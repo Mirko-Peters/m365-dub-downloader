@@ -77,10 +77,16 @@ def save_json(path: Path, data) -> None:
     os.replace(tmp, path)
 
 
+LANG_ALIASES = {"iw": "he", "in": "id", "ji": "yi", "jw": "jv"}
+
+
 def norm_lang(code: str | None) -> str | None:
     if not code:
         return None
-    return code.strip().lower().replace("_", "-")
+    c = code.strip().lower().replace("_", "-")
+    head, _, tail = c.partition("-")
+    head = LANG_ALIASES.get(head, head)
+    return f"{head}-{tail}" if tail else head
 
 
 def base_lang(code: str | None) -> str | None:
@@ -142,6 +148,8 @@ def ydl_base_opts(cfg) -> dict:
         "retries": 5,
         "socket_timeout": 30,
         "sleep_interval_requests": cfg.get("sleep_between_requests", 1),
+        # Löst YouTubes JS-Challenge (sonst wird der Download stark gedrosselt)
+        "remote_components": list(cfg.get("remote_components", ["ejs:github"])),
     }
     if cfg.get("deno_path"):
         opts["js_runtimes"] = {"deno": {"path": cfg["deno_path"]}}
@@ -397,6 +405,7 @@ def cmd_download(cfg, state, args) -> int:
                 log.info("Limit von %d Downloads pro Lauf erreicht.", max_dl)
                 save_json(STATE_FILE, state)
                 return done
+            log.info("  ↓ lade %s ...", lang)
             try:
                 meta = download_dub(cfg, info, lang, dubs[lang], args.dry_run)
             except Exception as e:
