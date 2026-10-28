@@ -911,7 +911,8 @@ def cmd_upload_texts(cfg, state, args) -> int:
             log.error("Upload fehlgeschlagen (%s): %s", media.name, e)
             continue
         eid = ep.get("episode_id")
-        done[f"{meta['video_id']}:{meta['language']}"] = {"show_id": sid, "episode_id": eid, "at": now_iso(), "title": t["title"]}
+        done[f"{meta['video_id']}:{meta['language']}"] = {"show_id": sid, "episode_id": eid, "at": now_iso(), "title": t["title"],
+                                                          "transcript": t.get("tr") or None}
         show_titles(sp, sid).add(t["title"].strip())
         save_json(UPLOADED_FILE, done)
         n += 1
@@ -927,7 +928,36 @@ def cmd_upload_texts(cfg, state, args) -> int:
                 log.warning("  Transkript-Update fehlgeschlagen: %s", e)
         if n >= cfg.get("max_uploads_per_run", 100):
             break
-    log.info("Upload fertig: %d Episoden hochgeladen, %d warten noch auf Texte.", n, skipped)
+    # Transkripte nachreichen: veröffentlichte Folgen ohne Transkript, für die jetzt eins im Repo liegt
+    fixed = 0
+    for key, info in done.items():
+        if info.get("transcript") or not info.get("episode_id") and info.get("note") != "bereits vorhanden":
+            continue
+        vid, lang = key.split(":", 1)
+        t = episode_texts(vid).get(base_lang(lang)) or {}
+        if not t.get("tr"):
+            continue
+        eid = info.get("episode_id")
+        if not eid:  # per Chrome hochgeladen: Episode über den Titel finden
+            try:
+                items = sp._req("GET", f"/shows/{t['show']}/episodes?limit=100").get("items", [])
+                eid = next((e["episode_id"] for e in items if e.get("title", "").strip() == t["title"].strip()), None)
+            except Exception:
+                eid = None
+        if not eid or args.dry_run:
+            continue
+        try:
+            cur = sp._req("GET", f"/episodes/{eid}")["episode"]
+            if not cur.get("transcript_url"):
+                sp._req("POST", f"/episodes/{eid}", data={"transcript_url": t["tr"], "transcript_type": "text/vtt"})
+                fixed += 1
+                log.info("📝 Transkript nachgereicht: %s", t["title"])
+            info["episode_id"], info["transcript"] = eid, t["tr"]
+            save_json(UPLOADED_FILE, done)
+        except Exception as e:
+            log.warning("Transkript-Nachtrag %s fehlgeschlagen: %s", key, e)
+    log.info("Upload fertig: %d Episoden hochgeladen, %d Transkripte nachgereicht, %d warten noch auf Texte.",
+             n, fixed, skipped)
     return n
 
 
