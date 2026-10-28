@@ -311,7 +311,7 @@ def download_dub(cfg, info: dict, lang: str, fmt: dict, dry: bool) -> dict | Non
     if not target.exists():
         raise RuntimeError(f"MP3 nicht gefunden nach Download: {target}")
 
-    transcript = fetch_dub_transcript(cfg, vid, lang, lang_dir, stem) if cfg.get("fetch_transcripts", True) else None
+    transcript = None
 
     # Cover (YouTube-Thumbnail) für Spreaker
     cover = None
@@ -413,6 +413,126 @@ def fetch_dub_transcript(cfg, vid: str, lang: str, lang_dir: Path, stem: str) ->
     return str(final)
 
 
+_WHISPER = None
+
+
+def _whisper_model(cfg):
+    """Lädt Whisper einmal: GPU (CUDA) wenn möglich, sonst CPU."""
+    global _WHISPER
+    if _WHISPER is not None:
+        return _WHISPER
+    import importlib.util
+    # CUDA-DLLs aus den pip-Paketen nvidia-* bekannt machen (ohne PATH zu ändern)
+    spec = importlib.util.find_spec("nvidia")
+    if spec and spec.submodule_search_locations and hasattr(os, "add_dll_directory"):
+        for root in spec.submodule_search_locations:
+            for b in Path(root).glob("*/bin"):
+                try:
+                    os.add_dll_directory(str(b))
+                    os.environ["PATH"] = str(b) + os.pathsep + os.environ.get("PATH", "")  # nur für diesen Prozess
+                except OSError:
+                    pass
+    from faster_whisper import WhisperModel
+    size = cfg.get("whisper_model", "large-v3-turbo")
+    try:
+        _WHISPER = WhisperModel(size, device="cuda", compute_type="float16")
+        log.info("Whisper %s läuft auf der GPU", size)
+    except Exception as e:
+        log.warning("GPU nicht nutzbar (%s) – Whisper läuft auf der CPU", str(e).splitlines()[0][:120])
+        _WHISPER = WhisperModel(cfg.get("whisper_model_cpu", "small"), device="cpu", compute_type="int8")
+    return _WHISPER
+
+
+def _decode_audio(cfg, f: Path):
+    """MP3 -> 16 kHz Mono float32 per FFmpeg (umgeht PyAV-Versionsprobleme)."""
+    import subprocess
+    import numpy as np
+    ff = "ffmpeg"
+    if cfg.get("ffmpeg_location"):
+        cand = Path(cfg["ffmpeg_location"]) / ("ffmpeg.exe" if os.name == "nt" else "ffmpeg")
+        if cand.exists():
+            ff = str(cand)
+    raw = subprocess.run([ff, "-nostdin", "-v", "error", "-i", str(f), "-f", "s16le", "-ac", "1",
+                          "-ar", "16000", "-"], capture_output=True, check=True).stdout
+    return np.frombuffer(raw, np.int16).astype(np.float32) / 32768.0
+
+
+def _ts(sec: float) -> str:
+    h, r = divmod(sec, 3600)
+    m, s_ = divmod(r, 60)
+    return f"{int(h):02d}:{int(m):02d}:{s_:06.3f}"
+
+
+def whisper_transcribe(cfg, meta: dict) -> str | None:
+    f = Path(meta["file"])
+    out = f.with_suffix(".vtt")
+    if out.exists():
+        return str(out)
+    if not f.exists():
+        return None
+    model = _whisper_model(cfg)
+    lang = base_lang(meta["language"])
+    t0 = time.time()
+    audio = _decode_audio(cfg, f)
+    segments, _info = model.transcribe(audio, language=lang, vad_filter=True, beam_size=5)
+    lines = ["WEBVTT", ""]
+    for seg in segments:
+        lines += [f"{_ts(seg.start)} --> {_ts(seg.end)}", seg.text.strip(), ""]
+    out.write_text("\n".join(lines), encoding="utf-8")
+    log.info("  📝 %s (%ds)", out.name, time.time() - t0)
+    return str(out)
+
+
+def fetch_video_transcripts(cfg, vid: str, items: list[dict]) -> int:
+    """Holt die Transkripte ALLER Dub-Sprachen eines Videos in einem einzigen Abruf
+    (mit Pausen zwischen den Untertiteln, gegen YouTubes 429-Sperre) und legt sie
+    als <stem>.vtt neben die jeweilige MP3."""
+    todo = [m for m in items if not (m.get("transcript") and Path(m["transcript"]).exists())]
+    if not todo:
+        return 0
+    base = Path(os.environ.get("DUB_DIR") or cfg["download_dir"])
+    if not base.is_absolute():
+        base = BASE / base
+    tmp = base / "_transkripte" / "_tmp"
+    tmp.mkdir(parents=True, exist_ok=True)
+    codes = sorted({YT_CODES.get(base_lang(m["language"]), base_lang(m["language"])) for m in todo})
+    opts = ydl_base_opts(cfg) | {
+        "skip_download": True, "writeautomaticsub": True, "writesubtitles": True,
+        "subtitleslangs": codes, "subtitlesformat": "vtt",
+        "sleep_interval_subtitles": cfg.get("sleep_between_subtitles", 6),
+        "outtmpl": str(tmp / f"{vid}.%(ext)s"),
+        "ignoreerrors": True,
+    }
+    for attempt in range(3):
+        try:
+            with YoutubeDL(opts) as ydl:
+                ydl.download([f"https://www.youtube.com/watch?v={vid}"])
+        except Exception as e:
+            log.warning("  Transkripte: %s", str(e).splitlines()[0])
+        missing = [c for c in codes if not (tmp / f"{vid}.{c}.vtt").exists()]
+        if not missing:
+            break
+        wait = 60 * (attempt + 1)
+        log.info("  %d Transkripte fehlen noch (%s) – warte %ds", len(missing), ", ".join(missing), wait)
+        time.sleep(wait)
+        opts["subtitleslangs"] = missing
+    n = 0
+    for m in todo:
+        code = YT_CODES.get(base_lang(m["language"]), base_lang(m["language"]))
+        src = tmp / f"{vid}.{code}.vtt"
+        if src.exists():
+            f = Path(m["file"])
+            dst = f.with_suffix(".vtt")
+            dst.write_bytes(src.read_bytes())
+            m["transcript"] = str(dst)
+            f.with_suffix(".json").write_text(json.dumps(m, ensure_ascii=False, indent=2), encoding="utf-8")
+            n += 1
+    for c in codes:
+        (tmp / f"{vid}.{c}.vtt").unlink(missing_ok=True)
+    log.info("  📝 %d/%d Transkripte", n, len(todo))
+    return n
+
+
 def needs_check(entry: dict | None, cfg, full: bool, vid: str = "", state: dict | None = None) -> bool:
     if full or not entry:
         return True
@@ -471,8 +591,6 @@ def cmd_download(cfg, state, args) -> int:
         if dubs:
             log.info("[%d/%d] %s – Dubs: %s | neu: %s", i, len(videos), info.get("title"),
                      ", ".join(sorted(dubs)), ", ".join(missing) or "–")
-        if missing and cfg.get("fetch_transcripts", True) and not args.dry_run:
-            fetch_transcript(cfg, vid)
         for lang in missing:
             if cloud and sp is not None and not resolve_show(lang, cfg, shows):
                 if cfg.get("create_missing_shows"):
@@ -510,6 +628,21 @@ def cmd_download(cfg, state, args) -> int:
                     _delete_files(meta)
                     state["downloads"].get(key, {}).pop("description", None)
                 save_json(STATE_FILE, state)
+        if cfg.get("fetch_transcripts", True) and not args.dry_run:
+            items = [m for k, m in state["downloads"].items() if k.startswith(vid + ":")]
+            for m in items:
+                if cfg.get("transcript_engine", "whisper") == "whisper":
+                    try:
+                        t = whisper_transcribe(cfg, m)
+                    except Exception as e:
+                        log.error("  Whisper-Fehler (%s): %s", m["language"], e)
+                        t = None
+                    if t:
+                        m["transcript"] = t
+                        Path(m["file"]).with_suffix(".json").write_text(
+                            json.dumps(m, ensure_ascii=False, indent=2), encoding="utf-8")
+            if items and cfg.get("transcript_engine", "whisper") == "youtube":
+                fetch_video_transcripts(cfg, vid, items)
         save_json(STATE_FILE, state)
     log.info("Download fertig: %d neue Dub-Dateien.", done)
     return done
@@ -675,7 +808,117 @@ def episode_payload(meta: dict, cfg) -> dict:
     return data
 
 
+EPISODES_BASE = "https://raw.githubusercontent.com/Mirko-Peters/m365-dub-downloader/main/episodes"
+_TEXT_CACHE: dict = {}
+_COVER_CACHE: dict = {}
+_TITLES_CACHE: dict = {}
+
+
+def episode_texts(vid: str) -> dict:
+    """Übersetzte Titel/Beschreibungen/Transkript-Links aus dem GitHub-Repo (von Claude geschrieben)."""
+    if vid not in _TEXT_CACHE:
+        try:
+            r = requests.get(f"{EPISODES_BASE}/{vid}.json", params={"t": int(time.time())}, timeout=30)
+            _TEXT_CACHE[vid] = r.json() if r.status_code == 200 else {}
+        except Exception:
+            _TEXT_CACHE[vid] = {}
+    return _TEXT_CACHE[vid]
+
+
+def show_cover(sp: "Spreaker", show_id) -> Path | None:
+    if show_id not in _COVER_CACHE:
+        try:
+            url = sp.show(show_id).get("image_original_url")
+            f = BASE / "_runtime" / "covers" / f"{show_id}.jpg"
+            f.parent.mkdir(parents=True, exist_ok=True)
+            if not f.exists() and url:
+                f.write_bytes(requests.get(url, timeout=60).content)
+            _COVER_CACHE[show_id] = f if f.exists() else None
+        except Exception as e:
+            log.warning("Show-Cover %s nicht geladen: %s", show_id, e)
+            _COVER_CACHE[show_id] = None
+    return _COVER_CACHE[show_id]
+
+
+def show_titles(sp: "Spreaker", show_id) -> set:
+    if show_id not in _TITLES_CACHE:
+        titles, url = set(), f"/shows/{show_id}/episodes?limit=100"
+        try:
+            while url:
+                resp = sp._req("GET", url)
+                titles |= {e.get("title", "").strip() for e in resp.get("items", [])}
+                url = resp.get("next_url")
+        except Exception as e:
+            log.warning("Episodenliste %s nicht lesbar: %s", show_id, e)
+        _TITLES_CACHE[show_id] = titles
+    return _TITLES_CACHE[show_id]
+
+
 def cmd_upload(cfg, state, args) -> int:
+    if cfg.get("upload_mode", "texts") == "texts":
+        return cmd_upload_texts(cfg, state, args)
+    return cmd_upload_basic(cfg, state, args)
+
+
+def cmd_upload_texts(cfg, state, args) -> int:
+    """Upload mit Claudes übersetzten Texten aus dem Repo – nur Folgen, für die Texte existieren."""
+    sp = spreaker_client(cfg)
+    pending = [m for m in state["downloads"].values() if not m.get("uploaded")]
+    n = skipped = 0
+    for meta in sorted(pending, key=lambda m: (m.get("upload_date") or "", m["video_id"], m["language"])):
+        lang = base_lang(meta["language"])
+        t = episode_texts(meta["video_id"]).get(lang)
+        if not t:
+            skipped += 1
+            continue
+        sid = int(t.get("show") or resolve_show(meta["language"], cfg, []) or 0)
+        if not sid:
+            continue
+        if t["title"].strip() in show_titles(sp, sid):
+            meta["uploaded"] = {"show_id": sid, "episode_id": None, "at": now_iso(), "note": "bereits vorhanden"}
+            save_json(STATE_FILE, state)
+            log.info("= schon online: %s", t["title"])
+            continue
+        media = Path(meta["file"])
+        if not media.exists():
+            log.warning("Datei fehlt: %s", media)
+            continue
+        data = {"title": t["title"][:140], "description": t["desc"], "visibility": "PUBLIC",
+                "ai_generated": "true", "episode_link": cfg.get("show_website_url", "https://www.m365.fm"),
+                "download_enabled": "true"}
+        if t.get("tags"):
+            data["tags"] = t["tags"]
+        if t.get("tr"):
+            data["transcript_url"] = t["tr"]
+            data["transcript_type"] = "text/vtt"
+        if args.dry_run:
+            log.info("[dry-run] %s -> Show %s", t["title"], sid)
+            continue
+        try:
+            ep = sp.upload_episode(sid, data, media, show_cover(sp, sid))
+        except Exception as e:
+            log.error("Upload fehlgeschlagen (%s): %s", media.name, e)
+            continue
+        eid = ep.get("episode_id")
+        meta["uploaded"] = {"show_id": sid, "episode_id": eid, "at": now_iso()}
+        show_titles(sp, sid).add(t["title"].strip())
+        save_json(STATE_FILE, state)
+        n += 1
+        log.info("⬆ %s -> Show %s (Episode %s)", t["title"], sid, eid)
+        if t.get("tr") and n == 1:
+            try:
+                e2 = sp._req("GET", f"/episodes/{eid}")["episode"]
+                log.info("  Kontrolle: Transkript %s, KI-Kennzeichnung %s",
+                         "gesetzt" if e2.get("transcript_url") else "NICHT gesetzt", e2.get("ai_generated"))
+            except Exception:
+                pass
+        if n >= cfg.get("max_uploads_per_run", 100):
+            break
+    log.info("Upload fertig: %d Episoden hochgeladen, %d warten noch auf Texte.", n, skipped)
+    return n
+
+
+def cmd_upload_basic(cfg, state, args) -> int:
     pending = {k: v for k, v in state["downloads"].items() if not v.get("uploaded")}
     if not pending:
         log.info("Nichts hochzuladen.")
@@ -780,32 +1023,70 @@ def refresh_access_token(cfg) -> bool:
 
 
 def cmd_login(cfg, state, args) -> None:
-    import getpass, secrets, webbrowser
+    import getpass, secrets, webbrowser, threading
+    from http.server import BaseHTTPRequestHandler, HTTPServer
     from urllib.parse import urlencode, urlparse, parse_qs
     print("Spreaker-Anmeldung (Daten bleiben nur in deiner config.json auf diesem PC)\n")
     cid = input(f"OAuth2 Client Id [{cfg.get('spreaker_client_id') or ''}]: ").strip() or cfg.get("spreaker_client_id")
     sec = getpass.getpass("OAuth2 Client Secret (Eingabe unsichtbar, Enter = gespeichertes behalten): ").strip() \
         or cfg.get("spreaker_client_secret")
-    redirect = cfg.get("spreaker_redirect_uri") or "https://mirko-peters.github.io/spreaker-callback/"
+    redirect = cfg.get("spreaker_redirect_uri") or "http://localhost/callback"
+    if "m365.fm" in redirect or ":8765" in redirect:
+        redirect = "http://localhost/callback"
     if not cid or not sec:
         print("Client Id und Secret werden gebraucht."); return
     st = secrets.token_hex(8)
+    got: dict = {}
+
+    class H(BaseHTTPRequestHandler):
+        def do_GET(self):
+            q = parse_qs(urlparse(self.path).query)
+            got.update({k: v[0] for k, v in q.items()})
+            self.send_response(200)
+            self.send_header("Content-Type", "text/html; charset=utf-8")
+            self.end_headers()
+            if "code" not in got and "error" not in got:
+                got.clear()  # z. B. favicon-Abruf ignorieren
+            msg = "Anmeldung erhalten – du kannst dieses Fenster schliessen." if "code" in got else "Kein Code erhalten."
+            self.wfile.write(f"<html><body style='font-family:sans-serif;padding:40px'><h2>{msg}</h2></body></html>".encode())
+
+        def log_message(self, *a):
+            pass
+
+    u = urlparse(redirect)
+    try:
+        srv = HTTPServer(("127.0.0.1", u.port or 80), H)
+    except OSError as e:
+        print(f"Port {u.port or 80} ist belegt ({e}). Bitte Programme schliessen, die Port 80 nutzen, und neu starten.")
+        return
+    def serve():
+        import time as _t
+        end = _t.time() + 300
+        srv.timeout = 5
+        while _t.time() < end and "code" not in got and "error" not in got:
+            srv.handle_request()
+
+    t = threading.Thread(target=serve, daemon=True)
+    t.start()
     url = OAUTH_AUTHORIZE + "?" + urlencode({"client_id": cid, "response_type": "code", "state": st,
                                              "scope": "basic", "redirect_uri": redirect})
-    print("\nIm Browser oeffnet sich Spreaker. Bitte 'Erlauben' klicken.")
-    print("Danach zeigt dir die Seite einen Code - auf 'Code kopieren' klicken.\n")
+    print(f"\nIm Browser oeffnet sich Spreaker. Bitte 'Erlauben' klicken.\n(Callback-URL in der App muss sein: {redirect})\n")
     webbrowser.open(url)
-    back = input("Code hier einfuegen (Rechtsklick = einfuegen): ").strip()
-    code = parse_qs(urlparse(back).query).get("code", [back])[0] if "code=" in back else back
+    t.join(timeout=310)
+    srv.server_close()
+    if "code" not in got:
+        print("Kein Code empfangen:", got.get("error_description") or got.get("error") or "Zeitüberschreitung"); return
+    if got.get("state") != st:
+        print("Sicherheitsprüfung (state) fehlgeschlagen."); return
     r = requests.post(OAUTH_TOKEN, data={"grant_type": "authorization_code", "client_id": cid,
-                                         "client_secret": sec, "redirect_uri": redirect, "code": code}, timeout=60)
+                                         "client_secret": sec, "redirect_uri": redirect, "code": got["code"]}, timeout=60)
     if r.status_code != 200:
         print("Fehler:", r.status_code, r.text[:300]); return
     cfg["spreaker_client_id"], cfg["spreaker_client_secret"], cfg["spreaker_redirect_uri"] = cid, sec, redirect
-    cfg["auto_upload"] = True
     _save_tokens(cfg, r.json())
     me = Spreaker(cfg["spreaker_token"]).me()
-    print(f"\nFertig - verbunden als: {me.get('fullname')}. Auto-Upload ist eingeschaltet.")
+    print(f"\nFertig - verbunden als: {me.get('fullname')}.")
+    input("Enter zum Schliessen")
 
 
 def cmd_status(cfg, state, args) -> None:
@@ -842,16 +1123,20 @@ def main() -> None:
     state = load_json(STATE_FILE, {"videos": {}, "downloads": {}})
 
     if args.command == "transcripts":
-        for key, m in state["downloads"].items():
-            f = Path(m["file"])
-            if not m.get("transcript"):
-                t = fetch_dub_transcript(cfg, m["video_id"], m["language"], f.parent, f.stem)
-                if t:
-                    m["transcript"] = t
-                    f.with_suffix(".json").write_text(json.dumps(m, ensure_ascii=False, indent=2), encoding="utf-8")
-                    log.info("📝 %s", Path(t).name)
-            fetch_transcript(cfg, m["video_id"])
-        save_json(STATE_FILE, state)
+        items = [m for m in state["downloads"].values()
+                 if not (m.get("transcript") and Path(m["transcript"]).exists())]
+        log.info("%d Folgen ohne Transkript", len(items))
+        for i, m in enumerate(items, 1):
+            log.info("[%d/%d] %s", i, len(items), Path(m["file"]).name)
+            try:
+                t = whisper_transcribe(cfg, m)
+            except Exception as e:
+                log.error("  Whisper-Fehler: %s", e)
+                continue
+            if t:
+                m["transcript"] = t
+                Path(m["file"]).with_suffix(".json").write_text(json.dumps(m, ensure_ascii=False, indent=2), encoding="utf-8")
+                save_json(STATE_FILE, state)
         return
     if args.command == "login":
         return cmd_login(cfg, state, args)
