@@ -1,0 +1,1555 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:01.580
+Voici la partie choquante que personne ne vous dit.
+
+00:00:02.020 --> 00:00:05.780
+Lorsque vous déployez une IA dans Azure Foundry, vous ne vous contentez pas de lancer un modèle surdimensionné.
+
+00:00:06.300 --> 00:00:11.940
+Vous la déposez dans un environnement d'exécution géré où chaque action, message, appel d'outils et étapes d'exécution pertinents sont consignées et tracées.
+
+00:00:12.540 --> 00:00:17.640
+Vous verrez comment les threads, les exécutions et les étapes d'exécution constituent la trace écrite qui rend les expériences vérifiables et prêtes pour l'entreprise.
+
+00:00:18.060 --> 00:00:20.920
+Cela fait passer l'IA d'un électron libre à un système discipliné que vous pouvez gouverner.
+
+00:00:21.640 --> 00:00:27.240
+Et une fois cette structure en place, la vraie question est, qui dirige cette escouade numérique ?
+
+00:00:27.240 --> 00:00:31.320
+Rencontrez le chef d'escouade. Lorsque vous en configurez une dans Fenderie, vous ne vous contentez pas d'ouvrir une fenêtre de job.
+
+00:00:31.560 --> 00:00:35.200
+Vous nommez un chef d'escouade, il ne s'agit pas d'un stagiaire qui tape sur la saisie semi-automatique.
+
+00:00:35.800 --> 00:00:38.660
+C'est un capitaine de terrain conçu pour des missions fonctionnant selon une conception claire.
+
+00:00:39.380 --> 00:00:43.520
+Cette conception se résume à trois éléments fondamentaux, le modèle, les instructions et les outils.
+
+00:00:44.440 --> 00:00:45.280
+Le modèle et le cerveau.
+
+00:00:45.360 --> 00:00:50.340
+Il gère le raisonnement et le langage, la partie qui peut analyser les mots humains, planifier les étapes et rédiger les réponses.
+
+00:00:51.080 --> 00:00:52.220
+Les instructions sont les ordres de mission.
+
+00:00:52.620 --> 00:00:56.560
+Elles empêchent le cerveau de dériver vers le jeu libre en l'ancrant dans les résultats dont vous avez réellement besoin.
+
+00:00:57.240 --> 00:01:03.800
+Et les outils sont l'équipement attaché à sa poitrine, l'exécution de code, les connecteurs de recherche, les API de reporting ou tout système tiers que vous connectez.
+
+00:01:04.440 --> 00:01:07.220
+Un agent Azure AI est explicitement construit à partir de cette triade.
+
+00:01:07.780 --> 00:01:10.280
+Sans cela, vous n'obtenez pas de reproductibilité ou d'auditabilité.
+
+00:01:10.640 --> 00:01:12.240
+Vous obtenez juste une génération de texte sans reçu.
+
+00:01:12.880 --> 00:01:14.760
+Traduisons cela en un exemple de champ de bataille.
+
+00:01:15.100 --> 00:01:16.540
+Le modèle est l'entraînement au combat de votre capitaine.
+
+00:01:16.900 --> 00:01:18.560
+Il sait manier une épée ou prononcer une phrase.
+
+00:01:19.040 --> 00:01:20.400
+Les instructions sont le briefing de la mission.
+
+00:01:20.840 --> 00:01:21.520
+Protéger le convoi.
+
+00:01:21.880 --> 00:01:23.100
+Extraire des données d'un ensemble de contrats.
+
+00:01:23.560 --> 00:01:25.200
+Rapporter les résultats dans un format spécifique.
+
+00:01:25.200 --> 00:01:27.320
+Cela permet au capitaine de rester aligné et prévisé.
+
+00:01:27.720 --> 00:01:29.120
+Ensuite, les outils ajoutent une spécialisation.
+
+00:01:29.540 --> 00:01:32.600
+Un grappin pour escalader les murs et comme un interpréteur de code pour exécuter des analyses.
+
+00:01:33.540 --> 00:01:37.580
+Une radio sécurisée comme un connecteur SharePoint ou MCP personnalisé qui alimente le plan en données en direct.
+
+00:01:38.240 --> 00:01:40.500
+Lorsque ces trois éléments sont réunis, l'agent ne fait pas de riff.
+
+00:01:40.840 --> 00:01:42.780
+Il exécute une mission avec des journaux et des points de contrôle.
+
+00:01:43.340 --> 00:01:44.840
+Fondry rend cette machinerie pratique.
+
+00:01:45.360 --> 00:01:47.860
+Dans la plupart des API de chat, vous obtenez uniquement le modèle et une invite.
+
+00:01:48.360 --> 00:01:51.500
+Et une fois qu'il commence à parler, il n'y a pas de sens formel des ordres ou de l'orchestration des outils.
+
+00:01:51.500 --> 00:01:55.020
+C'est comme si vous envoyiez votre capitaine sur le terrain sans plan ni équipement.
+
+00:01:55.580 --> 00:01:59.280
+En revanche, le service d'agent Fondry garantit que les trois couches sont présentes.
+
+00:02:00.340 --> 00:02:02.000
+Mieux encore, vous n'êtes pas soudé à un seul cerveau.
+
+00:02:02.420 --> 00:02:04.400
+Vous pouvez basculer entre les modèles du catalogue Fondry.
+
+00:02:04.900 --> 00:02:08.100
+GPT-4 pour une stratégie complexe peut être un modèle plus léger pour les tâches légères,
+
+00:02:08.220 --> 00:02:09.800
+ou même intégrer Mistral ou Dipsic.
+
+00:02:10.540 --> 00:02:11.840
+Vous choisissez ce qui convient à la mission.
+
+00:02:12.400 --> 00:02:16.400
+Cette flexibilité fait la différence entre un stagiaire universel et un commandant capable de s'adapter.
+
+00:02:16.880 --> 00:02:18.700
+Maintenant, réfléchissez aux enjeux si ces couches sont manquantes.
+
+00:02:18.700 --> 00:02:21.020
+Les résultats deviennent incohérents ?
+
+00:02:21.020 --> 00:02:22.380
+Un résumé de contrat se lit de cette façon.
+
+00:02:22.460 --> 00:02:24.160
+Le suivant le contredit subtilement.
+
+00:02:24.680 --> 00:02:28.300
+Vous perdez en traçabilité, car aucun journal structuré ne capture la manière dont la réponse a été obtenue.
+
+00:02:28.760 --> 00:02:32.200
+Le débogage se transforme en conjecture, car les développeurs ne peuvent pas retracer la chaîne de raisonnement.
+
+00:02:32.740 --> 00:02:34.280
+Dans une entreprise, ce n'est pas un inconvénient minable.
+
+00:02:34.800 --> 00:02:36.660
+C'est un risque réel qui bloque la confiance et l'adoption.
+
+00:02:37.140 --> 00:02:38.720
+Fondry résout ce problème de manière simple.
+
+00:02:39.080 --> 00:02:40.660
+Des garde-fous sont intégrés à l'agent.
+
+00:02:40.800 --> 00:02:43.280
+Les instructions agissent comme un manuel de règles fixes qui doivent être suivis.
+
+00:02:43.620 --> 00:02:46.480
+L'ensemble d'outils peut être défini de manière stricte ou étendue en fonction du cas d'utilisation.
+
+00:02:46.480 --> 00:02:51.160
+Le modèle peut être échangé librement, mais toujours dans le cadre de la structure qui impose la responsabilité.
+
+00:02:52.580 --> 00:02:56.220
+Ensemble, la triade fournit un chef d'escouade discipliné, des résultats prévisibles, des étapes visibles
+
+00:02:56.220 --> 00:02:59.820
+et la possibilité de s'étendre de manière responsable avec des connecteurs d'entreprise et des API personnalisés.
+
+00:03:00.440 --> 00:03:02.780
+Il ne s'agit pas de présenter l'IA comme une conversation magique.
+
+00:03:03.320 --> 00:03:06.620
+Il s'agit de montrer que votre organisation dispose d'un officier endurci qui gère les journaux,
+
+00:03:06.920 --> 00:03:08.580
+suit les ordres et porte le bon équipement.
+
+00:03:09.220 --> 00:03:12.080
+Et comme tout bon capitaine, il tient un registre minutieux de ce qui s'est passé lors de chaque mission.
+
+00:03:12.560 --> 00:03:15.500
+Car lorsque les systèmes sont audités ou qu'une exécution échoue, vous avez besoin du journal.
+
+00:03:15.500 --> 00:03:18.560
+Dans Fondry, ce journal porte un nom. Il s'appelle le Fil.
+
+00:03:19.460 --> 00:03:20.700
+Les Fils, le journal du champ de bataille.
+
+00:03:21.200 --> 00:03:23.440
+Les Fils sont l'endroit où le journal de mission commence à prendre forme.
+
+00:03:23.820 --> 00:03:27.120
+Dans Azure Fondry, un Fil n'est pas une fenêtre de discussion ordinaire qui disparaît lorsque vous la fermez.
+
+00:03:27.660 --> 00:03:29.260
+C'est une session de conversation persistante.
+
+00:03:29.840 --> 00:03:33.840
+Chaque échange entre vous et l'agent est stocké ici, qu'il provienne de vous, de l'agent ou même d'un autre agent,
+
+00:03:33.920 --> 00:03:35.640
+dans une configuration multi-agent.
+
+00:03:36.340 --> 00:03:38.500
+Il s'agit du journal du champ de bataille qui conserve un historique durable,
+
+00:03:38.560 --> 00:03:40.860
+des interactions qui peuvent être consultées longtemps après la fin de la discussion.
+
+00:03:40.860 --> 00:03:44.300
+La véritable force des fils de discussion est que ce ne sont pas de simples transcriptions statiques.
+
+00:03:44.680 --> 00:03:47.860
+Ce sont des conteneurs structurés qui gèrent automatiquement la troncature en maintenant
+
+00:03:47.860 --> 00:03:51.980
+le contexte actif dans les limites du modèle tout en préservant une piste d'audit complète.
+
+00:03:52.840 --> 00:03:55.740
+Cela signifie que l'agent continue de comprendre la conversation en cours,
+
+00:03:55.840 --> 00:03:58.960
+tandis que les entreprises conservent un enregistrement permanent et consultable.
+
+00:03:59.560 --> 00:04:01.700
+Contrairement à la plupart des applications de chat, rien ne disparaît dans la nature.
+
+00:04:02.000 --> 00:04:04.360
+Vous bénéficiez d'une continuité pour l'agent et d'une gouvernance pour l'entreprise.
+
+00:04:04.360 --> 00:04:06.580
+Les entrées de ce journal sont créées à partir de messages.
+
+00:04:06.980 --> 00:04:08.340
+Un message ne se limite pas au texte brut.
+
+00:04:08.820 --> 00:04:11.940
+Il peut contenir une image, un fichier tableur ou un bloc de code généré.
+
+00:04:12.720 --> 00:04:15.720
+Chacun est horodaté et étiqueté avec un rôle utilisateur ou assistant.
+
+00:04:16.620 --> 00:04:18.540
+Ainsi, lorsque vous inspectez un fil de discussion,
+
+00:04:18.700 --> 00:04:20.960
+vous voyez non seulement ce qui a été dit, mais aussi qu'il a dit quand cela a été dit,
+
+00:04:21.140 --> 00:04:22.940
+quand cela a été dit et quel type de contenu était impliqué.
+
+00:04:23.460 --> 00:04:25.820
+Imaginez un responsable de la conformité ouvrant un enregistrement
+
+00:04:25.820 --> 00:04:27.720
+et voyant la demande de texte exact soumise hier.
+
+00:04:28.580 --> 00:04:30.480
+L'image graphique que l'agent a produite en réponse est
+
+00:04:30.480 --> 00:04:32.380
+lors à laquelle les deux événements se sont produits.
+
+00:04:32.380 --> 00:04:34.680
+C'est plus qu'une mémoire, c'est un véritable registre complet.
+
+00:04:35.040 --> 00:04:36.680
+Pour le dire en termes de jeu, un fil de discussion
+
+00:04:36.680 --> 00:04:38.580
+est comme le ternet de note d'une campagne de donjons et dragons.
+
+00:04:38.980 --> 00:04:41.320
+Le maître du donjon note les villes que vous avez visitées,
+
+00:04:41.560 --> 00:04:43.500
+les jets réussis et le butin pris.
+
+00:04:44.100 --> 00:04:46.580
+Sans journal, les joueurs finissent par se chamailler sur des détails oubliés.
+
+00:04:47.280 --> 00:04:49.640
+Avec lui, les disputes disparaissent car les événements sont documentés.
+
+00:04:50.500 --> 00:04:52.080
+Les fils de discussion font la même chose pour lire d'entreprise.
+
+00:04:52.420 --> 00:04:54.320
+Ils évitent les litiges sur ce que l'agent a réellement fait
+
+00:04:54.320 --> 00:04:55.600
+car tout est capturé dans l'ordre.
+
+00:04:56.300 --> 00:04:57.960
+Voici maintenant pourquoi cet enregistrement est important.
+
+00:04:58.280 --> 00:05:00.360
+Pour l'audit et la conformité, les fils de discussion sont de leur plus.
+
+00:05:00.360 --> 00:05:02.940
+Les régulateurs ou les équipes d'audit internes peuvent en ouvrir un
+
+00:05:02.940 --> 00:05:04.840
+et visualiser immédiatement la séquence complète,
+
+00:05:04.940 --> 00:05:06.640
+la demande de l'utilisateur, la réponse de l'agent,
+
+00:05:06.840 --> 00:05:08.440
+les outils impliqués et le moment où tout cela s'est produit.
+
+00:05:08.800 --> 00:05:11.240
+Pour les développeurs, ces mêmes enregistrements fonctionnent comme un mode débogage.
+
+00:05:11.700 --> 00:05:13.100
+Si un agent a produit un mauvais extrait de code,
+
+00:05:13.280 --> 00:05:15.160
+vous pouvez revenir en arrière jusqu'au point où il a été demandé
+
+00:05:15.160 --> 00:05:16.960
+et voir exactement comment il est arrivé là.
+
+00:05:17.460 --> 00:05:18.840
+Les deux groupes obtiennent de la visibilité
+
+00:05:18.840 --> 00:05:20.160
+et évitent tous deux de perdre du temps, j'imagine.
+
+00:05:21.040 --> 00:05:23.200
+Comparer cela au système qui ne conserve pas les conversations.
+
+00:05:23.780 --> 00:05:25.580
+Sans fils de discussion, vous essayez de suivre le comportement
+
+00:05:25.580 --> 00:05:27.700
+avec des captures d'écran ou une mémoire floue.
+
+00:05:27.700 --> 00:05:30.520
+Cela ne tient pas la route lorsque la conformité demande des preuves
+
+00:05:30.520 --> 00:05:31.960
+ou lorsque le support doit reproduire un bug.
+
+00:05:32.480 --> 00:05:34.520
+C'est comme si on vous demandait de rejoindre un combat de boss dans un jeu
+
+00:05:34.520 --> 00:05:36.200
+pour vous rendre compte que vous n'avez jamais sauvegardé.
+
+00:05:37.220 --> 00:05:38.540
+Pas d'enregistrement signifie pas de preuves
+
+00:05:38.540 --> 00:05:39.800
+et pas de traces signifie pas de correction.
+
+00:05:40.760 --> 00:05:43.060
+Dans un environnement naturel, vous ne pouvez rassurer les parties prenantes
+
+00:05:43.060 --> 00:05:44.780
+qu'avec des promesses verbales.
+
+00:05:44.860 --> 00:05:46.680
+Avec les fils de discussion dans Fondry, vous échappez à ce piège.
+
+00:05:47.260 --> 00:05:49.020
+Chaque conversation devient une preuve structurée.
+
+00:05:49.340 --> 00:05:50.840
+Si un workflow extrait un langage juridique,
+
+00:05:50.920 --> 00:05:52.700
+l'enregistrement indiquera la demande initiale,
+
+00:05:52.700 --> 00:05:54.060
+la réponse spécifique générée
+
+00:05:54.060 --> 00:05:56.140
+et si des outils de support ont été appelés
+
+00:05:56.140 --> 00:05:58.920
+et si plusieurs agents communiquent entre eux
+
+00:05:58.920 --> 00:06:01.520
+pour répartir les tâches, leurs échanges sont également consignés.
+
+00:06:02.640 --> 00:06:04.140
+Les entreprises peuvent prouver leur conformité,
+
+00:06:04.260 --> 00:06:05.580
+les développeurs peuvent identifier les bugs
+
+00:06:05.580 --> 00:06:06.560
+et les responsables peuvent être sûrs
+
+00:06:06.560 --> 00:06:07.840
+que ce qui sort du système est responsable.
+
+00:06:08.340 --> 00:06:10.480
+C'est à ce stade que les trades transforment les discussions chaotiques
+
+00:06:10.480 --> 00:06:11.720
+en quelque chose de prêt pour la production.
+
+00:06:12.820 --> 00:06:13.660
+Au lieu d'échanges éphémères,
+
+00:06:13.740 --> 00:06:15.840
+ils produisent un historique stable des missions et des décisions,
+
+00:06:15.980 --> 00:06:17.580
+une base sur laquelle vous pouvez compter.
+
+00:06:18.200 --> 00:06:19.940
+Mais n'oubliez pas que le journal n'est toujours qu'un journal intime.
+
+00:06:19.940 --> 00:06:22.560
+L'action réelle commence lorsque l'agent prend ce qui est écrit dans le thread
+
+00:06:22.560 --> 00:06:23.520
+et l'exécute réellement.
+
+00:06:24.260 --> 00:06:26.340
+L'étape suivante est celle où les missions cessent d'être
+
+00:06:26.340 --> 00:06:28.940
+des notes sur papier et commencent à être vécues en temps réel.
+
+00:06:29.720 --> 00:06:31.240
+Les exécutions et les étapes d'exécution lancent l'idée.
+
+00:06:31.520 --> 00:06:33.260
+Les exécutions sont le moment où la mission démarre enfin.
+
+00:06:33.660 --> 00:06:35.920
+En termes fonderie, un thread contient l'arriéré de conversation,
+
+00:06:36.220 --> 00:06:38.800
+les ordres, le contexte, les cartes défilantes, les cartes défilantes.
+
+00:06:39.120 --> 00:06:41.040
+Une exécution est le déclencheur qui active l'agent
+
+00:06:41.040 --> 00:06:42.960
+pour qu'il prenne ce contexte et l'exécute réellement.
+
+00:06:43.560 --> 00:06:44.920
+Les threads se souviennent des exécutions agissent.
+
+00:06:45.260 --> 00:06:46.620
+Considérez une exécution comme le bouton lancement.
+
+00:06:47.060 --> 00:06:48.800
+Votre thread peut dire qu'analyser le fichier CSV
+
+00:06:48.800 --> 00:06:50.240
+ou dessiner un graphique linéaire.
+
+00:06:50.620 --> 00:06:52.880
+Mais l'exécution est le moment où l'agent traite cette requête
+
+00:06:52.880 --> 00:06:55.240
+via ses instructions et outils de modèle.
+
+00:06:55.960 --> 00:06:57.380
+Il peut rechercher des données supplémentaires,
+
+00:06:57.380 --> 00:06:59.080
+traiter des chiffres ou appeler l'interpréteur de code
+
+00:06:59.080 --> 00:07:00.020
+pour générer un artefact.
+
+00:07:00.600 --> 00:07:01.720
+En termes de jeu de rôle sur table,
+
+00:07:01.840 --> 00:07:04.420
+un thread est votre groupe qui planifie les mouvements autour de la table.
+
+00:07:05.340 --> 00:07:07.540
+L'exécution est le jet d'initiative qui déclenche le combat.
+
+00:07:08.000 --> 00:07:09.180
+Sans lui, rien n'avance.
+
+00:07:09.500 --> 00:07:10.420
+Voici ce que Fondry a expliqué.
+
+00:07:10.880 --> 00:07:12.340
+Les exécutions ne sont pas une boîte noire.
+
+00:07:12.340 --> 00:07:14.720
+Ce sont des exécutions surveillées et suivies par l'État.
+
+00:07:15.560 --> 00:07:16.700
+Vous verrez généralement des statuts
+
+00:07:16.700 --> 00:07:18.080
+tels que mis en file d'attente en cours
+
+00:07:18.080 --> 00:07:19.580
+nécessitent une action terminée ou échouée.
+
+00:07:20.140 --> 00:07:22.020
+Les échantillons du SDK interrogent souvent ces États
+
+00:07:22.020 --> 00:07:23.040
+dans une boucle de la même manière
+
+00:07:23.040 --> 00:07:24.440
+qu'un maître de jeu vérifie lors de détours.
+
+00:07:24.640 --> 00:07:26.800
+Cela vous donne une visibilité non seulement sur ce qui est fait,
+
+00:07:26.940 --> 00:07:28.080
+mais aussi sur le moment où cela se produit.
+
+00:07:28.660 --> 00:07:29.540
+Mais voici le plus gros problème.
+
+00:07:30.080 --> 00:07:32.440
+Comment savoir ce qui s'est réellement passé au cours de cette exécution ?
+
+00:07:33.080 --> 00:07:34.800
+La réponse peut sembler correcte, mais sans détail,
+
+00:07:34.880 --> 00:07:37.240
+vous ne pouvez pas savoir si l'agent a accédé à une API externe
+
+00:07:37.240 --> 00:07:39.140
+écrite du code ou simplement improvisé du texte.
+
+00:07:39.140 --> 00:07:41.780
+Cette opacité est dangereuse dans les environnements d'entreprise.
+
+00:07:42.320 --> 00:07:43.700
+C'est l'équivalent d'entrer dans une partie d'échecs,
+
+00:07:43.800 --> 00:07:45.000
+de voir un échiquier en plein milieu de la partie
+
+00:07:45.000 --> 00:07:46.000
+et de se faire dire « faites-nous confiance,
+
+00:07:46.080 --> 00:07:47.000
+les bonnes confiances et mes congés ».
+
+00:07:47.000 --> 00:07:48.300
+Vous ne pouvez pas, vous ne pouvez pas la rejouer.
+
+00:07:48.920 --> 00:07:49.920
+Vous ne savez pas si le jeu est illégal.
+
+00:07:50.320 --> 00:07:52.180
+Les étapes d'exécution sont ce qui élimine ces conjectures.
+
+00:07:52.560 --> 00:07:54.600
+Chaque exécution est enregistrée étape par étape,
+
+00:07:54.760 --> 00:07:55.900
+avec les sorties de modèles générées,
+
+00:07:56.360 --> 00:07:58.200
+les outils invoqués, les calculs exécutés
+
+00:07:58.200 --> 00:07:59.180
+et les messages produits.
+
+00:07:59.800 --> 00:08:00.920
+C'est la notation d'échec pour l'IA.
+
+00:08:01.200 --> 00:08:02.420
+Puis en E4, cavalier en F6,
+
+00:08:02.420 --> 00:08:04.880
+sauf qu'ici, c'est la récupération du fichier à 10h2,
+
+00:08:05.000 --> 00:08:06.780
+l'exécution du bloc de code à 10h3,
+
+00:08:07.040 --> 00:08:09.040
+le renvoi de l'artefact du graphe à 10h4,
+
+00:08:09.400 --> 00:08:10.060
+le renvoi 10h4.
+
+00:08:10.260 --> 00:08:11.400
+Chaque action est écrite dans l'ordre
+
+00:08:11.400 --> 00:08:12.520
+afin que vous puissiez la rejouer plus tard.
+
+00:08:12.880 --> 00:08:14.620
+Cette structure est un énorme soulagement pour les développeurs.
+
+00:08:14.980 --> 00:08:15.860
+Sans les étapes d'exécution,
+
+00:08:16.020 --> 00:08:17.260
+vous vous retrouvez face à une réponse finale
+
+00:08:17.260 --> 00:08:18.500
+sans savoir comment elle a été créée.
+
+00:08:18.820 --> 00:08:19.860
+La requête de recherche était à l'erreur.
+
+00:08:20.220 --> 00:08:21.300
+Une erreur mathématique s'était glissé.
+
+00:08:21.640 --> 00:08:22.180
+Vous devez deviner.
+
+00:08:22.520 --> 00:08:23.560
+Avec les étapes d'exécution,
+
+00:08:23.640 --> 00:08:24.800
+vous pouvez faire défiler la chronologie,
+
+00:08:24.800 --> 00:08:26.420
+identifier le raté exact et le corriger.
+
+00:08:27.140 --> 00:08:28.480
+Le débogage cesse d'être une conjecture
+
+00:08:28.480 --> 00:08:29.720
+et devient une analyse médico-légale.
+
+00:08:30.100 --> 00:08:31.580
+C'est la différence entre un combat de boss flou,
+
+00:08:31.640 --> 00:08:32.620
+vous ne pouvez pas dire qui est attaqué,
+
+00:08:32.740 --> 00:08:33.440
+et un journal de combat
+
+00:08:33.440 --> 00:08:34.800
+qui montre chaque coup d'épée
+
+00:08:34.800 --> 00:08:36.420
+et chaque sort lancé.
+
+00:08:37.000 --> 00:08:37.820
+Les équipes de conformité
+
+00:08:37.820 --> 00:08:38.700
+obtiennent également leur victoire.
+
+00:08:39.280 --> 00:08:40.200
+Lorsque les auditeurs demandent
+
+00:08:40.200 --> 00:08:41.400
+comment le résumé a-t-il été généré,
+
+00:08:41.480 --> 00:08:41.720
+vous savez,
+
+00:08:42.260 --> 00:08:43.200
+vous n'avez pas besoin de décrire
+
+00:08:43.200 --> 00:08:44.540
+le raisonnement du modèle en termes abstraits.
+
+00:08:44.920 --> 00:08:45.460
+Vous avez des reçus.
+
+00:08:45.840 --> 00:08:46.420
+L'appel de l'outil,
+
+00:08:46.480 --> 00:08:47.360
+les tables de l'interpréteur,
+
+00:08:47.460 --> 00:08:48.240
+la réponse assemblée,
+
+00:08:48.520 --> 00:08:49.180
+le tour redaté.
+
+00:08:50.180 --> 00:08:52.140
+Cela transforme les explications en gouvernance.
+
+00:08:52.400 --> 00:08:53.000
+Montrer des preuves
+
+00:08:53.000 --> 00:08:53.900
+au lieu de raconter des histoires.
+
+00:08:54.300 --> 00:08:55.280
+Et les entreprises adorent cela,
+
+00:08:55.500 --> 00:08:56.380
+car cela transforme le risque
+
+00:08:56.380 --> 00:08:57.540
+en responsabilité en preuve
+
+00:08:57.540 --> 00:08:58.260
+plutôt qu'en promesse.
+
+00:08:59.100 --> 00:09:00.260
+Et pour les opérations quotidiennes,
+
+00:09:00.340 --> 00:09:01.140
+les étapes d'exécution
+
+00:09:01.140 --> 00:09:02.220
+créent des modèles reproductibles
+
+00:09:02.220 --> 00:09:03.040
+sur lesquels vous pouvez compter.
+
+00:09:03.680 --> 00:09:05.360
+Si un flux de travail doit être réexécuté,
+
+00:09:05.580 --> 00:09:06.520
+vous pouvez suivre la même séquence.
+
+00:09:06.940 --> 00:09:08.020
+Si un résultat est contesté,
+
+00:09:08.080 --> 00:09:08.640
+vous pouvez le rejouer.
+
+00:09:09.180 --> 00:09:09.900
+Sur un vin naturel,
+
+00:09:09.940 --> 00:09:11.580
+les exécutions avec des étapes d'exécution complètes
+
+00:09:11.580 --> 00:09:12.500
+vous donnent des preuves vérifiables
+
+00:09:12.500 --> 00:09:12.880
+et rejouables
+
+00:09:12.880 --> 00:09:14.080
+de la manière dont les sorties ont été construites.
+
+00:09:14.080 --> 00:09:15.880
+Sur un système naturel dans d'autres systèmes,
+
+00:09:15.960 --> 00:09:16.700
+tout ce que vous obtiendriez
+
+00:09:16.700 --> 00:09:17.680
+serait une sortie et rendre sans traces.
+
+00:09:17.920 --> 00:09:18.660
+C'est pourquoi cette partie
+
+00:09:18.660 --> 00:09:20.120
+du cycle de vie de l'agent est importante.
+
+00:09:20.520 --> 00:09:21.600
+Vous avez le journal dans les exécutions
+
+00:09:21.600 --> 00:09:22.880
+et le journal mouvement par mouvement
+
+00:09:22.880 --> 00:09:24.020
+dans les étapes d'exécution
+
+00:09:24.020 --> 00:09:25.300
+et le journal les étapes d'exécution.
+
+00:09:25.700 --> 00:09:25.980
+Ensemble,
+
+00:09:26.180 --> 00:09:27.200
+ils transforment l'IA improvisé
+
+00:09:27.200 --> 00:09:28.280
+en un coéquipier responsable
+
+00:09:28.280 --> 00:09:29.000
+dont vous pouvez suivre,
+
+00:09:29.180 --> 00:09:30.200
+tester et défendre les actions.
+
+00:09:30.640 --> 00:09:30.960
+Bien sûr,
+
+00:09:31.040 --> 00:09:32.080
+savoir que tous ces détails existent
+
+00:09:32.080 --> 00:09:32.960
+n'est qu'une partie du puzzle.
+
+00:09:33.480 --> 00:09:34.880
+Vous aurez besoin d'un moyen d'interagir avec elle,
+
+00:09:34.960 --> 00:09:35.680
+quelque chose d'assez structuré
+
+00:09:35.680 --> 00:09:36.280
+pour lancer des agents,
+
+00:09:36.380 --> 00:09:37.140
+déclencher des exécutions
+
+00:09:37.140 --> 00:09:38.240
+et voir lire les étapes d'exécution
+
+00:09:38.240 --> 00:09:38.620
+sans vous noyer.
+
+00:09:38.700 --> 00:09:39.560
+Les étapes d'exécution sont vous noyées
+
+00:09:39.560 --> 00:09:40.400
+dans des appels d'API bruts.
+
+00:09:40.560 --> 00:09:41.180
+Et le plus surprenant,
+
+00:09:41.260 --> 00:09:41.740
+c'est que vous n'avez pas besoin
+
+00:09:41.740 --> 00:09:43.040
+d'un deck de commandes rutilant pour le faire.
+
+00:09:43.500 --> 00:09:44.880
+La console que la plupart des gens utilisent
+
+00:09:44.880 --> 00:09:45.780
+est quelque chose de familier,
+
+00:09:45.860 --> 00:09:47.140
+de robuste et d'un peu moins glamour.
+
+00:09:47.700 --> 00:09:48.540
+Net Arsenal.
+
+00:09:48.800 --> 00:09:50.400
+Et Alliance ?
+
+00:09:50.400 --> 00:09:51.420
+L'Arsenal et les Alliances
+
+00:09:51.420 --> 00:09:52.320
+sont ceux qui transforment
+
+00:09:52.320 --> 00:09:54.040
+un agent de bavard en travailleur.
+
+00:09:54.740 --> 00:09:55.420
+Dans Azure Fondry,
+
+00:09:55.480 --> 00:09:56.260
+cet arsenal se présente
+
+00:09:56.260 --> 00:09:57.000
+sous la forme d'outils,
+
+00:09:57.260 --> 00:09:58.100
+d'extensions pratiques
+
+00:09:58.100 --> 00:09:58.820
+qui permettent à l'agent
+
+00:09:58.820 --> 00:10:00.200
+de passer de la parole à l'action.
+
+00:10:00.900 --> 00:10:01.920
+Au lieu de simplement décrire
+
+00:10:01.920 --> 00:10:02.880
+comment vérifier un document
+
+00:10:02.880 --> 00:10:03.780
+ou exécuter un calcul,
+
+00:10:04.120 --> 00:10:05.180
+l'agent peut réellement le faire
+
+00:10:05.180 --> 00:10:06.600
+et renvoyer le résultat.
+
+00:10:07.160 --> 00:10:08.060
+Cette distinction est ce qui rend
+
+00:10:08.060 --> 00:10:08.820
+la plateforme précieuse
+
+00:10:08.820 --> 00:10:09.700
+dans une entreprise réelle
+
+00:10:09.700 --> 00:10:10.940
+plutôt que simplement impressionnante
+
+00:10:10.940 --> 00:10:11.760
+dans une démonstration.
+
+00:10:12.140 --> 00:10:12.800
+Fondry vous propose
+
+00:10:12.800 --> 00:10:14.240
+trois catégories claires de fonctionnalités.
+
+00:10:14.580 --> 00:10:15.700
+Tout d'abord, les outils intégrés.
+
+00:10:16.160 --> 00:10:16.760
+Il s'agit notamment
+
+00:10:16.760 --> 00:10:17.680
+de l'interpréteur de code,
+
+00:10:18.140 --> 00:10:18.740
+de la recherche Bing,
+
+00:10:18.880 --> 00:10:19.740
+des connecteurs SharePoint
+
+00:10:19.740 --> 00:10:20.580
+et Microsoft Fabric,
+
+00:10:20.740 --> 00:10:22.360
+ainsi que d'Azure et iSearch.
+
+00:10:22.920 --> 00:10:23.560
+Grâce à ces outils,
+
+00:10:23.640 --> 00:10:24.680
+l'agent peut analyser des données,
+
+00:10:24.920 --> 00:10:25.620
+extraire des fichiers,
+
+00:10:25.780 --> 00:10:26.760
+rechercher du contenu d'entreprise
+
+00:10:26.760 --> 00:10:27.560
+et même créer des graphiques
+
+00:10:27.560 --> 00:10:28.940
+ou des rapports sans col personnalisé.
+
+00:10:29.560 --> 00:10:31.000
+Chacun d'eux étant le champ d'application
+
+00:10:31.000 --> 00:10:31.780
+des réponses bavardes
+
+00:10:31.780 --> 00:10:32.660
+aux produits de travail tangibles
+
+00:10:32.660 --> 00:10:33.980
+que vous pouvez inspecter et réutiliser.
+
+00:10:34.660 --> 00:10:34.980
+Deuxièmement,
+
+00:10:35.020 --> 00:10:35.640
+vous n'êtes pas limité
+
+00:10:35.640 --> 00:10:36.640
+à ce que Microsoft fournit.
+
+00:10:37.620 --> 00:10:38.640
+Fondry vous permet d'enregistrer
+
+00:10:38.640 --> 00:10:39.480
+des outils personnalisés
+
+00:10:39.480 --> 00:10:40.700
+via les spécifications OpenApplay
+
+00:10:40.700 --> 00:10:42.400
+ou le protocole de contexte de modèle, MCP.
+
+00:10:43.040 --> 00:10:44.400
+Le MCP est particulièrement important
+
+00:10:44.400 --> 00:10:45.640
+car il est traité comme l'USB-C
+
+00:10:45.640 --> 00:10:46.260
+pour les outils d'IA.
+
+00:10:46.900 --> 00:10:48.160
+Au lieu d'écrire manuellement des wrappers
+
+00:10:48.160 --> 00:10:49.340
+à chaque fois que vous connectez des agents
+
+00:10:49.340 --> 00:10:50.700
+à des serveurs MCP distants,
+
+00:10:50.820 --> 00:10:52.020
+le système gère automatiquement
+
+00:10:52.020 --> 00:10:52.640
+dans la découverte,
+
+00:10:52.800 --> 00:10:53.500
+la gestion des versions
+
+00:10:53.500 --> 00:10:54.520
+et l'invocation des outils.
+
+00:10:55.580 --> 00:10:56.540
+Cela allège considérablement
+
+00:10:56.540 --> 00:10:57.360
+les frais d'intégration,
+
+00:10:57.540 --> 00:10:58.860
+en particulier lorsque votre environnement
+
+00:10:58.860 --> 00:11:00.140
+comporte des dizaines de systèmes
+
+00:11:00.140 --> 00:11:00.780
+à relier entre eux.
+
+00:11:01.480 --> 00:11:01.840
+Troisièmement,
+
+00:11:01.880 --> 00:11:02.480
+chaque appel d'outils
+
+00:11:02.480 --> 00:11:03.440
+dans Fondry est observable.
+
+00:11:04.100 --> 00:11:04.960
+Les appels sont consignés
+
+00:11:04.960 --> 00:11:05.620
+au niveau des étapes
+
+00:11:05.620 --> 00:11:06.280
+avec l'identité,
+
+00:11:06.360 --> 00:11:06.700
+les entrées,
+
+00:11:06.760 --> 00:11:07.800
+les sorties et les horodatages.
+
+00:11:08.280 --> 00:11:09.460
+Cela signifie que la vue opérationnelle
+
+00:11:09.460 --> 00:11:10.260
+de ces agents n'est pas magique,
+
+00:11:10.340 --> 00:11:10.640
+croyez-moi.
+
+00:11:10.920 --> 00:11:11.500
+C'est un registre.
+
+00:11:11.840 --> 00:11:12.420
+Vous pouvez voir exactement
+
+00:11:12.420 --> 00:11:13.080
+ce qui a été invoqué,
+
+00:11:13.420 --> 00:11:14.240
+confirmer qu'il a respecté
+
+00:11:14.240 --> 00:11:15.180
+les autorisations appropriées
+
+00:11:15.180 --> 00:11:16.020
+et conserver des enregistrements
+
+00:11:16.020 --> 00:11:16.860
+permanents pour la conformité.
+
+00:11:17.400 --> 00:11:18.280
+Pour ancrer ces catégories,
+
+00:11:18.380 --> 00:11:19.280
+imaginez la démo démarrage RAM.
+
+00:11:20.040 --> 00:11:20.920
+Télécharger un fichier CSV
+
+00:11:20.920 --> 00:11:21.960
+en tant que message dans un thread,
+
+00:11:22.420 --> 00:11:23.160
+l'agent appelle l'outil
+
+00:11:23.160 --> 00:11:24.000
+d'interprétation de code
+
+00:11:24.000 --> 00:11:24.980
+dans ses étapes d'exécution,
+
+00:11:25.080 --> 00:11:25.580
+traite le fichier
+
+00:11:25.580 --> 00:11:26.280
+et génère un graphique.
+
+00:11:26.660 --> 00:11:27.500
+Cet artefact revient
+
+00:11:27.500 --> 00:11:28.360
+sous forme d'image jointe
+
+00:11:28.360 --> 00:11:29.360
+visible directement
+
+00:11:29.360 --> 00:11:30.220
+dans le journal du thread.
+
+00:11:30.580 --> 00:11:31.560
+Vous n'avez pas écrit d'analyseur
+
+00:11:31.560 --> 00:11:32.720
+ou de visualisation vous-même.
+
+00:11:33.200 --> 00:11:34.060
+Vous avez donné une instruction,
+
+00:11:34.460 --> 00:11:35.460
+l'agent a sélectionné l'outil,
+
+00:11:35.540 --> 00:11:36.080
+l'a exécuté
+
+00:11:36.080 --> 00:11:37.000
+et a renvoyé le fichier
+
+00:11:37.000 --> 00:11:37.660
+que vous pouvez déposer
+
+00:11:37.660 --> 00:11:38.420
+dans un rapport.
+
+00:11:39.200 --> 00:11:39.860
+Ce n'est pas de la théorie,
+
+00:11:40.000 --> 00:11:41.080
+c'est un comportement documenté
+
+00:11:41.080 --> 00:11:41.940
+dans les exemples de SDK.
+
+00:11:42.580 --> 00:11:43.640
+Là où cela ouvre vraiment la voie,
+
+00:11:43.720 --> 00:11:44.560
+c'est l'intégration d'entreprise.
+
+00:11:44.980 --> 00:11:45.940
+Les outils peuvent se connecter
+
+00:11:45.940 --> 00:11:46.820
+à des applications logiques,
+
+00:11:46.900 --> 00:11:47.620
+ce qui signifie que l'agent
+
+00:11:47.620 --> 00:11:49.160
+peut accéder à plus de 1 400 connecteurs
+
+00:11:49.160 --> 00:11:50.300
+SaaS et sur site existant
+
+00:11:50.300 --> 00:11:51.300
+et sur site existant.
+
+00:11:51.420 --> 00:11:52.700
+Plutôt que de recoder les adaptateurs
+
+00:11:52.700 --> 00:11:54.360
+pour les plateformes CRM, ERP ou ITSM,
+
+00:11:54.440 --> 00:11:55.820
+vous les configurez en fonction des connecteurs
+
+00:11:55.820 --> 00:11:57.260
+que l'entreprise utilise déjà.
+
+00:11:57.820 --> 00:11:58.520
+C'est un jeu d'échelle.
+
+00:11:59.160 --> 00:11:59.960
+Un agent peut fonctionner
+
+00:11:59.960 --> 00:12:00.620
+en toute sécurité
+
+00:12:00.620 --> 00:12:01.780
+dans un vaste paysage
+
+00:12:01.780 --> 00:12:02.600
+sans que vous écriviez
+
+00:12:02.600 --> 00:12:03.560
+de pont d'API fragiles.
+
+00:12:03.560 --> 00:12:05.040
+Ah, la question que tout le monde
+
+00:12:05.040 --> 00:12:06.200
+se pose ensuite est la sécurité.
+
+00:12:06.740 --> 00:12:07.800
+Foundry s'en occupe au cœur.
+
+00:12:08.640 --> 00:12:09.720
+Lorsque les outils se connectent
+
+00:12:09.720 --> 00:12:10.720
+à des systèmes d'entreprise
+
+00:12:10.720 --> 00:12:12.160
+tels que SharePoint ou Fabric,
+
+00:12:12.300 --> 00:12:13.180
+ils le font en utilisant
+
+00:12:13.180 --> 00:12:13.980
+une authentification
+
+00:12:13.980 --> 00:12:15.340
+au nom de Microsoft Antra.
+
+00:12:16.300 --> 00:12:17.280
+Si vous n'étiez pas autorisé
+
+00:12:17.280 --> 00:12:18.100
+à lire un fichier hier,
+
+00:12:18.180 --> 00:12:19.320
+l'agent ne contournera pas ce mur
+
+00:12:19.320 --> 00:12:20.120
+comme par magie aujourd'hui.
+
+00:12:20.620 --> 00:12:21.620
+L'identité et les autorisations
+
+00:12:21.620 --> 00:12:22.260
+restent intactes,
+
+00:12:22.320 --> 00:12:22.860
+ce qui est la seule façon
+
+00:12:22.860 --> 00:12:23.780
+pour les équipes de conformité
+
+00:12:23.780 --> 00:12:24.500
+de donner leur bénédiction.
+
+00:12:24.980 --> 00:12:26.140
+Chaque appel est également traçable.
+
+00:12:26.460 --> 00:12:27.280
+Qui l'a invoqué ?
+
+00:12:27.280 --> 00:12:28.100
+Qu'est-ce qui a été envoyé ?
+
+00:12:28.100 --> 00:12:28.980
+Qu'est-ce qui a été reçu ?
+
+00:12:28.980 --> 00:12:29.820
+Ainsi, les équipes conservent
+
+00:12:29.820 --> 00:12:30.280
+toujours le reçu.
+
+00:12:30.580 --> 00:12:31.300
+Sur un vin naturel,
+
+00:12:31.380 --> 00:12:32.220
+cette boîte à outils complète
+
+00:12:32.220 --> 00:12:33.200
+fait de votre escouade d'agents
+
+00:12:33.200 --> 00:12:34.340
+bien plus qu'une nouveauté.
+
+00:12:34.620 --> 00:12:35.380
+Vous obtenez des unités
+
+00:12:35.380 --> 00:12:36.120
+capables d'interroger
+
+00:12:36.120 --> 00:12:36.760
+des données réelles,
+
+00:12:36.860 --> 00:12:37.760
+de les traiter et d'agir
+
+00:12:37.760 --> 00:12:38.540
+dans le cadre aux garde-fous
+
+00:12:38.540 --> 00:12:39.460
+déjà familiers à l'informatique.
+
+00:12:39.820 --> 00:12:40.480
+Sur un vin naturel,
+
+00:12:40.540 --> 00:12:41.020
+sans ces options,
+
+00:12:41.140 --> 00:12:42.000
+vous vous retrouvez avec une session
+
+00:12:42.000 --> 00:12:42.720
+de chat qui parle beaucoup
+
+00:12:42.720 --> 00:12:43.700
+mais qui ne fait jamais le travail.
+
+00:12:44.240 --> 00:12:44.900
+C'est pourquoi l'arsenal
+
+00:12:44.900 --> 00:12:45.460
+est aussi important
+
+00:12:45.460 --> 00:12:46.220
+que le chef d'escouade.
+
+00:12:47.220 --> 00:12:48.040
+Le modèle et les instructions
+
+00:12:48.040 --> 00:12:48.900
+peuvent ancrer la façon
+
+00:12:48.900 --> 00:12:49.540
+dont l'agent pense,
+
+00:12:49.660 --> 00:12:50.460
+mais sans outils connectés
+
+00:12:50.460 --> 00:12:51.160
+de manière responsable
+
+00:12:51.160 --> 00:12:51.620
+et bien enregistrer
+
+00:12:51.620 --> 00:12:52.100
+de manière fiable
+
+00:12:52.100 --> 00:12:52.680
+cette manière fiable,
+
+00:12:52.800 --> 00:12:53.380
+cela reste une demi-mise.
+
+00:12:53.600 --> 00:12:54.400
+Avec l'ensemble intégré
+
+00:12:54.400 --> 00:12:54.840
+de Fondry,
+
+00:12:55.040 --> 00:12:55.480
+le MCP,
+
+00:12:55.560 --> 00:12:56.760
+l'extensibilité des API ouvertes
+
+00:12:56.760 --> 00:12:57.200
+et la sécurité
+
+00:12:57.200 --> 00:12:57.880
+de niveau entreprise,
+
+00:12:57.980 --> 00:12:58.600
+vous avez les ingrédients
+
+00:12:58.600 --> 00:12:59.620
+d'une force disciplinée
+
+00:12:59.620 --> 00:13:00.820
+et non d'une force disciplinée
+
+00:13:00.820 --> 00:13:01.580
+et non d'une collection
+
+00:13:01.580 --> 00:13:02.280
+d'invites de devinettes.
+
+00:13:02.560 --> 00:13:03.100
+Cela nous amène
+
+00:13:03.100 --> 00:13:03.680
+à la vue d'ensemble.
+
+00:13:04.180 --> 00:13:04.720
+Les agents de Fondry
+
+00:13:04.720 --> 00:13:05.300
+ne sont pas conçus
+
+00:13:05.300 --> 00:13:05.920
+pour être des acolytes
+
+00:13:05.920 --> 00:13:06.780
+ou des jouets aléatoires.
+
+00:13:07.240 --> 00:13:07.560
+Ils sont conçus
+
+00:13:07.560 --> 00:13:08.580
+comme des opérateurs gouvernés
+
+00:13:08.580 --> 00:13:09.220
+avec une structure,
+
+00:13:09.360 --> 00:13:10.380
+avec des charges comptabilisées
+
+00:13:10.380 --> 00:13:11.400
+et avec un équipement
+
+00:13:11.400 --> 00:13:12.080
+qui les rend utiles
+
+00:13:12.080 --> 00:13:12.540
+en production.
+
+00:13:13.680 --> 00:13:14.140
+Donc c'est là
+
+00:13:14.140 --> 00:13:14.860
+que la campagne se termine.
+
+00:13:15.260 --> 00:13:15.920
+C'est l'heure de la conclusion.
+
+00:13:16.300 --> 00:13:17.100
+Fondry ne se contente pas
+
+00:13:17.100 --> 00:13:18.060
+de lancer des invites à un modèle.
+
+00:13:18.420 --> 00:13:19.640
+Il vous offre un moyen reproductible
+
+00:13:19.640 --> 00:13:20.340
+de créer des agents
+
+00:13:20.340 --> 00:13:20.980
+dotés d'un cerveau,
+
+00:13:21.040 --> 00:13:21.680
+d'un manuel de règles
+
+00:13:21.680 --> 00:13:22.360
+et d'une boîte à outils.
+
+00:13:22.740 --> 00:13:23.240
+Et chaque action
+
+00:13:23.240 --> 00:13:23.740
+qu'ils effectuent
+
+00:13:23.740 --> 00:13:24.560
+est consignée dans des threads
+
+00:13:24.560 --> 00:13:25.020
+d'exécution
+
+00:13:25.020 --> 00:13:25.800
+et des étapes d'exécution.
+
+00:13:26.480 --> 00:13:27.540
+Pour les responsables du développement
+
+00:13:27.540 --> 00:13:28.560
+et les responsables de la conformité,
+
+00:13:28.660 --> 00:13:29.220
+l'outil très simple.
+
+00:13:29.660 --> 00:13:30.680
+Nous proposons une exécution
+
+00:13:30.680 --> 00:13:31.760
+reproductible et vérifiable
+
+00:13:31.760 --> 00:13:32.940
+avec des SDK tels que net,
+
+00:13:33.040 --> 00:13:33.860
+ce qui vous offre un contrôle
+
+00:13:33.860 --> 00:13:34.740
+et une visibilité complète
+
+00:13:34.740 --> 00:13:35.360
+du cycle de vie.
+
+00:13:36.080 --> 00:13:36.740
+Votre prochaine étape
+
+00:13:36.740 --> 00:13:37.820
+consiste à lancer un projet de test,
+
+00:13:37.960 --> 00:13:38.680
+à créer un agent de base,
+
+00:13:38.800 --> 00:13:39.560
+à exécuter un thread
+
+00:13:39.560 --> 00:13:40.080
+puis à inspecter
+
+00:13:40.080 --> 00:13:40.780
+les étapes d'exécution
+
+00:13:40.780 --> 00:13:42.040
+dans le SDK ou le portail.
+
+00:13:42.680 --> 00:13:43.420
+C'est ainsi que vous confirmez
+
+00:13:43.420 --> 00:13:43.840
+que vos journaux
+
+00:13:43.840 --> 00:13:44.460
+correspondent à l'histoire.
+
+00:13:44.720 --> 00:13:45.360
+Si cela vous a aidé
+
+00:13:45.360 --> 00:13:46.340
+à obtenir un vin naturel
+
+00:13:46.340 --> 00:13:47.020
+lors des déploiements,
+
+00:13:47.440 --> 00:13:48.720
+abonnez-vous et activez les alertes.
+
+00:13:49.460 --> 00:13:50.480
+Ou nous avons apprivoisé
+
+00:13:50.480 --> 00:13:51.000
+un autre cluster,
+
+00:13:51.160 --> 00:13:51.860
+abonnez-vous pour maintenir
+
+00:13:51.860 --> 00:13:52.620
+votre flotte en formation.
