@@ -171,8 +171,12 @@ def list_channel_videos(cfg, limit: int | None) -> list[dict]:
         except Exception as e:
             log.warning("Quelle %s nicht lesbar: %s", src, str(e).splitlines()[0])
             continue
+        min_dur = cfg.get("min_duration_seconds", 0)
         for e in (info or {}).get("entries") or []:
             vid = e.get("id")
+            dur = e.get("duration")
+            if min_dur and (("/shorts/" in (e.get("url") or "")) or (dur is not None and dur < min_dur)):
+                continue  # Shorts überspringen
             if vid and vid not in seen:
                 seen.add(vid)
                 videos.append({"id": vid, "title": e.get("title")})
