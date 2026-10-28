@@ -1202,17 +1202,29 @@ def main() -> None:
     if args.command == "shows":
         return cmd_shows(cfg, state, args)
 
+    want_upload = args.command == "upload" or (args.command == "run" and
+                                               (cfg.get("auto_upload") or cfg.get("upload_mode", "texts") == "texts"))
+
+    def do_upload():
+        if not want_upload:
+            return
+        if not cfg.get("spreaker_token"):
+            log.warning("Kein Spreaker-Login – Upload übersprungen (spreaker_login.bat ausführen).")
+            return
+        try:
+            cmd_upload(cfg, state, args)
+        except Exception as e:  # Upload-Fehler sollen den Lauf nicht abbrechen
+            log.error("Upload-Fehler: %s", e)
+
     with RunLock("upload" if args.command == "upload" else "run"):
+        # Erst veröffentlichen, was schon fertig ist – dann laden/transkribieren – dann nochmal veröffentlichen
+        if args.command == "run":
+            do_upload()
         if args.command in ("run", "download"):
             cmd_download(cfg, state, args)
         if args.command == "run" and cfg.get("transcript_engine", "whisper") == "whisper" and not args.dry_run:
-            run_transcripts(cfg, state, limit=cfg.get("max_transcripts_per_run", 120))
-        if args.command == "upload" or (args.command == "run" and
-                                         (cfg.get("auto_upload") or cfg.get("upload_mode", "texts") == "texts")):
-            if cfg.get("spreaker_token"):
-                cmd_upload(cfg, state, args)
-            else:
-                log.warning("Kein Spreaker-Login – Upload übersprungen (spreaker_login.bat ausführen).")
+            run_transcripts(cfg, state, limit=cfg.get("max_transcripts_per_run", 50))
+        do_upload()
 
 
 if __name__ == "__main__":
