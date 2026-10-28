@@ -1,0 +1,1573 @@
+WEBVTT
+
+00:00:00.370 --> 00:00:06.790
+Bereit für 10 Tage voller Microsoft 365, Co-Pilot, KI, Azure und den Menschen, die die Zukunft der Arbeit gestalten?
+
+00:00:07.570 --> 00:00:12.070
+Diesen Januar ist die M365-Kont zurück und wir legen noch eins drauf. Blalip.
+
+00:00:12.950 --> 00:00:17.970
+Seien Sie dabei bei Live-Sitzungen, Praxis-Demos und Expertenwissen von MVPs und Branchenprofis aus der ganzen Welt.
+
+00:00:18.870 --> 00:00:21.230
+Keine generischen Folien, keine endlosen Schlagworte.
+
+00:00:21.970 --> 00:00:28.850
+Wir gehen die echten Herausforderungen an, Co-Pilot Studio, KI-Agenten, Fabrik, Sicherheit, Governance und Automatisierung.
+
+00:00:28.850 --> 00:00:34.350
+Ob IT-Profi, Entwickler oder Führungskraft, eh es gibt Sitzungen, die genau auf Sie zugeschnitten sind.
+
+00:00:35.550 --> 00:00:39.850
+An 10 vollen Tagen können Sie verschiedene Technologien erkunden und sich mit einer globalen Community vernetzen.
+
+00:00:40.930 --> 00:00:44.270
+Schauen Sie live zu und nehmen Sie praktische Erkenntnisse mit in Ihr Unternehmen.
+
+00:00:45.150 --> 00:00:48.790
+Januar 2027, 10 Tage, eine Microsoft-Community.
+
+00:00:49.370 --> 00:00:50.470
+Die Registrierung ist jetzt eröffnet.
+
+00:00:51.870 --> 00:00:55.350
+Besuchen Sie mtrent5.net und sichern Sie sich noch heute Ihren Platz.
+
+00:00:56.350 --> 00:00:58.250
+Das ist mtrent5.net.
+
+00:00:58.850 --> 00:01:02.970
+Melden Sie sich jetzt auf mtrent5.net an.
+
+00:01:03.490 --> 00:01:04.690
+Wir sehen uns live im Januar.
+
+00:01:05.230 --> 00:01:08.710
+Wenn Sie glauben, Co-Pilot zeigt nur das, wofür Sie bereits eine Berechtigung haben, denken Sie noch einmal nach.
+
+00:01:09.230 --> 00:01:13.930
+Eine falsche Graph-Berechtigung und plötzlich kann Ihre KI-Daten anzeigen, die Ihr Compliance-Team nie freigegeben hat.
+
+00:01:14.470 --> 00:01:16.670
+Das Erschreckende daran, Sie merken vielleicht nicht einmal, dass es passiert.
+
+00:01:16.670 --> 00:01:24.950
+In diesem Video erläutere ich die echten Risiken von Unmanaged Co-Pilot-Zugriffen und wie sensible Dateien, Finanztabellen und vertrauliche Kundendaten durchsickern können, durchsickern können.
+
+00:01:24.950 --> 00:01:33.790
+Anschließend zeige ich Ihnen, wie Sie das Ganze mit Graph-Berechtigung, DLP-Richtlinien und Purview absichern, ohne die Produktivität derer zu beeinträchtigen, die den Zugriff wirklich benötigen.
+
+00:01:33.790 --> 00:01:39.210
+Wenn Co-Pilot zu viel weiß, fragt ein Mitarbeiter Co-Pilot nach Notizen zur Projekt-Review des letzten Quartals.
+
+00:01:39.210 --> 00:01:51.590
+Und was zurückkommt, ist keine saubere Zusammenfassung des eigenen Meetings, sondern detaillierte Protokolle einer vertraulichen Vorstandssitzung inklusive Strategieentscheidungen, Budgetkürzungen und Namen, die nie in den Posteingang dieser Person hätten gelangen dürfen, die nie in den Posteingang dürfen.
+
+00:01:52.130 --> 00:01:57.390
+Kein Sicherheitsalarm, keine DLP-Warnung, nur eine KI, die stillschweigend ein Dokument herausgibt, das sie nie hätte berühren dürfen.
+
+00:01:58.270 --> 00:02:02.210
+Dies geschieht, weil Co-Pilot nicht auf magische Weise am Postfach- oder OneDrive-Ordnern des Benutzers Halt macht.
+
+00:02:02.210 --> 00:02:06.650
+Eine Reichweite wird durch die Berechtigung bestimmt, die über Microsoft Graph erteilt wurden.
+
+00:02:08.330 --> 00:02:19.050
+Und Graph ist nicht nur eine Datenbank, es ist der zentrale Zugriffspunkt für nahezu jeden Inhalt in Microsoft 365, SharePoint, Teams-Nachrichten, Kalenderereignisse, OneNote, CRM-Daten, die mit dem Tenant verknüpft sind.
+
+00:02:20.310 --> 00:02:22.750
+Alles läuft über Graph, sobald die richtige Tür offen steht.
+
+00:02:23.350 --> 00:02:24.710
+Das ist der Punkt, den viele Administratoren übersehen.
+
+00:02:25.250 --> 00:02:29.130
+Es gibt die allgemeine Annahme, dass Co-Pilot nur das sehen kann, was ich selbst sehen kann, wenn ich angemeldet bin.
+
+00:02:30.070 --> 00:02:30.650
+Klingt vernünftig.
+
+00:02:30.650 --> 00:02:35.470
+Das Problem ist, dass Co-Pilot selbst oft mit einem separaten Satz an Anwendungsberechtigungen läuft.
+
+00:02:36.530 --> 00:02:43.870
+Wenn diese Berechtigungen umfassender sind als die Rechte des angemeldeten Benutzers, erhalten Sie einen KI-Assistenten, der weit mehr erreichen kann als der Mensch an der Tastatur.
+
+00:02:45.270 --> 00:02:49.570
+Und in einigen Implementierungen werden diese erweiterten Berechtigungen vergeben, ohne dass jemand nach dem Warum fragt.
+
+00:02:51.090 --> 00:02:53.630
+Stellen Sie sich einen Finanzanalysten vor, der in einer Quartalsprognose arbeitet.
+
+00:02:54.210 --> 00:02:57.690
+Er bittet Co-Pilot um die aktuellen Pipeline-Daten für die 20 wichtigsten Kunden.
+
+00:02:57.690 --> 00:03:01.690
+In seiner regulären Rolle sollte er nur Zahlen für einen Teil der Kunden sehen.
+
+00:03:01.690 --> 00:03:12.950
+Doch dank der Art und Weise, wie Graph in der App-Registrierung von Co-Pilot konfiguriert wurde, zieht die KI den gesamten Vertriebs-Pipeline-Bericht von einer Team-Website, auf die der Analyst nie direkten Zugriff hatte, auf die direkten Zugriff hatte.
+
+00:03:13.370 --> 00:03:15.630
+Aus Sicht des Endbenutzers sieht das nicht verdächtig aus.
+
+00:03:15.630 --> 00:03:19.290
+Aber aus Sicherheits- und Compliance-Sicht ist das eine sensible Offenlegung.
+
+00:03:20.310 --> 00:03:23.790
+Die Graph-Art-Berechtigungen sind praktisch das Eingangstor zu den Daten Ihres Unternehmens.
+
+00:03:24.630 --> 00:03:32.550
+Microsoft unterteilt sie in Delegierte Berechtigungen, die im Auftrag eines angemeldeten Benutzers agieren, und Anwendungsberechtigungen, die es einer App ermöglichen, unabhängig zu arbeiten.
+
+00:03:33.330 --> 00:03:44.870
+Co-Pilot-Szenarien erfordern oft Delegierte Berechtigungen für den Abruf von Inhalten, aber bestimmte Funktionen, wie das Zusammenfassen eines Teams-Meetings, an dem der Benutzer nicht teilgenommen hat, können Administratoren dazu veranlassen, Berechtigungen dazu veranlassen, Berechtigungen auf Anwendungsebene zu nehmen.
+
+00:03:45.630 --> 00:03:47.230
+Und genau da schleicht sich die Gefahr ein.
+
+00:03:48.190 --> 00:03:51.950
+Anwendungsberechtigungen ignorieren individuelle Benutzerbeschränkungen, es sei denn, sie grenzen sie gezielt ein.
+
+00:03:52.950 --> 00:04:06.450
+Diese Genehmigungen erfolgen oft früh bei der Einführung, und ein IT-Administrator, der Co-Pilot in einem Entwicklungstenent testet, klickt bei einer Berechtigungsaufforderung möglicherweise einfach auf Akzeptieren, um die Einrichtung abzuschließen, und übernimmt diese Konfiguration dann in die Produktion, ohne die Auswirkungen zu prüfen.
+
+00:04:07.210 --> 00:04:11.190
+Einmal eingerichtet bleiben diese weitreichen Berechtigungen bestehen, sofern sie nicht aktiv von jemandem überprüft werden.
+
+00:04:11.190 --> 00:04:18.950
+Im Laufe der Zeit, wenn neue Datenquellen mit M35 verbunden werden, erweitert sich die Reichweite von Co-Pilot, ohne dass eine bewusste Entscheidung getroffen wird, ab.
+
+00:04:19.510 --> 00:04:25.130
+Das ist ein schleichendes Ausweiten von Berechtigungen, kein Drama, keine Benutzerbeschwerden, nur eine allmähliche Vergrößerung des KI-Anwendungsbereichs.
+
+00:04:25.130 --> 00:04:31.710
+Die Herausforderung besteht darin, dass die meisten Sicherheitsteams nicht genau wissen, welche Co-Pilot-Funktionen welches Maß an Graph-Zugriff erfordern.
+
+00:04:31.950 --> 00:04:40.330
+Sie sehen vielleicht alle Dateien in SharePoint lesen und gehen davon aus, dass dies durch den Benutzerkontext eingeschränkt ist, ohne zu bemerken, dass die Berechtigung auf Anwendungsebene für den gesamten Tenant gilt.
+
+00:04:41.230 --> 00:04:49.070
+Ohne spezifische KI-Szenarien auf die minimal erforderlichen Berechtigungen abzubilden, landen sie bei den Standardeinstellungen, die bei der ersten Einrichtung genehmigt wurden.
+
+00:04:49.070 --> 00:04:55.650
+Und je umfassender diese Rechte sind, desto größer ist die potenzielle Kluft zwischen dem erwarteten und dem tatsächlichen Verhalten.
+
+00:04:56.730 --> 00:05:02.950
+Es ist auch wichtig, daran zu denken, dass die Ausgabe von Co-Pilot keine integrierte, für den Benutzer sichtbare Berechtigungshistorie enthält.
+
+00:05:04.190 --> 00:05:11.370
+Wenn die KI-Inhalte von einem Ort abruft, den der Benutzer normalerweise nicht durchsuchen dürfte, gibt es keinen Warnbanner, das besagt, dass dies außerhalb ihrer Freigabe liegt.
+
+00:05:12.690 --> 00:05:17.390
+Diese mangelnde Transparenz macht es einfacher, dass sich riskante Offenlegungen in die täglichen Arbeitsabläufe einschleichen.
+
+00:05:17.830 --> 00:05:23.070
+Die Erkenntnis hier ist, dass Graph-Berechtigungen für KI-Implementierung nicht nur ein weiterer Haken im Onboarding-Prozess sind.
+
+00:05:24.250 --> 00:05:27.970
+Sie sind eine Designentscheidung, die jede Interaktion prägt, die Co-Pilot in ihrem Netzwerk haben wird.
+
+00:05:29.190 --> 00:05:34.770
+Behandeln Sie diese wie Firewall-Regeln oder VPN-Zugriffsbereiche, wohl überlegt, geprüft und regelmäßig neu validiert.
+
+00:05:36.770 --> 00:05:41.610
+Standardeinstellungen bringen Sie zwar schnell zum Laufen, setzen aber auch voraus, dass die KI ein viel größeres Netz auswirft als der Mensch dahinter.
+
+00:05:41.610 --> 00:05:48.990
+Nachdem wir gesehen haben, wie leicht sich der Umfang ausweiten kann, stellt sich die Frage, wie man diese Lücken findet, bevor sie zu einem echten Vorfall führen.
+
+00:05:50.570 --> 00:05:51.610
+Lecks finden, bevor sie auslaufen?
+
+00:05:52.190 --> 00:05:55.110
+Würden Sie überhaupt bemerken, wenn Co-Pilot Daten preisgibt, die er nicht anzeigen dürfte?
+
+00:05:55.790 --> 00:05:57.890
+Für die meisten Unternehmen lautet die ehrliche Antwort, nein.
+
+00:05:57.890 --> 00:06:03.030
+Es geht nicht darum, dass Informationen auf einer öffentlichen Website veröffentlicht oder an eine Mailing-Liste gesendet werden.
+
+00:06:04.210 --> 00:06:09.590
+Das Leck könnte unbemerkt in einem Dokumententwurf, einer Zusammenfassung oder einer KI-generierten Antwort auftauchen.
+
+00:06:10.550 --> 00:06:14.050
+Und solange niemand etwas Ungewöhnliches bemerkt, schlüpft es durch, ohne Alarm zu schlagen.
+
+00:06:14.990 --> 00:06:18.330
+Das Problem der Sichtbarkeit beginnt damit, wie die meisten Überwachungssysteme aufgebaut sind.
+
+00:06:19.090 --> 00:06:25.170
+Sie sind auf herkömmliche Aktivitäten, abgestimmte Datei-Downloads, ungewöhnliche Anmeldeorte, große E-Mail-Sendungen nicht auf die Art und Weise,
+
+00:06:25.170 --> 00:06:28.130
+wie eine KI-Information abruft und zusammenstellt.
+
+00:06:29.350 --> 00:06:31.050
+Co-Pilot öffnet Dateien nicht im üblichen Sinne.
+
+00:06:31.730 --> 00:06:37.130
+Er fragt Datenquellen über Microsoft Graph ab, stellt die Ergebnisse zusammen und präsentiert sie als natürlichsprachlichen Text.
+
+00:06:38.290 --> 00:06:40.990
+Das bedeutet, dass Standarddatei-Zugriffsberichte sauber aussehen können,
+
+00:06:41.150 --> 00:06:44.530
+während die KI im Hintergrund weiterhin auf sensible Bereiche zugreift.
+
+00:06:45.950 --> 00:06:49.430
+Ich habe Situationen erlebt, in denen ein Unternehmen nur deshalb merkte, dass etwas nicht stimmte,
+
+00:06:49.490 --> 00:06:53.510
+weil ein Mitarbeiter beiläufig einen Kundennamen erwähnte, der nicht in den Aufgabenbereich seiner Abteilung fiel.
+
+00:06:53.510 --> 00:06:58.070
+Als der Manager fragte, woher das Wisse, lautete die Antwort, Co-Pilot hat es in meinen Entwurf eingefügt.
+
+00:06:58.750 --> 00:07:00.870
+Es gab kein Vorfallticket, keinen automatisierten Alarm,
+
+00:07:01.490 --> 00:07:04.010
+nur einen zufälligen Kommentar, der die IT zu einer Untersuchung veranlasste.
+
+00:07:05.110 --> 00:07:09.770
+Als sie den Vorfall nachvollzogen hatten, waren dieselben KI-Antworten bereits an mehrere Teams weitergegeben worden.
+
+00:07:10.570 --> 00:07:15.710
+Microsoft 365 bietet ihnen die Werkzeuge, um solche Szenarien zu untersuchen, aber sie müssen wissen, wo sie suchen müssen.
+
+00:07:16.230 --> 00:07:19.970
+Die Audit-Funktion von Purview kann die Datenzugriffe von Co-Pilot im Detail aufzeichnen.
+
+00:07:19.970 --> 00:07:23.470
+Sie ist nur nicht mit einem großen, blinkenden KI-Batch gekennzeichnet.
+
+00:07:24.030 --> 00:07:28.390
+Sobald sie sich in der Protokollsuche befinden, können sie nach den spezifischen Vorgängen filtern, die Co-Pilot verwendet,
+
+00:07:28.470 --> 00:07:33.390
+wie zum B ausgeführte Suchanfragen oder Dateizugriffe, und diese anhand der Anwendungs-ID eingrenzen,
+
+00:07:33.470 --> 00:07:35.270
+die mit ihrer Co-Pilot-Bereitstellung verknüpft ist.
+
+00:07:36.050 --> 00:07:37.090
+Das erfordert immer nicht Vorbereitung.
+
+00:07:37.590 --> 00:07:41.990
+Sie sollten die App-Registrierungsdetails in Entra-ID bestätigen, damit sie den Datenverkehr identifizieren können.
+
+00:07:42.430 --> 00:07:43.870
+Von dort aus geht es darum, Muster zu erkennen.
+
+00:07:43.870 --> 00:07:47.730
+Wenn Sie ein hohes Abfragevolumen von Konten sehen, die normalerweise einen geringen Datenbedarf haben,
+
+00:07:47.790 --> 00:07:52.110
+wie etwa ein Praktikantenkonto, das in einer Stunde zehn komplexe Suchanfragen durchführt, ist das eine Überprüfung wert.
+
+00:07:53.050 --> 00:07:55.670
+Dasselbe gilt für plötzliche Spitzenbeinhalt mit der Kennzeichnung vertraulich,
+
+00:07:55.730 --> 00:07:57.810
+die in Abteilungen auftauchen, die normalerweise nicht damit arbeiten.
+
+00:07:58.550 --> 00:08:00.310
+Purview kann Labelaktivitäten kennzeichnen.
+
+00:08:00.830 --> 00:08:04.530
+Wenn also eine Co-Pilot-Abfrage ein markiertes Dokument aufruft, sehen Sie dies in den Protokollen,
+
+00:08:04.890 --> 00:08:06.870
+selbst wenn die KI nicht den gesamten Text ausgibt.
+
+00:08:08.630 --> 00:08:11.510
+Rollenbasierte Zugriffsüberprüfungen sind eine weitere Möglichkeit, die Zusammenhänge zu verstehen.
+
+00:08:11.510 --> 00:08:15.330
+Indem Sie erfassen, der Co-Pilot tatsächlich nutzt und dies mit den Daten abgleichen,
+
+00:08:15.350 --> 00:08:18.870
+auf die diese Personen zugreifen, lassen sich potenzielle Unstimmigkeiten frühzeitig erkennen.
+
+00:08:19.970 --> 00:08:22.930
+Vielleicht nutzt die Finanzabteilung Co-Pilot intensiv für Berichte, was sinnvoll ist,
+
+00:08:23.030 --> 00:08:26.450
+aber warum greifen mehrere Marketingkonten über KI-Abfragen auf Gehaltslisten zu?
+
+00:08:27.330 --> 00:08:29.250
+Diese Überprüfungen bieten Ihnen ein breiteres Bild,
+
+00:08:29.410 --> 00:08:31.750
+das über einzelne Ereignisse im Überwachungspfad hinausgeht.
+
+00:08:32.510 --> 00:08:35.450
+Der Haken dabei ist, dass allgemeine Monitoring-Dashboards hier kaum weiterhelfen.
+
+00:08:35.450 --> 00:08:39.950
+Sie fassen alle M365-Aktivitäten in groben Kategorien zusammen,
+
+00:08:40.290 --> 00:08:44.030
+wodurch KI-spezifisches Verhalten mit normalen Vorgängen verschwimmt.
+
+00:08:44.910 --> 00:08:49.910
+Ohne benutzerdefinierte Filter oder Berichte, die sich auf Ihre Co-Pilot-App-ID und Nutzungsmuster konzentrieren,
+
+00:08:50.190 --> 00:08:53.750
+suchen Sie im Grunde nach bestimmten Sandkörnern in einer riesigen Datenmenge,
+
+00:08:54.030 --> 00:08:55.290
+äh, riesigen Datenmenge.
+
+00:08:55.390 --> 00:08:57.730
+Sie benötigen gezielte Sichtbarkeit, nicht einfach nur mehr Sichtbarkeit.
+
+00:08:58.090 --> 00:09:00.170
+Es geht nicht darum, eine Überwachungskultur zu etablieren,
+
+00:09:00.230 --> 00:09:02.650
+sondern mit Sicherheit zu wissen, was Ihre KI tatsächlich abruft.
+
+00:09:02.650 --> 00:09:06.010
+Ein geeigneter Protokollierungsansatz beantwortet drei entscheidende Fragen.
+
+00:09:06.410 --> 00:09:07.310
+Was hat Co-Pilot abgerufen?
+
+00:09:07.730 --> 00:09:08.490
+Wer hat die Aktion ausgelöst?
+
+00:09:08.870 --> 00:09:11.950
+Und entsprach diese Aktion ihren bestehenden Sicherheits- und Compliance-Richtlinien?
+
+00:09:12.710 --> 00:09:15.230
+Diese Antworten ermöglichen es Ihnen, Probleme präzise anzugehen,
+
+00:09:15.410 --> 00:09:18.590
+sei es durch die Anpassung einer Berechtigung, die Verfeinerung einer DLP-Regel
+
+00:09:18.590 --> 00:09:20.930
+oder die Straffung von Rollenzuweisungen oder die Straffungen.
+
+00:09:21.670 --> 00:09:25.270
+Ohne diese Klarheit tappen Sie im Dunkeln und raten es keine Sicherheitsstrategie.
+
+00:09:26.270 --> 00:09:29.830
+Anstatt darauf zu warten, dass ein beiläufiger Kommentar Sie auf ein Problem hinweist,
+
+00:09:29.830 --> 00:09:33.390
+lohnt es sich, Zeit in die Strukturierung Ihres Monitorings zu investieren,
+
+00:09:33.450 --> 00:09:36.030
+damit der Fußabdruck von Co-Pilot sichtbar und nachvollziehbar wird.
+
+00:09:37.030 --> 00:09:39.290
+Auf diese Weise wird jedes Anzeichen von Datenüberbelichtung
+
+00:09:39.290 --> 00:09:41.550
+zu einem kontrollierten Ereignis und nicht zu einer Überraschung.
+
+00:09:42.510 --> 00:09:44.290
+Zu wissen, wo die Lags sind, ist nur der erste Schritt.
+
+00:09:45.170 --> 00:09:47.570
+Das eigentliche Ziel ist, es sicherzustellen, dass sie nicht erneut auftreten
+
+00:09:47.570 --> 00:09:49.650
+und genau hier kommen die richtigen Leitplanken ins Spiel.
+
+00:09:50.610 --> 00:09:51.790
+Leitplanken, die auch wirklich funktionieren.
+
+00:09:51.790 --> 00:09:54.990
+DLP ist nicht nur dazu da, E-Mails mit Kritik-Kartennummern abzufangen.
+
+00:09:56.170 --> 00:09:59.270
+Im Kontext von Co-Pilot kann es als Stolperdraht dienen,
+
+00:09:59.630 --> 00:10:02.950
+der verhindert, dass sensible Daten in eine KI-generierte Antwort gelangen,
+
+00:10:03.070 --> 00:10:05.850
+die dann in einen Teams-Chat kopiert oder in ein Dokument exportiert wird,
+
+00:10:06.210 --> 00:10:07.610
+das ihren Tenant verlässt.
+
+00:10:08.890 --> 00:10:12.110
+Es ist zwar dasselbe zugrunde liegende Tool in Microsoft 365,
+
+00:10:12.610 --> 00:10:16.370
+aber die Konfiguration für KI-Szenarien erfordert ein Umdenken.
+
+00:10:16.370 --> 00:10:19.670
+Das Problem ist, dass die DLP-Richtlinien der meisten Unternehmen
+
+00:10:19.670 --> 00:10:21.990
+noch auf klassische Auslöser ausgerichtet sind.
+
+00:10:22.130 --> 00:10:24.530
+E-Mail-Anhänge, Datei-Downloads auf USB-Sticks
+
+00:10:24.530 --> 00:10:27.450
+oder das Kopieren von Daten in nicht genehmigte Apps.
+
+00:10:29.090 --> 00:10:31.530
+Co-Pilot löst diese Regeln standardmäßig nicht aus,
+
+00:10:31.610 --> 00:10:33.050
+da keine Dateien versendet werden.
+
+00:10:33.570 --> 00:10:35.070
+Es generiert Inhalte in Echtzeit.
+
+00:10:35.910 --> 00:10:37.790
+Wenn Sie Co-Pilot nach einer vollständigen Liste
+
+00:10:37.790 --> 00:10:39.490
+als eingeschränkt markierter Kunden fragen
+
+00:10:39.490 --> 00:10:41.930
+und diese aus einem klassifizierten Dokument abgerufen wird,
+
+00:10:42.030 --> 00:10:43.350
+kann die Ausgabe verbreitet werden,
+
+00:10:43.410 --> 00:10:45.990
+ohne jemals eine herkömmliche DLP-Bedingung auszulösen.
+
+00:10:47.270 --> 00:10:49.290
+Deshalb müssen KI-Prompte und Antworten
+
+00:10:49.290 --> 00:10:52.010
+explizit in Ihren DLP-Geltungsbereich einbezogen werden.
+
+00:10:53.170 --> 00:10:54.650
+Ein praktisches Beispiel.
+
+00:10:54.950 --> 00:10:57.030
+Nehmen wir an, Ihre Richtlinie verbietet den Export
+
+00:10:57.030 --> 00:10:59.590
+bestimmter Vertragsdokumente außerhalb Ihrer sicheren Umgebung.
+
+00:11:00.410 --> 00:11:01.690
+Ein Benutzer könnte Co-Pilot bitten,
+
+00:11:01.770 --> 00:11:02.970
+wichtige Klauseln zu extrahieren
+
+00:11:02.970 --> 00:11:04.550
+und in eine PowerPoint-Präsentation einzuführen.
+
+00:11:04.930 --> 00:11:07.830
+Wenn Ihre DLP-Regeln keine KI-generierten Inhalte überwachen,
+
+00:11:08.050 --> 00:11:11.070
+befindet sich das sensible Material nun in einer ungeschützten Datei.
+
+00:11:12.390 --> 00:11:14.890
+Durch die Ausweitung der DLP-Prüfung auf Co-Pilot-Ausgaben
+
+00:11:14.890 --> 00:11:16.910
+können Sie verhindern, dass diese PowerPoint-Datei
+
+00:11:16.910 --> 00:11:19.230
+an einem nicht verwalteten Speicherort gespeichert
+
+00:11:19.230 --> 00:11:21.270
+oder in Teams mit externen Gästen geteilt wird.
+
+00:11:22.590 --> 00:11:25.390
+Die Einrichtung in Microsoft 305-Masety ist nicht kompliziert,
+
+00:11:25.490 --> 00:11:27.070
+erfordert jedoch ein zielgerichtetes Vorgehen.
+
+00:11:27.790 --> 00:11:30.130
+Gehen Sie zunächst im Microsoft Purview Compliance-Portal
+
+00:11:30.130 --> 00:11:32.030
+zum Bereich Verhinderung von Datenverlust
+
+00:11:32.030 --> 00:11:33.450
+und erstellen Sie eine neue Richtlinie.
+
+00:11:34.110 --> 00:11:35.870
+Wenn Sie die Standorte für die Anwendung auswählen,
+
+00:11:35.950 --> 00:11:39.190
+schließen Sie Exchange, SharePoint, OneDrive und vor allem Teams ein,
+
+00:11:39.190 --> 00:11:41.930
+da Co-Pilot-Daten in all diesen bereitstellen kann.
+
+00:11:43.090 --> 00:11:44.590
+Definieren Sie anschließend die Bedingungen.
+
+00:11:45.590 --> 00:11:47.690
+Sie können integrierte vertrauliche Informationstypen
+
+00:11:47.690 --> 00:11:50.190
+wie Finanzkontonummern oder benutzerdefinierte Typen wählen,
+
+00:11:50.270 --> 00:11:51.890
+die Ihre internen Projektcodes erkennen.
+
+00:11:53.290 --> 00:11:55.670
+Und wenn Sie Vertraulichkeitsbezeichnungen konsequent verwenden,
+
+00:11:55.810 --> 00:11:58.030
+können Sie die Bedingungen auch so festlegen, dass sie ausgelöst wird,
+
+00:11:58.110 --> 00:12:00.930
+wenn klassifizierte Inhalte in der endgültigen Ausgabe einer Datei erscheinen,
+
+00:12:01.010 --> 00:12:02.250
+die gespeichert oder geteilt wird.
+
+00:12:03.370 --> 00:12:04.610
+Konfigurieren Sie abschließend die Aktion.
+
+00:12:05.090 --> 00:12:06.110
+Blockieren Sie die Freigabe.
+
+00:12:06.110 --> 00:12:08.010
+Zeigen Sie dem Benutzer einen Richtlinientipp an
+
+00:12:08.010 --> 00:12:10.270
+oder fordern Sie eine Begründung für das Fortfahren an.
+
+00:12:11.150 --> 00:12:12.910
+Vertraulichkeitsbezeichnungen selbst sind ein wesentlicher Bestandteil,
+
+00:12:13.010 --> 00:12:13.650
+damit dies funktioniert.
+
+00:12:14.550 --> 00:12:16.610
+Im KI-Kontext ist die Bezeichnung Metadaten,
+
+00:12:16.710 --> 00:12:20.070
+die Co-Pilot genau wie jeder andere M365-Dienst lesen kann.
+
+00:12:21.310 --> 00:12:23.650
+Wenn ein hochvertrauliches Dokument eine Bezeichnung hat,
+
+00:12:23.770 --> 00:12:25.030
+die Zugriff und Nutzung einschränkt,
+
+00:12:25.110 --> 00:12:26.730
+respektiert Co-Pilot diese Einschränkungen
+
+00:12:26.730 --> 00:12:28.690
+bei der Generierung von Antworten vorausgesetzt,
+
+00:12:28.790 --> 00:12:30.110
+die Schutzeinstellungen der Bezeichnung
+
+00:12:30.110 --> 00:12:32.450
+werden in den beteiligten Apps einheitlich durchgesetzt.
+
+00:12:32.770 --> 00:12:33.670
+Einheitlich durchgesetzt.
+
+00:12:33.670 --> 00:12:36.570
+Wenn die KI versucht, Inhalte mit einer Bezeichnung
+
+00:12:36.570 --> 00:12:38.310
+außerhalb ihres zulässigen Bereichs zu verwenden,
+
+00:12:38.390 --> 00:12:40.530
+kann die mit dieser Bezeichnung verknüpfte DLP-Richtlinie
+
+00:12:40.530 --> 00:12:42.770
+die Aktion entweder verhindern oder zur Überprüfung markieren.
+
+00:12:43.450 --> 00:12:44.930
+Ohne diese Anbindung ist die Bezeichnung
+
+00:12:44.930 --> 00:12:46.810
+aus Compliance-Sicht lediglich Dekoration.
+
+00:12:47.450 --> 00:12:47.750
+Theon.
+
+00:12:48.390 --> 00:12:49.910
+Eine der häufigsten Fehlkonfigurationen,
+
+00:12:49.950 --> 00:12:50.490
+auf die ich stoße,
+
+00:12:50.570 --> 00:12:52.990
+ist, dass DLP-Richtlinien in KI-Szenarien völlig ignorieren.
+
+00:12:53.490 --> 00:12:54.050
+Völlig ignorieren.
+
+00:12:54.050 --> 00:12:55.310
+Die Regeln sind zwar vorhanden,
+
+00:12:55.370 --> 00:12:57.170
+aber es gibt keine Verbindung zur Co-Pilot-Ausgabe,
+
+00:12:57.270 --> 00:12:59.530
+da Administratoren sie nicht als separaten Kanal betrachtet haben.
+
+00:12:59.530 --> 00:13:01.750
+Dies schafft einen toten Winkel,
+
+00:13:01.970 --> 00:13:04.650
+in dem sensible Begriffe in einer generierten Antwort nicht geprüft werden,
+
+00:13:04.750 --> 00:13:07.050
+obwohl derselbe Text in einer E-Mail blockiert worden wäre.
+
+00:13:08.250 --> 00:13:09.070
+Um dies zu beheben,
+
+00:13:09.290 --> 00:13:11.050
+müssen Sie KI-gestützte Arbeitsabläufe
+
+00:13:11.050 --> 00:13:13.030
+als einen Ihrer DLP-Standorte betrachten
+
+00:13:13.030 --> 00:13:15.330
+und diese zusammen mit allem anderen überwachen.
+
+00:13:15.330 --> 00:13:19.510
+Wenn DLP und Vertraulichkeitskennzeichen korrekt konfiguriert
+
+00:13:19.510 --> 00:13:20.690
+und aufeinander abgestimmt sind,
+
+00:13:21.170 --> 00:13:22.110
+bleibt Co-Pilot nützlich,
+
+00:13:22.250 --> 00:13:24.270
+ohne zum Compliance-Risiko zu werden.
+
+00:13:25.110 --> 00:13:26.370
+Sie können Ihnen Berichte entwerfen,
+
+00:13:26.890 --> 00:13:29.250
+Dokumente zusammenfassen und Datensätze durchsuchen lassen,
+
+00:13:29.590 --> 00:13:31.550
+während er im Hintergrund dieselben Grenzen durchsetzt,
+
+00:13:31.750 --> 00:13:33.510
+wie in einer E-Mail- oder Teams-Nachricht,
+
+00:13:33.730 --> 00:13:36.250
+wie Benutzer profitieren von der KI-Unterstützung,
+
+00:13:36.330 --> 00:13:37.350
+während Leitplanken verhindern,
+
+00:13:37.610 --> 00:13:39.290
+dass sensible Informationen nach außen dringen.
+
+00:13:39.910 --> 00:13:41.130
+Der Vorteil liegt nicht nur darin,
+
+00:13:41.190 --> 00:13:42.790
+versehentliche Datenfreigaben zu verhindern.
+
+00:13:42.790 --> 00:13:44.630
+Es geht darum, der Technologie einen Betrieb
+
+00:13:44.630 --> 00:13:46.210
+innerhalb klarer Regeln zu ermöglichen.
+
+00:13:47.350 --> 00:13:49.050
+So vermeiden Sie pauschale Einschränkungen,
+
+00:13:49.150 --> 00:13:51.290
+die Teams frustrieren und die Akzeptanz bremsen.
+
+00:13:52.550 --> 00:13:53.870
+Sie können die Kontrollen so anpassen,
+
+00:13:54.130 --> 00:13:55.810
+dass Marketing mit Copilot Brainstorm
+
+00:13:55.810 --> 00:13:57.450
+Finanzenanalysen durchführen
+
+00:13:57.450 --> 00:13:59.790
+und HR-Onboarding-Leitfäden erstellen kann,
+
+00:13:59.890 --> 00:14:02.070
+jeweils in Ihren zulässigen Bereichen.
+
+00:14:03.070 --> 00:14:04.570
+Doch die Kontrolle der Ergebnisse
+
+00:14:04.570 --> 00:14:05.590
+ist nur ein Teil des Puzzles.
+
+00:14:06.490 --> 00:14:08.070
+Um Risiken vollständig zu minimieren,
+
+00:14:08.170 --> 00:14:09.050
+müssen Sie zudem entscheiden,
+
+00:14:09.050 --> 00:14:11.330
+wer überhaupt Zugriff auf welche KI-Funktionen erhält.
+
+00:14:11.330 --> 00:14:14.770
+Äh, ein Einheitszugriff ist hier nicht zielführend.
+
+00:14:15.570 --> 00:14:17.750
+Sollten ein Marketing-Praktikant und ein CFO
+
+00:14:17.750 --> 00:14:19.810
+wirklich dieselben Copilot-Privilegien haben?
+
+00:14:20.590 --> 00:14:22.670
+Die Idee klingt absurd, wenn man sie laut ausspricht,
+
+00:14:22.750 --> 00:14:24.250
+aber in vielen Tenants ist genau das,
+
+00:14:24.410 --> 00:14:25.390
+die Standardeinstellung.
+
+00:14:26.110 --> 00:14:28.330
+Copilot wird für alle mit denselben Berechtigungen aktiviert,
+
+00:14:28.390 --> 00:14:29.690
+weil das schneller und einfacher ist
+
+00:14:29.690 --> 00:14:31.570
+als rollenspezifische Konfigurationen.
+
+00:14:32.550 --> 00:14:33.430
+Der Nachteil ist,
+
+00:14:33.510 --> 00:14:35.670
+dass der KI-Zugriff dem offensten Szenario entspricht
+
+00:14:35.670 --> 00:14:37.090
+und nicht den tatsächlichen Bedürfnissen
+
+00:14:37.090 --> 00:14:37.850
+der jeweiligen Rolle.
+
+00:14:37.850 --> 00:14:41.090
+Hier kommen rollenbasierte Copilot-Zugriffsgruppen ins Spiel.
+
+00:14:41.810 --> 00:14:43.410
+Anstatt jeden Benutzer gleich zu behandeln,
+
+00:14:43.530 --> 00:14:46.030
+passen Sie die KI-Funktionen an die Informationen und Workflows an,
+
+00:14:46.190 --> 00:14:48.010
+die für bestimmte Rollen tatsächlich erforderlich sind.
+
+00:14:49.370 --> 00:14:51.970
+Das Marketing benötigt vielleicht Zugriff auf Kampagnenmaterial
+
+00:14:51.970 --> 00:14:53.410
+und Markenrichtlinien,
+
+00:14:53.950 --> 00:14:55.670
+nicht aber auf rohe Finanzmodelle.
+
+00:14:56.730 --> 00:14:58.270
+Das Finanzwesen benötigt diese Modelle,
+
+00:14:58.270 --> 00:15:00.770
+aber keine Produkt-Roadmaps für frühe Entwicklungsphasen.
+
+00:15:01.330 --> 00:15:03.310
+Das Ziel ist nicht, Copilot weniger nützlich zu machen.
+
+00:15:03.310 --> 00:15:05.050
+Es geht darum, den Funktionsumfang
+
+00:15:05.050 --> 00:15:06.530
+für die jeweilige Tätigkeit relevant zu halten.
+
+00:15:07.250 --> 00:15:08.730
+Die Risiken einer universellen Aktivierung
+
+00:15:08.730 --> 00:15:10.210
+sind größer als die meisten Teams vermuten.
+
+00:15:10.950 --> 00:15:12.770
+Copilot arbeitet, indem auf die Daten zugreift,
+
+00:15:12.830 --> 00:15:15.310
+die bereits in ihrer Microsoft 365-Umgebung vorhanden sind.
+
+00:15:16.390 --> 00:15:18.590
+Wenn alle Mitarbeiter den gleichen KI-Zugriff haben,
+
+00:15:18.670 --> 00:15:20.870
+kann die Technologie bewusst eingerichtete Daten
+
+00:15:20.870 --> 00:15:21.670
+seelos überbrücken.
+
+00:15:22.610 --> 00:15:23.390
+So kann es passieren,
+
+00:15:23.490 --> 00:15:25.750
+dass Personalassistenten auf Umsatzübersichten stoßen
+
+00:15:25.750 --> 00:15:27.930
+oder ein Betriebsleiter Copilot
+
+00:15:27.930 --> 00:15:29.810
+nach dem Produktplan für nächstes Jahr fragt
+
+00:15:29.810 --> 00:15:31.230
+und Designdetails erhält,
+
+00:15:31.230 --> 00:15:32.670
+die noch gar nicht finalisiert sind,
+
+00:15:32.910 --> 00:15:34.130
+die noch gar nicht finalisiert sind.
+
+00:15:34.430 --> 00:15:36.350
+In diesem Moment fühlt sich das nicht wie eine Verletzung an,
+
+00:15:37.010 --> 00:15:38.070
+aber das Risiko ist real.
+
+00:15:39.050 --> 00:15:40.950
+Ein korrektes Zugriffsmodell beginnt mit der Zuordnung
+
+00:15:40.950 --> 00:15:42.510
+von Jobfunktionen zu Datenanforderungen,
+
+00:15:42.670 --> 00:15:44.190
+nicht nur bezogen auf die genutzten Anwendungen,
+
+00:15:44.330 --> 00:15:45.870
+sondern auch auf die Tiefe und Sensibilität
+
+00:15:45.870 --> 00:15:47.070
+der täglich verarbeiteten Daten.
+
+00:15:49.180 --> 00:15:50.380
+Sie werden möglicherweise feststellen,
+
+00:15:50.480 --> 00:15:52.320
+dass 70% der Anfragen Ihres Vertriebsteams
+
+00:15:52.320 --> 00:15:53.780
+an Copilot-Kundenhistorien betreffen,
+
+00:15:53.880 --> 00:15:56.480
+während weniger als 5% hochsensible Vertragsdateien berühren.
+
+00:15:57.760 --> 00:15:58.600
+Das deutet darauf hin,
+
+00:15:58.660 --> 00:16:00.180
+dass Sie die KI-Nutzung größtenteils sicher
+
+00:16:00.180 --> 00:16:01.920
+auf bestimmte SharePoint-Bibliotheken beschränken
+
+00:16:01.920 --> 00:16:03.160
+und den Rest sperren können.
+
+00:16:03.900 --> 00:16:05.400
+Führen Sie diese Übung für jede Abteilung durch,
+
+00:16:05.440 --> 00:16:06.360
+dann werden Muster erkennbar.
+
+00:16:07.000 --> 00:16:08.720
+Sobald Sie wissen, was jede Gruppe benötigt,
+
+00:16:08.780 --> 00:16:09.940
+wird Microsoft Enter ID,
+
+00:16:10.360 --> 00:16:11.700
+das viele noch Azure ID nennen,
+
+00:16:11.920 --> 00:16:13.200
+zu Ihrem Kontrollinstrument.
+
+00:16:14.260 --> 00:16:15.460
+Sie erstellen Sicherheitsgruppen
+
+00:16:15.460 --> 00:16:17.100
+entsprechend Ihrer Rollendefinitionen
+
+00:16:17.100 --> 00:16:18.640
+und weisen dann Copilot-Berechtigungen
+
+00:16:18.640 --> 00:16:19.700
+auf Gruppenebene zu.
+
+00:16:20.660 --> 00:16:21.320
+Das könnte bedeuten,
+
+00:16:21.400 --> 00:16:22.600
+bestimmte Graph-RPI-Bereiche
+
+00:16:22.600 --> 00:16:25.180
+nur für Mitglieder der Finanz-Copilot-Gruppe freizugeben,
+
+00:16:25.340 --> 00:16:26.820
+während die Marketing-Copilot-Gruppe
+
+00:16:26.820 --> 00:16:28.400
+andere erhält, erhält.
+
+00:16:29.480 --> 00:16:31.060
+Der Zugriff auf sensible Websites,
+
+00:16:31.160 --> 00:16:32.960
+Teams-Kanäle oder spezifische OneDrive-Ordner
+
+00:16:32.960 --> 00:16:34.060
+kann demselben Modell folgen.
+
+00:16:34.860 --> 00:16:36.420
+Die Stärke dieses Ansatzes zeigt sich,
+
+00:16:36.480 --> 00:16:38.040
+wenn er mit den bereits behandelten Kontrollen
+
+00:16:38.040 --> 00:16:38.740
+kombiniert wird.
+
+00:16:40.000 --> 00:16:42.040
+Graph-Berechtigungen definieren die äußeren Grenzen dessen,
+
+00:16:42.100 --> 00:16:43.560
+worauf Copilot technisch zugreifen kann.
+
+00:16:44.760 --> 00:16:46.820
+DLP-Richtlinien überwachen die KI-Ausgabe
+
+00:16:46.820 --> 00:16:47.820
+auf sensible Inhalte.
+
+00:16:49.560 --> 00:16:51.460
+Rollenbasierte Gruppen fungieren als Bindeglied.
+
+00:16:51.600 --> 00:16:52.160
+Sie stellen sicher,
+
+00:16:52.160 --> 00:16:54.460
+dass Graph-Berechtigungen für weniger sensible Rollen
+
+00:16:54.460 --> 00:16:58.080
+nicht zu weit gefasst sind und DLP keine Inhalte abfängt,
+
+00:16:58.240 --> 00:16:59.720
+die durch Einschränkung der Datenquellen
+
+00:16:59.720 --> 00:17:00.840
+vermeidbar gewesen wären.
+
+00:17:02.100 --> 00:17:04.340
+Doch wie bei jedem System kann man es auch übertreiben.
+
+00:17:04.840 --> 00:17:06.060
+Es ist verlockend, für jedes Szenario
+
+00:17:06.060 --> 00:17:07.300
+eine Mikrogruppe zu erstellen.
+
+00:17:08.220 --> 00:17:10.440
+Copilot für Finanzanalysten mit Reporting-Rechten
+
+00:17:10.440 --> 00:17:12.620
+oder Marketing-Praktikanten ohne Teams-Zugriff?
+
+00:17:13.180 --> 00:17:14.780
+So entstehen schnell Dutzende Varianten.
+
+00:17:15.680 --> 00:17:18.400
+Dieser Grad an Granularität mag auf dem Papier präzise wirken,
+
+00:17:18.520 --> 00:17:20.280
+ist in der Praxis jedoch ein Wartungsalbtraum.
+
+00:17:20.280 --> 00:17:22.380
+Benutzer wechseln Rollen, Projekte ändern sich,
+
+00:17:22.460 --> 00:17:23.760
+externe Mitarbeiter kommen und gehen.
+
+00:17:25.220 --> 00:17:26.400
+Ist das Gruppenmodell zu starr,
+
+00:17:26.480 --> 00:17:28.580
+verbringt Ihre IT mehr Zeit mit der Fehlerbehebung
+
+00:17:28.580 --> 00:17:30.540
+als mit der tatsächlichen Sicherheitsoptimierung.
+
+00:17:31.640 --> 00:17:32.460
+Eigentlicher Ziel ist das gleich.
+
+00:17:32.800 --> 00:17:34.800
+Eine Handvoll klar definierter Rollengruppen
+
+00:17:34.800 --> 00:17:36.060
+deckt die meisten Anwendungsfälle ab,
+
+00:17:36.140 --> 00:17:37.800
+ohne den administrativen Betrieb zu lähmen.
+
+00:17:38.840 --> 00:17:41.160
+Die Gruppe des CFO benötigt umfassende Analysebefugnisse,
+
+00:17:41.300 --> 00:17:43.400
+aber strenge Kontrollen bei der Weitergabe von Ergebnissen.
+
+00:17:44.340 --> 00:17:46.980
+Die Praktikantengruppe erhält einen begrenzten Datenumfang,
+
+00:17:47.120 --> 00:17:49.260
+aber genug Möglichkeiten, um sinnvoll mitzuarbeiten.
+
+00:17:49.260 --> 00:17:52.640
+Abteilungsleiter erhalten eine Mittelposition
+
+00:17:52.640 --> 00:17:54.420
+und die IT kann Anpassungen vornehmen,
+
+00:17:54.740 --> 00:17:56.520
+falls Sonderprojekte Ausnahmen erfordern.
+
+00:17:57.700 --> 00:17:59.120
+Sie wollen nicht alles so stark einschränken,
+
+00:17:59.200 --> 00:18:00.160
+dass es frustrierend wird.
+
+00:18:00.980 --> 00:18:03.120
+Sie stellen sicher, dass jede KI-Anwendung relevant,
+
+00:18:03.420 --> 00:18:04.820
+sicher und richtlinienkonform bleibt.
+
+00:18:05.700 --> 00:18:07.560
+Wenn Sie es richtig machen, zeigen sich die Vorteile schnell.
+
+00:18:08.520 --> 00:18:10.300
+Benutzer sind nicht mehr überrascht von den Daten,
+
+00:18:10.380 --> 00:18:11.180
+die Co-Pilot liefert,
+
+00:18:11.260 --> 00:18:13.060
+da sie stets in ihren Zuständigkeitsbereich fallen.
+
+00:18:13.060 --> 00:18:16.520
+Compliance-Teams müssen weniger Vorfälle untersuchen,
+
+00:18:16.520 --> 00:18:18.380
+da versehentliche Datenfreigaben ausbleiben.
+
+00:18:18.540 --> 00:18:19.080
+Ausbleiben.
+
+00:18:19.720 --> 00:18:22.900
+Und die IT kann neue Co-Pilot-Funktionen vorantreiben,
+
+00:18:23.020 --> 00:18:25.280
+ohne zu befürchten, dass ein globaler Rollout
+
+00:18:25.280 --> 00:18:28.080
+mühsam aufgebaute Datengrenzen untergräbt.
+
+00:18:28.940 --> 00:18:30.440
+Indem Zugriffsberechtigungen,
+
+00:18:30.500 --> 00:18:31.840
+Schutzmaßnahmen Hand in Hand arbeiten,
+
+00:18:31.940 --> 00:18:33.620
+haben Sie Ihr Risikoprofil erheblich gesenkt.
+
+00:18:33.620 --> 00:18:36.140
+Doch selbst ein gut durchdachtes Modell
+
+00:18:36.140 --> 00:18:37.700
+nützt nur dann etwas, wenn Sie nachweisen können,
+
+00:18:37.780 --> 00:18:39.100
+dass es funktioniert, sowohl für sich selbst
+
+00:18:39.100 --> 00:18:40.940
+als auch für jeden, der mit einer Audit-Anfrage anklopft.
+
+00:18:41.900 --> 00:18:43.400
+Compliance-Nachweise ohne das Tempo zu drossen.
+
+00:18:44.120 --> 00:18:45.800
+Compliance ist kein reines Sicherheitstheater,
+
+00:18:45.980 --> 00:18:47.880
+sondern der Beleg, der die Prüfer zufriedenstellt.
+
+00:18:49.000 --> 00:18:50.340
+Richtlinien und Leitplanken sind gut,
+
+00:18:50.480 --> 00:18:52.040
+aber wenn Sie nicht genau zeigen können,
+
+00:18:52.100 --> 00:18:53.600
+was mit KI-gestützten Daten geschehen ist,
+
+00:18:53.680 --> 00:18:54.760
+müssen Sie Behauptungen aufstellen,
+
+00:18:54.840 --> 00:18:55.680
+anstatt sie zu beweisen.
+
+00:18:56.880 --> 00:18:58.860
+Eine auditfähige Co-Pilot-Umgebung bedeutet,
+
+00:18:58.860 --> 00:19:01.040
+dass jede Interaktion von der Benutzeranfrage
+
+00:19:01.040 --> 00:19:02.960
+bis zum Datenabruf durch die KI erklärt
+
+00:19:02.960 --> 00:19:05.300
+und mit einem nachprüfbaren Pfad belegt werden kann.
+
+00:19:06.460 --> 00:19:07.420
+Die Schwierigkeit liegt darin,
+
+00:19:07.460 --> 00:19:08.220
+dass viele Unternehmen glauben,
+
+00:19:08.320 --> 00:19:09.000
+sie seien abgesichert,
+
+00:19:09.060 --> 00:19:10.380
+weil sie interne Überprüfungen bestehen.
+
+00:19:11.560 --> 00:19:13.300
+Diese Prüfungen kontrollieren oft nur
+
+00:19:13.300 --> 00:19:15.040
+das Vorhandensein von Kontrollen
+
+00:19:15.040 --> 00:19:16.540
+und einige Beispielszenarien
+
+00:19:16.540 --> 00:19:18.420
+fordern aber nicht immer die Granularität,
+
+00:19:18.540 --> 00:19:19.800
+die externe Prüfer erwarten.
+
+00:19:21.300 --> 00:19:22.440
+Wenn ein externer Gutachter
+
+00:19:22.440 --> 00:19:24.800
+ein Protokoll aller sensiblen Inhalte anfordert,
+
+00:19:24.920 --> 00:19:26.940
+auf die Co-Pilot im letzten Quartal zugegriffen hat,
+
+00:19:26.940 --> 00:19:28.080
+zusammen mit der Frage,
+
+00:19:28.280 --> 00:19:29.620
+wer sie warum angefordert hat,
+
+00:19:29.720 --> 00:19:31.900
+entstehen überraschend oft Lücken.
+
+00:19:31.900 --> 00:19:34.600
+Entweder sind die Protokolle unvollständig
+
+00:19:34.600 --> 00:19:36.560
+oder sie lassen KI-bezogene Ereignisse komplett aus,
+
+00:19:36.640 --> 00:19:38.660
+weil sie von Anfang an nicht als solche gekennzeichnet waren.
+
+00:19:39.620 --> 00:19:40.640
+Hier kann Microsoft Purview
+
+00:19:40.640 --> 00:19:41.860
+einen großen Unterschied machen.
+
+00:19:42.740 --> 00:19:44.260
+Die Compliance-Funktionen beschränken sich
+
+00:19:44.260 --> 00:19:45.960
+nicht nur auf das Anwenden von Bezeichnungen
+
+00:19:45.960 --> 00:19:46.740
+und DLP-Richtlinien.
+
+00:19:47.440 --> 00:19:49.140
+Sie tragen auch die forensischen Beweise zusammen,
+
+00:19:49.220 --> 00:19:49.840
+die sie benötigen.
+
+00:19:50.500 --> 00:19:52.280
+Im Kontext von Co-Pilot kann Purview
+
+00:19:52.280 --> 00:19:54.000
+jede relevante Datenzugriffsanfrage,
+
+00:19:54.000 --> 00:19:55.160
+die dahinterstehende Identität
+
+00:19:55.160 --> 00:19:56.220
+und den Quellort aufzeichnen.
+
+00:19:56.800 --> 00:19:58.100
+Es kann diese Ereignisse zudem
+
+00:19:58.100 --> 00:19:59.600
+mit Datenbewegungsmustern korrelieren,
+
+00:19:59.600 --> 00:20:01.340
+etwa wenn sensible Dateien in Entwürfen,
+
+00:20:01.440 --> 00:20:03.420
+Zusammenfassungen oder Exporten referenziert werden,
+
+00:20:03.820 --> 00:20:05.860
+ohne dass man sich auf die Selbstmeldung der KI verlassen muss.
+
+00:20:07.380 --> 00:20:08.440
+Der Compliance-Score von Purview
+
+00:20:08.440 --> 00:20:09.840
+ist mehr als eine reine Schönheitskennzahl.
+
+00:20:10.440 --> 00:20:11.620
+Er ist eine Momentaufnahme davon,
+
+00:20:11.720 --> 00:20:12.320
+wie ihre Umgebung
+
+00:20:12.320 --> 00:20:14.600
+im Vergleich zu den empfohlenen Microsoft-Kontrollen abschneidet,
+
+00:20:14.720 --> 00:20:15.460
+einschließlich derer,
+
+00:20:15.520 --> 00:20:17.140
+die KI-bezogene Risiken direkt begrenzen.
+
+00:20:18.180 --> 00:20:19.780
+Stärkere Graphberechtigungshygiene,
+
+00:20:20.140 --> 00:20:21.680
+engere DLP-Konfigurationen
+
+00:20:21.680 --> 00:20:23.060
+und gepflegte rollenbasierte Gruppen
+
+00:20:23.060 --> 00:20:24.440
+fließen alle in diesen Score ein.
+
+00:20:25.480 --> 00:20:27.520
+Und da sich der Score bei Änderungen aktualisiert,
+
+00:20:27.520 --> 00:20:29.380
+können Sie in nahezu Echtzeit sehen,
+
+00:20:29.460 --> 00:20:31.200
+wie Verbesserungen in der KI-Governance
+
+00:20:31.200 --> 00:20:32.740
+Ihren Compliance-Status erhöhen.
+
+00:20:34.060 --> 00:20:35.840
+Denken Sie an eine behördliche Prüfung,
+
+00:20:35.900 --> 00:20:37.000
+bei der Sie rechtfertigen müssen,
+
+00:20:37.140 --> 00:20:38.280
+warum bestimmte Kundendaten
+
+00:20:38.280 --> 00:20:39.320
+in einem von Co-Pilot
+
+00:20:39.320 --> 00:20:41.120
+generierten Bericht erschienen sind.
+
+00:20:41.900 --> 00:20:42.980
+Ohne strukturierte Protokollierung
+
+00:20:42.980 --> 00:20:44.460
+wird dieses Gespräch zum Rätsel raten.
+
+00:20:45.000 --> 00:20:46.380
+Mit korrekt konfiguriertem Purview
+
+00:20:46.380 --> 00:20:48.380
+können Sie die Zugriffsanfrage im Audit-Log zeigen,
+
+00:20:48.480 --> 00:20:49.720
+auf die Rolle und die Berechtigung verweisen,
+
+00:20:49.800 --> 00:20:50.580
+die Sie autorisiert haben,
+
+00:20:50.680 --> 00:20:51.960
+und belegen, dass die Autorisiert haben
+
+00:20:51.960 --> 00:20:52.980
+und belegen, dass die Ausgabe
+
+00:20:52.980 --> 00:20:54.060
+innerhalb genehmigter Kanäle blieb.
+
+00:20:54.060 --> 00:20:55.700
+Das ist eine wesentlich einfache Diskussion,
+
+00:20:55.760 --> 00:20:57.080
+als sich mühsam für ein undokumentiertes
+
+00:20:57.080 --> 00:20:57.980
+Ereignis rechtfertigen zu tun.
+
+00:20:58.320 --> 00:20:59.200
+Der Schlüssel liegt darin,
+
+00:20:59.280 --> 00:21:01.080
+Compliance-Berichte zu einem festen Bestandteil
+
+00:21:01.080 --> 00:21:02.480
+Ihres IT-Governance-Zyklus zu machen,
+
+00:21:02.560 --> 00:21:03.500
+statt sie nur als Sonderprojekt
+
+00:21:03.500 --> 00:21:04.720
+vor einem Audit zu betrachten.
+
+00:21:05.460 --> 00:21:06.460
+Automatisierte Berichterstattung
+
+00:21:06.460 --> 00:21:07.280
+ist hier ein entscheidender Faktor.
+
+00:21:07.680 --> 00:21:08.920
+Purview kann wiederkehrende Berichte
+
+00:21:08.920 --> 00:21:09.820
+zu Übereinstimmungen mit
+
+00:21:09.820 --> 00:21:10.860
+Informationsschutzrichtlinien,
+
+00:21:10.920 --> 00:21:11.640
+DEP-Vorfällen
+
+00:21:11.640 --> 00:21:12.580
+und der Nutzung von
+
+00:21:12.580 --> 00:21:14.120
+Vertraulichkeitsbezeichnungen erstellen.
+
+00:21:14.260 --> 00:21:14.560
+Erstellen.
+
+00:21:15.060 --> 00:21:16.320
+Wenn diese Berichte jeden Monat
+
+00:21:16.320 --> 00:21:17.540
+planmäßig im Arbeitsbereich
+
+00:21:17.540 --> 00:21:18.860
+Ihres Governance-Teams eingehen,
+
+00:21:18.860 --> 00:21:20.060
+erstellen Sie eine Basis für
+
+00:21:20.060 --> 00:21:21.060
+KI-Aktivitäten,
+
+00:21:21.200 --> 00:21:22.460
+die leicht zu überprüfen ist.
+
+00:21:23.680 --> 00:21:24.940
+Jede Anomalie hebt sich deutlich
+
+00:21:24.940 --> 00:21:26.000
+vom historischen Muster ab.
+
+00:21:26.440 --> 00:21:27.720
+Die Zeitersparnisse summieren sich.
+
+00:21:28.400 --> 00:21:29.580
+Purview enthält beispielsweise
+
+00:21:29.580 --> 00:21:30.700
+vorgefertigte Berichte,
+
+00:21:30.800 --> 00:21:31.600
+die alle Vorfälle mit
+
+00:21:31.600 --> 00:21:33.140
+gekennzeichneten Inhalten hervorheben,
+
+00:21:33.220 --> 00:21:34.080
+gruppiert nach Standort
+
+00:21:34.080 --> 00:21:35.240
+oder Aktivitätstyp.
+
+00:21:36.460 --> 00:21:37.400
+Wenn eine Co-Pilotsitzung
+
+00:21:37.400 --> 00:21:38.240
+ein vertrauliches Dokument
+
+00:21:38.240 --> 00:21:39.100
+in einer Ausgabe zog
+
+00:21:39.100 --> 00:21:40.320
+und Ihr DLP darauf reagierte,
+
+00:21:40.420 --> 00:21:41.140
+erscheint dieser Vorfall
+
+00:21:41.140 --> 00:21:41.940
+bereits in einem Bericht,
+
+00:21:42.020 --> 00:21:43.180
+ohne dass Sie eine benutzerdefinierte
+
+00:21:43.180 --> 00:21:44.140
+Abfrage von Grund auf
+
+00:21:44.140 --> 00:21:44.700
+erstellen müssen.
+
+00:21:46.040 --> 00:21:47.200
+Sie können dann für weitere Details
+
+00:21:47.200 --> 00:21:48.380
+in diesen Datensatz eintauchen,
+
+00:21:48.380 --> 00:21:49.380
+aber die Schwerstarbeit
+
+00:21:49.380 --> 00:21:50.440
+der Sammlung und Kategorisierung
+
+00:21:50.440 --> 00:21:51.440
+ist bereits erledigt.
+
+00:21:52.300 --> 00:21:53.880
+Eine weitere Effizienzsteigerung
+
+00:21:53.880 --> 00:21:54.440
+ist die Integration
+
+00:21:54.440 --> 00:21:55.680
+zwischen der Purview-Überwachung
+
+00:21:55.680 --> 00:21:56.460
+und den rollenbasierten
+
+00:21:56.460 --> 00:21:57.580
+Zugriffsdaten von Microsoft
+
+00:21:57.580 --> 00:21:58.500
+3 und 65.
+
+00:21:59.620 --> 00:22:01.260
+Da Purview-Entre-ID-Gruppen
+
+00:22:01.260 --> 00:22:02.100
+versteht, kann es
+
+00:22:02.100 --> 00:22:03.100
+Zugriffsprotokolle
+
+00:22:03.100 --> 00:22:04.400
+nach Rollentyp aufschlüsseln.
+
+00:22:05.360 --> 00:22:05.820
+Das bedeutet,
+
+00:22:05.920 --> 00:22:06.720
+Sie können gezielte Fragen
+
+00:22:06.720 --> 00:22:07.400
+schnell beantworten.
+
+00:22:07.460 --> 00:22:08.640
+Wie etwa, zeige mir alle Fälle,
+
+00:22:08.760 --> 00:22:09.560
+in denen Marketingrollen
+
+00:22:09.560 --> 00:22:10.400
+in den letzten 90 Tagen
+
+00:22:10.400 --> 00:22:11.100
+über Co-Pilot auf,
+
+00:22:11.160 --> 00:22:12.080
+als Finanzen gekennzeichneter
+
+00:22:12.080 --> 00:22:13.020
+Daten zugegriffen haben.
+
+00:22:14.380 --> 00:22:15.320
+Diese Fähigkeit,
+
+00:22:15.460 --> 00:22:16.140
+sowohl nach Rolle
+
+00:22:16.140 --> 00:22:17.540
+als auch nach Datenklassifizierung
+
+00:22:17.540 --> 00:22:18.940
+zu filtern, ist genau das,
+
+00:22:19.280 --> 00:22:20.820
+wonach externe Prüfer suchen.
+
+00:22:21.740 --> 00:22:22.660
+Wenn man darüber nachdenkt,
+
+00:22:22.720 --> 00:22:23.700
+ist Compliance auf dieser Ebene
+
+00:22:23.700 --> 00:22:24.340
+keine Belastung.
+
+00:22:24.740 --> 00:22:25.500
+Sie ist eine Leitplanke,
+
+00:22:25.580 --> 00:22:26.040
+die bestätigt,
+
+00:22:26.120 --> 00:22:26.960
+dass Ihr Governance-Design
+
+00:22:26.960 --> 00:22:27.920
+in der Praxis funktioniert.
+
+00:22:28.740 --> 00:22:29.960
+Es nimmt auch den Stress aus Audits,
+
+00:22:30.020 --> 00:22:30.640
+weil Sie nicht mühsam
+
+00:22:30.640 --> 00:22:31.540
+nach Daten suchen müssen.

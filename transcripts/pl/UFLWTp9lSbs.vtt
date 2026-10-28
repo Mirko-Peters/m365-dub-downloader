@@ -1,0 +1,925 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:06.300
+Wdrażanie Microsoft 365 Copilot przypomina zdobycie legendarnego przedmiotu, dopóki nie uświadomisz sobie, że to tylko zestaw startowy.
+
+00:00:06.300 --> 00:00:10.440
+Od razu po uruchomieniu korzysta z bazowej wiedzy modelu oraz treści w Twoim tenancie.
+
+00:00:10.700 --> 00:00:15.980
+Przydatne, ale co z zakurzonymi procedurami, podręcznikami HR czy tym ogromnym systemem ERP czającym się w koncie?
+
+00:00:16.200 --> 00:00:19.840
+Bez konektorów, ugruntowania, grounding czy własnych agentów Copilot nie uzyska do nich dostępu.
+
+00:00:20.020 --> 00:00:22.020
+Dobra wiadomość jest taka, że możesz go tego nauczyć.
+
+00:00:22.220 --> 00:00:28.300
+Sztuczka polega na tym, by wiedzieć, kiedy sięgnąć po Copilot Studio, kiedy przejść na Teams Toolkit oraz jak w tym wszystkim uwzględnić zarządzanie, monitorowanie i licencjonowanie.
+
+00:00:28.300 --> 00:00:29.800
+Bo oto prawdziwy zwrot akcji.
+
+00:00:30.060 --> 00:00:32.560
+Stworzenie pierwszego agenta to nie walka z ostatnim bossem.
+
+00:00:32.680 --> 00:00:33.920
+To tylko koniec samouczka.
+
+00:00:34.180 --> 00:00:35.980
+Sama budowa to nie jest walka z bossem.
+
+00:00:36.120 --> 00:00:41.240
+Testujesz pierwszego agenta, prompti działają, dane demo wyglądają nieskazitelnie i przez chwilę czujesz, że ukończyłeś grę.
+
+00:00:41.360 --> 00:00:41.980
+To pułapka.
+
+00:00:42.180 --> 00:00:46.560
+Prawdziwa praca zaczyna się, gdy skierujesz te budowe na środowisko produkcyjne, gdzie obowiązują zupełnie inne zasady.
+
+00:00:46.780 --> 00:00:49.880
+Zbyt wielu twórców zakłada, że czysta odpowiedź w testach oznacza wykonanie misji.
+
+00:00:50.080 --> 00:00:52.980
+W rzeczywistości to tylko tryb fabularny na łatwym poziomie trudności.
+
+00:00:52.980 --> 00:00:57.380
+Produkcję nie obchodzi, czy twój proof of concept działał dobrze na laptopie deweloperskim.
+
+00:00:57.560 --> 00:01:04.480
+Produkcja wymaga stabilności pod presją kontroli zgodności, zabezpieczeń tożsamości i standardów dostępności, które siedzą jej na karku.
+
+00:01:04.960 --> 00:01:06.900
+I tutaj pojawiają się pierwsi bossowie.
+
+00:01:06.900 --> 00:01:10.680
+Skalowalność, czy agent poradzi sobie z obciążeniem korporacyjnym bez zacięcia?
+
+00:01:10.680 --> 00:01:14.960
+Właśnie wtedy kluczowe stają się logi monitorowania i diagnostyki z systemu kontroli kopilota.
+
+00:01:15.160 --> 00:01:18.300
+Nieaktualne ugruntowanie, gdy dane w SharePoint lub Dataverse się zmieniają.
+
+00:01:18.380 --> 00:01:20.280
+Czy agent nadal korzysta z właściwej migawki?
+
+00:01:20.460 --> 00:01:22.980
+Konektory i ugruntowanie w grafie to twoje zabezpieczenia.
+
+00:01:23.240 --> 00:01:24.900
+Zgodność i możliwość audytu.
+
+00:01:25.080 --> 00:01:31.760
+Jeśli organ regulacyjny lub audytor zapuka do twoich drzwi, czy historię agenta można przejrzeć z pełnym wglądem w logi i etykietami wrażliwości?
+
+00:01:32.040 --> 00:01:35.600
+Jeśli którykolwiek z tych elementów zawiedzie, ekran zwycięstwa szybko zniknie.
+
+00:01:35.600 --> 00:01:40.660
+Uruchamianie testów w Copilot Studio jest jak sparring na arenie treningowej z nieskończoną ilością mikstur zdrowia.
+
+00:01:40.860 --> 00:01:47.160
+Możesz rzucać czary i zmieniać prompt i wszystko wygląda świetnie, ale w rzeczywistym użyciu każda blokada Firewalla to nieudane zaklęcie,
+
+00:01:47.280 --> 00:01:50.340
+a przeciążone zewnętrzne źródło danych spowalnia odpowiedzi do minimum.
+
+00:01:50.600 --> 00:01:54.600
+To moment, w którym użytkownicy przestają nazywać go inteligentnym i zaczynają zgłaszać problemy.
+
+00:01:54.780 --> 00:01:58.000
+Najczęstsza porażka zdarza się zespołom, które odkładają zarządzanie na później.
+
+00:01:58.260 --> 00:02:03.340
+Wmawiają sobie, że zajmą się tym później, ale odkładanie zarządzania prawie zawsze prowadzi do przykrych niespodzianek.
+
+00:02:03.340 --> 00:02:08.100
+Problemy ze skalowaniem, niespójność danych czy luki w zgodności pojawiają się w najgorszym możliwym momencie.
+
+00:02:08.500 --> 00:02:11.160
+Bezpieczeństwo i zgodność to nie są opcjonalne zadania poboczne.
+
+00:02:11.380 --> 00:02:12.980
+Są częścią głównej mapy kampanii.
+
+00:02:13.120 --> 00:02:16.300
+Porozmawiajmy teraz o architekturze, bo mózg Copilota nie jest jednolitym blokiem.
+
+00:02:16.520 --> 00:02:22.140
+Mamy model podstawowy, czyli surowy silnik językowy, a na nim orkiestrator, który ustala, jakie funkcje są wywoływane i kiedy.
+
+00:02:22.420 --> 00:02:27.580
+Microsoft 365 Copilot zapewnia tę orkiestrację domyślnie, dzięki czemu każde zapytanie ma strukturę.
+
+00:02:27.580 --> 00:02:31.840
+Następnie mamy ugruntowanie, czyli powiązanie z treściami firmowymi, aby odpowiedzi nie były zmyślone.
+
+00:02:32.020 --> 00:02:36.240
+Na końcu są umiejętności, czyli twoje niestandardowe wtyczki lub konektory do wykonywania rzeczywistych zadań.
+
+00:02:36.420 --> 00:02:40.280
+Jeśli potraktujesz te cztery elementy jako odizolowane silosy, cała konstrukcja zacznie się chwiać.
+
+00:02:40.480 --> 00:02:43.440
+Solidna umiejętność bez ugruntowania to tylko wymyślna halucynacja.
+
+00:02:43.700 --> 00:02:46.340
+Model podstawowy bez kontroli zgodności staje się obciążeniem.
+
+00:02:46.580 --> 00:02:49.720
+Dopiero gdy traktuje się warstwy jako jeden stos, agent pozostaje stabilny.
+
+00:02:49.920 --> 00:02:51.900
+Jak więc wygląda sukces w rzeczywistych warunkach?
+
+00:02:51.900 --> 00:02:54.120
+Nie chodzi o zgrabną odpowiedź na prośbę demonstracyjną.
+
+00:02:54.260 --> 00:02:55.400
+To tylko tryb ćwiczebny.
+
+00:02:55.560 --> 00:03:02.820
+O sukcesie świadczy działanie w warunkach rzeczywistych, w trakcie rozliczeń płacowych, migracji danych i pod okiem inspektorów zgodności przy dużym obciążeniu zapytaniami.
+
+00:03:03.000 --> 00:03:05.380
+To właśnie tam agent udowadnia, że zasługuje na działanie.
+
+00:03:05.540 --> 00:03:07.980
+Oto kolejny powód, dla którego wiele projektów kończy się niepowodzeniem.
+
+00:03:08.160 --> 00:03:11.180
+Organizacje traktują je jak jednorazowe projekty, a nie systemy operacyjne.
+
+00:03:11.340 --> 00:03:14.860
+Ktoś tworzy prototyp, pokazuje efektowne demo, a potem zostawia je bez nadzoru.
+
+00:03:14.860 --> 00:03:20.040
+Wkrótce różne działy budują własne rozwiązania, żadne nie jest udokumentowane, a wszystkie niekontrolowanie zużywają tokeny.
+
+00:03:20.220 --> 00:03:25.100
+Bez prostej instrukcji obsługi, wiedzy kto zarządza konektorami, audytuje ugruntowanie i sprawdza zużycie kredytów.
+
+00:03:25.220 --> 00:03:27.880
+Krajobraz staje się chaosem nieskoordynowanych mini projektów.
+
+00:03:28.080 --> 00:03:30.380
+Zmień perspektywę, a stanie się to znacznie łatwiejsze.
+
+00:03:30.580 --> 00:03:33.240
+Jeśli zaczniesz od nastawienia operacyjnego, projektowanie się zmienia.
+
+00:03:33.440 --> 00:03:35.860
+Nie dbasz już tylko o to, czy pierwszy test wyglądał dobrze.
+
+00:03:36.160 --> 00:03:37.860
+Wzmacniasz całość do codziennej pracy.
+
+00:03:37.860 --> 00:03:43.100
+Dzienniki audytu, bramki administracyjne, kopie zapasowe i kontrole stanu budują zaufanie, utrzymując system przy życiu pod presją.
+
+00:03:43.360 --> 00:03:50.480
+Administratorzy mają już użyteczne kontrolki w Centrum Administracyjnym Microsoft 365, gdzie można zarządzać scenariuszami i szybko uzyskiwać informacje diagnostyczne.
+
+00:03:50.620 --> 00:03:54.060
+Opieranie się na tych narzędziach odróżnia nowinkę od niezawodnego operatora.
+
+00:03:54.220 --> 00:03:56.440
+Dlatego samo zbudowanie czegoś nie czyni Cię zwycięzcą.
+
+00:03:56.660 --> 00:03:58.900
+Środowisko testowe pozwala osiągnąć pierwszy poziom.
+
+00:03:59.140 --> 00:04:03.560
+Rzeczywiste wdrożenie z odpowiednim zarządzaniem i monitoringiem to moment, w którym zaczyna się prawdziwe wyzwanie.
+
+00:04:03.560 --> 00:04:07.340
+A zanim zajdziesz w tym zbyt daleko, będziesz potrzebować odpowiedniej broni do walki.
+
+00:04:07.340 --> 00:04:10.940
+Microsoft oferuje dwa różne zestawy narzędzi, rządzące się innymi zasadami.
+
+00:04:11.120 --> 00:04:14.640
+Jeśli wybierzesz źle, poczujesz się, jakbyś przyszedł z plastikowym mieczem na bitwę.
+
+00:04:14.780 --> 00:04:17.460
+Copilot Studio kontra Teams Toolkit wybór broni.
+
+00:04:17.680 --> 00:04:19.500
+Właśnie tam pojawia się prawdziwe pytanie.
+
+00:04:19.720 --> 00:04:21.000
+Po które narzędzi sięgniesz?
+
+00:04:21.160 --> 00:04:25.760
+Copilot Studio czy Teams Toolkit, zwany również Microsoft 365 Agent Toolkit.
+
+00:04:25.980 --> 00:04:30.440
+Brzmią podobnie, oba służą do rozszerzania Copilota, ale kierowane są do różnych grup twórców i potrzeb.
+
+00:04:30.440 --> 00:04:35.060
+Zły wybór kosztuje czas, budżet i być może wiarygodność, gdy błyskotliwe demo zawiedzie w środowisku produkcyjnym.
+
+00:04:35.220 --> 00:04:36.960
+Copilot Studio to arena dla twórców.
+
+00:04:37.120 --> 00:04:40.400
+To wizualne narzędzie typu low-code zaprojektowane z myślą o szybkości i przejrzystości.
+
+00:04:40.600 --> 00:04:44.500
+Otrzymujesz przepływy typu przeciągnij i upuść, szablony, dialogi prowadzone i wbudowaną analitykę.
+
+00:04:44.740 --> 00:04:47.940
+Studio zawiera zestaw łączników do źródeł danych Microsoft 365,
+
+00:04:48.480 --> 00:04:51.620
+dzięki czemu zaawansowany użytkownik może pobierać zawartość SharePointa,
+
+00:04:51.700 --> 00:04:55.120
+monitorować wiadomości w Teams czy obsługiwać dokumenty HR bez pisania kodu.
+
+00:04:55.120 --> 00:04:59.840
+Możesz testować, dostosowywać i publikować bezpośrednio w Microsoft 365 Copilot,
+
+00:04:59.960 --> 00:05:03.000
+a nawet udostępnić jako samodzielnego agenta przy minimalnym wysiłku.
+
+00:05:03.260 --> 00:05:07.400
+Dla działu, który potrzebuje sprawnego procesu w tym kwartale, a nie w przyszłym roku obrotowym,
+
+00:05:07.600 --> 00:05:08.840
+Studio to najszybsza ścieżka.
+
+00:05:08.840 --> 00:05:13.640
+Ponad 160 tysięcy klientów już używa Studio właśnie do tego uzgadniania danych finansowych,
+
+00:05:13.760 --> 00:05:17.400
+wdrażania pracowników czy odpowiadania na pytania o produkty w handlu detalicznym.
+
+00:05:17.600 --> 00:05:20.180
+Powód nie jest tajemnicą, po prostu obniża poprzeczkę.
+
+00:05:20.400 --> 00:05:24.080
+Jeśli Twój zespół pracuje już w Power Apps lub automatyzuje raporty w Power Automate,
+
+00:05:24.240 --> 00:05:26.100
+Studio będzie dla niego naturalnym środowiskiem.
+
+00:05:26.280 --> 00:05:30.560
+Nie musisz być inżynierem oprogramowania, wystarczy jasny cel i podstawowa znajomość low-code,
+
+00:05:30.700 --> 00:05:32.340
+aby klikać, konfigurować i wdrażać.
+
+00:05:32.460 --> 00:05:34.140
+Teraz przejdźmy do Teams Toolkit.
+
+00:05:34.300 --> 00:05:36.560
+To tutaj rozwijają skrzydła programiści Fullstack.
+
+00:05:36.560 --> 00:05:39.980
+Toolkit integruje się z VS Code, a nie z płótnem typu Przeciągnij i upuść.
+
+00:05:40.100 --> 00:05:42.980
+Tutaj projektujesz deklaratywnych agentów z ustrukturyzowanymi regułami
+
+00:05:42.980 --> 00:05:45.320
+lub idziesz o krok dalej, tworząc niestandardowe silniki,
+
+00:05:45.480 --> 00:05:48.660
+w których od podstaw definiujesz wywołania modelu orkiestracji i obsługę API.
+
+00:05:48.860 --> 00:05:52.360
+Otrzymujesz wsparcie w tworzeniu szkieletów, debakowaniu, konfiguracji i publikowaniu
+
+00:05:52.360 --> 00:05:55.820
+nie tylko w Kopilocie, ale także w Teams, aplikacjach Microsoft 365,
+
+00:05:56.200 --> 00:05:57.460
+w sieci i kanałach zewnętrznych.
+
+00:05:57.640 --> 00:05:59.640
+Jeśli Kopilot Studio to gotowe meble z katalogu,
+
+00:05:59.680 --> 00:06:02.960
+to Toolkit jest jak samodzielne wycinanie desek i instalacja elektryki w domu.
+
+00:06:02.960 --> 00:06:06.600
+Wolność jest imponująca, ale odpowiadasz też za każdy gwóźdź i bezpiecznik.
+
+00:06:06.740 --> 00:06:09.860
+Prawdziwe zamieszanie wynika z tego, że oba rozwiązania rozszerzają Kopilota.
+
+00:06:10.080 --> 00:06:13.180
+W praktyce Studio oznacza rozszerzanie w ramach wyznaczonych przez Microsoft
+
+00:06:13.180 --> 00:06:17.240
+zabezpieczeń bezpiecznych łączników, kontroli administracyjnych i lekkiego zarządzania.
+
+00:06:17.420 --> 00:06:20.500
+Toolkit oznacza modyfikowanie tych zabezpieczeń, tworzenie własnej orkiestracji,
+
+00:06:20.620 --> 00:06:23.580
+wywoływanie zewnętrznych modeli LLM lub budowanie zachowań agentów,
+
+00:06:23.680 --> 00:06:25.480
+których Microsoft nie dostarczył w standardzie.
+
+00:06:25.700 --> 00:06:27.780
+Jedno podejście zapewnia bezpieczeństwo dzięki szablonom,
+
+00:06:27.780 --> 00:06:30.520
+drugie daje ogromną moc i wymaga odpowiedzialnego korzystania z niej.
+
+00:06:30.700 --> 00:06:33.600
+Wiele osób uważa, że wybór narzędzia oznacza inny interfejs użytkownika.
+
+00:06:33.840 --> 00:06:36.400
+Nie, użytkownicy końcowi widzą to samo pole zapytania i kartę odpowiedzi,
+
+00:06:36.480 --> 00:06:38.800
+niezależnie od tego, czy zbudowałeś agenta w studio, czy za pomocą Toolkit.
+
+00:06:38.940 --> 00:06:41.080
+To zamierzone warstwa UX jest ujednolicona.
+
+00:06:41.240 --> 00:06:43.500
+To, co faktycznie się zmienia, dzieje się za kulisami.
+
+00:06:43.700 --> 00:06:46.700
+Opcje ugruntowania, skalowalność i kontrola administracyjna.
+
+00:06:46.900 --> 00:06:49.360
+Dlatego ta decyzja jest operacyjna, a nie kosmetyczna.
+
+00:06:49.520 --> 00:06:50.580
+Oto praktyczna zasada.
+
+00:06:50.840 --> 00:06:53.380
+Niektóre funkcje uziemiające, takie jak zawartość SharePointa,
+
+00:06:53.380 --> 00:06:58.240
+czaty i spotkania w Teams, osadzone pliki, dane datavers, czy łączniki do poczty e-mail i wyszukiwania osób
+
+00:06:58.240 --> 00:07:04.280
+aktywują się tylko wtedy, gdy Twój tenant posiada licencję Microsoft 365, Copilot lub włączone rozliczanie Copilot Studio.
+
+00:07:04.520 --> 00:07:07.860
+Jeśli nie masz tego uprawnienia, wybór studio nie odblokuje tych sztuczek.
+
+00:07:08.020 --> 00:07:11.960
+Ta jedna weryfikacja licencyjna może być czynnikiem decydującym o tym, którą drogę wybrać.
+
+00:07:12.120 --> 00:07:13.440
+Jak więc uprościć ten wybór?
+
+00:07:13.600 --> 00:07:15.140
+Przygotuj szybką listę kontrolną.
+
+00:07:15.320 --> 00:07:18.180
+Po pierwsze, potrzebujesz szybkich, audytowalnych agentów pod kontrolą administratora,
+
+00:07:18.240 --> 00:07:20.440
+których zaawansowani użytkownicy mogą stworzyć bez angażowania IT.
+
+00:07:20.440 --> 00:07:21.580
+Wybierz Copilot Studio.
+
+00:07:21.580 --> 00:07:24.180
+Po drugie, potrzebujesz niestandardowej orkiestracji zewnętrznych modeli,
+
+00:07:24.240 --> 00:07:26.820
+a ilu głębokiej integracji wplecionej bezpośrednio w szkielet przedsiębiorstwa?
+
+00:07:26.980 --> 00:07:28.620
+Wybierz zestaw narzędzi Agent's Toolkit.
+
+00:07:28.760 --> 00:07:32.140
+Po trzecie, nie ufaj etykietom, ufaj rzeczywistym umiejętnościom i celom swojego zespołu.
+
+00:07:32.300 --> 00:07:33.760
+Używam tu metafory budownictwa.
+
+00:07:34.000 --> 00:07:38.200
+Studio to prefabrykat, wybierasz kolory i szafki, ale instalacje wodne i elektryczne są już bezpieczne.
+
+00:07:38.380 --> 00:07:43.000
+Toolkit to surowa działka, projektujesz każdy centymetr, ale też ponosisz ryzyko, jeśli projekt zawiedzie.
+
+00:07:43.180 --> 00:07:44.900
+Oba mogą zaowocować pięknym domem.
+
+00:07:44.900 --> 00:07:48.780
+Jedno jest szybsze i mniej złożone, drugie daje nieograniczone możliwości, ale jest kruche, jeśli nie zarządza się nim dobrze.
+
+00:07:48.940 --> 00:07:50.600
+Oba zawalą się bez uziemienia, groundingu.
+
+00:07:50.780 --> 00:07:55.120
+Wybrane narzędzie zajmuje się budową, ale jeśli nie zostanie zasilone właściwymi danymi, będzie jedynie szybciej generować pewne siebie bzdury.
+
+00:07:55.280 --> 00:07:57.260
+Agent ze Studio bez łączników to tylko papuga.
+
+00:07:57.480 --> 00:08:00.160
+Agent z Toolkit bez uziemienia to własnoręcznie zakodowana papuga.
+
+00:08:00.380 --> 00:08:04.080
+Tak czy inaczej, wciąż masz ptaka, który wykrzykuje domysły w stronę użytkowników.
+
+00:08:04.180 --> 00:08:06.680
+I to sprowadza nas do życiodajnej krwi każdego agenta,
+
+00:08:06.680 --> 00:08:11.060
+danych, które powstrzymują jego mózg przed bawieniem się we wróżbite z połową talii kart.
+
+00:08:11.240 --> 00:08:13.800
+Uziemianie agentów to karmienie mózgu, a nie pustki.
+
+00:08:14.060 --> 00:08:18.180
+Dzięki uziemieniu agent przestaje udawać mądrość i zaczyna pracować na prawdziwej wiedzy.
+
+00:08:18.440 --> 00:08:22.800
+Dostarcz mu odpowiednie źródła, a przejdzie od blefowania do udzielania odpowiedzi, których możesz bronić.
+
+00:08:22.960 --> 00:08:28.260
+Pomiń to, a to, co z pozoru wygląda na dopracowane, szybko się rozsypie, gdy ktoś zapyta, skąd w ogóle wzięła się ta odpowiedź.
+
+00:08:28.380 --> 00:08:32.940
+Wbudowany Microsoft 365, kopilot już polega na danych, które widzi przez Microsoft Graph.
+
+00:08:32.940 --> 00:08:35.840
+Kliki, czaty, spotkania, a nawet wydarzenia w kalendarzu.
+
+00:08:35.980 --> 00:08:39.440
+To niezły początek, ale najcenniejsza treść leży poza tym rdzeniem.
+
+00:08:39.680 --> 00:08:43.420
+Systemy ERP przechowują zapasy, CRMY śledzą cykle życia klientów,
+
+00:08:43.540 --> 00:08:48.400
+HR trzyma podręczniki głęboko w SharePoint, a dokumenty polityk leżą w dziale prawnym w zabezpieczonym folderze.
+
+00:08:48.580 --> 00:08:53.200
+Jeśli nie uziemisz agenta do tych źródeł, będzie pewnie zgadywał używając ogólnej wiedzy modelu,
+
+00:08:53.260 --> 00:08:55.200
+zamiast wskazywać na coś weryfikowalnego.
+
+00:08:55.420 --> 00:08:59.500
+Łączenie ich to nie tylko metoda przeciągnij i upuść, to delikatna instalacja techniczna.
+
+00:08:59.500 --> 00:09:04.360
+Kopilot Studio i konektory Microsoft Graph umożliwiają sięganie do dokumentów w SharePoint,
+
+00:09:04.540 --> 00:09:08.000
+tabel w Dataverse, wiadomości w Exchange oraz czatów w Teams.
+
+00:09:08.240 --> 00:09:14.080
+Poza podstawowymi usługami Microsoftu, ponad 1200 konektorów w ramach Power Platform otwiera drzwi do systemów zewnętrznych.
+
+00:09:14.280 --> 00:09:16.900
+Finanse, HR, systemy zgłoszeń, co tylko chcesz.
+
+00:09:16.980 --> 00:09:22.160
+A jeśli nic nie pasuje, gotowe API pozwalają włączyć aplikacje biznesowe, które nie są objęte standardowymi konektorami.
+
+00:09:22.320 --> 00:09:26.540
+Prawidłowo zbudowany agent pobiera aktualne fakty z tych źródeł i przedstawia je w odpowiednim kontekście.
+
+00:09:26.540 --> 00:09:29.280
+To, co wydaje się magią, jest tylko dobrze przygotowaną infrastrukturą.
+
+00:09:29.460 --> 00:09:30.580
+Jest jednak pewien haczyk.
+
+00:09:30.720 --> 00:09:33.480
+Niektóre z opcji ugruntowania wiedzy, grounding, nie są darmowe dla każdego.
+
+00:09:33.700 --> 00:09:38.540
+Dostęp do źródeł takich jak zawartość SharePoint, spotkania Teams, poczta czy Dataverse często wymaga licencji kopilot
+
+00:09:38.540 --> 00:09:40.660
+lub włączonego naliczania opłat w Twoim dzierżawcy.
+
+00:09:40.920 --> 00:09:46.400
+Bez tych uprawnień konektory nie zadziałają, a Twój asystent, a i pozostanie ślepy na niektóre z najważniejszych danych.
+
+00:09:46.620 --> 00:09:48.840
+Nie zakładaj, że jeden przełącznik załatwi wszystko.
+
+00:09:49.140 --> 00:09:50.900
+Najpierw sprawdź swoją mapę licencyjną.
+
+00:09:51.100 --> 00:09:52.660
+Pomyśl o przykładach z działu hrabia.
+
+00:09:52.660 --> 00:09:55.460
+Ktoś pyta, jaka jest polityka urlopów rodzicielskich?
+
+00:09:55.620 --> 00:09:59.640
+Bez ugruntowania agent konstruuje wiarygodną odpowiedź na podstawie ogólnej wiedzy modelu.
+
+00:09:59.820 --> 00:10:02.020
+Brzmi to pomocnie, ale brakuje linku i dowodu.
+
+00:10:02.280 --> 00:10:08.140
+Dzięki ugruntowaniu agent może pobrać właściwą politykę z SharePoint, odwołać się do tytułu dokumentu i dodać link do podręcznika pracownika.
+
+00:10:08.320 --> 00:10:13.260
+Ta jedna różnica zmienia niezweryfikowane stwierdzenie w wiarygodną odpowiedź, pod którą podpiszą się audytorzy i hrabia.
+
+00:10:13.420 --> 00:10:15.620
+Ten ścieżka audytu to prawdziwy wzrost możliwości.
+
+00:10:15.840 --> 00:10:20.000
+Ugruntowane odpowiedzi mogą zawierać cytaty kierujące użytkowników i organy regulacyjne do oryginalnego źródła.
+
+00:10:20.000 --> 00:10:23.880
+Gdy dział zgodności pyta, dlaczego bot udzielił takiej odpowiedzi, nie musisz wymyślać długich historii.
+
+00:10:24.080 --> 00:10:25.460
+Logi pokazują całą drogę.
+
+00:10:25.640 --> 00:10:29.120
+Oto zapytanie, oto pobrany dokument, oto wygenerowana odpowiedź.
+
+00:10:29.260 --> 00:10:32.500
+Nie trzeba liczyć na szczęście, ale każde połączenie to również punkt ryzyka.
+
+00:10:32.760 --> 00:10:37.780
+Jeśli niechlujnie połączysz się z danymi HR, możesz ujawnić prywatne rekordy pracowników obok publicznego FAQ.
+
+00:10:38.000 --> 00:10:42.000
+Jeśli błędnie skonfigurujesz dostęp do ERP, nagle handlowiec może podejrzeć dane płacowe.
+
+00:10:42.180 --> 00:10:44.480
+Takie przeoczenia to błędy krytyczne dla produkcji.
+
+00:10:44.480 --> 00:10:49.260
+Bezpieczniej jest uwzględnić etykiety wrażliwości i klasyfikację perwiu w swoim planie ugruntowania.
+
+00:10:49.540 --> 00:10:55.440
+W ten sposób agent pobiera tylko treści zgodne z regułami uprawnień, szanując klasyfikację danych, zamiast ją ignorować.
+
+00:10:55.600 --> 00:10:56.900
+Ostrzeżenie jest proste.
+
+00:10:57.060 --> 00:11:01.960
+Nieugruntowane agenty zmyślają z przekonaniem, a słabo ugruntowane ujawniają to, co powinno pozostać w sejfie.
+
+00:11:02.140 --> 00:11:06.420
+W obu przypadkach kończysz na rozpowszechnianiu błędów lub wycieku wrażliwych szczegółów pod logo Twojej firmy.
+
+00:11:06.640 --> 00:11:09.420
+Narzędzia zarządzania takie jak perwiu istnieją z konkretnego powodu.
+
+00:11:09.420 --> 00:11:15.080
+Łącz konektory danych z klasyfikacją od pierwszego dnia, albo później będziesz naprawiać problemy z wizerunkiem i zgodnością.
+
+00:11:15.280 --> 00:11:16.520
+Wniosek jest więc jasny.
+
+00:11:16.700 --> 00:11:19.220
+Grounding, zakotwiczenie, to niezaawansowana funkcja dodatkowa.
+
+00:11:19.340 --> 00:11:22.540
+To podstawa, która odróżnia użyteczne kopiloty od niewiarygodnych gaduł.
+
+00:11:22.680 --> 00:11:27.360
+Odpowiednio wykonane wyposaża użytkowników w fakty oparte na rzeczywistych treściach i dziennikach, które możesz obronić.
+
+00:11:27.560 --> 00:11:31.960
+Źle wykonane potęguje halucynacje i wycieki danych w organizacji szybciej niż zdążysz zgłosić problem.
+
+00:11:32.200 --> 00:11:36.660
+Dlatego kolejne wyzwanie jest równie krytyczne, ponieważ jeden zakotwiczony agent jest łatwy do opanowania.
+
+00:11:36.660 --> 00:11:39.860
+Dziesiątki wypuszczonych bez nadzoru to początek prawdziwych kłopotów.
+
+00:11:40.020 --> 00:11:43.120
+Ład organizacyjny, powstrzymanie niekontrolowanego namnażania agentów.
+
+00:11:43.300 --> 00:11:48.140
+Ład organizacyjny w tym kontekście to zestaw zasad, które chronią agentów kopilot przed chaosem.
+
+00:11:48.280 --> 00:11:53.420
+To sposób, w jaki decydujesz, kto może je tworzyć, gdzie działają i do jakich danych mają dostęp, nie licząc na łód szczęścia.
+
+00:11:53.640 --> 00:11:56.480
+Microsoft udostępnia narzędzia, dzięki którym możesz to wymusić.
+
+00:11:56.480 --> 00:12:08.400
+System kontroli kopilot w Centrum Administracyjnym Microsoft 365, zarządzanie cyklem życia w Centrum Administracyjnym Power Platform, Microsoft Perview do etykietowania i ochrony danych, DLP oraz dzienniki diagnostyczne kopilot do audytu.
+
+00:12:08.520 --> 00:12:12.080
+Potraktuj je jako cztery filary, które chronią domek z kart przed zawaleniem.
+
+00:12:12.340 --> 00:12:16.480
+Warto wiedzieć od razu, zarządzanie scenariuszami kopilot nie jest dla każdego z dostępem administratora.
+
+00:12:17.360 --> 00:12:20.900
+Wymaga określonych ról, takich jak administrator globalny lub administrator AI.
+
+00:12:21.140 --> 00:12:25.320
+Stosuj zasadę najmniejszych uprawnień, aby nie dawać nikomu miecza, który może ciąć głębiej niż przypuszczają.
+
+00:12:25.320 --> 00:12:28.320
+Ograniczenie liczby osób mogących zmieniać te ustawienia to forma ładu organizacyjnego.
+
+00:12:29.080 --> 00:12:32.100
+Wprowadzaj zasady cyklu życia już na etapie projektowania, a nie po fakcie.
+
+00:12:32.340 --> 00:12:37.480
+Zasada pierwsza określ, kto może tworzyć agentów i powiąż to ze środowiskami w Centrum Administracyjnym Power Platform.
+
+00:12:37.820 --> 00:12:44.640
+Zasada druga określ, kto może publikować agentów używając ustawień kopilot w Centrum Administracyjnym 365, aby zatwierdzać lub blokować wydania.
+
+00:12:44.880 --> 00:12:51.000
+Zasada trzecia określ, gdzie agenci mogą działać przypisując ich do izolowanych środowisk, aby środowisko produkcyjne nie było otwartą areną.
+
+00:12:51.000 --> 00:12:55.880
+I zasada czwarta określ sposób alokacji kredytów, tutaj przydaje się licznik zużycia agentów kopilot.
+
+00:12:56.040 --> 00:13:00.680
+Ten licznik w jasnych liczbach pokazuje, kiedy twój limit wyczerpuje się zbyt szybko i kto go obciąża.
+
+00:13:00.860 --> 00:13:05.760
+Perview to sieć zgodności, na której polegasz przy dokumentach i poczcie, działa tak samo i tutaj.
+
+00:13:06.020 --> 00:13:11.680
+Nakładaj etykiety czułości na dane, aby nawet jeśli agent łączy się ze źródłem, etykieta przenosiła się do odpowiedzi.
+
+00:13:11.920 --> 00:13:16.600
+Stosuj zasady DLP, aby blokować agentom możliwość ujawniania poufnych pól w odpowiedziach.
+
+00:13:16.600 --> 00:13:23.100
+Zasady przechowywania zapobiegają zaleganiu starych treści, aby agenci nie kotwiczyli się na danych, które powinny wygasnąć tygodnie temu.
+
+00:13:23.360 --> 00:13:26.980
+Gdy ustanowisz te zabezpieczenia, każdy agent automatycznie dziedziczy nadzór.
+
+00:13:27.160 --> 00:13:30.720
+Kolejny krok, który większość zespołów pomija, włączenie dzienników diagnostycznych.
+
+00:13:30.900 --> 00:13:34.200
+Przełącz ten przełącznik, a zyskasz pełną widoczność każdej interakcji.
+
+00:13:34.400 --> 00:13:39.640
+Polecenia odpowiedzi, odwołania do treści, logi systemowe, wszystko to tworzy zapisy, z których możesz później skorzystać.
+
+00:13:39.760 --> 00:13:44.480
+Jeśli przełożony zapyta, dlaczego agent podał błędną instrukcję, możesz odtworzyć historię zamiast wzruszać ramionami.
+
+00:13:44.480 --> 00:13:49.220
+Co więcej, administratorzy mogą przesyłać logi w imieniu użytkowników, nawet jeśli ci sami nie wysyłają opinii.
+
+00:13:49.420 --> 00:13:52.100
+Dzięki temu rozwiązywanie problemów staje się proaktywne, a nie reaktywne.
+
+00:13:52.260 --> 00:13:54.980
+Nie chodzi o spowalnianie innowacji, ale o nadanie im właściwego kierunku.
+
+00:13:55.240 --> 00:13:58.580
+Studio niezwykle ułatwia zaawansowanym użytkownikom tworzenie przepływów w jedno popołudnie,
+
+00:13:58.660 --> 00:14:01.620
+a zestaw narzędzi pozwala programistom szybko wdrażać rozbudowane kompilacje.
+
+00:14:01.860 --> 00:14:04.720
+Bez kontroli taka szybkość oznacza powielanie pracy i sprzeczności.
+
+00:14:04.720 --> 00:14:08.460
+Dzięki odpowiedniemu zarządzaniu ta sama szybkość pozwala uzyskać zasoby wielokrotnego użytku,
+
+00:14:08.580 --> 00:14:10.160
+które są zgodne z przepisami i monitorowane.
+
+00:14:10.400 --> 00:14:14.580
+Różnica nie tkwi w kreatywności pracowników, lecz w dyscyplinie RAM, w jakich działają.
+
+00:14:14.820 --> 00:14:17.080
+Nawet śledzenie kosztów jest częścią zarządzania.
+
+00:14:17.280 --> 00:14:21.280
+Miernik zużycia w centrum administracyjnym to nie tylko podgląd księgowy, to Twoje pokrętło równowagi.
+
+00:14:21.500 --> 00:14:26.500
+Możesz przypisywać pakiety kredytów, monitorować nadwyżki w modelu płatności za użycie i utrzymywać zużycie w ramach budżetu.
+
+00:14:26.500 --> 00:14:31.540
+Jeśli to zignorujesz, o limitach dowiesz się dopiero, gdy agent nagle zatrzyma się w trakcie pracy, bo zasoby się wyczerpały.
+
+00:14:31.720 --> 00:14:34.260
+Nie chcesz debagować środowiska produkcyjnego z pustym bakiem.
+
+00:14:34.480 --> 00:14:37.000
+Przy naturalnym 20 zarządzanie działa jak zbroja.
+
+00:14:37.240 --> 00:14:42.320
+Jest na tyle elastyczna, że twórcy mogą szybko działać, ale na tyle ochronna, że jeden błąd nie pogrąży całego zespołu.
+
+00:14:42.500 --> 00:14:49.000
+Przy naturalnym 1 ignorujesz je, pozwalasz agentom powstawać bez zgody i łatasz wycieki w działach, podczas gdy audytorzy czają się tuż nad głową.
+
+00:14:49.340 --> 00:14:52.940
+Zarządzanie nie sprawia, że gra staje się nudna, ale sprawia, że można w niej przetrwać.
+
+00:14:52.940 --> 00:15:00.240
+A przetrwanie prowadzi prosto do kolejnej pułapki czekającej w lochu, ponieważ gdy już opanujesz zarządzanie, kolejna niespodzianka nie będzie techniczna, lecz finansowa.
+
+00:15:00.440 --> 00:15:04.000
+Nie bez powodu administratorzy budzą się w potach, gdy zespół finansowy sprawdza licznik.
+
+00:15:04.200 --> 00:15:07.660
+Nic tak nie psuje dobrze działającego rozwiązania jak rachunek, który generuje.
+
+00:15:07.880 --> 00:15:10.260
+Licencje i koszty pułapki, których nie dostrzegłeś.
+
+00:15:10.420 --> 00:15:14.760
+Licencje i koszty to karty pułapki, których większość zespołów nie zauważa, dopóki nie znajdą się na stole.
+
+00:15:15.020 --> 00:15:18.680
+Microsoft sprzedaje wizję szybkich kompilacji i efektownych dem, ale to nie ma znaczenia.
+
+00:15:18.680 --> 00:15:22.820
+Jeśli kredyty znikają w połowie miesiąca lub łącznik po cichu, dodaje kolejny wymóg licencyjny.
+
+00:15:22.940 --> 00:15:24.260
+To nie jest uwaga na marginesie.
+
+00:15:24.380 --> 00:15:26.340
+To główny mechanizm, którym musisz zarządzać.
+
+00:15:26.480 --> 00:15:29.400
+Inaczej agenci staną w momencie, gdy ludzie zaczną na nich polegać.
+
+00:15:29.540 --> 00:15:31.820
+Copilot Studio działa w oparciu o kredyty Copilot.
+
+00:15:32.000 --> 00:15:36.620
+Kupujesz je w pakietach 25 tysięcy kredytów za około 200 dolarów miesięcznie dla całego tenanta
+
+00:15:36.620 --> 00:15:41.700
+lub używasz miernika płatności za użycie, gdzie rachunek przychodzi na koniec okresu na podstawie zużycia organizacji.
+
+00:15:41.960 --> 00:15:45.620
+Brzmi hojnie, ale dokumentacja jasno wskazuje, że zużycie nie jest stałe.
+
+00:15:45.620 --> 00:15:51.640
+Stosuje stawki warstwowe, standardowe akcje niegeneratywne kosztują mniej, podczas gdy odpowiedzi generatywne zużywają więcej.
+
+00:15:51.920 --> 00:15:57.780
+Dokładne liczby zmieniają się wraz z wytycznymi licencyjnymi Microsoftu, więc traktuj dokumentację rozliczeniową jak część swojego zestawu narzędzi.
+
+00:15:57.940 --> 00:16:02.200
+Kluczowe jest to, że zarówno testowe prompt Y, jak i odpowiedzi produkcyjne czerpią zasoby z tej samej puli.
+
+00:16:02.360 --> 00:16:06.340
+W systemie nie ma ukrytej darmowej piaskownicy, niezależnie od tego, jak bardzo byś chciał, aby istniała.
+
+00:16:06.480 --> 00:16:14.180
+Ponieważ kredyty dotyczą całego dzierżawcy, każdy agent korzysta z tej samej puli, niezależnie czy to bot HR, bot wsparcia sprzedaży, czy asystent raportowania finansowego.
+
+00:16:14.180 --> 00:16:20.620
+Taka konstrukcja daje elastyczność, ale oznacza też, że intensywny sprint testowy jednego działu może wyczerpać zasoby innego zespołu.
+
+00:16:20.820 --> 00:16:24.580
+Jeśli pula się wyczerpie, Kopilot Studio nie ogranicza wydajności ani nie ostrzega delikatnie.
+
+00:16:24.760 --> 00:16:28.120
+Po prostu wstrzymuje działanie tych agentów, dopóki kredyty nie zostaną uzupełnione.
+
+00:16:28.320 --> 00:16:35.040
+Nie chcesz być osobą tłumaczącą, dlaczego działający bot wsparcia zamilkł w trakcie transakcji tylko dlatego, że inna grupa zostawiła testy na noc.
+
+00:16:35.240 --> 00:16:41.120
+Model płatności zgodnie z użyciem jest pomocny, jeśli chcesz uniknąć zobowiązań z góry, płacąc tylko za to, co faktycznie zużyłeś w danym miesiącu.
+
+00:16:41.120 --> 00:16:50.040
+Ale licznik jest brutalnie bezstronny. Szybka runda testów prototypu zużywa kredyty tak samo jak przepływ produkcyjny, co sprawia, że łatwo przekroczyć budżet bez odpowiednich alertów.
+
+00:16:50.240 --> 00:16:55.320
+Bezpiecznym podejściem jest traktowanie nawet wersji testowych jako części planowania kredytów i wczesne ustalanie limitów.
+
+00:16:55.480 --> 00:16:59.440
+Teams Toolkit lub zestaw narzędzi dla agentów w VS Code przyjmują inne podejście.
+
+00:16:59.680 --> 00:17:06.140
+Nie widzisz kredytów za prąd, ponieważ praca odbywa się w ramach licencji Microsoft 365, Kopilot Użytkownika, gdy publikujesz w pakiecie.
+
+00:17:06.140 --> 00:17:14.540
+Wygląda to na wolność w porównaniu do studio, ale pokrywa tylko podstawy. W momencie budowania niestandardowego agenta lub łączenia się z zewnętrznymi usługami koszty zaczynają rosnąć.
+
+00:17:14.660 --> 00:17:21.620
+API mają własne liczniki, konektory korporacyjne często wymagają własnych licencji, a zgody administratora mogą wymusić wyższe progi cenowe.
+
+00:17:21.860 --> 00:17:27.340
+Studio rozlicza Cię za akcję Toolkit pozwala ominąć model kredytowy, ale oba rozwiązania przenoszą koszty gdzie indziej.
+
+00:17:27.580 --> 00:17:29.380
+Nazwij to kompromisem, a nie darmową drogą.
+
+00:17:29.380 --> 00:17:35.080
+Praktyczna zasada mówi, że Teams Toolkit ukrywa koszty w warstwach integracji i usług, podczas gdy studio każe płacić z góry w kredytach.
+
+00:17:35.260 --> 00:17:37.160
+Żadne z nich nie jest tańsze w każdym przypadku.
+
+00:17:37.480 --> 00:17:41.500
+Musisz dopasować oczekiwane przepływy pracy do dokumentacji cenowej, zanim wybierzesz ścieżkę.
+
+00:17:41.740 --> 00:17:46.740
+Lekki bot zatwierdzający oparty na SharePoint może świetnie sprawdzić się w studio, zużywając niewiele kredytów.
+
+00:17:46.940 --> 00:17:54.220
+Głęboka integracja z zewnętrznym CRM może mieć więcej sensu w Toolkit, nawet jeśli zapłacisz opłaty API za CRM zamiast zużywać kredyty Kopilota.
+
+00:17:54.220 --> 00:17:57.800
+Chodzi o to, gdzie przesuwa się obciążenie finansowe, a nie o całkowite jego unikanie.
+
+00:17:57.980 --> 00:18:00.720
+Więc jak sprawić, by te karty pułapki nie zrujnowały Twojego planu?
+
+00:18:00.820 --> 00:18:05.920
+Po pierwsze, włącz monitorowanie zużycia na poziomie dzierżawy za pomocą licznika użycia agenta Kopilot lub raportów płatności zgodnie z rzeczywistym użyciem.
+
+00:18:06.020 --> 00:18:10.920
+Po drugie, skonfiguruj progi alertów, aby dział finansowy i IT otrzymywały powiadomienia, zanim pula środków się wyczerpie.
+
+00:18:10.920 --> 00:18:18.220
+Po trzecie, przydziel budżety dla poszczególnych jednostek biznesowych, korzystając z wyznaczonych pakietów kredytów lub jasnych zasad wewnętrznych, aby jeden zespół nie wyczerpał puli w jednym splincie.
+
+00:18:18.380 --> 00:18:21.380
+Te trzy mechanizmy kontrolne eliminują większość niemiłych niespodzianek.
+
+00:18:21.540 --> 00:18:23.480
+Rozszerzony rozwój dodaje kolejną warstwę.
+
+00:18:23.620 --> 00:18:28.580
+Integracje często wymagają wyraźnej zgody administratora, a każda zgoda może domyślnie generować nowe koszty.
+
+00:18:28.820 --> 00:18:33.420
+Zewnętrzne API, z którego korzystałeś podczas testów, obciąży Cię kosztami w środowisku produkcyjnym, a nie Microsoft.
+
+00:18:33.420 --> 00:18:38.920
+Mądrym posunięciem jest skatalogowanie licencji i łączników na etapie projektowania oraz ustalenie, kto za co płaci przed wdrożeniem.
+
+00:18:39.060 --> 00:18:42.100
+Traktuj to jak zarządzanie zmianą w zakresie kosztów, a nie tylko możliwości.
+
+00:18:42.500 --> 00:18:44.780
+Licencjonowanie to niedrobny druk, to część architektury.
+
+00:18:45.020 --> 00:18:48.640
+Wydawaj kredyty tak, jak wydawałbyś żetony w rajdzie rozważnie, a nie lekko myślnie.
+
+00:18:48.880 --> 00:18:54.820
+Zapewnij odpowiedni zestaw licencji na początku, monitoruj wskaźniki zużycia i spodziewaj się kosztów integracji przy każdym nowym łączniku.
+
+00:18:54.820 --> 00:19:00.940
+Nic z tego nie jest opcjonalne, jeśli chcesz, aby Twoi agenci byli dostępni, gdy ludzie na nich polegają, co prowadzi nas do ostatniej fazy operacji.
+
+00:19:00.940 --> 00:19:08.040
+Budowanie, ugruntowywanie, zarządzanie i finansowanie agenta to kluczowe punkty kontrolne, ale prawdziwym sprawdzianem nie jest wdrożenie go do produkcji, lecz długoterminowe prowadzenie kampanii.
+
+00:19:08.140 --> 00:19:10.680
+To właśnie tutaj ostateczna perspektywa ma największe znaczenie.
+
+00:19:10.860 --> 00:19:12.040
+Oto najważniejsze wnioski.
+
+00:19:12.260 --> 00:19:16.620
+Sukcesem nie są błyszczące demach, lecz przestrzeganie zasad, które sprawiają, że agenci są użyteczni, a nie nieprzewidywalni.
+
+00:19:16.780 --> 00:19:18.640
+Po pierwsze, wybierz mądrze ścieżkę budowania.
+
+00:19:18.840 --> 00:19:22.800
+Kopilot Studio dla szybkości low-code, Teams Toolkit dla pełnych, niestandardowych silników i głębszej kontroli.
+
+00:19:22.800 --> 00:19:25.320
+Po drugie, zabezpiecz ład korporacyjny od momentu uruchomienia.
+
+00:19:25.320 --> 00:19:29.900
+Etykiety perwiu, role administratorów, logi diagnostyczne i monitorowanie zużycia, wszystko włączone przed publikacją.
+
+00:19:30.060 --> 00:19:31.620
+Po trzecie, zaplanuj swoje wydatki.
+
+00:19:31.860 --> 00:19:37.060
+Studio zużywa pakiety kredytów dla całej dzierżawy lub liczniki płatności za użycie, podczas gdy Toolkit przenosi koszty na zewnętrzne API i usługi.
+
+00:19:37.300 --> 00:19:38.160
+Sprawa zamknięta.
+
+00:19:38.440 --> 00:19:40.800
+Zasubskrybuj, włącz powiadomienia i zostaw komentarz.
+
+00:19:40.960 --> 00:19:43.320
+Wybierasz Studio czy Toolkit do swojej następnej misji?
