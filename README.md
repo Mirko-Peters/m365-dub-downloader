@@ -1,6 +1,6 @@
 # M365 Dub Downloader
 
-Läuft täglich per GitHub Actions: prüft den YouTube-Kanal **@m365show** auf Dub-Tonspuren
+Läuft täglich per GitHub Actions: prüft die animierten Videos der Playlist **Sticky Man Explained** (Kanal „m365 Show by Mirko Peters“) auf Dub-Tonspuren
 (alle Sprachen außer der Originalsprache, inklusive Deutsch), lädt jede neue Spur als MP3,
 lädt sie als **private** Episode in die passende M365.FM-Sprach-Show auf Spreaker hoch und löscht die Datei wieder.
 Was erledigt ist, steht in `state.json`.
