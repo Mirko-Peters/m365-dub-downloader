@@ -123,7 +123,12 @@ def setup_logging(cfg) -> None:
 
 
 class RunLock:
-    """Verhindert, dass zwei geplante Läufe gleichzeitig laufen."""
+    """Verhindert, dass zwei gleichartige Läufe gleichzeitig laufen."""
+
+    def __init__(self, name: str = "run"):
+        global LOCK_FILE
+        self.file = BASE / (".running.lock" if name != "upload" else ".upload.lock")
+        LOCK_FILE = self.file
 
     def __enter__(self):
         if LOCK_FILE.exists():
@@ -860,10 +865,16 @@ def cmd_upload(cfg, state, args) -> int:
     return cmd_upload_basic(cfg, state, args)
 
 
+UPLOADED_FILE = BASE / "uploaded.json"
+
+
 def cmd_upload_texts(cfg, state, args) -> int:
-    """Upload mit Claudes übersetzten Texten aus dem Repo – nur Folgen, für die Texte existieren."""
+    """Upload mit Claudes übersetzten Texten aus dem Repo – nur Folgen, für die Texte existieren.
+    Merkt sich Uploads in uploaded.json (unabhängig vom laufenden Download)."""
     sp = spreaker_client(cfg)
-    pending = [m for m in state["downloads"].values() if not m.get("uploaded")]
+    done = load_json(UPLOADED_FILE, {})
+    pending = [m for k, m in state["downloads"].items()
+               if not m.get("uploaded") and f"{m['video_id']}:{m['language']}" not in done]
     n = skipped = 0
     for meta in sorted(pending, key=lambda m: (m.get("upload_date") or "", m["video_id"], m["language"])):
         lang = base_lang(meta["language"])
@@ -875,8 +886,8 @@ def cmd_upload_texts(cfg, state, args) -> int:
         if not sid:
             continue
         if t["title"].strip() in show_titles(sp, sid):
-            meta["uploaded"] = {"show_id": sid, "episode_id": None, "at": now_iso(), "note": "bereits vorhanden"}
-            save_json(STATE_FILE, state)
+            done[f"{meta['video_id']}:{meta['language']}"] = {"show_id": sid, "episode_id": None, "at": now_iso(), "note": "bereits vorhanden"}
+            save_json(UPLOADED_FILE, done)
             log.info("= schon online: %s", t["title"])
             continue
         media = Path(meta["file"])
@@ -900,18 +911,20 @@ def cmd_upload_texts(cfg, state, args) -> int:
             log.error("Upload fehlgeschlagen (%s): %s", media.name, e)
             continue
         eid = ep.get("episode_id")
-        meta["uploaded"] = {"show_id": sid, "episode_id": eid, "at": now_iso()}
+        done[f"{meta['video_id']}:{meta['language']}"] = {"show_id": sid, "episode_id": eid, "at": now_iso(), "title": t["title"]}
         show_titles(sp, sid).add(t["title"].strip())
-        save_json(STATE_FILE, state)
+        save_json(UPLOADED_FILE, done)
         n += 1
         log.info("⬆ %s -> Show %s (Episode %s)", t["title"], sid, eid)
-        if t.get("tr") and n == 1:
+        if t.get("tr") and eid:
             try:
+                sp._req("POST", f"/episodes/{eid}", data={"transcript_url": t["tr"], "transcript_type": "text/vtt",
+                                                          "ai_generated": "true"})
                 e2 = sp._req("GET", f"/episodes/{eid}")["episode"]
-                log.info("  Kontrolle: Transkript %s, KI-Kennzeichnung %s",
+                log.info("  Transkript %s, KI-Kennzeichnung %s",
                          "gesetzt" if e2.get("transcript_url") else "NICHT gesetzt", e2.get("ai_generated"))
-            except Exception:
-                pass
+            except Exception as e:
+                log.warning("  Transkript-Update fehlgeschlagen: %s", e)
         if n >= cfg.get("max_uploads_per_run", 100):
             break
     log.info("Upload fertig: %d Episoden hochgeladen, %d warten noch auf Texte.", n, skipped)
@@ -1145,7 +1158,7 @@ def main() -> None:
     if args.command == "shows":
         return cmd_shows(cfg, state, args)
 
-    with RunLock():
+    with RunLock("upload" if args.command == "upload" else "run"):
         if args.command in ("run", "download"):
             cmd_download(cfg, state, args)
         if args.command == "upload" or (args.command == "run" and cfg.get("auto_upload", True)):
