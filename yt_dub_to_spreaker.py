@@ -636,7 +636,7 @@ def cmd_download(cfg, state, args) -> int:
         if cfg.get("fetch_transcripts", True) and not args.dry_run:
             items = [m for k, m in state["downloads"].items() if k.startswith(vid + ":")]
             for m in items:
-                if cfg.get("transcript_engine", "whisper") == "whisper":
+                if cfg.get("transcript_engine", "whisper") == "whisper_inline":
                     try:
                         t = whisper_transcribe(cfg, m)
                     except Exception as e:
@@ -1147,6 +1147,33 @@ def cmd_status(cfg, state, args) -> None:
 
 
 # --------------------------------------------------------------------------- main
+def run_transcripts(cfg, state, limit: int | None = None) -> int:
+    items = [m for m in state["downloads"].values()
+             if not (m.get("transcript") and Path(m["transcript"]).exists())
+             and not Path(m["file"]).with_suffix(".vtt").exists()
+             and Path(m["file"]).exists()]
+    weak = {"ml", "pa", "ta", "te", "bn"}
+    items.sort(key=lambda m: (0 if base_lang(m["language"]) == "de" else
+                              2 if base_lang(m["language"]) in weak else 1, m.get("upload_date") or ""))
+    if limit:
+        items = items[:limit]
+    log.info("%d Folgen ohne Transkript", len(items))
+    n = 0
+    for i, m in enumerate(items, 1):
+        log.info("[%d/%d] %s", i, len(items), Path(m["file"]).name)
+        try:
+            t = whisper_transcribe(cfg, m)
+        except Exception as e:
+            log.error("  Whisper-Fehler: %s", e)
+            continue
+        if t:
+            m["transcript"] = t
+            Path(m["file"]).with_suffix(".json").write_text(json.dumps(m, ensure_ascii=False, indent=2), encoding="utf-8")
+            save_json(STATE_FILE, state)
+            n += 1
+    return n
+
+
 def main() -> None:
     p = argparse.ArgumentParser(description="YouTube-Dubs herunterladen und zu Spreaker hochladen")
     p.add_argument("command", choices=["run", "download", "upload", "shows", "status", "login", "transcripts"])
@@ -1166,20 +1193,7 @@ def main() -> None:
     state = load_json(STATE_FILE, {"videos": {}, "downloads": {}})
 
     if args.command == "transcripts":
-        items = [m for m in state["downloads"].values()
-                 if not (m.get("transcript") and Path(m["transcript"]).exists())]
-        log.info("%d Folgen ohne Transkript", len(items))
-        for i, m in enumerate(items, 1):
-            log.info("[%d/%d] %s", i, len(items), Path(m["file"]).name)
-            try:
-                t = whisper_transcribe(cfg, m)
-            except Exception as e:
-                log.error("  Whisper-Fehler: %s", e)
-                continue
-            if t:
-                m["transcript"] = t
-                Path(m["file"]).with_suffix(".json").write_text(json.dumps(m, ensure_ascii=False, indent=2), encoding="utf-8")
-                save_json(STATE_FILE, state)
+        run_transcripts(cfg, state)
         return
     if args.command == "login":
         return cmd_login(cfg, state, args)
@@ -1191,8 +1205,14 @@ def main() -> None:
     with RunLock("upload" if args.command == "upload" else "run"):
         if args.command in ("run", "download"):
             cmd_download(cfg, state, args)
-        if args.command == "upload" or (args.command == "run" and cfg.get("auto_upload", True)):
-            cmd_upload(cfg, state, args)
+        if args.command == "run" and cfg.get("transcript_engine", "whisper") == "whisper" and not args.dry_run:
+            run_transcripts(cfg, state, limit=cfg.get("max_transcripts_per_run", 120))
+        if args.command == "upload" or (args.command == "run" and
+                                         (cfg.get("auto_upload") or cfg.get("upload_mode", "texts") == "texts")):
+            if cfg.get("spreaker_token"):
+                cmd_upload(cfg, state, args)
+            else:
+                log.warning("Kein Spreaker-Login – Upload übersprungen (spreaker_login.bat ausführen).")
 
 
 if __name__ == "__main__":
