@@ -159,20 +159,24 @@ def ydl_base_opts(cfg) -> dict:
 
 def list_channel_videos(cfg, limit: int | None) -> list[dict]:
     url = cfg["youtube_channel_url"].rstrip("/")
-    tabs = cfg.get("channel_tabs") or ["videos"]
+    sources = cfg.get("source_urls") or [f"{url}/{t}" for t in (cfg.get("channel_tabs") or ["videos"])]
     videos, seen = [], set()
-    for tab in tabs:
+    for src in sources:
         opts = ydl_base_opts(cfg) | {"extract_flat": "in_playlist"}
         if limit:
             opts["playlistend"] = limit
-        with YoutubeDL(opts) as ydl:
-            info = ydl.extract_info(f"{url}/{tab}", download=False)
+        try:
+            with YoutubeDL(opts) as ydl:
+                info = ydl.extract_info(src, download=False)
+        except Exception as e:
+            log.warning("Quelle %s nicht lesbar: %s", src, str(e).splitlines()[0])
+            continue
         for e in (info or {}).get("entries") or []:
             vid = e.get("id")
             if vid and vid not in seen:
                 seen.add(vid)
                 videos.append({"id": vid, "title": e.get("title")})
-    log.info("Kanal: %d Videos gefunden (%s)", len(videos), ", ".join(tabs))
+    log.info("Kanal: %d Videos gefunden", len(videos))
     return videos
 
 
