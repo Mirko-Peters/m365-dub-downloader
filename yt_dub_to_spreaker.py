@@ -94,6 +94,10 @@ def base_lang(code: str | None) -> str | None:
     return c.split("-")[0] if c else None
 
 
+def glob_escape(name: str) -> str:
+    return re.sub(r"([\[\]*?])", r"[\1]", name)
+
+
 def safe_filename(name: str, max_len: int = 140) -> str:
     name = re.sub(r'[<>:"/\\|?*\x00-\x1f]', " ", name)
     name = re.sub(r"\s+", " ", name).strip().rstrip(". ")
@@ -276,7 +280,7 @@ def download_dub(cfg, info: dict, lang: str, fmt: dict, dry: bool) -> dict | Non
     title, desc = info.get("title") or vid, info.get("description") or ""
     if cfg.get("localized_metadata", True):
         try:
-            li = video_info(cfg, vid, base_lang(lang))
+            li = video_info(cfg, vid, YT_CODES.get(base_lang(lang), base_lang(lang)))
             title = li.get("title") or title
             desc = li.get("description") or desc
         except Exception as e:  # nicht kritisch
@@ -298,6 +302,8 @@ def download_dub(cfg, info: dict, lang: str, fmt: dict, dry: bool) -> dict | Non
         }],
         "overwrites": True,
     }
+    if cfg.get("audio_channels"):
+        opts["postprocessor_args"] = {"ExtractAudio": ["-ac", str(cfg["audio_channels"])]}
     if cfg.get("ffmpeg_location"):
         opts["ffmpeg_location"] = cfg["ffmpeg_location"]
     with YoutubeDL(opts) as ydl:
@@ -305,9 +311,11 @@ def download_dub(cfg, info: dict, lang: str, fmt: dict, dry: bool) -> dict | Non
     if not target.exists():
         raise RuntimeError(f"MP3 nicht gefunden nach Download: {target}")
 
+    transcript = fetch_dub_transcript(cfg, vid, lang, lang_dir, stem) if cfg.get("fetch_transcripts", True) else None
+
     # Cover (YouTube-Thumbnail) für Spreaker
     cover = None
-    turl = thumbnail_url(info)
+    turl = thumbnail_url(info) if cfg.get("episode_cover", False) else None
     if turl:
         try:
             r = requests.get(turl, timeout=30)
@@ -329,10 +337,80 @@ def download_dub(cfg, info: dict, lang: str, fmt: dict, dry: bool) -> dict | Non
         "tags": (info.get("tags") or [])[:20],
         "file": str(target),
         "cover": str(cover) if cover else None,
+        "transcript": transcript,
         "downloaded_at": now_iso(),
     }
     target.with_suffix(".json").write_text(json.dumps(meta, ensure_ascii=False, indent=2), encoding="utf-8")
     return meta
+
+
+def fetch_transcript(cfg, vid: str) -> str | None:
+    """Lädt das (automatische) englische Transkript einmal pro Video als Text."""
+    tdir = Path(os.environ.get("DUB_DIR") or cfg["download_dir"])
+    if not tdir.is_absolute():
+        tdir = BASE / tdir
+    tdir = tdir / "_transkripte"
+    tdir.mkdir(parents=True, exist_ok=True)
+    out_txt = tdir / f"{vid}.txt"
+    if out_txt.exists():
+        return str(out_txt)
+    opts = ydl_base_opts(cfg) | {
+        "skip_download": True, "writesubtitles": True, "writeautomaticsub": True,
+        "subtitleslangs": ["en.*", "en"], "subtitlesformat": "vtt",
+        "outtmpl": str(tdir / f"{vid}.%(ext)s"),
+    }
+    try:
+        with YoutubeDL(opts) as ydl:
+            ydl.download([f"https://www.youtube.com/watch?v={vid}"])
+    except Exception as e:
+        log.warning("  Transkript nicht geladen: %s", str(e).splitlines()[0])
+        return None
+    vtts = sorted(tdir.glob(f"{vid}*.vtt"))
+    if not vtts:
+        return None
+    lines, last = [], ""
+    for line in vtts[0].read_text(encoding="utf-8", errors="ignore").splitlines():
+        line = re.sub(r"<[^>]+>", "", line).strip()
+        if not line or "-->" in line or line.startswith(("WEBVTT", "Kind:", "Language:")) or line.isdigit():
+            continue
+        if line != last:
+            lines.append(line)
+            last = line
+    out_txt.write_text(" ".join(lines), encoding="utf-8")
+    for v in vtts:
+        v.unlink()
+    log.info("  📝 Transkript gespeichert")
+    return str(out_txt)
+
+
+YT_CODES = {"he": "iw", "id": "id"}
+
+
+def fetch_dub_transcript(cfg, vid: str, lang: str, lang_dir: Path, stem: str) -> str | None:
+    """Automatisches YouTube-Transkript in der Dub-Sprache als <stem>.vtt."""
+    final = lang_dir / f"{stem}.vtt"
+    if final.exists():
+        return str(final)
+    code = YT_CODES.get(base_lang(lang), base_lang(lang))
+    opts = ydl_base_opts(cfg) | {
+        "skip_download": True, "writeautomaticsub": True, "writesubtitles": True,
+        "subtitleslangs": [code, f"{code}-.*"], "subtitlesformat": "vtt",
+        "outtmpl": str(lang_dir / f"{stem}.%(ext)s"),
+    }
+    try:
+        with YoutubeDL(opts) as ydl:
+            ydl.download([f"https://www.youtube.com/watch?v={vid}"])
+    except Exception as e:
+        log.warning("  Transkript (%s) nicht geladen: %s", lang, str(e).splitlines()[0])
+        return None
+    vtts = sorted(lang_dir.glob(glob_escape(stem) + ".*.vtt"))
+    if not vtts:
+        log.warning("  Kein Transkript für %s gefunden", lang)
+        return None
+    os.replace(vtts[0], final)
+    for extra in vtts[1:]:
+        extra.unlink(missing_ok=True)
+    return str(final)
 
 
 def needs_check(entry: dict | None, cfg, full: bool, vid: str = "", state: dict | None = None) -> bool:
@@ -393,6 +471,8 @@ def cmd_download(cfg, state, args) -> int:
         if dubs:
             log.info("[%d/%d] %s – Dubs: %s | neu: %s", i, len(videos), info.get("title"),
                      ", ".join(sorted(dubs)), ", ".join(missing) or "–")
+        if missing and cfg.get("fetch_transcripts", True) and not args.dry_run:
+            fetch_transcript(cfg, vid)
         for lang in missing:
             if cloud and sp is not None and not resolve_show(lang, cfg, shows):
                 if cfg.get("create_missing_shows"):
@@ -745,7 +825,7 @@ def cmd_status(cfg, state, args) -> None:
 # --------------------------------------------------------------------------- main
 def main() -> None:
     p = argparse.ArgumentParser(description="YouTube-Dubs herunterladen und zu Spreaker hochladen")
-    p.add_argument("command", choices=["run", "download", "upload", "shows", "status", "login"])
+    p.add_argument("command", choices=["run", "download", "upload", "shows", "status", "login", "transcripts"])
     p.add_argument("--limit", type=int, help="max. Anzahl Kanal-Videos (neueste zuerst)")
     p.add_argument("--full-rescan", action="store_true", help="alle Videos erneut auf neue Dubs prüfen")
     p.add_argument("--dry-run", action="store_true", help="nur anzeigen, nichts laden/hochladen")
@@ -761,6 +841,18 @@ def main() -> None:
     setup_logging(cfg)
     state = load_json(STATE_FILE, {"videos": {}, "downloads": {}})
 
+    if args.command == "transcripts":
+        for key, m in state["downloads"].items():
+            f = Path(m["file"])
+            if not m.get("transcript"):
+                t = fetch_dub_transcript(cfg, m["video_id"], m["language"], f.parent, f.stem)
+                if t:
+                    m["transcript"] = t
+                    f.with_suffix(".json").write_text(json.dumps(m, ensure_ascii=False, indent=2), encoding="utf-8")
+                    log.info("📝 %s", Path(t).name)
+            fetch_transcript(cfg, m["video_id"])
+        save_json(STATE_FILE, state)
+        return
     if args.command == "login":
         return cmd_login(cfg, state, args)
     if args.command == "status":
