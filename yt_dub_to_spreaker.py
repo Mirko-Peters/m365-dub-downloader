@@ -163,8 +163,6 @@ def list_channel_videos(cfg, limit: int | None) -> list[dict]:
     videos, seen = [], set()
     for src in sources:
         opts = ydl_base_opts(cfg) | {"extract_flat": "in_playlist"}
-        if limit:
-            opts["playlistend"] = limit
         try:
             with YoutubeDL(opts) as ydl:
                 info = ydl.extract_info(src, download=False)
@@ -172,14 +170,21 @@ def list_channel_videos(cfg, limit: int | None) -> list[dict]:
             log.warning("Quelle %s nicht lesbar: %s", src, str(e).splitlines()[0])
             continue
         min_dur = cfg.get("min_duration_seconds", 0)
-        for e in (info or {}).get("entries") or []:
+        entries = list((info or {}).get("entries") or [])
+        skipped = 0
+        log.info("Quelle: %d Einträge", len(entries))
+        for e in entries:
+            if limit and len(videos) >= limit:
+                break
             vid = e.get("id")
             dur = e.get("duration")
             if min_dur and (("/shorts/" in (e.get("url") or "")) or (dur is not None and dur < min_dur)):
+                skipped += 1
                 continue  # Shorts überspringen
             if vid and vid not in seen:
                 seen.add(vid)
                 videos.append({"id": vid, "title": e.get("title")})
+        log.info("Davon %d Shorts übersprungen", skipped)
     log.info("Kanal: %d Videos gefunden", len(videos))
     return videos
 
