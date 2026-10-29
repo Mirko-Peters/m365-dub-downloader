@@ -1,0 +1,100 @@
+{
+ "de": {
+  "html": "<p>Fast jeder hat schon von Azure Private Link gehört, aber nur wenige können klar erklären, was dahintersteckt. Die Option taucht beim Einrichten eines Speicherkontos oder einer SQL-Datenbank auf. Doch was bewirkt sie, und braucht man sie wirklich?</p>\n<p>Ein weit verbreiteter Irrtum lautet: Ein Dienst, der in Azure läuft, ist automatisch privat und vom Internet abgeschottet. Das stimmt nicht. Dieser Artikel erklärt, was Private Link ist, warum es existiert, wie private Endpunkte und DNS zusammenspielen und worauf Sie bei Sicherheit, Kosten und Einrichtung achten sollten.</p>\n\n<h2>Öffentliche Endpunkte in Azure: Das Standardproblem</h2>\n<p>Die meisten Azure-PaaS-Dienste wie Storage, SQL oder Key Vault haben standardmäßig einen öffentlichen Endpunkt. Legen Sie ein Speicherkonto an, erhalten Sie eine URL im Stil von <em>meinspeicherkonto.blob.core.windows.net</em>. Diese URL wird in eine öffentliche IP-Adresse aufgelöst. Jeder mit Internetzugang kann versuchen, sich zu verbinden, sofern er die richtige URL und gültige Anmeldedaten hat.</p>\n<p>Besonders unerwartet ist der Weg des Datenverkehrs. Angenommen, eine virtuelle Maschine in Ihrem virtuellen Azure-Netzwerk liest Dateien aus dem Blob Storage. Man würde erwarten, dass der Verkehr in Azure bleibt, schließlich liegen beide Ressourcen in derselben Cloud. Tatsächlich verlässt die VM ihr virtuelles Netzwerk, geht über das öffentliche Internet und gelangt erst dann zurück zum Speicherkonto.</p>\n<p>Das ist, als müssten Sie in einem Bürogebäude etwas aus dem Vorratsschrank holen, gehen aber zuerst nach draußen, um den Block herum und durch eine andere Tür wieder hinein. Der Verkehr ist zwar verschlüsselt, läuft aber über Router und Switches, die Sie nicht kontrollieren.</p>\n\n<h3>Warum „im eigenen Abonnement\" nicht „privat\" heißt</h3>\n<p>Viele denken, eine Ressource im eigenen Abonnement sei automatisch privat. Doch ein Abonnement ist eine Abrechnungs- und Verwaltungsgrenze, keine Netzwerkgrenze. Standardmäßig schützen Sie nur Authentifizierung, Autorisierung, Schlüssel, Passwörter und Firewall-Regeln. Der Netzwerkpfad selbst bleibt öffentlich. Genau hier setzt Private Link an.</p>\n\n<h2>Privater Endpunkt und DNS: So funktioniert Azure Private Link</h2>\n<p>Private Link ist der Gesamtdienst. Das Kernstück ist der <strong>private Endpunkt</strong>: eine virtuelle Netzwerkschnittstellenkarte (NIC) in Ihrem virtuellen Netzwerk, die eine Verbindung zu einem PaaS-Dienst herstellt.</p>\n\n<h3>Die virtuelle NIC im eigenen Subnetz</h3>\n<p>Erstellen Sie einen privaten Endpunkt für Ihr Speicherkonto, legt Azure eine virtuelle NIC mit einer privaten IP-Adresse aus Ihrem Subnetz an. Diese NIC verbindet sich im Backend über Private Link mit dem Speicherkonto. Für Ihre VM wirkt das Konto nun wie jede andere Ressource im eigenen Netzwerk. Der Verkehr trifft auf die private IP der NIC und läuft über das Microsoft-Backbone-Netzwerk, nie über das öffentliche Internet. Im Bild des Bürogebäudes gehen Sie einfach den Flur entlang direkt zum Vorratsschrank.</p>\n<p>Wichtig: Private Link ist nicht dasselbe wie ein VPN oder ExpressRoute. Es ermöglicht den Zugriff auf einen bestimmten Dienst und verbindet nicht Ihr gesamtes Netzwerk mit Azure.</p>\n\n<h3>Private DNS-Zone: Wie die VM die private IP findet</h3>\n<p>Ihre VM kennt nicht die private IP, sondern nur den Namen des Speicherkontos. Damit dieser Name zur privaten IP aufgelöst wird, kommt DNS ins Spiel. Wählen Sie beim Erstellen des privaten Endpunkts die Integration in eine private DNS-Zone, legt Azure diese automatisch an. Für Blob Storage heißt sie <em>privatelink.blob.core.windows.net</em>. Darin steht ein A-Eintrag, der den Namen des Speicherkontos der privaten IP des Endpunkts zuordnet.</p>\n<p>Die Auflösungskette sieht so aus:</p>\n<ol>\n<li>Die VM fragt nach der URL des Speicherkontos.</li>\n<li>DNS antwortet mit einem CNAME, der auf die <em>privatelink</em>-Adresse verweist.</li>\n<li>Diese liegt in der privaten DNS-Zone, die mit Ihrem virtuellen Netzwerk verknüpft ist, und wird zur privaten IP aufgelöst.</li>\n<li>Die VM verbindet sich mit dieser privaten IP, der Verkehr bleibt im Azure-Netz.</li>\n</ol>\n<p>Die private DNS-Zone wirkt wie ein Empfangsmitarbeiter, der Besucher im Gebäude zum richtigen Flur schickt, statt sie nach draußen zu lassen.</p>\n<p>Wie viel Aufwand das bedeutet, hängt vom Standort der VM ab:</p>\n<ul>\n<li><strong>Im selben virtuellen Netzwerk:</strong> Die Zone ist verknüpft, die Auflösung läuft automatisch.</li>\n<li><strong>In einem Peering-Netzwerk:</strong> Die Zone muss auch mit diesem Netzwerk verknüpft werden.</li>\n<li><strong>Lokal über VPN oder ExpressRoute:</strong> Hier braucht es in der Regel eine DNS-Weiterleitung oder den Azure DNS Private Resolver.</li>\n</ul>\n\n<h2>Praxisbeispiel: Private Link mit Azure Blob Storage</h2>\n<p>Eine VM soll Dateien aus einem Blob-Storage-Konto abrufen, etwa weil eine Anwendung Benutzer-Uploads speichert oder ein Datenverarbeitungsjob aus einem Container liest. Ohne Private Link erhält die VM eine öffentliche IP, und der Verkehr macht den unnötigen Umweg über das Internet.</p>\n<p>Mit Private Link stellen Sie einen privaten Endpunkt für die Blob-Ressource des Speicherkontos bereit. Azure erstellt die NIC mit privater IP und richtet die private DNS-Zone ein. Löst die VM dieselbe URL wie zuvor auf, erhält sie nun die private IP. Der Verkehr fließt vom privaten Endpunkt über das Microsoft-Backbone zum Speicherkonto.</p>\n<p>Die Anwendung selbst ändert sich nicht. Verbindungszeichenfolgen und Konfigurationsdateien bleiben unverändert, die URL ist dieselbe. Geändert hat sich nur der Weg, den der Verkehr nimmt.</p>\n<p>Wer den vollen Schutz will, deaktiviert zusätzlich den öffentlichen Endpunkt. Dann ist das Speicherkonto nur noch über den privaten Endpunkt erreichbar, und niemand kann von außen auch nur versuchen, sich zu verbinden.</p>\n<p>Speicherkonten haben außerdem mehrere Unterressourcen: Blob, File, Table und Queue. Jede kann einen eigenen privaten Endpunkt bekommen, etwa einen für Blob- und einen separaten für File-Verkehr. Je nach Bedarf lässt sich auch ein einzelner Endpunkt für alle nutzen.</p>\n\n<h2>Private Link, VPN, ExpressRoute und Service-Endpunkte im Vergleich</h2>\n<p>Diese Optionen klingen ähnlich, lösen aber unterschiedliche Probleme und werden oft kombiniert.</p>\n<ul>\n<li><strong>VPN:</strong> Ein verschlüsselter Tunnel verbindet Ihr lokales Netzwerk über das öffentliche Internet mit Azure. Der Tunnel ist sicher, die Straße darunter bleibt öffentlich.</li>\n<li><strong>ExpressRoute:</strong> Eine dedizierte private Leitung von Ihrem Rechenzentrum zu Azure, ohne Berührung mit dem öffentlichen Internet. Allein bietet sie aber keinen privaten Zugriff auf PaaS-Dienste, denn das Speicherkonto behält seinen öffentlichen Endpunkt.</li>\n<li><strong>Service-Endpunkte:</strong> Die ältere Technologie beschränkt den Zugriff auf einen Dienst auf Verkehr aus Ihrem virtuellen Netzwerk. Der Dienst behält jedoch seinen öffentlichen Endpunkt, es kommt nur eine Firewall-Regel hinzu.</li>\n<li><strong>Private Link:</strong> Der Endpunkt liegt wirklich in Ihrem virtuellen Netzwerk und hat eine private IP. Es gibt keinen öffentlichen Endpunkt, den man angreifen könnte.</li>\n</ul>\n<p>Als Merkhilfe: Ein VPN ist ein sicherer Tunnel durch eine öffentliche Straße. ExpressRoute ist eine Privatstraße direkt zu Azure. Service-Endpunkte sind ein Wachmann am öffentlichen Tor, der Ausweise kontrolliert. Private Link ist ein direkter Flur im Gebäude.</p>\n<p>Um Ihr Büro mit Azure zu verbinden, kommen VPN oder ExpressRoute infrage. Für privaten Zugriff auf PaaS-Dienste ist Private Link der Goldstandard. Für höchste Sicherheit kombinieren Sie beides: ExpressRoute bringt den Verkehr privat nach Azure, Private Link ermöglicht von dort den privaten Zugriff auf die Dienste.</p>\n\n<h2>Eigene Anwendungen mit dem Private Link Service bereitstellen</h2>\n<p>Private Link dient nicht nur dem Zugriff auf Azure-Dienste. Mit dem Private Link Service können Sie auch eigene Anwendungen privat anbieten. Nehmen wir eine Anwendung auf virtuellen Maschinen hinter einem Standard Load Balancer, auf die Ihre Kunden zugreifen. Bisher gab es zwei Möglichkeiten: alles ins Internet stellen oder ein VPN zwischen beiden Netzwerken einrichten. Öffentliche Verfügbarkeit birgt Sicherheitsrisiken, VPNs sind aufwendig in Verwaltung und Wartung.</p>\n<p>Mit dem Private Link Service erstellen Sie den Dienst und verknüpfen ihn mit dem Standard Load Balancer. Ihre Kunden legen in ihrem eigenen virtuellen Netzwerk einen privaten Endpunkt an, der sich direkt mit Ihrem Dienst verbindet. Es braucht kein Peering, kein VPN und keine öffentliche Exposition. Der Verkehr läuft über das Microsoft-Backbone.</p>\n<p>Ihr Dienst erhält einen global eindeutigen Alias, den Kunden zur Verbindung nutzen. Sie steuern, wer ihn sehen darf:</p>\n<ul>\n<li>Sichtbarkeit über RBAC-Rollen oder bestimmte Abonnements einschränken</li>\n<li>oder jedem mit dem Alias eine Verbindungsanfrage erlauben</li>\n</ul>\n<p>Jede Anfrage geht zur manuellen Genehmigung an Sie, sodass Sie immer wissen, wer sich verbindet. Für SaaS-Anbieter ist das ein großer Fortschritt: Statt Firewall-Regeln zu öffnen oder VPNs zu pflegen, geben sie dem Kunden den Alias, der Kunde stellt den privaten Endpunkt bereit, und Sie genehmigen ihn. Einschränkung: Der Dienst funktioniert nur mit Standard Load Balancern, nicht mit Basic. Wer noch einen Basic Load Balancer nutzt, muss zuerst upgraden.</p>\n\n<h2>Sicherheit, Compliance und Kosten von Private Link</h2>\n<h3>Weniger Angriffsfläche, weniger Datenabfluss</h3>\n<p>Private Link reduziert die Angriffsfläche, weil öffentliche Endpunkte entfallen. Statt eines Speicherkontos oder einer SQL-Datenbank, die aus dem Internet erreichbar ist, haben Sie eine Ressource, die nur auf Verkehr aus Ihrem virtuellen Netzwerk reagiert. Es gibt keine öffentliche IP zum Scannen und keinen offenen Port zum Ausspähen.</p>\n<p>Ein weiterer, oft unterschätzter Vorteil ist der Schutz vor Datenabfluss. Jeder private Endpunkt ist einer bestimmten Ressourceninstanz zugeordnet, nicht dem gesamten Dienst und nicht jedem Speicherkonto im Abonnement. Wird eine Arbeitslast in Ihrem Netzwerk kompromittiert, kann der Angreifer diesen Endpunkt nicht nutzen, um andere Speicherkonten zu erreichen.</p>\n<h3>Compliance</h3>\n<p>Vorschriften wie HIPAA, DSGVO und PCI verlangen häufig, dass sensible Daten nicht über öffentliche Netzwerke übertragen werden. Private Link bietet dafür einen sauberen Nachweis: Der Verkehr bleibt im Microsoft-Backbone, und die Auditlogs belegen es. In regulierten Branchen kann das allein die Investition rechtfertigen.</p>\n<h3>Kosten</h3>\n<p>Private Link ist nicht kostenlos. Es fällt eine stündliche Gebühr pro privatem Endpunkt an, dazu kommen Gebühren für die Datenverarbeitung. Je nach Nutzung kann das zwei- bis dreimal teurer sein als ein öffentlicher Endpunkt mit Firewall-Regeln, vor allem bei vielen Endpunkten.</p>\n<p>Daher ist Private Link nicht immer die richtige Wahl:</p>\n<ul>\n<li>In Entwicklungs- und Testumgebungen ohne sensible Daten reichen öffentliche Endpunkte mit passenden Firewall-Regeln wahrscheinlich aus.</li>\n<li>Bei einer öffentlichen Website, die aus dem Internet erreichbar sein soll, hilft Private Link nicht weiter.</li>\n<li>Für Produktionsumgebungen in regulierten Branchen wie Finanzen, Gesundheitswesen oder Behörden ist es erforderlich.</li>\n</ul>\n\n<h2>Häufige Fehler und Stolpersteine bei der Einrichtung</h2>\n<h3>Öffentlichen Zugriff nicht deaktiviert</h3>\n<p>Der größte Fehler: Der private Endpunkt wird erstellt, und man hält die Sache für erledigt. Der öffentliche Endpunkt bleibt jedoch standardmäßig aktiv, und der Verkehr kann weiter übers Internet fließen. Sie müssen den öffentlichen Netzwerkzugriff in den Netzwerkeinstellungen ausdrücklich ausschalten. Ohne diesen Schritt ist praktisch nichts abgesichert.</p>\n<h3>DNS für On-Premises-Clients</h3>\n<p>Geräte im Büro, die über VPN oder ExpressRoute verbunden sind, lösen die IP des privaten Endpunkts nicht automatisch auf. Die private DNS-Zone ist mit dem virtuellen Azure-Netzwerk verknüpft, nicht mit lokalen DNS-Servern. Nötig sind eine DNS-Weiterleitung oder der Azure DNS Private Resolver. Wird das übersehen, wundert man sich, warum lokale Anwendungen keine Verbindung bekommen.</p>\n<h3>Die Region des Endpunkts</h3>\n<p>Der private Endpunkt muss in derselben Region liegen wie das virtuelle Netzwerk. Der PaaS-Dienst selbst darf in einer anderen Region sein, der Endpunkt nicht. Planen Sie das von Anfang an ein.</p>\n<h3>Netzwerksicherheitsgruppen</h3>\n<p>Die virtuelle NIC des privaten Endpunkts liegt in Ihrem Subnetz und unterliegt denselben NSG-Regeln wie alles andere dort. Blockieren Sie den Verkehr zum Subnetz der NIC, funktioniert der Endpunkt nicht. Prüfen Sie, dass Ihre NSG-Regeln den Verkehr zulassen.</p>\n\n<h2>Praktische Takeaways</h2>\n<ul>\n<li>Azure-PaaS-Dienste wie Storage, SQL und Key Vault haben standardmäßig einen öffentlichen Endpunkt, auch wenn alles im eigenen Abonnement liegt.</li>\n<li>Ein privater Endpunkt ist eine virtuelle NIC mit privater IP in Ihrem Subnetz, über die der Verkehr das Microsoft-Backbone nutzt.</li>\n<li>Binden Sie den privaten Endpunkt in eine private DNS-Zone ein, damit die bekannte URL zur privaten IP aufgelöst wird. Anwendungen müssen dafür nicht angepasst werden.</li>\n<li>Deaktivieren Sie nach dem Anlegen des Endpunkts den öffentlichen Netzwerkzugriff ausdrücklich.</li>\n<li>Planen Sie für lokale Clients eine DNS-Weiterleitung oder den Azure DNS Private Resolver ein.</li>\n<li>Der Endpunkt gehört in dieselbe Region wie das virtuelle Netzwerk, und die NSG-Regeln müssen den Verkehr zulassen.</li>\n<li>Private Link ergänzt VPN und ExpressRoute, ersetzt sie aber nicht. Für maximale Sicherheit kombinieren Sie ExpressRoute mit Private Link.</li>\n<li>Rechnen Sie mit höheren Kosten durch Stundengebühr und Datenverarbeitung, und setzen Sie Private Link dort ein, wo Schutzbedarf oder Compliance es verlangen.</li>\n<li>Für eigene Dienste brauchen Sie den Private Link Service mit einem Standard Load Balancer.</li>\n</ul>\n\n<h2>Fazit</h2>\n<p>Azure Private Link holt den Verkehr zu Ihren PaaS-Diensten aus dem öffentlichen Internet und führt ihn über private IP-Adressen und das Microsoft-Backbone. Dazu gehören ein privater Endpunkt, eine sauber eingerichtete private DNS-Zone und das konsequente Abschalten des öffentlichen Zugriffs. Das reduziert die Angriffsfläche, begrenzt das Risiko von Datenabfluss und erleichtert den Compliance-Nachweis. Dem stehen zusätzliche Kosten und etwas Planungsaufwand bei DNS, Region und NSGs gegenüber. Für Produktionsumgebungen mit sensiblen Daten, vor allem in regulierten Branchen, lohnt sich dieser Aufwand. Für einfache Test- oder öffentliche Szenarien genügen oft öffentliche Endpunkte mit Firewall-Regeln.</p>",
+  "model": "claude-sonnet-5-5",
+  "info": {
+   "titel": "Azure Private Link einrichten: der Ablauf",
+   "typ": "schritte",
+   "punkte": [
+    {
+     "kopf": "Privaten Endpunkt erstellen",
+     "text": "Azure legt eine virtuelle NIC mit privater IP im eigenen Subnetz an."
+    },
+    {
+     "kopf": "Private DNS-Zone einbinden",
+     "text": "Die bekannte URL wird per CNAME und A-Eintrag zur privaten IP aufgelöst."
+    },
+    {
+     "kopf": "Öffentlichen Zugriff deaktivieren",
+     "text": "Der öffentliche Endpunkt bleibt sonst aktiv und muss ausdrücklich abgeschaltet werden."
+    },
+    {
+     "kopf": "DNS für lokale Clients",
+     "text": "Über VPN oder ExpressRoute braucht es DNS-Weiterleitung oder den Azure DNS Private Resolver."
+    },
+    {
+     "kopf": "Region und NSG prüfen",
+     "text": "Der Endpunkt gehört in die Region des V-Nets, NSG-Regeln müssen den Verkehr erlauben."
+    }
+   ]
+  },
+  "faq": [
+   {
+    "q": "Ist ein Azure-Dienst automatisch privat, wenn er in meinem Abonnement liegt?",
+    "a": "Nein. Dienste wie Storage, SQL oder Key Vault haben standardmäßig einen öffentlichen Endpunkt. Ein Abonnement ist nur eine Abrechnungs- und Verwaltungsgrenze, keine Netzwerkgrenze. Ohne Private Link schützen lediglich Authentifizierung, Schlüssel und Firewall-Regeln, während der Netzwerkpfad öffentlich bleibt."
+   },
+   {
+    "q": "Was ist ein privater Endpunkt in Azure Private Link und wie funktioniert er?",
+    "a": "Ein privater Endpunkt ist eine virtuelle Netzwerkschnittstelle (NIC) mit privater IP-Adresse in Ihrem Subnetz. Sie verbindet sich über Private Link mit dem PaaS-Dienst. Der Verkehr läuft über das Microsoft-Backbone statt über das öffentliche Internet. Eine private DNS-Zone löst den Dienstnamen zur privaten IP auf."
+   },
+   {
+    "q": "Warum funktioniert mein privater Endpunkt nicht oder ist trotzdem öffentlich erreichbar?",
+    "a": "Häufige Ursachen: Der öffentliche Netzwerkzugriff wurde nicht deaktiviert, er bleibt standardmäßig aktiv. Lokalen Clients fehlt eine DNS-Weiterleitung oder der Azure DNS Private Resolver. Auch eine falsche Region des Endpunkts oder blockierende NSG-Regeln im Subnetz können Probleme verursachen."
+   },
+   {
+    "q": "Was kostet Azure Private Link und wann lohnt es sich?",
+    "a": "Es fällt eine stündliche Gebühr pro privatem Endpunkt plus Datenverarbeitungsgebühren an. Das kann zwei- bis dreimal teurer sein als ein öffentlicher Endpunkt mit Firewall-Regeln. Es lohnt sich bei Produktionsumgebungen in regulierten Branchen oder sensiblen Daten, in Test- und Entwicklungsumgebungen meist nicht."
+   }
+  ],
+  "infos": [
+   {
+    "titel": "Öffentlicher Endpunkt vs. Private Link",
+    "typ": "vergleich",
+    "links": {
+     "titel": "Öffentlicher Endpunkt",
+     "punkte": [
+      "URL wird zu einer öffentlichen IP-Adresse aufgelöst",
+      "Verkehr der VM verlässt das Netzwerk und läuft übers Internet",
+      "Jeder mit URL und Zugangsdaten kann versuchen, sich zu verbinden",
+      "Schutz nur durch Authentifizierung, Schlüssel und Firewall-Regeln"
+     ]
+    },
+    "rechts": {
+     "titel": "Privater Endpunkt",
+     "punkte": [
+      "Virtuelle NIC mit privater IP im eigenen Subnetz",
+      "Verkehr läuft über das Microsoft-Backbone, nie übers Internet",
+      "Ohne öffentlichen Endpunkt gibt es nichts zu scannen oder anzugreifen",
+      "Anwendung und URL bleiben unverändert"
+     ]
+    }
+   },
+   {
+    "titel": "Private Link: Wichtige Fakten",
+    "typ": "fakten",
+    "punkte": [
+     {
+      "wert": "2–3×",
+      "text": "Private Link kann teurer sein als ein öffentlicher Endpunkt mit Firewall-Regeln."
+     },
+     {
+      "wert": "Stundengebühr",
+      "text": "Pro privatem Endpunkt fallen stündliche Kosten plus Datenverarbeitungsgebühren an."
+     },
+     {
+      "wert": "Gleiche Region",
+      "text": "Der private Endpunkt muss in derselben Region wie das virtuelle Netzwerk liegen."
+     },
+     {
+      "wert": "Standard Load Balancer",
+      "text": "Der Private Link Service funktioniert nicht mit Basic Load Balancern."
+     },
+     {
+      "wert": "HIPAA, DSGVO, PCI",
+      "text": "Vorschriften verlangen oft, dass sensible Daten nicht über öffentliche Netze laufen."
+     }
+    ]
+   }
+  ]
+ }
+}

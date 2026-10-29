@@ -45,6 +45,45 @@
     "q": "Warum erkennt die KI meinen Beleg nicht oder meldet einen leeren Beleg?",
     "a": "Häufig fehlt die richtige Inhaltsreferenz: Im Ausdruckseditor muss „Content“ an die Body-Referenz angehängt werden, sonst erhält die KI Metadaten statt Dateibytes. Zweite Ursache ist das Timing: Löst der Flow bei Erstellung aus, existiert der Anhang oft noch nicht. Stellen Sie den Trigger auf „bei Elementänderung“ um."
    }
+  ],
+  "infos": [
+   {
+    "titel": "Klassische Genehmigung vs. Agent Flow",
+    "typ": "vergleich",
+    "links": {
+     "titel": "Klassische Genehmigungskette",
+     "punkte": [
+      "E-Mail als Genehmigungsmechanismus erzeugt vor allem Wartezeit und Verzögerung",
+      "Tabellen laufen auseinander, niemand kennt die finale Version",
+      "Verschachtelte Bedingungen sind nach sechs Monaten kaum noch zu debuggen",
+      "Fällt ein Connector aus, versagt das System womöglich geräuschlos",
+      "Jeder Beteiligte erzeugt Latenz, aber keinen Mehrwert"
+     ]
+    },
+    "rechts": {
+     "titel": "Agent Flow in Copilot Studio",
+     "punkte": [
+      "KI-Stufe bewertet feste Regeln sofort und konsistent",
+      "Nur zweideutige Ausnahmefälle werden an Menschen eskaliert",
+      "Dataverse erzeugt nachvollziehbare Protokolle und einen lückenlosen Prüfpfad",
+      "Manager-Routing aktualisiert sich dynamisch, ohne Hardcodierung",
+      "Bearbeitungszeit sinkt von Tagen auf Minuten"
+     ]
+    }
+   },
+   {
+    "titel": "Häufige Stolpersteine vermeiden",
+    "typ": "checkliste",
+    "punkte": [
+     "Prompt mit klaren, mathematischen Definitionen statt vager Begriffe formulieren",
+     "Datentypen korrekt wählen, Zahlen nicht als Text speichern",
+     "Bei Dateien „Content“ an die Body-Referenz anhängen",
+     "Trigger auf „bei Elementänderung“ der Quittungsspalte umstellen",
+     "Sicherheitsrollen über rollenbasierte Zugriffskontrolle eng begrenzen",
+     "Grenz- und Unsinnsfälle testen, bis gleiche Eingaben gleiche Ergebnisse liefern",
+     "Logik schlank halten, um Over-Engineering zu vermeiden"
+    ]
+   }
   ]
  },
  "es": {
@@ -97,6 +136,46 @@
     "q": "¿Por qué falla la validación de recibos con IA en Dataverse y cómo se soluciona?",
     "a": "Muchas tablas de Dataverse no guardan los adjuntos hasta que se salva el registro, así que el flujo puede ejecutarse antes y recibir contenido nulo. Se soluciona usando el desencadenador de modificación de fila limitado a la columna del recibo y haciendo referencia al cuerpo del contenido en la expresión."
    }
+  ],
+  "infos": [
+   {
+    "titulo": "Aprobaciones tradicionales frente a Agent Flows",
+    "titel": "Aprobaciones tradicionales frente a Agent Flows",
+    "typ": "vergleich",
+    "links": {
+     "titel": "Aprobaciones tradicionales",
+     "punkte": [
+      "Correos que van y vienen y hojas de cálculo desincronizadas",
+      "Condiciones anidadas como muñecas rusas, difíciles de depurar",
+      "Cada persona es un nodo de latencia en serie",
+      "Si falla un conector, el sistema se rompe en silencio",
+      "Resultados que tardan días y dependen de la agenda de otros"
+     ]
+    },
+    "rechts": {
+     "titel": "Agent Flows en Copilot Studio",
+     "punkte": [
+      "La IA procesa al instante alrededor del 80 % de los casos",
+      "Las personas intervienen solo cuando hace falta interpretación",
+      "Dataverse genera registros verificables para auditar",
+      "Etapas separadas: automáticas para velocidad, humanas para validación",
+      "Tiempo de respuesta de días a minutos"
+     ]
+    }
+   },
+   {
+    "titel": "Antes de publicar tu flujo de aprobación",
+    "typ": "checkliste",
+    "punkte": [
+     "Redacta instrucciones con reglas medibles y sin ambigüedades",
+     "Define cada entrada con el tipo correcto: texto, número o documento",
+     "Prueba casos que deben rechazarse: importe alto, fecha antigua, compra absurda",
+     "Obtén al gerente de forma dinámica con el conector de usuarios de Office 365",
+     "Activa el flujo al modificar la columna del recibo",
+     "Aplica prefijos de nombres como STR, NUM y DOC",
+     "Restringe permisos con control de acceso basado en roles"
+    ]
+   }
   ]
  },
  "ar": {
@@ -144,6 +223,45 @@
    {
     "q": "لماذا يجد تدفق الموافقة محتوى الإيصال فارغًا أو يفشل، وكيف أحل المشكلة؟",
     "a": "لأن معظم جداول Dataverse لا تخزن المرفقات إلا بعد حفظ السجل أولًا، فإذا عمل التدفق عند إنشاء السجل قد يبدأ قبل وجود الملف. الحل أن تغيّر شرط التشغيل إلى «عند تعديل العنصر» وتقيّده بتغيّر عمود الإيصال فقط."
+   }
+  ],
+  "infos": [
+   {
+    "titel": "الموافقات التقليدية مقابل تدفقات الوكلاء",
+    "typ": "vergleich",
+    "links": {
+     "titel": "سلسلة الموافقات التقليدية",
+     "punkte": [
+      "رسائل بريد وجداول بيانات تنتقل بين الأيدي وتفقد تزامنها",
+      "كل مشارك يضيف تأخيرًا دون أن يضيف قيمة",
+      "شروط متداخلة هشّة يصعب إصلاحها بعد ستة أشهر",
+      "اتصال واحد معطّل قد يُفشل النظام بصمت",
+      "البشر نقاط تأخير وكل رسالة رحلة غير متزامنة جديدة"
+     ]
+    },
+    "rechts": {
+     "titel": "تدفقات الوكلاء في Copilot Studio",
+     "punkte": [
+      "الأتمتة حيث تحتاج السرعة، والعنصر البشري حيث تحتاج التقدير",
+      "الذكاء الاصطناعي يتولى الحالات الروتينية فورًا",
+      "الحالات الغامضة فقط تُصعَّد إلى الإشراف البشري",
+      "تتبع كل شيء عبر Dataverse بسجلات قابلة للتحقق",
+      "الأشخاص يبقون في الحلقة فقط حين يتطلب الأمر تفسيرًا"
+     ]
+    }
+   },
+   {
+    "titel": "الأخطاء الشائعة التي يجب تجنبها",
+    "typ": "checkliste",
+    "punkte": [
+     "تجنب الصياغة الغامضة مثل «نفقات معقولة» أو «شراء حديث»",
+     "لا تخلط أنواع المدخلات، كتخزين رقم كنص",
+     "لا تهمل إضافة المرجع المناسب لمحتوى الملف في محرر التعبير",
+     "لا تشغّل التدفق عند إنشاء السجل، بل عند تعديل عمود الإيصال",
+     "لا تمنح صلاحيات واسعة تستطيع الموافقة على كل شيء",
+     "اختبر سيناريوهات الحافة مثل إيصال غير مقروء أو تاريخ في العام المقبل",
+     "بسّط المراحل والتعليمات بدل الإفراط في الهندسة"
+    ]
    }
   ]
  }
