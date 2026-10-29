@@ -75,6 +75,24 @@
      }
     ]
    }
+  ],
+  "faq": [
+   {
+    "q": "Was sind Microsoft Graph Änderungsbenachrichtigungen und wie funktionieren sie?",
+    "a": "Änderungsbenachrichtigungen lassen Ihre App sofort auf Ereignisse in Microsoft 365 reagieren, ohne ständiges Polling. Sie erstellen ein Abonnement für eine Ressource. Tritt eine Änderung ein, sendet Microsoft Graph einen HTTP-POST an Ihren Endpunkt. Ihre App entscheidet dann, ob sie Daten abruft oder einen Workflow startet."
+   },
+   {
+    "q": "Welche Angaben braucht ein Microsoft Graph Abonnement und wie lange läuft es?",
+    "a": "Ein Abonnement braucht vier Angaben: Ressource, Änderungstyp (erstellt, aktualisiert, gelöscht), Benachrichtigungs-URL als öffentlich erreichbaren HTTPS-Endpunkt und Ablaufdatum. Die maximale Laufzeit variiert: Outlook-Nachrichten sieben Tage, Teams-Chat drei Tage, SharePoint-Dateien etwa 30 Tage, Präsenzinformationen nur eine Stunde."
+   },
+   {
+    "q": "Wie funktioniert der Validierungs-Handshake bei Graph-Abonnements?",
+    "a": "Beim Erstellen schickt Graph eine Verifizierungsanfrage mit einem Validierungstoken. Ihr Endpunkt muss dieses Token innerhalb von 10 Sekunden als reinen Klartext zurücksenden, ohne JSON oder XML. So ist belegt, dass der Endpunkt aktiv ist und unter Ihrer Kontrolle steht. Sonst lehnt Graph das Abonnement ab."
+   },
+   {
+    "q": "Wie verhindere ich, dass Benachrichtigungen verloren gehen oder Abonnements ausfallen?",
+    "a": "Antworten Sie innerhalb von 3 Sekunden mit 202 Accepted und verarbeiten Sie die Benachrichtigung asynchron über eine Warteschlange. Erneuern Sie Abonnements vor dem Ablauf per PATCH mit der Abonnement-ID. Regelmäßige Delta-Abfragen dienen als Sicherheitsnetz, Lebenszyklus-Benachrichtigungen warnen vor dem Ablauf."
+   }
   ]
  }
 }
