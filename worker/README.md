@@ -8,7 +8,8 @@ Läuft unter `https://api-dub.m365.fm`. Schlüssel (Session, VAPID, Cron) erzeug
 2. **Google-Login**: console.cloud.google.com → APIs & Dienste → Anmeldedaten → OAuth-Client-ID (Webanwendung). Autorisierte Weiterleitungs-URI: `https://api-dub.m365.fm/auth/callback/google`. Secrets: `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`.
 3. **Microsoft-Login**: entra.microsoft.com → App-Registrierungen → Neu; Kontotypen „Konten in allen Organisationsverzeichnissen und persönliche Microsoft-Konten“; Web-Redirect-URI `https://api-dub.m365.fm/auth/callback/microsoft`; unter Zertifikate & Geheimnisse ein Client-Geheimnis (Wert!). Secrets: `MS_CLIENT_ID` (Anwendungs-ID), `MS_CLIENT_SECRET`.
 4. **E-Mail (Resend)**: resend.com → Domain `dub.m365.fm` (oder m365.fm) verifizieren (DNS-Einträge) → API-Key. Secret: `RESEND_API_KEY`. Absender steht in `wrangler.toml` (`MAIL_FROM`).
-5. Optional `ADMIN_SUBS` = `google:<sub>` oder `microsoft:<sub>` (Moderator; die ID siehst du in D1 in der Tabelle users).
+4. **LinkedIn-Login**: developer.linkedin.com → Create app (LinkedIn-Seite des Unternehmens verknüpfen) → Reiter Products → „Sign In with LinkedIn using OpenID Connect“ anfordern → Reiter Auth: Authorized redirect URL `https://api-dub.m365.fm/auth/callback/linkedin`. Secrets: `LINKEDIN_CLIENT_ID`, `LINKEDIN_CLIENT_SECRET` (Client ID und Primary Client Secret).
+5. Optional `ADMIN_SUBS` = `google:<sub>`, `microsoft:<sub>` oder `linkedin:<sub>` (Moderator; die ID siehst du in D1 in der Tabelle users).
 6. Workflow **„Community-API … einrichten“** starten (Actions → Run workflow). Er legt die D1-Datenbank `m365-dub` an, wendet `schema.sql` an, setzt Secrets, veröffentlicht den Worker.
 
 Ohne Zugangsdaten tut der Workflow nichts; die Website blendet die Community-Bereiche automatisch aus, solange die API nicht erreichbar ist.

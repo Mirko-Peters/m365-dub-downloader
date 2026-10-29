@@ -84,7 +84,9 @@
   }
 
   var box = h("div", { class: "wk" }); root.appendChild(box);
-  function login() { var ret = encodeURIComponent(location.href.split("#")[0]); return h("div", { class: "wk-login" }, [h("p", { text: T.login }), h("div", { class: "btns" }, [h("a", { class: "btn main", href: W.api + "/auth/login/google?return=" + ret, rel: "nofollow", text: "Google" }), h("a", { class: "btn", href: W.api + "/auth/login/microsoft?return=" + ret, rel: "nofollow", text: "Microsoft" })])]); }
+  function pruneLogin(box){var P=window.__m365p=window.__m365p||fetch(W.api+"/api/providers").then(function(r){return r.json()}).catch(function(){return null});P.then(function(j){if(!j||!j.providers)return;[].slice.call(box.querySelectorAll("a[href*=\"/auth/login/\"]")).forEach(function(a){var m=/login\/(\w+)/.exec(a.href);if(m&&j.providers.indexOf(m[1])<0)a.remove()})})}
+  function login() { var b = login0(); pruneLogin(b); return b; }
+  function login0() { var ret = encodeURIComponent(location.href.split("#")[0]); return h("div", { class: "wk-login" }, [h("p", { text: T.login }), h("div", { class: "btns" }, [h("a", { class: "btn main", href: W.api + "/auth/login/google?return=" + ret, rel: "nofollow", text: "Google" }), h("a", { class: "btn", href: W.api + "/auth/login/microsoft?return=" + ret, rel: "nofollow", text: "Microsoft" }), h("a", { class: "btn", href: W.api + "/auth/login/linkedin?return=" + ret, rel: "nofollow", text: "LinkedIn" })])]); }
 
   /* ---------- Editor ---------- */
   function editor(d, cur) {

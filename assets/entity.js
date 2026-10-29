@@ -12,7 +12,9 @@
   function slug(s) { return s.toLowerCase().normalize("NFKD").replace(/[̀-ͯ]/g, "").replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "").slice(0, 48); }
   var ents = null;
   function list() { return ents ? Promise.resolve(ents) : fetch(E.base + "/entities.json").then(function (r) { return r.json(); }).then(function (j) { ents = j.entities || []; return ents; }); }
-  function login() { var ret = encodeURIComponent(location.href.split("#")[0]); return h("div", {}, [h("p", { text: X.login }), h("a", { class: "btn main", href: E.api + "/auth/login/google?return=" + ret, rel: "nofollow", text: "Google" }), h("a", { class: "btn", href: E.api + "/auth/login/microsoft?return=" + ret, rel: "nofollow", text: "Microsoft" })]); }
+  function pruneLogin(box){var P=window.__m365p=window.__m365p||fetch(E.api+"/api/providers").then(function(r){return r.json()}).catch(function(){return null});P.then(function(j){if(!j||!j.providers)return;[].slice.call(box.querySelectorAll("a[href*=\"/auth/login/\"]")).forEach(function(a){var m=/login\/(\w+)/.exec(a.href);if(m&&j.providers.indexOf(m[1])<0)a.remove()})})}
+  function login() { var b = login0(); pruneLogin(b); return b; }
+  function login0() { var ret = encodeURIComponent(location.href.split("#")[0]); return h("div", {}, [h("p", { text: X.login }), h("a", { class: "btn main", href: E.api + "/auth/login/google?return=" + ret, rel: "nofollow", text: "Google" }), h("a", { class: "btn", href: E.api + "/auth/login/microsoft?return=" + ret, rel: "nofollow", text: "Microsoft" }), h("a", { class: "btn", href: E.api + "/auth/login/linkedin?return=" + ret, rel: "nofollow", text: "LinkedIn" })]); }
 
   function form(e, isNew, all) {
     var f = h("div", { class: "wk-form en-form" }), msg = h("p", { class: "wk-msg", role: "status", "aria-live": "polite" });

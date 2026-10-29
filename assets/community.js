@@ -23,14 +23,17 @@
   function badgeEls(list, big) {
     return h("span", { class: "cbs" }, (list || []).map(function (b) { return h("span", { class: "cb" + (big ? " big" : ""), title: tt("b_" + b) + " – " + tt("b_" + b + "_d"), text: (ICON[b] || "★") }); }));
   }
+  function pruneLogin(box){var P=window.__m365p=window.__m365p||fetch(API+"/api/providers").then(function(r){return r.json()}).catch(function(){return null});P.then(function(j){if(!j||!j.providers)return;[].slice.call(box.querySelectorAll("a[href*=\"/auth/login/\"]")).forEach(function(a){var m=/login\/(\w+)/.exec(a.href);if(m&&j.providers.indexOf(m[1])<0)a.remove()})})}
   function loginBox() {
     var ret = encodeURIComponent(location.href.split("#")[0]);
-    return h("div", { class: "clogin" }, [
+    var lb = h("div", { class: "clogin" }, [
       h("p", { text: tt("login_to_comment") }),
       h("div", { class: "btns" }, [
         h("a", { class: "btn main", href: API + "/auth/login/google?return=" + ret, rel: "nofollow", text: tt("signin_google") }),
-        h("a", { class: "btn", href: API + "/auth/login/microsoft?return=" + ret, rel: "nofollow", text: tt("signin_ms") })]),
+        h("a", { class: "btn", href: API + "/auth/login/microsoft?return=" + ret, rel: "nofollow", text: tt("signin_ms") }),
+        h("a", { class: "btn", href: API + "/auth/login/linkedin?return=" + ret, rel: "nofollow", text: tt("signin_li") })]),
       h("small", {}, [tt("signin_note") + " ", h("a", { href: C.privacy, text: tt("privacy") })])]);
+    pruneLogin(lb); return lb;
   }
 
 

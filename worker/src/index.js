@@ -16,6 +16,10 @@ const PROVIDERS = {
     auth: "https://login.microsoftonline.com/common/oauth2/v2.0/authorize", token: "https://login.microsoftonline.com/common/oauth2/v2.0/token",
     info: "https://graph.microsoft.com/oidc/userinfo", scope: "openid profile", id: (e) => e.MS_CLIENT_ID, secret: (e) => e.MS_CLIENT_SECRET,
   },
+  linkedin: {   // "Sign In with LinkedIn using OpenID Connect"
+    auth: "https://www.linkedin.com/oauth/v2/authorization", token: "https://www.linkedin.com/oauth/v2/accessToken",
+    info: "https://api.linkedin.com/v2/userinfo", scope: "openid profile", id: (e) => e.LINKEDIN_CLIENT_ID, secret: (e) => e.LINKEDIN_CLIENT_SECRET,
+  },
 };
 const VID = /^[A-Za-z0-9_-]{5,24}$/;
 const now = () => Math.floor(Date.now() / 1000);
@@ -43,7 +47,7 @@ async function upsertUser(env, provider, sub, name) {
 }
 
 async function auth(env, request, url, path) {
-  const m = /^\/auth\/(login|callback)\/(google|microsoft)$/.exec(path);
+  const m = /^\/auth\/(login|callback)\/(google|microsoft|linkedin)$/.exec(path);
   if (path === "/auth/dev" && env.DEV_LOGIN === "1") {
     const u = await upsertUser(env, "dev", url.searchParams.get("name") || "dev", url.searchParams.get("name") || "Dev User");
     return new Response(null, { status: 302, headers: { location: safeReturn(env, url.searchParams.get("return") || env.SITE), "set-cookie": cookie("m365s", await makeSession(env, u.id), 5184000) } });
@@ -55,7 +59,7 @@ async function auth(env, request, url, path) {
   if (m[1] === "login") {
     const state = randomToken(16), ret = safeReturn(env, url.searchParams.get("return") || env.SITE);
     const val = `${state}|${b64u.enc(new TextEncoder().encode(ret))}`;
-    const q = new URLSearchParams({ client_id: P.id(env), redirect_uri: redirect, response_type: "code", scope: P.scope, state, prompt: m[2] === "google" ? "select_account" : "select_account" });
+    const q = new URLSearchParams({ client_id: P.id(env), redirect_uri: redirect, response_type: "code", scope: P.scope, state, ...(m[2] === "linkedin" ? {} : { prompt: "select_account" }) });
     return new Response(null, { status: 302, headers: { location: `${P.auth}?${q}`, "set-cookie": cookie("m365o", `${val}.${await sign(env.SESSION_SECRET, val)}`, 600) } });
   }
   // callback
@@ -101,6 +105,7 @@ async function api(env, request, url, path) {
   const db = env.DB;
 
   if (path === "/api/health") return J({ ok: true }, 200);
+  if (path === "/api/providers") return J({ providers: Object.keys(PROVIDERS).filter((k) => PROVIDERS[k].id(env) && PROVIDERS[k].secret(env)) }, 200, { "cache-control": "public, max-age=300" });
   if (path === "/api/me") {
     if (method === "GET") return J({ user: user ? { id: user.id, name: user.name, bio: user.bio, lang: user.lang, admin: user.admin, editor: user.editor, ...(await stats(db, user.id)) } : null });
     if (need()) return need();
