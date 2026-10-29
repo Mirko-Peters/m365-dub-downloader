@@ -44,7 +44,7 @@
           Object.keys(RL).forEach(function (k) { rsel.appendChild(h("option", { value: k, text: RL[k] })); });
           det.appendChild(h("div", { class: "wk-form" }, [h("label", { text: RT.rel }), rsel, h("label", { text: RT.body }), ta, h("p", { class: "cmut", text: RT.hint }), h("div", { class: "btns" }, [h("button", { type: "button", class: "btn main", text: RT.send, onclick: function () {
             api("/api/recommend", { method: "POST", body: { handle: handle, relation: rsel.value, body: ta.value } }).then(function (x) { if (x.s === 401) { location.href = home; return; } rm.textContent = x.s === 200 ? RT.sent : RT.err; if (x.s === 200) ta.value = ""; }); } }), rm])]));
-          var mn = document.querySelector("main"); if (mn) mn.appendChild(det);
+          var mn = document.querySelector("main"); if (mn) { mn.appendChild(h("p", {}, [h("a", { class: "btn", href: home + "?msg=" + handle + "#c-messages", text: de ? "Kontakt aufnehmen" : "Get in touch", rel: "nofollow" })])); mn.appendChild(det); }
         }
       } else {
         var host = document.querySelector("main h1"); if (host) {

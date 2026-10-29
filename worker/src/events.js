@@ -2,7 +2,9 @@
 import { cleanText, rateLimit } from "./util.js";
 import { baseIds } from "./entities.js";
 import { cleanUrl } from "./profiles.js";
+import { stats } from "./badges.js";
 
+const FREE_ASKS = 2, ASK_COST = 1000;
 const HANDLE = /^[a-z0-9][a-z0-9-]{2,39}$/, PH = /^[a-z0-9][a-z0-9-]{2,29}$/;
 const DATE = /^\d{4}-\d{2}-\d{2}(T\d{2}:\d{2})?$/, MODES = ["online", "onsite", "hybrid"], LEVELS = ["", "100", "200", "300", "400"];
 const now = () => Math.floor(Date.now() / 1000);
@@ -59,6 +61,7 @@ async function evView(db, ev, withPending) {
   const rows = (await db.prepare("SELECT * FROM event_sessions WHERE event_id=? " + (withPending ? "" : "AND status='live' ") + "ORDER BY start,id").bind(ev.id).all()).results || [];
   return { handle: ev.handle, title: ev.title, summary: ev.summary, about: ev.about, start: ev.start, end: ev.end, mode: ev.mode, location: ev.location, country: ev.country, url: ev.url, tickets_url: ev.tickets_url,
     free: !!ev.free, lang: ev.lang, topics: parse(ev.topics, []), seeking_sponsor: !!ev.seeking_sponsor, public: !!ev.public,
+    asked: withPending ? ((await db.prepare("SELECT o.handle FROM sponsor_asks a JOIN orgs o ON o.id=a.org_id WHERE a.event_id=?").bind(ev.id).all()).results || []).map((x) => x.handle) : undefined,
     organizer: org ? { kind: "o", handle: org.public ? org.handle : "", name: org.name } : { kind: "u", handle: ow?.handle || "", name: ow?.name || "" }, sessions: rows.map((r) => sessView(r, withPending)) };
 }
 
@@ -213,13 +216,45 @@ export async function handleEvents(env, request, url, path, user, J) {
     return J({ ok: true });
   }
 
+  // Sponsoren (Firmen mit aktivem Gesuch) sehen Events, die Sponsoren suchen
+  if (path === "/api/events/for-sponsors" && method === "GET") {
+    if (need()) return need();
+    const o = (await db.prepare("SELECT s.criteria FROM org_sponsor s JOIN org_members m ON m.org_id=s.org_id WHERE s.open=1 AND m.user_id=? AND m.status='active' AND m.role IN ('owner','admin')").bind(user.id).all()).results || [];
+    if (!o.length) return J({ error: "forbidden" }, 403);
+    const crits = o.map((r) => parse(r.criteria, {}));
+    const today = new Date().toISOString().slice(0, 10);
+    const evs = (await db.prepare("SELECT * FROM events WHERE seeking_sponsor=1 AND public=1 AND (CASE WHEN end<>'' THEN end ELSE start END)>=? ORDER BY start LIMIT 100").bind(today).all()).results || [];
+    const out = []; for (const e of evs) { const v = await evView(db, e, false); delete v.sessions; v.match = crits.some((c) => !c.format || c.format === e.mode); out.push(v); }
+    return J({ events: out });
+  }
+  // Veranstalter fragen Firmen an (2 Wunschfirmen je Event frei, weitere kosten Punkte); Nachricht landet im Postfach der Firma
+  if (path === "/api/events/ask-sponsor" && method === "POST") {
+    if (need()) return need();
+    const b = await body(), ev = await db.prepare("SELECT * FROM events WHERE handle=? AND seeking_sponsor=1").bind(String(b.event || "")).first();
+    if (!ev || !(await canManage(db, user, ev))) return J({ error: "forbidden" }, 403);
+    const org = await db.prepare("SELECT o.id FROM org_sponsor s JOIN orgs o ON o.id=s.org_id WHERE s.open=1 AND o.handle=?").bind(String(b.org || "")).first(); if (!org) return J({ error: "not_found" }, 404);
+    const tx = txt(b.body, 1000); if (tx.length < 10) return J({ error: "too_short" }, 400);
+    if (await db.prepare("SELECT 1 x FROM sponsor_asks WHERE event_id=? AND org_id=?").bind(ev.id, org.id).first()) return J({ error: "already" }, 409);
+    const used = (await db.prepare("SELECT COUNT(*) n FROM sponsor_asks WHERE event_id=?").bind(ev.id).first()).n;
+    let paid = false;
+    if (used >= FREE_ASKS) { const st = await stats(db, user.id); if (st.balance < ASK_COST) return J({ error: "need_points", cost: ASK_COST, balance: st.balance }, 402); paid = true; }
+    const to = (await db.prepare("SELECT user_id FROM org_members WHERE org_id=? AND role='owner' AND status='active' LIMIT 1").bind(org.id).first())?.user_id; if (!to || to === user.id) return J({ error: "no_recipient" }, 400);
+    const t0 = now(); let t = await db.prepare("SELECT * FROM msg_threads WHERE (a_id=?1 AND b_id=?2) OR (a_id=?2 AND b_id=?1)").bind(user.id, to).first();
+    const ops = [];
+    if (!t) { const r = await db.prepare("INSERT INTO msg_threads(a_id,b_id,ctx,created,last,a_read) VALUES(?,?,?,?,?,?)").bind(user.id, to, "sponsor:" + ev.handle, t0, t0, t0).run(); t = { id: r.meta.last_row_id, a_id: user.id }; }
+    ops.push(db.prepare("INSERT INTO msg_messages(thread_id,from_id,body,created) VALUES(?,?,?,?)").bind(t.id, user.id, tx, t0), db.prepare(`UPDATE msg_threads SET last=?,${t.a_id === user.id ? "a_read" : "b_read"}=? WHERE id=?`).bind(t0, t0, t.id),
+      db.prepare("INSERT INTO sponsor_asks(event_id,org_id,created) VALUES(?,?,?)").bind(ev.id, org.id, t0));
+    if (paid) ops.push(db.prepare("INSERT INTO points_spent(user_id,item,cost,status,note,created) VALUES(?,?,?,?,?,?)").bind(user.id, "sponsor_ask", ASK_COST, "done", ev.handle, t0));
+    await db.batch(ops);
+    return J({ ok: true, free_left: Math.max(0, FREE_ASKS - used - 1), paid });
+  }
   // Veranstalter sehen Firmen, die Sponsoring angeboten haben (nur wer ein Event mit "sucht Sponsoren" hat)
   if (path === "/api/events/sponsors" && method === "GET") {
     if (need()) return need();
     const mine = await db.prepare("SELECT 1 x FROM events WHERE seeking_sponsor=1 AND (owner_id=?1 OR org_id IN (SELECT org_id FROM org_members WHERE user_id=?1 AND status='active' AND role IN ('owner','admin'))) LIMIT 1").bind(user.id).first();
     if (!mine && !user.admin) return J({ error: "forbidden" }, 403);
     const rows = (await db.prepare("SELECT o.handle,o.name,o.public,o.website,s.criteria FROM org_sponsor s JOIN orgs o ON o.id=s.org_id WHERE s.open=1 ORDER BY s.updated DESC LIMIT 100").all()).results || [];
-    return J({ sponsors: rows.map((r) => ({ handle: r.public ? r.handle : "", name: r.name, website: r.website, criteria: parse(r.criteria, {}) })) });
+    return J({ free_asks: FREE_ASKS, ask_cost: ASK_COST, sponsors: rows.map((r) => ({ handle: r.handle, name: r.name, website: r.website, criteria: parse(r.criteria, {}) })) });
   }
   return null;
 }

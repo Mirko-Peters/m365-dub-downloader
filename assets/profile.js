@@ -15,19 +15,19 @@
     function show(hd, v) { if (hd && v) { im.src = X.api + "/api/img/" + kind + "/" + hd + ".jpg?v=" + v; im.hidden = false; } else im.hidden = true; }
     show(handle0, img0);
     function resize(file) { return new Promise(function (res, rej) { var u = URL.createObjectURL(file), i = new Image(); i.onload = function () { var c = document.createElement("canvas"); c.width = c.height = 256; var g = c.getContext("2d"), m = Math.min(i.width, i.height), sx = (i.width - m) / 2, sy = (i.height - m) / 2; g.fillStyle = "#fff"; g.fillRect(0, 0, 256, 256); g.drawImage(i, sx, sy, m, m, 0, 0, 256, 256); URL.revokeObjectURL(u); var q = 0.88; (function t() { c.toBlob(function (b) { if (b && b.size > 140000 && q > 0.4) { q -= 0.15; t(); } else if (b) res(b); else rej(); }, "image/jpeg", q); })(); }; i.onerror = function () { rej(); }; i.src = u; }); }
-    var up = h("button", { type: "button", class: "btn", text: IQ.up, onclick: function () { if (!w.handle()) { msg.textContent = IQ.first; return; } f.click(); } });
+    var up = h("button", { type: "button", class: "btn", text: IQ.up, onclick: function () { if (!w.handle()) { if (!w.ensure) { msg.textContent = IQ.first; return; } msg.textContent = "…"; w.ensure().then(function (ok) { if (ok) { msg.textContent = ""; f.click(); } else msg.textContent = IQ.first; }); return; } f.click(); } });
     var rm = h("button", { type: "button", class: "btn", text: IQ.rm, onclick: function () { api("/api/img/" + kind + "/" + w.handle(), { method: "DELETE" }).then(function () { show(null); msg.textContent = ""; }); } });
     f.addEventListener("change", function () {
       var file = f.files && f.files[0]; if (!file) return; msg.textContent = "…";
       resize(file).then(function (b) { return fetch(X.api + "/api/img/" + kind + "/" + w.handle(), { method: "POST", credentials: "include", headers: { "x-requested-with": "m365", "content-type": "image/jpeg" }, body: b }).then(function (r) { return r.json(); }); })
-        .then(function (j) { if (j && j.ok) { show(w.handle(), j.img); msg.textContent = IQ.ok; } else msg.textContent = IQ.bad; }).catch(function () { msg.textContent = IQ.bad; }); f.value = "";
+        .then(function (j) { if (j && j.ok) { show(w.handle(), j.img); msg.textContent = IQ.ok; } else msg.textContent = IQ.bad + (j && j.error ? " (" + j.error + ")" : ""); }).catch(function () { msg.textContent = IQ.bad; }); f.value = "";
     });
     w.handle = function () { return ""; };
     w.appendChild(h("label", { text: IQ.t, style: "display:block;margin-top:14px;font-weight:600" })); w.appendChild(h("div", { style: "display:flex;gap:12px;align-items:center;flex-wrap:wrap" }, [im, up, rm, f, msg])); w.appendChild(h("p", { class: "cmut", text: IQ.hint, style: "margin:4px 0 0;font-size:.85rem" }));
     return w;
   }
-  var SQ = de ? { t: "Event-Sponsoring", d: "Nur für Veranstalter sichtbar, nie öffentlich. Veranstalter sehen nur, ob ihr Sponsoren sucht, und eure Kriterien.", open: "Wir sind offen für Event-Sponsoring", topics: "Themen (z. B. Copilot, Security)", fmt: "Format", any: "egal", online: "Online", onsite: "Vor Ort", hybrid: "Hybrid", aud: "Mindestgröße Publikum", reg: "Regionen / Sprachen", bud: "Budgetrahmen (optional)", notes: "Weitere Kriterien", save: "Sponsoring speichern", saved: "✓ Gespeichert.", first: "Speichere die Firma zuerst, dann kannst du Sponsoring-Kriterien angeben." }
-    : { t: "Event sponsoring", d: "Visible to event organizers only, never public. Organizers only see whether you are looking to sponsor, and your criteria.", open: "We are open to sponsoring events", topics: "Topics (e.g. Copilot, security)", fmt: "Format", any: "any", online: "Online", onsite: "On site", hybrid: "Hybrid", aud: "Minimum audience size", reg: "Regions / languages", bud: "Budget range (optional)", notes: "Further criteria", save: "Save sponsoring", saved: "✓ Saved.", first: "Save the company first, then you can add sponsoring criteria." };
+  var SQ = de ? { t: "Event-Sponsoring", d: "Nie öffentlich. Veranstalter, die Sponsoren suchen, sehen eure Kriterien – und ihr seht als potenzieller Sponsor, welche Events in Frage kommen, und könnt die Veranstalter direkt kontaktieren.", open: "Wir sind offen für Event-Sponsoring", topics: "Themen (z. B. Copilot, Security)", fmt: "Format", any: "egal", online: "Online", onsite: "Vor Ort", hybrid: "Hybrid", aud: "Mindestgröße Publikum", reg: "Regionen / Sprachen", bud: "Budgetrahmen (optional)", notes: "Weitere Kriterien", save: "Sponsoring speichern", saved: "✓ Gespeichert.", first: "Speichere die Firma zuerst, dann kannst du Sponsoring-Kriterien angeben." }
+    : { t: "Event sponsoring", d: "Never public. Organizers who are looking for sponsors see your criteria – and as a potential sponsor you see which events qualify and can contact the organizers directly.", open: "We are open to sponsoring events", topics: "Topics (e.g. Copilot, security)", fmt: "Format", any: "any", online: "Online", onsite: "On site", hybrid: "Hybrid", aud: "Minimum audience size", reg: "Regions / languages", bud: "Budget range (optional)", notes: "Further criteria", save: "Save sponsoring", saved: "✓ Saved.", first: "Save the company first, then you can add sponsoring criteria." };
   function sponsorUI(getHandle) {
     var w = h("div", { class: "spons" }), msg = h("span", { class: "cmut", role: "status", "aria-live": "polite" });
     w.appendChild(h("h4", { text: SQ.t })); w.appendChild(h("p", { class: "cmut", text: SQ.d }));
@@ -51,7 +51,7 @@
         h("button", { type: "button", class: "btn", text: RIQ.rm, onclick: function () { api("/api/recommend/" + x.id, { method: "DELETE" }).then(load); } })])])); }); }); }
     load(); return w;
   }
-  var CQ = de ? { hint: "Firmen sind immer Entitäten: Wähle eine bestehende Firma aus der Liste. Gibt es sie noch nicht, wird sie beim Speichern als neue Firmen-Entität angelegt (nach kurzer Prüfung sichtbar).", bad: "Die Firma konnte nicht angelegt werden – bitte den Namen prüfen." } : { hint: "Companies are always entities: pick an existing company from the list. If it does not exist yet, it is created as a new company entity when you save (visible after a short review).", bad: "The company could not be created – please check the name." };
+  var CQ = de ? { hint: "Deine Firma wählst du weiter unten bei „Firmen“: per Suche beitreten – gibt es sie noch nicht, legst du sie dort an. Firmen sind immer Entitäten, nie Freitext.", nf: "Keine Firma gefunden.", mk: "Firma anlegen", bad: "Die Firma konnte nicht angelegt werden – bitte den Namen prüfen." } : { hint: "You choose your company further down under “Companies”: join it via search – if it does not exist yet, create it there. Companies are always entities, never free text.", nf: "No company found.", mk: "Create company", bad: "The company could not be created – please check the name." };
   var uid = 0; function lab(text, el) { var id = "pe" + (++uid); el.id = id; return h("div", {}, [h("label", { for: id, text: text, style: "display:block;margin-top:.5em;font-weight:600" }), el]); }
   var inp = function (max, v) { var e = h("input", { type: "text", maxlength: max || 120 }); e.value = v || ""; return e; };
   var chk = function (text, v) { var c = h("input", { type: "checkbox" }); c.checked = !!v; return { c: c, w: h("label", { style: "display:block;margin:.4em 0" }, [c, " " + text]) }; };
@@ -94,7 +94,7 @@
     (initial || []).forEach(add); wrap.appendChild(list); wrap.appendChild(h("button", { type: "button", class: "btn", text: Q.addch, onclick: function () { add(null); } }));
     wrap.get = function () { return [].slice.call(list.children).map(function (r) { return r._get(); }).filter(Boolean); }; return wrap;
   }
-  function saveBtn(label, fn, msg) { var b = h("button", { type: "button", class: "btn main", text: label, onclick: function () { b.disabled = true; msg.textContent = ""; fn().then(function (r) { b.disabled = false; if (r) msg.textContent = r.s === 200 ? "✓ " + Q.saved : (Q[r.j.error] || Q.err); }).catch(function () { b.disabled = false; msg.textContent = Q.err; }); } }); return b; }
+  function saveBtn(label, fn, msg) { var b = h("button", { type: "button", class: "btn main", text: label, onclick: function () { b.disabled = true; msg.textContent = ""; fn().then(function (r) { b.disabled = false; if (r) msg.textContent = r.s === 200 ? "✓ " + Q.saved : (Q[r.j.error] || Q.err); }).catch(function (e) { try { console.error(e); } catch (x) {} b.disabled = false; msg.textContent = Q.err; }); } }); return b; }
 
   function orgForm(all, org, onDone) {
     var o = org || {}, f = h("div", { class: "wk-form" }), msg = h("p", { class: "wk-msg", role: "status", "aria-live": "polite" });
@@ -102,19 +102,13 @@
     about.value = o.about || ""; ["", "1", "2-10", "11-50", "51-200", "201-1000", "1000+"].forEach(function (s) { size.appendChild(h("option", { value: s, text: s || "–" })); }); size.value = o.size || "";
     if (org) handle.disabled = true;
     var pub = chk(Q.pub, o.public), prog = programsUI(o.programs, true), ex = pickerRows(all, function (x) { return ["product", "platform", "concept", "category"].indexOf(x.type) > -1; }, (o.expertise || []).map(function (x) { return { e: x.e, level: x.level }; }), false, Q.addexp), ch = channelsUI(o.channels);
-    var pic = imgUI("o", o.handle, o.img); pic.handle = function () { return o.handle || ""; };
-    var cdl = h("datalist", { id: "cdl" + (++uid) }); all.filter(function (x) { return x.type === "org"; }).forEach(function (x) { cdl.appendChild(h("option", { value: x.name })); }); company.setAttribute("list", cdl.id);
-    var ceid = p.company_eid || "";
-    function resolveCompany() { var v = company.value.trim(); if (!v) { ceid = ""; return Promise.resolve(true); }
-      var hit = all.filter(function (x) { return x.type === "org" && (x.name.toLowerCase() === v.toLowerCase() || (x.aliases || []).some(function (a) { return a.toLowerCase() === v.toLowerCase(); })); })[0];
-      if (hit) { ceid = hit.id; company.value = hit.name; return Promise.resolve(true); }
-      return api("/api/profile/company", { method: "POST", body: { name: v } }).then(function (r) { if (r.s === 200 && r.j.eid) { ceid = r.j.eid; return true; } return false; }); }
+    var pic = imgUI("o", o.handle, o.img); pic.handle = function () { return o.handle || ""; }; pic.ensure = function () { if (!handle.value.trim() || !name.value.trim()) return Promise.resolve(false); mainSave.click(); return new Promise(function (res) { var n = 0, t = setInterval(function () { if (++n > 6) { clearInterval(t); res(true); } }, 500); }); };
     [pub.w, pic, lab(Q.handle, handle), lab(Q.orgname, name), lab(Q.tagline, tag), lab(de ? "Über uns (ohne Links)" : "About us (no links)", about), lab(Q.site, site), lab(Q.country, country), lab(Q.size, size), h("h4", { text: Q.prog }), prog, h("h4", { text: Q.exp }), ex, h("h4", { text: Q.chan }), ch, sponsorUI(function () { return o.handle || ""; })].forEach(function (x) { f.appendChild(x); });
-    f.appendChild(h("div", { class: "btns" }, [saveBtn(Q.save, function () {
+    var mainSave = saveBtn(Q.save, function () {
       var e = ex.get(); if (e === null) { msg.textContent = Q.bad_expertise; return Promise.resolve(null); }
       o.handle = handle.value.trim().toLowerCase();
       return api("/api/org", { method: "POST", body: { handle: handle.value.trim().toLowerCase(), name: name.value, tagline: tag.value, about: about.value, website: site.value.trim(), country: country.value, size: size.value, public: pub.c.checked, programs: prog.get(), expertise: e, channels: ch.get() } }).then(function (r) { if (r.s === 200 && onDone) onDone(); return r; });
-    }, msg)])); f.appendChild(msg); return f;
+    }, msg); f.appendChild(h("div", { class: "btns" }, [mainSave])); f.appendChild(msg); return f;
   }
 
   Promise.all([api("/api/profile/me"), fetch(X.base + "/entities.json").then(function (r) { return r.json(); }), api("/api/org/mine")]).then(function (a) {
@@ -124,13 +118,13 @@
     about.value = p.about || "";
     var prog = programsUI(p.programs, false), ex = pickerRows(all, function (x) { return ["cert", "person", "event", "media"].indexOf(x.type) < 0; }, (p.expertise || []).map(function (x) { return { e: x.e, level: x.level }; }), false, Q.addexp);
     var cert = pickerRows(all, function (x) { return x.type === "cert"; }, (p.certs || []).map(function (x) { return { e: x.e, year: x.year, url: x.url }; }), true, Q.addcert), ch = channelsUI(p.channels);
-    var pic = imgUI("u", p.handle, p.img); pic.handle = function () { return p.handle || ""; };
-    [pub.w, pic, lab(Q.handle, handle), lab(Q.headline, head), lab(Q.about, about), lab(Q.company, company), h("p", { class: "cmut", text: CQ.hint }), cdl, lab(Q.job, job), lab(Q.country, country), so.w, h("h3", { text: Q.prog }), prog, h("h3", { text: Q.exp }), ex, h("h3", { text: Q.certs }), cert, h("h3", { text: Q.chan }), ch].forEach(function (x) { sec.appendChild(x); });
-    sec.appendChild(h("div", { class: "btns" }, [saveBtn(Q.save, function () {
+    var pic = imgUI("u", p.handle, p.img); pic.handle = function () { return p.handle || ""; }; pic.ensure = function () { if (!handle.value.trim()) return Promise.resolve(false); mainSave.click(); return new Promise(function (res) { var n = 0, t = setInterval(function () { if (p.handle || ++n > 30) { clearInterval(t); res(!!p.handle); } }, 200); }); };
+    [pub.w, pic, lab(Q.handle, handle), lab(Q.headline, head), lab(Q.about, about), h("p", { class: "cmut", text: CQ.hint }), lab(Q.job, job), lab(Q.country, country), so.w, h("h3", { text: Q.prog }), prog, h("h3", { text: Q.exp }), ex, h("h3", { text: Q.certs }), cert, h("h3", { text: Q.chan }), ch].forEach(function (x) { sec.appendChild(x); });
+    var mainSave = saveBtn(Q.save, function () {
       var e = ex.get(), c = cert.get(); if (e === null) { msg.textContent = Q.bad_expertise; return Promise.resolve(null); } if (c === null) { msg.textContent = Q.bad_cert; return Promise.resolve(null); }
-      return resolveCompany().then(function (okc) { if (!okc) { msg.textContent = CQ.bad; return null; } return api("/api/profile/me", { method: "POST", body: { company_eid: ceid, public: pub.c.checked, handle: handle.value.trim().toLowerCase(), headline: head.value, about: about.value, company: company.value, job: job.value, country: country.value, show_org: so.c.checked, programs: prog.get(), expertise: e, certs: c, channels: ch.get() } }).then(function (r) {
+      return Promise.resolve(true).then(function (okc) { return api("/api/profile/me", { method: "POST", body: { public: pub.c.checked, handle: handle.value.trim().toLowerCase(), headline: head.value, about: about.value, company: company.value, job: job.value, country: country.value, show_org: so.c.checked, programs: prog.get(), expertise: e, certs: c, channels: ch.get() } }).then(function (r) {
         if (r.s === 200) { p.handle = handle.value.trim().toLowerCase(); msg.textContent = "✓ " + Q.saved + " " + Q.note; } return null; }); });
-    }, msg)]));
+    }, msg); sec.appendChild(h("div", { class: "btns" }, [mainSave]));
     sec.appendChild(msg);
     if (p.public && p.handle) sec.appendChild(h("p", {}, [h("a", { href: X.base + (de ? "/de" : "") + "/community/u/" + p.handle + "/", text: Q.open })]));
     root.appendChild(sec); if (p.handle) root.appendChild(recInbox());
@@ -152,7 +146,7 @@
     var nd = h("details", { class: "wk-edit" }, [h("summary", { text: Q.neworg })]); nd.appendChild(orgForm(all, null, function () { setTimeout(function () { location.reload(); }, 600); })); os.appendChild(nd);
     var jd = h("details", { class: "wk-edit" }, [h("summary", { text: Q.join })]), q = inp(40, ""), res = h("ul"), jm = h("p", { class: "wk-msg", role: "status", "aria-live": "polite" });
     q.setAttribute("placeholder", Q.search); q.setAttribute("aria-label", Q.search); var t;
-    q.addEventListener("input", function () { clearTimeout(t); t = setTimeout(function () { api("/api/orgs/search?q=" + encodeURIComponent(q.value)).then(function (r) { res.textContent = ""; (r.j.items || []).forEach(function (o) { res.appendChild(h("li", {}, [o.name + " ", h("button", { type: "button", class: "btn", text: Q.req, onclick: function () { api("/api/org/" + o.handle + "/join", { method: "POST" }).then(function (x) { jm.textContent = x.s === 200 ? "✓ " + Q.pend_me : Q.err; }); } })])); }); }); }, 300); });
+    q.addEventListener("input", function () { clearTimeout(t); t = setTimeout(function () { api("/api/orgs/search?q=" + encodeURIComponent(q.value)).then(function (r) { res.textContent = ""; if (!(r.j.items || []).length && q.value.trim().length > 1) res.appendChild(h("li", {}, [CQ.nf + " ", h("button", { type: "button", class: "btn main", text: CQ.mk + ": " + q.value.trim(), onclick: function () { nd.open = true; var ins = nd.querySelectorAll("input[type=text]"); if (ins[1]) { ins[1].value = q.value.trim(); } nd.scrollIntoView({ behavior: "smooth" }); } })])); (r.j.items || []).forEach(function (o) { res.appendChild(h("li", {}, [o.name + " ", h("button", { type: "button", class: "btn", text: Q.req, onclick: function () { api("/api/org/" + o.handle + "/join", { method: "POST" }).then(function (x) { jm.textContent = x.s === 200 ? "✓ " + Q.pend_me : Q.err; }); } })])); }); }); }, 300); });
     [q, res, jm].forEach(function (x) { jd.appendChild(x); }); os.appendChild(jd);
     root.appendChild(os);
   }).catch(function () {});

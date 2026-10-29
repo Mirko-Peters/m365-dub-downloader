@@ -126,6 +126,8 @@ def org_ld(BASE, o, people_by_handle):
     if any(x["p"] == "partner" and x.get("verified") for x in o.get("programs", [])):
         n["memberOf"] = {"@type": "OrganizationRole", "memberOf": {"@id": eid_of(BASE, "microsoft")}, "roleName": "Microsoft Partner"}
     same = [c["url"] for c in o.get("channels", [])]
+    if o.get("eid") and o["eid"] in ENTS:
+        same.append(eurl(BASE, "en", o["eid"]))
     if same:
         n["sameAs"] = same
     return n

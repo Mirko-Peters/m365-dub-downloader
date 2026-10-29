@@ -14,6 +14,7 @@ S = {"en": dict(entities="Microsoft ecosystem entity database", intro="Products,
 
 
 CLAIMS = {}   # eid -> Profil-Handle (uebernommene Entitaeten)
+ORGPAGES = {}   # eid -> Firmen-Handle
 
 
 def eurl(BASE, lang, i):
@@ -96,6 +97,9 @@ def ent_ld(BASE, e, lang, glossary_set=None):
 
 
 def claim_html(eid, lang):
+    oh = ORGPAGES.get(eid)
+    if oh and not CLAIMS.get(eid):
+        return f'<p><a href="{BASE_}{"/de" if lang == "de" else ""}/community/c/{oh}/">{"Firmenprofil auf M365.FM" if lang == "de" else "Company profile on M365.FM"}</a></p>'
     h = CLAIMS.get(eid)
     if not h:
         return ""

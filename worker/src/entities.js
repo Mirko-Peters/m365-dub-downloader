@@ -47,7 +47,7 @@ export async function validate(env, id, raw) {
 async function liveOf(db, eid) {
   return await db.prepare("SELECT r.id,r.data,r.created,r.user_id,COALESCE(u.name,'') name FROM entity_rev r LEFT JOIN users u ON u.id=r.user_id AND u.banned=0 WHERE r.eid=? AND r.status='live' ORDER BY r.created DESC LIMIT 1").bind(eid).first();
 }
-export const trustedUser = async (db, user) => !!(user && (user.admin || user.editor || (await stats(db, user.id)).points >= TRUST_POINTS));
+export const trustedUser = async (db, user) => !!(user && (user.admin || user.editor || user.pro || (await stats(db, user.id)).points >= TRUST_POINTS));
 
 export async function handleEntity(env, request, url, path, user, J) {
   const db = env.DB, method = request.method; let m;

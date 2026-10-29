@@ -44,7 +44,7 @@ export async function handleWiki(env, request, url, path, user, J) {
     let mine = null, trusted = false;
     if (user) {
       mine = await db.prepare("SELECT id,body,created FROM wiki_rev WHERE term=? AND lang=? AND user_id=? AND status='pending' ORDER BY created DESC LIMIT 1").bind(term, lang, user.id).first();
-      trusted = user.admin || user.editor || (await stats(db, user.id)).points >= TRUST_POINTS;
+      trusted = user.admin || user.editor || user.pro || (await stats(db, user.id)).points >= TRUST_POINTS;
     }
     return J({ live: live ? { id: live.id, body: live.body, name: live.name || "", created: live.created } : null, history: hist, mine, loggedIn: !!user, trusted, admin: !!(user?.admin || user?.editor), owner: !!user?.admin });
   }
@@ -60,7 +60,7 @@ export async function handleWiki(env, request, url, path, user, J) {
     if (!(await rateLimit(db, `wiki:h:${user.id}`, 6, 3600)) || !(await rateLimit(db, `wiki:d:${user.id}`, 25, 86400))) return J({ error: "rate_limit" }, 429);
     const cur = await liveOf(db, term, lang);
     if (cur && cur.body === body) return J({ error: "unchanged" }, 400);
-    const trusted = user.admin || user.editor || (await stats(db, user.id)).points >= TRUST_POINTS;
+    const trusted = user.admin || user.editor || user.pro || (await stats(db, user.id)).points >= TRUST_POINTS;
     const t = now();
     if (trusted) {
       await db.batch([

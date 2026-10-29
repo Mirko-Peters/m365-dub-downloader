@@ -295,3 +295,67 @@ CREATE TABLE IF NOT EXISTS profile_company (
   user_id INTEGER PRIMARY KEY,
   eid TEXT NOT NULL
 );
+
+-- Fluechtige Nachrichten: Threads + Nachrichten, Nachrichten werden nach 7 Tagen geloescht
+CREATE TABLE IF NOT EXISTS msg_threads (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  a_id INTEGER NOT NULL,                 -- Initiator
+  b_id INTEGER NOT NULL,
+  ctx TEXT NOT NULL DEFAULT '',          -- optionaler Kontext, z. B. event:<handle>
+  created INTEGER NOT NULL,
+  last INTEGER NOT NULL,
+  a_read INTEGER NOT NULL DEFAULT 0,
+  b_read INTEGER NOT NULL DEFAULT 0,
+  UNIQUE (a_id, b_id)
+);
+CREATE INDEX IF NOT EXISTS idx_mt_b ON msg_threads(b_id);
+CREATE TABLE IF NOT EXISTS msg_messages (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  thread_id INTEGER NOT NULL,
+  from_id INTEGER NOT NULL,
+  body TEXT NOT NULL,
+  created INTEGER NOT NULL
+);
+CREATE INDEX IF NOT EXISTS idx_mm_thread ON msg_messages(thread_id, created);
+CREATE TABLE IF NOT EXISTS msg_blocks (
+  user_id INTEGER NOT NULL,
+  blocked_id INTEGER NOT NULL,
+  PRIMARY KEY (user_id, blocked_id)
+);
+CREATE TABLE IF NOT EXISTS msg_prefs (
+  user_id INTEGER PRIMARY KEY,
+  open INTEGER NOT NULL DEFAULT 1        -- 1 = Kontaktanfragen erlaubt
+);
+
+-- Firmenkonto <-> Firmen-Entitaet (wird beim Anlegen einer Firma automatisch erzeugt/verknuepft)
+CREATE TABLE IF NOT EXISTS org_entity (
+  org_id INTEGER PRIMARY KEY,
+  eid TEXT NOT NULL
+);
+
+-- Punkte einloesen: Ausgaben (Guthaben = verdiente Punkte - Summe cost) und Tagesbonus fuer Kontakte
+CREATE TABLE IF NOT EXISTS points_spent (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  user_id INTEGER NOT NULL,
+  item TEXT NOT NULL,
+  cost INTEGER NOT NULL,
+  status TEXT NOT NULL DEFAULT 'done',     -- done | pending (manuell zu erfuellen)
+  note TEXT NOT NULL DEFAULT '',
+  created INTEGER NOT NULL
+);
+CREATE INDEX IF NOT EXISTS idx_ps_user ON points_spent(user_id);
+CREATE TABLE IF NOT EXISTS msg_bonus (
+  user_id INTEGER NOT NULL,
+  day TEXT NOT NULL,
+  extra INTEGER NOT NULL DEFAULT 0,
+  PRIMARY KEY (user_id, day)
+);
+
+-- Sponsoren-Anfragen von Veranstaltern an Firmen (2 Wunschfirmen je Event frei, weitere gegen Punkte)
+CREATE TABLE IF NOT EXISTS sponsor_asks (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  event_id INTEGER NOT NULL,
+  org_id INTEGER NOT NULL,
+  created INTEGER NOT NULL,
+  UNIQUE (event_id, org_id)
+);
