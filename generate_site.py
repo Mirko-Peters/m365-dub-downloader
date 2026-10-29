@@ -8,6 +8,7 @@ import glob, html, json, os, re, shutil, sys, unicodedata
 from datetime import date
 from pathlib import Path
 import hashlib
+import site_money as SM
 import site_cover
 from site_content import FAQ
 from site_taxonomy import (CATS, ORDER, TOPICS, TAGW, cat_name, classify, tags_of, tag_slug, tag_url, related, autolink)
@@ -129,7 +130,7 @@ footer{border-top:1px solid var(--fg);margin-top:64px;padding:26px 0 48px;font-s
 .faq details{border-bottom:1px solid var(--bd);padding:14px 0}.faq summary{cursor:pointer;font:700 1.15rem/1.35 Didot,"Bodoni 72",Georgia,"Noto Serif",serif}.faq p{margin:.6em 0 0;color:var(--mut)}
 .cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:22px;margin:16px 0}.cols h3{margin:.1em 0 .3em;font:700 1.15rem Didot,"Bodoni 72",Georgia,serif}.cols p{margin:0;color:var(--mut);font-size:.96rem}
 @media (max-width:560px){body{font-size:16px}.panel{padding:14px}.btn{padding:10px 16px}}"""
-from site_design import FONT_CSS, INDUSTRY, EN_NAMES, section, spec_box, lang_tile, spec_table, cta_box, hero_h1
+from site_design import lang_dropdown, site_header, FONT_CSS, INDUSTRY, EN_NAMES, section, spec_box, lang_tile, spec_table, cta_box, hero_h1
 CSS = FONT_CSS + CSS + INDUSTRY
 
 
@@ -184,13 +185,8 @@ def load():
 
 
 def lang_switch(cur, alt_urls, home_langs):
-    items = []
-    for l in home_langs:
-        name = LANGS[l][0]
-        url = alt_urls.get(l) or f"{BASE}/{l}/"
-        cls = ' aria-current="page"' if l == cur else ""
-        items.append(f'<a href="{url}" hreflang="{LANGS[l][1]}" lang="{LANGS[l][1]}"{cls}>{esc(name)}</a>')
-    return '<nav class="langs" aria-label="Languages">' + " · ".join(items) + "</nav>"
+    items = [(l, LANGS[l][0], alt_urls.get(l) or f"{BASE}/{l}/", LANGS[l][1]) for l in home_langs]
+    return lang_dropdown(cur, items, "")
 
 
 TOP_L = {"de": "Top-Folgen der Woche", "es": "Episodios más escuchados de la semana", "fr": "Épisodes les plus écoutés cette semaine", "it": "Episodi più ascoltati della settimana",
@@ -246,8 +242,7 @@ def share_html(lang, url, title):
     fl = "".join(f'<a href="{h}" target="_blank" rel="noopener nofollow" aria-label="{n}" title="{n}" style="--bc:#{BRAND_ICONS[n][1]}">{brand_icon(n)}</a>' for n, h in nets)
     fbar = (f'<aside class="fshare" aria-label="{esc(SHARE_L.get(lang, "Share"))}">{fl}'
             f'<button type="button" data-share data-url="{url}" data-title="{esc(strip_tags(title))}" aria-label="{esc(COPY_L.get(lang, "Copy link"))}" title="{esc(COPY_L.get(lang, "Copy link"))}" style="--bc:#6B7280">{brand_icon("Copy")}</button></aside>')
-    return (fbar + f'<div class="share"><div class="wrap"><b>{esc(SHARE_L.get(lang, "Share"))}</b>{links}'
-            f'<button type="button" class="btn" data-share data-url="{url}" data-title="{esc(strip_tags(title))}">{esc(COPY_L.get(lang, "Copy link"))}</button></div></div>'
+    return (fbar + ""
             "<script>document.querySelectorAll('[data-share]').forEach(function(b){b.addEventListener('click',function(){var u=b.dataset.url,t=b.dataset.title;"
             "if(navigator.share){navigator.share({title:t,url:u}).catch(function(){})}else if(navigator.clipboard){navigator.clipboard.writeText(u).then(function(){var o=b.textContent;b.textContent='✓';setTimeout(function(){b.textContent=o},1500)})}})});</script>")
 
@@ -405,9 +400,36 @@ def m365con_band():
             f'<div class="btns"><a class="btn main" href="https://m365con.net">m365con.net</a></div></div></div>')
 
 
+BAR_T = {"en": "M365Con 2027 – free online conference", "de": "M365Con 2027 – die kostenlose Online-Konferenz", "es": "M365Con 2027 – conferencia online gratuita",
+         "fr": "M365Con 2027 – conférence en ligne gratuite", "it": "M365Con 2027 – conferenza online gratuita", "pt": "M365Con 2027 – conferência online gratuita",
+         "nl": "M365Con 2027 – gratis online conferentie", "pl": "M365Con 2027 – bezpłatna konferencja online", "id": "M365Con 2027 – konferensi online gratis",
+         "ru": "M365Con 2027 – бесплатная онлайн-конференция", "uk": "M365Con 2027 – безкоштовна онлайн-конференція", "ar": "M365Con 2027 – مؤتمر مجاني عبر الإنترنت",
+         "he": "M365Con 2027 – כנס אונליין חינמי", "hi": "M365Con 2027 – मुफ़्त ऑनलाइन सम्मेलन", "ja": "M365Con 2027 – 無料オンラインカンファレンス",
+         "ko": "M365Con 2027 – 무료 온라인 컨퍼런스", "ml": "M365Con 2027 – സൗജന്യ ഓൺലൈൻ കോൺഫറൻസ്", "pa": "M365Con 2027 – ਮੁਫ਼ਤ ਆਨਲਾਈਨ ਕਾਨਫਰੰਸ",
+         "ta": "M365Con 2027 – இலவச ஆன்லைன் மாநாடு", "te": "M365Con 2027 – ఉచిత ఆన్‌లైన్ సమావేశం"}
+M365CON_END = date(2027, 1, 22)
+
+
+def con_bar(lang):
+    if date.today() > M365CON_END:
+        return ""
+    return (f'<div class="mbar"><a href="https://m365con.net" rel="noopener"><b>{esc(BAR_T.get(lang, BAR_T["en"]))}</b> · 11–22 Jan 2027 · 120 sessions<i>→ m365con.net</i></a></div>')
+
+
 def header(lang, switch):
-    home = f"{BASE}/{lang}/" if lang in LANGS else f"{BASE}/"
-    return f'<div class="top"><div class="wrap"><a class="brand" href="{home}">M365<i>.</i>FM <span class="dub">DUB</span></a>{switch}</div></div>'
+    ui = UI.get(lang)
+    if lang in LANGS:
+        home = f"{BASE}/{lang}/"
+        menu = [(ui[3], home), (ui[5], f"{BASE}/about/mirko-peters/"), ("M365Con", "https://m365con.net"), ("m365.fm", "https://www.m365.fm")]
+        if (ROOT / "data" / "top.json").exists():
+            menu.insert(1, (TOP_L.get(lang, "Top"), f"{BASE}/{lang}/top/"))
+    else:
+        home = f"{BASE}/"
+        menu = [("Languages", f"{BASE}/#languages"), ("About Mirko Peters", f"{BASE}/about/mirko-peters/"), ("M365Con", "https://m365con.net"), ("m365.fm", "https://www.m365.fm")]
+    if not switch:
+        items = [(x, LANGS[x][0], f"{BASE}/{x}/", LANGS[x][1]) for x in LANGS if (ROOT / "episodes").exists()]
+        switch = lang_dropdown("en", items, "")
+    return site_header(home, home, menu, switch, con_bar(lang))
 
 
 def footer(lang):
@@ -548,6 +570,7 @@ def build():
                                "spec": (covers.get(vid) or {}).get(l)}
     cat_url = lambda l, c: f"{BASE}/{l}/c/{c}/"
     autolink_log = []
+    MONEY = SM.update(ROOT / "data" / "money_keywords.json", by_lang, tagraw)
 
     def chips_html(l, it):
         out = "".join(f'<a class="chip cat" href="{cat_url(l, c)}">{esc(cat_name(c, l))}</a>' for c in ORDER if c in cat_of[it["vid"]] and c in catidx[l])
@@ -614,7 +637,7 @@ def build():
         art = articles.get(vid, {}).get(l, {})
         art_html = art.get("html", "")
         if art_html:
-            art_html, _lk = autolink(art_html, it, by_lang[l], tagraw[l], url_of)
+            art_html, _lk = autolink(art_html, it, by_lang[l], tagraw[l], url_of, money=SM.registry_for(MONEY, l))
             autolink_log.append(((vid, l), _lk))
         if art_html and art.get("info"):
             ih = info_html(art["info"])

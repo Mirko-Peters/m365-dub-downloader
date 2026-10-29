@@ -2,7 +2,7 @@ name: Website bauen und veröffentlichen
 on:
   push:
     branches: [main]
-    paths: ["episodes/**", "data/**", "domain.txt", "sync_platforms.py", "generate_og.py", "site_taxonomy.py", "check_links.py", "assets/**", "generate_articles.py", "scrape_spotify.py", "generate_site.py", "generate_covers.py", "sync_spreaker.py", "spreaker_auth.py", "site_cover.py", "site_design.py", "shows_seo.json", ".github/workflows/site.yml"]
+    paths: ["episodes/**", "data/**", "domain.txt", "sync_platforms.py", "generate_og.py", "site_taxonomy.py", "check_links.py", "assets/**", "generate_articles.py", "scrape_spotify.py", "generate_site.py", "generate_covers.py", "sync_spreaker.py", "spreaker_auth.py", "site_cover.py", "site_design.py", "site_money.py", "site_legal.py", "shows_seo.json", ".github/workflows/site.yml"]
   schedule:
     - cron: "17 5 * * *"
   workflow_dispatch:
@@ -70,6 +70,14 @@ jobs:
           SPOTIFY_CLIENT_SECRET: ${{ secrets.SPOTIFY_CLIENT_SECRET }}
         run: python sync_platforms.py
       - run: python generate_site.py
+      - name: Money-Keyword-Liste sichern
+        continue-on-error: true
+        run: |
+          if [ -n "$(git status --porcelain data/money_keywords.json)" ]; then
+            git config user.name "m365-site-bot"; git config user.email "actions@users.noreply.github.com"
+            git add data/money_keywords.json && git commit -m "Money-Keywords aktualisiert"
+            git pull --rebase -q && git push -q || true
+          fi
       - name: Interne Links prüfen
         continue-on-error: true
         run: python check_links.py

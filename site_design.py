@@ -70,6 +70,27 @@ nav.langs{font-family:"Barlow Condensed",sans-serif;font-weight:500;letter-spaci
 .faq p{max-width:40em}
 footer{margin-top:80px}
 .cc .btn{background:transparent;color:var(--onink);border-color:var(--onink)}.cc .btn.main{background:var(--ac);color:#fff;border-color:var(--ac)}
+
+/* ---- Kopfbereich: M365Con-Leiste, Menue, Sprachwahl mit Flaggen ---- */
+.mbar{position:sticky;top:0;z-index:60;background:var(--ink);color:var(--onink);text-align:center;font:600 .82rem/1.3 "Barlow Condensed",sans-serif;letter-spacing:.1em;text-transform:uppercase}
+.mbar a{display:block;padding:9px 14px;color:inherit;text-decoration:none}.mbar a:hover{background:var(--ac)}.mbar b{color:#9fc0ea;font-weight:600}.mbar i{font-style:normal;margin-inline-start:8px;opacity:.85}
+.top .wrap{display:flex;align-items:center;gap:22px;flex-wrap:nowrap}
+.top .brand{white-space:nowrap}
+.menu{display:flex;gap:22px;margin-inline-start:auto;align-items:center}
+.menu a{font:500 .88rem "Barlow Condensed",sans-serif;letter-spacing:.12em;text-transform:uppercase;text-decoration:none;color:var(--fg);padding:4px 0;border-bottom:2px solid transparent}
+.menu a:hover{border-color:var(--ac);color:var(--ac)}
+.lsw{position:relative}.lsw summary{list-style:none;cursor:pointer;display:flex;align-items:center;gap:8px;padding:6px 10px;border:1px solid var(--bd);font:600 .85rem "Barlow Condensed",sans-serif;letter-spacing:.1em;text-transform:uppercase;user-select:none}
+.lsw summary::-webkit-details-marker{display:none}.lsw summary:after{content:"▾";font-size:.8em;color:var(--mut)}.lsw[open] summary,.lsw summary:hover{border-color:var(--ac)}
+.fl{width:22px;height:16px;object-fit:cover;border:1px solid var(--bd);flex:none;display:inline-block;vertical-align:middle}
+.lsw .pn{position:absolute;inset-inline-end:0;top:calc(100% + 6px);z-index:70;background:var(--bg);border:1px solid var(--fg);padding:6px;display:grid;grid-template-columns:repeat(2,minmax(150px,1fr));gap:0;box-shadow:0 12px 34px #0003;max-height:70vh;overflow:auto}
+.lsw .pn a{display:flex;align-items:center;gap:10px;padding:8px 10px;text-decoration:none;color:var(--fg);font:500 1rem "Barlow Condensed",sans-serif;letter-spacing:.03em}
+.lsw .pn a:hover{background:var(--ac);color:#fff}.lsw .pn a[aria-current]{background:var(--ink);color:var(--onink)}
+.mm{display:none;position:relative}.mm summary{list-style:none;cursor:pointer;padding:6px 12px;border:1px solid var(--bd);font:600 1.1rem "Barlow Condensed",sans-serif}.mm summary::-webkit-details-marker{display:none}
+.mm .pn{position:absolute;inset-inline-end:0;top:calc(100% + 6px);z-index:70;background:var(--bg);border:1px solid var(--fg);min-width:220px;display:grid;box-shadow:0 12px 34px #0003}
+.mm .pn a{padding:12px 16px;text-decoration:none;color:var(--fg);font:500 1rem "Barlow Condensed",sans-serif;letter-spacing:.1em;text-transform:uppercase;border-bottom:1px solid var(--bd)}.mm .pn a:last-child{border:0}
+@media(max-width:860px){.menu{display:none}.mm{display:block;margin-inline-start:auto}.top .wrap{gap:10px}.lsw .pn{grid-template-columns:1fr;position:fixed;inset-inline:12px;top:auto;width:auto}.lsw .pn{top:96px}}
+.share{display:none}
+.fshare{border-radius:0}
 .chip{background:transparent;color:var(--fg)}
 button.btn{background:transparent;color:var(--fg);font-size:.88rem;cursor:pointer}button.btn:hover{background:var(--ac);border-color:var(--ac);color:#fff}
 .fshare{position:fixed;z-index:40;display:flex;gap:0;background:var(--bg);border:1px solid var(--bd);left:0;top:50%;transform:translateY(-50%);flex-direction:column;border-left:0}
@@ -116,3 +137,26 @@ def spec_table(caption, cols, rows):
 def cta_box(title, text, btn_label, href):
     return (f'<div class="xbox cta"><div><h2>{_e(title)}</h2><p>{_e(text)}</p></div>'
             f'<a class="btn main" href="{_e(href)}">{_e(btn_label)}</a><span class="x1"></span><span class="x2"></span></div>')
+
+
+FLAG = {"de": "de", "es": "es", "fr": "fr", "it": "it", "pt": "br", "nl": "nl", "pl": "pl", "id": "id", "ru": "ru", "uk": "ua", "ar": "sa", "he": "il",
+        "hi": "in", "ml": "in", "pa": "in", "ta": "in", "te": "in", "ja": "jp", "ko": "kr", "en": "gb"}
+
+
+def flag(code, base):
+    return f'<img class="fl" src="{base}/assets/flags/{FLAG.get(code, "gb")}.svg" width="22" height="16" alt="" loading="lazy">'
+
+
+def lang_dropdown(cur, items, base):
+    """items: (code, native name, url, hreflang). Dropdown mit Flaggen."""
+    cur_i = next((x for x in items if x[0] == cur), None)
+    label = (cur_i[0] if cur_i else cur).upper()
+    links = "".join(f'<a href="{_e(u)}" hreflang="{_e(h)}" lang="{_e(h)}"{" aria-current=page" if c == cur else ""}>{flag(c, base)}{_e(n)}</a>' for c, n, u, h in items)
+    return f'<details class="lsw"><summary aria-label="Language">{flag(cur, base)}{_e(label)}</summary><div class="pn">{links}</div></details>'
+
+
+def site_header(home, brand_href, menu, lang_html, bar_html=""):
+    """menu: (label, href)"""
+    m = "".join(f'<a href="{_e(h)}">{_e(t)}</a>' for t, h in menu)
+    return (f'{bar_html}<div class="top"><div class="wrap"><a class="brand" href="{_e(brand_href)}">M365<i>.</i>FM <span class="dub">DUB</span></a>'
+            f'<nav class="menu" aria-label="Menu">{m}</nav>{lang_html}<details class="mm"><summary aria-label="Menu">☰</summary><div class="pn">{m}</div></details></div></div>')

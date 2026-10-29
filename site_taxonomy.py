@@ -86,7 +86,7 @@ def related(it, pool, tagsets, catset, n=6):
     return [o for _, _, o in scored[:n]]
 
 
-def autolink(html, it, pool, tagsets_raw, url_of, max_links=6):
+def autolink(html, it, pool, tagsets_raw, url_of, max_links=10, money=None):
     """Verlinkt im Artikel erstmalige Nennungen spezifischer Tags anderer Folgen (gleiche Sprache) auf diese Folgen.
     Nur Absätze/Listenpunkte, nie Überschriften oder bestehende Links. Rückgabe: (html, [(phrase, url)])."""
     df = {}
@@ -102,6 +102,9 @@ def autolink(html, it, pool, tagsets_raw, url_of, max_links=6):
             if (len(t) >= 8 or " " in t) and len(df[k]) <= 2 and k not in tagsets_lower(tagsets_raw[it["vid"]]):
                 cands.append((t, o))
     cands.sort(key=lambda c: -len(c[0]))
+    byvid = {o["vid"]: o for o in pool}
+    mcands = sorted(((p, byvid[v]) for p, v in (money or {}).items() if v in byvid and v != it["vid"]), key=lambda c: -len(c[0]))
+    cands = mcands + [c for c in cands if c[0].lower() not in {p.lower() for p, _ in mcands}]
     used, links = set(), []
 
     def boundary(p):
