@@ -93,9 +93,20 @@ footer{margin-top:80px}
 .fshare{border-radius:0}
 .ichecks{list-style:none;margin:0;padding:0;display:grid;gap:8px}.ichecks li{padding-inline-start:30px;position:relative}.ichecks li:before{content:"✓";position:absolute;inset-inline-start:0;top:-1px;width:22px;height:22px;background:var(--ac);color:#fff;text-align:center;font-weight:700;line-height:22px}
 
+.iflow{list-style:none;margin:0;padding:0;display:flex;gap:0;align-items:stretch;counter-reset:n}
+.pn{flex:1 1 0;position:relative;padding:14px 12px;border:2px solid color-mix(in srgb,var(--ac) 30%,transparent);background:var(--card);margin-inline-end:34px;cursor:pointer;display:flex;flex-direction:column;gap:6px;min-width:0;transition:border-color .3s,background .3s,transform .3s}
+.pn:last-child{margin-inline-end:0}.pn .pi{width:24px;height:24px;line-height:24px;text-align:center;background:color-mix(in srgb,var(--ac) 25%,transparent);color:var(--ac);font-weight:700;font-size:.85rem;transition:background .3s,color .3s}.pn b{font-size:1.02rem;line-height:1.2}.pn .pt{font-size:.85rem;opacity:.8;line-height:1.35}
+.pn:after{content:"";position:absolute;inset-inline-start:100%;top:50%;width:34px;height:2px;background:repeating-linear-gradient(90deg,var(--ac) 0 6px,transparent 6px 10px);background-size:20px 2px;opacity:.35;animation:flowdash 1s linear infinite}.pn:last-child:after{display:none}
+.pn.on{border-color:var(--ac)}.pn.on:after{opacity:1}.pn.on .pi{background:var(--ac);color:#fff}.pn.cur{transform:translateY(-4px);background:color-mix(in srgb,var(--ac) 8%,var(--card))}
+.pn.entscheidung{clip-path:none;border-style:dashed}.pn.start .pi,.pn.ende .pi{border-radius:50%}.pn.ende.on{background:color-mix(in srgb,var(--ac) 12%,var(--card))}
+.iplay{margin-top:12px}.iplay .btn{padding:4px 14px;font-size:.85rem}
+@keyframes flowdash{to{background-position:20px 0}}
+@media (max-width:720px){.iflow{flex-direction:column}.pn{margin-inline-end:0;margin-bottom:30px}.pn:last-child{margin-bottom:0}.pn:after{inset-inline-start:50%;top:100%;width:2px;height:30px;background:repeating-linear-gradient(180deg,var(--ac) 0 6px,transparent 6px 10px);background-size:2px 20px;animation-name:flowdashv}@keyframes flowdashv{to{background-position:0 20px}}}
+@media (prefers-reduced-motion:reduce){.pn:after{animation:none}}
+
 .js .info.rv{opacity:0;transform:translateY(18px);transition:opacity .6s ease,transform .6s ease}.js .info.rv.in{opacity:1;transform:none}
-.js .info.rv .isteps li,.js .info.rv .icol,.js .info.rv .ifacts div,.js .info.rv .ichecks li{opacity:0;transform:translateX(-14px);transition:opacity .5s ease,transform .5s ease}
-.js .info.rv.in .isteps li,.js .info.rv.in .icol,.js .info.rv.in .ifacts div,.js .info.rv.in .ichecks li{opacity:1;transform:none}
+.js .info.rv .pn,.js .info.rv .isteps li,.js .info.rv .icol,.js .info.rv .ifacts div,.js .info.rv .ichecks li{opacity:0;transform:translateX(-14px);transition:opacity .5s ease,transform .5s ease}
+.js .info.rv.in .pn,.js .info.rv.in .isteps li,.js .info.rv.in .icol,.js .info.rv.in .ifacts div,.js .info.rv.in .ichecks li{opacity:1;transform:none}
 .info.in li:nth-child(2),.info.in .icol:nth-child(2),.info.in .ifacts div:nth-child(2){transition-delay:.12s}.info.in li:nth-child(3),.info.in .ifacts div:nth-child(3){transition-delay:.24s}.info.in li:nth-child(4),.info.in .ifacts div:nth-child(4){transition-delay:.36s}.info.in li:nth-child(5),.info.in .ifacts div:nth-child(5){transition-delay:.48s}.info.in li:nth-child(n+6),.info.in .ifacts div:nth-child(n+6){transition-delay:.6s}
 .isteps li{cursor:pointer;transition:background .25s,box-shadow .25s}.isteps li:hover{background:color-mix(in srgb,var(--ac) 7%,transparent)}.isteps li.on i{background:var(--ac);transform:scale(1.12)}.isteps li.cur{box-shadow:inset 3px 0 0 var(--ac)}.isteps li:focus-visible,.ichecks li:focus-visible{outline:2px solid var(--ac);outline-offset:2px}.isteps i{transition:transform .25s}
 .ichecks li{cursor:pointer;user-select:none}.ichecks li:before{transition:background .25s,transform .25s}.ichecks li:not(.done):before{background:transparent;color:transparent;box-shadow:inset 0 0 0 2px var(--ac)}.ichecks li.done{opacity:.6;text-decoration:line-through}.ichecks li.done:before{transform:scale(1.1)}

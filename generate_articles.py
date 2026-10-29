@@ -96,13 +96,14 @@ def infos_for(lang, html, have=()):
          'Typen: {"titel":"...","typ":"vergleich","links":{"titel":"...","punkte":["..."]},"rechts":{"titel":"...","punkte":["..."]}} (je 3-5 Punkte, max. 14 Wörter) | '
          '{"titel":"...","typ":"fakten","punkte":[{"wert":"nur wenn im Artikel genannt, sonst ein Stichwort","text":"max. 14 Wörter"}]} (3-5 Punkte) | '
          '{"titel":"...","typ":"checkliste","punkte":["max. 14 Wörter", ...]} (4-7 Punkte) | '
-         '{"titel":"...","typ":"schritte","punkte":[{"kopf":"max. 4 Wörter","text":"max. 18 Wörter"}]} (4-6 Punkte). '
+         '{"titel":"...","typ":"schritte","punkte":[{"kopf":"max. 4 Wörter","text":"max. 18 Wörter"}]} (4-6 Punkte) | '
+         '{"titel":"...","typ":"prozess","punkte":[{"kopf":"max. 3 Wörter","text":"max. 14 Wörter","art":"start|schritt|entscheidung|ende"}]} (4-6 Knoten eines Prozessablaufs, erster "start", letzter "ende"; "entscheidung" nur wenn der Artikel eine Ja/Nein-Weiche beschreibt). '
          "Ausgabe: [ {...}, {...} ]\n\nArtikel:\n" + txt)
     try:
         raw = _post(p, 3000)
         m = re.search(r"\[.*\]", raw, re.S)
         j = json.loads(m.group(0)) if m else []
-        ok = [x for x in j if isinstance(x, dict) and x.get("typ") in ("vergleich", "fakten", "checkliste", "schritte") and x.get("titel")]
+        ok = [x for x in j if isinstance(x, dict) and x.get("typ") in ("vergleich", "fakten", "checkliste", "schritte", "prozess") and x.get("titel")]
         return ok[:2] or None
     except Exception as ex:
         print("Infografik2-Fehler", str(ex)[:100])
@@ -121,7 +122,7 @@ Regeln:
 - Erlaubtes HTML: h2, h3, p, ul, ol, li, strong, em.
 - Ausgabeformat: zuerst das HTML des Artikels. Danach eine Zeile mit genau ---INFOGRAFIK--- und darunter ein JSON-Objekt für eine Infografik, die den Kern der Folge zusammenfasst (Texte in der Zielsprache, kurz, nur Inhalte aus dem Transkript):
   {{"titel": "...", "typ": "schritte", "punkte": [{{"kopf": "max. 4 Wörter", "text": "max. 18 Wörter"}}, ...4 bis 6 Punkte]}}
-  Mögliche "typ": "schritte" (Ablauf/Vorgehen), "vergleich" (dann "links": {{"titel","punkte":[Strings]}}, "rechts": {{"titel","punkte":[Strings]}}), "fakten" (dann "punkte": [{{"wert": "nur wenn im Transkript genannt", "text": "..."}}]).
+  Mögliche "typ": "schritte" (Ablauf/Vorgehen), "vergleich" (dann "links": {{"titel","punkte":[Strings]}}, "rechts": {{"titel","punkte":[Strings]}}), "prozess" (Ablaufdiagramm, "punkte": [{{"kopf","text","art":"start|schritt|entscheidung|ende"}}], 4-6 Knoten), "fakten" (dann "punkte": [{{"wert": "nur wenn im Transkript genannt", "text": "..."}}]).
 - Sonst nichts ausgeben.
 
 Titel der Folge: {title}

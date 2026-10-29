@@ -499,6 +499,10 @@ def info_html(info):
             body = f'<div class="icols">{col(info["links"])}{col(info["rechts"])}</div>'
         elif typ == "checkliste":
             body = '<ul class="ichecks">' + "".join(f'<li tabindex="0" role="checkbox" aria-checked="false">{esc(x if isinstance(x, str) else x.get("text", ""))}</li>' for x in info.get("punkte", [])[:7]) + "</ul>"
+        elif typ == "prozess":
+            pts = info.get("punkte", [])[:6]
+            nodes = "".join(f'<li class="pn {esc(p.get("art", "schritt")) if p.get("art") in ("start", "ende", "entscheidung") else "schritt"}" tabindex="0"><span class="pi">{n + 1}</span><b>{esc(p.get("kopf", ""))}</b><span class="pt">{esc(p.get("text", ""))}</span></li>' for n, p in enumerate(pts))
+            body = f'<ol class="iflow">{nodes}</ol><div class="iplay"><button type="button" class="btn">▶</button></div>'
         elif typ == "fakten":
             body = '<div class="ifacts">' + "".join(f'<div><b>{esc(p.get("wert", ""))}</b><span>{esc(p.get("text", ""))}</span></div>' for p in info.get("punkte", [])[:6]) + "</div>"
         else:
@@ -512,6 +516,7 @@ INFO_JS = """<script>(function(){try{var f=document.querySelectorAll(".info");if
 function cnt(el){var t=el.textContent,m=t.match(/^(\\D*)(\\d[\\d.,]*)(.*)$/);if(!m||rm)return;var n=parseFloat(m[2].replace(/,/g,"")),d=(m[2].split(/[.]/)[1]||"").length;if(!isFinite(n)||n>1e6)return;var s=performance.now();(function st(x){var p=Math.min(1,(x-s)/900),v=n*(1-Math.pow(1-p,3));el.textContent=m[1]+(d?v.toFixed(d):Math.round(v).toLocaleString("en-US").replace(/,/g,m[2].indexOf(",")>-1?",":""))+m[3];if(p<1)requestAnimationFrame(st);else el.textContent=t})(s)}
 var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add("in");e.target.querySelectorAll(".ifacts b").forEach(cnt);io.unobserve(e.target)}})},{threshold:.25});
 f.forEach(function(x){io.observe(x);
+var fl=x.querySelectorAll(".iflow li");if(fl.length){var tm=null,ci=-1;function hl(i){ci=i;fl.forEach(function(o,j){o.classList.toggle("on",j<=i);o.classList.toggle("cur",j==i)})}fl.forEach(function(o,i){o.addEventListener("click",function(){clearInterval(tm);hl(i)});o.addEventListener("keydown",function(e){if(e.key=="Enter"||e.key==" "){e.preventDefault();clearInterval(tm);hl(i)}})});var pb2=x.querySelector(".iplay button");pb2.addEventListener("click",function(){clearInterval(tm);hl(-1);var k=0;hl(0);tm=setInterval(function(){k++;if(k>=fl.length){clearInterval(tm);return}hl(k)},900)});if(!rm){var io2=new IntersectionObserver(function(es){if(es[0].isIntersecting){pb2.click();io2.disconnect()}},{threshold:.6});io2.observe(x)}else hl(fl.length-1)}
 x.querySelectorAll(".isteps li").forEach(function(li,i,a){function go(){a.forEach(function(o,j){o.classList.toggle("on",j<=i);o.classList.toggle("cur",j==i)})}li.addEventListener("click",go);li.addEventListener("keydown",function(e){if(e.key=="Enter"||e.key==" "){e.preventDefault();go()}})});
 var ck=x.querySelectorAll(".ichecks li");function pr(){var n=0;ck.forEach(function(o){if(o.classList.contains("done"))n++});var b=x.querySelector(".iprog");if(b){b.firstChild.style.width=(ck.length?n*100/ck.length:0)+"%";b.setAttribute("data-t",n+" / "+ck.length)}}
 if(ck.length){var pb=document.createElement("div");pb.className="iprog";pb.innerHTML="<i></i>";x.querySelector(".ichecks").after(pb);ck.forEach(function(li){function tg(){li.classList.toggle("done");li.setAttribute("aria-checked",li.classList.contains("done"));pr()}li.addEventListener("click",tg);li.addEventListener("keydown",function(e){if(e.key=="Enter"||e.key==" "){e.preventDefault();tg()}})});pr()}
