@@ -216,7 +216,11 @@ def share_html(lang, url, title):
             ("Telegram", f"https://t.me/share/url?url={u}&text={t}"), ("Reddit", f"https://www.reddit.com/submit?url={u}&title={t}"),
             ("E-Mail", f"mailto:?subject={t}&body={u}")]
     links = "".join(f'<a class="btn" href="{h}" target="_blank" rel="noopener nofollow">{n}</a>' for n, h in nets)
-    return (f'<div class="share"><div class="wrap"><b>{esc(SHARE_L.get(lang, "Share"))}</b>{links}'
+    short_n = {"LinkedIn": "in", "X": "X", "Facebook": "f", "WhatsApp": "WA", "Telegram": "TG", "Reddit": "R", "E-Mail": "@"}
+    fl = "".join(f'<a href="{h}" target="_blank" rel="noopener nofollow" aria-label="{n}" title="{n}">{short_n[n]}</a>' for n, h in nets)
+    fbar = (f'<aside class="fshare" aria-label="{esc(SHARE_L.get(lang, "Share"))}"><b>{esc(SHARE_L.get(lang, "Share"))}</b>{fl}'
+            f'<button type="button" data-share data-url="{url}" data-title="{esc(strip_tags(title))}" aria-label="{esc(COPY_L.get(lang, "Copy link"))}" title="{esc(COPY_L.get(lang, "Copy link"))}">⧉</button></aside>')
+    return (fbar + f'<div class="share"><div class="wrap"><b>{esc(SHARE_L.get(lang, "Share"))}</b>{links}'
             f'<button type="button" class="btn" data-share data-url="{url}" data-title="{esc(strip_tags(title))}">{esc(COPY_L.get(lang, "Copy link"))}</button></div></div>'
             "<script>document.querySelectorAll('[data-share]').forEach(function(b){b.addEventListener('click',function(){var u=b.dataset.url,t=b.dataset.title;"
             "if(navigator.share){navigator.share({title:t,url:u}).catch(function(){})}else if(navigator.clipboard){navigator.clipboard.writeText(u).then(function(){var o=b.textContent;b.textContent='✓';setTimeout(function(){b.textContent=o},1500)})}})});</script>")
