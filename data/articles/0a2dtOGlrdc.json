@@ -83,6 +83,52 @@
      "Registrierung wie Produktionscode behandeln"
     ]
    }
+  ],
+  "quiz": [
+   {
+    "q": "Wie teilen Sie Business Central mit, dass eine neue KI-Funktion existiert?",
+    "opts": [
+     "Durch Aufruf von „Register Capability“ in einer Install- oder Upgrade-Codeunit",
+     "Durch einen Eintrag im Azure Key Vault",
+     "Durch Setzen der Temperatur auf der Seite „Copilot- und Agentenfunktionen“",
+     "Durch bloßes Kompilieren der Erweiterung ohne weitere Schritte"
+    ],
+    "a": 0,
+    "why": "Erst der Aufruf von „Register Capability“ macht die Funktion für Copilot sichtbar; Kompilieren allein genügt nicht."
+   },
+   {
+    "q": "Was ist der Metaprompt laut Artikel?",
+    "opts": [
+     "Eine einzelne Aufgabe, die ein Benutzer im Chat eingibt",
+     "Die primäre Systemnachricht, die Profil, Format und Leitplanken des Modells festlegt",
+     "Ein Schlüssel, der den Azure-OpenAI-Dienst authentifiziert",
+     "Eine Einstellung, die nur die Zufälligkeit der Antworten steuert"
+    ],
+    "a": 1,
+    "why": "Der Metaprompt ist die feste Systemnachricht, die in jede Antwort einfließt und im Chat-Kontext bestehen bleibt."
+   },
+   {
+    "q": "Wo sollten Azure-OpenAI-Schlüssel in der Produktion gespeichert werden?",
+    "opts": [
+     "Im isolierten Speicher der Erweiterung",
+     "In einem privaten GitHub-Repository",
+     "Im Azure Key Vault",
+     "Fest im AL-Code als Konstante"
+    ],
+    "a": 2,
+    "why": "In der Produktion gehören Schlüssel in den Azure Key Vault; der isolierte Speicher gilt nur für Entwicklung und Test."
+   },
+   {
+    "q": "Wozu dient die Seite „Copilot- und Agentenfunktionen“ unter anderem?",
+    "opts": [
+     "Zum Erweitern des Copilot-Chats in Business Central",
+     "Zum Speichern des API-Schlüssels als SecretText",
+     "Zum Schreiben des Metaprompts im AL-Code",
+     "Zum Deaktivieren einzelner Funktionen als Notausschalter"
+    ],
+    "a": 3,
+    "why": "Administratoren können dort Funktionen sofort deaktivieren, Verfügbarkeit festlegen und die registrierten Funktionen prüfen."
+   }
   ]
  }
 }

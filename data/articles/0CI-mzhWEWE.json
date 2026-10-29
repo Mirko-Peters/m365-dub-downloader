@@ -87,6 +87,52 @@
      "In diesen Fällen besser Active Directory selbst betreiben, lokal oder auf Azure-VMs."
     ]
    }
+  ],
+  "quiz": [
+   {
+    "q": "Warum kann Entra ID allein viele ältere Unternehmensanwendungen nicht ausführen?",
+    "opts": [
+     "Entra ID unterstützt keine Multifaktor-Authentifizierung für Apps in Azure",
+     "Ältere Apps erwarten eine klassische Windows-Domäne und können moderne Cloud-Anmeldebestätigungen nicht lesen",
+     "Entra ID kann nur Anmeldungen bei Microsoft 365 prüfen",
+     "Ältere Apps dürfen grundsätzlich nicht auf Azure-VMs laufen"
+    ],
+    "a": 1,
+    "why": "Legacy-Apps benötigen LDAP, Kerberos oder Gruppenrichtlinien einer Windows-Domäne und verstehen die moderne Cloud-Anmeldenachricht von Entra ID nicht."
+   },
+   {
+    "q": "Was gehört bei Entra Domain Services zu Ihren Aufgaben?",
+    "opts": [
+     "Domain-Controller patchen und deren Synchronisierung untereinander verwalten",
+     "Per Remote-Desktop auf die Domain-Controller zugreifen und deren Anzahl festlegen",
+     "Das Active-Directory-Schema an die Bedürfnisse der App anpassen",
+     "Azure-VMs und Apps mit der verwalteten Domäne verbinden"
+    ],
+    "a": 3,
+    "why": "Microsoft betreibt die Domain-Controller. Ihre Aufgabe ist es, die passenden Azure-VMs und Apps mit der verwalteten Domäne zu verbinden."
+   },
+   {
+    "q": "Wo sollten Sie einen Benutzer bearbeiten, der in Domain Services erscheint?",
+    "opts": [
+     "Direkt in der verwalteten Domäne, weil Änderungen dort zurückgespielt werden",
+     "Im Quellverzeichnis, also in Entra ID oder im lokalen Active Directory",
+     "Auf den Domain-Controllern per Remote-Desktop mit Domain-Administrator-Rechten",
+     "In jedem Verzeichnis separat, damit alle Versionen identisch bleiben"
+    ],
+    "a": 1,
+    "why": "Identitäten fließen nur in die verwaltete Domäne hinein, nicht zurück. Änderungen dort erreichen nie den Haupteintrag im Quellverzeichnis."
+   },
+   {
+    "q": "In welchem Fall ist ein selbst betriebenes Active Directory besser als Domain Services?",
+    "opts": [
+     "Eine ältere App prüft per LDAP Benutzer und Kennwörter",
+     "Gemeinsam genutzte Windows-Desktops laufen in Azure per Remote Desktop Services",
+     "Die App braucht LDAP-Schreibzugriff oder muss das Schema ändern",
+     "Webserver, App-Server und Datenbank vertrauen sich über Dienstkonten"
+    ],
+    "a": 2,
+    "why": "LDAP-Schreibzugriff und Schemaänderungen sind feste Grenzen des verwalteten Dienstes. Dann ist ein selbst betriebenes Active Directory die bessere Wahl."
+   }
   ]
  }
 }
