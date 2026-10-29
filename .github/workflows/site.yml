@@ -2,7 +2,7 @@ name: Website bauen und veröffentlichen
 on:
   push:
     branches: [main]
-    paths: ["episodes/**", "data/**", "domain.txt", "sync_platforms.py", "generate_articles.py", "scrape_spotify.py", "generate_site.py", "shows_seo.json", ".github/workflows/site.yml"]
+    paths: ["episodes/**", "data/**", "domain.txt", "sync_platforms.py", "generate_og.py", "generate_articles.py", "scrape_spotify.py", "generate_site.py", "shows_seo.json", ".github/workflows/site.yml"]
   schedule:
     - cron: "17 5 * * *"
   workflow_dispatch:
@@ -45,6 +45,13 @@ jobs:
           SPOTIFY_CLIENT_SECRET: ${{ secrets.SPOTIFY_CLIENT_SECRET }}
         run: python sync_platforms.py
       - run: python generate_site.py
+      - name: Teilen-Bilder (Open Graph) erzeugen
+        continue-on-error: true
+        run: |
+          sudo apt-get install -y -qq fonts-noto-core fonts-noto-cjk fonts-noto-extra >/dev/null 2>&1 || true
+          pip install playwright
+          playwright install chromium
+          python generate_og.py
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with: { path: docs }
