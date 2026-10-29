@@ -15,6 +15,9 @@ const b64u = (b) => Buffer.from(b).toString("base64url");
   const z = await cf("/zones?name=m365.fm");
   console.log("Zone m365.fm:", z.success && z.result?.length ? "gefunden (" + z.result[0].id + ")" : "NICHT sichtbar " + JSON.stringify(z.errors || []));
   if (!(z.success && z.result?.length)) fail("Zone m365.fm nicht sichtbar: dem Token fehlt 'Zone > Zone > Read' fuer m365.fm (oder die Domain liegt in einem anderen Konto).");
+  const za = z.result[0].account?.id || "";
+  console.log("Konto der Zone:", za.slice(0, 6) + "…", "| gesetzte CLOUDFLARE_ACCOUNT_ID:", A.slice(0, 6) + "…");
+  if (za && za !== A) fail(`Die Zone m365.fm gehoert zum Cloudflare-Konto ${za.slice(0, 6)}…, die Secret CLOUDFLARE_ACCOUNT_ID beginnt aber mit ${A.slice(0, 6)}… – bitte die Konto-ID des Kontos eintragen, in dem m365.fm liegt (steht in der Adresszeile: dash.cloudflare.com/<ID>/m365.fm).`);
   const sd = await cf(`/accounts/${A}/workers/subdomain`);
   if (!(sd.success && sd.result?.subdomain)) {
     const put = await cf(`/accounts/${A}/workers/subdomain`, { method: "PUT", body: JSON.stringify({ subdomain: "m365fm-" + A.slice(0, 6) }) });
