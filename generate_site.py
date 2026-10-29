@@ -268,7 +268,7 @@ CONSENT = {
 
 def consent_html(lang):
     m, a, d = CONSENT.get(lang, CONSENT["en"])
-    return (f'<div id="cc" class="cc" hidden><span>{esc(m)}</span><button type="button" class="btn main" id="cc1">{esc(a)}</button><button type="button" class="btn" id="cc0">{esc(d)}</button></div>'
+    return (f'<div id="cc" class="cc" hidden role="region" aria-label="Cookies"><span>{esc(m)}</span><button type="button" class="btn main" id="cc1">{esc(a)}</button><button type="button" class="btn" id="cc0">{esc(d)}</button></div>'
             "<script>(function(){var K='m365-consent',v=null;try{v=localStorage.getItem(K)}catch(e){}"
             "function load(){(function(c,l,a,r,i,t,y){c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};t=l.createElement(r);t.async=1;t.src='https://www.clarity.ms/tag/'+i;"
             f"y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y)}})(window,document,'clarity','script','{CLARITY_ID}')}}"
@@ -297,6 +297,35 @@ def ext_links(html_):
     return re.sub(r"<a\s[^>]*>", fix, html_)
 
 
+SKIP_T = {"en": "Skip to content", "de": "Zum Inhalt springen", "es": "Saltar al contenido", "fr": "Aller au contenu", "it": "Vai al contenuto", "pt": "Saltar para o conteúdo",
+          "nl": "Naar de inhoud", "pl": "Przejdź do treści", "id": "Langsung ke konten", "ru": "Перейти к содержимому", "uk": "Перейти до вмісту", "ar": "انتقل إلى المحتوى",
+          "he": "דלג לתוכן", "hi": "सामग्री पर जाएँ", "ja": "本文へスキップ", "ko": "본문으로 건너뛰기", "ml": "ഉള്ളടക്കത്തിലേക്ക് പോകുക", "pa": "ਸਮੱਗਰੀ ’ਤੇ ਜਾਓ",
+          "ta": "உள்ளடக்கத்திற்குச் செல்", "te": "కంటెంట్‌కు వెళ్లండి"}
+
+
+def single_main(html_):
+    """Pro Seite genau ein <main>; weitere werden zu benannten <section>-Landmarken (Name = erste Ueberschrift)."""
+    parts = re.split(r"(<main\b[^>]*>|</main>)", html_)
+    n, used = 0, set()
+    for i, p in enumerate(parts):
+        if p.startswith("<main"):
+            n += 1
+            if n == 1:
+                parts[i] = '<main id="main"' + p[5:]
+            if n > 1:
+                m = re.search(r"<h[1-6][^>]*>(.*?)</h[1-6]>", parts[i + 1] if i + 1 < len(parts) else "", re.S)
+                lab = re.sub(r"<[^>]+>", "", m.group(1)).strip() if m else "M365.FM"
+                base_lab, k = lab, 1
+                while lab in used:
+                    k += 1
+                    lab = f"{base_lab} {k}"
+                used.add(lab)
+                parts[i] = "<section" + p[5:-1] + f' aria-label="{html.escape(lab)}">'
+        elif p == "</main>" and n > 1 and (sum(1 for q in parts[:i] if q.startswith("<main")) > 1):
+            parts[i] = "</section>"
+    return "".join(parts)
+
+
 def page(lang, title, desc, canonical, body, alternates=None, jsonld=None, xdefault=None, og_type="article", extra_head="", noindex=False):
     hl = LANGS[lang][1] if lang in LANGS else "en"
     d = LANGS[lang][2] if lang in LANGS else "ltr"
@@ -314,6 +343,9 @@ def page(lang, title, desc, canonical, body, alternates=None, jsonld=None, xdefa
         OGLIST.append({"path": f"og/{rel}.png", "title": strip_tags(title), "lang": lang, "seed": canonical, "cover": OG_COVER.get(canonical)})
         ogimg = f"{BASE}/og/{rel}.png"
         body = body.replace("<footer>", share_html(lang, canonical, title) + "<footer>", 1)
+    body = single_main(body)
+    if 'id="main"' in body:
+        body = f'<a class="skip" href="#main">{esc(SKIP_T.get(lang, SKIP_T["en"]))}</a>' + body
     return f"""<!doctype html>
 <html lang="{hl}" dir="{d}">
 <head>
@@ -420,9 +452,9 @@ def faq_html(lang, title="FAQ"):
 
 
 def m365con_band():
-    return (f'<div class="band"><div class="wrap"><div class="kicker" style="margin:0;color:inherit;opacity:.8">M365Con 2027 · Jan 11–22 · 100% online · free</div>'
+    return (f'<section class="band" aria-label="M365Con 2027"><div class="wrap"><div class="kicker" style="margin:0;color:inherit;opacity:.8">M365Con 2027 · Jan 11–22 · 100% online · free</div>'
             f'<h2>120 sessions. 10 days. Microsoft community from all over the world.</h2>'
-            f'<div class="btns"><a class="btn main" href="https://m365con.net">m365con.net</a></div></div></div>')
+            f'<div class="btns"><a class="btn main" href="https://m365con.net">m365con.net</a></div></div></section>')
 
 
 BAR_T = {"en": "M365Con 2027 – free online conference", "de": "M365Con 2027 – die kostenlose Online-Konferenz", "es": "M365Con 2027 – conferencia online gratuita",
@@ -520,7 +552,7 @@ def info_html(info):
                 return f'<div class="icol"><h4>{esc(c.get("titel", ""))}</h4><ul>' + "".join(f"<li>{esc(x)}</li>" for x in c.get("punkte", [])[:6]) + "</ul></div>"
             body = f'<div class="icols">{col(info["links"])}{col(info["rechts"])}</div>'
         elif typ == "checkliste":
-            body = '<ul class="ichecks">' + "".join(f'<li tabindex="0" role="checkbox" aria-checked="false">{esc(x if isinstance(x, str) else x.get("text", ""))}</li>' for x in info.get("punkte", [])[:7]) + "</ul>"
+            body = '<ul class="ichecks">' + "".join(f'<li><button type="button" class="ck" aria-pressed="false">{esc(x if isinstance(x, str) else x.get("text", ""))}</button></li>' for x in info.get("punkte", [])[:7]) + "</ul>"
         elif typ == "prozess":
             pts = info.get("punkte", [])[:6]
             nodes = "".join(f'<li class="pn {esc(p.get("art", "schritt")) if p.get("art") in ("start", "ende", "entscheidung") else "schritt"}" tabindex="0"><span class="pi">{n + 1}</span><b>{esc(p.get("kopf", ""))}</b><span class="pt">{esc(p.get("text", ""))}</span></li>' for n, p in enumerate(pts))
@@ -541,7 +573,7 @@ f.forEach(function(x){io.observe(x);
 var fl=x.querySelectorAll(".iflow li");if(fl.length){var tm=null,ci=-1;function hl(i){ci=i;fl.forEach(function(o,j){o.classList.toggle("on",j<=i);o.classList.toggle("cur",j==i)})}fl.forEach(function(o,i){o.addEventListener("click",function(){clearInterval(tm);hl(i)});o.addEventListener("keydown",function(e){if(e.key=="Enter"||e.key==" "){e.preventDefault();clearInterval(tm);hl(i)}})});var pb2=x.querySelector(".iplay button");pb2.addEventListener("click",function(){clearInterval(tm);hl(-1);var k=0;hl(0);tm=setInterval(function(){k++;if(k>=fl.length){clearInterval(tm);return}hl(k)},900)});if(!rm){var io2=new IntersectionObserver(function(es){if(es[0].isIntersecting){pb2.click();io2.disconnect()}},{threshold:.6});io2.observe(x)}else hl(fl.length-1)}
 x.querySelectorAll(".isteps li").forEach(function(li,i,a){function go(){a.forEach(function(o,j){o.classList.toggle("on",j<=i);o.classList.toggle("cur",j==i)})}li.addEventListener("click",go);li.addEventListener("keydown",function(e){if(e.key=="Enter"||e.key==" "){e.preventDefault();go()}})});
 var ck=x.querySelectorAll(".ichecks li");function pr(){var n=0;ck.forEach(function(o){if(o.classList.contains("done"))n++});var b=x.querySelector(".iprog");if(b){b.firstChild.style.width=(ck.length?n*100/ck.length:0)+"%";b.setAttribute("data-t",n+" / "+ck.length)}}
-if(ck.length){var pb=document.createElement("div");pb.className="iprog";pb.innerHTML="<i></i>";x.querySelector(".ichecks").after(pb);ck.forEach(function(li){function tg(){li.classList.toggle("done");li.setAttribute("aria-checked",li.classList.contains("done"));pr()}li.addEventListener("click",tg);li.addEventListener("keydown",function(e){if(e.key=="Enter"||e.key==" "){e.preventDefault();tg()}})});pr()}
+if(ck.length){var pb=document.createElement("div");pb.className="iprog";pb.innerHTML="<i></i>";x.querySelector(".ichecks").after(pb);ck.forEach(function(li){var bt=li.querySelector("button");li.addEventListener("click",function(){li.classList.toggle("done");if(bt)bt.setAttribute("aria-pressed",li.classList.contains("done"));pr()})});pr()}
 })}catch(e){}})()</script>"""
 
 PLAT_JS = """<script>(function(){try{var ua=navigator.userAgent||"",pl=navigator.platform||"";var apple=/iPhone|iPad|iPod|Macintosh|Mac OS X/.test(ua)||/Mac|iPhone|iPad/.test(pl)||(navigator.maxTouchPoints>1&&/Mac/.test(pl));
@@ -869,7 +901,7 @@ def build():
     # Community-Seite je Sprache (noindex) + Service Worker fuer Web-Push
     for l in active:
         ct = _CI.get(l, _CI.get("en", {})).get("community", "Community")
-        write(f"{l}/community/index.html", page(l, f"{ct} – M365.FM {LANGS[l][0]}", ct, f"{BASE}/{l}/community/", f'{header(l, "")}<main class="wrap" style="max-width:48em"><div id="c-page"></div></main>{footer(l)}{community_tags(l)}', og_type="website", noindex=True))
+        write(f"{l}/community/index.html", page(l, f"{ct} – M365.FM {LANGS[l][0]}", ct, f"{BASE}/{l}/community/", f'{header(l, "")}<main class="wrap" style="max-width:48em"><h1 id="c-h1">{esc(ct)}</h1><div id="c-page"></div></main>{footer(l)}{community_tags(l)}', og_type="website", noindex=True))
     shutil.copy(ROOT / "assets" / "sw.js", OUT / "sw.js")
 
     # Entity-Seite

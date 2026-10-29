@@ -131,7 +131,7 @@
       api("/api/u/" + encodeURIComponent(uid)).then(function (r) {
         if (r.s !== 200) { root.appendChild(h("p", { text: tt("error") })); return; }
         var j = r.j;
-        root.appendChild(h("h1", { text: j.user.name }));
+        var H=document.getElementById("c-h1");if(H)H.textContent=j.user.name;
         root.appendChild(badgeEls(j.badges, true));
         if (j.user.bio) root.appendChild(h("p", { text: j.user.bio }));
         root.appendChild(h("p", { class: "cmut", text: j.points + " " + tt("points") + " · " + j.comments + " " + tt("comments_count") + " · " + j.likes + " " + tt("likes_count") + " · " + tt("members_since") + " " + date(j.user.created) }));
@@ -140,7 +140,6 @@
       return;
     }
     me().then(function (u) {
-      root.appendChild(h("h1", { text: tt("community") }));
       if (!u) root.appendChild(loginBox());
       else {
         var name = h("input", { type: "text", maxlength: 40, value: u.name, "aria-label": tt("your_name") }), bio = h("textarea", { rows: 3, maxlength: 280, placeholder: tt("bio_ph"), "aria-label": tt("bio_ph") });
