@@ -39,19 +39,25 @@ jobs:
     steps:
       - id: deployment
         uses: actions/deploy-pages@v4
-      - name: Suchmaschinen informieren (IndexNow)
+      - uses: actions/checkout@v4
+      - name: Suchmaschinen informieren (IndexNow: Bing, Yandex, Seznam, Naver …)
         continue-on-error: true
         env:
           PAGE_URL: ${{ steps.deployment.outputs.page_url }}
         run: |
           python3 - <<'PY'
           import json, os, re, urllib.request
-          base = os.environ["PAGE_URL"].rstrip("/")
+          dom = open("domain.txt").read().strip() if os.path.exists("domain.txt") else ""
+          base = ("https://" + dom) if dom else os.environ["PAGE_URL"].rstrip("/")
           key = "c1d5e8a7b3f94a6e8d2b7f0a9c4e6b13"
-          xml = urllib.request.urlopen(base + "/sitemap.xml", timeout=60).read().decode()
-          urls = re.findall(r"<loc>(.*?)</loc>", xml)[:9000]
+          def get(u): return urllib.request.urlopen(u, timeout=60).read().decode()
+          urls = []
+          for sm in re.findall(r"<loc>(.*?)</loc>", get(base + "/sitemap.xml")):
+              urls += re.findall(r"<loc>(.*?)</loc>", get(sm))
+          urls = sorted(set(urls))
           host = base.split("//")[1].split("/")[0]
-          body = json.dumps({"host": host, "key": key, "keyLocation": f"{base}/{key}.txt", "urlList": urls}).encode()
-          req = urllib.request.Request("https://api.indexnow.org/indexnow", body, {"Content-Type": "application/json"})
-          print(urllib.request.urlopen(req, timeout=60).status, len(urls), "URLs gemeldet")
+          for i in range(0, len(urls), 9000):
+              body = json.dumps({"host": host, "key": key, "keyLocation": f"{base}/{key}.txt", "urlList": urls[i:i + 9000]}).encode()
+              req = urllib.request.Request("https://api.indexnow.org/indexnow", body, {"Content-Type": "application/json; charset=utf-8"})
+              print(urllib.request.urlopen(req, timeout=60).status, len(urls[i:i + 9000]), "URLs gemeldet")
           PY

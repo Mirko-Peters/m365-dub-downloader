@@ -113,6 +113,7 @@ h2{font-size:1.5rem;line-height:1.2;margin:2.1em 0 .6em;font-weight:700}
 .author p{margin:0;font-size:.95rem;color:var(--mut)}.author strong{color:var(--fg);display:block;font-size:1.02rem}
 .mut{color:var(--mut);font-size:.9rem}.crumbs{font-size:.78rem;letter-spacing:.12em;text-transform:uppercase;color:var(--mut);margin-top:26px}.crumbs a{text-decoration:none}
 footer{border-top:1px solid var(--fg);margin-top:64px;padding:26px 0 48px;font-size:.85rem;color:var(--mut)}footer a{margin-right:14px}
+.yt{position:relative;margin:22px 0;aspect-ratio:16/9;background:#000;border-radius:4px;overflow:hidden;cursor:pointer}.yt img{width:100%;height:100%;object-fit:cover;opacity:.85}.yt button{position:absolute;inset:0;margin:auto;width:76px;height:76px;border-radius:50%;border:0;background:var(--ac);color:#fff;font-size:30px;cursor:pointer}.yt iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
 .cover{margin:18px 0 6px;border-radius:4px;overflow:hidden;line-height:0}.cover svg{width:100%;height:auto;display:block}
 .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:0;border-top:1px solid var(--fg);border-bottom:1px solid var(--fg);margin:30px 0}
 .stats div{padding:18px 14px;border-inline-end:1px solid var(--bd)}.stats b{display:block;font:700 2.4rem/1 Didot,"Bodoni 72",Georgia,serif;color:var(--ac)}.stats span{font-size:.76rem;letter-spacing:.14em;text-transform:uppercase;color:var(--mut)}
@@ -293,6 +294,7 @@ def author_box(lang):
             f'<p>{esc(bio)}</p></div></div>')
 
 
+YT_JS = """<script>document.querySelectorAll('.yt').forEach(function(b){b.addEventListener('click',function(){var i=document.createElement('iframe');i.src='https://www.youtube-nocookie.com/embed/'+b.dataset.id+'?autoplay=1&rel=0';i.allow='accelerometer;autoplay;encrypted-media;picture-in-picture';i.allowFullscreen=true;i.title='YouTube';b.innerHTML='';b.appendChild(i)},{once:true})});</script>"""
 PLAT_JS = """<script>(function(){try{var ua=navigator.userAgent||"",pl=navigator.platform||"";var apple=/iPhone|iPad|iPod|Macintosh|Mac OS X/.test(ua)||/Mac|iPhone|iPad/.test(pl)||(navigator.maxTouchPoints>1&&/Mac/.test(pl));
 var d=document.documentElement;if(apple)d.className+=" apple-first";var pick=document.querySelector(apple?'[data-p=apple]':'[data-p=spotify]')||document.querySelector('[data-p=spotify]')||document.querySelector('[data-p=apple]')||document.querySelector('[data-p=spreaker]');if(pick)pick.className+=" main"}catch(e){}})();</script>"""
 
@@ -301,6 +303,7 @@ def build():
     eps, pub, seo = load()
     plat = json.load(open(ROOT / "data" / "platforms.json", encoding="utf-8")) if (ROOT / "data" / "platforms.json").exists() else {}
     elinks = json.load(open(ROOT / "data" / "episode_links.json", encoding="utf-8")) if (ROOT / "data" / "episode_links.json").exists() else {}
+    videos = json.load(open(ROOT / "data" / "videos.json", encoding="utf-8")) if (ROOT / "data" / "videos.json").exists() else {}
     if OUT.exists():
         shutil.rmtree(OUT)
     OUT.mkdir(parents=True)
@@ -369,8 +372,14 @@ def build():
                 {"@type": "ListItem", "position": 1, "name": "M365.FM", "item": f"{BASE}/"},
                 {"@type": "ListItem", "position": 2, "name": LANGS[l][0], "item": f"{BASE}/{l}/"},
                 {"@type": "ListItem", "position": 3, "name": e["title"], "item": canonical}]},
-            person_ld(),
+            {"@context": "https://schema.org", "@type": "VideoObject", "@id": canonical + "#video", "name": e["title"], "description": strip_tags(intro),
+             "thumbnailUrl": [f"https://i.ytimg.com/vi/{vid}/maxresdefault.jpg", f"https://i.ytimg.com/vi/{vid}/hqdefault.jpg"],
+             "uploadDate": videos.get(vid, {}).get("date", it["date"]), "contentUrl": f"https://www.youtube.com/watch?v={vid}",
+             "embedUrl": f"https://www.youtube-nocookie.com/embed/{vid}", "isFamilyFriendly": True,
+             "publisher": {"@id": f"{BASE}/#org"}, "author": {"@id": f"{BASE}/about/mirko-peters/#person"}},
+            person_ld(), org_ld(),
         ]
+        ld[0]["video"] = {"@id": canonical + "#video"}
         lis = "".join(f"<li>{x}</li>" for x in bullets)
         el = elinks.get(f"{vid}:{l}", {}); sh = plat.get(l, {})
         apple = el.get("apple") or sh.get("apple_show"); spot = el.get("spotify") or sh.get("spotify_show")
@@ -390,6 +399,7 @@ def build():
 <figure class="cover" style="margin-inline:0">{art_svg(vid, LANGS[l][0], "M365.FM · " + ui[0])}</figure>
 <div class="panel"><iframe src="https://widget.spreaker.com/player?episode_id={it["eid"]}&amp;theme=light&amp;playlist=false" height="131" loading="lazy" title="{esc(e["title"])}"></iframe>
 <div class="btns">{btns}</div></div>
+<div class="yt" data-id="{vid}" role="button" aria-label="{esc(ui[1])}"><img src="https://i.ytimg.com/vi/{vid}/hqdefault.jpg" alt="" loading="lazy" width="480" height="360"><button type="button" aria-hidden="true">▶</button></div>
 <h2>{esc(hdr)}</h2><ol class="points">{lis}</ol>
 <p class="lede" style="margin-top:1.4em">{aud}</p>
 {author_box(l)}
@@ -397,7 +407,7 @@ def build():
 </article>
 {('<h2>' + esc(ui[4]) + '</h2><div class="list">' + rel + '</div>') if rel else ''}
 <p style="margin-top:1.6em"><a class="btn" href="{BASE}/{l}/">{esc(ui[3])} →</a></p></main>
-{footer(l)}{PLAT_JS}"""
+{footer(l)}{PLAT_JS}{YT_JS}"""
         write(f'{l}/{it["slug"]}/index.html',
               page(l, e["title"], short(intro), canonical, body, alts, ld))
         sitemap.append((canonical, it["date"], alts))
@@ -485,14 +495,31 @@ def build():
     sitemap.append((f"{BASE}/about/mirko-peters/", TODAY, None))
 
     # Sitemap, robots, llms.txt, IndexNow
-    sm = ['<?xml version="1.0" encoding="UTF-8"?>', '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">']
-    for u, lm, alts in sitemap:
-        sm.append(f"<url><loc>{u}</loc><lastmod>{lm}</lastmod>")
-        for x, au in (alts or {}).items():
-            sm.append(f'<xhtml:link rel="alternate" hreflang="{LANGS[x][1]}" href="{au}"/>')
-        sm.append("</url>")
-    sm.append("</urlset>")
-    write("sitemap.xml", "\n".join(sm))
+    def sm_file(entries):
+        x = ['<?xml version="1.0" encoding="UTF-8"?>', '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">']
+        for u, lm, alts in entries:
+            x.append(f"<url><loc>{u}</loc><lastmod>{lm}</lastmod>")
+            for k, au in (alts or {}).items():
+                x.append(f'<xhtml:link rel="alternate" hreflang="{LANGS[k][1]}" href="{au}"/>')
+            x.append("</url>")
+        x.append("</urlset>")
+        return "\n".join(x)
+
+    # eine Sitemap pro Sprache (Startseite + alle Folgenseiten) + eine für Kernseiten, dazu der Index
+    index = []
+    core = [e for e in sitemap if not any(e[0].startswith(f"{BASE}/{l}/") for l in LANGS)]
+    write("sitemap-core.xml", sm_file(core))
+    index.append(("sitemap-core.xml", TODAY))
+    for l in active:
+        ents = [e for e in sitemap if e[0].startswith(f"{BASE}/{l}/")]
+        lm = max(e[1] for e in ents)
+        write(f"sitemap-{l}.xml", sm_file(ents))
+        index.append((f"sitemap-{l}.xml", lm))
+    idx = ['<?xml version="1.0" encoding="UTF-8"?>', '<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">']
+    for f, lm in index:
+        idx.append(f"<sitemap><loc>{BASE}/{f}</loc><lastmod>{lm}</lastmod></sitemap>")
+    idx.append("</sitemapindex>")
+    write("sitemap.xml", "\n".join(idx))
     write("robots.txt", f"User-agent: *\nAllow: /\n\nSitemap: {BASE}/sitemap.xml\n")
     write("llms.txt", f"# M365.FM – Mirko Peters\n\n> AI-dubbed podcast episodes about Microsoft 365, Copilot, Azure and Power Platform by Microsoft MVP Mirko Peters, in {len(active)} languages.\n\n"
           f"- [About Mirko Peters]({BASE}/about/mirko-peters/)\n" + "".join(f"- [{LANGS[l][0]}]({BASE}/{l}/)\n" for l in active))
