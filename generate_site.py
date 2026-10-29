@@ -4,6 +4,7 @@
 Nur Python-Standardbibliothek. Lauf:  python generate_site.py
 Basis-URL (z. B. eigene Domain):  SITE_BASE=https://international.m365.fm python generate_site.py
 """
+import site_learn as LRN
 import glob, html, json, os, re, shutil, sys, unicodedata
 from datetime import date
 from pathlib import Path
@@ -558,6 +559,7 @@ def header(lang, switch):
         menu = [(ui[3], home), (ui[5], about_url(lang)), ("M365Con", "https://m365con.net"), ("m365.fm", "https://www.m365.fm")]
         menu.insert(1, ((TOP_L if lang in TOP_REAL else REC_L).get(lang, "Top"), f"{BASE}/{lang}/top/"))
         menu.insert(2, (_CI.get(lang, _CI.get("en", {})).get("community", "Community"), f"{BASE}/{lang}/community/"))
+        menu.insert(2, (LRN.T(lang)["learn"], f"{BASE}/{lang}/learn/"))
     else:
         home = f"{BASE}/"
         menu = [("Languages", f"{BASE}/#languages"), ("About Mirko Peters", f"{BASE}/about/mirko-peters/"), ("M365Con", "https://m365con.net"), ("m365.fm", "https://www.m365.fm")]
@@ -836,6 +838,7 @@ def build():
         if art_html:
             art_html, _lk = autolink(art_html, it, by_lang[l], tagraw[l], url_of, money=SM.registry_for(MONEY, l))
             autolink_log.append(((vid, l), _lk))
+            art_html = LRN.gloss_link(art_html, l, BASE)
         if art_html and art.get("info"):
             ih = info_html(art["info"])
             art_html = re.sub(r"(</p>)", r"\1" + ih.replace("\\", "\\\\"), art_html, count=1) if ih else art_html
@@ -1037,6 +1040,10 @@ def build():
         ld = [{"@context": "https://schema.org", "@type": "ProfilePage", "@id": f"{url}#profile", "url": url, "name": "Mirko Peters", "inLanguage": LANGS[lang][1] if lang != "en" else "en", "dateModified": TODAY, "mainEntity": {"@id": f"{BASE}/about/mirko-peters/#person"}}, person_ld(), org_ld(), event_ld(), faq_ld(lang)]
         write(path, page(lang if lang != "en" else "en", A["title"], A["meta"], url, about_body(lang), about_alts or None, ld, xdefault=about_en_url, og_type="profile", extra_head=hl_en))
         sitemap.append((url, TODAY, about_alts or None))
+
+    LRN.build_learn(dict(write=write, page=page, header=header, footer=footer, footer_en=footer_en, BASE=BASE, LANGS=LANGS, active=active, by_lang=by_lang, catidx=catidx,
+                        articles=articles, url_of=url_of, cat_name=cat_name, ORDER=ORDER, strip_tags=strip_tags, anchor_title=anchor_title, short=short, parse_desc=parse_desc,
+                        sitemap=sitemap, TODAY=TODAY, SCORE={l: (_QUI.get(l, {}).get("score") or _QUI["en"]["score"]) for l in list(LANGS) + ["en"]}))
 
     # Kategorie-Seiten (indexierbar, in Sitemap) und Tag-Seiten (noindex,follow – nur für die interne Verlinkung)
     def rows_html(lst):

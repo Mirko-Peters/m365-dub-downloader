@@ -29,7 +29,9 @@
     function show(o) { p.hidden = !o; b.setAttribute("aria-expanded", o ? "true" : "false"); if (o) { var f = p.querySelector("button"); f && f.focus(); } }
     b.addEventListener("click", function () { show(p.hidden); });
     document.addEventListener("keydown", function (e) { if (e.key === "Escape" && !p.hidden) { show(false); b.focus(); } });
-    document.body.appendChild(b); document.body.appendChild(p); sync();
+    var fs = document.querySelector(".fshare");
+    if (fs) { b.classList.add("inbar"); p.classList.add("inbar"); fs.appendChild(b); } else document.body.appendChild(b);
+    document.body.appendChild(p); sync();
   }
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", build); else build();
 })();
