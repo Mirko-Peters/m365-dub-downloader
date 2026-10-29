@@ -63,7 +63,7 @@ if (!have.includes("VAPID_PRIVATE_JWK") || !have.includes("VAPID_PUBLIC")) {
 }
 // Vom Betreiber gelieferte Secrets (GitHub-Secrets -> Umgebung); nur setzen, wenn vorhanden
 for (const k of ["GOOGLE_CLIENT_ID", "GOOGLE_CLIENT_SECRET", "MS_CLIENT_ID", "MS_CLIENT_SECRET", "RESEND_API_KEY", "ADMIN_SUBS"]) if (process.env[k]) put(k, process.env[k]);
-console.log("Fertig. Worker: https://api.dub.m365.fm");
+console.log("Fertig. Worker: https://api-dub.m365.fm");
 // Nachpruefung: Custom Domain und DNS-Eintrag
 {
   const H = { Authorization: "Bearer " + process.env.CLOUDFLARE_API_TOKEN }, A = process.env.CLOUDFLARE_ACCOUNT_ID;
@@ -73,5 +73,5 @@ console.log("Fertig. Worker: https://api.dub.m365.fm");
   const z = await g("/zones?name=m365.fm"); const zid = z.result?.[0]?.id;
   const r = await g(`/zones/${zid}/dns_records?per_page=100`);
   console.log("::notice::DNS (dub/api):", JSON.stringify((r.result || []).filter((x) => /dub|api/.test(x.name)).map((x) => `${x.type} ${x.name} -> ${String(x.content).slice(0, 40)}`)), r.success ? "" : JSON.stringify(r.errors));
-  try { const t = await fetch("https://api.dub.m365.fm/api/health"); console.log("::notice::Test api.dub.m365.fm:", t.status, (await t.text()).slice(0, 80)); } catch (e) { console.log("Test api.dub.m365.fm: nicht erreichbar", String(e.cause?.code || e)); }
+  try { const t = await fetch("https://api-dub.m365.fm/api/health"); console.log("::notice::Test api-dub.m365.fm:", t.status, (await t.text()).slice(0, 80)); } catch (e) { console.log("Test api-dub.m365.fm: nicht erreichbar", String(e.cause?.code || e)); }
 }

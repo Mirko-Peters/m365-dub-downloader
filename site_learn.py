@@ -173,7 +173,7 @@ def build_learn(ctx):
         return [{"@context": "https://schema.org", "@type": "DefinedTerm", "name": term["name"], "description": definition(term, lang)[0], "url": url,
                  "inDefinedTermSet": setname}]
 
-    WIKI_API = g.get("api", "https://api.dub.m365.fm")
+    WIKI_API = g.get("api", "https://api-dub.m365.fm")
     for lang in ["en", "de"]:
         t = T(lang)
         stat = fetch_wiki(WIKI_API, lang)

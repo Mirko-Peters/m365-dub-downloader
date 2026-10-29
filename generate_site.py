@@ -532,7 +532,7 @@ def con_bar(lang):
     return (f'<div class="mbar"><a href="https://m365con.net" rel="noopener"><b>{esc(BAR_T.get(lang, BAR_T["en"]))}</b> · 11–22 Jan 2027 · 120 sessions<i>→ m365con.net</i></a></div>')
 
 
-COMMUNITY_API = os.environ.get("COMMUNITY_API", "https://api.dub.m365.fm")
+COMMUNITY_API = os.environ.get("COMMUNITY_API", "https://api-dub.m365.fm")
 _CI = json.loads((ROOT / "data" / "community_i18n.json").read_text("utf-8")) if (ROOT / "data" / "community_i18n.json").exists() else {}
 
 
