@@ -10,7 +10,9 @@ from pathlib import Path
 
 ROOT = Path(__file__).parent
 OUT = ROOT / "docs"
-BASE = os.environ.get("SITE_BASE", "https://mirko-peters.github.io/m365-dub-downloader").rstrip("/")
+_dom = (ROOT / "domain.txt").read_text().strip() if (ROOT / "domain.txt").exists() else ""
+BASE = os.environ.get("SITE_BASE") or (f"https://{_dom}" if _dom else "https://mirko-peters.github.io/m365-dub-downloader")
+BASE = BASE.rstrip("/")
 TODAY = date.today().isoformat()
 INDEXNOW_KEY = "c1d5e8a7b3f94a6e8d2b7f0a9c4e6b13"
 
@@ -74,21 +76,41 @@ UI = {
         "Mirko Peters ఒక Microsoft MVP; M365.FM పాడ్‌కాస్ట్ హోస్ట్, ఉచిత ఆన్‌లైన్ కాన్ఫరెన్స్ M365Con నిర్వాహకుడు.", "హోమ్"),
 }
 
-CSS = """:root{--bg:#fff;--fg:#14202b;--mut:#5a6b7b;--ac:#0b6bcb;--card:#f4f7fa;--bd:#dbe3ea}
-@media (prefers-color-scheme:dark){:root{--bg:#0f1720;--fg:#e8eef4;--mut:#9fb0c0;--ac:#6cb2ff;--card:#17222d;--bd:#26364a}}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--fg);font:17px/1.65 system-ui,-apple-system,Segoe UI,Roboto,Noto Sans,sans-serif}
-a{color:var(--ac)}header,main,footer{max-width:820px;margin:0 auto;padding:16px}
-header{display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between;border-bottom:1px solid var(--bd)}
-header .brand{font-weight:700;text-decoration:none;color:var(--fg)}nav.langs{display:flex;flex-wrap:wrap;gap:6px 10px;font-size:14px}
-h1{font-size:1.75rem;line-height:1.25;margin:.6em 0 .4em}h2{font-size:1.2rem;margin-top:1.6em}
-.card{background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:14px 16px;margin:12px 0}
-.card h2,.card h3{margin:.1em 0 .3em;font-size:1.05rem}.card p{margin:.2em 0;color:var(--mut);font-size:.95rem}
-.btn{display:inline-block;margin:6px 8px 6px 0;padding:9px 16px;border-radius:999px;background:var(--ac);color:#fff;text-decoration:none;font-weight:600;font-size:.95rem}
-.btn.alt{background:transparent;color:var(--ac);border:1px solid var(--ac)}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:10px}
-.grid a{display:block;padding:12px;border:1px solid var(--bd);border-radius:10px;text-decoration:none;background:var(--card)}
-iframe{width:100%;border:0;border-radius:12px}.mut{color:var(--mut);font-size:.9rem}footer{border-top:1px solid var(--bd);margin-top:32px;font-size:.9rem;color:var(--mut)}
-ul{padding-inline-start:1.2em}li{margin:.35em 0}"""
+CSS = """:root{--bg:#f6f1ea;--fg:#141210;--mut:#6b645c;--ac:#b4233c;--card:#fffdf9;--bd:#1412101f;--ink:#141210;--onink:#f6f1ea}
+@media (prefers-color-scheme:dark){:root{--bg:#0e0d0c;--fg:#f1ebe2;--mut:#a39a8e;--ac:#ff5a72;--card:#171513;--bd:#f1ebe226;--ink:#f1ebe2;--onink:#0e0d0c}}
+*{box-sizing:border-box}html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--fg);font:17px/1.7 -apple-system,"Segoe UI",Inter,Roboto,"Noto Sans",system-ui,sans-serif}
+a{color:inherit;text-decoration-color:var(--ac);text-underline-offset:3px}a:hover{color:var(--ac)}
+.serif,h1,h2,.brand,.tile b,.num{font-family:"Didot","Bodoni 72","Playfair Display","Iowan Old Style",Georgia,"Noto Serif",serif}
+.wrap{max-width:1040px;margin:0 auto;padding:0 22px}
+.top{border-bottom:1px solid var(--fg)}.top .wrap{display:flex;flex-wrap:wrap;gap:10px 22px;align-items:center;justify-content:space-between;padding-top:14px;padding-bottom:14px}
+.brand{font-size:1.35rem;font-weight:700;letter-spacing:.02em;text-decoration:none}.brand i{color:var(--ac);font-style:normal}
+nav.langs{display:flex;flex-wrap:wrap;gap:4px 14px;font-size:.78rem;letter-spacing:.08em;text-transform:uppercase}
+nav.langs a{text-decoration:none;color:var(--mut)}nav.langs a[aria-current]{color:var(--fg);border-bottom:2px solid var(--ac)}
+.kicker{font-size:.76rem;letter-spacing:.2em;text-transform:uppercase;color:var(--ac);font-weight:600;margin:46px 0 10px}
+h1{font-size:clamp(1.9rem,4.6vw,3.1rem);line-height:1.1;font-weight:700;letter-spacing:-.015em;margin:0 0 .45em}
+h2{font-size:1.5rem;line-height:1.2;margin:2.1em 0 .6em;font-weight:700}
+.lede{font-size:clamp(1.15rem,2.4vw,1.45rem);line-height:1.55;max-width:40em;margin:.2em 0 1.4em}
+.panel{background:var(--ink);color:var(--onink);border-radius:4px;padding:22px;margin:26px 0}
+.panel iframe{width:100%;border:0;border-radius:4px;background:#fff}
+.btns{display:flex;flex-wrap:wrap;gap:10px;margin:16px 0 4px}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:11px 20px;border:1px solid currentColor;border-radius:999px;text-decoration:none;font-size:.88rem;letter-spacing:.06em;text-transform:uppercase;font-weight:600;color:inherit}
+.btn.main{background:var(--ac);border-color:var(--ac);color:#fff}.btn:hover{background:var(--fg);border-color:var(--fg);color:var(--bg)}.panel .btn:hover{background:var(--onink);color:var(--ink)}
+.btns{flex-direction:row}.apple-first .btns{display:flex}.apple-first .btn[data-p=apple]{order:-1}.apple-first .btn[data-p=spotify]{order:0}
+.points{list-style:none;padding:0;margin:0;counter-reset:n;border-top:1px solid var(--fg)}
+.points li{counter-increment:n;display:grid;grid-template-columns:3.2rem 1fr;gap:6px 14px;padding:16px 0;border-bottom:1px solid var(--bd)}
+.points li:before{content:counter(n,decimal-leading-zero);font-family:Didot,"Bodoni 72",Georgia,serif;font-size:1.8rem;line-height:1;color:var(--ac)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:0;border-top:1px solid var(--fg);border-left:1px solid var(--bd)}
+.tile{display:block;padding:20px 16px 18px;border-right:1px solid var(--bd);border-bottom:1px solid var(--bd);text-decoration:none}
+.tile b{display:block;font-size:1.5rem;line-height:1.15;font-weight:700}.tile span{font-size:.78rem;letter-spacing:.14em;text-transform:uppercase;color:var(--mut)}.tile:hover{background:var(--ink);color:var(--onink)}.tile:hover span{color:var(--onink)}
+.list{border-top:1px solid var(--fg)}.row{display:block;padding:20px 0;border-bottom:1px solid var(--bd);text-decoration:none}
+.row h3{margin:0 0 .25em;font:700 1.35rem/1.25 Didot,"Bodoni 72",Georgia,"Noto Serif",serif}.row p{margin:0;color:var(--mut);font-size:.98rem}.row:hover h3{color:var(--ac)}
+.author{display:flex;gap:16px;align-items:center;border-top:1px solid var(--fg);border-bottom:1px solid var(--bd);padding:18px 0;margin:36px 0}
+.author .badge{flex:none;width:58px;height:58px;border-radius:50%;background:var(--ink);color:var(--onink);display:grid;place-items:center;font:700 1.15rem Didot,Georgia,serif}
+.author p{margin:0;font-size:.95rem;color:var(--mut)}.author strong{color:var(--fg);display:block;font-size:1.02rem}
+.mut{color:var(--mut);font-size:.9rem}.crumbs{font-size:.78rem;letter-spacing:.12em;text-transform:uppercase;color:var(--mut);margin-top:26px}.crumbs a{text-decoration:none}
+footer{border-top:1px solid var(--fg);margin-top:64px;padding:26px 0 48px;font-size:.85rem;color:var(--mut)}footer a{margin-right:14px}
+@media (max-width:560px){body{font-size:16px}.panel{padding:14px}.btn{padding:10px 16px}}"""
 
 
 def esc(s): return html.escape(s or "", quote=True)
@@ -181,21 +203,33 @@ def person_ld():
 
 
 def header(lang, switch):
-    ui = UI.get(lang)
     home = f"{BASE}/{lang}/" if lang in LANGS else f"{BASE}/"
-    return f'<header><a class="brand" href="{home}">M365.FM · Mirko Peters</a>{switch}</header>'
+    return f'<div class="top"><div class="wrap"><a class="brand" href="{home}">M365<i>.</i>FM <span class="mut" style="font:400 .8rem sans-serif;letter-spacing:.14em">MIRKO PETERS</span></a>{switch}</div></div>'
 
 
 def footer(lang):
-    ui = UI[lang] if lang in UI else None
+    ui = UI.get(lang)
     about = ui[5] if ui else "About Mirko Peters"
-    return (f'<footer><a href="{BASE}/about/mirko-peters/">{esc(about)}</a> · <a href="https://www.m365.fm">m365.fm</a> · '
-            f'<a href="https://m365con.net">M365Con</a> · <a href="{LINKEDIN}" rel="me">LinkedIn</a> · '
-            f'<a href="{YT_CHANNEL}">YouTube</a></footer>')
+    return (f'<footer><div class="wrap"><a href="{BASE}/about/mirko-peters/">{esc(about)}</a><a href="https://www.m365.fm">m365.fm</a>'
+            f'<a href="https://m365con.net">M365Con</a><a href="{LINKEDIN}" rel="me">LinkedIn</a><a href="{YT_CHANNEL}">YouTube</a></div></footer>')
+
+
+def author_box(lang):
+    ui = UI.get(lang)
+    name = ui[5] if ui else "About Mirko Peters"
+    bio = ui[6] if ui else "Mirko Peters is a Microsoft MVP, host of the podcast M365.FM and initiator of the free online conference M365Con."
+    return (f'<div class="author"><div class="badge">MP</div><div><strong><a href="{BASE}/about/mirko-peters/">Mirko Peters</a> · Microsoft MVP</strong>'
+            f'<p>{esc(bio)}</p></div></div>')
+
+
+PLAT_JS = """<script>(function(){try{var ua=navigator.userAgent||"",pl=navigator.platform||"";var apple=/iPhone|iPad|iPod|Macintosh|Mac OS X/.test(ua)||/Mac|iPhone|iPad/.test(pl)||(navigator.maxTouchPoints>1&&/Mac/.test(pl));
+var d=document.documentElement;if(apple)d.className+=" apple-first";var pick=document.querySelector(apple?'[data-p=apple]':'[data-p=spotify]')||document.querySelector('[data-p=spotify]')||document.querySelector('[data-p=apple]')||document.querySelector('[data-p=spreaker]');if(pick)pick.className+=" main"}catch(e){}})();</script>"""
 
 
 def build():
     eps, pub, seo = load()
+    plat = json.load(open(ROOT / "data" / "platforms.json", encoding="utf-8")) if (ROOT / "data" / "platforms.json").exists() else {}
+    elinks = json.load(open(ROOT / "data" / "episode_links.json", encoding="utf-8")) if (ROOT / "data" / "episode_links.json").exists() else {}
     if OUT.exists():
         shutil.rmtree(OUT)
     OUT.mkdir(parents=True)
@@ -261,24 +295,32 @@ def build():
                 {"@type": "ListItem", "position": 3, "name": e["title"], "item": canonical}]},
             person_ld(),
         ]
-        lis = "".join(f"<li>{b}</li>" for b in bullets)
-        btns = (f'<a class="btn" href="{spk}">🎧 {esc(ui[0])}</a><a class="btn alt" href="{yt}">▶ {esc(ui[1])}</a>' +
-                (f'<a class="btn alt" href="{tr}">📄 {esc(ui[2])}</a>' if tr else ""))
-        rel = "".join(f'<li><a href="{url_of(x)}">{esc(x["e"]["title"])}</a></li>' for x in more)
+        lis = "".join(f"<li>{x}</li>" for x in bullets)
+        el = elinks.get(f"{vid}:{l}", {}); sh = plat.get(l, {})
+        apple = el.get("apple") or sh.get("apple_show"); spot = el.get("spotify") or sh.get("spotify_show")
+        btns = ""
+        if apple: btns += f'<a class="btn" data-p="apple" href="{apple}" rel="noopener">Apple Podcasts</a>'
+        if spot: btns += f'<a class="btn" data-p="spotify" href="{spot}" rel="noopener">Spotify</a>'
+        btns += f'<a class="btn" data-p="spreaker" href="{spk}" rel="noopener">🎧 {esc(ui[0])}</a>'
+        btns += f'<a class="btn" href="{yt}" rel="noopener">▶ {esc(ui[1])}</a>'
+        if tr: btns += f'<a class="btn" href="{tr}">📄 {esc(ui[2])}</a>'
+        rel = "".join(f'<a class="row" href="{url_of(x)}"><h3>{esc(x["e"]["title"])}</h3></a>' for x in more)
         body = f"""{header(l, lang_switch(l, alts, [x for x in LANGS if x in alts]))}
-<main><article>
-<p class="mut"><a href="{BASE}/{l}/">{esc(ui[7])}</a> › {esc(LANGS[l][0])}</p>
+<main class="wrap"><article>
+<div class="crumbs"><a href="{BASE}/{l}/">{esc(ui[7])}</a> / {esc(LANGS[l][0])} / {it["date"]}</div>
+<div class="kicker">M365.FM · {esc(LANGS[l][0])}</div>
 <h1>{esc(e["title"])}</h1>
-<p>{intro}</p>
-<iframe src="https://widget.spreaker.com/player?episode_id={it["eid"]}&amp;theme=light&amp;playlist=false" height="131" loading="lazy" title="{esc(e["title"])}"></iframe>
-<h2>{esc(hdr)}</h2><ul>{lis}</ul>
-<p>{aud}</p>
-<p>{btns}</p>
+<p class="lede">{intro}</p>
+<div class="panel"><iframe src="https://widget.spreaker.com/player?episode_id={it["eid"]}&amp;theme=light&amp;playlist=false" height="131" loading="lazy" title="{esc(e["title"])}"></iframe>
+<div class="btns">{btns}</div></div>
+<h2>{esc(hdr)}</h2><ol class="points">{lis}</ol>
+<p class="lede" style="margin-top:1.4em">{aud}</p>
+{author_box(l)}
 <p class="mut">{esc(ui[6])}</p>
 </article>
-{('<h2>' + esc(ui[4]) + '</h2><ul>' + rel + '</ul>') if rel else ''}
-<p><a href="{BASE}/{l}/">{esc(ui[3])} →</a></p></main>
-{footer(l)}"""
+{('<h2>' + esc(ui[4]) + '</h2><div class="list">' + rel + '</div>') if rel else ''}
+<p style="margin-top:1.6em"><a class="btn" href="{BASE}/{l}/">{esc(ui[3])} →</a></p></main>
+{footer(l)}{PLAT_JS}"""
         write(f'{l}/{it["slug"]}/index.html',
               page(l, e["title"], short(intro), canonical, body, alts, ld))
         sitemap.append((canonical, it["date"], alts))
@@ -290,39 +332,45 @@ def build():
         title = s.get("title") or f"M365.FM – {LANGS[l][0]}"
         d = short(s.get("description", ""), 300)
         cards = "".join(
-            f'<div class="card"><h2><a href="{url_of(i)}">{esc(i["e"]["title"])}</a></h2><p>{esc(short(parse_desc(i["e"]["desc"])[0], 200))}</p></div>'
+            f'<a class="row" href="{url_of(i)}"><h3>{esc(i["e"]["title"])}</h3><p>{esc(short(parse_desc(i["e"]["desc"])[0], 190))}</p></a>'
             for i in by_lang[l])
         ld = [{"@context": "https://schema.org", "@type": "PodcastSeries", "name": title, "url": f"{BASE}/{l}/",
                "description": d, "inLanguage": LANGS[l][1], "webFeed": f"https://www.spreaker.com/show/{LANGS[l][3]}/episodes/feed",
-               "sameAs": [f"https://www.spreaker.com/show/{LANGS[l][3]}"], "author": {"@id": f"{BASE}/about/mirko-peters/#person"}},
+               "sameAs": [x for x in [f"https://www.spreaker.com/show/{LANGS[l][3]}", plat.get(l, {}).get("apple_show"), plat.get(l, {}).get("spotify_show")] if x],
+               "author": {"@id": f"{BASE}/about/mirko-peters/#person"}},
               person_ld()]
+        sh = plat.get(l, {})
+        sbtn = ""
+        if sh.get("apple_show"): sbtn += f'<a class="btn" data-p="apple" href="{sh["apple_show"]}">Apple Podcasts</a>'
+        if sh.get("spotify_show"): sbtn += f'<a class="btn" data-p="spotify" href="{sh["spotify_show"]}">Spotify</a>'
+        sbtn += f'<a class="btn" data-p="spreaker" href="https://www.spreaker.com/show/{LANGS[l][3]}">🎧 {esc(ui[0])}</a><a class="btn" href="https://www.m365.fm">m365.fm</a>'
         body = f"""{header(l, lang_switch(l, alts_home, active))}
-<main><h1>{esc(title)}</h1><p>{esc(d)}</p>
-<p><a class="btn" href="https://www.spreaker.com/show/{LANGS[l][3]}">🎧 {esc(ui[0])}</a><a class="btn alt" href="https://www.m365.fm">m365.fm</a></p>
-<h2>{esc(ui[3])}</h2>{cards}
-<p class="mut">{esc(ui[6])}</p></main>{footer(l)}"""
+<main class="wrap"><div class="kicker">{esc(LANGS[l][0])} · {len(by_lang[l])}</div><h1>{esc(title)}</h1><p class="lede">{esc(d)}</p>
+<div class="btns">{sbtn}</div>
+<h2>{esc(ui[3])}</h2><div class="list">{cards}</div>
+{author_box(l)}</main>{footer(l)}{PLAT_JS}"""
         write(f"{l}/index.html", page(l, title, short(d), f"{BASE}/{l}/", body, alts_home, ld, og_type="website"))
         sitemap.append((f"{BASE}/{l}/", TODAY, alts_home))
 
     # Wurzel
     alts_home = {x: f"{BASE}/{x}/" for x in active}
-    grid = "".join(f'<a href="{BASE}/{l}/" hreflang="{LANGS[l][1]}" lang="{LANGS[l][1]}"><strong>{esc(LANGS[l][0])}</strong><br><span class="mut">{len(by_lang[l])}</span></a>' for l in active)
-    root_body = f"""<header><a class="brand" href="{BASE}/">M365.FM · Mirko Peters</a></header>
-<main><h1>Microsoft 365, Copilot &amp; AI – podcast episodes in {len(active)} languages</h1>
-<p>Animated explainers about Microsoft 365, Copilot, Azure and the Power Platform by Microsoft MVP Mirko Peters – as AI-dubbed audio episodes in your language. Free, with transcripts.</p>
+    grid = "".join(f'<a class="tile" href="{BASE}/{l}/" hreflang="{LANGS[l][1]}" lang="{LANGS[l][1]}"><b>{esc(LANGS[l][0])}</b><span>{len(by_lang[l])} episodes</span></a>' for l in active)
+    root_body = f"""{header('en', '')}
+<main class="wrap"><div class="kicker">Microsoft 365 · Copilot · Azure · AI</div>
+<h1>The M365.FM podcast in {len(active)} languages</h1>
+<p class="lede">Animated explainers about Microsoft 365, Copilot, Azure and the Power Platform by Microsoft MVP Mirko Peters – as AI-dubbed audio episodes in your language. Free, with transcripts.</p>
 <div class="grid">{grid}</div>
-<p><a href="{BASE}/about/mirko-peters/">About Mirko Peters</a></p></main>{footer_en()}"""
+{author_box('en')}</main>{footer_en()}"""
     write("index.html", page("en", "M365.FM – Microsoft 365, Copilot & AI podcast in 19 languages | Mirko Peters",
           "AI-dubbed podcast episodes about Microsoft 365, Copilot, Azure and Power Platform by Microsoft MVP Mirko Peters – in German, Spanish, French, Japanese and more.",
           f"{BASE}/", root_body, alts_home, [person_ld(), {"@context": "https://schema.org", "@type": "WebSite", "name": "M365.FM international", "url": f"{BASE}/", "publisher": {"@id": f"{BASE}/about/mirko-peters/#person"}}], og_type="website"))
     sitemap.append((f"{BASE}/", TODAY, None))
 
     # Entity-Seite
-    about = f"""<header><a class="brand" href="{BASE}/">M365.FM · Mirko Peters</a></header>
-<main><h1>Mirko Peters – Microsoft MVP, podcaster, M365Con organizer</h1>
-<p>Mirko Peters is a Microsoft MVP who explains Microsoft 365, Microsoft Copilot, Azure, Power Platform, Microsoft Fabric and AI agents for IT admins, architects, developers and decision makers. He hosts the podcast <a href="https://www.m365.fm">M365.FM</a> and the <em>m365 Show</em> on YouTube, and organizes the free online conference <a href="https://m365con.net">M365Con</a>.</p>
-<ul><li><a href="https://www.m365.fm">M365.FM – the podcast</a></li><li><a href="https://m365con.net">M365Con – free online conference</a></li>
-<li><a href="{LINKEDIN}" rel="me">LinkedIn</a></li><li><a href="{YT_CHANNEL}">YouTube: m365 Show by Mirko Peters</a></li></ul>
+    about = f"""{header('en', '')}
+<main class="wrap"><div class="kicker">Microsoft MVP</div><h1>Mirko Peters</h1>
+<p class="lede">Mirko Peters is a Microsoft MVP who explains Microsoft 365, Microsoft Copilot, Azure, Power Platform, Microsoft Fabric and AI agents for IT admins, architects, developers and decision makers. He hosts the podcast <a href="https://www.m365.fm">M365.FM</a> and the <em>m365 Show</em> on YouTube, and organizes the free online conference <a href="https://m365con.net">M365Con</a>.</p>
+<div class="btns"><a class="btn main" href="https://www.m365.fm">M365.FM</a><a class="btn" href="https://m365con.net">M365Con</a><a class="btn" href="{LINKEDIN}" rel="me">LinkedIn</a><a class="btn" href="{YT_CHANNEL}">YouTube</a></div>
 <h2>Podcast episodes by language</h2><div class="grid">{grid}</div></main>{footer_en()}"""
     write("about/mirko-peters/index.html", page("en", "Mirko Peters – Microsoft MVP, M365.FM podcast host & M365Con organizer",
           "Mirko Peters is a Microsoft MVP and host of the M365.FM podcast about Microsoft 365, Copilot, Azure and AI. Organizer of the free online conference M365Con.",
@@ -342,14 +390,15 @@ def build():
     write("llms.txt", f"# M365.FM – Mirko Peters\n\n> AI-dubbed podcast episodes about Microsoft 365, Copilot, Azure and Power Platform by Microsoft MVP Mirko Peters, in {len(active)} languages.\n\n"
           f"- [About Mirko Peters]({BASE}/about/mirko-peters/)\n" + "".join(f"- [{LANGS[l][0]}]({BASE}/{l}/)\n" for l in active))
     write(f"{INDEXNOW_KEY}.txt", INDEXNOW_KEY)
-    write("404.html", page("en", "Not found", "Page not found", f"{BASE}/404.html", '<main><h1>404</h1><p><a href="%s/">M365.FM</a></p></main>' % BASE))
+    if _dom:
+        write("CNAME", _dom)
+    write("404.html", page("en", "Not found", "Page not found", f"{BASE}/404.html", '<main class="wrap"><h1>404</h1><p><a class="btn" href="%s/">M365.FM</a></p></main>' % BASE))
     json.dump([u for u, _, _ in sitemap], open(ROOT / "data" / "urls.json", "w"), indent=0)
     print(f"{len(items)} Episodenseiten, {len(active)} Sprachen, {len(sitemap)} URLs → docs/")
 
 
 def footer_en():
-    return (f'<footer><a href="{BASE}/about/mirko-peters/">About Mirko Peters</a> · <a href="https://www.m365.fm">m365.fm</a> · '
-            f'<a href="https://m365con.net">M365Con</a> · <a href="{LINKEDIN}" rel="me">LinkedIn</a> · <a href="{YT_CHANNEL}">YouTube</a></footer>')
+    return footer("en")
 
 
 if __name__ == "__main__":
