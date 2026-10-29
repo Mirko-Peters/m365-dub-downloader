@@ -1,5 +1,5 @@
 """Impressum und Datenschutz (de/en). Kontakt-E-Mail in CONTACT_EMAIL eintragen (Pflichtangabe im Impressum)."""
-CONTACT_EMAIL = ""   # z. B. "kontakt@m365.fm" – leer = Zeile wird weggelassen
+CONTACT_EMAIL = "mirko.peters@m365.fm"   # z. B. "kontakt@m365.fm" – leer = Zeile wird weggelassen
 NAME, STREET, CITY = "Mirko Peters (M365.FM)", "Julius-Hölder-Str 60", "70597 Stuttgart"
 AUTH_DE = "Der Landesbeauftragte für den Datenschutz und die Informationsfreiheit Baden-Württemberg"
 
