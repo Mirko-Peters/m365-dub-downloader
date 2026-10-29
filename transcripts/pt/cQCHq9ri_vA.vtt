@@ -1,0 +1,1297 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:03.820
+Imagine lançar seu primeiro agente do Copilot Studio e, em vez de impressionar alguém,
+
+00:00:03.940 --> 00:00:08.720
+ele solta algo frágil como, acho que a política diz talvez, que essa é a natural da criação de bots.
+
+00:00:10.020 --> 00:00:13.480
+Mas com alguns ajustes e instruções claras baseadas no documento de política real,
+
+00:00:13.560 --> 00:00:16.380
+você pode transformar esse erro em um acerto crítico que cita o conteúdo de forma precisa.
+
+00:00:17.160 --> 00:00:20.340
+Ao final deste vídeo, você saberá como recriar uma resposta ruim no painel de teste,
+
+00:00:20.440 --> 00:00:23.340
+corrigi-la para que o bot cite o documento real e publicar um piloto funcional.
+
+00:00:24.120 --> 00:00:27.940
+Um aviso rápido, clique em inscrever-se agora para que esses tutoriais sejam adicionados automaticamente à sua playlist.
+
+00:00:27.940 --> 00:00:30.800
+É claro que obter um resultado limpo na janela de teste é fácil.
+
+00:00:31.300 --> 00:00:34.700
+Verdadeira dificuldade aparece quando seu bot deixa o ambiente controlado e tropeça no mundo real.
+
+00:00:35.540 --> 00:00:37.480
+Por que seu bot de teste perfeito entra em colapso no mundo?
+
+00:00:37.780 --> 00:00:41.840
+Então por que um bot que parece impecável no painel de teste começa a falhar assim que é exposto aos usuários reais?
+
+00:00:42.680 --> 00:00:47.120
+Em resumo, o estúdio mantém as coisas protegidas e polidas, enquanto o mundo real não tem essa cortesia.
+
+00:00:47.980 --> 00:00:49.820
+No estúdio, as entradas que você fornece são organizadas.
+
+00:00:50.420 --> 00:00:54.760
+As perguntas são curtas, bem formuladas e geralmente correspondem aos exemplos de treinamento que você prepara.
+
+00:00:54.980 --> 00:00:56.260
+É por isso que parece uma sequência perfeita.
+
+00:00:56.260 --> 00:00:59.340
+Mas ao passar para a produção, as pessoas digitam como pessoa.
+
+00:00:59.740 --> 00:01:02.300
+Um sênior perguntará quanto posso solicitar quando estou em um hotel.
+
+00:01:02.760 --> 00:01:05.620
+Um representante pode digitar o limite de despesas de hotel com erro de digitação.
+
+00:01:05.900 --> 00:01:08.520
+Ou pode simplesmente dizer, lembre-me novamente sobre o dinheiro de viagem.
+
+00:01:09.240 --> 00:01:14.760
+Todos eles significam a mesma coisa, mas se você testou apenas qual limite de despesa, o bot nem sempre conectará os pontos.
+
+00:01:15.800 --> 00:01:17.340
+Aqui está uma maneira de ver essa lacuna agora mesmo.
+
+00:01:17.780 --> 00:01:20.080
+Abra o painel de teste e lance três variações para o seu bot.
+
+00:01:20.340 --> 00:01:23.600
+O primeiro é a versão limpa, depois uma reescrita casual e em seguida uma versão com erro de digitação.
+
+00:01:23.600 --> 00:01:25.120
+Observe como as respostas mudam.
+
+00:01:25.560 --> 00:01:27.920
+Às vezes ele acerta as três, às vezes apenas a versão limpa funciona.
+
+00:01:28.400 --> 00:01:32.060
+Essa é a sua primeira dica de que resultados de teste bonitos não equivalem à sobrevivência no mundo real.
+
+00:01:32.340 --> 00:01:33.900
+A razão técnica é a cobertura de intenção.
+
+00:01:34.300 --> 00:01:37.920
+Os bots dependem de frases de gatilho e definições de tópicos para saber quando disparar uma resposta.
+
+00:01:38.300 --> 00:01:40.840
+Se todos os seus exemplos parecerem iguais, o modelo se torna frágil.
+
+00:01:41.260 --> 00:01:42.400
+O único sinônimo pode confundir.
+
+00:01:42.760 --> 00:01:44.020
+A solução é entediante, mas funciona.
+
+00:01:44.360 --> 00:01:48.600
+Adicione frases de gatilho mais amplas aos seus tópicos e não use apenas a linguagem formal dos seus documentos de política.
+
+00:01:48.600 --> 00:01:52.700
+Inclua frases casuais, abreviadas e até mesmo um pouco desorganizadas que as pessoas realmente usam.
+
+00:01:52.940 --> 00:01:56.280
+Você não precisa de desenhas, apenas o suficiente para cobrir as variações óbvias e então teste novamente.
+
+00:01:56.620 --> 00:01:57.960
+As diferenças entre canais estão nem soma de fim.
+
+00:01:58.300 --> 00:01:59.960
+O painel de teste do estúdio é apenas uma simulação.
+
+00:02:00.420 --> 00:02:03.600
+Assim que você publica em um canal como o Teams, SharePoint ou um site de demonstração,
+
+00:02:03.680 --> 00:02:06.940
+a plataforma pode alterar como o texto de entrada é tratado ou como as respostas renderizadas.
+
+00:02:07.080 --> 00:02:08.400
+O Teams pode dividir as linhas de forma diferente.
+
+00:02:08.840 --> 00:02:10.380
+Uma página da web pode remover a formatação.
+
+00:02:10.700 --> 00:02:14.860
+Mesmo pequenas mudanças, como mover uma frase-chave para outra linha, podem alterar o peso que o modelo atribui a ela.
+
+00:02:14.860 --> 00:02:18.400
+É por isso que a Microsoft destaca a necessidade de testes iterativos em todos os canais.
+
+00:02:19.280 --> 00:02:23.180
+Um bot que é aprovado no estúdio ainda pode tropeçar com a formatação do mundo real, altera o cenário.
+
+00:02:23.660 --> 00:02:24.840
+Os usuários também trazem expectativa.
+
+00:02:25.340 --> 00:02:27.400
+Para eles, reformular uma pergunta é uma conversa normal.
+
+00:02:27.940 --> 00:02:30.580
+Eles não estão pensando em tensões, gatilhos ou sobreposição semântica.
+
+00:02:30.920 --> 00:02:33.460
+Eles apenas presumem que o bot entende como um colega de trabalho entender.
+
+00:02:33.800 --> 00:02:36.460
+Uma falha grave, especialmente uma demonstração, e a confiança desaparece.
+
+00:02:36.700 --> 00:02:38.060
+É aí que os construtores iniciantes dão uma.
+
+00:02:38.300 --> 00:02:40.460
+O ensaio no estúdio lhes deu uma falsa segurança,
+
+00:02:41.100 --> 00:02:43.740
+mas a primeira entrada casual do usuário no Teams derrubou a ilusão.
+
+00:02:43.740 --> 00:02:45.420
+Vamos fundamentar isso com mais um exemplo.
+
+00:02:45.880 --> 00:02:47.740
+No estúdio você digita qual o limite de despesas.
+
+00:02:48.580 --> 00:02:49.580
+O bot responde diretamente.
+
+00:02:49.660 --> 00:02:51.500
+A política estabelece o ST dólares por dia para a hospedagem.
+
+00:02:52.020 --> 00:02:52.420
+Perfeito.
+
+00:02:52.840 --> 00:02:53.200
+Public.
+
+00:02:53.640 --> 00:02:54.180
+Agora tente aí.
+
+00:02:54.260 --> 00:02:55.900
+Quanto posso ser reembolsado por um hotel mesmo?
+
+00:02:56.500 --> 00:03:01.280
+Em vez de citar a política, o bot entrega algo como verifique com RH ou faz um palpite impreciso.
+
+00:03:01.760 --> 00:03:03.300
+Mesma intenção, resultado totalmente diferente.
+
+00:03:03.820 --> 00:03:06.080
+Essa troca precisa no ensaio e vaga na produção.
+
+00:03:06.320 --> 00:03:08.000
+É exatamente sobre o que estamos falando.
+
+00:03:08.800 --> 00:03:09.760
+A lição prática é esta.
+
+00:03:10.540 --> 00:03:11.780
+Trate o estúdio como um treino de lua.
+
+00:03:11.780 --> 00:03:14.220
+Útil para aprender, mas não é uma prova de prontidão.
+
+00:03:14.540 --> 00:03:17.440
+Antes de seguir em frente, tente o teste de três variações no painel de testes
+
+00:03:17.440 --> 00:03:19.980
+e em seguida amplie seus tópicos para incluir sinônimos e frases casuais.
+
+00:03:20.500 --> 00:03:23.540
+Finalmente, ao publicar, teste novamente em cada canal onde o bot irá operar.
+
+00:03:23.880 --> 00:03:25.600
+Você encontrará problemas antes que seus usuários encontram.
+
+00:03:25.940 --> 00:03:27.460
+E há uma armadilha ainda maior à espera.
+
+00:03:27.820 --> 00:03:29.840
+Porque mesmo que você tenha o fraseado e os canais cobertos,
+
+00:03:29.900 --> 00:03:32.540
+seu bot ainda pode falhar se não estiver fundamentado na fonte correta.
+
+00:03:32.800 --> 00:03:34.880
+Quando ele para de errar perguntas e começa a inventar coisas.
+
+00:03:35.240 --> 00:03:37.860
+Imagine um bot que parece confiante, mas está apenas chutando.
+
+00:03:38.220 --> 00:03:39.460
+É aí que as coisas ficam complicadas.
+
+00:03:39.460 --> 00:03:47.180
+O primeiro erro de novato é tratar o Copilot Studio como uma bola de cristal
+
+00:03:47.180 --> 00:03:48.260
+em vez de um livro de regras.
+
+00:03:48.940 --> 00:03:51.240
+Ao lançar um agente sem fundamentá-lo em conhecimento real,
+
+00:03:51.360 --> 00:03:54.620
+você está basicamente enviando um estagiário júnior para a sala de reuniões sem preparo algum.
+
+00:03:55.040 --> 00:03:57.540
+Eles falarão rápido, parecerão confiantes e metade do que disserem
+
+00:03:57.540 --> 00:03:58.860
+cairá por terra sem que alguém verificar.
+
+00:03:59.360 --> 00:04:01.140
+Essa é a armadilha de deixar seu bot sem base de conhecimento.
+
+00:04:01.460 --> 00:04:02.540
+No início, o brilho escondiz.
+
+00:04:02.540 --> 00:04:07.360
+Uma nova versão no estúdio parece ótima, saudações educadas, respostas rápidas sem atrasos visíveis.
+
+00:04:08.000 --> 00:04:10.260
+Mas por baixo do capô não há nada sólido sustentando essas palavras.
+
+00:04:10.640 --> 00:04:12.520
+O sistema está extraindo padrões, não fatos.
+
+00:04:13.200 --> 00:04:14.780
+Bots sem base de conhecimento não sabem nada.
+
+00:04:15.240 --> 00:04:15.740
+Eles blefam.
+
+00:04:16.340 --> 00:04:20.760
+Embora um blefe possa parecer convincente no painel de teste, os usuários em produção identificarão instantaneamente.
+
+00:04:21.220 --> 00:04:23.760
+O pior resultado não são apenas respostas fracas, são as alucinações.
+
+00:04:23.760 --> 00:04:27.660
+É quando um bot inventa algo que parece correto, mas não tem base na realidade.
+
+00:04:28.340 --> 00:04:29.940
+Você pergunta sobre reembolso de viagem.
+
+00:04:30.440 --> 00:04:33.620
+E, em vez de recusar educadamente, o bot inventa um número que soa plausível.
+
+00:04:34.140 --> 00:04:36.600
+Um funcionário reserva um hotel com base nessa resposta errada,
+
+00:04:36.720 --> 00:04:39.440
+e de repente você está lidando com disputas de despesas e e-mails irritados.
+
+00:04:39.820 --> 00:04:41.920
+A frase parecia profissional, mas o conteúdo era vazio.
+
+00:04:42.460 --> 00:04:43.960
+O exemplo do contoso Lab se torna isso real.
+
+00:04:44.420 --> 00:04:48.960
+No exercício prático oficial, você deve carregar um arquivo chamado expensespolicy.docx.
+
+00:04:49.420 --> 00:04:52.680
+Nele, o limite de hospedagem está claramente declarado como 200 dólares por noite.
+
+00:04:52.680 --> 00:04:56.340
+Agora, se você pula a base de conhecimento e perguntar ao seu novo bot qual é a política de hotel,
+
+00:04:57.020 --> 00:04:58.860
+ele pode responder confiantemente 100 dólares por noite.
+
+00:04:59.440 --> 00:05:00.160
+Totalmente inventado.
+
+00:05:00.500 --> 00:05:04.080
+Somente quando você realmente anexa o arquivo expensespolicy.docx é que o modelo para de improvisar.
+
+00:05:05.100 --> 00:05:06.260
+Botes com base de conhecimento citam.
+
+00:05:06.820 --> 00:05:10.360
+De acordo com a política de viagens corporativas, a hospedagem limitada é 200 dólares por dia.
+
+00:05:10.800 --> 00:05:14.300
+E essa diferença entre fabricação e citação resume-se à etapa de fundamentação.
+
+00:05:14.800 --> 00:05:16.560
+Então aqui está exatamente como corrigir isso na interface.
+
+00:05:17.060 --> 00:05:18.580
+Vá para o seu agente no Compilot Studio.
+
+00:05:19.000 --> 00:05:20.440
+Na tela de visão geral, clique em Conhecimento.
+
+00:05:20.440 --> 00:05:23.160
+Selecione o sinal de mais para adicionar conhecimento e escolha carregar um arquivo.
+
+00:05:23.480 --> 00:05:26.200
+Ponte para o expensespolicy.docx ou outra fonte confiável.
+
+00:05:26.680 --> 00:05:30.060
+Se preferir conectar um site público ou local do SharePoint, você também pode escolher isso,
+
+00:05:30.100 --> 00:05:32.940
+mas arquivos são mais práticos após o upload e aguarde.
+
+00:05:33.320 --> 00:05:35.960
+A indexação pode levar 10 minutos ou mais até que o conteúdo esteja puro.
+
+00:05:36.180 --> 00:05:39.020
+Não entre em pânico se as primeiras consultas de teste não extraem informações imediatamente.
+
+00:05:39.240 --> 00:05:40.940
+Assim que a indexação terminar, refaça a pergunta.
+
+00:05:41.080 --> 00:05:44.340
+Quando estiver fundamentado corretamente, você verá a resposta real de 200 dólares
+
+00:05:44.340 --> 00:05:46.800
+junto com uma pequena citação mostrando que veio do seu documento enviado.
+
+00:05:47.620 --> 00:05:49.880
+Essa citação é como você sabe que tirou a sorte grande.
+
+00:05:50.680 --> 00:05:54.840
+Um equívoco comum é assumir que o reforço conversacional cobrirá magicamente as lacunas.
+
+00:05:55.700 --> 00:05:58.620
+O reforço não cria consciência de política, ele apenas amplifica padrões de texto.
+
+00:05:59.160 --> 00:06:02.580
+Sem uma fonte de conhecimento para ancorar, o reforço despeja alegremente conteúdo genérico.
+
+00:06:03.020 --> 00:06:06.580
+É como dar 3 xícaras de café a um estagiário e esperar que a cafeína compense a falta de conhecimento.
+
+00:06:07.380 --> 00:06:08.900
+Os documentos do laboratório até avisaram sobre isso.
+
+00:06:08.900 --> 00:06:13.200
+Se nenhuma correspondência for encontrada no seu conhecimento, o reforço pode recorrer
+
+00:06:13.200 --> 00:06:16.440
+ao conhecimento geral integrado do modelo e retornar respostas vagas ou imprecisas.
+
+00:06:16.820 --> 00:06:20.000
+É por isso que você deve configurar tópicos críticos para pesquisar apenas nas suas fontes
+
+00:06:20.000 --> 00:06:21.360
+adicionadas quando a precisão for importante.
+
+00:06:21.760 --> 00:06:25.060
+Não deixe o bot solto no modelo de linguagem mais amplo se o que está em jogo é conformidade,
+
+00:06:25.200 --> 00:06:25.880
+finanças ou RH.
+
+00:06:26.360 --> 00:06:28.540
+As consequências de ignorar este passo se acumulam rapidamente.
+
+00:06:28.960 --> 00:06:32.620
+Bots sem base podem funcionar bem para conversas informais, mas quando respondem sobre reembolsos
+
+00:06:32.620 --> 00:06:34.760
+ou políticas de licença, querem chamados reais para o suporte.
+
+00:06:34.760 --> 00:06:39.300
+Imagine explicar ao financeiro porque 5 funcionários registraram solicitações com a taxa errada
+
+00:06:39.300 --> 00:06:41.200
+porque seu bot inventou um limite na hora.
+
+00:06:41.840 --> 00:06:44.340
+A correção custa mais do que apenas carregar o documento no primeiro dia.
+
+00:06:45.200 --> 00:06:48.200
+Fundamentação transforma seu agente de um estagiário entusiasmado, porém sem noção
+
+00:06:48.200 --> 00:06:49.780
+que os jogadores chamariam de regra de regras.
+
+00:06:50.140 --> 00:06:51.460
+Ele cita o manual, não a própria intuição.
+
+00:06:52.100 --> 00:06:55.520
+Anexe o documento de política de despesa e, de repente, o sistema impõe as normas da
+
+00:06:55.520 --> 00:06:56.600
+empresa em vez de improvisar.
+
+00:06:57.080 --> 00:06:59.960
+Melhor ainda, as respostas trazem comprovantes e situações claras que você pode verificar.
+
+00:07:00.260 --> 00:07:01.440
+É assim que você protege a confiança.
+
+00:07:01.440 --> 00:07:04.560
+Em um dado 1 falha crítica, você consegue uma máquina de fofoca desconfiante que
+
+00:07:04.560 --> 00:07:05.500
+espalha regras inventada.
+
+00:07:06.020 --> 00:07:09.460
+Em um dado 20 sucesso crítico, você construiu um especialista fundamentado e com citações.
+
+00:07:09.860 --> 00:07:13.620
+A única maneira de obter o segundo é alimentá-lo com fontes de conhecimento verificadas desde
+
+00:07:13.620 --> 00:07:13.940
+o início.
+
+00:07:14.560 --> 00:07:18.000
+E uma vez que seu bot finalmente consegue dizer a verdade, você enfrenta o próximo desafio.
+
+00:07:18.080 --> 00:07:21.380
+Moldar como ele diz essa verdade, porque precisão sem personalidade ainda faz os usuários
+
+00:07:21.380 --> 00:07:22.060
+desistirem.
+
+00:07:22.900 --> 00:07:25.720
+Ensinar a personalidade do seu bot vem a seguir no Copilot Studio.
+
+00:07:25.900 --> 00:07:27.640
+Você não recebe uma de graça.
+
+00:07:28.380 --> 00:07:29.120
+Você precisa escrevê-la.
+
+00:07:29.120 --> 00:07:32.880
+É aqui que você para de deixar o sistema soar com um modelo de teste e começa a moldá-lo
+
+00:07:32.880 --> 00:07:34.580
+em algo que seus usuários realmente queiram falar.
+
+00:07:35.220 --> 00:07:38.300
+Na prática, isso significa editar os campos de nome, descrição e instruções que ficam
+
+00:07:38.300 --> 00:07:39.180
+na página de visão geral.
+
+00:07:39.840 --> 00:07:44.020
+Deixe-os em branco e você terá respostas prontas que parecem um NPC preso no modo tutorial.
+
+00:07:44.960 --> 00:07:47.020
+Aqui está a parte que muitos construtores de primeira viagem têm.
+
+00:07:47.540 --> 00:07:50.000
+O sistema já tem um estilo padrão no segundo e que você clica em criar.
+
+00:07:51.000 --> 00:07:54.420
+Se você não mexer nos campos, terá um atendente insípido, sem autoridade e sem contexto.
+
+00:07:54.420 --> 00:07:56.440
+Contexto é o que conquista a confiança.
+
+00:07:56.920 --> 00:08:00.100
+Em ambientes como RH ou Finanças, um tom genérico faz as pessoas pensarem que estão
+
+00:08:00.100 --> 00:08:02.620
+testando um protótipo, não usando uma ferramenta na qual podem confiar.
+
+00:08:03.320 --> 00:08:04.120
+Um exemplo rápido.
+
+00:08:04.240 --> 00:08:07.780
+Digamos que você pretendia construir um especialista em política de despesas, mas como nunca o
+
+00:08:07.780 --> 00:08:11.240
+renomeou ou descreveu, a gente aparece como um Copilot genérico sem histórico.
+
+00:08:12.060 --> 00:08:14.740
+Alguém pergunta sobre reembolso de hotel esperando o conselho profissional.
+
+00:08:15.600 --> 00:08:19.620
+O que eles recebem é um texto simples e sem graça, sem contexto, que cria o sinal sutil
+
+00:08:19.620 --> 00:08:20.240
+mais poderoso.
+
+00:08:20.320 --> 00:08:21.080
+Não confie em mim.
+
+00:08:21.080 --> 00:08:25.340
+Confiança se esvai rapidamente, perca usuários no primeiro contato e eles raramente voltam.
+
+00:08:25.660 --> 00:08:28.280
+Pense em toda a configuração como se estivesse escrevendo uma ficha e personagem.
+
+00:08:28.880 --> 00:08:33.000
+O nome é a classe, a descrição é o histórico, a caixa de instruções longas são os atributos
+
+00:08:33.000 --> 00:08:34.380
+e o tom é o alinhamento.
+
+00:08:35.000 --> 00:08:37.420
+Você não apareceria em uma campanha sem distribuir os pontos de habilidade.
+
+00:08:37.880 --> 00:08:39.200
+Não publique um bot dessa maneira também.
+
+00:08:39.600 --> 00:08:40.720
+Agora, os números brutos importam.
+
+00:08:41.200 --> 00:08:44.200
+O campo de nome do bot limita a 30 caracteres, então mantenha o curto e direto.
+
+00:08:44.200 --> 00:08:47.680
+Especialista em política de despesas, guia de viagem, assistente de benefícios.
+
+00:08:48.560 --> 00:08:52.280
+A descrição permite cerca de mil caracteres, o que é suficiente para algumas frases claras.
+
+00:08:52.720 --> 00:08:56.640
+Algo como, este agente fornece aos funcionários respostas atualizadas da política oficial
+
+00:08:56.640 --> 00:08:57.160
+de viagens.
+
+00:08:58.000 --> 00:09:00.040
+Ele cita trechos relevantes e evita especulações.
+
+00:09:01.500 --> 00:09:04.840
+Depois, você tem um campo de instruções que é seu espaço flexível com até 8 mil caracteres.
+
+00:09:05.840 --> 00:09:07.620
+É aí que você pode fixar as regras de trabalho reais.
+
+00:09:07.620 --> 00:09:10.120
+Não diga apenas para ser prestativo, explique uma noite com dúvida.
+
+00:09:10.500 --> 00:09:12.240
+Sempre cite a linha da política quando disponível.
+
+00:09:12.560 --> 00:09:13.600
+Evite respostas especulativas.
+
+00:09:14.520 --> 00:09:17.440
+Resume uma frase clara para executivos e depois forneça citação.
+
+00:09:18.680 --> 00:09:21.180
+Uma lista de verificação prática, você pode ler ou criar se parece com isto.
+
+00:09:21.660 --> 00:09:24.260
+No meio à função, escreva uma breve descrição da especialidade.
+
+00:09:24.640 --> 00:09:29.440
+Defina o tom formal casual simples para leigos e preencha instruções com regras de comportamento
+
+00:09:29.440 --> 00:09:32.180
+que incluir o que evitar e como formatar e como formatar.
+
+00:09:32.760 --> 00:09:34.520
+Cada uma dessas etapas fortalece a identidade.
+
+00:09:35.040 --> 00:09:36.520
+Nenhuma delas requer configuração avançada.
+
+00:09:36.520 --> 00:09:39.920
+Está tudo lá durante a criação ou pode ser editado depois na página de visão geral.
+
+00:09:40.480 --> 00:09:42.160
+A orientação de tom é sutil, mas poderosa.
+
+00:09:42.960 --> 00:09:46.100
+Você pode ajustá-lo explicitamente com frases como formal e profissional
+
+00:09:46.100 --> 00:09:48.860
+ou casual e fácil de entender para funcionários sem formação técnica.
+
+00:09:49.700 --> 00:09:51.920
+Adicione exemplos diretamente nas instruções se desejar.
+
+00:09:52.280 --> 00:09:55.000
+Não é preciso muito texto para direcionar como o bot molda cada frase.
+
+00:09:55.780 --> 00:09:57.460
+Duas melhorias rápidas que nem todos conhecem.
+
+00:09:58.280 --> 00:10:00.740
+Edite o tópico de início da conversa e troque o ícone do agente.
+
+00:10:01.400 --> 00:10:02.560
+Ambos levam menos de 5 minutos.
+
+00:10:02.740 --> 00:10:05.080
+No painel de teste, você verá a mensagem de introdução
+
+00:10:05.080 --> 00:10:06.820
+que seu bot exibe a abrir no chat pela primeira vez.
+
+00:10:07.000 --> 00:10:07.920
+Por padrão, ela é genérica.
+
+00:10:08.420 --> 00:10:10.320
+Clique nela, edite o tópico de início da conversa
+
+00:10:10.320 --> 00:10:13.540
+e substitua a saudação padrão por uma introdução específica da função como
+
+00:10:13.540 --> 00:10:15.740
+Estou aqui para ajudar você a entender a política de viagens
+
+00:10:15.740 --> 00:10:17.620
+e citarei o documento oficial sempre que possível.
+
+00:10:18.280 --> 00:10:19.780
+Depois, atualize a conversa para testar.
+
+00:10:20.140 --> 00:10:20.980
+Instantaneamente mais profissional.
+
+00:10:21.380 --> 00:10:22.980
+Para o ícone, o sistema suporta um PNG
+
+00:10:22.980 --> 00:10:26.380
+de até 192 por 192 pixels com menos de 30 kilobytes.
+
+00:10:27.000 --> 00:10:29.380
+Adicionar um gráfico com a sua marca, mesmo que um logotipo simples,
+
+00:10:29.500 --> 00:10:32.140
+evita que a sensação de demonstração destrua a confiança das primeiras respostas.
+
+00:10:32.560 --> 00:10:34.720
+Algumas pessoas descartam essas edições como polimento opcional.
+
+00:10:35.140 --> 00:10:36.300
+Mas pensem neles como armadura básica.
+
+00:10:36.760 --> 00:10:38.700
+Um personagem sem armadura ainda pode atacar, claro,
+
+00:10:38.760 --> 00:10:40.660
+mas é eliminado instantaneamente no primeiro golpe real.
+
+00:10:41.020 --> 00:10:43.660
+Um bot que recebe os usuários com um nome sem graça e um preâmbulo vago
+
+00:10:43.660 --> 00:10:44.860
+está na mesma posição vulnerável.
+
+00:10:45.560 --> 00:10:48.980
+Preencha o básico e você já terá garantido uma defesa real contra a confusão e abandono.
+
+00:10:49.520 --> 00:10:50.860
+Pequenos ajustes se multiplicam rapidamente.
+
+00:10:50.860 --> 00:10:53.840
+Configurar a introdução para mencionar seu papel e incentivos os usuários
+
+00:10:53.840 --> 00:10:55.000
+a fazerem perguntas relevantes.
+
+00:10:55.560 --> 00:10:57.860
+Usar regras de tom evita divagações excessivamente longas.
+
+00:10:58.120 --> 00:11:00.280
+Refinar as instruções guia IA para evitar a enrolação,
+
+00:11:00.380 --> 00:11:02.280
+mantendo um estilo compreensível para humanos.
+
+00:11:02.960 --> 00:11:05.260
+Cada um desses ajustes significa menos tickets de não entende
+
+00:11:05.260 --> 00:11:07.340
+e fluxos mais suaves sem novos conectores ou plugins.
+
+00:11:07.680 --> 00:11:08.520
+Tanto faça disso uma regra.
+
+00:11:08.760 --> 00:11:10.700
+Antes de tocar na lógica avançada, defina a pessoa.
+
+00:11:11.100 --> 00:11:12.480
+Escolha um nome que indique o propósito.
+
+00:11:12.820 --> 00:11:13.920
+Escreva uma descrição curta e clara.
+
+00:11:14.260 --> 00:11:14.640
+Definou.
+
+00:11:15.040 --> 00:11:17.280
+Carregue as instruções com as regras que você deseja que seja o que seja.
+
+00:11:17.500 --> 00:11:19.020
+Atualize a saldação de início da conversa.
+
+00:11:19.220 --> 00:11:20.180
+Proque por um ícone simples.
+
+00:11:20.180 --> 00:11:22.140
+Essas são ações de baixo esforço com altos retornos.
+
+00:11:22.440 --> 00:11:25.220
+Em um acerto crítico, uma persona definida transforma até uma construção nova
+
+00:11:25.220 --> 00:11:26.960
+em um colega de equipe que os usuários querem por perto.
+
+00:11:27.400 --> 00:11:30.100
+Em uma falha crítica, ignorar a persona deixa você com um NPC estranho
+
+00:11:30.100 --> 00:11:31.260
+com quem ninguém interage duas vezes.
+
+00:11:31.820 --> 00:11:33.460
+Depois de dar uma identidade ao seu agente,
+
+00:11:33.540 --> 00:11:35.060
+você está pronto para o trabalho mais difícil,
+
+00:11:35.140 --> 00:11:36.660
+porque o teste real não é a criação.
+
+00:11:36.800 --> 00:11:39.860
+É o que acontece após você vê-lo errar ou acertar durante encontros ao vivo.
+
+00:11:41.000 --> 00:11:42.980
+É aí que você precisa parar e ler os logs
+
+00:11:42.980 --> 00:11:44.720
+em vez de desistir após o primeiro erro.
+
+00:11:45.760 --> 00:11:47.140
+Depurando as falhas em tempo real.
+
+00:11:47.620 --> 00:11:50.000
+Depurar em tempo real é onde você transforma falhas em lições
+
+00:11:50.000 --> 00:11:50.600
+em vez de tickets.
+
+00:11:51.080 --> 00:11:53.040
+Este é o ciclo prático que todo construtor deve executar.
+
+00:11:53.400 --> 00:11:56.160
+Observe o erro, isole, corrija-o e depois refaça o teste.
+
+00:11:56.620 --> 00:11:58.020
+O Companhia do Estúdio oferece as ferramentas,
+
+00:11:58.080 --> 00:11:59.280
+mas apenas se você as usar em sequência.
+
+00:11:59.800 --> 00:12:02.500
+Aqui está a rotina que você pode seguir em voz alta enquanto demonstra.
+
+00:12:02.940 --> 00:12:05.420
+Passo 1. Reproduza a consulta do usuário que falhou no painel de teste.
+
+00:12:05.920 --> 00:12:06.560
+Não ignore isso.
+
+00:12:07.080 --> 00:12:08.800
+Faça exatamente a mesma pergunta que o usuário faria.
+
+00:12:09.240 --> 00:12:10.880
+Passo 2. Clique no ícone de atualizar
+
+00:12:10.880 --> 00:12:13.500
+ou em novo chat para redefinir a conversa antes de executar novamente.
+
+00:12:13.500 --> 00:12:15.200
+Começar do zero é importante.
+
+00:12:15.900 --> 00:12:17.900
+Passo 3. Abre os tópicos para ver qual deles foi acionado.
+
+00:12:18.740 --> 00:12:21.520
+Se não foi um dos seus, mas o tópico de impulsionamento conversacional do sistema,
+
+00:12:21.600 --> 00:12:24.100
+isso é um sinal de que o bot dependeu do modelo, não do seu conhecimento.
+
+00:12:24.680 --> 00:12:26.280
+Passo 4. Se veio do impulsionamento,
+
+00:12:26.380 --> 00:12:28.600
+verifique se o arquivo ou site relevante foi carregado e indexado.
+
+00:12:29.160 --> 00:12:30.300
+Sem índice e sem fundamentação.
+
+00:12:30.800 --> 00:12:32.220
+Lembre-se, a indexação pode levar vários minutos.
+
+00:12:32.780 --> 00:12:35.340
+Passo 5. Edite suas instruções ou o conteúdo do tópico,
+
+00:12:35.480 --> 00:12:36.900
+salve e execute a mesma consulta novamente.
+
+00:12:37.800 --> 00:12:40.540
+Esse ciclo reproduzir, corrigir, reexecutar e repetir é o seu mantra.
+
+00:12:41.060 --> 00:12:43.700
+Se você pular isso, estará apenas esperando que a sorte sorria na próxima vez.
+
+00:12:44.400 --> 00:12:47.080
+Às vezes o problema não é o tom vago da resposta, mas a falta de estrutura.
+
+00:12:47.460 --> 00:12:48.960
+É aí que criar um novo tópico vale a pena.
+
+00:12:49.380 --> 00:12:52.000
+O estúdio tem uma opção prática de adicionar a partir da descrição,
+
+00:12:52.280 --> 00:12:53.980
+com o copilot na página de tópicos.
+
+00:12:54.760 --> 00:12:56.840
+Você descreve o que precisa, como responder diretamente
+
+00:12:56.840 --> 00:12:58.620
+quando usuários perguntarem sobre limites de despesa.
+
+00:12:59.140 --> 00:13:02.340
+Clique em adicionar, e o sistema elabora uma árvore de tópicos a partir dessa descrição.
+
+00:13:02.600 --> 00:13:05.640
+É rápido, é explícito e garante que aquela resposta confusa
+
+00:13:05.640 --> 00:13:07.760
+se torne um caminho confiável na próxima vez.
+
+00:13:08.940 --> 00:13:11.720
+Use sempre que o bot continuar ignorando a mesma pergunta básica.
+
+00:13:12.380 --> 00:13:14.040
+Não pare apenas em correções simples de Sion.
+
+00:13:14.460 --> 00:13:16.720
+Realize experimentos de 10 minutos, como testes abelitão de voz.
+
+00:13:17.140 --> 00:13:18.960
+Vá para o campo de instruções e escreva a variante A
+
+00:13:18.960 --> 00:13:20.700
+com uma linguagem formal de política corporativa.
+
+00:13:21.240 --> 00:13:23.460
+Salve e pergunte qual o limite de despesas de viagem.
+
+00:13:23.620 --> 00:13:26.320
+Registre a resposta e altere as instruções para a variante B.
+
+00:13:26.800 --> 00:13:29.540
+Um guia de RH amigável que dá explicações simples e casuais
+
+00:13:29.540 --> 00:13:30.580
+enquanto cita as regras.
+
+00:13:31.320 --> 00:13:32.720
+Execute a mesma pergunta novamente,
+
+00:13:32.720 --> 00:13:35.360
+você terá registros lado a lado mostrando qual persona funciona melhor.
+
+00:13:35.520 --> 00:13:37.460
+E não precisa de nada além do painel de teste para fazer isso.
+
+00:13:38.100 --> 00:13:40.560
+Dessa forma você toma decisões de tom baseadas em evidência, não em palpites.
+
+00:13:40.900 --> 00:13:42.100
+Agora adicione verificação de fundamento.
+
+00:13:42.580 --> 00:13:44.580
+Digamos que um testador pergunte, o que posso reembolsar de hotéis?
+
+00:13:45.340 --> 00:13:47.240
+E o bot responda vagamente, verifique um RH.
+
+00:13:47.900 --> 00:13:49.400
+Isso não é uma falha total, um feedback.
+
+00:13:49.900 --> 00:13:52.320
+Talvez o documento de política de despesas ainda não tenha sido indexado.
+
+00:13:52.580 --> 00:13:54.240
+Talvez suas frases de gatilho não incluam o hotel.
+
+00:13:55.000 --> 00:13:56.880
+Você corrige isso verificando a guia de conhecimento
+
+00:13:56.880 --> 00:13:58.240
+para garantir que o arquivo esteja ativo
+
+00:13:58.240 --> 00:14:01.020
+e adicionando despesas de hotel com uma frase de gatilho no seu tópico de viagem.
+
+00:14:01.020 --> 00:14:01.920
+Agora reexecute.
+
+00:14:02.280 --> 00:14:03.620
+Se você obtiver, de acordo com a política,
+
+00:14:03.700 --> 00:14:05.620
+a hospedagem é limitada ao S200 dólares por noite,
+
+00:14:05.680 --> 00:14:06.920
+você corrigir o problema com sucesso.
+
+00:14:07.340 --> 00:14:10.040
+Um truque sutil, porém importante, é usar iniciadores de conversa.
+
+00:14:10.540 --> 00:14:12.760
+Caixas de texto vazias deixam os usuários travados,
+
+00:14:12.860 --> 00:14:15.600
+mas você pode preencher previamente algumas sugestões de prontos direto
+
+00:14:15.600 --> 00:14:16.500
+na página de visão geral.
+
+00:14:16.960 --> 00:14:18.580
+Adicione de 3 a 5 ganchos, como
+
+00:14:18.580 --> 00:14:19.920
+Qual é o limite do hotel?
+
+00:14:20.680 --> 00:14:21.940
+Como faz para registrar um pedido de reino?
+
+00:14:22.360 --> 00:14:23.420
+Quais refeições são reembolsadas?
+
+00:14:24.160 --> 00:14:25.460
+O usuário clica diretamente,
+
+00:14:25.540 --> 00:14:27.780
+o que significa que você testa caminhos reais mais rapidamente
+
+00:14:27.780 --> 00:14:30.180
+e eles sentem que o bot conhece seu papel antes mesmo de digitar.
+
+00:14:30.180 --> 00:14:33.220
+Todo esse ritmo torna seu bot mais robusto a cada caminho percorrido.
+
+00:14:33.640 --> 00:14:35.360
+Se você apenas ignorar as saídas com falha
+
+00:14:35.360 --> 00:14:37.500
+e presumir que a próxima execução terá sucesso magicamente,
+
+00:14:37.800 --> 00:14:40.220
+isso leva as pessoas a abrirem chamados de suporte e perderem a confiança.
+
+00:14:40.680 --> 00:14:42.580
+Em um 20 natural, você continua repetindo a rotina
+
+00:14:42.580 --> 00:14:45.040
+até que o bot comprove, com citações e a persona certa
+
+00:14:45.040 --> 00:14:46.560
+que entende até entradas confusas.
+
+00:14:47.140 --> 00:14:49.740
+Cada iteração o aproxima de um colega de equipe confiável,
+
+00:14:49.840 --> 00:14:51.020
+em vez de um risco imprevisível.
+
+00:14:51.640 --> 00:14:52.320
+E aqui está a realidade.
+
+00:14:52.960 --> 00:14:54.580
+Refinar dentro do painel de teste é o modo seguro.
+
+00:14:55.000 --> 00:14:56.300
+Assim que seu loop estiver funcionando,
+
+00:14:56.300 --> 00:14:59.080
+a próxima etapa é ver como essas correções se sustentam fora da sua máquina.
+
+00:14:59.080 --> 00:15:01.700
+É aí que as diferenças de canal começam a surgir.
+
+00:15:02.000 --> 00:15:04.240
+E essa é a parte que a maioria dos novos criadores subestima.
+
+00:15:04.980 --> 00:15:07.220
+Ah, quando a masmorra se torna pública, a publicação é a surpresa do canal.
+
+00:15:07.780 --> 00:15:09.220
+Quando você finalmente clica em publicar,
+
+00:15:09.300 --> 00:15:12.120
+é quando seu agente deixa a oficina e precisa sobreviver diante de usuários reais.
+
+00:15:13.360 --> 00:15:15.220
+No Copilot Studio, esse passo é chamado de
+
+00:15:15.220 --> 00:15:16.500
+quando a masmorra se torna pública,
+
+00:15:16.620 --> 00:15:18.960
+porque publicar coloca seu bote cuidadosamente ensaiado
+
+00:15:18.960 --> 00:15:20.400
+em canais que seguem suas próprias regras.
+
+00:15:21.060 --> 00:15:23.860
+A primeira surpresa é que publicar não é apenas um clique para colocar no ar.
+
+00:15:23.860 --> 00:15:26.580
+É um processo que decide quem pode acessar seu agente,
+
+00:15:26.780 --> 00:15:29.600
+como eles entram e como essas respostas aparecem no mundo real.
+
+00:15:30.600 --> 00:15:33.300
+Team SharePoint, o site de demonstração, cada canal tem suas peculiaridades.
+
+00:15:33.980 --> 00:15:37.260
+Uma resposta limpa no estúdio pode parecer diferente ou falhar completamente com a sensação.
+
+00:15:37.860 --> 00:15:38.780
+Veja o Teams como exemplo.
+
+00:15:39.340 --> 00:15:41.100
+No estúdio, sua resposta retorna clara e direta.
+
+00:15:41.700 --> 00:15:43.600
+A política diz 200 dólares por dia para a hospedagem.
+
+00:15:44.380 --> 00:15:46.580
+Teste a mesma frase no Teams e, de repente, ele responde com
+
+00:15:46.580 --> 00:15:48.960
+Não entendi, como se nada tivesse mudado no seu bote.
+
+00:15:49.480 --> 00:15:52.600
+É a maneira como o Teams quebra o texto e passa os metadados que quebrou o alinhamento.
+
+00:15:52.600 --> 00:15:55.040
+O SharePoint tem seu próprio jeito com o espaçamento entre mim.
+
+00:15:55.380 --> 00:15:59.560
+O site de demonstração é mais simples, mas ainda pode renderizar a formatação de forma diferente do estúdio.
+
+00:16:00.080 --> 00:16:03.280
+Cada destino de publicação é uma arena diferente e você precisa testá-los separadamente.
+
+00:16:03.680 --> 00:16:05.220
+Qual é a sequência certa antes de considerar pronto?
+
+00:16:05.700 --> 00:16:08.000
+Quinta a lista de verificação de publicação que evita as armadilhas de ensino.
+
+00:16:08.580 --> 00:16:11.160
+Primeiro, confirme se seus arquivos de conhecimento estão totalmente indexados.
+
+00:16:11.560 --> 00:16:14.540
+Se você acabou de carregá-los, eles podem ainda não estar prontos para respostas ao vivo.
+
+00:16:14.860 --> 00:16:16.000
+Segundo, defina a autenticação.
+
+00:16:16.560 --> 00:16:19.140
+Se estiver fazendo uma demonstração ampla, selecione Sem autenticação,
+
+00:16:19.320 --> 00:16:21.040
+para que qualquer pessoa com link possa testar.
+
+00:16:21.040 --> 00:16:24.400
+Terceiro, pressione Publicar e certifique-se de ver o banner de confirmação verde
+
+00:16:24.400 --> 00:16:26.400
+ou a atualização de status na página de canais.
+
+00:16:26.860 --> 00:16:29.000
+Quarto, abra as configurações do canal do site de demonstração.
+
+00:16:29.480 --> 00:16:31.740
+Atualize a mensagem de boas-vindas e os iniciadores de conversa
+
+00:16:31.740 --> 00:16:34.000
+para que seus testadores não fiquem parados diante de uma caixa de chat vazia.
+
+00:16:34.180 --> 00:16:35.500
+E finalmente, execute o piloto fechado.
+
+00:16:35.860 --> 00:16:37.160
+Não transmita para todo o locatário ainda.
+
+00:16:37.800 --> 00:16:40.560
+O grupo pequeno com instruções claras é mais inteligente do que um lançamento comum.
+
+00:16:40.940 --> 00:16:42.740
+Esse grupo piloto deve saber que são grupos de teste.
+
+00:16:43.500 --> 00:16:46.100
+Peça que usem linguagem casual, que cometam erros de digitação
+
+00:16:46.100 --> 00:16:47.660
+e até que enviem arquivos quando fizer sentido.
+
+00:16:48.220 --> 00:16:49.780
+São os erros deles que revelam os pontos fracos.
+
+00:16:49.780 --> 00:16:52.100
+Um piloto fechado não serve apenas para suavizar o lançamento.
+
+00:16:52.440 --> 00:16:55.060
+Ele produz os relatórios brutos necessários para corrigir a versão
+
+00:16:55.060 --> 00:16:56.260
+antes de liberá-la para toda a empresa.
+
+00:16:56.680 --> 00:16:58.820
+O comportamento dos canais torna este passo obrigatório.
+
+00:16:59.160 --> 00:17:01.820
+Qualquer cenário testado no estúdio, consulta formal, frase casual,
+
+00:17:01.960 --> 00:17:03.420
+erro de digitação ou citação fundamentada
+
+00:17:03.420 --> 00:17:05.560
+repita exatamente esses testes em cada canal de destino.
+
+00:17:05.920 --> 00:17:07.240
+Veja se o time se exibe de forma diferente.
+
+00:17:07.680 --> 00:17:09.040
+Veja como o SharePoint altera o espaçamento.
+
+00:17:09.480 --> 00:17:11.700
+Veja se a demonstração na web ainda anexa a citação da fonte.
+
+00:17:12.120 --> 00:17:13.780
+Esta é a única forma de comprovar consistência.
+
+00:17:14.120 --> 00:17:16.660
+Um teste perfeito no estúdio não garante uma implementação funcional.
+
+00:17:16.660 --> 00:17:19.900
+Publicar também significa parar de depender apenas do feedback do usuário
+
+00:17:19.900 --> 00:17:20.980
+e começar a monitorar a telemetria.
+
+00:17:21.420 --> 00:17:23.800
+Assim que seu bot estiver no Teams ou no site de demonstração,
+
+00:17:23.920 --> 00:17:25.100
+os dados de uso começam a fluir.
+
+00:17:25.500 --> 00:17:28.460
+Centro de administração da Power Platform e as análises integradas estão lá para ajudar.
+
+00:17:29.100 --> 00:17:31.160
+Você verá números de adoção, contagem de erros.
+
+00:17:31.300 --> 00:17:33.180
+E até quais conversas não acionaram o tópico.
+
+00:17:33.780 --> 00:17:35.400
+Isso não custa o extra, é seu sistema de monitoramento.
+
+00:17:35.740 --> 00:17:37.120
+Você não publica uma vez e esquece.
+
+00:17:37.200 --> 00:17:40.180
+Você observa os registros para garantir que seu bot esteja sendo usado corretamente
+
+00:17:40.180 --> 00:17:41.380
+e não gerando novos chamados de suporte.
+
+00:17:41.380 --> 00:17:43.340
+Se você apreciar este passo, perderá confiança.
+
+00:17:43.640 --> 00:17:46.600
+Em um cenário ruim, você clica em publicar, lança para todos os departamentos
+
+00:17:46.600 --> 00:17:49.580
+e é soterrado por chamados de erro quando o Teams omite respostas importantes.
+
+00:17:50.160 --> 00:17:53.440
+Os usuários desistem e reconquistá-los leva mais tempo do que consertar o próprio bot.
+
+00:17:53.940 --> 00:17:56.460
+Em um cenário ideal, você trata a publicação como mais uma fase de teste.
+
+00:17:57.180 --> 00:17:59.740
+Índice concluído, autenticação definida, publicação confirmada,
+
+00:17:59.840 --> 00:18:01.480
+site de demonstração ajustado, piloto executado.
+
+00:18:01.720 --> 00:18:03.740
+Você reúne feedbacks diversos, corrige respostas
+
+00:18:03.740 --> 00:18:05.680
+e executa novamente cada consulta principal em cada canal.
+
+00:18:06.040 --> 00:18:08.880
+Quando você escala para a implementação ampla, o teste de estresse já foi superado.
+
+00:18:08.880 --> 00:18:11.880
+O verdadeiro truque é parar de pensar que publicado significa o fim.
+
+00:18:12.300 --> 00:18:14.760
+O botão não marca a última linha do livro, ele inicia a campanha em campo.
+
+00:18:15.480 --> 00:18:17.860
+Assim que os dados do piloto chegarem e seus registros confirmarem
+
+00:18:17.860 --> 00:18:20.020
+que os usuários estão recebendo respostas claras em toda parte,
+
+00:18:20.100 --> 00:18:21.480
+então você terá conquistado direitos de chamá-los.
+
+00:18:21.960 --> 00:18:25.300
+E essa percepção se conecta ao contexto geral de construir com o Coparato Studio,
+
+00:18:25.400 --> 00:18:28.200
+porque não é uma criação única, é um sistema que você ajusta repetidamente.
+
+00:18:29.220 --> 00:18:30.600
+Tanto aqui está o resumo, o que realmente importa.
+
+00:18:31.380 --> 00:18:33.400
+Três coisas transformam sua versão instável para confiar.
+
+00:18:33.880 --> 00:18:35.860
+Primeiro, fundamente o agente carrega os documentos reais
+
+00:18:35.860 --> 00:18:37.880
+ou aponte para fontes confiáveis para que ele pare de adivinhar.
+
+00:18:37.880 --> 00:18:41.260
+Segundo, dê aí numa persona, defina o nome, a descrição, o tom
+
+00:18:41.260 --> 00:18:44.020
+e especifique o comportamento naquele campo de instruções de caracteres.
+
+00:18:44.720 --> 00:18:47.180
+Terceiro, não confie em um ensaio limpo, use o painel de teste,
+
+00:18:47.280 --> 00:18:49.220
+execute um piloto fechado, publique e monitore.
+
+00:18:49.780 --> 00:18:51.960
+Com o resultado perfeito, esse espaço garante a você um bot
+
+00:18:51.960 --> 00:18:53.160
+e ganha confiança em vez de chamados.
+
+00:18:53.700 --> 00:18:55.700
+Inscreva-se para mais e deixe uma frase nos comentários
+
+00:18:55.700 --> 00:18:58.240
+indicando o único documento de política com o qual você basearei seu agente.

@@ -1,0 +1,853 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:04.500
+Stel je voor dat je je eerste co-pilot studio-agent uitrolt en in plaats van indruk te maken,
+
+00:00:04.800 --> 00:00:08.500
+er zoiets wankels uitflapt als ik denk dat het beleid misschien zegt dat dat de natuurlijke
+
+00:00:08.500 --> 00:00:11.960
+manier van botbouwen is. Maar met een paar aanpassingen en duidelijke instructies die
+
+00:00:11.960 --> 00:00:15.540
+het verankeren in het daadwerkelijke beleidsdocument kun je die blunder veranderen in een voltreffer
+
+00:00:15.540 --> 00:00:18.540
+die precies uit het boekje citeert. Aan het einde van deze video weet je hoe je een slechte
+
+00:00:18.540 --> 00:00:21.860
+reactie in het testvenster kunt reproduceren, deze kunt herstellen zodat de bot het echte
+
+00:00:21.860 --> 00:00:25.580
+document citeert en een werkende pilot kunt publiceren. Korte zijstap, abonneer je nu zodat
+
+00:00:25.580 --> 00:00:29.120
+deze walkthroughs automatisch in je afspeellijst verschijnen. Natuurlijk is het eenvoudig om
+
+00:00:29.120 --> 00:00:32.700
+een vlekkeloos resultaat te krijgen in het testvenster. De echte problemen ontstaan wanneer
+
+00:00:32.700 --> 00:00:36.580
+je bot de veilige omgeving verlaat en in het wild gaat blunderen. Waarom je perfecte testbot
+
+00:00:36.580 --> 00:00:40.280
+in de praktijk instort? Dus, waarom begint een bot die er in het testvenster feilloos uitziet
+
+00:00:40.280 --> 00:00:44.240
+plotseling te fladderen zodra hij wordt losgelaten op echte gebruikers? Kort gezegd, studio houdt de
+
+00:00:44.240 --> 00:00:48.440
+zaken netjes en beleeft, terwijl de echte wereld die hoffelijkheid niet kent. In studio zijn de
+
+00:00:48.440 --> 00:00:53.200
+invoergegevens die je voert keurig. Vragen zijn kort, netjes geformuleerd en komen meestal overeen met de
+
+00:00:53.200 --> 00:00:57.380
+trainingsvoorbeelden die je hebt voorbereid. Daarom voelt het als een perfecte reeks. Maar ga naar
+
+00:00:57.380 --> 00:01:01.600
+productie en mensen typen zoals mensen dat doen. Een senior zal vragen, hoeveel kan ik declareren
+
+00:01:01.600 --> 00:01:05.500
+als ik in een hotel verblijf? Een medewerker typt misschien, hotel onkostenlimiet, met een
+
+00:01:05.500 --> 00:01:09.840
+typfout. Een ander zegt misschien gewoon, herinner me nog eens aan het reizenbudget. Ze betekenen
+
+00:01:09.840 --> 00:01:14.260
+allemaal hetzelfde, maar als je alleen hebt getest op, wat is de onkostenlimiet, dan zal de bot niet
+
+00:01:14.260 --> 00:01:18.740
+altijd de verbanden leggen. Dit is een manier om dit gat nu meteen te zien. Open het testvenster en
+
+00:01:18.740 --> 00:01:23.440
+gooi drie variaties naar je bot. Eerst de nette versie, dan een informele herschrijving en daarna een versie met
+
+00:01:23.440 --> 00:01:27.360
+een typfout. Kijk hoe de reacties veranderen. Soms haalt hij alle drie, soms is alleen
+
+00:01:27.360 --> 00:01:31.080
+de nette versie raak. Dat is je eerste aanwijzing dat prachtige testresultaten geen garantie zijn
+
+00:01:31.080 --> 00:01:35.000
+voor overleving in de echte wereld. De technische reden is een tentdekking. Bots vertrouwen op
+
+00:01:35.000 --> 00:01:38.640
+triggerzinnen en tappelijk definities om te weten wanneer ze een reactie moeten geven. Als al je
+
+00:01:38.640 --> 00:01:42.480
+voorbeelden op elkaar lijken, wordt het model rigide. Een enkel synoniem kan het al in de war
+
+00:01:42.480 --> 00:01:46.460
+brengen. De oplossing is saai, maar het werkt. Voeg bredere triggerzinnen toe aan je onderwerpen en
+
+00:01:46.460 --> 00:01:49.360
+gebruik niet alleen de formele bewoordingen uit je beleidsdocumenten. Voeg wat informele,
+
+00:01:49.560 --> 00:01:53.240
+verkorte en zelfs enigszins hommelige formuleringen toe die mensen echt gebruiken. Je hebt er geen
+
+00:01:53.240 --> 00:01:56.400
+tientallen nodig, net genoeg om de voor de hand liggende variaties te dekken, en test dan opnieuw.
+
+00:01:56.800 --> 00:02:00.540
+Kanaalverschillen maken dit ingewikkelder. Het testvenster van Studio is slechts een simulatie.
+
+00:02:00.780 --> 00:02:04.380
+Zodra je publiceert naar een kanaal zoals Teams, SharePoint of een demo-website, kan het platform
+
+00:02:04.380 --> 00:02:07.780
+aanpassen hoe invoertekst wordt verwerkt of hoe antwoorden worden weergegeven. Teams kan regels
+
+00:02:07.780 --> 00:02:12.380
+anders afbreken. Een webpagina kan opmaak verwijderen. Zelfs kleine wijzigingen, zoals het verplaatsen
+
+00:02:12.380 --> 00:02:15.940
+van een kernzin naar een andere regel, kunnen de weging door het model veranderen. Daarom benadrukt
+
+00:02:15.940 --> 00:02:19.940
+Microsoft de noodzaak van iteratief testen over verschillende kanalen heen. Een bot die in Studio
+
+00:02:19.940 --> 00:02:23.840
+slaagt, kan alsnog struikelen wanneer de opmaak in de echte wereld de zaken verandert. Gebruikers
+
+00:02:23.840 --> 00:02:27.160
+hebben ook hun eigen verwachtingen. Voor hen is het herformuleren van een vraag een normaal
+
+00:02:27.160 --> 00:02:30.740
+onderdeel van het gesprek. Zij denken niet na over intenties, triggers of semantische overlap.
+
+00:02:30.940 --> 00:02:33.660
+Ze gaan er simpelweg vanuit dat de bot hen begrijpt zoals een collega dat zou doen.
+
+00:02:33.800 --> 00:02:37.760
+Een grote fout, zeker tijdens een demo, en het vertrouwen is weg. Dat is waar beginnende makers
+
+00:02:37.760 --> 00:02:41.600
+de mist in gaan. De repetitie in Studio gaf hen een vals gevoel van veiligheid, maar de eerste
+
+00:02:41.600 --> 00:02:45.860
+informele gebruikersinvoer in Teams doorbrak die illusie. Laten we dit onderbouwen met nog een voorbeeld.
+
+00:02:45.860 --> 00:02:50.400
+In Studio typ je, wat is de onkostenlimiet? De bot antwoordt direct, het beleid stelt 200
+
+00:02:50.400 --> 00:02:55.580
+dollar per dag voor accommodatie. Perfect, zet het in productie. Probeer nu, hé, wat krijg ik ook alweer
+
+00:02:55.580 --> 00:02:59.660
+terug voor een hotel? In plaats van het beleid te citeren, geeft de bot een antwoord zoals check
+
+00:02:59.660 --> 00:03:04.680
+met hour of doet hij een vage gok? Dezelfde intentie, totaal andere uitkomst. Die wisseling,
+
+00:03:04.840 --> 00:03:09.360
+precies tijdens de repetitie maar vaag in productie, is precies waar we het over hebben. De praktische
+
+00:03:09.360 --> 00:03:14.020
+lee is deze. Behandel Studio als een sparringsessie. Handig om te leren, maar geen bewijs van
+
+00:03:14.020 --> 00:03:17.400
+gereedheid. Probeer voordat je verder gaat de test met drie variaties in het testvenster
+
+00:03:17.400 --> 00:03:20.820
+en verbreed daarna je onderwerpen met synoniemen en informele formuleringen. Test tot slot,
+
+00:03:21.000 --> 00:03:24.960
+zodra je publiceert, opnieuw in elk kanaal waar de bot actief zal zijn. Zo ontdek je problemen
+
+00:03:24.960 --> 00:03:28.320
+voordat je gebruikers dat doen. Er wacht nog een grotere valstrik, want zelfs als je de
+
+00:03:28.320 --> 00:03:32.000
+formuleringen en kanalen dekt, kan je bot alsnog crashen als deze niet gebaseerd is op de juiste
+
+00:03:32.000 --> 00:03:35.400
+bron. Dat is wanneer hij stopt met het missen van vragen en begint met het verzinnen van antwoorden.
+
+00:03:35.620 --> 00:03:39.500
+Stel je een bot voor die zelfverzekerd klinkt, maar eigenlijk maar wat gokt. Dat is waar het vanaf
+
+00:03:39.500 --> 00:03:45.080
+nu ingewikkeld wordt. De beginnersfout, je bot niet baseren op bronnen. De eerste beginnersfout
+
+00:03:45.080 --> 00:03:49.380
+is co-pilot studio behandelen als een glazenbol in plaats van een regelboek. Wanneer je een agent
+
+00:03:49.380 --> 00:03:53.500
+lanceert zonder deze te baseren op echte kennis, stuur je in feite een junior stagiair de directiekamer
+
+00:03:53.500 --> 00:03:57.480
+in zonder enige voorbereiding. Ze spreken snel, ze klinken zelfverzekerd en de helft van wat ze
+
+00:03:57.480 --> 00:04:00.980
+zeggen stort in zodra iemand het controleert. Dat is de valstrik van een bot die niet op bronnen is
+
+00:04:00.980 --> 00:04:04.900
+gebaseerd. In het begin verhult de glans dat nog. Een nieuwe beeld in de studio ziet er strak uit,
+
+00:04:04.900 --> 00:04:08.960
+beleefde begroetingen, snelle reacties, geen merkbare vertraging. Maar onder de motorkap is
+
+00:04:08.960 --> 00:04:13.200
+er niets solide dat die woorden ondersteunt. Het systeem haalt er patronen uit, geen feiten.
+
+00:04:13.440 --> 00:04:17.820
+Niet verankerde bots weten niets. Ze bluffen. En hoewel een bluffer gelikt uit kan zien in het
+
+00:04:17.820 --> 00:04:22.060
+testvenster, zullen gebruikers in productie het direct doorhebben. De ergste uitkomst is niet
+
+00:04:22.060 --> 00:04:26.140
+alleen zwakke antwoorden, het zijn hallucinaties. Dat is wanneer een bot iets verzint dat er goed
+
+00:04:26.140 --> 00:04:30.700
+uitziet, maar geen basis in de realiteit heeft. Je vraagt naar reiskostenvergoedingen en in plaats
+
+00:04:30.700 --> 00:04:34.700
+van beleefd te weigeren, verzint de bot een getal dat aannemelijk klinkt. Een medewerker boekt
+
+00:04:34.700 --> 00:04:38.080
+een hotel op basis van die slechte output en plotseling ben je onkoste conflicten en
+
+00:04:38.080 --> 00:04:41.540
+geïrriteerde e-mails aan het afhandelen. De zin zag er professioneel uit, de inhoud
+
+00:04:41.540 --> 00:04:45.400
+was gebakken lucht. Het voorbeeld van Contoso Labs maakt dit tastbaar. In de officiële
+
+00:04:45.400 --> 00:04:48.460
+praktijk oefening is het de bedoeling dat je een bestand genaamd Expenses Policy,
+
+00:04:48.740 --> 00:04:52.520
+Dockx upload. Daarin staat de limiet voor overnachtingen duidelijk vermeld als 200 dollar
+
+00:04:52.520 --> 00:04:56.120
+per nacht. Als je nu de verankering overslaat en je glimmende nieuwe bot vraagt, wat is het
+
+00:04:56.120 --> 00:05:00.660
+hotelbeleid? Dan kan hij vol vertrouwen 100 dollar per nacht antwoorden. Totaal verzonnen. Pas
+
+00:05:00.660 --> 00:05:04.600
+wanneer je daadwerkelijk die Expenses Policy, Dockx toevoegt, stopt het model met gissen.
+
+00:05:04.920 --> 00:05:08.820
+Verankerde bots citeren het document. Volgens het bedrijfsreisbeleid is de overnachting
+
+00:05:08.820 --> 00:05:13.680
+beperkt tot 200 dollar per dag en dat verschil, verzinsel versus citatie, draait volledig
+
+00:05:13.680 --> 00:05:17.320
+om de verankering stap. Dus, dit is precies hoe je het oplost in de interface. Ga naar
+
+00:05:17.320 --> 00:05:21.400
+je agent in Copilot Studio. Klik vanaf het overzichtsscherm op Kennis. Selecteer plus
+
+00:05:21.400 --> 00:05:25.640
+Kennis toevoegen en kies vervolgens om een bestand te uploaden. Wijs naar Expenses Policy, Dockx of een
+
+00:05:25.640 --> 00:05:29.100
+andere vertrouwde bron. Als je liever verbinding maakt met een openbare website of SharePoint
+
+00:05:29.100 --> 00:05:32.840
+locatie, kun je dat ook kiezen, maar bestanden zijn overzichtelijker. Wacht na het uploaden
+
+00:05:32.840 --> 00:05:36.600
+even. Het indexeren kan 10 minuten of langer duren voordat de inhoud gereed is. Raak niet
+
+00:05:36.600 --> 00:05:40.120
+in paniek als de eerste testvragen er niet direct informatie uithalen. Zodra het indexeren
+
+00:05:40.120 --> 00:05:43.380
+is voltooid, stel je je vraag opnieuw. Wanneer het correct verankerd is, zie je het werkelijke
+
+00:05:43.380 --> 00:05:46.860
+antwoord van 200 dollar, samen met een kleine bronvermelding die aangeeft dat het uit je geuploaden
+
+00:05:46.860 --> 00:05:50.740
+document kwam. Die bronvermelding is hoe je weet dat je een voltreffer hebt geland. Een veel
+
+00:05:50.740 --> 00:05:54.840
+voorkomend misverstand is aannemen dat conversationele stimulering op magische wijze de gaten
+
+00:05:54.840 --> 00:05:59.480
+opvult. Stimulering creëert geen beleidsbewustzijn, het versterkt alleen tekstpatronen. Zonder een
+
+00:05:59.480 --> 00:06:03.540
+kennisbron om op terug te vallen, spuit stimulering vrolijk algemene opvulling. Het is alsof je
+
+00:06:03.540 --> 00:06:07.120
+die stagiair drie koppen koffie geeft en hoopt dat cafeïne compenseert voor onwetendheid.
+
+00:06:07.320 --> 00:06:11.240
+De labdocumenten waarschuwden hier zelfs al voor. Als er geen overeenkomst wordt gevonden
+
+00:06:11.240 --> 00:06:15.040
+in je kennisbronnen, kan boosting terugvallen op de algemene basiskennis van het model en
+
+00:06:15.040 --> 00:06:19.200
+vage of onjuiste antwoorden geven. Daarom moet je kritieke onderwerpen zo configureren dat ze alleen
+
+00:06:19.200 --> 00:06:23.080
+je toegevoegde bronnen doorzoeken wanneer precisie belangrijk is. Laat de bot niet vrijuitputten uit
+
+00:06:23.080 --> 00:06:27.480
+het bredere taalmodel als het gaat om compliance, financiën of hour. De gevolgen van het negeren
+
+00:06:27.480 --> 00:06:31.300
+van deze stap lopen snel op. Ongefundeerde bots werken prima voor koetjes en kalfjes,
+
+00:06:31.420 --> 00:06:35.160
+maar zodra ze antwoorden over vergoedingen of verlofbeleid, zorgen ze voor echte helpdesktickets.
+
+00:06:35.420 --> 00:06:38.840
+Stel je voor dat je aan finance moet uitleggen waarom vijf medewerkers claims hebben ingediend
+
+00:06:38.840 --> 00:06:42.440
+tegen het verkeerde tarief, omdat je bot ter plekke een limiet verzon. Het herstellen daarvan
+
+00:06:42.440 --> 00:06:46.340
+kost meer dan simpelweg het document op dag één uploaden. Grounding verandert je agent van een
+
+00:06:46.340 --> 00:06:50.580
+enthousiaste maar onwetende stagiair in wat gamers'en, Rules Lyre, zouden noemen. Hij citeert het boek
+
+00:06:50.580 --> 00:06:54.100
+en baseert zich niet op zijn onderbuikgevoel. Voeg het declaratiebeleid toe en het systeem
+
+00:06:54.100 --> 00:06:57.980
+handhaaft plotseling de bedrijfsregels in plaats van te improviseren. Beter nog antwoorden bevatten
+
+00:06:57.980 --> 00:07:01.700
+bewijzen, duidelijke bronvermeldingen die je kunt controleren. Zo bescherm je het vertrouwen.
+
+00:07:01.900 --> 00:07:05.320
+Bij een kritieke misstap heb je een zelfverzekerde roddelmachine gebouwd die verzonnen regels
+
+00:07:05.320 --> 00:07:09.160
+verspreidt. Bij een perfect resultaat heb je een gefundeerde expert gebouwd, compleet met
+
+00:07:09.160 --> 00:07:13.060
+bronvermeldingen. De enige manier om dat laatste te bereiken is door hem vanaf het begin te voeden
+
+00:07:13.060 --> 00:07:17.300
+met geverifieerde kennisbronnen. En zodra je bot eindelijk de waarheid kan spreken, kom je voor
+
+00:07:17.300 --> 00:07:21.000
+de volgende uitdaging, hoe hij die waarheid brengt, want nauwkeurigheid zonder persoonlijkheid
+
+00:07:21.000 --> 00:07:25.060
+zorgt er alsnog voor dat gebruikers afhaken. Je bot een persoonlijkheid geven is de volgende
+
+00:07:25.060 --> 00:07:30.160
+stap en in Copilot Studio krijg je die niet cadeau. Je moet hem zelf uitschrijven. Dit is het punt
+
+00:07:30.160 --> 00:07:33.500
+waarop je stopt het systeem als een testpop te laten klinken en het vormgeeft tot iets waar
+
+00:07:33.500 --> 00:07:37.640
+gebruikers echt mee willen praten. In de praktijk betekent dit dat je de velden voor naam, beschrijving
+
+00:07:37.640 --> 00:07:41.480
+en instructies op de overzichtspagina moet bewerken. Laat je ze leeg, dan eindig je met standaard
+
+00:07:41.480 --> 00:07:45.740
+antwoorden die aanvoelen als een NPC die vast zit in de tutorialmodus. Dit is het onderdeel
+
+00:07:45.740 --> 00:07:49.380
+dat veel beginners over het hoofd zien. Het systeem heeft al een standaardstel zodra
+
+00:07:49.380 --> 00:07:53.540
+je op aanmaken klikt. Als je de velden niet aanpast, krijg je een saaie bego-eter zonder
+
+00:07:53.540 --> 00:07:58.120
+autoriteit en zonder context. Context is wat vertrouwen wint. In omgevingen als Hour of
+
+00:07:58.120 --> 00:08:01.740
+Finance geeft een generieke toon mensen het gevoel dat ze een prototype testen, in plaats
+
+00:08:01.740 --> 00:08:05.320
+van een tool waar ze op kunnen vertrouwen. Een kort voorbeeld, stel je wilde een expert in
+
+00:08:05.320 --> 00:08:09.580
+declaratiebeleid bouwen, maar omdat je hem nooit een naam of beschrijving hebt gegeven, verschijnt
+
+00:08:09.580 --> 00:08:14.080
+de agent als een generieke copilot zonder achtergrond. Iemand vraagt naar hotelvergoedingen en verwacht
+
+00:08:14.080 --> 00:08:19.000
+professioneel advies. Wat ze krijgen is een saaie lab tekst zonder context, wat het subtiele
+
+00:08:19.000 --> 00:08:23.660
+maar krachtige signaal afgeeft. Vertrouw me niet. Vertrouwen vervliegt snel, verlies gebruikers
+
+00:08:23.660 --> 00:08:27.620
+bij het eerste contact en ze komen zelden terug. Zie de hele opzet als het schrijven van een
+
+00:08:27.620 --> 00:08:31.820
+snelle karaktersheet. De naam is de klasse, de beschrijving het achtergrondverhaal, het
+
+00:08:31.820 --> 00:08:35.740
+instructieveld, de eigenschappen en de toon is de afstemming. Je zou ook niet aan een campagne
+
+00:08:35.740 --> 00:08:39.160
+beginnen zonder je vaardigheidspunten toe te wijzen. Verstuur een bot dan ook niet op die
+
+00:08:39.160 --> 00:08:43.040
+manier. Nu, cijfers zijn hier wel van belang. Het naamveld van de bot heeft een limiet van 30
+
+00:08:43.040 --> 00:08:47.080
+tekens, dus hou het kort en krachtig. Expert in onkostenbeleid, reisschids, hulp bij
+
+00:08:47.080 --> 00:08:51.200
+secundaire arbeidsvoorwaarden. De beschrijving biedt ruimte voor ongeveer 1000 tekens, wat
+
+00:08:51.200 --> 00:08:55.100
+genoeg is voor een paar duidelijke zinnen. Iets in de trant van deze agent voorziet medewerkers
+
+00:08:55.100 --> 00:08:59.180
+van actuele antwoorden uit het officiële reisbeleid. Het citeert relevante passages en
+
+00:08:59.180 --> 00:09:04.120
+vermijdt speculatie. Aanhalingsteken, dan heb je het instructieveld, je flexibele ruimte, tot
+
+00:09:04.120 --> 00:09:08.620
+wel 8000 tekens. Dat is waar je concrete werkregels kunt vastleggen. Zeg niet alleen dat de bot
+
+00:09:08.620 --> 00:09:12.060
+behulpzaam moet zijn, maar leg het draaiboek uit. Citeer altijd de beleidsregel wanneer deze
+
+00:09:12.060 --> 00:09:16.820
+beschikbaar is. Vermijd speculatieve antwoorden. Vat het samen in één heldere zin voor leidinggevenden
+
+00:09:16.820 --> 00:09:20.920
+en geef daarna de bronvermelding. Een handige checklist die je kunt aflopen tijdens het bouwen
+
+00:09:20.920 --> 00:09:25.400
+ziet er zo uit. Geef de rol een naam, schrijf een korte beschrijving van de expertise, bepaalde
+
+00:09:25.400 --> 00:09:30.400
+toonformeel, informeel, simpel voor niet-experts en vul de instructies met gedragsregels, wat
+
+00:09:30.400 --> 00:09:34.860
+wel, wat niet, en de gewenste opmaak. Elk van die stappen versterkt de identiteit. Geen
+
+00:09:34.860 --> 00:09:38.680
+enkele stap vereist geavanceerde instellingen. Het is allemaal beschikbaar tijdens het aanmaken
+
+00:09:38.680 --> 00:09:42.440
+of later aanpasbaar op de overzichtspagina. De richtlijnen voor de toon zijn subtiel maar
+
+00:09:42.440 --> 00:09:46.260
+krachtig. Je kunt de bot expliciet sturen met zinsneden als formeel en professioneel
+
+00:09:46.260 --> 00:09:50.400
+of informeel en begrijpelijk voor medewerkers zonder technische achtergrond. Voeg desgewenst
+
+00:09:50.400 --> 00:09:54.240
+voorbeelden toe in de instructies. Er is niet veel tekst nodig om te bepalen hoe de bot
+
+00:09:54.240 --> 00:09:59.040
+elke zin vormgeeft. Twee snelle verbeteringen die niet iedereen kent. Bewerk het startonderwerp
+
+00:09:59.040 --> 00:10:03.480
+van het gesprek en wijzig het icoon van de agent. Beide kosten minder dan 5 minuten. In het
+
+00:10:03.480 --> 00:10:07.440
+testvenster zie je het welkomstbericht dat je bot geeft zodra je een chat opent. Standaard
+
+00:10:07.440 --> 00:10:11.440
+is dit vrij algemeen. Klik erop, bewerk het gespreksonderwerp en vervang het standaard
+
+00:10:11.440 --> 00:10:15.700
+welkomstbericht door een rolspecifieke introductie zoals ik ben hier om je te helpen met het reisbeleid
+
+00:10:15.700 --> 00:10:19.480
+en zal waar mogelijk het officiële document citeren. Ververs daarna het gesprek om het te
+
+00:10:19.480 --> 00:10:23.740
+testen. Direct een stuk professioneler. Voor het icoon ondersteunt het systeem een PNG-bestand
+
+00:10:23.740 --> 00:10:28.720
+tot 192 bij 192 pixels onder de 30 kilobyte. Door een huistijlafbeelding toe te voegen, zelfs
+
+00:10:28.720 --> 00:10:31.800
+een simpel logo, voorkom je dat de demo-uitstraling het vertrouwens gaat nog voor het eerste
+
+00:10:31.800 --> 00:10:36.500
+antwoord. Sommigen doen deze aanpassingen af als optionele vervraaiing. Maar zie ze als een basisuitrusting.
+
+00:10:36.500 --> 00:10:39.780
+Een onbeschermd personage kan nog steeds vechten, natuurlijk, maar is bij de eerste
+
+00:10:39.780 --> 00:10:43.180
+voltreffer meteen uitgeschakeld. Een bot die gebruikers begroet met een zieloze naam en
+
+00:10:43.180 --> 00:10:46.800
+vage inleiding verkeert in dezelfde kwetsbare positie. Vul de basis in en je hebt al een
+
+00:10:46.800 --> 00:10:50.800
+stevige verdediging opgebouwd tegen verwarring en afhakers. Kleine aanpassingen hebben snel
+
+00:10:50.800 --> 00:10:54.900
+effect. Door in de introductie de rol te benoemen, stimuleer je gebruikers om relevante vragen
+
+00:10:54.900 --> 00:10:59.620
+te stellen. Toonregels gebruiken voorkomt al te langdradig gezwets. Het aanscherpen van instructies
+
+00:10:59.620 --> 00:11:03.640
+leidt de AI weg van opvulling en naar een menselijk leesbare stijl. Elk van deze aanpassingen
+
+00:11:03.640 --> 00:11:06.800
+betekent minder, ik begrijp het niet, tickets en vloeideren processen zonder nieuwe connectoren
+
+00:11:06.800 --> 00:11:10.580
+of plugins. Maak er dus een regel van. Stel de persona in voordat je begint met geavanceerde
+
+00:11:10.580 --> 00:11:14.220
+logica. Kies een naam die het doel aangeeft. Schrijf een korte, duidelijke beschrijving.
+
+00:11:14.420 --> 00:11:17.680
+Bepaal de toon. Laat de instructies met de regels die gevolgd moeten worden. Update de
+
+00:11:17.680 --> 00:11:21.360
+begroeting bij de start van het gesprek. Plaats een simpel icoon. Dit zijn acties met weinig
+
+00:11:21.360 --> 00:11:24.920
+inspanning, maar een grote opbrengst. Bij een natuurlijke 20 verandert een gedefinieerde persona
+
+00:11:24.920 --> 00:11:27.640
+zelfs een goed nieuwe beeld in een teamgenoot die gebruikers erbij willen hebben. Bij een
+
+00:11:27.640 --> 00:11:31.100
+natuurlijke 1 laat het overslaan van een persona je achter met een ongemakkelijke NPC waar niemand
+
+00:11:31.100 --> 00:11:35.100
+een tweede keer mee praat. En zodra je je agent een identiteit hebt gegeven, ben je klaar voor
+
+00:11:35.100 --> 00:11:38.580
+het zwaardere werk, want de echte test is niet het maken, maar wat er gebeurt nadat je ziet
+
+00:11:38.580 --> 00:11:42.760
+dat het misgaat of lukt tijdens live interacties. Dat is het moment om te stoppen en de logbestanden
+
+00:11:42.760 --> 00:11:45.480
+te lezen in plaats van de boel in te pakken naar de eerste misstap.
+
+00:11:45.680 --> 00:11:50.080
+Fouten in real-time debuggen. Real-time debuggen is waar je misstappen omzet in lessen in plaats
+
+00:11:50.080 --> 00:11:54.440
+van in tickets. Dit is de praktische cyclus die elke bouwer moet doorlopen. Zie de fout, isoleer
+
+00:11:54.440 --> 00:11:58.480
+deze. Herstel hem en voer de test opnieuw uit. Copilot Studio geeft je de tools, maar alleen als
+
+00:11:58.480 --> 00:12:01.900
+je ze in de juiste volgorde gebruikt. Hier is de routine die je hardop kunt volgen tijdens een
+
+00:12:01.900 --> 00:12:06.240
+demonstratie. Stap 1. Reproduceer de falende gebruikersvraag in het testvenster. Ga er niet
+
+00:12:06.240 --> 00:12:10.500
+zomaar aan voorbij. Stel precies dezelfde vraag als de gebruiker zou doen. Stap 2. Klik op het
+
+00:12:10.500 --> 00:12:14.160
+verversycon of start een nieuwe chat om het gesprek te resetten voordat je opnieuw probeert. Met een
+
+00:12:14.160 --> 00:12:19.120
+schone lei beginnen is belangrijk. Stap 3. Open de onderwerpen om te zien welke werd geactiveerd. Als het er niet
+
+00:12:19.120 --> 00:12:23.320
+een van jou was, maar het conversational boosting, onderwerp van het systeem, is dat een teken dat de bot vertrouwde op het
+
+00:12:23.320 --> 00:12:28.320
+model niet op jouw kennis. Stap 4. Als het uit het boosting kwam, controleer dan of je relevante bestand of site is geüpload
+
+00:12:28.320 --> 00:12:34.240
+en geïndexeerd. Geen index, geen grounding. Onthoud dat indexeren enkele minuten kan duren. Stap 5. Pas je instructies of
+
+00:12:34.240 --> 00:12:39.400
+onderwerpinhoud aan, sla op en voer daarna exact dezelfde query opnieuw uit. Deals, reproduceren, patchen, opnieuw
+
+00:12:39.400 --> 00:12:43.620
+draaien, herhalen, is je mantra. Als je die overslaat, hoop je alleen maar dat de dobbelstenen de volgende keer
+
+00:12:43.620 --> 00:12:48.640
+gunstiger vallen. Soms is het antwoord niet vaag van toon, maar ontbreekt het aan structuur. Dat is waar het maken van een nieuw
+
+00:12:48.640 --> 00:12:53.020
+onderwerp loont. Studio heeft een handige optie om met co-pilot toe te voegen op basis van een beschrijving,
+
+00:12:53.240 --> 00:12:57.240
+direct op de pagina met onderwerpen. Je beschrijft wat je nodig hebt, zoals antwoord direct wanneer
+
+00:12:57.240 --> 00:13:01.540
+gebruikers vragen naar onkostenlimieten. Klik op toevoegen en het systeem ontwerpt een onderwerpsstructuur
+
+00:13:01.540 --> 00:13:05.820
+op basis van die beschrijving. Het is snel, het is expliciet en het garandeert dat die ene pijnlijke,
+
+00:13:06.060 --> 00:13:10.620
+vage reactie de volgende keer een betrouwbaar antwoordat wordt. Gebruik het telkens wanneer de bot dezelfde
+
+00:13:10.620 --> 00:13:16.060
+basisvraag blijft negeren. Stop echter niet bij alleen ja of nee oplossingen. Voer experimenten van 10 minuten uit,
+
+00:13:16.060 --> 00:13:20.400
+zoals A, B, testen van de toon. Ga naar het instructieveld en schrijf variant A met formele
+
+00:13:20.400 --> 00:13:24.780
+beleidstaal. Sla op, vraag wat de limiet voor reiskosten is, noteer het antwoord en wijzig de
+
+00:13:24.780 --> 00:13:28.960
+instructies vervolgens naar variant B, een vriendelijke oudergids die eenvoudige, informele
+
+00:13:28.960 --> 00:13:33.200
+uitleg geeft terwijl de regels worden gesiteerd. Stel dezelfde vraag opnieuw, je hebt dan laks naast
+
+00:13:33.200 --> 00:13:37.000
+elkaar die laten zien welke persona beter werkt en je hebt niets anders nodig dan het testvenster om
+
+00:13:37.000 --> 00:13:40.640
+dit te doen. Op die manier neem je beslissingen over de toon op basis van bewijs, niet op basis van
+
+00:13:40.640 --> 00:13:45.060
+gissingen. Voeg nu groundingchecks toe. Stel dat een tester vraagt, wat kan ik declareren voor hotels?
+
+00:13:45.060 --> 00:13:49.720
+En de bot reageert vaag met overleg met ouwer. Dat is geen totale mislukking, het is feedback.
+
+00:13:49.940 --> 00:13:53.380
+Misschien is het document expenses policy dax nog niet geïndexeerd. Misschien bevatte je
+
+00:13:53.380 --> 00:13:57.080
+triggerfrasen het woord hotel niet. Je lost dit op door het tabblad kennis opnieuw te controleren om
+
+00:13:57.080 --> 00:14:00.040
+er zeker van te zijn dat het bestand actief is en vervolgens hotelkosten toe te voegen als
+
+00:14:00.040 --> 00:14:03.840
+triggerfrasen in je reisonderwerp. Voer het nu opnieuw uit. Als je krijgt volgens het beleid is de
+
+00:14:03.840 --> 00:14:08.060
+overnachting beperkt tot 200 dollar per nacht, heb je het lek succesvol gedicht. Een subtiele maar
+
+00:14:08.060 --> 00:14:13.160
+belangrijke truc is het gebruik van gesprekstarters. Lege tekstvakken laten live gebruikers bevriezen,
+
+00:14:13.160 --> 00:14:18.220
+maar je kunt een aantal suggesties vooraf invullen vanaf de overzichtspagina. Voeg 3 tot 5 vragen
+
+00:14:18.220 --> 00:14:22.820
+toe, zoals wat is de hotelimiet? Hoe dien ik een reisdeclaratie in? Welke maaltijden worden
+
+00:14:22.820 --> 00:14:27.500
+vergoed? Aanhalingsteken. De gebruiker klikt er direct op, wat betekent dat je echte paden sneller
+
+00:14:27.500 --> 00:14:31.420
+test en zij het gevoel krijgen dat de bot zijn rol kent nog voordat ze iets typen. Dit hele ritme
+
+00:14:31.420 --> 00:14:35.860
+maakt je bot robuuster bij elk pad. Bij een natuurlijke fout negeer je de mislukte output en ga je ervan
+
+00:14:35.860 --> 00:14:39.740
+uit dat de volgende keer alles magisch wel goed gaat. Dat zorgt ervoor dat mensen support tickets indienen
+
+00:14:39.740 --> 00:14:43.640
+en hun vertrouwen verliezen. Bij een natuurlijke 20 blijf je die routine herhalen totdat de bot met
+
+00:14:43.640 --> 00:14:47.320
+bronvermeldingen en de juiste persona bewijst dat hij zelfs hommelige input begrijpt. Elke
+
+00:14:47.320 --> 00:14:51.040
+iteratie brengt je dichter bij een betrouwbare teamgenoot in plaats van een onvoorspelbare
+
+00:14:51.040 --> 00:14:55.840
+grob. En dit is de realiteit. Verfijnen in het testvenster is de veilige modus. Zodra je
+
+00:14:55.840 --> 00:14:59.960
+luswerkt is de volgende stap kijken hoe die oplossingen stand houden buiten je eigen machine. Dan
+
+00:14:59.960 --> 00:15:03.940
+beginnen de verschillen per kanaal op te duiken en dat is het deel dat de meeste nieuwe bouwers
+
+00:15:03.940 --> 00:15:08.560
+onderschatten. Als de dungeon openbaar gaat publiceren en kanaalverrassingen. Wanneer je eindelijk
+
+00:15:08.560 --> 00:15:12.140
+op publiceren klikt, verlaat je agent de werkplaats en moet hij zien te overleven bij
+
+00:15:12.140 --> 00:15:16.820
+echte gebruikers. In Copilot Studio heet deze stap als de dungeon openbaar gaat omdat publiceren
+
+00:15:16.820 --> 00:15:21.180
+je zorgvuldig gerepeteerde bot in kanalen dropt die volgens hun eigen regels spelen. De eerste
+
+00:15:21.180 --> 00:15:25.260
+verrassing is dat publiceren niet slechts één klik is om hem live te zetten. Het is een proces
+
+00:15:25.260 --> 00:15:29.420
+dat bepaalt wie je agent kan bereiken, hoe ze binnenkomen en hoe die antwoorden in de praktijk
+
+00:15:29.420 --> 00:15:34.060
+verschijnen. Teams, SharePoint, de demo website, elk kanaal heeft zijn eigen eigenaardigheden. Een
+
+00:15:34.060 --> 00:15:37.760
+strak antwoord in studio kan er anders uitzien of volledig falen zodra je het implementeert.
+
+00:15:37.760 --> 00:15:42.660
+Neem Teams als voorbeeld. In Studio komt je antwoord helder terug. Het beleid zegt 200
+
+00:15:42.660 --> 00:15:46.700
+dollar per dag voor verblijf. Test dezelfde zin in Teams en plotseling staart hij je aan
+
+00:15:46.700 --> 00:15:50.120
+met ik begrijp het niet, terwijl er niets aan je bot is veranderd. Het is de manier waarop
+
+00:15:50.120 --> 00:15:53.900
+Teams de tekst ontbreekt en metadata doorgeeft die de uitleiding verstoorde. SharePoint doet
+
+00:15:53.900 --> 00:15:58.040
+zijn eigen ding met regelafstanden. De demo website is het eenvoudigst, maar kan de opmaak
+
+00:15:58.040 --> 00:16:02.280
+nog steeds anders weergeven dan Studio Date. Elk publicatiedoel is een andere arena en je moet
+
+00:16:02.280 --> 00:16:06.280
+ze afzonderlijk testen. Wat is de juiste volgorde voordat je het klaar noemt? Hier is de
+
+00:16:06.280 --> 00:16:10.100
+publicatie checklist die beginners vallen vermijdt. Bevestig eerst dat je kennisbestanden
+
+00:16:10.100 --> 00:16:13.800
+volledig zijn geïndexeerd. Als je ze net hebt geüpload, zijn ze mogelijk nog niet klaar
+
+00:16:13.800 --> 00:16:18.520
+voor live antwoorden. Stel ten tweede de authenticatie in. Als je een brede demo draait, kies dan voor
+
+00:16:18.520 --> 00:16:22.740
+geen authenticatie, zodat iedereen met de link het kan proberen. Druk ten derde op publiceren
+
+00:16:22.740 --> 00:16:26.640
+en zorg ervoor dat je de groene bevestigingsbanner of status update op de kanalenpagina ziet.
+
+00:16:26.840 --> 00:16:30.920
+Open ten vierde de kanaalinstellingen van de demo website. Update het welkomstbericht en de
+
+00:16:30.920 --> 00:16:34.680
+gesprek starters zodat je testers niet bevriezen bij een leeg chatvenster. En voert tot slot de
+
+00:16:34.680 --> 00:16:38.940
+besloten pilot uit. Zend nog niet uit naar de volledige tenant. Een kleine groep met duidelijke
+
+00:16:38.940 --> 00:16:43.020
+instructies is slimmer dan een volledige release. Die pilotgroep moet weten dat zij de testpartij
+
+00:16:43.020 --> 00:16:46.680
+zijn. Vraag hen om informeel taalgebruik te proberen, typfouten te maken en zelfs bestanden
+
+00:16:46.680 --> 00:16:50.700
+te uploaden waar dat logisch is. Hun fouten zijn precies wat de zwakke plekken blootlegt. Een besloten
+
+00:16:50.700 --> 00:16:54.400
+pilot maakt de lancering niet alleen soepeler. Het levert de ruwe rapporten die je nodig hebt om de
+
+00:16:54.400 --> 00:16:58.780
+beeld te verbeteren voordat je deze binnen het hele bedrijf uitholt. Kanaalgedrag maakt deze stap verplicht.
+
+00:16:58.780 --> 00:17:02.800
+Welke scenario's je ook in studio hebt getest, formele vragen, informele bewoordingen, typfouten
+
+00:17:02.800 --> 00:17:06.480
+en één onderbouwde bronvermelding, herhaal die exacte runs in elk doelkanaal. Kijk of Teams ze
+
+00:17:06.480 --> 00:17:10.820
+anders weergeeft. Kijk hoe SharePoint de witruimte verpest. Kijk of de webdemo nog steeds de
+
+00:17:10.820 --> 00:17:14.940
+bronvermelding toevoegt. Dit is de enige manier om consistentie aan te tonen. Een vlekkeloze
+
+00:17:14.940 --> 00:17:18.820
+studiotest garandeert geen werkende uitrol. Publiceren betekent ook dat je niet langer alleen op
+
+00:17:18.820 --> 00:17:22.600
+gebruikersfeedback vertrouwt, maar begint met het bekijken van telemetrie. Zodra je bot live is op
+
+00:17:22.600 --> 00:17:26.980
+Teams of de demo-website, begint de gebruiksdata binnen te stromen. Het Power Platform Beheer Centrum
+
+00:17:26.980 --> 00:17:31.020
+en de ingebouwde analyses zijn er om je te helpen. Je ziet adoptiecijfers, foutmeldingen
+
+00:17:31.020 --> 00:17:34.920
+en zelfs welke gesprekken geen onderwerp hebben geactiveerd. Dat is geen extra werk, het is
+
+00:17:34.920 --> 00:17:38.380
+je monitoringsysteem. Je publiceert niet zomaar één keer en vergeet het, je houdt de laks
+
+00:17:38.380 --> 00:17:41.060
+in de gaten om te zorgen dat je bot correct wordt gebruikt en geen nieuwe support tickets
+
+00:17:41.060 --> 00:17:44.700
+genereert. Als je deze stap overhaast, verlies je het vertrouwen. Bij een mislukking druk je
+
+00:17:44.700 --> 00:17:48.200
+snel op de publiceerknop, rol je het uit naar elke afdeling en wordt je bedolven onder support
+
+00:17:48.200 --> 00:17:52.300
+tickets omdat Teams belangrijke antwoorden weglaat. Gebruikers haken af en hen terugwinnen duurt langer
+
+00:17:52.300 --> 00:17:56.940
+dan het repareren van de bot zelf. Bij een succes benader je publicatie als een nieuwe testfase.
+
+00:17:56.940 --> 00:18:01.660
+Index voltooit authenticatie ingesteld, publicatie bevestigd, demo sites afgesteld, pilot gedraaid.
+
+00:18:01.660 --> 00:18:04.980
+Je verzamelt rommelige feedback, verbetert antwoorden en voert elke belangrijke query
+
+00:18:04.980 --> 00:18:08.300
+opnieuw uit in elk kanaal. Tegen de tijd dat je opschaalt naar een brede uitrol is de
+
+00:18:08.300 --> 00:18:12.340
+stresstest al doorstaan. De echte truc is om publiceren niet langer als een eindpunt te zien.
+
+00:18:12.340 --> 00:18:16.380
+De knop markeert niet het einde van het boek, maar het begin van de veldcampagne. Zodra de data
+
+00:18:16.380 --> 00:18:20.580
+van de pilot binnenkomt en je laks bevestigen dat gebruikers overal duidelijke antwoorden krijgen,
+
+00:18:20.580 --> 00:18:23.740
+heb je het recht verdiend om het stabiel te noemen. En dat besef sluit aan bij het grotere
+
+00:18:23.740 --> 00:18:27.620
+plaatje van bouwen met Copilot Studio, want het is geen eenmalig gebouw, maar een systeem
+
+00:18:27.620 --> 00:18:31.300
+dat je keer op keer aanpast. Dus hier is de samenvatting die er echt toe doet.
+
+00:18:31.300 --> 00:18:35.660
+Drie dingen maken je beeld van Wankel naar betrouwbaar. Ten eerste, onderbouwde agent, upload de echte
+
+00:18:35.660 --> 00:18:39.260
+documenten of verwijs naar vertrouwde bronnen zodat hij stopt met gokken. Ten tweede, geef
+
+00:18:39.260 --> 00:18:43.300
+hem een persona, stel de naam, beschrijving en toon in en beschrijf het gedrag in dat instructieveld
+
+00:18:43.300 --> 00:18:47.580
+van 8000 tekens. Ten derde, vertrouw niet blind op een soepele repetitie, gebruik het testvenster,
+
+00:18:47.580 --> 00:18:51.340
+draai een besloten pilot en publiceer en monitor daarna. Bij een perfect resultaat leveren
+
+00:18:51.340 --> 00:18:54.580
+die stappen je een bot op die vertrouwen wint in plaats van tickets. Abonneer je voor meer
+
+00:18:54.580 --> 00:18:58.140
+en laat in één zin in de comments weten welk beleidsdocument jij zou gebruiken als basis
+
+00:18:58.140 --> 00:19:01.900
+voor je agent.

@@ -1,0 +1,2605 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:03.740
+Hai cliccato perché il podcast diceva che Azure AI Foundry è una trappola, giusto?
+
+00:00:04.600 --> 00:00:06.860
+Sei nel posto giusto. Ecco la promessa fin da subito.
+
+00:00:07.440 --> 00:00:12.160
+Copilot crollano senza grounding, ma strumenti come la Retrieval Augmented Generation o RAG
+
+00:00:12.160 --> 00:00:17.480
+con Azure AI Search ibrida e semantica più valutatori per accuratezza, pertinenza e coerenza
+
+00:00:17.480 --> 00:00:21.460
+sono le vere soluzioni per evitare di pubblicare allucinazioni travestite da risposte.
+
+00:00:22.800 --> 00:00:26.760
+Supereremo le presentazioni di marketing e ti mostreremo il manuale di sopravvivenza con esempi reali dal campo.
+
+00:00:26.760 --> 00:00:31.220
+Iscriviti alla newsletter dell'M365 Show e segui le dirette con gli MVP.
+
+00:00:32.060 --> 00:00:34.200
+E' lì che risiedono le cicatrici e le soluzioni.
+
+00:00:35.000 --> 00:00:38.060
+E dato che le prime crepe appaiono solitamente nelle app multimodali, iniziamo da lì.
+
+00:00:38.920 --> 00:00:40.960
+Perché le app multimodali falliscono al mondo reale?
+
+00:00:41.460 --> 00:00:43.800
+Quando vedi una demo multimodale sul palco, sembra impeccabile.
+
+00:00:44.680 --> 00:00:48.600
+Il presentatore inserisce un prompt testuale, un'immagine pulita, forse anche un rapido input vocale
+
+00:00:48.600 --> 00:00:51.400
+e il modello fornisce un grafico perfetto o un riassunto nitido di un contratto.
+
+00:00:51.780 --> 00:00:56.100
+Sembra tutto magia, ma nel momento in cui provi la stessa cosa in un'azienda reale, l'incanto svanisce rapidamente.
+
+00:00:56.760 --> 00:00:59.460
+Le demo girano su input perfetto, gli ambienti di lavoro girano su spazzatù.
+
+00:00:59.880 --> 00:01:00.760
+Questa è la vera differenza.
+
+00:01:01.100 --> 00:01:01.760
+In produzione.
+
+00:01:01.940 --> 00:01:07.120
+Nessuno fornisce al tuo modello screenshot preparati con cura o file CSV formattati da un comitato di standardizzazione.
+
+00:01:07.860 --> 00:01:09.660
+Le risorse umane caricano documenti di identità sfocati.
+
+00:01:10.180 --> 00:01:13.160
+L'ufficio acquisti trascina dentro PDF che sono la quinta generazione di fax.
+
+00:01:13.640 --> 00:01:17.020
+Qualcuno in amministrazione scatta una foto a una fattura con la fotocamera rotta di un Android.
+
+00:01:17.020 --> 00:01:24.480
+I modelli multimodali possono gestire testo, immagini, voce e video, ma necessitano di dati ben indicizzati e di recupero per funzionare in condizioni disordinate.
+
+00:01:25.040 --> 00:01:27.520
+Altrimenti stai solo chiedendo al modello di improvvisare sulla spazzatura.
+
+00:01:28.000 --> 00:01:31.000
+E nessuna quantità di spesa in GPU risolve il problema spazzatura in intratto, spazzatura in uscita.
+
+00:01:31.360 --> 00:01:34.940
+Qui che la retrieval augmented generation o RUG dovrebbe salvarti.
+
+00:01:35.660 --> 00:01:36.200
+Parole povere.
+
+00:01:36.260 --> 00:01:38.860
+Il modello non conosce la tua azienda, quindi lo colleghano a fonte di conoscenza.
+
+00:01:39.500 --> 00:01:41.700
+Recupera una fetta di dati e modella la risposta attorno ad essa.
+
+00:01:41.700 --> 00:01:44.720
+Quando la corrispondenza è precisa ottieni risposte utili e fondate.
+
+00:01:44.980 --> 00:01:47.840
+Quando è approssimativa il modello va a braccio sputando assurdità con sicurezza.
+
+00:01:48.380 --> 00:01:53.880
+Ed è così che finisci con un chatbot che giura che la tua azienda ha una nuova politica di sconti per il terzo trimestre che non esiste.
+
+00:01:54.440 --> 00:01:56.960
+Non è diventato senziente, ha solo estratto i dati sbagliati.
+
+00:01:58.000 --> 00:02:05.020
+Azure Rai Studio e Azure Rai Foundry si basano entrambi su questo modello e supportano tutti i tipi di modalità, linguaggio, visione, voce e persino recupero video.
+
+00:02:05.620 --> 00:02:07.800
+Ma il punto è che la rag è valida solo quanto i suoi dati.
+
+00:02:08.300 --> 00:02:09.800
+Ecco la sorpresa che la maggior parte di ti mino.
+
+00:02:09.800 --> 00:02:12.640
+Non puoi semplicemente inserire un metodo di recupero e pensare che basta.
+
+00:02:13.020 --> 00:02:19.540
+Se vuoi che i risultati siano coerenti ti serve una ricerca ibrida basata su parole chiave e vettori, completata da un riordinatore semantico integrato in Azure Research.
+
+00:02:19.960 --> 00:02:25.460
+Permette al sistema di bilanciare le corrispondenze letterali con il significato semantico, riordinando i risultati per mettere in cima il contesto corretto.
+
+00:02:26.120 --> 00:02:33.520
+Integrandolo nella tua configurazione multimodale, il modello riesce improvvisamente a gestire scansioni storte e immagini sfocate invece di inventare la tua polisi di conformità dal nulla.
+
+00:02:34.300 --> 00:02:36.520
+Parliamo ora del perché così tante implementazioni falliscono in misura.
+
+00:02:36.520 --> 00:02:41.760
+Le aziende si aspettano risultati perfetti fin dal primo giorno, ma non stanziano un budget per i cicli di valutazione.
+
+00:02:42.720 --> 00:02:47.840
+Senza controlli di fondatezza, pertinenza e coerenza in background, non ti accorgi dello scostamento finché gli utenti non ne subiscono le conseguenze.
+
+00:02:48.780 --> 00:02:51.420
+Molte implementazioni iniziali falliscono rapidamente proprio per questo modo.
+
+00:02:51.680 --> 00:02:54.600
+L'output sembra corretto, ma nessuno l'ha verificato rispetto alle leità di dirigente.
+
+00:02:54.600 --> 00:02:57.580
+Pensaci, non distribueresti mai un nuovo database senza un monitoraggio.
+
+00:02:58.320 --> 00:03:02.780
+Eppure, con l'IA multimodale, i dirigenti la mettono in produzione come se fosse una scatola magica plug and play.
+
+00:03:03.460 --> 00:03:04.620
+Non deve per forza finire un fallimento.
+
+00:03:05.200 --> 00:03:07.920
+Carvana è una delle storie di successo dei clienti foundry che lo dimostra.
+
+00:03:08.400 --> 00:03:14.200
+Hanno reso l'IA self-service davvero utile, ottimizzando il recupero, fondando correttamente i propri agenti e investendo nell'osservabilità.
+
+00:03:14.800 --> 00:03:19.100
+Ciò ha trasformato quello che poteva essere solo un altro bot giocattolo in qualcosa di cui i clienti potevano fidarsi.
+
+00:03:19.100 --> 00:03:25.580
+Ora, guarda invece le aziende che hanno incollato un chatbot generico alla loro pagina di supporto senza fondatezza né valutazione.
+
+00:03:26.060 --> 00:03:26.840
+Hai già visto il risultato.
+
+00:03:27.340 --> 00:03:31.360
+Richieste di garanzia scambiate per l'idea di vendita, code di assistenza intasata e credibilità distrutta.
+
+00:03:31.720 --> 00:03:33.200
+Stesso stacca azzurro, risultato opposto.
+
+00:03:33.720 --> 00:03:34.860
+Quindi, ecco la cruda realtà.
+
+00:03:35.420 --> 00:03:38.200
+Multimodale non crolla perché l'IA non è abbastanza intelligente.
+
+00:03:38.880 --> 00:03:41.520
+Crolla perché i dati non sono preparati, indicizzati o monitorati.
+
+00:03:42.280 --> 00:03:45.800
+Inserisci spazzatura nel sistema di recupero, salta le valutazioni e guarda la fiducia andare in fumo.
+
+00:03:45.800 --> 00:03:49.700
+Ma con la ricerca ibrida e il riordinamento semantico e costanti valutazioni
+
+00:03:49.700 --> 00:03:53.460
+puoi elaborare fatture, contratti, immagini e persino note audio approssimative
+
+00:03:53.460 --> 00:03:55.300
+con risposte che rimangono ancorate alla realtà.
+
+00:03:56.740 --> 00:03:59.180
+E una volta che la fondatezza assicurata emerge un altro rischio.
+
+00:03:59.860 --> 00:04:03.700
+Perché anche se le pipeline di dati sono pulite, il sistema che le guida può comunque andare fuori controllo.
+
+00:04:04.520 --> 00:04:05.440
+E' qui che la domanda cambia.
+
+00:04:06.080 --> 00:04:08.400
+La gente che coordina tutto questo sta davvero aiutando la tua azienda
+
+00:04:08.400 --> 00:04:11.200
+o sta solo trasformando silenziosamente il tuo budget in combustibile?
+
+00:04:12.120 --> 00:04:13.940
+La gente utile o costoso fermacarte?
+
+00:04:13.940 --> 00:04:17.460
+Un'agente coordina modelli, dati, trigger e azioni.
+
+00:04:18.120 --> 00:04:20.440
+Pensalo come un vigile urbano per i tuoi flussi di lavoro automatizzati.
+
+00:04:21.020 --> 00:04:24.720
+A volte dirige tutto senza intoppi, a volte fa passare tre autocarri e un'auto da clown.
+
+00:04:24.840 --> 00:04:26.000
+Poi se ne va a pranzo.
+
+00:04:26.840 --> 00:04:30.300
+Quel divario tra la definizione pulita e la realtà disordinata è dove la maggior parte il controllo.
+
+00:04:31.120 --> 00:04:32.420
+Sulla carta un'agente sembra perfetto.
+
+00:04:33.180 --> 00:04:35.240
+Dagli istruzioni puntalo verso i tuoi dati e le tue app
+
+00:04:35.240 --> 00:04:38.520
+e dovrebbe eseguire processi, trovare risposte e persino avviare flussi di lavoro.
+
+00:04:39.200 --> 00:04:40.860
+Ma questo non è un collega perfetto.
+
+00:04:41.620 --> 00:04:44.140
+E' tanto probabile che risolva un problema ricorrente alle due del mattino
+
+00:04:44.140 --> 00:04:47.480
+quanto chi non dì la tua coda di ticket fantasma perché ha letto male un registro errori.
+
+00:04:48.200 --> 00:04:49.260
+Immaginalo dentro ServiceNow.
+
+00:04:49.260 --> 00:04:53.100
+Se limitata correttamente, li ha creati che tre ali solo per problemi autentici
+
+00:04:53.100 --> 00:04:54.600
+restituendo ore preziosi agli umani.
+
+00:04:55.520 --> 00:04:58.240
+Se lasciata libera, può seppellire il desk sotto una valanga di falsi avvisi
+
+00:04:58.240 --> 00:05:00.600
+su critiche falle della stampante su Harder perfettamente funzionante.
+
+00:05:00.840 --> 00:05:03.180
+Prova a spiegare questo incremento di produttività al tuo CIO.
+
+00:05:03.620 --> 00:05:04.800
+Ecco la distinzione che molti trascurano.
+
+00:05:05.140 --> 00:05:06.680
+Copilot e agenti non sono la stessa cosa.
+
+00:05:07.100 --> 00:05:08.600
+Copilot è fondamente un assistente per i prompt.
+
+00:05:09.060 --> 00:05:11.020
+Tu chiedi, lui risponde e tu mantieni il controllo.
+
+00:05:11.840 --> 00:05:14.280
+Gli agenti, d'altra parte, decidono le cose senza aspettare te.
+
+00:05:14.940 --> 00:05:18.400
+Seguono le tue vage istruzioni alla lettera anche quando i risultati non hanno senso.
+
+00:05:19.260 --> 00:05:22.000
+E' qui che l'automazione o fare risparmiare tempo reale occade nel caos
+
+00:05:22.000 --> 00:05:23.660
+che passerà il doppio del tempo a ripulire.
+
+00:05:24.320 --> 00:05:27.020
+La verità è che molti team forniscono al proprio agente una descrizione del lavoro
+
+00:05:27.020 --> 00:05:28.180
+che sembra una promessa elettorale.
+
+00:05:28.980 --> 00:05:31.580
+Ottimizzare i processi, formire insight, aiutare le persone.
+
+00:05:32.260 --> 00:05:34.320
+Congratulazioni, è praticamente detto al bot di fare quello che vuole.
+
+00:05:34.740 --> 00:05:37.240
+Gli agenti senza limiti non restano educatamente nella loro borsi.
+
+00:05:37.500 --> 00:05:40.320
+Vanno nel panico, inventano problemi da risolvere, duplicano i record,
+
+00:05:41.000 --> 00:05:41.960
+si bloccano i loop infiniti.
+
+00:05:42.240 --> 00:05:45.440
+E poi la dirigenza si chiede perché una demo brillante si sia trasformata in un incubo per la tua.
+
+00:05:45.760 --> 00:05:46.720
+Ora facciamo chiarezza.
+
+00:05:46.720 --> 00:05:49.780
+Non è che la maggior parte delle organizzazioni falliscano i primi due mesi.
+
+00:05:50.300 --> 00:05:51.320
+Questo non emerge dalla ricerca.
+
+00:05:51.800 --> 00:05:55.240
+Ciò che accade, velocemente, è che molte aziende incontrano ostacoli presto
+
+00:05:55.240 --> 00:05:57.200
+perché non hanno mai limitato bene i loro agenti,
+
+00:05:57.260 --> 00:06:00.120
+non hanno aggiunto passaggi di convalida e non hanno implementato la telemetria.
+
+00:06:00.760 --> 00:06:02.620
+Senza queste barriere il tuo nuovo strumento scintillante
+
+00:06:02.620 --> 00:06:04.780
+è solo uno stagista spericolato con privilegi di amministratore.
+
+00:06:05.120 --> 00:06:07.600
+Ed è qui che lo stack Microsoft ti fornisce effettivamente i pezzi necessari.
+
+00:06:08.240 --> 00:06:09.680
+Copai lo studio è lo spazio low-code
+
+00:06:09.680 --> 00:06:11.720
+dove i creatori progettano il comportamento dell'agente
+
+00:06:11.720 --> 00:06:13.520
+e pensano a flussi prompt e trigger di eventi.
+
+00:06:13.520 --> 00:06:17.360
+Poi aggiori iFoundries, agent service, l'impalcatura aziendale
+
+00:06:17.360 --> 00:06:19.460
+che mette quegli agenti in produzione con osservabilità.
+
+00:06:20.540 --> 00:06:23.060
+Agent service è dove aggiungi monitoraggio, log e metriche.
+
+00:06:24.200 --> 00:06:27.700
+È deliberatamente progettato per l'automazione con supervisione umana integrata
+
+00:06:27.700 --> 00:06:31.260
+perché Microsoft sa cosa succede se ti fidi di un agente non testato.
+
+00:06:31.260 --> 00:06:33.940
+Quindi come fai a sapere se il tuo agente è davvero utile?
+
+00:06:34.820 --> 00:06:36.420
+Sottoponilo a una lista di controllo a schietta.
+
+00:06:36.780 --> 00:06:38.540
+Primo, riduce le ore di lavoro umano
+
+00:06:38.540 --> 00:06:40.200
+o trascina il tuo staff in compiti di debugging?
+
+00:06:40.960 --> 00:06:44.260
+Due, state acquisendo metriche come fondatezza, fluidità e coerenza
+
+00:06:44.260 --> 00:06:46.380
+o state solo fissando le belle dashboard di marketing?
+
+00:06:47.580 --> 00:06:50.140
+Tre, avete una telemetria attiva per individuare le derive
+
+00:06:50.140 --> 00:06:51.820
+prima che gli utenti inizino a lamentarsi?
+
+00:06:52.540 --> 00:06:54.420
+Se avete risposto in modo errato a una qualsiasi di queste
+
+00:06:54.420 --> 00:06:55.320
+non avete un agente in tempo.
+
+00:06:55.580 --> 00:06:56.920
+Avete solo un costoso salvaschermo.
+
+00:06:56.920 --> 00:06:59.380
+La via d'uscita è usare le funzioni di osservabilità
+
+00:06:59.380 --> 00:07:02.180
+e i valutatori integrati di Azure AI Foundry, Foundry.
+
+00:07:02.560 --> 00:07:03.900
+Questi non sono componenti aggiuntivi observi.
+
+00:07:04.240 --> 00:07:07.040
+Sono il metodo documentato per misurare fondatezza, pertinenza alla fonte.
+
+00:07:08.100 --> 00:07:09.720
+Senza di essi state solo tirando a indovinare
+
+00:07:09.720 --> 00:07:11.000
+se il vostro agente sia intelligente
+
+00:07:11.000 --> 00:07:12.940
+o se stia solo inventando cose con tono cortese.
+
+00:07:13.420 --> 00:07:15.020
+Con essi potete intervenire con sicurezza
+
+00:07:15.020 --> 00:07:16.400
+e ottimizzare quando l'output è via.
+
+00:07:17.000 --> 00:07:18.680
+Quindi sì, gli agenti possono cambiare le regole del gioco.
+
+00:07:19.100 --> 00:07:21.040
+Se maldimensionati diventano amplificatori di caos
+
+00:07:21.040 --> 00:07:22.940
+che sottraggono più tempo di quanto ne facciano risparmiare.
+
+00:07:23.200 --> 00:07:25.520
+Se ben dimensionati, con confini chiari, telemetria reale
+
+00:07:25.520 --> 00:07:27.280
+e risposte fondate possono gestire compiti
+
+00:07:27.280 --> 00:07:28.920
+lasciando agli umani il lavoro a maggior valore.
+
+00:07:30.220 --> 00:07:31.860
+È proprio quando pensate di aver trovato il giusto equilibrio
+
+00:07:31.860 --> 00:07:32.700
+la storia cambia ancora.
+
+00:07:33.460 --> 00:07:35.500
+Microsoft è già spingendo verso gli agenti autonomi
+
+00:07:35.500 --> 00:07:37.300
+bot che non aspettano il vostro input per agire.
+
+00:07:38.760 --> 00:07:40.740
+Questo porta la posta in gioco da utile o inutile
+
+00:07:40.740 --> 00:07:42.200
+a una categoria totalmente diversa
+
+00:07:42.200 --> 00:07:44.800
+perché parliamo di sistemi che operano anche quando nessuno guarda.
+
+00:07:46.080 --> 00:07:47.740
+La trappola dell'agente autonomo.
+
+00:07:48.320 --> 00:07:50.700
+Gli agenti autonomi sono il punto in cui l'hype diventa pericoloso.
+
+00:07:51.480 --> 00:07:52.600
+Sulla carta sono il sogno.
+
+00:07:53.240 --> 00:07:54.520
+Lasciate che li agisca per voi
+
+00:07:54.520 --> 00:07:55.720
+automatizzate la routine
+
+00:07:55.720 --> 00:07:57.720
+e smettete di alzarvi dal letto alle 2 del mattino
+
+00:07:57.720 --> 00:07:58.960
+per gestire le code dei ticket.
+
+00:07:59.520 --> 00:08:00.480
+Suona bene in sala riunioni.
+
+00:08:00.940 --> 00:08:01.580
+La trappola è semplice.
+
+00:08:01.940 --> 00:08:02.820
+Non aspettano il permesso.
+
+00:08:03.300 --> 00:08:04.200
+I copiloti si fermano ad aspettare.
+
+00:08:04.620 --> 00:08:05.440
+Gli agenti autonomi no.
+
+00:08:05.860 --> 00:08:07.200
+E quando prendono una decisione sbagliata
+
+00:08:07.200 --> 00:08:09.220
+il danno è immediato e si propaga in tutto il vostro tenant.
+
+00:08:09.660 --> 00:08:10.580
+Concetto abbastanza semplice.
+
+00:08:11.000 --> 00:08:11.900
+I copiloti sono reattivi.
+
+00:08:12.200 --> 00:08:13.020
+Gli agenti sono pronti.
+
+00:08:13.400 --> 00:08:14.960
+Invece di restare in attesa di un prompt
+
+00:08:14.960 --> 00:08:15.940
+impostate gli agenti
+
+00:08:15.940 --> 00:08:17.260
+per monitorare la salute dei servizi
+
+00:08:17.260 --> 00:08:18.360
+gestire segnali di sicurezza
+
+00:08:18.360 --> 00:08:20.060
+e eseguire flussi di lavoro automaticamente.
+
+00:08:20.880 --> 00:08:22.480
+Microsoft lo presenta come efficienza
+
+00:08:24.520 --> 00:08:25.340
+per azioni più fluide.
+
+00:08:25.940 --> 00:08:26.660
+La promessa è reale
+
+00:08:26.660 --> 00:08:27.920
+ma ecco il contesto importante.
+
+00:08:29.240 --> 00:08:30.500
+Gli agenti autonomi in Copilot Studio
+
+00:08:30.500 --> 00:08:31.960
+sono attualmente ancora in anteprima.
+
+00:08:32.580 --> 00:08:33.740
+Anteprima non significa rotto
+
+00:08:33.740 --> 00:08:34.920
+ma significa non ancora testato
+
+00:08:34.920 --> 00:08:35.960
+nel caotico mondo reale.
+
+00:08:36.560 --> 00:08:37.560
+Persino Microsoft afferma
+
+00:08:37.560 --> 00:08:38.760
+che servono presidi di governance
+
+00:08:38.760 --> 00:08:39.380
+del ciclo di vita
+
+00:08:39.380 --> 00:08:40.440
+e sistema di console Copilot
+
+00:08:40.440 --> 00:08:41.620
+prima di pensare a una distribuzione
+
+00:08:41.620 --> 00:08:42.200
+su larga scala.
+
+00:08:42.680 --> 00:08:43.700
+Considerate un rischio realistico?
+
+00:08:44.140 --> 00:08:45.300
+Diciamo che costruite un agente
+
+00:08:45.300 --> 00:08:46.280
+di helpdesk autonomo
+
+00:08:46.280 --> 00:08:47.220
+gli date l'autorità
+
+00:08:47.220 --> 00:08:48.600
+di rispondere alle anomalie di accesso.
+
+00:08:49.220 --> 00:08:50.240
+In una demo con 5 utenti
+
+00:08:50.240 --> 00:08:51.060
+funziona perfettamente.
+
+00:08:51.500 --> 00:08:52.200
+Avvisi generati.
+
+00:08:52.300 --> 00:08:52.860
+Account gesti.
+
+00:08:53.420 --> 00:08:54.020
+Poi in produzione
+
+00:08:54.520 --> 00:08:55.000
+trumorosi.
+
+00:08:55.480 --> 00:08:56.340
+Invece di attendere
+
+00:08:56.340 --> 00:08:57.640
+inizia a resettare
+
+00:08:57.640 --> 00:08:58.680
+in massa centinaia di account
+
+00:08:58.680 --> 00:09:00.000
+basandosi su falsi positivi.
+
+00:09:00.980 --> 00:09:01.640
+Il risultato non è
+
+00:09:01.640 --> 00:09:02.500
+un'interruzione ipotetica.
+
+00:09:02.940 --> 00:09:03.900
+Potrebbe realisticamente
+
+00:09:03.900 --> 00:09:04.660
+bloccare le operazioni
+
+00:09:04.660 --> 00:09:05.180
+di fine mese.
+
+00:09:05.660 --> 00:09:06.380
+Non è fantascienza.
+
+00:09:06.940 --> 00:09:07.600
+È la modalità di errore
+
+00:09:07.600 --> 00:09:08.120
+a cui ti esponi
+
+00:09:08.120 --> 00:09:09.300
+se eviti di definire l'ambito.
+
+00:09:09.800 --> 00:09:11.040
+La soluzione è abbandonare la tecnologia
+
+00:09:11.040 --> 00:09:12.120
+e costruire prima
+
+00:09:12.120 --> 00:09:12.880
+una rete di sicurezza.
+
+00:09:13.280 --> 00:09:14.060
+Qual è la lista di controllo
+
+00:09:14.060 --> 00:09:14.620
+per la sopravvivenza?
+
+00:09:14.960 --> 00:09:15.520
+Tre cose da fare
+
+00:09:15.520 --> 00:09:16.880
+prima di qualsiasi automazione appariscente.
+
+00:09:17.360 --> 00:09:19.200
+1. Ambito di identità e accesso.
+
+00:09:20.140 --> 00:09:20.820
+Concedi al tuo agente
+
+00:09:20.820 --> 00:09:21.420
+diritti minimi
+
+00:09:21.420 --> 00:09:22.620
+niente ruoli di amministrazione totale.
+
+00:09:22.980 --> 00:09:24.080
+2. Registrazione e rollback.
+
+00:09:24.600 --> 00:09:25.440
+Ogni azione deve lasciare
+
+00:09:25.440 --> 00:09:26.520
+una traccia che puoi controllare.
+
+00:09:27.200 --> 00:09:28.000
+E ogni azione importante
+
+00:09:28.000 --> 00:09:29.260
+necessita di una via di inversione
+
+00:09:29.260 --> 00:09:30.140
+quando l'agente sbaglia.
+
+00:09:30.840 --> 00:09:32.120
+3. Fili contenuto e comportamento.
+
+00:09:32.580 --> 00:09:33.480
+Microsoft lo evidenzia
+
+00:09:33.480 --> 00:09:34.520
+con la sicurezza dei contenuti
+
+00:09:34.520 --> 00:09:35.120
+di Azure AI
+
+00:09:35.120 --> 00:09:36.440
+e la configurazione della conoscenza.
+
+00:09:36.880 --> 00:09:37.800
+I filtri che impediscono
+
+00:09:37.800 --> 00:09:38.500
+a un bot zelante
+
+00:09:38.500 --> 00:09:39.680
+di generare risposte inappropriate
+
+00:09:39.680 --> 00:09:40.740
+e uscire da seminato.
+
+00:09:41.560 --> 00:09:42.180
+Fai prima questo
+
+00:09:42.180 --> 00:09:43.100
+altrimenti l'intelligenza
+
+00:09:43.100 --> 00:09:43.560
+del tuo agente
+
+00:09:43.560 --> 00:09:44.300
+fosserà il tuo lavoro
+
+00:09:44.300 --> 00:09:45.080
+invece di aiutarlo.
+
+00:09:45.360 --> 00:09:45.980
+Lo strato etico
+
+00:09:45.980 --> 00:09:47.040
+rende tutto ancora più critico.
+
+00:09:47.440 --> 00:09:48.520
+Immagina un agente HR
+
+00:09:48.520 --> 00:09:49.620
+che segnala automaticamente
+
+00:09:49.620 --> 00:09:50.780
+i dipendenti come rischiosi
+
+00:09:50.780 --> 00:09:51.700
+o un agente finanziario
+
+00:09:51.700 --> 00:09:52.960
+che blocca i pagamenti ai fornitori
+
+00:09:52.960 --> 00:09:54.020
+classificandoli erroneamente
+
+00:09:54.020 --> 00:09:54.520
+come frodi.
+
+00:09:55.060 --> 00:09:56.120
+Questi non sono difetti innocui
+
+00:09:56.120 --> 00:09:57.260
+sono fallimenti con impatto umano
+
+00:09:57.260 --> 00:09:58.080
+e conseguenze regali
+
+00:09:58.080 --> 00:09:58.760
+e di conformità.
+
+00:09:59.400 --> 00:10:00.280
+I pregiudizi nei dati
+
+00:10:00.280 --> 00:10:00.880
+di addestramento
+
+00:10:00.880 --> 00:10:01.520
+o nel recupero
+
+00:10:01.520 --> 00:10:02.280
+non svaniscono solo
+
+00:10:02.280 --> 00:10:02.840
+perché ora sei
+
+00:10:02.840 --> 00:10:03.880
+in anteprima aziendale.
+
+00:10:05.020 --> 00:10:05.960
+Senza filtri, controlli
+
+00:10:05.960 --> 00:10:06.640
+e alternativi umane
+
+00:10:06.640 --> 00:10:07.800
+stai esternalizzando giudizi
+
+00:10:07.800 --> 00:10:08.380
+che i tuoi avvocati
+
+00:10:08.380 --> 00:10:08.980
+non vogliono certo
+
+00:10:08.980 --> 00:10:09.920
+siano presi da un algoritmo
+
+00:10:09.920 --> 00:10:10.680
+non supervisionato.
+
+00:10:11.360 --> 00:10:11.940
+Il messaggio stesso
+
+00:10:11.940 --> 00:10:12.860
+di Microsoft iNight
+
+00:10:12.860 --> 00:10:13.760
+è stato scritto su questo
+
+00:10:13.760 --> 00:10:14.960
+Guardrail, gestione
+
+00:10:14.960 --> 00:10:15.600
+del ciclo di vita
+
+00:10:15.600 --> 00:10:16.200
+monitoraggio
+
+00:10:16.200 --> 00:10:17.020
+e sistema di controllo
+
+00:10:17.020 --> 00:10:17.440
+copilot
+
+00:10:17.440 --> 00:10:18.320
+non sono opzionali
+
+00:10:18.320 --> 00:10:19.100
+sono requisiti.
+
+00:10:19.860 --> 00:10:20.580
+L'anteprima oggi
+
+00:10:20.580 --> 00:10:21.880
+riguarda meno le demo brillanti
+
+00:10:21.880 --> 00:10:22.440
+e più i tester
+
+00:10:22.440 --> 00:10:22.920
+che provano
+
+00:10:22.920 --> 00:10:23.980
+dove appaiono le crepe.
+
+00:10:24.860 --> 00:10:25.320
+Se vai live
+
+00:10:25.320 --> 00:10:26.140
+senza test di fase
+
+00:10:26.140 --> 00:10:27.020
+a flussi di approvazione
+
+00:10:27.020 --> 00:10:27.420
+e audit
+
+00:10:27.420 --> 00:10:28.640
+non stai eseguendo un agente
+
+00:10:28.640 --> 00:10:29.400
+stai stressando
+
+00:10:29.400 --> 00:10:29.920
+il tuo tenant
+
+00:10:29.920 --> 00:10:30.880
+in produzione.
+
+00:10:31.760 --> 00:10:32.040
+Ecco perché
+
+00:10:32.040 --> 00:10:32.500
+l'osservabilità
+
+00:10:32.500 --> 00:10:33.180
+non è facoltativa.
+
+00:10:33.640 --> 00:10:34.560
+Hai bisogno di dashboard
+
+00:10:34.560 --> 00:10:35.020
+che mostri
+
+00:10:35.020 --> 00:10:36.020
+in ogni passo dell'agente
+
+00:10:36.020 --> 00:10:36.540
+e verifichino
+
+00:10:36.540 --> 00:10:37.060
+se l'output
+
+00:10:37.060 --> 00:10:37.720
+sia fondato
+
+00:10:37.720 --> 00:10:38.340
+pertinente
+
+00:10:38.340 --> 00:10:38.960
+e coerente
+
+00:10:38.960 --> 00:10:40.080
+con la tua policy
+
+00:10:40.080 --> 00:10:41.560
+e hai bisogno di opzioni
+
+00:10:41.560 --> 00:10:42.300
+con intervento umano.
+
+00:10:42.560 --> 00:10:43.480
+Microsoft non lo nasconde.
+
+00:10:44.300 --> 00:10:44.900
+Fanno riferimento
+
+00:10:44.900 --> 00:10:45.220
+a modelli
+
+00:10:45.220 --> 00:10:45.640
+in cui l'umano
+
+00:10:45.640 --> 00:10:46.380
+rimane il dispositivo
+
+00:10:46.380 --> 00:10:46.860
+di sicurezza.
+
+00:10:47.640 --> 00:10:48.020
+Pensalo come
+
+00:10:48.020 --> 00:10:48.680
+il pilota automatico
+
+00:10:48.680 --> 00:10:49.020
+di un aero
+
+00:10:49.020 --> 00:10:50.280
+incredibilmente utile
+
+00:10:50.280 --> 00:10:51.480
+ma sempre progettato
+
+00:10:51.480 --> 00:10:52.600
+con un override manuale.
+
+00:10:53.240 --> 00:10:53.540
+Se il bot
+
+00:10:53.540 --> 00:10:54.240
+crede che l'atterraggio
+
+00:10:54.240 --> 00:10:55.100
+ottimale sia in un lago
+
+00:10:55.100 --> 00:10:55.580
+vuoi riprendere
+
+00:10:55.580 --> 00:10:56.020
+il controllo
+
+00:10:56.020 --> 00:10:56.860
+prima dell'ammaraggio.
+
+00:10:57.640 --> 00:10:58.400
+L'analogia corretta qui
+
+00:10:58.400 --> 00:10:59.280
+è lasciare che un adolescente
+
+00:10:59.280 --> 00:10:59.940
+impare a guidare.
+
+00:11:00.640 --> 00:11:01.600
+Il potenziale è reale
+
+00:11:01.600 --> 00:11:02.720
+e la velocità è impressionante
+
+00:11:02.720 --> 00:11:03.660
+ma non consegni le chiavi
+
+00:11:03.660 --> 00:11:04.240
+lasci il vialetto
+
+00:11:04.240 --> 00:11:05.120
+e speri per il meglio.
+
+00:11:05.920 --> 00:11:07.100
+Ti siedi sul lato passeggero
+
+00:11:07.100 --> 00:11:07.840
+stabilisci dei limiti
+
+00:11:07.840 --> 00:11:08.480
+e installi i freni
+
+00:11:08.480 --> 00:11:09.360
+che puoi premere tu stesso.
+
+00:11:10.000 --> 00:11:10.640
+Questa è la governance
+
+00:11:10.640 --> 00:11:11.640
+del ciclo di vita in pratica.
+
+00:11:12.040 --> 00:11:12.820
+Rotelle di addestramento
+
+00:11:12.820 --> 00:11:13.640
+finché non sarai certo
+
+00:11:13.640 --> 00:11:14.060
+che il sistema
+
+00:11:14.060 --> 00:11:14.780
+non esca distratto.
+
+00:11:15.300 --> 00:11:15.940
+E questo ci porta
+
+00:11:15.940 --> 00:11:16.740
+al reparto di produzione
+
+00:11:16.740 --> 00:11:17.220
+più grande
+
+00:11:17.220 --> 00:11:18.240
+dove agenti, copilot
+
+00:11:18.240 --> 00:11:19.040
+e ogni flusso di lavoro
+
+00:11:19.040 --> 00:11:20.040
+testato si riuniscono.
+
+00:11:20.760 --> 00:11:21.440
+Microsoft lo chiama
+
+00:11:21.440 --> 00:11:22.360
+Azure AI Foundry
+
+00:11:22.360 --> 00:11:23.220
+uno spazio unico
+
+00:11:23.220 --> 00:11:23.860
+per creare IA
+
+00:11:23.860 --> 00:11:25.040
+con tutti gli strumenti necessari.
+
+00:11:25.900 --> 00:11:26.400
+Se diventerà
+
+00:11:26.400 --> 00:11:27.820
+un potente centro di produzione
+
+00:11:27.820 --> 00:11:28.420
+o il luogo dove
+
+00:11:28.420 --> 00:11:29.400
+il tuo progetto va in fumo
+
+00:11:29.400 --> 00:11:30.780
+dipende solo da come lo tratti.
+
+00:11:30.780 --> 00:11:33.000
+Azure AI Foundry
+
+00:11:33.000 --> 00:11:33.880
+la tua fabbrica
+
+00:11:33.880 --> 00:11:34.840
+o il tuo campo minato.
+
+00:11:35.660 --> 00:11:36.540
+Azure AI Foundry
+
+00:11:36.540 --> 00:11:37.100
+è il nuovo fiore
+
+00:11:37.100 --> 00:11:38.080
+all'occhiello di Microsoft
+
+00:11:38.080 --> 00:11:39.240
+una cosiddetta fabbrica
+
+00:11:39.240 --> 00:11:40.520
+per tutto ciò che è IA
+
+00:11:40.520 --> 00:11:42.140
+nei problemi.
+
+00:11:42.520 --> 00:11:43.400
+Troppi team entrano
+
+00:11:43.400 --> 00:11:44.280
+e lo trattano come unichè.
+
+00:11:45.000 --> 00:11:45.820
+Si aggirano abbagliati
+
+00:11:45.820 --> 00:11:46.480
+dai cataloghi
+
+00:11:46.480 --> 00:11:47.100
+prendono un paio
+
+00:11:47.100 --> 00:11:48.020
+di modelli linguistici
+
+00:11:48.020 --> 00:11:48.440
+brillanti
+
+00:11:48.440 --> 00:11:49.500
+aggiungono qualche connettore
+
+00:11:49.500 --> 00:11:50.180
+e assemblano tutto
+
+00:11:50.180 --> 00:11:51.100
+senza istruzioni.
+
+00:11:52.400 --> 00:11:53.020
+Ciò che ottengono
+
+00:11:53.020 --> 00:11:54.240
+non è un sistema IA aziendale
+
+00:11:54.240 --> 00:11:55.160
+ma un giocattolo da demo
+
+00:11:55.160 --> 00:11:55.620
+che crolla
+
+00:11:55.620 --> 00:11:56.740
+non appena un utente
+
+00:11:56.740 --> 00:11:58.660
+inserisce un PDF disordinato.
+
+00:11:59.440 --> 00:12:00.160
+Ecco cosa offre
+
+00:12:00.160 --> 00:12:00.900
+realmente Foundry
+
+00:12:00.900 --> 00:12:02.400
+direttamente dal manuale ufficiale.
+
+00:12:03.100 --> 00:12:03.840
+Un catalogo di modelli
+
+00:12:03.840 --> 00:12:04.720
+che spazia tra Microsoft
+
+00:12:04.720 --> 00:12:05.180
+OpenAI
+
+00:12:05.180 --> 00:12:05.500
+Meta
+
+00:12:05.500 --> 00:12:05.840
+Mistral
+
+00:12:05.840 --> 00:12:06.580
+DeepSeek e altri.
+
+00:12:07.420 --> 00:12:08.640
+Opzioni di personalizzazione
+
+00:12:08.640 --> 00:12:09.420
+come la generazione
+
+00:12:09.420 --> 00:12:10.300
+aumenta dal recupero
+
+00:12:10.300 --> 00:12:10.920
+il fine tuning
+
+00:12:10.920 --> 00:12:11.720
+e la distillazione.
+
+00:12:12.640 --> 00:12:14.100
+Un servizio di orchestrazione agenti
+
+00:12:14.100 --> 00:12:14.740
+strumenti come
+
+00:12:14.740 --> 00:12:15.280
+prompt flow
+
+00:12:15.280 --> 00:12:16.320
+per valutazione e debug
+
+00:12:16.320 --> 00:12:18.140
+funzioni di sicurezza
+
+00:12:18.140 --> 00:12:19.020
+controlli di accesso
+
+00:12:19.020 --> 00:12:19.740
+filtri di sicurezza
+
+00:12:19.740 --> 00:12:20.300
+dei contenuti
+
+00:12:20.300 --> 00:12:21.500
+e dashboard di osservabilità.
+
+00:12:22.620 --> 00:12:22.960
+In breve
+
+00:12:22.960 --> 00:12:24.440
+contiene tutte le parti necessarie
+
+00:12:24.440 --> 00:12:25.320
+per creare copiloti
+
+00:12:25.320 --> 00:12:26.300
+agenti flussi autonomi
+
+00:12:26.300 --> 00:12:27.340
+e mantenerli conformi.
+
+00:12:27.840 --> 00:12:28.500
+Questo è l'inventario.
+
+00:12:28.500 --> 00:12:29.540
+Il problema
+
+00:12:29.540 --> 00:12:30.200
+non è la mancanza
+
+00:12:30.200 --> 00:12:30.760
+di strumenti
+
+00:12:30.760 --> 00:12:31.860
+ma che troppi amministratori
+
+00:12:31.860 --> 00:12:32.220
+pensano
+
+00:12:32.220 --> 00:12:32.780
+basta attivare
+
+00:12:32.780 --> 00:12:34.100
+un interruttore GPT-4 Turbo
+
+00:12:34.100 --> 00:12:34.760
+per essere pronti
+
+00:12:34.760 --> 00:12:35.400
+alla produzione.
+
+00:12:36.300 --> 00:12:36.780
+La verità è che
+
+00:12:36.780 --> 00:12:37.620
+Foundry è una fabbrica
+
+00:12:37.620 --> 00:12:38.620
+e non la scatola dei giochi
+
+00:12:38.620 --> 00:12:39.240
+per un hackathon.
+
+00:12:39.820 --> 00:12:40.600
+Significa stabilire
+
+00:12:40.600 --> 00:12:41.500
+i confini di identità
+
+00:12:41.500 --> 00:12:42.820
+affinché solo le persone giuste
+
+00:12:42.820 --> 00:12:43.720
+cedano ai modelli corretti.
+
+00:12:44.380 --> 00:12:45.000
+Significa integrare
+
+00:12:45.000 --> 00:12:46.000
+la sicurezza dei contenuti
+
+00:12:46.000 --> 00:12:46.640
+in ogni pipeline.
+
+00:12:47.280 --> 00:12:47.840
+Significa usare
+
+00:12:47.840 --> 00:12:48.440
+l'osservabilità
+
+00:12:48.440 --> 00:12:48.860
+per sapere
+
+00:12:48.860 --> 00:12:49.720
+quando una risposta
+
+00:12:49.720 --> 00:12:50.600
+è basata su fatti
+
+00:12:50.600 --> 00:12:51.180
+e quando il modello
+
+00:12:51.180 --> 00:12:52.220
+inventa politiche aziendali
+
+00:12:52.220 --> 00:12:52.740
+dal nulla.
+
+00:12:54.160 --> 00:12:54.560
+E significa
+
+00:12:54.560 --> 00:12:55.240
+abbinare il lavoro
+
+00:12:58.500 --> 00:13:00.460
+Saltate questi passaggi
+
+00:13:00.460 --> 00:13:00.820
+e il caos
+
+00:13:00.820 --> 00:13:01.900
+entrerà dalla porta di servizio.
+
+00:13:02.320 --> 00:13:02.860
+Ho visto un team
+
+00:13:02.860 --> 00:13:03.540
+collegare un copilot
+
+00:13:03.540 --> 00:13:04.620
+di Foundry su SharePoint
+
+00:13:04.620 --> 00:13:05.740
+che ha esposto dati riservati
+
+00:13:05.740 --> 00:13:06.460
+delle risorse umane
+
+00:13:06.460 --> 00:13:07.240
+a 20 stagisti.
+
+00:13:08.080 --> 00:13:08.960
+Non è stata una genialata
+
+00:13:08.960 --> 00:13:09.540
+ma un disastro
+
+00:13:09.540 --> 00:13:10.580
+di conformità evitabile
+
+00:13:10.580 --> 00:13:11.800
+con regole di accesso integrate.
+
+00:13:12.560 --> 00:13:13.060
+Parliamo di reali
+
+00:13:13.060 --> 00:13:13.740
+modalità di fallimento.
+
+00:13:14.160 --> 00:13:15.120
+Un'organizzazione ha usato
+
+00:13:15.120 --> 00:13:15.980
+GPT-4 Turbo
+
+00:13:15.980 --> 00:13:16.600
+per l'etichettatura
+
+00:13:16.600 --> 00:13:17.220
+di foto di prodotto.
+
+00:13:18.000 --> 00:13:18.580
+In laboratorio
+
+00:13:18.580 --> 00:13:19.600
+la demo è stata un successo.
+
+00:13:20.220 --> 00:13:21.100
+Foto da studio pulite
+
+00:13:21.100 --> 00:13:22.060
+tag perfetti
+
+00:13:22.060 --> 00:13:22.960
+applausi di tutto.
+
+00:13:23.960 --> 00:13:24.560
+In produzione
+
+00:13:24.560 --> 00:13:25.240
+gli input non erano
+
+00:13:25.240 --> 00:13:25.820
+jpeg lucidi
+
+00:13:25.820 --> 00:13:26.420
+ma foto sfocate
+
+00:13:26.420 --> 00:13:27.640
+scattate col telefono in magazzino.
+
+00:13:28.540 --> 00:13:28.940
+Improvvisamente
+
+00:13:28.940 --> 00:13:29.700
+l'IA ha etichettato
+
+00:13:29.700 --> 00:13:30.720
+erroneamente passeggi
+
+00:13:30.720 --> 00:13:31.480
+come sede d'ufficio
+
+00:13:31.480 --> 00:13:32.480
+trasformato codice UPC
+
+00:13:32.480 --> 00:13:33.500
+in numeri di serie falsi
+
+00:13:33.500 --> 00:13:34.500
+in numeri di serie falsi.
+
+00:13:35.000 --> 00:13:35.880
+Oltre al colpo alla fiducia
+
+00:13:35.880 --> 00:13:37.020
+i costi hanno iniziato a salire
+
+00:13:37.020 --> 00:13:38.140
+e non è una favola
+
+00:13:38.140 --> 00:13:39.240
+a 0,1 dollari a messaggio.
+
+00:13:39.860 --> 00:13:40.440
+Prezzo di Foundry
+
+00:13:40.440 --> 00:13:41.320
+si basa sul consumo
+
+00:13:41.320 --> 00:13:41.720
+ed è legato
+
+00:13:41.720 --> 00:13:42.580
+ai servizi specifici
+
+00:13:42.580 --> 00:13:43.080
+che utilizzi.
+
+00:13:43.500 --> 00:13:44.180
+Ogni connettore
+
+00:13:44.180 --> 00:13:45.200
+ogni chiamata di recupero
+
+00:13:45.200 --> 00:13:46.200
+ogni contatore di messaggi
+
+00:13:46.200 --> 00:13:46.820
+viene addebitato
+
+00:13:46.820 --> 00:13:47.380
+sul tuo teno.
+
+00:13:47.940 --> 00:13:48.440
+Ogni componente
+
+00:13:48.440 --> 00:13:49.100
+è una rifatturazione.
+
+00:13:49.880 --> 00:13:50.600
+Questa flessibilità
+
+00:13:50.600 --> 00:13:51.140
+è ottima
+
+00:13:51.140 --> 00:13:51.900
+ma se non fai stime
+
+00:13:51.900 --> 00:13:52.600
+con il calcolatore
+
+00:13:52.600 --> 00:13:53.280
+dei prezzi a azzurro
+
+00:13:53.280 --> 00:13:54.000
+e monitori l'uso
+
+00:13:54.000 --> 00:13:54.940
+il tuo team finanziario
+
+00:13:54.940 --> 00:13:55.620
+sarà entusiasta
+
+00:13:55.620 --> 00:13:56.780
+della tua fattura a sorpresa.
+
+00:13:57.940 --> 00:13:58.440
+Questa è la trappola
+
+00:13:58.440 --> 00:13:58.980
+della fattura Z.
+
+00:13:59.180 --> 00:13:59.900
+Il prezzo basato
+
+00:13:59.900 --> 00:14:00.840
+sul consumo funziona
+
+00:14:00.840 --> 00:14:01.400
+se pianifichi
+
+00:14:01.400 --> 00:14:02.320
+i monitori e ottimizzi.
+
+00:14:02.740 --> 00:14:03.220
+Se non lo fai
+
+00:14:03.220 --> 00:14:03.760
+sembra di guidare
+
+00:14:03.760 --> 00:14:04.320
+una fuoriserie
+
+00:14:04.320 --> 00:14:04.880
+come uno scooter
+
+00:14:04.880 --> 00:14:05.500
+per consegne
+
+00:14:05.500 --> 00:14:06.460
+costoso, rumoroso
+
+00:14:06.460 --> 00:14:06.960
+e inutile.
+
+00:14:07.540 --> 00:14:08.140
+Siamo passati tutti
+
+00:14:08.140 --> 00:14:08.700
+con strumenti
+
+00:14:08.700 --> 00:14:09.300
+come Power BI
+
+00:14:09.300 --> 00:14:09.860
+ottima demo
+
+00:14:09.860 --> 00:14:10.780
+conto fuori controllo.
+
+00:14:11.520 --> 00:14:12.300
+Non lasciare che Foundry
+
+00:14:12.300 --> 00:14:13.300
+ti porti nella stessa situazione.
+
+00:14:13.800 --> 00:14:14.360
+Gli sviluppatori
+
+00:14:14.360 --> 00:14:15.320
+amano creare prototipi
+
+00:14:21.140 --> 00:14:21.780
+ma ecco il problema fatale.
+
+00:14:22.080 --> 00:14:22.660
+I team portano
+
+00:14:22.660 --> 00:14:23.760
+quel prototipo in produzione
+
+00:14:23.760 --> 00:14:24.880
+senza pipeline di valutazione.
+
+00:14:25.760 --> 00:14:26.580
+Se salti i valutatori
+
+00:14:26.580 --> 00:14:27.280
+per accuratezza,
+
+00:14:27.360 --> 00:14:28.280
+fluidità, pertinenza
+
+00:14:28.280 --> 00:14:28.740
+e coerenza
+
+00:14:28.740 --> 00:14:29.820
+stai distribuendo al buio.
+
+00:14:30.720 --> 00:14:31.240
+Cosa succede?
+
+00:14:31.560 --> 00:14:32.200
+Gli utenti notano
+
+00:14:32.200 --> 00:14:33.080
+la deriva nell'output
+
+00:14:33.080 --> 00:14:33.780
+e la fiducia cala
+
+00:14:33.780 --> 00:14:34.860
+e i dirigenti tagliano i fondi.
+
+00:14:35.320 --> 00:14:36.180
+Non è Foundry che fallisce
+
+00:14:36.180 --> 00:14:36.540
+sono i team
+
+00:14:36.540 --> 00:14:37.560
+che falliscono nella governance.
+
+00:14:38.020 --> 00:14:38.920
+Molti prototipi Foundry
+
+00:14:38.920 --> 00:14:39.440
+si bloccano
+
+00:14:39.440 --> 00:14:40.200
+prima della produzione
+
+00:14:40.200 --> 00:14:41.100
+proprio per questo motivo.
+
+00:14:41.640 --> 00:14:42.440
+Nessuna osservabilità
+
+00:14:42.440 --> 00:14:43.420
+nessun controllo qualità
+
+00:14:43.420 --> 00:14:44.160
+nessuna telemetria.
+
+00:14:44.560 --> 00:14:45.200
+La risposta è proprio lì
+
+00:14:45.200 --> 00:14:45.840
+nella piattaforma.
+
+00:14:45.840 --> 00:14:47.120
+Usa l'osservabilità
+
+00:14:47.120 --> 00:14:48.020
+di Azure e iFoundry
+
+00:14:48.020 --> 00:14:48.760
+fin dal primo giorno.
+
+00:14:49.140 --> 00:14:49.800
+Colleghi PrampFlow?
+
+00:14:50.360 --> 00:14:51.340
+Esegui valutatori integrati
+
+00:14:51.340 --> 00:14:51.800
+su ogni test.
+
+00:14:52.320 --> 00:14:53.140
+Fondamenta il tuo sistema
+
+00:14:53.140 --> 00:14:53.940
+con Azure e iSearch
+
+00:14:53.940 --> 00:14:54.900
+usando la ricerca ibrida
+
+00:14:54.900 --> 00:14:55.900
+e il semantic re-ranking
+
+00:14:55.900 --> 00:14:56.680
+prima ancora di pensare
+
+00:14:56.680 --> 00:14:57.200
+di andare live.
+
+00:14:57.620 --> 00:14:58.700
+Microsoft non ha nascosto
+
+00:14:58.700 --> 00:14:59.340
+questi strumenti
+
+00:14:59.340 --> 00:14:59.860
+in un allegato
+
+00:14:59.860 --> 00:15:00.460
+sono documentati
+
+00:15:00.460 --> 00:15:01.380
+per la sicurezza in produzione.
+
+00:15:01.720 --> 00:15:02.280
+Ma troppo spesso
+
+00:15:02.280 --> 00:15:03.280
+gli sviluppatori discorrono
+
+00:15:03.280 --> 00:15:04.240
+come semplici note a pilota.
+
+00:15:04.680 --> 00:15:05.500
+Questa mentalità
+
+00:15:05.500 --> 00:15:06.220
+basata sui checkpoint
+
+00:15:06.220 --> 00:15:07.500
+è come evitare il campo minato.
+
+00:15:08.300 --> 00:15:09.620
+Tratta Foundry come una fabbrica,
+
+00:15:09.820 --> 00:15:11.000
+la governance come primo passo,
+
+00:15:11.240 --> 00:15:12.360
+policy di conformità integrate
+
+00:15:12.360 --> 00:15:13.500
+come l'accesso condizionato,
+
+00:15:13.900 --> 00:15:15.140
+pipeline di osservabilità attiva
+
+00:15:15.140 --> 00:15:15.840
+e fin dall'inizio.
+
+00:15:16.260 --> 00:15:16.480
+E sì,
+
+00:15:16.540 --> 00:15:17.340
+l'ambito dell'identità
+
+00:15:17.340 --> 00:15:18.360
+e la sicurezza dei contenuti
+
+00:15:18.360 --> 00:15:19.580
+non dovrebbero essere aggiunti dopo,
+
+00:15:19.700 --> 00:15:20.780
+fanno parte del pacchetto base.
+
+00:15:21.240 --> 00:15:21.940
+Salta la governance
+
+00:15:21.940 --> 00:15:22.540
+e rischi molto più
+
+00:15:22.540 --> 00:15:23.480
+che semplici di esposta errada.
+
+00:15:24.040 --> 00:15:24.640
+Senza di essa
+
+00:15:24.640 --> 00:15:25.620
+il tuo bot multimodale
+
+00:15:25.620 --> 00:15:26.480
+potrebbe tranquillamente
+
+00:15:26.480 --> 00:15:27.200
+esporre gli stipendi
+
+00:15:27.200 --> 00:15:27.920
+delle risorse umane
+
+00:15:27.920 --> 00:15:28.640
+agli utenti esterni
+
+00:15:28.640 --> 00:15:29.460
+o etichettare fatture
+
+00:15:29.460 --> 00:15:30.440
+con numeri di polizia in metà.
+
+00:15:30.620 --> 00:15:31.620
+Questa non è solo un'ia rotta
+
+00:15:31.620 --> 00:15:32.600
+e materiale da prima pagina
+
+00:15:32.600 --> 00:15:33.560
+che il tuo ufficio conformità
+
+00:15:33.560 --> 00:15:34.340
+non vorrà dover spiegare.
+
+00:15:34.340 --> 00:15:36.160
+Ed è qui che l'attenzione si sposta
+
+00:15:36.160 --> 00:15:37.140
+perché il prossimo ostacolo
+
+00:15:37.140 --> 00:15:38.200
+non è affatto tecnico.
+
+00:15:39.140 --> 00:15:39.740
+E se la tua IA
+
+00:15:39.740 --> 00:15:40.640
+si è responsabile?
+
+00:15:41.660 --> 00:15:42.920
+Tutti amano inserire queste parole
+
+00:15:42.920 --> 00:15:44.160
+in una slide di presentazione
+
+00:15:44.160 --> 00:15:45.020
+ma in pratica si tratta
+
+00:15:45.020 --> 00:15:45.780
+di audit, filtri,
+
+00:15:45.860 --> 00:15:46.300
+conformità
+
+00:15:46.300 --> 00:15:47.280
+e della montagna di scelta
+
+00:15:47.280 --> 00:15:48.260
+da fare prima del lancio.
+
+00:15:48.900 --> 00:15:49.440
+Ed è qui che iniziano
+
+00:15:49.440 --> 00:15:50.140
+davvero i grattacap.
+
+00:15:50.640 --> 00:15:51.380
+Iscriviti e seguici
+
+00:15:51.380 --> 00:15:52.040
+sulla newsletter
+
+00:15:52.040 --> 00:15:53.320
+m365.show
+
+00:15:53.320 --> 00:15:54.120
+per le soluzioni dirette
+
+00:15:54.120 --> 00:15:55.360
+e seguici su m365.
+
+00:15:55.940 --> 00:15:56.580
+Pagina LinkedIn
+
+00:15:56.580 --> 00:15:56.980
+dello show
+
+00:15:56.980 --> 00:15:57.580
+per i live streaming
+
+00:15:57.580 --> 00:15:58.020
+con MVP
+
+00:15:58.020 --> 00:15:59.020
+che hanno testato Foundry
+
+00:15:59.020 --> 00:15:59.620
+in produzione
+
+00:15:59.620 --> 00:16:00.980
+e visto cosa può andare storto.
+
+00:16:01.620 --> 00:16:02.320
+IA responsabile
+
+00:16:02.320 --> 00:16:03.260
+o grattacapi responsabili.
+
+00:16:04.180 --> 00:16:04.980
+Tutti amano inserire
+
+00:16:04.980 --> 00:16:05.760
+IA responsabile
+
+00:16:05.760 --> 00:16:06.540
+in un discorso.
+
+00:16:06.960 --> 00:16:07.680
+Fa un figurone accanto
+
+00:16:07.680 --> 00:16:08.340
+a termine alla moda
+
+00:16:08.340 --> 00:16:09.480
+come correttezza e trasparenza.
+
+00:16:10.140 --> 00:16:10.640
+Ma sul campo
+
+00:16:10.640 --> 00:16:11.800
+non è una filosofia di ispirazione.
+
+00:16:12.340 --> 00:16:13.240
+Sono configurazioni,
+
+00:16:13.380 --> 00:16:14.120
+audit, filtri
+
+00:16:14.120 --> 00:16:15.080
+e procedure di governance
+
+00:16:15.080 --> 00:16:16.220
+che sembrano più manutenzione
+
+00:16:16.220 --> 00:16:17.320
+di server che innovazione.
+
+00:16:18.200 --> 00:16:18.840
+IA responsabile
+
+00:16:18.840 --> 00:16:19.720
+è la cintura di sicurezza
+
+00:16:19.720 --> 00:16:20.480
+non l'auto sportiva.
+
+00:16:21.020 --> 00:16:21.640
+Saltano una volta
+
+00:16:21.640 --> 00:16:22.660
+e l'incidente arriva in fretta.
+
+00:16:23.080 --> 00:16:24.260
+Microsoft parla di etica
+
+00:16:24.260 --> 00:16:25.440
+e sicurezza fin da subito
+
+00:16:25.440 --> 00:16:26.560
+ma per gli amministratori
+
+00:16:26.560 --> 00:16:27.240
+che la implementano
+
+00:16:27.240 --> 00:16:28.560
+significa barriere pratiche.
+
+00:16:29.660 --> 00:16:30.700
+Servono polissi di accesso
+
+00:16:30.700 --> 00:16:31.900
+che non cedano sotto pressione,
+
+00:16:32.140 --> 00:16:32.760
+filtri che blocchino
+
+00:16:32.760 --> 00:16:33.840
+davvero i prompt dannosi
+
+00:16:33.840 --> 00:16:34.140
+e log
+
+00:16:34.140 --> 00:16:35.360
+abbastanza dettagliati
+
+00:16:35.360 --> 00:16:35.860
+da soddisfare
+
+00:16:35.860 --> 00:16:36.820
+un ispettore con caffeina
+
+00:16:36.820 --> 00:16:37.320
+e mandato.
+
+00:16:38.200 --> 00:16:39.020
+Non è un lavoro affascinante.
+
+00:16:39.580 --> 00:16:40.200
+Significa isolare
+
+00:16:40.200 --> 00:16:40.940
+i copiloti a carre
+
+00:16:40.940 --> 00:16:42.380
+dai dati finanziari,
+
+00:16:42.560 --> 00:16:43.560
+impostare regole di ambito
+
+00:16:43.560 --> 00:16:44.140
+affinché i team
+
+00:16:44.140 --> 00:16:44.740
+non sbircilano
+
+00:16:44.740 --> 00:16:45.700
+i segreti di SharePoint
+
+00:16:45.700 --> 00:16:46.520
+e taggare i log
+
+00:16:46.520 --> 00:16:46.960
+per provare
+
+00:16:46.960 --> 00:16:47.620
+come è stata formata
+
+00:16:47.620 --> 00:16:48.180
+una risposta.
+
+00:16:49.440 --> 00:16:49.920
+Se lo fai bene
+
+00:16:49.920 --> 00:16:50.520
+è responsabile,
+
+00:16:50.600 --> 00:16:51.640
+non è uno slogan aziendale,
+
+00:16:51.740 --> 00:16:52.500
+è sopravvivenza.
+
+00:16:53.020 --> 00:16:53.720
+La versione è brutta
+
+00:16:53.720 --> 00:16:54.540
+se si salta tutto.
+
+00:16:54.920 --> 00:16:55.500
+Collegare un bot
+
+00:16:55.500 --> 00:16:55.940
+direttamente
+
+00:16:55.940 --> 00:16:56.840
+il repository a share
+
+00:16:56.840 --> 00:16:57.880
+senza delimitare il tenant.
+
+00:16:59.220 --> 00:17:00.200
+Un utente chiede informazioni
+
+00:17:00.200 --> 00:17:01.200
+sui benefit assicurativi.
+
+00:17:01.680 --> 00:17:02.820
+Il bot pubblica gentilmente
+
+00:17:02.820 --> 00:17:03.620
+le fasce salariali
+
+00:17:03.620 --> 00:17:04.140
+dei dipendenti
+
+00:17:04.140 --> 00:17:04.640
+nella chat.
+
+00:17:05.280 --> 00:17:06.120
+Ora hai una violazione
+
+00:17:06.120 --> 00:17:06.740
+della privacy,
+
+00:17:07.000 --> 00:17:07.960
+un incubo per il morale
+
+00:17:07.960 --> 00:17:09.500
+e forse le autorità
+
+00:17:09.500 --> 00:17:10.200
+le calcagna.
+
+00:17:10.640 --> 00:17:11.240
+Il modo più veloce
+
+00:17:11.240 --> 00:17:12.040
+per uccidere l'adozione
+
+00:17:12.040 --> 00:17:12.960
+non è una cattiva UX,
+
+00:17:13.060 --> 00:17:14.100
+è una fuga di dati sensibili.
+
+00:17:14.360 --> 00:17:15.000
+Quindi cosa ti lontano
+
+00:17:15.000 --> 00:17:15.500
+con questo disastro?
+
+00:17:15.820 --> 00:17:17.180
+Inizia con Azure AI Content Safety.
+
+00:17:17.680 --> 00:17:18.260
+È progettato
+
+00:17:18.260 --> 00:17:19.160
+per filtrare prompt
+
+00:17:19.160 --> 00:17:20.080
+e risposte violente
+
+00:17:20.080 --> 00:17:20.820
+o scene offensive
+
+00:17:20.820 --> 00:17:22.240
+prima che raggiungano gli utenti.
+
+00:17:23.120 --> 00:17:23.600
+Ma questo è solo
+
+00:17:23.600 --> 00:17:24.120
+e gene di base.
+
+00:17:25.940 --> 00:17:27.500
+Aggiungono pipeline di valutazione
+
+00:17:27.500 --> 00:17:28.820
+che gestiscono il livello successivo.
+
+00:17:29.360 --> 00:17:30.500
+Controlli di fondatezza,
+
+00:17:30.740 --> 00:17:31.740
+punteggi di pertinenza,
+
+00:17:32.100 --> 00:17:33.060
+dashboard di trasparenza
+
+00:17:33.060 --> 00:17:33.700
+e spiegabilità.
+
+00:17:34.800 --> 00:17:35.520
+In parole povere
+
+00:17:35.520 --> 00:17:36.860
+puoi regolare le soglie,
+
+00:17:37.140 --> 00:17:38.420
+filtrare input e output
+
+00:17:38.420 --> 00:17:39.840
+e far mostrare il lavoro ai bot.
+
+00:17:40.620 --> 00:17:41.140
+Senza queste
+
+00:17:41.140 --> 00:17:42.180
+stai solo tirando i dadi
+
+00:17:42.180 --> 00:17:43.240
+su ciò che li ha sputa fuori.
+
+00:17:43.620 --> 00:17:44.680
+Ed ecco la realtà delle risorse.
+
+00:17:45.200 --> 00:17:46.160
+Microsoft ci punta molto.
+
+00:17:47.320 --> 00:17:48.600
+34.000 ingegneri
+
+00:17:48.600 --> 00:17:49.120
+a tempo pieno
+
+00:17:49.120 --> 00:17:50.200
+dedicati alla sicurezza
+
+00:17:50.200 --> 00:17:51.280
+più 15.000 partner
+
+00:17:51.280 --> 00:17:52.300
+con profonda competenza
+
+00:17:52.300 --> 00:17:52.740
+in materia.
+
+00:17:53.820 --> 00:17:54.440
+Una fortezza.
+
+00:17:54.440 --> 00:17:55.740
+Ma non adagiarti sugli allori.
+
+00:17:55.940 --> 00:17:57.100
+nessuno di quegli ingegneri
+
+00:17:57.100 --> 00:17:57.760
+dentro il tuo tenant
+
+00:17:57.760 --> 00:17:59.100
+a definire le tue regole di accesso.
+
+00:17:59.460 --> 00:18:00.900
+Microsoft ti fornisce le barriere.
+
+00:18:01.180 --> 00:18:01.800
+Ma aspetta ancora a te
+
+00:18:01.800 --> 00:18:02.540
+blindare l'identità,
+
+00:18:02.640 --> 00:18:03.200
+isolare i dati,
+
+00:18:03.320 --> 00:18:04.180
+applicare la criptografia
+
+00:18:04.180 --> 00:18:05.340
+e configurare le policy.
+
+00:18:05.860 --> 00:18:06.660
+E configura le policy.
+
+00:18:07.060 --> 00:18:07.800
+Se la tua perimetrazione
+
+00:18:07.800 --> 00:18:08.320
+è approssimativa
+
+00:18:08.320 --> 00:18:09.220
+sarai comunque responsabile
+
+00:18:09.220 --> 00:18:09.500
+della fatta.
+
+00:18:09.880 --> 00:18:10.440
+La vera soluzione
+
+00:18:10.440 --> 00:18:10.960
+è la governance
+
+00:18:10.960 --> 00:18:11.520
+del ciclo di vita.
+
+00:18:11.820 --> 00:18:12.640
+Pensala come la ricetta
+
+00:18:12.640 --> 00:18:14.080
+che Microsoft stessa raccomanda.
+
+00:18:14.820 --> 00:18:15.140
+Testa,
+
+00:18:15.540 --> 00:18:15.960
+approva,
+
+00:18:16.480 --> 00:18:16.920
+rilascia,
+
+00:18:17.180 --> 00:18:17.620
+controlla,
+
+00:18:18.080 --> 00:18:18.380
+itera.
+
+00:18:18.380 --> 00:18:19.820
+Con Checkpoint
+
+00:18:19.820 --> 00:18:20.340
+ogni ciclo
+
+00:18:20.340 --> 00:18:21.060
+continui a notare,
+
+00:18:21.260 --> 00:18:22.140
+deriva prima che diventino
+
+00:18:22.140 --> 00:18:23.020
+titoli di giornale.
+
+00:18:23.700 --> 00:18:24.620
+I team che rilasciano una volta
+
+00:18:24.620 --> 00:18:25.100
+e poi abbandonano
+
+00:18:25.100 --> 00:18:26.100
+finisco sempre per esplodere.
+
+00:18:26.420 --> 00:18:27.220
+I modelli evolvono,
+
+00:18:27.300 --> 00:18:27.960
+i prompt cambiano
+
+00:18:27.960 --> 00:18:29.120
+e gli output vagano.
+
+00:18:29.900 --> 00:18:30.340
+La governance
+
+00:18:30.340 --> 00:18:31.140
+non è burocrazia.
+
+00:18:31.580 --> 00:18:32.100
+È come impedisce
+
+00:18:32.100 --> 00:18:32.760
+un bot interno
+
+00:18:32.760 --> 00:18:33.860
+di inventare policy su teams
+
+00:18:33.860 --> 00:18:34.760
+mentre tutti dormono.
+
+00:18:35.640 --> 00:18:36.360
+Alcuni amministratori
+
+00:18:36.360 --> 00:18:36.840
+brontano che
+
+00:18:36.840 --> 00:18:37.440
+responsabile
+
+00:18:37.440 --> 00:18:38.280
+significhi solo più meno.
+
+00:18:38.840 --> 00:18:39.540
+Prospettiva errada.
+
+00:18:40.100 --> 00:18:40.580
+Responsabile
+
+00:18:40.580 --> 00:18:41.420
+non uccide la velocità,
+
+00:18:41.540 --> 00:18:42.280
+impedisce alla velocità
+
+00:18:42.280 --> 00:18:42.880
+di uccidere te.
+
+00:18:42.880 --> 00:18:44.500
+Una buona governance
+
+00:18:44.500 --> 00:18:45.580
+significa poter superare
+
+00:18:45.580 --> 00:18:45.920
+gli audit
+
+00:18:45.920 --> 00:18:47.100
+e far proseguire i progetti.
+
+00:18:47.520 --> 00:18:48.200
+Se salti questa fase
+
+00:18:48.200 --> 00:18:49.000
+ti stai lanciando nel volo.
+
+00:18:49.160 --> 00:18:50.120
+La velocità senza controlli
+
+00:18:50.120 --> 00:18:50.760
+ti garantisce solo
+
+00:18:50.760 --> 00:18:51.340
+un tipo di regola.
+
+00:18:51.820 --> 00:18:52.460
+Menor tempo possibile
+
+00:18:52.460 --> 00:18:53.020
+per arrivare a posto.
+
+00:18:53.820 --> 00:18:54.560
+Pensa a guidare
+
+00:18:54.560 --> 00:18:55.380
+sui tornanti di montagna.
+
+00:18:55.920 --> 00:18:56.880
+Non maledici quadrelle
+
+00:18:56.880 --> 00:18:57.480
+e li ringrazio
+
+00:18:57.480 --> 00:18:57.940
+quando la strada
+
+00:18:57.940 --> 00:18:59.020
+precipita per 60 metri.
+
+00:18:59.760 --> 00:19:00.260
+È la stessa cosa.
+
+00:19:00.820 --> 00:19:01.180
+Perimetri,
+
+00:19:01.260 --> 00:19:01.480
+policy,
+
+00:19:01.620 --> 00:19:01.840
+filtri,
+
+00:19:01.920 --> 00:19:02.120
+log
+
+00:19:02.120 --> 00:19:03.200
+non bloccano la tua velocità
+
+00:19:03.200 --> 00:19:03.900
+e tengono la tua auto
+
+00:19:03.900 --> 00:19:04.900
+lontana dai notiziari.
+
+00:19:05.720 --> 00:19:06.280
+In sintesi,
+
+00:19:06.480 --> 00:19:07.240
+Microsoft ti ha fornito
+
+00:19:07.240 --> 00:19:08.160
+una potenza notevole.
+
+00:19:09.040 --> 00:19:10.020
+Sicurezza dei contenuti,
+
+00:19:10.020 --> 00:19:11.180
+pipeline di valutazione,
+
+00:19:11.440 --> 00:19:12.460
+framework di sicurezza,
+
+00:19:12.580 --> 00:19:13.280
+guardare il SDK.
+
+00:19:14.040 --> 00:19:14.880
+Ma aspetta ancora te
+
+00:19:14.880 --> 00:19:15.800
+delimitare i tenant,
+
+00:19:15.920 --> 00:19:16.860
+configurare gli accessi
+
+00:19:16.860 --> 00:19:17.740
+e integrare quei cicli
+
+00:19:17.740 --> 00:19:18.880
+nel tuo processo di produzione.
+
+00:19:19.360 --> 00:19:19.700
+Fallo
+
+00:19:19.700 --> 00:19:20.200
+e avrai un IA
+
+00:19:20.200 --> 00:19:21.240
+che sopravviva alla conformità
+
+00:19:21.240 --> 00:19:22.560
+invece di crollare sotto di essa.
+
+00:19:23.640 --> 00:19:24.000
+Ignoralo
+
+00:19:24.000 --> 00:19:24.680
+e non sarà solo
+
+00:19:24.680 --> 00:19:25.540
+un rischio di interruzione.
+
+00:19:25.880 --> 00:19:26.800
+Saranno carriera a rischio.
+
+00:19:27.300 --> 00:19:27.880
+L'IA responsabile
+
+00:19:27.880 --> 00:19:28.360
+non è lenta.
+
+00:19:28.900 --> 00:19:29.640
+L'IA responsabile
+
+00:19:29.640 --> 00:19:30.360
+è sostenibile
+
+00:19:30.360 --> 00:19:31.360
+e la sostenibilità
+
+00:19:31.360 --> 00:19:32.060
+è il vero test
+
+00:19:32.060 --> 00:19:32.720
+perché ciò che conta
+
+00:19:32.720 --> 00:19:33.660
+non sono le funzionalità
+
+00:19:33.660 --> 00:19:34.880
+ma se tratti questa piattaforma
+
+00:19:34.880 --> 00:19:35.560
+come un plug and play
+
+00:19:35.560 --> 00:19:36.320
+o la rispetti
+
+00:19:36.320 --> 00:19:36.920
+come un'infrastruttura
+
+00:19:36.920 --> 00:19:37.840
+basata sulla governance.
+
+00:19:38.560 --> 00:19:39.280
+Questa distinzione
+
+00:19:39.280 --> 00:19:40.100
+decide chi resiste
+
+00:19:40.100 --> 00:19:40.880
+e chi brucia le tappe.
+
+00:19:41.540 --> 00:19:42.240
+Ecco il punto ventale.
+
+00:19:42.660 --> 00:19:43.680
+La trappola non è Foundry
+
+00:19:43.680 --> 00:19:44.440
+o Copilot Studio
+
+00:19:44.440 --> 00:19:45.720
+e pensare che siano plug and play.
+
+00:19:46.940 --> 00:19:47.700
+Il principio da ricordare
+
+00:19:47.700 --> 00:19:48.140
+è semplice.
+
+00:19:48.280 --> 00:19:48.840
+Prima la governance
+
+00:19:48.840 --> 00:19:49.600
+per la sperimentazione
+
+00:19:49.600 --> 00:19:50.340
+e infine la produzione.
+
+00:19:50.800 --> 00:19:51.440
+Trascorre identità
+
+00:19:51.440 --> 00:19:52.040
+e osservabilità
+
+00:19:52.040 --> 00:19:52.840
+a tuo rischio e pericolo.
+
+00:19:53.160 --> 00:19:54.060
+Gli strumenti ci sono
+
+00:19:54.060 --> 00:19:54.920
+ma solo la governance
+
+00:19:54.920 --> 00:19:55.860
+trasforma i prototipi
+
+00:19:55.860 --> 00:19:56.600
+in vera produzione.
+
+00:19:57.120 --> 00:19:57.600
+Quindi se vuoi
+
+00:19:57.600 --> 00:19:58.380
+le soluzioni dirette
+
+00:19:58.380 --> 00:19:59.140
+che mantengono davvero
+
+00:19:59.140 --> 00:19:59.800
+in vita al tuo tenant
+
+00:19:59.800 --> 00:20:00.840
+iscriviti al podcast
+
+00:20:00.840 --> 00:20:02.840
+e lasciami una recensione.
+
+00:20:02.840 --> 00:20:04.200
+e di cuore quotidiana
+
+00:20:04.200 --> 00:20:04.820
+a questo progetto
+
+00:20:04.820 --> 00:20:05.360
+il tuo supporto
+
+00:20:05.360 --> 00:20:06.040
+è davvero utile.
+
+00:20:06.640 --> 00:20:07.440
+Gli strumenti cambieranno
+
+00:20:07.440 --> 00:20:08.440
+tanti che sopravvivenza resta.

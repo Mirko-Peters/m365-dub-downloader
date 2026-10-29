@@ -1,0 +1,985 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:03.940
+Je hebt geklikt omdat de podcast zei dat Azure AI Foundry een valstrik is, toch?
+
+00:00:04.120 --> 00:00:05.960
+Goed, je bent hier op de juiste plek.
+
+00:00:06.140 --> 00:00:07.480
+Hier is de belofte vooraf.
+
+00:00:07.640 --> 00:00:12.580
+Co-pilots storten in zonder grounding, maar tools zoals Retrieval Augmented Generation, of RAG,
+
+00:00:12.760 --> 00:00:18.300
+met Azure ISR hybride en semantisch, plus evaluators voor gefundeerdheid, relevantie en coherentie,
+
+00:00:18.520 --> 00:00:22.200
+zijn de echte oplossingen die voorkomen dat je hallucinaties als antwoorden verstuurt.
+
+00:00:22.360 --> 00:00:27.160
+We laten de marketingpraatjes achterwegen en laten je het overlevingshandboek zien met voorbeelden uit de praktijk.
+
+00:00:27.160 --> 00:00:32.180
+Abonneer je op de M365 Show Nieuwsbrief en volg de livestreams met MVP's.
+
+00:00:32.400 --> 00:00:34.340
+Daar vind je de littekens en de oplossingen.
+
+00:00:34.540 --> 00:00:38.620
+En aangezien de eerste barsten meestal in multimodale apps verschijnen, laten we daar beginnen.
+
+00:00:38.860 --> 00:00:41.120
+Waarom multimodale apps falen in de echte wereld?
+
+00:00:41.360 --> 00:00:44.540
+Wanneer je een multimodale demo op het podium ziet, ziet het er foutloos uit.
+
+00:00:44.720 --> 00:00:48.500
+De presentator voert een tekstprompt in, een schone afbeelding, misschien zelfs een snelle spraakinvoer,
+
+00:00:48.500 --> 00:00:51.440
+en het model levert een perfecte grafiek of een scherpe samenvatting van een contract.
+
+00:00:51.600 --> 00:00:56.360
+Het voelt allemaal als magie, maar zodra je hetzelfde probeert binnen een echt bedrijf, is de glans er snel vanaf.
+
+00:00:56.360 --> 00:00:59.720
+Demo's draaien op perfecte invoer, werkplekken draaien op rommel.
+
+00:00:59.960 --> 00:01:01.300
+Dat is de werkelijke kloof.
+
+00:01:01.460 --> 00:01:07.280
+In productie geeft niemand je model zorgvuldig geënsceneerde screenshots of CSV's die door een normencommissie zijn opgemaakt.
+
+00:01:07.460 --> 00:01:10.240
+Ouer voert het wazige identiteitsbewijzen van de overheid.
+
+00:01:10.440 --> 00:01:13.420
+Inkoop sleept er PDF's bij die al vijf keer zijn doorgevaxt.
+
+00:01:13.620 --> 00:01:17.240
+Iemand bij Finance maakt een foto van een factuur met een gebarsten Android-camera.
+
+00:01:17.240 --> 00:01:20.780
+Multimodale modellen kunnen tekst, afbeeldingen, spraak en video verwerken,
+
+00:01:20.920 --> 00:01:24.640
+maar ze hebben goed geïndexeerde data en retrieval nodig om te presteren onder rommelige omstandigheden.
+
+00:01:24.780 --> 00:01:27.700
+Anders vraag je het model simpelweg om te improviseren op basis van afval.
+
+00:01:27.860 --> 00:01:31.620
+En hoeveel GPU-budget je ook uitgeeft, garbage in, garbage out, los je daarmee niet op.
+
+00:01:31.800 --> 00:01:35.180
+Dit is waar retrieval augmented generation, of RAG, je moet redden.
+
+00:01:35.340 --> 00:01:39.100
+In begrijpelijke taal, het model kent je bedrijf niet, dus koppel je het aan een kennisbron.
+
+00:01:39.260 --> 00:01:41.880
+Het haalt een stukje data op en vormt het antwoord daaromheen.
+
+00:01:41.960 --> 00:01:44.940
+Wanneer de match scherp is, krijg je bruikbare, gefundeerde antwoorden.
+
+00:01:45.100 --> 00:01:48.680
+Wanneer het slordig is, gaat het model freestylen en spuugt het zelfverzekerde onzin uit.
+
+00:01:48.840 --> 00:01:54.260
+En zo eindig je met een chatbot die zweert dat je bedrijf een nieuw Q3-kortingsbeleid heeft dat helemaal niet bestaat.
+
+00:01:54.400 --> 00:01:57.600
+Het is niet bewust geworden, het heeft gewoon de verkeerde data opgehaald.
+
+00:01:57.780 --> 00:02:02.660
+Azure AI Studio en Azure AI Foundry leunen beide op dit patroon en ze ondersteunen alle soorten modaliteiten,
+
+00:02:02.860 --> 00:02:05.040
+taal, visie, spraak en zelfs video-retrieval.
+
+00:02:05.200 --> 00:02:08.020
+Maar de adder onder het gras is dat RAG slecht zo goed is als de data die het gebruikt.
+
+00:02:08.020 --> 00:02:10.240
+Dit is het addertje onder het gras dat de meeste teams missen.
+
+00:02:10.240 --> 00:02:13.220
+Je kunt niet zomaar één retrieval methode implementeren en denken dat het klaar is.
+
+00:02:13.380 --> 00:02:17.120
+Als je wilt dat resultaten consistent blijven, heb je hybride zoekopdrachten met trefwoorden en factoren nodig,
+
+00:02:17.280 --> 00:02:19.740
+aangevuld met een semantische herrangschikker die in Azure AI's ARG is ingebouwd.
+
+00:02:19.900 --> 00:02:23.100
+Hiermee balanceert het systeem letterlijke trefwoordresultaten met semantische betekenis
+
+00:02:23.100 --> 00:02:26.060
+en worden de resultaten opnieuw gerangschikt zodat de juiste context bovenaan staat.
+
+00:02:26.320 --> 00:02:30.520
+Integreer dat in je multimodale opzet en plotseling kan het model omgaan met scheve scans
+
+00:02:30.520 --> 00:02:33.860
+en wazige afbeeldingen in plaats van je nalevingsbeleid uit het niets te verzinnen.
+
+00:02:33.860 --> 00:02:37.020
+Laten we het nu hebben over waarom zoveel implementaties mislukken.
+
+00:02:37.020 --> 00:02:42.240
+Ondernemingen verwachten vanaf de eerste dag perfecte resultaten, maar begroten niets voor evaluatierondes.
+
+00:02:42.460 --> 00:02:46.020
+Zonder controles op betrouwbaarheid, relevantie en samenhang op de achtergrond
+
+00:02:46.020 --> 00:02:48.460
+merk je afwijkingen pas op als gebruiker zal zijn afgehaakt.
+
+00:02:48.660 --> 00:02:51.400
+Veel vroege implementaties falen snel om precies deze reden.
+
+00:02:51.620 --> 00:02:54.760
+De output klinkt correct, maar niemand heeft het getoetst aan de bronwaarheid.
+
+00:02:54.980 --> 00:02:58.200
+Denk er eens over na, je zou nooit een nieuwe database implementeren zonder monitoring.
+
+00:02:58.200 --> 00:03:03.140
+Toch gooi je leidinggevende multimodale AI in productie alsof het een plug-and-play toverdoos is.
+
+00:03:03.140 --> 00:03:05.040
+Het hoeft niet in een mislukking te eindigen.
+
+00:03:05.240 --> 00:03:08.340
+Carvana is een van de Foundry klantverhalen die dit punt bewijst.
+
+00:03:08.540 --> 00:03:15.140
+Zij maakt de self-service AI echt nuttig door retrieval te verfijnen, hun agents goed te funderen en te investeren in observabiliteit.
+
+00:03:15.400 --> 00:03:19.920
+Dat veranderde wat een nutteloze chatbot had kunnen zijn in iets waar klanten op konden vertrouwen.
+
+00:03:20.100 --> 00:03:25.480
+Kijk nu naar de bedrijven die een generieke chatbot op hun supportpagina plakten zonder fundering of evaluatie.
+
+00:03:25.480 --> 00:03:26.980
+Je hebt het resultaat gezien.
+
+00:03:27.320 --> 00:03:31.300
+Garantieclaims die als verkoopniets werden verwerkt, overvolle supportwachtrijen en een beschadigde geloofwaardigheid.
+
+00:03:31.460 --> 00:03:33.960
+Dezelfde Azure Stack, het tegenovergestelde resultaat.
+
+00:03:34.120 --> 00:03:35.440
+Dus, hier is de botte waarheid.
+
+00:03:35.840 --> 00:03:38.320
+Multimodaal faalt niet omdat de AI niet slim genoeg is.
+
+00:03:38.520 --> 00:03:41.480
+Het faalt omdat de data niet is voorbereid, geïndexeerd of gemonitord.
+
+00:03:42.260 --> 00:03:46.220
+Voer rommel in het retrieval systeem, sla evaluaties over en zie het vertrouwen verdampen.
+
+00:03:46.380 --> 00:03:55.080
+Maar met hybride zoeken, semantische herrangschikking en constante evaluaties kun je facturen, contracten, foto's en zelfs ruwe audionotices verwerken met antwoorden die in de realiteit blijven.
+
+00:03:55.080 --> 00:03:56.120
+In plaats van in fantasie.
+
+00:03:56.300 --> 00:03:59.660
+En zodra de fundering op orde is, komt er een ander risico in beeld.
+
+00:03:59.860 --> 00:04:04.240
+Want zelfs als de datapijplijnen schoon zijn, kan het systeem dat ze aanstuurt nog steeds ontsporen.
+
+00:04:04.520 --> 00:04:05.960
+Dat is waar de vraag verschuift.
+
+00:04:06.200 --> 00:04:11.840
+Helpt de agent die dit allemaal coördineert je bedrijf echt, of is hij stilletjes je IT-budget aan het verbranden?
+
+00:04:12.360 --> 00:04:17.820
+Behulpzame agent of dure pressen papier, een agent coördineert modellen, data, triggers en acties.
+
+00:04:18.060 --> 00:04:20.820
+Zie het als een verkeersregelaar voor je geautomatiseerde workflows.
+
+00:04:20.820 --> 00:04:26.400
+Soms regelt hij alles soepel, soms wuift hij drie keepwagens en een clownauto naar binnen en gaat dan lunchen.
+
+00:04:26.620 --> 00:04:30.720
+Dat gat tussen de nette definitie en de rommelige realiteit is waar de meeste teams de mist in gaan.
+
+00:04:30.940 --> 00:04:32.880
+Op papier ziet een agent er fantastisch uit.
+
+00:04:33.160 --> 00:04:39.280
+Voer er instructies in, wijs het naar je data en apps en het hoort processen uit te voeren, antwoorden te vinden en zelfs workflows te starten.
+
+00:04:39.400 --> 00:04:40.960
+Maar dit is geen perfecte collega.
+
+00:04:40.960 --> 00:04:47.880
+Het lost net zo makkelijk om twee uur s'nachts een terugkerend probleem op, als dat het je wachtrij overspoelt met honderd spooktickets omdat het een foutlogboek verkeerd las.
+
+00:04:48.120 --> 00:04:49.580
+Stel het je voor binnen ServiceNow.
+
+00:04:49.880 --> 00:04:55.020
+Wanneer strikt afgebakend, maakt de AI alleen echte tickets aan voor werkelijke problemen en bespaart het mensen uren tijd.
+
+00:04:55.260 --> 00:05:00.520
+Wordt het losgelaten, dan kan het de helpdesk begraven onder een muur van valse meldingen over kritieke printerstoringen op hardware die prima werkt.
+
+00:05:00.660 --> 00:05:03.220
+Probeer die productiviteitswinst maar eens uit te leggen aan je CEO.
+
+00:05:03.460 --> 00:05:04.960
+Hier is het onderscheid dat vele missen.
+
+00:05:05.140 --> 00:05:06.840
+Copilots en agents zijn niet hetzelfde.
+
+00:05:07.000 --> 00:05:09.220
+Een copilot is in feite een assistent voor je prompts.
+
+00:05:09.220 --> 00:05:11.720
+Jij vraagt het antwoord en jij houdt de controle.
+
+00:05:11.960 --> 00:05:14.600
+Agents daarentegen beslissen dingen zonder op jou te wachten.
+
+00:05:14.860 --> 00:05:18.800
+Ze volgen je vage instructies tot op de letter, zelfs als de resultaten nergens op slaan.
+
+00:05:18.980 --> 00:05:24.280
+Dat is het moment waarop automatisering ofwel echte tijd bespaart, ofwel leidt tot chaos die je twee keer zoveel tijd kost om op te ruimen.
+
+00:05:24.460 --> 00:05:28.640
+De waarheid is dat veel teams hun agent een functieomschrijving geven die klinkt als een verkiezingsbelofte.
+
+00:05:29.060 --> 00:05:31.520
+Optimaliseer processen, bied inzichten, help mensen.
+
+00:05:32.060 --> 00:05:34.480
+Gefeliciteerd, je hebt de bot in feite verteld dat hij zijn gang mag gaan.
+
+00:05:34.660 --> 00:05:36.920
+Agents zonder afbakening blijven niet beleefd binnen hun grenzen.
+
+00:05:36.920 --> 00:05:38.060
+Ze gaan volledig los.
+
+00:05:38.060 --> 00:05:39.680
+Ze verzinnen problemen om op te lossen.
+
+00:05:39.840 --> 00:05:40.880
+Ze dupliceren records.
+
+00:05:41.100 --> 00:05:42.340
+Ze raken in eindeloze lussen.
+
+00:05:42.540 --> 00:05:45.060
+En dan vraagt het management zich af waarom een gelikte demo uitmondde in productieproblemen.
+
+00:05:45.780 --> 00:05:47.220
+Laten we nu de feiten op een rij zetten.
+
+00:05:47.400 --> 00:05:50.300
+Het is niet zo dat de meeste organisaties in de eerste twee maanden falen.
+
+00:05:50.500 --> 00:05:51.820
+Dat staat niet in het onderzoek.
+
+00:05:51.960 --> 00:05:57.480
+Wat wel gebeurt, en snel ook, is dat veel organisaties vroeg tegen barrières aanlopen omdat ze hun agents nooit strak hebben afgebakend,
+
+00:05:57.640 --> 00:06:00.540
+geen validatiestappen hebben toegevoegd en nooit telemetrie hebben geïmplementeerd.
+
+00:06:00.760 --> 00:06:04.060
+Zonder die vangrails is je glimmende nieuwe tool gewoon een hoekenloze stagiair met beheerdersrechten.
+
+00:06:04.060 --> 00:06:08.040
+En hier geeft de Microsoft stack je daadwerkelijk de benodigde onderdelen.
+
+00:06:08.200 --> 00:06:11.940
+Copilot Studio is de low-code plek waar makers het gedrag van agents ontwerpen.
+
+00:06:12.140 --> 00:06:14.040
+Denk aan flows, prompts en event triggers.
+
+00:06:14.340 --> 00:06:20.180
+En Azure Eye Foundries Agent Service is de bedrijfsmatige basis die die agents in productie brengt met observability.
+
+00:06:20.440 --> 00:06:23.740
+Agent Service is waar je monitoring, logs en statistieken toevoegt.
+
+00:06:23.740 --> 00:06:27.860
+Het is doelbewust afgebakend voor automatisering met ingebouwd menselijk toezicht,
+
+00:06:28.000 --> 00:06:31.940
+omdat Microsoft weet wat er gebeurt als je een ongevere testenagent in het wild vertrouwt.
+
+00:06:32.060 --> 00:06:34.400
+Dus, hoe weet je of je agent daadwerkelijk nuttig is?
+
+00:06:34.600 --> 00:06:36.200
+Haal hem door een simpele checklist.
+
+00:06:36.440 --> 00:06:40.820
+1. Vermindert het het aantal werkuren van mensen of sleept het je personeel mee in het oplossen van baks?
+
+00:06:41.020 --> 00:06:47.240
+2. Meet je statistieken zoals onderbouwing, vloeiendheid en samenhang of staar je alleen naar die mooie marketing dashboards?
+
+00:06:47.520 --> 00:06:52.100
+3. Heb je telemetrie ingesteld zodat je afwijkingen kunt opvangen voordat gebruikers gaan klagen?
+
+00:06:52.100 --> 00:06:55.560
+Als je een van die vragen verkeerd hebt beantwoord, heb je geen intelligente agent.
+
+00:06:55.720 --> 00:06:57.140
+Je hebt een dure screensaver.
+
+00:06:57.400 --> 00:07:02.140
+De oplossing is het gebruik van de observability functies en ingebouwde evaluators van Azure AI Foundry.
+
+00:07:02.360 --> 00:07:03.980
+Dit zijn geen optionele extra's.
+
+00:07:04.180 --> 00:07:08.480
+Dit is de gedocumenteerde manier om onderbouwing, relevantie, samenhang en waarheidsgetrouwheid te meten.
+
+00:07:08.700 --> 00:07:12.720
+Zonder deze tools gok je maar of je agent slim is of gewoon beleefd uit zijn nek kletst.
+
+00:07:12.920 --> 00:07:16.860
+Met deze tools kun je vol vertrouwen ingrijpen en bijsturen wanneer de output afwijkt.
+
+00:07:17.040 --> 00:07:19.120
+Dus ja, agents kunnen echt het verschil maken.
+
+00:07:19.120 --> 00:07:22.940
+Verkeerd ingezet worden ze chaosversterkers die meer tijd kosten dan ze besparen.
+
+00:07:23.120 --> 00:07:29.860
+Goed ingezet, met duidelijke taken, echte telemetrie en onderbouwde antwoorden kunnen ze taken afhandelen terwijl mensen zich op waardevoller werk richten.
+
+00:07:29.980 --> 00:07:33.220
+En net wanneer je denkt dat je die balans gevonden hebt, verandert het verhaal weer.
+
+00:07:33.480 --> 00:07:37.920
+Microsoft pust nu al autonome agentspots die niet op jou wachten voordat ze actie ondernemen.
+
+00:07:38.500 --> 00:07:45.700
+Dat verplaatst de inzet van behulpzaam of nutteloos naar een heel ander niveau, want we hebben het nu over systemen die draaien terwijl niemand meekijkt.
+
+00:07:45.700 --> 00:07:51.040
+De valkuil van de autonome agent. Autonome agents zijn waar de hype gevaarlijk wordt.
+
+00:07:51.360 --> 00:07:58.800
+Op papier zijn ze de droom. Laat de AI voor je werken, automatiseer het saaie werk en stop met jezelf om twee uur s'nachts uit bed te slepen voor ticketwachtrijen.
+
+00:07:58.940 --> 00:08:00.520
+Klinkt geweldig in de bestuurskamer.
+
+00:08:00.740 --> 00:08:03.020
+De valkuil is simpel. Ze wachten niet op toestemming.
+
+00:08:03.240 --> 00:08:05.960
+Copilots pauseren voor jou. Autonome agents doen dat niet.
+
+00:08:06.100 --> 00:08:09.460
+En wanneer ze een verkeerde beslissing nemen, is de schade direct zichtbaar en schaal deze door je hele tenant heen.
+
+00:08:09.460 --> 00:08:13.540
+Het concept is simpel genoeg. Copilots zijn reactief. Agents zijn proactief.
+
+00:08:13.700 --> 00:08:20.560
+In plaats van stil te zitten tot iemand een prompt typt, zet je agents in om de status van services te bewaken, beveiligingssignalen te verwerken of workflows automatisch uit te voeren.
+
+00:08:20.760 --> 00:08:25.800
+Microsoft presenteert dit als efficiëntie, minder menselijke verspilling, snellere detectie, soepelere operaties.
+
+00:08:26.000 --> 00:08:28.680
+De belofte is reëel, maar hier is de belangrijke context.
+
+00:08:29.040 --> 00:08:32.160
+Autonome agents in Copilot Studio zijn momenteel nog in preview.
+
+00:08:32.420 --> 00:08:36.400
+Preview betekent niet dat het kapot is, maar wel dat het nog niet getest is in de complexe echte wereld.
+
+00:08:36.400 --> 00:08:42.260
+En zelfs Microsoft zegt dat je governance-richtlijnen voor de levenscyclus en het Copilot console beheer op orde moet hebben voordat je ze breed uitholt.
+
+00:08:42.440 --> 00:08:44.040
+Denk eens aan een realistisch risico.
+
+00:08:44.320 --> 00:08:48.860
+Stel dat je een autonome helpdesk-agent bouwt en deze toestemming geeft om op inlogafwijkingen te reageren.
+
+00:08:49.000 --> 00:08:51.060
+In een demo met vijf gebruikers werkt het perfect.
+
+00:08:51.300 --> 00:08:53.140
+Meldingen worden verwerkt, accounts beheerd.
+
+00:08:53.360 --> 00:08:55.780
+Dan komen de onvoorspelbare inputstromen binnen in productie.
+
+00:08:55.940 --> 00:09:00.280
+In plaats van te wachten, begint het honderden accounts massaal te resetten op basis van valse positieven.
+
+00:09:00.440 --> 00:09:02.520
+Het resultaat is geen hypothetische storing.
+
+00:09:02.740 --> 00:09:05.440
+Het kan in werkelijkheid de operaties aan het eind van de maand platleggen.
+
+00:09:05.440 --> 00:09:06.720
+Dat is geen science fiction.
+
+00:09:06.940 --> 00:09:09.620
+Het is het storingsscenario waar je voor tekent als je scoping overslaat.
+
+00:09:09.780 --> 00:09:11.500
+De oplossing is niet de technologie dumpen.
+
+00:09:11.660 --> 00:09:12.920
+Het is eerst het van het bouwen.
+
+00:09:13.140 --> 00:09:14.880
+Dus, wat staat er op de checklist voor overleving?
+
+00:09:15.060 --> 00:09:17.560
+Drie zaken zijn essentieel voor elke flitsende automatisering.
+
+00:09:17.760 --> 00:09:19.740
+1. Scoping van identiteit en toegang.
+
+00:09:19.940 --> 00:09:22.840
+Geef je agent minimale rechten, geen algemene beheerdersrollen.
+
+00:09:22.960 --> 00:09:24.240
+2. Logging en rollback.
+
+00:09:24.420 --> 00:09:26.440
+Elke actie moet een spoor achterlaten dat je kunt controleren.
+
+00:09:27.120 --> 00:09:30.720
+En voor elke serieuze actie is een terugdrijdmogelijkheid nodig als de agent fouten maakt.
+
+00:09:30.900 --> 00:09:32.500
+3. Inhouds en gedragsfilters.
+
+00:09:32.500 --> 00:09:36.540
+Microsoft benoemt dit bij Azure AI content safety en configuratie van kennis.
+
+00:09:36.760 --> 00:09:41.300
+De filters die voorkomen dat een enthousiaste bot ongepaste antwoorden geeft of buiten de lijntjes kleurt.
+
+00:09:41.540 --> 00:09:45.340
+Doe dit eerst, anders zal de slimheid van je agent je operatie begraven in plaats van helpen.
+
+00:09:45.480 --> 00:09:47.140
+De ethische laag maakt dit nog scherper.
+
+00:09:47.420 --> 00:09:50.260
+Denk aan een ouder agent die medewerkers automatisch als riskant markeert,
+
+00:09:50.500 --> 00:09:54.700
+of een financiële agent die betalingen aan leveranciers inhoudt omdat hij ze onterecht als fraude klassificeert.
+
+00:09:54.700 --> 00:09:59.540
+Dit zijn geen onschuldige eigenaardigheden, dit zijn fouten met menselijke gevolgen en juridische consequenties.
+
+00:09:59.760 --> 00:10:04.380
+Bias in trainingsdata of retrieval verdwijnt niet zomaar omdat je nu in Enterprise Preview draait.
+
+00:10:04.580 --> 00:10:10.940
+Zonder filters, controles en menselijke backups besteed je oordeelsvorming uit waarvan je advocaten zeker niet willen dat die door een onbeheerd algoritme wordt gemaakt.
+
+00:10:11.380 --> 00:10:14.000
+Microsoft's eigen boodschap tijdens Ignite was hier overbod.
+
+00:10:14.240 --> 00:10:19.700
+Guardrails, levenscyclusbeheer, monitoring en het copilot controlesysteem zijn geen extraatjes, ze zijn vereist.
+
+00:10:19.700 --> 00:10:24.500
+Preview draait vandaag minder om glimmende demo's en meer om testers die aantonen waar de gaten zitten.
+
+00:10:24.700 --> 00:10:31.260
+Als je live gaat zonder stage-tests, goedkeuringsworkflows en audits, draai je geen agent, maar stress test je jouw tenant in productie.
+
+00:10:31.520 --> 00:10:33.620
+Daarom is observabiliteit niet optioneel.
+
+00:10:33.800 --> 00:10:40.000
+Je hebt dashboards nodig die elke stap van een agent tonen en controleren of de output gefundeerd, relevant en in lijn met je beleid is.
+
+00:10:40.140 --> 00:10:42.180
+En je hebt Human in T-loop opties nodig.
+
+00:10:42.420 --> 00:10:44.220
+Microsoft steekt dit niet onder stoelen of banken.
+
+00:10:44.380 --> 00:10:47.380
+Ze verwijzen naar patronen waarbij de mens de uiteindelijke veiligheidsmaatregel blijft.
+
+00:10:47.380 --> 00:10:49.620
+Zie het als een automatische piloot in een vliegtuig.
+
+00:10:50.020 --> 00:10:52.940
+Ongelooflijk nuttig, maar altijd ontworpen met een handmatige override.
+
+00:10:53.080 --> 00:10:57.400
+Als de bot denkt dat de optimale landing in een meer is, wil je de besturing overnemen voor de plons.
+
+00:10:57.580 --> 00:11:00.260
+De juiste vergelijking hier is een tiener leren autorijden.
+
+00:11:00.440 --> 00:11:05.600
+Het potentieel is echt, de snelheid is indrukwekkend, maar je geeft niet zomaar de sleutels, verlaat de oprit en hoopt op het beste.
+
+00:11:05.840 --> 00:11:09.660
+Je zit aan de passagierskant, stelt grenzen en installeert remmen waar je zelf bij kunt.
+
+00:11:09.880 --> 00:11:11.960
+Dat is levenscyclus governance in de praktijk.
+
+00:11:12.300 --> 00:11:15.100
+Zijwieltjes totdat je zeker weet dat het systeem niet van de weg afraakt.
+
+00:11:15.100 --> 00:11:20.460
+En dit brengt ons naar de grotere fabrieksvloer waar agents, copilots en elke workflow die je hebt getest samenkomen.
+
+00:11:20.700 --> 00:11:25.520
+Microsoft noemt dat Azure AI Foundry, een alles-in-één AI bouwruimte met alle nodige tools.
+
+00:11:25.780 --> 00:11:31.520
+Of het een productiekrachtpatser wordt of de plek waar je project zelf ontbrandt, hangt volledig af van hoe je ermee omgaat.
+
+00:11:32.020 --> 00:11:35.000
+Azure AI Foundry, jouw fabriek of jouw mijneveld.
+
+00:11:35.000 --> 00:11:41.240
+Azure AI Foundry is Microsoft's nieuwe vlaggenschip, een zogenaamde fabriek voor alles wat met AI te maken heeft.
+
+00:11:41.440 --> 00:11:44.760
+Het probleem? Te veel teams lopen naar binnen en behandelen het als een Ikea.
+
+00:11:45.080 --> 00:11:49.000
+Ze dwalen verblind door de catalogie rond, grijpen een paar glimmende grote taalmodellen,
+
+00:11:49.320 --> 00:11:52.100
+gooien er wat connectors bij en schroeven zonder instructies iets in elkaar.
+
+00:11:52.340 --> 00:11:59.000
+Waar ze mee eindigen is geen Enterprise AI systeem, maar een speelgoeddemo die omvalt zodra een echte gebruiker een rommelige PDF upload.
+
+00:11:59.000 --> 00:12:02.700
+Dit is wat Foundry werkelijk biedt, rechtstreeks uit het officiële handboek.
+
+00:12:02.800 --> 00:12:07.520
+Een model katalogus die Microsoft, OpenAI, Meta, Mistral, DeepSeq en anderen omvat.
+
+00:12:08.000 --> 00:12:12.200
+Aanpassingsopties zoals Retrieval Augmented Generation, Fine Tuning en Distillatie.
+
+00:12:12.360 --> 00:12:16.580
+Een agentservice voor orkestratie, tools zoals Prompt Flow voor evaluatie en debugging,
+
+00:12:16.800 --> 00:12:22.120
+beveiligingsbaselines, identiteits- en toegangsbeheer, contentfilters en observabiliteitsdashboards.
+
+00:12:22.320 --> 00:12:27.580
+Kortom, alle onderdelen die je nodig hebt om copilots, agents en autonome stromen te bouwen en ze compliant te houden.
+
+00:12:27.580 --> 00:12:28.920
+Dat is de inventaris.
+
+00:12:29.120 --> 00:12:35.900
+Het probleem is niet dat de gereedschapskist leeg is, maar dat te veel beheerders denken dat ze simpelweg de GPT-4 turboschakelaar omzetten en het klaar voor productie noemen.
+
+00:12:36.080 --> 00:12:39.540
+De waarheid is dat Foundry een fabrieksvloer is, geen speelgoeddoos voor je hackathon.
+
+00:12:39.780 --> 00:12:44.040
+Dat betekent identiteitsgrenzen instellen, zodat alleen de juiste mensen bij de juiste modellen kunnen.
+
+00:12:44.220 --> 00:12:47.060
+Het betekent contentbeveiliging toevoegen aan elke pipeline.
+
+00:12:47.380 --> 00:12:53.920
+Het betekent observabiliteit gebruiken, zodat je weet wanneer een antwoord is onderbouwd versus wanneer het model bedrijfsbeleid uit de duim zuigt.
+
+00:12:53.920 --> 00:12:58.980
+En het betekent de taak koppelen aan het juiste model in plaats van de grootste te kiezen omdat die slim klinkt.
+
+00:12:59.160 --> 00:13:02.080
+Sla die stappen over en de chaos komt via de achterdeur naar binnen.
+
+00:13:02.280 --> 00:13:07.660
+Ik heb een team een Foundry co-pilot op SharePoint zien bouwen die vrolijk vertrouwelijke oude data deelde met 20 stagiairs.
+
+00:13:07.860 --> 00:13:12.160
+Het was niet slim, het was een compliance ramp die voorkomen had kunnen worden met ingebouwde toegangsregels.
+
+00:13:12.360 --> 00:13:14.040
+Laten we praten over echte faalmodi.
+
+00:13:14.200 --> 00:13:17.960
+Een organisatie gebruikte ooit GPT-4 Turbo voor het taggen van productfoto's.
+
+00:13:18.120 --> 00:13:19.700
+In het lab verpletterde het de demo.
+
+00:13:19.980 --> 00:13:23.300
+Strakke studiofoto's, perfecte tags, iedereen applaudisseerde.
+
+00:13:23.300 --> 00:13:28.440
+In productie waren de inputbestanden geen glanzende JPEG's, maar wazige telefoonfoto's uit het magazijn.
+
+00:13:28.580 --> 00:13:34.160
+Plotseling bestempelde de AI kinderwagens als bureaustoelen en veranderde UPC labels in valse serienummers.
+
+00:13:34.400 --> 00:13:36.940
+Bovenop de vertrouwensbreuk begonnen de kosten op te lopen.
+
+00:13:37.140 --> 00:13:39.780
+En dit is geen sprookje van 0,01 dollar per bericht.
+
+00:13:39.940 --> 00:13:43.580
+De prijsstelling van Foundry is gebaseerd op verbruik en gekoppeld aan de specifieke services die je gebruikt.
+
+00:13:43.580 --> 00:13:47.500
+Elke connector, elke ophaalaanhoep, elke berichtmeter wordt gefactureerd aan je tenant.
+
+00:13:47.700 --> 00:13:49.960
+Elk onderdeel heeft zijn eigen facturatie model.
+
+00:13:50.220 --> 00:13:57.560
+Die flexibiliteit is mooi, maar als je niets gaat met de Asherprijs calculator en het verbruik niet bijhoudt, zal je financiële team verrast zijn door de rekening.
+
+00:13:57.780 --> 00:13:59.080
+Dat is de factuurvalstrik.
+
+00:13:59.660 --> 00:14:02.480
+Verbruiksprijzen werken als je plant, monitort en optimaliseert.
+
+00:14:02.720 --> 00:14:07.180
+Zo niet, dan lijkt het op een sportwagen gebruiken als pizza scooter, duur, lawaaierig en zinloos.
+
+00:14:07.340 --> 00:14:11.220
+We kennen dit allemaal van zaken als Powerbee, geweldige demo, torenhoge rekening.
+
+00:14:11.220 --> 00:14:13.420
+Laat Foundry je niet in dezelfde positie brengen.
+
+00:14:13.680 --> 00:14:16.760
+Ontwikkelaars prototypen graag in Foundry omdat de sandbox zo soepel aanvoelt.
+
+00:14:16.920 --> 00:14:18.540
+En in een sandbox is het inderdaad soepel.
+
+00:14:18.740 --> 00:14:21.100
+Schone demogegevens, geen rommel, direct resultaat.
+
+00:14:21.260 --> 00:14:22.280
+Maar dit is de doodsteek.
+
+00:14:22.420 --> 00:14:25.400
+Teams duwen dat prototype naar productie zonder evaluatiepijplijnen.
+
+00:14:25.580 --> 00:14:30.320
+Als je evaluatoren voor gefundeerdheid, vloeiendheid, relevantie en samenhang overslaat, werk je in het duister.
+
+00:14:30.520 --> 00:14:31.420
+En wat gebeurt er dan?
+
+00:14:31.580 --> 00:14:35.000
+Gebruikers zien de afwijking in de output, het vertrouwen daalt, het management snijdt in de financiering.
+
+00:14:35.200 --> 00:14:38.080
+Dit is geen falen van Foundry, dit is het falen van teams op het gebied van governance.
+
+00:14:38.080 --> 00:14:41.240
+Veel Foundry prototypes stranden om deze reden voor de productie.
+
+00:14:41.380 --> 00:14:44.260
+Geen observeerbaarheid, geen kwaliteitscontroles, geen telemetrie.
+
+00:14:44.420 --> 00:14:45.980
+Het antwoord zit gewoon in het platform.
+
+00:14:46.240 --> 00:14:48.900
+Gebruik Azure AI Foundry observeerbaarheid vanaf de eerste dag.
+
+00:14:49.080 --> 00:14:50.140
+Integreer prompt flows.
+
+00:14:50.380 --> 00:14:52.520
+Draai ingebouwde evaluatoren bij elke test.
+
+00:14:52.760 --> 00:14:57.540
+Fundeer je systeem met Azure Isearch via hybride zoekopdrachten en semantischere ranking voordat je überhaupt live gaat.
+
+00:14:57.740 --> 00:15:01.080
+Microsoft heeft deze tools niet weggestopt, ze zijn gedocumenteerd voor productieveiligheid.
+
+00:15:01.780 --> 00:15:04.760
+Maar al te vaak bladeren bouwers erlangs alsof het voetnoten zijn.
+
+00:15:04.760 --> 00:15:07.880
+Die checkpointmentaliteit is hoe je uit het mijneveld blijft.
+
+00:15:08.040 --> 00:15:15.940
+Behandel Foundry als een fabriek, met governance als eerste stap, compliancebeleid ingebakken zoals voorwaardelijke toegang en observeerbaarheidspijplijnen die vanaf het begin draaien.
+
+00:15:16.080 --> 00:15:21.020
+En ja, identiteitskoping en contentveiligheid moeten niet achteraf worden toegevoegd, ze horen in de materiaallijst.
+
+00:15:21.200 --> 00:15:23.940
+Sla governance over en je riskeert meer dan alleen slechte antwoorden.
+
+00:15:24.220 --> 00:15:30.200
+Zonder dat kan je multimodale bot, vrolijk hour, salarissen blootstellen aan externe gebruikers of facturen labelen met fictieve polisnummers.
+
+00:15:30.200 --> 00:15:34.800
+Dat is niet alleen kapotte AI, dat is voor voor de krantenkoppen dat je compliance afdeling hiervoor niet uitlegt.
+
+00:15:34.980 --> 00:15:38.820
+En daar verschuift de aandacht, want het volgende struikelblok is helemaal niet technisch.
+
+00:15:39.000 --> 00:15:41.160
+Het is de vraag of je AI verantwoordelijk is.
+
+00:15:41.380 --> 00:15:48.380
+Iedereen strooit graag met die woorden in een keynote slide, maar in de praktijk gaat het om audits, filters, compliance en de bergkeuzes die je voor de lancering maakt.
+
+00:15:48.540 --> 00:15:50.400
+En dat is waar de hoofdpijn pas echt begint.
+
+00:15:50.400 --> 00:15:55.840
+Abonneer je op de M365, show nieuwsbrief voor de directe oplossingen en volg ons op M365.
+
+00:15:56.060 --> 00:16:01.400
+Volg onze LinkedIn pagina voor livestreams met MVPs die Foundry in productie hebben getest en hebben gezien wat er misgaat.
+
+00:16:01.640 --> 00:16:03.640
+Verantwoorden AI of verantwoorden hoofdpijn.
+
+00:16:03.860 --> 00:16:06.660
+Iedereen laat verantwoorden AI graag vallen in een keynote.
+
+00:16:06.900 --> 00:16:09.780
+Het staat mooi naast modeworden als eerlijkheid en transparantie.
+
+00:16:09.960 --> 00:16:12.380
+Maar in de praktijk is het geen inspirerende filosofie.
+
+00:16:12.380 --> 00:16:17.760
+Het is configuratie, audits, filters en governance stappen die meer aanvoelen als serveronderhoud dan als innovatie.
+
+00:16:17.760 --> 00:16:20.680
+Voor antwoorden AI is de autogordel, niet de sportwagen.
+
+00:16:20.900 --> 00:16:23.020
+Sla het één keer over en de crash volgt snel.
+
+00:16:23.340 --> 00:16:29.180
+Microsoft praat vooraf over ethiek en beveiliging, maar voor beheerders die dit uitrollen, vertaalt het zich naar praktische vangrails.
+
+00:16:29.380 --> 00:16:37.700
+Je hebt toegangsbeleid nodig dat niet bezwijkt onder druk, filters die schadelijke prompts echt blokkeren en logboeken die gedetailleerd genoeg zijn voor een toezichthouder met cafeïne en een dagvaarding.
+
+00:16:37.880 --> 00:16:39.280
+Het is geen glamoureus werk.
+
+00:16:39.280 --> 00:16:49.120
+Het is het isoleren van ouder copilots van financiële gegevens, het instellen van scopingregels zodat 10 bots niet bij SharePoint geheimen komen en het labelen van LAX zodat je precies kunt bewijzen hoe een antwoord tot stand kwam.
+
+00:16:49.320 --> 00:16:52.920
+Doe dat goed en verantwoord is geen bedrijfslogan, het is overleving.
+
+00:16:53.160 --> 00:16:58.300
+De lelijke kant van dit overslaan, een bot direct aansluiten op je ouder repository zonder tenantscoping.
+
+00:16:58.760 --> 00:17:01.400
+Een gebruiker vraagt naar secundaire arbeidsvoorwaarden.
+
+00:17:01.620 --> 00:17:05.220
+De bot publiceert behulpzaam de salarisschalen van werknemers in de chat.
+
+00:17:05.220 --> 00:17:10.100
+Nu heb je een privacy schending, een morele nachtmerrie en mogelijk toezichthouders in je nek hijgen.
+
+00:17:10.220 --> 00:17:14.100
+De snelste manier om adoptie te doden is niet een slecht ux, maar één lek van gevoelige gegevens.
+
+00:17:14.340 --> 00:17:15.620
+Dus wat houdt die puinhoop buiten?
+
+00:17:15.820 --> 00:17:17.520
+Begin met Azure AI Content Safety.
+
+00:17:17.760 --> 00:17:23.160
+Het is gebouwd om gewelddadige, opzene en aanstootgevende prompts en antwoorden te filteren voordat ze bij gebruikers terechtkomen.
+
+00:17:23.340 --> 00:17:24.200
+Maar dat is de basis.
+
+00:17:24.600 --> 00:17:29.140
+Foundry en Copilot Studio voegen daar evaluatiepijplijnen aan toe die de volgende laag afhandelen.
+
+00:17:29.360 --> 00:17:34.400
+Controles op basis van feiten, relevantiescores, transparantie, dashboards en uitlegbaarheid.
+
+00:17:34.400 --> 00:17:40.340
+Eenvoudig gezegd, je kunt drempelwaarden aanpassen, zowel input als output filteren en bots dwingen hun bronnen te tonen.
+
+00:17:40.520 --> 00:17:43.320
+Zonder dat gooi je met dobbelstenen over wat de AI uitspugt.
+
+00:17:43.420 --> 00:17:45.080
+En dit is de realiteit van de middelen.
+
+00:17:45.380 --> 00:17:46.940
+Microsoft zet hier zwaar op in.
+
+00:17:47.180 --> 00:17:53.180
+34.000 full-time ingenieurs toegewezen aan beveiliging, plus 15.000 partners met diepgaande expertise.
+
+00:17:53.620 --> 00:17:55.980
+Dat is een fort, maar wordt niet te comfortabel.
+
+00:17:55.980 --> 00:17:59.300
+Geen van die ingenieurs zit in jouw tenant om je toegangsregels te bepalen.
+
+00:17:59.540 --> 00:18:06.560
+Microsoft geeft je de vangrails, maar het is nog steeds jouw taak om identiteiten te beveiligen, data isolatie in te stellen, versleuteling toe te passen en beleid te configureren.
+
+00:18:06.740 --> 00:18:09.640
+Als je scoping slordig is, ben jij nog steeds verantwoordelijk voor het lek.
+
+00:18:09.800 --> 00:18:11.840
+De echte oplossing is lifecycle governance.
+
+00:18:12.160 --> 00:18:14.900
+Zie het als het recept dat Microsoft zelf aanbeveelt.
+
+00:18:15.080 --> 00:18:18.480
+Testen, goedkeuren, releasen, all the ten, itereren.
+
+00:18:18.720 --> 00:18:22.980
+Met checkpoints in elke cyclus zie je afwijkingen voordat ze voorpaginanieuws worden.
+
+00:18:23.160 --> 00:18:26.300
+Teams die één keer releasen en daarna niet meer omkijken, gaan altijd de mist in.
+
+00:18:26.300 --> 00:18:29.480
+Modellen evolueren, prompts verschuiven en outputs dwalen af.
+
+00:18:29.680 --> 00:18:31.540
+Governance is geen bureaucratische rompslong.
+
+00:18:31.720 --> 00:18:35.340
+Het voorkomt dat een interne bot beleidsregels verzint intiemsterwijl iedereen slaapt.
+
+00:18:35.540 --> 00:18:38.560
+Sommige beheerders mopperen dat verantwoordelijk werken alleen maar trager is.
+
+00:18:38.800 --> 00:18:39.940
+Dat is de verkeerde kijk.
+
+00:18:40.460 --> 00:18:41.840
+Verantwoordelijkheid remt, snelheid niet.
+
+00:18:42.020 --> 00:18:43.540
+Het voorkomt dat snelheid jou remt.
+
+00:18:43.700 --> 00:18:47.120
+Goede governance betekent dat je audits overleeft en projecten draaiende houdt.
+
+00:18:47.260 --> 00:18:49.000
+Sla je dit over, dan spring je in het diepe.
+
+00:18:49.240 --> 00:18:51.860
+Snelheid zonder controle levert je slechts één soort record op.
+
+00:18:51.940 --> 00:18:53.500
+De kortste tijd tot een postmortem.
+
+00:18:53.500 --> 00:18:55.780
+Denk aan het rijden over haarspeldbochten in de bergen.
+
+00:18:55.780 --> 00:18:59.080
+Je vervloekt de vangrails niet, je bedankt ze als de weg 60 meter naar beneden stort.
+
+00:18:59.420 --> 00:19:01.200
+Verantwoorden AI is precies hetzelfde.
+
+00:19:01.420 --> 00:19:05.500
+Scopes, policies, filters en logs stoppen je snelheid niet, ze houden je uit het nieuws.
+
+00:19:05.680 --> 00:19:08.780
+Kortom, Microsoft heeft je serieuze krachtige tools gegeven.
+
+00:19:08.980 --> 00:19:13.620
+Content safety, evaluatie pipelines, beveiligingskaders, SDK guardrails.
+
+00:19:13.860 --> 00:19:19.140
+Maar het blijft jouw taak om tenants de scope open, toegang te configureren en die lussen in je productiecyclus op te nemen.
+
+00:19:19.400 --> 00:19:22.980
+Doe dat en je hebt AI die compliance overleeft in plaats van eraan bezwijkt.
+
+00:19:22.980 --> 00:19:27.020
+Negeer het en het is niet alleen een risico op uitval, maar je carrière staat op het spel.
+
+00:19:27.480 --> 00:19:29.020
+Verantwoorden AI is niet traag.
+
+00:19:29.360 --> 00:19:30.580
+Verantwoorden AI is houdbaar.
+
+00:19:30.760 --> 00:19:38.280
+En houdbaarheid is de echte test, want wat volgt gaat niet om functies, maar of je dit platform als plug-and-play behandelt of respecteert als infrastructuur waar governance voorop staat.
+
+00:19:38.540 --> 00:19:41.300
+Dat onderscheid bepaalt wie het volhoudt en wie opbrandt.
+
+00:19:41.440 --> 00:19:42.360
+Dit is de essentie.
+
+00:19:42.360 --> 00:19:46.340
+De Valkuil is niet Foundry of Copilot Studio, maar denken dat ze plug-and-play zijn.
+
+00:19:46.520 --> 00:19:50.500
+Het geheugensteuntje is simpel, governance eerst, experimenten daarna, productie als laatste.
+
+00:19:50.760 --> 00:19:53.440
+Identiteit en observabiliteit negeren is op eigen risico.
+
+00:19:53.640 --> 00:19:57.040
+De tools zijn er, maar alleen governance maakt van prototypes echte productie.
+
+00:19:57.260 --> 00:20:03.160
+Dus als je de harde oplossingen wilt die je tenant echt in de lucht houden, abonneer je dan op de podcast en laat een review achter.
+
+00:20:03.400 --> 00:20:06.000
+Ik steek hier dagelijks uren in en je steun helpt echt.
+
+00:20:06.200 --> 00:20:08.660
+Tools veranderen, overlevingstactieken blijven bestaan.
