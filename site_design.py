@@ -93,6 +93,15 @@ footer{margin-top:80px}
 .fshare{border-radius:0}
 .ichecks{list-style:none;margin:0;padding:0;display:grid;gap:8px}.ichecks li{padding-inline-start:30px;position:relative}.ichecks li:before{content:"✓";position:absolute;inset-inline-start:0;top:-1px;width:22px;height:22px;background:var(--ac);color:var(--onac);text-align:center;font-weight:700;line-height:22px}
 
+.quiz{margin:2.2em 0;padding:22px;background:var(--card);border:1px solid var(--bd);border-top:4px solid var(--ac)}.quiz h2{margin-top:0}
+.qq{border:0;padding:0;margin:14px 0}.qq legend{padding:0;font-weight:700;font-size:1.12rem;line-height:1.35;margin-bottom:12px}.qq legend small{display:block;color:var(--mut);font-weight:500;font-size:.8rem;letter-spacing:.06em;text-transform:uppercase;margin-bottom:4px}
+.qo{display:flex;gap:12px;align-items:flex-start;padding:12px 14px;margin:8px 0;border:2px solid var(--bd);cursor:pointer;transition:border-color .2s,background .2s}.qo:hover{border-color:var(--ac)}.qo input{margin-top:.25em;accent-color:var(--ac);width:18px;height:18px;flex:none}
+.qo:has(input:checked){border-color:var(--ac);background:color-mix(in srgb,var(--ac) 9%,transparent)}.qo:has(input:focus-visible){outline:3px solid var(--ac);outline-offset:2px}
+.qo.ok{border-color:#2e7d32!important;background:color-mix(in srgb,#2e7d32 14%,transparent)!important}.qo.no{border-color:#c62828!important;background:color-mix(in srgb,#c62828 12%,transparent)!important}.qq:disabled .qo{cursor:default}
+.qctl{margin-top:10px}.qfb{min-height:1.4em;margin:12px 0 0;font-weight:600}.qfb.ok:before{content:"✓ "}.qfb.no:before{content:"✗ "}
+.qres{text-align:center;padding:14px 0;animation:qpop .5s ease both}.qscore{font:700 2.2rem/1.1 "Barlow Condensed",sans-serif;color:var(--ac);margin:0 0 6px}.qres .btns{justify-content:center;margin-top:14px}
+@keyframes qpop{from{opacity:0;transform:scale(.94)}to{opacity:1;transform:none}}@media (prefers-reduced-motion:reduce){.qres{animation:none}}
+
 .iflow{list-style:none;margin:0;padding:0;display:flex;gap:0;align-items:stretch;counter-reset:n}
 .pn{flex:1 1 0;position:relative;padding:14px 12px;border:2px solid color-mix(in srgb,var(--ac) 30%,transparent);background:var(--card);margin-inline-end:34px;cursor:pointer;display:flex;flex-direction:column;gap:6px;min-width:0;transition:border-color .3s,background .3s,transform .3s}
 .pn:last-child{margin-inline-end:0}.pn .pi{width:24px;height:24px;line-height:24px;text-align:center;background:color-mix(in srgb,var(--ac) 25%,transparent);color:var(--ac);font-weight:700;font-size:.85rem;transition:background .3s,color .3s}.pn b{font-size:1.02rem;line-height:1.2}.pn .pt{font-size:.85rem;opacity:.8;line-height:1.35}
@@ -183,4 +192,5 @@ def site_header(home, brand_href, menu, lang_html, bar_html=""):
     m = "".join(f'<a href="{_e(h)}">{_e(t)}</a>' for t, h in menu)
     return (f'<header class="sh">{bar_html}<div class="top"><div class="wrap"><a class="brand" href="{_e(brand_href)}">M365<i>.</i>FM <span class="dub">DUB</span></a>'
             f'<nav class="menu" aria-label="Menu">{m}</nav>{lang_html}<details class="mm"><summary aria-label="Menu">☰</summary><div class="pn">{m}</div></details></div></div></header>')
+
 

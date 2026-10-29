@@ -321,6 +321,43 @@ def a11y_tags(lang):
             f'<script>window.M365A={{t:{json.dumps(t, ensure_ascii=False).replace("</", "<\\/")}}}</script><script defer src="{BASE}/assets/a11y.js"></script>')
 
 
+_QUI = {}
+for _f in ("quiz_ui_en.json", "quiz_ui_i18n.json"):
+    if (ROOT / "data" / _f).exists():
+        for _k, _v in json.loads((ROOT / "data" / _f).read_text("utf-8")).items():
+            _QUI.setdefault(_k, {}).update(_v)
+
+
+def quiz_html(qz, lang, title, url):
+    """Quiz-Block (Fragen als echte Radiogruppen; Logik in QUIZ_JS)."""
+    try:
+        t = dict(_QUI.get("en", {}))
+        t.update(_QUI.get(lang, {}))
+        qs = ""
+        for i, q in enumerate(qz[:5]):
+            opts = "".join(f'<label class="qo"><input type="radio" name="q{i}" value="{j}"><span>{esc(o)}</span></label>' for j, o in enumerate(q["opts"][:4]))
+            qs += (f'<fieldset class="qq" data-a="{int(q["a"])}" data-why="{esc(q.get("why", ""))}" hidden><legend><small>{esc(t["question_of"].replace("{i}", str(i + 1)).replace("{n}", str(len(qz[:5]))))}</small>'
+                   f'<span>{esc(q["q"])}</span></legend>{opts}</fieldset>')
+        cfg = json.dumps({"t": t, "title": strip_tags(title), "url": url}, ensure_ascii=False).replace("</", "<\\/")
+        return (f'<section class="quiz" id="quiz" aria-labelledby="qz-h" data-n="{len(qz[:5])}"><h2 id="qz-h">{esc(t["quiz"])}</h2><p class="mut">{esc(t["quiz_intro"].replace("{n}", str(len(qz[:5]))))}</p>'
+                f'{qs}<div class="qctl"></div><p class="qfb" role="status" aria-live="polite"></p><script type="application/json" class="qcfg">{cfg}</script></section>')
+    except Exception:
+        return ""
+
+
+QUIZ_JS = """<script>(function(){try{var Q=document.getElementById("quiz");if(!Q)return;var C=JSON.parse(Q.querySelector(".qcfg").textContent),T=C.t,qs=[].slice.call(Q.querySelectorAll(".qq")),ctl=Q.querySelector(".qctl"),fb=Q.querySelector(".qfb"),i=0,score=0,done=false;
+function el(t,c,x){var e=document.createElement(t);if(c)e.className=c;if(x!=null)e.textContent=x;return e}
+function btn(x,f,m){var b=el("button","btn"+(m?" main":""),x);b.type="button";b.onclick=f;return b}
+function show(n){qs.forEach(function(q,j){q.hidden=j!==n});ctl.textContent="";fb.textContent="";fb.className="qfb";var q=qs[n];q.disabled=false;var b=btn(T.check,check,1);b.disabled=true;ctl.appendChild(b);q.onchange=function(){b.disabled=false};var f=q.querySelector("input");}
+function check(){var q=qs[i],a=+q.dataset.a,sel=q.querySelector("input:checked");if(!sel)return;var ok=+sel.value===a;if(ok)score++;q.disabled=true;[].forEach.call(q.querySelectorAll(".qo"),function(l,j){l.classList.toggle("ok",j===a);if(l.querySelector("input").checked&&!ok)l.classList.add("no")});
+fb.className="qfb "+(ok?"ok":"no");fb.textContent=(ok?T.correct:T.wrong+" "+T.right_answer+" "+q.querySelectorAll(".qo span")[a].textContent)+(q.dataset.why?" "+q.dataset.why:"");ctl.textContent="";ctl.appendChild(btn(i<qs.length-1?T.next:T.finish,function(){i++;i<qs.length?show(i):result()},1))}
+function result(){qs.forEach(function(q){q.hidden=true});ctl.textContent="";fb.className="qfb";var n=qs.length,pct=score/n;fb.textContent="";var r=el("div","qres");r.appendChild(el("p","qscore",T.score.replace("{s}",score).replace("{n}",n)));r.appendChild(el("p",null,pct>=.75?T.great:pct>=.5?T.good:T.tryagain));
+var txt=T.share_text.replace("{s}",score).replace("{n}",n).replace("{t}",C.title);var row=el("div","btns");
+row.appendChild(btn(T.share,function(){var u=C.url+"#quiz";if(navigator.share){navigator.share({title:C.title,text:txt,url:u}).catch(function(){})}else if(navigator.clipboard){navigator.clipboard.writeText(txt+" "+u).then(function(){fb.className="qfb ok";fb.textContent=T.copied})}},1));
+var a=el("a","btn","LinkedIn");a.href="https://www.linkedin.com/sharing/share-offsite/?url="+encodeURIComponent(C.url+"#quiz");a.target="_blank";a.rel="noopener nofollow";row.appendChild(a);row.appendChild(btn(T.retry,function(){i=0;score=0;qs.forEach(function(q){q.disabled=false;[].forEach.call(q.querySelectorAll("input"),function(x){x.checked=false});[].forEach.call(q.querySelectorAll(".qo"),function(l){l.classList.remove("ok","no")})});Q.removeChild(r);show(0)}));r.appendChild(row);Q.insertBefore(r,ctl)}
+show(0)}catch(e){}})()</script>"""
+
+
 def single_main(html_):
     """Pro Seite genau ein <main>; weitere werden zu benannten <section>-Landmarken (Name = erste Ueberschrift)."""
     parts = re.split(r"(<main\b[^>]*>|</main>)", html_)
@@ -822,6 +859,7 @@ def build():
             if _m and len(_m.group(1)) <= 70:
                 h1_main, h1_rest = _m.group(1).strip(), _m.group(2).strip()
         faq_items = art.get("faq") or []
+        quiz_block = quiz_html(art["quiz"], l, e["title"], canonical) if (art_html and art.get("quiz")) else ""
         faq_block = ""
         if art_html and faq_items:
             faq_block = ('<section class="faq" style="margin-top:2.2em"><h2>' + esc(FAQ_T.get(l, "FAQ")) + "</h2>"
@@ -854,13 +892,13 @@ def build():
 <p class="mut">▶ {esc(e["title"])}</p>
 <h2>{esc(hdr)}</h2><ol class="points">{lis}</ol>
 <p class="lede" style="margin-top:1.4em">{aud}</p>
-{("<section class=article>" + art_html + "</section>") if art_html else ""}{faq_block}
+{("<section class=article>" + art_html + "</section>") if art_html else ""}{quiz_block}{faq_block}
 {author_box(l)}
 </article>
 {('<h2>' + esc(ui[4]) + '</h2><div class="list">' + rel + '</div>') if rel else ''}
 <p style="margin-top:1.6em"><a class="btn" href="{BASE}/{l}/">{esc(ui[3])} →</a></p>
 <section id="c-comments"></section><section id="c-sub"></section></main>
-{footer(l)}{PLAT_JS}{INFO_JS}{community_tags(l, vid)}"""
+{footer(l)}{PLAT_JS}{INFO_JS}{QUIZ_JS if quiz_block else ''}{community_tags(l, vid)}"""
         OG_COVER[canonical] = art_svg(vid, LANGS[l][0], lang=l)
         write(f'{l}/{it["slug"]}/index.html',
               page(l, e["title"], short(intro), canonical, body, alts, ld, extra_head=f'<meta property="article:section" content="{esc(cat_name(pc, l))}">' + "".join(f'<meta property="article:tag" content="{esc(t)}">' for t in tagraw[l][vid])))

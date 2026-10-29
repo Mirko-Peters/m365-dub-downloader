@@ -88,6 +88,28 @@ def faq_for(lang, html):
         return None
 
 
+def quiz_for(lang, html):
+    """4 Multiple-Choice-Fragen (je 4 Optionen) aus dem fertigen Artikel."""
+    txt = re.sub(r"<[^>]+>", " ", html)[:14000]
+    p = (f"Erstelle aus dem folgenden Artikel ein Quiz mit genau 4 Multiple-Choice-Fragen in {NAMES.get(lang, lang)}. Jede Frage hat genau 4 Antwortoptionen (je max. 14 Wörter), genau eine ist richtig, "
+         "die falschen sind plausibel, aber eindeutig falsch. Nur Wissen aus dem Artikel, keine Verweise auf Transkript/Podcast/Folge, keine Links, richtige Antwort nicht immer an derselben Position. "
+         'Zu jeder Frage eine kurze Erklärung (max. 25 Wörter). Ausgabe: reines JSON, keine Erklärung: [{"q": "...", "opts": ["...","...","...","..."], "a": 0, "why": "..."}, ...] ("a" = Index 0-3 der richtigen Option)\n\nArtikel:\n' + txt)
+    try:
+        raw = _post(p, 3000)
+        m = re.search(r"\[.*\]", raw, re.S)
+        j = json.loads(m.group(0)) if m else None
+        out = []
+        for x in j or []:
+            o = [str(t).strip() for t in x.get("opts", [])]
+            a = int(x.get("a", -1))
+            if x.get("q") and len(o) == 4 and all(o) and 0 <= a < 4:
+                out.append({"q": str(x["q"]).strip(), "opts": o, "a": a, "why": str(x.get("why", "")).strip()})
+        return out[:5] if len(out) >= 3 else None
+    except Exception as ex:
+        print("Quiz-Fehler", str(ex)[:100])
+        return None
+
+
 def infos_for(lang, html, have=()):
     """Zwei weitere Infografiken (andere Typen als die erste) als JSON-Liste."""
     txt = re.sub(r"<[^>]+>", " ", html)[:14000]
@@ -191,6 +213,9 @@ def work(job):
     more = infos_for(l, html, [inf.get("typ", "schritte")] if inf else ())
     if more:
         res["infos"] = more
+    qz = quiz_for(l, html)
+    if qz:
+        res["quiz"] = qz
     return vid, l, res
 
 
@@ -215,19 +240,20 @@ def main():
     jobs = jobs[:LIMIT]
     changed = set()
     # vorhandene Artikel ohne Infografik nachrüsten
-    fill = [(v, l) for v, d in store.items() for l, a in d.items() if not a.get("info") or not a.get("faq") or not a.get("infos")][:LIMIT]
+    fill = [(v, l) for v, d in store.items() for l, a in d.items() if not a.get("info") or not a.get("faq") or not a.get("infos") or not a.get("quiz")][:LIMIT]
     def fillwork(t):
         v, l = t
         a = store[v][l]
         inf = a.get("info") or info_for(l, a["html"])
         more = None if a.get("infos") else infos_for(l, a["html"], [(inf or {}).get("typ", "schritte")])
-        return v, l, (None if a.get("info") else inf), (None if a.get("faq") else faq_for(l, a["html"])), more
+        return v, l, (None if a.get("info") else inf), (None if a.get("faq") else faq_for(l, a["html"])), more, (None if a.get("quiz") else quiz_for(l, a["html"]))
     with ThreadPoolExecutor(WORKERS) as ex:
-        for v, l, inf, fq, more in ex.map(fillwork, fill):
+        for v, l, inf, fq, more, qz in ex.map(fillwork, fill):
             if inf: store[v][l]["info"] = inf
             if fq: store[v][l]["faq"] = fq
             if more: store[v][l]["infos"] = more
-            if inf or fq or more:
+            if qz: store[v][l]["quiz"] = qz
+            if inf or fq or more or qz:
                 changed.add(v)
                 json.dump(store[v], open(ROOT / "data" / "articles" / f"{v}.json", "w", encoding="utf-8"), ensure_ascii=False, indent=1)
     print(len(fill), "Infografiken/FAQ nachgerüstet versucht")
