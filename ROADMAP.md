@@ -68,3 +68,11 @@ Stand: 2026-10-29. Reihenfolge nach Absprache mit Mirko; alles mit Schema.org-Ve
 - Bei X Upvotes: **Benachrichtigung an Mirko** (Web-Push über vorhandenes `push.js`, später E-Mail über Resend) mit Link zum Spreaker-Entwurf. Mirko prüft/veröffentlicht in Spreaker; „Ablehnen“ löscht den Entwurf.
 - Schutz: nur Mitglieder mit öffentlichem Profil, 1 Upload/Woche, Dateityp-Prüfung, Entwurf wird nach 30 Tagen ohne Schwelle gelöscht (Spreaker-Speicherlimit schonen).
 - Voraussetzungen: Spreaker-API-Token als Worker-Secret (Spreaker-Re-Auth steht ohnehin offen), Show-ID der Community-Show.
+
+## Kompletter Kreislauf Community-Episode → Stick-Man-Video (30.10., Präzisierung)
+1. Mitglied lädt Episode hoch → Worker legt sie als **Entwurf bei Spreaker** an (Entwurfs-ID wird gespeichert).
+2. **25 Upvotes** → Benachrichtigung an Mirko zur Prüfung.
+3. Mirko **veröffentlicht in Spreaker**.
+4. Der Worker-Cron (alle 30 Min) fragt die Spreaker-API ab: Ist die gespeicherte Episode jetzt veröffentlicht? Dann Status „veröffentlicht“, Autor wird benachrichtigt, Credit/Link auf Profil.
+5. Die veröffentlichte Episode löst die **Stick-Man-Video-Produktion** aus (bestehende Pipeline Episode → Video); das fertige Video wird dem Mitglied zugeordnet (Link im Profil/Beitrag) – das Video ist die Belohnung für die freigegebene Episode.
+- Offen: wie die Video-Pipeline angestoßen wird (GitHub-Workflow per Dispatch aus dem Worker vs. Pipeline pollt Spreaker selbst), wo das Video erscheint (YouTube-Kanal, Episodenseite).
