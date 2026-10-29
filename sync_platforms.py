@@ -29,6 +29,10 @@ def main():
         for l, e in langs.items():
             titles.setdefault(l, {})[norm(e["title"])] = vid
     out = {}
+    sl = ROOT / "data" / "spotify_links.json"  # per scrape_spotify.py gesammelt (ohne API)
+    if sl.exists():
+        for k, u in json.load(open(sl, encoding="utf-8")).items():
+            out.setdefault(k, {})["spotify"] = u
     token = None
     cid, sec = os.environ.get("SPOTIFY_CLIENT_ID"), os.environ.get("SPOTIFY_CLIENT_SECRET")
     if cid and sec:
