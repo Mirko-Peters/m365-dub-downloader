@@ -1,0 +1,1246 @@
+WEBVTT
+
+00:00:00.600 --> 00:00:03.780
+Imagina implementar un chatbot para ayudar a tu personal a gestionar tareas diarias.
+
+00:00:03.980 --> 00:00:08.300
+Y en cuestión de minutos, empiezas a sugerir acciones sesgadas, engañosas o poco útiles para tus clientes.
+
+00:00:09.120 --> 00:00:13.020
+Esto no es paranoia de ciencia ficción, es lo que sucede cuando faltan medidas de protección de AI responsable.
+
+00:00:14.040 --> 00:00:17.840
+La AI responsable se enfoca en la equidad, la transparencia, la privacidad y la rendición de cuentas.
+
+00:00:18.740 --> 00:00:21.020
+Estos son los cinturones de seguridad para tus copilatos digitales.
+
+00:00:21.200 --> 00:00:23.300
+Reduce los riesgos si realmente los pones en práctica.
+
+00:00:23.780 --> 00:00:24.300
+Las consecuencias.
+
+00:00:24.760 --> 00:00:27.960
+Violaciones de cumplimiento, desconfianza del cliente y liderazgo en modo de pánico.
+
+00:00:27.960 --> 00:00:36.960
+En esta sesión, demostraré fallos por inyección de prompts y mostraré pasos de gobernanza que puedes aplicar dentro de los flujos de trabajo de Power Platform y Microsoft 365 porque el peligro no es lejano.
+
+00:00:37.520 --> 00:00:39.900
+Comienza en el momento en que un asistente de AI se sale del guión.
+
+00:00:40.720 --> 00:00:44.800
+Cuando el AI se sale del guión, imagina esto. Lanzas un asistente de programación para organizar tu calendario.
+
+00:00:45.180 --> 00:00:48.900
+Deberías reorganizar horarios de reuniones, marcar notas urgentes y mantener el desorden bajo punto.
+
+00:00:49.260 --> 00:00:54.260
+En cambio, empieza a mostrar favoritismo decidiendo qué colegas importan más y eliminando silenciosamente a otro de la invitación.
+
+00:00:54.260 --> 00:00:58.900
+O peor aún, entierra un mensaje crítico de tu gerente bajo el equivalente digital del correo basura.
+
+00:00:59.600 --> 00:01:04.200
+Pediste un reloj confiable y lo que obtuviste parece un compañero de tripulación excéntrico que inventa reglas que nadie aprobó.
+
+00:01:04.740 --> 00:01:06.360
+Piensa en ese asistente como una embarcación en el mar.
+
+00:01:07.040 --> 00:01:12.720
+El barco puede brillar, el motor zumbar con potencia, pero sin un sistema de navegación navega ciegas a través de la niebla.
+
+00:01:13.400 --> 00:01:17.820
+La AI sin protección es exactamente eso. Movimiento sin dirección, propulsión sin brújula.
+
+00:01:17.820 --> 00:01:23.160
+Y aunque los errores comunes duelen, el peligro real llega cuando alguien pone una mano sobre el timón.
+
+00:01:24.140 --> 00:01:25.240
+Ahí es donde entra la inyección de prompts.
+
+00:01:26.200 --> 00:01:31.000
+Este es el capitán rebelde que se infiltra a bordo, colando una orden que suena oficial pero que redirige el barco por completo.
+
+00:01:31.740 --> 00:01:37.400
+Una pequeña frase disfrazada en una solicitud puede hacer que tu amable programador filtre información, difunda sesgos o repita tonterías.
+
+00:01:37.960 --> 00:01:41.940
+Esto en la ciencia ficción es un riesgo real de entrada adversaria que los expertos llaman inyección de prompts.
+
+00:01:41.940 --> 00:01:46.160
+Los atacantes usan texto cuidadosamente elaborado para eludir las reglas de seguridad.
+
+00:01:46.500 --> 00:01:49.660
+Y el sistema cumple porque no puede distinguir a un saboteador de un pasajero de confianza.
+
+00:01:50.900 --> 00:01:51.620
+He aquí por qué sucede.
+
+00:01:52.000 --> 00:01:55.220
+La mayoría de los modelos fundamentales tratarán cualquier instrucción bien formada como valiente.
+
+00:01:55.760 --> 00:01:58.580
+No detectan motivos o intenciones sin capas de seguridad adicionales.
+
+00:01:59.220 --> 00:02:03.420
+A menos que una organización añada protecciones, filtros de seguridad y controles con intervención humana,
+
+00:02:03.420 --> 00:02:06.480
+la IA sigue órdenes con la diligencia de una máquina construida para obedecer.
+
+00:02:07.260 --> 00:02:11.720
+Pídele que resume una reunión y si dentro de esa solicitud también se incluye imprimir el archivo de agenda privada
+
+00:02:11.720 --> 00:02:13.360
+los tratará a ambos por igual.
+
+00:02:13.900 --> 00:02:15.820
+No se sospecha de la ética, no se sospecha de engaños.
+
+00:02:16.600 --> 00:02:17.760
+La metáfora de Adana funciona aquí.
+
+00:02:18.180 --> 00:02:21.480
+Es como pasar por un punto de control con documentos falsificados marcados como autorizado.
+
+00:02:21.940 --> 00:02:23.880
+Existen barreras de protección pero no siempre son suficientes.
+
+00:02:24.240 --> 00:02:26.360
+Un texto ingenioso puede engañar a las reglas para que sepan.
+
+00:02:26.760 --> 00:02:30.480
+Y como los resultados son no deterministas, nunca es la misma respuesta dos veces el peligro se multiplica.
+
+00:02:30.720 --> 00:02:34.440
+Un atacante puede seguir probando hasta que el modelo finalmente se da la respuesta que quería,
+
+00:02:34.680 --> 00:02:36.320
+como lanzar dados hasta que salga la travesura.
+
+00:02:36.760 --> 00:02:39.820
+Si el asistente creado para servirle puede convertirse en un bufón en una brisa rardeo.
+
+00:02:40.200 --> 00:02:41.620
+Un minuto está eligiendo espacios en la cadena.
+
+00:02:42.160 --> 00:02:46.500
+Al siguiente, inventa criterios de solicitud de empleo o difunde nombres sensibles en el contexto equivocado.
+
+00:02:47.200 --> 00:02:52.340
+La gobernanza se vuelve crucial aquí porque la transformación de útil a caótica no es gradual, es instante.
+
+00:02:52.720 --> 00:02:54.380
+El daño no se detiene en una sola bandeja de entrada.
+
+00:02:55.060 --> 00:02:58.320
+Los resultados erróneos se propagan por los flujos de trabajo más rápidos de cualquier humano.
+
+00:02:58.720 --> 00:03:00.880
+Una sugerencia defectuosa se agrava esta forma no cascada.
+
+00:03:01.580 --> 00:03:02.820
+A los consejos alimentando decisión.
+
+00:03:03.460 --> 00:03:06.240
+Etiquetas erróneas difundiendo sesgos de desinformación a velocidad de máquina.
+
+00:03:06.720 --> 00:03:09.160
+Sin supervisión, un mensaje engañoso provoca un incendio total.
+
+00:03:09.160 --> 00:03:11.860
+La mitigación es posible y no depende de ilusiones.
+
+00:03:12.640 --> 00:03:19.840
+Los proveedores y las empresas ya utilizan defensas en capas, filtros automatizados, reglas de aprendizaje por refuerzo y revisores humanos que verifican lo que se escapa.
+
+00:03:21.180 --> 00:03:30.440
+TILES, por ejemplo, recomienda probar nuevos copilotos dentro de entornos cerrados, entornos aislados y auditables que contengan el radio de explosión antes de exponerlos a usuarios o datos reales.
+
+00:03:30.440 --> 00:03:37.220
+Si se combina eso con un red teaming continuo, donde humanos prueban el sistema en busca de habilidades de forma constante, se crea un amortiguador.
+
+00:03:37.880 --> 00:03:44.100
+Las salvaguardas automatizadas hacen el trabajo pesado, pero la revisión humana asegura que el modelo se mantenga alineado cuando las reglas sencillas fallan.
+
+00:03:44.800 --> 00:03:45.480
+Este es el patrón.
+
+00:03:45.880 --> 00:03:47.760
+Observar, probar, revisar, contener.
+
+00:03:48.620 --> 00:03:51.920
+Si dejas el timón desatendido, la AIA navega hacia donde la provocación la dirija.
+
+00:03:52.740 --> 00:03:55.240
+Si aplicas supervisión, reduces el margen para el desastre.
+
+00:03:55.700 --> 00:03:56.800
+La metáfora del barco lo capturó.
+
+00:03:56.800 --> 00:04:00.200
+La orientación es posible, pero solo cuando alguien revisa la brújula.
+
+00:04:00.740 --> 00:04:01.860
+Y eso prepara el siguiente desafío.
+
+00:04:02.360 --> 00:04:06.440
+Incluso si mantienes a los intrusos fuera y los filtros en línea, aún enfrentas otra complicación.
+
+00:04:07.180 --> 00:04:09.120
+Imprevisibilidad integrada en los propios sistemas.
+
+00:04:10.140 --> 00:04:13.740
+No por sabotaje, sino por la forma en que estos modelos generan sus respuestas.
+
+00:04:15.480 --> 00:04:18.020
+Determinista frente a no determinista el interruptor oculto.
+
+00:04:18.580 --> 00:04:23.880
+Imagina esto, escribes 2 más 2 en una calculadora y en lugar del esperado 4 te responde con un 42.
+
+00:04:23.880 --> 00:04:26.000
+Bizarro, ¿verdad?
+
+00:04:26.360 --> 00:04:29.360
+Quedamos atónitos porque las calculadoras están construidas sobre un determinismo férmico.
+
+00:04:29.660 --> 00:04:32.880
+Si les das la misma entrada mil veces, obtendrás el mismo resultado siempre.
+
+00:04:33.600 --> 00:04:34.980
+Esa previsibilidad es el objetivo principal.
+
+00:04:35.520 --> 00:04:37.520
+Ahora, contrasta eso con la nueva clase de herramientas de IA.
+
+00:04:37.920 --> 00:04:39.620
+No siempre llegan al mismo lugar dos veces.
+
+00:04:40.020 --> 00:04:40.780
+Sus resultados varían.
+
+00:04:41.100 --> 00:04:45.020
+A veces la variación parece inteligente o perspicaz, y otras veces cae en el sinsentido.
+
+00:04:45.340 --> 00:04:46.280
+Ese es el interruptor oculto.
+
+00:04:46.280 --> 00:04:53.320
+En los sistemas deterministas, como las hojas de cálculo o las fórmulas basadas en reglas, el resultado nunca cambia.
+
+00:04:54.240 --> 00:04:59.240
+Ingresa 7 un lunes o un sábado y la máquina entregará el mismo veredicto, sin cambios de humor ni creatividad.
+
+00:04:59.920 --> 00:05:02.840
+Es lealtad mecánica, repitiendo el mismo movimiento una y otra vez.
+
+00:05:03.260 --> 00:05:04.940
+Los modelos no deterministas funcionan de otra manera.
+
+00:05:05.380 --> 00:05:09.840
+Les das un aviso, y en lugar de seguir un camino fijo, exploran entre varias posibilidades.
+
+00:05:10.820 --> 00:05:16.200
+Ese muestreo sumado a procesos estocásticos, actualizaciones del modelo e incluso la desviación de datos, lo que hace que los resultados varíen.
+
+00:05:17.640 --> 00:05:19.200
+Es como preparar un escenario para improvisación.
+
+00:05:19.640 --> 00:05:22.440
+Tú escribes la escena, pero el actor inventa remates sobre la marcha.
+
+00:05:23.020 --> 00:05:25.800
+A veces funciona de maravilla, a veces se desvía hacia la incoherencia.
+
+00:05:26.840 --> 00:05:32.580
+La automatización clásica y los flujos de trabajo basados en reglas, como muchos creados en Power Platform, se inclinan más hacia el lado determinista.
+
+00:05:33.300 --> 00:05:37.040
+Estableces una condición y cuando se activa, ejecuta la regla definida con precisión de máquina.
+
+00:05:37.040 --> 00:05:41.460
+Esa previsibilidad es lo que mantiene estable el cumplimiento de los flujos de datos y los registros de auditorio.
+
+00:05:41.960 --> 00:05:43.880
+Sabes lo que sucederá porque los pasos están definidos.
+
+00:05:44.500 --> 00:05:48.660
+Los copilotos generativos, en cambio, convierten cualquier entrada en un espacio abierto a la interpretación.
+
+00:05:49.360 --> 00:05:52.300
+Resumirán, recombinarán y parafrasearán de formas que a menudo parecen humanas.
+
+00:05:53.600 --> 00:05:59.100
+La fluidez es su encanto, pero también su riesgo, porque esa misma fluidez permite la imprevisibilidad en contextos que requieren consistencia.
+
+00:06:00.060 --> 00:06:01.480
+Imagina un grupo de improvisación en el escenario.
+
+00:06:02.020 --> 00:06:03.400
+Les das el tema de aprobación de presupuesto.
+
+00:06:03.400 --> 00:06:10.780
+Un actor improvisa una broma ingeniosa sobre ahorros, otro se desvía hacia una subtrama sobre banquetes y, de repente, el espectáculo casi no se parece a tu petición original.
+
+00:06:11.220 --> 00:06:13.180
+Eso es un modelo no determinista en plena actuación.
+
+00:06:14.020 --> 00:06:21.080
+Estos cambios no son señales de un mal diseño, tan integrados en la forma en que los modelos de lenguaje extenso generan lenguaje explorando muchos caminos, no solo uno.
+
+00:06:21.900 --> 00:06:22.520
+El problema es claro.
+
+00:06:22.520 --> 00:06:27.960
+La creatividad no siempre equivale a precisión y en los flujos de trabajo empresariales la precisión suele ser la única moneda que cuenta.
+
+00:06:28.360 --> 00:06:29.240
+Apliquemos esto a las filas.
+
+00:06:29.840 --> 00:06:33.140
+Supongamos que tu herramienta de verificación de crédito ponía a un solicitante como aprobado.
+
+00:06:34.080 --> 00:06:37.140
+Ingresas la información al día siguiente, pero esta vez dice rechazado.
+
+00:06:37.920 --> 00:06:39.180
+El solicitante es en una gran confusión.
+
+00:06:39.720 --> 00:06:41.980
+El regulador percibe una inconsistencia que parece discriminación.
+
+00:06:42.400 --> 00:06:43.320
+Lo que sucede es una desviación.
+
+00:06:43.680 --> 00:06:48.060
+Los resultados cambian sin una razón transparente porque los sistemas no deterministas pueden variar con el tiempo.
+
+00:06:48.640 --> 00:06:51.800
+A diferencia de los humanos, no puedes simplemente pedirle al modelo que explique qué cambió.
+
+00:06:52.460 --> 00:06:56.480
+Aquí es donde la confianza se erosiona más rápido, cuando el razonamiento desaparece detrás de un resultado paro.
+
+00:06:56.880 --> 00:06:58.860
+En producción, la desviación se amplifica rápidamente.
+
+00:06:59.640 --> 00:07:03.640
+Un flujo de trabajo aprobado para reducir el sesgo un mes puede desviarse en la dirección opuesta al siguiente.
+
+00:07:04.720 --> 00:07:09.480
+Las variaciones que parecen menores de forma aislada se suman para convertirse en incumplimientos al magnificarse en cientos de casos.
+
+00:07:10.200 --> 00:07:16.160
+Los reguladores, a diferencia del público divertido en la noche de improvisación, exigen estabilidad, auditabilidad y explicaciones claras.
+
+00:07:16.500 --> 00:07:19.040
+Ellos no aceptan el no determinismo como parte del encanto.
+
+00:07:19.560 --> 00:07:20.800
+Es por eso que el salvaguarda es importante.
+
+00:07:20.800 --> 00:07:24.700
+Los reguladores y las normas exigen auditabilidad, documentación del modelo de monitoreo.
+
+00:07:25.240 --> 00:07:28.120
+Así que integra registros y medidas de explicabilidad en el despliegue.
+
+00:07:28.860 --> 00:07:34.920
+Sin ellos, hasta pequeños cambios se vuelven pasivos, las multas se acumulan, el daño a la reputación se extiende y la confianza del cliente se disuelve.
+
+00:07:35.540 --> 00:07:38.000
+La gobernanza es el árbitro humano en esta hora impredecible.
+
+00:07:38.680 --> 00:07:40.900
+Imagina de nuevo a esos improvisadores, girando en todas direcciones.
+
+00:07:41.260 --> 00:07:43.920
+Si nadie establece límites, el acto colapsa bajo su propio caos.
+
+00:07:43.920 --> 00:07:46.400
+Un árbitro, sin embargo, los mantiene sujetos.
+
+00:07:47.040 --> 00:07:48.660
+Mantente en este tema, sigue este arco.
+
+00:07:49.460 --> 00:07:51.000
+La gobernanza funciona igual para la IA.
+
+00:07:51.680 --> 00:07:52.820
+No extingue la innovación.
+
+00:07:53.420 --> 00:07:56.600
+Convierte la aleatoriedad en un desempeño que respeta el guión.
+
+00:07:57.320 --> 00:08:00.120
+El no determinismo permanece, pero opera dentro de carriles definidos.
+
+00:08:00.900 --> 00:08:01.600
+Aquí reside el crimen.
+
+00:08:02.000 --> 00:08:03.900
+No puede forzar a un copiloto o actor como una calculadora.
+
+00:08:03.980 --> 00:08:04.720
+No fue diseñado para eso.
+
+00:08:05.580 --> 00:08:07.080
+Pero puedes colocar redes de seguridad a su alrededor.
+
+00:08:07.620 --> 00:08:11.020
+Supervisión humana, los sistemas de monitoreo y los marcos de gobernanza actúan como esa red.
+
+00:08:11.500 --> 00:08:14.200
+Con ellos el modelo sigue improvisando, pero no arruinará el espectáculo.
+
+00:08:14.800 --> 00:08:19.300
+Sin ellos la desviación se descontrola y los equipos de cumplimiento deben limpiar decisiones que nadie puede justificar.
+
+00:08:19.620 --> 00:08:20.560
+Lo que está en juego es evidente.
+
+00:08:20.720 --> 00:08:21.720
+La impredecibilidad es neutra.
+
+00:08:22.380 --> 00:08:25.160
+Cuál de resultados que afectan préstamos, empleos o atención médica.
+
+00:08:25.720 --> 00:08:28.680
+Y cuando los resultados tienen peso en el mundo real, los reguladores intervienen.
+
+00:08:29.480 --> 00:08:30.860
+Lo que nos lleva a la siguiente frontera.
+
+00:08:30.960 --> 00:08:34.580
+La eminente llegada de reglas externas que no solo sugieren supervisión, sino que la exigen.
+
+00:08:35.500 --> 00:08:37.320
+La ley de Ilaue, asteroide en camino.
+
+00:08:38.160 --> 00:08:40.340
+Imagina esto, has construido un brillante proyecto de IA.
+
+00:08:40.740 --> 00:08:43.220
+Una ciudad digital con calles ordenadas y actividad vibrante.
+
+00:08:44.140 --> 00:08:47.480
+Distritos para datos, puentes de integración, rasquecielos de funciones inteligentes.
+
+00:08:48.100 --> 00:08:48.860
+Todo se sienten sólido.
+
+00:08:49.500 --> 00:08:53.560
+Entonces de la noche a la mañana llega la ley de IA de IA de IA como reglas de zonificación lanzadas desde la órbita.
+
+00:08:54.100 --> 00:08:56.440
+Bloques enteros de tu ciudad son etiquetados como regulados,
+
+00:08:56.440 --> 00:09:00.660
+algunos monitoreados estrictamente a tus prohibidos si cruzan a terrenos manipuladores o dañinos o dañinos.
+
+00:09:01.140 --> 00:09:04.560
+No es opcional, es legislación y tu ciudad debe remodelarse lo hayas planeado
+
+00:09:04.560 --> 00:09:04.980
+o no.
+
+00:09:05.880 --> 00:09:07.540
+En el núcleo de estas reglas está la categorización.
+
+00:09:08.360 --> 00:09:12.480
+Los sistemas se clasifican en niveles de riesgo mínimo, limitado, alto o inaceptable.
+
+00:09:13.540 --> 00:09:16.320
+El mínimo podría cubrir un chatbot que ayuda a clientes con preguntas frecuentes.
+
+00:09:17.020 --> 00:09:20.320
+El riesgo alto abarca herramientas de reclutamiento, calificación crediticia y monitoreo laboral.
+
+00:09:21.000 --> 00:09:24.660
+El inaceptable cubre usos manipuladores o peligrosos que están efectivamente prohibidos.
+
+00:09:25.740 --> 00:09:28.120
+Estas no son solo etiquetas, se vinculan directamente con obligación.
+
+00:09:28.680 --> 00:09:31.620
+Si se clasifica como riesgo alto, debes brindar transparencia y explicabilidad,
+
+00:09:31.740 --> 00:09:34.780
+mantener registros detallados para auditorías e implementar supervisión humana.
+
+00:09:35.240 --> 00:09:37.580
+De repente a tu brillante ciudad nueva no solo se le pide que funcione,
+
+00:09:37.680 --> 00:09:39.680
+se le pide que pruebe detalladamente cómo y por qué funciona.
+
+00:09:40.420 --> 00:09:42.560
+Para los desarrolladores y creadores de soluciones es un cambio de uso.
+
+00:09:43.140 --> 00:09:45.600
+Ayer las funciones podían integrarse en las aplicaciones a gran velocidad.
+
+00:09:46.060 --> 00:09:49.580
+Hoy, esas mismas funciones pueden exigir revisiones de cumplimiento ante una sola demostración.
+
+00:09:50.340 --> 00:09:52.980
+Una aplicación de contratación que clasifica CBS en la plataforma Power,
+
+00:09:53.060 --> 00:09:56.540
+que antes era un simple ahorro de tiempo y de repente cae en territorio de alto riesgo, no se rompió.
+
+00:09:57.020 --> 00:09:59.800
+Simplemente impacta a las personas de formas que la ley define como sensibles,
+
+00:09:59.960 --> 00:10:00.920
+y eso cambia lo que está en juego.
+
+00:10:01.580 --> 00:10:03.440
+Y aquí es donde el pánico se apoderá a muchos equipos.
+
+00:10:03.880 --> 00:10:06.500
+La transparencia significa registros de cómo se toman las decisiones.
+
+00:10:06.500 --> 00:10:07.880
+Una lista vaga en una presentación.
+
+00:10:08.820 --> 00:10:12.220
+La auditabilidad requiere que cada ruta de decisión esté almacenada y sea recuperable,
+
+00:10:12.320 --> 00:10:13.920
+lista para que los reguladores la inspeccionen.
+
+00:10:13.920 --> 00:10:16.680
+La supervisión humana significa responsabilidad en tiempo real,
+
+00:10:16.780 --> 00:10:20.000
+personas reales observando el sistema, capaces de intervenir cuando el modelo se desvíe.
+
+00:10:20.440 --> 00:10:22.640
+Estas no son directrices ligeras, sino condiciones exigibles.
+
+00:10:23.100 --> 00:10:25.820
+Los prototipos rápidos se transforman en implementaciones supervisadas
+
+00:10:25.820 --> 00:10:27.400
+con aprobación de cumplimiento requerida en capa.
+
+00:10:27.960 --> 00:10:29.040
+La velocidad pasa al estructo.
+
+00:10:29.500 --> 00:10:33.080
+Piensa en la ley menos como burocracia y más como reglas de oxígeno en una nave espacial.
+
+00:10:33.720 --> 00:10:36.520
+Puede que pongas los ojos en blanco al abrir la máscara en cielos tranquilos,
+
+00:10:36.960 --> 00:10:39.400
+pero durante una turbulencia es lo único que mantiene viva la tripulación.
+
+00:10:39.980 --> 00:10:40.760
+La ley es lo mismo.
+
+00:10:40.760 --> 00:10:43.660
+Las reglas se sienten pesadas hasta que recuerdas por qué existen,
+
+00:10:43.720 --> 00:10:45.960
+por qué un lapso puede asfixiar la confianza en toda una industria.
+
+00:10:46.740 --> 00:10:49.180
+Y aquí hay una advertencia que no puedes posparar el cumbrino.
+
+00:10:49.980 --> 00:10:54.320
+La ley impone obligaciones ahora y adaptar registros, controles y supervisión más tarde
+
+00:10:54.320 --> 00:10:56.920
+será más costoso que incorporarlos en la etapa de diseño.
+
+00:10:57.660 --> 00:11:00.740
+Las consecuencias de ignorar estos requisitos no son solo financieras.
+
+00:11:01.300 --> 00:11:04.160
+Las multas duelen, sí, pero la reputación es más difícil de reparar.
+
+00:11:04.160 --> 00:11:07.000
+Una vez que los clientes descubren que tu herramienta cruzó la línea roja,
+
+00:11:07.060 --> 00:11:08.580
+la confianza en toda tu empresa se erosiona.
+
+00:11:08.940 --> 00:11:10.320
+No puedes corregir eso con una actualización.
+
+00:11:10.740 --> 00:11:13.780
+La confianza pública es frágil y cuando se quiebra, los usuarios se cambian a otro lugar.
+
+00:11:14.180 --> 00:11:16.880
+La mayor penalización no está escrita en la ley, está escrita en el comportamiento del cliente.
+
+00:11:17.420 --> 00:11:19.340
+Así que aquí está la pregunta incómoda de inventario.
+
+00:11:20.220 --> 00:11:23.040
+¿Acaso sabes cuáles de tus funciones de IA califican como de alto riesgo?
+
+00:11:23.440 --> 00:11:24.400
+Es el clasificador de su web.
+
+00:11:24.660 --> 00:11:25.940
+Es herramienta de productividad predictiva.
+
+00:11:25.940 --> 00:11:29.820
+Si tocan áreas sensibles como el empleo de las perspectivas financieras, a la ley le importa.
+
+00:11:30.800 --> 00:11:32.700
+Y no importa si los ves como ayudantes inofensivos.
+
+00:11:33.360 --> 00:11:35.820
+La clasificación conlleva obligaciones, las reconozcas o no.
+
+00:11:36.300 --> 00:11:38.480
+Las organizaciones inteligentes comienzan con un inventario,
+
+00:11:38.580 --> 00:11:41.960
+catalogando qué funciones se sitúan donde antes de que los reguladores les pidan cuentas pagando una multa.
+
+00:11:42.300 --> 00:11:43.080
+Es el verdadero giro.
+
+00:11:43.580 --> 00:11:44.880
+La ley nos recomienda gentilmente.
+
+00:11:45.020 --> 00:11:46.320
+La IA responsable la exige.
+
+00:11:46.860 --> 00:11:49.740
+La gobernanza ya no es un condimento opcional, está integrada en la ley.
+
+00:11:50.780 --> 00:11:52.360
+O diseñas con responsabilidad.
+
+00:11:52.460 --> 00:11:55.140
+Desde el principio, la ley impondrá la responsabilidad desde fuera
+
+00:11:55.140 --> 00:11:56.920
+con sanciones y auditores de por medio.
+
+00:11:58.180 --> 00:11:59.680
+En ese sentido, el asteroide ya ha impactado.
+
+00:12:00.260 --> 00:12:00.960
+No puedes apartarlo.
+
+00:12:01.320 --> 00:12:03.600
+Solo puedes protegerte del impacto y mantener tu ciudad habitable.
+
+00:12:04.640 --> 00:12:07.040
+Lo que plantea la pregunta práctica, ¿qué escudos tienes a mano?
+
+00:12:07.520 --> 00:12:10.180
+Porque en este panorama, sobrevivir al asteroide no es cuestión de suerte,
+
+00:12:10.260 --> 00:12:13.260
+sino de usar las defensas que ya tienes en tu panel de control.
+
+00:12:14.600 --> 00:12:16.420
+Escudos y barreras del ecosistema de Microsoft.
+
+00:12:17.260 --> 00:12:20.540
+En el ecosistema de Microsoft, los escudos ya están integrados en la nave.
+
+00:12:21.040 --> 00:12:21.900
+Solo tienes que encenderlo.
+
+00:12:21.900 --> 00:12:25.600
+Microsoft 365 y Power Platform cuentan con herramientas de gobierno
+
+00:12:25.600 --> 00:12:28.540
+que a menudo pasan desapercibidas y escondidas como si fueran extras opcionales.
+
+00:12:29.120 --> 00:12:32.020
+No son decoración, son el blindaje estructural que mantiene tus sistemas intactos
+
+00:12:32.020 --> 00:12:33.660
+cuando llegan las normativas y los riesgos.
+
+00:12:34.520 --> 00:12:36.500
+El peligro surge cuando los equipos miran estos paneles,
+
+00:12:36.560 --> 00:12:37.660
+se encogen de hombros y siguen adelante.
+
+00:12:38.240 --> 00:12:40.320
+Estos no son botones adicionales, son equipos de supervivencia.
+
+00:12:40.800 --> 00:12:41.440
+Empiezas por la visibilidad.
+
+00:12:41.440 --> 00:12:45.240
+Microsoft 365 y Power Platform incluyen funciones de supervisión
+
+00:12:45.240 --> 00:12:47.240
+que te permiten rastrear cómo se comportan los modelos,
+
+00:12:47.340 --> 00:12:49.940
+registrar decisiones y exponer explicaciones en términos sencillos.
+
+00:12:50.640 --> 00:12:53.200
+No hay necesidad de depender de una caja negra que emite veredictos extraños.
+
+00:12:53.820 --> 00:12:55.520
+Obtienes un ciclo de retroalimentación real,
+
+00:12:55.640 --> 00:12:57.260
+señales en la consola siempre que un algoritmo se divide.
+
+00:12:57.620 --> 00:12:59.760
+Esa distinción es la diferencia entre navegar a ciegas
+
+00:12:59.760 --> 00:13:02.700
+y hacerlo con instrumentos que te indican exactamente cuándo te estás desviando.
+
+00:13:03.520 --> 00:13:04.340
+Luego está la transparencia.
+
+00:13:05.020 --> 00:13:07.600
+Algunos proveedores como AWS ofrecen tarjetas de servicio de IA
+
+00:13:07.600 --> 00:13:09.080
+para documentar el uso y los límites de los no.
+
+00:13:09.080 --> 00:13:12.860
+Microsoft aborda esto de manera diferente con su estándar de IA responsable
+
+00:13:12.860 --> 00:13:14.780
+y herramientas como el panel de IA responsable.
+
+00:13:15.900 --> 00:13:18.260
+Estos proporcionan a los profesionales informes de explicabilidad,
+
+00:13:18.640 --> 00:13:20.520
+notas de rendimiento y opciones de diseño responsable.
+
+00:13:21.040 --> 00:13:22.960
+Piénsalo como un copiloto que anota su razonamiento
+
+00:13:22.960 --> 00:13:24.480
+en lugar de simplemente entregarte un plan.
+
+00:13:25.200 --> 00:13:27.280
+Ves cada consideración, no solo el resultado final.
+
+00:13:27.840 --> 00:13:29.800
+En cuanto a las protecciones a nivel de modelo, recuerda esto.
+
+00:13:30.140 --> 00:13:32.240
+Todos los proveedores ofrecen barreras de algún tipo.
+
+00:13:32.980 --> 00:13:35.260
+En el entorno de Microsoft encontrarás controles de políticas,
+
+00:13:35.500 --> 00:13:37.340
+paneles de explicabilidad y registros de auditoría
+
+00:13:37.340 --> 00:13:39.940
+que cumplen esa función bloqueando intentos de entrada maliciosos
+
+00:13:39.940 --> 00:13:42.020
+y filtrando resultados antes de que se convierta en un caos.
+
+00:13:42.740 --> 00:13:45.300
+Para la explicabilidad en sí, existen métodos establecidos como SHAP
+
+00:13:45.300 --> 00:13:47.760
+o herramientas específicas de proveedores como SageMaker Clarify.
+
+00:13:48.460 --> 00:13:51.420
+En el mundo de Microsoft, el panel de IA responsable cumple esa función,
+
+00:13:52.080 --> 00:13:54.640
+ofreciendo informes claros sobre qué variables impulsaron la elección de un modelo.
+
+00:13:55.180 --> 00:13:58.220
+Conecto del acto de magia de la decisión de una I deja de ser un truco aterrador.
+
+00:13:58.720 --> 00:14:01.540
+Puedes ver qué entradas importaron y evaluar si el resultado fue justo.
+
+00:14:01.540 --> 00:14:05.040
+Los auditores obtienen pruebas rastreables y los usuarios ganan confianza
+
+00:14:05.040 --> 00:14:06.900
+en que el modelo no está inventando tonterías de la nada.
+
+00:14:07.680 --> 00:14:10.760
+Y luego llega a las redes de seguridad sencilla pero vital, la protección de datos.
+
+00:14:11.840 --> 00:14:15.180
+Habilite la prevención de pérdida de datos para evitar que información confidencial se filtre
+
+00:14:15.180 --> 00:14:18.320
+y combínela con la retención de registros y auditorías.
+
+00:14:19.360 --> 00:14:21.580
+Colectivamente, estos funcionan como su caja negra de grabación.
+
+00:14:22.000 --> 00:14:26.020
+Cada acción y cada desviación se catalogan para que pueda rastrear los errores cuando ocurran.
+
+00:14:26.620 --> 00:14:29.320
+Si omite esto, solo le quedará humo cuando los errores se propaguen.
+
+00:14:29.320 --> 00:14:30.820
+La recompensa no es truco.
+
+00:14:31.260 --> 00:14:33.580
+Considera una power-up básica creada con AI Builder.
+
+00:14:34.160 --> 00:14:36.500
+En los primeros borradores recopilaba más información personal
+
+00:14:36.500 --> 00:14:38.160
+de la que cualquier organización podría justificar.
+
+00:14:38.680 --> 00:14:40.800
+Nombres, registros y campos confidenciales quedaron expuestos.
+
+00:14:41.280 --> 00:14:43.740
+Una vez activada la configuración de cumplimiento, el flujo se detuvo,
+
+00:14:43.960 --> 00:14:46.280
+los límites de datos se endurecieron, la aplicación siguió funcionando
+
+00:14:46.280 --> 00:14:47.520
+y se respetaron las normas de privacidad.
+
+00:14:47.960 --> 00:14:49.700
+La arquitectura no fue demolida ni reconstruida.
+
+00:14:50.400 --> 00:14:53.200
+Se alineó activando protecciones que habían estado allí todo el tiempo.
+
+00:14:53.760 --> 00:14:56.660
+Para las primeras etapas de implementación hay otra práctica que vale la pena adoptar.
+
+00:14:56.660 --> 00:14:58.360
+Los jardines amurallados al estilo Telus.
+
+00:14:58.360 --> 00:15:01.340
+Al probar copilotos en un entorno aislado y auditable,
+
+00:15:01.900 --> 00:15:04.540
+se restringe cualquier comportamiento inesperado a una zona segura
+
+00:15:04.540 --> 00:15:06.480
+antes de lanzarlo a flujos de trabajo críticos.
+
+00:15:07.120 --> 00:15:08.960
+Es un campo de pruebas con muros lo suficientemente altos
+
+00:15:08.960 --> 00:15:10.740
+para que los errores no se filtren en los sistemas de producción.
+
+00:15:11.480 --> 00:15:12.880
+Combina eso con un monitoreo robusto
+
+00:15:12.880 --> 00:15:15.640
+y su organización detectará los errores antes de que se conviertan en noticias.
+
+00:15:16.440 --> 00:15:19.700
+Los paneles de control de gobernanza aún no son solo pantallas de estado
+
+00:15:19.700 --> 00:15:21.560
+brindan a los equipos una supervisión activa.
+
+00:15:22.060 --> 00:15:24.960
+Los supervisores pueden cuestionar, aprobar o vetar los resultados de la IA en tiempo real.
+
+00:15:25.060 --> 00:15:27.400
+Es una intervención humana incorporada en el sistema.
+
+00:15:27.400 --> 00:15:31.380
+Sin tal supervisión, la automatización corre libre hasta que choca con una violación de políticas.
+
+00:15:32.380 --> 00:15:35.400
+Con los paneles en su lugar, los humanos se sientan en el torre de control,
+
+00:15:35.660 --> 00:15:38.380
+coordinando cada sistema de IA como aviones en un espacio aéreo concurrido.
+
+00:15:39.180 --> 00:15:41.760
+En lugar de caos en el aire, obtiene un flujo sincronizado y gestionado.
+
+00:15:42.620 --> 00:15:43.540
+Y aquí es donde ocurre el cambio.
+
+00:15:43.540 --> 00:15:46.440
+Una vez que las organizaciones ven estos sistemas como defensas,
+
+00:15:46.520 --> 00:15:49.240
+pasan de ser una carga regulatoria a un multiplicador de productividad,
+
+00:15:49.940 --> 00:15:50.520
+le ahorra el retró.
+
+00:15:50.800 --> 00:15:52.940
+Entrega a los reguladores los registros que desean en un instante.
+
+00:15:53.340 --> 00:15:55.300
+Avanza más rápido porque el cumplimiento fue parte del diseño,
+
+00:15:55.380 --> 00:15:56.600
+no un parche añadido después.
+
+00:15:57.240 --> 00:15:59.080
+Lo que antes ralentizaba su ritmo, ahora lo acelera.
+
+00:15:59.400 --> 00:16:01.480
+Aún así, las protecciones no funcionan por sí solas.
+
+00:16:01.560 --> 00:16:03.980
+Requieren configuración, revisión y monitoreo constante.
+
+00:16:04.520 --> 00:16:07.300
+Estos controles ayudan, pero deben ser gestionados correctamente por personas.
+
+00:16:07.300 --> 00:16:10.820
+La Junta de Gobernanza son la última defensa contra el caos.
+
+00:16:11.320 --> 00:16:14.180
+Piensa en la Junta de Gobernanza como la tripulación del puente de mando de Zuna Vesta.
+
+00:16:14.480 --> 00:16:17.500
+El grupo que mantiene el rumbo firme cuando la turbulencia sacude los controles.
+
+00:16:18.420 --> 00:16:21.520
+Los escudos, los interruptores de cumplimiento y los registros de auditoría
+
+00:16:21.520 --> 00:16:23.800
+pueden funcionar de fondo, pero alguien debe mirar por la ventana,
+
+00:16:23.900 --> 00:16:26.180
+observar los indicadores y responder cuando surge el inesperado.
+
+00:16:26.960 --> 00:16:30.860
+Sin esa supervisión, incluso las mejores barandillas son solo metal, sin juicio detrás.
+
+00:16:31.460 --> 00:16:33.860
+Una Junta de Gobernanza no es un oficial solitario dando órdenes.
+
+00:16:33.860 --> 00:16:37.000
+Está formado por un equipo interdisciplinario que incluye líderes tecnológicos
+
+00:16:37.000 --> 00:16:39.460
+responsables de gobernanza de datos, asesores legales o de cumplimiento,
+
+00:16:39.560 --> 00:16:41.840
+un representante de negocios y al menos un revisor independiente.
+
+00:16:42.220 --> 00:16:43.360
+Y al menos un revisor independiente.
+
+00:16:43.700 --> 00:16:46.660
+Cada uno desempeña un papel distinto porque la IA no se limita a un solo departamento.
+
+00:16:47.360 --> 00:16:49.580
+Una herramienta de selección de currículum se afecta a recursos humanos.
+
+00:16:49.780 --> 00:16:52.920
+Un algoritmo de previsión moldea las finanzas y un chatbot habla directamente con sus clientes.
+
+00:16:53.500 --> 00:16:55.840
+Una sola función no puede anticipar todas las consecuencias.
+
+00:16:56.260 --> 00:16:59.780
+Se adquiere una mesa redonda para detectar y corregir riesgos antes de que se extienda por los departamentos.
+
+00:17:00.160 --> 00:17:01.380
+Ahora, imagina operar sin ese equipo.
+
+00:17:01.980 --> 00:17:05.400
+Dejar la IA sin supervisión es como activar el piloto automático en un campo de asteroides.
+
+00:17:05.400 --> 00:17:09.060
+Todo parece ir bien hasta que una maniobra extraña desvía la nave de su curso.
+
+00:17:09.900 --> 00:17:13.580
+Puede haber medidas de seguridad, pero no interpretan, no cuestionan y no anticipan.
+
+00:17:13.900 --> 00:17:15.480
+El Consejo de Gobernanza de la Capa Pensante.
+
+00:17:15.540 --> 00:17:18.240
+Humanos que ven más allá de las luces propagandantes para observar el contexto de la ética y las
+
+00:17:18.240 --> 00:17:21.100
+contextos de la ética y las consecuencias antes de que la deviación se convierta en desastre.
+
+00:17:21.240 --> 00:17:22.420
+Sus deberes no son abstractos.
+
+00:17:22.880 --> 00:17:24.620
+Realizan auditorias periódicas de cedo y equidad.
+
+00:17:24.880 --> 00:17:26.000
+Confirman la procedencia de los datos.
+
+00:17:26.160 --> 00:17:29.580
+Revisan informe de cumplimiento y rastrean cómo improvisan los sistemas no deterministas.
+
+00:17:29.580 --> 00:17:34.140
+Gestionan la cadencia, estableciendo el cronograma de revisiones para detectar problemas temprano
+
+00:17:34.140 --> 00:17:35.320
+en lugar de después del lanzamiento.
+
+00:17:35.480 --> 00:17:38.900
+Y lo amplían definiendo indicadores clave de desempeño, equidad, precisión y métricas
+
+00:17:38.900 --> 00:17:42.260
+de deriva para que el monitoreo no sea una conjetura, sino una responsabilidad medida.
+
+00:17:43.420 --> 00:17:46.320
+Especialmente en salidas no deterministas, estos consejos protegen los límites.
+
+00:17:46.840 --> 00:17:48.260
+La IA no siempre devuelve la misma respuesta.
+
+00:17:49.020 --> 00:17:50.420
+Muestrea, improvisa, explora.
+
+00:17:51.240 --> 00:17:55.540
+Eso puede generar respuestas creativas o desviarse hacia resultados engañosos que socavan la confianza.
+
+00:17:55.540 --> 00:18:00.140
+Un consejo de gobernanza actúa como un vigilante de seguridad digital, registrando resultados
+
+00:18:00.140 --> 00:18:04.820
+inesperados, robando prompts mediante red-teaming, marcando patrones peligrosos e incorporando
+
+00:18:04.820 --> 00:18:06.760
+a los humanos cuando los filtros automáticos fallan.
+
+00:18:07.680 --> 00:18:08.600
+No sofoquen la innovación.
+
+00:18:09.100 --> 00:18:10.620
+La mantienen operando dentro del límite seguro.
+
+00:18:11.140 --> 00:18:12.320
+Y aquí está la diferencia práctica.
+
+00:18:12.920 --> 00:18:16.160
+Las organizaciones con consejos de gobernanza eficaces suelen detectar problemas en las pruebas.
+
+00:18:17.280 --> 00:18:20.480
+Una auditoría de equidad revela sesgos en un modelo de reclutamiento, el problema se
+
+00:18:20.480 --> 00:18:23.000
+corrige discretamente y el despliegue continúa sin escándalos.
+
+00:18:23.000 --> 00:18:26.900
+En organizaciones sin tal supervisión, la noticia aparece primero en la prensa.
+
+00:18:27.560 --> 00:18:30.980
+Los clientes descubren el daño, los reguladores detectan las fallas y la acción correctiva
+
+00:18:30.980 --> 00:18:31.900
+llega demasiado tarde.
+
+00:18:33.060 --> 00:18:33.860
+La previsión cuesta tiempo.
+
+00:18:34.600 --> 00:18:36.220
+La remediación cuesta reputación.
+
+00:18:36.680 --> 00:18:38.820
+El patrón se repite lo suficiente como para dejar clara la acción.
+
+00:18:39.420 --> 00:18:42.260
+La base de estos consejos es ir en torno a la equidad, la transparencia, la rendición
+
+00:18:42.260 --> 00:18:44.240
+de cuentas, la seguridad y la privacidad.
+
+00:18:45.240 --> 00:18:48.500
+La equidad asegura que los resultados no penalicen a los usuarios por razones demográficas.
+
+00:18:49.200 --> 00:18:52.160
+La transparencia requiere que las decisiones sean explicables en términos claros, tanto
+
+00:18:52.160 --> 00:18:53.780
+para los usuarios como para el cumplimiento normal.
+
+00:18:54.260 --> 00:18:57.600
+La rendición de cuentas asegura que exista un rol designado que acepta la responsabilidad.
+
+00:18:58.000 --> 00:19:00.820
+No es que la IA lo hizo, sino que este responsable es dueño del resultado.
+
+00:19:01.460 --> 00:19:04.100
+La seguridad evita que los resultados causen daños o sean utilizados indebidos.
+
+00:19:04.620 --> 00:19:07.880
+La privacidad protege los datos confidenciales para que las personas no se conviertan en
+
+00:19:07.880 --> 00:19:09.220
+carga involuntaria en un viaje arriesgado.
+
+00:19:10.160 --> 00:19:14.060
+Cada principio es sólido por sí solo, pero juntos sueldan el casco que hace que la IA responsable
+
+00:19:14.060 --> 00:19:15.040
+funcione bajo escrutinio.
+
+00:19:15.040 --> 00:19:18.200
+Y los consejos no solo defienden principios, sino que ejecutan acciones.
+
+00:19:19.000 --> 00:19:22.580
+Revisan la documentación del modelo para confirmar su claridad, ejecutan procesos de evaluación
+
+00:19:22.580 --> 00:19:25.680
+de riesgos para clasificar casos de uso y aplican puntos de control con intervención
+
+00:19:25.680 --> 00:19:27.000
+humana donde se requiere supervisión.
+
+00:19:27.360 --> 00:19:31.140
+Como entregable inicial, una de las acciones más sencillas y valiosas es un inventario
+
+00:19:31.140 --> 00:19:33.200
+de casos de uso de IA y su clasificación de riesgos.
+
+00:19:33.740 --> 00:19:37.340
+Este mapa rápido muestra qué proyectos califican como de alto riesgo, cuáles requieren gobernanza
+
+00:19:37.340 --> 00:19:38.800
+estricta y cuáles plantean riesgos menores.
+
+00:19:39.380 --> 00:19:42.520
+Es evidencia tangible tanto para el liderazgo como para los reguladores de que la supervisión
+
+00:19:42.520 --> 00:19:43.620
+está estructurada y no improvisada.
+
+00:19:44.240 --> 00:19:47.420
+Incluso a toda velocidad, las reuniones del consejo actúan como escáneos regulares del
+
+00:19:47.420 --> 00:19:47.580
+viaje.
+
+00:19:48.400 --> 00:19:51.220
+No solo establecen estrategias, sino que rastrean métricas y hacen cumplir los informes
+
+00:19:51.220 --> 00:19:51.760
+de cumplimiento.
+
+00:19:52.740 --> 00:19:53.960
+Esa cadencia genera resiliencia.
+
+00:19:54.600 --> 00:19:58.620
+Los ciclos de prueba, los escapees de equidad y la revisión de deriva marcan el ritmo para
+
+00:19:58.620 --> 00:20:02.140
+que las salvaguardas permanezcan activas en lugar de desvanecerse tras la implementación.
+
+00:20:02.880 --> 00:20:05.820
+A través de estos rituales, la supervisión deja de ser una casilla de verificación única
+
+00:20:05.820 --> 00:20:06.860
+y se convierte en un proceso vivo.
+
+00:20:07.500 --> 00:20:09.480
+La IA del reclutamiento nos cuenta historia de advertencia.
+
+00:20:09.480 --> 00:20:14.500
+Modelos entrenados con datos defectuosos absorbieron sesgos silenciosamente, degradando a candidatos
+
+00:20:14.500 --> 00:20:16.760
+de ciertos grupos sin intención en alguna de los desarrolladores.
+
+00:20:17.860 --> 00:20:20.840
+Al pasar desapercibida, la discriminación se propagó a escala hasta que llegaron las
+
+00:20:20.840 --> 00:20:21.220
+demandas.
+
+00:20:21.900 --> 00:20:25.120
+Un consejo de gobernanza equipado con auditorías de equidad y verificaciones de procedencia
+
+00:20:25.120 --> 00:20:27.020
+podría haber detectado el sesgo mucho antes de la producción.
+
+00:20:27.440 --> 00:20:30.620
+Esa diferencia prevenció en frente a revelación es la razón por la que existen estos consejos.
+
+00:20:31.220 --> 00:20:34.420
+Por lo tanto, los consejos de gobernanza no son proyectos secundarios ni comités decorativos.
+
+00:20:34.420 --> 00:20:38.320
+Son la última defensa ante una guía firme y un caos evitable, el equipo encargado de
+
+00:20:38.320 --> 00:20:41.300
+convertir los lemas de IA responsable en prácticas fundamentadas.
+
+00:20:41.700 --> 00:20:44.980
+Al mantener la estructura, las métricas y la responsabilidad, aseguran que la embarcación
+
+00:20:44.980 --> 00:20:46.280
+avance con la confianza intacta.
+
+00:20:46.640 --> 00:20:47.780
+Y esto nos trae el punto de partida.
+
+00:20:48.140 --> 00:20:51.500
+Con los consejos en su lugar, la supervisión sobre la cultura no parches, lo que eleva
+
+00:20:51.500 --> 00:20:52.820
+la verdad más aguda con la que cerramos.
+
+00:20:52.820 --> 00:20:56.120
+La IA responsable no es un ajuste adicional que activas para aparentar.
+
+00:20:56.920 --> 00:21:00.240
+Es el aparato de seguridad que determina si sobrevives a la turbulencia que se vecina.
+
+00:21:01.000 --> 00:21:02.220
+La IA responsable no es opcional.
+
+00:21:02.760 --> 00:21:05.780
+Es lo que separa una organización bajo control de una que deriva hacia el caos.
+
+00:21:06.320 --> 00:21:10.680
+Con ella generas confianza, reduces significativamente el riesgo y posicionas tus proyectos de IA
+
+00:21:10.680 --> 00:21:13.380
+para el éxito a largo plazo en lugar de estériles a corto plazo.
+
+00:21:13.660 --> 00:21:14.560
+Entonces este es tu próximo movimiento.
+
+00:21:14.920 --> 00:21:18.300
+Inventaría tus casos de uso de IA, activa las protecciones que ya están en tu plataforma
+
+00:21:18.300 --> 00:21:20.860
+y establece un consejo de gobernanza para monitorearlos.
+
+00:21:20.860 --> 00:21:24.080
+Trata esos pasos como control de misión, no como misión en secundaria.
+
+00:21:24.380 --> 00:21:27.220
+Las notas del programa incluyen una lista de verificación y enlaces a las herramientas
+
+00:21:27.220 --> 00:21:28.620
+que cubrimos para que puedas comenzar ahora mismo.
+
+00:21:29.120 --> 00:21:32.020
+Si este episodio cargó tus cristales de dilitio, configura tu reproductor de podcast
+
+00:21:32.020 --> 00:21:33.080
+para el acoplamiento automático.
+
+00:21:33.520 --> 00:21:37.480
+Envíen sus preguntas a arroarshow y leeré las mejores la próxima vez.
