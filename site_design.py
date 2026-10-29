@@ -92,6 +92,7 @@ footer{margin-top:80px}
 .share{display:none}
 .fshare{border-radius:0}
 .ichecks{list-style:none;margin:0;padding:0;display:grid;gap:8px}.ichecks li{padding-inline-start:30px;position:relative}.ichecks li:before{content:"✓";position:absolute;inset-inline-start:0;top:-1px;width:22px;height:22px;background:var(--ac);color:#fff;text-align:center;font-weight:700;line-height:22px}
+.sub{font:500 1.35rem/1.35 "Barlow Condensed",sans-serif;color:var(--mut);letter-spacing:.02em;margin:-.3em 0 1em;max-width:34em}
 .chip{background:transparent;color:var(--fg)}
 button.btn{background:transparent;color:var(--fg);font-size:.88rem;cursor:pointer}button.btn:hover{background:var(--ac);border-color:var(--ac);color:#fff}
 .fshare{position:fixed;z-index:40;display:flex;gap:0;background:var(--bg);border:1px solid var(--bd);left:0;top:50%;transform:translateY(-50%);flex-direction:column;border-left:0}
@@ -144,16 +145,16 @@ FLAG = {"de": "de", "es": "es", "fr": "fr", "it": "it", "pt": "br", "nl": "nl", 
         "hi": "in", "ml": "in", "pa": "in", "ta": "in", "te": "in", "ja": "jp", "ko": "kr", "en": "gb"}
 
 
-def flag(code, base):
-    return f'<img class="fl" src="{base}/assets/flags/{FLAG.get(code, "gb")}.svg" width="22" height="16" alt="" loading="lazy">'
+def flag(code, base, name=""):
+    return f'<img class="fl" src="{base}/assets/flags/{FLAG.get(code, "gb")}.svg" width="22" height="16" alt="{_e(name)}" loading="lazy">'
 
 
 def lang_dropdown(cur, items, base):
     """items: (code, native name, url, hreflang). Dropdown mit Flaggen."""
     cur_i = next((x for x in items if x[0] == cur), None)
     label = (cur_i[0] if cur_i else cur).upper()
-    links = "".join(f'<a href="{_e(u)}" hreflang="{_e(h)}" lang="{_e(h)}"{" aria-current=page" if c == cur else ""}>{flag(c, base)}{_e(n)}</a>' for c, n, u, h in items)
-    return f'<details class="lsw"><summary aria-label="Language">{flag(cur, base)}{_e(label)}</summary><div class="pn">{links}</div></details>'
+    links = "".join(f'<a href="{_e(u)}" hreflang="{_e(h)}" lang="{_e(h)}"{" aria-current=page" if c == cur else ""}>{flag(c, base, n)}{_e(n)}</a>' for c, n, u, h in items)
+    return f'<details class="lsw"><summary aria-label="Language">{flag(cur, base, cur_i[1] if cur_i else cur)}{_e(label)}</summary><div class="pn">{links}</div></details>'
 
 
 def site_header(home, brand_href, menu, lang_html, bar_html=""):

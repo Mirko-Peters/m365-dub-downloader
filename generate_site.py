@@ -701,6 +701,12 @@ def build():
                        "datePublished": it["date"], "dateModified": it["date"], "mainEntityOfPage": canonical,
                        "author": {"@id": f"{BASE}/about/mirko-peters/#person"}, "publisher": {"@id": f"{BASE}/#org"},
                        "image": [f"{BASE}/og/{canonical.replace(BASE, '').strip('/')}.png", f"https://i.ytimg.com/vi/{vid}/maxresdefault.jpg"], "wordCount": len(strip_tags(art_html).split()), "articleSection": cat_name(pc, l), "keywords": ", ".join(tagraw[l][vid])})
+        _t = re.sub(r"\s*[（(][^()（）]*[)）]\s*$", "", e["title"]).strip()
+        h1_main, h1_rest = _t, ""
+        if len(_t) > 70:
+            _m = re.match(r"^(.{18,}?)(?:\s*[:：]\s+|\s+[–—-]\s+)(.+)$", _t)
+            if _m and len(_m.group(1)) <= 70:
+                h1_main, h1_rest = _m.group(1).strip(), _m.group(2).strip()
         faq_items = art.get("faq") or []
         faq_block = ""
         if art_html and faq_items:
@@ -725,7 +731,7 @@ def build():
 <main class="wrap"><article>
 <div class="crumbs"><a href="{BASE}/{l}/">{esc(ui[7])}</a> / {esc(LANGS[l][0])} / {it["date"]}</div>
 <div class="kicker">M365.FM · {esc(LANGS[l][0])}</div>
-<h1>{esc(e["title"])}</h1>
+<h1>{esc(h1_main)}</h1>{("<p class=sub>" + esc(h1_rest) + "</p>") if h1_rest else ""}
 {chips_html(l, it)}<p class="lede">{intro}</p>
 <figure class="cover" style="margin-inline:0">{art_svg(vid, LANGS[l][0], "M365.FM · " + ui[0], l)}</figure>
 <div class="panel"><iframe src="https://widget.spreaker.com/player?episode_id={it["eid"]}&amp;theme=light&amp;playlist=false" height="131" loading="lazy" title="{esc(e["title"])}"></iframe>
