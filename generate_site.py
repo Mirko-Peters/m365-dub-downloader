@@ -21,7 +21,8 @@ INDEXNOW_KEY = "0348df8af6514d5bae4d9f9a5ba51f57"
 
 YT_CHANNEL = "https://www.youtube.com/channel/UCIdo4tN3khKldHP3733E9JA"
 LINKEDIN = "https://www.linkedin.com/in/m365showpodcast/"
-SAME_AS = [LINKEDIN, "https://www.m365.fm", "https://m365con.net", YT_CHANNEL]
+MVP = "https://mvp.microsoft.com/de-DE/mvp/profile/9b0ca797-db5a-493a-a845-8b9158046cf5"
+SAME_AS = [MVP, LINKEDIN, "https://www.m365.fm", "https://m365con.net", YT_CHANNEL]
 
 # lang: (Eigenname, hreflang, dir, Spreaker-Show-ID, OpenGraph-Locale)
 LANGS = {
@@ -363,7 +364,7 @@ def footer(lang):
     ui = UI.get(lang)
     about = ui[5] if ui else "About Mirko Peters"
     return (f'<footer><div class="wrap"><a href="{BASE}/about/mirko-peters/">{esc(about)}</a><a href="https://www.m365.fm">m365.fm</a>'
-            f'<a href="https://m365con.net">M365Con</a><a href="{LINKEDIN}" rel="me">LinkedIn</a><a href="{YT_CHANNEL}">YouTube</a>'
+            f'<a href="https://m365con.net">M365Con</a><a href="{LINKEDIN}" rel="me">LinkedIn</a><a href="{YT_CHANNEL}">YouTube</a><a href="{MVP}" rel="me">Microsoft MVP</a>'
             f'<a href="{BASE}/impressum/" rel="nofollow">Impressum</a><a href="{BASE}/legal/" rel="nofollow">Legal notice</a>'
             f'<a href="{BASE}/datenschutz/" rel="nofollow">Datenschutz</a><a href="{BASE}/privacy/" rel="nofollow">Privacy</a>'
             f'<div style="margin-top:10px">© {date.today().year} Mirko Peters · M365.FM</div></div></footer>')
@@ -682,7 +683,7 @@ def build():
     about = f"""{header('en', '')}
 <main class="wrap"><div class="kicker">Microsoft MVP · Podcaster · Conference organizer</div>{PORTRAIT}<h1>Mirko Peters</h1>
 <p class="lede">Mirko Peters is a Microsoft MVP who explains Microsoft 365, Microsoft Copilot, Azure, Power Platform, Microsoft Fabric and AI agents for IT admins, architects, developers and decision makers. He hosts the podcast <a href="https://www.m365.fm">M365.FM</a> and the <em>m365 Show</em> on YouTube, and organizes the free online conference <a href="https://m365con.net">M365Con</a>.</p>
-<div class="btns"><a class="btn main" href="https://www.m365.fm">M365.FM</a><a class="btn" href="https://m365con.net">M365Con</a><a class="btn" href="{LINKEDIN}" rel="me">LinkedIn</a><a class="btn" href="{YT_CHANNEL}">YouTube</a></div>
+<div class="btns"><a class="btn main" href="https://www.m365.fm">M365.FM</a><a class="btn" href="https://m365con.net">M365Con</a><a class="btn" href="{LINKEDIN}" rel="me">LinkedIn</a><a class="btn" href="{YT_CHANNEL}">YouTube</a><a class="btn" href="{MVP}" rel="me">Microsoft MVP profile</a></div>
 <h2>What Mirko works on</h2>
 <div class="cols"><div><h3>Podcast</h3><p>M365.FM covers Microsoft 365, Copilot, Azure, Power Platform and security – practical, from real projects, with new episodes every week.</p></div>
 <div><h3>Video</h3><p>The m365 Show on YouTube turns complex Microsoft topics into short animated explainers, now also available as AI-dubbed audio in {len(active)} languages.</p></div>
@@ -690,7 +691,7 @@ def build():
 <h2>Topics</h2>
 <p>Microsoft 365 Copilot · Copilot Studio · AI agents · Azure AI Foundry · Power Platform · Microsoft Fabric · Microsoft Entra · Microsoft Purview · Microsoft Teams · SharePoint · Dynamics 365 · Governance &amp; security</p>
 <h2>Find Mirko Peters online</h2>
-<ul class="points"><li><span><a href="https://www.m365.fm">m365.fm</a> – the podcast and episode archive</span></li><li><span><a href="https://m365con.net">m365con.net</a> – free online conference</span></li><li><span><a href="{LINKEDIN}" rel="me">LinkedIn</a></span></li><li><span><a href="{YT_CHANNEL}">YouTube – m365 Show by Mirko Peters</a></span></li></ul>
+<ul class="points"><li><span><a href="https://www.m365.fm">m365.fm</a> – the podcast and episode archive</span></li><li><span><a href="https://m365con.net">m365con.net</a> – free online conference</span></li><li><span><a href="{LINKEDIN}" rel="me">LinkedIn</a></span></li><li><span><a href="{YT_CHANNEL}">YouTube – m365 Show by Mirko Peters</a></span></li><li><span><a href="{MVP}" rel="me">Microsoft MVP profile</a> – official Microsoft recognition</span></li></ul>
 <h2>Podcast episodes by language</h2><div class="grid">{grid}</div></main>
 {m365con_band()}
 <main class="wrap">{faq_html('en', 'FAQ')}</main>{footer_en()}"""
@@ -802,7 +803,7 @@ def build():
             f"in {len(active)} languages. Each episode has its own page with player, YouTube video, key points, transcript link and links to Spotify, Amazon Music, Deezer and more.")
     L = [f"# M365.FM international – Mirko Peters", "", f"> {summ}", "",
          "Author: Mirko Peters (Microsoft MVP), host of the M365.FM podcast and the m365 Show on YouTube, organizer of M365Con (free online conference, 2027-01-11 to 2027-01-22).", "",
-         "## Core", f"- [About Mirko Peters]({BASE}/about/mirko-peters/): profile, expertise, links", f"- [Full episode list]({BASE}/llms-full.txt): every episode with title, language and summary",
+         "## Core", f"- [About Mirko Peters]({BASE}/about/mirko-peters/): profile, expertise, links", f"- [Microsoft MVP profile]({MVP}): official Microsoft MVP recognition of Mirko Peters", f"- [Full episode list]({BASE}/llms-full.txt): every episode with title, language and summary",
          f"- [Machine-readable feed]({BASE}/episodes.json): all episodes as JSON", f"- [Agent card]({BASE}/agent.json): capabilities for AI agents", f"- [Sitemap]({BASE}/sitemap.xml)", "",
          "## Languages"]
     for l in active:
