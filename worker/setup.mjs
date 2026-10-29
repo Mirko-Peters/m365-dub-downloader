@@ -7,6 +7,21 @@ const run = (args, input) => { const r = spawnSync("npx", ["wrangler", ...args],
 const fail = (m) => { console.error("::error::" + String(m).replace(/\r?\n/g, " | ").slice(0, 900)); process.exit(1); };
 const b64u = (b) => Buffer.from(b).toString("base64url");
 
+
+// 0) Vorab-Prüfung: Zone m365.fm sichtbar? workers.dev-Subdomain vorhanden (sonst anlegen)?
+{
+  const H = { Authorization: "Bearer " + process.env.CLOUDFLARE_API_TOKEN, "content-type": "application/json" }, A = process.env.CLOUDFLARE_ACCOUNT_ID;
+  const cf = async (p, o) => { try { const r = await fetch("https://api.cloudflare.com/client/v4" + p, { headers: H, ...o }); return await r.json(); } catch (e) { return { success: false, errors: [{ message: String(e) }] }; } };
+  const z = await cf("/zones?name=m365.fm");
+  console.log("Zone m365.fm:", z.success && z.result?.length ? "gefunden (" + z.result[0].id + ")" : "NICHT sichtbar " + JSON.stringify(z.errors || []));
+  if (!(z.success && z.result?.length)) fail("Zone m365.fm nicht sichtbar: dem Token fehlt 'Zone > Zone > Read' fuer m365.fm (oder die Domain liegt in einem anderen Konto).");
+  const sd = await cf(`/accounts/${A}/workers/subdomain`);
+  if (!(sd.success && sd.result?.subdomain)) {
+    const put = await cf(`/accounts/${A}/workers/subdomain`, { method: "PUT", body: JSON.stringify({ subdomain: "m365fm-" + A.slice(0, 6) }) });
+    console.log("workers.dev-Subdomain anlegen:", put.success ? "ok" : JSON.stringify(put.errors || []));
+  } else console.log("workers.dev-Subdomain:", sd.result.subdomain);
+}
+
 // 1) D1-Datenbank finden oder anlegen, ID in wrangler.toml eintragen
 let list = run(["d1", "list", "--json"]);
 let dbs = []; try { dbs = JSON.parse(list.stdout); } catch { fail("d1 list: " + (list.stderr || list.stdout)); }
