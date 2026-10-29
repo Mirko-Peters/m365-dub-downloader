@@ -24,7 +24,7 @@ jobs:
         continue-on-error: true
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
-          ARTICLE_LIMIT: "30"
+          ARTICLE_LIMIT: "90"
         run: |
           python generate_articles.py
           if [ -n "$(git status --porcelain data/articles)" ]; then
