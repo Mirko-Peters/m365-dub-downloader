@@ -34,6 +34,7 @@ CREDITS_OUT = False
 
 
 def _post(prompt, max_tokens):
+    global CREDITS_OUT
     if CREDITS_OUT:
         raise RuntimeError("credits out")
     body = json.dumps({"model": MODEL, "max_tokens": max_tokens, "messages": [{"role": "user", "content": prompt}]}).encode()
@@ -51,7 +52,6 @@ def _post(prompt, max_tokens):
                 except Exception:
                     msg = ""
                 if "credit balance" in msg or "billing" in msg or ex.code in (401, 402):
-                    global CREDITS_OUT
                     CREDITS_OUT = True
                     print("ANTHROPIC-GUTHABEN LEER oder Key ungueltig (HTTP %s) - weitere Artikel werden uebersprungen" % ex.code)
             if ex.code in (429, 500, 502, 503, 529) and attempt < 4:
