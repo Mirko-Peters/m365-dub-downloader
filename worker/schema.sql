@@ -198,3 +198,11 @@ CREATE TABLE IF NOT EXISTS images (
   updated INTEGER NOT NULL,
   PRIMARY KEY (kind, owner_id)
 );
+
+-- Sponsoring-Gesuch von Firmen: NICHT oeffentlich (nur Inhaber/Admins; spaeter sichtbar fuer Veranstalter)
+CREATE TABLE IF NOT EXISTS org_sponsor (
+  org_id INTEGER PRIMARY KEY,
+  open INTEGER NOT NULL DEFAULT 0,
+  criteria TEXT NOT NULL DEFAULT '{}',   -- JSON: topics, format, min_audience, regions, budget, notes
+  updated INTEGER NOT NULL
+);

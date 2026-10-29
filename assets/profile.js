@@ -26,6 +26,21 @@
     w.appendChild(h("label", { text: IQ.t, style: "display:block;margin-top:14px;font-weight:600" })); w.appendChild(h("div", { style: "display:flex;gap:12px;align-items:center;flex-wrap:wrap" }, [im, up, rm, f, msg])); w.appendChild(h("p", { class: "cmut", text: IQ.hint, style: "margin:4px 0 0;font-size:.85rem" }));
     return w;
   }
+  var SQ = de ? { t: "Event-Sponsoring", d: "Nur für Veranstalter sichtbar, nie öffentlich. Veranstalter sehen nur, ob ihr Sponsoren sucht, und eure Kriterien.", open: "Wir sind offen für Event-Sponsoring", topics: "Themen (z. B. Copilot, Security)", fmt: "Format", any: "egal", online: "Online", onsite: "Vor Ort", hybrid: "Hybrid", aud: "Mindestgröße Publikum", reg: "Regionen / Sprachen", bud: "Budgetrahmen (optional)", notes: "Weitere Kriterien", save: "Sponsoring speichern", saved: "✓ Gespeichert.", first: "Speichere die Firma zuerst, dann kannst du Sponsoring-Kriterien angeben." }
+    : { t: "Event sponsoring", d: "Visible to event organizers only, never public. Organizers only see whether you are looking to sponsor, and your criteria.", open: "We are open to sponsoring events", topics: "Topics (e.g. Copilot, security)", fmt: "Format", any: "any", online: "Online", onsite: "On site", hybrid: "Hybrid", aud: "Minimum audience size", reg: "Regions / languages", bud: "Budget range (optional)", notes: "Further criteria", save: "Save sponsoring", saved: "✓ Saved.", first: "Save the company first, then you can add sponsoring criteria." };
+  function sponsorUI(getHandle) {
+    var w = h("div", { class: "spons" }), msg = h("span", { class: "cmut", role: "status", "aria-live": "polite" });
+    w.appendChild(h("h4", { text: SQ.t })); w.appendChild(h("p", { class: "cmut", text: SQ.d }));
+    var on = h("input", { type: "checkbox" }), tp = inp(300), rg = inp(200), bd = inp(100), au = h("input", { type: "number", min: 0, max: 1000000 }), nt = h("textarea", { rows: 3, maxlength: 800 }), fm = h("select");
+    [["", SQ.any], ["online", SQ.online], ["onsite", SQ.onsite], ["hybrid", SQ.hybrid]].forEach(function (x) { fm.appendChild(h("option", { value: x[0], text: x[1] })); });
+    w.appendChild(h("label", { style: "display:block;margin:.4em 0" }, [on, " " + SQ.open]));
+    [lab(SQ.topics, tp), lab(SQ.fmt, fm), lab(SQ.aud, au), lab(SQ.reg, rg), lab(SQ.bud, bd), lab(SQ.notes, nt)].forEach(function (x) { w.appendChild(x); });
+    var loaded = "";
+    function load() { var hd = getHandle(); if (!hd || hd === loaded) return; loaded = hd; api("/api/org/sponsor/" + hd).then(function (r) { if (r.s !== 200) return; on.checked = !!r.j.open; var c = r.j.criteria || {}; tp.value = c.topics || ""; fm.value = c.format || ""; au.value = c.min_audience || ""; rg.value = c.regions || ""; bd.value = c.budget || ""; nt.value = c.notes || ""; }); }
+    load();
+    w.appendChild(h("div", { class: "btns" }, [h("button", { type: "button", class: "btn", text: SQ.save, onclick: function () { var hd = getHandle(); if (!hd) { msg.textContent = SQ.first; return; } api("/api/org/sponsor/" + hd, { method: "POST", body: { open: on.checked, criteria: { topics: tp.value, format: fm.value, min_audience: +au.value || 0, regions: rg.value, budget: bd.value, notes: nt.value } } }).then(function (r) { msg.textContent = r.s === 200 ? SQ.saved : SQ.first; }); } }), msg]));
+    return w;
+  }
   var uid = 0; function lab(text, el) { var id = "pe" + (++uid); el.id = id; return h("div", {}, [h("label", { for: id, text: text, style: "display:block;margin-top:.5em;font-weight:600" }), el]); }
   var inp = function (max, v) { var e = h("input", { type: "text", maxlength: max || 120 }); e.value = v || ""; return e; };
   var chk = function (text, v) { var c = h("input", { type: "checkbox" }); c.checked = !!v; return { c: c, w: h("label", { style: "display:block;margin:.4em 0" }, [c, " " + text]) }; };
@@ -77,7 +92,7 @@
     if (org) handle.disabled = true;
     var pub = chk(Q.pub, o.public), prog = programsUI(o.programs, true), ex = pickerRows(all, function (x) { return ["product", "platform", "concept", "category"].indexOf(x.type) > -1; }, (o.expertise || []).map(function (x) { return { e: x.e, level: x.level }; }), false, Q.addexp), ch = channelsUI(o.channels);
     var pic = imgUI("o", o.handle, o.img); pic.handle = function () { return o.handle || ""; };
-    [pub.w, pic, lab(Q.handle, handle), lab(Q.orgname, name), lab(Q.tagline, tag), lab(de ? "Über uns (ohne Links)" : "About us (no links)", about), lab(Q.site, site), lab(Q.country, country), lab(Q.size, size), h("h4", { text: Q.prog }), prog, h("h4", { text: Q.exp }), ex, h("h4", { text: Q.chan }), ch].forEach(function (x) { f.appendChild(x); });
+    [pub.w, pic, lab(Q.handle, handle), lab(Q.orgname, name), lab(Q.tagline, tag), lab(de ? "Über uns (ohne Links)" : "About us (no links)", about), lab(Q.site, site), lab(Q.country, country), lab(Q.size, size), h("h4", { text: Q.prog }), prog, h("h4", { text: Q.exp }), ex, h("h4", { text: Q.chan }), ch, sponsorUI(function () { return o.handle || ""; })].forEach(function (x) { f.appendChild(x); });
     f.appendChild(h("div", { class: "btns" }, [saveBtn(Q.save, function () {
       var e = ex.get(); if (e === null) { msg.textContent = Q.bad_expertise; return Promise.resolve(null); }
       o.handle = handle.value.trim().toLowerCase();

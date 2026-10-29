@@ -116,6 +116,24 @@ export async function handleProfiles(env, request, url, path, user, J) {
   const need = () => (user ? null : J({ error: "login" }, 401));
   const body = async () => await request.json().catch(() => ({}));
 
+  // ---- Sponsoring-Gesuch (privat) ----
+  if ((m = path.match(/^\/api\/org\/sponsor\/([a-z0-9-]{2,30})$/))) {
+    if (need()) return need();
+    const o = await db.prepare("SELECT o.id FROM orgs o JOIN org_members mm ON mm.org_id=o.id WHERE o.handle=? AND mm.user_id=? AND mm.status='active' AND mm.role IN ('owner','admin')").bind(m[1], user.id).first();
+    if (!o) return J({ error: "forbidden" }, 403);
+    if (method === "GET") {
+      const r = await db.prepare("SELECT open,criteria FROM org_sponsor WHERE org_id=?").bind(o.id).first();
+      return J({ open: !!r?.open, criteria: r ? JSON.parse(r.criteria || "{}") : {} });
+    }
+    if (method === "POST") {
+      if (!(await rateLimit(db, `spons:${user.id}`, 30, 3600))) return J({ error: "rate_limit" }, 429);
+      const b = await body(), c = b.criteria || {};
+      const crit = { topics: txt(c.topics, 300), format: ["", "online", "onsite", "hybrid"].includes(c.format) ? c.format : "", min_audience: Math.max(0, Math.min(1e6, +c.min_audience || 0)), regions: txt(c.regions, 200), budget: txt(c.budget, 100), notes: txt(c.notes, 800) };
+      await db.prepare("INSERT INTO org_sponsor(org_id,open,criteria,updated) VALUES(?,?,?,?) ON CONFLICT(org_id) DO UPDATE SET open=excluded.open,criteria=excluded.criteria,updated=excluded.updated").bind(o.id, b.open ? 1 : 0, JSON.stringify(crit), Math.floor(Date.now() / 1000)).run();
+      return J({ ok: true });
+    }
+  }
+
   // ---- Bilder (Profilbild / Firmenlogo) ----
   if ((m = path.match(/^\/api\/img\/(u|o)\/([a-z0-9-]{2,30})(?:\.jpg)?$/))) {
     const kind = m[1], handle = m[2];
@@ -321,7 +339,7 @@ export async function deleteUserData(db, id) {
   for (const o of own) {
     const other = await db.prepare("SELECT user_id FROM org_members WHERE org_id=? AND user_id<>? AND status='active' ORDER BY role='admin' DESC, created LIMIT 1").bind(o.org_id, id).first();
     if (other) ops.push(db.prepare("UPDATE org_members SET role='owner' WHERE org_id=? AND user_id=?").bind(o.org_id, other.user_id));
-    else ops.push(db.prepare("DELETE FROM expertise WHERE owner_type='o' AND owner_id=?").bind(o.org_id), db.prepare("DELETE FROM programs WHERE owner_type='o' AND owner_id=?").bind(o.org_id),
+    else ops.push(db.prepare("DELETE FROM org_sponsor WHERE org_id=?").bind(o.org_id), db.prepare("DELETE FROM images WHERE kind='o' AND owner_id=?").bind(o.org_id), db.prepare("DELETE FROM expertise WHERE owner_type='o' AND owner_id=?").bind(o.org_id), db.prepare("DELETE FROM programs WHERE owner_type='o' AND owner_id=?").bind(o.org_id),
       db.prepare("DELETE FROM item_votes WHERE item_id IN (SELECT id FROM feed_items WHERE owner_type='o' AND owner_id=?)").bind(o.org_id), db.prepare("DELETE FROM feed_items WHERE owner_type='o' AND owner_id=?").bind(o.org_id),
       db.prepare("DELETE FROM channels WHERE owner_type='o' AND owner_id=?").bind(o.org_id), db.prepare("DELETE FROM org_members WHERE org_id=?").bind(o.org_id), db.prepare("DELETE FROM orgs WHERE id=?").bind(o.org_id));
   }
