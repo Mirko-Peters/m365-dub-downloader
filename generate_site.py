@@ -109,7 +109,7 @@ h2{font-size:1.5rem;line-height:1.2;margin:2.1em 0 .6em;font-weight:700}
 .tile{display:block;padding:20px 16px 18px;border-right:1px solid var(--bd);border-bottom:1px solid var(--bd);text-decoration:none}
 .tile b{display:block;font-size:1.5rem;line-height:1.15;font-weight:700}.tile span{font-size:.78rem;letter-spacing:.14em;text-transform:uppercase;color:var(--mut)}.tile:hover{background:var(--ink);color:var(--onink)}.tile:hover span{color:var(--onink)}
 .list{border-top:1px solid var(--fg)}.row{display:block;padding:20px 0;border-bottom:1px solid var(--bd);text-decoration:none}
-.row h3{margin:0 0 .25em;font:700 1.35rem/1.25 Didot,"Bodoni 72",Georgia,"Noto Serif",serif}.row p{margin:0;color:var(--mut);font-size:.98rem}.row:hover h3{color:var(--ac)}
+.row h3{margin:0 0 .25em;font:700 1.35rem/1.25 Didot,"Bodoni 72",Georgia,"Noto Serif",serif}.row p{margin:0;color:var(--mut);font-size:.98rem}.row:hover h3{color:var(--ac)}.row>a,.thumb>a{display:block;color:inherit;text-decoration:none}
 .author{display:flex;gap:16px;align-items:center;border-top:1px solid var(--fg);border-bottom:1px solid var(--bd);padding:18px 0;margin:36px 0}
 .author img.badge{object-fit:cover;border:2px solid var(--ac)}.portrait{float:right;width:190px;height:190px;object-fit:cover;border-radius:50%;border:3px solid var(--ac);margin:0 0 12px 22px}
 .author .badge{flex:none;width:58px;height:58px;border-radius:50%;background:var(--ink);color:var(--onink);display:grid;place-items:center;font:700 1.15rem Didot,Georgia,serif}
@@ -157,6 +157,13 @@ def parse_desc(desc):
 
 
 def strip_tags(s): return re.sub(r"<[^>]+>", "", s)
+
+
+def anchor_title(t, n=58):
+    """Kurzer Ankertext fuer interne Links (Kernthema vor dem Doppelpunkt)."""
+    t = re.sub(r"\s*\((KI|AI)[^)]*\)\s*$", "", strip_tags(t)).strip()
+    main = t.split(":")[0].strip() if ":" in t and len(t.split(":")[0].strip()) >= 14 else t
+    return main if len(main) <= n else main[: n - 1].rsplit(" ", 1)[0].rstrip(",;–-") + "…"
 
 
 def short(s, n=155):
@@ -237,7 +244,7 @@ def share_html(lang, url, title):
             ("E-Mail", f"mailto:?subject={t}&body={u}")]
     links = "".join(f'<a class="btn" href="{h}" target="_blank" rel="noopener nofollow">{n}</a>' for n, h in nets)
     fl = "".join(f'<a href="{h}" target="_blank" rel="noopener nofollow" aria-label="{n}" title="{n}" style="--bc:#{BRAND_ICONS[n][1]}">{brand_icon(n)}</a>' for n, h in nets)
-    fbar = (f'<aside class="fshare" aria-label="{esc(SHARE_L.get(lang, "Share"))}"><b>{esc(SHARE_L.get(lang, "Share"))}</b>{fl}'
+    fbar = (f'<aside class="fshare" aria-label="{esc(SHARE_L.get(lang, "Share"))}">{fl}'
             f'<button type="button" data-share data-url="{url}" data-title="{esc(strip_tags(title))}" aria-label="{esc(COPY_L.get(lang, "Copy link"))}" title="{esc(COPY_L.get(lang, "Copy link"))}" style="--bc:#6B7280">{brand_icon("Copy")}</button></aside>')
     return (fbar + f'<div class="share"><div class="wrap"><b>{esc(SHARE_L.get(lang, "Share"))}</b>{links}'
             f'<button type="button" class="btn" data-share data-url="{url}" data-title="{esc(strip_tags(title))}">{esc(COPY_L.get(lang, "Copy link"))}</button></div></div>'
@@ -295,6 +302,7 @@ def page(lang, title, desc, canonical, body, alternates=None, jsonld=None, xdefa
 <meta name="description" content="{esc(desc)}">
 <meta name="author" content="Mirko Peters"><meta name="robots" content="{'noindex,follow' if noindex else 'index,follow,max-image-preview:large,max-snippet:-1'}">
 <link rel="canonical" href="{canonical}">
+<link rel="icon" href="{BASE}/assets/favicon.svg" type="image/svg+xml"><link rel="icon" href="{BASE}/assets/favicon-32.png" sizes="32x32" type="image/png"><link rel="shortcut icon" href="{BASE}/assets/favicon.ico"><link rel="apple-touch-icon" href="{BASE}/assets/apple-touch-icon.png"><meta name="theme-color" content="#1d2126">
 {alt}<meta property="og:type" content="{og_type}"><meta property="og:title" content="{esc(title)}"><meta property="og:description" content="{esc(desc)}">
 <meta property="og:url" content="{canonical}"><meta property="og:locale" content="{loc}"><meta property="og:site_name" content="M365.FM">
 <meta property="og:image" content="{ogimg}"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta property="og:image:alt" content="{esc(title)}">
@@ -556,7 +564,7 @@ def build():
         if not t:
             return ""
         return (f'<h2>★ {esc(TOP_L.get(l, TOP_L["en"]))}</h2><div class="list">' + "".join(
-            f'<a class="row" href="{url_of(x)}"><h3>{n + 1}. {esc(x["e"]["title"])}</h3></a>' for n, x in enumerate(t)) +
+            f'<a class="row" href="{url_of(x)}" title="{esc(x["e"]["title"])}"><h3>{n + 1}. {esc(anchor_title(x["e"]["title"]))}</h3></a>' for n, x in enumerate(t)) +
             f'</div><p><a class="btn" href="{BASE}/{l}/top/">{esc(TOP_L.get(l, TOP_L["en"]))} →</a></p>')
 
     def topics_nav(l):
@@ -622,7 +630,7 @@ def build():
         btns += f'<a class="btn" data-p="spreaker" href="{spk}" rel="noopener">🎧 {esc(ui[0])}</a>' 
         btns += f'<a class="btn" href="{yt}" rel="noopener">▶ {esc(ui[1])}</a>'
         if tr: btns += f'<a class="btn" href="{tr}">📄 {esc(ui[2])}</a>'
-        rel = "".join(f'<a class="row" href="{url_of(x)}"><h3>{esc(x["e"]["title"])}</h3></a>' for x in more)
+        rel = "".join(f'<a class="row" href="{url_of(x)}" title="{esc(x["e"]["title"])}"><h3>{esc(anchor_title(x["e"]["title"]))}</h3></a>' for x in more)
         body = f"""{header(l, lang_switch(l, alts, [x for x in LANGS if x in alts]))}
 <main class="wrap"><article>
 <div class="crumbs"><a href="{BASE}/{l}/">{esc(ui[7])}</a> / {esc(LANGS[l][0])} / {it["date"]}</div>
@@ -655,7 +663,7 @@ def build():
         d = short(s.get("description", ""), 300)
         newest = by_lang[l]
         thumbs = "".join(
-            f'<a class="thumb" href="{url_of(i)}"><figure class="cover" style="margin-inline:0">{yt_thumb(i["vid"], i["e"]["title"])}</figure><h3>{esc(i["e"]["title"])}</h3><p>{esc(short(parse_desc(i["e"]["desc"])[0], 110))}</p></a>'
+            f'<div class="thumb"><a href="{url_of(i)}" title="{esc(i["e"]["title"])}"><figure class="cover" style="margin-inline:0">{yt_thumb(i["vid"], "")}</figure><h3>{esc(anchor_title(i["e"]["title"]))}</h3></a><p>{esc(short(parse_desc(i["e"]["desc"])[0], 110))}</p></div>'
             for i in newest)
         ld = [{"@context": "https://schema.org", "@type": "PodcastSeries", "@id": f"{BASE}/{l}/#series", "name": title, "url": f"{BASE}/{l}/",
                "description": d, "inLanguage": LANGS[l][1], "webFeed": f"https://www.spreaker.com/show/{LANGS[l][3]}/episodes/feed", "image": f"{BASE}/assets/og-default.png",
@@ -691,7 +699,7 @@ def build():
     for n, v in enumerate(vids_new):
         avail = [x for x in active if x in by_vid[v]]
         latest.append(by_vid[v][avail[n % len(avail)]])
-    lt = "".join(f'<a class="thumb" href="{url_of(i)}" hreflang="{LANGS[i["lang"]][1]}"><figure class="cover" style="margin-inline:0">{yt_thumb(i["vid"], i["e"]["title"])}</figure><h3>{esc(i["e"]["title"])}</h3><p>{esc(LANGS[i["lang"]][0])}</p></a>' for i in latest)
+    lt = "".join(f'<div class="thumb"><a href="{url_of(i)}" hreflang="{LANGS[i["lang"]][1]}" title="{esc(i["e"]["title"])}"><figure class="cover" style="margin-inline:0">{yt_thumb(i["vid"], "")}</figure><h3>{esc(anchor_title(i["e"]["title"]))}</h3></a><p>{esc(LANGS[i["lang"]][0])}</p></div>' for i in latest)
     nvid_all = len(by_vid)
     rows = [(l, LANGS[l][0], EN_NAMES.get(l, ""), f"{BASE}/{l}/") for l in active]
     tiles = "".join(lang_tile(l, LANGS[l][0], EN_NAMES.get(l, ""), f"{BASE}/{l}/", LANGS[l][1], f"{len(by_lang[l])} episodes") for l in active)
@@ -749,7 +757,7 @@ def build():
 
     # Kategorie-Seiten (indexierbar, in Sitemap) und Tag-Seiten (noindex,follow – nur für die interne Verlinkung)
     def rows_html(lst):
-        return "".join(f'<a class="row" href="{url_of(x)}"><h3>{esc(x["e"]["title"])}</h3><p>{esc(short(parse_desc(x["e"]["desc"])[0], 150))}</p></a>' for x in lst)
+        return "".join(f'<div class="row"><a href="{url_of(x)}" title="{esc(x["e"]["title"])}"><h3>{esc(anchor_title(x["e"]["title"]))}</h3></a><p>{esc(short(parse_desc(x["e"]["desc"])[0], 150))}</p></div>' for x in lst)
 
     def list_page(l, kind, label, lst, canonical, alts, noindex):
         ui = UI[l]
@@ -798,7 +806,7 @@ def build():
         u = f"{BASE}/{l}/top/"
         ui = UI[l]
         wk = topdata.get("week_end", TODAY)
-        rows = "".join(f'<a class="row" href="{url_of(x)}"><h3>{n + 1}. {esc(x["e"]["title"])}</h3><p>{esc(short(parse_desc(x["e"]["desc"])[0], 150))}</p></a>' for n, x in enumerate(t))
+        rows = "".join(f'<div class="row"><a href="{url_of(x)}" title="{esc(x["e"]["title"])}"><h3>{n + 1}. {esc(anchor_title(x["e"]["title"]))}</h3></a><p>{esc(short(parse_desc(x["e"]["desc"])[0], 150))}</p></div>' for n, x in enumerate(t))
         ld = [{"@context": "https://schema.org", "@type": "CollectionPage", "name": label, "url": u, "inLanguage": LANGS[l][1], "dateModified": wk,
                "mainEntity": {"@type": "ItemList", "itemListOrder": "https://schema.org/ItemListOrderDescending", "numberOfItems": len(t),
                               "itemListElement": [{"@type": "ListItem", "position": n + 1, "url": url_of(x)} for n, x in enumerate(t)]}},
