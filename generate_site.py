@@ -7,6 +7,8 @@ Basis-URL (z. B. eigene Domain):  SITE_BASE=https://international.m365.fm python
 import html, json, os, re, shutil, sys, unicodedata
 from datetime import date
 from pathlib import Path
+import hashlib
+from site_content import FAQ
 
 ROOT = Path(__file__).parent
 OUT = ROOT / "docs"
@@ -110,6 +112,14 @@ h2{font-size:1.5rem;line-height:1.2;margin:2.1em 0 .6em;font-weight:700}
 .author p{margin:0;font-size:.95rem;color:var(--mut)}.author strong{color:var(--fg);display:block;font-size:1.02rem}
 .mut{color:var(--mut);font-size:.9rem}.crumbs{font-size:.78rem;letter-spacing:.12em;text-transform:uppercase;color:var(--mut);margin-top:26px}.crumbs a{text-decoration:none}
 footer{border-top:1px solid var(--fg);margin-top:64px;padding:26px 0 48px;font-size:.85rem;color:var(--mut)}footer a{margin-right:14px}
+.cover{margin:18px 0 6px;border-radius:4px;overflow:hidden;line-height:0}.cover svg{width:100%;height:auto;display:block}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:0;border-top:1px solid var(--fg);border-bottom:1px solid var(--fg);margin:30px 0}
+.stats div{padding:18px 14px;border-inline-end:1px solid var(--bd)}.stats b{display:block;font:700 2.4rem/1 Didot,"Bodoni 72",Georgia,serif;color:var(--ac)}.stats span{font-size:.76rem;letter-spacing:.14em;text-transform:uppercase;color:var(--mut)}
+.thumbs{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:22px;margin:14px 0}
+.thumb{display:block;text-decoration:none}.thumb .cover{margin:0 0 10px}.thumb h3{margin:0 0 .2em;font:700 1.08rem/1.3 Didot,"Bodoni 72",Georgia,"Noto Serif",serif}.thumb p{margin:0;font-size:.82rem;color:var(--mut)}.thumb:hover h3{color:var(--ac)}
+.band{background:var(--ink);color:var(--onink);margin:46px 0;padding:34px 0}.band .wrap{display:grid;gap:10px}.band h2{margin:0}.band .btn:hover{background:var(--onink);color:var(--ink)}
+.faq details{border-bottom:1px solid var(--bd);padding:14px 0}.faq summary{cursor:pointer;font:700 1.15rem/1.35 Didot,"Bodoni 72",Georgia,"Noto Serif",serif}.faq p{margin:.6em 0 0;color:var(--mut)}
+.cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:22px;margin:16px 0}.cols h3{margin:.1em 0 .3em;font:700 1.15rem Didot,"Bodoni 72",Georgia,serif}.cols p{margin:0;color:var(--mut);font-size:.96rem}
 @media (max-width:560px){body{font-size:16px}.panel{padding:14px}.btn{padding:10px 16px}}"""
 
 
@@ -186,7 +196,7 @@ def page(lang, title, desc, canonical, body, alternates=None, jsonld=None, xdefa
 <link rel="canonical" href="{canonical}">
 {alt}<meta property="og:type" content="{og_type}"><meta property="og:title" content="{esc(title)}"><meta property="og:description" content="{esc(desc)}">
 <meta property="og:url" content="{canonical}"><meta property="og:locale" content="{loc}"><meta property="og:site_name" content="M365.FM">
-<meta name="twitter:card" content="summary">
+<meta property="og:image" content="{BASE}/assets/og-default.png"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:image" content="{BASE}/assets/og-default.png">
 {extra_head}<style>{CSS}</style>
 {ld}</head>
 <body>
@@ -196,10 +206,68 @@ def page(lang, title, desc, canonical, body, alternates=None, jsonld=None, xdefa
 
 
 def person_ld():
-    return {"@context": "https://schema.org", "@type": "Person", "@id": f"{BASE}/about/mirko-peters/#person",
-            "name": "Mirko Peters", "jobTitle": "Microsoft MVP", "url": f"{BASE}/about/mirko-peters/",
-            "sameAs": SAME_AS, "knowsAbout": ["Microsoft 365", "Microsoft Copilot", "Azure", "Power Platform", "Microsoft Fabric", "AI agents"],
-            "worksFor": {"@type": "Organization", "name": "M365.FM", "url": "https://www.m365.fm"}}
+    d = {"@context": "https://schema.org", "@type": "Person", "@id": f"{BASE}/about/mirko-peters/#person",
+         "name": "Mirko Peters", "alternateName": ["Mirko Peters MVP", "Mirko Peters M365.FM"], "givenName": "Mirko", "familyName": "Peters",
+         "jobTitle": "Microsoft MVP", "description": "Microsoft MVP, host of the M365.FM podcast and the m365 Show on YouTube, organizer of the free online conference M365Con.",
+         "url": f"{BASE}/about/mirko-peters/", "mainEntityOfPage": f"{BASE}/about/mirko-peters/", "sameAs": SAME_AS,
+         "award": "Microsoft Most Valuable Professional (MVP)",
+         "hasOccupation": {"@type": "Occupation", "name": "Microsoft MVP, podcaster and conference organizer"},
+         "knowsAbout": ["Microsoft 365", "Microsoft Copilot", "Copilot Studio", "Azure", "Azure AI Foundry", "Power Platform", "Microsoft Fabric",
+                        "Microsoft Entra", "Microsoft Purview", "Microsoft Teams", "SharePoint", "AI agents", "Dynamics 365"],
+         "worksFor": {"@id": f"{BASE}/#org"}, "founder": [{"@id": f"{BASE}/#org"}]}
+    if (ROOT / "assets" / "mirko-peters.jpg").exists():
+        d["image"] = f"{BASE}/assets/mirko-peters.jpg"
+    return d
+
+
+def art_svg(seed, big, small="M365.FM · AI"):
+    h = int(hashlib.md5(seed.encode()).hexdigest(), 16)
+    h1 = h % 360; h2 = (h1 + 35 + (h >> 9) % 70) % 360
+    bars = ""
+    x = 60; hh = h
+    for i in range(44):
+        hh = (hh * 1103515245 + 12345) & 0x7fffffff
+        v = 40 + (hh >> 8) % 180
+        bars += f'<rect x="{x}" y="{330 - v // 2}" width="14" height="{v}" rx="7" fill="hsl({h1 + 18},85%,72%)" opacity="{0.35 + (v / 400):.2f}"/>'
+        x += 25
+    return (f'<svg viewBox="0 0 1200 420" xmlns="http://www.w3.org/2000/svg" role="img" aria-hidden="true" focusable="false">'
+            f'<defs><linearGradient id="g{h % 99999}" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="hsl({h1},55%,24%)"/><stop offset="1" stop-color="hsl({h2},60%,11%)"/></linearGradient></defs>'
+            f'<rect width="1200" height="420" fill="url(#g{h % 99999})"/>{bars}'
+            f'<text x="60" y="92" font-family="Didot,Georgia,serif" font-size="64" font-weight="700" fill="#f6f1ea">{esc(big)}</text>'
+            f'<text x="60" y="388" font-family="system-ui,sans-serif" font-size="22" letter-spacing="5" fill="#f6f1ea" opacity=".8">{esc(small.upper())}</text>'
+            f'<circle cx="1120" cy="66" r="14" fill="#b4233c"/></svg>')
+
+
+def org_ld():
+    return {"@context": "https://schema.org", "@type": "Organization", "@id": f"{BASE}/#org", "name": "M365.FM", "url": "https://www.m365.fm",
+            "logo": f"{BASE}/assets/og-default.png", "founder": {"@id": f"{BASE}/about/mirko-peters/#person"},
+            "sameAs": ["https://www.m365.fm", "https://m365con.net", YT_CHANNEL, LINKEDIN]}
+
+
+def event_ld():
+    return {"@context": "https://schema.org", "@type": "Event", "@id": f"{BASE}/#m365con2027", "name": "M365Con 2027 – free online conference",
+            "description": "Free, 100% online Microsoft community conference with 120 sessions on Microsoft 365, Copilot, Azure, Power Platform, security and AI.",
+            "startDate": "2027-01-11", "endDate": "2027-01-22", "eventAttendanceMode": "https://schema.org/OnlineEventAttendanceMode",
+            "eventStatus": "https://schema.org/EventScheduled", "isAccessibleForFree": True, "inLanguage": "en",
+            "location": {"@type": "VirtualLocation", "url": "https://m365con.net"}, "url": "https://m365con.net",
+            "organizer": {"@id": f"{BASE}/about/mirko-peters/#person"},
+            "offers": {"@type": "Offer", "price": "0", "priceCurrency": "EUR", "url": "https://m365con.net", "availability": "https://schema.org/InStock"}}
+
+
+def faq_ld(lang):
+    return {"@context": "https://schema.org", "@type": "FAQPage", "inLanguage": LANGS[lang][1] if lang in LANGS else "en",
+            "mainEntity": [{"@type": "Question", "name": q, "acceptedAnswer": {"@type": "Answer", "text": a}} for q, a in FAQ[lang]]}
+
+
+def faq_html(lang, title="FAQ"):
+    rows = "".join(f"<details><summary>{esc(q)}</summary><p>{esc(a)}</p></details>" for q, a in FAQ[lang])
+    return f'<section class="faq"><h2>{esc(title)}</h2>{rows}</section>'
+
+
+def m365con_band():
+    return (f'<div class="band"><div class="wrap"><div class="kicker" style="margin:0;color:inherit;opacity:.8">M365Con 2027 · Jan 11–22 · 100% online · free</div>'
+            f'<h2>120 sessions. 10 days. Microsoft community from all over the world.</h2>'
+            f'<div class="btns"><a class="btn main" href="https://m365con.net">m365con.net</a></div></div></div>')
 
 
 def header(lang, switch):
@@ -234,6 +302,8 @@ def build():
         shutil.rmtree(OUT)
     OUT.mkdir(parents=True)
     (OUT / ".nojekyll").write_text("")
+    if (ROOT / "assets").exists():
+        shutil.copytree(ROOT / "assets", OUT / "assets")
 
     # veröffentlichte Folgen je Sprache sammeln
     items = {}  # (vid, lang) -> dict
@@ -287,6 +357,9 @@ def build():
             {"@context": "https://schema.org", "@type": "PodcastEpisode", "name": e["title"], "description": strip_tags(intro),
              "url": canonical, "inLanguage": LANGS[l][1], "datePublished": it["date"],
              "associatedMedia": {"@type": "AudioObject", "contentUrl": spk, "inLanguage": LANGS[l][1]},
+             "image": f"{BASE}/assets/og-default.png", "isAccessibleForFree": True, "keywords": e.get("tags", ""),
+             "about": [{"@type": "Thing", "name": t.strip()} for t in (e.get("tags") or "").split(",")[:5] if t.strip() and "m365.fm" not in t],
+             **({"transcript": tr} if tr else {}),
              "partOfSeries": {"@type": "PodcastSeries", "name": seo.get(l, {}).get("title", "M365.FM"), "url": f"https://www.spreaker.com/show/{LANGS[l][3]}"},
              "author": {"@id": f"{BASE}/about/mirko-peters/#person"}},
             {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [
@@ -311,6 +384,7 @@ def build():
 <div class="kicker">M365.FM · {esc(LANGS[l][0])}</div>
 <h1>{esc(e["title"])}</h1>
 <p class="lede">{intro}</p>
+<figure class="cover" style="margin-inline:0">{art_svg(vid, LANGS[l][0], "M365.FM · " + ui[0])}</figure>
 <div class="panel"><iframe src="https://widget.spreaker.com/player?episode_id={it["eid"]}&amp;theme=light&amp;playlist=false" height="131" loading="lazy" title="{esc(e["title"])}"></iframe>
 <div class="btns">{btns}</div></div>
 <h2>{esc(hdr)}</h2><ol class="points">{lis}</ol>
@@ -331,50 +405,79 @@ def build():
         alts_home = {x: f"{BASE}/{x}/" for x in active}
         title = s.get("title") or f"M365.FM – {LANGS[l][0]}"
         d = short(s.get("description", ""), 300)
-        cards = "".join(
-            f'<a class="row" href="{url_of(i)}"><h3>{esc(i["e"]["title"])}</h3><p>{esc(short(parse_desc(i["e"]["desc"])[0], 190))}</p></a>'
-            for i in by_lang[l])
-        ld = [{"@context": "https://schema.org", "@type": "PodcastSeries", "name": title, "url": f"{BASE}/{l}/",
-               "description": d, "inLanguage": LANGS[l][1], "webFeed": f"https://www.spreaker.com/show/{LANGS[l][3]}/episodes/feed",
+        newest = by_lang[l]
+        thumbs = "".join(
+            f'<a class="thumb" href="{url_of(i)}"><figure class="cover" style="margin-inline:0">{art_svg(i["vid"], LANGS[l][0])}</figure><h3>{esc(i["e"]["title"])}</h3><p>{esc(short(parse_desc(i["e"]["desc"])[0], 110))}</p></a>'
+            for i in newest)
+        ld = [{"@context": "https://schema.org", "@type": "PodcastSeries", "@id": f"{BASE}/{l}/#series", "name": title, "url": f"{BASE}/{l}/",
+               "description": d, "inLanguage": LANGS[l][1], "webFeed": f"https://www.spreaker.com/show/{LANGS[l][3]}/episodes/feed", "image": f"{BASE}/assets/og-default.png",
+               "numberOfEpisodes": len(newest),
                "sameAs": [x for x in [f"https://www.spreaker.com/show/{LANGS[l][3]}", plat.get(l, {}).get("apple_show"), plat.get(l, {}).get("spotify_show")] if x],
-               "author": {"@id": f"{BASE}/about/mirko-peters/#person"}},
-              person_ld()]
+               "author": {"@id": f"{BASE}/about/mirko-peters/#person"}, "publisher": {"@id": f"{BASE}/#org"}},
+              {"@context": "https://schema.org", "@type": "CollectionPage", "name": title, "url": f"{BASE}/{l}/", "inLanguage": LANGS[l][1],
+               "mainEntity": {"@type": "ItemList", "numberOfItems": len(newest),
+                              "itemListElement": [{"@type": "ListItem", "position": n + 1, "url": url_of(i)} for n, i in enumerate(newest[:50])]}},
+              faq_ld(l), person_ld(), org_ld()]
         sh = plat.get(l, {})
         sbtn = ""
         if sh.get("apple_show"): sbtn += f'<a class="btn" data-p="apple" href="{sh["apple_show"]}">Apple Podcasts</a>'
         if sh.get("spotify_show"): sbtn += f'<a class="btn" data-p="spotify" href="{sh["spotify_show"]}">Spotify</a>'
         sbtn += f'<a class="btn" data-p="spreaker" href="https://www.spreaker.com/show/{LANGS[l][3]}">🎧 {esc(ui[0])}</a><a class="btn" href="https://www.m365.fm">m365.fm</a>'
+        nvid = len({i["vid"] for i in newest})
         body = f"""{header(l, lang_switch(l, alts_home, active))}
-<main class="wrap"><div class="kicker">{esc(LANGS[l][0])} · {len(by_lang[l])}</div><h1>{esc(title)}</h1><p class="lede">{esc(d)}</p>
+<main class="wrap"><div class="kicker">{esc(LANGS[l][0])} · M365.FM</div><h1>{esc(title)}</h1><p class="lede">{esc(d)}</p>
 <div class="btns">{sbtn}</div>
-<h2>{esc(ui[3])}</h2><div class="list">{cards}</div>
-{author_box(l)}</main>{footer(l)}{PLAT_JS}"""
+<div class="stats"><div><b>{len(newest)}</b><span>{esc(ui[3])}</span></div><div><b>{nvid}</b><span>Videos</span></div><div><b>{len(active)}</b><span>Languages</span></div></div>
+<h2>{esc(ui[3])}</h2><div class="thumbs">{thumbs}</div></main>
+{m365con_band()}
+<main class="wrap">{faq_html(l, "FAQ")}{author_box(l)}</main>{footer(l)}{PLAT_JS}"""
         write(f"{l}/index.html", page(l, title, short(d), f"{BASE}/{l}/", body, alts_home, ld, og_type="website"))
         sitemap.append((f"{BASE}/{l}/", TODAY, alts_home))
 
     # Wurzel
     alts_home = {x: f"{BASE}/{x}/" for x in active}
     grid = "".join(f'<a class="tile" href="{BASE}/{l}/" hreflang="{LANGS[l][1]}" lang="{LANGS[l][1]}"><b>{esc(LANGS[l][0])}</b><span>{len(by_lang[l])} episodes</span></a>' for l in active)
+    vids_new = sorted(by_vid, key=lambda v: max(x["date"] for x in by_vid[v].values()), reverse=True)[:9]
+    latest = []
+    for n, v in enumerate(vids_new):
+        avail = [x for x in active if x in by_vid[v]]
+        latest.append(by_vid[v][avail[n % len(avail)]])
+    lt = "".join(f'<a class="thumb" href="{url_of(i)}" hreflang="{LANGS[i["lang"]][1]}"><figure class="cover" style="margin-inline:0">{art_svg(i["vid"], LANGS[i["lang"]][0])}</figure><h3>{esc(i["e"]["title"])}</h3><p>{esc(LANGS[i["lang"]][0])}</p></a>' for i in latest)
+    nvid_all = len(by_vid)
     root_body = f"""{header('en', '')}
 <main class="wrap"><div class="kicker">Microsoft 365 · Copilot · Azure · AI</div>
 <h1>The M365.FM podcast in {len(active)} languages</h1>
 <p class="lede">Animated explainers about Microsoft 365, Copilot, Azure and the Power Platform by Microsoft MVP Mirko Peters – as AI-dubbed audio episodes in your language. Free, with transcripts.</p>
-<div class="grid">{grid}</div>
-{author_box('en')}</main>{footer_en()}"""
+<div class="btns"><a class="btn main" href="#languages">Choose your language</a><a class="btn" href="{BASE}/about/mirko-peters/">About Mirko Peters</a></div>
+<div class="stats"><div><b>{len(items)}</b><span>Episodes</span></div><div><b>{nvid_all}</b><span>Videos</span></div><div><b>{len(active)}</b><span>Languages</span></div><div><b>0 €</b><span>Free</span></div></div>
+<h2>Latest episodes</h2><div class="thumbs">{lt}</div>
+<h2 id="languages">Languages</h2><div class="grid">{grid}</div></main>
+{m365con_band()}
+<main class="wrap">{faq_html('en', 'FAQ')}{author_box('en')}</main>{footer_en()}"""
     write("index.html", page("en", "M365.FM – Microsoft 365, Copilot & AI podcast in 19 languages | Mirko Peters",
           "AI-dubbed podcast episodes about Microsoft 365, Copilot, Azure and Power Platform by Microsoft MVP Mirko Peters – in German, Spanish, French, Japanese and more.",
-          f"{BASE}/", root_body, alts_home, [person_ld(), {"@context": "https://schema.org", "@type": "WebSite", "name": "M365.FM international", "url": f"{BASE}/", "publisher": {"@id": f"{BASE}/about/mirko-peters/#person"}}], og_type="website"))
+          f"{BASE}/", root_body, alts_home, [person_ld(), org_ld(), event_ld(), faq_ld("en"), {"@context": "https://schema.org", "@type": "WebSite", "@id": f"{BASE}/#website", "name": "M365.FM international", "url": f"{BASE}/", "inLanguage": [LANGS[x][1] for x in active], "publisher": {"@id": f"{BASE}/#org"}, "author": {"@id": f"{BASE}/about/mirko-peters/#person"}}], og_type="website"))
     sitemap.append((f"{BASE}/", TODAY, None))
 
     # Entity-Seite
     about = f"""{header('en', '')}
-<main class="wrap"><div class="kicker">Microsoft MVP</div><h1>Mirko Peters</h1>
+<main class="wrap"><div class="kicker">Microsoft MVP · Podcaster · Conference organizer</div><h1>Mirko Peters</h1>
 <p class="lede">Mirko Peters is a Microsoft MVP who explains Microsoft 365, Microsoft Copilot, Azure, Power Platform, Microsoft Fabric and AI agents for IT admins, architects, developers and decision makers. He hosts the podcast <a href="https://www.m365.fm">M365.FM</a> and the <em>m365 Show</em> on YouTube, and organizes the free online conference <a href="https://m365con.net">M365Con</a>.</p>
 <div class="btns"><a class="btn main" href="https://www.m365.fm">M365.FM</a><a class="btn" href="https://m365con.net">M365Con</a><a class="btn" href="{LINKEDIN}" rel="me">LinkedIn</a><a class="btn" href="{YT_CHANNEL}">YouTube</a></div>
-<h2>Podcast episodes by language</h2><div class="grid">{grid}</div></main>{footer_en()}"""
+<h2>What Mirko works on</h2>
+<div class="cols"><div><h3>Podcast</h3><p>M365.FM covers Microsoft 365, Copilot, Azure, Power Platform and security – practical, from real projects, with new episodes every week.</p></div>
+<div><h3>Video</h3><p>The m365 Show on YouTube turns complex Microsoft topics into short animated explainers, now also available as AI-dubbed audio in {len(active)} languages.</p></div>
+<div><h3>Community</h3><p>M365Con is a free, 100% online conference (Jan 11–22, 2027) with 120 sessions by speakers from the global Microsoft community.</p></div></div>
+<h2>Topics</h2>
+<p>Microsoft 365 Copilot · Copilot Studio · AI agents · Azure AI Foundry · Power Platform · Microsoft Fabric · Microsoft Entra · Microsoft Purview · Microsoft Teams · SharePoint · Dynamics 365 · Governance &amp; security</p>
+<h2>Find Mirko Peters online</h2>
+<ul class="points"><li><span><a href="https://www.m365.fm">m365.fm</a> – the podcast and episode archive</span></li><li><span><a href="https://m365con.net">m365con.net</a> – free online conference</span></li><li><span><a href="{LINKEDIN}" rel="me">LinkedIn</a></span></li><li><span><a href="{YT_CHANNEL}">YouTube – m365 Show by Mirko Peters</a></span></li></ul>
+<h2>Podcast episodes by language</h2><div class="grid">{grid}</div></main>
+{m365con_band()}
+<main class="wrap">{faq_html('en', 'FAQ')}</main>{footer_en()}"""
     write("about/mirko-peters/index.html", page("en", "Mirko Peters – Microsoft MVP, M365.FM podcast host & M365Con organizer",
           "Mirko Peters is a Microsoft MVP and host of the M365.FM podcast about Microsoft 365, Copilot, Azure and AI. Organizer of the free online conference M365Con.",
-          f"{BASE}/about/mirko-peters/", about, None, [person_ld()], og_type="profile"))
+          f"{BASE}/about/mirko-peters/", about, None, [{"@context": "https://schema.org", "@type": "ProfilePage", "@id": f"{BASE}/about/mirko-peters/#profile", "url": f"{BASE}/about/mirko-peters/", "name": "Mirko Peters", "dateModified": TODAY, "mainEntity": {"@id": f"{BASE}/about/mirko-peters/#person"}}, person_ld(), org_ld(), event_ld(), faq_ld("en")], og_type="profile"))
     sitemap.append((f"{BASE}/about/mirko-peters/", TODAY, None))
 
     # Sitemap, robots, llms.txt, IndexNow
