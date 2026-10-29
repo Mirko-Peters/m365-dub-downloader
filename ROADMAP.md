@@ -54,3 +54,10 @@ Stand: 2026-10-29. Reihenfolge nach Absprache mit Mirko; alles mit Schema.org-Ve
 - Eigener Blog je Mitglied: Beiträge schreiben (Wiki-Markup, Quellen), eigene Seite `/community/u/<handle>/blog/`, Schema.org BlogPosting/Blog, Upvotes, Moderation für Neue, Feed (zählt als Creator-Feed). Punkte/Badge „Autor".
 - Podcast-Upload ins m365con.net-Netzwerk: Mitglieder reichen Podcast-Folgen/Shows ein (RSS-Feed anmelden oder Audio hochladen), Prüfung durch Redaktion, Anzeige im Netzwerk; Schema.org PodcastSeries/PodcastEpisode. Technische Frage: Speicher (R2) oder nur RSS-Verknüpfung.
 - Eigenes Stick-Man-Video aus Blog/Podcast: Mitglied bekommt aus seinem Beitrag ein animiertes Erklärvideo (Pipeline wie bei den Dubs). Offen: Kosten/Kontingent pro Mitglied, Qualitätsprüfung, Warteschlange – eher als Belohnung (Punkte) oder Premium.
+
+## Präzisierung Podcast (30.10.): Community-Episoden mit Upvote-Schwelle
+- Mitglieder laden **Episoden (Audio) hoch** (nicht nur RSS): Titel, Beschreibung, Themen (Entitäten), Cover, Sprache, Erklärung „Rechte liegen bei mir / KI-Einsatz offengelegt“.
+- Community-Liste mit **Upvotes**. Ab **X Upvotes** (Vorschlag: 25 von verschiedenen Konten, Mindestalter der Konten) wandert die Episode in die **redaktionelle Prüfung** durch Mirko (Freigabe/Ablehnung mit Notiz).
+- Nach Freigabe: Veröffentlichung auf **m365.fm** (Spreaker-Entwurf über die bestehende Pipeline, Mirko veröffentlicht), mit Autor-Credit und Link zum Profil; Schema.org PodcastEpisode.
+- Technik: Audio in Cloudflare R2 (mp3, max. ~100 MB), Worker-Endpunkte für Upload/Votes/Review, Admin-Queue; Missbrauchsschutz (Rate-Limit, Dateityp-Prüfung, Melden-Button).
+- Offen: Schwellenwert X, Speicherlimit je Mitglied, ob Upload nur für verifizierte/aktive Mitglieder.
