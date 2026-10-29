@@ -23,26 +23,43 @@ async function canManage(db, user, ev) {
   if (!ev.org_id) return false;
   return !!(await db.prepare("SELECT 1 x FROM org_members WHERE org_id=? AND user_id=? AND status='active' AND role IN ('owner','admin')").bind(ev.org_id, user.id).first());
 }
-async function speakersCheck(db, list) {
-  const out = [];
+const EID = /^[a-z0-9-]{2,48}$/;
+const rndToken = () => [...crypto.getRandomValues(new Uint8Array(18))].map((b) => b.toString(16).padStart(2, "0")).join("");
+// Speaker pruefen. Jede Person muss die Teilnahme selbst bestaetigen (s: invited|confirmed). Bestehende Stati/Tokens bleiben erhalten.
+async function speakersCheck(db, list, prev, selfHandle) {
+  const out = [], old = new Map((prev || []).map((x) => [x.h || x.n, x]));
   for (const s of (Array.isArray(list) ? list : []).slice(0, 8)) {
-    const n = txt(s?.n, 80), h = String(s?.h || "").toLowerCase().trim();
+    const n = txt(s?.n, 80), h = String(s?.h || "").toLowerCase().trim(), e = String(s?.e || "").toLowerCase().trim();
+    if (e && !EID.test(e)) return null;
+    const keep = old.get(h || n);
     if (h) {
       if (!PH.test(h)) return null;
       const p = await db.prepare("SELECT u.name FROM profiles p JOIN users u ON u.id=p.user_id WHERE p.handle=? AND p.public=1").bind(h).first();
-      if (!p) return null; out.push({ h, n: n || p.name });
-    } else if (n.length >= 2) out.push({ n });
+      if (!p) return null;
+      out.push({ h, n: keep?.n || n || p.name, ...(e ? { e } : keep?.e ? { e: keep.e } : {}), s: keep?.s === "confirmed" || h === selfHandle ? "confirmed" : keep?.s === "declined" ? "declined" : "invited" });
+    } else if (n.length >= 2) out.push({ n, ...(e ? { e } : keep?.e ? { e: keep.e } : {}), s: keep?.s === "confirmed" ? "confirmed" : "invited", ...(keep?.t ? { t: keep.t } : { t: rndToken() }) });
   }
   return out;
 }
-const sessView = (r) => ({ id: r.id, title: r.title, abstract: r.abstract, start: r.start, end: r.end, room: r.room, track: r.track, level: r.level, lang: r.lang, topics: parse(r.topics, []), speakers: parse(r.speakers, []), recording_url: r.recording_url, status: r.status });
+async function saveInvites(db, evId, sid, sp) {
+  const ops = [db.prepare("DELETE FROM speaker_invites WHERE session_id=? AND token NOT IN (SELECT value FROM json_each(?))").bind(sid, JSON.stringify(sp.filter((x) => x.t).map((x) => x.t)))];
+  for (const x of sp) if (x.t && x.s !== "confirmed") ops.push(db.prepare("INSERT OR IGNORE INTO speaker_invites(token,event_id,session_id,name,eid,created) VALUES(?,?,?,?,?,?)").bind(x.t, evId, sid, x.n, x.e || "", now()));
+  await db.batch(ops);
+}
+async function claimEntity(db, eid, uid, via) {
+  const c = await db.prepare("SELECT user_id FROM entity_claims WHERE eid=?").bind(eid).first();
+  if (c && c.user_id !== uid) return false;
+  await db.prepare("INSERT INTO entity_claims(eid,user_id,status,via,created) VALUES(?,?,?,?,?) ON CONFLICT(eid) DO UPDATE SET status=CASE WHEN excluded.status='verified' THEN 'verified' ELSE entity_claims.status END").bind(eid, uid, via === "invite" ? "verified" : "pending", via, now()).run();
+  return true;
+}
+const sessView = (r, mgr) => ({ id: r.id, title: r.title, abstract: r.abstract, start: r.start, end: r.end, room: r.room, track: r.track, level: r.level, lang: r.lang, topics: parse(r.topics, []), speakers: mgr ? parse(r.speakers, []) : parse(r.speakers, []).filter((x) => x.s === "confirmed").map((x) => ({ h: x.h, n: x.n, e: x.e })), speakers_open: parse(r.speakers, []).filter((x) => x.s !== "confirmed").length, recording_url: r.recording_url, status: r.status });
 async function evView(db, ev, withPending) {
   const org = ev.org_id ? await db.prepare("SELECT handle,name,public FROM orgs WHERE id=?").bind(ev.org_id).first() : null;
   const ow = await db.prepare("SELECT u.name,p.handle FROM users u LEFT JOIN profiles p ON p.user_id=u.id AND p.public=1 WHERE u.id=?").bind(ev.owner_id).first();
   const rows = (await db.prepare("SELECT * FROM event_sessions WHERE event_id=? " + (withPending ? "" : "AND status='live' ") + "ORDER BY start,id").bind(ev.id).all()).results || [];
   return { handle: ev.handle, title: ev.title, summary: ev.summary, about: ev.about, start: ev.start, end: ev.end, mode: ev.mode, location: ev.location, country: ev.country, url: ev.url, tickets_url: ev.tickets_url,
     free: !!ev.free, lang: ev.lang, topics: parse(ev.topics, []), seeking_sponsor: !!ev.seeking_sponsor, public: !!ev.public,
-    organizer: org ? { kind: "o", handle: org.public ? org.handle : "", name: org.name } : { kind: "u", handle: ow?.handle || "", name: ow?.name || "" }, sessions: rows.map(sessView) };
+    organizer: org ? { kind: "o", handle: org.public ? org.handle : "", name: org.name } : { kind: "u", handle: ow?.handle || "", name: ow?.name || "" }, sessions: rows.map((r) => sessView(r, withPending)) };
 }
 
 export async function handleEvents(env, request, url, path, user, J) {
@@ -102,7 +119,9 @@ export async function handleEvents(env, request, url, path, user, J) {
     const st = String(b.start || ""), en = String(b.end || "");
     if ((st && !okDate(st)) || (en && !okDate(en))) return J({ error: "bad_date" }, 400);
     const tp = await topics(env, b.topics); if (!tp) return J({ error: "bad_topic" }, 400);
-    const sp = await speakersCheck(db, b.speakers); if (!sp) return J({ error: "bad_speaker" }, 400);
+    const myH = (await db.prepare("SELECT handle FROM profiles WHERE user_id=? AND public=1").bind(user.id).first())?.handle || "";
+    let prevSp = []; if (b.id) { const ps = await db.prepare("SELECT speakers FROM event_sessions WHERE id=? AND event_id=?").bind(+b.id, ev.id).first(); prevSp = parse(ps?.speakers, []); }
+    const sp = await speakersCheck(db, b.speakers, prevSp, myH); if (!sp) return J({ error: "bad_speaker" }, 400);
     const ru = cleanUrl(b.recording_url, null); if (ru === null) return J({ error: "bad_url" }, 400);
     const level = LEVELS.includes(String(b.level || "")) ? String(b.level || "") : "";
     const f = [title, long(b.abstract, 1500), st, en, txt(b.room, 60), txt(b.track, 60), level, txt(b.lang, 10), JSON.stringify(tp), JSON.stringify(sp), ru];
@@ -110,10 +129,12 @@ export async function handleEvents(env, request, url, path, user, J) {
       const s = await db.prepare("SELECT * FROM event_sessions WHERE id=? AND event_id=?").bind(+b.id, ev.id).first(); if (!s) return J({ error: "not_found" }, 404);
       if (!mgr && !(s.proposer_id === user.id && s.status === "pending")) return J({ error: "forbidden" }, 403);
       await db.prepare("UPDATE event_sessions SET title=?,abstract=?,start=?,end=?,room=?,track=?,level=?,lang=?,topics=?,speakers=?,recording_url=? WHERE id=?").bind(...f, s.id).run();
+      await saveInvites(db, ev.id, s.id, sp);
       return J({ ok: true });
     }
     if ((await db.prepare("SELECT COUNT(*) n FROM event_sessions WHERE event_id=?").bind(ev.id).first()).n >= 300) return J({ error: "limit" }, 400);
     await db.prepare("INSERT INTO event_sessions(title,abstract,start,end,room,track,level,lang,topics,speakers,recording_url,event_id,status,proposer_id,created) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)").bind(...f, ev.id, mgr ? "live" : "pending", user.id, now()).run();
+    const nid = (await db.prepare("SELECT last_insert_rowid() id").first()).id; await saveInvites(db, ev.id, nid, sp);
     return J({ ok: true, status: mgr ? "live" : "pending" });
   }
   if ((m = path.match(/^\/api\/event\/([a-z0-9-]{3,40})\/session\/(\d+)(\/approve)?$/))) {
@@ -132,6 +153,66 @@ export async function handleEvents(env, request, url, path, user, J) {
       await db.prepare("DELETE FROM event_sessions WHERE id=?").bind(s.id).run(); return J({ ok: true });
     }
   }
+  // ---- Speaker: Einladung ansehen/bestaetigen, Anfragen an bestehende Mitglieder ----
+  if ((m = path.match(/^\/api\/speaker\/invite\/([a-f0-9]{36})$/)) && method === "GET") {
+    const i = await db.prepare("SELECT i.name,i.eid,s.title,e.title ev,e.handle FROM speaker_invites i JOIN event_sessions s ON s.id=i.session_id JOIN events e ON e.id=i.event_id WHERE i.token=?").bind(m[1]).first();
+    return i ? J({ invite: i }) : J({ error: "not_found" }, 404);
+  }
+  if (path === "/api/speaker/confirm" && method === "POST") {
+    if (need()) return need();
+    const b = await body(), tok = String(b.token || "");
+    const i = await db.prepare("SELECT * FROM speaker_invites WHERE token=?").bind(tok).first(); if (!i) return J({ error: "not_found" }, 404);
+    const pr = await db.prepare("SELECT handle FROM profiles WHERE user_id=? AND public=1").bind(user.id).first();
+    const se = await db.prepare("SELECT id,speakers FROM event_sessions WHERE id=?").bind(i.session_id).first();
+    let sp = parse(se?.speakers, []);
+    if (b.decline) { sp = sp.map((x) => (x.t === tok ? { ...x, s: "declined" } : x)); await db.batch([db.prepare("UPDATE event_sessions SET speakers=? WHERE id=?").bind(JSON.stringify(sp), se.id), db.prepare("DELETE FROM speaker_invites WHERE token=?").bind(tok)]); return J({ ok: true, declined: true }); }
+    if (!pr) return J({ error: "need_profile" }, 409);
+    sp = sp.map((x) => (x.t === tok ? { h: pr.handle, n: x.n, ...(x.e ? { e: x.e } : {}), s: "confirmed" } : x));
+    await db.batch([db.prepare("UPDATE event_sessions SET speakers=? WHERE id=?").bind(JSON.stringify(sp), se.id), db.prepare("DELETE FROM speaker_invites WHERE token=?").bind(tok)]);
+    let claimed = false; if (i.eid) claimed = await claimEntity(db, i.eid, user.id, "invite");
+    return J({ ok: true, handle: pr.handle, claimed });
+  }
+  if (path === "/api/speaker/requests" && method === "GET") {
+    if (need()) return need();
+    const pr = await db.prepare("SELECT handle FROM profiles WHERE user_id=?").bind(user.id).first(); if (!pr?.handle) return J({ items: [] });
+    const rows = (await db.prepare("SELECT s.id,s.title,e.title ev,e.handle eh,s.speakers FROM event_sessions s JOIN events e ON e.id=s.event_id WHERE s.speakers LIKE ?").bind(`%"h":"${pr.handle}"%`).all()).results || [];
+    return J({ items: rows.filter((r) => parse(r.speakers, []).some((x) => x.h === pr.handle && x.s === "invited")).map((r) => ({ id: r.id, title: r.title, event: r.ev, eh: r.eh })) });
+  }
+  if (path === "/api/speaker/respond" && method === "POST") {
+    if (need()) return need();
+    const b = await body(), pr = await db.prepare("SELECT handle FROM profiles WHERE user_id=?").bind(user.id).first(); if (!pr?.handle) return J({ error: "need_profile" }, 409);
+    const se = await db.prepare("SELECT id,speakers FROM event_sessions WHERE id=?").bind(+b.id).first(); if (!se) return J({ error: "not_found" }, 404);
+    const sp = parse(se.speakers, []).map((x) => (x.h === pr.handle ? { ...x, s: b.ok ? "confirmed" : "declined" } : x));
+    await db.prepare("UPDATE event_sessions SET speakers=? WHERE id=?").bind(JSON.stringify(sp), se.id).run();
+    return J({ ok: true });
+  }
+  // ---- Entitaet uebernehmen ----
+  if (path === "/api/entity/claim" && method === "POST") {
+    if (need()) return need();
+    const b = await body(), eid = String(b.eid || "").toLowerCase();
+    if (!EID.test(eid)) return J({ error: "bad_id" }, 400);
+    const pr = await db.prepare("SELECT handle FROM profiles WHERE user_id=? AND public=1").bind(user.id).first(); if (!pr) return J({ error: "need_profile" }, 409);
+    if (!(await rateLimit(db, `claim:${user.id}`, 5, 86400))) return J({ error: "rate_limit" }, 429);
+    const ok = await claimEntity(db, eid, user.id, "manual"); return ok ? J({ ok: true }) : J({ error: "claimed" }, 409);
+  }
+  if (path === "/api/entity/claims" && method === "GET") {
+    const rows = (await db.prepare("SELECT c.eid,p.handle FROM entity_claims c JOIN profiles p ON p.user_id=c.user_id AND p.public=1 WHERE c.status='verified'").all()).results || [];
+    return J({ claims: rows }, 200, { "cache-control": "public, max-age=300" });
+  }
+  if (path === "/api/entity/claim/mine" && method === "GET") {
+    if (need()) return need();
+    return J({ claims: (await db.prepare("SELECT eid,status FROM entity_claims WHERE user_id=?").bind(user.id).all()).results || [] });
+  }
+  if (path === "/api/admin/entity/claims" && method === "GET") {
+    if (!(user?.admin || user?.editor)) return J({ error: "forbidden" }, 403);
+    return J({ claims: (await db.prepare("SELECT c.eid,c.user_id,u.name,p.handle FROM entity_claims c JOIN users u ON u.id=c.user_id LEFT JOIN profiles p ON p.user_id=c.user_id WHERE c.status='pending'").all()).results || [] });
+  }
+  if (path === "/api/admin/entity/claim" && method === "POST") {
+    if (!(user?.admin || user?.editor)) return J({ error: "forbidden" }, 403);
+    const b = await body(); if (b.ok) await db.prepare("UPDATE entity_claims SET status='verified' WHERE eid=?").bind(String(b.eid)).run(); else await db.prepare("DELETE FROM entity_claims WHERE eid=?").bind(String(b.eid)).run();
+    return J({ ok: true });
+  }
+
   // Veranstalter sehen Firmen, die Sponsoring angeboten haben (nur wer ein Event mit "sucht Sponsoren" hat)
   if (path === "/api/events/sponsors" && method === "GET") {
     if (need()) return need();

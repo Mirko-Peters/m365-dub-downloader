@@ -271,3 +271,27 @@ CREATE TABLE IF NOT EXISTS recommendations (
   UNIQUE (author_id, subject_id)
 );
 CREATE INDEX IF NOT EXISTS idx_rec_subject ON recommendations(subject_id, status);
+
+-- Speaker-Einladungen (Personen ohne Konto) und Entitaets-Uebernahme (Claim)
+CREATE TABLE IF NOT EXISTS speaker_invites (
+  token TEXT PRIMARY KEY,
+  event_id INTEGER NOT NULL,
+  session_id INTEGER NOT NULL,
+  name TEXT NOT NULL,
+  eid TEXT NOT NULL DEFAULT '',
+  created INTEGER NOT NULL
+);
+CREATE TABLE IF NOT EXISTS entity_claims (
+  eid TEXT PRIMARY KEY,
+  user_id INTEGER NOT NULL,
+  status TEXT NOT NULL DEFAULT 'pending',   -- pending | verified
+  via TEXT NOT NULL DEFAULT 'manual',       -- invite | manual
+  created INTEGER NOT NULL
+);
+CREATE INDEX IF NOT EXISTS idx_claim_user ON entity_claims(user_id);
+
+-- Firma im Profil immer als Entitaet (nie Freitext)
+CREATE TABLE IF NOT EXISTS profile_company (
+  user_id INTEGER PRIMARY KEY,
+  eid TEXT NOT NULL
+);

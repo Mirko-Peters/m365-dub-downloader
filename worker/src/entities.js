@@ -47,7 +47,7 @@ export async function validate(env, id, raw) {
 async function liveOf(db, eid) {
   return await db.prepare("SELECT r.id,r.data,r.created,r.user_id,COALESCE(u.name,'') name FROM entity_rev r LEFT JOIN users u ON u.id=r.user_id AND u.banned=0 WHERE r.eid=? AND r.status='live' ORDER BY r.created DESC LIMIT 1").bind(eid).first();
 }
-const trustedUser = async (db, user) => !!(user && (user.admin || user.editor || (await stats(db, user.id)).points >= TRUST_POINTS));
+export const trustedUser = async (db, user) => !!(user && (user.admin || user.editor || (await stats(db, user.id)).points >= TRUST_POINTS));
 
 export async function handleEntity(env, request, url, path, user, J) {
   const db = env.DB, method = request.method; let m;
@@ -70,7 +70,8 @@ export async function handleEntity(env, request, url, path, user, J) {
     const data = JSON.stringify(v.data), summary = cleanText(b.summary || "", 140).replace(/[<>]/g, "");
     const cur = await liveOf(db, id); if (cur && cur.data === data) return J({ error: "unchanged" }, 400);
     const t = now();
-    if (await trustedUser(db, user)) {
+    const claimed = await db.prepare("SELECT 1 x FROM entity_claims WHERE eid=? AND user_id=? AND status='verified'").bind(id, user.id).first();
+    if (claimed || (await trustedUser(db, user))) {
       await db.batch([db.prepare("UPDATE entity_rev SET status='old' WHERE eid=? AND status='live'").bind(id), db.prepare("INSERT INTO entity_rev(eid,data,summary,user_id,status,created) VALUES(?,?,?,?,'live',?)").bind(id, data, summary, user.id, t)]);
       await evalBadges(env, user.id); return J({ ok: true, status: "live" });
     }

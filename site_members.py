@@ -54,6 +54,9 @@ def img_tag(kind, x, alt):
     return f'<img src="{esc(u)}" alt="{esc(alt)}" width="112" height="112" loading="lazy" style="float:inline-end;border-radius:{"50%" if kind == "u" else "12px"};object-fit:cover;margin-inline-start:1em">' if u else ""
 
 
+CLAIMED = {}   # profil-handle -> entity id
+
+
 def person_ld(BASE, p, orgs_by_handle):
     pid = f"{purl(BASE, 'en', 'u', p['handle'])}#person"
     n = {"@type": "Person", "@id": pid, "name": p["name"], "url": purl(BASE, "en", "u", p["handle"]), "mainEntityOfPage": {"@id": purl(BASE, "en", "u", p["handle"]) + "#profile"}}
@@ -72,6 +75,8 @@ def person_ld(BASE, p, orgs_by_handle):
     org = p.get("org")
     if org and org["handle"] in orgs_by_handle:
         n["worksFor"] = {"@id": f"{purl(BASE, 'en', 'c', org['handle'])}#org"}
+    elif p.get("company_eid") in ENTS:
+        n["worksFor"] = {"@id": eid_of(BASE, p["company_eid"])}
     elif p.get("company"):
         n["worksFor"] = {"@type": "Organization", "name": p["company"]}
     n["knowsAbout"] = [{"@id": eid_of(BASE, e["e"])} for e in p.get("expertise", []) if e["e"] in ENTS]
@@ -91,6 +96,8 @@ def person_ld(BASE, p, orgs_by_handle):
     if mem:
         n["memberOf"] = mem
     same = [c["url"] for c in p.get("channels", [])] + [x["url"] for x in p.get("programs", []) if x.get("verified") and x.get("url")]
+    if CLAIMED.get(p["handle"]):
+        same.append(eurl(BASE, "en", CLAIMED[p["handle"]]))
     if same:
         n["sameAs"] = same
     cnt = (p.get("counts") or {}); tot = cnt.get("wiki", 0) + cnt.get("entity", 0)
@@ -179,7 +186,7 @@ def build(g, people, orgs, extra=None):
             org = p.get("org")
             facts = []
             if p.get("job") or p.get("company") or org:
-                comp = f'<a href="{purl(BASE, lang, "c", org["handle"])}">{esc(org["name"])}</a>' if org and org["handle"] in ob else esc(p.get("company", ""))
+                comp = f'<a href="{purl(BASE, lang, "c", org["handle"])}">{esc(org["name"])}</a>' if org and org["handle"] in ob else (f'<a href="{eurl(BASE, lang, p["company_eid"])}">{esc(ENTS[p["company_eid"]]["name"])}</a>' if p.get("company_eid") in ENTS else esc(p.get("company", "")))
                 facts.append((s["company"], esc(p.get("job", "")) + (" · " if p.get("job") and comp else "") + comp))
             if p.get("country"):
                 facts.append((s["country"], esc(p["country"])))

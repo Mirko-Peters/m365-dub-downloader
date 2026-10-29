@@ -1,6 +1,6 @@
 // Experten- und Firmenprofile, Programme (MVP/MCT/...), Kanaele mit Feeds, Upvotes, Bestaetigungen
 import { cleanText, rateLimit } from "./util.js";
-import { baseIds } from "./entities.js";
+import { baseIds, validate, trustedUser } from "./entities.js";
 
 export const PROGRAMS = ["mvp", "mct", "rd", "msa", "ms_employee", "partner"];
 export const RELATIONS = ["colleague", "manager", "report", "client", "trainer", "student", "cospeaker", "podcast", "community", "mentor", "other"];
@@ -83,7 +83,8 @@ async function personView(db, uid, viewer) {
   const badges = (await q("SELECT badge FROM user_badges WHERE user_id=?", uid)).map((b) => b.badge);
   const recs = (await q("SELECT r.id,r.relation,r.body,r.created,u.name,(SELECT handle FROM profiles WHERE user_id=r.author_id AND public=1) h FROM recommendations r JOIN users u ON u.id=r.author_id AND u.banned=0 WHERE r.subject_id=? AND r.status='live' ORDER BY r.created DESC LIMIT 30", uid)).map((r) => ({ id: r.id, relation: r.relation, body: r.body, created: r.created, by: { name: r.name, handle: r.h || "" } }));
   const im = await db.prepare("SELECT updated FROM images WHERE kind='u' AND owner_id=?").bind(uid).first();
-  return { type: "u", img: im?.updated || 0, id: uid, handle: p.handle, name: p.name, bio: p.bio, headline: p.headline, about: p.about, company: p.company, job: p.job, country: p.country, public: !!p.public, show_org: !!p.show_org,
+  const pce = (await db.prepare("SELECT eid FROM profile_company WHERE user_id=?").bind(uid).first())?.eid || "";
+  return { type: "u", img: im?.updated || 0, company_eid: pce, id: uid, handle: p.handle, name: p.name, bio: p.bio, headline: p.headline, about: p.about, company: p.company, job: p.job, country: p.country, public: !!p.public, show_org: !!p.show_org,
     expertise: exp.map((e) => ({ ...e, verified: !!e.verified, me: !!e.me })), programs: programs.map((x) => ({ ...x, verified: !!x.verified })), certs, channels, org, contrib, counts, badges, recs,
     items: await itemsOf(db, "i.owner_type='u' AND i.owner_id=?", [uid], viewer, 8) };
 }
@@ -134,6 +135,22 @@ export async function handleProfiles(env, request, url, path, user, J) {
       await db.prepare("INSERT INTO org_sponsor(org_id,open,criteria,updated) VALUES(?,?,?,?) ON CONFLICT(org_id) DO UPDATE SET open=excluded.open,criteria=excluded.criteria,updated=excluded.updated").bind(o.id, b.open ? 1 : 0, JSON.stringify(crit), Math.floor(Date.now() / 1000)).run();
       return J({ ok: true });
     }
+  }
+
+  // ---- Firma als Entitaet anlegen/wiederverwenden ----
+  if (path === "/api/profile/company" && method === "POST") {
+    if (need()) return need();
+    if (!(await rateLimit(db, `co:${user.id}`, 5, 86400))) return J({ error: "rate_limit" }, 429);
+    const b = await body(), name = txt(b.name, 80); if (name.length < 2) return J({ error: "bad_name" }, 400);
+    const id = slug(name).replace(/-+$/g, "") || "firma"; if (id.length < 2) return J({ error: "bad_name" }, 400);
+    const known = await baseIds(env);
+    const row = await db.prepare("SELECT 1 x FROM entity_rev WHERE eid=? AND status IN ('live','pending')").bind(id).first();
+    if (known.has(id) || row) return J({ ok: true, eid: id, existing: true });
+    const web = cleanUrl(b.web, null); if (web === null) return J({ error: "bad_url" }, 400);
+    const v = await validate(env, id, { name, type: "org", desc: { en: `${name} is a company in the Microsoft ecosystem.`, de: `${name} ist ein Unternehmen im Microsoft-Umfeld.` }, web, rel: [] }); if (v.err) return J({ error: v.err }, 400);
+    const st = (await trustedUser(db, user)) ? "live" : "pending";
+    await db.prepare("INSERT INTO entity_rev(eid,data,summary,user_id,status,created) VALUES(?,?,?,?,?,?)").bind(id, JSON.stringify(v.data), "Firma über Profil angelegt", user.id, st, now()).run();
+    return J({ ok: true, eid: id, status: st });
   }
 
   // ---- Empfehlungen ----
@@ -221,6 +238,9 @@ export async function handleProfiles(env, request, url, path, user, J) {
       ON CONFLICT(user_id) DO UPDATE SET public=excluded.public,handle=excluded.handle,headline=excluded.headline,about=excluded.about,company=excluded.company,job=excluded.job,country=excluded.country,show_org=excluded.show_org,updated=excluded.updated`)
       .bind(user.id, isPublic, handle || null, txt(b.headline, 100), long(b.about, 1500), txt(b.company, 80), txt(b.job, 80), txt(b.country, 60), b.show_org === false ? 0 : 1, now()).run();
     await db.prepare("UPDATE users SET bio=? WHERE id=?").bind(txt(b.headline, 100), user.id).run();
+    const ce = String(b.company_eid || "").toLowerCase();
+    if (ce) { if (ID.test(ce) && ((await baseIds(env)).has(ce) || (await db.prepare("SELECT 1 x FROM entity_rev WHERE eid=? AND status IN ('live','pending')").bind(ce).first()))) await db.prepare("INSERT INTO profile_company(user_id,eid) VALUES(?,?) ON CONFLICT(user_id) DO UPDATE SET eid=excluded.eid").bind(user.id, ce).run(); }
+    else await db.prepare("DELETE FROM profile_company WHERE user_id=?").bind(user.id).run();
     await replaceLists(db, "u", user.id, { exp: ex.list, prog: pr.list, chan: ch.list, certs });
     return J({ ok: true });
   }
@@ -363,6 +383,7 @@ export async function handleProfiles(env, request, url, path, user, J) {
 // Konto loeschen: alle Profil-, Firmen- und Entitaetsdaten des Nutzers entfernen bzw. anonymisieren
 export async function deleteUserData(db, id) {
   await db.prepare("DELETE FROM recommendations WHERE author_id=? OR subject_id=?").bind(id, id).run();
+  await db.prepare("DELETE FROM profile_company WHERE user_id=?").bind(id).run();
   await db.prepare("DELETE FROM images WHERE kind='u' AND owner_id=?").bind(id).run();
   const own = (await db.prepare("SELECT org_id FROM org_members WHERE user_id=? AND role='owner'").bind(id).all()).results || [];
   const ops = [];

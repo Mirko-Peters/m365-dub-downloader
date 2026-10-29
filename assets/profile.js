@@ -51,6 +51,7 @@
         h("button", { type: "button", class: "btn", text: RIQ.rm, onclick: function () { api("/api/recommend/" + x.id, { method: "DELETE" }).then(load); } })])])); }); }); }
     load(); return w;
   }
+  var CQ = de ? { hint: "Firmen sind immer Entitäten: Wähle eine bestehende Firma aus der Liste. Gibt es sie noch nicht, wird sie beim Speichern als neue Firmen-Entität angelegt (nach kurzer Prüfung sichtbar).", bad: "Die Firma konnte nicht angelegt werden – bitte den Namen prüfen." } : { hint: "Companies are always entities: pick an existing company from the list. If it does not exist yet, it is created as a new company entity when you save (visible after a short review).", bad: "The company could not be created – please check the name." };
   var uid = 0; function lab(text, el) { var id = "pe" + (++uid); el.id = id; return h("div", {}, [h("label", { for: id, text: text, style: "display:block;margin-top:.5em;font-weight:600" }), el]); }
   var inp = function (max, v) { var e = h("input", { type: "text", maxlength: max || 120 }); e.value = v || ""; return e; };
   var chk = function (text, v) { var c = h("input", { type: "checkbox" }); c.checked = !!v; return { c: c, w: h("label", { style: "display:block;margin:.4em 0" }, [c, " " + text]) }; };
@@ -102,6 +103,12 @@
     if (org) handle.disabled = true;
     var pub = chk(Q.pub, o.public), prog = programsUI(o.programs, true), ex = pickerRows(all, function (x) { return ["product", "platform", "concept", "category"].indexOf(x.type) > -1; }, (o.expertise || []).map(function (x) { return { e: x.e, level: x.level }; }), false, Q.addexp), ch = channelsUI(o.channels);
     var pic = imgUI("o", o.handle, o.img); pic.handle = function () { return o.handle || ""; };
+    var cdl = h("datalist", { id: "cdl" + (++uid) }); all.filter(function (x) { return x.type === "org"; }).forEach(function (x) { cdl.appendChild(h("option", { value: x.name })); }); company.setAttribute("list", cdl.id);
+    var ceid = p.company_eid || "";
+    function resolveCompany() { var v = company.value.trim(); if (!v) { ceid = ""; return Promise.resolve(true); }
+      var hit = all.filter(function (x) { return x.type === "org" && (x.name.toLowerCase() === v.toLowerCase() || (x.aliases || []).some(function (a) { return a.toLowerCase() === v.toLowerCase(); })); })[0];
+      if (hit) { ceid = hit.id; company.value = hit.name; return Promise.resolve(true); }
+      return api("/api/profile/company", { method: "POST", body: { name: v } }).then(function (r) { if (r.s === 200 && r.j.eid) { ceid = r.j.eid; return true; } return false; }); }
     [pub.w, pic, lab(Q.handle, handle), lab(Q.orgname, name), lab(Q.tagline, tag), lab(de ? "Über uns (ohne Links)" : "About us (no links)", about), lab(Q.site, site), lab(Q.country, country), lab(Q.size, size), h("h4", { text: Q.prog }), prog, h("h4", { text: Q.exp }), ex, h("h4", { text: Q.chan }), ch, sponsorUI(function () { return o.handle || ""; })].forEach(function (x) { f.appendChild(x); });
     f.appendChild(h("div", { class: "btns" }, [saveBtn(Q.save, function () {
       var e = ex.get(); if (e === null) { msg.textContent = Q.bad_expertise; return Promise.resolve(null); }
@@ -113,16 +120,16 @@
   Promise.all([api("/api/profile/me"), fetch(X.base + "/entities.json").then(function (r) { return r.json(); }), api("/api/org/mine")]).then(function (a) {
     if (a[0].s !== 200) return; var me = a[0].j, all = (a[1].entities || []), p = me.profile || {}, orgs = (a[2].j.orgs || []);
     var sec = h("section", { class: "ccard" }, [h("h2", { text: Q.h }), h("p", { class: "cmut", text: Q.intro })]), msg = h("p", { class: "wk-msg", role: "status", "aria-live": "polite" });
-    var pub = chk(Q.pub, p.public), handle = inp(30, p.handle || me.suggest), head = inp(100, p.headline), about = h("textarea", { rows: 6, maxlength: 1500 }), company = inp(80, p.company), job = inp(80, p.job), country = inp(60, p.country), so = chk(Q.showorg, p.show_org !== false);
+    var pub = chk(Q.pub, p.public), handle = inp(30, p.handle || me.suggest), head = inp(100, p.headline), about = h("textarea", { rows: 6, maxlength: 1500 }), company = inp(80, p.company_eid ? ((all.filter(function (x) { return x.id === p.company_eid; })[0] || {}).name || p.company) : ""), job = inp(80, p.job), country = inp(60, p.country), so = chk(Q.showorg, p.show_org !== false);
     about.value = p.about || "";
     var prog = programsUI(p.programs, false), ex = pickerRows(all, function (x) { return ["cert", "person", "event", "media"].indexOf(x.type) < 0; }, (p.expertise || []).map(function (x) { return { e: x.e, level: x.level }; }), false, Q.addexp);
     var cert = pickerRows(all, function (x) { return x.type === "cert"; }, (p.certs || []).map(function (x) { return { e: x.e, year: x.year, url: x.url }; }), true, Q.addcert), ch = channelsUI(p.channels);
     var pic = imgUI("u", p.handle, p.img); pic.handle = function () { return p.handle || ""; };
-    [pub.w, pic, lab(Q.handle, handle), lab(Q.headline, head), lab(Q.about, about), lab(Q.company, company), lab(Q.job, job), lab(Q.country, country), so.w, h("h3", { text: Q.prog }), prog, h("h3", { text: Q.exp }), ex, h("h3", { text: Q.certs }), cert, h("h3", { text: Q.chan }), ch].forEach(function (x) { sec.appendChild(x); });
+    [pub.w, pic, lab(Q.handle, handle), lab(Q.headline, head), lab(Q.about, about), lab(Q.company, company), h("p", { class: "cmut", text: CQ.hint }), cdl, lab(Q.job, job), lab(Q.country, country), so.w, h("h3", { text: Q.prog }), prog, h("h3", { text: Q.exp }), ex, h("h3", { text: Q.certs }), cert, h("h3", { text: Q.chan }), ch].forEach(function (x) { sec.appendChild(x); });
     sec.appendChild(h("div", { class: "btns" }, [saveBtn(Q.save, function () {
       var e = ex.get(), c = cert.get(); if (e === null) { msg.textContent = Q.bad_expertise; return Promise.resolve(null); } if (c === null) { msg.textContent = Q.bad_cert; return Promise.resolve(null); }
-      return api("/api/profile/me", { method: "POST", body: { public: pub.c.checked, handle: handle.value.trim().toLowerCase(), headline: head.value, about: about.value, company: company.value, job: job.value, country: country.value, show_org: so.c.checked, programs: prog.get(), expertise: e, certs: c, channels: ch.get() } }).then(function (r) {
-        if (r.s === 200) { p.handle = handle.value.trim().toLowerCase(); msg.textContent = "✓ " + Q.saved + " " + Q.note; } return null; });
+      return resolveCompany().then(function (okc) { if (!okc) { msg.textContent = CQ.bad; return null; } return api("/api/profile/me", { method: "POST", body: { company_eid: ceid, public: pub.c.checked, handle: handle.value.trim().toLowerCase(), headline: head.value, about: about.value, company: company.value, job: job.value, country: country.value, show_org: so.c.checked, programs: prog.get(), expertise: e, certs: c, channels: ch.get() } }).then(function (r) {
+        if (r.s === 200) { p.handle = handle.value.trim().toLowerCase(); msg.textContent = "✓ " + Q.saved + " " + Q.note; } return null; }); });
     }, msg)]));
     sec.appendChild(msg);
     if (p.public && p.handle) sec.appendChild(h("p", {}, [h("a", { href: X.base + (de ? "/de" : "") + "/community/u/" + p.handle + "/", text: Q.open })]));

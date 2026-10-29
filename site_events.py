@@ -5,10 +5,10 @@ from site_entities import eurl, eid_of
 
 S = {"en": dict(events="Events", intro="Conferences, webinars and meetups of the Microsoft community – with their sessions and speakers.", upcoming="Upcoming", past="Past", none="No events yet.",
                 organizer="Organizer", when="When", where="Where", online="Online", onsite="On site", hybrid="Hybrid", free="Free", paid="Paid", topics="Topics", sessions="Sessions", speakers="Speakers", website="Website", tickets="Tickets / register",
-                lang="Language", level="Level", room="Room", track="Track", about="About", create="Add your event", my="Sessions at events", recording="Recording", more="Events", sponsors="Looking for sponsors", nosess="No sessions published yet.", propose="Propose a session"),
+                lang="Language", level="Level", room="Room", track="Track", about="About", create="Add your event", my="Sessions at events", recording="Recording", more="Events", sponsors="Looking for sponsors", nosess="No sessions published yet.", tbc="speaker(s) to be confirmed", propose="Propose a session"),
      "de": dict(events="Events", intro="Konferenzen, Webinare und Meetups der Microsoft-Community – mit Sessions und Speakern.", upcoming="Kommende", past="Vergangene", none="Noch keine Events.",
                 organizer="Veranstalter", when="Wann", where="Wo", online="Online", onsite="Vor Ort", hybrid="Hybrid", free="Kostenlos", paid="Kostenpflichtig", topics="Themen", sessions="Sessions", speakers="Speaker", website="Webseite", tickets="Tickets / Anmeldung",
-                lang="Sprache", level="Level", room="Raum", track="Track", about="Über das Event", create="Event eintragen", my="Sessions bei Events", recording="Aufzeichnung", more="Events", sponsors="Sucht Sponsoren", nosess="Noch keine Sessions veröffentlicht.", propose="Session vorschlagen")}
+                lang="Sprache", level="Level", room="Raum", track="Track", about="Über das Event", create="Event eintragen", my="Sessions bei Events", recording="Aufzeichnung", more="Events", sponsors="Sucht Sponsoren", nosess="Noch keine Sessions veröffentlicht.", tbc="Speaker noch zu bestätigen", propose="Session vorschlagen")}
 MODE_URL = {"online": "OnlineEventAttendanceMode", "onsite": "OfflineEventAttendanceMode", "hybrid": "MixedEventAttendanceMode"}
 
 
@@ -76,7 +76,8 @@ def event_ld(BASE, ev, pb, ob):
             sub["description"] = s["abstract"][:500]
         if s.get("lang"):
             sub["inLanguage"] = s["lang"]
-        perf = [({"@id": f"{BASE}/community/u/{x['h']}/#person"} if x.get("h") in pb else {"@type": "Person", "name": x["n"]}) for x in s.get("speakers", [])]
+        perf = [({"@id": f"{BASE}/community/u/{x['h']}/#person"} if x.get("h") in pb else {"@id": eid_of(BASE, x["e"])} if x.get("e") in ENTS else {"@type": "Person", "name": x["n"]}) for x in s.get("speakers", [])]
+        perf = [x for i, x in enumerate(perf) if x not in perf[:i]]
         if perf:
             sub["performer"] = perf
         st = [{"@id": eid_of(BASE, e)} for e in s.get("topics", []) if e in ENTS]
@@ -135,10 +136,10 @@ def build(g, events, people, orgs):
             tp = "".join(f'<a class="ev-tag" href="{eurl(BASE, lang, e)}">{esc(ENTS[e]["name"])}</a>' for e in ev.get("topics", []) if e in ENTS)
             ss = []
             for se in ev.get("sessions", []):
-                spk = ", ".join((f'<a href="{BASE}{"/de" if lang == "de" else ""}/community/u/{x["h"]}/">{esc(x["n"])}</a>' if x.get("h") in pb else esc(x["n"])) for x in se.get("speakers", []))
+                spk = ", ".join((f'<a href="{BASE}{"/de" if lang == "de" else ""}/community/u/{x["h"]}/">{esc(x["n"])}</a>' if x.get("h") in pb else f'<a href="{eurl(BASE, lang, x["e"])}">{esc(x["n"])}</a>' if x.get("e") in ENTS else esc(x["n"])) for x in se.get("speakers", []))
                 meta = " · ".join(esc(v) for v in [fdate(se["start"], lang) if se.get("start") else "", f'{s["room"]} {se["room"]}' if se.get("room") else "", f'{s["track"]} {se["track"]}' if se.get("track") else "", f'{s["level"]} {se["level"]}' if se.get("level") else "", se.get("lang", "")] if v)
                 st = "".join(f'<a class="ev-tag" href="{eurl(BASE, lang, e)}">{esc(ENTS[e]["name"])}</a>' for e in se.get("topics", []) if e in ENTS)
-                ss.append(f'<div class="ev-s"><h3>{esc(se["title"])}</h3><p class="mut">{meta}{" · " if meta and spk else ""}{spk}</p>' + (f'<p style="white-space:pre-line">{esc(se["abstract"])}</p>' if se.get("abstract") else "") + st
+                ss.append(f'<div class="ev-s"><h3>{esc(se["title"])}</h3><p class="mut">{meta}{" · " if meta and spk else ""}{spk}{(" · " + str(se["speakers_open"]) + " " + s["tbc"]) if se.get("speakers_open") else ""}</p>' + (f'<p style="white-space:pre-line">{esc(se["abstract"])}</p>' if se.get("abstract") else "") + st
                           + (f'<p><a href="{esc(se["recording_url"])}" rel="nofollow noopener" target="_blank">{esc(s["recording"])}</a></p>' if se.get("recording_url") else "") + "</div>")
             b = shell(lang, f'<nav aria-label="breadcrumb"><a href="{croot}events/">{esc(s["events"])}</a></nav><h1>{esc(ev["title"])}</h1><p style="font-size:1.1em">{esc(ev.get("summary", ""))}</p>{ft}<p>{btn}</p>'
                       + (f'<h2>{esc(s["about"])}</h2><p style="white-space:pre-line">{esc(ev["about"])}</p>' if ev.get("about") else "") + (f'<h2>{esc(s["topics"])}</h2><p>{tp}</p>' if tp else "")

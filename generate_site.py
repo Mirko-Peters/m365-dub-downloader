@@ -1055,6 +1055,8 @@ def build():
     def _ep_find(e):
         rx = [re.compile(r"(?<![\w-])" + re.escape(n) + r"(?![\w-])", re.I) for n in LRN.ent_names(e)]
         return [it for it in by_lang.get("de", []) if any(r.search(it["e"]["title"] + " " + (it["e"].get("tags") or "")) for r in rx)][:8] if rx else []
+    _cl = (LRN._fetch_json(f"{COMMUNITY_API}/api/entity/claims") or {}).get("claims", []) if hasattr(LRN, "_fetch_json") else []
+    ENT.CLAIMS.update({c["eid"]: c["handle"] for c in _cl}); MEM.CLAIMED.update({c["handle"]: c["eid"] for c in _cl})
     ENT.build(_ctx, lambda lang: LRN.gloss_links(lang, BASE), MEM.experts_index(_people, _orgs), _ep_find)
     _events = EVT.fetch_events(COMMUNITY_API)
     MEM.build(_ctx, _people, _orgs, extra={l: EVT.blocks(BASE, _events, l) for l in ("en", "de")})

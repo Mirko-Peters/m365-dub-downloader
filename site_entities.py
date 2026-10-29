@@ -13,6 +13,9 @@ S = {"en": dict(entities="Microsoft ecosystem entity database", intro="Products,
      "de": dict(entities="Entitätsdatenbank zum Microsoft-Ökosystem", intro="Produkte, Plattformen, Konzepte, Zertifizierungen und Organisationen rund um Microsoft – mit Beziehungen, von der Community beschrieben und als Schema.org-Daten veröffentlicht.", new="Neues Thema anlegen", all="Alle", facts="Fakten", website="Webseite", docs="Dokumentation", wikipedia="Wikipedia", wikidata="Wikidata", type="Typ", aka="Auch bekannt als", experts="Experten und Firmen zu diesem Thema", noexperts="Dieses Thema hat noch niemand im Profil angegeben. Trag es in deinem Profil ein.", eps="Folgen zu {t}", export="Datenexport", edit_e="Eigenschaften bearbeiten", glossary="Glossar", count="{n} Einträge", up="Zuletzt bearbeitet")}
 
 
+CLAIMS = {}   # eid -> Profil-Handle (uebernommene Entitaeten)
+
+
 def eurl(BASE, lang, i):
     return f"{BASE}/entity/{i}/" if lang == "en" else f"{BASE}/de/entity/{i}/"
 
@@ -40,6 +43,8 @@ def ent_ld(BASE, e, lang, glossary_set=None):
             rel.setdefault(p, []).append(to)
     same = [u for u in (e.get("web"), e.get("wikipedia"), e.get("docs"), f"https://www.wikidata.org/wiki/{e['wikidata']}" if e.get("wikidata") else "") if u]
     same += [u for u in e.get("same_as", []) if u]
+    if CLAIMS.get(i):
+        same.append(f"{BASE}/community/u/{CLAIMS[i]}/")
     n = {"@type": {"product": "SoftwareApplication", "platform": "SoftwareApplication", "concept": "DefinedTerm", "category": "DefinedTerm", "org": "Organization", "person": "Person", "cert": "EducationalOccupationalCredential",
                    "event": "Event", "media": "PodcastSeries"}[t], "@id": eid_of(BASE, i), "name": e["name"], "url": eurl(BASE, "en", i), "description": d}
     if e.get("aliases"):
@@ -90,7 +95,16 @@ def ent_ld(BASE, e, lang, glossary_set=None):
     return n
 
 
+def claim_html(eid, lang):
+    h = CLAIMS.get(eid)
+    if not h:
+        return ""
+    return f'<p><a href="{BASE_}{"/de" if lang == "de" else ""}/community/u/{h}/">{"Profil auf M365.FM (gepflegt von der Person)" if lang == "de" else "Profile on M365.FM (maintained by the person)"}</a></p>'
+
+
 def build(g, wiki_links, experts_by_ent, ep_find):
+    global BASE_
+    BASE_ = g["BASE"]
     """g: ctx wie bei build_learn. experts_by_ent: eid -> [{kind,handle,name,headline,verified,level,endorsed}]; ep_find(entity)->[episodes]."""
     BASE, write, page, header, footer, footer_en, LANGS = g["BASE"], g["write"], g["page"], g["header"], g["footer"], g["footer_en"], g["LANGS"]
     sitemap, TODAY, url_of = g["sitemap"], g["TODAY"], g["url_of"]
@@ -165,7 +179,7 @@ def build(g, wiki_links, experts_by_ent, ep_find):
             data_attr = esc(json.dumps({k: e.get(k) for k in ("id", "name", "type", "aliases", "desc", "web", "docs", "wikipedia", "wikidata", "rel")}, ensure_ascii=False))
             edit = f'<div id="en-edit" data-e="{data_attr}"></div>'
             wb = wiki_block(lang, e["id"], api, BASE, stat.get(e["id"]), wiki_links(lang))
-            b = shell(lang, f'<nav aria-label="breadcrumb"><a href="{root}">{esc(s["entities"])}</a></nav><h1>{esc(e["name"])}</h1><p class="mut">{esc(TL[e["type"]][li])}</p><p style="font-size:1.1em">{esc(d)}</p>{ft}{gloss}'
+            b = shell(lang, f'<nav aria-label="breadcrumb"><a href="{root}">{esc(s["entities"])}</a></nav><h1>{esc(e["name"])}</h1><p class="mut">{esc(TL[e["type"]][li])}</p><p style="font-size:1.1em">{esc(d)}</p>{claim_html(e["id"], lang)}{ft}{gloss}'
                           f'<div class="en-rel">{rb}</div>{eb}{wb}<h2>{esc(s["experts"])}</h2>{ehtml}{edit}'
                           f'<script>window.M365E={{api:"{api}",lang:"{lang}",base:"{BASE}",s:{json.dumps({k: s[k] for k in ("edit_e",)}, ensure_ascii=False)}}}</script><script defer src="{BASE}/assets/entity.js"></script>')
             node = ent_ld(BASE, e, lang, gl_ids)
