@@ -41,6 +41,16 @@
     w.appendChild(h("div", { class: "btns" }, [h("button", { type: "button", class: "btn", text: SQ.save, onclick: function () { var hd = getHandle(); if (!hd) { msg.textContent = SQ.first; return; } api("/api/org/sponsor/" + hd, { method: "POST", body: { open: on.checked, criteria: { topics: tp.value, format: fm.value, min_audience: +au.value || 0, regions: rg.value, budget: bd.value, notes: nt.value } } }).then(function (r) { msg.textContent = r.s === 200 ? SQ.saved : SQ.first; }); } }), msg]));
     return w;
   }
+  var RIQ = de ? { t: "Empfehlungen für dich", none: "Noch keine Empfehlungen.", ok: "Freigeben", no: "Ablehnen", rm: "Entfernen", pend: "wartet auf Freigabe", live: "veröffentlicht" } : { t: "Recommendations for you", none: "No recommendations yet.", ok: "Approve", no: "Reject", rm: "Remove", pend: "awaiting approval", live: "published" };
+  function recInbox() {
+    var w = h("section", { class: "ccard" }, [h("h2", { text: RIQ.t })]);
+    function load() { api("/api/recommend/inbox").then(function (r) { while (w.children.length > 1) w.removeChild(w.lastChild); var l = (r.j && r.j.items) || []; if (!l.length) w.appendChild(h("p", { class: "cmut", text: RIQ.none }));
+      l.forEach(function (x) { var pend = x.status === "pending"; w.appendChild(h("div", { class: "ev-s" }, [h("b", { text: x.name }), h("span", { class: "cmut", text: " · " + x.relation + " · " + (pend ? RIQ.pend : RIQ.live) }), h("p", { text: x.body, style: "white-space:pre-line" }), h("div", { class: "btns" }, pend ? [
+        h("button", { type: "button", class: "btn main", text: RIQ.ok, onclick: function () { api("/api/recommend/" + x.id, { method: "POST", body: { ok: true } }).then(load); } }),
+        h("button", { type: "button", class: "btn", text: RIQ.no, onclick: function () { api("/api/recommend/" + x.id, { method: "POST", body: { ok: false } }).then(load); } })] : [
+        h("button", { type: "button", class: "btn", text: RIQ.rm, onclick: function () { api("/api/recommend/" + x.id, { method: "DELETE" }).then(load); } })])])); }); }); }
+    load(); return w;
+  }
   var uid = 0; function lab(text, el) { var id = "pe" + (++uid); el.id = id; return h("div", {}, [h("label", { for: id, text: text, style: "display:block;margin-top:.5em;font-weight:600" }), el]); }
   var inp = function (max, v) { var e = h("input", { type: "text", maxlength: max || 120 }); e.value = v || ""; return e; };
   var chk = function (text, v) { var c = h("input", { type: "checkbox" }); c.checked = !!v; return { c: c, w: h("label", { style: "display:block;margin:.4em 0" }, [c, " " + text]) }; };
@@ -116,7 +126,7 @@
     }, msg)]));
     sec.appendChild(msg);
     if (p.public && p.handle) sec.appendChild(h("p", {}, [h("a", { href: X.base + (de ? "/de" : "") + "/community/u/" + p.handle + "/", text: Q.open })]));
-    root.appendChild(sec);
+    root.appendChild(sec); if (p.handle) root.appendChild(recInbox());
     // ---- Firmen ----
     var os = h("section", { class: "ccard" }, [h("h2", { text: Q.orgs })]);
     orgs.forEach(function (o) {

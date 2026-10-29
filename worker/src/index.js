@@ -215,7 +215,7 @@ async function api(env, request, url, path) {
 
   if (path.startsWith("/api/entity") || path.startsWith("/api/admin/entity")) { const e = await handleEntity(env, request, url, path, user, J); if (e) return e; }
   if (/^\/api\/events?(\/|$)/.test(path)) { const p = await handleEvents(env, request, url, path, user, J); if (p) return p; }
-  if (/^\/api\/(profile|profiles|endorse|vote|feed|org|orgs|img)(\/|$)/.test(path) || path === "/api/admin/verify" || path === "/api/admin/feed-hide") { const p = await handleProfiles(env, request, url, path, user, J); if (p) return p; }
+  if (/^\/api\/(profile|profiles|endorse|vote|feed|org|orgs|img|recommend)(\/|$)/.test(path) || path === "/api/admin/verify" || path === "/api/admin/feed-hide") { const p = await handleProfiles(env, request, url, path, user, J); if (p) return p; }
   if (path === "/api/wiki" || path.startsWith("/api/wiki/") || path.startsWith("/api/admin/wiki")) { const w = await handleWiki(env, request, url, path, user, J); if (w) return w; }
 
   if (path === "/api/curator" && method === "GET") {

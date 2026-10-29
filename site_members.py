@@ -37,6 +37,10 @@ def purl(BASE, lang, kind, h):
     return f"{BASE}{'/de' if lang == 'de' else ''}/community/{kind}/{h}/"
 
 
+REL = {"colleague": ("Colleague", "Kollege/Kollegin"), "manager": ("Manager", "Führungskraft"), "report": ("Direct report", "Mitarbeiter:in"), "client": ("Client", "Kunde/Kundin"), "trainer": ("Trainer", "Trainer:in"),
+       "student": ("Student / participant", "Teilnehmer:in / Schüler:in"), "cospeaker": ("Co-speaker / event", "Co-Speaker / Event"), "podcast": ("Podcast guest or host", "Podcast-Gast oder -Host"),
+       "community": ("Community", "Community"), "mentor": ("Mentor / mentee", "Mentor:in / Mentee"), "other": ("Other", "Sonstiges")}
+RS = {"en": dict(recs="Recommendations", relof="{n} · {rel}", write="Write a recommendation"), "de": dict(recs="Empfehlungen", relof="{n} · {rel}", write="Empfehlung schreiben")}
 import os as _os
 _API = _os.environ.get("COMMUNITY_API") or "https://api-dub.m365.fm"
 
@@ -55,6 +59,8 @@ def person_ld(BASE, p, orgs_by_handle):
     n = {"@type": "Person", "@id": pid, "name": p["name"], "url": purl(BASE, "en", "u", p["handle"]), "mainEntityOfPage": {"@id": purl(BASE, "en", "u", p["handle"]) + "#profile"}}
     if img_url("u", p):
         n["image"] = img_url("u", p)
+    if p.get("recs"):
+        n["review"] = [{"@type": "Review", "reviewBody": r["body"][:600], "author": {"@type": "Person", "name": r["by"]["name"], **({"url": purl(BASE, "en", "u", r["by"]["handle"])} if r["by"].get("handle") else {})}, "datePublished": datetime.fromtimestamp(r["created"], timezone.utc).strftime("%Y-%m-%d")} for r in p["recs"][:10]]
     if p.get("headline"):
         n["description"] = p["headline"]
     if p.get("about"):
@@ -128,6 +134,13 @@ def build(g, people, orgs, extra=None):
            '.mb-card[hidden]{display:none}.mb-facts{border-collapse:collapse}.mb-facts th{text-align:start;padding:.3em .8em .3em 0;vertical-align:top}.pf-item{display:flex;gap:.8em;align-items:flex-start;padding:.5em 0;border-bottom:1px solid var(--bd);list-style:none}.pf-item .vt{font:inherit;min-width:3.2rem;min-height:2.5rem;border:1px solid var(--bd);border-radius:.5em;background:var(--card);color:var(--fg);cursor:pointer}.pf-item .vt[aria-pressed=true]{background:var(--ac);color:var(--onac);border-color:var(--ac)}.pf-list{padding:0}</style>')
     live_js = f'<script>window.M365P={{api:"{api}",base:"{BASE}"}}</script><script defer src="{BASE}/assets/pfpub.js"></script>'
 
+    def rec_html(p, lang, li, pb):
+        if not p.get("recs"):
+            return ""
+        items = "".join('<li class="mb-card"><span class="mut">' + (f'<a href="{purl(BASE, lang, "u", r["by"]["handle"])}">{esc(r["by"]["name"])}</a>' if r["by"].get("handle") in pb else esc(r["by"]["name"])) + " · " + esc(REL.get(r["relation"], REL["other"])[li])
+                        + "</span><br><span style=\"white-space:pre-line\">" + esc(r["body"]) + "</span></li>" for r in p["recs"])
+        return f'<h2>{esc(RS[lang]["recs"])}</h2><ul class="mb-list">{items}</ul>'
+
     def tags_of_p(x, li, s):
         return "".join(f'<span class="mb-tag{" ok" if p.get("verified") else ""}">{esc(PROG[p["p"]][li])}{" ✔" if p.get("verified") else ""}</span>' for p in x.get("programs", []))
 
@@ -177,7 +190,7 @@ def build(g, people, orgs, extra=None):
                           + (f'<h2>{esc(s["about"])}</h2><p style="white-space:pre-line">{esc(p["about"])}</p>' if p.get("about") else "")
                           + (f'<h2>{esc(s["expertise"])}</h2>{exp_ul(p, lang, li, s)}' if p.get("expertise") else "") + (f'<h2>{esc(s["certs"])}</h2>{certs}' if certs else "")
                           + (f'<h2>{esc(s["latest"])}</h2>{items_ul(p)}' if p.get("items") else "") + (f'<h2>{esc(s["channels"])}</h2>{chan_ul(p)}' if p.get("channels") else "")
-                          + (f'<h2>{esc(s["contrib"])}</h2>{contrib}' if contrib else "") + ((extra or {}).get(lang, {}).get("u", {}).get(p["handle"], "")) + live_js + css)
+                          + rec_html(p, lang, li, pb) + (f'<h2>{esc(s["contrib"])}</h2>{contrib}' if contrib else "") + ((extra or {}).get(lang, {}).get("u", {}).get(p["handle"], "")) + live_js + css)
             node = person_ld(BASE, p, ob)
             ld = [{"@context": "https://schema.org", "@type": "ProfilePage", "@id": purl(BASE, "en", "u", p["handle"]) + "#profile", "url": u, "name": p["name"], "inLanguage": lang, "dateModified": TODAY, "mainEntity": node}]
             write(f"{'de/' if lang == 'de' else ''}community/u/{p['handle']}/index.html", page(lang, f'{p["name"]} – {p.get("headline") or s["members"]} | M365.FM', (p.get("headline") or p.get("about") or "")[:155], u, b, None, ld, og_type="profile", extra_head=LCSS, noindex=noidx))

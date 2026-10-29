@@ -258,3 +258,16 @@ CREATE TABLE IF NOT EXISTS event_sessions (
   created INTEGER NOT NULL
 );
 CREATE INDEX IF NOT EXISTS idx_es_event ON event_sessions(event_id);
+
+-- Empfehlungen (Recommendations) zwischen Mitgliedern; erst sichtbar, wenn die empfohlene Person freigibt
+CREATE TABLE IF NOT EXISTS recommendations (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  author_id INTEGER NOT NULL,
+  subject_id INTEGER NOT NULL,
+  relation TEXT NOT NULL,
+  body TEXT NOT NULL,
+  status TEXT NOT NULL DEFAULT 'pending',   -- pending | live
+  created INTEGER NOT NULL,
+  UNIQUE (author_id, subject_id)
+);
+CREATE INDEX IF NOT EXISTS idx_rec_subject ON recommendations(subject_id, status);

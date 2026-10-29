@@ -36,6 +36,16 @@
           });
           sp.appendChild(document.createTextNode(" · ")); sp.appendChild(b);
         });
+
+        if (!d.mine) {
+          var RL = de ? { colleague: "Kollege/Kollegin", manager: "Führungskraft", report: "Mitarbeiter:in", client: "Kunde/Kundin", trainer: "Trainer:in", student: "Teilnehmer:in / Schüler:in", cospeaker: "Co-Speaker / Event", podcast: "Podcast-Gast oder -Host", community: "Community", mentor: "Mentor:in / Mentee", other: "Sonstiges" } : { colleague: "Colleague", manager: "Manager", report: "Direct report", client: "Client", trainer: "Trainer", student: "Student / participant", cospeaker: "Co-speaker / event", podcast: "Podcast guest or host", community: "Community", mentor: "Mentor / mentee", other: "Other" };
+          var RT = de ? { open: "Empfehlung schreiben", rel: "In welcher Beziehung stehst du zu dieser Person?", body: "Deine Empfehlung (mind. 40 Zeichen, ohne Links)", send: "Absenden", sent: "✓ Danke! Die Empfehlung erscheint, sobald die Person sie freigibt.", err: "Das hat nicht geklappt – bitte Eingaben prüfen.", hint: "Empfehlungen werden mit deinem Anzeigenamen veröffentlicht, nachdem die empfohlene Person sie freigegeben hat." } : { open: "Write a recommendation", rel: "How do you know this person?", body: "Your recommendation (at least 40 characters, no links)", send: "Send", sent: "✓ Thanks! The recommendation appears once the person approves it.", err: "That did not work – please check your input.", hint: "Recommendations are published with your display name after the recommended person approves them." };
+          var det = h("details", { class: "wk-edit" }, [h("summary", { text: RT.open })]), rsel = h("select", { "aria-label": RT.rel }), ta = h("textarea", { rows: 5, maxlength: 1200, "aria-label": RT.body, placeholder: RT.body }), rm = h("p", { class: "wk-msg", role: "status", "aria-live": "polite" });
+          Object.keys(RL).forEach(function (k) { rsel.appendChild(h("option", { value: k, text: RL[k] })); });
+          det.appendChild(h("div", { class: "wk-form" }, [h("label", { text: RT.rel }), rsel, h("label", { text: RT.body }), ta, h("p", { class: "cmut", text: RT.hint }), h("div", { class: "btns" }, [h("button", { type: "button", class: "btn main", text: RT.send, onclick: function () {
+            api("/api/recommend", { method: "POST", body: { handle: handle, relation: rsel.value, body: ta.value } }).then(function (x) { if (x.s === 401) { location.href = home; return; } rm.textContent = x.s === 200 ? RT.sent : RT.err; if (x.s === 200) ta.value = ""; }); } }), rm])]));
+          var mn = document.querySelector("main"); if (mn) mn.appendChild(det);
+        }
       } else {
         var host = document.querySelector("main h1"); if (host) {
           var jb = h("button", { type: "button", class: "btn", text: T.join }); jb.addEventListener("click", function () { api("/api/org/" + handle + "/join", { method: "POST" }).then(function (x) { if (x.s === 401) location.href = home; else if (x.s === 200) { jb.textContent = T.joined; jb.disabled = true; } }); });

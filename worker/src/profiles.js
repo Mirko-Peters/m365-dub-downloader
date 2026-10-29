@@ -3,6 +3,7 @@ import { cleanText, rateLimit } from "./util.js";
 import { baseIds } from "./entities.js";
 
 export const PROGRAMS = ["mvp", "mct", "rd", "msa", "ms_employee", "partner"];
+export const RELATIONS = ["colleague", "manager", "report", "client", "trainer", "student", "cospeaker", "podcast", "community", "mentor", "other"];
 export const KINDS = ["linkedin", "github", "youtube", "x", "mastodon", "bluesky", "twitch", "blog", "podcast", "newsletter", "website", "other"];
 const KIND_HOST = { linkedin: /(^|\.)linkedin\.com$/, github: /(^|\.)github\.com$/, youtube: /(^|\.)(youtube\.com|youtu\.be)$/, x: /(^|\.)(x\.com|twitter\.com)$/, twitch: /(^|\.)twitch\.tv$/, bluesky: /(^|\.)bsky\.app$/ };
 const HANDLE = /^[a-z0-9][a-z0-9-]{2,29}$/, ID = /^[a-z0-9-]{2,48}$/;
@@ -80,9 +81,10 @@ async function personView(db, uid, viewer) {
     ...(await q("SELECT 'entity' k,eid t,'' l,summary s,created c FROM entity_rev WHERE user_id=? AND status IN ('live','old') ORDER BY created DESC LIMIT 15", uid))].sort((a, b) => b.c - a.c).slice(0, 15);
   const counts = { wiki: (await db.prepare("SELECT COUNT(*) n FROM wiki_rev WHERE user_id=? AND status IN ('live','old')").bind(uid).first()).n, entity: (await db.prepare("SELECT COUNT(*) n FROM entity_rev WHERE user_id=? AND status IN ('live','old')").bind(uid).first()).n };
   const badges = (await q("SELECT badge FROM user_badges WHERE user_id=?", uid)).map((b) => b.badge);
+  const recs = (await q("SELECT r.id,r.relation,r.body,r.created,u.name,(SELECT handle FROM profiles WHERE user_id=r.author_id AND public=1) h FROM recommendations r JOIN users u ON u.id=r.author_id AND u.banned=0 WHERE r.subject_id=? AND r.status='live' ORDER BY r.created DESC LIMIT 30", uid)).map((r) => ({ id: r.id, relation: r.relation, body: r.body, created: r.created, by: { name: r.name, handle: r.h || "" } }));
   const im = await db.prepare("SELECT updated FROM images WHERE kind='u' AND owner_id=?").bind(uid).first();
   return { type: "u", img: im?.updated || 0, id: uid, handle: p.handle, name: p.name, bio: p.bio, headline: p.headline, about: p.about, company: p.company, job: p.job, country: p.country, public: !!p.public, show_org: !!p.show_org,
-    expertise: exp.map((e) => ({ ...e, verified: !!e.verified, me: !!e.me })), programs: programs.map((x) => ({ ...x, verified: !!x.verified })), certs, channels, org, contrib, counts, badges,
+    expertise: exp.map((e) => ({ ...e, verified: !!e.verified, me: !!e.me })), programs: programs.map((x) => ({ ...x, verified: !!x.verified })), certs, channels, org, contrib, counts, badges, recs,
     items: await itemsOf(db, "i.owner_type='u' AND i.owner_id=?", [uid], viewer, 8) };
 }
 async function orgView(db, oid, viewer) {
@@ -132,6 +134,32 @@ export async function handleProfiles(env, request, url, path, user, J) {
       await db.prepare("INSERT INTO org_sponsor(org_id,open,criteria,updated) VALUES(?,?,?,?) ON CONFLICT(org_id) DO UPDATE SET open=excluded.open,criteria=excluded.criteria,updated=excluded.updated").bind(o.id, b.open ? 1 : 0, JSON.stringify(crit), Math.floor(Date.now() / 1000)).run();
       return J({ ok: true });
     }
+  }
+
+  // ---- Empfehlungen ----
+  if (path === "/api/recommend" && method === "POST") {
+    if (need()) return need();
+    if (!(await rateLimit(db, `rec:${user.id}`, 10, 86400))) return J({ error: "rate_limit" }, 429);
+    const b = await body(), handle = String(b.handle || "").toLowerCase();
+    const t = await db.prepare("SELECT p.user_id FROM profiles p JOIN users u ON u.id=p.user_id AND u.banned=0 WHERE p.handle=? AND p.public=1").bind(handle).first();
+    if (!t) return J({ error: "not_found" }, 404);
+    if (t.user_id === user.id) return J({ error: "self" }, 400);
+    if (!RELATIONS.includes(b.relation)) return J({ error: "bad_relation" }, 400);
+    const text = long(b.body, 1200); if (text.length < 40) return J({ error: "too_short" }, 400);
+    await db.prepare("INSERT INTO recommendations(author_id,subject_id,relation,body,status,created) VALUES(?,?,?,?,'pending',?) ON CONFLICT(author_id,subject_id) DO UPDATE SET relation=excluded.relation,body=excluded.body,status='pending',created=excluded.created").bind(user.id, t.user_id, b.relation, text, now()).run();
+    return J({ ok: true, status: "pending" });
+  }
+  if (path === "/api/recommend/inbox" && method === "GET") {
+    if (need()) return need();
+    const rows = (await db.prepare("SELECT r.id,r.relation,r.body,r.status,r.created,u.name FROM recommendations r JOIN users u ON u.id=r.author_id WHERE r.subject_id=? ORDER BY r.status='pending' DESC, r.created DESC LIMIT 100").bind(user.id).all()).results || [];
+    return J({ items: rows });
+  }
+  if ((m = path.match(/^\/api\/recommend\/(\d+)$/))) {
+    if (need()) return need();
+    const r = await db.prepare("SELECT * FROM recommendations WHERE id=?").bind(+m[1]).first(); if (!r) return J({ error: "not_found" }, 404);
+    if (method === "POST" && r.subject_id === user.id) { const b = await body(); if (b.ok) await db.prepare("UPDATE recommendations SET status='live' WHERE id=?").bind(r.id).run(); else await db.prepare("DELETE FROM recommendations WHERE id=?").bind(r.id).run(); return J({ ok: true }); }
+    if (method === "DELETE" && (r.author_id === user.id || r.subject_id === user.id || user.admin)) { await db.prepare("DELETE FROM recommendations WHERE id=?").bind(r.id).run(); return J({ ok: true }); }
+    return J({ error: "forbidden" }, 403);
   }
 
   // ---- Bilder (Profilbild / Firmenlogo) ----
@@ -334,6 +362,7 @@ export async function handleProfiles(env, request, url, path, user, J) {
 
 // Konto loeschen: alle Profil-, Firmen- und Entitaetsdaten des Nutzers entfernen bzw. anonymisieren
 export async function deleteUserData(db, id) {
+  await db.prepare("DELETE FROM recommendations WHERE author_id=? OR subject_id=?").bind(id, id).run();
   await db.prepare("DELETE FROM images WHERE kind='u' AND owner_id=?").bind(id).run();
   const own = (await db.prepare("SELECT org_id FROM org_members WHERE user_id=? AND role='owner'").bind(id).all()).results || [];
   const ops = [];
