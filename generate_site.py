@@ -529,12 +529,39 @@ def header(lang, switch):
     return site_header(home, home, menu, switch, con_bar(lang))
 
 
+_AST = {}
+for _f in ("a11y_statement_en.json", "a11y_statement_i18n.json"):
+    if (ROOT / "data" / _f).exists():
+        for _k, _v in json.loads((ROOT / "data" / _f).read_text("utf-8")).items():
+            _AST.setdefault(_k, {}).update(_v)
+
+
+def ast_url(lang):
+    return f"{BASE}/accessibility/" if lang == "en" or lang not in LANGS else f"{BASE}/{lang}/accessibility/"
+
+
+def ast_label(lang):
+    return (_AST.get(lang) or _AST.get("en") or {}).get("title", "Accessibility")
+
+
+def ast_body(lang):
+    A = dict(_AST.get("en", {}))
+    A.update(_AST.get(lang, {}))
+    mail = '<a href="mailto:mirko.peters@m365.fm">mirko.peters@m365.fm</a>'
+    li = lambda keys: "<ul class=\"points\">" + "".join(f"<li><span>{esc(A[k])}</span></li>" for k in keys) + "</ul>"
+    return (f'<h1>{esc(A["title"])}</h1><p class="lede">{esc(A["intro"])}</p>'
+            f'<h2>{esc(A["status_h"])}</h2><p>{esc(A["status_p"])}</p>'
+            f'<h2>{esc(A["done_h"])}</h2>{li(["d1", "d2", "d3", "d4", "d5", "d6"])}'
+            f'<h2>{esc(A["limits_h"])}</h2>{li(["l1", "l2", "l3", "l4"])}'
+            f'<h2>{esc(A["contact_h"])}</h2><p>{esc(A["contact_p"]).replace("{MAIL}", mail)}</p><p class="mut">{esc(A["date_p"])}</p>')
+
+
 def footer(lang):
     ui = UI.get(lang)
     about = ui[5] if ui else "About Mirko Peters"
     return (f'<footer><div class="wrap"><a href="{about_url(lang)}">{esc(about)}</a><a href="https://www.m365.fm">m365.fm</a>'
             f'<a href="https://m365con.net">M365Con</a><a class="soc" href="{LINKEDIN}" rel="me" style="--bc:#0A66C2">{brand_icon("LinkedIn")}<span>LinkedIn</span></a><a class="soc" href="{YT_CHANNEL}" style="--bc:#FF0000">{brand_icon("YouTube")}<span>YouTube</span></a><a href="{MVP}" rel="me">Microsoft MVP</a>'
-            f'<a href="{BASE}/impressum/" rel="nofollow">Impressum</a><a href="{BASE}/legal/" rel="nofollow">Legal notice</a>'
+            f'<a href="{ast_url(lang)}">{esc(ast_label(lang))}</a><a href="{BASE}/impressum/" rel="nofollow">Impressum</a><a href="{BASE}/legal/" rel="nofollow">Legal notice</a>'
             f'<a href="{BASE}/datenschutz/" rel="nofollow">Datenschutz</a><a href="{BASE}/privacy/" rel="nofollow">Privacy</a>'
             f'<div style="margin-top:10px">© {date.today().year} Mirko Peters · M365.FM</div></div></footer>')
 
@@ -916,6 +943,16 @@ def build():
     for path, fn, lg, ttl in (("impressum", SL.impressum_de, "de", "Impressum"), ("legal", SL.impressum_en, "en", "Legal notice"),
                               ("datenschutz", SL.privacy_de, "de", "Datenschutz"), ("privacy", SL.privacy_en, "en", "Privacy policy")):
         write(f"{path}/index.html", page(lg, f"{ttl} – M365.FM", ttl, f"{BASE}/{path}/", f"{header(lg, '')}<main class=\"wrap\" style=\"max-width:46em\">{fn()}</main>{footer(lg)}", og_type="website", noindex=True))
+
+    # Barrierefreiheitserklaerung je Sprache
+    for lg in ["en"] + list(active):
+        if lg not in _AST and lg != "en":
+            continue
+        u = ast_url(lg)
+        alts_ast = {x: ast_url(x) for x in active if x in _AST}
+        write(("accessibility" if lg == "en" else f"{lg}/accessibility") + "/index.html", page(lg, ast_label(lg) + " – M365.FM", (_AST.get(lg) or _AST["en"]).get("meta", ""), u,
+              f'{header(lg, "")}<main class="wrap" style="max-width:46em">{ast_body(lg)}</main>{footer(lg)}', alts_ast or None, [], xdefault=ast_url("en"), og_type="website", extra_head=f'<link rel="alternate" hreflang="en" href="{ast_url("en")}">\n'))
+        sitemap.append((u, TODAY, alts_ast or None))
 
     # Community-Seite je Sprache (noindex) + Service Worker fuer Web-Push
     for l in active:
