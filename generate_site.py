@@ -363,7 +363,10 @@ def footer(lang):
     ui = UI.get(lang)
     about = ui[5] if ui else "About Mirko Peters"
     return (f'<footer><div class="wrap"><a href="{BASE}/about/mirko-peters/">{esc(about)}</a><a href="https://www.m365.fm">m365.fm</a>'
-            f'<a href="https://m365con.net">M365Con</a><a href="{LINKEDIN}" rel="me">LinkedIn</a><a href="{YT_CHANNEL}">YouTube</a></div></footer>')
+            f'<a href="https://m365con.net">M365Con</a><a href="{LINKEDIN}" rel="me">LinkedIn</a><a href="{YT_CHANNEL}">YouTube</a>'
+            f'<a href="{BASE}/impressum/" rel="nofollow">Impressum</a><a href="{BASE}/legal/" rel="nofollow">Legal notice</a>'
+            f'<a href="{BASE}/datenschutz/" rel="nofollow">Datenschutz</a><a href="{BASE}/privacy/" rel="nofollow">Privacy</a>'
+            f'<div style="margin-top:10px">© {date.today().year} Mirko Peters · M365.FM</div></div></footer>')
 
 
 def author_box(lang):
@@ -667,6 +670,12 @@ def build():
           "AI-dubbed podcast episodes about Microsoft 365, Copilot, Azure and Power Platform by Microsoft MVP Mirko Peters – in German, Spanish, French, Japanese and more.",
           f"{BASE}/", root_body, alts_home, [person_ld(), org_ld(), event_ld(), faq_ld("en"), {"@context": "https://schema.org", "@type": "WebSite", "@id": f"{BASE}/#website", "name": "M365.FM international", "url": f"{BASE}/", "inLanguage": [LANGS[x][1] for x in active], "publisher": {"@id": f"{BASE}/#org"}, "author": {"@id": f"{BASE}/about/mirko-peters/#person"}}], og_type="website"))
     sitemap.append((f"{BASE}/", TODAY, None))
+
+    # Rechtliche Seiten (noindex)
+    import site_legal as SL
+    for path, fn, lg, ttl in (("impressum", SL.impressum_de, "de", "Impressum"), ("legal", SL.impressum_en, "en", "Legal notice"),
+                              ("datenschutz", SL.privacy_de, "de", "Datenschutz"), ("privacy", SL.privacy_en, "en", "Privacy policy")):
+        write(f"{path}/index.html", page(lg, f"{ttl} – M365.FM", ttl, f"{BASE}/{path}/", f"{header(lg, '')}<main class=\"wrap\" style=\"max-width:46em\">{fn()}</main>{footer(lg)}", og_type="website", noindex=True))
 
     # Entity-Seite
     PORTRAIT = (f'<img class="portrait" src="{BASE}/assets/mirko-peters.jpg" alt="Mirko Peters, Microsoft MVP, host of M365.FM" width="190" height="190">' if (ROOT / "assets" / "mirko-peters.jpg").exists() else "")
