@@ -1,0 +1,32 @@
+name: Spreaker verbinden (einmalig)
+on:
+  workflow_dispatch:
+    inputs:
+      code:
+        description: "Code von dub.m365.fm/callback (nach 'Erlauben' bei Spreaker)"
+        required: true
+permissions:
+  contents: write
+  actions: write
+jobs:
+  connect:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.12" }
+      - run: pip install requests cryptography
+      - name: Code gegen Token tauschen
+        env:
+          SPREAKER_CLIENT_ID: ${{ secrets.SPREAKER_CLIENT_ID }}
+          SPREAKER_CLIENT_SECRET: ${{ secrets.SPREAKER_CLIENT_SECRET }}
+          CODE: ${{ inputs.code }}
+        run: python spreaker_auth.py connect "$CODE"
+      - name: Speichern und Seite neu bauen
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          git config user.name "m365-site-bot"; git config user.email "actions@users.noreply.github.com"
+          git add data/spreaker_auth.enc && git commit -m "Spreaker verbunden (verschlüsselt)"
+          git pull --rebase -q && git push -q
+          gh workflow run site.yml --ref main

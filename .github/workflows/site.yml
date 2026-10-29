@@ -2,7 +2,7 @@ name: Website bauen und veröffentlichen
 on:
   push:
     branches: [main]
-    paths: ["episodes/**", "data/**", "domain.txt", "sync_platforms.py", "generate_og.py", "site_taxonomy.py", "check_links.py", "assets/**", "generate_articles.py", "scrape_spotify.py", "generate_site.py", "generate_covers.py", "sync_spreaker.py", "site_cover.py", "site_design.py", "shows_seo.json", ".github/workflows/site.yml"]
+    paths: ["episodes/**", "data/**", "domain.txt", "sync_platforms.py", "generate_og.py", "site_taxonomy.py", "check_links.py", "assets/**", "generate_articles.py", "scrape_spotify.py", "generate_site.py", "generate_covers.py", "sync_spreaker.py", "spreaker_auth.py", "site_cover.py", "site_design.py", "shows_seo.json", ".github/workflows/site.yml"]
   schedule:
     - cron: "17 5 * * *"
   workflow_dispatch:
@@ -24,12 +24,14 @@ jobs:
         continue-on-error: true
         env:
           SPREAKER_TOKEN: ${{ secrets.SPREAKER_TOKEN }}
+          SPREAKER_CLIENT_ID: ${{ secrets.SPREAKER_CLIENT_ID }}
+          SPREAKER_CLIENT_SECRET: ${{ secrets.SPREAKER_CLIENT_SECRET }}
         run: |
-          pip install requests
+          pip install requests cryptography
           python sync_spreaker.py
-          if [ -n "$(git status --porcelain data/top.json data/published.json)" ]; then
+          if [ -n "$(git status --porcelain data/top.json data/published.json data/spreaker_auth.enc)" ]; then
             git config user.name "m365-site-bot"; git config user.email "actions@users.noreply.github.com"
-            git add data/top.json data/published.json && git commit -m "Spreaker-Daten aktualisiert"
+            git add data/top.json data/published.json data/spreaker_auth.enc && git commit -m "Spreaker-Daten aktualisiert"
             git pull --rebase -q && git push -q
           fi
       - name: Artikel aus Transkripten schreiben (Claude API)

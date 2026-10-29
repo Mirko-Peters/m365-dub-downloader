@@ -39,8 +39,16 @@ def norm_title(t):
 
 def main():
     tok = os.environ.get("SPREAKER_TOKEN", "").strip()
+    if not tok and os.environ.get("SPREAKER_CLIENT_SECRET"):
+        import spreaker_auth
+        d = spreaker_auth.load()
+        if d:
+            tok = d["access_token"]
+            S.headers["Authorization"] = f"Bearer {tok}"
+            if S.get(API + "/me", timeout=30).status_code == 401:   # abgelaufen -> erneuern
+                tok = spreaker_auth.refresh()
     if not tok:
-        print("Kein SPREAKER_TOKEN – uebersprungen"); return
+        print("Kein Spreaker-Zugang (SPREAKER_TOKEN bzw. 'Spreaker verbinden') – uebersprungen"); return
     S.headers["Authorization"] = f"Bearer {tok}"
     cfg = json.load(open(ROOT / "config.json", encoding="utf-8"))
     shows = {l: s for l, s in (cfg.get("show_map") or {}).items() if s}
