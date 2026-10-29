@@ -30,7 +30,12 @@ def clean(html):
     return html.strip()
 
 
+CREDITS_OUT = False
+
+
 def _post(prompt, max_tokens):
+    if CREDITS_OUT:
+        raise RuntimeError("credits out")
     body = json.dumps({"model": MODEL, "max_tokens": max_tokens, "messages": [{"role": "user", "content": prompt}]}).encode()
     req = urllib.request.Request("https://api.anthropic.com/v1/messages", body, {
         "x-api-key": os.environ["ANTHROPIC_API_KEY"], "anthropic-version": "2023-06-01", "content-type": "application/json"})
@@ -40,6 +45,15 @@ def _post(prompt, max_tokens):
             r = json.load(urllib.request.urlopen(req, timeout=240))
             break
         except urllib.error.HTTPError as ex:
+            if ex.code in (400, 401, 402, 403):
+                try:
+                    msg = ex.read().decode("utf-8", "ignore").lower()
+                except Exception:
+                    msg = ""
+                if "credit balance" in msg or "billing" in msg or ex.code in (401, 402):
+                    global CREDITS_OUT
+                    CREDITS_OUT = True
+                    print("ANTHROPIC-GUTHABEN LEER oder Key ungueltig (HTTP %s) - weitere Artikel werden uebersprungen" % ex.code)
             if ex.code in (429, 500, 502, 503, 529) and attempt < 4:
                 time.sleep(15 * (attempt + 1))
                 continue
