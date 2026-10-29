@@ -903,7 +903,7 @@ def build():
 {('<h2>' + esc(ui[4]) + '</h2><div class="list">' + rel + '</div>') if rel else ''}
 <p style="margin-top:1.6em"><a class="btn" href="{BASE}/{l}/">{esc(ui[3])} →</a></p>
 <section id="c-comments"></section><section id="c-sub"></section></main>
-{footer(l)}{PLAT_JS}{INFO_JS}{QUIZ_JS if quiz_block else ''}{community_tags(l, vid)}"""
+{footer(l)}{PLAT_JS}{INFO_JS}{LRN.GLOSS_JS}{QUIZ_JS if quiz_block else ''}{community_tags(l, vid)}"""
         OG_COVER[canonical] = art_svg(vid, LANGS[l][0], lang=l)
         write(f'{l}/{it["slug"]}/index.html',
               page(l, e["title"], short(intro), canonical, body, alts, ld, extra_head=f'<meta property="article:section" content="{esc(cat_name(pc, l))}">' + "".join(f'<meta property="article:tag" content="{esc(t)}">' for t in tagraw[l][vid])))

@@ -14,6 +14,32 @@ LUI = _load("learn_ui.json", {})
 GLOSS = _load("glossary.json", [])
 
 
+def sortkey(x):
+    n = x.get("sort") or re.sub(r"^Microsoft ", "", x["name"])
+    return n.lower()
+
+
+def letter_of(x):
+    c = (x.get("sort") or re.sub(r"^Microsoft ", "", x["name"]))[:1].upper()
+    return c if c.isalpha() else "#"
+
+
+def az_html(terms, lang, link_fn, with_eps=None, t=None):
+    """Alphabetisches Glossar mit Buchstaben-Ueberschriften und A-Z-Navigation."""
+    groups = {}
+    for x in sorted(terms, key=sortkey):
+        groups.setdefault(letter_of(x), []).append(x)
+    nav = "".join(f'<a href="#l-{k}">{k}</a>' for k in groups)
+    out = f'<nav class="ln-az" aria-label="A–Z">{nav}</nav>'
+    for k, lst in groups.items():
+        out += f'<h2 class="ln-letter" id="l-{k}">{k}</h2><dl class="ln-def">'
+        for x in lst:
+            d, other = (x["de"], False) if lang == "de" else (x["en"], lang != "en")
+            out += link_fn(x, d, other)
+        out += "</dl>"
+    return out
+
+
 def T(lang):
     t = dict(LUI.get("en", {}))
     t.update(LUI.get(lang, {}))
@@ -34,6 +60,7 @@ LCSS = """<style>
 .ln-btn[aria-pressed=true]{background:var(--ac);color:var(--onac);border-color:var(--ac)}
 .ln-bar{height:.6em;background:var(--bd);border-radius:1em;overflow:hidden;margin:.6em 0}.ln-bar i{display:block;height:100%;background:var(--ac);width:0}
 .ln-def{margin:.8em 0 1.4em}.ln-def dt{font-weight:700;font-size:1.05em}.ln-def dd{margin:.2em 0 .2em}
+.ln-az{display:flex;flex-wrap:wrap;gap:.3em;margin:1em 0;position:sticky;top:0;background:var(--bg);padding:.4em 0;z-index:5}.ln-az a{display:inline-block;min-width:2em;text-align:center;padding:.35em .3em;border:1px solid var(--bd);border-radius:.4em;color:var(--fg);text-decoration:none;font-weight:700}.ln-az a:hover,.ln-az a:focus-visible{border-color:var(--ac);color:var(--ac)}.ln-letter{margin:1.2em 0 .2em;border-bottom:2px solid var(--ac);padding-bottom:.1em}
 .ln-q{border:1px solid var(--bd);border-radius:.9em;padding:1em 1.2em;margin:1em 0;background:var(--card)}
 .ln-q legend{font-weight:700;padding:0 .4em}.ln-q label{display:block;padding:.45em .3em;cursor:pointer}
 .ln-ok{color:var(--fg);font-weight:700}.ln-cert{border:3px double var(--fg);padding:2em;text-align:center;margin:1.5em 0;background:var(--card)}
@@ -121,8 +148,8 @@ def build_learn(ctx):
         gb = f"{BASE}/glossary/" if lang == "en" else f"{BASE}/{lang}/glossary/"
         rel = "glossary" if lang == "en" else f"{lang}/glossary"
         terms = sorted(GLOSS, key=lambda x: x["name"].lower())
-        dl = "".join(f'<dt><a href="{gb}{x["id"]}/">{esc(x["name"])}</a></dt><dd>{esc(definition(x, lang)[0])}</dd>' for x in terms)
-        body = shell(lang, f'<h1>{esc(t["glossary"])}</h1><p class="mut">{esc(t["glossary_intro"])}</p><dl class="ln-def">{dl}</dl>')
+        az = az_html(terms, lang, lambda x, d, o: f'<dt><a href="{gb}{x["id"]}/">{esc(x["name"])}</a></dt><dd>{esc(d)}</dd>')
+        body = shell(lang, f'<h1>{esc(t["glossary"])}</h1><p class="mut">{esc(t["glossary_intro"])}</p>{az}')
         write(f"{rel}/index.html", page(lang, f'{t["glossary"]} – M365.FM', t["glossary_intro"], gb, body, None, gloss_ld(lang, gb), og_type="website", extra_head=LCSS))
         sitemap.append((gb, TODAY, None))
         for x in terms:
@@ -145,12 +172,11 @@ def build_learn(ctx):
         # Glossar in Sprache lang: Definitionen (Englisch außer Deutsch) mit Episoden – noindex, solange nicht übersetzt
         if lang != "de":
             gb = f"{BASE}/{lang}/glossary/"
-            dl = ""
-            for x in sorted(GLOSS, key=lambda y: y["name"].lower()):
+            def row(x, d, o, lang=lang, t=t):
                 eps = eps_for(lang, x, 5)
-                dl += (f'<dt id="{x["id"]}">{esc(x["name"])}</dt><dd lang="en" dir="ltr">{esc(x["en"])}</dd>'
-                       + (f'<dd><small>{esc(t["term_eps"].replace("{t}", x["name"]))}:</small>{ep_list(eps)}</dd>' if eps else ""))
-            body = shell(lang, f'<h1>{esc(t["glossary"])}</h1><p class="mut">{esc(t["glossary_intro"])} ({esc(t["en_note"])})</p><dl class="ln-def">{dl}</dl>')
+                return (f'<dt id="{x["id"]}">{esc(x["name"])}</dt><dd lang="en" dir="ltr">{esc(d)}</dd>'
+                        + (f'<dd><small>{esc(t["term_eps"].replace("{t}", x["name"]))}:</small>{ep_list(eps)}</dd>' if eps else ""))
+            body = shell(lang, f'<h1>{esc(t["glossary"])}</h1><p class="mut">{esc(t["glossary_intro"])} ({esc(t["en_note"])})</p>{az_html(GLOSS, lang, row)}')
             write(f"{lang}/glossary/index.html", page(lang, f'{t["glossary"]} – M365.FM {LANGS[lang][0]}', t["glossary_intro"], gb, body, None, None, og_type="website", extra_head=LCSS, noindex=True))
         # Lernpfade
         paths = {c: sorted(g["catidx"][lang][c], key=lambda i: (i["date"], i["vid"])) for c in ORDER if c in g["catidx"].get(lang, {}) and len(g["catidx"][lang][c]) >= 2}
@@ -192,7 +218,7 @@ def build_learn(ctx):
         cards = (f'<a class="ln-card" href="{BASE}/{lang}/glossary/"><b>{esc(t["glossary"])}</b><span>{esc(t["glossary_intro"])}</span></a>'
                  f'<a class="ln-card" href="{BASE}/{lang}/trainer/"><b>{esc(t["trainer"])}</b><span>{esc(t["trainer_intro"])}</span></a>')
         pl = "".join(f'<a class="ln-card" href="{BASE}/{lang}/path/{c}/"><b>{esc(cat_name(c, lang))}</b><span>{len(paths[c])}</span></a>' for c in ORDER if c in paths)
-        b = shell(lang, f'<h1>{esc(t["learn"])}</h1><p class="mut">{esc(t["learn_intro"])}</p><div class="ln-grid">{cards}</div><h2>{esc(t["paths"])}</h2><div class="ln-grid">{pl}</div>')
+        b = shell(lang, f'<h1>{esc(t["learn"])}</h1><p class="mut">{esc(t["learn_intro"])}</p><h2>{esc(t["paths"])}</h2><div class="ln-grid">{pl}</div><div class="ln-grid">{cards}</div>')
         write(f"{lang}/learn/index.html", page(lang, f'{t["learn"]} – M365.FM {LANGS[lang][0]}', t["learn_intro"], hu, b, None, None, og_type="website", extra_head=LCSS))
         sitemap.append((hu, TODAY, None))
 
@@ -216,7 +242,7 @@ def _names(term):
     return res
 
 
-def gloss_link(html_, lang, base, max_links=4):
+def gloss_link(html_, lang, base, max_links=8):
     """Erste Nennung bekannter Begriffe im Artikel auf die Glossar-Seite verlinken (nur Absätze/Listen, nie in Links)."""
     if not GLOSS or not html_:
         return html_
@@ -245,10 +271,23 @@ def gloss_link(html_, lang, base, max_links=4):
                 if depth == 0 and seg.strip():
                     mm = rx.search(seg)
                     if mm:
-                        parts[i:i + 1] = [seg[:mm.start()], f'<a class="ilink gl" href="{tgt(x)}">', mm.group(0), "</a>", seg[mm.end():]]
+                        dd = x["de"] if lang == "de" else x["en"]
+                        parts[i:i + 1] = [seg[:mm.start()], f'<a class="ilink gl" href="{tgt(x)}" data-gt="{esc(x["name"])}" data-gd="{esc(dd)}"' + ('' if lang == "de" else ' data-gl="en"') + '>', mm.group(0), "</a>", seg[mm.end():]]
                         used.add(x["id"])
                         cnt[0] += 1
                         break
         return "".join(parts)
 
     return re.sub(r"<(p|li)>.*?</\1>", blk, html_, flags=re.S)
+
+
+GLOSS_JS = """<script>(function(){try{var L=[].slice.call(document.querySelectorAll("a.gl[data-gd]"));if(!L.length)return;
+var st=document.createElement("style");st.textContent=".glpop{position:absolute;z-index:60;max-width:22em;background:var(--card);color:var(--fg);border:1px solid var(--ac);border-radius:.6em;padding:.7em .9em;box-shadow:0 8px 24px rgba(0,0,0,.2);font-size:.92rem;line-height:1.45}.glpop b{display:block;margin-bottom:.2em}.glpop a{font-weight:700}a.gl{border-bottom:1px dotted var(--ac);text-decoration:none}";document.head.appendChild(st);
+var pop=document.createElement("div");pop.className="glpop";pop.id="glpop";pop.setAttribute("role","tooltip");pop.hidden=true;document.body.appendChild(pop);var cur=null,touch=matchMedia("(hover:none)").matches;
+function show(a){cur=a;pop.textContent="";var b=document.createElement("b");b.textContent=a.dataset.gt;pop.appendChild(b);var p=document.createElement("span");p.textContent=a.dataset.gd;if(a.dataset.gl)p.lang=a.dataset.gl;pop.appendChild(p);
+if(touch){var m=document.createElement("a");m.href=a.href;m.textContent=" →";m.setAttribute("aria-label",a.dataset.gt);pop.appendChild(m)}
+pop.hidden=false;a.setAttribute("aria-describedby","glpop");var r=a.getBoundingClientRect(),x=Math.max(8,Math.min(r.left+scrollX,scrollX+document.documentElement.clientWidth-pop.offsetWidth-8));pop.style.left=x+"px";pop.style.top=(r.bottom+scrollY+6)+"px"}
+function hide(){pop.hidden=true;if(cur)cur.removeAttribute("aria-describedby");cur=null}
+L.forEach(function(a){a.addEventListener("mouseenter",function(){if(!touch)show(a)});a.addEventListener("mouseleave",function(){setTimeout(function(){if(!pop.matches(":hover"))hide()},120)});a.addEventListener("focus",function(){show(a)});a.addEventListener("blur",function(){setTimeout(function(){if(!pop.contains(document.activeElement))hide()},120)});
+a.addEventListener("click",function(e){if(touch&&cur!==a){e.preventDefault();show(a)}})});
+pop.addEventListener("mouseleave",hide);document.addEventListener("keydown",function(e){if(e.key==="Escape")hide()});document.addEventListener("click",function(e){if(cur&&!pop.contains(e.target)&&e.target!==cur)hide()})}catch(e){}})();</script>"""
