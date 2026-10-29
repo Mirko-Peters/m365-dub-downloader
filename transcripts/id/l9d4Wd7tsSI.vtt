@@ -1,0 +1,1264 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:02.880
+Mari kita bicara tentang laporan tata kelola, risiko, dan kepatuhan.
+
+00:00:03.020 --> 00:00:07.620
+GRC, tiga huruf yang menyebabkan konsumsi kafein lebih banyak daripada semua audisasi digabungkan.
+
+00:00:08.180 --> 00:00:14.860
+Di suatu tempat saat ini, ada seorang analis malang yang masih menyalin log audit ke Excel Cell demi Cell seperti tahun 2003 dan makro adalah sihir.
+
+00:00:15.660 --> 00:00:21.480
+Mereka memulainya dengan niat baik, buku kerja yang rapi, beberapa filter, dan berakhir dengan empat putih pivot table yang saling bertentangan.
+
+00:00:22.040 --> 00:00:25.240
+Kepatuhan, yang seharusnya menjadi pelindung, malah menjadi seni pertunjukan.
+
+00:00:26.040 --> 00:00:29.380
+Berjam-jam mengolah data hanya untuk meyakinkan auditor bahwa semuanya terkendali.
+
+00:00:29.380 --> 00:00:31.080
+Woy lo jalan segalanya terjadi.
+
+00:00:31.700 --> 00:00:35.780
+Pelaporan GRC manual terjadi saat organisasi salah mengartikan dokumentasi sebagai wawasan.
+
+00:00:36.840 --> 00:00:41.320
+Anda menarik data dari Microsoft Proview, mengekspornya, menyebarkannya ke spreadsheet, dan menyebutnya tata kelola.
+
+00:00:42.120 --> 00:00:47.680
+Minggu berikutnya, aktivitas baru terjadi, data bergeser, dan tiba-tiba grafik Anda yang rapi hanyalah kebohongan dalam gradient warna.
+
+00:00:48.260 --> 00:00:51.340
+Jejak audit yang seharusnya menegakkan akuntabilitas justru menyebabkan kelam kerja.
+
+00:00:51.340 --> 00:00:56.200
+Lebih buruk lagi, sebagian besar perusahaan memperlakukan Proview sebagai berangkas sesuatu yang hanya dibuka sebelum audit.
+
+00:00:56.200 --> 00:01:01.080
+Log auditnya diam-diam mengumpulkan terabak data tentang siapa melakukan apa, di mana, dan kapan, dan kapan.
+
+00:01:01.320 --> 00:01:01.620
+Bergembang.
+
+00:01:01.900 --> 00:01:02.400
+Tentu saja.
+
+00:01:02.820 --> 00:01:03.300
+Tapi becah.
+
+00:01:03.520 --> 00:01:03.920
+Hampir tidak.
+
+00:01:04.340 --> 00:01:07.200
+Setiap entry adalah gumpalan JSON yang begitu padat hingga bisa menunggalkan cahaya.
+
+00:01:07.340 --> 00:01:11.680
+Dan ya, Anda bisa memprosesnya secara manual jika akhir pekan itu opsional dan kewarasan bisa ditawar.
+
+00:01:11.680 --> 00:01:15.140
+Sekarang, bandingkan absurditas itu dengan ide agen AI.
+
+00:01:15.720 --> 00:01:21.800
+Bukan kopilot ajaib yang hanya menebak jawaban, melainkan agen berbasis aturan otomatis yang dibangun dari alat Microsoft sendiri.
+
+00:01:23.140 --> 00:01:27.980
+Copilot studio untuk kecerdasan bahasa alami, or automate untuk orkestrasi tugas, dan Proview.
+
+00:01:28.520 --> 00:01:30.840
+Sebagai sumber kebenaran audit yang otoritatif.
+
+00:01:30.840 --> 00:01:35.520
+Dengan kata lain, perangkat Luna akan melakukan apa yang selalu diinginkan tim kepatuhan.
+
+00:01:35.720 --> 00:01:39.900
+Mengambil, menganalisis, dan menjelaskan tanpa keluhan serta tanpa risiko menumpahkan kopi disipensi itu sama.
+
+00:01:40.960 --> 00:01:46.660
+Anggap saja ini sebagai mengalihdayakan pelaporan GRC Anda ke anak magang yang tidak pernah mengeluh, tidak pernah tidur, dan membaca JSON seperti bahasa seri hari.
+
+00:01:47.440 --> 00:01:49.960
+Di akhir penjelasan ini, Anda akan tahu persis cara membangunnya.
+
+00:01:50.400 --> 00:01:53.400
+Mulai dari menghubungkan log purview hingga mengotomatiskan penjadwalan laporan.
+
+00:01:53.400 --> 00:01:54.780
+Semua di dalam ekosistem Microsoft.
+
+00:01:55.660 --> 00:02:00.060
+Dan ya, kita akan membahas langkah logika yang mengubahnya dari otomatisasi sederhana menjadi auditor yang sepenuhnya tolong.
+
+00:02:00.060 --> 00:02:01.360
+Untuk saat ini, fokuslah penerbangan.
+
+00:02:01.740 --> 00:02:03.340
+Kepatannya tidak seharusnya bergantung pada asuman kafe.
+
+00:02:03.800 --> 00:02:06.320
+Mesin tidak merasa lelah dan mereka tentu tidak salah melabeli kolom.
+
+00:02:06.840 --> 00:02:11.880
+Ada satu lapisan logika, satu pilihan desain halus yang membuat agen ini cukup andal untuk mengirim laporan tanpa pengawasan.
+
+00:02:12.380 --> 00:02:14.900
+Kita akan sampai ke sana, tapi pertama mari pahami apa sebenarnya agen tersebut.
+
+00:02:16.060 --> 00:02:20.380
+Apa yang membuat perpaduan Copilot Studio dan Power Automate ini lebih dari sekadar alur kerja dengan nama yang mewah?
+
+00:02:21.660 --> 00:02:23.240
+Apa sebenarnya agen GRC itu?
+
+00:02:24.080 --> 00:02:27.520
+Mari kita singkirkan persona AI dan definisikan apa sebenarnya benda ini.
+
+00:02:27.520 --> 00:02:32.360
+Ini otomatisasi terstruktura yang dibangun di atas tumpukan teknologi Microsoft yang menyamar sebagai kecerdasan.
+
+00:02:33.180 --> 00:02:35.000
+Agen GRC adalah makhluk berkepala tiga.
+
+00:02:35.820 --> 00:02:38.340
+Tiap kepala bertanggung jawab atas satu bagian dari proses komitif.
+
+00:02:38.840 --> 00:02:40.460
+Perview menyediakan memori mentahnya.
+
+00:02:41.220 --> 00:02:43.320
+Log audit, data klasifikasi, dan peristiwa kepatuhan.
+
+00:02:44.400 --> 00:02:46.400
+Power Automate bertindak sebagai sistem sarafnya.
+
+00:02:46.900 --> 00:02:50.660
+Ia mengumpulkan sinyal, menyaring kebisingan, dan memastikan proses berjalan sesuai jadwal.
+
+00:02:51.260 --> 00:02:53.580
+Copilot Studio akhirnya menjadi mulut dan penerjemahnya.
+
+00:02:53.580 --> 00:02:57.640
+Ia mengambil jargon teknis dari log dan menghasilkan ringkasan yang dapat dibaca manusia.
+
+00:02:58.460 --> 00:03:02.560
+Pengguna meningkatkan hak akses lima kali dalam 24 jam menepi ambang batas kebijakan.
+
+00:03:03.240 --> 00:03:04.200
+Terbahasa manusia bukan jism.
+
+00:03:04.700 --> 00:03:05.260
+Inilah kebenaran.
+
+00:03:05.660 --> 00:03:09.060
+90% tugas kepatuhan bukanlah keputusan berdasarkan penilaian, melainkan pengalaman pola.
+
+00:03:09.060 --> 00:03:17.640
+Namun, analis masih membuang waktu berjam-jam, memindai kolom jenis aktivitas dan status hasil ketika otomatisasi dapat mengategorikan dan meringkas pola-pola tersebut secara otomatis.
+
+00:03:18.960 --> 00:03:20.660
+Itulah sebabnya penekatan ini berhasil.
+
+00:03:20.760 --> 00:03:24.600
+Karena sistem tidak mencoba berpikir seperti orang, sistem ini dibangun untuk mengatur lebih baik daripada manusia.
+
+00:03:25.040 --> 00:03:26.160
+Mari kita berdakumkan kemudian-kemudian bersebut.
+
+00:03:26.420 --> 00:03:30.600
+Microsoft Purview bukan sekadar alat pelabelan file, melainkan kotak hitam kepatuhan Anda.
+
+00:03:30.600 --> 00:03:37.380
+Setiap tindakan pengguna di seluruh Microsoft 365, seperti berbagi dokumen memodifikasi label retensi, semuanya dicatat.
+
+00:03:38.220 --> 00:03:42.340
+Tetapi kecuali Anda fasi dalam memproses struktur JSON bertingkat, Anda tidak akan pernah mendapatkan banyak awas.
+
+00:03:42.800 --> 00:03:44.940
+Itulah masalah utamanya kelimpahan datang nol keterbacaan.
+
+00:03:45.740 --> 00:03:48.160
+Selanjutnya, Power Automate tidak glamor, tetapi disiplin.
+
+00:03:48.640 --> 00:03:51.880
+Ia memicu tepat waktu tidak pernah lupa dan memperlakukan setiap langkah seperti kebenaran mutera.
+
+00:03:52.220 --> 00:03:57.780
+Anda menentukan jadwal, katakanlah setiap hari pukul 8 pagi, dan ia memanggil konektor untuk menarik aktivitas Purview terbaru.
+
+00:03:57.780 --> 00:03:59.300
+Saat salah konfigurasi, manusia panik.
+
+00:03:59.300 --> 00:04:04.100
+Saat salah konfigurasi di sini, alurnya gagal dengan tenang, namun mencet kegagalan tersebut secara mendetak.
+
+00:04:04.420 --> 00:04:05.180
+Kepatuhan menyukai, Lord.
+
+00:04:05.760 --> 00:04:08.100
+Power Automate menyediakannya dengan keteraturan yang religius.
+
+00:04:08.580 --> 00:04:11.680
+Dan akhirnya, Copelo Studio yang mengubah data terstruktur menjadi narasi.
+
+00:04:12.460 --> 00:04:16.260
+Anda memberinya ringkasan terstruktur, mungkin tabel JSON yang menghitung tindakan berisiko perpengguna,
+
+00:04:16.640 --> 00:04:18.740
+dan ia menghasilkan ringkasan risiko dalam bahasa alami.
+
+00:04:19.840 --> 00:04:21.480
+Disinilah ilusi kecerdasan muncul.
+
+00:04:22.100 --> 00:04:24.940
+Ia tidak menebak, ia mengikuti aturan yang tertanam dalam prom yang Anda rancang.
+
+00:04:25.080 --> 00:04:26.480
+Misalnya, Anda menginstruksikan.
+
+00:04:26.480 --> 00:04:31.620
+Ringkas aktivitas risiko yang menonjol dikategorikan berdasarkan tingkat kebarahan dan sertakan satu rekomendasi per kategori.
+
+00:04:32.500 --> 00:04:36.160
+Hasilnya terasa seperti memo analis, tetapi itu adalah kejujuran algoritmik yang dibalut tata bahasa.
+
+00:04:36.700 --> 00:04:37.820
+Sekarang mari kita berucapkan.
+
+00:04:37.820 --> 00:04:43.660
+Perusahaan membeli dashboard yang menjanjikan visibilitas, laporan mengilap, indikator berkode warna, tetapi dashboard tidak menjelaskan.
+
+00:04:44.120 --> 00:04:44.660
+Mereka nyamanan.
+
+00:04:44.960 --> 00:04:46.220
+Akin GRC bagaimanapun menulis.
+
+00:04:46.800 --> 00:04:48.260
+Ia merejemahkan pola menjadi kalimat.
+
+00:04:49.020 --> 00:04:52.940
+Menghilangkan celah interpretatif yang telah menyebabkan banyak kegagalan nyaris terjadi dalam tinjauan kepatuhan.
+
+00:04:53.500 --> 00:04:58.660
+Saat eksekutif Anda peminta pola risiko bulan lalu, Anda tidak mengirimkan tautan Power BI yang hampir tidak Anda percayai.
+
+00:04:58.660 --> 00:05:03.600
+Anda mengirimkan narasi rapi yang dibuat oleh alur kerja yang berjalan pukul 8.05 pagi saat Anda masih menukup.
+
+00:05:03.960 --> 00:05:05.440
+Mengapa belum banyak tim yang melakukan ini?
+
+00:05:05.880 --> 00:05:08.200
+Karena banyak yang meremehkan betapa mudah dibacanya otomatisasi.
+
+00:05:08.440 --> 00:05:11.980
+Mereka melihat AI sebagai sesuatu yang tidak terduga padahal tumpukan teknologi ini terimistik.
+
+00:05:12.180 --> 00:05:12.860
+Anda menentukan segala.
+
+00:05:13.300 --> 00:05:16.400
+Logikanya, frekuensinya, cakupannya, bahkan nada bahasanya.
+
+00:05:17.400 --> 00:05:18.200
+Otonomi itu tidak acak.
+
+00:05:18.800 --> 00:05:20.600
+Ini adalah otomatisasi disiplin dengan mampuan bahasa.
+
+00:05:21.620 --> 00:05:23.980
+Namun sebelum agen ini bisa berpikir, ia harus bisa melihat.
+
+00:05:23.980 --> 00:05:29.200
+Itu berarti membangun jalur data yang memberinya akses ke bagian yang tepat dari data audit purview, tidak lebih, tidak kurang.
+
+00:05:29.720 --> 00:05:32.100
+Tanpa visibilitas tersebut, Anda hanya akan mengotomatisasi kebutuhan.
+
+00:05:32.460 --> 00:05:37.500
+Jadi selanjutnya kita akan menghubungkan Power Automate ke purview, menentukan peristiwa mana yang penting, dan mengajari agen kita ke mana harus melihat.
+
+00:05:37.760 --> 00:05:39.480
+Baru setelah itu kita bisa mengajarinya cara berpikir.
+
+00:05:40.220 --> 00:05:41.480
+Membangun jalur data purview.
+
+00:05:42.060 --> 00:05:45.140
+Sebelum Anda bisa mengajari agen GRC Anda berpikir, Anda harus memberinya penglihatan.
+
+00:05:45.620 --> 00:05:47.140
+Bungkan secara langsung ke sumber kebenaran.
+
+00:05:48.040 --> 00:05:49.100
+Log audit Microsoft Purview.
+
+00:05:49.840 --> 00:05:52.660
+Log ini melacak siapa yang menyentuh apa, kapan, dan bagaimana.
+
+00:05:52.660 --> 00:05:57.000
+Sayangnya, log tersebut disimpan dalam mimpi buruk struktural yang menyenangkan bernama JSON.
+
+00:05:57.560 --> 00:06:00.040
+Anggap JSON sebagai jargon hukum versi insinyur.
+
+00:06:00.780 --> 00:06:02.660
+Secara teknis tepat, secara praktis tidak terbaca.
+
+00:06:03.160 --> 00:06:07.680
+Keunggulan Power Automate adalah ia dapat membaca omong kosong ini dengan lancar asalkan Anda menghubungkannya dengan benar.
+
+00:06:08.100 --> 00:06:08.780
+Anggap pertama, guys,
+
+00:06:08.900 --> 00:06:16.160
+Anda mulai dengan konektor bauan purview atau jika Anda suka tantangan, tindakan HTTP di mana Anda memanggil API log audit purview secara langsung.
+
+00:06:16.780 --> 00:06:18.200
+Kedua jalur tersebut mencapai hasil yang sama.
+
+00:06:18.700 --> 00:06:21.500
+Aliran data yang merepresentasikan semua hal yang terjadi di dalam penyewa Anda,
+
+00:06:21.500 --> 00:06:25.800
+berbagi file, perubahan izin, pelanggaran akses, login, administrator, dan banyak lagi.
+
+00:06:26.420 --> 00:06:29.000
+Pendekatan yang lebih disiplin adalah membatasi cakupan sejak awal.
+
+00:06:29.540 --> 00:06:30.920
+Ya, Anda bisa menarik seluruh umpan audit,
+
+00:06:31.080 --> 00:06:33.980
+tapi itu seperti mencadangkan seluruh internet hanya karena Anda kehilangan satu file PDF.
+
+00:06:34.480 --> 00:06:36.160
+Tentukan peristiwa apa yang sebenarnya memengaruhi kepatung.
+
+00:06:36.760 --> 00:06:40.500
+Jika tidak, alur Anda akan menjadi gangguan layanan yang tidak disengaja terhadap kesambaran Anda sendiri.
+
+00:06:41.260 --> 00:06:41.940
+Sekarang kontrol akses.
+
+00:06:42.340 --> 00:06:44.580
+Power Automate hanya bertindak sesuai izin yang diberikan padanya.
+
+00:06:44.580 --> 00:06:47.880
+Jika akun layanan alur Anda tidak bisa membaca log audit purview,
+
+00:06:48.000 --> 00:06:51.340
+agen Anda akan menatap kehampaan dan dengan patuh melaporkan tidak ada masalah yang ditemukan.
+
+00:06:52.580 --> 00:06:55.000
+Itu bukan jaminan, itulah kebutuhan yang disamarkan sebagai kesuksesan.
+
+00:06:56.080 --> 00:06:58.980
+Pastikan akun layanan memiliki peran pembaca log audit di dalam purview
+
+00:06:58.980 --> 00:07:01.540
+dan dapat melakukan autentikasi tanpa gangguan MFA.
+
+00:07:02.500 --> 00:07:04.420
+AA itu patuh, tetapi tidak kreatif.
+
+00:07:04.420 --> 00:07:08.220
+Anda tidak akan mengeklik dan melakukan autentikasi atau merespons permintaan pada pukul 2 pagi.
+
+00:07:08.220 --> 00:07:11.680
+Tetapkan kredensial dengan hati-hati dan simpan di Azure Key Vault atau referensi koneksi
+
+00:07:11.680 --> 00:07:13.860
+agar Anda tetap patuh sambil menjaga otomatisasi tetap berjalan.
+
+00:07:14.260 --> 00:07:16.360
+Setelah ekstraksi data stabil, Anda beralih ke penyaringan.
+
+00:07:17.000 --> 00:07:20.640
+Tidak ada yang membutuhkan setiap kejadian akses file untuk folder menu makan siang kantin.
+
+00:07:21.660 --> 00:07:23.600
+Sebaliknya, seringlah untuk mengidentifikasi risikonya.
+
+00:07:24.100 --> 00:07:26.520
+Pengguna masuk dari lokasi baru, penetapan peran berubah,
+
+00:07:26.520 --> 00:07:29.080
+berbagai eksternal dilakukan, kebijakan label dimodifikasi.
+
+00:07:29.900 --> 00:07:32.200
+Hal-hal ini menceritakan kisah yang benar-benar diperhatikan oleh audit.
+
+00:07:32.680 --> 00:07:36.000
+Anda dapat memfilter pada tahap query menggunakan parameter IPI atau hilir
+
+00:07:36.000 --> 00:07:38.040
+di dalam power automate dengan logika kondisional.
+
+00:07:38.680 --> 00:07:40.220
+Manapun yang menjaga gerpilot tetap dapati kolom.
+
+00:07:40.700 --> 00:07:42.540
+Ingat, Anda tidak sedang menimbun, Anda sedang mengurasi.
+
+00:07:43.240 --> 00:07:47.260
+Lalu tibalah bagian yang membedakan profesional dari mereka yang mengandap saling tempel adalah otomatisasi.
+
+00:07:48.400 --> 00:07:51.380
+Anda akan mengonversi blob JSON tersebut menjadi kolom terstruktur,
+
+00:07:51.580 --> 00:07:53.700
+sesuatu yang dapat diinterpretasikan oleh modul kopilot Anda.
+
+00:07:53.880 --> 00:07:56.680
+Metode sederhana adalah menggunakan tindakan parsi JSON
+
+00:07:56.680 --> 00:07:59.260
+dengan skema yang ditentukan yang diambil dari sampel acara preview.
+
+00:07:59.900 --> 00:08:02.140
+Jika istilah area bersarang menyebabkan ketidaknyamanan dada,
+
+00:08:02.260 --> 00:08:03.360
+selamat datang di pengkodean kepatu.
+
+00:08:03.360 --> 00:08:08.780
+Tiap properti, ID pengguna, operasi, beban kerja, status hasil, IP client menjadi variabelnya sendiri.
+
+00:08:10.120 --> 00:08:14.320
+Anda pada dasarnya mengajarkan kata-kata kosa-kata kepada agen AI masa depan Anda sebelum percakapan dimulai.
+
+00:08:14.840 --> 00:08:18.120
+Pada tahap ini, Anda akan menemukan humor eksistensial dari format data Microsoft.
+
+00:08:18.580 --> 00:08:21.820
+Beberapa bidang audit muncul sebagai area, bahkan ketika bidang tersebut hanya menyimpan nilai tumbuh.
+
+00:08:22.580 --> 00:08:26.240
+Yang lain menyembunyikan hasil di bawah tiga lapisan sarang seperti boneka rusi yang ambigu.
+
+00:08:27.180 --> 00:08:29.980
+Power Automate menangani kekecohan ini dengan ekspresi.
+
+00:08:29.980 --> 00:08:32.700
+Sintaks item terapkan ke setiap ID pengguna.
+
+00:08:32.860 --> 00:08:37.480
+Mungkin terlihat samar, tetapi begitulah cara Anda memerintahkan otomatisasi untuk menggali JSON dan memunculkan makna.
+
+00:08:37.920 --> 00:08:40.560
+Kesalahan ketika-kecil di sini menciptakan omong kosong yang spektakuler nanti.
+
+00:08:40.920 --> 00:08:42.980
+Jadi uji setiap ekstraksi dengan contoh pengoperasi yang kecil.
+
+00:08:43.560 --> 00:08:45.200
+Yang mendebak alur adalah pekerjaan yang glamor.
+
+00:08:45.780 --> 00:08:47.800
+Anda mungkin ingin menyimpan data yang tak dipersihkan ini di suatu tempat.
+
+00:08:48.340 --> 00:08:52.060
+SharePoint, Dataverse, atau bahkan bahas data SQL tergantung pada seberapa berat laporan.
+
+00:08:52.060 --> 00:08:57.940
+Penyimpanan ini bertindak sebagai memori jangka pendek memberikan perbandingan historis kepada agen Anda tanpa terus menerus menekan.
+
+00:08:58.360 --> 00:08:59.740
+Anggap saja ini sebagai kecerdasan cacik.
+
+00:09:00.360 --> 00:09:03.000
+Peristiwa kemarin membantu analisis hari ini terdengar lebih berwawasan.
+
+00:09:03.560 --> 00:09:08.640
+Jika Anda memerlukan kemampuan kolom atau hubungan antar set data, Dataverse bekerja lebih baik dengan Power Automate.
+
+00:09:09.460 --> 00:09:12.220
+SharePoint lebih mudah tetapi lebih canggung jika melebihi beberapa ribu baris.
+
+00:09:13.340 --> 00:09:14.200
+Selanjutnya penjadwal.
+
+00:09:14.200 --> 00:09:15.460
+Tentukan irama.
+
+00:09:16.040 --> 00:09:18.960
+Ringkasan harian untuk lingkungan dinamis, mingguan untuk ekosistem yang lebih tenang.
+
+00:09:19.500 --> 00:09:21.080
+Gunakan pemicu pengulangan Power Automate.
+
+00:09:21.680 --> 00:09:22.600
+Atur ke zona waktu Anda.
+
+00:09:22.860 --> 00:09:26.440
+Bukan UTC, kecuali Anda senang bertanya-tanya mengapa laporan tiba pada jam 3 pagi.
+
+00:09:26.860 --> 00:09:33.540
+Alur dimulai secara otomatis, mengekstrak data yang difilter, mengubahnya, menyimpannya, dan menyiapkan pilot untuk fase berikutnya otak logika.
+
+00:09:34.280 --> 00:09:38.120
+Konsistensi kepetuhan tidak lagi bergantung pada antusiasme manusia ini adalah cara kerja yang pasti.
+
+00:09:38.540 --> 00:09:43.660
+Saat Anda mengonfigurasi toleransi kesalahan penanganan, misalkan api preview memberikan kesalahan terlalu banyak permintaan
+
+00:09:43.660 --> 00:09:47.420
+karena secara mengejutkan setiap analis lain mencoba menanyakan log pada detik yang sama, yang sama.
+
+00:09:47.960 --> 00:09:49.760
+Bangun kebijakan percobaan ulang dan pesan cadangan.
+
+00:09:50.440 --> 00:09:52.200
+Bahkan otomatisasi pun harus gagal dengan elegan.
+
+00:09:52.880 --> 00:09:57.020
+Tulis kesalahan ke file log dan kirim pesan tim jika ambang batas melebihi parameter yang diharapkan.
+
+00:09:57.600 --> 00:10:00.060
+Dengan begitu Anda mengolak kegagalan sebagai data, bukan sebagai drama.
+
+00:10:00.960 --> 00:10:02.700
+Ingat auditor tidak menghukum kesalahan.
+
+00:10:03.600 --> 00:10:05.440
+Mereka menghukum hilangnya dokumentasi atas kesalahan tersebut.
+
+00:10:06.040 --> 00:10:07.340
+Anda kini memiliki alur kerja yang hidup.
+
+00:10:07.780 --> 00:10:12.100
+Data streaming preview mengalir melalui arteri Power Automate ke penyimpanan manapun yang Anda pilih.
+
+00:10:12.100 --> 00:10:15.800
+Ini menggantikan proses pengumpulan data manual dengan sesuatu yang jauh lebih disiplin.
+
+00:10:16.560 --> 00:10:19.220
+Jika dilakukan dengan benar, ini juga memperkenalkan perubahan budaya yang halus.
+
+00:10:19.680 --> 00:10:23.760
+Tiba-tiba, pelaporan kepatuhan Anda bukan lagi sprint sebelum audit, melainkan detak jantung yang berkelanjutan.
+
+00:10:24.000 --> 00:10:29.020
+Dan sebagai catatan, Anda bisa mencapai hal yang sama dengan mengquery preview secara manual setiap Jumat dan menyalin hasil yang ke Excel.
+
+00:10:29.340 --> 00:10:30.720
+Anda juga bisa membuat mentega sendiri, seraman.
+
+00:10:31.160 --> 00:10:33.340
+Alur kerja ini tidak ada karena Anda tidak bisa melakukannya dengan cara lain.
+
+00:10:33.600 --> 00:10:34.860
+Ini ada karena Anda menghargai akhir pekanan.
+
+00:10:35.600 --> 00:10:38.780
+Lucu bagi mereka yang masih menggunakan ekspor log sambil mengklaim otomatisasi itu berisiko.
+
+00:10:38.780 --> 00:10:44.500
+Satu-satunya risiko nyata yang tersisa adalah tetap menggunakan proses yang begitu rapuh hingga satu analis absen saja bisa merusak juga.
+
+00:10:44.720 --> 00:10:49.200
+Sekarang setelah agen Anda memiliki penglihatan, aliran data konstan dengan struktur dan jadwal saatnya memberinya kognisi.
+
+00:10:49.780 --> 00:10:55.360
+Lapisan berikutnya mengubah informasi mentah menjadi interpretasi, ambang keputusan, logika kondisional, dan ringkasan data.
+
+00:10:55.980 --> 00:10:57.520
+Intinya kita berpindah dari mata ke otak.
+
+00:10:58.040 --> 00:10:58.820
+Fondasinya sudah ditetap.
+
+00:10:59.280 --> 00:11:00.220
+Mari kita ajar cara berpikir.
+
+00:11:00.220 --> 00:11:01.960
+Pemberi Akin Swab
+
+00:11:01.960 --> 00:11:03.340
+Logika Power Automate
+
+00:11:03.340 --> 00:11:04.780
+Power Automate bukanlah AI.
+
+00:11:05.440 --> 00:11:08.040
+Ia tidak bermimpi berspekulasi atau berhalusinasi tentang risiko kepatu.
+
+00:11:08.520 --> 00:11:11.200
+Apa yang dilakukannya adalah sesuatu yang sudah dipertahankan manusia, kepatu.
+
+00:11:11.780 --> 00:11:15.420
+Ia tidak pernah lupa langkah, tidak pernah berimprovisasi, dan tidak pernah mengklaim seharusnya berhasil.
+
+00:11:16.200 --> 00:11:18.440
+Kekakuan yang dapat diprediksi itulah yang dibutuhkan otonomi.
+
+00:11:19.040 --> 00:11:21.240
+Lapisan logika agen GRC Anda dimulai dengan struktur.
+
+00:11:21.500 --> 00:11:27.860
+Alur harus memicu dirinya sendiri, mengquery purview dengan andal, menaksirkan temuannya, dan memutuskan kapan peristiwa melampaui ambang batas yang Anda tentukan.
+
+00:11:28.660 --> 00:11:29.680
+Layangkan sebuah reaksi berantai.
+
+00:11:30.220 --> 00:11:31.560
+Pemicu pengulangan aktif.
+
+00:11:32.100 --> 00:11:33.080
+Sumpah panggilan masuk purview.
+
+00:11:34.320 --> 00:11:39.260
+Data dibersihkan, mulai dihitung, kategori risiko ditetapkan, tanpa drama menyeksekusi.
+
+00:11:39.600 --> 00:11:40.480
+Mulai dengan pemicu pengulangan.
+
+00:11:40.740 --> 00:11:43.880
+Pengulangan yang tempat waktu adalah jawaban peradaban terhadap kelupaan manusia.
+
+00:11:44.280 --> 00:11:45.940
+Konfigurasikan untuk zona waktu tempat auditor.
+
+00:11:46.660 --> 00:11:50.900
+Baik harian maupun mingguan, jadwal itu berarti alur memulai ritualnya tanpa diminta.
+
+00:11:51.180 --> 00:11:52.600
+Cara sistem otonom tetap hidup.
+
+00:11:53.640 --> 00:11:55.380
+Segera ikuti itu dengan pluk inisialisasi,
+
+00:11:56.320 --> 00:11:57.960
+variabel lingkungan penghitung larik.
+
+00:11:57.960 --> 00:12:00.660
+Ini menyediakan perancang kognitif yang akan digunakan agen nantinya.
+
+00:12:01.380 --> 00:12:05.380
+Variabel seperti total peristiwa, jumlah risiko tinggi, dan tanggal laporan menjadi memori kerjanya.
+
+00:12:06.180 --> 00:12:10.460
+Setelah dipicu, alur menjalankan konektor log audit purview atau HTTP API.
+
+00:12:11.120 --> 00:12:11.260
+I.
+
+00:12:11.960 --> 00:12:12.920
+Lalu kenyataan pun tiba.
+
+00:12:13.500 --> 00:12:17.720
+Response mentah mencakup draw status, detak sistem, atau peristiwa yang sama sekali tidak relevan.
+
+00:12:18.540 --> 00:12:20.340
+Masukkan langkah filter array untuk membuang samba tersebut.
+
+00:12:20.340 --> 00:12:24.180
+Pola umum, abaikan catatan apapun di mana tipe pengguna adalah prinsip pelayanan,
+
+00:12:24.260 --> 00:12:27.300
+dan simpan hanya tipe operasi yang terkait dengan tata kewala data atau perubahan kebijakan.
+
+00:12:27.840 --> 00:12:30.420
+Pembangkasan ini menjaga agen Anda tetap analitis, bukan kelisah.
+
+00:12:31.460 --> 00:12:35.000
+Mengingat kecintaan Microsoft pada redundansi, banyak aliran log mengulang peristiwa yang identik.
+
+00:12:35.880 --> 00:12:38.720
+Hapus duplikat menggunakan union sederhana pada ekspresi atau perbandingan log.
+
+00:12:38.720 --> 00:12:41.760
+Yang tersisa adalah sinyal, subset jujur yang layak diklasifikasikan.
+
+00:12:42.600 --> 00:12:44.320
+Disinilah skrip mendapatkan label otaknya.
+
+00:12:45.140 --> 00:12:49.680
+Tambahkan tindakan kompos atau select yang mengumpulkan catatan yang tersisa berdasarkan 6 prinsipal penggunaan dan operasi.
+
+00:12:50.240 --> 00:12:53.300
+Kemudian masukkan jumlah tersebut ke dalam loop apply to each yang menjembatkan setiap kategori.
+
+00:12:53.760 --> 00:12:55.540
+Pada akhirnya, agen Anda memiliki sebuah snapshot.
+
+00:12:55.900 --> 00:12:59.360
+Siapa melakukan apa, seberapa sering, dan apakah itu mencapai batas risiko yang telah ditentukan.
+
+00:13:00.200 --> 00:13:03.920
+Rahasia otonomi adalah membiarkan sistem menyimpulkan tingkat risiko dari ambang batas yang Anda tetapkan.
+
+00:13:03.920 --> 00:13:09.080
+Misalnya, jika eskalasi H istimewa 3, atur tingkat risiko sama dengan tinggi.
+
+00:13:09.740 --> 00:13:12.900
+Jika berbagi eksternal 1, atur tingkat risiko sama dengan sedang.
+
+00:13:13.660 --> 00:13:17.400
+Jika tidak normal, logika ini tidak menciptakan makna, tetapi menegakkan.
+
+00:13:18.040 --> 00:13:23.180
+Dengan mengodifikasi seperti apa batasan yang berlebihan, Anda telah mengganti virasat manusia dengan kejelasan numerik.
+
+00:13:23.960 --> 00:13:25.160
+Gunakan tindakan kondisi bersarang.
+
+00:13:25.620 --> 00:13:29.140
+Saat tingkat risiko tinggi, tambahkan informasi pengguna tersebut ke area risiko tinggi.
+
+00:13:29.560 --> 00:13:31.120
+Saat sedang, mungkin masukkan ke antrean untuk ditinjak.
+
+00:13:31.460 --> 00:13:33.900
+Saat tidak ada yang aneh muncul, catat pesan, tidak ada temukan.
+
+00:13:33.920 --> 00:13:35.560
+Semua alih-alih memberikan keheningan.
+
+00:13:36.320 --> 00:13:39.060
+Perbedaan antara data yang hilang dan tidak ada data sangat sakal dalam kepat.
+
+00:13:39.520 --> 00:13:44.100
+Setelah ambang batas aktif, secara opsional panggil endpoint kopilot studio untuk lingkasan naratif.
+
+00:13:44.860 --> 00:13:46.300
+Dua pengguna melampaui ambang batas risiko.
+
+00:13:47.000 --> 00:13:48.600
+Namun langkah bahasa itu milik bagian berikut.
+
+00:13:49.700 --> 00:13:51.980
+Di sini tujuannya adalah kualifikasi, bukan komposisi.
+
+00:13:52.780 --> 00:13:53.160
+Kesalah jadi.
+
+00:13:53.860 --> 00:13:57.220
+Api yang sering mengalami throttle atau gangguan lebih sering daripada diiklankan pemasarannya.
+
+00:13:57.220 --> 00:14:01.800
+Bungkus semua panggilan HTTP dalam moda skop dengan kebijakan coba lagi diaktifkan.
+
+00:14:02.360 --> 00:14:04.220
+Tiga kali percobaan, jeda waktu eksponensial.
+
+00:14:05.000 --> 00:14:11.200
+Dicabang kegagalan, catat pesan kesalahan, stempel waktu dan ID eksekusi alur ke daftar sharepoint atau tabel data first bernama kesehatan otomatisasi.
+
+00:14:11.200 --> 00:14:13.460
+Saat penerapan pertama, harapkan komedi.
+
+00:14:14.180 --> 00:14:17.260
+Saat saya pertama kali menguji build ini, akin dengan bangga melaporkan nol masalah.
+
+00:14:17.700 --> 00:14:18.620
+Kepatuan sempurna pikir saya.
+
+00:14:19.480 --> 00:14:22.220
+Sampai saya menyadari akun layanan tidak memiliki peran pembayar calon audit.
+
+00:14:23.560 --> 00:14:25.840
+Robot itu tidak malas, ia hanya buta karena patuh.
+
+00:14:26.740 --> 00:14:29.980
+Sebuah pengingat bahwa otomatisasi menegakkan tempat apa yang Anda berikan dan tidak lebih.
+
+00:14:30.480 --> 00:14:32.660
+Setiap eksekusi alur menulis bukti pelaksanaan.
+
+00:14:33.180 --> 00:14:37.740
+Masukkan tindakan final append to file atau create item yang menyimpan metode keringkasan total peristiwa yang diproses,
+
+00:14:37.840 --> 00:14:40.520
+penggunaan risiko tertinggi, durasi kode tertinggi, durasi waktu proses.
+
+00:14:41.480 --> 00:14:44.580
+Alirkan hasil tersebut ke saluran Teams atau pustaka SharePoint Tata Kelolaan.
+
+00:14:45.660 --> 00:14:47.680
+Setiap musim audit tiba, Anda tidak akan membela ingatan.
+
+00:14:48.320 --> 00:14:49.180
+Anda akan menampilkan arti.
+
+00:14:50.040 --> 00:14:52.800
+Tambahkan satu langkah perlindungan ekstra serta akan edit proses dan versi alat.
+
+00:14:53.720 --> 00:14:57.860
+Jika ambang batas Anda berubah nanti, auditor tetap bisa melacak logika mana yang menghasilkan hasil apa.
+
+00:14:58.580 --> 00:15:01.340
+Tata kelola mesin sama dengan tata kelola oleh mesin.
+
+00:15:01.880 --> 00:15:04.720
+Pada titik ini, otomatisasi dapat mengklasifikasi, menghitung, dan memutuskan.
+
+00:15:04.840 --> 00:15:08.320
+Ia tahu kapan tingkat risiko melanggar kebijakan, namun tidak mengatakan apapun tentangnya.
+
+00:15:08.320 --> 00:15:12.180
+Bagi manusia, keheningan itu terasa ganja, jadi lapisan berikutnya akan memberikan kata-kata.
+
+00:15:12.700 --> 00:15:17.200
+Atau seperti yang mungkin kita katakan sekarang, setelah ia bisa berpikir, ia berbicara, dan sebaiknya dalam bahasa yang menurut.
+
+00:15:17.940 --> 00:15:18.920
+Mengajarinya menulis.
+
+00:15:19.320 --> 00:15:20.220
+Integrasi Copilot Studio.
+
+00:15:20.220 --> 00:15:24.600
+Sampai sekarang, agen Anda adalah tipe pendiam yang tangguh, efisien, namun bisu.
+
+00:15:25.340 --> 00:15:29.560
+Copilot Studio adalah yang memberinya kemampuan berbicara, penerjemahnya mengubah data menjadi diplomasi.
+
+00:15:30.420 --> 00:15:34.120
+Bayangkan itu sebagai negosiator multibahasa yang terjebak di antara kode dan rapat komite.
+
+00:15:35.080 --> 00:15:36.600
+Sebuah sistem yang tidak mengadada cerita.
+
+00:15:37.140 --> 00:15:39.500
+Ia menulis ulang realitas ke dalam kalimat yang dapat dipanggil manusia.
+
+00:15:39.500 --> 00:15:50.840
+Bakatnya terletak pada mengubah rawa Jason yang dihasilkan power automate menjadi ringkasan rapi mengenai tindakan pengguna, jumlah risiko, dan catatan acara menjadi paragraf yang cukup sopan bagi eksekutif, dan cukup presisi bagi auditor.
+
+00:15:51.500 --> 00:15:53.620
+Ini menjembatani sintaksis dan politik.
+
+00:15:53.880 --> 00:15:58.500
+Memastikan apa yang dulunya data mesin mentah kini terbaca seperti penilaian terkini alih-alih omong kosong lembar kerja.
+
+00:15:59.220 --> 00:16:01.440
+Mulailah dengan membentukan jenis komunikasi apa yang Anda inginkan.
+
+00:16:02.140 --> 00:16:05.660
+Biasanya ada tiga, ringkasan eksekutif, lampiran teknis, dan rekomendasi.
+
+00:16:05.660 --> 00:16:07.700
+Masing-masing mulai di tingkat kecederasan yang berbeda.
+
+00:16:08.080 --> 00:16:09.420
+Manajemen menginginkan satu paragraf.
+
+00:16:09.740 --> 00:16:10.900
+Auditor membutuhkan jejak bukti.
+
+00:16:11.280 --> 00:16:14.160
+Staff TI menginginkan setiap kolom karena mereka membentangi diri dengan data.
+
+00:16:14.800 --> 00:16:18.500
+Anda akan membuat satu pengalaman co-pilot di studio tetapi menyusun beberapa perintah di dalamnya.
+
+00:16:19.360 --> 00:16:21.600
+Setiap perintah membentuk nada, format, dan verbositas.
+
+00:16:22.760 --> 00:16:28.360
+Contoh, ringkas risiko teratas menggunakan bahasa yang lugas, batasi hingga lima poin, dan sarankan perbaikan untuk masing-masing.
+
+00:16:29.560 --> 00:16:33.740
+Yang berikutnya mungkin, buat lampiran teknis yang mencantumkan setiap acara berisiko tinggi dalam bentuk tabel.
+
+00:16:33.920 --> 00:16:39.080
+Untuk menghubungkan power automate dengan co-pilot studio, gunakan tindakan HTTP di dalam alur Anda
+
+00:16:39.080 --> 00:16:42.140
+yang mengirimkan payload json terstruktur ke URL endpoint copilot.
+
+00:16:43.100 --> 00:16:46.040
+Copilot menafsirkan payload tersebut menggunakan perintah sistem yang telah Anda tentukan.
+
+00:16:47.060 --> 00:16:48.820
+Autentikasi Microsoft membuat ini aman.
+
+00:16:49.680 --> 00:16:52.700
+Anda mengautentikasi panggilan melalui Azure Anda yang dapat mengaksesnya.
+
+00:16:52.700 --> 00:16:57.680
+Selamat, Anda baru saja mengajari bot Anda untuk mengirimkan pemikiran terstruktur ke mesin penuh.
+
+00:16:58.340 --> 00:17:00.000
+Hasil yang dikembalikan adalah teks, bukan angka.
+
+00:17:00.440 --> 00:17:01.260
+Teks itulah laporan Anda.
+
+00:17:01.980 --> 00:17:04.040
+Masukkan itu ke co-pilot dengan instruksi seperti,
+
+00:17:04.500 --> 00:17:06.320
+Ringkas hasil ini dalam laporan kepatuhan singkat,
+
+00:17:06.480 --> 00:17:08.160
+dikategorikan berdasarkan tingkat keparahan,
+
+00:17:08.540 --> 00:17:10.140
+rekomendasikan satu tindakan pertemuan,
+
+00:17:10.580 --> 00:17:11.840
+dan tutup dengan tren keseluruhan.
+
+00:17:12.840 --> 00:17:15.440
+Co-pilot mengembalikan sesuatu yang menyerupai memo analis.
+
+00:17:15.440 --> 00:17:18.940
+Dua pengguna menunjukkan perilaku berisiko tinggi kemarin.
+
+00:17:19.420 --> 00:17:22.900
+Adela Fence melakukan tiga eskalasi hak istimewa yang melebihi amang batas yang diizinkan.
+
+00:17:23.280 --> 00:17:25.000
+Direkomendasikan penginjauan segera terhadap renang.
+
+00:17:26.360 --> 00:17:28.440
+Megan B mencoba berbagi eksternal satu kali.
+
+00:17:29.000 --> 00:17:30.620
+Ingatkan pengguna tentang kebijakan data eksternal.
+
+00:17:31.220 --> 00:17:32.480
+Tidak ada anomali lain yang terdeteksi.
+
+00:17:32.900 --> 00:17:34.840
+Tren keseluruhan dibandingkan dengan garis dasar stabil.
+
+00:17:35.560 --> 00:17:37.420
+Ya, itu bukan tebakan generatif.
+
+00:17:37.920 --> 00:17:40.440
+Itu adalah sintesis terformat yang mengikuti perintah deterministik.
+
+00:17:41.460 --> 00:17:43.420
+Manusia menyebutnya menulis, mesin menyebutnya output.
+
+00:17:43.420 --> 00:17:46.720
+Rahasianya adalah kendali Anda atas struktur data dan struktur bahasa.
+
+00:17:47.440 --> 00:17:50.040
+Co-pilot tidak bergerak bebas, ia menerasikan statistik.
+
+00:17:51.380 --> 00:17:52.660
+Sekarang tentukan distribusinya.
+
+00:17:53.340 --> 00:17:55.820
+Orang biasa tidak perlu masuk ke data first untuk mencari laporan.
+
+00:17:56.720 --> 00:17:58.420
+Jadi gunakan konektor power otomat lagi.
+
+00:17:59.280 --> 00:18:00.680
+Kerjakan dari dua cabang alur yang sama.
+
+00:18:01.660 --> 00:18:03.900
+Satu yang memposting ringkasan Co-pilot langsung ke saluran Teams.
+
+00:18:04.200 --> 00:18:07.100
+Yang lain mencatat versi HTML lengkap ke SharePoint.
+
+00:18:08.100 --> 00:18:09.520
+Manajemen membaca postingan Teams.
+
+00:18:09.840 --> 00:18:11.520
+Auditor membuka R-ship untuk dokumentasi.
+
+00:18:11.520 --> 00:18:15.080
+Keduanya tiba secara otomatis dengan stemper waktu dan frasa yang identik.
+
+00:18:15.660 --> 00:18:16.560
+Itulah konsistensi.
+
+00:18:16.900 --> 00:18:18.760
+Kebajikan yang tidak dimiliki kebanyakan penulis manusia.
+
+00:18:19.520 --> 00:18:21.000
+Mari bicara tentang disiplin terkayasa perintah.
+
+00:18:21.700 --> 00:18:22.660
+Anda akan membutuhkan batasan.
+
+00:18:23.200 --> 00:18:25.080
+Tentukan tajuk yang tepat yang harus digunakan Co-pilot.
+
+00:18:25.740 --> 00:18:27.780
+Ikhtisar, temuan utama, rekomendasi.
+
+00:18:27.780 --> 00:18:32.160
+Jika tidak ditentukan, Co-pilot akan mencoba membuat Anda terkesan dengan gaya narasi atau emoji.
+
+00:18:32.960 --> 00:18:35.260
+Laporan audit dengan emoji hanya cocok untuk kekacauan.
+
+00:18:36.760 --> 00:18:42.300
+Sematkan arahan seperti gunakan nada netral profesional, hindari bahasa spekulatif, sertakan metrik terukur.
+
+00:18:43.360 --> 00:18:46.120
+Semakin ketat instruksi Anda, semakin dapat direproduksi output Anda.
+
+00:18:46.120 --> 00:18:49.380
+Tepatuan berkembang berdasarkan reproduktibilitas bukan kepribadian.
+
+00:18:50.000 --> 00:18:51.500
+Ada keindahan dalam mekanisme yang biasa.
+
+00:18:52.440 --> 00:18:54.300
+Co-pilot Studio mengizinkan variable konteks.
+
+00:18:55.120 --> 00:18:59.620
+Anda dapat menyematkan data dinamis seperti tanggal laporan atau durasi proses langsung di dalam output.
+
+00:19:00.400 --> 00:19:02.460
+Gunakan placeholder untuk tanggal, untuk jumlah catatan.
+
+00:19:03.620 --> 00:19:06.680
+Saat alur memanggil Co-pilot, variable tersebut teratasi secara otomatis.
+
+00:19:07.240 --> 00:19:11.240
+Hasilnya berbunyi, dibuat pada 15 Maret 1563 peristiwa audit dianalisis.
+
+00:19:12.040 --> 00:19:15.220
+Konteks meta itu memuaskan auditor lebih cepat daripada gif manapun.
+
+00:19:15.220 --> 00:19:18.020
+Akurasi menuntut suatu langkah terakhir, validasi.
+
+00:19:18.860 --> 00:19:22.180
+Masukkan kondisi power automate yang meriksa apakah respons Co-pilot tidak kosong.
+
+00:19:22.840 --> 00:19:25.100
+Jika kosong, simpan kegagalan ke lock Anda dan ulangi sekali.
+
+00:19:25.520 --> 00:19:27.800
+Anda telah mengajari agen Anda kesadaran diri dan logika.
+
+00:19:28.240 --> 00:19:30.660
+Sekarang Anda menggabungkannya dengan pemeriksaan kewarasan linguistik.
+
+00:19:30.760 --> 00:19:31.980
+Alur yang sudah selesai terlihat seperti ini.
+
+00:19:33.140 --> 00:19:35.420
+Ekstrak, analisis, ringkas nasikan.
+
+00:19:37.690 --> 00:19:39.090
+Setiap panah mewakili akuntamides.
+
+00:19:39.850 --> 00:19:40.710
+Penyempurnaan akhir.
+
+00:19:40.710 --> 00:19:42.430
+Wad versi perintah sistem Co-pilot.
+
+00:19:42.790 --> 00:19:44.470
+Setiap kali kriteria kepatuhan berubah,
+
+00:19:44.470 --> 00:19:46.630
+Tandai pembaraan Anda V1 DLOL.
+
+00:19:47.250 --> 00:19:50.330
+Dan catat versi perintah mana yang menghasilkan laporan mana.
+
+00:19:50.770 --> 00:19:53.210
+Audit di masa mendatang dapat merujuk tidak hanya pada apa yang terjadi,
+
+00:19:53.350 --> 00:19:55.230
+tetapi bagaimana model narasi diinstruksikan pada saatnya.
+
+00:19:55.610 --> 00:19:57.870
+Ini adalah meta kepatuhan tata kelola yang menulis dirinya sendiri.
+
+00:19:58.430 --> 00:19:59.870
+Birokrasi akhirnya mencapai rekursi.
+
+00:20:00.870 --> 00:20:02.430
+Setelah Copel Studio menulis laporannya,
+
+00:20:02.630 --> 00:20:04.610
+peran manusia Anda menjadi opsional yang melegakan.
+
+00:20:04.610 --> 00:20:07.070
+Agen tersebut menyusun narasi,
+
+00:20:07.290 --> 00:20:07.970
+melampirkan bukti,
+
+00:20:08.090 --> 00:20:08.690
+memposting file,
+
+00:20:08.870 --> 00:20:09.930
+mengarsipkan versi sebelumnya,
+
+00:20:10.130 --> 00:20:11.750
+dan berhenti hingga siklus aktif berikutnya.
+
+00:20:12.330 --> 00:20:13.770
+Ia tidak mengirim email untuk persetujuan,
+
+00:20:14.050 --> 00:20:16.530
+karena Anda secara khusus merancangnya agar tidak merupakan konfirmasi.
+
+00:20:17.850 --> 00:20:20.910
+Diam-diam bangga jika Anda mengizinkan antropomorfisme
+
+00:20:20.910 --> 00:20:22.190
+dengan ketepatan bahasanya.
+
+00:20:22.950 --> 00:20:24.610
+Di sinilah otonomi berhenti menjadi metafora
+
+00:20:24.610 --> 00:20:25.890
+dan menjadi realitas alur kerja.
+
+00:20:26.610 --> 00:20:28.690
+Mesin tidak hanya memproses data kepatuhan,
+
+00:20:29.010 --> 00:20:30.930
+ia menjelaskan kembali kepatuhan kepada manusia
+
+00:20:30.930 --> 00:20:33.430
+sesuai jet dual tanpa drama keterlambatan.
+
+00:20:33.430 --> 00:20:36.030
+Dan, ya, jika Anda ingin sedikit cenaka,
+
+00:20:36.210 --> 00:20:37.630
+Anda bisa memberinya tanda tangan penutup
+
+00:20:37.630 --> 00:20:40.510
+seperti laporan disusun secara otonom oleh agen kopilot GRC.
+
+00:20:41.290 --> 00:20:43.170
+Tidak ada yang bisa mencegah mikro-management atasan
+
+00:20:43.170 --> 00:20:45.070
+seperti robot yang menandatangani pekerjaannya sendiri.
+
+00:20:45.850 --> 00:20:47.670
+Sekarang agen dapat mengartikulasikan temuan,
+
+00:20:47.810 --> 00:20:50.370
+Anda bisa berhenti menulis laporan GRC selamanya atau setidaknya
+
+00:20:50.370 --> 00:20:52.170
+sampai seseorang menonaktifkan konektor Anda.
+
+00:20:53.010 --> 00:20:54.850
+Pada tahap ini, siklus tersebut melengkapi dirinya sendiri.
+
+00:20:55.310 --> 00:20:56.150
+Purview mengumpulkan,
+
+00:20:56.490 --> 00:20:57.710
+power automate menafsirkan,
+
+00:20:58.110 --> 00:20:59.230
+kopilot merangkum dan Anda,
+
+00:20:59.230 --> 00:21:00.330
+secara mengejutkan,
+
+00:21:00.510 --> 00:21:01.830
+mendapatkan kembali akhir pekan Anda.
+
+00:21:01.830 --> 00:21:04.070
+Rutinitas harian yang membosankan berubah
+
+00:21:04.070 --> 00:21:06.370
+menjadi satu alur kerja yang fasi berbicara tentang kepatuhan.
+
+00:21:07.290 --> 00:21:09.110
+Hasilnya muncul di teams pada waktu yang tepat
+
+00:21:09.110 --> 00:21:10.110
+di setiap intervalnya,
+
+00:21:10.410 --> 00:21:10.530
+ya,
+
+00:21:11.470 --> 00:21:12.090
+teks yang jelas,
+
+00:21:12.330 --> 00:21:14.150
+terminologi yang konsisten asal usul yang dapat diaudit,
+
+00:21:14.590 --> 00:21:16.150
+manfaat yang halus bukanlah kecepatan,
+
+00:21:16.530 --> 00:21:17.330
+melainkan standarisasi.
+
+00:21:17.790 --> 00:21:19.050
+Setiap laporan terdengar sama
+
+00:21:19.050 --> 00:21:20.590
+menggunakan ambang batas yang sama
+
+00:21:20.590 --> 00:21:21.970
+dan mencatat metadata yang identik.
+
+00:21:22.970 --> 00:21:24.650
+Auditor tidak lagi membuang waktu berjam-jam
+
+00:21:24.650 --> 00:21:25.390
+untuk memvalidasi format.
+
+00:21:25.690 --> 00:21:26.810
+Mereka mengevaluasi substansinya.
+
+00:21:26.810 --> 00:21:29.190
+Pola risiko menjadi narasi yang teracak sepanjang waktu
+
+00:21:29.190 --> 00:21:30.310
+alih-alih kekacauan spreadsheet.
+
+00:21:30.310 --> 00:21:32.250
+Anda telah mengubah kepatuhan
+
+00:21:32.250 --> 00:21:33.930
+dari sekadar dokumentasi menjadi orkestrasi.
+
+00:21:34.510 --> 00:21:35.770
+Sistem yang selalu aktif yang memantau,
+
+00:21:35.850 --> 00:21:38.090
+menafsirkan, dan melaporkan dengan presisi layaknya di ruang sidang.
+
+00:21:38.750 --> 00:21:40.410
+Laporan KRC manual adalah mesintik.
+
+00:21:40.830 --> 00:21:41.910
+Agen ini adalah pengolah kata,
+
+00:21:42.010 --> 00:21:43.350
+termasuk pemeriksaan otomatis di dalam.
+
+00:21:43.750 --> 00:21:45.370
+Terapkan sebelum musim audit berikutnya
+
+00:21:45.370 --> 00:21:46.850
+dan frase laporan kepatuhan manual
+
+00:21:46.850 --> 00:21:48.370
+akan segera terdengar ketinggalan zaman
+
+00:21:48.370 --> 00:21:49.590
+seperti kirim lop lewat fax.
+
+00:21:50.090 --> 00:21:50.610
+Selanjutnya,
+
+00:21:50.970 --> 00:21:51.850
+memperluas kecerdasan ini
+
+00:21:51.850 --> 00:21:52.930
+kependegakan privasi data.
+
+00:21:53.390 --> 00:21:54.310
+Anda sudah membangun otaknya,
+
+00:21:54.310 --> 00:21:55.410
+sekarang biarkan dia bertugas mengawas.

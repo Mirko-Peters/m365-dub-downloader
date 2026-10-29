@@ -1,0 +1,1144 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:03.500
+Parliamo di report e di governance, rischio e conformità, ovvero GR e GRC,
+
+00:00:03.920 --> 00:00:07.560
+le tre lettere responsabili di un consumo di caffeina superiore a tutti gli audit messi insieme.
+
+00:00:08.020 --> 00:00:12.020
+Da qualche parte in questo momento un povero analista sta ancora copiando i log di audit in Excel,
+
+00:00:12.180 --> 00:00:15.000
+cella per cella come se fossimo nel 2003, le macro fosse o stregoneria.
+
+00:00:15.660 --> 00:00:18.740
+Inizieranno con molte intenzioni, una cartella di lavoro ordinata, qualche filtro,
+
+00:00:18.800 --> 00:00:21.560
+per finire con 40 schede di tabelle pivot che si contraddicono a vicenda.
+
+00:00:22.060 --> 00:00:25.240
+La conformità, che dovrebbe essere una salvaguardia, diventa un'arte performativa.
+
+00:00:25.760 --> 00:00:29.680
+Ore di elaborazione, dati per assicurare ai revisori che tutto è sotto controllo.
+
+00:00:30.260 --> 00:00:31.140
+Spoiler, raramente lo è.
+
+00:00:31.680 --> 00:00:35.900
+Il report in GRC manuale è ciò che accade quando le organizzazioni confondono la documentazione con l'analisi.
+
+00:00:36.860 --> 00:00:41.120
+Estrai i dati da Microsoft Purview, gli esporti, gli spalmi su fogli di calcolo e la chiami governance.
+
+00:00:42.100 --> 00:00:44.640
+La settimana successiva, avendo nuove attività, i dati cambiano.
+
+00:00:44.900 --> 00:00:47.860
+Improvvisamente i tuoi grafici macolati sono solo bugie raccontate in gradazione di colore.
+
+00:00:48.340 --> 00:00:51.160
+Percorsi di audit che dovrai imporre la responsabilità finiscono per imporre il burnout.
+
+00:00:51.620 --> 00:00:54.000
+Peggio ancora, la maggior parte dell'azienda è tratta Purview come un cavo,
+
+00:00:54.000 --> 00:00:55.740
+qualcosa in cui entrare solo prima di un audit.
+
+00:00:55.740 --> 00:01:00.740
+I suoi log di audit accumulano silenziosamente terabyte di dati su chi ha fatto cosa, dove e quando.
+
+00:01:01.320 --> 00:01:01.620
+Utili.
+
+00:01:02.100 --> 00:01:02.580
+Assolutamente.
+
+00:01:02.900 --> 00:01:03.300
+Leggibili.
+
+00:01:04.080 --> 00:01:06.720
+Ogni voce ha un blob JSON così denso che potrebbe curvare la luce.
+
+00:01:07.220 --> 00:01:11.120
+Sì, puoi analizzare manualmente se i weekend sono opzionali e la sanità mentale è negoziabile.
+
+00:01:11.540 --> 00:01:12.020
+Negoziabile.
+
+00:01:12.020 --> 00:01:16.960
+Ora, contrapponi quell'assurdità all'idea di un agente IA, non un copilota magico che
+
+00:01:16.960 --> 00:01:21.120
+indovina le risposte, ma un agente automatizzato, basato su regole, costruito con gli strumenti
+
+00:01:21.120 --> 00:01:21.660
+Microsoft.
+
+00:01:23.200 --> 00:01:27.760
+Copilot Studio per l'intelligenza del linguaggio naturale Power, Automate per l'orchestrazione
+
+00:01:27.760 --> 00:01:30.640
+delle attività e Purview come fonte autorevole di verità.
+
+00:01:31.920 --> 00:01:35.840
+In altre parole, un software che fa ciò che i team di conformità hanno sempre desiderato
+
+00:01:35.840 --> 00:01:39.420
+recuperare, analizzare e spiegare senza sospiri e senza il rischio di versare caffè sul foglio
+
+00:01:39.420 --> 00:01:40.140
+di calcolo principale.
+
+00:01:40.980 --> 00:01:44.600
+Pensalo come esternalizzare il tuo report in GRC a un ostagista che non si lamenta mai,
+
+00:01:44.680 --> 00:01:46.720
+non dorme mai, legge il JSON come se fosse italiano.
+
+00:01:47.380 --> 00:01:51.320
+Alla fine di questa spiegazione saprai esattamente come costruirlo, dal collegamento dei log di
+
+00:01:51.320 --> 00:01:54.560
+Purview alla pianificazione automatizzata dei report, tutto all'interno dell'ecosistema
+
+00:01:54.560 --> 00:01:55.080
+Microsoft.
+
+00:01:55.780 --> 00:01:59.080
+E si vedremo il passaggio logico che trasforma questo processo da semplice automazione ad auditor
+
+00:01:59.080 --> 00:01:59.960
+completamente autonomo.
+
+00:02:00.380 --> 00:02:01.380
+Per ora concentrati su questo.
+
+00:02:01.680 --> 00:02:03.720
+La conformità non dovrebbe dipendere dalla sondazione di capo.
+
+00:02:03.840 --> 00:02:06.220
+Le macchine non si stancano e di certo non etichettano male le colonne.
+
+00:02:06.920 --> 00:02:09.240
+C'è un livello logico, una sottile scelta di design che rende questo
+
+00:02:09.240 --> 00:02:12.320
+agente abbastanza affidabile da inviare report senza supervisione.
+
+00:02:12.440 --> 00:02:14.900
+Ci arriveremo, ma prima capiamo cosa sia effettivamente l'agente.
+
+00:02:15.520 --> 00:02:18.960
+Cosa rende questa combinazione di Copilot Studio e Power Automate qualcosa di più,
+
+00:02:19.200 --> 00:02:20.720
+di un semplice flusso dal nome elegante?
+
+00:02:21.680 --> 00:02:23.420
+Cosa sia effettivamente l'agente GRC?
+
+00:02:24.000 --> 00:02:27.700
+Togliamo di mezzo il fascino dell'IA e definiamo cosa sia veramente questa cosa.
+
+00:02:28.160 --> 00:02:32.100
+Un'automazione strutturata costruita sullo stack Microsoft che si maschera da intelligenza.
+
+00:02:32.680 --> 00:02:35.060
+L'agente GRC è una creatura a tre teste.
+
+00:02:35.800 --> 00:02:38.300
+Ogni test è responsabile di una parte del processo cognitivo.
+
+00:02:38.300 --> 00:02:40.360
+Purview fornisce la memoria grezza.
+
+00:02:41.160 --> 00:02:43.680
+Log di audit, dati di classificazione ed eventi di conformità.
+
+00:02:44.480 --> 00:02:46.420
+Power Automate funge da sistema nervoso.
+
+00:02:46.940 --> 00:02:50.620
+Raccoglie segnali, filtra rumore e assicura che il processo rispetti la pianificazione.
+
+00:02:51.300 --> 00:02:53.760
+Copilot Studio, infine, è la bocca e il traduttore.
+
+00:02:54.360 --> 00:02:57.340
+Prende il gergo tecnico dei log e produce sintesi leggibili dagli umani.
+
+00:02:57.340 --> 00:03:02.380
+L'utente ha elevato i privilegi cinque volte in ventiquattro ore superando la soglia di policy.
+
+00:03:03.200 --> 00:03:04.200
+Questo è inglese, non Jason.
+
+00:03:04.200 --> 00:03:05.200
+Ecco la verità.
+
+00:03:05.640 --> 00:03:09.040
+Il 90% delle attività di conformità non richiede giudizio ma riconoscimento di schemi.
+
+00:03:10.340 --> 00:03:17.480
+Eppure, gli analisti perdono ore a scansionare colonne di tipi di attività e stati quando l'automazione potrebbe categorizzare e riassumere quei pattern automaticamente.
+
+00:03:17.480 --> 00:03:24.200
+Ecco perché questo approccio funziona e il sistema non cerca di pensare come una persona, è costruito per organizzare meglio di una.
+
+00:03:25.020 --> 00:03:26.060
+Analizziamo questi componenti.
+
+00:03:26.460 --> 00:03:30.500
+Microsoft Purview non è solo uno strumento di etichettatura, è la scatola miera della tua conformità.
+
+00:03:31.460 --> 00:03:36.940
+Ogni azione utente in Microsoft 365 dà la condivisione di un documento alla creazione di una policy, viene registrata.
+
+00:03:37.440 --> 00:03:38.100
+Viene registrata.
+
+00:03:38.320 --> 00:03:42.220
+Ma se non sai analizzare strutture JSON edificate, non otterrai mai grandi intuizioni.
+
+00:03:42.780 --> 00:03:45.120
+Questo è il problema alla base, abbondanza di dati, zero legibilità.
+
+00:03:45.120 --> 00:03:48.180
+Poi, Power Automate non è affascinante, ma è disciplinato.
+
+00:03:48.720 --> 00:03:51.740
+Si attiva puntuale, non dimentica mai, segue ogni passaggio alla lettera.
+
+00:03:52.360 --> 00:03:56.800
+Definisce una pianificazione diciamo alle 8 ogni giorno e richiama i connettori per estrarre le ultime attività da Purview.
+
+00:03:57.880 --> 00:03:59.360
+Se configurato male, humanismo è panico.
+
+00:04:00.040 --> 00:04:04.280
+Se configurato male qui, il flusso fallisce silenziosamente, ma registra l'errore con precisione assoluta.
+
+00:04:04.280 --> 00:04:05.240
+La conformità mail-on.
+
+00:04:05.800 --> 00:04:08.060
+Power Automate li fornisce con religiosa regolarità.
+
+00:04:08.660 --> 00:04:11.580
+E infine Copilot Studio, che trasforma dati strutturati in una razione.
+
+00:04:11.580 --> 00:04:16.280
+Gli fornisce un riepilogo strutturato, magari una tabella JSON con le azioni rischiose per l'utente,
+
+00:04:16.360 --> 00:04:18.580
+e lui produce riassunti dei rischi in linguaggio naturale.
+
+00:04:19.880 --> 00:04:21.720
+È qui che appare l'illusione dell'intelligenza.
+
+00:04:22.100 --> 00:04:25.040
+Non sta indovinando, sta seguendo regole incorporate nel prompt che hai progettato.
+
+00:04:25.380 --> 00:04:26.400
+Ad esempio, hai istruito?
+
+00:04:27.160 --> 00:04:31.600
+Riassumi le attività di rischio notevoli categorizzate per gravità e includi una raccomandazione per categoria.
+
+00:04:31.600 --> 00:04:35.940
+L'output sembra il memo di un analista, ma è onestà algoritmica vestita di grammatica.
+
+00:04:36.680 --> 00:04:37.940
+Ora affrontiamo l'ironia non detta.
+
+00:04:38.680 --> 00:04:42.560
+Le aziende comprano dashboard che promettono visibilità, report lucidi e indicatori colorati,
+
+00:04:42.620 --> 00:04:43.580
+ma le dashboard non spiegano.
+
+00:04:44.160 --> 00:04:44.540
+Mostrano.
+
+00:04:44.940 --> 00:04:46.200
+L'agente GRC invece scrive.
+
+00:04:46.880 --> 00:04:52.760
+Traduce schemi in frasi, eliminando il divario interpretativo che ha causato innumerevoli mancati incidenti nelle revisioni di conformità.
+
+00:04:52.760 --> 00:04:58.300
+Quando il tuo dirigente ti chiede i pattern di rischio dell'ultimo mese, non gli invia un link a Power BI di cui ti fidi a malapena,
+
+00:04:58.380 --> 00:05:03.440
+ma gli invia una narrazione chiara generata da un workflow eseguito alle 8.05 mentre stavi ancora prendendo il caffè.
+
+00:05:04.020 --> 00:05:05.380
+Perché non l'hanno già fatto più team?
+
+00:05:05.980 --> 00:05:08.320
+Perché molti sottovalutano quanto possa essere leggibile l'automazione?
+
+00:05:08.840 --> 00:05:11.800
+Vedano l'Ia come imprevedibile, quando in realtà questo stack è deterministico.
+
+00:05:12.100 --> 00:05:12.860
+Definisci tutto tu.
+
+00:05:13.340 --> 00:05:16.080
+La logica, la frequenza, l'ambito, persino il tono del linguaggio.
+
+00:05:17.080 --> 00:05:18.400
+L'autonomia non è casuale.
+
+00:05:18.780 --> 00:05:20.780
+È un'automazione disciplinata con competenze linguistiche.
+
+00:05:20.780 --> 00:05:23.720
+Prima che questo agente possa pensare, però, deve vedere.
+
+00:05:24.440 --> 00:05:29.220
+Ciò significa stabilire una pipeline di dati che gli dia accesso alle giuste porzioni dei dati di audit e preview, né più né meno.
+
+00:05:29.840 --> 00:05:32.100
+Senza quella visibilità, automatizzerai la cecità.
+
+00:05:32.460 --> 00:05:37.380
+Quindi successivamente collegheremo Power Automate a preview, definiremo quali eventi contano e insegneremo al nostro agente dove guardare.
+
+00:05:37.720 --> 00:05:39.480
+Solo allora potremo insegnarvi cosa pensare.
+
+00:05:40.200 --> 00:05:41.600
+Costruire la pipeline di dati di Power View.
+
+00:05:41.820 --> 00:05:45.100
+Prima di poter insegnare al tuo agente GRC a pensare, devi dargli gli occhi.
+
+00:05:45.580 --> 00:05:47.280
+Collegalo direttamente alla fonte della verità.
+
+00:05:48.040 --> 00:05:49.220
+Log di audit di Microsoft Preview.
+
+00:05:49.220 --> 00:05:52.600
+Questi log tracciano chi ha toccato cosa, quando e come.
+
+00:05:53.540 --> 00:05:56.920
+Sfortunatamente sono archiviati in un delizioso incubo strutturale chiamato JSON.
+
+00:05:57.560 --> 00:06:00.220
+Pensa al JSON come l'equivalente ingegneristico del cerco legale.
+
+00:06:00.840 --> 00:06:02.800
+Tecnicamente preciso, praticamente illegibile.
+
+00:06:03.320 --> 00:06:07.420
+La bellezza di Power Automate è che legge questo nonsense fluentemente a patto di collegarlo correttamente.
+
+00:06:08.220 --> 00:06:08.880
+Primo passo è l'essere.
+
+00:06:08.880 --> 00:06:15.920
+Inizi con il connettore integrato di Preview o, se ami soffrire, con un'azione HTTP richiamando direttamente l'API dei log di audit di Preview.
+
+00:06:16.700 --> 00:06:18.160
+Entrambe le strade ottengono lo stesso risultato.
+
+00:06:18.600 --> 00:06:25.840
+Un flusso di dati che rappresenta tutto ciò che è accaduto all'interno del tuo tenant, condivisione di file, modifiche ai permessi, violazioni di accesso, accessi degli amministratori e altro ancora.
+
+00:06:25.840 --> 00:06:29.020
+L'approccio più disciplinato consiste nel limitare l'ambito fin da su.
+
+00:06:29.520 --> 00:06:33.700
+Sì, potresti estrarre l'intero feed di audit, ma è come fare il backup dell'intero internet perché hai perso un PDF.
+
+00:06:34.560 --> 00:06:40.440
+Definisci quali eventi la conformità, altrimenti il tuo flusso diventa un involontario attacco di negazione del servizio e la tua pazienza.
+
+00:06:41.240 --> 00:06:44.700
+Ora controllo degli accessi, Power Automate agisce solo in base ai permessi che gli vengono concessi.
+
+00:06:45.020 --> 00:06:51.340
+Se il service account del tuo flusso non può leggere il log di audit di Preview, il tuo agente fisserà il vuoto e riporterà dirigentemente che non sono stati trovati i problemi.
+
+00:06:52.340 --> 00:06:55.060
+Questa non è rassicurazione e cecità mascherata da successo.
+
+00:06:55.840 --> 00:07:01.880
+Assicurati che il service account abbia il ruolo di lettore di log di audit in Preview e che possa autenticarsi senza interruzioni MFA e I.
+
+00:07:02.560 --> 00:07:07.400
+L'IA è obbediente ma non è creativa, non cliccherà per autenticarsi o risponderà un prompt alle due mati.
+
+00:07:07.760 --> 00:07:13.340
+Assegna le credenziali con attenzione archiviale nel giro chi volto nei riferimenti di connessione così rimarrai conforme mantenendo attiva l'automazione.
+
+00:07:14.300 --> 00:07:16.300
+Una volta stabilizzata l'estrella dei dati, si passa a filtrare?
+
+00:07:16.980 --> 00:07:20.700
+Nessuno ha bisogno di ogni evento di accesso ai file della cartella del menu della mensa.
+
+00:07:21.860 --> 00:07:24.020
+Invece filtra per identificatori di rischio reale.
+
+00:07:24.020 --> 00:07:29.400
+Accesso utente da nuova posizione, modifica dell'assegnazione di ruolo, condivisione esterna attivata, policy di etichettura modificata.
+
+00:07:30.020 --> 00:07:32.040
+Queste raccontano storie che interessano davvero i revisori.
+
+00:07:32.620 --> 00:07:38.280
+Puoi filtrare nella fase di query usando i parametri dell'API o avalle all'interno di Power Automate con la logica condizionale.
+
+00:07:38.760 --> 00:07:40.280
+Qualunque soluzione mantiene gestibile carico.
+
+00:07:40.700 --> 00:07:42.560
+Ricorda, non stai accumulando, stai selezionando.
+
+00:07:43.300 --> 00:07:47.140
+Poi arriva la parte che distingue i professionisti da chi pensa che il copia e incolla sia automazione.
+
+00:07:47.140 --> 00:07:53.420
+Convertirei quei blocchi JSON in colonne strutturate, qualcosa che il comodulo Copilot possa interpretare in seguito.
+
+00:07:54.280 --> 00:07:59.060
+Un metodo semplice è usare l'azione parse JSON con uno schema definito e estratto da un evento per view di esempio.
+
+00:07:59.940 --> 00:08:03.420
+Se i termini array in edificati causano fastidio, benvenuto nella programmazione per la compliance.
+
+00:08:03.420 --> 00:08:09.440
+Ogni proprietà, id utente, operazione, carico di lavoro, stato del risultato, IP Client diventa una propria variabile.
+
+00:08:10.240 --> 00:08:14.060
+Stai essenzialmente insegnando a tuo futuro agente AI il vocabolario prima che inizi la conversazione.
+
+00:08:14.860 --> 00:08:18.120
+In questa fase scoprirai l'umorismo esistenziale dei formati dati di Microsoft.
+
+00:08:18.640 --> 00:08:21.740
+Alcuni campi di audit si presentano come array anche quando contengono signori valori.
+
+00:08:22.640 --> 00:08:26.400
+Altri nascondono risultati sotto tre strati di nidificazione come matriosche di ambiguità.
+
+00:08:27.480 --> 00:08:30.260
+Power Automate gestisce questo caos con le espressioni.
+
+00:08:30.260 --> 00:08:37.360
+La sintassi Items Apply to Each User ID può sembrare arcana ma è così che indicia l'automazione di scavare nel JSON e far emergere il significato.
+
+00:08:37.920 --> 00:08:40.560
+Un piccolo errore di battitura qui crea spettacolari assurdità in seguito.
+
+00:08:40.900 --> 00:08:43.140
+Quindi testa ogni estrazione con piccole esecuzioni di prova.
+
+00:08:43.640 --> 00:08:47.840
+Se il debug dei flussi è un lavoro affascinante, potresti voler mantenere questi dati puliti da qualche parte.
+
+00:08:48.340 --> 00:08:52.180
+SharePoint, Dataverse o persino un database SQL a seconda di quanto siano pesanti i tuoi report.
+
+00:08:52.700 --> 00:08:57.940
+Questo archivio funge da memoria a breve termine fornendo al tuo agente un confronto storico senza interrogare piuttutamente per view.
+
+00:08:58.400 --> 00:08:59.820
+Pensalo come una cascia di intelligenza.
+
+00:09:00.260 --> 00:09:02.940
+Gli eventi di ieri aiutano l'analisi di oggi a sembrare informata.
+
+00:09:03.540 --> 00:09:08.720
+Se hai bisogno di funzionalità colonnari o relazioni tra set di dati, Dataverse integra meglio con Power Automate.
+
+00:09:09.480 --> 00:09:12.280
+SharePoint è più semplice ma più macchinoso oltre qualche migliaio di righe.
+
+00:09:13.280 --> 00:09:14.380
+Prossimo passo alla pianificazione.
+
+00:09:14.940 --> 00:09:15.620
+Definisci la cadenza.
+
+00:09:16.080 --> 00:09:18.960
+Riepilovi giornalieri per ambienti dinamici settimanali per sistemi più calmi.
+
+00:09:19.520 --> 00:09:21.120
+Usa il trigger di ricorrenza di Power Automate.
+
+00:09:21.800 --> 00:09:26.600
+Impostalo sul tuo fuso orario, non su TC, a meno che non ti piaccia chiederti perché i reporter vino alle 3 del mattino.
+
+00:09:27.340 --> 00:09:33.280
+Il flusso si avvia automaticamente, estrae i dati filtrati, li trasforma, li archivia e prepara il payload per la fase successiva e il cervello logico.
+
+00:09:33.280 --> 00:09:38.080
+La coerenza della compliance non dipende più dall'entusiasmo umano, al meccanismo orologeria.
+
+00:09:38.940 --> 00:09:47.160
+Mentre configuri la tolleranza agli errori, supponi che l'app di Parview restituisca un errore di troppe richieste perché, sorprendentemente, ogni altro analista ha cercato di interrogare i log nello stesso secondo.
+
+00:09:47.980 --> 00:09:49.780
+Crea politiche di ripetizione ai messaggi di fallback.
+
+00:09:50.440 --> 00:09:52.100
+Anche l'automazione deve fallire con eleganza.
+
+00:09:53.040 --> 00:09:56.880
+Scrivi l'errore in un file di log e invia un messaggio Teams se le soglie superano i parametri previsti.
+
+00:09:57.540 --> 00:10:00.140
+In questo modo gestisci il fallimento come dati, non come dramma.
+
+00:10:00.960 --> 00:10:02.980
+Ricorda, i revisori non penalizzano gli errori.
+
+00:10:03.580 --> 00:10:05.560
+Penalizzano la mancanza di documentazione su di essi.
+
+00:10:06.000 --> 00:10:07.080
+Ora hai una pipeline attiva.
+
+00:10:07.840 --> 00:10:11.900
+Purview trasmette i dati attraverso le arterie di Power Automate, verso l'archivio che hai scelto.
+
+00:10:12.640 --> 00:10:15.880
+Sostituisce il processo manuale di raccolta dati con qualcosa di molto più disciplinato.
+
+00:10:16.620 --> 00:10:19.280
+Se fatto bene, introduce anche un sottile cambiamento culturale.
+
+00:10:19.740 --> 00:10:23.620
+All'improvviso il tuo reporting di conformità non è uno sprint pre-audit, ma un battito continuo.
+
+00:10:24.100 --> 00:10:28.740
+E per la cronaca, se potresti ottenere lo stesso interrogando manualmente Purview ogni venerdì e copiando i risultati in Excel,
+
+00:10:29.420 --> 00:10:30.680
+potresti anche zangolare il tuo burro.
+
+00:10:30.680 --> 00:10:33.080
+La pipeline non esiste perché non puoi fare altrimenti.
+
+00:10:33.480 --> 00:10:35.000
+Esiste perché dai valori ai tuoi fine settimana.
+
+00:10:35.620 --> 00:10:39.020
+Chi ride meglio è chi non deve più scorrere loghe esportati sostenendo che l'automazione sia rischiosa.
+
+00:10:39.840 --> 00:10:44.420
+L'unico vero rischio rimasto è restare legati a un processo così fragile che l'assenza di un analista interrompe la traccia di Audi.
+
+00:10:44.760 --> 00:10:48.920
+Ora che il tuo agente era vista, un flusso costante di dati strutturato e pianificato è tempo di dargli la cognizione.
+
+00:10:48.920 --> 00:10:55.400
+Il livello successivo trasforma le informazioni grezze in interpretazione, soglie decisionali, logica condizionale e sintesi dei dati.
+
+00:10:55.860 --> 00:10:57.620
+In sostanza passiamo dagli occhi al cervello.
+
+00:10:58.040 --> 00:10:59.000
+Le fondamenta sono gettate.
+
+00:10:59.380 --> 00:11:00.300
+Insegniamogli a pensare.
+
+00:11:01.100 --> 00:11:01.940
+Diamo il cervello alla gente.
+
+00:11:02.520 --> 00:11:03.440
+Logica di Power Automate.
+
+00:11:03.700 --> 00:11:05.220
+Power Automate è un'intelligenza artificiale.
+
+00:11:05.600 --> 00:11:07.820
+Non sogna, non specula e non allucina rischi di conformità.
+
+00:11:08.580 --> 00:11:11.140
+Quello che fa è qualcosa che la maggior parte degli umani non riesce a sostenere, obbedienza.
+
+00:11:11.840 --> 00:11:15.220
+Non dimentica man passaggio, non improvvisa mai e non sostiene mai che dovrebbe aver funzionato.
+
+00:11:16.180 --> 00:11:18.540
+Questa rigidità prevedibile è esattamente ciò che richiede l'autonomia.
+
+00:11:19.060 --> 00:11:21.320
+Il livello logico del tuo agente GRC inizia dalla struttura.
+
+00:11:22.060 --> 00:11:27.800
+Il flusso deve attivarsi da solo, interrogare Power View in modo affidabile, interpretare ciò che trova e decidere quando gli eventi superano le soli definite.
+
+00:11:29.040 --> 00:11:29.580
+Immagina la catena.
+
+00:11:30.460 --> 00:11:31.740
+L'attivatore di ricorrenza si avvia.
+
+00:11:32.140 --> 00:11:33.160
+Una chiamata raggiunge Power View.
+
+00:11:33.700 --> 00:11:39.160
+I dati vengono ripuliti, i modelli conteggiati, le categorie di rischio assegnate, le... niente drammi, solo esecuzione.
+
+00:11:39.600 --> 00:11:40.780
+Inizia con un trigger di ricorrenza.
+
+00:11:40.780 --> 00:11:43.940
+Una ricorrenza ben programmata è la risposta della civiltà all'edimenticanza umana.
+
+00:11:44.300 --> 00:11:46.240
+Configuralo per il fuso orario in cui operano i tuoi revisori.
+
+00:11:46.860 --> 00:11:53.060
+Che sia giornaliero o settimanale, quella pianificazione permette al flusso di iniziare il suo rituale senza solleciti, esattamente come restano vivi sistemi autonomi.
+
+00:11:53.640 --> 00:11:55.540
+Fallo seguire immediatamente da un blocco di inizializzazione.
+
+00:11:56.340 --> 00:11:57.900
+Variabili di ambiente, contatori, array.
+
+00:11:58.340 --> 00:12:00.920
+Questi forniscono un'impalcatura cognitiva che l'agente utilizzerà in seguito.
+
+00:12:01.440 --> 00:12:05.340
+Variabili come totale eventi, conteggio rischi elevati e data del report diventano la sua memoria di lavoro.
+
+00:12:05.340 --> 00:12:10.860
+Una volta attivato, il flusso richiama il connettore dei log di audit di Purview o la API HTTP.
+
+00:12:12.180 --> 00:12:12.840
+Poi arriva la realtà.
+
+00:12:13.500 --> 00:12:17.340
+Le risposte grezze includono rumore statico, segnali di sistema o eventi del tutto rilevanti.
+
+00:12:18.540 --> 00:12:20.500
+Inserisci un passaggio o filtra matrice per rimuovere la spazzatura.
+
+00:12:20.500 --> 00:12:27.420
+Modello comune, ignora ogni record in cui il tipo utente o un'entità di servizio e mantieni solo i tipi di operazione legati alla governance dei dati o al cambio di policy.
+
+00:12:27.860 --> 00:12:30.560
+Questa potatura è ciò che mantiene il tuo agente analitico invece che ansioso.
+
+00:12:31.460 --> 00:12:35.000
+Data la passione di Microsoft per la ridondanza, molti flussi di log ripetono eventi identici.
+
+00:12:35.860 --> 00:12:38.460
+Elimina i duplicati usando una semplice unione su espressione in confronto con C.
+
+00:12:39.000 --> 00:12:41.920
+Ciò che resta è il segnale, un sottoinsieme veritiero che vale la pena classificare.
+
+00:12:42.580 --> 00:12:44.580
+È qui che lo script si guadagna l'etichetta di cervello.
+
+00:12:44.580 --> 00:12:49.820
+Aggiungi un'azione, componi o seleziona, che raggruppi i record rimanenti per nome di entità utente e operazione.
+
+00:12:50.260 --> 00:12:53.220
+Poi alimenta i conteggi in cicli e applica a ciascuno che sommano ogni categoria.
+
+00:12:53.900 --> 00:12:55.440
+Alla fine il tuo agente possiede un istantane.
+
+00:12:56.000 --> 00:12:59.340
+Chi ha fatto cosa, quanto spesso e si è raggiunto i limiti di rischio predefiniti?
+
+00:13:00.200 --> 00:13:03.880
+Il segreto dell'autonomia è lasciare che il sistema deduca i livelli di rischio dalle soglie che definisci.
+
+00:13:04.360 --> 00:13:09.280
+Per esempio, se le escalation di privilegi sono tre, imposta il livello di rischio su alto.
+
+00:13:09.940 --> 00:13:12.900
+Se le condivisioni esterne sono una, imposta il livello di rischio sul medio.
+
+00:13:13.660 --> 00:13:14.440
+Altrimenti normale.
+
+00:13:15.280 --> 00:13:17.540
+Questa logica non inventa un significato, lo impone.
+
+00:13:18.580 --> 00:13:22.860
+Codificando cosa significhi troppo, hai sostituito l'intuito umano con la chiarezza numerica.
+
+00:13:23.920 --> 00:13:25.200
+Usazioni condizionali significate.
+
+00:13:25.600 --> 00:13:29.040
+Quando il livello di rischio è alto, aggiungi le informazioni con l'utente a una matrice ad alto rischio.
+
+00:13:29.540 --> 00:13:31.240
+Quando è medio, magari metti in coda per una revisione.
+
+00:13:31.400 --> 00:13:35.620
+Quando non appare nulla di insolito, registra un messaggio di nessun risultato invece di restituire silenzio.
+
+00:13:36.340 --> 00:13:39.160
+La distinzione tra dati mancanti e assenza di dati è sacra nella conformità.
+
+00:13:39.800 --> 00:13:43.940
+Dopo che le soglie si attivano, chiama opzionalmente un endpoint di Copilot Studio per una sintesi narrativa.
+
+00:13:43.940 --> 00:13:46.440
+Due utenti hanno superato le soglie di rischio.
+
+00:13:46.980 --> 00:13:48.980
+Ma quel passaggio linguistico appartiene alla sezione successiva.
+
+00:13:49.740 --> 00:13:52.000
+Qui lo scopo è la qualificazione, non la composizione.
+
+00:13:52.760 --> 00:13:53.380
+Gli errori capitano.
+
+00:13:53.880 --> 00:13:57.320
+L'API Riperview ha limitazioni a intoppi più spesso di quanto il suo marketing lascia intendere.
+
+00:13:57.320 --> 00:14:01.820
+Avvolgi tutte le chiamate HTTP in un contenitore di ambito con policy di riprobabilità.
+
+00:14:02.420 --> 00:14:03.060
+Tre tentativi.
+
+00:14:03.180 --> 00:14:04.160
+Backoff esponenziale.
+
+00:14:05.040 --> 00:14:11.200
+Nel ramo di errore, registra il messaggio, il timestamp e l'ID di esecuzione del flusso in un enrico SharePoint o tabella dataverse chiamata a stato automazione.
+
+00:14:11.920 --> 00:14:13.380
+Al primo deployment, aspetta delle comiche.
+
+00:14:14.120 --> 00:14:17.320
+Quando ho testato questa build per la prima volta, l'agente ha riportato con orgoglio zero problemi.
+
+00:14:17.680 --> 00:14:18.760
+Conformità perfetta, ha pensato.
+
+00:14:19.320 --> 00:14:22.320
+Finché non ho capito che all'account di servizio mancava il ruolo di lettore dei log di odio.
+
+00:14:22.320 --> 00:14:25.780
+Il robot non era pigro, era obbedientemente cieco.
+
+00:14:26.780 --> 00:14:29.900
+Un promemoria che l'automazione impone esattamente ciò che le dai, e nulla di più.
+
+00:14:30.660 --> 00:14:32.740
+Ogni esecuzione del flusso scrive una prova del suo svolgimento.
+
+00:14:33.380 --> 00:14:37.280
+Inserisci un'azione finale di aggiunta al file o creazione elemento che salve le metriche di riepilogo.
+
+00:14:37.580 --> 00:14:40.440
+Il totale 20 elaborati, l'utente a maggior rischio, la durata dell'esecuzione.
+
+00:14:41.520 --> 00:14:44.640
+E invia questi risultati a un canale Teams o a un libreria SharePoint Governance.
+
+00:14:45.440 --> 00:14:47.940
+Quando arriva la stagione degli audit, non potrai difenderti solo con il record.
+
+00:14:48.340 --> 00:14:49.300
+Dovremo stare ai dati di fatto.
+
+00:14:49.300 --> 00:14:52.960
+Aggiungi un'ulteriore precauzione, includi un ID di esecuzione e la versione del file.
+
+00:14:53.640 --> 00:14:58.060
+Se in seguito le soglie cambieranno, i revisori potranno comunque tracciare quale logica ha prodotto quale risultato.
+
+00:14:58.540 --> 00:15:01.420
+La governance della macchina equivale alla governance tramite la macchina.
+
+00:15:02.080 --> 00:15:04.300
+A questo punto l'automazione può classificare, contare e decidere.
+
+00:15:05.280 --> 00:15:08.220
+Sa quando i riveli di rischio violano la policy, ma non dice nulla al riguardo.
+
+00:15:09.140 --> 00:15:12.220
+Per gli esseri umani quel silenzio è inquietante, quindi il livello successivo fornirà le parole.
+
+00:15:12.220 --> 00:15:17.200
+O, come potremmo dire, ora che sa pensare deve saper parlare, preferibilmente in un linguaggio chiaro.
+
+00:15:17.900 --> 00:15:18.680
+Insegnargli a scrivere.
+
+00:15:19.040 --> 00:15:20.200
+L'integrazione con Copaello Studio.
+
+00:15:20.940 --> 00:15:24.520
+Fino ad ora il tuo agente è stato del tipo forte e silenzioso, efficiente, ma muto.
+
+00:15:25.420 --> 00:15:27.020
+Copaello Studio è ciò che gli dà voce.
+
+00:15:27.220 --> 00:15:29.280
+Un interprete che traduce i dati in diplomazia.
+
+00:15:29.280 --> 00:15:34.180
+Immaginalo come un mediatore multilinguo intrappolato tra codice e riunioni di comitato.
+
+00:15:35.060 --> 00:15:39.300
+Un sistema che non inventa storie, riscrive le realtà in frasi che gli umani possono comprendere.
+
+00:15:40.240 --> 00:15:44.060
+Il suo talento sta nel trasformare la pallude di Jason prodotta da Power Automate,
+
+00:15:44.160 --> 00:15:48.100
+il tuo riepilogo, ordinato di azioni utente, conteggi di rischio e registro di eventi.
+
+00:15:48.160 --> 00:15:51.060
+In paragrafi abbastanza educati per i dirigenti e precisi per i revisori.
+
+00:15:51.900 --> 00:15:55.520
+Con nel divario tra sintassi e politica, assicurando che ciò che un tempo erano dati grezzi
+
+00:15:55.520 --> 00:15:58.720
+ora si legga come un giudizio ponderato invece di un incomprensibile foglio di calcolo.
+
+00:15:58.720 --> 00:16:01.380
+Inizia definendo che tipo di comunicazione desideri.
+
+00:16:02.080 --> 00:16:05.740
+Di solito ce ne sono tre, un riepilogo esecutivo, un appendice tecnica e delle raccomandazioni.
+
+00:16:06.120 --> 00:16:07.700
+Ognuna serve a un diverso livello di competenza.
+
+00:16:07.980 --> 00:16:09.240
+Il management vuole un solo paragrafo.
+
+00:16:09.560 --> 00:16:11.040
+I revisori hanno bisogno di percorsi probati.
+
+00:16:11.380 --> 00:16:14.340
+Il personale IT vuole ogni singolo campo perché si nutre di dati.
+
+00:16:14.840 --> 00:16:18.540
+Creerai un'unica esperienza co-pilot in studio ma strutturerai più prompt al suo interno.
+
+00:16:19.440 --> 00:16:21.600
+Ogni prompt modella tono, formato e prolissità.
+
+00:16:22.860 --> 00:16:23.300
+Esempio.
+
+00:16:23.540 --> 00:16:25.840
+Riassumi i rischi principali usando un linguaggio semplice,
+
+00:16:25.980 --> 00:16:28.500
+limita 5 punti elenco e suggerisce un rimedio per ciascuno.
+
+00:16:29.600 --> 00:16:30.660
+Successivo potrebbe essere.
+
+00:16:30.820 --> 00:16:33.920
+Produce un appendice tecnica che elenchi ogni evento ad alto rischio in formato tabella.
+
+00:16:34.400 --> 00:16:36.380
+Per collegare Power Automate a Copilot Studio,
+
+00:16:36.600 --> 00:16:41.780
+usa un'azione HTTP nel tuo flusso che invii il payload JSON strutturato all'URL dell'endpoint del Copilot.
+
+00:16:42.780 --> 00:16:46.140
+Il Copilot interpreta quel payload usando il prompt di sistema che hai definito.
+
+00:16:46.960 --> 00:16:48.960
+L'autenticazione di Microsoft rende tutto sicuro.
+
+00:16:49.600 --> 00:16:52.860
+Autentichi la chiamata tramite Azure AD così solo il tuo flusso può accedervi.
+
+00:16:53.640 --> 00:16:54.080
+Congratulazioni.
+
+00:16:54.080 --> 00:16:57.460
+Ha appena insegnato al tuo bot a inviare pensieri strutturati a una macchina da scrivere.
+
+00:16:58.340 --> 00:16:59.920
+Il risultato restituito è testo in un numero.
+
+00:17:00.420 --> 00:17:01.240
+Quel testo è il tuo report.
+
+00:17:02.020 --> 00:17:03.800
+Invialo a Copilot con istruzioni come
+
+00:17:03.800 --> 00:17:07.760
+riassumi questi risultati in un breve report di conformità classificato per gravità.
+
+00:17:08.020 --> 00:17:11.740
+Consiglia un'azione per ogni rilievo e chiudi con la tendenza generale.
+
+00:17:13.020 --> 00:17:15.640
+Copilot restituisce qualcosa che assomiglia il promemoria dell'analista.
+
+00:17:15.640 --> 00:17:19.080
+Due utenti hanno mostrato un comportamento di rischio elevato ieri.
+
+00:17:19.560 --> 00:17:22.740
+Ad elevanza ha esibito tre escalation di privilegi superando la soglia consentita.
+
+00:17:23.240 --> 00:17:25.120
+Si raccomandano le visioni immediata dei ruoli di amministratore.
+
+00:17:26.700 --> 00:17:28.520
+Megan B ha tentato una condivisione esterna una volta.
+
+00:17:28.960 --> 00:17:30.680
+Ricordare l'utente della politica sui dati esterni.
+
+00:17:31.280 --> 00:17:32.460
+Nessun'altra anomalia è rilevata.
+
+00:17:32.880 --> 00:17:34.800
+Tendenza complessiva rispetto alla design stabile.
+
+00:17:36.080 --> 00:17:37.520
+Non si tratta di congettura generale.
+
+00:17:37.900 --> 00:17:40.660
+È una sintesi formattata che segue prompt deterministici.
+
+00:17:41.460 --> 00:17:43.480
+Gli umani lo chiamano scrittura, le macchine lo chiamano output.
+
+00:17:43.480 --> 00:17:46.680
+Il segreto è il tuo controllo sia sulla struttura dei dati che su quella del linguaggio.
+
+00:17:47.480 --> 00:17:50.040
+Copilot non vaga liberamente e sta esponendo statistiche.
+
+00:17:51.720 --> 00:17:52.740
+Ora decidi la distribuzione.
+
+00:17:53.360 --> 00:17:55.900
+I comuni mortali non dovrebbero accedere al dataverse per trovare i report.
+
+00:17:56.580 --> 00:17:58.520
+Quindi usa di nuovo i connettori di Power Automate.
+
+00:17:59.280 --> 00:18:00.840
+Lavora su due rami dello stesso flusso.
+
+00:18:01.540 --> 00:18:04.360
+Uno che pubblica il repilogo di Copilot direttamente in un canale Teams.
+
+00:18:04.740 --> 00:18:07.220
+L'altro che registra una versione HTML completa su SharePoint.
+
+00:18:08.020 --> 00:18:09.540
+Il management legge il post su Teams.
+
+00:18:09.740 --> 00:18:11.620
+I revisori aprono l'archivio per la documentazione.
+
+00:18:11.620 --> 00:18:15.020
+Entrambi arrivano con timestamp automatico in una formulazione identica.
+
+00:18:15.700 --> 00:18:16.480
+Questa è coerenza.
+
+00:18:16.980 --> 00:18:18.840
+Una virtù sconosciuta nella maggior parte degli scrittori umani.
+
+00:18:19.480 --> 00:18:21.080
+Parliamo della disciplina in ingegneria dei prom.
+
+00:18:21.480 --> 00:18:22.780
+Serviranno di parametri di protezione.
+
+00:18:23.180 --> 00:18:25.380
+Specifica le intestazioni esatte che Copilot deve usare.
+
+00:18:25.780 --> 00:18:27.860
+Panoramica, risultati chiave, raccomandazioni.
+
+00:18:28.420 --> 00:18:32.220
+Se lasciato senza indicazioni, Copilot cercherà di impressionarti con stile narrativo o emoji.
+
+00:18:32.840 --> 00:18:35.240
+Un report di audit con emoji è vendibile solo al caos.
+
+00:18:35.240 --> 00:18:42.720
+Inserisci direttive come usare un tono professionale neutro, evitare linguaggio speculativo, includere metriche quantificabili.
+
+00:18:43.360 --> 00:18:46.080
+Più le tue istruzioni sono precise, più il tuo output sarà riproducibile.
+
+00:18:46.620 --> 00:18:49.340
+La conformità prospera sulla riproducibilità, non sulla personalità.
+
+00:18:50.020 --> 00:18:51.360
+C'è bellezza nei meccanismi banali.
+
+00:18:52.400 --> 00:18:54.240
+Copilot Studio consente l'uso di variabili di contesto.
+
+00:18:55.140 --> 00:18:59.500
+Può incorporare dati dinamici come la data del report o la durata dell'esecuzione direttamente nell'output.
+
+00:18:59.500 --> 00:19:02.620
+Usa segna posto per la data e per il conteggio dei record.
+
+00:19:03.580 --> 00:19:06.720
+Quando il flusso richiama Copilot, quelle variabili si risolvono automaticamente.
+
+00:19:07.160 --> 00:19:10.980
+Risultato recita, generato il 15 marzo, 563 eventi di audit analizzati.
+
+00:19:11.960 --> 00:19:15.200
+Quel metà contesto soddisfa i revisori più velocemente di quanto farebbe mai una GIF.
+
+00:19:15.800 --> 00:19:18.080
+L'accuratezza richiede un passaggio finale, la convalida.
+
+00:19:18.940 --> 00:19:22.240
+Inserisci una condizione di Power Automate che verifichi che la risposta di Copilot non sia vuota.
+
+00:19:22.840 --> 00:19:25.200
+In caso contrario, salva l'errore nel tuo registro ed esigua una ricorsione.
+
+00:19:25.200 --> 00:19:27.860
+Hai già insegnato al tuo agente l'autoconsapevolezza e la logica.
+
+00:19:27.860 --> 00:19:30.080
+Ora le combini con controlli di sanità linguistica.
+
+00:19:30.820 --> 00:19:31.820
+Il flusso finito appare così.
+
+00:19:32.580 --> 00:19:35.640
+Estrai, analizza, riassumi, esponi, pubblica.
+
+00:19:37.260 --> 00:19:39.220
+Ogni freccia rappresenta la responsabilità.
+
+00:19:39.800 --> 00:19:40.640
+Raffinamento finale.
+
+00:19:41.140 --> 00:19:42.780
+Versione al prompt di sistema di Copilot.
+
+00:19:42.980 --> 00:19:47.460
+Ogni volta che cambiano i criteri di conformità, etichetta il tuo aggiornamento come V1, 1.1 eccetera.
+
+00:19:47.660 --> 00:19:49.980
+E registra quale versione del prompt ha prodotto quale report.
+
+00:19:50.420 --> 00:19:53.260
+Le revisioni future potranno fare riferimento non solo a ciò che è accaduto,
+
+00:19:53.260 --> 00:19:55.220
+ma come il modello narrativo era istruito in quel momento.
+
+00:19:55.600 --> 00:19:57.780
+E meta conformità, la governance che scrive se stessa.
+
+00:19:58.340 --> 00:20:00.140
+La burocrazia raggiunge finalmente la ricorsione.
+
+00:20:00.860 --> 00:20:04.780
+Una volta che Covailo Studio scrive il suo report, il tuo ruolo umano diventa misericordiosamente facoltativo.
+
+00:20:05.780 --> 00:20:09.740
+L'agente crea una narrazione, allega le prove, pubblica i file, archivia le versioni precedenti
+
+00:20:09.740 --> 00:20:11.780
+e si spegne fino al successivo ciclo di attività.
+
+00:20:12.500 --> 00:20:16.300
+Non ti inviami per l'approvazione perché l'hai progettato esplicitamente affinché non ne richieda.
+
+00:20:17.820 --> 00:20:22.060
+È silenziosamente orgoglioso se mi concedete l'antropomorfismo della sua precisione linguistica.
+
+00:20:22.900 --> 00:20:25.940
+È qui che l'autonomia smette di essere una metafora e diventa una realtà operativa.
+
+00:20:26.980 --> 00:20:31.120
+La macchina non solo elabora i dati di conformità, ma li spiega agli umani nei tempi previsti,
+
+00:20:31.300 --> 00:20:33.440
+senza il carico emotivo di accumulare ritardi.
+
+00:20:33.440 --> 00:20:40.260
+E sì, se vuoi un tocco di estro potresti aggiungere una firma come rapporto compilato autonomamente dall'agente Co-Pilot GRC.
+
+00:20:41.080 --> 00:20:44.960
+Nulla scoraggia il micromanagement della dirigenza quanto un robot che firma il proprio lavoro.
+
+00:20:45.820 --> 00:20:49.660
+Ora che l'agente può esporre i risultati, puoi smettere di scrivere rapporti GRC per sempre,
+
+00:20:49.740 --> 00:20:52.160
+o almeno finché qualcuno non disabilita i tuoi connettori.
+
+00:20:53.280 --> 00:20:54.860
+A questo punto il ciclo si completa da solo.
+
+00:20:55.320 --> 00:21:01.680
+Purview raccoglie, Power Automate interpreta, Co-Pilot riassume e tu, sorprendentemente, ti riprendi i fine settimana.
+
+00:21:01.680 --> 00:21:06.660
+Un rito quotidiano di fatica si trasforma in un unico flusso di lavoro che parla fluentemente la lingua della conformità.
+
+00:21:07.280 --> 00:21:10.600
+I risultati appaiono su Teams esattamente allo stesso orario, a ogni intervallo.
+
+00:21:11.520 --> 00:21:14.020
+Testo chiaro, terminologia coerente, provenienza verificabile.
+
+00:21:14.640 --> 00:21:17.080
+Il vantaggio sottile non è la velocità, è la standardizzazione.
+
+00:21:17.920 --> 00:21:21.620
+Ogni rapporto ha lo stesso tono, usa le stesse soglie e registra metadati identici.
+
+00:21:23.080 --> 00:21:26.620
+I revisori non perdono più ore a convalidare il formato, valutano la sostanza.
+
+00:21:27.060 --> 00:21:30.520
+Modelli di rischio diventano narrazioni tracciate nel tempo invece che un caos di foglie di Carlo.
+
+00:21:30.520 --> 00:21:33.820
+Hai trasformato la conformità da semplice documentazione e orchestrazione.
+
+00:21:34.640 --> 00:21:37.700
+Un sistema sempre attivo che monitora interpreta e riferisce con precisione giudiziaria.
+
+00:21:38.620 --> 00:21:40.580
+I rapporti gerici manuali sono come macchine da scritto.
+
+00:21:40.860 --> 00:21:43.520
+Questo agente è il programma di videoscrittura, con correzione automatica inclusa.
+
+00:21:43.820 --> 00:21:45.560
+Distribuiscelo prima della prossima stagione di Audit.
+
+00:21:45.640 --> 00:21:49.600
+La frase e il rapporto di conformità manuale sembrerà presto antiquata quanto madami log via fax.
+
+00:21:49.960 --> 00:21:53.060
+Il prossimo passo è estendere questa intelligenza all'applicazione della privacy dei dati.
+
+00:21:53.060 --> 00:21:55.320
+Hai già costruito il cervello o rascia che sia lui a vigilare?
