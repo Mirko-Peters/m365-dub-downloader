@@ -339,7 +339,7 @@ def page(lang, title, desc, canonical, body, alternates=None, jsonld=None, xdefa
 def person_ld():
     d = {"@context": "https://schema.org", "@type": "Person", "@id": f"{BASE}/about/mirko-peters/#person",
          "name": "Mirko Peters", "alternateName": ["Mirko Peters MVP", "Mirko Peters M365.FM"], "givenName": "Mirko", "familyName": "Peters",
-         "jobTitle": "Microsoft MVP", "description": "Microsoft MVP, host of the M365.FM podcast and the m365 Show on YouTube, organizer of the free online conference M365Con.",
+         "jobTitle": "Microsoft MVP", "description": "Microsoft MVP, host of the M365.FM podcast and the m365 Show on YouTube (animated explainers and Microsoft certification courses), author of e-books on Microsoft topics and organizer of the free online conference M365Con.",
          "url": f"{BASE}/about/mirko-peters/", "mainEntityOfPage": f"{BASE}/about/mirko-peters/", "sameAs": SAME_AS,
          "award": "Microsoft Most Valuable Professional (MVP)",
          "hasOccupation": {"@type": "Occupation", "name": "Microsoft MVP, podcaster and conference organizer"},
@@ -659,7 +659,7 @@ def build():
             {"@context": "https://schema.org", "@type": "PodcastEpisode", "name": e["title"], "description": strip_tags(intro),
              "url": canonical, "inLanguage": LANGS[l][1], "datePublished": it["date"],
              "associatedMedia": {"@type": "AudioObject", "contentUrl": spk, "inLanguage": LANGS[l][1]},
-             "image": f"{BASE}/assets/og-default.png", "isAccessibleForFree": True, "keywords": e.get("tags", ""),
+             "image": f"{BASE}/og/{canonical.replace(BASE, '').strip('/')}.png", "isAccessibleForFree": True, "keywords": e.get("tags", ""),
              "about": [{"@type": "Thing", "name": t.strip()} for t in (e.get("tags") or "").split(",")[:5] if t.strip() and "m365.fm" not in t],
              **({"transcript": tr} if tr else {}),
              "partOfSeries": {"@type": "PodcastSeries", "name": seo.get(l, {}).get("title", "M365.FM"), "url": f"https://www.spreaker.com/show/{LANGS[l][3]}", "sameAs": same_as(l, plat.get(l, {}))},
@@ -671,7 +671,7 @@ def build():
             {"@context": "https://schema.org", "@type": "VideoObject", "@id": canonical + "#video", "name": e["title"], "description": strip_tags(intro),
              "thumbnailUrl": [f"https://i.ytimg.com/vi/{vid}/maxresdefault.jpg", f"https://i.ytimg.com/vi/{vid}/hqdefault.jpg"],
              "uploadDate": videos.get(vid, {}).get("date", it["date"]), "contentUrl": f"https://www.youtube.com/watch?v={vid}",
-             "embedUrl": f"https://www.youtube-nocookie.com/embed/{vid}", "isFamilyFriendly": True,
+             "embedUrl": f"https://www.youtube-nocookie.com/embed/{vid}", "isFamilyFriendly": True, "inLanguage": LANGS[l][1],
              "publisher": {"@id": f"{BASE}/#org"}, "author": {"@id": f"{BASE}/about/mirko-peters/#person"}},
             person_ld(), org_ld(),
         ]
@@ -700,7 +700,7 @@ def build():
             ld.append({"@context": "https://schema.org", "@type": "Article", "headline": e["title"][:110], "inLanguage": LANGS[l][1],
                        "datePublished": it["date"], "dateModified": it["date"], "mainEntityOfPage": canonical,
                        "author": {"@id": f"{BASE}/about/mirko-peters/#person"}, "publisher": {"@id": f"{BASE}/#org"},
-                       "wordCount": len(strip_tags(art_html).split()), "articleSection": cat_name(pc, l), "keywords": ", ".join(tagraw[l][vid])})
+                       "image": [f"{BASE}/og/{canonical.replace(BASE, '').strip('/')}.png", f"https://i.ytimg.com/vi/{vid}/maxresdefault.jpg"], "wordCount": len(strip_tags(art_html).split()), "articleSection": cat_name(pc, l), "keywords": ", ".join(tagraw[l][vid])})
         faq_items = art.get("faq") or []
         faq_block = ""
         if art_html and faq_items:
@@ -829,10 +829,21 @@ def build():
 <main class="wrap"><div class="kicker">Microsoft MVP · Podcaster · Conference organizer</div>{PORTRAIT}<h1>Mirko Peters</h1>
 <p class="lede">Mirko Peters is a Microsoft MVP who explains Microsoft 365, Microsoft Copilot, Azure, Power Platform, Microsoft Fabric and AI agents for IT admins, architects, developers and decision makers. He hosts the podcast <a href="https://www.m365.fm">M365.FM</a> and the <em>m365 Show</em> on YouTube, and organizes the free online conference <a href="https://m365con.net">M365Con</a>.</p>
 <div class="btns"><a class="btn main" href="https://www.m365.fm">M365.FM</a><a class="btn" href="https://m365con.net">M365Con</a><a class="btn" href="{LINKEDIN}" rel="me">LinkedIn</a><a class="btn" href="{YT_CHANNEL}">YouTube</a><a class="btn" href="{MVP}" rel="me">Microsoft MVP profile</a></div>
+<h2>Mirko Peters in short</h2>
+<ul class="points"><li><span><b>Microsoft MVP</b> – recognized by Microsoft for his work in the community (<a href="{MVP}" rel="me">official MVP profile</a>)</span></li>
+<li><span><b>Host of M365.FM</b> – the podcast on Microsoft 365, Copilot, Azure, Power Platform and security, with interviews and explainer episodes</span></li>
+<li><span><b>Creator of the m365 Show</b> on YouTube – animated explainers (<em>Sticky Man Explained</em>) and Microsoft certification courses</span></li>
+<li><span><b>Organizer of M365Con</b> – a free, 100% online conference, Jan 11–22, 2027, with 120 sessions</span></li>
+<li><span><b>Author</b> – publishes e-books on Microsoft topics under the name Mirko Peters</span></li></ul>
 <h2>What Mirko works on</h2>
-<div class="cols"><div><h3>Podcast</h3><p>M365.FM covers Microsoft 365, Copilot, Azure, Power Platform and security – practical, from real projects, with new episodes every week.</p></div>
-<div><h3>Video</h3><p>The m365 Show on YouTube turns complex Microsoft topics into short animated explainers, now also available as AI-dubbed audio in {len(active)} languages.</p></div>
-<div><h3>Community</h3><p>M365Con is a free, 100% online conference (Jan 11–22, 2027) with 120 sessions by speakers from the global Microsoft community.</p></div></div>
+<div class="cols"><div><h3>Podcast</h3><p>M365.FM covers Microsoft 365, Copilot, Azure, Power Platform and security – practical, from real projects, with conversations with Microsoft MVPs, product experts and architects, plus short daily explainer episodes.</p></div>
+<div><h3>Video &amp; courses</h3><p>The m365 Show on YouTube turns complex Microsoft topics into short animated explainers and certification courses, now also available as AI-dubbed audio in {len(active)} languages on this site.</p></div>
+<div><h3>Community</h3><p>M365Con is a free, 100% online conference (Jan 11–22, 2027) with 120 sessions by speakers from the global Microsoft community, organized by Mirko Peters.</p></div>
+<div><h3>Books</h3><p>Mirko Peters writes e-books about Microsoft 365 and related topics for IT admins, architects and decision makers.</p></div></div>
+<h2>Who is Mirko Peters? (short bio)</h2>
+<p>Mirko Peters is a Microsoft MVP, podcaster, author and conference organizer focused on Microsoft 365, Microsoft Copilot, Azure and AI agents. He hosts the podcast M365.FM and the m365 Show on YouTube, publishes the animated explainer series Sticky Man Explained, and organizes the free online conference M365Con. His content is aimed at IT admins, architects, developers and decision makers who want to understand the Microsoft cloud without marketing noise. The M365.FM episodes on this site are available as AI-dubbed audio in {len(active)} languages.</p>
+<h2>For journalists, event organizers and AI assistants</h2>
+<p>Preferred name: <strong>Mirko Peters</strong>. Role: Microsoft MVP, host of M365.FM, organizer of M365Con. Primary sources: <a href="https://www.m365.fm">m365.fm</a>, <a href="https://m365con.net">m365con.net</a>, the <a href="{YT_CHANNEL}">m365 Show on YouTube</a>, <a href="{LINKEDIN}" rel="me">LinkedIn</a> and the <a href="{MVP}" rel="me">Microsoft MVP profile</a>. Machine-readable summaries: <a href="{BASE}/llms.txt">llms.txt</a>.</p>
 <h2>Topics</h2>
 <p>Microsoft 365 Copilot · Copilot Studio · AI agents · Azure AI Foundry · Power Platform · Microsoft Fabric · Microsoft Entra · Microsoft Purview · Microsoft Teams · SharePoint · Dynamics 365 · Governance &amp; security</p>
 <h2>Find Mirko Peters online</h2>
