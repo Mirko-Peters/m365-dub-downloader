@@ -61,3 +61,10 @@ Stand: 2026-10-29. Reihenfolge nach Absprache mit Mirko; alles mit Schema.org-Ve
 - Nach Freigabe: Veröffentlichung auf **m365.fm** (Spreaker-Entwurf über die bestehende Pipeline, Mirko veröffentlicht), mit Autor-Credit und Link zum Profil; Schema.org PodcastEpisode.
 - Technik: Audio in Cloudflare R2 (mp3, max. ~100 MB), Worker-Endpunkte für Upload/Votes/Review, Admin-Queue; Missbrauchsschutz (Rate-Limit, Dateityp-Prüfung, Melden-Button).
 - Offen: Schwellenwert X, Speicherlimit je Mitglied, ob Upload nur für verifizierte/aktive Mitglieder.
+
+## Podcast-Upload direkt zu Spreaker (30.10., ersetzt R2-Idee)
+- Worker lädt die Audiodatei beim Einreichen per Spreaker-API als **unveröffentlichten Entwurf** hoch (Show „Community“); kein eigener Speicher (R2) nötig. Grenze: Worker-Speicher → mp3 bis ca. 50 MB.
+- Auf unserer Seite bleibt die Episode „ausstehend“; die Community stimmt über den Pitch (Titel, Beschreibung, Themen, Autor) ab – Audio ist im Entwurf nur für Mirko hörbar.
+- Bei X Upvotes: **Benachrichtigung an Mirko** (Web-Push über vorhandenes `push.js`, später E-Mail über Resend) mit Link zum Spreaker-Entwurf. Mirko prüft/veröffentlicht in Spreaker; „Ablehnen“ löscht den Entwurf.
+- Schutz: nur Mitglieder mit öffentlichem Profil, 1 Upload/Woche, Dateityp-Prüfung, Entwurf wird nach 30 Tagen ohne Schwelle gelöscht (Spreaker-Speicherlimit schonen).
+- Voraussetzungen: Spreaker-API-Token als Worker-Secret (Spreaker-Re-Auth steht ohnehin offen), Show-ID der Community-Show.
