@@ -233,6 +233,27 @@ def work(job):
     return vid, l, res
 
 
+def popularity():
+    """Beliebtheit je Video aus Spreaker-Daten (data/top.json, ggf. 'alltime'); Summe ueber alle Sprachen. Leer, solange keine Daten da sind."""
+    try:
+        top = json.load(open(ROOT / "data" / "top.json", encoding="utf-8"))
+        pub = json.load(open(ROOT / "data" / "published.json", encoding="utf-8"))
+    except Exception:
+        return {}
+    eid2vid = {}
+    for key, v in pub.items():
+        if isinstance(v, dict) and v.get("episode_id"):
+            eid2vid[int(v["episode_id"])] = key.split(":")[0]
+    score = {}
+    for src in ("alltime", "langs"):
+        for lang, rows in (top.get(src) or {}).items():
+            for r in rows:
+                vid = eid2vid.get(int(r.get("episode_id", 0)))
+                if vid:
+                    score[vid] = score.get(vid, 0) + int(r.get("score", 0)) * (1 if src == "langs" else 1)
+    return score
+
+
 def main():
     if not os.environ.get("ANTHROPIC_API_KEY"):
         print("Kein ANTHROPIC_API_KEY – übersprungen")
@@ -251,10 +272,17 @@ def main():
             vp = ROOT / "transcripts" / l / f"{vid}.vtt"
             if l not in store[vid] and vp.exists():
                 jobs.append((vid, l, e["title"], vp))
+    pop = popularity()
+    if pop:
+        jobs.sort(key=lambda j: -pop.get(j[0], 0))
+        print("Reihenfolge nach Spreaker-Beliebtheit:", len(pop), "Videos bewertet")
     jobs = jobs[:LIMIT]
     changed = set()
     # vorhandene Artikel ohne Infografik nachrüsten
-    fill = [(v, l) for v, d in store.items() for l, a in d.items() if not a.get("info") or not a.get("faq") or not a.get("infos") or not a.get("quiz")][:LIMIT]
+    fill = [(v, l) for v, d in store.items() for l, a in d.items() if not a.get("info") or not a.get("faq") or not a.get("infos") or not a.get("quiz")]
+    if pop:
+        fill.sort(key=lambda t: -pop.get(t[0], 0))
+    fill = fill[:LIMIT]
     def fillwork(t):
         v, l = t
         a = store[v][l]
