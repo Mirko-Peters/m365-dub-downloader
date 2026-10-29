@@ -101,7 +101,7 @@ async function api(env, request, url, path) {
     if (need()) return need();
     if (method === "POST") {
       const b = await request.json().catch(() => ({}));
-      const name = cleanName(b.name || user.name) || user.name, bio = cleanText(b.bio ?? user.bio, 200).replace(/https?:\/\/\S+/g, ""), lang = isLang(b.lang) ? b.lang : user.lang;
+      const name = cleanName(b.name || user.name) || user.name, bio = cleanText(b.bio ?? user.bio, 280).replace(/https?:\/\/\S+/g, ""), lang = isLang(b.lang) ? b.lang : user.lang;
       await db.prepare("UPDATE users SET name=?,bio=?,lang=? WHERE id=?").bind(name, bio, lang, user.id).run();
       return J({ ok: true });
     }
