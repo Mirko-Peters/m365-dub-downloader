@@ -30,25 +30,8 @@ def clean(html):
     return html.strip()
 
 
-def ask(lang, title, text):  # -> (html, infografik|None)
-    prompt = f"""Schreibe aus dem folgenden Podcast-Transkript einen eigenständigen, gut lesbaren Blogartikel für Suchmaschinen und Leser.
-
-Regeln:
-- Sprache des Artikels: {NAMES.get(lang, lang)} (Zielsprache der Leser), natürliche, idiomatische Sprache, keine Wort-für-Wort-Übersetzung.
-- 1200-1800 Wörter, ausführlich und tiefgehend. Struktur: Einstieg (ein bis zwei <p>), 5-7 Abschnitte mit <h2>-Überschriften (suchmaschinenfreundlich, mit den Kernbegriffen), pro Abschnitt mehrere Absätze, wo sinnvoll <h3>-Unterpunkte oder Listen, ein Abschnitt "häufige Fehler / Stolpersteine" falls im Transkript vorhanden, zum Schluss ein Abschnitt mit praktischen Takeaways als <ul> und ein kurzes Fazit.
-- Nur Inhalte aus dem Transkript. Nichts erfinden: keine Zahlen, Produktnamen, Zitate oder Versprechen, die nicht im Transkript stehen. Produktnamen (Microsoft 365, Copilot, Azure ...) unübersetzt lassen.
-- Keine Titelwiederholung als H1, keine Links, keine Werbung, kein Hinweis auf KI.
-- Erlaubtes HTML: h2, h3, p, ul, ol, li, strong, em.
-- Ausgabeformat: zuerst das HTML des Artikels. Danach eine Zeile mit genau ---INFOGRAFIK--- und darunter ein JSON-Objekt für eine Infografik, die den Kern der Folge zusammenfasst (Texte in der Zielsprache, kurz, nur Inhalte aus dem Transkript):
-  {{"titel": "...", "typ": "schritte", "punkte": [{{"kopf": "max. 4 Wörter", "text": "max. 18 Wörter"}}, ...4 bis 6 Punkte]}}
-  Mögliche "typ": "schritte" (Ablauf/Vorgehen), "vergleich" (dann "links": {{"titel","punkte":[Strings]}}, "rechts": {{"titel","punkte":[Strings]}}), "fakten" (dann "punkte": [{{"wert": "nur wenn im Transkript genannt", "text": "..."}}]).
-- Sonst nichts ausgeben.
-
-Titel der Folge: {title}
-
-Transkript:
-{text[:60000]}"""
-    body = json.dumps({"model": MODEL, "max_tokens": 9000, "messages": [{"role": "user", "content": prompt}]}).encode()
+def _post(prompt, max_tokens):
+    body = json.dumps({"model": MODEL, "max_tokens": max_tokens, "messages": [{"role": "user", "content": prompt}]}).encode()
     req = urllib.request.Request("https://api.anthropic.com/v1/messages", body, {
         "x-api-key": os.environ["ANTHROPIC_API_KEY"], "anthropic-version": "2023-06-01", "content-type": "application/json"})
     r = None
@@ -61,7 +44,52 @@ Transkript:
                 time.sleep(15 * (attempt + 1))
                 continue
             raise
-    raw = "".join(b.get("text", "") for b in r["content"])
+    return "".join(b.get("text", "") for b in r["content"])
+
+
+def parse_info(raw):
+    m = re.search(r"\{.*\}", raw, re.S)
+    if not m:
+        return None
+    try:
+        j = json.loads(m.group(0))
+        return j if isinstance(j, dict) and j.get("punkte") or j.get("links") else None
+    except Exception:
+        return None
+
+
+def info_for(lang, html):
+    """Zweiter Versuch: nur die Infografik (JSON) aus dem fertigen Artikel ableiten."""
+    txt = re.sub(r"<[^>]+>", " ", html)[:12000]
+    p = (f"Erstelle aus dem folgenden Artikel eine Infografik als reines JSON (keine Erklärung, kein Markdown), Texte in {NAMES.get(lang, lang)}, "
+         'nur Inhalte aus dem Artikel. Format: {"titel": "...", "typ": "schritte", "punkte": [{"kopf": "max. 4 Wörter", "text": "max. 18 Wörter"}, ...4 bis 6 Punkte]}. '
+         'Alternativ "typ": "vergleich" mit "links"/"rechts": {"titel","punkte":[Strings]} oder "typ": "fakten" mit "punkte": [{"wert","text"}].\n\nArtikel:\n' + txt)
+    try:
+        return parse_info(_post(p, 1500))
+    except Exception as ex:
+        print("Infografik-Fehler", str(ex)[:100])
+        return None
+
+
+def ask(lang, title, text):  # -> (html, infografik|None)
+    prompt = f"""Schreibe aus dem folgenden Podcast-Transkript einen eigenständigen, gut lesbaren Blogartikel für Suchmaschinen und Leser.
+
+Regeln:
+- Sprache des Artikels: {NAMES.get(lang, lang)} (Zielsprache der Leser), natürliche, idiomatische Sprache, keine Wort-für-Wort-Übersetzung.
+- 1200-1800 Wörter (auf keinen Fall mehr als 1800), ausführlich, aber ohne Füllsätze. Struktur: Einstieg (ein bis zwei <p>), 5-7 Abschnitte mit <h2>-Überschriften (suchmaschinenfreundlich, mit den Kernbegriffen), pro Abschnitt mehrere Absätze, wo sinnvoll <h3>-Unterpunkte oder Listen, ein Abschnitt "häufige Fehler / Stolpersteine" falls im Transkript vorhanden, zum Schluss ein Abschnitt mit praktischen Takeaways als <ul> und ein kurzes Fazit.
+- Nur Inhalte aus dem Transkript. Nichts erfinden: keine Zahlen, Produktnamen, Zitate oder Versprechen, die nicht im Transkript stehen. Produktnamen (Microsoft 365, Copilot, Azure ...) unübersetzt lassen.
+- Keine Titelwiederholung als H1, keine Links, keine Werbung, kein Hinweis auf KI.
+- Erlaubtes HTML: h2, h3, p, ul, ol, li, strong, em.
+- Ausgabeformat: zuerst das HTML des Artikels. Danach eine Zeile mit genau ---INFOGRAFIK--- und darunter ein JSON-Objekt für eine Infografik, die den Kern der Folge zusammenfasst (Texte in der Zielsprache, kurz, nur Inhalte aus dem Transkript):
+  {{"titel": "...", "typ": "schritte", "punkte": [{{"kopf": "max. 4 Wörter", "text": "max. 18 Wörter"}}, ...4 bis 6 Punkte]}}
+  Mögliche "typ": "schritte" (Ablauf/Vorgehen), "vergleich" (dann "links": {{"titel","punkte":[Strings]}}, "rechts": {{"titel","punkte":[Strings]}}), "fakten" (dann "punkte": [{{"wert": "nur wenn im Transkript genannt", "text": "..."}}]).
+- Sonst nichts ausgeben.
+
+Titel der Folge: {title}
+
+Transkript:
+{text[:60000]}"""
+    raw = _post(prompt, 9000)
     html, _, info = raw.partition("---INFOGRAFIK---")
     inf = None
     m = re.search(r"\{.*\}", info, re.S)
@@ -88,6 +116,8 @@ def work(job):
         return vid, l, None
     print("Artikel", vid, l, len(html))
     res = {"html": html, "model": MODEL}
+    if not inf:
+        inf = info_for(l, html)
     if inf:
         res["info"] = inf
     return vid, l, res
@@ -110,6 +140,18 @@ def main():
                 jobs.append((vid, l, e["title"], vp))
     jobs = jobs[:LIMIT]
     changed = set()
+    # vorhandene Artikel ohne Infografik nachrüsten
+    fill = [(v, l) for v, d in store.items() for l, a in d.items() if not a.get("info")][:LIMIT]
+    def fillwork(t):
+        v, l = t
+        return v, l, info_for(l, store[v][l]["html"])
+    with ThreadPoolExecutor(WORKERS) as ex:
+        for v, l, inf in ex.map(fillwork, fill):
+            if inf:
+                store[v][l]["info"] = inf
+                changed.add(v)
+                json.dump(store[v], open(ROOT / "data" / "articles" / f"{v}.json", "w", encoding="utf-8"), ensure_ascii=False, indent=1)
+    print(len(fill), "Infografiken nachgerüstet versucht")
     with ThreadPoolExecutor(WORKERS) as ex:
         for vid, l, res in ex.map(work, jobs):
             if res:
