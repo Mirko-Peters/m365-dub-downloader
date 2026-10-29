@@ -24,6 +24,7 @@ Sprachschlüssel im JSON = Basissprache (`de-de`→`de`, `es-us`→`es`, `pt-br`
 ## Ablauf pro Lauf
 1. `state.json` vom PC holen (stage). Videos ermitteln, deren Sprachen noch keinen Eintrag in `episodes/<ID>.json` haben.
 2. Pro Video das **deutsche** Transkript lesen (`de-de/<Titel> [de-de].vtt`). Gibt es das noch nicht → Video überspringen (kommt im nächsten Lauf).
+   Ist es unbrauchbar (Zeichensalat, endlose Wiederholungen, fremdsprachige Fetzen, viel kürzer als die Folge) → Video ebenfalls überspringen und im Bericht nennen (aktuell: K6TsHy0-6oo „Stop Manual Reporting“). Nie Texte aus dem Titel allein erfinden.
 3. Für **alle** Sprachen mit Show Titel + Beschreibung schreiben (siehe Stil) und in `episodes/<ID>.json` eintragen,
    `"tr": ""`, solange kein brauchbares Transkript im Repo liegt.
 4. Alle neuen `.vtt` vom PC holen, auf Qualität prüfen (ersten Zeilen lesen: echter Text in der richtigen Sprache?
