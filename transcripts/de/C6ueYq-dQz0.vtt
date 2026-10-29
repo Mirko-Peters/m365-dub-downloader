@@ -1,0 +1,790 @@
+WEBVTT
+
+00:00:00.240 --> 00:00:06.520
+Bereit für 10 Tage voller Microsoft 365, Co-Pilot, KI-Azure und den Menschen, die die Zukunft der Arbeit gestalten?
+
+00:00:07.520 --> 00:00:11.500
+Diesen Januar ist die M3 655-Con zurück und wir legen noch einen drauf.
+
+00:00:12.500 --> 00:00:17.740
+Seien Sie bei Live-Sessions, Praxis-Demos und Expertenwissen von MVPs und Branchenprofis aus aller Welt dabei.
+
+00:00:18.500 --> 00:00:21.140
+Keine generischen Folien. Kein endloses Buzzword-Bingo.
+
+00:00:21.980 --> 00:00:23.680
+Wir gehen die echten Herausforderungen an.
+
+00:00:23.800 --> 00:00:28.560
+Co-Pilot Studio, KI-Agenten, Fabric, Sicherheit, Governance und Automatisierung.
+
+00:00:28.560 --> 00:00:34.000
+Egal ob IT-Profi, Entwickler oder Führungskraft, es gibt Sessions, die speziell für Sie gemacht sind.
+
+00:00:35.000 --> 00:00:39.960
+An 10 vollen Tagen können Sie zahlreiche Technologien erkunden und sich mit einer globalen Community vernetzen.
+
+00:00:40.900 --> 00:00:44.220
+Schauen Sie live zu und nehmen Sie praktische Erkenntnisse mit in Ihr Unternehmen.
+
+00:00:45.120 --> 00:00:48.900
+Januar 2027. 10 Tage. Eine Microsoft-Community.
+
+00:00:49.360 --> 00:00:50.520
+Die Registrierung ist jetzt eröffnet.
+
+00:00:51.460 --> 00:00:55.560
+Gehen Sie auf m3 65.con.net und sichern Sie sich noch heute Ihren Platz.
+
+00:00:55.560 --> 00:00:58.680
+Das ist m3 65.con.net.
+
+00:01:00.040 --> 00:01:04.480
+Melden Sie sich jetzt unter m3 65.con.net an. Wir sehen uns live im Januar.
+
+00:01:05.000 --> 00:01:08.180
+Sie haben eine funktionierende App gebaut. Dann kommt ein Service hinzu, dann noch einer.
+
+00:01:08.660 --> 00:01:10.620
+Und plötzlich wird die Verkehrsleitung dazwischen zum Albtraum.
+
+00:01:11.180 --> 00:01:13.560
+Was genau ist also ein API-Gateway und brauchen Sie überhaupt eines?
+
+00:01:14.060 --> 00:01:17.300
+Am Ende dieser Folge werden Sie verstehen, was ein API-Gateway tut.
+
+00:01:18.020 --> 00:01:21.800
+Warum ist das Chaos bei der Verwaltung mehrerer Services löst und wie Sie wissen, ob Sie eines brauchen.
+
+00:01:21.800 --> 00:01:26.380
+Fangen wir mit dem Problem an. Dann den Komponenten und wie alles zusammenpasst.
+
+00:01:27.780 --> 00:01:28.980
+Das Problem. Zu viele Türen.
+
+00:01:29.780 --> 00:01:31.560
+Stellen Sie sich vor, Sie leiten ein schnell wachsendes Unternehmen.
+
+00:01:32.340 --> 00:01:36.060
+Sie haben ein Vertriebsteam im dritten Stock, die Buchhaltung im Keller und die IT im hinteren Flügel.
+
+00:01:36.460 --> 00:01:36.580
+Äh.
+
+00:01:37.100 --> 00:01:42.680
+Stellen Sie sich nun vor, jede dieser Abteilungen hat Ihre eigene Eingangstür, Ihre eigene Telefonnummer und einen eigenen Sicherheitsmann, der nicht mit den anderen spricht.
+
+00:01:43.320 --> 00:01:45.480
+Wenn Sie als Besucher ein Paket abgeben wollen, viel Glück.
+
+00:01:45.480 --> 00:01:50.460
+Sie müssen genau wissen, welche Tür Sie nehmen, mit welchem Wachmann Sie sprechen müssen und was zu tun ist, wenn der gerade Pause macht.
+
+00:01:51.120 --> 00:01:55.560
+Genau das passiert, wenn Ihre App mehrere Backend-Services hat und jeder Client jeden Einzelnen direkt anspricht.
+
+00:01:56.520 --> 00:02:04.080
+Der Client, egal ob Mobile, App, Website oder ein anderer Service, muss wissen, wo jeder Service zu finden ist, wie die Authentifizierung funktioniert und was bei Fehlern zu tun ist.
+
+00:02:05.080 --> 00:02:09.180
+Jeder einzelne Service muss sich um seine eigene Sicherheit, das Rate-Limiting und die Fehlerbehandlung kümmern.
+
+00:02:09.700 --> 00:02:12.320
+Das ist doppelte Arbeit und es führt leicht zu Inkonsistenzen.
+
+00:02:12.320 --> 00:02:13.460
+Nehmen wir eine Bank als Beispiel.
+
+00:02:13.860 --> 00:02:16.800
+Sie haben separate Services für Konten, Zahlungen, Kredite und Betrugserkennung.
+
+00:02:17.200 --> 00:02:19.160
+Nach alter Methode ist jeder Einzelnen direkt erreichbar.
+
+00:02:19.720 --> 00:02:24.840
+Eine mobile App muss vier verschiedene URLs, vier verschiedene Authentifizierungsmethoden und vier verschiedene Arten der Fehlerbehandlung kennen.
+
+00:02:25.820 --> 00:02:28.960
+Das bedeutet vierfache Komplexität und vierfache Angriffsfläche für Fehler.
+
+00:02:29.100 --> 00:02:31.640
+Genau das Chaos, das ein API-Gateway beheben soll.
+
+00:02:32.520 --> 00:02:33.260
+Was ist also die Lösung?
+
+00:02:33.980 --> 00:02:34.880
+Was ist ein API-Gateway?
+
+00:02:35.680 --> 00:02:37.920
+Stellen Sie sich ein API-Gateway wie die Rezeption eines Hotels vor.
+
+00:02:37.920 --> 00:02:44.020
+Wenn Sie reinkommen, müssen Sie nicht wissen, auf welcher Etage der Zimmerservice ist, wo die Küche ist oder wie man den Wartungsdienst erreicht.
+
+00:02:44.680 --> 00:02:48.200
+Sie gehen einfach zur Rezeption, sagen, was Sie brauchen und die kümmern sich um den Rest.
+
+00:02:48.860 --> 00:02:53.780
+Sie leiten Ihre Anfrage an die richtige Person weiter, prüfen, ob Sie dort sein dürfen und erledigen einfache Anfragen sogar selbst.
+
+00:02:54.560 --> 00:02:56.620
+Ein API-Gateway macht das Gleiche für Ihre Software.
+
+00:02:57.420 --> 00:03:00.700
+Es ist ein zentraler Einstiegspunkt, der zwischen Ihren Clients und Ihren Backenddiensten liegt.
+
+00:03:00.700 --> 00:03:03.300
+Jede Anfrage läuft zuerst durch das Gateway.
+
+00:03:03.700 --> 00:03:07.140
+Es entscheidet, wohin sie geleitet wird, ob sie erlaubt ist und was zurückgeschickt wird.
+
+00:03:07.780 --> 00:03:08.800
+Das ist keine neue Idee.
+
+00:03:09.500 --> 00:03:11.100
+Reverse-Proxies gibt es schon seit Jahrzehnten.
+
+00:03:11.460 --> 00:03:13.960
+Aber das API-Gateway ist bei Microservices unverzichtbar geworden.
+
+00:03:14.400 --> 00:03:17.040
+Wenn Sie Ihre App in viele kleine Dienste aufteilen, haben Sie plötzlich viele Türen.
+
+00:03:17.400 --> 00:03:18.940
+Das Gateway bietet Ihnen eine einzige Fördertür.
+
+00:03:19.260 --> 00:03:21.980
+In der Azure-Welt ist Azure API Management die vollständige Plattform.
+
+00:03:22.340 --> 00:03:24.700
+Und das Gateway ist die Kernkomponente, die den Datenverkehr steuert.
+
+00:03:25.260 --> 00:03:26.380
+Aber das Prinzip ist überall gleich.
+
+00:03:26.960 --> 00:03:28.400
+Ein Einstiegspunkt, zentrale Kontrolle.
+
+00:03:28.740 --> 00:03:29.920
+Jede Anfrage kommt herein.
+
+00:03:29.920 --> 00:03:33.120
+Das Gateway prüft Sie, leitet Sie weiter und sendet die Antwort zurück.
+
+00:03:33.580 --> 00:03:35.480
+Der Client kommuniziert nie direkt mit Ihren Backenddiensten.
+
+00:03:35.900 --> 00:03:36.980
+Er kommuniziert nur mit dem Gateway.
+
+00:03:37.340 --> 00:03:38.680
+Schlüsseln wir auf, was das eigentlich bedeutet.
+
+00:03:39.460 --> 00:03:41.700
+Beginnen wir mit der grundlegendsten Aufgabe, dem Routing.
+
+00:03:42.820 --> 00:03:43.880
+Teil 1 Traffic Routing
+
+00:03:43.880 --> 00:03:49.120
+Die einfachste Aufgabe eines API-Gateways ist das Routing, also die Weiterleitung jeder Anfrage an den richtigen Diensten.
+
+00:03:49.540 --> 00:03:50.540
+Denken Sie daran, wie es heute funktioniert.
+
+00:03:50.920 --> 00:03:52.860
+Wenn Sie auf einen Link klicken, sendet Ihr Browser eine Anfrage.
+
+00:03:53.320 --> 00:03:54.060
+Diese Anfrage empfährt.
+
+00:03:54.580 --> 00:03:57.420
+Ist der Pfad Users, weiß das Gateway, dass es Ihnen einen Benutzerdienst senden muss.
+
+00:03:57.420 --> 00:03:59.280
+Bei Orders geht es an den Bestelldienst.
+
+00:03:59.920 --> 00:04:03.420
+Das Gateway liest den Pfad, bestimmt das Ziel und leitet die Anfrage weiter.
+
+00:04:03.880 --> 00:04:06.620
+Ohne ein Gateway müssen Ihre Clients jede einzelne Dienst-URL kennen.
+
+00:04:07.080 --> 00:04:11.740
+Die mobile App benötigt die Adresse des Benutzerdienstes, des Bestelldienstes, des Zahlungsdienstes und des Katalogdienstes.
+
+00:04:12.100 --> 00:04:13.680
+Das sind eine Menge URLs, die verwaltet werden müssen.
+
+00:04:14.100 --> 00:04:16.860
+Und wenn sich eine dieser Adressen ändert, müssen Sie jeden Client aktualisieren.
+
+00:04:17.380 --> 00:04:20.380
+Mit einem Gateway kennen Clients nur eine URL, die Adresse des Gateways.
+
+00:04:20.820 --> 00:04:22.420
+Sie müssen nicht wissen, wo die Dienste tatsächlich liegen.
+
+00:04:22.920 --> 00:04:25.800
+Sie senden Ihre Anfrage einfach an das Gateway und dieses kümmert sich um den Rest.
+
+00:04:25.800 --> 00:04:29.660
+Dies ist einer der häufigsten Anwendungsfälle für ein API-Gateway, ressourcenbasiertes Routing.
+
+00:04:30.100 --> 00:04:32.420
+Die Untersuchung von Apache API 670 ist ausdrücklich hervor.
+
+00:04:32.760 --> 00:04:37.220
+Man routet basierend auf dem Pfad der HTTP-Methode, den Headern oder sogar der Geolokalisierung des Clients.
+
+00:04:37.720 --> 00:04:40.880
+Sendet jemand aus Europa eine Anfrage, kann man ihn an ein europäisches Rechenzentrum leiten?
+
+00:04:41.460 --> 00:04:44.380
+Sendet jemand aus den USA eine Anfrage, geht dieser an ein US-Rechenzentrum?
+
+00:04:44.720 --> 00:04:45.880
+Der Client bemerkt von alledem nichts.
+
+00:04:46.380 --> 00:04:47.520
+Erhält lediglich eine schnelle Antwort.
+
+00:04:48.000 --> 00:04:49.220
+Routing ermöglicht auch die Versionierung.
+
+00:04:49.740 --> 00:04:51.380
+Nehmen wir an, Sie haben eine neue Version Ihres Nutzerdiensten.
+
+00:04:51.380 --> 00:04:55.400
+Die alten Clients nutzen weiterhin Slash-Ur1-Users und die neuen Slash-Ur2-Users.
+
+00:04:56.080 --> 00:04:57.780
+Das Gateway leitet Sie an verschiedene Backends weiter.
+
+00:04:58.380 --> 00:05:00.980
+Alte Clients funktionieren weiter, während Sie die neue Version ausrollen.
+
+00:05:01.400 --> 00:05:03.600
+Sie können Ihr Backend ändern, ohne dass die Clients gestört werden.
+
+00:05:04.180 --> 00:05:06.820
+Das ist enorm wichtig, wenn man eine Live-Anwendung mit echten Nutzern verwaltet.
+
+00:05:07.560 --> 00:05:08.820
+Denken Sie an eine E-Commerce-Plattform.
+
+00:05:09.280 --> 00:05:12.740
+Sie haben separate Dienste für den Katalog, den Warenkorb, die Kasse und Nutzerkunden.
+
+00:05:13.700 --> 00:05:16.620
+Ohne Gateway müsste eine mobile App vier verschiedene URLs kennen.
+
+00:05:17.440 --> 00:05:18.540
+Mit einem Gateway kennt Sie nur eine.
+
+00:05:18.540 --> 00:05:24.840
+Das Gateway liest den Pfad Katalog, Warenkorb, Kasse, Konto und sendet jede Anfrage an den richtigen Dienst.
+
+00:05:25.240 --> 00:05:26.400
+Einfaches Routing ist der leichte Teil.
+
+00:05:26.860 --> 00:05:28.540
+Die nächste Aufgabe ist der wirklich nützliche Partner.
+
+00:05:29.340 --> 00:05:30.840
+Teil 2. Sicherheit am Haupteingang.
+
+00:05:31.600 --> 00:05:33.080
+Jeder API-Aufruf muss geprüft werden.
+
+00:05:33.500 --> 00:05:34.240
+Wer stellt diese Anfrage?
+
+00:05:34.740 --> 00:05:36.200
+Hat derjenige die erforderlichen Berechtigungen?
+
+00:05:36.500 --> 00:05:39.400
+Ohne Gateway muss jeder Dienst seine eigene Authentifizierung verwalten.
+
+00:05:39.620 --> 00:05:41.480
+Das bedeutet doppelte Arbeit und ist fehleranfällig.
+
+00:05:42.280 --> 00:05:46.900
+Ein Dienst prüft Tokens korrekt, ein anderer lässt einen Schritt aus und ein dritter nutzt eine völlig andere Methode.
+
+00:05:46.900 --> 00:05:50.940
+Am Ende haben Sie eine inkonsistente Sicherheit in der gesamten Anwendung.
+
+00:05:51.400 --> 00:05:52.140
+Das Gateway ändert das.
+
+00:05:52.500 --> 00:05:55.080
+Es übernimmt Authentifizierung und Autorisierung an einer zentralen Stelle.
+
+00:05:55.600 --> 00:05:59.040
+Ein Punkt zur Prüfung, ein Punkt zur Durchsetzung, ein Punkt für Updates bei Richtlinienänderungen.
+
+00:05:59.420 --> 00:06:00.800
+Das ist eine bewährte Best Practice für Sicherheit.
+
+00:06:01.220 --> 00:06:06.520
+Es validiert API-Schlüssel, JBTs, OAuth-Tokens oder Zertifikate bei jeder einzelnen Anfrage.
+
+00:06:07.420 --> 00:06:09.040
+Jede Anfrage durchläuft dieselbe Prüfung.
+
+00:06:09.480 --> 00:06:09.980
+Ohne Ausnahmen.
+
+00:06:10.900 --> 00:06:12.240
+Das Gateway kann auch Regeln durchsetzen.
+
+00:06:12.240 --> 00:06:15.200
+Sie können festlegen, dieser API-Schlüssel darf nur diese Endpunkte aufrufen.
+
+00:06:15.620 --> 00:06:18.820
+Oder dieser Client darf nur auf den Katalogdienst zugreifen, nicht auf den Zahlungsdienst.
+
+00:06:19.560 --> 00:06:23.020
+Sie definieren präzise Berechtigungen auf Gateway-Ebene und diese werden automatisch angewendet.
+
+00:06:23.360 --> 00:06:25.600
+Die Backend-Dienste müssen sich nie um die Autorisierung kümmern.
+
+00:06:26.140 --> 00:06:28.460
+Sie verarbeiten einfach die Anfrage und senden die Daten zurück.
+
+00:06:28.860 --> 00:06:29.280
+Ist der Punkt.
+
+00:06:29.860 --> 00:06:32.780
+Das Gateway ist der zentrale Ort, um Zugriffe bei Problemen zu widerrufen.
+
+00:06:33.300 --> 00:06:36.000
+Wenn der API-Schlüssel eines Clients kompromittiert ist, sperren Sie ihn am Gateway.
+
+00:06:36.720 --> 00:06:37.520
+Eine Änderung fertig.
+
+00:06:37.940 --> 00:06:40.140
+Sie müssen keinen Dienst aktualisieren oder irgendetwas neu starten.
+
+00:06:40.140 --> 00:06:42.700
+Die nächste Anfrage mit diesem Schlüssel wird sofort abgelehnt.
+
+00:06:43.140 --> 00:06:43.980
+Nehmen wir ein praktisches Beispiel.
+
+00:06:44.340 --> 00:06:46.160
+Eine Bank hat einen Zahlungsdienst und einen Abrechnungsdienst.
+
+00:06:46.740 --> 00:06:49.260
+Nur der Zahlungsdienst benötigt Schreibzugriff auf das Abrechnungssystem.
+
+00:06:49.640 --> 00:06:50.620
+Das Gateway setzt dies durch.
+
+00:06:50.960 --> 00:06:54.140
+Wenn ein Client versucht, über den falschen Endpunkt in das Abrechnungssystem zu schreiben,
+
+00:06:54.260 --> 00:06:54.960
+blockt das Gateway dies.
+
+00:06:55.420 --> 00:06:57.180
+Der Abrechnungsdienst sieht die Anfrage nicht einmal.
+
+00:06:57.900 --> 00:07:01.640
+Das Gateway kann auch gegenseitiges TLS- und WAF-Integration für tieferen Schutz unterstützen.
+
+00:07:02.260 --> 00:07:04.240
+Im Kern ist es jedoch ihre erste Verteidigungslinie.
+
+00:07:04.800 --> 00:07:05.580
+Sicherheit ist das eine.
+
+00:07:05.920 --> 00:07:07.600
+Aber was passiert bei zu vielen Anfragen gleichzeitig?
+
+00:07:07.600 --> 00:07:13.440
+Was passiert, wenn 10.000 Nutzer gleichzeitig auf ihre App zugreifen?
+
+00:07:14.060 --> 00:07:17.600
+Vielleicht haben sie einen Flash-Sale, eine Produkteinführung geht viral oder es ist einfach
+
+00:07:17.600 --> 00:07:19.720
+ein normaler Dienstag und alle melden sich gleichzeitig an.
+
+00:07:20.640 --> 00:07:24.280
+Ohne ein Gateway werden ihre Backend-Dienste direkt überflutet und könnten abstürzen.
+
+00:07:25.000 --> 00:07:26.120
+Nicht langsam, sondern alles auf einmal.
+
+00:07:26.920 --> 00:07:28.240
+Hier kommt das Traffic-Management ins Spiel.
+
+00:07:28.860 --> 00:07:31.520
+Das Gateway kann begrenzen, wie viele Anfragen jeder Client stellen darf.
+
+00:07:32.720 --> 00:07:34.340
+Ratenbegrenzung und Drosselung sind Standardfunktion.
+
+00:07:34.340 --> 00:07:36.860
+Sie legen die Regeln am Gateway fest und es setzt sie durch.
+
+00:07:37.340 --> 00:07:39.080
+Ihre Backend-Dienste bekommen die Lastspitze nie zu spüren.
+
+00:07:39.600 --> 00:07:42.720
+Sie können Kontingente, Probenutzer, APE-Schlüssel oder IP-Adresse festlegen.
+
+00:07:43.100 --> 00:07:44.520
+Angenommen, Sie haben ein kostenloses Level für Ihre App.
+
+00:07:45.000 --> 00:07:46.780
+Kostenlose Nutzer erhalten 100 Anfragen pro Stunde.
+
+00:07:47.180 --> 00:07:48.380
+Premium-Nutzer erhalten 10.000.
+
+00:07:48.660 --> 00:07:51.460
+Das Gateway verfolgt jede Anfrage und setzt diese Limits direkt am Eingang durch.
+
+00:07:51.940 --> 00:07:55.400
+Erreicht ein kostenloser Nutzer sein Limit, sendet das Gateway eine höfliche Nachricht,
+
+00:07:55.520 --> 00:07:56.320
+es später zu versuchen.
+
+00:07:57.020 --> 00:07:59.300
+Die Backend-Dienste erfahren nicht einmal, dass eine Anfrage stattfand.
+
+00:07:59.720 --> 00:08:01.640
+Sie laufen einfach weiter und bedienen die zahlenden Kunden.
+
+00:08:01.640 --> 00:08:03.960
+Das Gateway übernimmt auch das Load-Balancing.
+
+00:08:04.420 --> 00:08:08.520
+Wenn mehrere Instanzen desselben Dienstes laufen, verteilt das Gateway die Anfragen auf diese.
+
+00:08:09.120 --> 00:08:12.480
+Instanz 1 erhält eine Anfrage, Instanz 2 die nächste, Instanz 3 die darauf folgende.
+
+00:08:12.960 --> 00:08:13.780
+Das geschieht automatisch.
+
+00:08:14.180 --> 00:08:16.620
+Und wenn eine Instanz ausfällt, leitet das Gateway den Verkehr auf eine andere um.
+
+00:08:16.940 --> 00:08:17.680
+Die Clients merken davon.
+
+00:08:18.020 --> 00:08:19.040
+Sie erhalten einfach ihre Antworten.
+
+00:08:19.680 --> 00:08:21.960
+Load-Balancing mit Gesundheitscheckstock für einen reibungslosen Betrieb.
+
+00:08:22.500 --> 00:08:24.720
+Das Gateway pingt jede Instanz an, um sicherzustellen, dass sie läuft.
+
+00:08:25.140 --> 00:08:26.840
+Ist sie nicht erreichbar, leidet es kein Traffic mehr dorthin.
+
+00:08:27.180 --> 00:08:29.260
+Dies ist besonders wichtig für APIs mit hohem Datenverkehr.
+
+00:08:29.260 --> 00:08:32.620
+Ohne Gateway trifft eine Verkehrsspitze ihre Dienste direkt.
+
+00:08:33.520 --> 00:08:39.640
+Mit dem Gateway trifft die Spitze zuerst auf das Gateway, das sie absorbiert, verteilt und ihre Dienste vor einer Überlastung schützt.
+
+00:08:40.560 --> 00:08:42.760
+Aber was ist, wenn die Daten bei der Ankunft nicht korrekt aussehen?
+
+00:08:44.880 --> 00:08:46.320
+Teil 4. Datentransformation
+
+00:08:46.320 --> 00:08:50.240
+Manchmal entsprechen die vom Client gesendeten Daten nicht dem, was ihr Backend erwartet.
+
+00:08:50.780 --> 00:08:53.400
+Vielleicht sendet der Client JSON, aber ihr Backend versteht nur XML.
+
+00:08:54.140 --> 00:08:55.380
+Vielleicht stimmen die Feldnamen nicht überein.
+
+00:08:55.780 --> 00:08:58.360
+Der Client verwendet Vorname so und ihr Backend erwartet ebenfalls Vorname.
+
+00:08:59.260 --> 00:09:00.480
+Diese Diskrepanzen führen zu fehlen.
+
+00:09:00.940 --> 00:09:03.900
+Früher mussten Sie jeden einzelnen Client reparieren oder das Backend umschreiben.
+
+00:09:04.420 --> 00:09:04.820
+Ich kann ideal.
+
+00:09:05.320 --> 00:09:07.820
+Das Gateway kann die Daten transformieren, bevor Sie das Backend erreichen.
+
+00:09:08.300 --> 00:09:09.460
+Trachten Sie es als ein Übersetzer.
+
+00:09:09.460 --> 00:09:13.080
+Es sitzt in der Mitte und kann die Daten auf dem Weg hinein, hinaus oder beides ändern.
+
+00:09:13.480 --> 00:09:15.420
+Das ist Anforderungs- und Antworttransformation in Kürze.
+
+00:09:15.860 --> 00:09:16.980
+Lassen Sie mich ein echtes Beispiel geben.
+
+00:09:17.260 --> 00:09:19.180
+Nehmen wir an, Sie haben ein Altsystem, das XML erwartet.
+
+00:09:19.680 --> 00:09:20.740
+Es läuft seit 15 Jahren.
+
+00:09:21.180 --> 00:09:21.840
+Es funktioniert einmal.
+
+00:09:22.100 --> 00:09:24.620
+Aber jetzt bauen Sie eine neue mobile App und mobile Apps sprechen JSON.
+
+00:09:25.440 --> 00:09:29.500
+Ohne Gateway müssten Sie das Altsystem umschreiben oder die App zwingen, XML zu senden.
+
+00:09:29.940 --> 00:09:31.360
+Mit einem Gateway müssen Sie keines verwendet.
+
+00:09:31.700 --> 00:09:32.760
+Die mobile App sendet JSON.
+
+00:09:33.180 --> 00:09:34.360
+Das Gateway konvertiert es in XML.
+
+00:09:34.860 --> 00:09:36.140
+Das System erhält, was es erwartet.
+
+00:09:36.580 --> 00:09:38.820
+Die mobile App erhält eine Antwort zurück, die bereits in JSON vorliegt.
+
+00:09:38.820 --> 00:09:40.200
+Niemand muss da etwas umschreiben.
+
+00:09:40.540 --> 00:09:41.160
+Das ist das Schöne daran.
+
+00:09:41.600 --> 00:09:45.380
+Das Gateway kann auch Header hinzufügen oder entfernen, URLs ändern oder sensible Daten maskieren.
+
+00:09:46.260 --> 00:09:47.960
+Stellen Sie sich vor, eine Antwort enthält eine Kritik ab.
+
+00:09:48.360 --> 00:09:49.900
+Sie möchten nicht, dass diese an den Client zurückgeht.
+
+00:09:50.380 --> 00:09:54.200
+Das Gateway kann Sie entfernen, bevor die Antwort das System verlässt oder durch eine maskierte Version ersetzen.
+
+00:09:54.580 --> 00:09:55.660
+Das Backend muss sich nie ändern.
+
+00:09:56.180 --> 00:09:56.960
+Das Gateway kümmert sich darum.
+
+00:09:57.320 --> 00:09:59.580
+Dies ist besonders nützlich, wenn Sie alte Systeme modernisieren.
+
+00:09:59.880 --> 00:10:00.980
+Sie müssen das Backend nicht umschreiben.
+
+00:10:01.340 --> 00:10:02.800
+Sie müssen Clients nicht zur Änderung zwingen.
+
+00:10:03.380 --> 00:10:04.140
+Wir ändern öfters Gateway.
+
+00:10:04.520 --> 00:10:06.480
+Es ist wie ein Dolmetscher bei einer internationalen Konferenz.
+
+00:10:06.480 --> 00:10:10.140
+Jeder spricht seine eigene Sprache, aber der Dolmetscher stellt sicher, dass jeder jeden versteht.
+
+00:10:10.660 --> 00:10:12.280
+Das Gateway ist dieser Dolmetscher für Ihre Software.
+
+00:10:12.760 --> 00:10:15.420
+Also Routing, Sicherheit, Drosselung, Transformation, das ist eine ganze Menge.
+
+00:10:15.860 --> 00:10:17.140
+Aber es sind keine vier getrennten Dinge.
+
+00:10:17.500 --> 00:10:18.580
+Lassen Sie mich zeigen, wie sie zusammenhängt.
+
+00:10:18.980 --> 00:10:19.700
+Wie alles zusammenhängt.
+
+00:10:20.180 --> 00:10:20.600
+Hier ist die Sache.
+
+00:10:21.280 --> 00:10:22.780
+Diese vier Aufgaben sind nicht voneinander getrennt.
+
+00:10:23.160 --> 00:10:24.920
+Sie arbeiten bei jeder einzelnen Anfrage zusammen.
+
+00:10:25.120 --> 00:10:26.300
+Jedes Mal, wenn eine Frage eingeht.
+
+00:10:26.680 --> 00:10:28.100
+Das Gateway prüft die Authentifizierung.
+
+00:10:28.500 --> 00:10:29.540
+Es validiert das Ratenlimit.
+
+00:10:29.920 --> 00:10:30.980
+Es leitet einen richtigen Dienstwart.
+
+00:10:31.200 --> 00:10:32.600
+Es transformiert die Daten, falls nötig.
+
+00:10:32.940 --> 00:10:33.700
+Es empfängt die Antwort.
+
+00:10:33.700 --> 00:10:35.780
+Es transformiert auch diese, falls erforderlich.
+
+00:10:36.220 --> 00:10:37.420
+Dann setzt es alles an den Client zurück.
+
+00:10:37.720 --> 00:10:38.120
+Eine Pipeline.
+
+00:10:38.580 --> 00:10:42.320
+Jeder Schritt erfolgt automatisch der Reihe nach, ohne dass ein Dienst daran denken muss.
+
+00:10:42.780 --> 00:10:44.400
+Die wahre Stärke liegt nicht in einzelnen Funktionen.
+
+00:10:44.720 --> 00:10:45.320
+Es ist die Integration.
+
+00:10:46.100 --> 00:10:48.960
+Sie können eine neue Sicherheitsrichtlinie hinzufügen, ohne das Routing anzupassen.
+
+00:10:49.620 --> 00:10:51.340
+Den Backend-Dienst ohne den Client zu ändern.
+
+00:10:51.960 --> 00:10:54.440
+Sie können die Ratenbegrenzung aktualisieren, ohne etwas neu bereitzustellen.
+
+00:10:54.860 --> 00:10:57.300
+Jeder Teil ist unabhängig, arbeitet aber in derselben Pipeline.
+
+00:10:57.300 --> 00:11:01.340
+Und weil alles durch eine Stelle läuft, erhalten Sie volle Transparenz über die Vorgänge.
+
+00:11:02.100 --> 00:11:04.500
+Logs, Metriken, Analysen, alles aus einem Punkt.
+
+00:11:05.160 --> 00:11:09.820
+Sie sehen, wie viele Anfragen eingingen, welche fehlschlugen, welche langsam waren, welche Clients die meisten Ressourcen nutzen.
+
+00:11:10.360 --> 00:11:13.400
+Ohne Gateway müssten Sie diese Daten von jedem Dienst einzeln sammeln.
+
+00:11:13.940 --> 00:11:15.100
+Mit einem Gateway ist alles direkt verfügbar.
+
+00:11:15.400 --> 00:11:16.160
+Das ist die wichtige Erkenntnis.
+
+00:11:16.480 --> 00:11:17.540
+Das Gateway ist nicht nur ein Router.
+
+00:11:18.060 --> 00:11:20.320
+Es ist eine Kontrollzentrale für Ihre gesamte API-Plattform.
+
+00:11:20.780 --> 00:11:23.540
+Jede Anfrage, jede Antwort, jeder Fehler, alles fließt durch eine Stelle.
+
+00:11:24.080 --> 00:11:26.080
+Sie haben eine zentrale Übersicht für alles, was passiert.
+
+00:11:26.080 --> 00:11:27.620
+Wie nutzt man das nun konkret?
+
+00:11:28.080 --> 00:11:29.580
+Lassen Sie uns darüber sprechen, was Sie jetzt damit tun.
+
+00:11:30.020 --> 00:11:31.040
+Konkrete Handlungsempfehlung.
+
+00:11:31.300 --> 00:11:35.360
+Wenn Sie nur ein oder zwei Dienste haben, brauchen Sie wahrscheinlich noch kein API-Gateway.
+
+00:11:35.880 --> 00:11:38.620
+Sie können das Routing selbst übernehmen und die Authentifizierung in jedem Dienst verweilen.
+
+00:11:38.800 --> 00:11:39.920
+Das ist nicht elegant, aber es funktioniert.
+
+00:11:40.420 --> 00:11:45.600
+Aber sobald Sie drei Dienste haben oder APIs für externe Clients freigeben, nimmt die Komplexität schnell zu.
+
+00:11:46.020 --> 00:11:47.140
+Das Gateway zahlt sich schnell aus.
+
+00:11:47.540 --> 00:11:48.460
+Was ist also Ihr bester Schritt?
+
+00:11:49.040 --> 00:11:50.520
+Zentralisieren Sie die Authentifizierung am Gateway.
+
+00:11:50.820 --> 00:11:51.700
+Tun Sie das vor allem anderen.
+
+00:11:52.100 --> 00:11:54.480
+Wählen Sie einen Dienst und verlagern Sie dessen Authentifizierungsprüfung zum Geld.
+
+00:11:54.480 --> 00:11:56.920
+Sie werden sofort bemerken, dass Ihr Dienstcode sauberer wird.
+
+00:11:57.600 --> 00:11:59.980
+Keine überall verstreute Logik zur Tokenvalidierung mehr.
+
+00:12:00.660 --> 00:12:03.260
+Kein Rätselraten mehr, ob Sie es in jedem Dienst gleich implementiert haben.
+
+00:12:03.660 --> 00:12:06.200
+Das Gateway erledigt es einmal und jeder Dienst profitiert davon.
+
+00:12:06.900 --> 00:12:08.120
+Nächster Schritt, Ratenbegrenzung.
+
+00:12:09.060 --> 00:12:11.220
+Selbst ein einfaches Limit schützt Ihr Backend vor Überlastung.
+
+00:12:11.500 --> 00:12:14.340
+Beginnen Sie mit etwas Grundlegendem wie 100 Anfragen pro Minute pro Client.
+
+00:12:14.480 --> 00:12:16.860
+Das verhindert, dass ein außer Kontrolle geratener Client Ihre Dienste langlegt.
+
+00:12:17.060 --> 00:12:18.020
+Das war die K heinstell!
+
+00:12:18.100 --> 00:12:19.300
+Bis zum nächsten Mal.
+
+00:12:19.620 --> 00:12:19.740
+Tschüss.

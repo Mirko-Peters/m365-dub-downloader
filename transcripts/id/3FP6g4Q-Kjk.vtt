@@ -1,0 +1,2281 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:02.680
+Jika Anda masih mengeklik pusat admin, Anda sudah ketinggalan.
+
+00:00:03.360 --> 00:00:06.780
+Karena saat Anda sibuk menunggu roda, konfigurasi berputar untuk selesai menyimpan.
+
+00:00:07.300 --> 00:00:12.100
+Orang lain baru saja mengotomatiskan proses yang sama untuk 10 ribu pengguna dengan PowerShell, lalu pergi makan siang.
+
+00:00:13.120 --> 00:00:16.900
+Kenyataannya, dashboard Microsoft 365 yang keren itu bukanlah pusat kendali Anda.
+
+00:00:17.360 --> 00:00:17.860
+Tuhannya umpan.
+
+00:00:18.840 --> 00:00:20.740
+Setir mainan yang dipasang pada jet perusahaan.
+
+00:00:21.240 --> 00:00:24.180
+Itu membuat Anda sibuk sementara mesin aslinya bekerja tanpa kompromi dalam kode.
+
+00:00:24.760 --> 00:00:26.420
+Kebanyakan admin menyukainya karena terlihat hebat.
+
+00:00:26.420 --> 00:00:31.360
+Ada tombol, tab grafik, dan skema warna biru yang menenangkan yang membisikkan bahwa Anda yang memegang kendali.
+
+00:00:31.520 --> 00:00:35.420
+Padahal tidak, Anda hanya membalik saklar yang memanggil perintah PowerShell di balik layar.
+
+00:00:35.820 --> 00:00:39.000
+Pusat admin hanya menyembunyikannya agar pengguna biasa tidak mencelakai diri mereka sendiri.
+
+00:00:39.220 --> 00:00:42.160
+Itu adalah perancah yang dicat bagus tetapi bukan struktur yang menopang apapun.
+
+00:00:42.640 --> 00:00:43.740
+Anda lihat ilusnya adalah kemudah.
+
+00:00:44.180 --> 00:00:44.780
+Klik seresai.
+
+00:00:45.400 --> 00:00:50.040
+Sampai Anda perlu melakukannya seribu kali di berbagai penyewa dengan label kepatuhan yang harus segera disebarkan.
+
+00:00:50.860 --> 00:00:52.680
+Saat ditulah das permainan itu hancur di bawah tekanan.
+
+00:00:52.680 --> 00:00:56.520
+Anda kehilangan skalabilitas, visibilitas, dan yang paling berbahaya Anda kehilangan bukti.
+
+00:00:56.900 --> 00:00:59.400
+Karena dunia sekarang berjalan dengan jejak audit bukan tangkapan layar.
+
+00:01:00.140 --> 00:01:02.320
+Dan mengeklik simpan perubahan bukanlah dokumentasi.
+
+00:01:02.880 --> 00:01:08.480
+Di akhir penjelasan ini, Anda akan mengerti mengapa setiap administrator co-pilot yang serius harus melepaskan mouse dan beralih ke baris perintah.
+
+00:01:09.460 --> 00:01:11.820
+Karena PowerShell bukan hanya saudara tua dari pusat admin,
+
+00:01:12.000 --> 00:01:17.380
+ini adalah satu-satunya alat yang benar-benar dapat mengatur, memantau, dan mengotomatiskan infrastruktur Microsoft dalam skala perusahaan.
+
+00:01:17.380 --> 00:01:23.560
+Dan, ya, saya akan menunjukkan kepada Anda bagaimana baris perintah Anda adalah kunci sebenarnya menuju kekuatan super tata kelola AI.
+
+00:01:24.520 --> 00:01:25.360
+Mainan versus alat.
+
+00:01:26.000 --> 00:01:26.860
+Mari kita luruskan sesuatu.
+
+00:01:27.340 --> 00:01:28.540
+Pusat admin bukanlah produk yang buruk.
+
+00:01:29.180 --> 00:01:30.660
+Hanya saja bukan produk seperti yang Anda kira.
+
+00:01:30.660 --> 00:01:36.560
+Ini adalah cara Microsoft menjaga manajemen perusahaan tetap aman bagi orang yang panik saat melihat kursor bergabung.
+
+00:01:37.000 --> 00:01:43.400
+Ini memberi mereka grafik untuk dipajang dalam rapat dan rasa kendali yang kira-kira setara dengan menekan tombol lift yang sudah tidak terhubung kemanapun.
+
+00:01:44.160 --> 00:01:46.340
+Ini lucu seperti gunting keamanan di taman kanak-kanakan.
+
+00:01:47.260 --> 00:01:49.580
+Microsoft merancang GUI untuk visibilitas, bukan perintah.
+
+00:01:50.380 --> 00:01:51.800
+Antarmukanya adalah taman bermain umpun.
+
+00:01:51.800 --> 00:01:55.480
+Ini nyampuk, pintunya terkunci, dan apapun yang tajam disembunyikan di balik tips alat.
+
+00:01:55.920 --> 00:01:57.400
+Ini adalah cloud dalam mode aman untuk anak.
+
+00:01:57.400 --> 00:02:02.580
+Saat Anda mengelola Copilot, hal itu penting karena administrasi AI bukan sekadar mengubah pengaturan.
+
+00:02:03.400 --> 00:02:09.380
+Ini tentang membuat skrip tindakan yang dapat diaudit, hal-hal yang dapat diulang, dicatat, dan dibuktikan nanti ketika auditor bertanya.
+
+00:02:09.980 --> 00:02:12.580
+Siapa yang memberi Copilot akses ke data keuangan pada 12 Mei?
+
+00:02:13.380 --> 00:02:14.520
+Pusat admin menjawab dengan angkat.
+
+00:02:14.880 --> 00:02:16.060
+PowerShell memberi Anda transkrip.
+
+00:02:16.660 --> 00:02:17.720
+Disinilah celah-celah mulai terlihat.
+
+00:02:18.180 --> 00:02:19.820
+Cobalah melakukan operasi masal.
+
+00:02:20.000 --> 00:02:23.980
+Misalnya, non-aktifkan Copilot untuk semua penggunaan eksekutif di berbagai unit bisnis.
+
+00:02:23.980 --> 00:02:28.920
+Pusat admin akan membuat Anda mengklik setiap catatan pengguna secara manual seolah ini tahun 2008.
+
+00:02:29.400 --> 00:02:33.100
+Cukup menarik melihat bagaimana sitemennya berpura-pura bala T modern bisa dikelola satu kotak centang dalam set.
+
+00:02:33.460 --> 00:02:34.600
+Kemudian Anda harus menunggu replikasi.
+
+00:02:34.960 --> 00:02:37.720
+Berjam-jam kemudian, beberapa situs diperbarui, yang lain tidak sinkron.
+
+00:02:38.300 --> 00:02:39.740
+Petugas kebatuhan mulai mengirim surel.
+
+00:02:40.140 --> 00:02:44.920
+Sementara itu, satu perintah PowerShell dapat menangani seluruh penyewa dalam hitungan detik output tercatat tindakan tertanggal.
+
+00:02:44.920 --> 00:02:48.340
+Tanpa menebak, tanpa penundaan, tanpa pengguna tertulis yang mengatakan periksa lagi besok.
+
+00:02:48.960 --> 00:02:51.480
+Anggap pusat admin sebagai peta dan PowerShell sebagai kendaraannya.
+
+00:02:52.000 --> 00:02:53.100
+Peta memang berguna tentu saja.
+
+00:02:53.420 --> 00:02:54.560
+Peta menunjukkan di mana letak berk.
+
+00:02:55.020 --> 00:02:58.460
+Namun jika yang Anda lakukan hanya menunjuk lokasi selamat, Anda akan mati di tempat.
+
+00:02:58.940 --> 00:02:59.840
+PowerShell mengantar Anda ke sang.
+
+00:03:00.300 --> 00:03:05.260
+Dia bisa menafigasi, mengisi bahan bakar, mengambil jalan memutar, dan terpenting merekam rute untuk diikuti orang lain.
+
+00:03:05.860 --> 00:03:09.680
+Begitulah cara administrator beroperasi ketika kepatuhan, skala, dan otomatisasi menjadi penting.
+
+00:03:10.240 --> 00:03:12.900
+Ada paradoks di jantung administrasi Copilot, dan inilah dia.
+
+00:03:12.900 --> 00:03:16.900
+I.I. terlihat visual, tetapi mengelolanya memerlukan presisi non-visual.
+
+00:03:17.780 --> 00:03:21.560
+Kontrol perintah penetapan lisensi integrasi DLP ini bukan aktivitas dashboard.
+
+00:03:22.280 --> 00:03:23.540
+Ini adalah operasi data terstruktur.
+
+00:03:24.180 --> 00:03:26.320
+Pusat admin dapat menunjukkan grafik penggunaan E Anda.
+
+00:03:26.920 --> 00:03:30.120
+Hanya PowerShell yang bisa memberitahu Anda mengapa hal itu terjadi dan siapa yang memulainya.
+
+00:03:30.840 --> 00:03:32.000
+Perbedaan kekuatannya tidak abstrak.
+
+00:03:32.620 --> 00:03:35.020
+Perbedaannya ada pada segalanya, mulai dari kontrol versi kebijakan.
+
+00:03:35.760 --> 00:03:37.540
+Gunakan GUI dan Anda bergantung pada ingatan manusia.
+
+00:03:37.980 --> 00:03:39.840
+Apakah saya sudah menerapkan label retensi itu keseluruh penyewa?
+
+00:03:39.840 --> 00:03:45.100
+Gunakan PowerShell dan Anda bergantung pada skrip yang ditandatangani dapat diulang dan didistribusikan di seluruh lingkungan.
+
+00:03:45.600 --> 00:03:47.840
+GUI meninggalkan remah-remah, Shell meninggalkan cetak biru.
+
+00:03:48.600 --> 00:03:49.940
+Dan mari kita bicara tentang penanganan yang kesalahan.
+
+00:03:50.300 --> 00:03:51.920
+Kesalahan di pusat admin seperti berubahan suasana.
+
+00:03:52.360 --> 00:03:54.420
+Anda mendapatkan sepanduk merah yang mengatakan sesuatu telah salah.
+
+00:03:54.880 --> 00:03:56.420
+Sesuatu detail yang luar biasa, terima kasih.
+
+00:03:56.420 --> 00:04:00.060
+Sebaliknya, PowerShell memberi Anda perintah yang tepat objek yang terdampak dan nomor barisnya.
+
+00:04:00.240 --> 00:04:00.720
+Dan nomor baris.
+
+00:04:00.840 --> 00:04:03.600
+Anda dapat mendiagnosis, memperbaiki, dan menjalankan ulang semuanya dalam jenir.
+
+00:04:03.880 --> 00:04:05.280
+Ini tidak glamor, tetapi sangat efektif.
+
+00:04:06.760 --> 00:04:09.780
+Admin yang terpaku pada dasber melakukannya karena satu alasan rasanya aman.
+
+00:04:10.340 --> 00:04:14.380
+Ini visual, mengonfirmasi tindakan mereka dengan notifikasi sukses kecil seolah-olah ada konfetti.
+
+00:04:15.500 --> 00:04:17.480
+Namun, tata kelala perusahaan bukanlah bisnis perasaan.
+
+00:04:17.560 --> 00:04:18.340
+Ini adalah bisnis hasil.
+
+00:04:18.700 --> 00:04:20.200
+Anda tidak butuh notifikasi, Anda butuh entry.
+
+00:04:20.200 --> 00:04:22.440
+Segalanya tentang PowerShell meneriakan kendali.
+
+00:04:22.820 --> 00:04:24.980
+Ini tidak dimusukkan untuk terlihat cantik, ini dimusukkan untuk permanen.
+
+00:04:25.380 --> 00:04:26.900
+Ini tidak berasumsi kepercayaan yang menutup.
+
+00:04:27.280 --> 00:04:28.760
+Ini tidak melambat untuk melindungi Anda dari diri.
+
+00:04:29.160 --> 00:04:32.900
+Ini memberikan Anda setiap perintah dengan peringatan bahwa Anda kini memengkang kendali tingkat produksi.
+
+00:04:33.540 --> 00:04:35.500
+Dan itulah yang sebenarnya dituntut oleh administrasi Copilot.
+
+00:04:36.080 --> 00:04:39.280
+Sekarang sebelum Anda membelagui ikan kenyamanannya, inilah kebenaran yang tidak nyaman.
+
+00:04:39.960 --> 00:04:41.060
+Kenyamanan membunuh tata kelola.
+
+00:04:41.500 --> 00:04:43.180
+Alat admin berbasis klik menyemayakan telurban.
+
+00:04:43.680 --> 00:04:45.920
+Alat tersebut mengabstrasitas hingga kebijakan menjadi tidak terlihat.
+
+00:04:45.920 --> 00:04:49.160
+Dan ketika terjadi kerusakan, Anda tidak bisa melacak penyebabnya. Anda hanya bisa.
+
+00:04:49.880 --> 00:04:51.260
+Sebaliknya, skrip adalah buku terbuk.
+
+00:04:51.720 --> 00:04:52.880
+Setiap tindakan meninggalkan jejak.
+
+00:04:53.420 --> 00:04:57.140
+Jadi, sementara pusat admin membuat Anda terhibur, PowerShell menjalankan perusahaan.
+
+00:04:57.680 --> 00:05:02.160
+Ini adalah alat yang digunakan Microsoft secara internal untuk menguji, menerapkan, mengaudit, dan memperbaiki sistem mereka sendiri.
+
+00:05:02.600 --> 00:05:04.840
+Mereka membangun mainan itu untuk Anda. Mereka sendiri menggunakan alat.
+
+00:05:05.180 --> 00:05:06.540
+Terus seharusnya sudah menjelaskan segalanya.
+
+00:05:06.660 --> 00:05:08.080
+Bahkan sebelum kita membahas tentang tata kelola.
+
+00:05:08.640 --> 00:05:09.400
+Mari kita buka lanjut.
+
+00:05:10.000 --> 00:05:11.100
+Kesenjangan tata kelola dikupil.
+
+00:05:11.100 --> 00:05:14.500
+Di inilah keadaan berubah dari tidak efisien menjadi berpotensi bencana.
+
+00:05:15.140 --> 00:05:19.220
+Kebanyakan administrator berasumsi bahwa saat mereka mengaktifkan co-pilot ke rangka kerja kepatuhan,
+
+00:05:19.360 --> 00:05:21.860
+Microsoft 365 juga otomatis mencakup lapisan AI.
+
+00:05:22.440 --> 00:05:22.740
+Spoiler.
+
+00:05:22.880 --> 00:05:23.240
+Nata tidak.
+
+00:05:23.680 --> 00:05:27.040
+Ada kesenjangan tata kelola yang cukup lebar untuk memicu kebocoran data dan pusat admin
+
+00:05:27.040 --> 00:05:29.140
+dengan sikap menyembunyikannya di balik pemutar penguatan yang ram.
+
+00:05:29.600 --> 00:05:33.620
+Output co-pilot, email, dokumen, ringkasan rapat dapat diaudit tetapi promnya.
+
+00:05:33.940 --> 00:05:38.280
+Input yang menghasilkan output tersebut seringkali lenyap, begitu saja, seringkali lena begitu saja.
+
+00:05:38.280 --> 00:05:41.040
+Itu adalah mimpi buruk hukum dan operasional di lingkungan yang diatur ketat.
+
+00:05:41.700 --> 00:05:45.160
+Jika direktur keuangan Anda tidak sengaja mengetik perakhiran sensitif ke co-pilot,
+
+00:05:45.640 --> 00:05:48.160
+outputnya mungkin dihapus, tetapi konteks query mereka,
+
+00:05:48.380 --> 00:05:51.580
+siapa yang bertanya kapan dan dalam batasan data apa mungkin tidak pernah terkam.
+
+00:05:52.140 --> 00:05:53.280
+Pusat admin tidak bisa membantu Anda.
+
+00:05:53.740 --> 00:05:56.200
+Pusat admin menampilkan metrik adopsi dan tren penggunaan,
+
+00:05:56.280 --> 00:05:57.520
+tetapi bukan rantai bukti yang Anda perlu.
+
+00:05:58.280 --> 00:06:00.360
+Tata kelola tanpa keterlacakan hanya lahasan diwara.
+
+00:06:00.940 --> 00:06:02.940
+Sekarang pertimbangkan masalah nomor satu, menegakkan masalah.
+
+00:06:03.440 --> 00:06:07.600
+Ingin menerapkan aturan pencegahan kehilangan data baru ke setiap pengguna dengan akses co-pilot?
+
+00:06:08.280 --> 00:06:08.740
+Sayang sekali.
+
+00:06:09.160 --> 00:06:12.300
+Pusat admin memungkinkan Anda mengaktifkan kebijakan DLP pada tingkat luas,
+
+00:06:12.440 --> 00:06:15.920
+tetapi tidak menjalankan pembaruan di seluruh penyewa yang dikhususkan untuk aktivitas co-pilot.
+
+00:06:16.580 --> 00:06:18.920
+Ini seperti mencoba memasang kabel gedung melalui saklar lampunya.
+
+00:06:19.720 --> 00:06:23.280
+Namun, PowerShell masuk kebalik dinding ke skema sirkuit yang sebenarnya...
+
+00:06:24.040 --> 00:06:25.340
+PowerShell mengungkap atribut,
+
+00:06:25.620 --> 00:06:28.300
+tersembunyi titik akhir data, hak lisensi, log perilaku model.
+
+00:06:29.180 --> 00:06:32.720
+Dengan satu skrip, Anda dapat menemukan setiap akun yang diaktifkan co-pilot,
+
+00:06:32.860 --> 00:06:35.580
+memverifikasi cakupan DLP-nya, dan mengekspornya untuk audit.
+
+00:06:36.700 --> 00:06:39.220
+Lalu ada poin masalah nomor dua, lisensi yang tidak konsisten.
+
+00:06:39.760 --> 00:06:41.640
+Anda pikir semua pengguna Anda memikir tingkat akses coba yang sama.
+
+00:06:42.260 --> 00:06:43.300
+Optimisme yang menyenangkan.
+
+00:06:43.960 --> 00:06:46.180
+Dalam prakteknya, lisensi tersebar seperti konfeti,
+
+00:06:46.380 --> 00:06:48.380
+ditetapkan secara manual, ditransfer sembarangan,
+
+00:06:48.520 --> 00:06:50.520
+terkadang diduplikasi, terkadang hilang sama sekali.
+
+00:06:51.400 --> 00:06:54.460
+Pusat admin memang bisa menampilkan daftar, tentu saja, tetapi bukan relasi.
+
+00:06:54.940 --> 00:06:56.520
+Anda tidak bisa memfilter, melakukan pivot,
+
+00:06:56.640 --> 00:06:57.920
+atau mengorelasikan antar berbagai layanan.
+
+00:06:58.600 --> 00:07:00.860
+Sementara itu, PowerShell mengambil objek-objek tersebut
+
+00:07:00.860 --> 00:07:02.860
+dan memungkinkan Anda mengquerinya seperti data terstruktur.
+
+00:07:03.480 --> 00:07:05.480
+Anda bisa memetakan pengguna SKU lisensi,
+
+00:07:05.760 --> 00:07:07.280
+mengelompokkannya berdasarkan departemen,
+
+00:07:07.580 --> 00:07:09.080
+mencocokkannya dengan kebijakan kepatuhan,
+
+00:07:09.300 --> 00:07:11.440
+dan benar-benar memahami lingkungan Anda alih-alih menebak-nebak.
+
+00:07:12.280 --> 00:07:14.340
+Mari kita tunjukkan kesenjangan ini dengan skenario praktis.
+
+00:07:15.000 --> 00:07:18.520
+Bayangkan Anda perlu memastikan apakah setiap eksekutif di penyewa E5 Anda
+
+00:07:18.520 --> 00:07:19.660
+memiliki co-pilot premium,
+
+00:07:19.660 --> 00:07:22.800
+dan apakah ada kontraktor sementara yang tidak sengaja diberikan akses.
+
+00:07:23.580 --> 00:07:25.360
+Di pusat admin, Anda harus membuka pengguna.
+
+00:07:25.480 --> 00:07:26.740
+Pengguna aktif menggulir-mengeklik,
+
+00:07:26.820 --> 00:07:28.680
+menggulir lagi, membuka filter, menerapkan tag,
+
+00:07:28.780 --> 00:07:31.460
+lalu mengekspor ke Excel, dan mengekspor ke Excel, dan mengekspor ke Excel.
+
+00:07:31.820 --> 00:07:34.200
+Setelah tiga cangkir kopi, Anda mungkin masih harus menerapikan baris data.
+
+00:07:34.520 --> 00:07:35.860
+Di PowerShell, cukup satu baris.
+
+00:07:36.520 --> 00:07:38.680
+Weerigate muscle user yang difilter berdasarkan SKU
+
+00:07:38.680 --> 00:07:39.820
+diseluruhkan melalui select object
+
+00:07:39.820 --> 00:07:42.020
+dan diekspor sebagai CSV lengkap dengan setempel waktu.
+
+00:07:42.860 --> 00:07:44.420
+Singkatnya, Anda bisa mengganti ketidakpastian
+
+00:07:44.420 --> 00:07:46.340
+selama berjam-jam dengan kepastian dalam hitungan detik.
+
+00:07:46.340 --> 00:07:48.560
+Banyak administrator mendengarnya dan merespons,
+
+00:07:48.720 --> 00:07:49.840
+tapi saya bisa melihatnya secara visual.
+
+00:07:50.660 --> 00:07:51.300
+Setelah masalahnya.
+
+00:07:51.700 --> 00:07:53.040
+Anda melihatnya, tapi Anda tidak mengaturnya.
+
+00:07:53.600 --> 00:07:55.000
+Visibilitas dan kontrol bukanlah sinun.
+
+00:07:55.640 --> 00:07:56.840
+GUI menawarkan kenyamanan.
+
+00:07:57.180 --> 00:07:58.540
+PowerShell menawarkan akuntabilitas.
+
+00:07:59.200 --> 00:08:01.020
+Sekarang inilah ironi perusahaan yang kurang mengenakan.
+
+00:08:01.640 --> 00:08:03.800
+Microsoft sendiri menggunakan modul PowerShell yang sama,
+
+00:08:04.060 --> 00:08:06.060
+MS Graph, Azure ID, Exchange Online,
+
+00:08:06.520 --> 00:08:08.240
+untuk membangun dashboard yang Anda percayai.
+
+00:08:08.620 --> 00:08:11.320
+Anda sebenarnya sedang melihat tampilan depan PowerShell
+
+00:08:11.320 --> 00:08:12.940
+dengan setengah parameter yang dihilangkan.
+
+00:08:12.940 --> 00:08:16.840
+Ini seperti penyewa mobil dan dilarang memutar setir lebih dari 90 derajat.
+
+00:08:17.740 --> 00:08:19.380
+Batasan tersebut menjaga pemula tetap aman,
+
+00:08:19.480 --> 00:08:20.480
+tetapi membuat para profesional.
+
+00:08:21.040 --> 00:08:23.000
+Tata kelola yang nyata membutuhkan akses tanpa filter,
+
+00:08:23.180 --> 00:08:25.580
+karena AI tidak beroperasi dalam batas administratif.
+
+00:08:26.540 --> 00:08:29.100
+AI mencakup batasan data, struktur olah pesan, dan konektor cloud.
+
+00:08:30.000 --> 00:08:32.260
+Jika proses audit, Anda tidak bisa melacak permintaan AI
+
+00:08:32.260 --> 00:08:34.400
+dari penyewa ke pusat data, Anda tidak memiliki tata kelola.
+
+00:08:34.580 --> 00:08:35.320
+Anda hanya memiliki pajangan.
+
+00:08:36.860 --> 00:08:39.000
+PowerShell memperbaiki kesenjangan itu bukan dengan hiasan,
+
+00:08:39.060 --> 00:08:39.720
+melainkan dengan ekspos.
+
+00:08:39.720 --> 00:08:42.020
+Ia mengungkap parameter konfigurasi AI penyewa,
+
+00:08:42.340 --> 00:08:44.660
+entry control akses modal, dan bahkan batasan titik akhir,
+
+00:08:45.100 --> 00:08:46.280
+dan bahkan batasan titik akhir.
+
+00:08:46.540 --> 00:08:49.180
+Transparansi itu memungkinkan Anda membangun lapisan tata kelola yang asli,
+
+00:08:49.280 --> 00:08:51.340
+penugasan kebijakan, audit prompt, serta pemantahan berasisme.
+
+00:08:51.600 --> 00:08:53.200
+Anda bisa mengodekan siapa yang bisa bertanya apa,
+
+00:08:53.280 --> 00:08:54.220
+dan dari mana jawaban bisa diberikan.
+
+00:08:55.120 --> 00:08:57.420
+Detail tersebut sama sekali tidak ada di GUI manapun saat ini.
+
+00:08:57.940 --> 00:08:59.600
+Dan ketika sesuatu berjalan tidak semestinya,
+
+00:08:59.720 --> 00:09:01.180
+dan dalam administrasi EH itu pasti terjadi,
+
+00:09:01.280 --> 00:09:02.200
+Anda membutuhkan jejak forensik.
+
+00:09:02.440 --> 00:09:05.040
+PowerShell bisa mengekspor log JSON yang tidak dapat diubah,
+
+00:09:05.040 --> 00:09:06.640
+menangkap objek berdasarkan GUID,
+
+00:09:06.640 --> 00:09:09.960
+dan bahkan menandai hasil perintah dengan tanda tangan hash untuk verifikasi integritas.
+
+00:09:10.420 --> 00:09:14.340
+Ustaz, itu hanya akan menunjukkan grafik tan yang tentunya seperti perspektif Anda jika Anda mengenai.
+
+00:09:14.600 --> 00:09:17.220
+Jadi, ya, kesenjangan tata kelola di Copilot itu nyata,
+
+00:09:17.340 --> 00:09:19.200
+terukur, dan melebar seiring bertambahnya penggunaan.
+
+00:09:19.640 --> 00:09:21.040
+PowerShell bukan lagi lapisan opsional.
+
+00:09:21.660 --> 00:09:24.100
+Ini satu-satunya lapisan dengan jangkauan cukup dalam untuk melihat kebenaran.
+
+00:09:24.540 --> 00:09:26.480
+Selebihnya hanyalah screensaver bertema kepatuhan.
+
+00:09:27.060 --> 00:09:28.800
+Dari pencegahan, kita sekarang beralih kekendali,
+
+00:09:28.800 --> 00:09:30.300
+karena setelah Anda melihat masalahnya,
+
+00:09:30.400 --> 00:09:33.440
+langkah logis berikutnya adalah menghapus hambatan manusia sepenuhnya.
+
+00:09:33.440 --> 00:09:36.060
+Otomatisasi di sini bukan soal kenyamanan, ini adalah hukum.
+
+00:09:36.700 --> 00:09:39.720
+Mari kita bahas bagaimana PowerShell membuat eksekusi kebijakan tidak hanya lebih cepat,
+
+00:09:39.780 --> 00:09:40.640
+tetapi juga bersifat judis.
+
+00:09:41.020 --> 00:09:41.940
+Otomatisasi sebagai hukum.
+
+00:09:42.300 --> 00:09:45.340
+Otomatisasi bukan kemewahan dalam tata kelola Copilot ini adalah undang-undang.
+
+00:09:45.940 --> 00:09:47.800
+Pendekatan manual tidak lagi sekadar tidak efisien,
+
+00:09:47.980 --> 00:09:49.180
+melainkan tidak patuh sejak awal.
+
+00:09:50.060 --> 00:09:52.620
+Karena ketika ekosistem AI Anda meluas ke berbagai penyewa,
+
+00:09:52.760 --> 00:09:54.860
+setiap tindakan tanpa skrip adalah kewajiban yang berisiko.
+
+00:09:55.600 --> 00:09:58.300
+Kesalahan manusia meluas lebih cepat daripada algoritma apapun,
+
+00:09:58.520 --> 00:10:01.000
+dan PowerShell adalah satu-satunya bahasa yang dapat mengunci kerentan manusia
+
+00:10:01.000 --> 00:10:02.460
+dibalik otomatisasi prosedural.
+
+00:10:03.040 --> 00:10:04.880
+Terus terang saja kebijakan yang ditulis di Word hanyalah harapan.
+
+00:10:05.420 --> 00:10:07.000
+Kebijakan yang ditulis dalam PowerShell adalah hukum.
+
+00:10:07.480 --> 00:10:09.780
+Skrip tidak akan lupa menerapkan pengaturan di hari Jumat ketiga
+
+00:10:09.780 --> 00:10:12.080
+atau melewatkan akun karena copy seseorang sudah habis.
+
+00:10:12.500 --> 00:10:14.360
+Saat Anda menentukan aturan tata kelola Mkode,
+
+00:10:14.500 --> 00:10:16.980
+aturan tersebut dijalankan dengan cara yang persis sama setiap saat
+
+00:10:16.980 --> 00:10:18.080
+sesuai jadwal di bawah update.
+
+00:10:18.340 --> 00:10:19.760
+Ini adalah kepatuhan melalui reproduktivitas.
+
+00:10:20.240 --> 00:10:21.320
+Tata kelola bukan sebagai saran,
+
+00:10:21.620 --> 00:10:22.420
+lain kan sebagai penedakan.
+
+00:10:22.880 --> 00:10:24.200
+GUI memberi Anda fleksibilitas,
+
+00:10:24.280 --> 00:10:25.580
+PowerShell memberi Anda akuntabilitas.
+
+00:10:25.580 --> 00:10:27.820
+Ambil contoh lisensi sakit kepala yang takut jungsan.
+
+00:10:28.280 --> 00:10:30.000
+Setiap modul AI, setiap fitur copilot,
+
+00:10:30.280 --> 00:10:32.980
+setiap peluncuran regional menambah hak akses lain untuk dilacak.
+
+00:10:33.380 --> 00:10:35.620
+Melakukan ini secara manual ibarat memberikan boarding pass
+
+00:10:35.620 --> 00:10:37.400
+dengan tangan di bandara tanpa pengeras suara.
+
+00:10:38.280 --> 00:10:40.060
+Namun, dengan tugas PowerShell yang dijadwalkan,
+
+00:10:40.180 --> 00:10:41.860
+Anda mendeteksi ketidak kondisi secara otomatis,
+
+00:10:41.940 --> 00:10:42.880
+memperbaikinya secara instan,
+
+00:10:42.940 --> 00:10:44.320
+dan mendokumentasikannya secara perubah.
+
+00:10:44.400 --> 00:10:47.120
+Skrip menjadi bukti, diberi waktu, dicatatat, dan diberi versi.
+
+00:10:47.820 --> 00:10:50.280
+Cobalah katakan, saya mengeklik dengan sangat hati-hati kepada auditor.
+
+00:10:50.400 --> 00:10:52.440
+Mereka akan memintas tempel waktu, bukan perasaan.
+
+00:10:52.440 --> 00:10:54.820
+Otomatisasi tidak hanya mereplikasi pekerjaan Anda,
+
+00:10:55.080 --> 00:10:56.340
+tetapi mengodekan keahlian Anda.
+
+00:10:56.560 --> 00:10:57.180
+Itulah keajaiban.
+
+00:10:57.680 --> 00:11:00.220
+Begitu admin senior menulis skrip untuk klasifikasi risiko
+
+00:11:00.220 --> 00:11:01.500
+atau penegakan filter konten,
+
+00:11:01.600 --> 00:11:03.460
+kode itu sendiri menjadi memori institusional.
+
+00:11:04.460 --> 00:11:06.100
+Karyawan baru tidak memerlukan pengetahuan kolektif.
+
+00:11:06.560 --> 00:11:08.100
+Mereka mewarisi doktrin operasional
+
+00:11:08.100 --> 00:11:09.400
+yang dinyatakan dalam sintaks yang jelas.
+
+00:11:10.060 --> 00:11:12.160
+Menghilangkan terka Anda adalah peningkatan produktivitas yang sebenar.
+
+00:11:12.560 --> 00:11:13.680
+Jam kerja yang dihama tanyalah bonus.
+
+00:11:14.500 --> 00:11:15.400
+Ini cerita singkatnya.
+
+00:11:15.820 --> 00:11:18.000
+Seorang admin yang mengelola beberapa unit bisnis dulunya
+
+00:11:18.000 --> 00:11:20.040
+menghabiskan seminggu untuk mencocokkan lisensi copilot.
+
+00:11:20.040 --> 00:11:22.340
+Setiap bulan ekspansi klien merusak sesuatu.
+
+00:11:23.280 --> 00:11:25.180
+Lalu dia menulis skrip power cell 12 baris.
+
+00:11:25.740 --> 00:11:28.480
+Skrip itu meminta data penyewa untuk hak akses yang tidak selaras,
+
+00:11:28.560 --> 00:11:29.420
+menetapkan yang hilang,
+
+00:11:29.760 --> 00:11:30.520
+mencabut kelebihan,
+
+00:11:30.920 --> 00:11:32.160
+dan membuat audit CSV.
+
+00:11:32.780 --> 00:11:34.960
+Tugas itu berubah dari 35 jam menjadi 5 menit
+
+00:11:34.960 --> 00:11:36.240
+dengan nol catatan yang terlewat.
+
+00:11:36.740 --> 00:11:37.820
+Hasilnya bukan waktu yang dihemat,
+
+00:11:37.940 --> 00:11:38.900
+melainkan penghapusan kata,
+
+00:11:39.080 --> 00:11:39.620
+percaya padaku.
+
+00:11:40.140 --> 00:11:41.540
+Skrip tersebut mengutukkan kepatuhan telah terjadi.
+
+00:11:42.020 --> 00:11:44.120
+Itulah arti otomatisasi sebagai kepatuhan yang sebenarnya.
+
+00:11:44.120 --> 00:11:46.380
+Mengodifikasi niat menjadi eksekusi yang dapat diulang.
+
+00:11:46.900 --> 00:11:48.320
+Persetujuan manusia menjadi opsional.
+
+00:11:48.320 --> 00:11:50.500
+Karena penegakan kebijakan bukan aspirasi,
+
+00:11:50.600 --> 00:11:51.300
+melainkan mekanis.
+
+00:11:52.100 --> 00:11:53.780
+Dan keanggunannya terletak pada cara power cell,
+
+00:11:53.920 --> 00:11:55.020
+mendukung audit secara bawaan.
+
+00:11:55.820 --> 00:11:57.440
+Setiap hasil eksekusi dapat diekspor,
+
+00:11:57.540 --> 00:11:58.540
+setiap perubahan dicatat,
+
+00:11:58.640 --> 00:11:59.860
+setiap perbaikan divalidasi.
+
+00:12:00.700 --> 00:12:02.720
+Ini adalah ritme tiga langkah kelangsungan perusahaan
+
+00:12:02.720 --> 00:12:04.040
+deteksi perbaiki validasi.
+
+00:12:04.720 --> 00:12:06.360
+Setiap kata kerja memiliki perintah yang sesuai
+
+00:12:06.360 --> 00:12:07.360
+get, set, confirm.
+
+00:12:07.840 --> 00:12:08.920
+Awalan-awalan itu tidak sembarangan,
+
+00:12:09.020 --> 00:12:09.800
+itu adalah sebelum manifesto.
+
+00:12:10.380 --> 00:12:12.660
+Bayangkan logika deteksi memindai log penggunaan copilot
+
+00:12:12.660 --> 00:12:13.580
+untuk mencari anomali,
+
+00:12:13.780 --> 00:12:15.140
+panggilan API yang tidak dikenal,
+
+00:12:15.140 --> 00:12:16.820
+atau permintaan patas data yang berlebihan.
+
+00:12:17.560 --> 00:12:19.420
+Segera skrip perbaikan menonaktifkan sesi
+
+00:12:19.420 --> 00:12:20.040
+yang bermasalah,
+
+00:12:20.200 --> 00:12:21.460
+memperbarui indeks kepatuhan,
+
+00:12:21.800 --> 00:12:23.240
+dan memicu rutinitas validasi
+
+00:12:23.240 --> 00:12:25.360
+yang memeriksa ulang akses residu.
+
+00:12:25.980 --> 00:12:26.900
+Semuanya diperstempel waktu,
+
+00:12:27.020 --> 00:12:27.800
+semuanya dapat dipatalkan.
+
+00:12:28.200 --> 00:12:28.720
+Sementara itu,
+
+00:12:28.820 --> 00:12:30.420
+pengguna dashboard Anda masih mengklik segarkan,
+
+00:12:30.540 --> 00:12:32.120
+bertanya-tanya mengapa hasilnya lambat.
+
+00:12:32.580 --> 00:12:33.380
+Ironia sangat menarik,
+
+00:12:33.680 --> 00:12:34.980
+dan ya, rasa bangga itu memang beralasan.
+
+00:12:35.360 --> 00:12:36.240
+Lompok klik sekali berkata,
+
+00:12:36.320 --> 00:12:37.340
+otomatisasi itu berisiko.
+
+00:12:38.060 --> 00:12:39.180
+Baiklah, begitu juga bernapas
+
+00:12:39.180 --> 00:12:40.060
+di dekat mereka saat mereka salah
+
+00:12:40.060 --> 00:12:41.040
+mengonfigurasi tidak sengaja.
+
+00:12:41.040 --> 00:12:42.920
+Risiko PowerShell transparan,
+
+00:12:43.040 --> 00:12:44.060
+risiko Kiwi itu samar.
+
+00:12:44.500 --> 00:12:45.680
+Sampai jumpa langsung di bulan Januar.
+
+00:12:46.480 --> 00:12:47.620
+Otomatisasi mengusatkan kesalahan
+
+00:12:47.620 --> 00:12:48.060
+ke dalam kode,
+
+00:12:48.160 --> 00:12:49.460
+di mana mereka dapat diperbaiki sekali saja.
+
+00:12:50.100 --> 00:12:51.120
+Proses manual menyebarkannya
+
+00:12:51.120 --> 00:12:51.700
+seperti glitter,
+
+00:12:51.860 --> 00:12:53.280
+permanen, dan mustahil untuk dibersihkan.
+
+00:12:53.640 --> 00:12:54.660
+Tapi mari kita bawa mekanika.
+
+00:12:55.240 --> 00:12:56.360
+Otomatisasi adalah filosofi.
+
+00:12:56.780 --> 00:12:58.200
+Sebuah skrip menegakkan konsistensi
+
+00:12:58.200 --> 00:12:59.560
+dengan menghilangkan ego dari proses.
+
+00:13:00.740 --> 00:13:01.380
+Tidak ada predikasi,
+
+00:13:01.500 --> 00:13:02.180
+tidak ada tebak-tebakan,
+
+00:13:02.280 --> 00:13:02.780
+tidak ada saya pikir,
+
+00:13:02.840 --> 00:13:03.980
+pemasaran butuh lisensi itu.
+
+00:13:04.520 --> 00:13:05.240
+Ini adalah tata kelola
+
+00:13:05.240 --> 00:13:06.540
+yang tidak memihak eksekusi matematis.
+
+00:13:06.540 --> 00:13:08.060
+Jika Anda pernah menginginkan keadilan
+
+00:13:08.060 --> 00:13:09.140
+dalam administrasi sistem,
+
+00:13:09.260 --> 00:13:09.620
+inilah jawab.
+
+00:13:09.940 --> 00:13:11.280
+Komputer mematuhi semua orang secara setara
+
+00:13:11.280 --> 00:13:12.580
+dan tidak memberikan pengecualian kepada siapa.
+
+00:13:13.120 --> 00:13:14.280
+Sekarang, bandingkan kembali hal itu
+
+00:13:14.280 --> 00:13:14.700
+dengan pusat.
+
+00:13:15.340 --> 00:13:16.940
+Setiap klik adalah kepingan salju,
+
+00:13:17.120 --> 00:13:17.840
+unik, sementara,
+
+00:13:17.980 --> 00:13:19.140
+dan tidak dapat diverifikasi.
+
+00:13:19.860 --> 00:13:20.860
+Anda tidak dapat memutar ulangnya
+
+00:13:20.860 --> 00:13:22.160
+atau mengukitikan bahwa itu terjadi persen.
+
+00:13:22.840 --> 00:13:23.920
+Sebaliknya, PowerShell adalah
+
+00:13:23.920 --> 00:13:24.900
+perekam kotak hitam Anda.
+
+00:13:25.720 --> 00:13:27.200
+Setiap eksekusi bersifat terministik,
+
+00:13:27.800 --> 00:13:28.760
+jalankan lagi besok,
+
+00:13:29.040 --> 00:13:29.500
+bulan depan,
+
+00:13:29.600 --> 00:13:30.320
+atau di wilayah lain
+
+00:13:30.320 --> 00:13:31.920
+dan Anda akan mendapatkan hasil yang sama.
+
+00:13:32.580 --> 00:13:33.460
+Begitulah cara regulator
+
+00:13:33.460 --> 00:13:34.580
+mengharapkan sistem berperilaku
+
+00:13:34.580 --> 00:13:35.360
+yaitu secara ada prediksi.
+
+00:13:35.900 --> 00:13:37.280
+Dan seiring skala kopelot yang berkembang,
+
+00:13:37.380 --> 00:13:38.400
+otomatisasi menjadi sangat kuat.
+
+00:13:38.900 --> 00:13:40.080
+Anda tidak bisa memantau ratusan
+
+00:13:40.080 --> 00:13:41.260
+antar muka AI hanya dengan mata.
+
+00:13:41.760 --> 00:13:42.640
+Anda memerlukan skrip
+
+00:13:42.640 --> 00:13:44.080
+untuk menerapkan kebijakan kontrol
+
+00:13:44.080 --> 00:13:45.860
+di seluruh tenan pusat data dan konektor.
+
+00:13:46.280 --> 00:13:47.820
+Anggaplah ini sebagai sistem kekebalan
+
+00:13:47.820 --> 00:13:49.060
+tatak wala Microsoft 365.
+
+00:13:49.540 --> 00:13:51.000
+Rutinitas otomatis yang terus berpatroli
+
+00:13:51.000 --> 00:13:51.800
+mendeteksi anomali
+
+00:13:51.800 --> 00:13:53.840
+merespon sebelum infeksi menyebar.
+
+00:13:55.300 --> 00:13:56.580
+Intervensi manualnya tidak terlihat, sir.
+
+00:13:56.960 --> 00:13:57.580
+Kadang diperlukan,
+
+00:13:57.680 --> 00:13:58.400
+tetapi selalu terambat.
+
+00:13:58.860 --> 00:13:59.200
+Jadi ya,
+
+00:13:59.400 --> 00:14:00.300
+saat pusat admin bertanya
+
+00:14:00.300 --> 00:14:01.640
+dengan sopan apa yang ingin Anda lakukan,
+
+00:14:01.800 --> 00:14:03.340
+PowerShell sudah melakukannya tiga kali,
+
+00:14:03.680 --> 00:14:04.380
+mencatat hasilnya,
+
+00:14:04.580 --> 00:14:05.540
+dan menyimpan laporannya.
+
+00:14:05.920 --> 00:14:06.060
+Ya,
+
+00:14:06.660 --> 00:14:08.420
+otomatisasi tidak menyingkirkan manusia
+
+00:14:08.420 --> 00:14:09.960
+yang meningkatkan peran mereka
+
+00:14:09.960 --> 00:14:11.140
+dari petugas konfigurasi
+
+00:14:11.140 --> 00:14:12.520
+menjadi perancang kontrol.
+
+00:14:13.100 --> 00:14:13.940
+GUI masih membutuhkan Anda
+
+00:14:13.940 --> 00:14:14.500
+untuk mengulisinya.
+
+00:14:14.840 --> 00:14:15.820
+PowerShell membutuhkan Anda
+
+00:14:15.820 --> 00:14:16.980
+untuk mendefinisikan apa arti simpan.
+
+00:14:17.240 --> 00:14:17.960
+Dan itulah yang menentukan
+
+00:14:17.960 --> 00:14:18.800
+tingkatan penguasaan berikut.
+
+00:14:19.260 --> 00:14:20.160
+Kendali bukan sekadar
+
+00:14:20.160 --> 00:14:21.160
+menekan tombol lebih cepat,
+
+00:14:21.880 --> 00:14:22.840
+melainkan memverifikasi
+
+00:14:22.840 --> 00:14:24.020
+apa yang sebenarnya dilakukan tombol sempurna.
+
+00:14:24.340 --> 00:14:25.440
+Otomatisasi membuat data keluar
+
+00:14:25.440 --> 00:14:26.220
+dan tak dijalankan,
+
+00:14:26.220 --> 00:14:27.680
+namun hanya audit yang membuatnya kredibel.
+
+00:14:28.100 --> 00:14:28.980
+Saatnya mengaudit para auditor.
+
+00:14:29.760 --> 00:14:31.060
+Audit segeranya yang jangan percaya pada apa-apa.
+
+00:14:31.360 --> 00:14:32.200
+Tata keluar tanpa audit
+
+00:14:32.200 --> 00:14:32.900
+hanya laksan diwara
+
+00:14:32.900 --> 00:14:33.800
+dan sebuah cantik yang sekadar
+
+00:14:33.800 --> 00:14:34.780
+melakukan cosplay kepatuhan.
+
+00:14:35.200 --> 00:14:36.640
+Penderinya atau membutuhkan bukti transaksi.
+
+00:14:37.080 --> 00:14:38.180
+Dan di Microsoft 365,
+
+00:14:38.400 --> 00:14:39.520
+PowerShell adalah mesin kasir
+
+00:14:39.520 --> 00:14:40.360
+yang tidak pernah melupakan
+
+00:14:40.360 --> 00:14:41.120
+suatu transaksi pun.
+
+00:14:41.640 --> 00:14:42.580
+Setiap tindakan, objek,
+
+00:14:42.700 --> 00:14:44.040
+dan parameter dapat dimunculkan,
+
+00:14:44.220 --> 00:14:44.640
+diberi waktu,
+
+00:14:44.740 --> 00:14:45.740
+dan dihas demi keaslian.
+
+00:14:46.580 --> 00:14:47.540
+Ini bukan sekadar transparansi
+
+00:14:47.540 --> 00:14:48.260
+melalui keteracakan.
+
+00:14:49.260 --> 00:14:50.580
+Saat Anda mengeklik pusat admin,
+
+00:14:50.580 --> 00:14:51.740
+Anda sebenarnya bertanya kepadanya
+
+00:14:51.740 --> 00:14:52.460
+apakah ini terjadi?
+
+00:14:53.280 --> 00:14:54.060
+Dan dia menjauh mungkin.
+
+00:14:55.200 --> 00:14:56.040
+Ia mengumpulkan log,
+
+00:14:56.360 --> 00:14:56.980
+memotong detail,
+
+00:14:57.080 --> 00:14:58.040
+dan memperbarui kapanpun
+
+00:14:58.040 --> 00:14:59.100
+replikasi merasa perlu.
+
+00:15:00.200 --> 00:15:01.140
+PowerShell tidak berurusan
+
+00:15:01.140 --> 00:15:01.920
+dengan probabilitas,
+
+00:15:02.040 --> 00:15:02.880
+ia berurusan dengan trust.
+
+00:15:03.120 --> 00:15:04.300
+Perintah Get memberitahu Anda
+
+00:15:04.300 --> 00:15:05.460
+kata demi kata apa yang berubah,
+
+00:15:05.640 --> 00:15:06.700
+di mana, dan oleh siapa.
+
+00:15:07.120 --> 00:15:08.180
+Anda tidak sedang mengamati terang,
+
+00:15:08.260 --> 00:15:09.020
+Anda sedang menyampaikan itu.
+
+00:15:09.520 --> 00:15:10.720
+Perbedaan itu menentukan selisih
+
+00:15:10.720 --> 00:15:11.700
+antara lingkungan yang patuh
+
+00:15:11.700 --> 00:15:13.220
+dan lingkungan yang penuh permintaan maaf.
+
+00:15:13.780 --> 00:15:14.740
+Mari kita beda piramid audit.
+
+00:15:15.360 --> 00:15:16.840
+Di dasarnya, Anda memiliki apa yang disebut
+
+00:15:16.840 --> 00:15:17.960
+pusat admin sebagai log aktif.
+
+00:15:18.600 --> 00:15:20.000
+Ini adalah ringkasan masa lalu,
+
+00:15:20.260 --> 00:15:21.360
+yang disederhanakan, dibulatkan,
+
+00:15:22.460 --> 00:15:23.920
+naik satu tingkat,
+
+00:15:24.140 --> 00:15:25.480
+dan PowerShell mengungkap catatan audit
+
+00:15:25.480 --> 00:15:26.460
+mentah yang diambil melalui
+
+00:15:26.460 --> 00:15:27.540
+titik akhir API grafik.
+
+00:15:28.700 --> 00:15:29.280
+Lebih tinggi lagi,
+
+00:15:29.520 --> 00:15:31.360
+Anda dapat menarik metadata tingkat perintah,
+
+00:15:31.540 --> 00:15:32.240
+ID eksekusi,
+
+00:15:32.440 --> 00:15:32.940
+asal sesi,
+
+00:15:33.180 --> 00:15:34.320
+dan perubahan properti sebelum
+
+00:15:34.320 --> 00:15:35.380
+dan sesudah modifikasi.
+
+00:15:36.400 --> 00:15:37.680
+Itu adalah fidelitas forensik,
+
+00:15:37.840 --> 00:15:38.720
+bukti yang tidak hanya cocok
+
+00:15:38.720 --> 00:15:39.420
+untuk keingin tahuan,
+
+00:15:39.520 --> 00:15:40.320
+tetapi juga untuk regulator.
+
+00:15:40.640 --> 00:15:41.440
+Ambil contoh audit kotak.
+
+00:15:41.860 --> 00:15:42.640
+GUI dapat menampilkan
+
+00:15:42.640 --> 00:15:43.280
+total pengiriman email
+
+00:15:43.280 --> 00:15:44.020
+dan peristiwa yang ditanding.
+
+00:15:44.540 --> 00:15:45.700
+PowerShell menyelam lebih dalam.
+
+00:15:45.940 --> 00:15:47.340
+Jalankan Search Unified Audit Log
+
+00:15:47.340 --> 00:15:48.120
+dan Anda akan melihat
+
+00:15:48.120 --> 00:15:49.140
+siapa yang memberikan akses,
+
+00:15:49.280 --> 00:15:50.280
+kapan mereka menyalin lampiran,
+
+00:15:50.280 --> 00:15:51.480
+dan apakah tindakan itu selaras
+
+00:15:51.480 --> 00:15:52.560
+dengan tag retensi yang ada.
+
+00:15:53.540 --> 00:15:54.040
+Tiba-tiba,
+
+00:15:54.360 --> 00:15:55.660
+sesuatu yang mencurigakan terjadi
+
+00:15:55.660 --> 00:15:56.280
+berubah menjadi
+
+00:15:56.280 --> 00:15:57.520
+pengguna A mengakses folder B
+
+00:15:57.520 --> 00:15:59.800
+melalui API C pukul 14.03 OTC
+
+00:15:59.800 --> 00:16:00.640
+menggunakan perangkat D,
+
+00:16:00.760 --> 00:16:01.540
+itulah yang disebut auditor
+
+00:16:01.540 --> 00:16:03.120
+sebagai bukti yang dapat dipertanggungjawabkan.
+
+00:16:03.500 --> 00:16:05.040
+Graph API memperluas yang khani lebih jauh.
+
+00:16:05.620 --> 00:16:06.360
+Dengan PowerShell,
+
+00:16:06.700 --> 00:16:07.380
+Anda dapat menanyakan
+
+00:16:07.380 --> 00:16:08.360
+rewrite perintah copilot,
+
+00:16:08.600 --> 00:16:09.160
+batasan sesi,
+
+00:16:09.520 --> 00:16:10.380
+dan jejak akses modal,
+
+00:16:10.620 --> 00:16:11.620
+objek yang tidak pernah muncul
+
+00:16:11.620 --> 00:16:12.460
+dalam laporan standar.
+
+00:16:13.720 --> 00:16:14.620
+Anda dapat mengekspornya
+
+00:16:14.620 --> 00:16:15.360
+sebagai paket JSON
+
+00:16:15.360 --> 00:16:16.240
+yang tidak dapat diubah
+
+00:16:16.240 --> 00:16:17.600
+menandatanganinya dengan atribut
+
+00:16:17.600 --> 00:16:18.620
+dan menyimpannya di Azure
+
+00:16:18.620 --> 00:16:19.340
+selama tujuh tahun
+
+00:16:19.340 --> 00:16:20.580
+jika Anda merasa sangat paranoid
+
+00:16:20.580 --> 00:16:21.720
+yang memang seharusnya dilakukan
+
+00:16:21.720 --> 00:16:22.980
+sebagai admin perusahaan.
+
+00:16:23.940 --> 00:16:24.740
+Lantas mengapa dipetik?
+
+00:16:25.100 --> 00:16:26.080
+Karena tata kelola AI
+
+00:16:26.080 --> 00:16:27.340
+memperkenalkan kewajiban baru.
+
+00:16:27.740 --> 00:16:29.220
+Perintah sebagai kekayaan intelektual,
+
+00:16:29.560 --> 00:16:30.540
+janji residensi data,
+
+00:16:30.800 --> 00:16:32.160
+dan akuntabilitas algoritmik.
+
+00:16:33.220 --> 00:16:34.440
+Audit AI yang hanya berhenti
+
+00:16:34.440 --> 00:16:35.400
+pada query yang diketik
+
+00:16:35.400 --> 00:16:36.720
+pengguna mirip dengan keamanan cyber
+
+00:16:36.720 --> 00:16:38.080
+yang berakhir pada penyalaan firewall.
+
+00:16:39.320 --> 00:16:40.180
+PowerShell memberi Anda
+
+00:16:40.180 --> 00:16:41.660
+kedalaman untuk merekonstruksi niat,
+
+00:16:41.660 --> 00:16:42.780
+data apa yang dirujuk di mana
+
+00:16:42.780 --> 00:16:43.940
+dan dibawa otoritas siapa.
+
+00:16:44.620 --> 00:16:45.880
+Kemampuan rekonstruksi itu
+
+00:16:45.880 --> 00:16:47.400
+adalah tulang punggung setiap
+
+00:16:47.400 --> 00:16:48.500
+kerangka akuntabilitas
+
+00:16:48.500 --> 00:16:51.920
+dari ISO 2701 hingga EUAIX.
+
+00:16:52.240 --> 00:16:53.500
+Ekspor berbasis skrip lebih unggul
+
+00:16:53.500 --> 00:16:54.280
+daripada tangkapan layak
+
+00:16:54.280 --> 00:16:55.200
+karena sifatnya tidak dapat.
+
+00:16:55.600 --> 00:16:56.920
+Anda dapat menjalankan ekstraksi
+
+00:16:56.920 --> 00:16:58.280
+harian otomatis interaksi copilot,
+
+00:16:58.480 --> 00:16:59.520
+mengirimnya ke penyimpanan blog,
+
+00:16:59.620 --> 00:17:01.120
+dan menyikilnya dengan validasi cek zoom.
+
+00:17:01.800 --> 00:17:03.240
+Saat regulator meminta bukti,
+
+00:17:03.720 --> 00:17:05.280
+Anda tidak perlu reput mencari catatan.
+
+00:17:05.580 --> 00:17:06.700
+Cukup berikan arsi bertanda waktu
+
+00:17:06.700 --> 00:17:07.640
+yang ditanda tangani HES.
+
+00:17:08.020 --> 00:17:08.960
+Coba lakukan itu dari Google.
+
+00:17:08.960 --> 00:17:10.820
+Paling banter Anda akan mengundu CSV
+
+00:17:10.820 --> 00:17:12.340
+yang kedalu warsa di tengah minggu kepatuhan.
+
+00:17:13.060 --> 00:17:13.920
+Ada keuntungan lain,
+
+00:17:14.080 --> 00:17:14.840
+yaitu normalisasi.
+
+00:17:14.840 --> 00:17:16.460
+Saat Anda menggunakan PowerShell
+
+00:17:16.460 --> 00:17:17.580
+untuk mengumpulkan telemetri,
+
+00:17:17.700 --> 00:17:19.620
+setiap sumber data menjadi set data terstruktur.
+
+00:17:20.200 --> 00:17:21.860
+Anda dapat mengorelasikan penggunaan copilot
+
+00:17:21.860 --> 00:17:23.360
+dengan sensitivitas fail sharepoint,
+
+00:17:23.520 --> 00:17:24.880
+access exchange, dan peran entra,
+
+00:17:25.040 --> 00:17:25.920
+semuanya dari satu pipeline.
+
+00:17:26.540 --> 00:17:27.820
+Pusat admin menjaga silo tersebut
+
+00:17:27.820 --> 00:17:28.820
+tetap terpisah dengan sopan,
+
+00:17:29.140 --> 00:17:29.980
+seolah tata kelola adalah
+
+00:17:29.980 --> 00:17:30.700
+jamuan makan malam
+
+00:17:30.700 --> 00:17:31.820
+di mana sistem tidak pernah bicara.
+
+00:17:32.380 --> 00:17:33.360
+PowerShell menyeret mereka
+
+00:17:33.360 --> 00:17:34.280
+ke tabel log yang sama
+
+00:17:34.280 --> 00:17:35.180
+dan menutup kejujuran.
+
+00:17:35.940 --> 00:17:36.800
+Kenario dunia nyata.
+
+00:17:36.920 --> 00:17:38.160
+Selama audit internal,
+
+00:17:38.340 --> 00:17:39.540
+sebuah perusahaan menemukan bahwa
+
+00:17:39.540 --> 00:17:41.700
+respons copilot mengutip data produk yang dibatasi.
+
+00:17:42.540 --> 00:17:44.740
+Pusat admin mengonfirmasi aktivitas copilot
+
+00:17:44.740 --> 00:17:46.520
+dan melalui PowerShell,
+
+00:17:46.820 --> 00:17:48.000
+admin melacak rantai perintah
+
+00:17:48.000 --> 00:17:49.500
+mengidentifikasi akun penanya
+
+00:17:49.500 --> 00:17:50.440
+dan mencocokkannya
+
+00:17:50.440 --> 00:17:52.340
+dengan izin akses tinggi kontraktor
+
+00:17:52.340 --> 00:17:55.080
+sementara yang disetel saat migrasi proyek.
+
+00:17:55.860 --> 00:17:57.380
+Mereka mencabut akses dalam hitungan menit,
+
+00:17:57.640 --> 00:17:58.720
+mendokumentasikan remediasi,
+
+00:17:58.980 --> 00:18:00.740
+dan menutup audit dengan bukti yang dapat diverifikasi.
+
+00:18:01.140 --> 00:18:02.460
+Versi GUI dari cerita itu berakhir
+
+00:18:02.460 --> 00:18:03.880
+dengan kami yakin itu tidak akan terjadi lagi.
+
+00:18:04.440 --> 00:18:05.500
+Inilah poin filosofisnya.
+
+00:18:05.800 --> 00:18:07.400
+Audit bukan tentang ketidakpercayaan pada orang,
+
+00:18:07.660 --> 00:18:08.800
+melainkan pengakuan atas skala.
+
+00:18:09.520 --> 00:18:11.140
+Setelah lingkungan Anda mencapai ribuan akun,
+
+00:18:11.340 --> 00:18:13.560
+kepercayaan menjadi tidak relevan secara statistik.
+
+00:18:13.560 --> 00:18:15.580
+Sistem menurutkan pengawasan bukan optimisme.
+
+00:18:16.260 --> 00:18:18.220
+PowerShell mewujudkan sinisme itu dengan luar biasa.
+
+00:18:18.720 --> 00:18:19.620
+Setiap pasangan perintah respons
+
+00:18:19.620 --> 00:18:20.860
+adalah pernyataan yang notariskan.
+
+00:18:21.360 --> 00:18:22.460
+Bahkan kesalahan pun adalah aset.
+
+00:18:23.000 --> 00:18:24.640
+Setiap pesan kegagalan menyertakan konteks
+
+00:18:24.640 --> 00:18:25.720
+pacakan yang dapat Anda masukkan
+
+00:18:25.720 --> 00:18:26.460
+ke skrip pemantauan.
+
+00:18:27.380 --> 00:18:29.120
+Shell tidak pernah mengambilkan masalah yang mengungkapkan.
+
+00:18:29.680 --> 00:18:31.120
+Pusat admin mempercantik ketidaktahuan
+
+00:18:31.120 --> 00:18:32.000
+dengan cara mengabstraksikan.
+
+00:18:32.460 --> 00:18:33.920
+PowerShell mendokumentasikannya secara paksa.
+
+00:18:34.560 --> 00:18:35.960
+Jika tata kelola adalah ruang sidang,
+
+00:18:36.080 --> 00:18:37.080
+GUI hanya menawarkan kesan.
+
+00:18:37.640 --> 00:18:38.640
+PowerShell mengajukan buktinya.
+
+00:18:39.200 --> 00:18:41.280
+Menunjukkan tren versus memberikan bukti transaksi.
+
+00:18:41.280 --> 00:18:43.740
+Ini bukan puisi, ini realitas kebijakan.
+
+00:18:44.600 --> 00:18:45.900
+Yang satu memuaskan rasa ingin tahu,
+
+00:18:46.000 --> 00:18:46.880
+yang lain memuaskan auditor.
+
+00:18:47.620 --> 00:18:48.740
+Dan inilah rahasia sebenarnya.
+
+00:18:48.940 --> 00:18:50.740
+Organisasi paling aman tidak takut pada audit,
+
+00:18:50.860 --> 00:18:51.740
+mereka mengotomasinya.
+
+00:18:52.660 --> 00:18:53.700
+Pekerjaan PowerShell terjatuh
+
+00:18:53.700 --> 00:18:54.880
+meng-export lock setiap malam,
+
+00:18:55.000 --> 00:18:55.780
+merekonsiliasi delta,
+
+00:18:55.920 --> 00:18:57.260
+dan memberi peringatan jika ada perbedaan.
+
+00:18:57.840 --> 00:18:59.480
+Jejak audit menjadi arsitektur hidup
+
+00:18:59.480 --> 00:19:01.140
+bukan sekadar dokumen pasca kejadian.
+
+00:19:01.660 --> 00:19:03.020
+Anda berhenti menyelidiki apa yang salah
+
+00:19:03.020 --> 00:19:05.080
+dan mulai membuktikan apa yang terus berjalan dengan benar
+
+00:19:05.080 --> 00:19:06.780
+karena dalam kepatuhan kredibilitas tidak dilahirai
+
+00:19:06.780 --> 00:19:07.300
+dengan kata-kata,
+
+00:19:07.420 --> 00:19:08.260
+melainkan dengan stempel waktu.
+
+00:19:08.260 --> 00:19:10.020
+Jadi jangan percaya apapun buat skrip untuk semuanya.
+
+00:19:10.420 --> 00:19:12.180
+Gui mungkin hanya menaruh curiga pada anomali,
+
+00:19:12.440 --> 00:19:13.720
+PowerShell membangun berkas kasusnya.
+
+00:19:14.040 --> 00:19:16.300
+Dan seiring jangkauan kopelot yang tumbuh di berbagai layanan
+
+00:19:16.300 --> 00:19:18.140
+dan menuah, skeptisisme itu bukan lagi pilihan.
+
+00:19:18.280 --> 00:19:19.160
+Itu adalah kunci kelasunya.
+
+00:19:19.520 --> 00:19:21.280
+Hal ini membawa kita pada kesimpulan yang tak terwak.
+
+00:19:21.560 --> 00:19:23.300
+Kendari bukan lagi sekadar hak istimewa teknis.
+
+00:19:23.800 --> 00:19:24.800
+Ini adalah literasi profesional.
+
+00:19:25.260 --> 00:19:27.080
+Mari kita akhiri ini dengan manifesto bagi admin
+
+00:19:27.080 --> 00:19:29.100
+yang masih percaya bahwa mengeklik berarti kompeten.
+
+00:19:30.160 --> 00:19:31.000
+Inilah manifesto admin.
+
+00:19:31.640 --> 00:19:32.620
+PowerShell bukan sekadar alat,
+
+00:19:32.700 --> 00:19:34.180
+ini adalah kosa kata untuk otoritas
+
+00:19:34.180 --> 00:19:36.960
+memahami yang memisahkan operator dari pengamat.
+
+00:19:38.160 --> 00:19:39.700
+Jika Anda mengelola kopelot tanpa skrip,
+
+00:19:39.780 --> 00:19:40.460
+Anda bukan mengelola,
+
+00:19:40.560 --> 00:19:41.320
+melainkan menonton.
+
+00:19:42.340 --> 00:19:43.860
+Admin sejati berpikir dalam perulang,
+
+00:19:44.100 --> 00:19:44.660
+bukan jalur titik.
+
+00:19:45.740 --> 00:19:46.460
+Inilah perubah pikirnya.
+
+00:19:46.880 --> 00:19:48.300
+Pembuatan skrip berarti berpikir dalam skala.
+
+00:19:48.540 --> 00:19:49.560
+Satu baris kode
+
+00:19:49.560 --> 00:19:51.740
+mendefinisikan prinsip yang berulang dengan sempurna.
+
+00:19:52.240 --> 00:19:53.520
+Ngeklik berarti berpikir kecil,
+
+00:19:53.660 --> 00:19:54.000
+spontan,
+
+00:19:54.140 --> 00:19:54.640
+tidak terlacak,
+
+00:19:54.720 --> 00:19:55.460
+dan tidak konsisten.
+
+00:19:56.020 --> 00:19:56.640
+Pusat admin
+
+00:19:56.640 --> 00:19:58.260
+mendorong kenyamanan pribadi.
+
+00:19:59.180 --> 00:20:01.220
+PowerShell menegakkan ketelitian organisasi.
+
+00:20:01.220 --> 00:20:03.640
+Yang satu berbicara pada insting,
+
+00:20:03.740 --> 00:20:04.560
+yang lain pada auditor Anda.
+
+00:20:05.220 --> 00:20:06.680
+Kopelot dengan segala kecerdasannya
+
+00:20:06.680 --> 00:20:07.720
+tetap patuh namun putah.
+
+00:20:08.220 --> 00:20:09.260
+Ia bekerja di dalam kerangka
+
+00:20:09.260 --> 00:20:10.280
+tata kelola yang Anda bangun.
+
+00:20:11.260 --> 00:20:12.640
+Jika lapisan PowerShell Anda lemah,
+
+00:20:13.020 --> 00:20:13.840
+kebebasan kopelot
+
+00:20:13.840 --> 00:20:15.640
+luas hingga akuntabilitas runtuh.
+
+00:20:17.280 --> 00:20:18.680
+Eronia hampir terasa tragis komik.
+
+00:20:19.340 --> 00:20:20.560
+Admin mengandalkan AI
+
+00:20:20.560 --> 00:20:22.020
+yang dibangun sepenuhnya dengan kode,
+
+00:20:22.180 --> 00:20:22.360
+namun
+
+00:20:22.360 --> 00:20:23.980
+Gann menulisnya sendiri.
+
+00:20:24.880 --> 00:20:25.920
+Anda percayakan tata kelola
+
+00:20:25.920 --> 00:20:27.520
+pada model yang hanya menghormati sintaks,
+
+00:20:27.700 --> 00:20:28.900
+tetapi menolak bahasanya.
+
+00:20:30.060 --> 00:20:30.760
+Manifestornya serana.
+
+00:20:31.220 --> 00:20:32.920
+Otomatisasi dokumentasi verifikasi.
+
+00:20:33.640 --> 00:20:34.940
+Setiap perintah harus menghasilkan bukti.
+
+00:20:35.520 --> 00:20:36.980
+Setiap bukti harus memberimakan pemantauan.
+
+00:20:37.400 --> 00:20:39.040
+Setiap pemantauan harus memuncul adaptasi.
+
+00:20:39.340 --> 00:20:40.580
+Perulangan itu adalah higienitas personal.
+
+00:20:40.960 --> 00:20:42.340
+Daspor memudar log tetap bertahan.
+
+00:20:42.800 --> 00:20:44.360
+Tugas admin bukan mengamati alat bekerja,
+
+00:20:44.440 --> 00:20:45.980
+melainkan membuktikan bahwa alat tersebut
+
+00:20:45.980 --> 00:20:47.420
+berperilaku benar saat tidak ada yang melihat.
+
+00:20:47.740 --> 00:20:49.520
+Literasi PowerShell juga menjamin masa depan Anda.
+
+00:20:50.520 --> 00:20:52.100
+Microsoft mengubah antarmuka setiap bulan.
+
+00:20:52.800 --> 00:20:54.380
+CMD lejarang merupakan tata bahasanya.
+
+00:20:54.920 --> 00:20:56.120
+Skrip bertahan dari perubahan merek.
+
+00:20:56.920 --> 00:20:58.860
+GW menderita amesia setelah setiap pembaruan.
+
+00:20:58.860 --> 00:21:00.880
+Saat copilot berevolusi,
+
+00:21:00.980 --> 00:21:03.300
+otomatisasi Anda beradaptasi dengan satu saklar parameter,
+
+00:21:03.480 --> 00:21:04.620
+bukan kursus sertifikasi baru.
+
+00:21:05.120 --> 00:21:06.100
+Umur panjang hidup dalam code.
+
+00:21:06.440 --> 00:21:07.480
+Hari kita jujur secara menyakitkan.
+
+00:21:07.860 --> 00:21:08.900
+Pembuatan screen memenang malas.
+
+00:21:09.560 --> 00:21:10.520
+Ini memaksa adanya visibilitas.
+
+00:21:11.240 --> 00:21:12.580
+Kesalahan berteriak dalam teks biasa
+
+00:21:12.580 --> 00:21:13.540
+bukannya bersembunyi di balik.
+
+00:21:13.680 --> 00:21:14.340
+Terjadi kesalahan.
+
+00:21:15.120 --> 00:21:16.520
+Namun konfrontasi dengan kebenaran itu
+
+00:21:16.520 --> 00:21:17.480
+adalah harga dekompetensi.
+
+00:21:17.840 --> 00:21:18.540
+Anda ingin mengendali.
+
+00:21:18.820 --> 00:21:19.680
+Pakakuasi sintaks Anda.
+
+00:21:20.420 --> 00:21:22.040
+Setiap perintah get, set, dan remove
+
+00:21:22.040 --> 00:21:22.820
+adalah suku kata
+
+00:21:22.820 --> 00:21:24.460
+dalam bahasa tak kelola perusahaan.
+
+00:21:24.460 --> 00:21:26.460
+Dan pengaturan ulang budaya di sana.
+
+00:21:27.020 --> 00:21:28.360
+Admin harus memperlakukan power shell
+
+00:21:28.360 --> 00:21:29.060
+bukan sebagai beban,
+
+00:21:29.140 --> 00:21:30.100
+melainkan kefasian profesional
+
+00:21:30.100 --> 00:21:31.340
+seperti insinyur memperlakukan matikan.
+
+00:21:31.940 --> 00:21:32.580
+Orang yang menuskrip,
+
+00:21:32.940 --> 00:21:33.620
+menentukan aturannya.
+
+00:21:34.300 --> 00:21:35.540
+Semua orang mengikuti dokumentasi.
+
+00:21:36.080 --> 00:21:37.000
+Shell tidak menggantikan Anda.
+
+00:21:37.520 --> 00:21:38.820
+Shell memastikan keputusan Anda
+
+00:21:38.820 --> 00:21:39.780
+dapat dieksekusi,
+
+00:21:40.000 --> 00:21:40.360
+diulang,
+
+00:21:40.480 --> 00:21:41.720
+dan diaudit jauh setelah Anda pergi.
+
+00:21:42.480 --> 00:21:43.940
+Jadi, saat seseorang mengatakan
+
+00:21:43.940 --> 00:21:45.560
+copilot bisa mengelola dirinya sendiri,
+
+00:21:45.700 --> 00:21:47.220
+tersenyumlah dan buka terminal Anda.
+
+00:21:47.880 --> 00:21:49.620
+Karena meskipun AI bisa membuat draft email
+
+00:21:49.620 --> 00:21:50.460
+dan meringkas rapat,
+
+00:21:50.560 --> 00:21:51.780
+ia tidak akan pernah menandatangani
+
+00:21:51.780 --> 00:21:52.920
+kepatuhan regulasi untuk Anda.
+
+00:21:52.920 --> 00:21:54.560
+Otoritas itu milik siapapun
+
+00:21:54.560 --> 00:21:55.740
+yang bisa menghasilkan skrip tersebut.
+
+00:21:56.220 --> 00:21:57.260
+Power shell tidak menggantikan copilot.
+
+00:21:57.640 --> 00:21:58.280
+Ini mengawasinya.
+
+00:21:58.760 --> 00:22:00.200
+Ini adalah sosok dewasa di ruangan
+
+00:22:00.200 --> 00:22:01.620
+yang memastikan chatbot canggih
+
+00:22:01.620 --> 00:22:02.980
+tidak mulai mengutip data terbatas
+
+00:22:02.980 --> 00:22:03.800
+di slide perusahaan.
+
+00:22:04.200 --> 00:22:05.660
+Kuasa ini dan Anda mengendalikan copilot.
+
+00:22:06.260 --> 00:22:07.300
+Abaikan ini dan Anda akan berakhir
+
+00:22:07.300 --> 00:22:07.920
+melapor kepadanya.
+
+00:22:08.260 --> 00:22:08.860
+Itulah manifestonya.
+
+00:22:09.260 --> 00:22:10.340
+Tata kelola bukan soal melihat,
+
+00:22:10.460 --> 00:22:11.040
+ini soal buat skrip.
+
+00:22:11.440 --> 00:22:12.920
+Kendali milik mereka yang bisa mengetiknya
+
+00:22:12.920 --> 00:22:13.620
+hingga terwujud.
+
+00:22:14.560 --> 00:22:15.340
+Kendali atau kenyamanan?
+
+00:22:15.780 --> 00:22:16.220
+Pada akhirnya,
+
+00:22:16.340 --> 00:22:17.340
+setiap admin menghadapi pilihan.
+
+00:22:17.580 --> 00:22:18.380
+Kendali atau kenyamanan?
+
+00:22:18.380 --> 00:22:19.660
+Kenyamanan terlihat rambut.
+
+00:22:20.100 --> 00:22:21.260
+Ia dimuat dengan warna biru,
+
+00:22:21.360 --> 00:22:22.320
+menawarkan kotak cintang
+
+00:22:22.320 --> 00:22:23.040
+dan mumpul Anda percaya
+
+00:22:23.040 --> 00:22:24.100
+tata kelola hanya alasan di warna.
+
+00:22:24.500 --> 00:22:25.740
+Kendali terlihat lebih sulit
+
+00:22:25.740 --> 00:22:27.040
+karena membutuhkan presisi sintaksis
+
+00:22:27.040 --> 00:22:27.760
+dan akutabilitas.
+
+00:22:28.100 --> 00:22:28.660
+Memperhatikan lebih dekat.
+
+00:22:29.040 --> 00:22:29.940
+Kenyamanan adalah sewa,
+
+00:22:30.040 --> 00:22:30.640
+bukan kepemilikan.
+
+00:22:31.260 --> 00:22:32.380
+Pusat admin meminjam kendali.
+
+00:22:33.040 --> 00:22:34.420
+Power shell membiarkan Anda memilikinya.
+
+00:22:35.200 --> 00:22:36.100
+Administrator copilot
+
+00:22:36.100 --> 00:22:37.540
+yang sesungguhnya tidak menglicat dashboard.
+
+00:22:38.140 --> 00:22:38.940
+Mereka menghasilkan lock.
+
+00:22:39.440 --> 00:22:40.320
+Mereka tidak mempercayai tombol.
+
+00:22:40.440 --> 00:22:41.280
+Mereka memvalidasi kebijakan.
+
+00:22:41.760 --> 00:22:43.200
+Setiap tindakan kepatuhan yang berarti,
+
+00:22:43.200 --> 00:22:44.640
+menetapkan, mencabut, mengaudit
+
+00:22:44.640 --> 00:22:46.040
+pertama-tama ada sebagai baris kode.
+
+00:22:47.120 --> 00:22:48.680
+Power shell mengubah niat menjadi bukti,
+
+00:22:48.820 --> 00:22:50.640
+sementara GUI mengubahnya menjadi visual
+
+00:22:50.640 --> 00:22:51.520
+sementara yang ditujukan
+
+00:22:51.520 --> 00:22:52.980
+untuk tangkapan layar di deck PowerPoint.
+
+00:22:54.360 --> 00:22:56.020
+Tata kelola AI bukan demo manajemen,
+
+00:22:56.160 --> 00:22:57.100
+ini infrastruktur hukum.
+
+00:22:58.000 --> 00:22:58.920
+Saat auditor datang
+
+00:22:58.920 --> 00:23:00.200
+atau batasan data bergeser,
+
+00:23:00.320 --> 00:23:01.640
+hanya otomatisasi berbasis skrip
+
+00:23:01.640 --> 00:23:02.480
+yang bisa membuktikan
+
+00:23:02.480 --> 00:23:03.640
+apa yang sebenarnya terjadi.
+
+00:23:04.340 --> 00:23:05.840
+Power shell menyediakan riwayat,
+
+00:23:05.940 --> 00:23:07.280
+silsilah, dan kausalitas,
+
+00:23:07.540 --> 00:23:08.720
+bahan utama kredibilitas.
+
+00:23:09.460 --> 00:23:10.960
+Dasbor menghias, skrip mempertahankan.
+
+00:23:11.420 --> 00:23:12.540
+Anda tidak bisa meningkatkan kepercayaan
+
+00:23:12.540 --> 00:23:13.800
+dengan tombol Anda menitapkannya dengan kode.
+
+00:23:14.180 --> 00:23:15.480
+Jadi prinsip akhirnya sangatlah sederhana.
+
+00:23:16.100 --> 00:23:17.320
+Pusat admin adalah kiosk turis.
+
+00:23:17.860 --> 00:23:18.700
+Ini hanya menunjukkan lokasi.
+
+00:23:19.320 --> 00:23:20.460
+Power shell mengemudikan busnya,
+
+00:23:20.700 --> 00:23:21.520
+mengisi bahan bakarnya,
+
+00:23:21.780 --> 00:23:22.540
+mencetak jarak tempuh,
+
+00:23:22.660 --> 00:23:23.600
+dan menulis klaim asuransi
+
+00:23:23.600 --> 00:23:24.400
+saat terjadi kerusakan.
+
+00:23:24.680 --> 00:23:25.460
+Terlaris perusahaan.
+
+00:23:26.020 --> 00:23:26.680
+Tidak ada yang diatur,
+
+00:23:26.780 --> 00:23:27.580
+tidak ada yang diverifikasi,
+
+00:23:27.680 --> 00:23:28.660
+tidak ada yang dipertahankan tanpa syar.
+
+00:23:28.980 --> 00:23:30.580
+Kendali dan kenyamanan jarang berdampingan.
+
+00:23:31.220 --> 00:23:31.700
+Pilih kenyamanan
+
+00:23:31.700 --> 00:23:32.640
+dan Anda tidak mendokumentasikan.
+
+00:23:33.020 --> 00:23:33.740
+Pilih kendali
+
+00:23:33.740 --> 00:23:34.940
+dan Anda mendokumentasikan segalanya
+
+00:23:34.940 --> 00:23:35.520
+secara otomatis.
+
+00:23:35.520 --> 00:23:36.960
+Jalur profesional sudah jelas.
+
+00:23:37.360 --> 00:23:38.000
+Pembaruan tidak akan
+
+00:23:38.000 --> 00:23:38.660
+merusak skrip Anda
+
+00:23:38.660 --> 00:23:39.840
+kecuali Anda menulisnya dengan saat.
+
+00:23:40.080 --> 00:23:40.980
+Berlangganan dan berbaik itu.

@@ -1,0 +1,1240 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:03.460
+Jeśli wciąż przeklikujesz się przez centrum administracyjne, to już jesteś w tyle.
+
+00:00:03.660 --> 00:00:07.100
+Ponieważ kiedy czekasz, aż kręcące się kółko zapisu konfiguracji skończy pracę,
+
+00:00:07.180 --> 00:00:12.380
+ktoś inny właśnie zautomatyzował ten sam proces dla 10 tysięcy użytkowników przez PowerShell i poszedł na lunch.
+
+00:00:12.540 --> 00:00:17.320
+Prawda jest taka, że ten błyszczący pulpit nawigacyjny Microsoft 365 nie jest twoim centrum dowodzenia.
+
+00:00:17.520 --> 00:00:18.100
+To zmyłka.
+
+00:00:18.320 --> 00:00:21.200
+Zabawkowa kierownica przymocowana do odrzutowca klasy korporacyjnej.
+
+00:00:21.400 --> 00:00:24.440
+Zajmuje ci czas, podczas gdy prawdziwe silniki bezlitośnie pracują w kodzie.
+
+00:00:24.660 --> 00:00:27.040
+Większość administratorów go uwielbia, bo wygląda na potężny.
+
+00:00:27.040 --> 00:00:31.220
+Są tam przełączniki, zakładki, wykresy i kojąca niebieska kolorystyka, która szepcze, że to ty rządzisz.
+
+00:00:31.360 --> 00:00:32.160
+Ale tak nie jest.
+
+00:00:32.280 --> 00:00:35.580
+I tak tylko przełączasz przełączniki, które pod maską wywołują polecenia PowerShell.
+
+00:00:35.720 --> 00:00:39.060
+Centrum administracyjne po prostu je ukrywa, żeby przeciętny użytkownik nie zrobił sobie krzywdy.
+
+00:00:39.200 --> 00:00:42.260
+To ładnie pomalowane rusztowanie, a nie konstrukcja, która cokolwiek podtrzymuje.
+
+00:00:42.480 --> 00:00:44.000
+Widzisz, tą iluzją jest wygoda.
+
+00:00:44.200 --> 00:00:45.520
+Klik, przeciągnij, gotowe.
+
+00:00:45.720 --> 00:00:50.520
+Dopóki nie musisz zrobić tego tysiąc razy w wielu dzierżawach z etykietami zgodności, które muszą propagować się natychmiast.
+
+00:00:50.720 --> 00:00:52.880
+Wtedy ten zabawkowy pulpit topnieje pod presją.
+
+00:00:57.040 --> 00:01:00.040
+Ponieważ świat działa teraz na ścieżkach audytu, a nie na zrzutach ekranu.
+
+00:01:00.120 --> 00:01:02.740
+A kliknięcie, zapisz zmiany, nie jest dokumentacją.
+
+00:01:02.940 --> 00:01:09.140
+Pod koniec tego wyjaśnienia zrozumiesz, dlaczego każdy poważny administrator, kopilot musi odłożyć myszkę i przesiąść się na wiersz poleceń.
+
+00:01:09.280 --> 00:01:18.220
+Ponieważ PowerShell to nie tylko starszy brat centrum administracyjnego, to jedyne narzędzie, które faktycznie potrafi zarządzać, monitorować i automatyzować infrastrukturę AI Microsoftu w skali korporacyjnej.
+
+00:01:18.220 --> 00:01:23.920
+I tak, pokażę Ci, jak Twój tak zwany wiersz poleceń jest prawdziwym kluczem do supermocy w zarządzaniu AI.
+
+00:01:24.200 --> 00:01:25.460
+Zabawka kontra narzędzie.
+
+00:01:25.820 --> 00:01:26.840
+Wyjaśnijmy sobie coś.
+
+00:01:27.040 --> 00:01:29.240
+Centrum administracyjne nie jest złym produktem.
+
+00:01:29.360 --> 00:01:31.580
+To po prostu nie jest produkt, za który je uważasz.
+
+00:01:31.720 --> 00:01:37.000
+To sposób Microsoftu na zapewnienie bezpieczeństwa zarządzania firmą dla osób, które wpadają w panikę na widok migającego kursora.
+
+00:01:37.240 --> 00:01:43.760
+Daje im wykresy do pokazywania na spotkaniach i poczucie kontroli porównywalne z naciskaniem przycisków w windzie, które nie są już z niczym połączone.
+
+00:01:43.980 --> 00:01:46.600
+Jest urocze, w stylu bezpiecznych nożyczek w przedszkolu.
+
+00:01:46.840 --> 00:01:50.000
+Microsoft zaprojektował interfejs GU i do podglądu, a nie do sterowania.
+
+00:01:50.220 --> 00:01:52.060
+Ten interfejs to publiczny plac zabaw.
+
+00:01:52.060 --> 00:01:55.920
+Ściany są wyściełane, drzwi zamknięte, a wszystko, co ostre, ukryte za podpowiedziami.
+
+00:01:56.040 --> 00:01:58.080
+To chmura w trybie zabezpieczeń przed dziećmi.
+
+00:01:58.260 --> 00:02:03.160
+Kiedy zarządzasz kopilotem, ma to znaczenie, bo administrowanie AI nie polega na przestawianiu ustawień.
+
+00:02:03.340 --> 00:02:08.100
+Chodzi o skryptowanie audytowalnych działań, rzeczy, które można powtórzyć, zarejestrować i udowodnić później,
+
+00:02:08.260 --> 00:02:12.440
+gdy audytor nieuchronnie zapyta, kto dał kopilotowi dostęp do danych finansowych 12 maja.
+
+00:02:12.440 --> 00:02:14.860
+Centrum administracyjne odpowiada wzruszeniem ramion.
+
+00:02:15.000 --> 00:02:16.500
+PowerShell daje Ci pełny zapis.
+
+00:02:16.680 --> 00:02:18.500
+W tym miejscu zaczynają pojawiać się rysy.
+
+00:02:18.680 --> 00:02:24.300
+Spróbuj wykonać operację zbiorczą, powiedzmy, wyłączenie kopilota dla wszystkich użytkowników niebędących kadrą kierowniczą w wielu jednostkach biznesowych.
+
+00:02:24.460 --> 00:02:24.940
+Powodzenia!
+
+00:02:25.140 --> 00:02:29.140
+Centrum administracyjne zmusi Cię do ręcznego klikania w każdy rekord użytkownika, jakby był rok 2008.
+
+00:02:29.420 --> 00:02:33.080
+To niemal urocze, jak udaje, że nowoczesne IT można robić, zaznaczając jedno pole wyboru na raz.
+
+00:02:33.240 --> 00:02:34.480
+Potem czekasz na replikację.
+
+00:02:34.700 --> 00:02:36.660
+Wiele godzin później niektóre witryny są zaktualizowane, inne nie.
+
+00:02:36.660 --> 00:02:37.840
+Granice danych tracą synchronizację.
+
+00:02:42.440 --> 00:02:45.160
+Mamy cały dzierżawca w kilka sekund z zarejestrowanym wyjściem i znacznikami czasu.
+
+00:02:45.400 --> 00:02:48.500
+Bez zgadywania, bez opóźnień, bez przypomnień w stylu sprawdź ponownie jutro.
+
+00:02:48.680 --> 00:02:51.720
+Pomyśl o centrum administracyjnym jak o mapie, a o PowerShellu jak o pojeździe.
+
+00:02:51.940 --> 00:02:53.340
+Mapa jest użyteczna, jasne.
+
+00:02:53.540 --> 00:02:55.020
+Pokazuje, gdzie znajdują się rzeczy.
+
+00:02:55.260 --> 00:02:58.700
+Ale jeśli tylko wskazujesz lokalizację, gratulacje, utkniesz w miejscu na zawsze.
+
+00:02:59.000 --> 00:03:00.420
+PowerShell dowozi Cię na miejsce.
+
+00:03:00.740 --> 00:03:05.600
+Potrafi nawigować, tankować, robić objazdy, a co najważniejsze, rejestrować trasę dla innych.
+
+00:03:05.600 --> 00:03:09.900
+Tak działają administratorzy, gdy liczy się zgodność, skala i automatyzacja.
+
+00:03:09.900 --> 00:03:13.200
+W sercu administracji kopilotem tkwi paradox, oto on.
+
+00:03:13.360 --> 00:03:17.320
+AI wygląda na wizualne, ale zarządzanie nim wymaga precyzji, która wizualna nie jest.
+
+00:03:17.500 --> 00:03:22.000
+Kontrola promptów, przypisywanie licencji, integracja DLP to nie są zadania dla pulpitu nawigacyjnego.
+
+00:03:22.180 --> 00:03:24.000
+To ustrukturyzowane operacje na danych.
+
+00:03:24.220 --> 00:03:26.760
+Centrum administracyjne pokaże Ci wykres użycia AI.
+
+00:03:26.960 --> 00:03:30.320
+Tylko PowerShell powie Ci, dlaczego do tego doszło i kto zainicjował te działania.
+
+00:03:30.540 --> 00:03:31.900
+Różnica w możliwościach nie jest abstrakcyjna.
+
+00:03:32.760 --> 00:03:35.420
+Widać ją we wszystkim od kontroli wersji po spójność zasad.
+
+00:03:35.660 --> 00:03:37.900
+Używając GUI, polegasz na ludzkiej pamięci.
+
+00:03:37.900 --> 00:03:40.500
+Czy nałożyłem tę etykietę przechowywania na cały dzierżawca?
+
+00:03:40.680 --> 00:03:45.200
+Używając PowerShella, polegasz na skrypcie podpisanym, powtarzalnym i rozproszonym w środowiskach.
+
+00:03:45.360 --> 00:03:48.140
+GUI zostawia okruchy, Shell zostawia plany techniczne.
+
+00:03:48.440 --> 00:03:49.920
+Porozmawiajmy o obsłudze błędów.
+
+00:03:50.100 --> 00:03:52.380
+Błędy w centrum administracyjnym są jak zmiany nastroju.
+
+00:03:52.580 --> 00:03:54.900
+Dostajesz czerwony pasek z informacją, że coś poszło nie tak.
+
+00:03:55.040 --> 00:03:56.720
+Coś wspaniały szczegół, dziękuję bardzo.
+
+00:03:56.900 --> 00:04:00.720
+PowerShell z kolei podaje precyzyjne polecenie obiekt, którego dotyczy błąd i numer linii.
+
+00:04:00.720 --> 00:04:03.780
+Możesz zdiagnozować, naprawić i uruchomić ponownie w tym samym oknie.
+
+00:04:03.920 --> 00:04:06.000
+To nie jest efektowne, to po prostu skuteczne.
+
+00:04:06.520 --> 00:04:10.420
+Administratorzy trzymający się pulpitu robią to z jednego powodu, daje im poczucie bezpieczeństwa.
+
+00:04:10.640 --> 00:04:14.740
+Jest wizualny, potwierdza działania miłym komunikatem o sukcesie, niemal czuć konfetti.
+
+00:04:14.960 --> 00:04:18.420
+Ale zarządzanie przedsiębiorstwem to nie biznes emocji, to biznes wyników.
+
+00:04:18.560 --> 00:04:21.000
+Nie potrzebujesz komunikatu, potrzebujesz wpisu w logach.
+
+00:04:21.180 --> 00:04:22.740
+Wszystko w tym krzyczy, kontrola.
+
+00:04:22.900 --> 00:04:24.860
+To nie ma być ładne, to ma być trwałe.
+
+00:04:25.060 --> 00:04:27.080
+Nie zakłada zaufania, rejestruje dowody.
+
+00:04:27.300 --> 00:04:29.220
+Nie zwalnia, by chronić Cię przed samym sobą.
+
+00:04:29.220 --> 00:04:33.440
+Daję Ci do ręki każde polecenie z ostrzeżeniem, że dysponujesz teraz władzą na poziomie produkcyjnym.
+
+00:04:33.600 --> 00:04:35.860
+I właśnie tego wymaga administracja jako pilotem.
+
+00:04:36.060 --> 00:04:39.560
+Zanim zaczniesz bronić wygody interfejsu graficznego, poznaj niewygodną prawdę.
+
+00:04:39.720 --> 00:04:41.200
+Wygoda zabija ład korporacyjny.
+
+00:04:41.400 --> 00:04:43.640
+Narzędzia administracyjne oparte na klikaniu zbyt wiele ukrywają.
+
+00:04:43.820 --> 00:04:46.320
+Abstrahują złożoność do momentu, w którym zasady stają się niewidoczne.
+
+00:04:46.480 --> 00:04:49.420
+A gdy coś się psuje, nie możesz prześledzić przyczyn, pozostają tylko domysły.
+
+00:04:49.640 --> 00:04:51.600
+Skrypty dla odmiany są otwartą księgą.
+
+00:04:51.840 --> 00:04:53.500
+Każde działanie pozostawia po sobie ślad.
+
+00:04:53.500 --> 00:04:57.640
+Więc podczas gdy centrum administracyjne zapewnia Ci rozrywkę, PowerShell zarządza przedsiębiorstwem.
+
+00:04:57.740 --> 00:05:02.400
+To narzędzie, którego Microsoft używa wewnętrznie do testowania, wdrażania, audytu i naprawy własnych systemów.
+
+00:05:02.580 --> 00:05:04.920
+Stworzyli zabawkę dla Ciebie, sami używają narzędzia.
+
+00:05:05.060 --> 00:05:08.520
+To powinno Ci powiedzieć wszystko, a to jeszcze zanim zaczniemy mówić o ładzie korporacyjnym.
+
+00:05:08.680 --> 00:05:09.800
+Otwórzmy tę szufladę.
+
+00:05:10.000 --> 00:05:11.520
+Luka w nadzorze nad kopilotem.
+
+00:05:11.680 --> 00:05:14.500
+Tu sprawy przechodzą od lekko nieefektywnych do potencjalnie katastrofalnych.
+
+00:05:15.280 --> 00:05:22.120
+Większość administratorów zakłada, że po włączeniu kopilota ramy zgodności Microsoft 365 automatycznie obejmują także warstwę AI.
+
+00:05:22.360 --> 00:05:23.500
+Spoiler, nie obejmują.
+
+00:05:23.720 --> 00:05:29.680
+Istnieje luka w nadzorze, wystarczająco duża, by przeprowadzić przez nią wyciek danych, a centrum administracyjne pomocnie ukrywa ją za przyjazną ikoną ładowania.
+
+00:05:29.900 --> 00:05:38.280
+Dane wyjściowe kopilota, maile, dokumenty, podsumowania spotkań mogą być audytowajn, ale jego prompti, czyli dane wejściowe, które wygenerowały te wyniki, często rozpływają się w powietrzu.
+
+00:05:38.420 --> 00:05:41.440
+To prawny i operacyjny koszmar w regulowanych środowiskach.
+
+00:05:41.440 --> 00:05:51.600
+Jeśli dyrektor finansowy wpisze przypadkiem wrażliwą prognozę do kopilota, wynik może zostać wyczyszczony, ale kontekst zapytania, kto pytał, kiedy i w jakich granicach danych, może nigdy nie zostać uchwycony.
+
+00:05:51.780 --> 00:05:53.680
+Centrum administracyjne Ci nie pomoże.
+
+00:05:53.880 --> 00:05:57.440
+Pokazuje wskaźniki adopcji i trendy użycia, ale nie łańcuch dowodowy, którego potrzebujesz.
+
+00:05:58.260 --> 00:06:00.460
+Ład bez identyfikowalności to tylko teatr.
+
+00:06:00.580 --> 00:06:03.540
+Teraz rozważmy pierwszy punkt zapalny, masowe egzekwowanie zasad.
+
+00:06:03.800 --> 00:06:08.200
+Chcesz zastosować nową regułę zapobiegania utracie danych dla każdego użytkownika z dostępem do kopilota?
+
+00:06:08.200 --> 00:06:08.900
+Szykro mi.
+
+00:06:08.900 --> 00:06:16.120
+Centrum administracyjne pozwala włączyć zasady DLP na ogólnym poziomie, ale nie pozwala wykonać aktualizacji w całej dzierżawie wymierzonych konkretnie w aktywność kopilota.
+
+00:06:16.280 --> 00:06:19.780
+To jak próba przebudowy instalacji elektrycznej w budynku za pomocą włączników światła.
+
+00:06:19.940 --> 00:06:23.860
+PowerShell natomiast zagląda za ściany do rzeczywistego schematu obwodów.
+
+00:06:24.040 --> 00:06:29.100
+Ujawnia ukryte atrybuty, punkty końcowe danych, uprawnienia licencyjne, logi zachowania modelu.
+
+00:06:29.340 --> 00:06:36.040
+Za pomocą jednego skryptu możesz wykryć każde konto z kopilotem, zweryfikować jego pokrycie DLP i wyeksportować to do audytu.
+
+00:06:36.040 --> 00:06:39.040
+Potem jest drugi punkt zapalny – niespójne licencjonowanie.
+
+00:06:39.240 --> 00:06:42.400
+Myślisz, że wszyscy Twoi użytkownicy mają ten sam poziom dostępu do kopilota?
+
+00:06:42.760 --> 00:06:43.880
+Zachwycający optymizm.
+
+00:06:44.060 --> 00:06:50.980
+W praktyce licencje rozsypują się jak konfetti, przypisywane ręcznie, przenoszone chaotycznie, czasem zduplikowane, czasem całkowicie brakujące.
+
+00:06:51.180 --> 00:06:54.740
+Centrum administracyjne potrafi wyświetlić listy jasne, ale nie powiązania.
+
+00:06:54.960 --> 00:06:58.540
+Nie możesz filtrować, przestawiać ani korelować danych między wieloma usługami.
+
+00:06:58.540 --> 00:07:02.540
+Tymczasem PowerShell pobiera te obiekty i pozwala odpytywać je jak dane strukturalne.
+
+00:07:03.380 --> 00:07:12.000
+Możesz przypisać użytkowników do licencji, grupować ich według działów, porównywać z politykami zgodności i faktycznie znać stan środowiska, zamiast zgadywać.
+
+00:07:12.280 --> 00:07:14.660
+Zilustrujmy tę lukę na praktycznym przykładzie.
+
+00:07:14.980 --> 00:07:23.040
+Wyobraź sobie, że musisz sprawdzić, czy każdy dyrektor w Twoim tenancie E5 ma kopilot premium oraz czy tymczasowi kontrahenci nie otrzymali przypadkiem dostępu.
+
+00:07:23.040 --> 00:07:31.580
+W centrum administracyjnym otwierasz użytkowników, aktywnych użytkowników, przewijasz, klikasz, przewijasz, przewijasz ponownie, otwierasz filtry, dodajesz tagi, eksportujesz do Excela i ręcznie usuwasz duplikaty.
+
+00:07:31.760 --> 00:07:34.400
+Trzy kawy później nadal będziesz poprawiać podziały wierszy.
+
+00:07:34.600 --> 00:07:36.160
+W PowerShellu jedna linijka.
+
+00:07:36.380 --> 00:07:42.620
+Zapytanie getmsholuser, przefiltrowane przez SKU, przekazane do Select Object i wyeksportowane do CSV wraz ze znacznikami czasu.
+
+00:07:42.860 --> 00:07:46.440
+Krótko mówiąc, możesz zamienić godziny niepewności na sekundy pewności.
+
+00:07:46.720 --> 00:07:50.180
+Wielu administratorów słyszy to i odpowiada, ale ja widzę to wizualnie.
+
+00:07:50.180 --> 00:07:53.380
+I to jest właśnie problem. Widzisz to, ale tym nie zarządzasz.
+
+00:07:53.580 --> 00:07:55.440
+Widoczność i kontrola to nie synonimy.
+
+00:07:55.660 --> 00:07:59.120
+Interfejs graficzny oferuje wygodę, PowerShell oferuje odpowiedzialność.
+
+00:07:59.280 --> 00:08:01.320
+Oto niekomfortowa, korporacyjna ironia.
+
+00:08:01.600 --> 00:08:08.900
+Sam Microsoft używa tych samych modułów PowerShell, MS Graph, Azure Ad i Exchange Online, aby tworzyć pulpity nawigacyjne, którym ufasz.
+
+00:08:09.100 --> 00:08:12.940
+Dosłownie patrzysz na frontend PowerShella z usuniętą połową parametrów.
+
+00:08:13.060 --> 00:08:17.280
+To jak wynajęcie samochodu i zakaz skręcania kierownicą o więcej niż 90 stopni.
+
+00:08:17.280 --> 00:08:20.280
+Te ograniczenia chronią początkujących, ale spowalniają profesjonalistów.
+
+00:08:21.140 --> 00:08:26.320
+Prawdziwe zarządzanie wymaga niefiltrowanego dostępu, bo AI nie operuje w ramach ograniczeń administracyjnych.
+
+00:08:26.480 --> 00:08:29.820
+Obejmuje granice danych, strukturę wiadomości i łączniki chmurowe.
+
+00:08:30.060 --> 00:08:35.840
+Jeśli Twój proces audytu nie potrafi śledzić żądania, a i od tenanta do centrum danych, nie masz zarządzania, masz dekorację.
+
+00:08:36.580 --> 00:08:40.000
+PowerShell wypełnia tę lukę nie przez dekorowanie, lecz przez odsłanianie.
+
+00:08:40.000 --> 00:08:45.840
+Ujawnia parametry konfiguracji AI tenanta, wpisy kontroli dostępu do modeli, a nawet ograniczenia punktów końcowych.
+
+00:08:45.980 --> 00:08:51.300
+Ta przejrzystość pozwala budować prawdziwe warstwy zarządzania, przypisywanie polityk, audyt promptów i monitoring oparty na rolach.
+
+00:08:51.520 --> 00:08:54.680
+Możesz skodyfikować, kto o co może pytać i skąd odpowiedź może być udzielona.
+
+00:08:54.860 --> 00:08:57.940
+Takie szczegóły po prostu nie istnieją w żadnym dzisiejszym interfejsie graficznym.
+
+00:08:58.100 --> 00:09:02.380
+A kiedy coś pójdzie nie tak, a w administracji, a i zawsze tak się dzieje, potrzebujesz ścieżki kryminalistycznej.
+
+00:09:02.380 --> 00:09:09.700
+PowerShell potrafi eksportować niezmienne logi JSON, przechwytywać obiekty po GUID, a nawet tagować wyniki poleceń sygnaturami skrótu dla weryfikacji integralności.
+
+00:09:09.900 --> 00:09:14.880
+Centrum administracyjne pokaże Ci wykres trendu, który wygląda jak Twoje perspektywy zawodowe, jeśli będziesz na nim polegać.
+
+00:09:15.000 --> 00:09:19.260
+Więc tak luka w zarządzaniu kopilotem jest realna, mierzalna i pogłębia się wraz ze wzrostem adopcji.
+
+00:09:19.440 --> 00:09:21.500
+PowerShell nie jest już opcjonalną warstwą.
+
+00:09:21.660 --> 00:09:24.380
+To jedyna warstwa z zasięgiem wystarczającym, by dostrzec prawdę.
+
+00:09:24.540 --> 00:09:27.080
+Wszystko inne to tylko wygaszacz ekranu z motywem zgodności.
+
+00:09:27.080 --> 00:09:33.720
+Od zapobiegania przechodzimy teraz do kontroli, ponieważ gdy już widzisz problem, kolejnym logicznym krokiem jest całkowite wyeliminowanie ludzkiego wąskiego gardła.
+
+00:09:34.160 --> 00:09:36.340
+Automatyzacja nie jest tu udogodnieniem, lecz prawem.
+
+00:09:36.480 --> 00:09:40.720
+Omówmy, jak PowerShell sprawia, że egzekwowanie polityk staje się nie tylko szybsze, ale i prawnie wiążące.
+
+00:09:41.160 --> 00:09:42.200
+Automatyzacja jako prawo.
+
+00:09:42.440 --> 00:09:45.680
+W zarządzaniu kopilotem automatyzacja nie jest luksusem, lecz ustawą.
+
+00:09:45.860 --> 00:09:49.920
+Podejście ręczne nie jest już tylko nieefektywne, jest z założenia niezgodne z przepisami.
+
+00:09:50.080 --> 00:09:55.300
+Ponieważ gdy Twój ekosystem, a i rozrasta się na wiele dzierżaw, każde nieskryptowane działanie stanowi ryzyko.
+
+00:09:55.300 --> 00:10:02.580
+Ludzki błąd skaluje się szybciej niż jakikolwiek algorytm, a PowerShell to jedyny język, który potrafi zamknąć ludzką omylność w ramach proceduralnej automatyzacji.
+
+00:10:02.740 --> 00:10:05.360
+Powiedzmy wprost, polityki zapisane w Wordzie to tylko życzenia.
+
+00:10:05.580 --> 00:10:07.540
+Polityki zapisane w PowerShellu to prawo.
+
+00:10:07.780 --> 00:10:12.180
+Skrypt nie zapomni zastosować ustawienia w trzeci piątek, ani nie pominie konta, bo komuś skończyła się kawa.
+
+00:10:12.440 --> 00:10:17.960
+Gdy definiujesz zasady zarządzania w kodzie, są one wykonywane dokładnie tak samo za każdym razem, zgodnie z harmonogramem i podaudytem.
+
+00:10:18.100 --> 00:10:20.040
+To zgodność osiągana przez powtarzalność.
+
+00:10:20.040 --> 00:10:22.540
+Zarządzanie nie jako porada, lecz jako egzekwowanie.
+
+00:10:22.800 --> 00:10:25.900
+GUI daje Ci elastyczność, PowerShell daje Ci odpowiedzialność.
+
+00:10:26.100 --> 00:10:28.240
+Weźmy licencjonowanie, ten odwieczny ból głowy.
+
+00:10:28.460 --> 00:10:33.320
+Każdy moduł, a i każda funkcja kopilota, każde wdrożenie regionalne dodaje kolejne uprawnienie do śledzenia.
+
+00:10:33.580 --> 00:10:37.900
+Ręczne robienie tego jest jak wypisywanie kart pokładowych ręcznie na lotnisku bez megafonów.
+
+00:10:38.060 --> 00:10:43.900
+Ale dzięki zaplanowanemu zadaniu PowerShell automatycznie wykryjesz niespójności, natychmiast je skorygujesz i trwale udokumentujesz.
+
+00:10:43.900 --> 00:10:47.520
+Skrypt staje się dowodem zsynchronizowanym, zarejestrowanym i zarchiwizowanym.
+
+00:10:47.640 --> 00:10:50.560
+Spróbuj przedstawić audytorowi argument, klikałem bardzo ostrożnie.
+
+00:10:50.740 --> 00:10:52.760
+Poproszą o sygnatury czasowe, a nie o odczucia.
+
+00:10:53.040 --> 00:10:56.400
+Automatyzacja nie tylko powiela Twoją pracę, ona koduje Twoją wiedzę ekspercką.
+
+00:10:56.640 --> 00:10:57.560
+Na tym polega magia.
+
+00:10:57.800 --> 00:11:04.060
+Gdy starszy administrator napisze skrypt do klasyfikacji ryzyka lub egzekwowania filtrów zawartości, sam kod staje się pamięcią instytucjonalną.
+
+00:11:04.300 --> 00:11:06.580
+Nowi pracownicy nie potrzebują wiedzy nieformalnej.
+
+00:11:06.760 --> 00:11:09.540
+Przejmują doktrynę operacyjną wyrażoną w prostej składni.
+
+00:11:09.540 --> 00:11:12.320
+Eliminacja zgadywania to prawdziwy zysk produktywności.
+
+00:11:12.560 --> 00:11:14.300
+Zaoszczędzone godziny to tylko bonus.
+
+00:11:14.500 --> 00:11:15.460
+Oto krótka historia.
+
+00:11:15.740 --> 00:11:20.440
+Administrator zarządzający wieloma jednostkami biznesowymi spędzał kiedyś cały tydzień na uzgadnianiu licencji kopilota.
+
+00:11:20.660 --> 00:11:22.960
+Każdego miesiąca rozwój klienta powodował awarię.
+
+00:11:23.180 --> 00:11:25.840
+Wtedy napisała 12-liniowy skrypt w PowerShellu.
+
+00:11:25.980 --> 00:11:32.000
+Odpytywał dzierżawę o błędne uprawnienia, przypisywał brakujące, cofał nadmiarowe i generował audyt w formacie CSV.
+
+00:11:32.400 --> 00:11:36.320
+Zadanie skróciło się z 35 godzin do 5 minut przy zerowej liczbie pominiętych rekordów.
+
+00:11:36.320 --> 00:11:39.720
+Zyskiem nie był zaoszczędzony czas, lecz wyeliminowanie frazy uwierz mi na słowo.
+
+00:11:39.940 --> 00:11:42.280
+Skrypt dowiódł, że proces zgodności przebiegł pomyślnie.
+
+00:11:42.500 --> 00:11:46.780
+Właśnie to oznacza automatyzacja jako zgodność, kodyfikację intencji w powtarzalne wykonanie.
+
+00:11:47.020 --> 00:11:51.740
+Zgoda człowieka staje się opcjonalna, ponieważ egzekwowanie zasad nie jest dążeniem, lecz mechanizmem.
+
+00:11:51.880 --> 00:11:55.400
+A cała elegancja tkwi w tym, jak PowerShell natywnie wspiera audytowanie.
+
+00:11:55.660 --> 00:12:00.360
+Każdy wynik wykonania można wyeksportować, każdą zmianę zapisać, a każdą naprawę zweryfikować.
+
+00:12:00.500 --> 00:12:02.700
+To trzyetapowy rytm ciągłości przedsiębiorstwa.
+
+00:12:02.820 --> 00:12:04.260
+Wykryj, napraw, zweryfikuj.
+
+00:12:04.260 --> 00:12:07.680
+Każdy czasownik ma odpowiadające mu polecenie, pobierz, ustaw, potwierdź.
+
+00:12:07.740 --> 00:12:10.280
+Te przedrostki nie są przypadkowe, to swoisty manifest.
+
+00:12:10.580 --> 00:12:14.420
+Wyobraź sobie logikę detekcji skanującą dzienniki użycia kopilota w poszukiwaniu anomalii,
+
+00:12:14.500 --> 00:12:17.420
+nierozpoznanych wywołań API lub nadmiarowych zapytań o granice danych.
+
+00:12:17.620 --> 00:12:20.320
+Natychmiast skrypt naprawczy wyłącza naruszającą zasady sesję,
+
+00:12:20.460 --> 00:12:23.420
+aktualizuje wskaźnik zgodności i uruchamia procedurę sprawdzającą,
+
+00:12:23.540 --> 00:12:25.360
+która podwójnie weryfikuje dostęp resztkowy.
+
+00:12:25.560 --> 00:12:27.980
+Wszystko opatrzony znacznikiem czasu, wszystko odwracalne.
+
+00:12:27.980 --> 00:12:30.600
+W tym czasie użytkownicy twojego pulpitu nawigacyjnego wciąż klikają odśwież,
+
+00:12:30.660 --> 00:12:32.340
+zastanawiając się, dlaczego wyniki mają opóźnienie.
+
+00:12:32.480 --> 00:12:35.220
+Ironia jest wyśmienita i tak ta pewność siebie jest w pełni uzasadniona.
+
+00:12:35.440 --> 00:12:37.880
+Zwolennicy klikania twierdzą, automatyzacja jest ryzykowna.
+
+00:12:38.080 --> 00:12:41.380
+Dobrze, tak samo jak przebywanie w ich pobliżu, gdy przez przypadek błędnie skonfigurują DLP.
+
+00:12:41.660 --> 00:12:44.500
+Ryzyko w PowerShellu jest przejrzyste, ryzyko w GU i to ciemność.
+
+00:12:44.720 --> 00:12:46.100
+Do zobaczenia na żywo w styczniu.
+
+00:12:46.420 --> 00:12:49.740
+Automatyzacja centralizuje błędy w kodzie, gdzie można je naprawić raz, a skutecznie.
+
+00:12:49.740 --> 00:12:53.240
+Ręczne procesy rozsiewają je niczym brokat, są trwałe i niemożliwe do odkurzenia.
+
+00:12:53.480 --> 00:12:55.320
+Wznieśmy się jednak ponad samą mechanikę.
+
+00:12:55.640 --> 00:12:56.900
+Automatyzacja to filozofia.
+
+00:12:57.160 --> 00:12:59.940
+Skrypt wymusza spójność, usuwając ego z procesu.
+
+00:13:00.120 --> 00:13:01.980
+Żadnych faworytów, żadnego zgadywania, żadnego.
+
+00:13:02.100 --> 00:13:04.240
+Myślałem, że dział marketingu potrzebował tej licencji.
+
+00:13:04.420 --> 00:13:06.740
+To bezstronne zarządzanie i matematyczna precyzja wykonania.
+
+00:13:06.960 --> 00:13:09.980
+Jeśli kiedykolwiek chciałeś sprawiedliwości w administrowaniu systemami, właśnie ją masz.
+
+00:13:10.100 --> 00:13:12.860
+Komputer jest posłuszny wszystkim jednakowo i nikogo nie usprawiedliwia.
+
+00:13:13.020 --> 00:13:15.380
+A teraz zestaw to ponownie z centrum administracyjnym.
+
+00:13:15.380 --> 00:13:19.380
+Każde kliknięcie jest jak płatek śniegu unikalne, ulotne, niemożliwe do zweryfikowania.
+
+00:13:19.580 --> 00:13:22.660
+Nie możesz tego powtórzyć ani udowodnić, że wydarzyło się dokładnie w ten sposób.
+
+00:13:22.880 --> 00:13:25.340
+PowerShell natomiast jest Twoją czarną skrzynką.
+
+00:13:25.600 --> 00:13:27.660
+Każde uruchomienie jest deterministyczne.
+
+00:13:27.860 --> 00:13:32.160
+Uruchom to jutro, w przyszłym miesiącu lub w innym regionie, a uzyskasz identyczne rezultaty.
+
+00:13:32.380 --> 00:13:35.520
+Tego właśnie organy regulacyjne oczekują od systemów przewidywalności.
+
+00:13:35.720 --> 00:13:38.820
+A w miarę skalowania kopilota, automatyzacja staje się kwestią przetrwania.
+
+00:13:39.020 --> 00:13:41.720
+Nie jesteś w stanie monitorować setek interfejsów AI na oko.
+
+00:13:41.720 --> 00:13:46.340
+Potrzebujesz skryptów, aby instancjonować zasady kontroli w tenantach, centrach danych i konektorach.
+
+00:13:46.440 --> 00:13:49.760
+Pomyśl o tym, jak o układzie odpornościowym zarządzania Microsoft 365
+
+00:13:49.760 --> 00:13:54.900
+zautomatyzowane procedury nieustannie patrolują, wykrywają anomalie i reagują, zanim infekcja się rozprzestrzeni.
+
+00:13:55.080 --> 00:13:58.820
+Ręczna interwencja to segregacja rannych, czasami konieczna, ale zawsze spóźniona.
+
+00:13:59.020 --> 00:14:02.940
+Więc tak, podczas gdy centrum administracyjne uprzejmie pyta, co chciałbyś zrobić,
+
+00:14:03.080 --> 00:14:06.540
+PowerShell już to zrobił trzykrotnie, zapisał wynik i złożył raport.
+
+00:14:06.540 --> 00:14:12.180
+Automatyzacja nie usuwa ludzi, ona wynosi ich z roli sprzątaczy konfiguracji do roli projektantów kontroli.
+
+00:14:12.380 --> 00:14:14.680
+GUI wciąż wymaga od Ciebie kliknięcia, zapisz.
+
+00:14:14.820 --> 00:14:17.280
+PowerShell wymaga, abyś zdefiniował, co zapisz oznacza.
+
+00:14:17.420 --> 00:14:19.560
+I to właśnie definiuje kolejny poziom mistrzostwa.
+
+00:14:19.740 --> 00:14:23.880
+Kontrola to nie tylko szybsze klikanie, ale weryfikacja tego, co te przyciski faktycznie robią.
+
+00:14:24.320 --> 00:14:27.860
+Automatyzacja pozwala egzekwować zasady, ale tylko audyt czyni je wiarygodnymi.
+
+00:14:28.100 --> 00:14:29.380
+Czas sprawdzić audytorów.
+
+00:14:29.540 --> 00:14:31.260
+Audytuj wszystko, nie ufaj nikomu.
+
+00:14:31.320 --> 00:14:35.100
+Zarządzanie bez audytu to teatr, ładne dashboardy udające zgodność z przepisami.
+
+00:14:35.100 --> 00:14:36.900
+Prawdziwa kontrola wymaga dowodów.
+
+00:14:37.060 --> 00:14:41.440
+W Microsoft 365 PowerShell jest kasą fiskalną, która nigdy nie zapomina o transakcji.
+
+00:14:41.620 --> 00:14:46.200
+Każde działanie, każdy obiekt i parametr można wyciągnąć, oznaczyć czasem i haszem dla autentyczności.
+
+00:14:46.400 --> 00:14:49.140
+To nie tylko przejrzystość, to pełna identyfikowalność.
+
+00:14:49.300 --> 00:14:54.840
+Klikając w centrum administracyjnym w zasadzie pytasz, czy to się wydarzyło, a ono odpowiada prawdopodobnie,
+
+00:14:55.080 --> 00:14:59.640
+agreguje logi, ucina szczegóły i aktualizuje się, kiedy replikacja ma na to ochotę.
+
+00:14:59.820 --> 00:15:03.200
+PowerShell nie operuje na prawdopodobieństwie, operuje na transkrypcjach.
+
+00:15:03.200 --> 00:15:06.700
+Polecenie GET mówi dokładnie, co się zmieniło, gdzie i przez kogo.
+
+00:15:06.940 --> 00:15:09.160
+Nie obserwujesz trendów, operujesz na faktach.
+
+00:15:09.280 --> 00:15:13.580
+To rozróżnienie stanowi różnicę między środowiskiem zgodnym z normami, a takim, które musi się tłumaczyć.
+
+00:15:13.800 --> 00:15:15.260
+Przeanalizujmy piramidę audytu.
+
+00:15:15.440 --> 00:15:18.640
+U podstawy mamy to, co centrum administracyjne nazywa logami aktywności.
+
+00:15:18.820 --> 00:15:23.240
+To podsumowania przeszłości uproszczone, zaokrąglone i wygładzone, idealne na slajdy dla zarządu.
+
+00:15:23.440 --> 00:15:28.260
+Wchodząc wyżej, PowerShell ujawnia surowe rekordy audytu pobrane przez punkty końcowe graf API.
+
+00:15:28.260 --> 00:15:35.260
+Jeszcze wyżej możesz wyciągnąć metadany na poziomie polecenia, ID wykonania, źródło sesji oraz zmiany właściwości przed i po modyfikacji.
+
+00:15:35.980 --> 00:15:40.160
+To wierność śledcza, dowody przydatne nie tylko dla ciekawości, ale i dla organów regulacyjnych.
+
+00:15:40.360 --> 00:15:41.840
+Weźmy audyt skrzynek pocztowych.
+
+00:15:42.080 --> 00:15:44.740
+GUI pokaże liczbę wysłanych maili i oflagowane zdarzenia.
+
+00:15:44.940 --> 00:15:53.120
+PowerShell kopie głębiej, uruchom Search Unified Audit Log, a zobaczysz, kto delegował dostęp, kiedy skopiował załączniki i czy było to zgodne z polityką retencji.
+
+00:15:53.120 --> 00:16:00.680
+Nagle coś podejrzanego staje się użytkownik, a uzyskał dostęp do folderu B przez API C o 14.03 czasu uniwersalnego używając urządzenia D.
+
+00:16:00.880 --> 00:16:03.240
+Audytorzy nazywają to podstawą do obrony.
+
+00:16:03.420 --> 00:16:05.520
+Graf API rozszerza ten zasięg jeszcze bardziej.
+
+00:16:05.800 --> 00:16:13.360
+W PowerShell możesz odpytywać historię promptów kopilota, granice sesji i ślady dostępu do modelu obiekty, które nigdy nie pojawiają się w standardowych raportach.
+
+00:16:13.360 --> 00:16:23.460
+Możesz je wyeksportować jako niezmienne pakiety JSON, podpisać atrybutami i przechowywać w Azure przez 7 lat, jeśli czujesz się szczególnie paranoicznie, co jako administrator korporacyjny powinieneś czuć.
+
+00:16:23.700 --> 00:16:24.760
+Dlaczego to jest ważne?
+
+00:16:24.960 --> 00:16:32.360
+Ponieważ zarządzanie sztuczną inteligencją wprowadza nowe zobowiązania, prompti jako własność intelektualna, zapewnienie lokalizacji danych i odpowiedzialność algorytmiczną.
+
+00:16:33.140 --> 00:16:38.360
+Audyt, a i kończący się na zapytaniach użytkownika, jest jak cyberbezpieczeństwo kończące się na włączeniu Firewalla.
+
+00:16:38.360 --> 00:16:44.340
+PowerShell daje głębię potrzebną do odtworzenia intencji, jakie dane były użyte, gdzie i pod czyim nadzorem.
+
+00:16:44.540 --> 00:16:51.840
+Ta zdolność rekonstrukcji stanowi fundament każdych ram odpowiedzialności od ISO 27001 po unijny akt o sztucznej inteligencji.
+
+00:16:52.080 --> 00:16:55.460
+Skryptowany eksport danych jest lepszy od zrzutów ekranu, ponieważ jest niezmienny.
+
+00:16:55.680 --> 00:17:01.680
+Możesz uruchomić codzienną automatyczną ekstrakcję interakcji z kopilotem, wysłać ją do magazynu Blob i zabezpieczyć weryfikacją sumy kontrolnej.
+
+00:17:01.680 --> 00:17:07.120
+Gdy regulator poprosi o dowody, nie musisz przeszukiwać notatek, dostarczasz archiwa z sygnaturą czasową, podpisane skrótem.
+
+00:17:07.120 --> 00:17:09.520
+Spróbuj zrobić to z poziomu graficznego interfejsu GUI.
+
+00:17:09.680 --> 00:17:13.040
+W najlepszym razie pobierzesz plik CSV, który zdezaktualizował się w połowie tygodnia audytu.
+
+00:17:13.200 --> 00:17:15.280
+Istnieje jeszcze jedna zaleta – normalizacja.
+
+00:17:15.480 --> 00:17:20.000
+Kiedy używasz PowerShell do zbierania telemetrii, każde źródło danych staje się ustrukturyzowanym zbiorem.
+
+00:17:20.300 --> 00:17:26.200
+Możesz korelować użycie kopilota z wrażliwością plików w SharePoint, dostępem do Exchange i rolami w Entra, korzystając z jednego potoku.
+
+00:17:26.420 --> 00:17:32.200
+Centrum administracyjne grzecznie oddziela te silosy, jakby zarządzanie było uprzejmą kolacją, podczas której systemy ze sobą nie rozmawiają.
+
+00:17:32.200 --> 00:17:35.700
+PowerShell wciąga je do tej samej tabeli logów i wymusza uczciwość.
+
+00:17:35.940 --> 00:17:42.260
+Scenariusz z życia podczas wewnętrznego audytu firma odkryła, że odpowiedzi kopilota cytowały zastrzeżone dane produktowe.
+
+00:17:42.480 --> 00:17:48.720
+Centrum administracyjne potwierdziło pewną aktywność, a dzięki PowerShell administratorzy prześledzili łańcuch zapytań,
+
+00:17:48.840 --> 00:17:55.420
+zidentyfikowali konto i powiązali je z podniesionymi uprawnieniami tymczasowego wykonawcy, nadanymi podczas migracji projektu.
+
+00:17:55.420 --> 00:18:00.700
+W ciągu kilku minut cofnęli dostęp, udokumentowali naprawę i zamknęli audyt z niepodważalnymi dowodami.
+
+00:18:00.900 --> 00:18:04.460
+Wersja tej historii z GU i kończy się słowami, wierzymy, że to się nie powtórzy.
+
+00:18:04.640 --> 00:18:09.180
+Oto filozoficzna puenta, audyt nie polega na braku zaufania do ludzi, lecz na uznaniu skali.
+
+00:18:09.440 --> 00:18:13.380
+Gdy środowisko osiąga tysiące kont, zaufanie staje się statystycznie nieistotne.
+
+00:18:13.620 --> 00:18:15.920
+Systemy wymagają wnikliwości, nie optymizmu.
+
+00:18:16.080 --> 00:18:18.440
+PowerShell ucieleśnia ten cynizm w godny podziwu sposób.
+
+00:18:18.700 --> 00:18:21.140
+Każda para polecenie odpowiedzi jest poświadczonym oświadczeniem.
+
+00:18:21.140 --> 00:18:22.880
+Nawet błędy są cennym zasobem.
+
+00:18:23.020 --> 00:18:26.920
+Każdy komunikat o błędzie zawiera kontekst śledzenia, który można wykorzystać w skryptach monitorujących.
+
+00:18:27.060 --> 00:18:29.340
+Powłoka nigdy nie bagatelizuje faktów, ona się przyznaje.
+
+00:18:29.540 --> 00:18:32.300
+Centrum administracyjne upiększa ignorancję poprzez jej abstrakcję.
+
+00:18:32.480 --> 00:18:34.240
+PowerShell dokumentuje ją z konieczności.
+
+00:18:34.500 --> 00:18:37.360
+Jeśli zarządzanie to sala sądowa, GU i oferuje tylko przeczucia.
+
+00:18:37.520 --> 00:18:39.260
+PowerShell przedkłada dowody w sprawie.
+
+00:18:39.460 --> 00:18:41.660
+Pokazuje trendy zamiast dawać namacalne kwity.
+
+00:18:41.860 --> 00:18:44.540
+To nie poezja, to rzeczywistość polityki bezpieczeństwa.
+
+00:18:44.780 --> 00:18:47.560
+Jedno zaspokaja ciekawość, drugie zaspokaja audytorów.
+
+00:18:47.560 --> 00:18:52.340
+Oto prawdziwy sekret. Najbezpieczniejsze organizacje nie boją się audytu, one go automatyzują.
+
+00:18:52.640 --> 00:18:57.700
+Zaplanowane zadania PowerShell eksportują logi co noc, uzgadniają różnice i alarmują o rozbieżnościach.
+
+00:18:57.860 --> 00:19:01.380
+Ścieżka audytu staje się żywą architekturą, a nie dokumentacją po fakcie.
+
+00:19:01.600 --> 00:19:04.520
+Przestajesz badać co poszło nie tak, a zaczynasz udowadniać co działa poprawnie,
+
+00:19:04.640 --> 00:19:08.060
+bo w zgodności z przepisami wiarygodność zdobywa się sygnaturami czasowymi, nie słowami.
+
+00:19:08.240 --> 00:19:10.180
+Więc tak nie ufaj niczemu, skryptuj wszystko.
+
+00:19:10.460 --> 00:19:13.920
+GU i może unieść brew na widok anomalii, PowerShell buduje akta sprawy.
+
+00:19:13.920 --> 00:19:18.020
+A gdy zasięg kopilota rośnie wraz z usługami i kontynentami, ten sceptycyzm nie jest już opcją.
+
+00:19:18.260 --> 00:19:21.400
+Jest kwestią przetrwania, co prowadzi nas do nieuniknionego wniosku.
+
+00:19:21.580 --> 00:19:23.600
+Kontrola nie jest już technicznym przywilejem.
+
+00:19:23.780 --> 00:19:25.180
+To profesjonalna kompetencja.
+
+00:19:25.420 --> 00:19:29.840
+Zakończmy to manifestem dla administratorów, którzy wciąż wierzą, że klikanie oznacza kompetencje.
+
+00:19:30.000 --> 00:19:31.640
+Oto manifest administratora.
+
+00:19:31.880 --> 00:19:34.540
+PowerShell to nie tylko narzędzie, to słownik władzy.
+
+00:19:34.800 --> 00:19:37.600
+Jego znajomość odróżnia operatorów od obserwatorów.
+
+00:19:37.800 --> 00:19:41.780
+Jeśli zarządzasz kopilotem bez skryptów, nie administrujesz, lecz przyglądasz się.
+
+00:19:41.780 --> 00:19:45.240
+Prawdziwi administratorzy myślą w pętlach, a nie w ruchach myszki.
+
+00:19:45.400 --> 00:19:46.600
+Oto zmiana nastawienia.
+
+00:19:46.860 --> 00:19:48.740
+Skryptowanie to myślenie w dużej skali.
+
+00:19:48.980 --> 00:19:51.900
+Linia kodu definiuje zasadę, która powtarza się bezbłędnie.
+
+00:19:52.080 --> 00:19:56.000
+Klikanie to myślenie na małą skalę, spontaniczne, niesprawdzone i niespójne.
+
+00:19:56.200 --> 00:19:58.880
+Centrum administracyjne promuje osobistą wygodę.
+
+00:19:59.080 --> 00:20:01.580
+PowerShell wymusza organizacyjną dyscyplinę.
+
+00:20:01.780 --> 00:20:04.860
+Jedno przemawia do Twoich instynktów, drugie do Twoich audytorów.
+
+00:20:04.980 --> 00:20:08.160
+Kopilot, mimo całej swojej inteligencji, pozostaje posłusznie ślepy.
+
+00:20:08.400 --> 00:20:11.020
+Działa w ramach takiej powłoki zarządzania, jaką zbudujesz.
+
+00:20:11.020 --> 00:20:16.640
+Jeśli Twoja warstwa PowerShell jest słaba, swoboda kopilota rośnie, aż odpowiedzialność załamuje się.
+
+00:20:17.100 --> 00:20:19.000
+Ironia graniczy z tragikomedią.
+
+00:20:19.380 --> 00:20:24.020
+Administratorzy polegają na AI zbudowanej w całości z kodu, a boją się sami cokolwiek napisać.
+
+00:20:24.700 --> 00:20:29.500
+Powierzasz zarządzanie modelowi, który szanuje tylko składnie, a odmawiasz mówienia w jego języku.
+
+00:20:29.740 --> 00:20:30.900
+Manifest jest prosty.
+
+00:20:31.100 --> 00:20:33.180
+Automatyzacja, dokumentacja, weryfikacja.
+
+00:20:33.420 --> 00:20:35.120
+Każde polecenie musi generować dowód.
+
+00:20:35.320 --> 00:20:37.000
+Każdy dowód musi zasilać monitoring.
+
+00:20:37.280 --> 00:20:39.160
+Każdy monitoring musi wyzwalać adaptację.
+
+00:20:39.160 --> 00:20:40.860
+Ta pętla to profesjonalna higiena.
+
+00:20:40.980 --> 00:20:42.980
+Pulpity nawigacyjne znikają, logi pozostają.
+
+00:20:43.160 --> 00:20:45.520
+Praca administratora nie polega na obserwowaniu działających narzędzi,
+
+00:20:45.600 --> 00:20:47.700
+lecz na udowodnieniu, że działają poprawnie, gdy nikt nie patrzy.
+
+00:20:47.920 --> 00:20:50.060
+Znajomość PowerShell zapewnia też przyszłość.
+
+00:20:50.240 --> 00:20:52.360
+Microsoft zmienia interfejsy co miesiąc.
+
+00:20:52.480 --> 00:20:54.880
+Polecenia mdlet rzadko zapominają swojej gramatyki.
+
+00:20:55.120 --> 00:20:56.620
+Skrypty przetrwają rebranding.
+
+00:20:56.760 --> 00:20:59.580
+Interfejsy graficzne cierpią na amnezję po każdej aktualizacji.
+
+00:20:59.800 --> 00:21:03.220
+Gdy kopilot ewoluuje, Twoja automatyzacja dostosowuje się jedną zmianą parametru,
+
+00:21:03.280 --> 00:21:04.720
+a nie nowym kursem certyfikacyjnym.
+
+00:21:04.720 --> 00:21:06.280
+Długowieczność tkwi w kodzie.
+
+00:21:06.500 --> 00:21:07.700
+Bądźmy brutalnie szczerzy.
+
+00:21:07.940 --> 00:21:09.660
+Skryptowanie przeraża leniwe umysły.
+
+00:21:09.900 --> 00:21:11.000
+Wymusza przejrzystość.
+
+00:21:11.200 --> 00:21:14.860
+Błędy krzyczą tekstem, zamiast ukrywać się za komunikatem, coś poszło nie tak.
+
+00:21:15.020 --> 00:21:17.560
+Ale ta konfrontacja z prawdą to cena kompetencji.
+
+00:21:17.820 --> 00:21:18.560
+Chcesz kontroli?
+
+00:21:18.740 --> 00:21:20.200
+Więc opanuj swoją składnię.
+
+00:21:20.420 --> 00:21:24.720
+Każde polecenie get, set i remove to sylaba w języku zarządzania przedsiębiorstwem.
+
+00:21:24.900 --> 00:21:26.760
+I od tego zaczyna się reset kulturowy.
+
+00:21:27.000 --> 00:21:29.220
+Administratorzy muszą traktować PowerShell nie jako dodatkową pracę,
+
+00:21:29.220 --> 00:21:31.680
+lecz jako zawodową płynność, tak jak inżynierowie traktują matematykę.
+
+00:21:31.680 --> 00:21:33.960
+Osoba, która pisze skrypty, definiuje zasady.
+
+00:21:34.180 --> 00:21:36.100
+Wszyscy inni podążają za dokumentacją.
+
+00:21:36.260 --> 00:21:37.440
+Powłoka Cię nie zastąpi.
+
+00:21:37.700 --> 00:21:42.380
+Zapewnia, że Twoje decyzje są wykonywalne, powtarzalne i audytowalne długo po tym, jak odejdziesz.
+
+00:21:42.580 --> 00:21:45.700
+Więc gdy następnym razem ktoś powie Ci, że kopilot poradzi sobie sam,
+
+00:21:45.820 --> 00:21:47.640
+uśmiechnij się uprzejmie i otwórz terminal.
+
+00:21:47.960 --> 00:21:50.720
+Bo choć AI potrafi tworzyć e-maile i podsumowywać spotkania,
+
+00:21:50.840 --> 00:21:53.080
+nigdy nie podpisze się za Ciebie pod wymogami zgodności.
+
+00:21:53.300 --> 00:21:55.820
+Ta władza należy do tego, kto potrafi stworzyć skrypt.
+
+00:21:56.020 --> 00:21:57.660
+PowerShell nie zastępuje kopilota.
+
+00:21:57.920 --> 00:21:58.780
+Sprawuje nadzór.
+
+00:21:58.780 --> 00:22:03.860
+To dorosły w pokoju, który pilnuje, by błyszczący hotbot nie zaczął cytować poufnych danych na firmowych prezentacjach.
+
+00:22:03.980 --> 00:22:05.960
+Opanuj go, a będziesz sterować kopilotem.
+
+00:22:06.160 --> 00:22:08.080
+Zignoruj go, a w końcu będziesz mu podlegać.
+
+00:22:08.200 --> 00:22:08.800
+Oto manifest.
+
+00:22:09.140 --> 00:22:11.480
+Zarządzanie nie polega na obserwowaniu, lecz na pisaniu skryptów.
+
+00:22:11.620 --> 00:22:14.200
+Kontrola należy do tych, którzy potrafią ją stworzyć za pomocą kodu.
+
+00:22:14.400 --> 00:22:15.380
+Kontrola czy wygoda?
+
+00:22:15.560 --> 00:22:17.560
+W końcu każdy administrator staje przed wyborem.
+
+00:22:17.760 --> 00:22:18.720
+Kontrola czy wygoda?
+
+00:22:18.960 --> 00:22:20.140
+Wygoda wygląda przyjaźnie.
+
+00:22:20.360 --> 00:22:24.280
+Wczytuje się w niebieskich barwach, oferuje pola wyboru i pozwala uwierzyć, że zarządzanie to tylko klikanie.
+
+00:22:24.280 --> 00:22:27.700
+Kontrola wydaje się trudniejsza, bo wymaga precyzji, składni i odpowiedzialności.
+
+00:22:27.860 --> 00:22:28.940
+Ale przyjrzyj się bliżej.
+
+00:22:29.160 --> 00:22:30.780
+Wygoda to dzierżawa, a nie własność.
+
+00:22:30.960 --> 00:22:33.300
+Centrum administracyjne pozwala jedynie wypożyczyć kontrolę.
+
+00:22:33.440 --> 00:22:34.940
+PowerShell pozwala ją posiadać.
+
+00:22:35.080 --> 00:22:38.060
+Prawdziwy administrator kopilota nie goni za pulpitami nawigacyjnymi.
+
+00:22:38.280 --> 00:22:39.240
+On generuje logi.
+
+00:22:39.420 --> 00:22:40.480
+Nie ufa przełącznikom.
+
+00:22:40.580 --> 00:22:41.720
+On weryfikuje polityki.
+
+00:22:41.940 --> 00:22:46.780
+Każdy znaczący akt zgodności, przypisywania, cofania czy audytu istnieje najpierw jako linijka kodu.
+
+00:22:47.000 --> 00:22:53.600
+PowerShell zmienia intencje w dowody, podczas gdy interfejs graficzny zmienia je w chwilowe wizualizacje do zrzutów ekranu w PowerPoint.
+
+00:22:54.160 --> 00:22:57.520
+Zarządzanie, a i to nie pokaz dla zarządu, to infrastruktura prawna.
+
+00:22:57.760 --> 00:23:04.340
+Gdy pojawiają się audytorzy lub zmieniają się granice danych, tylko automatyzacja oparta na skryptach może dowieść, co faktycznie się stało.
+
+00:23:04.520 --> 00:23:08.820
+PowerShell zapewnia historię, pochodzenie i przyczynowość składniki wiarygodności.
+
+00:23:09.060 --> 00:23:10.800
+Pulpity zdobią, skrypty bronią.
+
+00:23:11.020 --> 00:23:13.840
+Nie zbudujesz zaufania na dużą skalę przyciskami, zrobisz to kodem.
+
+00:23:14.000 --> 00:23:15.860
+Więc ostateczna zasada jest boleśnie prosta.
+
+00:23:16.080 --> 00:23:18.020
+Centrum administracyjne to kiosk turystyczny.
+
+00:23:18.200 --> 00:23:19.340
+Pokazuje drogę do miejsc.
+
+00:23:19.340 --> 00:23:23.460
+PowerShell prowadzi autobus, tankuje go, rejestruje przebieg i wypisuje wniosek o odszkodowanie.
+
+00:23:23.600 --> 00:23:25.860
+Gdy coś się zepsuje, to korporacyjny realizm.
+
+00:23:26.040 --> 00:23:28.880
+Bez powłoki nic nie jest zarządzane, weryfikowane ani bronione.
+
+00:23:29.080 --> 00:23:30.900
+Kontrola i wygoda rzadko idą w parze.
+
+00:23:31.120 --> 00:23:33.000
+Wybierz wygodę, a nie udokumentujesz niczego.
+
+00:23:33.240 --> 00:23:35.540
+Wybierz kontrolę, a udokumentujesz wszystko automatycznie.
+
+00:23:35.840 --> 00:23:37.160
+Profesjonalna droga jest oczywista.
+
+00:23:37.420 --> 00:23:39.860
+Aktualizacje nie zepsują twoich skryptów, chyba że napisałeś je źle.
+
+00:23:40.240 --> 00:23:41.240
+Zasubskrybuj i napraw to.
