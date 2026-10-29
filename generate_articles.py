@@ -79,6 +79,7 @@ Regeln:
 - 1200-1800 Wörter (auf keinen Fall mehr als 1800), ausführlich, aber ohne Füllsätze. Struktur: Einstieg (ein bis zwei <p>), 5-7 Abschnitte mit <h2>-Überschriften (suchmaschinenfreundlich, mit den Kernbegriffen), pro Abschnitt mehrere Absätze, wo sinnvoll <h3>-Unterpunkte oder Listen, ein Abschnitt "häufige Fehler / Stolpersteine" falls im Transkript vorhanden, zum Schluss ein Abschnitt mit praktischen Takeaways als <ul> und ein kurzes Fazit.
 - Nur Inhalte aus dem Transkript. Nichts erfinden: keine Zahlen, Produktnamen, Zitate oder Versprechen, die nicht im Transkript stehen. Produktnamen (Microsoft 365, Copilot, Azure ...) unübersetzt lassen.
 - Keine Titelwiederholung als H1, keine Links, keine Werbung, kein Hinweis auf KI.
+- Verweise nie auf "Transkript", "Podcast", "Folge", "Video" oder "Sprecher"; schreibe als eigenständiger Fachartikel. Wirkt eine Stelle im Transkript verstümmelt (Spracherkennungsfehler), formuliere neutral oder lass sie weg, statt zu raten. Beispiele nur, wenn sie im Transkript vorkommen. Beende den Artikel immer mit einem vollständigen Fazit-Absatz.
 - Erlaubtes HTML: h2, h3, p, ul, ol, li, strong, em.
 - Ausgabeformat: zuerst das HTML des Artikels. Danach eine Zeile mit genau ---INFOGRAFIK--- und darunter ein JSON-Objekt für eine Infografik, die den Kern der Folge zusammenfasst (Texte in der Zielsprache, kurz, nur Inhalte aus dem Transkript):
   {{"titel": "...", "typ": "schritte", "punkte": [{{"kopf": "max. 4 Wörter", "text": "max. 18 Wörter"}}, ...4 bis 6 Punkte]}}
@@ -89,7 +90,7 @@ Titel der Folge: {title}
 
 Transkript:
 {text[:60000]}"""
-    raw = _post(prompt, 9000)
+    raw = _post(prompt, 16000)
     html, _, info = raw.partition("---INFOGRAFIK---")
     inf = None
     m = re.search(r"\{.*\}", info, re.S)
@@ -101,15 +102,40 @@ Transkript:
     return clean(html), inf
 
 
+META = re.compile(r"transkript|transcript|transcripci|transcrição|transcrizione|podcast|в подкасте|в транскрипте|في التسجيل|ポッドキャスト|トランスクリプト|팟캐스트|트랜스크립트", re.I)
+NOSPACE = {"ja", "ko", "zh"}
+
+
+def problems(html, lang):
+    """Qualitätsprüfung: abgeschnitten, zu lang, Meta-Verweise auf Transkript/Podcast."""
+    p = []
+    if not re.search(r"</(p|ul|ol|blockquote)>\s*$", html.strip()):
+        p.append("abgeschnitten")
+    txt = re.sub(r"<[^>]+>", " ", html)
+    if lang not in NOSPACE and len(txt.split()) > 2000:
+        p.append("zu lang")
+    if META.search(txt):
+        p.append("meta")
+    return p
+
+
 def work(job):
     vid, l, title, vp = job
     text = vtt_text(vp)
     if len(text) < 800:
         return vid, l, None
-    try:
-        html, inf = ask(l, title, text)
-    except Exception as ex:
-        print("Fehler", vid, l, str(ex)[:150])
+    html = inf = None
+    for attempt in range(2):
+        try:
+            html, inf = ask(l, title, text)
+        except Exception as ex:
+            print("Fehler", vid, l, str(ex)[:150])
+            return vid, l, None
+        pr = problems(html, l)
+        if not pr:
+            break
+        print("Qualität", vid, l, pr, "Versuch", attempt + 1)
+    if "abgeschnitten" in problems(html, l):
         return vid, l, None
     if len(re.sub(r"<[^>]+>", "", html)) < 3000:
         print("Zu kurz, verworfen:", vid, l)
@@ -134,6 +160,9 @@ def main():
         eps = json.load(open(p, encoding="utf-8"))
         ap = ROOT / "data" / "articles" / f"{vid}.json"
         store[vid] = json.load(open(ap, encoding="utf-8")) if ap.exists() else {}
+        for _l in [x for x, a in store[vid].items() if {"abgeschnitten", "meta"} & set(problems(a["html"], x))]:
+            print("Mangelhaften Artikel neu schreiben:", vid, _l)
+            del store[vid][_l]
         for l, e in eps.items():
             vp = ROOT / "transcripts" / l / f"{vid}.vtt"
             if l not in store[vid] and vp.exists():
