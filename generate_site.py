@@ -108,6 +108,7 @@ h2{font-size:1.5rem;line-height:1.2;margin:2.1em 0 .6em;font-weight:700}
 .list{border-top:1px solid var(--fg)}.row{display:block;padding:20px 0;border-bottom:1px solid var(--bd);text-decoration:none}
 .row h3{margin:0 0 .25em;font:700 1.35rem/1.25 Didot,"Bodoni 72",Georgia,"Noto Serif",serif}.row p{margin:0;color:var(--mut);font-size:.98rem}.row:hover h3{color:var(--ac)}
 .author{display:flex;gap:16px;align-items:center;border-top:1px solid var(--fg);border-bottom:1px solid var(--bd);padding:18px 0;margin:36px 0}
+.author img.badge{object-fit:cover;border:2px solid var(--ac)}.portrait{float:right;width:190px;height:190px;object-fit:cover;border-radius:50%;border:3px solid var(--ac);margin:0 0 12px 22px}
 .author .badge{flex:none;width:58px;height:58px;border-radius:50%;background:var(--ink);color:var(--onink);display:grid;place-items:center;font:700 1.15rem Didot,Georgia,serif}
 .author p{margin:0;font-size:.95rem;color:var(--mut)}.author strong{color:var(--fg);display:block;font-size:1.02rem}
 .mut{color:var(--mut);font-size:.9rem}.crumbs{font-size:.78rem;letter-spacing:.12em;text-transform:uppercase;color:var(--mut);margin-top:26px}.crumbs a{text-decoration:none}
@@ -286,7 +287,9 @@ def author_box(lang):
     ui = UI.get(lang)
     name = ui[5] if ui else "About Mirko Peters"
     bio = ui[6] if ui else "Mirko Peters is a Microsoft MVP, host of the podcast M365.FM and initiator of the free online conference M365Con."
-    return (f'<div class="author"><div class="badge">MP</div><div><strong><a href="{BASE}/about/mirko-peters/">Mirko Peters</a> · Microsoft MVP</strong>'
+    photo = (ROOT / "assets" / "mirko-peters.jpg").exists()
+    badge = (f'<img class="badge" src="{BASE}/assets/mirko-peters.jpg" alt="Mirko Peters, Microsoft MVP" width="58" height="58" loading="lazy">' if photo else '<div class="badge">MP</div>')
+    return (f'<div class="author">{badge}<div><strong><a href="{BASE}/about/mirko-peters/">Mirko Peters</a> · Microsoft MVP</strong>'
             f'<p>{esc(bio)}</p></div></div>')
 
 
@@ -460,8 +463,9 @@ def build():
     sitemap.append((f"{BASE}/", TODAY, None))
 
     # Entity-Seite
+    PORTRAIT = (f'<img class="portrait" src="{BASE}/assets/mirko-peters.jpg" alt="Mirko Peters, Microsoft MVP, host of M365.FM" width="190" height="190">' if (ROOT / "assets" / "mirko-peters.jpg").exists() else "")
     about = f"""{header('en', '')}
-<main class="wrap"><div class="kicker">Microsoft MVP · Podcaster · Conference organizer</div><h1>Mirko Peters</h1>
+<main class="wrap"><div class="kicker">Microsoft MVP · Podcaster · Conference organizer</div>{PORTRAIT}<h1>Mirko Peters</h1>
 <p class="lede">Mirko Peters is a Microsoft MVP who explains Microsoft 365, Microsoft Copilot, Azure, Power Platform, Microsoft Fabric and AI agents for IT admins, architects, developers and decision makers. He hosts the podcast <a href="https://www.m365.fm">M365.FM</a> and the <em>m365 Show</em> on YouTube, and organizes the free online conference <a href="https://m365con.net">M365Con</a>.</p>
 <div class="btns"><a class="btn main" href="https://www.m365.fm">M365.FM</a><a class="btn" href="https://m365con.net">M365Con</a><a class="btn" href="{LINKEDIN}" rel="me">LinkedIn</a><a class="btn" href="{YT_CHANNEL}">YouTube</a></div>
 <h2>What Mirko works on</h2>
