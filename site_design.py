@@ -71,6 +71,7 @@ nav.langs{font-family:"Barlow Condensed",sans-serif;font-weight:500;letter-spaci
 footer{margin-top:80px}
 .cc .btn{background:transparent;color:var(--onink);border-color:var(--onink)}.cc .btn.main{background:var(--ac);color:#fff;border-color:var(--ac)}
 .chip{background:transparent;color:var(--fg)}
+button.btn{background:transparent;color:var(--fg);font-size:.88rem;cursor:pointer}button.btn:hover{background:var(--ac);border-color:var(--ac);color:#fff}
 .fshare{position:fixed;z-index:40;display:flex;gap:0;background:var(--bg);border:1px solid var(--bd);left:0;top:50%;transform:translateY(-50%);flex-direction:column;border-left:0}
 .fshare b{font:600 .65rem "Barlow Condensed",sans-serif;letter-spacing:.14em;text-transform:uppercase;color:var(--mut);padding:8px 0 6px;text-align:center;writing-mode:horizontal-tb}
 .fshare a,.fshare button{display:block;width:44px;height:44px;line-height:44px;text-align:center;border:0;border-top:1px solid var(--bd);background:transparent;color:var(--fg);font:600 .9rem "Barlow Condensed",sans-serif;letter-spacing:.04em;text-decoration:none;cursor:pointer;padding:0}
