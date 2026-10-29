@@ -39,14 +39,23 @@ def norm_title(t):
 
 def main():
     tok = os.environ.get("SPREAKER_TOKEN", "").strip()
+    if tok:   # altes/ungueltiges Secret nicht blind nutzen: erst pruefen
+        S.headers["Authorization"] = f"Bearer {tok}"
+        if S.get(API + "/me", timeout=30).status_code == 401:
+            print("SPREAKER_TOKEN (Secret) ist ungueltig – versuche OAuth-Verbindung ('Spreaker verbinden')")
+            tok = ""
     if not tok and os.environ.get("SPREAKER_CLIENT_SECRET"):
         import spreaker_auth
         d = spreaker_auth.load()
         if d:
             tok = d["access_token"]
             S.headers["Authorization"] = f"Bearer {tok}"
-            if S.get(API + "/me", timeout=30).status_code == 401:   # abgelaufen -> erneuern
+            r = S.get(API + "/me", timeout=30)
+            print("OAuth-Token geprueft:", r.status_code)
+            if r.status_code == 401:   # abgelaufen -> erneuern
                 tok = spreaker_auth.refresh()
+        else:
+            print("Keine data/spreaker_auth.enc lesbar (Client-Secret passt nicht oder Datei fehlt)")
     if not tok:
         print("Kein Spreaker-Zugang (SPREAKER_TOKEN bzw. 'Spreaker verbinden') – uebersprungen"); return
     S.headers["Authorization"] = f"Bearer {tok}"
