@@ -1,7 +1,7 @@
-name: Artikel und Cover nachziehen (stündlich, wenige)
+name: Artikel und Cover nachziehen (alle 15 Minuten, wenige)
 on:
   schedule:
-    - cron: "7 * * * *"
+    - cron: "*/15 * * * *"
   workflow_dispatch:
 permissions:
   contents: write
@@ -20,13 +20,13 @@ jobs:
       - name: Artikel schreiben (wenige pro Lauf)
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
-          ARTICLE_LIMIT: "12"
-          ARTICLE_WORKERS: "4"
+          ARTICLE_LIMIT: "20"
+          ARTICLE_WORKERS: "5"
         run: python generate_articles.py
       - name: Cover-Texte entwerfen
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
-          COVER_LIMIT: "60"
+          COVER_LIMIT: "100"
         run: python generate_covers.py
       - name: Speichern und Website neu bauen lassen
         env:
