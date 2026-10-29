@@ -383,6 +383,12 @@ def event_ld():
             "offers": {"@type": "Offer", "price": "0", "priceCurrency": "EUR", "url": "https://m365con.net", "availability": "https://schema.org/InStock"}}
 
 
+FAQ_T = {"de": "Häufige Fragen", "es": "Preguntas frecuentes", "fr": "Questions fréquentes", "it": "Domande frequenti", "pt": "Perguntas frequentes",
+         "nl": "Veelgestelde vragen", "pl": "Najczęstsze pytania", "id": "Pertanyaan umum", "ru": "Частые вопросы", "uk": "Часті запитання",
+         "ar": "الأسئلة الشائعة", "he": "שאלות נפוצות", "hi": "अक्सर पूछे जाने वाले प्रश्न", "ja": "よくある質問", "ko": "자주 묻는 질문",
+         "ml": "പതിവ് ചോദ്യങ്ങൾ", "pa": "ਅਕਸਰ ਪੁੱਛੇ ਜਾਂਦੇ ਸਵਾਲ", "ta": "அடிக்கடி கேட்கப்படும் கேள்விகள்", "te": "తరచుగా అడిగే ప్రశ్నలు"}
+
+
 def faq_ld(lang):
     return {"@context": "https://schema.org", "@type": "FAQPage", "inLanguage": LANGS[lang][1] if lang in LANGS else "en",
             "mainEntity": [{"@type": "Question", "name": q, "acceptedAnswer": {"@type": "Answer", "text": a}} for q, a in FAQ[lang]]}
@@ -618,6 +624,13 @@ def build():
                        "datePublished": it["date"], "dateModified": it["date"], "mainEntityOfPage": canonical,
                        "author": {"@id": f"{BASE}/about/mirko-peters/#person"}, "publisher": {"@id": f"{BASE}/#org"},
                        "wordCount": len(strip_tags(art_html).split()), "articleSection": cat_name(pc, l), "keywords": ", ".join(tagraw[l][vid])})
+        faq_items = art.get("faq") or []
+        faq_block = ""
+        if art_html and faq_items:
+            faq_block = ('<section class="faq" style="margin-top:2.2em"><h2>' + esc(FAQ_T.get(l, "FAQ")) + "</h2>"
+                         + "".join(f"<details><summary>{esc(x['q'])}</summary><p>{esc(x['a'])}</p></details>" for x in faq_items) + "</section>")
+            ld.append({"@context": "https://schema.org", "@type": "FAQPage", "inLanguage": LANGS[l][1], "mainEntity": [
+                {"@type": "Question", "name": x["q"], "acceptedAnswer": {"@type": "Answer", "text": x["a"]}} for x in faq_items]})
         lis = "".join(f"<li>{x}</li>" for x in bullets)
         el = elinks.get(f"{vid}:{l}", {}); sh = plat.get(l, {})
         apple = el.get("apple") or sh.get("apple_show"); spot = el.get("spotify") or sh.get("spotify_show")
@@ -643,7 +656,7 @@ def build():
 <div class="yt"><iframe src="https://www.youtube-nocookie.com/embed/{vid}?rel=0" title="{esc(e["title"])}" loading="lazy" allow="accelerometer; encrypted-media; picture-in-picture; fullscreen" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe></div>
 <h2>{esc(hdr)}</h2><ol class="points">{lis}</ol>
 <p class="lede" style="margin-top:1.4em">{aud}</p>
-{("<section class=article>" + art_html + "</section>") if art_html else ""}
+{("<section class=article>" + art_html + "</section>") if art_html else ""}{faq_block}
 {author_box(l)}
 <p class="mut">{esc(ui[6])}</p>
 </article>

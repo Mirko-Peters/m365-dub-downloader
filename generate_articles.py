@@ -71,6 +71,23 @@ def info_for(lang, html):
         return None
 
 
+def faq_for(lang, html):
+    """3-4 Fragen/Antworten (JSON-Liste) aus dem fertigen Artikel."""
+    txt = re.sub(r"<[^>]+>", " ", html)[:14000]
+    p = (f"Erstelle aus dem folgenden Artikel 4 häufige Fragen mit kurzen, präzisen Antworten (je 25 bis 60 Wörter) in {NAMES.get(lang, lang)}. "
+         "Nur Inhalte aus dem Artikel, keine Verweise auf Transkript/Podcast/Folge, keine Links. Die Fragen so formulieren, wie Leser sie bei Google oder einem KI-Assistenten stellen würden. "
+         'Ausgabe: reines JSON, keine Erklärung: [{"q": "...", "a": "..."}, ...]\n\nArtikel:\n' + txt)
+    try:
+        raw = _post(p, 2500)
+        m = re.search(r"\[.*\]", raw, re.S)
+        j = json.loads(m.group(0)) if m else None
+        j = [{"q": str(x["q"]).strip(), "a": str(x["a"]).strip()} for x in j if x.get("q") and x.get("a")] if j else None
+        return j[:5] if j and len(j) >= 3 else None
+    except Exception as ex:
+        print("FAQ-Fehler", str(ex)[:100])
+        return None
+
+
 def ask(lang, title, text):  # -> (html, infografik|None)
     prompt = f"""Schreibe aus dem folgenden Podcast-Transkript einen eigenständigen, gut lesbaren Blogartikel für Suchmaschinen und Leser.
 
@@ -146,6 +163,9 @@ def work(job):
         inf = info_for(l, html)
     if inf:
         res["info"] = inf
+    fq = faq_for(l, html)
+    if fq:
+        res["faq"] = fq
     return vid, l, res
 
 
@@ -170,17 +190,19 @@ def main():
     jobs = jobs[:LIMIT]
     changed = set()
     # vorhandene Artikel ohne Infografik nachrüsten
-    fill = [(v, l) for v, d in store.items() for l, a in d.items() if not a.get("info")][:LIMIT]
+    fill = [(v, l) for v, d in store.items() for l, a in d.items() if not a.get("info") or not a.get("faq")][:LIMIT]
     def fillwork(t):
         v, l = t
-        return v, l, info_for(l, store[v][l]["html"])
+        a = store[v][l]
+        return v, l, (None if a.get("info") else info_for(l, a["html"])), (None if a.get("faq") else faq_for(l, a["html"]))
     with ThreadPoolExecutor(WORKERS) as ex:
-        for v, l, inf in ex.map(fillwork, fill):
-            if inf:
-                store[v][l]["info"] = inf
+        for v, l, inf, fq in ex.map(fillwork, fill):
+            if inf: store[v][l]["info"] = inf
+            if fq: store[v][l]["faq"] = fq
+            if inf or fq:
                 changed.add(v)
                 json.dump(store[v], open(ROOT / "data" / "articles" / f"{v}.json", "w", encoding="utf-8"), ensure_ascii=False, indent=1)
-    print(len(fill), "Infografiken nachgerüstet versucht")
+    print(len(fill), "Infografiken/FAQ nachgerüstet versucht")
     with ThreadPoolExecutor(WORKERS) as ex:
         for vid, l, res in ex.map(work, jobs):
             if res:
