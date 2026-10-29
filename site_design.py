@@ -91,6 +91,7 @@ footer{margin-top:80px}
 @media(max-width:860px){.menu{display:none}.mm{display:block;margin-inline-start:auto}.top .wrap{gap:10px}.lsw .pn{grid-template-columns:1fr;position:fixed;inset-inline:12px;top:auto;width:auto}.lsw .pn{top:96px}}
 .share{display:none}
 .fshare{border-radius:0}
+.ichecks{list-style:none;margin:0;padding:0;display:grid;gap:8px}.ichecks li{padding-inline-start:30px;position:relative}.ichecks li:before{content:"✓";position:absolute;inset-inline-start:0;top:-1px;width:22px;height:22px;background:var(--ac);color:#fff;text-align:center;font-weight:700;line-height:22px}
 .chip{background:transparent;color:var(--fg)}
 button.btn{background:transparent;color:var(--fg);font-size:.88rem;cursor:pointer}button.btn:hover{background:var(--ac);border-color:var(--ac);color:#fff}
 .fshare{position:fixed;z-index:40;display:flex;gap:0;background:var(--bg);border:1px solid var(--bd);left:0;top:50%;transform:translateY(-50%);flex-direction:column;border-left:0}

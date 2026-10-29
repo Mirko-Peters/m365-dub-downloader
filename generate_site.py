@@ -473,6 +473,8 @@ def info_html(info):
             def col(c):
                 return f'<div class="icol"><h4>{esc(c.get("titel", ""))}</h4><ul>' + "".join(f"<li>{esc(x)}</li>" for x in c.get("punkte", [])[:6]) + "</ul></div>"
             body = f'<div class="icols">{col(info["links"])}{col(info["rechts"])}</div>'
+        elif typ == "checkliste":
+            body = '<ul class="ichecks">' + "".join(f"<li>{esc(x if isinstance(x, str) else x.get('text', ''))}</li>" for x in info.get("punkte", [])[:7]) + "</ul>"
         elif typ == "fakten":
             body = '<div class="ifacts">' + "".join(f'<div><b>{esc(p.get("wert", ""))}</b><span>{esc(p.get("text", ""))}</span></div>' for p in info.get("punkte", [])[:6]) + "</div>"
         else:
@@ -642,6 +644,15 @@ def build():
         if art_html and art.get("info"):
             ih = info_html(art["info"])
             art_html = re.sub(r"(</p>)", r"\1" + ih.replace("\\", "\\\\"), art_html, count=1) if ih else art_html
+        if art_html and art.get("infos"):
+            parts = re.split(r"(?=<h2>)", art_html)
+            if len(parts) >= 4:
+                slots = [max(2, len(parts) // 2), max(3, len(parts) - 1)]
+                for k, inf2 in zip(sorted(set(slots)), art["infos"][:2]):
+                    h2 = info_html(inf2)
+                    if h2:
+                        parts[k] = h2 + parts[k]
+                art_html = "".join(parts)
         if art_html:
             ld.append({"@context": "https://schema.org", "@type": "Article", "headline": e["title"][:110], "inLanguage": LANGS[l][1],
                        "datePublished": it["date"], "dateModified": it["date"], "mainEntityOfPage": canonical,

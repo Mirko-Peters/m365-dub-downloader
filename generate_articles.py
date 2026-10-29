@@ -88,6 +88,27 @@ def faq_for(lang, html):
         return None
 
 
+def infos_for(lang, html, have=()):
+    """Zwei weitere Infografiken (andere Typen als die erste) als JSON-Liste."""
+    txt = re.sub(r"<[^>]+>", " ", html)[:14000]
+    p = (f"Erstelle aus dem folgenden Artikel genau 2 weitere Infografiken als reines JSON-Array (keine Erklärung, kein Markdown), Texte in {NAMES.get(lang, lang)}, "
+         "nur Inhalte aus dem Artikel, keine Verweise auf Transkript/Podcast/Folge. Die beiden sollen unterschiedliche Typen haben und möglichst nicht den Typ " + ", ".join(have or ("schritte",)) + " wiederholen. "
+         'Typen: {"titel":"...","typ":"vergleich","links":{"titel":"...","punkte":["..."]},"rechts":{"titel":"...","punkte":["..."]}} (je 3-5 Punkte, max. 14 Wörter) | '
+         '{"titel":"...","typ":"fakten","punkte":[{"wert":"nur wenn im Artikel genannt, sonst ein Stichwort","text":"max. 14 Wörter"}]} (3-5 Punkte) | '
+         '{"titel":"...","typ":"checkliste","punkte":["max. 14 Wörter", ...]} (4-7 Punkte) | '
+         '{"titel":"...","typ":"schritte","punkte":[{"kopf":"max. 4 Wörter","text":"max. 18 Wörter"}]} (4-6 Punkte). '
+         "Ausgabe: [ {...}, {...} ]\n\nArtikel:\n" + txt)
+    try:
+        raw = _post(p, 3000)
+        m = re.search(r"\[.*\]", raw, re.S)
+        j = json.loads(m.group(0)) if m else []
+        ok = [x for x in j if isinstance(x, dict) and x.get("typ") in ("vergleich", "fakten", "checkliste", "schritte") and x.get("titel")]
+        return ok[:2] or None
+    except Exception as ex:
+        print("Infografik2-Fehler", str(ex)[:100])
+        return None
+
+
 def ask(lang, title, text):  # -> (html, infografik|None)
     prompt = f"""Schreibe aus dem folgenden Podcast-Transkript einen eigenständigen, gut lesbaren Blogartikel für Suchmaschinen und Leser.
 
@@ -166,6 +187,9 @@ def work(job):
     fq = faq_for(l, html)
     if fq:
         res["faq"] = fq
+    more = infos_for(l, html, [inf.get("typ", "schritte")] if inf else ())
+    if more:
+        res["infos"] = more
     return vid, l, res
 
 
@@ -190,16 +214,19 @@ def main():
     jobs = jobs[:LIMIT]
     changed = set()
     # vorhandene Artikel ohne Infografik nachrüsten
-    fill = [(v, l) for v, d in store.items() for l, a in d.items() if not a.get("info") or not a.get("faq")][:LIMIT]
+    fill = [(v, l) for v, d in store.items() for l, a in d.items() if not a.get("info") or not a.get("faq") or not a.get("infos")][:LIMIT]
     def fillwork(t):
         v, l = t
         a = store[v][l]
-        return v, l, (None if a.get("info") else info_for(l, a["html"])), (None if a.get("faq") else faq_for(l, a["html"]))
+        inf = a.get("info") or info_for(l, a["html"])
+        more = None if a.get("infos") else infos_for(l, a["html"], [(inf or {}).get("typ", "schritte")])
+        return v, l, (None if a.get("info") else inf), (None if a.get("faq") else faq_for(l, a["html"])), more
     with ThreadPoolExecutor(WORKERS) as ex:
-        for v, l, inf, fq in ex.map(fillwork, fill):
+        for v, l, inf, fq, more in ex.map(fillwork, fill):
             if inf: store[v][l]["info"] = inf
             if fq: store[v][l]["faq"] = fq
-            if inf or fq:
+            if more: store[v][l]["infos"] = more
+            if inf or fq or more:
                 changed.add(v)
                 json.dump(store[v], open(ROOT / "data" / "articles" / f"{v}.json", "w", encoding="utf-8"), ensure_ascii=False, indent=1)
     print(len(fill), "Infografiken/FAQ nachgerüstet versucht")
