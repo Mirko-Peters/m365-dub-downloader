@@ -441,11 +441,18 @@ def con_bar(lang):
     return (f'<div class="mbar"><a href="https://m365con.net" rel="noopener"><b>{esc(BAR_T.get(lang, BAR_T["en"]))}</b> · 11–22 Jan 2027 · 120 sessions<i>→ m365con.net</i></a></div>')
 
 
+_ABOUT_L = set(json.loads((ROOT / "data" / "about_i18n.json").read_text("utf-8"))) if (ROOT / "data" / "about_i18n.json").exists() else set()
+
+
+def about_url(lang):
+    return f"{BASE}/{lang}/about/mirko-peters/" if lang in _ABOUT_L else f"{BASE}/about/mirko-peters/"
+
+
 def header(lang, switch):
     ui = UI.get(lang)
     if lang in LANGS:
         home = f"{BASE}/{lang}/"
-        menu = [(ui[3], home), (ui[5], f"{BASE}/about/mirko-peters/"), ("M365Con", "https://m365con.net"), ("m365.fm", "https://www.m365.fm")]
+        menu = [(ui[3], home), (ui[5], about_url(lang)), ("M365Con", "https://m365con.net"), ("m365.fm", "https://www.m365.fm")]
         menu.insert(1, ((TOP_L if lang in TOP_REAL else REC_L).get(lang, "Top"), f"{BASE}/{lang}/top/"))
     else:
         home = f"{BASE}/"
@@ -459,7 +466,7 @@ def header(lang, switch):
 def footer(lang):
     ui = UI.get(lang)
     about = ui[5] if ui else "About Mirko Peters"
-    return (f'<footer><div class="wrap"><a href="{BASE}/about/mirko-peters/">{esc(about)}</a><a href="https://www.m365.fm">m365.fm</a>'
+    return (f'<footer><div class="wrap"><a href="{about_url(lang)}">{esc(about)}</a><a href="https://www.m365.fm">m365.fm</a>'
             f'<a href="https://m365con.net">M365Con</a><a class="soc" href="{LINKEDIN}" rel="me" style="--bc:#0A66C2">{brand_icon("LinkedIn")}<span>LinkedIn</span></a><a class="soc" href="{YT_CHANNEL}" style="--bc:#FF0000">{brand_icon("YouTube")}<span>YouTube</span></a><a href="{MVP}" rel="me">Microsoft MVP</a>'
             f'<a href="{BASE}/impressum/" rel="nofollow">Impressum</a><a href="{BASE}/legal/" rel="nofollow">Legal notice</a>'
             f'<a href="{BASE}/datenschutz/" rel="nofollow">Datenschutz</a><a href="{BASE}/privacy/" rel="nofollow">Privacy</a>'
@@ -472,7 +479,7 @@ def author_box(lang):
     bio = ui[6] if ui else "Mirko Peters is a Microsoft MVP, host of the podcast M365.FM and initiator of the free online conference M365Con."
     photo = (ROOT / "assets" / "mirko-peters.jpg").exists()
     badge = (f'<img class="badge" src="{BASE}/assets/mirko-peters.jpg" alt="Mirko Peters, Microsoft MVP" width="58" height="58" loading="lazy">' if photo else '<div class="badge">MP</div>')
-    return (f'<div class="author">{badge}<div><strong><a href="{BASE}/about/mirko-peters/">Mirko Peters</a> · Microsoft MVP</strong>'
+    return (f'<div class="author">{badge}<div><strong><a href="{about_url(lang)}">Mirko Peters</a> · Microsoft MVP</strong>'
             f'<p>{esc(bio)}</p></div></div>')
 
 
