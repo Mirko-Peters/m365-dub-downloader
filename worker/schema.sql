@@ -213,3 +213,48 @@ CREATE TABLE IF NOT EXISTS user_prefs (
   real_name TEXT,
   name_mode TEXT NOT NULL DEFAULT 'short'   -- short | full | first | handle | custom
 );
+
+-- Events, Veranstalter und Sessions (Speaker)
+CREATE TABLE IF NOT EXISTS events (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  handle TEXT NOT NULL UNIQUE,
+  owner_id INTEGER NOT NULL,
+  org_id INTEGER,                         -- optional: Veranstalter ist eine Firma
+  title TEXT NOT NULL,
+  summary TEXT NOT NULL DEFAULT '',
+  about TEXT NOT NULL DEFAULT '',
+  start TEXT NOT NULL,                    -- YYYY-MM-DD oder YYYY-MM-DDTHH:MM
+  end TEXT NOT NULL DEFAULT '',
+  mode TEXT NOT NULL DEFAULT 'online',    -- online | onsite | hybrid
+  location TEXT NOT NULL DEFAULT '',
+  country TEXT NOT NULL DEFAULT '',
+  url TEXT NOT NULL DEFAULT '',
+  tickets_url TEXT NOT NULL DEFAULT '',
+  free INTEGER NOT NULL DEFAULT 1,
+  lang TEXT NOT NULL DEFAULT '',
+  topics TEXT NOT NULL DEFAULT '[]',      -- JSON: Entity-IDs
+  seeking_sponsor INTEGER NOT NULL DEFAULT 0,
+  public INTEGER NOT NULL DEFAULT 1,
+  created INTEGER NOT NULL,
+  updated INTEGER NOT NULL
+);
+CREATE INDEX IF NOT EXISTS idx_ev_owner ON events(owner_id);
+CREATE TABLE IF NOT EXISTS event_sessions (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  event_id INTEGER NOT NULL,
+  title TEXT NOT NULL,
+  abstract TEXT NOT NULL DEFAULT '',
+  start TEXT NOT NULL DEFAULT '',
+  end TEXT NOT NULL DEFAULT '',
+  room TEXT NOT NULL DEFAULT '',
+  track TEXT NOT NULL DEFAULT '',
+  level TEXT NOT NULL DEFAULT '',
+  lang TEXT NOT NULL DEFAULT '',
+  topics TEXT NOT NULL DEFAULT '[]',
+  speakers TEXT NOT NULL DEFAULT '[]',    -- JSON: [{h: profil-handle, n: name}]
+  recording_url TEXT NOT NULL DEFAULT '',
+  status TEXT NOT NULL DEFAULT 'live',    -- live | pending
+  proposer_id INTEGER NOT NULL,
+  created INTEGER NOT NULL
+);
+CREATE INDEX IF NOT EXISTS idx_es_event ON event_sessions(event_id);

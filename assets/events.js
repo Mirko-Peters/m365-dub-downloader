@@ -1,0 +1,80 @@
+/* Events: anlegen, Sessions (Speaker), Vorschläge freigeben, Sponsoren-Ansicht für Veranstalter */
+(function () {
+  var X = window.M365X, root = document.getElementById("c-events"); if (!X || !root) return;
+  var de = X.lang === "de";
+  var Q = de ? { h: "Events", intro: "Als Veranstalter Events eintragen (Mitglieder, Firmen und Events sind getrennte Bereiche) und Sessions mit Speakern pflegen. Speaker können Sessions vorschlagen, der Veranstalter gibt sie frei.", login: "Zum Verwalten bitte oben anmelden.", mine: "Meine Events", newev: "Neues Event", title: "Titel", handle: "Adresse (a-z, 0-9, -)", summary: "Kurzbeschreibung", about: "Beschreibung (ohne Links)", start: "Beginn (JJJJ-MM-TT oder JJJJ-MM-TTTHH:MM)", end: "Ende (optional)", mode: "Format", online: "Online", onsite: "Vor Ort", hybrid: "Hybrid", loc: "Ort", country: "Land", url: "Webseite (https)", tickets: "Anmelde-/Ticket-Link (https)", free: "Kostenlos", lang: "Sprache (z. B. de)", topics: "Themen (Entitäten-IDs, Komma getrennt, z. B. copilot-studio)", seeking: "Wir suchen Sponsoren (nur für Veranstalter-Ansicht, Firmen sehen das nicht öffentlich)", org: "Veranstalter", me: "Ich selbst", save: "Event speichern", saved: "✓ Gespeichert.", del: "Event löschen", err: "Das hat nicht geklappt – bitte Eingaben prüfen.", sess: "Sessions", sadd: "Session hinzufügen", stitle: "Session-Titel", abstract: "Abstract (ohne Links)", sstart: "Beginn (optional)", room: "Raum", track: "Track", level: "Level", spk: "Speaker (Profil-Adresse oder Name, Komma getrennt)", rec: "Aufzeichnung (https, optional)", pending: "Vorschläge zur Freigabe", ok: "Freigeben", no: "Ablehnen", rm: "Löschen", propose: "Session vorschlagen", proposed: "✓ Vorschlag gesendet – der Veranstalter entscheidet.", sponsors: "Firmen, die Sponsoring anbieten", sp_none: "Noch keine Firma hat Sponsoring aktiviert.", pick: "Event wählen" }
+    : { h: "Events", intro: "Add events as an organizer (members, companies and events are separate areas) and manage sessions with speakers. Speakers can propose sessions; the organizer approves them.", login: "Please sign in above to manage events.", mine: "My events", newev: "New event", title: "Title", handle: "Address (a-z, 0-9, -)", summary: "Short description", about: "Description (no links)", start: "Start (YYYY-MM-DD or YYYY-MM-DDTHH:MM)", end: "End (optional)", mode: "Format", online: "Online", onsite: "On site", hybrid: "Hybrid", loc: "Location", country: "Country", url: "Website (https)", tickets: "Registration / ticket link (https)", free: "Free", lang: "Language (e.g. en)", topics: "Topics (entity ids, comma separated, e.g. copilot-studio)", seeking: "We are looking for sponsors (only shown to organizers, never public)", org: "Organizer", me: "Myself", save: "Save event", saved: "✓ Saved.", del: "Delete event", err: "That did not work – please check your input.", sess: "Sessions", sadd: "Add session", stitle: "Session title", abstract: "Abstract (no links)", sstart: "Start (optional)", room: "Room", track: "Track", level: "Level", spk: "Speakers (profile address or name, comma separated)", rec: "Recording (https, optional)", pending: "Proposals awaiting approval", ok: "Approve", no: "Reject", rm: "Delete", propose: "Propose a session", proposed: "✓ Proposal sent – the organizer decides.", sponsors: "Companies offering sponsorship", sp_none: "No company has enabled sponsoring yet.", pick: "Choose event" };
+  function h(tag, a, kids) { var e = document.createElement(tag); for (var k in (a || {})) { if (k === "class") e.className = a[k]; else if (k === "text") e.textContent = a[k]; else if (k.slice(0, 2) === "on") e.addEventListener(k.slice(2), a[k]); else e.setAttribute(k, a[k]); } (kids || []).forEach(function (c) { if (c != null) e.appendChild(typeof c === "string" ? document.createTextNode(c) : c); }); return e; }
+  function api(path, o) { o = o || {}; o.credentials = "include"; o.headers = Object.assign({ "x-requested-with": "m365" }, o.headers || {}); if (o.body && typeof o.body !== "string") { o.body = JSON.stringify(o.body); o.headers["content-type"] = "application/json"; } return fetch(X.api + path, o).then(function (r) { return r.json().then(function (j) { return { s: r.status, j: j }; }); }); }
+  var uid = 0;
+  function lab(text, el) { var id = "ev" + (++uid); el.id = id; return h("div", {}, [h("label", { for: id, text: text }), el]); }
+  function inp(v, max, type) { var e = h("input", { type: type || "text", maxlength: max || 200 }); e.value = v || ""; return e; }
+  function sel(opts, v) { var e = h("select"); opts.forEach(function (o) { e.appendChild(h("option", { value: o[0], text: o[1] })); }); e.value = v || opts[0][0]; return e; }
+  function csv(s) { return String(s || "").split(",").map(function (x) { return x.trim(); }).filter(Boolean); }
+  function spk(list) { return csv(list).map(function (x) { return /^[a-z0-9][a-z0-9-]{2,29}$/.test(x) ? { h: x } : { n: x }; }); }
+  function spkStr(l) { return (l || []).map(function (x) { return x.h || x.n; }).join(", "); }
+
+  function sessionForm(ev, s, done, propose) {
+    var f = h("div", { class: "wk-form" }), msg = h("p", { class: "wk-msg", role: "status", "aria-live": "polite" });
+    s = s || {};
+    var t = inp(s.title, 140), ab = h("textarea", { rows: 3, maxlength: 1500 }), st = inp(s.start, 16), room = inp(s.room, 60), track = inp(s.track, 60), lv = sel([["", "–"], ["100", "100"], ["200", "200"], ["300", "300"], ["400", "400"]], s.level), sp = inp(spkStr(s.speakers), 300), tp = inp((s.topics || []).join(", "), 300), rec = inp(s.recording_url, 300), lg = inp(s.lang, 10);
+    ab.value = s.abstract || "";
+    [lab(Q.stitle, t), lab(Q.abstract, ab), lab(Q.spk, sp), lab(Q.sstart, st), lab(Q.room, room), lab(Q.track, track), lab(Q.level, lv), lab(Q.lang, lg), lab(Q.topics, tp), lab(Q.rec, rec)].forEach(function (x) { f.appendChild(x); });
+    f.appendChild(h("div", { class: "btns" }, [h("button", { type: "button", class: "btn main", text: propose ? Q.propose : Q.save, onclick: function () {
+      api("/api/event/" + ev.handle + "/session", { method: "POST", body: { id: s.id, title: t.value, abstract: ab.value, speakers: spk(sp.value), start: st.value.trim(), room: room.value, track: track.value, level: lv.value, lang: lg.value.trim(), topics: csv(tp.value), recording_url: rec.value.trim() } }).then(function (r) {
+        if (r.s === 200) { msg.textContent = r.j.status === "pending" ? Q.proposed : Q.saved; if (done) done(); } else msg.textContent = Q.err; }); } }), msg]));
+    return f;
+  }
+  function eventCard(ev, orgs, reload) {
+    var d = h("details", { class: "wk-edit" }, [h("summary", { text: ev.title + " · " + ev.start })]), msg = h("p", { class: "wk-msg", role: "status", "aria-live": "polite" });
+    var f = h("div", { class: "wk-form" });
+    var hd = inp(ev.handle, 40); hd.disabled = !!ev.handle;
+    var t = inp(ev.title, 120), sm = inp(ev.summary, 200), ab = h("textarea", { rows: 5, maxlength: 3000 }), st = inp(ev.start, 16), en = inp(ev.end, 16), md = sel([["online", Q.online], ["onsite", Q.onsite], ["hybrid", Q.hybrid]], ev.mode), lc = inp(ev.location, 120), ct = inp(ev.country, 60), u = inp(ev.url, 300), tk = inp(ev.tickets_url, 300), lg = inp(ev.lang, 10), tp = inp((ev.topics || []).join(", "), 300);
+    ab.value = ev.about || "";
+    var fr = h("input", { type: "checkbox" }); fr.checked = ev.handle ? !!ev.free : true; var sk = h("input", { type: "checkbox" }); sk.checked = !!ev.seeking_sponsor;
+    var os = sel([["", Q.me]].concat((orgs || []).map(function (o) { return [o.handle, o.name]; })), ev.organizer && ev.organizer.kind === "o" ? ev.organizer.handle : "");
+    [lab(Q.title, t), lab(Q.handle, hd), lab(Q.summary, sm), lab(Q.about, ab), lab(Q.start, st), lab(Q.end, en), lab(Q.mode, md), lab(Q.loc, lc), lab(Q.country, ct), lab(Q.url, u), lab(Q.tickets, tk), lab(Q.lang, lg), lab(Q.topics, tp), lab(Q.org, os)].forEach(function (x) { f.appendChild(x); });
+    f.appendChild(h("label", {}, [fr, " " + Q.free])); f.appendChild(h("label", {}, [sk, " " + Q.seeking]));
+    f.appendChild(h("div", { class: "btns" }, [h("button", { type: "button", class: "btn main", text: Q.save, onclick: function () {
+      api("/api/event", { method: "POST", body: { handle: (ev.handle || hd.value).trim().toLowerCase(), title: t.value, summary: sm.value, about: ab.value, start: st.value.trim(), end: en.value.trim(), mode: md.value, location: lc.value, country: ct.value, url: u.value.trim(), tickets_url: tk.value.trim(), free: fr.checked, lang: lg.value.trim(), topics: csv(tp.value), seeking_sponsor: sk.checked, org: os.value || undefined } }).then(function (r) { msg.textContent = r.s === 200 ? Q.saved : Q.err; if (r.s === 200 && !ev.handle) reload(); }); } }),
+      ev.handle ? h("button", { type: "button", class: "btn", text: Q.del, onclick: function () { if (confirm(Q.del + "?")) api("/api/event/" + ev.handle, { method: "DELETE" }).then(reload); } }) : null, msg]));
+    d.appendChild(f);
+    if (ev.handle) {
+      d.appendChild(h("h4", { text: Q.sess }));
+      var pend = (ev.sessions || []).filter(function (s) { return s.status === "pending"; }), live = (ev.sessions || []).filter(function (s) { return s.status !== "pending"; });
+      if (pend.length) { d.appendChild(h("h4", { text: Q.pending })); pend.forEach(function (s) { d.appendChild(h("div", { class: "ev-s" }, [h("b", { text: s.title }), h("span", { class: "cmut", text: " · " + spkStr(s.speakers) }), h("div", { class: "btns" }, [
+        h("button", { type: "button", class: "btn main", text: Q.ok, onclick: function () { api("/api/event/" + ev.handle + "/session/" + s.id + "/approve", { method: "POST", body: { ok: true } }).then(reload); } }),
+        h("button", { type: "button", class: "btn", text: Q.no, onclick: function () { api("/api/event/" + ev.handle + "/session/" + s.id + "/approve", { method: "POST", body: { ok: false } }).then(reload); } })])])); }); }
+      live.forEach(function (s) { var dd = h("details", {}, [h("summary", { text: s.title + (s.speakers.length ? " · " + spkStr(s.speakers) : "") })]); dd.appendChild(sessionForm(ev, s, reload)); dd.appendChild(h("button", { type: "button", class: "btn", text: Q.rm, onclick: function () { api("/api/event/" + ev.handle + "/session/" + s.id, { method: "DELETE" }).then(reload); } })); d.appendChild(dd); });
+      var add = h("details", {}, [h("summary", { text: Q.sadd })]); add.appendChild(sessionForm(ev, null, reload)); d.appendChild(add);
+    }
+    return d;
+  }
+  function proposeBox(want) {
+    var sec = h("div", { class: "ccard" }, [h("h3", { text: Q.propose })]);
+    fetch(X.api + "/api/events/export").then(function (r) { return r.json(); }).then(function (j) {
+      var evs = j.events || [], s = sel([["", Q.pick]].concat(evs.map(function (e) { return [e.handle, e.title]; })), want || ""), slot = h("div");
+      function draw() { slot.textContent = ""; var ev = evs.filter(function (e) { return e.handle === s.value; })[0]; if (ev) slot.appendChild(sessionForm(ev, null, null, true)); }
+      s.addEventListener("change", draw); sec.appendChild(s); sec.appendChild(slot); draw();
+    }).catch(function () {});
+    return sec;
+  }
+  function mount(me) {
+    var sec = h("section", { class: "ccard" }, [h("h2", { text: Q.h }), h("p", { class: "cmut", text: Q.intro })]); root.textContent = ""; root.appendChild(sec);
+    var want = (/[?&]propose=([a-z0-9-]+)/.exec(location.search) || [])[1];
+    if (!me) { sec.appendChild(h("p", { text: Q.login })); return; }
+    function reload() { mount(me); }
+    api("/api/events/mine").then(function (r) {
+      var j = r.j || {}; sec.appendChild(h("h3", { text: Q.mine }));
+      (j.events || []).forEach(function (e) { sec.appendChild(eventCard(e, j.orgs, reload)); });
+      var nw = h("details", { class: "wk-edit" }, [h("summary", { text: "+ " + Q.newev })]); nw.appendChild(eventCard({ title: "", start: "", sessions: [] }, j.orgs, reload).lastChild); sec.appendChild(nw);
+      sec.appendChild(proposeBox(want));
+      if ((j.events || []).some(function (e) { return e.seeking_sponsor; })) api("/api/events/sponsors").then(function (r2) {
+        if (r2.s !== 200) return; var box = h("div", {}, [h("h3", { text: Q.sponsors })]), l = r2.j.sponsors || [];
+        if (!l.length) box.appendChild(h("p", { class: "cmut", text: Q.sp_none }));
+        l.forEach(function (s) { var c = s.criteria || {}; box.appendChild(h("div", { class: "ev-s" }, [h("b", { text: s.name }), h("p", { class: "cmut", text: [c.topics, c.format, c.min_audience ? "≥ " + c.min_audience : "", c.regions, c.budget, c.notes].filter(Boolean).join(" · ") })])); }); sec.appendChild(box);
+      });
+    });
+  }
+  api("/api/me").then(function (r) { mount(r.j && r.j.user); }).catch(function () { mount(null); });
+})();

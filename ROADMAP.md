@@ -40,3 +40,17 @@ Stand: 2026-10-29. Reihenfolge nach Absprache mit Mirko; alles mit Schema.org-Ve
 
 ## Struktur (vom Nutzer, 30.10.): Mitglieder, Firmen und Events getrennt
 - Drei eigene Bereiche mit eigenen Verzeichnissen, Seiten und Menüpunkten: Mitglieder (`/community/members/`, gebaut), Firmen (`/community/companies/`, gebaut), Events (`/community/events/`, geplant) – Events haben eigene Veranstalter-Konten/Rollen und sind nicht Teil des Firmenprofils; Verknüpfung nur per Relation (Firma/Person ↔ organizer/sponsor/speaker).
+
+## LinkedIn Marketing-APIs (Lead Sync, Matched Audiences) – bewertet 30.10.
+- Lead Sync API: holt Leads aus LinkedIn-Lead-Gen-Formularen von Anzeigen (braucht Werbekonto + Kampagnen). Nur sinnvoll, wenn wir z. B. für M365Con-Anmeldungen bezahlte Lead-Ads schalten → dann Sync in Newsletter/Teilnehmerliste.
+- Matched Audiences: Retargeting/Kontaktlisten-Upload für Anzeigen; braucht Werbebudget, Insight-Tag mit Einwilligung bzw. Rechtsgrundlage für E-Mail-Uploads (DSGVO). Für die Community-Plattform selbst nicht nötig.
+- Entscheidung: Backlog, nur bei geplanter LinkedIn-Werbung.
+
+## Events – Stand 30.10.
+- Gebaut: Tabellen `events`/`event_sessions`, Worker-API (`src/events.js`), Verwaltung in der Community-Seite (`assets/events.js`: Event anlegen/ändern, Sessions mit Speakern, Vorschläge von Mitgliedern mit Freigabe, Sponsoren-Ansicht für Veranstalter), öffentliche Seiten `/community/events/` + je Event (Schema.org Event, subEvent, performer → Profil-@id, about → Entitäten, organizer), Sessions auf Profilseiten, Events auf Firmen-/Profilseiten, Hub-Karte.
+- Noch offen: Sponsoren-Zusage/Anzeige auf Eventseite (erst nach Bestätigung der Firma), iCal-Export, LinkedIn-Event-Posting (Events Management API), Speaker-Einladung per Link.
+
+## Ideen (30.10.): Blog, Podcast-Upload, Stick-Man-Video
+- Eigener Blog je Mitglied: Beiträge schreiben (Wiki-Markup, Quellen), eigene Seite `/community/u/<handle>/blog/`, Schema.org BlogPosting/Blog, Upvotes, Moderation für Neue, Feed (zählt als Creator-Feed). Punkte/Badge „Autor".
+- Podcast-Upload ins m365con.net-Netzwerk: Mitglieder reichen Podcast-Folgen/Shows ein (RSS-Feed anmelden oder Audio hochladen), Prüfung durch Redaktion, Anzeige im Netzwerk; Schema.org PodcastSeries/PodcastEpisode. Technische Frage: Speicher (R2) oder nur RSS-Verknüpfung.
+- Eigenes Stick-Man-Video aus Blog/Podcast: Mitglied bekommt aus seinem Beitrag ein animiertes Erklärvideo (Pipeline wie bei den Dubs). Offen: Kosten/Kontingent pro Mitglied, Qualitätsprüfung, Warteschlange – eher als Belohnung (Punkte) oder Premium.
