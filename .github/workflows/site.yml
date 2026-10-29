@@ -1,0 +1,49 @@
+name: Website bauen und veröffentlichen
+on:
+  push:
+    branches: [main]
+    paths: ["episodes/**", "data/published.json", "generate_site.py", "shows_seo.json", ".github/workflows/site.yml"]
+  workflow_dispatch:
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+concurrency:
+  group: pages
+  cancel-in-progress: true
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.12" }
+      - run: python generate_site.py
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with: { path: docs }
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
+      - name: Suchmaschinen informieren (IndexNow)
+        continue-on-error: true
+        env:
+          PAGE_URL: ${{ steps.deployment.outputs.page_url }}
+        run: |
+          python3 - <<'PY'
+          import json, os, re, urllib.request
+          base = os.environ["PAGE_URL"].rstrip("/")
+          key = "c1d5e8a7b3f94a6e8d2b7f0a9c4e6b13"
+          xml = urllib.request.urlopen(base + "/sitemap.xml", timeout=60).read().decode()
+          urls = re.findall(r"<loc>(.*?)</loc>", xml)[:9000]
+          host = base.split("//")[1].split("/")[0]
+          body = json.dumps({"host": host, "key": key, "keyLocation": f"{base}/{key}.txt", "urlList": urls}).encode()
+          req = urllib.request.Request("https://api.indexnow.org/indexnow", body, {"Content-Type": "application/json"})
+          print(urllib.request.urlopen(req, timeout=60).status, len(urls), "URLs gemeldet")
+          PY
