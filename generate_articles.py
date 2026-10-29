@@ -40,8 +40,8 @@ Regeln:
 - Keine Titelwiederholung als H1, keine Links, keine Werbung, kein Hinweis auf KI.
 - Erlaubtes HTML: h2, h3, p, ul, ol, li, strong, em.
 - Ausgabeformat: zuerst das HTML des Artikels. Danach eine Zeile mit genau ---INFOGRAFIK--- und darunter ein JSON-Objekt für eine Infografik, die den Kern der Folge zusammenfasst (Texte in der Zielsprache, kurz, nur Inhalte aus dem Transkript):
-  {"titel": "...", "typ": "schritte", "punkte": [{"kopf": "max. 4 Wörter", "text": "max. 18 Wörter"}, ...4 bis 6 Punkte]}
-  Mögliche "typ": "schritte" (Ablauf/Vorgehen), "vergleich" (dann "links": {"titel","punkte":[Strings]}, "rechts": {"titel","punkte":[Strings]}), "fakten" (dann "punkte": [{"wert": "nur wenn im Transkript genannt", "text": "..."}]).
+  {{"titel": "...", "typ": "schritte", "punkte": [{{"kopf": "max. 4 Wörter", "text": "max. 18 Wörter"}}, ...4 bis 6 Punkte]}}
+  Mögliche "typ": "schritte" (Ablauf/Vorgehen), "vergleich" (dann "links": {{"titel","punkte":[Strings]}}, "rechts": {{"titel","punkte":[Strings]}}), "fakten" (dann "punkte": [{{"wert": "nur wenn im Transkript genannt", "text": "..."}}]).
 - Sonst nichts ausgeben.
 
 Titel der Folge: {title}
