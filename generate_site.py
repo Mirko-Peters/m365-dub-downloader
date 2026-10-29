@@ -4,10 +4,11 @@
 Nur Python-Standardbibliothek. Lauf:  python generate_site.py
 Basis-URL (z. B. eigene Domain):  SITE_BASE=https://international.m365.fm python generate_site.py
 """
-import html, json, os, re, shutil, sys, unicodedata
+import glob, html, json, os, re, shutil, sys, unicodedata
 from datetime import date
 from pathlib import Path
 import hashlib
+import site_cover
 from site_content import FAQ
 from site_taxonomy import (CATS, ORDER, TOPICS, TAGW, cat_name, classify, tags_of, tag_slug, tag_url, related, autolink)
 
@@ -283,7 +284,7 @@ def page(lang, title, desc, canonical, body, alternates=None, jsonld=None, xdefa
         ogimg = f"{BASE}/assets/og-default.png"
     else:
         rel = canonical.replace(BASE, "").strip("/") or "index"
-        OGLIST.append({"path": f"og/{rel}.png", "title": strip_tags(title), "lang": lang, "seed": canonical})
+        OGLIST.append({"path": f"og/{rel}.png", "title": strip_tags(title), "lang": lang, "seed": canonical, "cover": OG_COVER.get(canonical)})
         ogimg = f"{BASE}/og/{rel}.png"
         body = body.replace("<footer>", share_html(lang, canonical, title) + "<footer>", 1)
     return f"""<!doctype html>
@@ -322,7 +323,25 @@ def person_ld():
     return d
 
 
-def art_svg(seed, big, small="M365.FM · AI"):
+def yt_thumb(vid, alt=""):
+    """YouTube-Vorschaubild (16:9) fuer Uebersichten/Listen."""
+    return (f'<img src="https://i.ytimg.com/vi/{vid}/hqdefault.jpg" srcset="https://i.ytimg.com/vi/{vid}/mqdefault.jpg 320w, https://i.ytimg.com/vi/{vid}/hqdefault.jpg 480w, '
+            f'https://i.ytimg.com/vi/{vid}/maxresdefault.jpg 1280w" sizes="(max-width:700px) 92vw, 380px" alt="{esc(alt)}" width="480" height="360" loading="lazy" '
+            f'style="width:100%;height:auto;aspect-ratio:16/9;object-fit:cover;display:block">')
+
+
+COVER_CTX = {}   # (vid, lang) -> dict(title, cat_label, cats, tags, spec)
+OG_COVER = {}    # canonical -> svg (fuer Teilen-Bilder)
+
+
+def art_svg(seed, big, small="M365.FM · AI", lang=None):
+    c = COVER_CTX.get((seed, lang)) if lang else None
+    if c:
+        return site_cover.cover_svg(seed, lang, big, c["title"], c["cat_label"], c["cats"], c["tags"], c["spec"], uid=f"{seed}{lang}".replace("-", "").replace("_", ""))
+    return _art_svg_old(seed, big, small)
+
+
+def _art_svg_old(seed, big, small="M365.FM · AI"):
     h = int(hashlib.md5(seed.encode()).hexdigest(), 16)
     h1 = h % 360; h2 = (h1 + 35 + (h >> 9) % 70) % 360
     bars = ""
@@ -503,6 +522,16 @@ def build():
     for (vid, l), it in items.items():
         for c in cat_of[vid]:
             catidx[l].setdefault(c, []).append(it)
+    covers = {}
+    for p in glob.glob(str(ROOT / "data" / "covers" / "*.json")):
+        try:
+            covers[Path(p).stem] = json.load(open(p, encoding="utf-8"))
+        except Exception:
+            pass
+    for (vid, l), it in items.items():
+        cs = [c for c in ORDER if c in cat_of[vid]]
+        COVER_CTX[(vid, l)] = {"title": it["e"]["title"], "cats": cs, "cat_label": cat_name(cs[0], l) if cs else "", "tags": tagraw[l][vid],
+                               "spec": (covers.get(vid) or {}).get(l)}
     cat_url = lambda l, c: f"{BASE}/{l}/c/{c}/"
     autolink_log = []
 
@@ -600,7 +629,7 @@ def build():
 <div class="kicker">M365.FM · {esc(LANGS[l][0])}</div>
 <h1>{esc(e["title"])}</h1>
 {chips_html(l, it)}<p class="lede">{intro}</p>
-<figure class="cover" style="margin-inline:0">{art_svg(vid, LANGS[l][0], "M365.FM · " + ui[0])}</figure>
+<figure class="cover" style="margin-inline:0">{art_svg(vid, LANGS[l][0], "M365.FM · " + ui[0], l)}</figure>
 <div class="panel"><iframe src="https://widget.spreaker.com/player?episode_id={it["eid"]}&amp;theme=light&amp;playlist=false" height="131" loading="lazy" title="{esc(e["title"])}"></iframe>
 <div class="btns">{btns}</div>{"<p class=showrow>M365.FM ▸ " + showrow + "</p>" if showrow else ""}</div>
 <div class="yt"><iframe src="https://www.youtube-nocookie.com/embed/{vid}?rel=0" title="{esc(e["title"])}" loading="lazy" allow="accelerometer; encrypted-media; picture-in-picture; fullscreen" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe></div>
@@ -613,6 +642,7 @@ def build():
 {('<h2>' + esc(ui[4]) + '</h2><div class="list">' + rel + '</div>') if rel else ''}
 <p style="margin-top:1.6em"><a class="btn" href="{BASE}/{l}/">{esc(ui[3])} →</a></p></main>
 {footer(l)}{PLAT_JS}"""
+        OG_COVER[canonical] = art_svg(vid, LANGS[l][0], lang=l)
         write(f'{l}/{it["slug"]}/index.html',
               page(l, e["title"], short(intro), canonical, body, alts, ld, extra_head=f'<meta property="article:section" content="{esc(cat_name(pc, l))}">' + "".join(f'<meta property="article:tag" content="{esc(t)}">' for t in tagraw[l][vid])))
         sitemap.append((canonical, it["date"], alts))
@@ -625,7 +655,7 @@ def build():
         d = short(s.get("description", ""), 300)
         newest = by_lang[l]
         thumbs = "".join(
-            f'<a class="thumb" href="{url_of(i)}"><figure class="cover" style="margin-inline:0">{art_svg(i["vid"], LANGS[l][0])}</figure><h3>{esc(i["e"]["title"])}</h3><p>{esc(short(parse_desc(i["e"]["desc"])[0], 110))}</p></a>'
+            f'<a class="thumb" href="{url_of(i)}"><figure class="cover" style="margin-inline:0">{yt_thumb(i["vid"], i["e"]["title"])}</figure><h3>{esc(i["e"]["title"])}</h3><p>{esc(short(parse_desc(i["e"]["desc"])[0], 110))}</p></a>'
             for i in newest)
         ld = [{"@context": "https://schema.org", "@type": "PodcastSeries", "@id": f"{BASE}/{l}/#series", "name": title, "url": f"{BASE}/{l}/",
                "description": d, "inLanguage": LANGS[l][1], "webFeed": f"https://www.spreaker.com/show/{LANGS[l][3]}/episodes/feed", "image": f"{BASE}/assets/og-default.png",
@@ -661,7 +691,7 @@ def build():
     for n, v in enumerate(vids_new):
         avail = [x for x in active if x in by_vid[v]]
         latest.append(by_vid[v][avail[n % len(avail)]])
-    lt = "".join(f'<a class="thumb" href="{url_of(i)}" hreflang="{LANGS[i["lang"]][1]}"><figure class="cover" style="margin-inline:0">{art_svg(i["vid"], LANGS[i["lang"]][0])}</figure><h3>{esc(i["e"]["title"])}</h3><p>{esc(LANGS[i["lang"]][0])}</p></a>' for i in latest)
+    lt = "".join(f'<a class="thumb" href="{url_of(i)}" hreflang="{LANGS[i["lang"]][1]}"><figure class="cover" style="margin-inline:0">{yt_thumb(i["vid"], i["e"]["title"])}</figure><h3>{esc(i["e"]["title"])}</h3><p>{esc(LANGS[i["lang"]][0])}</p></a>' for i in latest)
     nvid_all = len(by_vid)
     rows = [(l, LANGS[l][0], EN_NAMES.get(l, ""), f"{BASE}/{l}/") for l in active]
     tiles = "".join(lang_tile(l, LANGS[l][0], EN_NAMES.get(l, ""), f"{BASE}/{l}/", LANGS[l][1], f"{len(by_lang[l])} episodes") for l in active)

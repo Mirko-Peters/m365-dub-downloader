@@ -2,7 +2,7 @@ name: Website bauen und veröffentlichen
 on:
   push:
     branches: [main]
-    paths: ["episodes/**", "data/**", "domain.txt", "sync_platforms.py", "generate_og.py", "site_taxonomy.py", "check_links.py", "assets/**", "generate_articles.py", "scrape_spotify.py", "generate_site.py", "shows_seo.json", ".github/workflows/site.yml"]
+    paths: ["episodes/**", "data/**", "domain.txt", "sync_platforms.py", "generate_og.py", "site_taxonomy.py", "check_links.py", "assets/**", "generate_articles.py", "scrape_spotify.py", "generate_site.py", "generate_covers.py", "site_cover.py", "site_design.py", "shows_seo.json", ".github/workflows/site.yml"]
   schedule:
     - cron: "17 5 * * *"
   workflow_dispatch:
@@ -30,6 +30,17 @@ jobs:
           if [ -n "$(git status --porcelain data/articles)" ]; then
             git config user.name "m365-site-bot"; git config user.email "actions@users.noreply.github.com"
             git add data/articles && git commit -m "Artikel aus Transkripten ergänzt"
+            git pull --rebase -q && git push -q
+          fi
+      - name: Cover-Texte entwerfen (Claude API)
+        continue-on-error: true
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: |
+          python generate_covers.py
+          if [ -n "$(git status --porcelain data/covers)" ]; then
+            git config user.name "m365-site-bot"; git config user.email "actions@users.noreply.github.com"
+            git add data/covers && git commit -m "Cover-Texte ergänzt"
             git pull --rebase -q && git push -q
           fi
       - name: Spotify-Folgenlinks einsammeln (ohne API)

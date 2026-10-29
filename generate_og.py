@@ -12,29 +12,44 @@ NAMES = {"de": "Deutsch", "es": "Español", "fr": "Français", "it": "Italiano",
 RTL = {"ar", "he"}
 
 
+def _fonts():
+    import base64
+    out = ""
+    for w in (500, 600, 700):
+        for sub, rg in (("latin", "U+0000-00FF,U+2000-206F,U+20AC"), ("latin-ext", "U+0100-02FF,U+1E00-1EFF")):
+            f = DOCS / "assets" / "fonts" / f"barlow-condensed-{sub}-{w}-normal.woff2"
+            if f.exists():
+                out += (f"@font-face{{font-family:'Barlow Condensed';font-weight:{w};src:url(data:font/woff2;base64,{base64.b64encode(f.read_bytes()).decode()}) format('woff2');unicode-range:{rg}}}")
+    return out
+
+
+FONTS = ""
+
+
 def card(item):
-    h = int(hashlib.md5(item["seed"].encode()).hexdigest(), 16)
-    h1 = h % 360
-    h2 = (h1 + 35 + (h >> 9) % 70) % 360
-    bars, x, hh = "", 60, h
-    for _ in range(44):
-        hh = (hh * 1103515245 + 12345) & 0x7fffffff
-        v = 40 + (hh >> 8) % 150
-        bars += f'<i style="left:{x}px;height:{v}px;bottom:150px;background:hsl({h1 + 18},85%,72%);opacity:{0.25 + v / 700:.2f}"></i>'
-        x += 25
-    t = item["title"].replace(" | M365.FM", "")
-    size = 64 if len(t) < 60 else 54 if len(t) < 90 else 46
+    global FONTS
+    if not FONTS:
+        FONTS = _fonts()
+    """1200x630: Folgen-Cover im Seitendesign oben, darunter Absenderzeile. Seiten ohne Cover: Titel-Tafel im gleichen Stil."""
     d = "rtl" if item["lang"] in RTL else "ltr"
-    return f"""<!doctype html><meta charset=utf-8><style>
+    t = html.escape(item["title"].replace(" | M365.FM", ""))
+    if item.get("cover"):
+        mid = f'<div style="position:absolute;left:0;top:0;width:1200px;height:420px">{item["cover"]}</div>'
+        foot_top = 420
+        size_note = ""
+    else:
+        size = 78 if len(t) < 40 else 62 if len(t) < 70 else 50
+        mid = (f'<div style="position:absolute;left:64px;right:64px;top:70px;color:#82a7d4;font:600 24px/1 \'Barlow Condensed\',sans-serif;letter-spacing:5px">M365.FM · {html.escape(NAMES.get(item["lang"], "").upper())}</div>'
+               f'<h1 style="position:absolute;left:64px;right:64px;top:130px;margin:0;font:700 {size}px/1.04 \'Barlow Condensed\',\'Noto Sans\',sans-serif;text-transform:uppercase;color:#eef0f3">{t}</h1>')
+        foot_top = 420
+    return f"""<!doctype html><meta charset=utf-8><style>{FONTS}
 html,body{{margin:0;width:1200px;height:630px;overflow:hidden}}
-body{{position:relative;background:linear-gradient(135deg,hsl({h1},55%,24%),hsl({h2},60%,10%));color:#f6f1ea;font-family:'Noto Serif','Noto Sans','DejaVu Serif',serif}}
-i{{position:absolute;width:14px;border-radius:7px}}
-.k{{position:absolute;top:52px;left:60px;right:60px;font:600 24px/1 'Noto Sans','DejaVu Sans',sans-serif;letter-spacing:5px;opacity:.85}}
-.dot{{position:absolute;top:44px;right:60px;width:30px;height:30px;border-radius:50%;background:#b4233c}}
-h1{{position:absolute;left:60px;right:60px;top:120px;margin:0;font-size:{size}px;line-height:1.18;font-weight:700;text-shadow:0 2px 18px #0008}}
-.f{{position:absolute;left:60px;right:60px;bottom:44px;font:500 24px/1 'Noto Sans','DejaVu Sans',sans-serif;display:flex;justify-content:space-between;opacity:.9}}
-</style><body dir="{d}">{bars}<div class=dot></div><div class=k>M365.FM · {html.escape(NAMES.get(item['lang'], '').upper())}</div>
-<h1>{html.escape(t)}</h1><div class=f><span>Mirko Peters · Microsoft MVP</span><span>dub.m365.fm</span></div></body>"""
+body{{position:relative;background:#1d2126;color:#eef0f3;font-family:'Barlow Condensed','Noto Sans','DejaVu Sans',sans-serif}}
+body:before{{content:"";position:absolute;inset:0;background-image:linear-gradient(#e9ecef0d 1px,transparent 1px),linear-gradient(90deg,#e9ecef0d 1px,transparent 1px);background-size:40px 40px}}
+.f{{position:absolute;left:0;right:0;top:{foot_top}px;bottom:0;border-top:1px solid #e9ecef33;background:#16191c;display:flex;align-items:center;justify-content:space-between;padding:0 64px}}
+.b{{font:700 46px/1 'Barlow Condensed',sans-serif;letter-spacing:2px;text-transform:uppercase}}.b i{{color:#82a7d4;font-style:normal}}
+.s{{font:600 26px/1.3 'Barlow Condensed',sans-serif;letter-spacing:3px;text-transform:uppercase;color:#98a0ab;text-align:right}}
+</style><body dir="{d}">{mid}<div class=f><div class=b>M365<i>.</i>FM <span style="color:#82a7d4;font-size:30px;letter-spacing:4px">DUB</span></div><div class=s>Mirko Peters · Microsoft MVP<br>dub.m365.fm</div></div></body>"""
 
 
 def main():
