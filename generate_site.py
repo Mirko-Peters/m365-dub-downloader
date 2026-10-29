@@ -194,7 +194,12 @@ TOP_L = {"de": "Top-Folgen der Woche", "es": "Episodios más escuchados de la se
          "ru": "Самые популярные выпуски недели", "uk": "Найпопулярніші випуски тижня", "ar": "أكثر الحلقات استماعًا هذا الأسبوع", "he": "הפרקים המובילים השבוע",
          "hi": "इस सप्ताह के टॉप एपिसोड", "ja": "今週の人気エピソード", "ko": "이번 주 인기 에피소드", "ml": "ഈ ആഴ്ചയിലെ ടോപ്പ് എപ്പിസോഡുകൾ", "pa": "ਇਸ ਹਫ਼ਤੇ ਦੇ ਟੌਪ ਐਪੀਸੋਡ",
          "ta": "இந்த வாரத்தின் சிறந்த எபிசோடுகள்", "te": "ఈ వారం టాప్ ఎపిసోడ్లు", "en": "Top episodes this week"}
+REC_L = {"de": "Empfohlene Folgen", "es": "Episodios recomendados", "fr": "Épisodes recommandés", "it": "Episodi consigliati", "pt": "Episódios recomendados",
+         "nl": "Aanbevolen afleveringen", "pl": "Polecane odcinki", "id": "Episode pilihan", "ru": "Рекомендуемые выпуски", "uk": "Рекомендовані випуски",
+         "ar": "حلقات مختارة", "he": "פרקים מומלצים", "hi": "चुनिंदा एपिसोड", "ja": "おすすめエピソード", "ko": "추천 에피소드", "ml": "തിരഞ്ഞെടുത്ത എപ്പിസോഡുകൾ",
+         "pa": "ਚੁਣੇ ਹੋਏ ਐਪੀਸੋਡ", "ta": "பரிந்துரைக்கப்பட்ட எபிசோடுகள்", "te": "సిఫార్సు చేసిన ఎపిసోడ్లు", "en": "Recommended episodes"}
 OGLIST = []
+TOP_REAL = set()   # Sprachen mit echten Statistikdaten (wird im Build gesetzt)
 SHARE_L = {"de": "Teilen", "es": "Compartir", "fr": "Partager", "it": "Condividi", "pt": "Compartilhar", "nl": "Delen", "pl": "Udostępnij",
            "id": "Bagikan", "ru": "Поделиться", "uk": "Поділитися", "ar": "مشاركة", "he": "שיתוף", "hi": "शेयर करें", "ja": "シェア",
            "ko": "공유", "ml": "പങ്കിടുക", "pa": "ਸਾਂਝਾ ਕਰੋ", "ta": "பகிர்", "te": "షేర్ చేయండి", "en": "Share"}
@@ -421,8 +426,7 @@ def header(lang, switch):
     if lang in LANGS:
         home = f"{BASE}/{lang}/"
         menu = [(ui[3], home), (ui[5], f"{BASE}/about/mirko-peters/"), ("M365Con", "https://m365con.net"), ("m365.fm", "https://www.m365.fm")]
-        if (ROOT / "data" / "top.json").exists():
-            menu.insert(1, (TOP_L.get(lang, "Top"), f"{BASE}/{lang}/top/"))
+        menu.insert(1, ((TOP_L if lang in TOP_REAL else REC_L).get(lang, "Top"), f"{BASE}/{lang}/top/"))
     else:
         home = f"{BASE}/"
         menu = [("Languages", f"{BASE}/#languages"), ("About Mirko Peters", f"{BASE}/about/mirko-peters/"), ("M365Con", "https://m365con.net"), ("m365.fm", "https://www.m365.fm")]
@@ -584,19 +588,38 @@ def build():
                 out += f'<span class="chip">{esc(t)}</span>'
         return f'<div class="chips">{out}</div>' if out else ""
 
-    def top_for(l, n=10):
+    def top_real(l, n=10):
         rows = (topdata.get("langs") or {}).get(l) or []
         by_eid = {i["eid"]: i for i in by_lang.get(l, [])}
-        out = [by_eid[r["episode_id"]] for r in rows if r.get("score", 0) > 0 and r["episode_id"] in by_eid]
-        return out[:n]
+        return [by_eid[r["episode_id"]] for r in rows if r.get("score", 0) > 0 and r["episode_id"] in by_eid][:n]
+
+    def top_for(l, n=10):
+        """Echte Top-Liste (Spreaker-Statistik); solange keine Daten da sind: vorlaeufige Auswahl = meistverlinkte (Money-Keyword-Ziele), dann neueste."""
+        t = top_real(l, n)
+        if t:
+            return t
+        tg = {}
+        for v in SM.registry_for(MONEY, l).values():
+            tg[v] = tg.get(v, 0) + 1
+        pool = [i for i in by_lang.get(l, []) if i["vid"] in by_vid]
+        pool.sort(key=lambda i: (tg.get(i["vid"], 0), i["date"]), reverse=True)
+        return pool[:n]
+
+    TOP_REAL.update(x for x in by_lang if top_real(x, 1))
+
+    def is_prov(l):
+        return not top_real(l, 1)
+
+    def top_label(l):
+        return (REC_L if is_prov(l) else TOP_L).get(l, (REC_L if is_prov(l) else TOP_L)["en"])
 
     def top_block(l):
         t = top_for(l, 5)
         if not t:
             return ""
-        return (f'<h2>★ {esc(TOP_L.get(l, TOP_L["en"]))}</h2><div class="list">' + "".join(
+        return (f'<h2>★ {esc(top_label(l))}</h2><div class="list">' + "".join(
             f'<a class="row" href="{url_of(x)}" title="{esc(x["e"]["title"])}"><h3>{n + 1}. {esc(anchor_title(x["e"]["title"]))}</h3></a>' for n, x in enumerate(t)) +
-            f'</div><p><a class="btn" href="{BASE}/{l}/top/">{esc(TOP_L.get(l, TOP_L["en"]))} →</a></p>')
+            f'</div><p><a class="btn" href="{BASE}/{l}/top/">{esc(top_label(l))} →</a></p>')
 
     def topics_nav(l):
         cs = "".join(f'<a class="chip cat" href="{cat_url(l, c)}">{esc(cat_name(c, l))} · {len(catidx[l][c])}</a>' for c in ORDER if c in catidx[l])
@@ -849,7 +872,8 @@ def build():
         t = top_for(l, 10)
         if not t:
             continue
-        label = TOP_L.get(l, TOP_L["en"])
+        label = top_label(l)
+        prov = is_prov(l)
         u = f"{BASE}/{l}/top/"
         ui = UI[l]
         wk = topdata.get("week_end", TODAY)
@@ -866,9 +890,11 @@ def build():
 <div class="kicker">★ {esc(LANGS[l][0])} · {esc(wk)}</div><h1>{esc(label)}</h1>
 <h2>{esc(ui[3])}</h2><div class="list">{rows}</div>
 <p style="margin-top:1.6em"><a class="btn" href="{BASE}/{l}/">{esc(ui[3])} →</a></p></main>{footer(l)}"""
-        write(f"{l}/top/index.html", page(l, f"{label} – M365.FM {LANGS[l][0]}", short(" · ".join(strip_tags(x["e"]["title"]).split(":")[0] for x in t[:3]), 155), u, body, alts, ld, og_type="website"))
-        sitemap.append((u, wk, alts))
+        write(f"{l}/top/index.html", page(l, f"{label} – M365.FM {LANGS[l][0]}", short(" · ".join(strip_tags(x["e"]["title"]).split(":")[0] for x in t[:3]), 155), u, body, alts, ld, og_type="website", noindex=prov))
+        if not prov:
+            sitemap.append((u, wk, alts))
         topfeed[l] = [{"rank": n + 1, "title": strip_tags(x["e"]["title"]), "url": url_of(x), "episode": x["eid"]} for n, x in enumerate(t)]
+    topfeed = {l: v for l, v in topfeed.items() if not is_prov(l)}
     if topfeed:
         write("top.json", json.dumps({"period": "last 7 days", "from": topdata.get("from"), "to": topdata.get("week_end"), "languages": topfeed}, ensure_ascii=False, indent=1))
         print(len(topfeed), "Sprachen mit Top-Woche")
