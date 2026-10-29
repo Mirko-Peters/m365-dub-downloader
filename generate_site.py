@@ -303,6 +303,24 @@ SKIP_T = {"en": "Skip to content", "de": "Zum Inhalt springen", "es": "Saltar al
           "ta": "உள்ளடக்கத்திற்குச் செல்", "te": "కంటెంట్‌కు వెళ్లండి"}
 
 
+_A11Y = {}
+for _f in ("a11y_en.json", "a11y_i18n.json"):
+    if (ROOT / "data" / _f).exists():
+        for _k, _v in json.loads((ROOT / "data" / _f).read_text("utf-8")).items():
+            _A11Y.setdefault(_k, {}).update(_v)
+
+A11Y_EARLY = ("<script>try{var a=JSON.parse(localStorage.getItem('m365-a11y')||'{}'),c=document.documentElement.classList;"
+              "if(a.s)c.add('a11y-s'+a.s);a.hc&&c.add('a11y-hc');a.font&&c.add('a11y-font');a.sp&&c.add('a11y-sp');a.ul&&c.add('a11y-ul');a.nomo&&c.add('a11y-nomo');"
+              "a.dk&&document.documentElement.setAttribute('data-theme','dark')}catch(e){}</script>")
+
+
+def a11y_tags(lang):
+    t = dict(_A11Y.get("en", {}))
+    t.update(_A11Y.get(lang, {}))
+    return (f'<link rel="stylesheet" href="{BASE}/assets/a11y.css">'
+            f'<script>window.M365A={{t:{json.dumps(t, ensure_ascii=False).replace("</", "<\\/")}}}</script><script defer src="{BASE}/assets/a11y.js"></script>')
+
+
 def single_main(html_):
     """Pro Seite genau ein <main>; weitere werden zu benannten <section>-Landmarken (Name = erste Ueberschrift)."""
     parts = re.split(r"(<main\b[^>]*>|</main>)", html_)
@@ -359,11 +377,12 @@ def page(lang, title, desc, canonical, body, alternates=None, jsonld=None, xdefa
 <meta property="og:url" content="{canonical}"><meta property="og:locale" content="{loc}"><meta property="og:site_name" content="M365.FM">
 <meta property="og:image" content="{ogimg}"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta property="og:image:alt" content="{esc(title)}">
 <meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="{esc(title)}"><meta name="twitter:description" content="{esc(desc)}"><meta name="twitter:image" content="{ogimg}">
-{extra_head}<style>{CSS}</style>
+{extra_head}<style>{CSS}</style>{A11Y_EARLY}
 {ld}</head>
 <body>
 {ext_links(body)}
 {consent_html(lang)}
+{a11y_tags(lang)}
 </body></html>
 """
 
