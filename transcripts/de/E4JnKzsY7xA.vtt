@@ -1,0 +1,2083 @@
+WEBVTT
+
+00:00:00.400 --> 00:00:06.840
+Bereit für 10 Tage voller Microsoft 365, Co-Pilot, KI, Azure und den Menschen, die die Zukunft der Arbeit gestalten?
+
+00:00:07.620 --> 00:00:11.820
+Diesen Januar ist die M365-Con zurück und wir legen noch eins drauf.
+
+00:00:12.880 --> 00:00:17.640
+Seien Sie bei Live-Sessions, Praxis-Demos und Expertenwissen von MVPs und Branchenprofis weltweit dabei.
+
+00:00:18.460 --> 00:00:21.080
+Keine generischen Folien. Kein endloses Passwort-Bingo.
+
+00:00:21.980 --> 00:00:28.480
+Wir gehen echte Herausforderungen an. Co-Pilot Studio, KI-Agenten, Fabric, Sicherheit, Governance und Automatisierung.
+
+00:00:28.480 --> 00:00:34.340
+Egal ob IT-Profi, Entwickler oder Führungskraft, es gibt Sessions, die genau auf Sie zugeschnitten sind.
+
+00:00:35.540 --> 00:00:39.940
+An 10 vollen Tagen können Sie Technologien erkunden und sich mit einer globalen Community vernetzen.
+
+00:00:40.960 --> 00:00:44.240
+Schauen Sie live zu und nehmen Sie praktische Erkenntnisse mit zurück in Ihr Unternehmen.
+
+00:00:45.240 --> 00:00:50.700
+Januar 2027, 10 Tage, eine Microsoft-Community. Die Registrierung ist ab sofort geöffnet.
+
+00:00:51.860 --> 00:00:55.360
+Besuchen Sie m3m5.net und sichern Sie sich heute Ihren Platz.
+
+00:00:55.360 --> 00:00:58.640
+Das ist m3m5.net.
+
+00:01:00.080 --> 00:01:02.960
+Melden Sie sich jetzt unter m3m5.net an.
+
+00:01:03.660 --> 00:01:04.720
+Wir sehen uns live im Januar.
+
+00:01:05.420 --> 00:01:09.160
+Willkommen zu einer weiteren Episode der Microsoft Knowledge Nuggets hier auf M365FM.
+
+00:01:09.720 --> 00:01:10.780
+Ich bin der Gastgeber Mirko Peters.
+
+00:01:11.040 --> 00:01:15.500
+Das heutige Thema ist eines, von dem fast jeder schon gehört hat, das aber die meisten nie wirklich nutzen möchten.
+
+00:01:15.500 --> 00:01:25.460
+Stellen Sie sich vor, eine sensible E-Mail landet im falschen Posteingang, ein Mitarbeiter reicht eine Beschwerde ein, eine Aufsichtsbehörde fordert Unterlagen an oder jemand vermutet, dass Unternehmensdaten abgeflossen sind.
+
+00:01:26.140 --> 00:01:27.240
+Denn das passiert gerade Menschen schnell.
+
+00:01:27.640 --> 00:01:31.740
+Jemand will die E-Mail löschen, eine andere Person beginnt, Posteingänge manuell zu durchsuchen.
+
+00:01:32.600 --> 00:01:36.700
+Manager befragen Mitarbeiter, während Dateien verschoben werden und es immer schwieriger wird, den Sachverhalt zu klären.
+
+00:01:36.700 --> 00:01:40.120
+Genau an diesem Punkt kommt Microsoft Purview e-Discovery ins Spiel.
+
+00:01:40.700 --> 00:01:49.300
+Am Ende dieses Knowledge Nuggets wissen Sie, wie man relevante Microsoft 365 Daten findet, schützt, prüft und übergibt, ohne dass Ihr IT-Team zum Anwaltsteam wird?
+
+00:01:50.180 --> 00:01:55.840
+Einfach ausgedrückt ist Microsoft Purview e-Discovery ein fallbasiertes Tool zum Finden, Sichern, Überprüfen und Exportieren von Arbeitsdaten.
+
+00:01:56.260 --> 00:01:58.180
+Betrachten Sie Microsoft 365 für den Bürohle.
+
+00:01:58.500 --> 00:02:02.800
+Exchange Online Teams, SharePoint und OneDrive sind verschiedene Räume, in denen täglich gearbeitet wird.
+
+00:02:03.480 --> 00:02:04.480
+E-Mails befinden sich in einem Raum.
+
+00:02:04.740 --> 00:02:05.420
+Teamdateien am anderen.
+
+00:02:05.420 --> 00:02:07.620
+Chats und geteilte Dokumente liegen woanders.
+
+00:02:08.460 --> 00:02:12.200
+Purview e-Discovery ist wie der verschlossene Archivraum in diesem Gebäude mit einem Suchschalter davor.
+
+00:02:12.840 --> 00:02:14.600
+Sie laufen nicht ohne Plan durch jeden Raum.
+
+00:02:15.220 --> 00:02:20.340
+Sie eröffnen einen Fall, entscheiden, welche Räume relevant sind, sichern die Unterlagen, suchen nach dem Passenden und bereiten die Daten für die Empfänger auf.
+
+00:02:20.680 --> 00:02:22.340
+M. Gehen wir das Schritt für Schritt durch.
+
+00:02:22.880 --> 00:02:28.660
+Zuerst, warum e-Discovery existiert, dann der Fall und die Datenquellen, danach Legal Hult, Suche, Prüfung und Export.
+
+00:02:29.300 --> 00:02:33.460
+Wir beginnen mit dem Grund für dessen Existenz, denn eine Suche hilft nur, wenn die Daten noch vorhanden sind.
+
+00:02:35.420 --> 00:02:37.680
+Baustein 1. Warum es e-Discovery gibt.
+
+00:02:38.460 --> 00:02:40.960
+Vor 20 Jahren lagen Arbeitsdaten oft an getrennten Orten.
+
+00:02:41.620 --> 00:02:42.820
+E-Mails befanden sich vielleicht in einem Archiv.
+
+00:02:43.220 --> 00:02:44.860
+Dateien lagen möglicherweise auf einer Datei freigab.
+
+00:02:45.360 --> 00:02:47.240
+Teamunterhaltungen konnten in einem anderen Tool stattfinden.
+
+00:02:47.240 --> 00:02:55.380
+Wenn jemand ein Problem untersuchen musste, durchsuchte die IT jeden Ort einzeln, kopierte Elemente in Ordner und hoffte, dass die Kopien genug Kontext enthielten.
+
+00:02:56.020 --> 00:02:56.900
+Dieser Ansatz schafft Glück.
+
+00:02:57.480 --> 00:02:59.700
+Eine Nachricht könnte auf eine Datei verweisen, die man gesichert hat.
+
+00:03:00.120 --> 00:03:02.260
+Eine Datei wurde möglicherweise seit der ursprünglichen Diskussion.
+
+00:03:02.260 --> 00:03:05.040
+Jemand erinnert sich vielleicht anders an das Ereignis, als die Aufzeichnungen zeigen.
+
+00:03:05.600 --> 00:03:07.580
+Die Arbeit hat sich verlagert, aber das Problem ist nicht verschwunden.
+
+00:03:08.300 --> 00:03:14.560
+Heute verteilt sie ihre Arbeit vielleicht auf Exchange Online für E-Mails und Kalender, Teams für Chat und Besprechungen, SharePoint für Teamdokumente,
+
+00:03:15.060 --> 00:03:21.260
+OneDrive für persönliche Arbeitsdateien, Microsoft 365 Gruppen für die gemeinsame Arbeit und Viva Engage für Communitygespräche.
+
+00:03:22.220 --> 00:03:25.300
+Eine einzige geschäftliche Entscheidung kann Spuren an mehreren dieser Orte hinterlassen.
+
+00:03:25.300 --> 00:03:35.400
+Diese Spuren sind wichtig, wenn ihr Unternehmen eine rechtliche Anfrage hält, ein Personalthema prüft, auf ein Audit reagiert, einen internen Bericht überprüft oder einen Sicherheitsvorfall bzw. eine mögliche Datenfreigabe untersucht.
+
+00:03:36.300 --> 00:03:38.960
+Stellen Sie sich vor, ein ehemaliger Mitarbeiter behauptet, ungerecht behandelt worden.
+
+00:03:39.500 --> 00:03:42.620
+Personalabteilung und Rechtsabteilung benötigen möglicherweise Nachrichten zwischen diesen Mitarbeitern zum Vorgesetzten.
+
+00:03:42.840 --> 00:03:44.580
+Sie benötigen eventuell Dateien aus einem bestimmten Projekt.
+
+00:03:44.580 --> 00:03:48.760
+Sie brauchen vielleicht Aufzeichnungen aus einem definierten Zeitraum, nicht jede E-Mail und jedes Dokument des Unternehmens erstellte.
+
+00:03:48.960 --> 00:03:51.000
+Das Ziel ist nicht zu beweisen, ob jemand etwas falsch gemacht hat.
+
+00:03:52.080 --> 00:03:54.440
+Purview eDiscovery findet und sichert mögliche Beweismittel.
+
+00:03:54.440 --> 00:03:59.320
+Rechtspersonal, Compliance, Sicherheits- und Geschäftsführung entscheiden, was die Beweise bedeuten und wie es weitergeht.
+
+00:03:59.720 --> 00:04:00.880
+Es ersetzt auch keine Rechtsberatung.
+
+00:04:01.320 --> 00:04:04.340
+Es gibt den richtigen Personen eine kontrollierte Möglichkeit, mit dem benötigten Daten zu haben.
+
+00:04:04.620 --> 00:04:07.000
+Warum also nicht einfach die normale Microsoft 365-Suche?
+
+00:04:07.180 --> 00:04:08.900
+Die normale Suche hilft Ihnen, Ihre Arbeit zu finden.
+
+00:04:09.280 --> 00:04:13.560
+Sie ist für tägliche Aufgaben konzipiert, wie das Suchen eines Dokuments aus der letzten Woche oder das Finden einer E-Mail-Riskunde.
+
+00:04:13.960 --> 00:04:15.220
+Eine Untersuchung erfordert mehr Kontrolle.
+
+00:04:15.640 --> 00:04:18.020
+Sie müssen möglicherweise einschränken, wer sensible Ergebnisse sehen darf.
+
+00:04:18.260 --> 00:04:20.560
+Sie benötigen eine klare Aufzeichnung der durchgeführten Suche.
+
+00:04:20.780 --> 00:04:22.740
+Möglicherweise müssen Sie Inhalte sichern, bevor jemand sie löscht.
+
+00:04:22.740 --> 00:04:27.040
+Und Sie müssen vermeiden, riesige Mengen an nicht zusammenhängenden persönlichen oder geschäftlichen Daten zu sammeln,
+
+00:04:27.100 --> 00:04:28.280
+nur weil eine Suche zu breit gefasst war.
+
+00:04:28.600 --> 00:04:29.980
+Hier ändert eDiscovery den Prozess.
+
+00:04:30.820 --> 00:04:34.960
+Anstatt zu sagen, suche alles und schicke mir, was du findest, beginnt das Team mit einer definierten Angelegenheit.
+
+00:04:35.460 --> 00:04:38.460
+Sie entscheiden, wonach Sie suchen müssen, wo es liegen könnte und wer Zugriff haben sollte.
+
+00:04:38.980 --> 00:04:40.240
+Für Sie ist der praktische Punkt einfach.
+
+00:04:40.780 --> 00:04:43.160
+Lernen Sie diesen Prozess, bevor eine dringende Anfrage die IT erreicht.
+
+00:04:43.420 --> 00:04:47.020
+In einer echten Situation brauchen Leute schnelle Antworten, aber schnell bedeutet nichts sorglos.
+
+00:04:47.700 --> 00:04:52.080
+Ein wenig Vorbereitung hilft Ihrer Organisation, die richtigen Daten zu schützen und die Arbeit fokussiert und privat zu halten.
+
+00:04:52.080 --> 00:04:55.660
+Jede Untersuchung braucht einen klaren Ort, bevor jemand mit der Suche beginnt.
+
+00:04:56.380 --> 00:04:58.500
+Baustein 2. Der Fall und die Datenquellen.
+
+00:04:59.060 --> 00:05:00.640
+Sie haben also einen Grund, etwas zu untersuchen.
+
+00:05:01.260 --> 00:05:04.000
+Bevor Sie auch nur ein einziges Suchwort eingeben, brauchen Sie einen Fall.
+
+00:05:04.500 --> 00:05:07.840
+Stellen Sie sich einen Fall wie einen sicheren digitalen Aktenordner für eine bestimmte Angelegenheit vor.
+
+00:05:08.520 --> 00:05:09.140
+Er enthält alles.
+
+00:05:09.620 --> 00:05:14.360
+Die beteiligten Personen, die Datenquellen, die Suchen, alle Sperren, Prüfungsarbeiten und Exporte an einem Ort.
+
+00:05:14.360 --> 00:05:16.620
+Stellen Sie sich einen beschrifteten Aktenordner vor.
+
+00:05:16.700 --> 00:05:18.540
+Nicht ein mit der Aufschrift, alles was dieses Jahr passiert ist.
+
+00:05:19.080 --> 00:05:22.800
+Sondern Mitarbeiter anliegen, März bis Juni oder Projekt Redwood überprüfen.
+
+00:05:23.400 --> 00:05:25.900
+Dieser Name ist wichtig, weil er jedem sagt, woran er arbeitet.
+
+00:05:26.540 --> 00:05:28.520
+Und genauso wichtig, woran er nicht arbeitet.
+
+00:05:29.600 --> 00:05:32.080
+Fälle halten Dinge organisiert, aber sie kontrollieren auch den Zugriff.
+
+00:05:32.080 --> 00:05:35.520
+Nicht jeder in der IT sollte eine sensible HR-Angelegenheit öffnen können.
+
+00:05:35.860 --> 00:05:37.800
+Und nicht jeder HR-Mittler sollte einen Rechtsfall sehen.
+
+00:05:38.840 --> 00:05:41.980
+Innerhalb von Purview weisen Sie Personen dem Fall basierend darauf zu, was Sie tun müssen.
+
+00:05:42.440 --> 00:05:43.900
+Ein Leser kann die Fallarbeit einsehen.
+
+00:05:43.980 --> 00:05:45.660
+Ein Manager kann Fälle erstellen und ausführen.
+
+00:05:45.760 --> 00:05:49.180
+Und ein Administrator kümmert sich um die umfassenderen Einstellungen und steuert den Zugriff in jedes Kapitel.
+
+00:05:49.500 --> 00:05:52.280
+Die genauen Rollennamen können sich ändern, wenn Microsoft den Dienst aktualisiert.
+
+00:05:52.380 --> 00:05:53.620
+Aber das Grundprinzip bleibt gleich.
+
+00:05:54.200 --> 00:05:56.340
+Manche Leute müssen nur schauen, manche müssen die Arbeit machen.
+
+00:05:56.340 --> 00:05:58.920
+Und eine kleinere Gruppe entscheidet, wer diesen Zugriff überhaupt bekommt.
+
+00:05:59.800 --> 00:06:01.340
+Diese Trennung schützt die Untersuchung.
+
+00:06:01.340 --> 00:06:04.520
+Sie gibt Ihrer Organisation auch eine klare Aufzeichnung dessen, was geschehen ist.
+
+00:06:04.760 --> 00:06:08.900
+Sie können sehen, welcher Fall die Suche enthielt, wer daran gearbeitet hat und warum diese Orte einbezogen wurden.
+
+00:06:09.300 --> 00:06:12.040
+Wenn jemand fragt, warum haben Sie diese Personen durchsucht und nicht alle anderen?
+
+00:06:12.460 --> 00:06:13.880
+Gibt es einen Ort, um die Entscheidung zu bekommen?
+
+00:06:14.460 --> 00:06:15.800
+Als nächstes wählen Sie die Datenquellen aus.
+
+00:06:16.140 --> 00:06:18.960
+Eine Datenquelle ist einfach ein Ort, an dem eDiscovery nach Inhalten sucht.
+
+00:06:19.120 --> 00:06:24.300
+Sie können Personengruppen, Websites oder sogar umfassendere Organisationsstandorte hinzufügen, je nachdem, welche Frage Sie beantworten möchten.
+
+00:06:24.920 --> 00:06:28.840
+Um dies gut zu tun, benötigen Sie eine grundlegende Karte davon, wo Microsoft 63 Arbeitsplätze.
+
+00:06:29.180 --> 00:06:31.020
+Geschäftliche E-Mails und Kalender befinden sich in Exchange Online.
+
+00:06:31.340 --> 00:06:33.420
+Ihre persönlichen Arbeitsdateien liegen normalerweise in OneDrive.
+
+00:06:33.800 --> 00:06:35.480
+Stellen Sie sich Ihren eigenen digitalen Aktenschank vor.
+
+00:06:36.020 --> 00:06:37.260
+Team-Dateien liegen normalerweise in SharePoint.
+
+00:06:37.660 --> 00:06:42.280
+Dazu gehören viele Dateien, die Sie über Teams öffnen, auch wenn Sie die SharePoint-Website im Hintergrund vielleicht nie sehen.
+
+00:06:42.780 --> 00:06:43.960
+Teams an sich kann verwirrend sein.
+
+00:06:44.480 --> 00:06:46.820
+Ein Teams-Chat findet nicht einfach nur innerhalb der Teams-App statt.
+
+00:06:47.820 --> 00:06:51.060
+Einzel- und Gruppenchats sind mit den Exchange Online-Postfächern der Teilnehmer verbunden
+
+00:06:51.060 --> 00:06:54.460
+und Dateien, die in diesen Chats geteilt werden, liegen in der Regel in OneDrive.
+
+00:06:54.460 --> 00:07:00.100
+Wenn Sie also nur E-Mails durchsuchen und OneDrive ignorieren, könnten Sie eine Datei übersehen, die jemand in einem Chat gesendet hat.
+
+00:07:00.740 --> 00:07:03.420
+Stellen Sie sich vor, die Personalabteilung muss Nachrichten zwischen zwei Mitarbeitern prüfen.
+
+00:07:03.820 --> 00:07:07.920
+Sie würden nicht damit beginnen, jedes Postfach, jedes OneDrive und jede SharePoint-Website im Unternehmen zu durchsuchen.
+
+00:07:08.460 --> 00:07:11.540
+Sie würden bei den Postfächern der beiden Mitarbeiter und deren zugehörigen Speicherorten für Dateien.
+
+00:07:11.880 --> 00:07:15.980
+Dann könnten Sie einen Datumsbereich um das Ereignis festlegen und das bekannte Projekt oder Thema als Anhaltspunkt nutzen.
+
+00:07:16.440 --> 00:07:17.640
+Das sind fokussierte Ausgangspunkte.
+
+00:07:17.640 --> 00:07:22.600
+Wenn die Ergebnisse auf eine gemeinsame Projektseite oder eine Gruppenunterhaltung hinweisen, können Sie den Suchbereich begründet erweitern.
+
+00:07:23.160 --> 00:07:24.700
+Sie lassen sich bei den nächsten Schritten von den Beweisen.
+
+00:07:25.060 --> 00:07:27.900
+Dies ist wichtig, da eine breitere Suche nicht automatisch eine bessere Suche bedeutet.
+
+00:07:28.260 --> 00:07:30.800
+Eine riesige Ergebnismenge kann die wenigen wichtigen Elemente begraben.
+
+00:07:31.540 --> 00:07:34.720
+Sie kann auch private, irrelevante Arbeitsinhalte einbeziehen, die niemand prüfen muss.
+
+00:07:35.060 --> 00:07:39.600
+Mehr Daten bedeuten mehr Zeitaufwand, mehr Sorgfalt und ein größeres Risiko, den Faden der Untersuchung zu verlieren.
+
+00:07:40.020 --> 00:07:42.400
+Beginnen Sie also mit bekannten Personen, bekannten Daten und Bekannten.
+
+00:07:42.960 --> 00:07:45.360
+Erweitern Sie erst dann, wenn die Ergebnisse Ihnen zeigen, wo als nächstes zu suchen.
+
+00:07:45.360 --> 00:07:49.820
+Die wichtigste Lektion für Sie ist zu wissen, wo Microsoft Rand 65 Arbeitsdaten tatsächlich speichert.
+
+00:07:50.340 --> 00:07:55.180
+Sobald Sie die Struktur kennen, ist es unwahrscheinlicher, dass Sie Inhalte übersehen oder einen riesigen Berg an Ergebnissen erzeugen,
+
+00:07:55.240 --> 00:07:57.920
+den niemand sinnvoll prüfen kann, den niemand sinnvoll prüfen kann.
+
+00:07:58.420 --> 00:08:02.580
+Sobald der Fall auf die richtigen Orte hinweist, müssen Sie die Beweise schützen, bevor Sie sich ändern.
+
+00:08:04.240 --> 00:08:07.120
+Baustein 3, Legal Hold, die Pausentaste für Beweismittel.
+
+00:08:07.580 --> 00:08:09.300
+Eine Aufbewahrungsrichtlinie ist eine Sicherungsregel.
+
+00:08:09.660 --> 00:08:12.040
+Sie hält relevante Inhalte verfügbar, solange ein Fall aktiv ist,
+
+00:08:12.040 --> 00:08:14.740
+selbst wenn jemand später versucht, diese Inhalte zu löschen oder zu ändern.
+
+00:08:14.740 --> 00:08:17.440
+Denken Sie an einen Aktenschrank mit einem klaren Etikett auf einer Schublade.
+
+00:08:18.140 --> 00:08:18.660
+Ich vernichten.
+
+00:08:19.820 --> 00:08:22.360
+Jemand kann zwar versuchen, ein Dokument aus dieser Schublade zu entfernen,
+
+00:08:22.740 --> 00:08:25.220
+aber das Unternehmen behält die Kopie, die für den Fall wichtig sein könnte.
+
+00:08:25.620 --> 00:08:27.080
+Das ist die Aufgabe einer Aufbewahrungsrichtlinie.
+
+00:08:27.440 --> 00:08:28.880
+Leute räumen ständig ihre Posteingänge auf.
+
+00:08:29.220 --> 00:08:31.820
+Sie löschen Chatnachrichten, ersetzen eine Datei durch eine neuere Version
+
+00:08:31.820 --> 00:08:35.100
+oder verlassen das Unternehmen, woraufhin ihr Konto einen Offboarding-Prozess durchläuft.
+
+00:08:35.900 --> 00:08:38.760
+Keine dieser Aktionen bedeutet automatisch, dass jemand etwas Falsches getan hat.
+
+00:08:38.760 --> 00:08:41.200
+Doch sobald ein Sachverhalt eine Aufbewahrung erfordert,
+
+00:08:41.280 --> 00:08:43.160
+kann die normale tägliche Bereinigung zu einem echten Problem.
+
+00:08:43.480 --> 00:08:45.640
+Die Nachricht oder das Dokument, das Sie benötigen, könnte verschwinden,
+
+00:08:45.720 --> 00:08:46.860
+bevor jemand die Chance hat, es zu finden.
+
+00:08:47.320 --> 00:08:49.940
+Deshalb geht eine umfassende Suche oft eine Aufbewahrungspflicht voraus.
+
+00:08:50.440 --> 00:08:53.680
+Vielleicht wissen Sie bereits genug, um die beteiligten Personen und Orte zu identifizieren,
+
+00:08:53.960 --> 00:08:56.380
+noch bevor Sie genau wissen, welche Nachrichten oder Dateien wichtig sind.
+
+00:08:57.240 --> 00:08:59.340
+Eine Aufbewahrungspflicht hält dieses Material verfügbar,
+
+00:08:59.400 --> 00:09:00.740
+während das Team die passende Suche erarbeitet.
+
+00:09:01.320 --> 00:09:02.760
+Nun, rechtliche Aufbewahrungspflichten und Aufbewahrungsrichtlinien
+
+00:09:02.760 --> 00:09:04.580
+sind zwar verwandt, aber nicht dasselbe.
+
+00:09:04.580 --> 00:09:07.840
+Eine Aufbewahrungsrichtlinie folgt den normalen Dokumentenregeln Ihres Unternehmens.
+
+00:09:08.120 --> 00:09:09.920
+Sie kann beispielsweise bestimmte Geschäftsunterlagen
+
+00:09:09.920 --> 00:09:12.380
+für einen festgelegten Zeitraum speichern und nach dessen Ablauf löschen.
+
+00:09:12.680 --> 00:09:14.880
+Eine rechtliche Aufbewahrungspflicht reagiert auf eine spezifische Sache.
+
+00:09:15.160 --> 00:09:16.560
+Bei der Aufbewahrungsrichtlinie stellt sich die Frage,
+
+00:09:16.640 --> 00:09:17.960
+wie lange sollten wir diese A von Arbeit noch lösen.
+
+00:09:18.240 --> 00:09:19.820
+Bei einer rechtlichen Aufbewahrungspflicht fragt man,
+
+00:09:19.900 --> 00:09:21.520
+könnte dieser Inhalt für diesen Fall jetzt von Bedeutung sein.
+
+00:09:22.460 --> 00:09:25.320
+Beide können beeinflussen, was verfügbar bleibt, haben aber unterschiedliche Ausgangspunkte.
+
+00:09:25.920 --> 00:09:27.200
+Stellen Sie sich vor, ein Mitarbeiter erfährt,
+
+00:09:27.200 --> 00:09:28.960
+dass die Personalabteilung eine Beschwerde untersucht.
+
+00:09:29.480 --> 00:09:31.120
+Dieser Mitarbeiter könnte einen Teams-Chat löschen
+
+00:09:31.120 --> 00:09:32.680
+oder eine E-Mail aus seinem Postfach entfernen.
+
+00:09:33.500 --> 00:09:35.880
+Vielleicht hält er sie für irrelevant oder er räumt einfach nur auf.
+
+00:09:36.580 --> 00:09:38.640
+Wenn die betroffenen Orte unter Aufbewahrungspflicht stehen,
+
+00:09:38.720 --> 00:09:40.560
+kann Purview eine Kopie für den Fall verfügbar halten.
+
+00:09:41.180 --> 00:09:43.600
+Der Benutzer sieht das gelöschte Element zwar nicht mehr am gewohnten Ort,
+
+00:09:43.740 --> 00:09:46.740
+doch die gesicherte Kopie bleibt für autorisierte Fallmitglieder verfügbar.
+
+00:09:47.220 --> 00:09:48.800
+Deshalb hat eine Aufbewahrungspflicht ein solches Gewicht.
+
+00:09:49.040 --> 00:09:50.900
+Es ist kein Routineschalter, den die IT umlegt,
+
+00:09:50.980 --> 00:09:52.260
+wenn jemand schnell eine Antwort braucht.
+
+00:09:52.260 --> 00:09:54.800
+Für eine schnelle Faktenprüfung reicht oft eine eng gefasste Suche.
+
+00:09:55.160 --> 00:09:56.700
+Eine Aufbewahrungspflicht ist dort angebracht,
+
+00:09:56.800 --> 00:09:59.180
+wo Rechtspersonal, Compliance oder Untersuchungsteams festlegen,
+
+00:09:59.260 --> 00:10:00.300
+dass Inhalte verfügbar bleiben müssen.
+
+00:10:00.300 --> 00:10:03.000
+Die Entscheidung sollte von den für den Fall Verantwortlichen getroffen werden,
+
+00:10:03.100 --> 00:10:04.660
+wobei die IT bei der korrekten Umsetzung hilft.
+
+00:10:05.040 --> 00:10:06.720
+Es gibt ein weiteres Detail, das oft übersehen.
+
+00:10:07.060 --> 00:10:07.980
+Der Fallstatus spielt eine Wort.
+
+00:10:08.280 --> 00:10:09.100
+Wenn Sie einen Fall schließen,
+
+00:10:09.440 --> 00:10:11.780
+können die mit diesem Fall verbundenen Aufbewahrungspflichten aufgehoben werden.
+
+00:10:12.020 --> 00:10:14.060
+Das Schließen eines Falls ist also nicht nur eine reine Verwaltungsaufgabe.
+
+00:10:14.340 --> 00:10:16.720
+Es ist eine Entscheidung mit Konsequenzen für die aufbewahrten Inhalte.
+
+00:10:17.160 --> 00:10:19.560
+Bevor etwas geschlossen wird, müssen die Verantwortlichen wissen,
+
+00:10:19.560 --> 00:10:21.140
+ob die Aufbewahrung beendet werden soll.
+
+00:10:21.700 --> 00:10:23.060
+Gehen Sie das auch mit einer Aufbewahrungspflicht.
+
+00:10:23.500 --> 00:10:25.220
+Sie verändert, welche Daten verfügbar bleiben müssen.
+
+00:10:25.600 --> 00:10:27.660
+Sie kann Postfächer, Dateien, Chats und Websites betreffen,
+
+00:10:27.720 --> 00:10:28.640
+die mit dem Fall verbunden sind.
+
+00:10:30.300 --> 00:10:31.760
+Wenn man klar ist, der Zugriff kontrolliert wird
+
+00:10:31.760 --> 00:10:33.880
+und das Fallteam weiß, wer für die Entscheidung zur Anwendung,
+
+00:10:33.980 --> 00:10:35.440
+Änderung oder Aufhebung zuständig ist.
+
+00:10:36.260 --> 00:10:38.000
+Mit gesicherten Beweisen verfügt der Suchprozess
+
+00:10:38.000 --> 00:10:39.140
+über eine zuverlässige Grundlage.
+
+00:10:40.240 --> 00:10:42.980
+Baustein 4. Suchen, ohne in Daten zu ertringen.
+
+00:10:43.540 --> 00:10:45.400
+Wenn also die richtigen Speicherorte geschützt sind,
+
+00:10:45.780 --> 00:10:46.700
+können Sie mit der Suche beginnen.
+
+00:10:47.280 --> 00:10:48.960
+Eine Suche weist Purview an, Inhalte zu finden,
+
+00:10:48.960 --> 00:10:49.880
+die Ihren Kriterien entsprechen,
+
+00:10:49.980 --> 00:10:51.580
+und zwar über die für den Fall ausgewählten Quellen hinweg.
+
+00:10:52.020 --> 00:10:53.480
+Sie fragen nicht, zeigen Sie mir alles.
+
+00:10:54.620 --> 00:10:55.940
+Sie stellen eine gezielte Frage etwa,
+
+00:10:56.500 --> 00:10:59.240
+was haben diese beiden Personen in diesem Zeitraum zu diesem Projekt besprochen?
+
+00:10:59.240 --> 00:11:02.540
+Purview bietet Ihnen mehrere einfache Möglichkeiten, diese Frage einzeln.
+
+00:11:03.520 --> 00:11:05.380
+Sie können nach einem Wort oder einer genauen Phrase suchen,
+
+00:11:05.480 --> 00:11:06.660
+einen Datumsbereich festlegen,
+
+00:11:06.740 --> 00:11:08.420
+sich auf einen Absender oder Empfänger konzentrieren
+
+00:11:08.420 --> 00:11:10.560
+oder nach Betreffzeile, Dateityp oder Nachrichtentyp suchen.
+
+00:11:11.180 --> 00:11:12.480
+Jede Bedingung entfernt Inhalte,
+
+00:11:12.540 --> 00:11:14.060
+die wahrscheinlich nichts mit der Angelegenheit zu tun haben.
+
+00:11:15.020 --> 00:11:16.320
+Beginnen Sie mit dem geführten Bedingungskennarat.
+
+00:11:16.320 --> 00:11:18.300
+Er bietet Ihnen klare Felder zum Ausfüllen,
+
+00:11:18.380 --> 00:11:19.960
+was für Anfänger meist der richtige Einstieg ist.
+
+00:11:20.400 --> 00:11:22.160
+Sie wählen die Person aus, legen die Daten fest,
+
+00:11:22.260 --> 00:11:24.340
+geben eine Phrase ein und wählen die benötigten Speicherorte.
+
+00:11:24.340 --> 00:11:26.480
+Manche Benutzer benötigen eine detailliertere Suchlumpe.
+
+00:11:26.820 --> 00:11:28.940
+Dafür unterstützt Purview die Keyword Query Language,
+
+00:11:29.120 --> 00:11:30.000
+meist KQL genannt.
+
+00:11:30.600 --> 00:11:32.400
+Mit KQL können Sie genauere Suchregeln verfassen.
+
+00:11:32.880 --> 00:11:34.240
+Sie müssen sie nicht am ersten Tag beherrschen,
+
+00:11:34.540 --> 00:11:36.280
+aber sie wird nützlich, wenn eine einfache Schlagwortsuche
+
+00:11:36.280 --> 00:11:38.400
+zu viel Rauschen liefert oder ein sehr spezifisches Muster übersieht.
+
+00:11:38.900 --> 00:11:40.320
+Die Personen und Orte, die Sie durchsuchen,
+
+00:11:40.400 --> 00:11:41.340
+sind genauso wichtig wie die Wörter.
+
+00:11:42.040 --> 00:11:43.860
+Sie können bestimmte Exchange Online Postfächer,
+
+00:11:44.260 --> 00:11:45.460
+individuelle OneDrive Konten,
+
+00:11:45.820 --> 00:11:47.060
+eine bekannte SharePoint Website,
+
+00:11:47.200 --> 00:11:48.780
+mit diesen Orten verbundene Teams Inhalte
+
+00:11:48.780 --> 00:11:50.320
+oder, wenn es der Fall erfordert,
+
+00:11:50.620 --> 00:11:52.700
+umfassendere organisationsweite Quellen durchsuchen.
+
+00:11:52.700 --> 00:11:55.060
+Stellen Sie sich eine Untersuchung vor,
+
+00:11:55.140 --> 00:11:57.700
+die zwei Mitarbeiter und ein Projekt namens Project Redwood betrifft.
+
+00:11:58.500 --> 00:12:00.740
+Eine sinnvolle erste Suche könnte die letzten 90 Tage,
+
+00:12:00.860 --> 00:12:02.040
+deren ausgewählte Datenquellen
+
+00:12:02.040 --> 00:12:04.440
+sowie die Begriffe Project Redwood und Settlement abdecken.
+
+00:12:05.220 --> 00:12:06.980
+Dieses erste Ergebnis ist nicht Ihre endgültige Antwort.
+
+00:12:07.440 --> 00:12:08.080
+Sie führen sie aus
+
+00:12:08.080 --> 00:12:09.820
+und überprüfen die Statistiken sowie Beispielergebnisse.
+
+00:12:10.340 --> 00:12:12.400
+Statistiken zeigen Ihnen die Struktur des Ergebnissatzes
+
+00:12:12.400 --> 00:12:13.600
+und ein Beispiel lässt Sie erkennen,
+
+00:12:13.720 --> 00:12:15.640
+ob Purview die Art von Nachrichten und Dateien gefunden hat,
+
+00:12:15.680 --> 00:12:16.360
+die Sie erwartet haben.
+
+00:12:16.940 --> 00:12:18.160
+Vielleicht liefert der Begriff Settlement
+
+00:12:18.160 --> 00:12:19.620
+nicht zusammenhängende Vertriebs-E-Mails,
+
+00:12:19.740 --> 00:12:20.860
+also passen Sie die Suche an.
+
+00:12:20.860 --> 00:12:23.420
+Oder vielleicht zeigt das Beispiel einen Projektcode,
+
+00:12:23.480 --> 00:12:24.600
+den anfangs niemand erwähnt hat,
+
+00:12:24.680 --> 00:12:25.840
+also fügen Sie diesen Begriff hinzu
+
+00:12:25.840 --> 00:12:26.800
+und führen eine weitere Suche durch.
+
+00:12:27.040 --> 00:12:27.500
+Das ist normal.
+
+00:12:27.960 --> 00:12:28.940
+Gute Suche ist ein Kreislauf.
+
+00:12:29.480 --> 00:12:30.660
+Sie stellen eine gezielte Frage,
+
+00:12:30.800 --> 00:12:31.600
+prüfen die Ergebnisse,
+
+00:12:31.960 --> 00:12:33.420
+lernen daraus und verfeinern die Frage.
+
+00:12:34.140 --> 00:12:35.200
+Sie können auch mehrere Suchen
+
+00:12:35.200 --> 00:12:36.560
+innerhalb desselben Falls erstellen.
+
+00:12:37.320 --> 00:12:38.820
+Eine Suche könnte sich auf Nachrichten
+
+00:12:38.820 --> 00:12:40.380
+zwischen den beiden Mitarbeitern konzentrieren,
+
+00:12:40.500 --> 00:12:41.820
+eine andere nur nach Dokumenten suchen
+
+00:12:41.820 --> 00:12:43.680
+und eine dritte den Datumsbereich auf die Woche
+
+00:12:43.680 --> 00:12:44.980
+um ein bestimmtes Meeting eingrenzen.
+
+00:12:44.980 --> 00:12:46.820
+Die Trennung dieser Suchvorgänge
+
+00:12:46.820 --> 00:12:47.920
+macht die Arbeit übersichtlicher
+
+00:12:47.920 --> 00:12:48.340
+und verhindert,
+
+00:12:48.460 --> 00:12:49.400
+dass unterschiedliche Ergebnisse
+
+00:12:49.400 --> 00:12:51.060
+zu einem unübersichtlichen Haufen verschmelzen.
+
+00:12:51.480 --> 00:12:51.920
+Viele denken,
+
+00:12:52.000 --> 00:12:53.100
+der sicherste Schritt sei zuerst,
+
+00:12:53.160 --> 00:12:54.620
+die gesamte Organisation zu durchsuchen,
+
+00:12:54.700 --> 00:12:55.660
+aber das ist meist nicht der Fall.
+
+00:12:56.380 --> 00:12:56.920
+Eine Suche,
+
+00:12:57.060 --> 00:12:57.880
+die jedes Postfach,
+
+00:12:58.120 --> 00:12:58.620
+jede Website
+
+00:12:58.620 --> 00:12:59.580
+und jede Datei umfasst,
+
+00:12:59.860 --> 00:13:01.560
+kann viel zu viel irrelevantes Material liefern,
+
+00:13:01.640 --> 00:13:02.900
+was die Arbeit der Prüfer verlangsamt
+
+00:13:02.900 --> 00:13:04.000
+und private Daten offenlegt,
+
+00:13:04.200 --> 00:13:05.280
+die nichts mit dem Fall zu tun haben.
+
+00:13:05.820 --> 00:13:06.580
+Beginnen Sie eng gefasst
+
+00:13:06.580 --> 00:13:07.480
+und erweitern Sie nur bei Bedarf.
+
+00:13:07.980 --> 00:13:09.580
+Es gibt auch die Inhaltssuche in Purview,
+
+00:13:09.940 --> 00:13:11.320
+die bei einer schnellen Überprüfung hilft,
+
+00:13:11.400 --> 00:13:11.720
+um zu sehen,
+
+00:13:11.720 --> 00:13:12.660
+ob ein Begriff vorkommt
+
+00:13:12.660 --> 00:13:13.880
+oder bei der Faktenfindung
+
+00:13:13.880 --> 00:13:15.020
+vor Beginn eines formellen Falls.
+
+00:13:16.020 --> 00:13:16.700
+Wenn die Arbeit jedoch
+
+00:13:16.700 --> 00:13:17.580
+zu einer Untersuchung wird,
+
+00:13:17.620 --> 00:13:18.460
+die kontrollierten Zugriff
+
+00:13:18.460 --> 00:13:19.580
+und einen festen Rahmen erfordert,
+
+00:13:19.660 --> 00:13:20.820
+verleiht ein E-Discovery-Fall
+
+00:13:20.820 --> 00:13:22.120
+der Suche eine klare Struktur.
+
+00:13:23.540 --> 00:13:24.600
+Für Sie ist die Lektion einfach.
+
+00:13:25.420 --> 00:13:26.440
+Gute E-Discovery beginnt
+
+00:13:26.440 --> 00:13:27.240
+mit einer Fragestellung,
+
+00:13:27.320 --> 00:13:28.260
+nicht mit einem riesigen Suchfeld.
+
+00:13:28.640 --> 00:13:29.580
+Sobald Ergebnisse vorliegen,
+
+00:13:29.660 --> 00:13:30.240
+ändert sich die Aufgabe.
+
+00:13:30.680 --> 00:13:31.700
+Sie finden nicht mehr nur Inhalte,
+
+00:13:31.780 --> 00:13:32.560
+sondern müssen entscheiden,
+
+00:13:32.660 --> 00:13:33.900
+was tatsächlich zum Fall gehört.
+
+00:13:34.060 --> 00:13:34.520
+Fall gehört.
+
+00:13:35.360 --> 00:13:35.980
+Baustein 5,
+
+00:13:36.080 --> 00:13:37.100
+Überprüfungssätze tags
+
+00:13:37.100 --> 00:13:38.180
+und der endgültige Export.
+
+00:13:38.840 --> 00:13:39.600
+Eine Suche liefert Ihnen
+
+00:13:39.600 --> 00:13:40.200
+mögliche Treffer.
+
+00:13:40.200 --> 00:13:41.900
+Ich sagte mögliche Treffer,
+
+00:13:42.160 --> 00:13:42.920
+denn Purview kann zwar
+
+00:13:42.920 --> 00:13:43.620
+ein Dokument finden,
+
+00:13:43.720 --> 00:13:44.480
+das Ihren Begriff enthält,
+
+00:13:44.880 --> 00:13:46.000
+aber die Software kann nicht entscheiden,
+
+00:13:46.100 --> 00:13:47.120
+ob es wirklich zum Fall gehört.
+
+00:13:48.040 --> 00:13:49.220
+Eine Person mit dem richtigen Kontext
+
+00:13:49.220 --> 00:13:50.120
+muss diese Entscheidung treffen.
+
+00:13:50.600 --> 00:13:51.920
+Hier kommt ein Überprüfungssatz ins Spiel.
+
+00:13:52.360 --> 00:13:53.820
+Ein Überprüfungssatz ist ein Arbeitstisch
+
+00:13:53.820 --> 00:13:54.440
+für Beweismittel,
+
+00:13:54.540 --> 00:13:55.440
+auf dem gesammelte Ergebnisse
+
+00:13:55.440 --> 00:13:56.560
+im Detail untersucht werden können.
+
+00:13:57.160 --> 00:13:58.100
+Anstatt eine lange Liste
+
+00:13:58.100 --> 00:13:59.460
+von Suchergebnissen zu durchsuchen,
+
+00:13:59.580 --> 00:14:00.680
+können autorisierte Prüfer
+
+00:14:00.680 --> 00:14:01.640
+einer ausgewählten Gruppe
+
+00:14:01.640 --> 00:14:02.580
+von Inhalten durchgehen
+
+00:14:02.580 --> 00:14:03.040
+und entscheiden,
+
+00:14:03.160 --> 00:14:04.500
+was jedes Element für den Fall bedeutet.
+
+00:14:05.080 --> 00:14:05.840
+Denn sie ist sich so vor,
+
+00:14:05.900 --> 00:14:06.840
+als würden sie mögliche Beweise
+
+00:14:06.840 --> 00:14:07.680
+auf den Prüfungstisch legen.
+
+00:14:07.680 --> 00:14:08.900
+Die Elemente sind dort,
+
+00:14:08.960 --> 00:14:09.840
+weil sie der Suche entsprechen
+
+00:14:09.840 --> 00:14:11.120
+und nun muss jemand sie lesen,
+
+00:14:11.240 --> 00:14:12.000
+den Kontext verstehen
+
+00:14:12.000 --> 00:14:13.440
+und sie in nützliche Gruppen sortieren.
+
+00:14:14.980 --> 00:14:15.420
+Überprüfungssätze
+
+00:14:15.420 --> 00:14:16.800
+und die fortgeschritteneren Prüfwerkzeuge
+
+00:14:16.800 --> 00:14:17.820
+hängen von Ihrer Lizenzierung ab.
+
+00:14:18.780 --> 00:14:20.160
+Standard eDiscovery Workflows
+
+00:14:20.160 --> 00:14:21.240
+konzentrieren sich auf Fall,
+
+00:14:21.420 --> 00:14:22.600
+Aufbewahrung, Suche und Export,
+
+00:14:22.980 --> 00:14:23.980
+was für viele kleinere Fälle
+
+00:14:23.980 --> 00:14:24.700
+ausreichen kann.
+
+00:14:25.240 --> 00:14:26.280
+Premium eDiscovery kann
+
+00:14:26.280 --> 00:14:27.000
+Überprüfungssätze
+
+00:14:27.000 --> 00:14:28.020
+und zusätzliche Methoden
+
+00:14:28.020 --> 00:14:28.840
+zur Analyse größerer
+
+00:14:28.840 --> 00:14:30.260
+oder komplexerer Ergebnismengen zufügen.
+
+00:14:30.600 --> 00:14:31.540
+Gehen Sie also nicht davon aus,
+
+00:14:31.600 --> 00:14:32.380
+dass jeder Purview-Mandant
+
+00:14:32.380 --> 00:14:33.320
+dieselben Schaltflächen anzeigt.
+
+00:14:33.320 --> 00:14:34.200
+Prüfen Sie,
+
+00:14:34.280 --> 00:14:35.180
+was Ihre Lizenz beinhaltet,
+
+00:14:35.280 --> 00:14:36.220
+bevor ein echter Fall beginnt,
+
+00:14:36.320 --> 00:14:37.320
+damit niemand einen Prüfprozess
+
+00:14:37.320 --> 00:14:38.400
+auf Basis einer Funktion plant,
+
+00:14:38.480 --> 00:14:39.100
+die er nicht nutzen kann.
+
+00:14:39.580 --> 00:14:40.380
+Der Zweck der Überprüfung
+
+00:14:40.380 --> 00:14:41.320
+bleibt in jedem Fall derselbe.
+
+00:14:42.080 --> 00:14:42.520
+Die Suche findet
+
+00:14:42.520 --> 00:14:43.340
+übereinstimmende Wörter,
+
+00:14:43.700 --> 00:14:44.360
+aber Menschen entscheiden
+
+00:14:44.360 --> 00:14:44.740
+über die Reise.
+
+00:14:45.160 --> 00:14:45.940
+Ein Word-Dokument
+
+00:14:45.940 --> 00:14:46.860
+enthält vielleicht den Begriff
+
+00:14:46.860 --> 00:14:47.740
+Projekt Redwood,
+
+00:14:47.960 --> 00:14:48.500
+aber das macht es
+
+00:14:48.500 --> 00:14:49.540
+noch nicht zu einem Beweismittel.
+
+00:14:50.480 --> 00:14:50.960
+Es könnte eine
+
+00:14:50.960 --> 00:14:51.720
+Besprechungsagenda
+
+00:14:51.720 --> 00:14:52.820
+ohne nützliche Details sein,
+
+00:14:52.880 --> 00:14:53.640
+ein Vertragsentwurf
+
+00:14:53.640 --> 00:14:54.840
+mit direktem Bezug zum Fall
+
+00:14:54.840 --> 00:14:55.520
+oder ein Dokument,
+
+00:14:55.660 --> 00:14:56.960
+das eine rechtliche Prüfung benötigt,
+
+00:14:57.040 --> 00:14:58.220
+bevor es das Unternehmen verlässt.
+
+00:14:59.340 --> 00:15:00.240
+Tags helfen Prüfern dabei,
+
+00:15:00.240 --> 00:15:01.180
+diese Entscheidung festzuhalten.
+
+00:15:01.640 --> 00:15:02.280
+Ein Tag ist lediglich
+
+00:15:02.280 --> 00:15:02.900
+eine Kennzeichnung,
+
+00:15:02.980 --> 00:15:03.700
+die Sie nach der Überprüfung
+
+00:15:03.700 --> 00:15:04.320
+an einem Element anbaut.
+
+00:15:04.700 --> 00:15:05.320
+Sie könnten tags
+
+00:15:05.320 --> 00:15:05.820
+wie relevant,
+
+00:15:05.960 --> 00:15:07.080
+nicht relevant zur Überprüfung
+
+00:15:07.080 --> 00:15:08.700
+vertraulich, intern oder öffentlich verwenden.
+
+00:15:09.240 --> 00:15:09.960
+Ihr Unternehmen verwendet
+
+00:15:09.960 --> 00:15:10.980
+möglicherweise andere Bezeichnungen,
+
+00:15:11.100 --> 00:15:11.820
+aber das Ziel ist dasselbe.
+
+00:15:12.460 --> 00:15:13.220
+Geben Sie dem Casteam
+
+00:15:13.220 --> 00:15:14.040
+eine klare Möglichkeit,
+
+00:15:14.200 --> 00:15:14.920
+Inhalte zu sortieren
+
+00:15:14.920 --> 00:15:16.020
+und Entscheidungen zu dokumentieren.
+
+00:15:16.360 --> 00:15:16.820
+Stellen Sie sich vor,
+
+00:15:16.880 --> 00:15:17.540
+dieses Word-Dokument
+
+00:15:17.540 --> 00:15:18.400
+taucht in einer Suche auf.
+
+00:15:18.880 --> 00:15:19.660
+Ein Prüfer liest es,
+
+00:15:19.740 --> 00:15:20.260
+findet Details
+
+00:15:20.260 --> 00:15:21.480
+mit direktem Bezug zum Thema
+
+00:15:21.480 --> 00:15:22.540
+und markiert es als relevant.
+
+00:15:23.420 --> 00:15:24.000
+Da das Dokument
+
+00:15:24.000 --> 00:15:25.320
+auch Ratschläge der Rechtsabteilung enthält,
+
+00:15:25.400 --> 00:15:25.940
+wird es zusätzlich
+
+00:15:25.940 --> 00:15:27.040
+als vertraulich gekennzeichnet.
+
+00:15:27.760 --> 00:15:28.620
+Jetzt ist das Element
+
+00:15:28.620 --> 00:15:29.280
+nicht mehr nur ein Treffer
+
+00:15:29.280 --> 00:15:29.860
+für ein Schlüsselrohr.
+
+00:15:30.220 --> 00:15:30.940
+Es wurde überprüft,
+
+00:15:31.020 --> 00:15:31.560
+klassifiziert
+
+00:15:31.560 --> 00:15:32.540
+und in den Kontext derjenigen
+
+00:15:32.540 --> 00:15:32.820
+gestellt,
+
+00:15:32.900 --> 00:15:33.520
+die den Fall bearbeiten.
+
+00:15:34.300 --> 00:15:35.260
+Premium-Prüfungstools
+
+00:15:35.260 --> 00:15:35.720
+können helfen,
+
+00:15:35.820 --> 00:15:36.400
+wenn die Ergebnismenge
+
+00:15:36.400 --> 00:15:36.920
+größer wird.
+
+00:15:37.580 --> 00:15:38.600
+Sie finden Duplikate,
+
+00:15:38.720 --> 00:15:39.940
+gruppieren verwandte Inhalte
+
+00:15:39.940 --> 00:15:40.840
+und verknüpfen
+
+00:15:40.840 --> 00:15:42.660
+E-Mail- oder Konversationsverläufe,
+
+00:15:42.760 --> 00:15:43.380
+damit ein Prüfer
+
+00:15:43.380 --> 00:15:44.120
+eine Diskussion
+
+00:15:44.120 --> 00:15:45.520
+als zusammenhängenden Austausch sieht,
+
+00:15:45.640 --> 00:15:46.920
+statt als isolierte Nachrichten.
+
+00:15:47.880 --> 00:15:48.560
+Diese Tools ersetzen
+
+00:15:48.560 --> 00:15:49.140
+kein Menschliches Urteil.
+
+00:15:49.580 --> 00:15:50.380
+Sie helfen dem Prüfer,
+
+00:15:50.460 --> 00:15:51.660
+mehr Zeit für Inhalte aufzuwenden,
+
+00:15:51.720 --> 00:15:52.620
+die eine menschliche Entscheidung
+
+00:15:52.620 --> 00:15:53.020
+erfordern.
+
+00:15:53.020 --> 00:15:54.140
+Soweit das Caseteam
+
+00:15:54.140 --> 00:15:54.800
+die richtigen Elemente
+
+00:15:54.800 --> 00:15:55.280
+ausgewählt hat,
+
+00:15:55.360 --> 00:15:56.180
+können diese exportiert werden.
+
+00:15:56.460 --> 00:15:57.240
+Ein Export bündelt
+
+00:15:57.240 --> 00:15:58.080
+ausgewählte Inhalte
+
+00:15:58.080 --> 00:15:59.060
+und unterstützende Details
+
+00:15:59.060 --> 00:15:59.840
+für die Rechtsabteilung,
+
+00:15:59.940 --> 00:16:00.660
+HR-Compliance
+
+00:16:00.660 --> 00:16:01.660
+oder ein externes Prüfteam.
+
+00:16:01.900 --> 00:16:02.860
+Dies ist der Übergabepunkt,
+
+00:16:02.940 --> 00:16:03.500
+an dem die Arbeit
+
+00:16:03.500 --> 00:16:04.160
+innerhalb von Purview
+
+00:16:04.160 --> 00:16:04.780
+zum Material wird,
+
+00:16:04.820 --> 00:16:05.300
+das eine andere
+
+00:16:05.300 --> 00:16:06.420
+autorisierte Person prüfen kann.
+
+00:16:06.740 --> 00:16:07.280
+Es gibt hier zwei
+
+00:16:07.280 --> 00:16:07.920
+grundlegende Wege.
+
+00:16:08.400 --> 00:16:09.060
+Manchmal erfordert
+
+00:16:09.060 --> 00:16:10.060
+eine abgeschlossene Suche
+
+00:16:10.060 --> 00:16:10.980
+eine schnelle Übergabe
+
+00:16:10.980 --> 00:16:11.840
+und das Team exportiert
+
+00:16:11.840 --> 00:16:12.980
+direkt aus den Suchergebnissen.
+
+00:16:13.660 --> 00:16:14.240
+Andere Male
+
+00:16:14.240 --> 00:16:14.900
+erfordert der Fall
+
+00:16:14.900 --> 00:16:15.940
+eine genauere Prüfung,
+
+00:16:16.020 --> 00:16:16.540
+damit das Team
+
+00:16:16.540 --> 00:16:17.140
+Inhaltesichten
+
+00:16:17.140 --> 00:16:17.920
+mit Tagsversehen
+
+00:16:23.020 --> 00:16:23.680
+mit Merkkontrolle,
+
+00:16:23.920 --> 00:16:25.160
+da sie nicht jedes Element senden,
+
+00:16:25.280 --> 00:16:26.500
+das zufällig ein Wort enthielt,
+
+00:16:26.860 --> 00:16:27.720
+sondern nur die Elemente,
+
+00:16:27.740 --> 00:16:28.560
+die ein Prüfer geprüft
+
+00:16:28.560 --> 00:16:29.440
+und für den richtigen Zweck
+
+00:16:29.440 --> 00:16:29.980
+markiert hat.
+
+00:16:30.820 --> 00:16:31.440
+Der Zugriff bleibt
+
+00:16:31.440 --> 00:16:32.380
+während des gesamten Prozesses
+
+00:16:32.380 --> 00:16:32.620
+scheiden.
+
+00:16:33.040 --> 00:16:34.060
+Nur zugewiesene Fallmitglieder
+
+00:16:34.060 --> 00:16:35.040
+sollten mit dem Fall arbeiten,
+
+00:16:35.160 --> 00:16:35.740
+auch in der Prüfungs-
+
+00:16:35.740 --> 00:16:36.360
+und Exportphase.
+
+00:16:37.240 --> 00:16:37.940
+Berechtigungen sind nichts,
+
+00:16:38.000 --> 00:16:39.020
+was man erst am Ende korrigiert.
+
+00:16:39.780 --> 00:16:40.920
+Sie müssen vor der ersten Suche
+
+00:16:40.920 --> 00:16:41.480
+vorhanden sein,
+
+00:16:41.560 --> 00:16:42.440
+da sensible Inhalte
+
+00:16:42.440 --> 00:16:43.640
+sofort in den Ergebnissen
+
+00:16:43.640 --> 00:16:44.340
+erscheinen können.
+
+00:16:45.340 --> 00:16:46.240
+Für sie ist ein Export
+
+00:16:46.240 --> 00:16:47.180
+kein Download-Button
+
+00:16:47.180 --> 00:16:48.120
+für alle Suchergebnisse.
+
+00:16:48.680 --> 00:16:49.380
+Es ist der letzte Schritt
+
+00:16:49.380 --> 00:16:50.080
+in einer sorgfältigen
+
+00:16:50.080 --> 00:16:50.580
+Entscheidungskette.
+
+00:16:53.020 --> 00:16:53.800
+Die Inhalte geschützt,
+
+00:16:53.880 --> 00:16:55.160
+gesucht, geprüft und sortiert.
+
+00:16:55.780 --> 00:16:56.340
+Erst dann gelangen
+
+00:16:56.340 --> 00:16:56.960
+die richtigen Daten
+
+00:16:56.960 --> 00:16:57.820
+zu den richtigen Personen.
+
+00:16:58.640 --> 00:16:59.560
+Das führt zum Gesamtbild,
+
+00:16:59.700 --> 00:17:00.080
+wie die Teile
+
+00:17:00.080 --> 00:17:01.340
+von verstreuten Arbeitsdaten
+
+00:17:01.340 --> 00:17:02.200
+zu einem rechtssicheren
+
+00:17:02.200 --> 00:17:03.160
+Prozess zusammenlaufen.
+
+00:17:04.140 --> 00:17:04.960
+Also das ist das Wichtigste
+
+00:17:04.960 --> 00:17:05.540
+bei eDiscovery.
+
+00:17:06.100 --> 00:17:06.900
+Es ist kein einzelner
+
+00:17:06.900 --> 00:17:07.680
+großer Such-Button.
+
+00:17:08.080 --> 00:17:08.740
+Es ist ein Prozess,
+
+00:17:08.860 --> 00:17:09.340
+ein Prozess,
+
+00:17:09.580 --> 00:17:10.560
+der jeder Sucher einen Zweck
+
+00:17:10.560 --> 00:17:11.260
+und ein Protokoll
+
+00:17:11.260 --> 00:17:12.200
+der Ereignisse verleiht.
+
+00:17:12.580 --> 00:17:13.120
+Lassen Sie es auf.
+
+00:17:13.500 --> 00:17:14.220
+Der Fall definiert
+
+00:17:14.220 --> 00:17:15.240
+den Umfang der Angelegenheit.
+
+00:17:15.580 --> 00:17:16.060
+Dann zeigen Ihnen
+
+00:17:16.060 --> 00:17:16.620
+die Datenquellen,
+
+00:17:16.700 --> 00:17:17.220
+wo Sie suchen müssen.
+
+00:17:17.580 --> 00:17:18.200
+Die Aufbewahrungsfrist
+
+00:17:18.200 --> 00:17:18.620
+stellt sicher,
+
+00:17:18.720 --> 00:17:19.520
+dass Inhalte erhalten bleiben,
+
+00:17:19.520 --> 00:17:20.400
+solange der Fall aktiv ist.
+
+00:17:20.800 --> 00:17:21.960
+Die Suche grenzt das Feld ein.
+
+00:17:22.500 --> 00:17:23.120
+Die Überprüfung
+
+00:17:23.120 --> 00:17:23.840
+trennt Relevantes
+
+00:17:23.840 --> 00:17:24.500
+von Irrelevanten.
+
+00:17:25.080 --> 00:17:25.460
+Und schließlich
+
+00:17:25.460 --> 00:17:26.220
+übergibt der Export
+
+00:17:26.220 --> 00:17:27.280
+die ausgewählten Ergebnisse
+
+00:17:27.280 --> 00:17:28.560
+an die zuständigen Personen.
+
+00:17:29.060 --> 00:17:29.680
+Die Reihenfolge ist wichtig.
+
+00:17:30.100 --> 00:17:30.440
+Suchen Sie,
+
+00:17:30.520 --> 00:17:31.560
+bevor Sie den Umfang definieren.
+
+00:17:31.660 --> 00:17:32.320
+Erhalten Sie nur Rausch.
+
+00:17:32.920 --> 00:17:33.440
+Exportieren Sie,
+
+00:17:33.540 --> 00:17:34.420
+bevor jemand die Daten prüft,
+
+00:17:34.500 --> 00:17:35.000
+teilen Sie eventuell
+
+00:17:35.000 --> 00:17:35.940
+weit mehr als der Fall erfolgt.
+
+00:17:36.440 --> 00:17:37.480
+Versäumen Sie die Aufbewahrung
+
+00:17:37.480 --> 00:17:38.020
+bei Bedarf.
+
+00:17:38.180 --> 00:17:39.120
+Können Inhalte sich ändern
+
+00:17:39.120 --> 00:17:39.720
+oder verschwinden,
+
+00:17:39.820 --> 00:17:40.860
+bevor sie geprüft werden können?
+
+00:17:41.640 --> 00:17:42.340
+Kehren wir zum Vergleich
+
+00:17:42.340 --> 00:17:43.260
+mit dem Bürogebäude zurück.
+
+00:17:43.740 --> 00:17:44.780
+Entra-ID ist der Empfangsschalter,
+
+00:17:44.780 --> 00:17:45.300
+der kontrolliert,
+
+00:17:45.360 --> 00:17:45.920
+wer Zugang erhält.
+
+00:17:46.420 --> 00:17:47.800
+Microsoft 365 Apps
+
+00:17:47.800 --> 00:17:48.240
+sind die Räume,
+
+00:17:48.320 --> 00:17:49.440
+in denen die tägliche Arbeit stattfindet.
+
+00:17:50.000 --> 00:17:50.820
+Purview e-Discovery
+
+00:17:50.820 --> 00:17:51.600
+ist wie ein Schlüssel,
+
+00:17:51.900 --> 00:17:52.740
+der nur die mit dem Fall
+
+00:17:52.740 --> 00:17:53.880
+verbundenen Räume öffnet
+
+00:17:53.880 --> 00:17:55.340
+und jeden Schritt des Fallteams
+
+00:17:55.340 --> 00:17:56.740
+in diesen Räumen protokolliert.
+
+00:17:57.240 --> 00:17:58.280
+Warum ist dieses Protokoll wichtig?
+
+00:17:58.660 --> 00:17:59.340
+Weil Untersuchungen
+
+00:17:59.340 --> 00:18:00.580
+mehr als nur Technologie beinhalten.
+
+00:18:01.120 --> 00:18:02.340
+Die IT verwaltet die Plattform
+
+00:18:02.340 --> 00:18:02.860
+und stellt sicher,
+
+00:18:02.940 --> 00:18:04.060
+dass der Prozess korrekt abläuft.
+
+00:18:04.140 --> 00:18:04.800
+Aber Rechtsabteilung,
+
+00:18:04.880 --> 00:18:05.440
+Personalwesen,
+
+00:18:05.560 --> 00:18:05.940
+Compliance,
+
+00:18:06.040 --> 00:18:07.100
+Sicherheit und Geschäftsinhaber
+
+00:18:07.100 --> 00:18:08.080
+liefern die eigentliche Frage,
+
+00:18:08.400 --> 00:18:08.920
+den Kontext
+
+00:18:08.920 --> 00:18:09.640
+und die Entscheidungen
+
+00:18:09.640 --> 00:18:10.640
+für das weitere Vorgehen.
+
+00:18:11.400 --> 00:18:12.100
+Keine einzelne Gruppe
+
+00:18:12.100 --> 00:18:12.620
+sollte versuchen,
+
+00:18:12.620 --> 00:18:13.480
+alles alleine zu bewältigen.
+
+00:18:13.680 --> 00:18:14.600
+Das ist ein Rezept für Fehler.
+
+00:18:15.200 --> 00:18:16.060
+Moderne Arbeit hinterlässt
+
+00:18:16.060 --> 00:18:17.120
+zudem überall vernetzte Spuren.
+
+00:18:17.520 --> 00:18:18.020
+Eine E-Mail kann
+
+00:18:18.020 --> 00:18:18.940
+auf eine Cloud-Datei verweisen.
+
+00:18:19.440 --> 00:18:20.580
+Ein Chat kann ein Dokument enthalten,
+
+00:18:20.660 --> 00:18:21.640
+das anderswo gespeichert ist.
+
+00:18:22.360 --> 00:18:23.080
+Eine Team-Diskussion
+
+00:18:23.080 --> 00:18:23.580
+kann zu einem anderen
+
+00:18:23.580 --> 00:18:24.520
+gemeinsam Speicherort finden.
+
+00:18:24.900 --> 00:18:25.920
+Deshalb ist Ihre Quellenübersicht
+
+00:18:25.920 --> 00:18:26.420
+genauso wichtig
+
+00:18:26.420 --> 00:18:27.120
+wie Ihre Suchbegriffe.
+
+00:18:27.880 --> 00:18:28.540
+Sobald Ihr Unternehmen
+
+00:18:28.540 --> 00:18:29.760
+diesen vernetzten Pfad versteht,
+
+00:18:29.820 --> 00:18:30.620
+können Sie sich vorbereiten,
+
+00:18:30.700 --> 00:18:32.140
+bevor die nächste Anfrage eintrifft.
+
+00:18:32.620 --> 00:18:33.480
+Das ist der wahre Nutzen.
+
+00:18:34.240 --> 00:18:35.120
+Praktische Erkenntnisse.
+
+00:18:35.540 --> 00:18:36.060
+Seien Sie bereit,
+
+00:18:36.140 --> 00:18:37.020
+bevor die Anfrage eintrifft.
+
+00:18:37.580 --> 00:18:38.580
+Beginnen Sie mit einer Datenentkarte.
+
+00:18:39.340 --> 00:18:39.840
+Notieren Sie,
+
+00:18:42.620 --> 00:18:44.200
+beziehen Sie Exchange Online
+
+00:18:44.200 --> 00:18:44.720
+für E-Mails,
+
+00:18:45.100 --> 00:18:46.480
+OneDrive für persönliche Dateien,
+
+00:18:46.980 --> 00:18:48.060
+SharePoint für gemeinsame Seiten
+
+00:18:48.060 --> 00:18:48.580
+sowie Teams,
+
+00:18:48.860 --> 00:18:50.380
+Microsoft 365 Groups
+
+00:18:50.380 --> 00:18:51.480
+und Viva Engage mit ein,
+
+00:18:51.700 --> 00:18:52.720
+falls diese genutzt werden.
+
+00:18:53.520 --> 00:18:54.280
+Also die Lankart einfach.
+
+00:18:55.280 --> 00:18:56.380
+Das Ziel ist es,
+
+00:18:56.440 --> 00:18:57.720
+Rechtsabteilung Personalwesen
+
+00:18:57.720 --> 00:18:59.140
+Compliance, Sicherheit und IT
+
+00:18:59.140 --> 00:19:00.020
+bei der schnellen Beantwortung
+
+00:19:00.020 --> 00:19:00.900
+einer Grundfrage zu helfen.
+
+00:19:01.440 --> 00:19:02.360
+Wo könnten die Datensätze
+
+00:19:02.360 --> 00:19:03.060
+zu diesem Fall liegen?
+
+00:19:04.580 --> 00:19:05.460
+Überprüfen Sie als nächstes
+
+00:19:05.460 --> 00:19:06.620
+Ihre Purview e-Discovery-Berechtigung.
+
+00:19:07.340 --> 00:19:07.880
+Nur die Personen,
+
+00:19:07.980 --> 00:19:09.060
+die tatsächlich sensible Fälle
+
+00:19:09.060 --> 00:19:09.980
+Fälle bearbeiten müssen,
+
+00:19:10.160 --> 00:19:10.980
+sollten Zugriff auf Fälle,
+
+00:19:11.100 --> 00:19:12.420
+Suchergebnisse und Exporte haben.
+
+00:19:13.100 --> 00:19:14.560
+Überprüfen Sie die zugewiesenen Rollen
+
+00:19:14.560 --> 00:19:15.640
+und entfernen Sie Zugriffe
+
+00:19:15.640 --> 00:19:16.560
+ohne klaren Grund.
+
+00:19:17.340 --> 00:19:18.120
+Dies ist ein guter Zeitpunkt,
+
+00:19:18.180 --> 00:19:18.580
+um festzulegen,
+
+00:19:18.660 --> 00:19:19.020
+wer was tut.
+
+00:19:19.280 --> 00:19:19.920
+Wer kann eine Fall öffnen?
+
+00:19:20.320 --> 00:19:21.040
+Wer kann eine Suche durchführen?
+
+00:19:21.400 --> 00:19:22.420
+Wer kann einen Export genehmigen?
+
+00:19:22.920 --> 00:19:23.600
+Solche Entscheidungen
+
+00:19:23.600 --> 00:19:24.340
+fallen viel leichter,
+
+00:19:24.380 --> 00:19:25.400
+wenn keine dringende Anfrage
+
+00:19:25.400 --> 00:19:26.420
+im Posteingang wartet.
+
+00:19:27.300 --> 00:19:28.120
+Vereinbaren Sie danach
+
+00:19:28.120 --> 00:19:29.140
+ein einfaches Namensschema
+
+00:19:29.140 --> 00:19:29.520
+für Fälle
+
+00:19:29.520 --> 00:19:30.660
+und einen Prozess für die Meldung.
+
+00:19:31.380 --> 00:19:32.420
+Ein Fallname könnte die Art
+
+00:19:32.420 --> 00:19:32.880
+des Vorgangs
+
+00:19:32.880 --> 00:19:33.600
+ein kurzes Thema
+
+00:19:33.600 --> 00:19:34.540
+und ein Datum enthalten.
+
+00:19:35.200 --> 00:19:36.080
+Halten Sie ihn so klar,
+
+00:19:36.300 --> 00:19:36.920
+dass das Fallteam
+
+00:19:36.920 --> 00:19:38.140
+die Vorgänge unterscheiden kann,
+
+00:19:38.140 --> 00:19:39.740
+ohne jeden einzeln zu öffnen.
+
+00:19:39.740 --> 00:19:40.700
+Tringen Sie außerdem
+
+00:19:40.700 --> 00:19:41.520
+den ersten Ansprechpartner.
+
+00:19:41.740 --> 00:19:42.620
+Wenn die Personalabteilung
+
+00:19:42.620 --> 00:19:43.560
+eine Mitarbeiterbeschwerde erhält,
+
+00:19:43.640 --> 00:19:44.280
+wer kontaktiert die ID?
+
+00:19:44.760 --> 00:19:45.240
+Wenn die Sicherheit
+
+00:19:45.240 --> 00:19:46.480
+eine mögliche Datenpanne feststellt,
+
+00:19:46.560 --> 00:19:47.220
+wann wird die Rechtsabteilung
+
+00:19:47.220 --> 00:19:47.620
+hinzugezogen?
+
+00:19:48.140 --> 00:19:48.980
+Wenn die Compliance
+
+00:19:48.980 --> 00:19:50.320
+eine Anfrage von Behörden erhält,
+
+00:19:50.420 --> 00:19:51.640
+wer entscheidet über die Aufbewahrung?
+
+00:19:52.140 --> 00:19:53.200
+Sie brauchen kein umfangreiches
+
+00:19:53.200 --> 00:19:53.860
+Strategiepapier,
+
+00:19:53.940 --> 00:19:54.540
+bevor Sie beginnen.
+
+00:19:55.000 --> 00:19:55.420
+Sie brauchen nur
+
+00:19:55.420 --> 00:19:55.980
+einen klaren Weg,
+
+00:19:56.080 --> 00:19:56.760
+dem die Beteiligten vorliegen.
+
+00:19:57.140 --> 00:19:57.580
+Üben Sie dann
+
+00:19:57.580 --> 00:19:58.460
+mit einem kleinen Testfall.
+
+00:19:59.040 --> 00:19:59.940
+Verwenden Sie eine begrenzte
+
+00:19:59.940 --> 00:20:00.620
+Testdatenquelle
+
+00:20:00.620 --> 00:20:01.580
+und einen kurzen Zeitraum.
+
+00:20:02.080 --> 00:20:02.840
+Vermeiden Sie echte,
+
+00:20:02.940 --> 00:20:03.620
+sensible Daten,
+
+00:20:03.740 --> 00:20:04.540
+erstellen Sie den Fall,
+
+00:20:04.640 --> 00:20:05.700
+prüfen Sie die Zugriffsrechte,
+
+00:20:06.020 --> 00:20:06.980
+führen Sie eine Suche durch
+
+00:20:06.980 --> 00:20:08.580
+und verfolgen Sie die Ergebnisse.
+
+00:20:09.300 --> 00:20:09.900
+Ein Probedurchlauf
+
+00:20:09.900 --> 00:20:10.980
+der Unklarheiten frühzeitig ab.
+
+00:20:11.400 --> 00:20:12.120
+Vielleicht haben die falschen
+
+00:20:12.120 --> 00:20:12.880
+Personen Zugriff,
+
+00:20:12.980 --> 00:20:14.460
+ein Team findet seine Dateien nicht
+
+00:20:14.460 --> 00:20:15.720
+oder der Name ist zu vage.
+
+00:20:16.640 --> 00:20:17.760
+Besser, Sie finden diese Probleme
+
+00:20:17.760 --> 00:20:18.600
+während eines Testers
+
+00:20:18.600 --> 00:20:19.600
+bei einer echten Untersuchung.
+
+00:20:20.000 --> 00:20:20.820
+Prüfen Sie die Lizenzierung,
+
+00:20:20.920 --> 00:20:21.860
+bevor Sie erweitert Optionen mit.
+
+00:20:22.340 --> 00:20:22.980
+Die Inhaltssuche
+
+00:20:22.980 --> 00:20:24.060
+und Standard eDiscovery
+
+00:20:24.060 --> 00:20:25.860
+sind meist in E3-Lizenzenen enthalten.
+
+00:20:27.060 --> 00:20:27.980
+Premiumoptionen für Überprüfung
+
+00:20:27.980 --> 00:20:28.460
+und Analyse
+
+00:20:28.460 --> 00:20:29.660
+erfordern meist E5-Lizenzenzen
+
+00:20:29.660 --> 00:20:30.200
+oder ein Add-Up.
+
+00:20:30.200 --> 00:20:31.340
+Ihr Set-Up kann abweichen,
+
+00:20:31.420 --> 00:20:31.940
+prüfen Sie es daher.
