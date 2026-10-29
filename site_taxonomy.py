@@ -125,11 +125,19 @@ def autolink(html, it, pool, tagsets_raw, url_of, max_links=10, money=None):
                 continue
             a, b = boundary(phrase)
             rx = re.compile(("(?<![\\w])" if a else "") + re.escape(phrase) + ("(?![\\w])" if b else ""), re.I)
+            depth = 0
             for i, seg in enumerate(parts):
-                if i % 2 == 0 and seg.strip():
+                if i % 2 == 1:
+                    if re.match(r"<a[\s>]", seg, re.I):
+                        depth += 1
+                    elif seg.lower().startswith("</a"):
+                        depth = max(0, depth - 1)
+                    continue
+                if depth == 0 and seg.strip():
                     mm = rx.search(seg)
                     if mm:
-                        parts[i] = seg[:mm.start()] + f'<a class="ilink" href="{url_of(o)}">{mm.group(0)}</a>' + seg[mm.end():]
+                        # Link als eigenes Tag-Segment einfuegen, damit spaetere Treffer nie in href/Linktext landen
+                        parts[i:i + 1] = [seg[:mm.start()], f'<a class="ilink" href="{url_of(o)}">', mm.group(0), "</a>", seg[mm.end():]]
                         used.add(o["vid"])
                         links.append((phrase, url_of(o)))
                         break
