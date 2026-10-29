@@ -1,5 +1,5 @@
 """Lern-Bereich: Glossar, Lernpfade, Übungs-Trainer (alles aus vorhandenen Daten, ohne API-Kosten)."""
-import json, re, html
+import json, re, html, os
 from pathlib import Path
 
 ROOT = Path(__file__).parent
@@ -215,9 +215,13 @@ def wiki_render(body, links, w):
 
 
 def gloss_links(lang, base):
-    """id -> [Name, URL] aller verlinkbaren Begriffe (Glossar; Entitaeten kommen dazu, sobald es Seiten gibt)."""
+    """id -> [Name, URL] aller verlinkbaren Begriffe: Glossar-Seiten, sonst Entitaetsseiten."""
     gb = f"{base}/glossary/" if lang == "en" else f"{base}/{lang}/glossary/"
-    return {x["id"]: [x["name"], f"{gb}{x['id']}/"] for x in GLOSS}
+    gids = {x["id"] for x in GLOSS}
+    eb = f"{base}/de/entity/" if lang == "de" else f"{base}/entity/"
+    out = {i: [e["name"], eb + i + "/"] for i, e in ENTS.items()}
+    out.update({x["id"]: [x["name"], f"{gb}{x['id']}/"] for x in GLOSS})
+    return out
 
 
 def wiki_block(lang, term_id, api, base, static, links=None):
@@ -346,7 +350,9 @@ def build_learn(ctx):
         # Hub
         hu = f"{BASE}/{lang}/learn/"
         cards = (f'<a class="ln-card" href="{BASE}/{lang}/glossary/"><b>{esc(t["glossary"])}</b><span>{esc(t["glossary_intro"])}</span></a>'
-                 f'<a class="ln-card" href="{BASE}/{lang}/trainer/"><b>{esc(t["trainer"])}</b><span>{esc(t["trainer_intro"])}</span></a>')
+                 f'<a class="ln-card" href="{BASE}/{lang}/trainer/"><b>{esc(t["trainer"])}</b><span>{esc(t["trainer_intro"])}</span></a>'
+                 f'<a class="ln-card" href="{BASE}/{"de/" if lang == "de" else ""}entity/"><b>{esc("Entitätsdatenbank" if lang == "de" else "Entity database")}</b><span>{esc("Produkte, Konzepte und Beziehungen rund um Microsoft" if lang == "de" else "Products, concepts and relationships around Microsoft")}</span></a>'
+                 f'<a class="ln-card" href="{BASE}/{"de/" if lang == "de" else ""}community/members/"><b>{esc("Mitglieder und Firmen" if lang == "de" else "Members and companies")}</b><span>{esc("Experten, Programme und Firmen der Community" if lang == "de" else "Experts, programs and companies of the community")}</span></a>')
         pl = "".join(f'<a class="ln-card" href="{BASE}/{lang}/path/{c}/"><b>{esc(cat_name(c, lang))}</b><span>{len(paths[c])}</span></a>' for c in ORDER if c in paths)
         b = shell(lang, f'<h1>{esc(t["learn"])}</h1><p class="mut">{esc(t["learn_intro"])}</p><h2>{esc(t["paths"])}</h2><div class="ln-grid">{pl}</div><div class="ln-grid">{cards}</div>')
         write(f"{lang}/learn/index.html", page(lang, f'{t["learn"]} – M365.FM {LANGS[lang][0]}', t["learn_intro"], hu, b, None, None, og_type="website", extra_head=LCSS))
@@ -372,11 +378,56 @@ def _names(term):
     return res
 
 
+# ---- Entitaets-Registry: Basisdaten (data/entities.json) + freigegebene Community-Aenderungen (API) ----
+def _fetch_json(url, timeout=10):
+    import urllib.request
+    try:
+        with urllib.request.urlopen(urllib.request.Request(url, headers={"user-agent": "m365-dub-build"}), timeout=timeout) as r:
+            return json.loads(r.read().decode("utf-8"))
+    except Exception:
+        return None
+
+
+def load_entities(api):
+    base = {}
+    f = Path(__file__).parent / "data" / "entities.json"
+    if f.exists():
+        for e in json.loads(f.read_text("utf-8")):
+            base[e["id"]] = e
+    over = (_fetch_json(f"{api}/api/entity/export") or {}).get("items", [])
+    for it in over:
+        d = it.get("data") or {}
+        if it.get("id") and d.get("name") and d.get("type"):
+            base[it["id"]] = {"id": it["id"], **d, "desc": d.get("desc") or {"en": "", "de": ""}, "rel": d.get("rel") or [], "aliases": d.get("aliases") or [], "edited": it.get("created")}
+    return base
+
+
+COMMUNITY_API_DEFAULT = os.environ.get("COMMUNITY_API", "https://api-dub.m365.fm")
+ENTS = load_entities(COMMUNITY_API_DEFAULT)
+_GENERIC = {"prompt", "governance", "graph", "teams", "viva", "fabric", "automation", "productivity", "actions", "outlook", "compliance", "context", "word", "excel", "ad", "pac", "rag", "mcp", "dlp", "crm", "cdp", "kql", "apim", "hitl", "gpt 5"}
+
+
+def ent_names(e, strict=True):
+    out = [e["name"], re.sub(r"\s*\(.*?\)", "", e["name"]).strip()]
+    m = re.search(r"\(([A-Za-z]{3,6})\)", e["name"])
+    if m:
+        out.append(m.group(1))
+    if e["name"].startswith("Microsoft "):
+        out.append(e["name"][10:])
+    out += e.get("aliases", [])
+    seen, res = set(), []
+    for x in out:
+        k = x.lower()
+        if len(x) >= (5 if strict else 3) and k not in _GENERIC and k not in seen:
+            seen.add(k); res.append(x)
+    return res
+
+
 def drop_glossed(money):
     """Money-Keywords, zu denen es einen Glossar-Eintrag gibt, nicht mehr auf Folgen verlinken (das uebernimmt gloss_link -> Glossar)."""
     if not GLOSS or not money:
         return money
-    names = {nm.lower() for x in GLOSS for nm in _names(x)} | {x["name"].lower() for x in GLOSS}
+    names = {nm.lower() for x in GLOSS for nm in _names(x)} | {x["name"].lower() for x in GLOSS} | {nm.lower() for e in ENTS.values() for nm in ent_names(e, False)}
     return {k: v for k, v in money.items() if k.lower() not in names}
 
 
@@ -385,7 +436,14 @@ def gloss_link(html_, lang, base, max_links=8):
     if not GLOSS or not html_:
         return html_
     tgt = (lambda x: f"{base}/de/glossary/{x['id']}/") if lang == "de" else (lambda x: f"{base}/{lang}/glossary/#{x['id']}")
-    cands = sorted(((nm, x) for x in GLOSS for nm in _names(x)), key=lambda c: -len(c[0]))
+    gids = {x["id"] for x in GLOSS}
+    cands = [(nm, x) for x in GLOSS for nm in _names(x)]
+    ents = [e for e in ENTS.values() if e["id"] not in gids and e["type"] not in ("person", "event", "media")]
+    for e in ents:
+        x = {"id": e["id"], "name": e["name"], "en": e["desc"].get("en", ""), "de": e["desc"].get("de") or e["desc"].get("en", ""), "ent": True}
+        cands += [(nm, x) for nm in ent_names(e)]
+    cands.sort(key=lambda c: -len(c[0]))
+    etgt = lambda x: f"{base}/de/entity/{x['id']}/" if lang == "de" else f"{base}/entity/{x['id']}/"
     used, cnt = set(), [0]
 
     def blk(m):
@@ -410,7 +468,8 @@ def gloss_link(html_, lang, base, max_links=8):
                     mm = rx.search(seg)
                     if mm:
                         dd = x["de"] if lang == "de" else x["en"]
-                        parts[i:i + 1] = [seg[:mm.start()], f'<a class="ilink gl" href="{tgt(x)}" data-gt="{esc(x["name"])}" data-gd="{esc(dd)}"' + ('' if lang == "de" else ' data-gl="en"') + '>', mm.group(0), "</a>", seg[mm.end():]]
+                        u_ = etgt(x) if x.get("ent") else tgt(x)
+                        parts[i:i + 1] = [seg[:mm.start()], f'<a class="ilink gl" href="{u_}" data-gt="{esc(x["name"])}" data-gd="{esc(dd)}"' + ('' if lang == "de" else ' data-gl="en"') + '>', mm.group(0), "</a>", seg[mm.end():]]
                         used.add(x["id"])
                         cnt[0] += 1
                         break

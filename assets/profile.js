@@ -1,0 +1,106 @@
+/* Experten-Profil und Firmen-Konten bearbeiten (Community-Seite, nur eingeloggt). window.M365X = {api, base, lang}. Nur DOM-Knoten. */
+(function () {
+  var X = window.M365X, root = document.getElementById("c-expert"); if (!X || !root || /[?&]u=/.test(location.search)) return;
+  var de = X.lang === "de";
+  var Q = de ? { h: "Öffentliches Experten-Profil", intro: "Freiwillig: Mit einem öffentlichen Profil erscheinst du im Mitgliederverzeichnis, bei deinen Themen und mit Verknüpfung zu den Schema.org-Entitäten. Programme und Expertise werden vom Redaktionsteam bestätigt oder von Mitgliedern gegengezeichnet.", pub: "Profil öffentlich anzeigen", handle: "Profil-Adresse (a-z, 0-9, -)", headline: "Kurzzeile (z. B. Power BI Berater, MVP)", about: "Über mich (Bio, ohne Links)", company: "Firma (Freitext)", job: "Position", country: "Land", showorg: "Firmenzugehörigkeit öffentlich zeigen", prog: "Microsoft-Programme", year: "Seit (Jahr)", proof: "Nachweis-Link (https)", exp: "Themen und Expertise", addexp: "Thema hinzufügen", lvl: ["Lerne", "Praxis", "Experte"], certs: "Zertifizierungen", addcert: "Zertifizierung hinzufügen", chan: "Kanäle und Links", addch: "Kanal hinzufügen", feedurl: "Feed-URL (RSS/Atom, optional)", save: "Profil speichern", saved: "Gespeichert.", err: "Etwas ist schiefgelaufen. Bitte prüfe deine Angaben.", rm: "Entfernen", pick: "Thema suchen…", url: "https://…", orgs: "Firmen", neworg: "Firma anlegen", orgname: "Firmenname", tagline: "Kurzbeschreibung", site: "Webseite", size: "Mitarbeitende", join: "Einer Firma beitreten", search: "Firma suchen…", req: "Beitritt anfragen", pending: "Offene Anfragen", team: "Team", approve: "Freigeben", remove: "Entfernen", pend_me: "Anfrage wartet auf Freigabe", leave: "Verlassen", edit: "Bearbeiten", open: "Öffentliche Seite", handle_taken: "Diese Adresse ist schon vergeben.", bad_handle: "Bitte eine Adresse mit 3–30 Zeichen (a-z, 0-9, -) angeben.", bad_channel: "Ein Kanal ist ungültig (https, passende Domain).", bad_expertise: "Ein Thema gibt es nicht.", bad_url: "Eine Adresse ist ungültig.", bad_cert: "Eine Zertifizierung ist ungültig.", rate_limit: "Zu viele Änderungen – bitte später erneut.", note: "Die öffentliche Seite erscheint nach dem nächsten Seitenbau (stündlich)." }
+    : { h: "Public expert profile", intro: "Optional: with a public profile you appear in the member directory, on your topics and linked to the Schema.org entities. Programs and expertise are confirmed by the editorial team or endorsed by members.", pub: "Show my profile publicly", handle: "Profile address (a-z, 0-9, -)", headline: "Headline (e.g. Power BI consultant, MVP)", about: "About me (bio, no links)", company: "Company (free text)", job: "Job title", country: "Country", showorg: "Show company membership publicly", prog: "Microsoft programs", year: "Since (year)", proof: "Proof link (https)", exp: "Topics and expertise", addexp: "Add topic", lvl: ["Learning", "Practitioner", "Expert"], certs: "Certifications", addcert: "Add certification", chan: "Channels and links", addch: "Add channel", feedurl: "Feed URL (RSS/Atom, optional)", save: "Save profile", saved: "Saved.", err: "Something went wrong. Please check your entries.", rm: "Remove", pick: "Search topic…", url: "https://…", orgs: "Companies", neworg: "Create a company", orgname: "Company name", tagline: "Tagline", site: "Website", size: "Employees", join: "Join a company", search: "Search company…", req: "Request to join", pending: "Open requests", team: "Team", approve: "Approve", remove: "Remove", pend_me: "Request awaiting approval", leave: "Leave", edit: "Edit", open: "Public page", handle_taken: "That address is already taken.", bad_handle: "Please use an address with 3–30 characters (a-z, 0-9, -).", bad_channel: "A channel is invalid (https, matching domain).", bad_expertise: "A topic does not exist.", bad_url: "An address is invalid.", bad_cert: "A certification is invalid.", rate_limit: "Too many changes – please try again later.", note: "The public page appears after the next site build (hourly)." };
+  var PROG = [["mvp", "Microsoft MVP"], ["mct", "Microsoft Certified Trainer (MCT)"], ["rd", "Microsoft Regional Director"], ["msa", "Microsoft Student Ambassador"], ["ms_employee", de ? "Microsoft-Mitarbeiter:in" : "Microsoft employee"], ["partner", "Microsoft Partner"]];
+  var KINDS = ["linkedin", "github", "youtube", "x", "mastodon", "bluesky", "twitch", "blog", "podcast", "newsletter", "website", "other"], KL = { linkedin: "LinkedIn", github: "GitHub", youtube: "YouTube", x: "X", mastodon: "Mastodon", bluesky: "Bluesky", twitch: "Twitch", blog: "Blog", podcast: "Podcast", newsletter: "Newsletter", website: "Website", other: "Link" };
+  function h(tag, a, kids) { var e = document.createElement(tag); for (var k in (a || {})) { if (k === "class") e.className = a[k]; else if (k === "text") e.textContent = a[k]; else if (k.slice(0, 2) === "on") e.addEventListener(k.slice(2), a[k]); else e.setAttribute(k, a[k]); } (kids || []).forEach(function (c) { if (c != null) e.appendChild(typeof c === "string" ? document.createTextNode(c) : c); }); return e; }
+  function api(path, o) { o = o || {}; o.credentials = "include"; o.headers = Object.assign({ "x-requested-with": "m365" }, o.headers || {}); if (o.body && typeof o.body !== "string") { o.body = JSON.stringify(o.body); o.headers["content-type"] = "application/json"; } return fetch(X.api + path, o).then(function (r) { return r.json().then(function (j) { return { s: r.status, j: j }; }); }); }
+  var uid = 0; function lab(text, el) { var id = "pe" + (++uid); el.id = id; return h("div", {}, [h("label", { for: id, text: text, style: "display:block;margin-top:.5em;font-weight:600" }), el]); }
+  var inp = function (max, v) { var e = h("input", { type: "text", maxlength: max || 120 }); e.value = v || ""; return e; };
+  var chk = function (text, v) { var c = h("input", { type: "checkbox" }); c.checked = !!v; return { c: c, w: h("label", { style: "display:block;margin:.4em 0" }, [c, " " + text]) }; };
+
+  function programsUI(sel, orgSide) {
+    var box = h("div", {}), rows = {};
+    PROG.filter(function (p) { return orgSide ? p[0] === "partner" : true; }).forEach(function (p) {
+      var cur = (sel || []).filter(function (x) { return x.p === p[0]; })[0] || {}, c = chk(p[1] + (cur.verified ? " ✔" : ""), !!cur.p), yr = h("input", { type: "number", min: 1990, max: 2100, "aria-label": Q.year, placeholder: Q.year, style: "width:7em" }), pr = h("input", { type: "text", maxlength: 300, placeholder: Q.proof, "aria-label": Q.proof });
+      yr.value = cur.year || ""; pr.value = cur.url || ""; rows[p[0]] = { c: c.c, yr: yr, pr: pr };
+      box.appendChild(h("div", { style: "margin:.5em 0" }, [c.w, h("div", { style: "display:flex;gap:.4em;flex-wrap:wrap" }, [yr, pr])]));
+    });
+    box.get = function () { return Object.keys(rows).filter(function (k) { return rows[k].c.checked; }).map(function (k) { return { p: k, year: +rows[k].yr.value || 0, url: rows[k].pr.value.trim() }; }); };
+    return box;
+  }
+  function pickerRows(all, filter, initial, withYear, labelAdd) {
+    var wrap = h("div", {}), list = h("div"), dl = h("datalist", { id: "pdl" + (++uid) });
+    all.filter(filter).forEach(function (x) { dl.appendChild(h("option", { value: x.name })); });
+    function add(it) {
+      var name = h("input", { type: "text", list: dl.id, placeholder: Q.pick, "aria-label": Q.pick, maxlength: 80 }), lv = h("select", { "aria-label": Q.exp }), yr = h("input", { type: "number", min: 1990, max: 2100, "aria-label": Q.year, placeholder: Q.year, style: "width:6em" }), pr = h("input", { type: "text", maxlength: 300, placeholder: Q.proof, "aria-label": Q.proof });
+      Q.lvl.forEach(function (l, i) { lv.appendChild(h("option", { value: i + 1, text: l })); }); lv.value = (it && it.level) || 2; yr.value = (it && it.year) || ""; pr.value = (it && it.url) || "";
+      if (it && it.e) { var t = all.filter(function (x) { return x.id === it.e; })[0]; name.value = t ? t.name : it.e; }
+      var row = h("div", { style: "display:flex;gap:.4em;flex-wrap:wrap;margin:.3em 0" }, [name].concat(withYear ? [yr, pr] : [lv], [h("button", { type: "button", class: "btn", text: Q.rm, onclick: function () { row.remove(); } })]));
+      row._get = function () { var v = name.value.trim().toLowerCase(), hit = all.filter(function (x) { return x.name.toLowerCase() === v; })[0]; if (!hit) return v ? null : false; return withYear ? { e: hit.id, year: +yr.value || 0, url: pr.value.trim() } : { e: hit.id, level: +lv.value }; };
+      list.appendChild(row);
+    }
+    (initial || []).forEach(add);
+    wrap.appendChild(dl); wrap.appendChild(list); wrap.appendChild(h("button", { type: "button", class: "btn", text: labelAdd, onclick: function () { add(null); } }));
+    wrap.get = function () { var out = [], bad = false; [].slice.call(list.children).forEach(function (r) { var v = r._get(); if (v === null) bad = true; else if (v) out.push(v); }); return bad ? null : out; };
+    return wrap;
+  }
+  function channelsUI(initial) {
+    var wrap = h("div"), list = h("div");
+    function add(c) {
+      var k = h("select", { "aria-label": Q.chan }); KINDS.forEach(function (x) { k.appendChild(h("option", { value: x, text: KL[x] })); }); k.value = (c && c.kind) || "linkedin";
+      var u = h("input", { type: "text", maxlength: 300, placeholder: Q.url, "aria-label": Q.url }), f = h("input", { type: "text", maxlength: 300, placeholder: Q.feedurl, "aria-label": Q.feedurl });
+      u.value = (c && c.url) || ""; f.value = (c && c.feed && !/youtube\.com\/feeds/.test(c.feed) ? c.feed : "") || "";
+      var row = h("div", { style: "display:flex;gap:.4em;flex-wrap:wrap;margin:.3em 0" }, [k, u, f, h("button", { type: "button", class: "btn", text: Q.rm, onclick: function () { row.remove(); } })]);
+      row._get = function () { return u.value.trim() ? { kind: k.value, url: u.value.trim(), feed: f.value.trim() } : null; }; list.appendChild(row);
+    }
+    (initial || []).forEach(add); wrap.appendChild(list); wrap.appendChild(h("button", { type: "button", class: "btn", text: Q.addch, onclick: function () { add(null); } }));
+    wrap.get = function () { return [].slice.call(list.children).map(function (r) { return r._get(); }).filter(Boolean); }; return wrap;
+  }
+  function saveBtn(label, fn, msg) { var b = h("button", { type: "button", class: "btn main", text: label, onclick: function () { b.disabled = true; msg.textContent = ""; fn().then(function (r) { b.disabled = false; if (r) msg.textContent = r.s === 200 ? "✓ " + Q.saved : (Q[r.j.error] || Q.err); }).catch(function () { b.disabled = false; msg.textContent = Q.err; }); } }); return b; }
+
+  function orgForm(all, org, onDone) {
+    var o = org || {}, f = h("div", { class: "wk-form" }), msg = h("p", { class: "wk-msg", role: "status", "aria-live": "polite" });
+    var handle = inp(30, o.handle), name = inp(80, o.name), tag = inp(120, o.tagline), about = h("textarea", { rows: 4, maxlength: 1500 }), site = inp(250, o.website), country = inp(60, o.country), size = h("select");
+    about.value = o.about || ""; ["", "1", "2-10", "11-50", "51-200", "201-1000", "1000+"].forEach(function (s) { size.appendChild(h("option", { value: s, text: s || "–" })); }); size.value = o.size || "";
+    if (org) handle.disabled = true;
+    var pub = chk(Q.pub, o.public), prog = programsUI(o.programs, true), ex = pickerRows(all, function (x) { return ["product", "platform", "concept", "category"].indexOf(x.type) > -1; }, (o.expertise || []).map(function (x) { return { e: x.e, level: x.level }; }), false, Q.addexp), ch = channelsUI(o.channels);
+    [pub.w, lab(Q.handle, handle), lab(Q.orgname, name), lab(Q.tagline, tag), lab(Q.about, about), lab(Q.site, site), lab(Q.country, country), lab(Q.size, size), h("h4", { text: Q.prog }), prog, h("h4", { text: Q.exp }), ex, h("h4", { text: Q.chan }), ch].forEach(function (x) { f.appendChild(x); });
+    f.appendChild(h("div", { class: "btns" }, [saveBtn(Q.save, function () {
+      var e = ex.get(); if (e === null) { msg.textContent = Q.bad_expertise; return Promise.resolve(null); }
+      return api("/api/org", { method: "POST", body: { handle: handle.value.trim().toLowerCase(), name: name.value, tagline: tag.value, about: about.value, website: site.value.trim(), country: country.value, size: size.value, public: pub.c.checked, programs: prog.get(), expertise: e, channels: ch.get() } }).then(function (r) { if (r.s === 200 && onDone) onDone(); return r; });
+    }, msg)])); f.appendChild(msg); return f;
+  }
+
+  Promise.all([api("/api/profile/me"), fetch(X.base + "/entities.json").then(function (r) { return r.json(); }), api("/api/org/mine")]).then(function (a) {
+    if (a[0].s !== 200) return; var me = a[0].j, all = (a[1].entities || []), p = me.profile || {}, orgs = (a[2].j.orgs || []);
+    var sec = h("section", { class: "ccard" }, [h("h2", { text: Q.h }), h("p", { class: "cmut", text: Q.intro })]), msg = h("p", { class: "wk-msg", role: "status", "aria-live": "polite" });
+    var pub = chk(Q.pub, p.public), handle = inp(30, p.handle || me.suggest), head = inp(100, p.headline), about = h("textarea", { rows: 6, maxlength: 1500 }), company = inp(80, p.company), job = inp(80, p.job), country = inp(60, p.country), so = chk(Q.showorg, p.show_org !== false);
+    about.value = p.about || "";
+    var prog = programsUI(p.programs, false), ex = pickerRows(all, function (x) { return ["cert", "person", "event", "media"].indexOf(x.type) < 0; }, (p.expertise || []).map(function (x) { return { e: x.e, level: x.level }; }), false, Q.addexp);
+    var cert = pickerRows(all, function (x) { return x.type === "cert"; }, (p.certs || []).map(function (x) { return { e: x.e, year: x.year, url: x.url }; }), true, Q.addcert), ch = channelsUI(p.channels);
+    [pub.w, lab(Q.handle, handle), lab(Q.headline, head), lab(Q.about, about), lab(Q.company, company), lab(Q.job, job), lab(Q.country, country), so.w, h("h3", { text: Q.prog }), prog, h("h3", { text: Q.exp }), ex, h("h3", { text: Q.certs }), cert, h("h3", { text: Q.chan }), ch].forEach(function (x) { sec.appendChild(x); });
+    sec.appendChild(h("div", { class: "btns" }, [saveBtn(Q.save, function () {
+      var e = ex.get(), c = cert.get(); if (e === null) { msg.textContent = Q.bad_expertise; return Promise.resolve(null); } if (c === null) { msg.textContent = Q.bad_cert; return Promise.resolve(null); }
+      return api("/api/profile/me", { method: "POST", body: { public: pub.c.checked, handle: handle.value.trim().toLowerCase(), headline: head.value, about: about.value, company: company.value, job: job.value, country: country.value, show_org: so.c.checked, programs: prog.get(), expertise: e, certs: c, channels: ch.get() } }).then(function (r) {
+        if (r.s === 200) msg.textContent = "✓ " + Q.saved + " " + Q.note; return null; });
+    }, msg)]));
+    sec.appendChild(msg);
+    if (p.public && p.handle) sec.appendChild(h("p", {}, [h("a", { href: X.base + (de ? "/de" : "") + "/community/u/" + p.handle + "/", text: Q.open })]));
+    root.appendChild(sec);
+    // ---- Firmen ----
+    var os = h("section", { class: "ccard" }, [h("h2", { text: Q.orgs })]);
+    orgs.forEach(function (o) {
+      var d = h("details", { class: "wk-edit" }, [h("summary", { text: o.name + " · " + o.role + (o.status === "pending" ? " · " + Q.pend_me : "") })]);
+      if (o.status === "active") {
+        d.appendChild(h("p", {}, [h("a", { href: X.base + (de ? "/de" : "") + "/community/c/" + o.handle + "/", text: Q.open })]));
+        if (o.org && (o.role === "owner" || o.role === "admin")) {
+          if ((o.pending || []).length) { d.appendChild(h("h4", { text: Q.pending })); o.pending.forEach(function (m) { d.appendChild(h("p", {}, [m.name + " ", h("button", { type: "button", class: "btn main", text: Q.approve, onclick: function () { api("/api/org/" + o.handle + "/member", { method: "POST", body: { user_id: m.user_id, action: "approve" } }).then(function () { location.reload(); }); } })])); }); }
+          d.appendChild(h("h4", { text: Q.team })); (o.team || []).forEach(function (m) { d.appendChild(h("p", {}, [m.name + " · " + m.role + " ", m.role === "owner" ? null : h("button", { type: "button", class: "btn", text: Q.remove, onclick: function () { api("/api/org/" + o.handle + "/member", { method: "POST", body: { user_id: m.user_id, action: "remove" } }).then(function () { location.reload(); }); } })])); });
+          d.appendChild(orgForm(all, o.org, null));
+        }
+      }
+      d.appendChild(h("button", { type: "button", class: "btn", text: Q.leave, onclick: function () { api("/api/org/" + o.handle + "/leave", { method: "POST" }).then(function () { location.reload(); }); } }));
+      os.appendChild(d);
+    });
+    var nd = h("details", { class: "wk-edit" }, [h("summary", { text: Q.neworg })]); nd.appendChild(orgForm(all, null, function () { setTimeout(function () { location.reload(); }, 600); })); os.appendChild(nd);
+    var jd = h("details", { class: "wk-edit" }, [h("summary", { text: Q.join })]), q = inp(40, ""), res = h("ul"), jm = h("p", { class: "wk-msg", role: "status", "aria-live": "polite" });
+    q.setAttribute("placeholder", Q.search); q.setAttribute("aria-label", Q.search); var t;
+    q.addEventListener("input", function () { clearTimeout(t); t = setTimeout(function () { api("/api/orgs/search?q=" + encodeURIComponent(q.value)).then(function (r) { res.textContent = ""; (r.j.items || []).forEach(function (o) { res.appendChild(h("li", {}, [o.name + " ", h("button", { type: "button", class: "btn", text: Q.req, onclick: function () { api("/api/org/" + o.handle + "/join", { method: "POST" }).then(function (x) { jm.textContent = x.s === 200 ? "✓ " + Q.pend_me : Q.err; }); } })])); }); }); }, 300); });
+    [q, res, jm].forEach(function (x) { jd.appendChild(x); }); os.appendChild(jd);
+    root.appendChild(os);
+  }).catch(function () {});
+})();

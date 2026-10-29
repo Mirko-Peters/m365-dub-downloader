@@ -1,6 +1,7 @@
 // Community-Wiki fuer Glossarbegriffe: kurze Ergaenzung zur Kurzinfo, Revisionen, Moderation
 import { cleanText, rateLimit, isLang } from "./util.js";
 import { stats, evalBadges } from "./badges.js";
+import { baseIds } from "./entities.js";
 
 const TERM = /^[a-z0-9-]{2,48}$/;
 const okLang = (l) => l === "en" || isLang(l);
@@ -54,6 +55,7 @@ export async function handleWiki(env, request, url, path, user, J) {
     const term = b.term, lang = b.lang, san = sanitize(b.body), body = san.body, summary = cleanText(b.summary || "", 140).replace(/[<>]/g, "");
     if (!TERM.test(term || "") || !okLang(lang)) return J({ error: "bad_request" }, 400);
     if (san.err) return J({ error: san.err }, 400);
+    if (!(await baseIds(env)).has(term) && !(await db.prepare("SELECT 1 x FROM entity_rev WHERE eid=? AND status='live'").bind(term).first())) return J({ error: "unknown_topic" }, 404);
     if (body.length < 20) return J({ error: "too_short" }, 400);
     if (!(await rateLimit(db, `wiki:h:${user.id}`, 6, 3600)) || !(await rateLimit(db, `wiki:d:${user.id}`, 25, 86400))) return J({ error: "rate_limit" }, 429);
     const cur = await liveOf(db, term, lang);

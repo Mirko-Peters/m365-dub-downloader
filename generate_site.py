@@ -6,6 +6,8 @@ Basis-URL (z. B. eigene Domain):  SITE_BASE=https://international.m365.fm python
 """
 import site_learn as LRN
 import site_press as PRS
+import site_entities as ENT
+import site_members as MEM
 import glob, html, json, os, re, shutil, sys, unicodedata
 from datetime import date
 from pathlib import Path
@@ -998,9 +1000,9 @@ def build():
         sitemap.append((u, TODAY, alts_ast or None))
 
     # Community-Seite je Sprache (noindex) + Service Worker fuer Web-Push
-    for l in active:
+    for l in list(active) + ["en"]:
         ct = _CI.get(l, _CI.get("en", {})).get("community", "Community")
-        write(f"{l}/community/index.html", page(l, f"{ct} – M365.FM {LANGS[l][0]}", ct, f"{BASE}/{l}/community/", f'{header(l, "")}<main class="wrap" style="max-width:48em"><h1 id="c-h1">{esc(ct)}</h1><div id="c-page"></div></main>{footer(l)}{community_tags(l)}', og_type="website", noindex=True))
+        write("community/index.html" if l == "en" else f"{l}/community/index.html", page(l, f"{ct} – M365.FM" + ("" if l == "en" else f" {LANGS[l][0]}"), ct, (f"{BASE}/community/" if l == "en" else f"{BASE}/{l}/community/"), f'{header(l, "")}<main class="wrap" style="max-width:48em"><h1 id="c-h1">{esc(ct)}</h1><div id="c-page"></div><div id="c-expert"></div></main>{footer(l)}{community_tags(l)}<script>window.M365X={{api:"{COMMUNITY_API}",base:"{BASE}",lang:"{l}"}}</script><script defer src="{BASE}/assets/profile.js"></script>', og_type="website", extra_head=LRN.WCSS, noindex=True))
     shutil.copy(ROOT / "assets" / "sw.js", OUT / "sw.js")
 
     # Entity-Seite
@@ -1045,6 +1047,15 @@ def build():
     LRN.build_learn(dict(write=write, page=page, header=header, footer=footer, footer_en=footer_en, BASE=BASE, LANGS=LANGS, active=active, by_lang=by_lang, catidx=catidx,
                         articles=articles, url_of=url_of, cat_name=cat_name, ORDER=ORDER, strip_tags=strip_tags, anchor_title=anchor_title, short=short, parse_desc=parse_desc,
                         sitemap=sitemap, TODAY=TODAY, api=COMMUNITY_API, SCORE={l: (_QUI.get(l, {}).get("score") or _QUI["en"]["score"]) for l in list(LANGS) + ["en"]}))
+
+    _ctx = dict(write=write, page=page, header=header, footer=footer, footer_en=footer_en, BASE=BASE, LANGS=LANGS, active=active, url_of=url_of, anchor_title=anchor_title, sitemap=sitemap, TODAY=TODAY, api=COMMUNITY_API)
+    _people, _orgs = MEM.fetch_members(COMMUNITY_API)
+
+    def _ep_find(e):
+        rx = [re.compile(r"(?<![\w-])" + re.escape(n) + r"(?![\w-])", re.I) for n in LRN.ent_names(e)]
+        return [it for it in by_lang.get("de", []) if any(r.search(it["e"]["title"] + " " + (it["e"].get("tags") or "")) for r in rx)][:8] if rx else []
+    ENT.build(_ctx, lambda lang: LRN.gloss_links(lang, BASE), MEM.experts_index(_people, _orgs), _ep_find)
+    MEM.build(_ctx, _people, _orgs)
 
     PRS.build_press(dict(write=write, page=page, header=header, footer=footer, footer_en=footer_en, BASE=BASE, LANGS=LANGS, sitemap=sitemap, TODAY=TODAY, n_eps=len(items), n_langs=len(active),
                          EMAIL=SL.CONTACT_EMAIL, MVP=MVP, LINKEDIN=LINKEDIN, YT=YT_CHANNEL, person_ld=person_ld, org_ld=org_ld))
