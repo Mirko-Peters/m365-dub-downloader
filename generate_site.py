@@ -557,13 +557,13 @@ def header(lang, switch):
     ui = UI.get(lang)
     if lang in LANGS:
         home = f"{BASE}/{lang}/"
-        menu = [(ui[3], home), (ui[5], about_url(lang)), ("M365Con", "https://m365con.net"), ("m365.fm", "https://www.m365.fm")]
+        menu = [(ui[3], home), ("M365Con", "https://m365con.net"), ("m365.fm", "https://www.m365.fm")]
         menu.insert(1, ((TOP_L if lang in TOP_REAL else REC_L).get(lang, "Top"), f"{BASE}/{lang}/top/"))
         menu.insert(2, (_CI.get(lang, _CI.get("en", {})).get("community", "Community"), f"{BASE}/{lang}/community/"))
         menu.insert(2, (LRN.T(lang)["learn"], f"{BASE}/{lang}/learn/"))
     else:
         home = f"{BASE}/"
-        menu = [("Languages", f"{BASE}/#languages"), ("About Mirko Peters", f"{BASE}/about/mirko-peters/"), ("M365Con", "https://m365con.net"), ("m365.fm", "https://www.m365.fm")]
+        menu = [("Languages", f"{BASE}/#languages"), ("M365Con", "https://m365con.net"), ("m365.fm", "https://www.m365.fm")]
     if not switch:
         items = [(x, LANGS[x][0], f"{BASE}/{x}/", LANGS[x][1]) for x in LANGS if (ROOT / "episodes").exists()]
         switch = lang_dropdown(lang if lang in LANGS else "en", items, "")
@@ -837,7 +837,7 @@ def build():
         art = articles.get(vid, {}).get(l, {})
         art_html = art.get("html", "")
         if art_html:
-            art_html, _lk = autolink(art_html, it, by_lang[l], tagraw[l], url_of, money=SM.registry_for(MONEY, l))
+            art_html, _lk = autolink(art_html, it, by_lang[l], tagraw[l], url_of, money=LRN.drop_glossed(SM.registry_for(MONEY, l)))
             autolink_log.append(((vid, l), _lk))
             art_html = LRN.gloss_link(art_html, l, BASE)
         if art_html and art.get("info"):

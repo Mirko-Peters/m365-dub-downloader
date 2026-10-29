@@ -274,6 +274,14 @@ def _names(term):
     return res
 
 
+def drop_glossed(money):
+    """Money-Keywords, zu denen es einen Glossar-Eintrag gibt, nicht mehr auf Folgen verlinken (das uebernimmt gloss_link -> Glossar)."""
+    if not GLOSS or not money:
+        return money
+    names = {nm.lower() for x in GLOSS for nm in _names(x)} | {x["name"].lower() for x in GLOSS}
+    return {k: v for k, v in money.items() if k.lower() not in names}
+
+
 def gloss_link(html_, lang, base, max_links=8):
     """Erste Nennung bekannter Begriffe im Artikel auf die Glossar-Seite verlinken (nur Absätze/Listen, nie in Links)."""
     if not GLOSS or not html_:
