@@ -18,7 +18,7 @@ TXT = {
   topics="Topics for interviews and talks", topics_l=["Microsoft 365 Copilot adoption and governance", "AI agents and Copilot Studio", "Security, identity and compliance in Microsoft 365", "Power Platform and Dynamics 365", "Microsoft Fabric and data", "Building a multilingual podcast and SEO/GEO strategy with AI"],
   media="Media", media_p="Photo and logo for editorial use. Please credit “Mirko Peters / M365.FM”.", portrait="Portrait", logo="Logo / icon", og="Social preview image",
   files="Files", files_p="Everything in one place – free to use for coverage of Mirko Peters, M365.FM and M365Con.", zip="Download everything (ZIP)",
-  fl=[("mirko-peters-bio-en.txt", "Short bio (English)"), ("mirko-peters-bio-de.txt", "Kurzbiografie (Deutsch)"), ("fact-sheet-en.txt", "Fact sheet (English)"), ("mirko-peters.jpg", "Portrait (JPG)"), ("logo.svg", "Logo (SVG)"), ("logo-192.png", "Logo (PNG)"), ("og-default.png", "Social preview image (PNG)"), ("colors.txt", "Brand colors")],
+  fl=[("mirko-peters-bio-en.txt", "Short bio (English)"), ("mirko-peters-bio-de.txt", "Kurzbiografie (Deutsch)"), ("fact-sheet-en.txt", "Fact sheet (English)"), ("mirko-peters-800.jpg", "Portrait (JPG, 800×800)"), ("mirko-peters.jpg", "Portrait (JPG)"), ("logo.svg", "Logo (SVG)"), ("logo-192.png", "Logo (PNG)"), ("og-default.png", "Social preview image (PNG)"), ("colors.txt", "Brand colors")],
   colors="Colors", colors_p="Brand colors of the M365.FM dub site, light and dark mode. Click a value to copy it.", light="Light", dark="Dark", fonts="Fonts: Barlow Condensed (headings) and Barlow (text).", copied="Copied",
   team="Team", team_p="Mirko Peters is the host, author and organizer behind all projects. For M365Con, speakers and partners are listed on m365con.net.",
   contact="Contact", contact_p="For interviews, speaking requests, partnerships and press inquiries:", addr="Address",
@@ -34,7 +34,7 @@ TXT = {
   topics="Themen für Interviews und Vorträge", topics_l=["Einführung und Governance von Microsoft 365 Copilot", "KI-Agenten und Copilot Studio", "Sicherheit, Identität und Compliance in Microsoft 365", "Power Platform und Dynamics 365", "Microsoft Fabric und Daten", "Mehrsprachiger Podcast und SEO/GEO-Strategie mit KI"],
   media="Medien", media_p="Foto und Logo zur redaktionellen Nutzung. Bitte nennen: „Mirko Peters / M365.FM“.", portrait="Porträt", logo="Logo / Icon", og="Social-Preview-Bild",
   files="Dateien", files_p="Alles an einem Ort – frei nutzbar für die Berichterstattung über Mirko Peters, M365.FM und M365Con.", zip="Alles herunterladen (ZIP)",
-  fl=[("mirko-peters-bio-en.txt", "Short bio (English)"), ("mirko-peters-bio-de.txt", "Kurzbiografie (Deutsch)"), ("fact-sheet-en.txt", "Fact sheet (English)"), ("mirko-peters.jpg", "Porträt (JPG)"), ("logo.svg", "Logo (SVG)"), ("logo-192.png", "Logo (PNG)"), ("og-default.png", "Social-Preview-Bild (PNG)"), ("colors.txt", "Markenfarben")],
+  fl=[("mirko-peters-bio-en.txt", "Short bio (English)"), ("mirko-peters-bio-de.txt", "Kurzbiografie (Deutsch)"), ("fact-sheet-en.txt", "Fact sheet (English)"), ("mirko-peters-800.jpg", "Porträt (JPG, 800×800)"), ("mirko-peters.jpg", "Porträt (JPG)"), ("logo.svg", "Logo (SVG)"), ("logo-192.png", "Logo (PNG)"), ("og-default.png", "Social-Preview-Bild (PNG)"), ("colors.txt", "Markenfarben")],
   colors="Farben", colors_p="Markenfarben der M365.FM-Dub-Seite, heller und dunkler Modus. Wert anklicken zum Kopieren.", light="Hell", dark="Dunkel", fonts="Schriften: Barlow Condensed (Überschriften) und Barlow (Text).", copied="Kopiert",
   team="Team", team_p="Mirko Peters ist Host, Autor und Veranstalter hinter allen Projekten. Für die M365Con sind Speaker und Partner auf m365con.net aufgeführt.",
   contact="Kontakt", contact_p="Für Interviews, Vortragsanfragen, Kooperationen und Presseanfragen:", addr="Adresse",
@@ -67,7 +67,7 @@ def build_press(g):
     out = ROOT / "docs" / "press" / "files"
     out.mkdir(parents=True, exist_ok=True)
     A = ROOT / "assets"
-    for src, dst in (("mirko-peters.jpg", "mirko-peters.jpg"), ("favicon.svg", "logo.svg"), ("favicon-192.png", "logo-192.png"), ("og-default.png", "og-default.png")):
+    for src, dst in (("mirko-peters.jpg", "mirko-peters.jpg"), ("mirko-peters-800.jpg", "mirko-peters-800.jpg"), ("favicon.svg", "logo.svg"), ("favicon-192.png", "logo-192.png"), ("og-default.png", "og-default.png")):
         if (A / src).exists():
             shutil.copy(A / src, out / dst)
     en, de = TXT["en"], TXT["de"]
@@ -76,7 +76,7 @@ def build_press(g):
     (out / "mirko-peters-bio-de.txt").write_text(f"Mirko Peters\n\n{de['about_p']}\n\nWebseite: {BASE}/de/about/mirko-peters/\nKontakt: {g['EMAIL']}\n", "utf-8")
     (out / "fact-sheet-en.txt").write_text(f"M365.FM / Mirko Peters – fact sheet\n\n{facts_en}\n\nContact: {g['EMAIL']}\nPress kit: {BASE}/press/\n", "utf-8")
     (out / "colors.txt").write_text("M365.FM brand colors (light / dark)\n" + "\n".join(f"{n}: {a} / {b}" for n, a, b in COLORS) + "\nFonts: Barlow Condensed, Barlow\n", "utf-8")
-    names = ["mirko-peters-bio-en.txt", "mirko-peters-bio-de.txt", "fact-sheet-en.txt", "colors.txt", "mirko-peters.jpg", "logo.svg", "logo-192.png", "og-default.png"]
+    names = ["mirko-peters-bio-en.txt", "mirko-peters-bio-de.txt", "fact-sheet-en.txt", "colors.txt", "mirko-peters.jpg", "mirko-peters-800.jpg", "logo.svg", "logo-192.png", "og-default.png"]
     with zipfile.ZipFile(out / "m365fm-presskit.zip", "w", zipfile.ZIP_DEFLATED) as z:
         for n in names:
             if (out / n).exists():
@@ -90,7 +90,7 @@ def build_press(g):
         facts = "".join(f'<dt>{E(k)}</dt><dd>{E(v.replace("{L}", str(L)).replace("{N}", str(N)))}</dd>' for k, v in t["f"])
         topics = "".join(f"<li>{E(x)}</li>" for x in t["topics_l"])
         base_files = f"{BASE}/press/files/"
-        media = (f'<div class="kg"><figure class="ktile"><img src="{base_files}mirko-peters.jpg" width="200" height="200" alt="Mirko Peters, Microsoft MVP, host of M365.FM" loading="lazy"><small>{E(t["portrait"])}</small></figure>'
+        media = (f'<div class="kg"><figure class="ktile"><img src="{base_files}mirko-peters-800.jpg" width="200" height="200" alt="Mirko Peters, Microsoft MVP, host of M365.FM" loading="lazy"><small>{E(t["portrait"])}</small></figure>'
                  f'<figure class="ktile"><img src="{base_files}logo-192.png" width="96" height="96" alt="M365.FM logo" loading="lazy"><small>{E(t["logo"])}</small></figure>'
                  f'<figure class="ktile"><img src="{base_files}og-default.png" width="300" height="158" alt="M365.FM" loading="lazy"><small>{E(t["og"])}</small></figure></div>')
         files = "".join(f'<li><a href="{base_files}{f}" download>{E(lbl)}<small>{E(f)}</small></a></li>' for f, lbl in t["fl"])
