@@ -46,6 +46,19 @@ def main():
                         out.setdefault(f"{vid}:{l}", {})["apple"] = x["trackViewUrl"]
             except Exception as e:
                 print("Apple", l, e)
+        m = re.search(r"/show/(\d+)", ids.get("deezer_show", ""))
+        if m:  # Deezer: öffentliche API, kein Zugang nötig
+            try:
+                url = f"https://api.deezer.com/podcast/{m.group(1)}/episodes?limit=100"
+                while url:
+                    r = get(url)
+                    for x in r.get("data", []):
+                        vid = t.get(norm(x.get("title")))
+                        if vid:
+                            out.setdefault(f"{vid}:{l}", {})["deezer"] = f"https://www.deezer.com/episode/{x['id']}"
+                    url = r.get("next")
+            except Exception as e:
+                print("Deezer", l, e)
         if ids.get("spotify_id") and token:
             try:
                 url = f"https://api.spotify.com/v1/shows/{ids['spotify_id']}/episodes?limit=50&market=US"
