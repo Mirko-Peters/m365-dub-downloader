@@ -219,6 +219,11 @@ def lang_switch(cur, alt_urls, home_langs):
     return '<nav class="langs" aria-label="Languages">' + " · ".join(items) + "</nav>"
 
 
+TOP_L = {"de": "Top-Folgen der Woche", "es": "Episodios más escuchados de la semana", "fr": "Épisodes les plus écoutés cette semaine", "it": "Episodi più ascoltati della settimana",
+         "pt": "Episódios mais ouvidos da semana", "nl": "Meest beluisterde afleveringen van de week", "pl": "Najczęściej słuchane odcinki tygodnia", "id": "Episode terpopuler minggu ini",
+         "ru": "Самые популярные выпуски недели", "uk": "Найпопулярніші випуски тижня", "ar": "أكثر الحلقات استماعًا هذا الأسبوع", "he": "הפרקים המובילים השבוע",
+         "hi": "इस सप्ताह के टॉप एपिसोड", "ja": "今週の人気エピソード", "ko": "이번 주 인기 에피소드", "ml": "ഈ ആഴ്ചയിലെ ടോപ്പ് എപ്പിസോഡുകൾ", "pa": "ਇਸ ਹਫ਼ਤੇ ਦੇ ਟੌਪ ਐਪੀਸੋਡ",
+         "ta": "இந்த வாரத்தின் சிறந்த எபிசோடுகள்", "te": "ఈ వారం టాప్ ఎపిసోడ్లు", "en": "Top episodes this week"}
 OGLIST = []
 SHARE_L = {"de": "Teilen", "es": "Compartir", "fr": "Partager", "it": "Condividi", "pt": "Compartilhar", "nl": "Delen", "pl": "Udostępnij",
            "id": "Bagikan", "ru": "Поделиться", "uk": "Поділитися", "ar": "مشاركة", "he": "שיתוף", "hi": "शेयर करें", "ja": "シェア",
@@ -442,6 +447,7 @@ def build():
     articles = {p.stem: json.load(open(p, encoding="utf-8")) for p in (ROOT / "data" / "articles").glob("*.json")} if (ROOT / "data" / "articles").exists() else {}
     elinks = json.load(open(ROOT / "data" / "episode_links.json", encoding="utf-8")) if (ROOT / "data" / "episode_links.json").exists() else {}
     videos = json.load(open(ROOT / "data" / "videos.json", encoding="utf-8")) if (ROOT / "data" / "videos.json").exists() else {}
+    topdata = json.load(open(ROOT / "data" / "top.json", encoding="utf-8")) if (ROOT / "data" / "top.json").exists() else {}
     if OUT.exists():
         shutil.rmtree(OUT)
     OUT.mkdir(parents=True)
@@ -520,9 +526,23 @@ def build():
                 out += f'<span class="chip">{esc(t)}</span>'
         return f'<div class="chips">{out}</div>' if out else ""
 
+    def top_for(l, n=10):
+        rows = (topdata.get("langs") or {}).get(l) or []
+        by_eid = {i["eid"]: i for i in by_lang.get(l, [])}
+        out = [by_eid[r["episode_id"]] for r in rows if r.get("score", 0) > 0 and r["episode_id"] in by_eid]
+        return out[:n]
+
+    def top_block(l):
+        t = top_for(l, 5)
+        if not t:
+            return ""
+        return (f'<h2>★ {esc(TOP_L.get(l, TOP_L["en"]))}</h2><div class="list">' + "".join(
+            f'<a class="row" href="{url_of(x)}"><h3>{n + 1}. {esc(x["e"]["title"])}</h3></a>' for n, x in enumerate(t)) +
+            f'</div><p><a class="btn" href="{BASE}/{l}/top/">{esc(TOP_L.get(l, TOP_L["en"]))} →</a></p>')
+
     def topics_nav(l):
         cs = "".join(f'<a class="chip cat" href="{cat_url(l, c)}">{esc(cat_name(c, l))} · {len(catidx[l][c])}</a>' for c in ORDER if c in catidx[l])
-        return f'<h2>{esc(TOPICS.get(l, "Topics"))}</h2><div class="chips">{cs}</div>'
+        return top_block(l) + f'<h2>{esc(TOPICS.get(l, "Topics"))}</h2><div class="chips">{cs}</div>'
 
     # Episoden-Seiten
     for (vid, l), it in items.items():
@@ -730,6 +750,36 @@ def build():
                 write(f"{l}/tag/{s}/index.html", list_page(l, TAGW.get(l, "Tag"), d["label"], d["items"], tag_url(BASE, l, d["label"]), None, True))
                 ntag += 1
     print(ncat, "Kategorie-Seiten,", ntag, "Tag-Seiten (noindex),", sum(len(v) for _, v in autolink_log), "automatische interne Links in", sum(1 for _, v in autolink_log if v), "Artikeln")
+
+    # "Top diese Woche" je Sprache (nur wenn Statistik-Daten vorliegen)
+    topfeed = {}
+    for l in active:
+        t = top_for(l, 10)
+        if not t:
+            continue
+        label = TOP_L.get(l, TOP_L["en"])
+        u = f"{BASE}/{l}/top/"
+        ui = UI[l]
+        wk = topdata.get("week_end", TODAY)
+        rows = "".join(f'<a class="row" href="{url_of(x)}"><h3>{n + 1}. {esc(x["e"]["title"])}</h3><p>{esc(short(parse_desc(x["e"]["desc"])[0], 150))}</p></a>' for n, x in enumerate(t))
+        ld = [{"@context": "https://schema.org", "@type": "CollectionPage", "name": label, "url": u, "inLanguage": LANGS[l][1], "dateModified": wk,
+               "mainEntity": {"@type": "ItemList", "itemListOrder": "https://schema.org/ItemListOrderDescending", "numberOfItems": len(t),
+                              "itemListElement": [{"@type": "ListItem", "position": n + 1, "url": url_of(x)} for n, x in enumerate(t)]}},
+              {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [
+                  {"@type": "ListItem", "position": 1, "name": "M365.FM", "item": f"{BASE}/"}, {"@type": "ListItem", "position": 2, "name": LANGS[l][0], "item": f"{BASE}/{l}/"},
+                  {"@type": "ListItem", "position": 3, "name": label, "item": u}]}]
+        alts = {x: f"{BASE}/{x}/top/" for x in active if top_for(x, 1)}
+        body = f"""{header(l, lang_switch(l, alts, active))}
+<main class="wrap"><div class="crumbs"><a href="{BASE}/{l}/">{esc(ui[7])}</a> / {esc(LANGS[l][0])}</div>
+<div class="kicker">★ {esc(LANGS[l][0])} · {esc(wk)}</div><h1>{esc(label)}</h1>
+<h2>{esc(ui[3])}</h2><div class="list">{rows}</div>
+<p style="margin-top:1.6em"><a class="btn" href="{BASE}/{l}/">{esc(ui[3])} →</a></p></main>{footer(l)}"""
+        write(f"{l}/top/index.html", page(l, f"{label} – M365.FM {LANGS[l][0]}", short(" · ".join(strip_tags(x["e"]["title"]).split(":")[0] for x in t[:3]), 155), u, body, alts, ld, og_type="website"))
+        sitemap.append((u, wk, alts))
+        topfeed[l] = [{"rank": n + 1, "title": strip_tags(x["e"]["title"]), "url": url_of(x), "episode": x["eid"]} for n, x in enumerate(t)]
+    if topfeed:
+        write("top.json", json.dumps({"period": "last 7 days", "from": topdata.get("from"), "to": topdata.get("week_end"), "languages": topfeed}, ensure_ascii=False, indent=1))
+        print(len(topfeed), "Sprachen mit Top-Woche")
 
     # Sitemap, robots, llms.txt, IndexNow
     def sm_file(entries):

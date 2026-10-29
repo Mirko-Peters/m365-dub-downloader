@@ -686,6 +686,15 @@ class Spreaker:
     def me(self) -> dict:
         return self._req("GET", "/me")["user"]
 
+    def episode_totals(self, show_id, date_from: str, date_to: str) -> list[dict]:
+        """Abrufe/Downloads je Episode einer Show im Zeitraum (Statistik-API, braucht Login)."""
+        items, url = [], f"/shows/{show_id}/episodes/statistics/plays/totals?from={date_from}&to={date_to}&limit=100"
+        while url:
+            resp = self._req("GET", url)
+            items += resp.get("items", [])
+            url = resp.get("next_url")
+        return items
+
     def user_shows(self, user_id) -> list[dict]:
         items, url = [], f"/users/{user_id}/shows?limit=100"
         while url:
@@ -1132,6 +1141,40 @@ def cmd_login(cfg, state, args) -> None:
     input("Enter zum Schliessen")
 
 
+def cmd_stats(cfg, state, args) -> None:
+    """Top-Folgen der letzten 7 Tage je Sprach-Show -> top_week.json (wird vom Claude-Task nach data/top.json ins Repo übernommen)."""
+    from datetime import date, timedelta
+    sp = spreaker_client(cfg)
+    end = date.today()
+    start = end - timedelta(days=7)
+    out, raw = {}, {}
+    for lang, sid in (cfg.get("show_map") or {}).items():
+        if not sid:
+            continue
+        try:
+            items = sp.episode_totals(sid, start.isoformat(), end.isoformat())
+        except Exception as e:
+            log.warning("Statistik %s (%s): %s", lang, sid, e)
+            continue
+        raw[lang] = items[:3]
+        rows = []
+        for it in items:
+            eid = it.get("episode_id") or (it.get("episode") or {}).get("episode_id")
+            if not eid:
+                continue
+            nums = {k: v for k, v in it.items() if isinstance(v, (int, float)) and not isinstance(v, bool) and k not in ("episode_id", "show_id")}
+            plays = sum(v for k, v in nums.items() if "play" in k.lower())
+            dls = sum(v for k, v in nums.items() if "download" in k.lower())
+            score = max(plays, dls) if (plays or dls) else max(nums.values(), default=0)
+            rows.append({"episode_id": int(eid), "score": int(score), "plays": int(plays), "downloads": int(dls)})
+        rows.sort(key=lambda r: -r["score"])
+        out[norm_lang(lang) or lang] = rows[:30]
+    top = {"from": start.isoformat(), "week_end": end.isoformat(), "updated": now_iso(), "langs": out}
+    save_json(Path(cfg.get("download_dir", ".")) / "top_week.json", top)
+    save_json(Path(cfg.get("download_dir", ".")) / "top_week_raw.json", raw)
+    log.info("Top-Folgen aktualisiert: %s Sprachen", len(out))
+
+
 def cmd_status(cfg, state, args) -> None:
     dls = state["downloads"].values()
     by_lang: dict[str, list[int]] = {}
@@ -1176,7 +1219,7 @@ def run_transcripts(cfg, state, limit: int | None = None) -> int:
 
 def main() -> None:
     p = argparse.ArgumentParser(description="YouTube-Dubs herunterladen und zu Spreaker hochladen")
-    p.add_argument("command", choices=["run", "download", "upload", "shows", "status", "login", "transcripts"])
+    p.add_argument("command", choices=["run", "download", "upload", "shows", "status", "login", "transcripts", "stats"])
     p.add_argument("--limit", type=int, help="max. Anzahl Kanal-Videos (neueste zuerst)")
     p.add_argument("--full-rescan", action="store_true", help="alle Videos erneut auf neue Dubs prüfen")
     p.add_argument("--dry-run", action="store_true", help="nur anzeigen, nichts laden/hochladen")
@@ -1201,6 +1244,8 @@ def main() -> None:
         return cmd_status(cfg, state, args)
     if args.command == "shows":
         return cmd_shows(cfg, state, args)
+    if args.command == "stats":
+        return cmd_stats(cfg, state, args)
 
     want_upload = args.command == "upload" or (args.command == "run" and
                                                (cfg.get("auto_upload") or cfg.get("upload_mode", "texts") == "texts"))
@@ -1225,6 +1270,13 @@ def main() -> None:
         if args.command == "run" and cfg.get("transcript_engine", "whisper") == "whisper" and not args.dry_run:
             run_transcripts(cfg, state, limit=cfg.get("max_transcripts_per_run", 50))
         do_upload()
+        if args.command == "run" and cfg.get("spreaker_token") and not args.dry_run:
+            try:  # Top-Folgen der Woche höchstens alle 6 Stunden neu holen
+                tp = Path(cfg.get("download_dir", ".")) / "top_week.json"
+                if not tp.exists() or time.time() - tp.stat().st_mtime > 6 * 3600:
+                    cmd_stats(cfg, state, args)
+            except Exception as e:
+                log.warning("Statistik-Abruf fehlgeschlagen: %s", e)
 
 
 if __name__ == "__main__":
