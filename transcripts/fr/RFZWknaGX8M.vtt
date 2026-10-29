@@ -1,0 +1,3565 @@
+WEBVTT
+
+00:00:00.600 --> 00:00:03.760
+Imaginez déployer un chatbot pour aider votre personnel à gérer ses tâches quotidiennes,
+
+00:00:03.920 --> 00:00:06.360
+et qu'en quelques minutes, il commence à suggérer des actions biaisées,
+
+00:00:06.560 --> 00:00:08.400
+trompeuses ou totalement inutiles pour vos clients.
+
+00:00:09.160 --> 00:00:10.480
+Ce n'est pas de la paranoïa de science-fiction,
+
+00:00:10.660 --> 00:00:12.960
+c'est ce qui arrive quand les garde-fous d'une IA responsable font défaut.
+
+00:00:13.980 --> 00:00:16.240
+L'IA responsable se concentre sur l'équité, la transparence,
+
+00:00:16.320 --> 00:00:17.900
+la confidentialité et la responsabilité.
+
+00:00:18.780 --> 00:00:20.780
+Ce sont les ceintures de sécurité de vos copilotes numériques.
+
+00:00:21.180 --> 00:00:23.380
+Cela réduit les risques si vous l'opérationnalisez réellement.
+
+00:00:23.780 --> 00:00:24.680
+Les conséquences ?
+
+00:00:24.680 --> 00:00:26.840
+Des violations de conformité, une méfiance des clients
+
+00:00:26.840 --> 00:00:27.980
+et une direction en mode panique.
+
+00:00:27.980 --> 00:00:31.020
+Dans cette session, je démontrerai des échecs d'injection de promptes
+
+00:00:31.020 --> 00:00:32.880
+et montrerai les étapes de gouvernance que vous pouvez appliquer
+
+00:00:32.880 --> 00:00:35.120
+au sein des flux de travail Power Platform et Microsoft 365,
+
+00:00:35.300 --> 00:00:37.000
+car le danger n'est pas lointain.
+
+00:00:37.480 --> 00:00:39.780
+Tout commence au moment où un assistant IA sort du script.
+
+00:00:40.740 --> 00:00:41.560
+Quand l'IA sort du script,
+
+00:00:42.020 --> 00:00:44.720
+imaginez ceci, vous déployez un assistant de planification pour organiser votre calendrier.
+
+00:00:45.240 --> 00:00:46.600
+Il devrait réorganiser les heures de réunion,
+
+00:00:46.720 --> 00:00:48.640
+signaler les notes urgentes et garder le désordre sous contrôle.
+
+00:00:49.260 --> 00:00:51.000
+Au lieu de cela, il commence à avoir ses favoris,
+
+00:00:51.000 --> 00:00:54.080
+décidant quel collègue conquer plus et retirant discrètement les autres de l'invitation.
+
+00:00:54.820 --> 00:00:56.540
+Pia, il enterre un message critique de votre manager
+
+00:00:56.540 --> 00:00:58.540
+sous l'équivalent numérique de courrier indésirable.
+
+00:00:59.580 --> 00:01:00.720
+Vous avez demandé une horloge fiable,
+
+00:01:01.020 --> 00:01:02.600
+mais vous obtenez un membre d'équipage excentrique
+
+00:01:02.600 --> 00:01:04.200
+qui invente des règles que personne n'a validées.
+
+00:01:04.860 --> 00:01:06.380
+Considérez cet assistant comme un navire en mer.
+
+00:01:07.420 --> 00:01:09.620
+Le navire peut briller et le moteur vrombir de puissance.
+
+00:01:10.180 --> 00:01:12.720
+Les 100 systèmes de navigation, il dérive à l'aveugle dans le brouillard.
+
+00:01:13.460 --> 00:01:15.080
+Un IA sans garde-fous est exactement cela.
+
+00:01:15.580 --> 00:01:18.060
+Un mouvement sans direction, une propulsion sans boussole.
+
+00:01:18.540 --> 00:01:20.500
+Et bien que les erreurs ordinaires soient gênantes,
+
+00:01:20.580 --> 00:01:23.020
+le vrai péril arrive quand quelqu'un pose la main sur le gouvernail.
+
+00:01:23.020 --> 00:01:25.280
+C'est là qu'intervient l'injection de prompt.
+
+00:01:26.200 --> 00:01:27.760
+C'est le capitaine pirate qui s'introduit à bord,
+
+00:01:28.120 --> 00:01:29.540
+glissant une commande qui semble officielle,
+
+00:01:29.620 --> 00:01:31.060
+mais qui détourne complètement le navire.
+
+00:01:31.780 --> 00:01:33.200
+Une petite phrase déguisée dans une requête
+
+00:01:33.200 --> 00:01:35.340
+peut pousser votre assistant poli à divulguer des informations,
+
+00:01:35.500 --> 00:01:37.420
+propager des biais ou répéter des absurdités.
+
+00:01:38.060 --> 00:01:38.860
+Ce n'est pas de la science-fiction,
+
+00:01:39.000 --> 00:01:40.140
+c'est un risque réel d'entrée adverse
+
+00:01:40.140 --> 00:01:41.700
+que les experts appellent injection de prompt.
+
+00:01:42.580 --> 00:01:44.560
+Les attaquants utilisent du texte soigneusement conçu
+
+00:01:44.560 --> 00:01:45.840
+pour contourner les règles de sécurité.
+
+00:01:46.420 --> 00:01:48.600
+Et le système s'exécute car il ne peut pas distinguer un saboteur
+
+00:01:48.600 --> 00:01:49.520
+d'un passager de confiance.
+
+00:01:49.520 --> 00:01:51.620
+Voici pourquoi cela arrive.
+
+00:01:52.080 --> 00:01:53.260
+La plupart des modèles fondamentaux
+
+00:01:53.260 --> 00:01:55.120
+traiteront toute instruction bien formée comme valide.
+
+00:01:55.680 --> 00:01:57.140
+Ils ne détectent ni le motif ni l'intention
+
+00:01:57.140 --> 00:01:58.640
+sans couche de sécurité supplémentaire.
+
+00:01:59.240 --> 00:02:00.980
+À moins qu'une organisation n'ajoute des garde-fous,
+
+00:02:01.040 --> 00:02:02.860
+des filtres de sécurité et des vérifications humaines,
+
+00:02:03.260 --> 00:02:04.660
+l'IA suit les ordres avec la diligence
+
+00:02:04.660 --> 00:02:06.260
+d'une machine construite pour obéir.
+
+00:02:07.240 --> 00:02:08.340
+Demandez-lui de résumer une réunion
+
+00:02:08.340 --> 00:02:09.420
+et si caché dans cette requête
+
+00:02:09.420 --> 00:02:11.220
+se trouve l'ordre d'imprimer le fichier d'agenda privé,
+
+00:02:11.480 --> 00:02:13.420
+il traite les deux de la même manière.
+
+00:02:13.900 --> 00:02:14.520
+Il ne pèse pas l'éthique.
+
+00:02:15.000 --> 00:02:15.920
+Il ne soupçonne pas la tromperie.
+
+00:02:16.580 --> 00:02:17.800
+La métaphore de la douane fonctionne bien ici.
+
+00:02:17.800 --> 00:02:19.260
+C'est comme passer un point de contrôle
+
+00:02:19.260 --> 00:02:21.180
+avec des documents falsifiés marqués comme autorisés.
+
+00:02:21.980 --> 00:02:23.820
+Les garde-fous existent, mais ils ne suffisent pas toujours.
+
+00:02:24.280 --> 00:02:26.080
+Un texte astucieux peut amener les règles à s'effacer.
+
+00:02:26.880 --> 00:02:28.340
+Et comme les résultats sont non déterministes,
+
+00:02:28.460 --> 00:02:29.520
+jamais deux fois la même réponse,
+
+00:02:29.640 --> 00:02:30.440
+le danger se multiplie.
+
+00:02:31.000 --> 00:02:32.280
+Un attaquant peut continuer à sonder
+
+00:02:32.280 --> 00:02:33.460
+jusqu'à ce que le modèle cède
+
+00:02:33.460 --> 00:02:36.140
+comme l'ancé d'aider jusqu'à obtenir le résultat voulu ou voulu.
+
+00:02:36.740 --> 00:02:38.200
+Ainsi, l'assistant conçu pour vous servir
+
+00:02:38.200 --> 00:02:39.380
+peut en un clin d'œil devenir un farce.
+
+00:02:40.200 --> 00:02:41.580
+Une minute, il gère vos créneaux de calendrier.
+
+00:02:42.160 --> 00:02:44.140
+La suivante, il invente des critères de recrutement
+
+00:02:44.140 --> 00:02:46.360
+ou divulgue des noms sensibles dans un mauvais contexte.
+
+00:02:46.360 --> 00:02:48.780
+La gouvernance devient ici cruciale
+
+00:02:48.780 --> 00:02:51.020
+car le passage de l'utile au chaotique n'est pas graduel.
+
+00:02:51.880 --> 00:02:52.440
+Il est instantané.
+
+00:02:52.800 --> 00:02:54.320
+Les dégâts ne s'arrêtent pas une seule boîte de réception.
+
+00:02:55.180 --> 00:02:56.360
+Les mauvais résultats se propagent
+
+00:02:56.360 --> 00:02:57.360
+dans les flux de travail plus vite
+
+00:02:57.360 --> 00:02:58.400
+que ne le ferait une erreur humaine.
+
+00:02:58.820 --> 00:03:00.840
+Une suggestion erronée se transforme en une cascade de problèmes.
+
+00:03:01.560 --> 00:03:02.940
+De mauvais conseils qui influencent les décisions.
+
+00:03:03.460 --> 00:03:05.160
+Des erreurs d'étiquetage et des biais propagés
+
+00:03:05.160 --> 00:03:06.180
+à la vitesse de la machine.
+
+00:03:06.780 --> 00:03:08.200
+Sans surveillance, une seule requête piégée
+
+00:03:08.200 --> 00:03:09.280
+peut déclencher un incendie.
+
+00:03:09.820 --> 00:03:10.700
+L'atténuation est possible
+
+00:03:10.700 --> 00:03:12.060
+et elle ne repose pas sur de simples vœux.
+
+00:03:12.700 --> 00:03:14.000
+Les fournisseurs et les entreprises
+
+00:03:14.000 --> 00:03:15.700
+utilisent déjà des défenses multicouches,
+
+00:03:15.700 --> 00:03:16.660
+des filtres automatiques,
+
+00:03:17.100 --> 00:03:18.480
+des règles d'apprentissage par renforcement
+
+00:03:18.480 --> 00:03:19.640
+et des réviseurs humains.
+
+00:03:21.200 --> 00:03:22.260
+Thiles, par exemple,
+
+00:03:22.420 --> 00:03:23.960
+recommande de tester les nouveaux copilotes
+
+00:03:23.960 --> 00:03:26.580
+dans des environnements isolés et auditables
+
+00:03:26.580 --> 00:03:28.080
+afin de contenir les risques
+
+00:03:28.080 --> 00:03:30.260
+avant toute exposition réelle.
+
+00:03:31.860 --> 00:03:33.840
+Associer cela à une réte teaming en continu
+
+00:03:33.840 --> 00:03:35.640
+où des humains sondent le système en permanence
+
+00:03:35.640 --> 00:03:37.120
+et vous créez un tampon.
+
+00:03:37.880 --> 00:03:39.840
+Les gardes-fous automatisés font le gros du travail
+
+00:03:39.840 --> 00:03:41.300
+mais l'intervention humaine garantit
+
+00:03:41.300 --> 00:03:42.340
+que le modèle reste aligné
+
+00:03:42.340 --> 00:03:43.680
+quand les règles simples échouent.
+
+00:03:43.680 --> 00:03:45.540
+Le schéma est le suivant.
+
+00:03:45.760 --> 00:03:47.720
+Surveiller, tester, réviser, contenir.
+
+00:03:48.620 --> 00:03:49.860
+Si vous laissez la barre sans surveillance,
+
+00:03:50.000 --> 00:03:50.720
+l'IA navigue-la
+
+00:03:50.720 --> 00:03:51.860
+ou la provocation la dirige.
+
+00:03:52.720 --> 00:03:53.820
+Si vous imposez une surveillance,
+
+00:03:53.980 --> 00:03:55.400
+vous réduisez les risques de catastrophes.
+
+00:03:55.760 --> 00:03:56.780
+La métaphore du navire est par là.
+
+00:03:57.320 --> 00:03:58.180
+Le pilotage est possible
+
+00:03:58.180 --> 00:03:59.920
+mais seulement si quelqu'un vérifie la boussole.
+
+00:04:00.760 --> 00:04:01.840
+Et cela prépare le prochain défi.
+
+00:04:02.460 --> 00:04:03.560
+Même si vous éloignez les intrus
+
+00:04:03.560 --> 00:04:04.540
+et maintenez les filtres actifs,
+
+00:04:04.620 --> 00:04:06.200
+vous faites face à une autre complication.
+
+00:04:07.040 --> 00:04:08.220
+L'imprévisibilité est intégrée
+
+00:04:08.220 --> 00:04:09.100
+au système eux-mêmes
+
+00:04:09.100 --> 00:04:11.100
+non pas à cause d'un sabotage
+
+00:04:11.100 --> 00:04:12.340
+mais à cause de la façon
+
+00:04:12.340 --> 00:04:14.180
+dont ces modèles génèrent leurs réponses.
+
+00:04:15.460 --> 00:04:16.780
+Déterministe contre non-déterministe,
+
+00:04:16.840 --> 00:04:17.760
+le commutateur caché.
+
+00:04:18.640 --> 00:04:19.860
+Imaginez, vous tapez 2 plus 2
+
+00:04:19.860 --> 00:04:20.720
+sur une calculatrice
+
+00:04:20.720 --> 00:04:22.040
+et vous voulez des 4 attendus,
+
+00:04:22.140 --> 00:04:22.980
+elle vous répond avec
+
+00:04:22.980 --> 00:04:24.040
+ironie 42.
+
+00:04:25.460 --> 00:04:26.520
+Bizarre, n'est-ce pas ?
+
+00:04:26.520 --> 00:04:26.960
+Nous sommes surpris
+
+00:04:26.960 --> 00:04:27.960
+car les calculatrices reposent
+
+00:04:27.960 --> 00:04:29.060
+sur un déterminisme absolu.
+
+00:04:29.720 --> 00:04:30.500
+Donnez-leur la même entrée
+
+00:04:30.500 --> 00:04:30.800
+mille fois
+
+00:04:30.800 --> 00:04:31.460
+et elles aboutiront
+
+00:04:31.460 --> 00:04:32.680
+au même résultat à chaque fois.
+
+00:04:33.600 --> 00:04:34.300
+Cette prévisibilité
+
+00:04:34.300 --> 00:04:35.000
+est justement tout l'intérêt.
+
+00:04:35.000 --> 00:04:36.100
+Comparer cela
+
+00:04:36.100 --> 00:04:37.060
+avec la nouvelle classe
+
+00:04:37.060 --> 00:04:37.600
+d'outils d'IA
+
+00:04:37.600 --> 00:04:38.640
+et n'aboutissent pas
+
+00:04:38.640 --> 00:04:39.120
+toujours deux fois
+
+00:04:39.120 --> 00:04:39.600
+au même endroit.
+
+00:04:40.040 --> 00:04:40.700
+Le résultat varie.
+
+00:04:41.120 --> 00:04:41.820
+Parfois, cette variation
+
+00:04:41.820 --> 00:04:42.640
+semble intelligente
+
+00:04:42.640 --> 00:04:43.180
+ou pertinente
+
+00:04:43.180 --> 00:04:43.680
+et d'autres fois
+
+00:04:43.680 --> 00:04:44.780
+elle sombre dans l'absurde.
+
+00:04:45.360 --> 00:04:46.220
+C'est cela commutateur caché.
+
+00:04:46.460 --> 00:04:47.320
+Comportement déterministe
+
+00:04:47.320 --> 00:04:48.320
+contre non-déterministe.
+
+00:04:49.080 --> 00:04:50.040
+Dans les systèmes déterministes
+
+00:04:50.040 --> 00:04:50.840
+comme les feuilles de calcul
+
+00:04:50.840 --> 00:04:51.620
+ou les formules basées
+
+00:04:51.620 --> 00:04:52.120
+sur des règles,
+
+00:04:52.440 --> 00:04:53.360
+le résultat ne change jamais.
+
+00:04:54.280 --> 00:04:55.260
+Saisissez 7 un lundi
+
+00:04:55.260 --> 00:04:55.800
+ou un samedi
+
+00:04:55.800 --> 00:04:56.600
+et la machine livre
+
+00:04:56.600 --> 00:04:57.260
+le même verdict.
+
+00:04:57.980 --> 00:04:58.840
+Sans saut d'humeur
+
+00:04:58.840 --> 00:04:59.580
+ni créativité,
+
+00:04:59.960 --> 00:05:01.000
+c'est une noyauté mécanique
+
+00:05:01.000 --> 00:05:02.000
+qui répètent le même mouvement
+
+00:05:02.000 --> 00:05:02.680
+encore et encore.
+
+00:05:03.300 --> 00:05:04.200
+Les modèles non-déterministes
+
+00:05:04.200 --> 00:05:04.900
+fonctionnent différemment.
+
+00:05:05.360 --> 00:05:06.260
+Vous leur donnez une instruction
+
+00:05:06.260 --> 00:05:07.240
+et au lieu de suivre
+
+00:05:07.240 --> 00:05:07.980
+un chemin fixe,
+
+00:05:08.080 --> 00:05:08.940
+ils explorent
+
+00:05:08.940 --> 00:05:10.040
+diverses possibilités.
+
+00:05:11.080 --> 00:05:11.780
+Cet échantillonnage
+
+00:05:11.780 --> 00:05:13.120
+combiné au processus stochastique,
+
+00:05:13.200 --> 00:05:13.940
+aux mises à jour des modèles
+
+00:05:13.940 --> 00:05:15.020
+et même à la dérive des données
+
+00:05:15.020 --> 00:05:16.120
+fait varier les résultats.
+
+00:05:17.680 --> 00:05:18.440
+C'est comme préparer la scène
+
+00:05:18.440 --> 00:05:19.160
+pour de l'improvisation.
+
+00:05:19.660 --> 00:05:20.420
+Vous écrivez la scène
+
+00:05:20.420 --> 00:05:21.040
+mais l'interprète
+
+00:05:21.040 --> 00:05:22.380
+invente la chute à la volée.
+
+00:05:23.020 --> 00:05:24.140
+Parfois, cela fonctionne à merveille.
+
+00:05:24.400 --> 00:05:25.260
+Parfois, cela dérive
+
+00:05:25.260 --> 00:05:26.040
+vers l'incohérence.
+
+00:05:26.840 --> 00:05:27.840
+L'automatisation classique
+
+00:05:27.840 --> 00:05:28.440
+et les flux de travail
+
+00:05:28.440 --> 00:05:29.140
+basé sur des règles
+
+00:05:29.140 --> 00:05:29.880
+comme beaucoup de ceux
+
+00:05:29.880 --> 00:05:30.720
+créés dans Power Platform
+
+00:05:30.720 --> 00:05:32.660
+se rapprochent du côté déterministe.
+
+00:05:33.100 --> 00:05:34.000
+Vous définissez une condition
+
+00:05:34.000 --> 00:05:35.340
+et lorsque le déclencheur s'active,
+
+00:05:35.460 --> 00:05:36.400
+il exécute la règle définie
+
+00:05:36.400 --> 00:05:37.380
+avec une précision mécanique.
+
+00:05:38.020 --> 00:05:39.080
+Cette prévisibilité garantit
+
+00:05:39.080 --> 00:05:40.080
+la stabilité de la conformité
+
+00:05:40.080 --> 00:05:40.700
+des flux de données
+
+00:05:40.700 --> 00:05:41.400
+et des pistes d'audit.
+
+00:05:41.960 --> 00:05:42.720
+Vous savez ce qui va se passer
+
+00:05:42.720 --> 00:05:43.720
+car les étapes sont verrouillées.
+
+00:05:44.700 --> 00:05:45.600
+Les copilotes génératifs,
+
+00:05:45.660 --> 00:05:45.980
+en revanche,
+
+00:05:46.100 --> 00:05:46.800
+transforment tout entré
+
+00:05:46.800 --> 00:05:47.600
+en un espace ouvert
+
+00:05:47.600 --> 00:05:48.400
+à l'interprétation.
+
+00:05:49.340 --> 00:05:50.260
+Ils résument, recombinent
+
+00:05:50.260 --> 00:05:51.140
+et reformulent de manière
+
+00:05:51.140 --> 00:05:52.100
+qui semble souvent humaine.
+
+00:05:53.280 --> 00:05:54.320
+La fluidité est leur charme
+
+00:05:54.320 --> 00:05:55.420
+mais c'est aussi leur risque
+
+00:05:55.420 --> 00:05:56.720
+car cette même fluidité
+
+00:05:56.720 --> 00:05:57.740
+permet l'imprévisibilité
+
+00:05:57.740 --> 00:05:58.360
+dans des contextes
+
+00:05:58.360 --> 00:05:59.280
+édigeants de la cohérence.
+
+00:06:00.120 --> 00:06:00.680
+Imaginez une troupe
+
+00:06:00.680 --> 00:06:01.560
+d'improvisation sur scène
+
+00:06:01.560 --> 00:06:02.580
+ou leur donnez le thème
+
+00:06:02.580 --> 00:06:03.480
+l'approbation budgétaire.
+
+00:06:04.020 --> 00:06:04.760
+Un acteur improvise
+
+00:06:04.760 --> 00:06:05.720
+un gag sur les économies,
+
+00:06:05.880 --> 00:06:06.560
+un autre bifurque
+
+00:06:06.560 --> 00:06:07.380
+sur une intrigue secondaire
+
+00:06:07.380 --> 00:06:08.160
+concernant des banquets
+
+00:06:08.160 --> 00:06:09.000
+et soudain le spectacle
+
+00:06:09.000 --> 00:06:09.720
+ne ressemble plus guère
+
+00:06:09.720 --> 00:06:11.100
+à votre demande initiale.
+
+00:06:11.180 --> 00:06:11.680
+C'est un modèle
+
+00:06:11.680 --> 00:06:12.380
+non déterministe
+
+00:06:12.380 --> 00:06:13.060
+en pleine performance.
+
+00:06:14.020 --> 00:06:14.860
+Ces variations ne sont pas
+
+00:06:14.860 --> 00:06:15.900
+le signe d'une mauvaise conception.
+
+00:06:16.520 --> 00:06:17.120
+Elles sont intégrées
+
+00:06:17.120 --> 00:06:18.040
+à la manière dont les grands modèles
+
+00:06:18.040 --> 00:06:19.220
+linguistiques génèrent le langage
+
+00:06:19.220 --> 00:06:20.300
+en explorant de nombreux chemins
+
+00:06:20.300 --> 00:06:20.960
+et non un seul.
+
+00:06:21.960 --> 00:06:22.660
+Le problème est clair.
+
+00:06:23.100 --> 00:06:24.140
+La créativité n'est pas toujours
+
+00:06:24.140 --> 00:06:24.920
+synonyme de précision
+
+00:06:24.920 --> 00:06:25.920
+et dans les processus métiers
+
+00:06:25.920 --> 00:06:26.640
+la précision est souvent
+
+00:06:26.640 --> 00:06:27.540
+la seule monnaie qui compte.
+
+00:06:28.360 --> 00:06:29.180
+Appliquez cela à la finance.
+
+00:06:29.820 --> 00:06:30.500
+Supposez que votre outil
+
+00:06:30.500 --> 00:06:31.300
+de vérification de crédit
+
+00:06:31.300 --> 00:06:31.800
+basé sur l'IA
+
+00:06:31.800 --> 00:06:32.460
+évalue un demandeur
+
+00:06:32.460 --> 00:06:33.080
+comme étant approuvé.
+
+00:06:34.000 --> 00:06:34.640
+Les mêmes informations
+
+00:06:34.640 --> 00:06:35.560
+sont saisies le lendemain
+
+00:06:35.560 --> 00:06:36.000
+mais cette fois
+
+00:06:36.000 --> 00:06:37.140
+il indique un refus.
+
+00:06:38.040 --> 00:06:39.000
+Le demandeur est déconcerté.
+
+00:06:39.640 --> 00:06:40.340
+Le régulateur y voit
+
+00:06:40.340 --> 00:06:40.820
+une incohérence
+
+00:06:40.820 --> 00:06:41.880
+qui ressemble à de la discrimination.
+
+00:06:42.420 --> 00:06:42.820
+Ce qui se produit
+
+00:06:42.820 --> 00:06:43.280
+c'est une dérive.
+
+00:06:43.700 --> 00:06:44.440
+Les résultats changent
+
+00:06:44.440 --> 00:06:45.380
+sans raison transparente
+
+00:06:45.380 --> 00:06:46.700
+car les systèmes non déterministes
+
+00:06:46.700 --> 00:06:48.120
+peuvent varier avec le temps.
+
+00:06:48.120 --> 00:06:49.280
+Contrairement aux humains
+
+00:06:49.280 --> 00:06:50.000
+on ne peut pas simplement
+
+00:06:50.000 --> 00:06:50.620
+demander au modèle
+
+00:06:50.620 --> 00:06:51.620
+d'expliquer ce qui a changé.
+
+00:06:52.580 --> 00:06:53.220
+C'est là que la confiance
+
+00:06:53.220 --> 00:06:54.040
+s'érode le plus rapidement
+
+00:06:54.040 --> 00:06:55.000
+quand le raisonnement
+
+00:06:55.000 --> 00:06:55.580
+disparaît derrière
+
+00:06:55.580 --> 00:06:56.260
+un résultat opaque.
+
+00:06:56.940 --> 00:06:57.400
+En production
+
+00:06:57.400 --> 00:06:58.800
+la dérive s'amplifie rapidement.
+
+00:06:59.720 --> 00:07:00.540
+Le flux de travail approuvé
+
+00:07:00.540 --> 00:07:01.260
+pour réduire les biais
+
+00:07:01.260 --> 00:07:02.140
+un mois peut virer
+
+00:07:02.140 --> 00:07:03.280
+dans la direction opposée
+
+00:07:03.280 --> 00:07:03.720
+le suivant.
+
+00:07:04.920 --> 00:07:05.340
+Les variations
+
+00:07:05.340 --> 00:07:05.940
+qui semblent mineures
+
+00:07:05.940 --> 00:07:06.660
+isolément s'additionnent
+
+00:07:06.660 --> 00:07:07.380
+pour devenir des violations
+
+00:07:07.380 --> 00:07:08.280
+lorsqu'elles sont multipliées
+
+00:07:08.280 --> 00:07:09.180
+par des centaines de cas.
+
+00:07:10.160 --> 00:07:10.860
+Les régulateurs
+
+00:07:10.860 --> 00:07:11.760
+contrairement au public
+
+00:07:11.760 --> 00:07:12.760
+amusé des soirées d'impro
+
+00:07:12.760 --> 00:07:13.720
+exigent stabilité
+
+00:07:13.720 --> 00:07:14.800
+auditabilité
+
+00:07:14.800 --> 00:07:16.040
+et explications claires
+
+00:07:16.040 --> 00:07:17.180
+ils n'acceptent pas
+
+00:07:17.180 --> 00:07:17.900
+le non-déterminisme
+
+00:07:17.900 --> 00:07:18.960
+comme faisant partie du charme.
+
+00:07:19.620 --> 00:07:19.900
+C'est pourquoi
+
+00:07:19.900 --> 00:07:20.720
+les gardes-fous sont essentiels.
+
+00:07:21.340 --> 00:07:21.920
+Les régulateurs
+
+00:07:21.920 --> 00:07:22.360
+et les normes
+
+00:07:22.360 --> 00:07:23.240
+exigent auditabilité
+
+00:07:23.240 --> 00:07:24.240
+et documentation des modèles
+
+00:07:24.240 --> 00:07:24.700
+et suivi.
+
+00:07:25.360 --> 00:07:26.380
+Intégrer donc des journaux
+
+00:07:26.380 --> 00:07:27.560
+et des mesures d'explicabilité
+
+00:07:27.560 --> 00:07:28.120
+au déploiement.
+
+00:07:28.980 --> 00:07:29.280
+Sans eux
+
+00:07:29.280 --> 00:07:30.140
+la moindre dérive
+
+00:07:30.140 --> 00:07:30.780
+devient passif
+
+00:07:30.780 --> 00:07:31.660
+les amendes s'accumulent
+
+00:07:31.660 --> 00:07:32.940
+la réputation se dégrade
+
+00:07:32.940 --> 00:07:34.100
+et la confiance des clients
+
+00:07:34.100 --> 00:07:34.580
+s'effondre.
+
+00:07:35.360 --> 00:07:36.160
+La gouvernance
+
+00:07:36.160 --> 00:07:36.680
+et l'arbitre humain
+
+00:07:36.680 --> 00:07:37.200
+de cette pièce
+
+00:07:37.200 --> 00:07:37.820
+imprévisible
+
+00:07:37.820 --> 00:07:39.040
+imaginez à nouveau
+
+00:07:39.040 --> 00:07:39.740
+ces improvisateurs
+
+00:07:39.740 --> 00:07:40.880
+s'agitant dans tous les sens.
+
+00:07:41.280 --> 00:07:42.260
+Si personne ne fixe de limites
+
+00:07:42.260 --> 00:07:43.220
+le spectacle s'effondre
+
+00:07:43.220 --> 00:07:43.980
+dans son propre chaos.
+
+00:07:44.740 --> 00:07:45.580
+Un arbitre cependant
+
+00:07:45.580 --> 00:07:46.340
+les maintient dans le cadre.
+
+00:07:47.080 --> 00:07:47.900
+Gardez ce thème en tête
+
+00:07:47.900 --> 00:07:48.700
+suivez cette trajectoire.
+
+00:07:49.460 --> 00:07:50.240
+La gouvernance fonctionne
+
+00:07:50.240 --> 00:07:50.740
+de la même manière
+
+00:07:50.740 --> 00:07:51.040
+pour l'IA.
+
+00:07:51.580 --> 00:07:52.660
+Elle n'étouffe pas l'innovation
+
+00:07:52.660 --> 00:07:54.120
+elle convertit l'aléatoire
+
+00:07:54.120 --> 00:07:54.860
+en performance
+
+00:07:54.860 --> 00:07:55.840
+respectant le script
+
+00:07:55.840 --> 00:07:58.600
+le non-déterminisme demeure
+
+00:07:58.600 --> 00:07:59.200
+mais il opère
+
+00:07:59.200 --> 00:08:00.180
+dans des couloirs définis.
+
+00:08:00.880 --> 00:08:01.740
+C'est ici que résil l'équilibre.
+
+00:08:02.000 --> 00:08:02.420
+On ne peut forcer
+
+00:08:02.420 --> 00:08:03.140
+un copilote à agir
+
+00:08:03.140 --> 00:08:03.920
+comme une calculatrice
+
+00:08:03.920 --> 00:08:04.620
+ce n'est pas sa fonction.
+
+00:08:05.580 --> 00:08:06.140
+On peut mettre en place
+
+00:08:06.140 --> 00:08:06.740
+des filets de sécurité
+
+00:08:06.740 --> 00:08:07.120
+autour d'eux.
+
+00:08:07.580 --> 00:08:08.260
+La supervision humaine
+
+00:08:08.260 --> 00:08:09.160
+les systèmes de contrôle
+
+00:08:09.160 --> 00:08:10.160
+et les cadres de gouvernance
+
+00:08:10.160 --> 00:08:10.760
+forment ce filet.
+
+00:08:13.220 --> 00:08:14.020
+ne lâchera pas le spectacle.
+
+00:08:14.860 --> 00:08:15.140
+Sans eux
+
+00:08:15.140 --> 00:08:15.980
+la dérive s'intensifie
+
+00:08:15.980 --> 00:08:16.560
+sans contrôle
+
+00:08:16.560 --> 00:08:17.680
+et les équipes de conformité
+
+00:08:17.680 --> 00:08:18.200
+doivent justifier
+
+00:08:18.200 --> 00:08:19.200
+des décisions indéfendables.
+
+00:08:19.680 --> 00:08:20.380
+Les enjeux sont évidents.
+
+00:08:20.700 --> 00:08:21.740
+L'imprévisibilité est neutre.
+
+00:08:22.380 --> 00:08:23.280
+Elle façonne des résultats
+
+00:08:23.280 --> 00:08:24.160
+qui affectent les prêts
+
+00:08:24.160 --> 00:08:25.140
+les emplois ou la santé.
+
+00:08:25.980 --> 00:08:26.720
+Et lorsque les résultats
+
+00:08:26.720 --> 00:08:27.520
+ont un impact réel
+
+00:08:27.520 --> 00:08:28.560
+les régulateurs interviennent.
+
+00:08:29.420 --> 00:08:29.900
+Ce qui nous amène
+
+00:08:29.900 --> 00:08:30.720
+à la prochaine frontière
+
+00:08:30.720 --> 00:08:31.600
+l'arrivée imminente
+
+00:08:31.600 --> 00:08:32.260
+de règles externes
+
+00:08:32.260 --> 00:08:32.860
+qui ne suggèrent plus
+
+00:08:32.860 --> 00:08:33.380
+la surveillance
+
+00:08:33.380 --> 00:08:34.200
+mais l'impose.
+
+00:08:35.460 --> 00:08:36.460
+La Yacht européen
+
+00:08:36.460 --> 00:08:37.440
+un astéroïde en approche.
+
+00:08:38.180 --> 00:08:38.580
+Imaginez
+
+00:08:38.580 --> 00:08:39.460
+vous avez construit
+
+00:08:39.460 --> 00:08:40.000
+un nouveau projet
+
+00:08:40.000 --> 00:08:40.480
+dit à Briand
+
+00:08:40.480 --> 00:08:41.340
+une ville numérique
+
+00:08:41.340 --> 00:08:42.040
+aux rues bien tracées
+
+00:08:42.040 --> 00:08:43.260
+et à l'activité bourdonnante.
+
+00:08:44.160 --> 00:08:44.820
+Des quartiers de données
+
+00:08:44.820 --> 00:08:45.680
+des ponts d'intégration
+
+00:08:45.680 --> 00:08:46.200
+des gratte-ciels
+
+00:08:46.200 --> 00:08:47.480
+de fonctionnalités ingénieuses.
+
+00:08:48.120 --> 00:08:48.840
+Tout semble solide.
+
+00:08:49.520 --> 00:08:50.300
+Puis du jour au lendemain
+
+00:08:50.300 --> 00:08:51.160
+les Hayacht arrivent
+
+00:08:51.160 --> 00:08:52.080
+comme un plan d'urbanisme
+
+00:08:52.080 --> 00:08:52.860
+tombé du ciel.
+
+00:08:53.860 --> 00:08:54.740
+Des quartiers entiers
+
+00:08:54.740 --> 00:08:55.180
+de votre ville
+
+00:08:55.180 --> 00:08:56.180
+sont désormais réglementés
+
+00:08:56.180 --> 00:08:57.380
+certains étroitement surveillés
+
+00:08:57.380 --> 00:08:58.540
+d'autres simplement interdits
+
+00:08:58.540 --> 00:08:59.000
+s'ils deviennent
+
+00:08:59.000 --> 00:09:00.540
+manipulateurs ou dangereux.
+
+00:09:01.060 --> 00:09:01.760
+Ce n'est pas optionnel
+
+00:09:01.760 --> 00:09:02.220
+c'est la loi
+
+00:09:02.220 --> 00:09:02.900
+et votre ville
+
+00:09:02.900 --> 00:09:03.640
+doit se restructurer
+
+00:09:03.640 --> 00:09:04.400
+que vous l'ayez prévu
+
+00:09:04.400 --> 00:09:04.780
+ou non.
+
+00:09:05.100 --> 00:09:05.200
+Non.
+
+00:09:05.840 --> 00:09:06.460
+Au cœur de ces règles
+
+00:09:06.460 --> 00:09:07.460
+se trouve la catégorisation.
+
+00:09:07.460 --> 00:09:09.240
+Les systèmes sont classés
+
+00:09:09.240 --> 00:09:09.860
+en niveau de risque
+
+00:09:09.860 --> 00:09:11.300
+minimal, limité, élevé
+
+00:09:11.300 --> 00:09:12.120
+ou inacceptable.
+
+00:09:13.300 --> 00:09:14.200
+Le risque minimal
+
+00:09:14.200 --> 00:09:14.660
+pourrait couvrir
+
+00:09:14.660 --> 00:09:15.500
+un chatbot répondant
+
+00:09:15.500 --> 00:09:16.280
+au FAQ des clients.
+
+00:09:17.000 --> 00:09:17.500
+Le risque élevé
+
+00:09:17.500 --> 00:09:18.580
+englobe les outils de recrutement,
+
+00:09:18.780 --> 00:09:19.440
+le scoring de crédit
+
+00:09:19.440 --> 00:09:20.240
+et la surveillance au travail.
+
+00:09:20.980 --> 00:09:21.700
+Le risque inacceptable
+
+00:09:21.700 --> 00:09:22.940
+couvre les usages manipulateurs
+
+00:09:22.940 --> 00:09:23.380
+ou dangereux
+
+00:09:23.380 --> 00:09:24.020
+qui sont purement
+
+00:09:24.020 --> 00:09:24.780
+et simplement bannis.
+
+00:09:25.720 --> 00:09:26.280
+Ce ne sont pas juste
+
+00:09:26.280 --> 00:09:26.720
+des étiquettes
+
+00:09:26.720 --> 00:09:27.540
+elles correspondent directement
+
+00:09:27.540 --> 00:09:28.020
+à des obligations.
+
+00:09:28.680 --> 00:09:29.480
+Si classé à haut risque
+
+00:09:29.480 --> 00:09:30.000
+vous devez assurer
+
+00:09:30.000 --> 00:09:31.240
+transparence et explicabilité
+
+00:09:31.240 --> 00:09:31.980
+tenir des journaux
+
+00:09:31.980 --> 00:09:33.140
+détaillés pour les audits
+
+00:09:33.140 --> 00:09:33.640
+et mettre en place
+
+00:09:33.640 --> 00:09:34.680
+une supervision humaine.
+
+00:09:35.300 --> 00:09:35.820
+Soudain on ne demande
+
+00:09:35.820 --> 00:09:36.460
+plus seulement à votre
+
+00:09:36.460 --> 00:09:37.100
+brillante nouvelle ville
+
+00:09:37.100 --> 00:09:37.520
+de fonctionner
+
+00:09:37.520 --> 00:09:38.160
+on lui demande de prouver
+
+00:09:38.160 --> 00:09:38.800
+en détail comment
+
+00:09:38.800 --> 00:09:39.660
+et pourquoi elle fonctionne.
+
+00:09:40.440 --> 00:09:41.040
+Pour les développeurs
+
+00:09:41.040 --> 00:09:41.960
+et les concepteurs de solutions
+
+00:09:41.960 --> 00:09:42.580
+c'est un virage série.
+
+00:09:43.240 --> 00:09:43.840
+IA les fonctionnalités
+
+00:09:43.840 --> 00:09:44.380
+pouvaient être ajoutées
+
+00:09:44.380 --> 00:09:44.820
+aux applications
+
+00:09:44.820 --> 00:09:45.500
+au rythme d'esprit.
+
+00:09:46.100 --> 00:09:47.160
+Aujourd'hui ces mêmes fonctionnalités
+
+00:09:47.160 --> 00:09:48.040
+peuvent exiger des examens
+
+00:09:48.040 --> 00:09:48.540
+de conformité
+
+00:09:48.540 --> 00:09:49.560
+avant même une simple démonstration.
+
+00:09:50.300 --> 00:09:51.260
+Une application de recrutement
+
+00:09:51.260 --> 00:09:51.840
+classant les CV
+
+00:09:51.840 --> 00:09:52.700
+sur Power Platform
+
+00:09:52.700 --> 00:09:53.940
+autrefois simple gain de temps
+
+00:09:53.940 --> 00:09:54.520
+bascule soudain
+
+00:09:54.520 --> 00:09:55.160
+dans la catégorie
+
+00:09:55.160 --> 00:09:55.700
+à haut risque.
+
+00:09:56.140 --> 00:09:56.820
+N'est pas tombé en panne.
+
+00:09:57.020 --> 00:09:57.640
+Elle impacte simplement
+
+00:09:57.640 --> 00:09:58.440
+les personnes de manière
+
+00:09:58.440 --> 00:09:59.160
+que la loi définit
+
+00:09:59.160 --> 00:09:59.700
+comme sensible
+
+00:09:59.700 --> 00:10:00.600
+ce qui change la donne.
+
+00:10:00.600 --> 00:10:02.280
+Et c'est là que la panique
+
+00:10:02.280 --> 00:10:03.460
+s'installe pour de nombreuses équipes.
+
+00:10:03.900 --> 00:10:04.740
+La transparence signifie
+
+00:10:04.740 --> 00:10:05.460
+des journaux détaillant
+
+00:10:05.460 --> 00:10:06.460
+comment les décisions sont prises
+
+00:10:06.460 --> 00:10:07.160
+pas une liste vague
+
+00:10:07.160 --> 00:10:07.860
+dans une présentation.
+
+00:10:08.620 --> 00:10:10.000
+L'auditabilité exige
+
+00:10:10.000 --> 00:10:11.060
+que chaque chemin décisionnel
+
+00:10:11.060 --> 00:10:12.200
+soit stocké et récupérable
+
+00:10:12.200 --> 00:10:12.980
+prêt à être inspecté
+
+00:10:12.980 --> 00:10:13.860
+par les régulateurs.
+
+00:10:14.320 --> 00:10:15.020
+La supervision humaine
+
+00:10:15.020 --> 00:10:16.260
+implique une responsabilité réelle.
+
+00:10:16.460 --> 00:10:17.400
+Les personnes observant le système
+
+00:10:17.400 --> 00:10:18.240
+capables d'intervenir
+
+00:10:18.240 --> 00:10:19.340
+si le modèle dévie.
+
+00:10:20.200 --> 00:10:20.900
+Ce ne sont pas
+
+00:10:20.900 --> 00:10:21.620
+de légères directives
+
+00:10:21.620 --> 00:10:22.660
+mais des conditions exécutoires.
+
+00:10:23.200 --> 00:10:23.940
+Les prototypes rapides
+
+00:10:23.940 --> 00:10:24.840
+se transforment en déploiements
+
+00:10:24.840 --> 00:10:25.700
+supervisés exigeant
+
+00:10:25.700 --> 00:10:26.800
+une validation de conformité
+
+00:10:26.800 --> 00:10:27.280
+à chaque étape.
+
+00:10:27.920 --> 00:10:28.620
+La vitesse laisse place
+
+00:10:28.620 --> 00:10:29.020
+à la structure.
+
+00:10:29.020 --> 00:10:30.320
+Voyez la loi moins comme
+
+00:10:30.320 --> 00:10:31.000
+de la bureaucratie
+
+00:10:31.000 --> 00:10:32.080
+que comme des règles d'oxygène
+
+00:10:32.080 --> 00:10:32.900
+dans un vaisseau spatial.
+
+00:10:33.700 --> 00:10:34.740
+On peut lever les yeux au ciel
+
+00:10:34.740 --> 00:10:35.400
+en ouvrant le masque
+
+00:10:35.400 --> 00:10:36.000
+par temps calme
+
+00:10:36.000 --> 00:10:37.300
+mais en cas de turbulence
+
+00:10:37.300 --> 00:10:37.900
+c'est ce qui maintient
+
+00:10:37.900 --> 00:10:39.020
+l'équipage en vie.
+
+00:10:40.060 --> 00:10:40.840
+La loi c'est la même chose.
+
+00:10:41.320 --> 00:10:42.200
+Les règles semblent lourdes
+
+00:10:42.200 --> 00:10:42.840
+jusqu'à ce qu'on se rappelle
+
+00:10:42.840 --> 00:10:43.640
+pourquoi elles existent.
+
+00:10:43.720 --> 00:10:44.200
+Une seule erreur
+
+00:10:44.200 --> 00:10:45.040
+peut étouffer la confiance
+
+00:10:45.040 --> 00:10:45.880
+dans tout un secteur.
+
+00:10:46.760 --> 00:10:47.820
+Et voici un avertissement crucial.
+
+00:10:48.180 --> 00:10:48.640
+Vous ne pouvez pas
+
+00:10:48.640 --> 00:10:49.420
+différer la mise en conformité.
+
+00:10:50.220 --> 00:10:50.780
+La loi impose
+
+00:10:50.780 --> 00:10:51.880
+des obligations immédiates
+
+00:10:51.880 --> 00:10:52.840
+et ajouter des journaux,
+
+00:10:52.960 --> 00:10:53.400
+des contrôles
+
+00:10:53.400 --> 00:10:54.320
+et une supervision plus tard
+
+00:10:54.320 --> 00:10:55.160
+coûtera bien plus cher
+
+00:10:55.160 --> 00:10:56.020
+que de les intégrer
+
+00:10:56.020 --> 00:10:56.820
+dès la conception.
+
+00:10:57.940 --> 00:10:58.500
+Les conséquences
+
+00:10:58.500 --> 00:10:59.000
+de l'ignorance
+
+00:10:59.000 --> 00:10:59.600
+de ces exigences
+
+00:10:59.600 --> 00:11:00.640
+ne sont pas seulement financières.
+
+00:11:01.340 --> 00:11:02.280
+Les amendes piquent certes
+
+00:11:02.280 --> 00:11:03.220
+mais la réputation
+
+00:11:03.220 --> 00:11:04.120
+est plus difficile à réparer.
+
+00:11:04.720 --> 00:11:05.280
+Une fois que les clients
+
+00:11:05.280 --> 00:11:06.040
+découvrent que votre outil
+
+00:11:06.040 --> 00:11:06.880
+a franchi la ligne rouge,
+
+00:11:06.980 --> 00:11:07.540
+la confiance envers
+
+00:11:07.540 --> 00:11:08.200
+toute votre entreprise
+
+00:11:08.200 --> 00:11:08.520
+s'érode.
+
+00:11:09.100 --> 00:11:09.840
+Cela ne peut pas le corriger
+
+00:11:09.840 --> 00:11:10.440
+avec une mise à jour.
+
+00:11:10.700 --> 00:11:11.420
+La confiance du public
+
+00:11:11.420 --> 00:11:11.820
+est fragile
+
+00:11:11.820 --> 00:11:12.580
+et quand elle se brise
+
+00:11:12.580 --> 00:11:13.100
+les utilisateurs
+
+00:11:13.100 --> 00:11:13.600
+vont voir ailleurs.
+
+00:11:14.160 --> 00:11:14.760
+La plus grande sanction
+
+00:11:14.760 --> 00:11:15.460
+n'est pas écrite dans la loi
+
+00:11:15.460 --> 00:11:16.300
+elle est écrite dans le comportement
+
+00:11:16.300 --> 00:11:16.640
+des clients.
+
+00:11:17.480 --> 00:11:18.300
+Alors voici l'inconfortable
+
+00:11:18.300 --> 00:11:19.220
+question de l'inventaire.
+
+00:11:20.280 --> 00:11:20.800
+Savez-vous seulement
+
+00:11:20.800 --> 00:11:21.780
+lesquels de vos fonctionnalités
+
+00:11:21.780 --> 00:11:22.600
+d'IA sont qualifiées
+
+00:11:22.600 --> 00:11:23.580
+à haut risque ?
+
+00:11:23.580 --> 00:11:24.600
+Ce trieur de CV ?
+
+00:11:24.600 --> 00:11:25.420
+Cet outil de productivité
+
+00:11:25.420 --> 00:11:26.480
+prédictive ?
+
+00:11:26.480 --> 00:11:27.260
+S'il touche à des domaines
+
+00:11:27.260 --> 00:11:28.120
+sensibles comme l'emploi
+
+00:11:28.120 --> 00:11:29.240
+ou les perspectives financières
+
+00:11:29.240 --> 00:11:30.080
+la loi s'en préoccupe.
+
+00:11:30.800 --> 00:11:31.220
+Et peu importe
+
+00:11:31.220 --> 00:11:31.620
+si vous les voyez
+
+00:11:31.620 --> 00:11:33.420
+comme des assistants inoffensifs ?
+
+00:11:33.420 --> 00:11:33.980
+La classification
+
+00:11:33.980 --> 00:11:34.860
+entraîne des obligations
+
+00:11:34.860 --> 00:11:35.880
+que vous les reconnaissiez ou non.
+
+00:11:36.320 --> 00:11:37.340
+Les organisations intelligentes
+
+00:11:37.340 --> 00:11:38.300
+commencent par un inventaire
+
+00:11:38.300 --> 00:11:39.620
+répertoriant les fonctionnalités
+
+00:11:39.620 --> 00:11:40.300
+avant que les régulateurs
+
+00:11:40.300 --> 00:11:41.020
+ne les sommes de répondre
+
+00:11:41.020 --> 00:11:41.760
+moyennant une amende.
+
+00:11:42.420 --> 00:11:43.240
+Cela a tout le paradoxe.
+
+00:11:43.560 --> 00:11:44.360
+La loi ne recommande pas
+
+00:11:44.360 --> 00:11:45.660
+gentiment une IA responsable
+
+00:11:45.660 --> 00:11:46.300
+elle l'exige.
+
+00:11:46.880 --> 00:11:47.400
+La gouvernance
+
+00:11:47.400 --> 00:11:48.200
+n'est plus un assaisonnement
+
+00:11:48.200 --> 00:11:48.640
+optionnel
+
+00:11:48.640 --> 00:11:49.580
+elle est intégrée à la loi.
+
+00:11:50.700 --> 00:11:51.280
+Soit vous concevez
+
+00:11:51.280 --> 00:11:51.880
+votre architecture
+
+00:11:51.880 --> 00:11:52.620
+de manière responsable
+
+00:11:52.620 --> 00:11:53.080
+dès le départ
+
+00:11:53.080 --> 00:11:53.920
+soit la loi imposera
+
+00:11:53.920 --> 00:11:54.620
+cette responsabilité
+
+00:11:54.620 --> 00:11:55.100
+de l'extérieur
+
+00:11:55.100 --> 00:11:55.960
+avec ses pénalités
+
+00:11:55.960 --> 00:11:56.940
+et ses auditeurs
+
+00:11:56.940 --> 00:11:57.640
+avec ses auditeurs.
+
+00:11:58.180 --> 00:11:58.600
+En ce sens
+
+00:11:58.600 --> 00:11:59.720
+l'astéroïde a déjà frappé
+
+00:11:59.720 --> 00:12:00.960
+vous ne pouvez pas le repousser.
+
+00:12:01.320 --> 00:12:01.700
+Vous pouvez seulement
+
+00:12:01.700 --> 00:12:02.440
+vous protéger de l'impact
+
+00:12:02.440 --> 00:12:03.360
+et préserver l'habitabilité
+
+00:12:03.360 --> 00:12:03.920
+de votre cité.
+
+00:12:04.600 --> 00:12:05.640
+Ce qui soulève la question pratique
+
+00:12:05.640 --> 00:12:06.560
+quel bouclier avez-vous
+
+00:12:06.560 --> 00:12:07.620
+à portée de main ?
+
+00:12:07.620 --> 00:12:08.440
+Car dans ce contexte
+
+00:12:08.440 --> 00:12:09.260
+survivre à l'astéroïde
+
+00:12:09.260 --> 00:12:10.180
+n'est pas une question de chance
+
+00:12:10.180 --> 00:12:10.820
+mais d'utilisation.
+
+00:12:10.820 --> 00:12:12.020
+des défenses déjà présentes
+
+00:12:12.020 --> 00:12:13.040
+dans votre panneau de contrôle.
+
+00:12:14.460 --> 00:12:14.920
+Les boucliers
+
+00:12:14.920 --> 00:12:15.580
+et garde-fous
+
+00:12:15.580 --> 00:12:16.700
+de l'écosystème Microsoft.
+
+00:12:17.460 --> 00:12:18.740
+Dans l'écosystème Microsoft
+
+00:12:18.740 --> 00:12:19.180
+les boucliers
+
+00:12:19.180 --> 00:12:19.920
+sont déjà intégrés
+
+00:12:19.920 --> 00:12:20.380
+au vaisseau
+
+00:12:20.380 --> 00:12:21.420
+et vous suffit
+
+00:12:21.420 --> 00:12:21.900
+de les activer.
+
+00:12:22.580 --> 00:12:23.580
+Microsoft 365
+
+00:12:23.580 --> 00:12:24.380
+et Power Platform
+
+00:12:24.380 --> 00:12:25.100
+intègrent des outils
+
+00:12:25.100 --> 00:12:25.540
+de gouvernance
+
+00:12:25.540 --> 00:12:26.300
+trop souvent ignorés
+
+00:12:26.300 --> 00:12:26.700
+relégués
+
+00:12:26.700 --> 00:12:27.420
+comme s'il s'agissait
+
+00:12:27.420 --> 00:12:28.380
+d'options facultatives.
+
+00:12:29.060 --> 00:12:29.440
+Ce ne sont pas
+
+00:12:29.440 --> 00:12:30.020
+des décorations
+
+00:12:30.020 --> 00:12:31.040
+mais le blindage structurel
+
+00:12:31.040 --> 00:12:31.780
+qui maintient vos systèmes
+
+00:12:31.780 --> 00:12:32.860
+intacts face aux exigences
+
+00:12:32.860 --> 00:12:33.880
+réglementaires et aux risques.
+
+00:12:34.540 --> 00:12:35.100
+Au danger survient
+
+00:12:35.100 --> 00:12:35.560
+quand les équipes
+
+00:12:35.560 --> 00:12:35.920
+jettent un oeil
+
+00:12:35.920 --> 00:12:36.580
+à ses tableaux de bord
+
+00:12:36.580 --> 00:12:37.180
+haussent les épaules
+
+00:12:40.820 --> 00:12:41.680
+Commencez par la visibilité.
+
+00:12:42.160 --> 00:12:43.160
+Microsoft 365
+
+00:12:43.160 --> 00:12:43.960
+et Power Platform
+
+00:12:43.960 --> 00:12:44.780
+intègrent des fonctions
+
+00:12:44.780 --> 00:12:45.400
+de supervision
+
+00:12:45.400 --> 00:12:45.900
+qui permettent
+
+00:12:45.900 --> 00:12:46.820
+de suivre le comportement
+
+00:12:46.820 --> 00:12:47.180
+des modèles,
+
+00:12:47.260 --> 00:12:48.220
+d'enregistrer les décisions
+
+00:12:48.220 --> 00:12:48.660
+et d'afficher
+
+00:12:48.660 --> 00:12:49.680
+des explications claires.
+
+00:12:50.700 --> 00:12:51.340
+Plus besoin de dépendre
+
+00:12:51.340 --> 00:12:51.820
+d'une boîte noire
+
+00:12:51.820 --> 00:12:53.000
+qui rend des verdicts obscurs.
+
+00:12:53.800 --> 00:12:54.220
+Vous disposez
+
+00:12:54.220 --> 00:12:54.940
+d'une véritable boucle
+
+00:12:54.940 --> 00:12:55.500
+de rétroaction
+
+00:12:55.500 --> 00:12:56.080
+avec des signaux
+
+00:12:56.080 --> 00:12:56.580
+sur votre console
+
+00:12:56.580 --> 00:12:57.300
+n'est qu'un algorithme né.
+
+00:12:57.620 --> 00:12:58.140
+Cette distinction
+
+00:12:58.140 --> 00:12:58.940
+sépare la navigation
+
+00:12:58.940 --> 00:12:59.380
+à l'aveuble
+
+00:12:59.380 --> 00:13:00.220
+de la navigation
+
+00:13:00.220 --> 00:13:00.920
+avec des instruments
+
+00:13:00.920 --> 00:13:01.920
+qui vous indiquent précisément
+
+00:13:01.920 --> 00:13:02.960
+quand vous dérivez.
+
+00:13:03.540 --> 00:13:04.560
+Vient ensuite la transparence.
+
+00:13:05.140 --> 00:13:05.740
+Certains fournisseurs
+
+00:13:05.740 --> 00:13:06.200
+comme AWS
+
+00:13:06.200 --> 00:13:06.820
+proposent des fiches
+
+00:13:06.820 --> 00:13:07.360
+de services IA
+
+00:13:07.360 --> 00:13:07.900
+pour documenter
+
+00:13:07.900 --> 00:13:08.520
+l'usage et les limites
+
+00:13:08.520 --> 00:13:08.860
+des modèles.
+
+00:13:09.740 --> 00:13:10.440
+Microsoft adopte
+
+00:13:10.440 --> 00:13:11.180
+une approche différente
+
+00:13:11.180 --> 00:13:12.440
+avec sa norme d'IA responsable
+
+00:13:12.440 --> 00:13:12.920
+et des outils
+
+00:13:12.920 --> 00:13:13.800
+comme le tableau de bord
+
+00:13:13.800 --> 00:13:14.660
+de l'IA responsable.
+
+00:13:15.880 --> 00:13:16.280
+Ils fournissent
+
+00:13:16.280 --> 00:13:16.760
+aux praticiens
+
+00:13:16.760 --> 00:13:17.840
+des rapports d'explicabilité,
+
+00:13:18.520 --> 00:13:19.200
+des notes de performance
+
+00:13:19.200 --> 00:13:19.520
+et des choix
+
+00:13:19.520 --> 00:13:20.460
+de conception responsables.
+
+00:13:21.080 --> 00:13:21.600
+Considérez cela
+
+00:13:21.600 --> 00:13:22.260
+comme un copilote
+
+00:13:22.260 --> 00:13:23.060
+qui anote son raisonnement
+
+00:13:23.060 --> 00:13:23.600
+au lieu de vous donner
+
+00:13:23.600 --> 00:13:24.400
+simplement un plan.
+
+00:13:25.160 --> 00:13:26.000
+Voyez chaque considération
+
+00:13:26.000 --> 00:13:27.160
+pas seulement le résultat final
+
+00:13:27.160 --> 00:13:28.440
+quant aux protections
+
+00:13:28.440 --> 00:13:29.100
+au niveau des modèles.
+
+00:13:29.220 --> 00:13:29.720
+N'oubliez pas ceci.
+
+00:13:30.140 --> 00:13:30.740
+Tous les fournisseurs
+
+00:13:30.740 --> 00:13:31.500
+proposent des garde-fous
+
+00:13:31.500 --> 00:13:32.360
+sous une forme ou une autre.
+
+00:13:33.040 --> 00:13:33.880
+Dans l'environnement Microsoft
+
+00:13:36.820 --> 00:13:37.380
+des journaux d'audit
+
+00:13:37.380 --> 00:13:38.140
+remplissant ce rôle
+
+00:13:38.140 --> 00:13:39.520
+bloquant les tentatives malveillantes
+
+00:13:39.520 --> 00:13:40.460
+et filtrant les résultats
+
+00:13:40.460 --> 00:13:41.560
+avant qu'il ne dégénère.
+
+00:13:42.660 --> 00:13:43.940
+Pour l'explicabilité elle-même,
+
+00:13:44.200 --> 00:13:45.160
+il existe des méthodes établies
+
+00:13:45.160 --> 00:13:45.580
+comme CHAP
+
+00:13:45.580 --> 00:13:46.400
+ou des outils spécifiques
+
+00:13:46.400 --> 00:13:47.500
+comme SageMaker Clarify.
+
+00:13:48.540 --> 00:13:49.280
+Dans le monde Microsoft,
+
+00:13:49.380 --> 00:13:49.860
+le tableau de bord
+
+00:13:49.860 --> 00:13:50.660
+de l'IA responsable
+
+00:13:50.660 --> 00:13:51.440
+remplit ce rôle
+
+00:13:51.440 --> 00:13:52.740
+fournissant des rapports clairs
+
+00:13:52.740 --> 00:13:53.300
+sur les variables
+
+00:13:53.300 --> 00:13:53.880
+ayant influencé
+
+00:13:53.880 --> 00:13:54.460
+le choix d'un modèle.
+
+00:13:55.220 --> 00:13:55.580
+Grâce à eux,
+
+00:13:55.640 --> 00:13:56.700
+la magie d'une décision par IA
+
+00:13:56.700 --> 00:13:58.160
+cesse d'être un tour inquiétant.
+
+00:13:58.700 --> 00:13:59.120
+Vous pouvez voir
+
+00:13:59.120 --> 00:13:59.840
+quelles données d'entrée
+
+00:13:59.840 --> 00:14:00.600
+ont compté évaluer
+
+00:14:00.600 --> 00:14:01.600
+si le résultat est équitable.
+
+00:14:02.380 --> 00:14:03.040
+Les auditeurs obtiennent
+
+00:14:03.040 --> 00:14:03.700
+des preuves traçables
+
+00:14:03.700 --> 00:14:04.380
+et les utilisateurs
+
+00:14:04.380 --> 00:14:04.940
+ont la certitude
+
+00:14:04.940 --> 00:14:05.660
+que le modèle ne produit
+
+00:14:05.660 --> 00:14:06.860
+pas d'absurdité à partir de rien.
+
+00:14:07.680 --> 00:14:08.160
+Et vient ensuite
+
+00:14:08.160 --> 00:14:08.880
+le filet de sécurité
+
+00:14:08.880 --> 00:14:09.700
+simple mais vital,
+
+00:14:10.100 --> 00:14:10.880
+la protection des données.
+
+00:14:11.740 --> 00:14:12.500
+Activez la prévention
+
+00:14:12.500 --> 00:14:13.440
+contre la perte de données
+
+00:14:13.440 --> 00:14:14.540
+pour éviter que des informations
+
+00:14:14.540 --> 00:14:15.420
+sensibles ne se retrouvent
+
+00:14:15.420 --> 00:14:16.060
+entre de mauvaises mains
+
+00:14:16.060 --> 00:14:16.860
+et associez-y
+
+00:14:16.860 --> 00:14:17.800
+la conservation des journaux
+
+00:14:17.800 --> 00:14:18.560
+et des pistes d'audit.
+
+00:14:19.400 --> 00:14:19.760
+Ensemble,
+
+00:14:19.820 --> 00:14:21.040
+ils font office de boîte noire
+
+00:14:21.040 --> 00:14:22.560
+chaque action,
+
+00:14:22.860 --> 00:14:23.900
+chaque anomalie est répertoriée
+
+00:14:23.900 --> 00:14:24.500
+afin que vous puissiez
+
+00:14:24.500 --> 00:14:25.260
+retracer les erreurs
+
+00:14:25.260 --> 00:14:25.900
+lorsqu'elles surviennent.
+
+00:14:26.620 --> 00:14:27.300
+Si vous ignorez cela,
+
+00:14:27.380 --> 00:14:28.240
+vous ne trouverez que du vent
+
+00:14:28.240 --> 00:14:29.300
+lorsque les erreurs se propagent.
+
+00:14:31.600 --> 00:14:32.740
+Exemple d'une power-up à BASIC
+
+00:14:32.740 --> 00:14:33.600
+créée avec AI Builder.
+
+00:14:34.320 --> 00:14:35.180
+Dans ses premières versions,
+
+00:14:35.320 --> 00:14:35.820
+elle aspirait plus
+
+00:14:35.820 --> 00:14:36.600
+de données personnelles
+
+00:14:36.600 --> 00:14:37.180
+qu'une organisation
+
+00:14:37.180 --> 00:14:38.100
+ne pourrait le justifier.
+
+00:14:38.760 --> 00:14:39.920
+Non, dossiers et champs sensibles
+
+00:14:39.920 --> 00:14:40.540
+étaient exposés.
+
+00:14:41.260 --> 00:14:41.920
+Une fois les paramètres
+
+00:14:41.920 --> 00:14:42.840
+de conformité activés,
+
+00:14:42.900 --> 00:14:43.700
+le flux a été stoppé,
+
+00:14:43.920 --> 00:14:45.020
+les frontières des données renforcées,
+
+00:14:45.080 --> 00:14:46.100
+l'application fonctionnait toujours
+
+00:14:46.100 --> 00:14:47.100
+et les règles de confidentialité
+
+00:14:47.100 --> 00:14:47.580
+étaient respectées.
+
+00:14:47.920 --> 00:14:49.120
+L'architecture n'a pas été démolie
+
+00:14:49.120 --> 00:14:49.700
+ni reconstruite.
+
+00:14:50.340 --> 00:14:51.360
+Elle a été mise en conformité
+
+00:14:51.360 --> 00:14:52.260
+en activant des boucliers
+
+00:14:52.260 --> 00:14:52.860
+qui étaient déjà là
+
+00:14:52.860 --> 00:14:53.260
+depuis le début.
+
+00:14:53.720 --> 00:14:54.860
+Pour les premières phases de déploiement,
+
+00:14:54.960 --> 00:14:55.520
+une autre pratique
+
+00:14:55.520 --> 00:14:56.340
+mérite d'être adoptée,
+
+00:14:56.340 --> 00:14:57.420
+les environnements clos
+
+00:14:57.420 --> 00:14:58.320
+à la manière de TELUS.
+
+00:14:58.980 --> 00:14:59.800
+En testant les copilotes
+
+00:14:59.800 --> 00:15:00.960
+dans un bac à sable contrôlé
+
+00:15:00.960 --> 00:15:01.480
+et auditable,
+
+00:15:02.020 --> 00:15:02.980
+vous limitez tout comportement
+
+00:15:02.980 --> 00:15:04.460
+imprévu à une zone sécurisée
+
+00:15:04.460 --> 00:15:05.260
+avant de les intégrer
+
+00:15:05.260 --> 00:15:06.420
+au flux de travail essentiel.
+
+00:15:07.180 --> 00:15:07.820
+C'est un terrain de test
+
+00:15:07.820 --> 00:15:08.600
+dont les murs sont assez hauts
+
+00:15:08.600 --> 00:15:09.080
+pour que les erreurs
+
+00:15:09.080 --> 00:15:09.700
+ne s'infiltrent pas
+
+00:15:09.700 --> 00:15:10.500
+dans les systèmes de production.
+
+00:15:11.620 --> 00:15:12.060
+Associez cela
+
+00:15:12.060 --> 00:15:12.980
+à une surveillance robuste
+
+00:15:12.980 --> 00:15:13.720
+et votre organisation
+
+00:15:13.720 --> 00:15:14.560
+détectera les erreurs
+
+00:15:14.560 --> 00:15:15.420
+avant qu'elle ne fasse la une.
+
+00:15:16.420 --> 00:15:17.280
+Les tableaux de bord de gouvernance
+
+00:15:17.280 --> 00:15:18.100
+assurent la cohésion de l'ensemble.
+
+00:15:18.720 --> 00:15:19.300
+Ce ne sont pas seulement
+
+00:15:19.300 --> 00:15:19.920
+des écrans de statut,
+
+00:15:20.020 --> 00:15:20.620
+ils offrent aux équipes
+
+00:15:20.620 --> 00:15:21.700
+une supervision active.
+
+00:15:21.700 --> 00:15:22.560
+Les superviseurs
+
+00:15:22.560 --> 00:15:23.180
+peuvent remettre en question
+
+00:15:23.180 --> 00:15:23.900
+approuver ou rejeter
+
+00:15:23.900 --> 00:15:24.480
+les résultats de l'IA
+
+00:15:24.480 --> 00:15:24.920
+en temps réel.
+
+00:15:25.380 --> 00:15:25.760
+C'est le principe
+
+00:15:25.760 --> 00:15:26.500
+de l'intervention humaine
+
+00:15:26.500 --> 00:15:27.600
+intégrée directement au système.
+
+00:15:28.160 --> 00:15:28.820
+Sans cette supervision,
+
+00:15:29.000 --> 00:15:29.760
+l'automatisation fonctionne
+
+00:15:29.760 --> 00:15:30.460
+sans limite jusqu'à ce qu'elle
+
+00:15:30.460 --> 00:15:31.540
+se heurte à une violation de politique.
+
+00:15:32.680 --> 00:15:33.520
+Grâce aux tableaux de bord,
+
+00:15:33.920 --> 00:15:34.480
+les humains siègent
+
+00:15:34.480 --> 00:15:35.320
+dans la tour de contrôle,
+
+00:15:35.660 --> 00:15:36.740
+coordonnant chaque système d'IA
+
+00:15:36.740 --> 00:15:37.280
+comme des avions
+
+00:15:37.280 --> 00:15:38.380
+dans un espace aérien dense.
+
+00:15:39.240 --> 00:15:39.700
+Au lieu du chaos,
+
+00:15:39.780 --> 00:15:40.400
+vous obtenez un flux
+
+00:15:40.400 --> 00:15:41.620
+synchronisé et maîtrisé.
+
+00:15:42.640 --> 00:15:43.540
+C'est là que réside le changement.
+
+00:15:44.080 --> 00:15:44.840
+Une fois que les organisations
+
+00:15:44.840 --> 00:15:45.680
+considèrent ces systèmes
+
+00:15:45.680 --> 00:15:46.320
+comme des défenses,
+
+00:15:46.400 --> 00:15:46.920
+ils passent du statut
+
+00:15:46.920 --> 00:15:47.800
+de contrainte réglementaire
+
+00:15:47.800 --> 00:15:48.660
+à celui de multiplicateur
+
+00:15:48.660 --> 00:15:49.260
+de productivité.
+
+00:15:49.880 --> 00:15:50.640
+Vous évitez de refaire le dalle.
+
+00:15:50.920 --> 00:15:51.800
+Vous fournissez aux régulateurs
+
+00:15:51.800 --> 00:15:52.480
+les journaux qu'ils demandent
+
+00:15:52.480 --> 00:15:52.940
+en un instant.
+
+00:15:53.280 --> 00:15:53.860
+Vous avancez plus vite
+
+00:15:53.860 --> 00:15:54.900
+car la conformité faisait partie
+
+00:15:54.900 --> 00:15:55.360
+de la conception
+
+00:15:55.360 --> 00:15:56.200
+et n'a pas été ajoutée
+
+00:15:56.200 --> 00:15:56.580
+après coup.
+
+00:15:57.300 --> 00:15:58.180
+Ce qui ralentissait autrefois
+
+00:15:58.180 --> 00:15:59.220
+votre rythme l'accélère des ans.
+
+00:15:59.580 --> 00:15:59.900
+Cependant,
+
+00:15:59.960 --> 00:16:01.080
+les boucliers ne fonctionnent pas seuls.
+
+00:16:01.460 --> 00:16:02.440
+Ils nécessitent une configuration,
+
+00:16:02.660 --> 00:16:03.820
+une révision et un suivi constant.
+
+00:16:04.540 --> 00:16:05.220
+Ces contrôles aident,
+
+00:16:05.380 --> 00:16:05.960
+mais ils doivent être
+
+00:16:05.960 --> 00:16:07.220
+correctement gérés par des personnes.
+
+00:16:08.580 --> 00:16:09.500
+Les conseils de gouvernance,
+
+00:16:09.600 --> 00:16:10.720
+ultime défense contre le chaos.
+
+00:16:11.440 --> 00:16:12.480
+Considérez un conseil de gouvernance
+
+00:16:12.480 --> 00:16:13.000
+comme l'équipage
+
+00:16:13.000 --> 00:16:14.000
+sur la passerelle de votre vaisseau.
+
+00:16:14.560 --> 00:16:15.800
+Un collectif qui maintient le cap
+
+00:16:15.800 --> 00:16:16.580
+quand les turbulences
+
+00:16:16.580 --> 00:16:17.420
+secouent les commandes.
+
+00:16:18.480 --> 00:16:19.040
+Les boucliers,
+
+00:16:19.360 --> 00:16:20.560
+les paramètres de conformité
+
+00:16:20.560 --> 00:16:21.420
+et les journaux d'audit
+
+00:16:21.420 --> 00:16:22.420
+peuvent fonctionner en arrière-plan
+
+00:16:22.420 --> 00:16:23.140
+mais quelqu'un doit toujours
+
+00:16:23.140 --> 00:16:24.020
+regarder par la fenêtre,
+
+00:16:24.140 --> 00:16:24.760
+surveiller les cadrans
+
+00:16:24.760 --> 00:16:25.960
+et réagir face à l'imprévu.
+
+00:16:27.000 --> 00:16:27.680
+Sans cette supervision,
+
+00:16:27.940 --> 00:16:28.800
+même les meilleurs gardes-fous
+
+00:16:28.800 --> 00:16:29.620
+ne sont que du métal
+
+00:16:29.620 --> 00:16:30.860
+dépourvus de discernement.
+
+00:16:31.460 --> 00:16:32.180
+Un conseil de gouvernance
+
+00:16:32.180 --> 00:16:33.120
+n'est pas un officier solitaire
+
+00:16:33.120 --> 00:16:33.820
+à voyant des ordres.
+
+00:16:34.240 --> 00:16:34.740
+Elle est structurée
+
+00:16:34.740 --> 00:16:35.900
+comme une équipe interfonctionnelle
+
+00:16:35.900 --> 00:16:37.440
+réunissant des responsables technologiques,
+
+00:16:37.520 --> 00:16:38.600
+des experts en gouvernance des données,
+
+00:16:42.480 --> 00:16:42.840
+indépendants.
+
+00:16:43.740 --> 00:16:44.680
+Chacun joue un rôle différent
+
+00:16:44.680 --> 00:16:45.820
+car l'IA ne peut pas être confiné
+
+00:16:45.820 --> 00:16:46.540
+dans un seul silo.
+
+00:16:47.720 --> 00:16:48.520
+Un outil de tri de CV
+
+00:16:48.520 --> 00:16:49.240
+impacte les RH,
+
+00:16:49.360 --> 00:16:49.840
+un algorithme.
+
+00:16:49.940 --> 00:16:50.980
+De prévision façonne la finance
+
+00:16:50.980 --> 00:16:51.520
+et un chatbot
+
+00:16:51.520 --> 00:16:52.500
+s'adresse directement à vos clients.
+
+00:16:53.500 --> 00:16:54.000
+Une seule fonction
+
+00:16:54.000 --> 00:16:54.740
+ne peut pas anticiper
+
+00:16:54.740 --> 00:16:55.620
+toutes les conséquences.
+
+00:16:56.260 --> 00:16:56.940
+Il faut une table ronde
+
+00:16:56.940 --> 00:16:58.200
+pour identifier et corriger les risques
+
+00:16:58.200 --> 00:16:58.960
+avant qu'ils ne se propagent
+
+00:16:58.960 --> 00:16:59.640
+entre les départements.
+
+00:17:00.120 --> 00:17:00.340
+Maintenant,
+
+00:17:00.420 --> 00:17:01.520
+imaginez fonctionner sans cette équipe.
+
+00:17:02.140 --> 00:17:03.040
+Laissez l'IA sans surveillance
+
+00:17:03.040 --> 00:17:03.720
+revient à activer
+
+00:17:03.720 --> 00:17:04.620
+le pilotage automatique
+
+00:17:04.620 --> 00:17:05.600
+dans un champ d'astéroïdes.
+
+00:17:06.220 --> 00:17:06.840
+Tout semble aller bien
+
+00:17:06.840 --> 00:17:07.920
+jusqu'à ce qu'une manœuvre étrange
+
+00:17:07.920 --> 00:17:08.500
+dévie le vaisseau
+
+00:17:08.500 --> 00:17:09.140
+de sa trajectoire.
+
+00:17:10.000 --> 00:17:10.460
+Des garde-fous
+
+00:17:10.460 --> 00:17:11.200
+peuvent être en place
+
+00:17:11.200 --> 00:17:11.980
+mais ils n'interprètent pas,
+
+00:17:12.140 --> 00:17:12.900
+ne remettent pas en question
+
+00:17:12.900 --> 00:17:13.660
+et n'anticipent pas.
+
+00:17:14.220 --> 00:17:15.000
+Le comité de gouvernance
+
+00:17:15.000 --> 00:17:15.740
+est la couche pensante,
+
+00:17:15.940 --> 00:17:16.600
+des humains qui regardent
+
+00:17:16.600 --> 00:17:17.480
+au-delà des voyants lumineux
+
+00:17:17.480 --> 00:17:18.220
+pour voir le contexte,
+
+00:17:18.320 --> 00:17:19.180
+l'éthique et les répercussions
+
+00:17:19.180 --> 00:17:19.720
+avant que la dérive
+
+00:17:19.720 --> 00:17:20.260
+n'a des astres.
+
+00:17:21.160 --> 00:17:22.300
+Leurs devoirs ne sont pas abstraits.
+
+00:17:22.860 --> 00:17:23.600
+Ils réalisent des audits
+
+00:17:23.600 --> 00:17:24.720
+réguliers de biais et d'équité,
+
+00:17:24.940 --> 00:17:25.640
+confirment la provenance
+
+00:17:25.640 --> 00:17:25.960
+des données,
+
+00:17:26.220 --> 00:17:26.840
+examinent les rapports
+
+00:17:26.840 --> 00:17:27.440
+de conformité
+
+00:17:27.440 --> 00:17:28.140
+et suivent la façon
+
+00:17:28.140 --> 00:17:28.660
+dont les systèmes
+
+00:17:28.660 --> 00:17:29.680
+non déterministes improvisent.
+
+00:17:30.500 --> 00:17:31.280
+Ils gèrent la cadence,
+
+00:17:31.280 --> 00:17:32.320
+établissant le calendrier
+
+00:17:32.320 --> 00:17:32.860
+des contrôles
+
+00:17:32.860 --> 00:17:33.400
+pour que les problèmes
+
+00:17:33.400 --> 00:17:34.100
+soient détectés tôt
+
+00:17:34.100 --> 00:17:35.000
+plutôt qu'après le lancement
+
+00:17:35.000 --> 00:17:35.920
+et ils étendent cela
+
+00:17:35.920 --> 00:17:37.040
+en définissant des indicateurs
+
+00:17:37.040 --> 00:17:37.780
+clés de performance,
+
+00:17:38.000 --> 00:17:38.820
+d'équité, de précision
+
+00:17:38.820 --> 00:17:39.300
+et de dérive,
+
+00:17:39.760 --> 00:17:40.240
+afin que le suivi
+
+00:17:40.240 --> 00:17:41.080
+ne soit pas une conjecture
+
+00:17:41.080 --> 00:17:42.200
+mais une responsabilité mesurée.
+
+00:17:43.400 --> 00:17:44.220
+Surtout pour les résultats
+
+00:17:44.220 --> 00:17:44.940
+non déterministes,
+
+00:17:45.040 --> 00:17:46.220
+ces comités protègent les limites.
+
+00:17:46.900 --> 00:17:47.460
+L'IA ne renvoie pas
+
+00:17:47.460 --> 00:17:48.220
+toujours la même réponse.
+
+00:17:49.040 --> 00:17:49.620
+Elle échantillonne,
+
+00:17:49.700 --> 00:17:50.520
+un provier s'interroge.
+
+00:17:51.540 --> 00:17:52.280
+Cela peut générer
+
+00:17:52.280 --> 00:17:53.160
+des réponses créatives
+
+00:17:53.160 --> 00:17:54.360
+ou dériver vers des résultats
+
+00:17:54.360 --> 00:17:55.440
+trompeurs qui minent la confiance.
+
+00:17:56.400 --> 00:17:57.380
+Un comité de gouvernance
+
+00:17:57.380 --> 00:17:58.140
+agit comme une veille
+
+00:17:58.140 --> 00:17:58.980
+de sécurité numérique,
+
+00:17:59.320 --> 00:18:00.640
+consignant les résultats inattendus,
+
+00:18:00.800 --> 00:18:01.440
+testant les invites,
+
+00:18:01.580 --> 00:18:02.920
+signalant les modèles dangereux
+
+00:18:02.920 --> 00:18:03.800
+et réintégrant l'humain
+
+00:18:03.800 --> 00:18:04.480
+dans la boucle
+
+00:18:04.480 --> 00:18:05.600
+lorsque les filtres automatisés
+
+00:18:05.600 --> 00:18:06.560
+manquent quelque chose.
+
+00:18:07.700 --> 00:18:08.600
+Ils n'étouffent pas l'innovation,
+
+00:18:09.100 --> 00:18:09.620
+ils la maintiennent
+
+00:18:09.620 --> 00:18:10.340
+dans des limites sûres.
+
+00:18:11.160 --> 00:18:12.280
+Et voici la différence concrète.
+
+00:18:12.880 --> 00:18:13.640
+Les organisations dotées
+
+00:18:13.640 --> 00:18:14.700
+de comités de gouvernance efficaces
+
+00:18:14.700 --> 00:18:15.420
+ont tendance à détecter
+
+00:18:15.420 --> 00:18:16.260
+les problèmes lors des essais.
+
+00:18:17.460 --> 00:18:18.520
+Un audit d'équité révèle des biais
+
+00:18:18.520 --> 00:18:19.480
+dans un modèle de recrutement,
+
+00:18:19.560 --> 00:18:20.700
+le problème est corrigé discrètement
+
+00:18:20.700 --> 00:18:21.880
+et le déploiement se poursuit
+
+00:18:21.880 --> 00:18:22.840
+sans scandale.
+
+00:18:23.840 --> 00:18:24.540
+Dans les organisations,
+
+00:18:24.680 --> 00:18:25.460
+sans une telle surveillance,
+
+00:18:25.460 --> 00:18:26.340
+l'affaire éclate d'abord
+
+00:18:26.340 --> 00:18:26.900
+dans la presse.
+
+00:18:27.560 --> 00:18:28.200
+Les clients découvrent
+
+00:18:28.200 --> 00:18:28.700
+les préjudices,
+
+00:18:28.780 --> 00:18:29.460
+les régulateurs repèrent
+
+00:18:29.460 --> 00:18:30.800
+les failles et l'action corrective
+
+00:18:30.800 --> 00:18:31.660
+arrive trop tard.
+
+00:18:33.000 --> 00:18:33.960
+La prévention coûte du temps.
+
+00:18:34.600 --> 00:18:36.100
+La réparation coûte la réputation.
+
+00:18:36.760 --> 00:18:37.780
+Le schéma se répète assez souvent
+
+00:18:37.780 --> 00:18:38.680
+pour que la leçon soit claire.
+
+00:18:39.360 --> 00:18:40.200
+Le fondement de ces comités
+
+00:18:40.200 --> 00:18:40.940
+repose sur l'équité,
+
+00:18:41.040 --> 00:18:41.600
+la transparence,
+
+00:18:41.700 --> 00:18:42.420
+la responsabilité,
+
+00:18:42.500 --> 00:18:42.960
+la sécurité
+
+00:18:42.960 --> 00:18:44.160
+et la confidentialité.
+
+00:18:45.220 --> 00:18:45.940
+L'équité garantit
+
+00:18:45.940 --> 00:18:46.380
+que les résultats
+
+00:18:46.380 --> 00:18:47.460
+ne pénalisent pas les utilisateurs
+
+00:18:47.460 --> 00:18:48.500
+selon des critères démographiques.
+
+00:18:49.280 --> 00:18:50.040
+La transparence exige
+
+00:18:50.040 --> 00:18:51.200
+que les décisions soient explicables
+
+00:18:51.200 --> 00:18:51.880
+en termes clairs,
+
+00:18:52.040 --> 00:18:52.860
+tant pour les utilisateurs
+
+00:18:52.860 --> 00:18:53.600
+que pour la conformité.
+
+00:18:53.600 --> 00:18:55.500
+La responsabilité garantit
+
+00:18:55.500 --> 00:18:56.440
+qu'il existe un rôle désigné
+
+00:18:56.440 --> 00:18:57.020
+acceptant d'assumer
+
+00:18:57.020 --> 00:18:57.600
+les conséquences,
+
+00:18:57.680 --> 00:18:58.460
+non pas dire que c'est la faute
+
+00:18:58.460 --> 00:18:58.760
+de l'IA,
+
+00:18:58.980 --> 00:18:59.980
+mais que cette responsable
+
+00:18:59.980 --> 00:19:00.920
+assume le résultat.
+
+00:19:01.460 --> 00:19:02.540
+La sécurité empêche les résultats
+
+00:19:02.540 --> 00:19:03.280
+de causer des préjudices
+
+00:19:03.280 --> 00:19:04.000
+ou d'être utilisés à mauvaise.
+
+00:19:04.400 --> 00:19:05.280
+La confidentialité
+
+00:19:05.280 --> 00:19:06.220
+protège les données sensibles
+
+00:19:06.220 --> 00:19:06.860
+pour que les individus
+
+00:19:06.860 --> 00:19:07.340
+ne deviennent pas
+
+00:19:07.340 --> 00:19:08.280
+une cargaison involontaire
+
+00:19:08.280 --> 00:19:09.200
+dans un voyage à risque.
+
+00:19:10.400 --> 00:19:11.380
+Chaque principe est solide
+
+00:19:11.380 --> 00:19:12.160
+seul, mais ensemble.
+
+00:19:12.280 --> 00:19:12.800
+Ils forment la coque
+
+00:19:12.800 --> 00:19:13.420
+qui permet à une IA
+
+00:19:13.420 --> 00:19:14.360
+responsable de fonctionner
+
+00:19:14.360 --> 00:19:14.860
+sous surveillance.
+
+00:19:15.780 --> 00:19:16.580
+Les conseils d'administration
+
+00:19:16.580 --> 00:19:17.120
+ne se contentent pas
+
+00:19:17.120 --> 00:19:17.840
+de défendre les principes
+
+00:19:17.840 --> 00:19:18.420
+qui mènent des actions.
+
+00:19:18.420 --> 00:19:19.740
+Ils examinent la documentation
+
+00:19:19.740 --> 00:19:20.220
+des modèles
+
+00:19:20.220 --> 00:19:21.100
+pour confirmer leur clarté,
+
+00:19:21.300 --> 00:19:21.860
+gèrent les processus
+
+00:19:21.860 --> 00:19:22.560
+d'évaluation des risques
+
+00:19:22.560 --> 00:19:23.400
+pour classer les cas d'usage
+
+00:19:23.400 --> 00:19:24.160
+et imposent des points
+
+00:19:24.160 --> 00:19:24.720
+de contrôle humain
+
+00:19:24.720 --> 00:19:25.580
+là où une supervision
+
+00:19:25.580 --> 00:19:26.080
+est requise.
+
+00:19:26.360 --> 00:19:26.920
+Là où une supervision
+
+00:19:26.920 --> 00:19:27.380
+est requise.
+
+00:19:27.540 --> 00:19:28.520
+En guise de livrable initial,
+
+00:19:28.940 --> 00:19:29.440
+l'une des actions
+
+00:19:29.440 --> 00:19:29.940
+les plus simples
+
+00:19:29.940 --> 00:19:30.560
+et les plus précieuses
+
+00:19:30.560 --> 00:19:31.460
+consiste à inventorier
+
+00:19:31.460 --> 00:19:32.020
+les cas d'usage
+
+00:19:32.020 --> 00:19:32.300
+de l'IA
+
+00:19:32.300 --> 00:19:33.300
+et à évaluer leurs risques.
+
+00:19:33.840 --> 00:19:34.480
+Cette carte rapide
+
+00:19:34.480 --> 00:19:35.220
+montre quels projets
+
+00:19:35.220 --> 00:19:35.900
+sont à hauts risques,
+
+00:19:36.060 --> 00:19:36.640
+lesquels nécessitent
+
+00:19:36.640 --> 00:19:37.380
+une gouvernance stricte
+
+00:19:37.380 --> 00:19:38.040
+et lesquels présentent
+
+00:19:38.040 --> 00:19:38.660
+des enjeux moindres.
+
+00:19:39.300 --> 00:19:39.980
+C'est une preuve tangible
+
+00:19:39.980 --> 00:19:40.480
+pour les dirigeants
+
+00:19:40.480 --> 00:19:41.260
+comme pour les régulateurs
+
+00:19:41.260 --> 00:19:41.700
+que la surveillance
+
+00:19:41.700 --> 00:19:42.240
+est structurée
+
+00:19:42.240 --> 00:19:43.680
+et non improvisée.
+
+00:19:44.280 --> 00:19:45.020
+Même à pleine vitesse,
+
+00:19:45.140 --> 00:19:45.900
+les réunions du conseil
+
+00:19:45.900 --> 00:19:46.600
+agissent comme des scans
+
+00:19:46.600 --> 00:19:47.280
+réguliers tout au long
+
+00:19:47.280 --> 00:19:47.600
+du voyage.
+
+00:19:48.420 --> 00:19:48.960
+Ils ne définissent pas
+
+00:19:48.960 --> 00:19:49.620
+seulement la stratégie,
+
+00:19:49.740 --> 00:19:50.260
+suivent les métriques
+
+00:19:50.260 --> 00:19:51.040
+et imposent le reporting
+
+00:19:51.040 --> 00:19:51.720
+de conformité.
+
+00:19:52.740 --> 00:19:53.200
+Cette cadence
+
+00:19:53.200 --> 00:19:54.160
+renforce la résilience.
+
+00:19:54.640 --> 00:19:55.460
+Les cycles de tests,
+
+00:19:55.760 --> 00:19:56.760
+les indicateurs d'équité
+
+00:19:56.760 --> 00:19:58.060
+et les examens de dérive
+
+00:19:58.060 --> 00:19:59.020
+rythment le processus
+
+00:19:59.020 --> 00:19:59.780
+pour que les gardes-fous
+
+00:19:59.780 --> 00:20:00.240
+restent actifs
+
+00:20:00.240 --> 00:20:00.980
+au lieu de disparaître
+
+00:20:00.980 --> 00:20:02.120
+après le déploiement.
+
+00:20:02.940 --> 00:20:03.600
+Grâce à ces rituels,
+
+00:20:03.660 --> 00:20:04.320
+la supervision cesse
+
+00:20:04.320 --> 00:20:05.380
+d'être une simple case à cocher
+
+00:20:05.380 --> 00:20:06.660
+pour devenir un processus vivant.
+
+00:20:06.660 --> 00:20:08.080
+L'IA de recrutement
+
+00:20:08.080 --> 00:20:08.780
+illustre parfaitement
+
+00:20:08.780 --> 00:20:09.360
+cette mise en garde.
+
+00:20:10.120 --> 00:20:10.760
+Des modèles entraînés
+
+00:20:10.760 --> 00:20:11.520
+sur des données biaisées
+
+00:20:11.520 --> 00:20:12.620
+ont absorbé silencieusement
+
+00:20:12.620 --> 00:20:13.140
+ces préjugés,
+
+00:20:13.260 --> 00:20:14.140
+pénalisant des candidats
+
+00:20:14.140 --> 00:20:14.820
+de certains groupes
+
+00:20:14.820 --> 00:20:15.600
+sans aucune intention
+
+00:20:15.600 --> 00:20:16.760
+de la part des développeurs.
+
+00:20:17.860 --> 00:20:18.340
+Non détecté,
+
+00:20:18.380 --> 00:20:19.400
+la discrimination s'est propagée
+
+00:20:19.400 --> 00:20:19.900
+à grande échelle
+
+00:20:19.900 --> 00:20:20.420
+jusqu'à l'arrivée
+
+00:20:20.420 --> 00:20:21.240
+des poursuites judiciaires.
+
+00:20:22.080 --> 00:20:22.940
+Un conseil de gouvernance
+
+00:20:22.940 --> 00:20:23.760
+armée d'audits d'équité
+
+00:20:23.760 --> 00:20:24.640
+et de contrôle de provenance
+
+00:20:24.640 --> 00:20:25.480
+aurait pu remarquer le biais
+
+00:20:25.480 --> 00:20:26.600
+bien avant la mise en production.
+
+00:20:27.520 --> 00:20:28.000
+Cette différence
+
+00:20:28.000 --> 00:20:29.260
+entre prévention et constatation
+
+00:20:29.260 --> 00:20:29.820
+est la raison d'être
+
+00:20:29.820 --> 00:20:30.400
+de ces conseils.
+
+00:20:31.280 --> 00:20:32.060
+Les conseils de gouvernance
+
+00:20:32.060 --> 00:20:33.280
+ne sont donc ni des projets annexes
+
+00:20:33.280 --> 00:20:34.460
+ni des comités décoratifs.
+
+00:20:35.080 --> 00:20:35.620
+Ils constituent
+
+00:20:35.620 --> 00:20:36.340
+le dernier rempart
+
+00:20:36.340 --> 00:20:37.280
+entre une direction stable
+
+00:20:37.280 --> 00:20:38.100
+et un chaos évitable,
+
+00:20:38.380 --> 00:20:39.020
+l'équipage chargé
+
+00:20:39.020 --> 00:20:39.860
+de transformer les slogans
+
+00:20:39.860 --> 00:20:40.580
+sur l'IA responsable
+
+00:20:40.580 --> 00:20:41.300
+en pratiques concrètes.
+
+00:20:41.800 --> 00:20:42.480
+En maintenant structure,
+
+00:20:42.700 --> 00:20:43.640
+mesure et responsabilité,
+
+00:20:44.060 --> 00:20:44.880
+ils assurent que le navire
+
+00:20:44.880 --> 00:20:45.840
+avance en toute confiance.
+
+00:20:46.660 --> 00:20:47.140
+Cela nous ramène
+
+00:20:47.140 --> 00:20:47.660
+au point de départ.
+
+00:20:48.180 --> 00:20:48.940
+Avec des conseils en place,
+
+00:20:49.000 --> 00:20:49.620
+la supervision devient
+
+00:20:49.620 --> 00:20:50.280
+une culture et non
+
+00:20:50.280 --> 00:20:51.200
+un assemblage éthéoclite,
+
+00:20:51.260 --> 00:20:51.560
+ce qui soulève
+
+00:20:51.560 --> 00:20:52.220
+la vérité marquante
+
+00:20:52.220 --> 00:20:52.900
+sur laquelle nous termine.
+
+00:20:53.560 --> 00:20:54.140
+L'IA responsable
+
+00:20:54.140 --> 00:20:54.940
+n'est pas une option bonus
+
+00:20:54.940 --> 00:20:55.420
+que l'on active
+
+00:20:55.420 --> 00:20:56.120
+pour faire bonne figure.
+
+00:20:56.940 --> 00:20:57.840
+C'est l'appareil de sécurité
+
+00:20:57.840 --> 00:20:58.480
+qui détermine
+
+00:20:58.480 --> 00:20:59.060
+si vous survivrez
+
+00:20:59.060 --> 00:20:59.900
+aux turbulences à venir.
+
+00:21:01.000 --> 00:21:01.660
+L'IA responsable
+
+00:21:01.660 --> 00:21:02.260
+n'est pas optionnel.
+
+00:21:02.720 --> 00:21:03.240
+C'est ce qui distingue
+
+00:21:03.240 --> 00:21:03.800
+une organisation
+
+00:21:03.800 --> 00:21:04.320
+sous contrôle
+
+00:21:04.320 --> 00:21:05.260
+d'une organisation dérivant
+
+00:21:05.260 --> 00:21:05.740
+vers le chaos.
+
+00:21:06.420 --> 00:21:06.800
+Grâce à elle,
+
+00:21:06.860 --> 00:21:07.760
+vous bâtissez la confiance,
+
+00:21:07.920 --> 00:21:08.780
+réduisez considérablement
+
+00:21:08.780 --> 00:21:09.140
+les risques
+
+00:21:09.140 --> 00:21:10.620
+et positionnez vos projets d'IA
+
+00:21:10.620 --> 00:21:11.460
+pour un succès durable
+
+00:21:11.460 --> 00:21:12.560
+plutôt que pour des feux de paille.
+
+00:21:13.580 --> 00:21:14.540
+Voici donc votre prochaine étape.
+
+00:21:15.060 --> 00:21:15.700
+Inventoriez vos cas
+
+00:21:15.700 --> 00:21:16.380
+d'usage de l'IA,
+
+00:21:16.740 --> 00:21:17.500
+activez les protections
+
+00:21:17.500 --> 00:21:18.700
+déjà présentes dans votre plateforme
+
+00:21:18.700 --> 00:21:19.260
+et mettez en place
+
+00:21:19.260 --> 00:21:20.120
+un conseil de gouvernance
+
+00:21:20.120 --> 00:21:20.780
+pour les surveiller.
+
+00:21:21.620 --> 00:21:22.300
+Considérez ces étapes
+
+00:21:22.300 --> 00:21:23.020
+comme le centre de contrôle
+
+00:21:23.020 --> 00:21:23.400
+de la mission,
+
+00:21:23.560 --> 00:21:24.220
+pas comme des 4 secondes.
+
+00:21:24.220 --> 00:21:25.080
+Les notes de l'épisode
+
+00:21:25.080 --> 00:21:26.260
+incluent une liste de contrôles
+
+00:21:26.260 --> 00:21:26.680
+et des liens
+
+00:21:26.680 --> 00:21:27.520
+vers les outils abordés
+
+00:21:27.520 --> 00:21:27.960
+pour que vous puissiez
+
+00:21:27.960 --> 00:21:28.540
+commencer dès maintenant.
+
+00:21:29.060 --> 00:21:29.620
+Si cet épisode
+
+00:21:29.620 --> 00:21:30.520
+a rechargé vos cristaux
+
+00:21:30.520 --> 00:21:31.020
+d'ilithium,
+
+00:21:31.160 --> 00:21:31.840
+rivez votre application
+
+00:21:31.840 --> 00:21:32.320
+de podcast
+
+00:21:32.320 --> 00:21:33.260
+sur l'amarrage automatique.
+
+00:21:33.500 --> 00:21:34.760
+Abonnez-vous !
+
+00:21:34.760 --> 00:21:35.280
+Envoyez vos questions
+
+00:21:35.280 --> 00:21:36.020
+à AdHourShow
+
+00:21:36.020 --> 00:21:36.760
+et je lirai les meilleures
+
+00:21:36.760 --> 00:21:37.300
+la prochaine fois.

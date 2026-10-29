@@ -1,0 +1,1045 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:08.800
+Stel je voor dat je een chatbot inzet om je medewerkers te helpen bij hun dagelijkse taken en dat deze binnen enkele minuten acties voorstelt die bevooroordeeld, misleidend of ronduit nutteloos zijn voor je klanten.
+
+00:00:09.000 --> 00:00:13.600
+Dit is geen science fiction paranoia, dit is wat er gebeurt als de waarborgen voor verantwoorde AI ontbreken.
+
+00:00:14.000 --> 00:00:18.140
+Verantwoorde AI richt zich op eerlijkheid, transparantie, privacy en verantwoording.
+
+00:00:18.400 --> 00:00:20.860
+Dit zijn de veiligheidsgordels voor je digitale co-piloten.
+
+00:00:21.080 --> 00:00:23.860
+Het vermindert risico's als je het daadwerkelijk in de praktijk brengt.
+
+00:00:24.020 --> 00:00:28.320
+De gevolgen, schendingen van de regelgeving, wantrouwen bij klanten en paniek bij het management.
+
+00:00:28.320 --> 00:00:37.360
+In deze sessie demonstreer ik hoe snelle injecties kunnen mislukken en laat ik zien welke governance stappen je kunt toepassen binnen Power Platform en Microsoft 365 workflows, want het gevaar is niet ver weg.
+
+00:00:37.500 --> 00:00:40.440
+Het begint op het moment dat een AI-assistent afwijkt van het script.
+
+00:00:40.700 --> 00:00:44.820
+Stel je voor dat de AI afwijkt van het script, je zet een planningsassistent in om je agenda op te ruimen.
+
+00:00:45.060 --> 00:00:49.160
+Deze zou vergadertijden moeten herschikken, urgente notices moeten markeren en de chaos onder controle moeten houden.
+
+00:00:49.340 --> 00:00:54.640
+In plaats daarvan begint de assistent favorieten te hebben, bepaalt welke collega's belangrijker zijn en verwijderd stilletjes anderen van de uitnodigingen.
+
+00:00:54.640 --> 00:00:59.220
+Of erger nog, het begraaft een cruciale boodschap van je manager onder het digitale equivalent van spam.
+
+00:00:59.380 --> 00:01:04.880
+Je vroeg om een betrouwbare klok, maar wat je kreeg voelt als een eigenzinnige bemanningslid die regels verzint waar niemand mee akkoord is gegaan.
+
+00:01:05.100 --> 00:01:06.840
+Zie die assistent als een schip op zee.
+
+00:01:07.360 --> 00:01:13.020
+Het schip mag dan glimmen, de motor zoomen van kracht, maar zonder navigatiesysteem drijft het blind door de mist.
+
+00:01:13.500 --> 00:01:18.200
+AI zonder vangrails is precies dat beweging zonder richting, voortstuwing zonder kompas.
+
+00:01:18.200 --> 00:01:23.560
+En hoewel gewone fouten pijnlijk zijn, ontstaat het echte gevaar wanneer iemand de touwtjes in handen neemt.
+
+00:01:23.740 --> 00:01:25.820
+Dat is waar promptinjectie om de hoek komt kijken.
+
+00:01:26.100 --> 00:01:31.540
+Dit is de malavide kapitein die aan boord sluipt en een commando geeft dat officieel klinkt, maar het schip volledig van koers doet veranderen.
+
+00:01:31.680 --> 00:01:37.860
+Een klein zinnetje, vermomd als een verzoek, kan je beleefde planner ertoe aanzetten informatie te lekken, vooroordelen te verspreiden of onzin uit te kramen.
+
+00:01:38.020 --> 00:01:42.500
+Dit is geen science fiction, het is een reëel risico van vijandige input dat experts promptinjectie noemen.
+
+00:01:42.500 --> 00:01:50.580
+Aanvallers gebruiken zorgvuldig geformuleerde teksten om veiligheidsregels te omzeilen en het systeem werkt mee omdat het geen onderscheid kan maken tussen een saboteur en een betrouwbare gebruiker.
+
+00:01:51.240 --> 00:01:55.380
+Dit komt doordat de meeste basismodellen elke goed geformuleerde instructie als geldig beschouwen.
+
+00:01:55.600 --> 00:01:59.180
+Zonder extra veiligheidsmaatregelen detecteren ze geen motief of intentie.
+
+00:01:59.360 --> 00:02:06.760
+Tenzij een organisatie vangrails veiligheidsfilters en menselijke controles toevoegt, volgt de AI orders met de nauwgezetheid van een machine die is gebouwd om te gehoorzamen.
+
+00:02:06.760 --> 00:02:13.520
+Vraagt de AI om een vergadering samen te vatten en als in dat verzoek ook het vertrouwelijke agenda bestand is opgenomen, behandelt de AI beide gelijk.
+
+00:02:13.640 --> 00:02:16.140
+Ethiek wordt niet meegewogen, bedrog wordt niet vermoed.
+
+00:02:16.320 --> 00:02:18.220
+De metafoor van de douane is hier van toepassing.
+
+00:02:18.420 --> 00:02:21.900
+Het is alsof je met vervalste documenten, die geautoriseerd zijn, door een controlepost glipt.
+
+00:02:22.080 --> 00:02:24.340
+De vangrails bestaan, maar ze zijn niet altijd voldoende.
+
+00:02:24.580 --> 00:02:30.880
+Slimme teksten kunnen de regels omzeilen en omdat de uitkomsten niet deterministisch zijn, nooit twee keer hetzelfde antwoord neemt het gevaar toe.
+
+00:02:30.880 --> 00:02:36.500
+Een aanvaller kan net zo lang blijven testen tot het model eindelijk het gewenste antwoord geeft, net zoals je met dobbelstenen gooit tot het raak is.
+
+00:02:36.500 --> 00:02:40.160
+De assistent die is ontworpen om je te helpen, kan dus in een oogwenk veranderen in een nar.
+
+00:02:40.320 --> 00:02:46.860
+Het ene moment kiest hij agendapunten, het volgende moment verzint hij sollicitatiecriteria of gebruikt hij gevoelige namen in de verkeerde context.
+
+00:02:47.120 --> 00:02:52.180
+Governance is hier cruciaal, omdat de transformatie van nuttig naar chaotisch niet geleidelijk verloopt, maar direct.
+
+00:02:52.360 --> 00:02:54.500
+De schade blijft niet beperkt tot één inbox.
+
+00:02:54.780 --> 00:02:58.720
+Slechte resultaten verspreiden zich sneller door workflows dan menselijke fouten ooit zouden kunnen.
+
+00:02:58.880 --> 00:03:01.080
+Een foute suggestie leidt tot een kettingreactie.
+
+00:03:01.080 --> 00:03:02.920
+Slecht advies beïnvloedt beslissingen.
+
+00:03:02.920 --> 00:03:06.900
+Verkeerde labels verspreiden misinformatie en vooringenomenheid die zich razendsnel door machines verspreidt.
+
+00:03:07.000 --> 00:03:09.840
+Zonder toezicht kan één misleidende suggestie een hele brand veroorzaken.
+
+00:03:10.060 --> 00:03:12.420
+Mitigatie is mogelijk en vereist geen wensdenken.
+
+00:03:12.620 --> 00:03:20.920
+Aanbieders en bedrijven gebruiken al gelaagde verdedigingsmechanismen, geautomatiseerde filters, reinforcement learning regels en menselijke beoordelaars die controleren wat er doorheen glipt.
+
+00:03:21.100 --> 00:03:25.040
+Telus raadt bijvoorbeeld aan om nieuwe co-piloten te testen in afgeschermde omgevingen.
+
+00:03:25.040 --> 00:03:31.300
+Geïsoleerde, controleerbare omgevingen die de impact beperken voordat ze worden blootgesteld aan daadwerkelijke gebruikers of data.
+
+00:03:31.500 --> 00:03:37.500
+Combineer dat met continu red teaming waarbij mensen het systeem voortdurend onderzoeken op zwakke punten en je creëert een buffer.
+
+00:03:38.060 --> 00:03:44.560
+Geautomatiseerde beveiligingsmaatregelen doen het zware werk, maar menselijke controle zorgt ervoor dat het model op koers blijft wanneer de eenvoudige regels falen.
+
+00:03:44.780 --> 00:03:48.260
+Dit is het patroon observeren, testen, controleren, beheersen.
+
+00:03:48.260 --> 00:03:52.480
+Als je het roer onbeheerd achterlaat, vaart de AI waarheen de provocatie haar stuurt.
+
+00:03:52.640 --> 00:03:55.180
+Als je toezicht houdt, verklein je de kans op een ram.
+
+00:03:55.320 --> 00:03:57.200
+De scheepsmetafoor vat het goed samen.
+
+00:03:57.460 --> 00:04:00.400
+Begeleiding is mogelijk, maar alleen als iemand het kompas controleert.
+
+00:04:00.540 --> 00:04:02.420
+En dat brengt ons bij de volgende uitdaging.
+
+00:04:02.680 --> 00:04:09.860
+Zelfs als je indringers buiten houdt en filters online zet, krijg je nog steeds te maken met een andere complicatie, onvoorspelbaarheid ingebouwd in de systemen zelf.
+
+00:04:10.080 --> 00:04:14.600
+Niet vanwege sabotage, maar vanwege de manier waarop deze modellen hun antwoorden genereren.
+
+00:04:14.600 --> 00:04:18.460
+Deterministisch versus niet-deterministisch, de verborgen schakelaar.
+
+00:04:18.640 --> 00:04:24.220
+Stel je voor, je typt 2 plus 2 in een rekenmachine en in plaats van de verwachte 4, grijnst hij je toe met 42.
+
+00:04:25.120 --> 00:04:25.880
+Bizar, toch?
+
+00:04:26.060 --> 00:04:29.440
+We kijken verbaasd omdat rekenmachines gebouwd zijn op ijzersterk determinisme.
+
+00:04:29.640 --> 00:04:33.320
+Voer ze duizend keer dezelfde invoer in en ze zullen elke keer dezelfde uitvoer geven.
+
+00:04:33.520 --> 00:04:35.100
+Die voorspelbaarheid is het hele punt.
+
+00:04:35.320 --> 00:04:37.640
+Vergelijk dat nu eens met de nieuwe regeneratie AI-tools.
+
+00:04:37.880 --> 00:04:39.900
+Die geven niet altijd twee keer hetzelfde resultaat.
+
+00:04:39.900 --> 00:04:41.180
+Hun output varieert.
+
+00:04:41.180 --> 00:04:45.000
+Soms voelt die variatie slim of inzichtelijk aan en andere keren slaat het de plank volledig mis.
+
+00:04:45.220 --> 00:04:46.500
+Dat is de verborgen schakelaar.
+
+00:04:46.940 --> 00:04:48.960
+Deterministisch versus niet-deterministisch gedrag.
+
+00:04:49.100 --> 00:04:54.020
+In deterministische systemen, denk aan spreadsheets of formules die op regels gebaseerd zijn, verandert het resultaat nooit.
+
+00:04:54.200 --> 00:04:57.640
+Typ 7 in op maandag of zaterdag en de machine geeft hetzelfde oordeel.
+
+00:04:57.820 --> 00:04:59.900
+Zonder stemmingswisselingen of creativiteit.
+
+00:05:00.120 --> 00:05:03.120
+Het is mechanische loyaliteit, steeds dezelfde actie herhalen.
+
+00:05:03.320 --> 00:05:05.400
+Niet-deterministische modellen werken anders.
+
+00:05:05.400 --> 00:05:10.380
+Je geeft ze een opdracht en in plaats van een vast pad te volgen, verkennen ze alle mogelijkheden.
+
+00:05:10.600 --> 00:05:16.400
+Die combinatie van sampling, stochastische processen, model-updates en zelfs datadrift zorgt ervoor dat de output varieert.
+
+00:05:17.120 --> 00:05:19.700
+Het is alsof je een podium opzet voor improvisatie.
+
+00:05:19.880 --> 00:05:22.840
+Je schrijft de scène, maar de acteur verzint de clue ter plekke.
+
+00:05:23.100 --> 00:05:26.140
+Soms werkt het prachtig, soms slaat het de plank volledig mis.
+
+00:05:26.380 --> 00:05:32.880
+Klassieke automatisering en op regels gebaseerde workflows, zoals veel ingebouwde functionaliteiten in Power Platform, neigen meer naar de deterministische kant.
+
+00:05:32.880 --> 00:05:37.740
+Je stelt een voorwaarde in en wanneer de trigger wordt geactiveerd, voert deze de gedefinieerde regel met machine precisie uit.
+
+00:05:37.920 --> 00:05:41.780
+Die voorspelbaarheid zorgt ervoor dat compliance, datastromen en audit trails stabiel blijven.
+
+00:05:41.940 --> 00:05:44.280
+Je weet wat er gaat gebeuren omdat de stappen vast liggen.
+
+00:05:44.620 --> 00:05:48.860
+Generatieve copilots daarentegen maken van elke input een open ruimte voor interpretatie.
+
+00:05:49.080 --> 00:05:52.900
+Ze vatten samen, combineren en herformuleren op een manier die vaak menselijk aanvoelt.
+
+00:05:53.180 --> 00:05:59.580
+Vloeiendheid is de charme, maar ook het risico, omdat diezelfde vloeiendheid onvoorspelbaarheid mogelijk maakt in contexten die consistentie vereisen.
+
+00:05:59.580 --> 00:06:03.940
+Stel je een improvisatietheatergroep voor, je geeft ze het thema en de budget goedkeuring.
+
+00:06:04.140 --> 00:06:11.000
+De ene acteur komt met een slimme grap over sparen, de andere dwaalt af naar een subplot over banketten en plotseling lijkt de voorstelling nog maar weinig op je oorspronkelijke verzoek.
+
+00:06:11.160 --> 00:06:13.600
+Dat is een niet-deterministisch model midden in een voorstelling.
+
+00:06:13.860 --> 00:06:16.300
+Deze schommelingen zijn geen teken van slecht ontwerp.
+
+00:06:16.420 --> 00:06:21.580
+Ze zijn ingebouwd in de manier waarop grote taalmodellen taal genereren, waarbij ze vele paden verkennen, niet slechts één.
+
+00:06:21.760 --> 00:06:22.860
+De valkuil is duidelijk.
+
+00:06:22.860 --> 00:06:28.020
+Creativiteit staat niet altijd gelijk aan nauwkeurigheid en in zakelijke workflows is nauwkeurigheid vaak de enige waarde die telt.
+
+00:06:28.200 --> 00:06:29.920
+Pas dit nu toe op de financiële wereld.
+
+00:06:30.160 --> 00:06:33.360
+Stel dat je AI-gestuurde kredietcheck-to-een-aanvrager goedkeurt.
+
+00:06:33.560 --> 00:06:37.580
+Dezelfde informatie wordt de volgende dag opnieuw ingevoerd, maar deze keer wordt de aanvraag afgewezen.
+
+00:06:37.740 --> 00:06:39.360
+De aanvrager voelt zich overrompelt.
+
+00:06:39.500 --> 00:06:42.280
+De toezichthouder ziet inconsistentie die naar discriminatie ruikt.
+
+00:06:42.500 --> 00:06:43.660
+Wat er gebeurt is drift.
+
+00:06:43.880 --> 00:06:48.360
+De resultaten verschuiven zonder duidelijke reden, omdat niet-deterministische systemen in de loop van de tijd kunnen variëren.
+
+00:06:48.360 --> 00:06:52.320
+In tegenstelling tot menselijk handelen kun je het model niet zomaar vragen om uit te leggen wat er is veranderd.
+
+00:06:52.420 --> 00:06:56.820
+En dit is waar het vertrouwen het snelst afbrokkelt, wanneer de redenering verdwijnt achter ondoorzichtige resultaten.
+
+00:06:56.980 --> 00:06:59.180
+In de praktijk kan een afwijking snel toenemen.
+
+00:06:59.380 --> 00:07:04.460
+Een workflow die de ene maand is goedgekeurd om bias te verminderen, kan de volgende maand de tegenovergestelde richting opgaan.
+
+00:07:04.820 --> 00:07:09.740
+Variaties die op zichzelf klein lijken, tellen op tot overtredingen wanneer ze over honderden gevallen worden uitvergroot.
+
+00:07:10.180 --> 00:07:16.260
+Toezichthouders eisen, in tegenstelling tot een geamuseerd publiek bij een improvisatieavond, stabiliteit, controleerbaarheid en duidelijke uitleg.
+
+00:07:16.260 --> 00:07:19.300
+Ze accepteren geen niet-determinisme als onderdeel van de charme.
+
+00:07:19.500 --> 00:07:21.060
+Daarom zijn vangrails zo belangrijk.
+
+00:07:21.440 --> 00:07:25.080
+Toezichthouders en normen vereisen controleerbaarheid, model documentatie en monitoring.
+
+00:07:25.380 --> 00:07:28.640
+Bouw daarom logboeken en verklaarbaarheidsmaatregelen in de implementatie in.
+
+00:07:28.820 --> 00:07:35.240
+Zonder deze maatregelen worden zelfs kleine verschuivingen risico's, stapelen de financiële boetes zich op, verspreidt de reputatieschade zich en verdwijnt het vertrouwen van de klant.
+
+00:07:35.420 --> 00:07:38.280
+Governance is de menselijke scheidsrechter in dit onvoorspelbare spel.
+
+00:07:38.520 --> 00:07:41.260
+Stel je die improvisatoren weer voor, die alle kanten opdraaien.
+
+00:07:41.420 --> 00:07:44.580
+Als niemand grenzen stelt, stoort de act in elkaar door zijn eigen chaos.
+
+00:07:44.580 --> 00:07:46.740
+Een scheidsrechter houdt ze echter in toom.
+
+00:07:46.980 --> 00:07:49.080
+Blijf bij dit thema, volg deze lijn.
+
+00:07:49.320 --> 00:07:51.420
+Governance werkt op dezelfde manier voor AI.
+
+00:07:51.660 --> 00:07:56.680
+Het smort innovatie niet, maar zet willekeurigheid om in prestaties die nog steeds het script respecteren.
+
+00:07:56.900 --> 00:08:00.500
+Niet-determinisme blijft bestaan, maar het opereert binnen afgebakende kaders.
+
+00:08:00.740 --> 00:08:01.660
+Daar ligt de balans.
+
+00:08:01.860 --> 00:08:05.380
+Je kunt een kopiloot niet dwingen zich als een rekenmachine te gedragen, daar is hij niet voor gemaakt.
+
+00:08:05.580 --> 00:08:07.400
+Maar je kunt er wel vangnetten omheen plaatsen.
+
+00:08:07.600 --> 00:08:11.200
+Menselijk toezicht, monitoring, systemen en governance kaders fungeren als dat vangnet.
+
+00:08:11.200 --> 00:08:14.520
+Met deze elementen improviseert het model nog steeds, maar het zal de boel niet verpesten.
+
+00:08:14.740 --> 00:08:19.260
+Zonder deze elementen escaleert de afwijking ongecontroleerd en moeten compliance teams beslissingen corrigeren die niemand kan verantwoorden.
+
+00:08:19.420 --> 00:08:20.600
+De risico's zijn duidelijk.
+
+00:08:21.240 --> 00:08:22.260
+Onvoorspelbaarheid is neutraal.
+
+00:08:22.400 --> 00:08:25.200
+Het beïnvloedt uitkomsten die van invloed zijn op leningen, banen of de gezondheidszorg.
+
+00:08:25.940 --> 00:08:29.320
+En wanneer de uitkomsten daadwerkelijk gevolgen hebben, grijpen toezichthouders in.
+
+00:08:29.480 --> 00:08:30.940
+Wat ons brengt bij de volgende grens?
+
+00:08:31.080 --> 00:08:35.340
+De dreigende komst van externe regelgeving die niet alleen toezicht suggereert, maar het verplicht stelt.
+
+00:08:35.340 --> 00:08:37.940
+De EU-AI-wet, een asteroïde opkomst.
+
+00:08:38.120 --> 00:08:43.740
+Stel je voor, je hebt een gloednieuw AI-project gebouwd, een digitale stad met keurige straten en bruisende activiteit.
+
+00:08:44.060 --> 00:08:47.880
+Districten voor data, integratiebruggen, wolkenkrabbers vol slimme functies.
+
+00:08:48.060 --> 00:08:49.160
+Alles voelt solide aan.
+
+00:08:49.360 --> 00:08:54.000
+En dan, van de ene op de andere dag, komt de EU-AI-wetgeving als een stijl bestemmingsplannen die uit de ruimte zijn gevallen.
+
+00:08:54.200 --> 00:08:58.120
+Hele stratenblokken in je stad worden nu als gereguleerd bestempeld, sommige als streng gecontroleerd,
+
+00:08:58.320 --> 00:09:00.900
+anderen zijn simpelweg verboden als ze manipulatief of schadelijk zijn.
+
+00:09:00.900 --> 00:09:05.580
+Het is geen optie, het is wetgeving en je stad moet zichzelf hervormen, of je dat nu gepland had of niet.
+
+00:09:05.760 --> 00:09:07.920
+De kern van deze regels is categorisatie.
+
+00:09:08.160 --> 00:09:12.920
+Systemen worden ingedeeld in categorieën van minimaal, beperkt, hoog of ronduit onaanvaardbaar risico.
+
+00:09:13.160 --> 00:09:16.860
+Minimaal risico kan bijvoorbeeld een chatbot betreffen die klanten helpt met veelgestelde vragen.
+
+00:09:17.080 --> 00:09:20.700
+Hoog risico omvat wervingstools, kredietscores en werkplekmonitoring.
+
+00:09:21.060 --> 00:09:25.280
+Onaanvaardbaar risico omvat manipulatief of gevaarlijk gebruik dat in feite volledig verboden is.
+
+00:09:25.500 --> 00:09:28.380
+Dit zijn niet zomaar labels, ze verwijzen direct naar verplichtingen.
+
+00:09:28.380 --> 00:09:31.980
+Als een systeem als hoog risico wordt geclassificeerd, moet je transparantie en uitleg bieden,
+
+00:09:32.080 --> 00:09:34.980
+gedetailleerde logboeken bijhouden voor audits en menselijk toezicht implementeren.
+
+00:09:35.140 --> 00:09:37.620
+Plotseling wordt er van je gloednieuwe stad niet alleen verwacht dat ze functioneert,
+
+00:09:37.760 --> 00:09:40.000
+maar ook dat ze gedetailleerd aantoont hoe en waarom ze functioneert.
+
+00:09:40.180 --> 00:09:42.880
+Voor ontwikkelaars en oplossingsbouwers is dat een scherpe wending.
+
+00:09:43.160 --> 00:09:45.960
+Gisteren konden functies razendsnel in apps worden geïmplementeerd.
+
+00:09:46.160 --> 00:09:50.000
+Nu vereisen diezelfde functies mogelijk een compliance audit voordat er ook maar één demo is gegeven.
+
+00:09:50.160 --> 00:09:52.540
+Een wervingsapp die CV's rangschikt op een geavanceerd platform,
+
+00:09:52.540 --> 00:09:55.780
+ooit een handige tijdsbesparing, valt plotseling in de categorie hoog risico.
+
+00:09:55.960 --> 00:09:56.960
+De app is niet kapot.
+
+00:09:57.140 --> 00:10:01.420
+Hij heeft alleen impact op mensen op manieren die de wet als gevoelig definieert en dat verandert de inzet.
+
+00:10:01.580 --> 00:10:03.660
+En dit is waar paniek toeslaat bij veel teams.
+
+00:10:04.100 --> 00:10:06.620
+Transparantie betekent logboeken van hoe beslissingen worden genomen,
+
+00:10:06.880 --> 00:10:08.560
+geen vage opzomming in een presentatie.
+
+00:10:09.140 --> 00:10:12.380
+Controleerbaarheid vereist dat elk beslissingspad wordt opgeslagen en opvraagbaar is,
+
+00:10:12.540 --> 00:10:13.540
+klaar voor inspectie door toezichthouders.
+
+00:10:14.280 --> 00:10:16.240
+Menselijk toezicht betekent directe verantwoordelijkheid,
+
+00:10:16.460 --> 00:10:20.080
+daadwerkelijke mensen die het systeem in de gaten houden en kunnen ingrijpen wanneer het model afwijkt van de koers.
+
+00:10:20.080 --> 00:10:22.980
+Dit zijn geen vage richtlijnen, maar afdwingbare voorwaarden.
+
+00:10:23.200 --> 00:10:27.740
+Snelle prototypes veranderen in gecontroleerde implementaties waarbij bij elke stap een compliancegoedkeuring vereist is.
+
+00:10:28.000 --> 00:10:29.440
+Snelheid maakt plaats voor structuur.
+
+00:10:29.680 --> 00:10:33.580
+Zie de wet minder als bureaucratie en meer als de zuurstofregels aan boord van een ruimteschip.
+
+00:10:33.680 --> 00:10:36.880
+Je rolt misschien snel met je ogen als je het masker opent bij een kalme hemel,
+
+00:10:36.900 --> 00:10:39.800
+maar tijdens turbulentie is het juist datgene wat de bemanning in leven houdt.
+
+00:10:39.940 --> 00:10:41.060
+Hetzelfde geldt voor de wet.
+
+00:10:41.260 --> 00:10:44.000
+De regels voelen zwaar aan totdat je je realiseert waarom ze bestaan,
+
+00:10:44.140 --> 00:10:46.600
+want één misstap kan het vertrouwen in een hele branche ondermijnen.
+
+00:10:46.600 --> 00:10:49.960
+En hier is een belangrijke waarschuwing, naleving kun je niet uitstellen.
+
+00:10:50.140 --> 00:10:53.580
+De wet legt verplichtingen nu op en het achteraf inbouwen van logboeken,
+
+00:10:53.800 --> 00:10:57.440
+controles en toezicht zal duurder zijn dan ze in de ontwerpfase te integreren.
+
+00:10:57.640 --> 00:11:00.880
+De gevolgen van het negeren van deze vereisten zijn niet alleen financieel.
+
+00:11:01.060 --> 00:11:04.340
+Een flinke klap, zeker, maar reputatieschade is moeilijker te herstellen.
+
+00:11:04.580 --> 00:11:08.760
+Zodra klanten ontdekken dat je tool de grens heeft overschreden, rodeert het vertrouwen in je hele bedrijf.
+
+00:11:08.880 --> 00:11:10.420
+Dat kun je niet herstellen met een update.
+
+00:11:10.620 --> 00:11:14.320
+Het publieke vertrouwen is fragiel en wanneer het barst, stappen gebruikers over naar de concurrentie.
+
+00:11:14.320 --> 00:11:17.320
+De grootste straf staat niet in de wet, maar in het gedrag van de klant.
+
+00:11:17.500 --> 00:11:19.740
+Dus hier is de ongemakkelijke inventarisvraag.
+
+00:11:19.840 --> 00:11:23.080
+Weet je überhaupt welke van je AI-functies als risicovol worden beschouwd?
+
+00:11:23.240 --> 00:11:26.220
+Die cv sorteerder, die voorspellende productiviteitstoel.
+
+00:11:26.400 --> 00:11:30.520
+Als ze gevoelige gebieden zoals werkgelegenheid of financiële vooruitzichten raken, dan is de wet van toepassing.
+
+00:11:30.720 --> 00:11:33.120
+En het maakt niet uit of je ze als onschuldige helpers beschouwt.
+
+00:11:33.560 --> 00:11:36.200
+Klassificatie brengt verplichtingen met zich mee, of je die nu erkent of niet.
+
+00:11:36.420 --> 00:11:40.060
+Slimme organisaties beginnen met een inventarisatie, waarin ze catalogiseren welke functies waar worden gebruikt,
+
+00:11:40.060 --> 00:11:42.360
+voordat toezichthouders hen tegen betaling verantwoording laten afleggen.
+
+00:11:42.540 --> 00:11:43.420
+Dat is de echte clou.
+
+00:11:43.660 --> 00:11:46.700
+De wet beveelt verantwoorden AI niet zachtjes aan, maar eist het.
+
+00:11:46.940 --> 00:11:50.500
+Governance is niet langer een optionele toevoeging, het is wettelijk vastgelegd.
+
+00:11:50.800 --> 00:11:57.360
+Of je ontwerpt verantwoordelijk vanaf de grond af, of de wet dwingt verantwoordelijkheid van buitenaf af met boetes en auditors.
+
+00:11:57.820 --> 00:11:59.760
+In die zin is de asteroide al geland.
+
+00:11:59.940 --> 00:12:01.100
+Je kunt hem niet wegduwen.
+
+00:12:01.280 --> 00:12:04.320
+Je kunt je alleen beschermen tegen de inslag en je stad bewoonbaar houden.
+
+00:12:04.500 --> 00:12:07.480
+Wat de praktische vraag oproept, welke bescherming heb je tot je beschikking?
+
+00:12:07.480 --> 00:12:13.760
+Want in dit landschap draait het overleven van de asteroiden niet om geluk, maar om het gebruik van de verdedigingsmechanismen die al in je controlepaneel zitten.
+
+00:12:13.940 --> 00:12:16.480
+De beschermingsmechanismen en vangrails van het Microsoft Ecosysteem.
+
+00:12:17.380 --> 00:12:20.900
+In het Microsoft Ecosysteem zijn de beschermingsmechanismen al ingebouwd.
+
+00:12:21.040 --> 00:12:22.420
+Je hoeft ze alleen maar aan te zetten.
+
+00:12:22.660 --> 00:12:28.860
+Microsoft 365 en Power Platform bevatten beheert tools die maar al te vaak onopgemerkt blijven, weggestopt alsof het optionele extra's zijn.
+
+00:12:29.020 --> 00:12:34.000
+Ze zijn geen decoratie, maar de structurele basis die uw systemen intact houdt wanneer regelgeving en risico's zich aandienen.
+
+00:12:34.000 --> 00:12:37.960
+Het gevaar schuilt erin dat teams even naar deze dashboards kijken, hun schouders ophalen en verder gaan.
+
+00:12:38.120 --> 00:12:40.800
+Want dit zijn geen extraatjes, maar essentiële overlevingsmechanismen.
+
+00:12:40.960 --> 00:12:42.180
+Laten we beginnen met inzicht.
+
+00:12:42.400 --> 00:12:50.280
+Microsoft 365 en Power Platform bevatten functies voor toezicht waarmee u kunt traceren hoe modellen zich gedragen, beslissingen kunt vastleggen en uitleg in duidelijke taal kunt weergeven.
+
+00:12:50.440 --> 00:12:53.500
+U hoeft niet te vertrouwen op een blackbox die vreemde oordelen uitspreekt.
+
+00:12:53.660 --> 00:12:57.800
+U krijgt een daadwerkelijke feedbackloop, signalen op de console wanneer een algoritme afwijkt.
+
+00:12:58.000 --> 00:13:03.040
+Dat is het verschil tussen blind sturen en navigeren met instrumenten die u precies vertellen wanneer u afdwaalt.
+
+00:13:04.000 --> 00:13:09.780
+Sommige leveranciers, zoals AWS, bieden AI-servicekaarten om het gebruik en de limieten van modellen te documenteren.
+
+00:13:10.000 --> 00:13:15.360
+Microsoft pakt dit anders aan met zijn Responsible AI-standaard en tools zoals het Responsible AI-dashboard.
+
+00:13:15.580 --> 00:13:20.760
+Deze bieden professionals rapporten over verklaarbaarheid, prestatie-aantekeningen en verantwoorde ontwerpkeuzes.
+
+00:13:20.980 --> 00:13:24.700
+Zie het als een co-piloot die zijn redenering toelicht in plaats van je alleen een plan te geven.
+
+00:13:24.900 --> 00:13:27.820
+Je ziet elke overweging, niet alleen de uiteindelijke uitkomst.
+
+00:13:27.820 --> 00:13:32.840
+Wat betreft beveiliging op modelniveau, onthoud dit, leveranciers bieden allemaal een of andere vorm van vangrails.
+
+00:13:33.020 --> 00:13:38.480
+In de Microsoft-omgeving vind je beleidscontroles, dashboards voor uitlegbaarheid en auditlogboeken die dezelfde rol vervullen.
+
+00:13:38.660 --> 00:13:42.320
+Ze blokkeren pogingen tot kwaadwillige invoer en filteren resultaten voordat ze uit de hand lopen.
+
+00:13:42.540 --> 00:13:48.140
+Voor uitlegbaarheid zelf zijn er gevestigde methoden zoals SHAP of leverancierspecifieke tools zoals zagenmaker Clarify.
+
+00:13:48.360 --> 00:13:54.980
+In de Microsoft-wereld vervult het Responsible AI-dashboard die rol en geeft de duidelijke rapporten over welke variabelen de keuze van een model hebben beïnvloed.
+
+00:13:54.980 --> 00:13:58.480
+Hiermee is de magische truc van een AI-beslissing geen engt trucje meer.
+
+00:13:58.640 --> 00:14:02.080
+Je kunt zien welke invoer ertoe deed en beoordelen of de uitkomst eerlijk was.
+
+00:14:02.300 --> 00:14:07.520
+Auditors krijgen traceerbaar bewijs en gebruikers krijgen er vertrouwen in dat het model geen onzin uit het niets verzint.
+
+00:14:07.700 --> 00:14:11.300
+En dan is er nog het eenvoudige maar essentiële vangnet, gegevensbescherming.
+
+00:14:11.500 --> 00:14:18.940
+Schakel gegevensverliespreventie in om te voorkomen dat gevoelige informatie in verkeerde handen terechtkomt en combineer dit met het bewaren van logboeken en auditsboren.
+
+00:14:19.200 --> 00:14:21.560
+Samen fungeren deze als uw blackbox-recorder.
+
+00:14:21.560 --> 00:14:26.140
+Elke actie, elke afwijking wordt vastgelegd, zodat u fouten kunt traceren wanneer ze zich voordoen.
+
+00:14:26.280 --> 00:14:29.580
+Als u dit overslaat, blijft u achter met lege handen wanneer fouten zich verspreiden.
+
+00:14:29.760 --> 00:14:31.080
+De voordelen zijn niet abstract.
+
+00:14:31.360 --> 00:14:34.100
+Neem bijvoorbeeld een eenvoudige power-app die is gebouwd met AI Builder.
+
+00:14:34.260 --> 00:14:38.580
+In de eerste versies verzamelde deze meer persoonlijke informatie dan welke organisatie dan ook kon verantwoorden.
+
+00:14:38.780 --> 00:14:40.560
+Namen, records, gevoelige velden werden blootgelegd.
+
+00:14:41.260 --> 00:14:47.620
+Nadat de compliance-instellingen waren geactiveerd, stopte de stroomgegevens, werden de gegevensgrenzen aangescherpt, werkte de app nog steeds en werden de privacy-regels nageleefd.
+
+00:14:47.620 --> 00:14:53.740
+De architectuur werd niet afgebroken en opnieuw opgebouwd. Deze werd geoptimaliseerd door de beveiligingsmechanismen in te schakelen die er al die tijd al waren.
+
+00:14:53.900 --> 00:14:59.080
+Voor de eerste implementatiefase is er nog een andere werkwijze die de moeite waard is om toe te passen, het gebruik van Wild Gardens, in de stijl van Talus.
+
+00:14:59.240 --> 00:15:06.500
+Door copilots te testen in een afgebakende en controleerbare sandbox, beperkt u onverwacht gedrag tot een veilige zone voordat u het vrijgeeft aan bedrijfscritische workflows.
+
+00:15:06.780 --> 00:15:11.380
+Het is een testomgeving met voldoende afgeschermde muren om te voorkomen dat fouten in de productiesystemen terechtkomen.
+
+00:15:11.380 --> 00:15:16.100
+Combineer dat met robuuste monitoring en uw organisatiespoort misstappen op voordat ze in het nieuws komen.
+
+00:15:16.360 --> 00:15:21.660
+Governance dashboards verbinden dit alles. Het zijn niet zomaar statenschermen, ze bieden teams actief toezicht.
+
+00:15:21.980 --> 00:15:25.360
+Leidinggevende kunnen AI-uitvoer in realtime bevragen, goedkeuren of vertoeien.
+
+00:15:25.560 --> 00:15:28.100
+Dat is menselijke controle die in het systeem is ingebouwd.
+
+00:15:28.300 --> 00:15:32.520
+Zonder dergelijk toezicht draait automatisering vrij rond totdat er een beleidsgending plaatsvindt.
+
+00:15:32.520 --> 00:15:38.660
+Met dashboards zitten mensen in de controlekamer en coördineren ze elk AI-systeem als vliegtuigen in een druk luchtruim.
+
+00:15:38.820 --> 00:15:42.240
+In plaats van chaos in de lucht krijgt u een gesynchroniseerde, beheerde workflow.
+
+00:15:42.520 --> 00:15:43.680
+En hier ligt de ommekeer.
+
+00:15:43.900 --> 00:15:49.560
+Zodra organisaties deze systemen als verdedigingsmechanismen zien, veranderen ze de last van regelgeving in een productiviteitsverhoger.
+
+00:15:49.680 --> 00:15:53.200
+U bespaart op herwerk. U levert toezichthouders direct de lags die ze nodig hebben.
+
+00:15:53.360 --> 00:15:57.000
+U werkt sneller omdat compliance onderdeel was van het ontwerp, niet een later toegevoegde patch.
+
+00:15:57.200 --> 00:15:59.340
+Wat eerst uw tempo vertraagde, versnelt het nu.
+
+00:15:59.340 --> 00:16:01.300
+Toch werken afschermingen niet vanzelf.
+
+00:16:01.300 --> 00:16:04.460
+Ze vereisen configuratie, beoordeling en constante monitoring.
+
+00:16:04.740 --> 00:16:07.980
+Deze controles helpen, maar ze moeten wel correct worden beheerd door mensen.
+
+00:16:08.300 --> 00:16:11.060
+Governance boards, de laatste verdediging tegen chaos.
+
+00:16:11.320 --> 00:16:14.080
+Zie een governance board als de brugbemanning van je ruimteschip.
+
+00:16:14.260 --> 00:16:18.120
+Het collectief dat de koers stabiel houdt wanneer turbulentie de besturing op zijn kop zet.
+
+00:16:18.520 --> 00:16:21.960
+Schildsystemen, compliance-instellingen en auditlogboeken zoomen misschien op de achtergrond,
+
+00:16:22.080 --> 00:16:26.900
+maar er moet nog steeds iemand uit het raam kijken, de meters in de gaten houden en reageren wanneer het onverwachte zich voordoet.
+
+00:16:26.900 --> 00:16:30.880
+Zonder dat toezicht zijn zelfs de beste van rails slechts metaal zonder oordeel.
+
+00:16:30.880 --> 00:16:34.120
+Een governance board is geen eenzame officier die bevelen blaft.
+
+00:16:34.300 --> 00:16:38.920
+Het is opgebouwd als een multidisciplinair team, bestaande uit technologieleiders, eigenaren van data governance,
+
+00:16:39.200 --> 00:16:43.480
+juridische of compliance adviseurs, een bedrijfsvertegenwoordiger en minstens één onafhankelijke beoordelaar.
+
+00:16:43.620 --> 00:16:46.740
+Ieder speelt een andere rol, omdat AI niet netjes in een silo past.
+
+00:16:46.940 --> 00:16:51.440
+Een tool voor het screenen van CV's beïnvloedt ouwer, een voorspellingsalgoritme geeft vorm aan de financiën
+
+00:16:51.440 --> 00:16:53.400
+en een chatbot communiceert rechtstreeks met je klanten.
+
+00:16:53.400 --> 00:16:55.640
+Eén functie alleen kan niet alle gevolgen voorzien.
+
+00:16:55.820 --> 00:17:00.000
+Een rondetafelgesprek is nodig om risico's te signaleren en aan te pakken voordat ze zich over verschillende afdelingen verspreiden.
+
+00:17:00.220 --> 00:17:02.020
+Stel je nu eens voor dat je zonder dat team werkt.
+
+00:17:02.180 --> 00:17:06.300
+AI ongecontroleerd laten opereren is als de automatische piloot inschakelen in een asteroideveld.
+
+00:17:06.460 --> 00:17:09.620
+Het voelt prima totdat een vreemde manoeuvre het schip uit koers brengt.
+
+00:17:09.740 --> 00:17:13.940
+Er zijn weliswaar vangrails, maar die interpreteren niet, stellen geen vragen en anticiperen niet.
+
+00:17:14.100 --> 00:17:17.640
+De governance raad is de denkende laag, mensen die voorbij de knipperende lampjes kijken
+
+00:17:17.640 --> 00:17:21.040
+om de context, ethiek en gevolgen te zien voordat de afwijking tot een ramp leidt.
+
+00:17:21.120 --> 00:17:22.500
+Hun taken zijn niet abstract.
+
+00:17:22.760 --> 00:17:26.560
+Ze voeren regelmatig audits uit op bias en eerlijkheid, bevestigen de herkomst van gegevens,
+
+00:17:26.820 --> 00:17:30.220
+beoordelen nalevingsrapporten en volgen hoe niet-deterministische systemen improviseren.
+
+00:17:30.400 --> 00:17:34.320
+Ze werken met een vast ritme, stellen een schema op voor controles zodat problemen vroegtijdig worden opgespoord
+
+00:17:34.320 --> 00:17:37.700
+in plaats van nade lancering en ze breiden dat uit door belangrijke prestatie-indicatoren,
+
+00:17:37.860 --> 00:17:40.320
+eerlijkheid, nauwkeurigheid en afwijkingstatistieken te definiëren,
+
+00:17:40.320 --> 00:17:43.020
+zodat continu monitoring geen giswerk is, maar meetbare verantwoording.
+
+00:17:43.240 --> 00:17:46.460
+Vooral bij niet-deterministische output bewaken deze raden de randen.
+
+00:17:46.660 --> 00:17:48.520
+AI geeft niet altijd hetzelfde antwoord.
+
+00:17:48.700 --> 00:17:51.280
+Het neemt monsters, improviseert en vraagt zich af.
+
+00:17:51.460 --> 00:17:56.160
+Dat kan leiden tot creatieve oplossingen, maar het kan ook misleidende resultaten opleveren die het vertrouwen ondermijnen.
+
+00:17:56.320 --> 00:17:58.960
+Een governance board fungeert als de digitale veiligheidswaarkont,
+
+00:17:59.180 --> 00:18:02.460
+registreert onverwachte resultaten, voert een red-teaming-procedure uit,
+
+00:18:02.700 --> 00:18:06.980
+signaleert gevaarlijke patronen en betrekt mensen weer bij het proces wanneer geautomatiseerde filters iets missen.
+
+00:18:06.980 --> 00:18:08.580
+Ze verstikken innovatie niet.
+
+00:18:08.780 --> 00:18:11.220
+Ze zorgen ervoor dat innovatie binnen veilige grenzen blijft.
+
+00:18:11.360 --> 00:18:12.800
+En hier is het praktische verschil.
+
+00:18:13.180 --> 00:18:16.960
+Organisaties met effectieve governance boards ontdekken problemen vaak al tijdens proefdraaien.
+
+00:18:17.120 --> 00:18:20.620
+Een eerlijkheid zou dit brengt bijvoorbeeld voor ingenomenheid in een wervingsmodel aan het licht,
+
+00:18:20.840 --> 00:18:23.640
+het probleem wordt discreet opgelost en de uitrol verloopt zonder schandaal.
+
+00:18:23.820 --> 00:18:27.240
+In organisaties zonder dergelijk toezicht komt het verhaal eerst in de pers.
+
+00:18:27.440 --> 00:18:32.860
+Klanten ontdekken de schade, toezichthouders signaleren de tekortkomingen en corrigeren de maatregelen komen te laat.
+
+00:18:33.160 --> 00:18:34.180
+Preventie kost tijd.
+
+00:18:34.680 --> 00:18:36.060
+Herstel kost reputatie.
+
+00:18:36.360 --> 00:18:39.180
+Dit patroon herhaalt zich vaak genoeg om de leed duidelijk te maken.
+
+00:18:39.180 --> 00:18:44.600
+De basis van deze boards draait om eerlijkheid, transparantie, verantwoording, veiligheid en privacy.
+
+00:18:44.840 --> 00:18:49.040
+Eerlijkheid zorgt ervoor dat de uitkomst de gebruikers niet benadelen op basis van demografische kenmerken.
+
+00:18:49.460 --> 00:18:54.040
+Transparantie vereist dat beslissingen helder en duidelijk worden uitgelegd, zowel voor gebruikers als voor compliance.
+
+00:18:54.600 --> 00:18:57.840
+Verantwoordelijkheid zorgt ervoor dat er een aangewezen rol is die de verantwoordelijkheid op zich neemt,
+
+00:18:57.920 --> 00:19:01.260
+niet dat de AI het gedaan heeft, maar dat deze persoon verantwoordelijk is voor het resultaat.
+
+00:19:01.440 --> 00:19:04.480
+Veiligheid voorkomt dat de output schade veroorzaakt of misbruikt wordt.
+
+00:19:04.680 --> 00:19:09.680
+Privacy beschermt gevoelige gegevens, zodat individuen niet onbedoeld slachtoffer worden van een risicovolle reis.
+
+00:19:09.880 --> 00:19:15.480
+Elk principe is op zichzelf sterk, maar samen vormen ze de basis die ervoor zorgt dat verantwoorde AI onder toezicht kan functioneren.
+
+00:19:15.480 --> 00:19:18.940
+En besturen handhaven niet alleen principes, ze voeren ook acties uit.
+
+00:19:19.100 --> 00:19:21.820
+Ze beoordelen model documentatie om de duidelijkheid te bevestigen,
+
+00:19:22.080 --> 00:19:25.440
+voeren risico-inventarisatieprocessen uit om gebruikscenario's te klassificeren
+
+00:19:25.440 --> 00:19:27.780
+en handhaven menselijke controlepunten waar toezicht vereist is.
+
+00:19:28.200 --> 00:19:33.480
+Een van de eenvoudigste en meest waardevolle eerste stappen is een inventarisatie van AI-gebruikscenario's en een risicoanalyse.
+
+00:19:33.720 --> 00:19:36.280
+Deze snelle kaart laat zien welke projecten een hoog risico vormen,
+
+00:19:36.460 --> 00:19:39.100
+welke strikte governance vereisen en welke minder risico's met zich meebrengen.
+
+00:19:39.220 --> 00:19:43.880
+Het is tastbaar bewijs voor zowel leidinggevenden als toezichthouders dat de toezicht gestructureerd is en niet geïmproviseerd.
+
+00:19:43.880 --> 00:19:48.040
+Zelfs in een snel tempo fungeren de bestuursvergaderingen als regelmatige controles van het proces.
+
+00:19:48.260 --> 00:19:51.880
+Ze bepalen niet alleen de strategie, maar volgen ook de meetgegevens en zorgen voor nalevingsrapportage.
+
+00:19:52.740 --> 00:19:54.340
+Die cadans bouwt veerkracht op.
+
+00:19:54.540 --> 00:19:58.540
+Testcyclic KPIs voor eerlijkheid en evaluaties van afwijkingen bepalen het ritme,
+
+00:19:58.660 --> 00:20:02.620
+zodat de voortdurende waarborgen actief blijven in plaats van te verdwijnen na de implementatie.
+
+00:20:02.840 --> 00:20:07.060
+Door deze rituelen is toezicht geen eenmalige afinklijst meer, maar een levend proces.
+
+00:20:07.400 --> 00:20:09.660
+Recruitment AI is een waarschuwend voorbeeld.
+
+00:20:09.740 --> 00:20:13.340
+Modellen die getraind zijn op gebrekkige data namen stilletjes vooroordelen over,
+
+00:20:13.340 --> 00:20:17.500
+waardoor kandidaten uit bepaalde groepen werden benadeeld zonder dat de ontwikkelaars daar opzet in hadden.
+
+00:20:17.800 --> 00:20:21.640
+Onopgemerkt verspreidde de discriminatie zich op grote schaal totdat er rechtszaken volgden.
+
+00:20:21.800 --> 00:20:24.340
+Een governance raad, gewapend met eerlijkheid zal het zijn herkomstcontroles,
+
+00:20:25.100 --> 00:20:27.260
+had de scheefheid al lang voor de productie kunnen opmerken.
+
+00:20:27.500 --> 00:20:31.060
+Dat verschil, preventie versus ontdekking, is de reden waarom deze raden bestaan.
+
+00:20:31.600 --> 00:20:34.740
+Governance raden zijn dus geen bij projecten en geen decoratieve commissies.
+
+00:20:34.960 --> 00:20:38.300
+Ze vormen de laatste verdedigingslinie tussen stabiele begeleiding en vermijdbare chaos,
+
+00:20:38.300 --> 00:20:41.400
+de bemanning die verantwoordelijke AI-slogans omzet in concrete praktijk.
+
+00:20:41.560 --> 00:20:44.120
+Door structuur, meetbare resultaten en verantwoording te handhaven,
+
+00:20:44.320 --> 00:20:46.500
+zorgen ze ervoor dat het schip met intact vertrouwen verder vaart.
+
+00:20:46.640 --> 00:20:48.000
+En daarmee is de cirkel rond.
+
+00:20:48.220 --> 00:20:51.220
+Met de juiste bestuursrade wordt toezicht een cultuur in plaats van een labmiddel,
+
+00:20:51.320 --> 00:20:53.380
+wat de scherpere waarheid benadrukt waarmee we afsluiten.
+
+00:20:53.780 --> 00:20:56.560
+Verantwoorden AI is geen extra optie die je voor de show aanzet.
+
+00:20:56.720 --> 00:21:00.620
+Het is het veiligheidsmechanisme dat bepaalt of je de turbulentie die voor je licht overleeft.
+
+00:21:01.000 --> 00:21:02.460
+Verantwoorden AI is geen optie.
+
+00:21:02.640 --> 00:21:06.500
+Het is wat een organisatie die de controle heeft onderscheidt van een organisatie die in chaos vervalt.
+
+00:21:06.500 --> 00:21:09.220
+Hiermee bouw je vertrouwen op, verlaag je de risico's aanzienlijk
+
+00:21:09.220 --> 00:21:13.360
+en positioneer je je AI-projecten voor succes op de lange termijn in plaats van kortstondige oplevingen.
+
+00:21:13.500 --> 00:21:14.820
+Dus, hier is je volgende stap.
+
+00:21:15.320 --> 00:21:19.500
+Inventariseer je AI-gebruikscenario's, activeer de beveiligingen die al in je platform aanwezig zijn
+
+00:21:19.500 --> 00:21:21.260
+en richt een bestuursraad op om ze te monitoren.
+
+00:21:21.460 --> 00:21:24.200
+Beschouw deze stappen als een missiebeheer, niet als bijzaken.
+
+00:21:24.380 --> 00:21:27.340
+De show notes bevatten een checklist en links naar de tools die we hebben besproken,
+
+00:21:27.520 --> 00:21:28.760
+zodat je meteen aan de slag kunt.
+
+00:21:28.960 --> 00:21:31.520
+Als deze aflevering je Dilithium-kristallen heeft opgeladen,
+
+00:21:31.740 --> 00:21:33.560
+stel je podcast-app dan in op automatisch dokken.
+
+00:21:33.780 --> 00:21:34.360
+Volg ons.
+
+00:21:34.360 --> 00:21:38.040
+Stuur je vragen naar het oorshow en ik lees de beste de volgende keer voor.

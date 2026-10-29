@@ -1,0 +1,826 @@
+WEBVTT
+
+00:00:00.270 --> 00:00:07.070
+Bereit für 10 Tage voller Microsoft 365 Dexy Co-Pilot, KI, Azure und den Menschen, die die Zukunft der Arbeit gestalten, ab.
+
+00:00:07.510 --> 00:00:12.430
+Diesen Januar ist die M365-Con zurück und wir legen noch eins drauf. Und wir legen noch eins drauf.
+
+00:00:12.850 --> 00:00:18.070
+Seien Sie bei Live-Sessions, Praxis-Demos und Expertenwissen von MVPs und Branchenprofis aus aller Welt dabei, dabei.
+
+00:00:18.710 --> 00:00:21.090
+Keine generischen Folien. Kein endloses Buzzword-Bingo.
+
+00:00:21.890 --> 00:00:23.070
+Wir widmen uns den echten Herausforderungen.
+
+00:00:23.750 --> 00:00:28.070
+Co-Pilot Studio, KI-Agenten, Fabrik, Sicherheit, Governance und Automatisierung.
+
+00:00:28.070 --> 00:00:34.350
+Ob IT-Profi-Entwickler oder Führungskraft Ace gibt Sessions, die genau auf Sie zugeschnitten sind.
+
+00:00:35.490 --> 00:00:39.930
+An 10 vollen Tagen können Sie verschiedene Technologien erkunden und sich mit einer globalen Community vernetzen.
+
+00:00:40.870 --> 00:00:44.330
+Schauen Sie live zu und nehmen Sie praktische Erkenntnisse für Ihr Unternehmen mit.
+
+00:00:45.090 --> 00:00:50.470
+Januar 2027. 10 Tage. Eine Microsoft-Community. Die Anmeldung ist jetzt geöffnet.
+
+00:00:51.750 --> 00:00:52.930
+Sichern Sie sich noch heute Ihren Platz.
+
+00:00:52.930 --> 00:00:58.910
+Das ist M31965, Kontum.net, net, net.
+
+00:01:00.050 --> 00:01:04.190
+Melden Sie sich jetzt unter M3196, Kontum.net an. Wir sehen uns live im Januar.
+
+00:01:04.190 --> 00:01:08.970
+Was passiert, wenn ein Angreifer ein legitimes Passwort stiehlt, statt eine Firewall zu durchbrechen?
+
+00:01:09.130 --> 00:01:09.390
+Charlotte.
+
+00:01:10.030 --> 00:01:13.530
+Ich bin der Gastgeber Mirko Peters und heute sprechen wir über Microsoft Defender for Identity.
+
+00:01:14.150 --> 00:01:16.310
+Die meisten Sicherheitstools konzentrieren sich auf den Pyramid.
+
+00:01:16.530 --> 00:01:19.390
+Sie achten auf malware, verdächtige Dateien und ungewöhnlichen Netzwerkverkehr.
+
+00:01:20.070 --> 00:01:22.050
+Doch Identitätsangriffe umgehen all das komplett.
+
+00:01:22.730 --> 00:01:24.870
+Ein Angreifer mit einem gestohlenen Passwort muss nicht einbrechen.
+
+00:01:25.390 --> 00:01:27.970
+Er meldet sich einfach an und von außen sieht alles ganz normal aus.
+
+00:01:27.970 --> 00:01:36.370
+Am Ende dieser Folge werden Sie verstehen, was Microsoft Defender for Identity ist, warum es existiert und wie es Bedrohungen erkennt, die herkömmliche Tools übersehen.
+
+00:01:37.450 --> 00:01:40.690
+Beginnen wir damit, warum Identitätssicherheit zum neuen Schlachtfeld geworden ist.
+
+00:01:41.430 --> 00:01:42.630
+Das Problem der Identitätssicherheit.
+
+00:01:43.050 --> 00:01:45.830
+Vor 20 Jahren bedeutete die Sicherung eines Netzwerks das Gebäude abzuriegen.
+
+00:01:46.210 --> 00:01:50.550
+Man installierte eine Firewall-Antivirus-Software auf jedem Rechner und riet allen zu starken Passwörtern.
+
+00:01:51.130 --> 00:01:54.410
+Das funktionierte damals recht gut, weil Angreifer ihre Verteidigung durchbrechen mussten, um hineinzukommen.
+
+00:01:55.110 --> 00:01:58.610
+Sie mussten eine Schwachstelle finden, sie ausnutzen und sich dann im Netzwerk bewegen.
+
+00:01:59.390 --> 00:02:03.390
+Der Perimeter war die Mauer und die Mauer war stark, aber das Problem ist, dieser Ansatz funktioniert heute nicht mehr.
+
+00:02:03.910 --> 00:02:05.570
+Angreifer brechen nicht ein, sie melden sich einfach an.
+
+00:02:05.950 --> 00:02:11.130
+Sie erbeuten ein gültiges Passwort durch Phishing, eine Datenpanne oder einfaches Raten und spazieren dann zur Vordertür herein.
+
+00:02:12.090 --> 00:02:14.870
+Kompromittierte Anmeldedaten stecken inzwischen hinter 79% der Ransom-Wanker.
+
+00:02:14.870 --> 00:02:18.430
+Das ist kein Nischenproblem. Es ist der Hauptweg für Angreifer und die Zahlen sind ernst.
+
+00:02:18.430 --> 00:02:23.650
+70% der Unternehmen verzeichneten 2025 mindestens eine identitätsbezogene Sicherheitsverletzung.
+
+00:02:23.930 --> 00:02:26.110
+Die durchschnittlichen Wiederherstellungskosten 1,64 Millionen.
+
+00:02:26.430 --> 00:02:31.950
+Dazu zählen nicht nur Lösegeldforderungen, sondern auch Ausfallzeiten, forensische Untersuchungen, Anwaltskosten, Strafzahlungen und Reputationsschäden.
+
+00:02:32.370 --> 00:02:35.910
+Für mittelständische Unternehmen liegen die durchschnittlichen Kosten immer noch bei 750.000 Dollar.
+
+00:02:36.450 --> 00:02:38.430
+Das ist also kein theoretisches Risiko, sondern passiert überall.
+
+00:02:39.570 --> 00:02:40.270
+Hier liegt das Kernproblem.
+
+00:02:40.690 --> 00:02:44.770
+Herkömmliche Sicherheitstools achten auf Malware, verdächtige Dateien und ungewöhnliche Netzwerkverbindungen.
+
+00:02:44.770 --> 00:02:48.910
+Sie verstehen aber das Nutzerverhalten nicht. Sie wissen nicht, ob eine Anmeldung normal oder verdächtig ist.
+
+00:02:49.250 --> 00:02:52.270
+Ein Angreifer mit einem gestohlenen Passwort sieht exakt wie ein legitimer Nutzer an.
+
+00:02:52.650 --> 00:02:55.310
+Derselbe Benutzernahme, dasselbe Passwort, derselbe Authentifizierungsprozess.
+
+00:02:55.610 --> 00:02:56.710
+Der einzige Unterschied ist die Absicht.
+
+00:02:57.190 --> 00:03:00.930
+Und wenn man nicht auf anormale Verhaltensmuster achtet, bemerkt man es erst, wenn es zu spät ist.
+
+00:03:01.670 --> 00:03:03.830
+Genau diese Lücke soll Defender for Identity schließen.
+
+00:03:04.310 --> 00:03:05.150
+Es überwacht die Überwacher.
+
+00:03:05.610 --> 00:03:07.210
+Es überwacht ihre Identitätsinfrastruktur.
+
+00:03:07.550 --> 00:03:11.490
+Lernt, was für jeden Benutzer und jedes Gerät normal ist und markiert alles, was nicht dazu passt und mag dazu passen.
+
+00:03:11.790 --> 00:03:14.430
+Es sucht nicht nach Malware. Es sucht nach Verhalten, das keinen Sinn ergibt.
+
+00:03:15.210 --> 00:03:17.610
+Was genau ist also Defender for Identity und wie funktioniert es?
+
+00:03:18.650 --> 00:03:19.770
+Was ist Defender for Identity?
+
+00:03:20.230 --> 00:03:21.290
+Hier ist die einfachste Definition.
+
+00:03:21.950 --> 00:03:24.690
+Microsoft Defender for Identity ist ein cloudbasiertes Sicherheitstool,
+
+00:03:24.890 --> 00:03:27.930
+das ihr lokales Active Directory auf identitätsbasierte Angriffe überwacht.
+
+00:03:27.930 --> 00:03:31.130
+Beachten Sie, dass ich nicht ein 3ID gesagt habe. Das ist ein häufiger Punkt für Verlust.
+
+00:03:31.570 --> 00:03:34.690
+Defender for Identity konzentriert sich auf ihre lokale Identitätsinfrastruktur.
+
+00:03:35.170 --> 00:03:38.010
+Einschließlich Domain-Controllern, Active Directory und ADFS-Servern.
+
+00:03:38.530 --> 00:03:41.110
+Das ist das, was in ihrem eigenen Rechenzentrum oder auf ihren eigenen Servern läuft.
+
+00:03:41.650 --> 00:03:42.910
+Es ist keine reine Cloud-Lösung.
+
+00:03:43.270 --> 00:03:43.970
+Wie funktioniert es nun?
+
+00:03:44.350 --> 00:03:45.530
+Es nutzt Verhaltensanalysen.
+
+00:03:45.870 --> 00:03:49.890
+Es lernt, was für jeden Benutzer und jedes Gerät normal ist und markiert dann alles Ungewöhnliche.
+
+00:03:50.410 --> 00:03:53.150
+Stellen Sie es sich wie einen Sicherheitsmitarbeiter vor, der die Routine jedes Mitarbeiters kennt.
+
+00:03:53.270 --> 00:03:57.170
+Er weiß, wer um 8 Uhr kommt, wer lange arbeitet und wer Zugriff auf den Serverraum hat.
+
+00:03:57.170 --> 00:04:01.930
+Wenn jemand um 3 Uhr morgens auftaucht und versucht, die Serverraumtür zu öffnen, bemerkt der Wachmann das sofort.
+
+00:04:02.550 --> 00:04:05.650
+Genau das macht Defender for Identity, nur eben für ihre digitale Umgebung.
+
+00:04:05.950 --> 00:04:07.370
+Lassen Sie uns klären, was dieses Tool nicht ist.
+
+00:04:07.650 --> 00:04:10.710
+Es ist kein Antivirus, keine Firewall und keine Patch-Management-Lösung.
+
+00:04:11.250 --> 00:04:13.890
+Es ist Identitätsbedrohungserkennung, eine völlig andere Kategorie.
+
+00:04:14.510 --> 00:04:17.370
+Es sucht nicht nach schädlichen Dateien, sondern nach schädlichem Verhalten.
+
+00:04:17.970 --> 00:04:22.830
+Dieser Unterschied ist wichtig, denn die gefährlichsten Angriffe von heute nutzen überhaupt keine Malware, sondern legitime Zugangsdaten.
+
+00:04:22.830 --> 00:04:28.290
+Defender for Identity ist Teil von Microsoft Defender XDR, der erweiterten Erkennungs- und Reaktionsplattform von Microsoft.
+
+00:04:28.930 --> 00:04:34.790
+In der Praxis bedeutet das, dass es Signale mit Defender for Endpoint, Defender for Office 3556-Fisch und Microsoft Sentinel austauschen.
+
+00:04:35.390 --> 00:04:38.950
+Wenn Defender for Identity, also eine verdächtige Anmeldung an einem Domain-Controller erkennt,
+
+00:04:38.950 --> 00:04:42.570
+kann dies mit einer Phishing-E-Mail, die von Defender for Office 3556-Fisch erkannt wurde
+
+00:04:42.570 --> 00:04:47.130
+oder einem verdächtigen Prozess auf dem Laptop eines Benutzers, den Defender for Endpoint identifiziert hat, abgeglichen werden.
+
+00:04:47.810 --> 00:04:51.170
+Der wahre Wert liegt nicht in einer einzelnen Warnung, sondern darin, wie diese Tools zusammenarbeiten,
+
+00:04:51.270 --> 00:04:52.850
+um den vollständigen Verlauf eines Angriffs aufzuzeigen.
+
+00:04:53.250 --> 00:04:56.730
+Eine einzelne Warnung mag wie ein Fehlalarm aussehen, aber wenn man das Gesamtbild sieht,
+
+00:04:57.090 --> 00:05:00.450
+einschließlich der Phishing-E-Mail, der kompromittierten Zugangsdaten und der lateralen Bewegung,
+
+00:05:00.710 --> 00:05:01.730
+weiß man genau, was passiert ist.
+
+00:05:02.230 --> 00:05:04.670
+Schauen wir unter die Haube und betrachten, wie die Bedrohung tatsächlich erkannt wird.
+
+00:05:05.450 --> 00:05:06.950
+Die Funktionsweise, Sensoren und Verhaltensanalysen.
+
+00:05:07.950 --> 00:05:11.570
+Defender for Identity verwendet leichtgewichtige Sensoren, die auf ihrem Domain-Controller installiert werden.
+
+00:05:12.030 --> 00:05:13.190
+Das ist der entscheidende Teil des Prissen.
+
+00:05:13.670 --> 00:05:14.710
+Ohne den Sensor passiert nichts.
+
+00:05:15.290 --> 00:05:19.390
+Der Sensor erfasst die Daten und ist so konzipiert, dass er möglichst unauffällig im Hintergrund arbeitet,
+
+00:05:19.490 --> 00:05:22.950
+den Netzwerkverkehr sowie Windows-Ereignisse liest, ohne ihren Domain-Controller zu verlangsamen.
+
+00:05:23.870 --> 00:05:24.010
+Oh.
+
+00:05:25.130 --> 00:05:27.830
+Betrachten Sie diese Sensoren als die Augen und Ohren des Systems.
+
+00:05:28.290 --> 00:05:33.210
+Sie erfassen drei Hauptarten von Informationen im Netzwerkverkehr, um Authentifizierungsanfragen zwischen Maschinen zu sehen,
+
+00:05:33.350 --> 00:05:35.710
+Windows-Ereignisse, um zu sehen, was auf Betriebssystem-Ebene geschieht
+
+00:05:35.710 --> 00:05:38.750
+und Authentifizierungsaktivitäten, um zu sehen, wer sich von wo und wann anmeldet.
+
+00:05:39.690 --> 00:05:43.150
+All diese Daten werden zur Analyse an den Cloud-Dienst von Defender for Identity gesendet.
+
+00:05:43.670 --> 00:05:46.490
+Der Sensor leistet selbst nicht die Schwerstarbeit, er sammelt und leitet lediglich weiter.
+
+00:05:46.870 --> 00:05:49.230
+Sobald die Daten die Cloud erreichen, beginnt die eigentliche Arbeit.
+
+00:05:49.790 --> 00:05:53.550
+Der Cloud-Dienst erstellt ein Basisprofil für jeden einzelnen Benutzer in ihrer Umgebung.
+
+00:05:54.210 --> 00:05:57.570
+Er lernt deren typische Anmeldezeiten, welche Workstations sie normalerweise verwenden
+
+00:05:57.570 --> 00:05:59.370
+und auf welche Ressourcen sie üblicherweise zugreifen.
+
+00:05:59.370 --> 00:06:01.070
+Dies ist der verhaltensbezogene Teil.
+
+00:06:01.530 --> 00:06:04.290
+Das System wird nicht mit vorkonfigurierten Regeln geliefert, was als normal gilt.
+
+00:06:04.590 --> 00:06:08.610
+Es lernt von ihrer tatsächlichen Umgebung, dass es wichtig, da normal für jede Organisation anders aussieht.
+
+00:06:09.050 --> 00:06:11.610
+Wenn etwas von dieser Basislinie abweicht, wird eine Warnung ausgelöst.
+
+00:06:12.110 --> 00:06:12.630
+Ein Beispiel.
+
+00:06:12.970 --> 00:06:17.310
+Ein Benutzer, der sich immer von 9 bis 17 anmeldet, authentifiziert sich plötzlich um drei morgens von einer Workstation aus,
+
+00:06:17.350 --> 00:06:18.450
+die er noch nie zuvor verwendet hat.
+
+00:06:18.890 --> 00:06:20.410
+Dessen Abweichung das System kennzeichnet dies.
+
+00:06:20.410 --> 00:06:24.970
+Es geht nicht sofort von Bösartigkeit aus, aber es gibt eine Warnung aus, damit ihr Sicherheitsteam die Untersuchung einleiten kann.
+
+00:06:25.230 --> 00:06:26.750
+Welche Arten von Angriffen erkennt es eigentlich?
+
+00:06:26.750 --> 00:06:28.590
+Die Liste ist lang, aber hier sind die wichtigsten.
+
+00:06:28.930 --> 00:06:33.110
+Pass-the-Hash-Angriffe, bei denen ein Angreifer einen Passwort-Hash stiehlt und ihn zur Authentifizierung verwendet.
+
+00:06:33.650 --> 00:06:37.910
+Kerberosting, bei dem ein Angreifer Dienst-Tickets für privilegierte Konten anfordert und diese offline knackt.
+
+00:06:38.410 --> 00:06:42.430
+Golden-Ticket-Nutzung, bei der ein Angreifer ein Kerberost-Ticket fälscht, um Domain-weiten Zugriff zu erlangen.
+
+00:06:43.170 --> 00:06:47.890
+DC-Sync-Angriffe, bei denen ein Angreifer vorgibt, ein Domänen-Controller zu sein und Passwort-Hashes anfordert.
+
+00:06:48.550 --> 00:06:52.430
+Und laterale Bewegungen, bei der ein Angreifer ein kompromittiertes Konto nutzt, um von Maschine zu springen.
+
+00:06:52.430 --> 00:06:58.210
+Jede Erkennung wird dem Maitre-ATDCK-Framework zugeordnet, dem Industriestandard zur Beschreibung von Angriffstechniken.
+
+00:06:58.710 --> 00:07:02.590
+Wenn Defender for Identity also etwas markiert, sagt es nicht einfach nur verdächtige Aktivität.
+
+00:07:03.290 --> 00:07:05.770
+Es sagt, dies ist ein Pass-the-Hash-Angriff zugeordnet zur Technik.
+
+00:07:08.550 --> 00:07:12.510
+Das gibt Ihrem Sicherheitsteam sofortigen Kontext darüber, womit Sie es zu tun haben und wie Sie reagieren müssen.
+
+00:07:12.970 --> 00:07:13.690
+Hier liegt der eigentliche Unterschied.
+
+00:07:14.070 --> 00:07:16.730
+Es sagt Ihnen nicht nur, dass etwas passiert ist, es zeigt Ihnen die Angriffstimeline.
+
+00:07:17.230 --> 00:07:19.870
+Es zeichnet nach, wie sich der Angreifer von Punkt A nach Punkt B bewegte.
+
+00:07:19.870 --> 00:07:30.090
+Anstatt einer einzelnen Warnung verdächtiger Anmeldung erhalten Sie die ganze Geschichte, die initiale Kompromittierung, die laterale Bewegung, die Privilegienerweiterung und die Domainherrschaft, alles verbunden in einer einzigen Timeline.
+
+00:07:31.030 --> 00:07:34.450
+Das ist der Unterschied zwischen einem Tool, das Sie alarmiert und einem Tool, das Ihnen hilft, die Dinge zu verstehen.
+
+00:07:35.270 --> 00:07:38.890
+Gehen wir die Phasen eines Angriffs durch und sehen wir, wo Defender for Identity jeweils eingreift.
+
+00:07:39.830 --> 00:07:41.170
+Den Angriffslebenszyklus, den es abdeckt.
+
+00:07:41.170 --> 00:07:43.190
+Angreifer folgen nämlich einem Vorhersehbar-Muster.
+
+00:07:43.650 --> 00:07:44.510
+Es ist keineswegs Willkür.
+
+00:07:44.930 --> 00:07:47.550
+Sie durchlaufen verschiedene Phasen und jede Phase hat ein spezifisches Ziel.
+
+00:07:47.910 --> 00:07:52.170
+Die Phasen sind Aufklärung, kompromittierte Anmeldedaten, laterale Bewegung und Domainherrschaft.
+
+00:07:52.810 --> 00:07:56.070
+Sobald Sie diese Phasen verstehen, werden Sie genau sehen, wo Defender for Identity ansetzt.
+
+00:07:56.710 --> 00:07:57.810
+Aber wie sieht das in der Praxis aus?
+
+00:07:58.230 --> 00:07:59.110
+Beginnen wir mit der Aufklärung.
+
+00:07:59.630 --> 00:08:00.850
+Der Angreifer hat noch keinen Zugriff.
+
+00:08:01.450 --> 00:08:05.230
+Er sieht sich nur um, scannt Ihr Netzwerk und sucht nach Kontengruppen und Vertrauensstellungen.
+
+00:08:05.830 --> 00:08:10.850
+Er versucht herauszufinden, wer die Administratoren sind, welche Konten erweiterte Rechte haben und wie die Domäne strukturiert ist.
+
+00:08:11.510 --> 00:08:14.070
+Oft nutzen Sie Tools wie Bloodhound, um die Umgebung abzubilden.
+
+00:08:14.650 --> 00:08:19.410
+Defender for Identity erkennt dies, indem es auf verdächtige LDRP-Abfragen oder Enumerationsversuche achtet.
+
+00:08:19.950 --> 00:08:24.610
+Ein Alarm wird ausgelöst, wenn jemand von einer Workstation, die das noch nie getan hat, alle Domain-Administrator-Konten abfragt.
+
+00:08:25.090 --> 00:08:27.350
+Der Angreifer hat noch nichts Schädliches getan, aber Sie wissen, dass er sich umsieht.
+
+00:08:27.810 --> 00:08:29.330
+Als nächstes folgen kompromittierte Anmeldedaten.
+
+00:08:29.730 --> 00:08:31.570
+Der Angreifer hat einen Weg gefunden, an ein Passwort zu gelangen.
+
+00:08:31.570 --> 00:08:33.970
+Etwa durch Phishing, einen Datenliebstahl oder den Kauf im Darknet.
+
+00:08:34.830 --> 00:08:36.990
+Nun verfügt er über einen legitimen Benutzernamen und ein Passwort.
+
+00:08:37.450 --> 00:08:40.010
+Defender for Identity markiert in dieser Phase ungewöhnliche Anmeldungen.
+
+00:08:40.010 --> 00:08:44.970
+Ungewöhnliche Anmeldungen beinhalten einen Nutzer, der sich um drei morgens von einem neuen Standort aus anmeldet
+
+00:08:44.970 --> 00:08:48.070
+oder plötzlich auf hunderte statt wie üblich auf fünf Dateien zugreift.
+
+00:08:48.830 --> 00:08:51.530
+Dies sind Verhaltensabweichungen, die keine Malweherkennung erfordern.
+
+00:08:52.430 --> 00:08:54.270
+Sie erfordern lediglich das Verständnis dafür, wie normales Fall.
+
+00:08:54.270 --> 00:08:55.890
+Dann folgt die laterale Bewegung.
+
+00:08:56.170 --> 00:08:59.190
+Der Angreifer hat einen Fuß in der Tür, aber es handelt sich wahrscheinlich noch nicht um ein privilegiertes Kunden.
+
+00:08:59.470 --> 00:09:01.970
+Sie müssen sich durch Ihr Netzwerk bewegen, um wertvolle Ziele zu erreichen.
+
+00:09:02.610 --> 00:09:07.030
+Sie nutzen Techniken wie Pass-the-Hash, Pass-the-Ticket und Overpass-the-Hash, um von Maschine zu Maschine zu springen.
+
+00:09:07.410 --> 00:09:10.450
+Jeder Sprung sieht wie eine legitime Authentifizierung aus, aber das muss das verdächtigen.
+
+00:09:10.830 --> 00:09:13.810
+Defender for Identity erkennt dies, indem es auf Authentifizierungsanomalie nacht.
+
+00:09:13.810 --> 00:09:18.010
+Wenn Sie ein Benutzerkonto innerhalb von fünf Minuten von drei verschiedenen Workstations aus anmeldet,
+
+00:09:18.050 --> 00:09:19.250
+ist das kein normales menschliches Verhalten.
+
+00:09:19.550 --> 00:09:20.830
+Das ist ein Angreifer, der sich lateral bewegt.
+
+00:09:21.250 --> 00:09:22.210
+Schließlich die Domänenhohe.
+
+00:09:22.570 --> 00:09:25.190
+Was Sie sehen? Warnmeldungen, Vorfälle und das Ergreifen von Maschine.
+
+00:09:25.510 --> 00:09:29.490
+Öffnen Sie das Microsoft Defender-Portal unter security.microsoft.com und navigieren Sie tippen.
+
+00:09:29.710 --> 00:09:30.590
+Das ist Ihr Kontrollzentrum.
+
+00:09:31.010 --> 00:09:36.310
+Als erstes sehen Sie das Dashboard, das Ihnen einen schnellen Überblick über alle Vorgänge in Ihrer Identitätsumgebung bietet.
+
+00:09:37.190 --> 00:09:41.430
+Benutzer werden überwacht, wie viele aktive Warnungen vorliegen und wie der Gesundheitsstatus Ihrer Sensoren ist.
+
+00:09:41.430 --> 00:09:45.110
+Es ist darauf ausgelegt, Ihnen Sekunden statt in Minuten eine Momentaufnahme zu geben.
+
+00:09:45.910 --> 00:09:48.750
+Auf diesem Dashboard befindet sich auch eine Punktzahl der Identitätssicherheitsscore.
+
+00:09:49.270 --> 00:09:52.690
+Es ist eine Zahl von 0 bis 100, die zeigt, wie gut Sie Ihre Identitätsinfrastruktur schützen.
+
+00:09:53.110 --> 00:09:56.670
+Dies ist keine theoretische Kennzahl, sondern basiert auf tatsächlichen Konfigurationen und Empfehlungen.
+
+00:09:57.050 --> 00:09:59.270
+Wenn Sie Domänencontroller ohne Sensoren haben, sinkt Ihr Score.
+
+00:09:59.850 --> 00:10:02.530
+Wenn Sie Benutzer ohne Multifaktor-Authentifizierung haben, sinkt Ihr Score.
+
+00:10:03.250 --> 00:10:04.830
+Beheben Sie diese Probleme und Ihr Score steigt.
+
+00:10:05.350 --> 00:10:08.070
+Es ist ein konkreter Weg, um Ihren Sicherheitsstatus zu verfolgen.
+
+00:10:08.490 --> 00:10:09.510
+Kommen wir nun zu den Warnmeldungen.
+
+00:10:10.070 --> 00:10:11.910
+Warnmeldungen werden durch Erkennungsregeln generiert.
+
+00:10:12.490 --> 00:10:15.230
+Vorkonfigurierte Bedingungen, die definieren, wie verdächtiges Verhalten aussieht.
+
+00:10:15.690 --> 00:10:18.810
+Basierend auf jahrelanger Bedrohungsforschung hat Microsoft hunderte dieser Regeln entwickelt.
+
+00:10:19.330 --> 00:10:22.430
+Wenn sich ein Benutzer von einem ungewöhnlichen Ort anmeldet, ist das eine Erkennungsregel.
+
+00:10:22.750 --> 00:10:24.990
+Wenn jemand einen DC-Sync-Angriff versucht, ist das eine Erkennungsregel.
+
+00:10:25.450 --> 00:10:27.890
+Wenn ein Angreifer ein Golden Ticket verwendet, ist das eine Erkennungsregel.
+
+00:10:28.530 --> 00:10:31.570
+Das System vergleicht ständig, was in Ihrer Umgebung passiert mit diesen Regeln.
+
+00:10:32.290 --> 00:10:32.950
+Aber hier ist der Punkt.
+
+00:10:33.190 --> 00:10:35.710
+Mehrere Warnmeldungen können zu einem einzigen Vorfall zusammengefasst werden.
+
+00:10:35.710 --> 00:10:40.190
+Das ist wichtig, denn Angreifer tun nicht nur eine verdächtige Sache, sie führen viele Dinge nacheinander aus.
+
+00:10:40.590 --> 00:10:44.210
+Eine einzelne Warnung könnte wie ein Fehlalarm aussehen, aber wenn Sie den gesamten Vorfall sehen,
+
+00:10:44.270 --> 00:10:48.050
+die Aufklärung, die Kompromittierung der Anmeldeinformationen, die laterale Bewegung, die Domänenhoheit,
+
+00:10:48.170 --> 00:10:49.190
+wissen Sie genau, was passiert ist.
+
+00:10:49.190 --> 00:10:50.470
+Der Vorfall ist die Geschichte.
+
+00:10:50.970 --> 00:10:52.410
+Die Warnmeldungen sind nur einzelne Sätze.
+
+00:10:53.010 --> 00:10:54.310
+Jeder Vorfall enthält einen Angriffsgraf.
+
+00:10:54.870 --> 00:10:57.670
+Dies ist eine visuelle Karte, die zeigt, wie sich der Angreifer durch ihre Umgebung bewegt hat.
+
+00:10:58.130 --> 00:11:01.290
+Sie zeigt Ihnen den Startpunkt, jeden Zwischenschritt und das endgültige Ziel.
+
+00:11:01.870 --> 00:11:05.610
+Sie können sehen, welche Konten kompromittiert, welche Maschinen aufgerufen und welche Techniken verwendet wurden.
+
+00:11:06.050 --> 00:11:09.990
+Es ist, als würde man eine Videoüberwachungsaufzeichnung des gesamten Angriffs sehen, nur in Form eines Diagramms.
+
+00:11:10.290 --> 00:11:12.170
+Und Sie können direkt aus dem Portal heraus Maßnahmen greifen.
+
+00:11:12.170 --> 00:11:17.350
+Wenn Sie ein kompromittiertes Benutzerkonto identifizieren, müssen Sie sich nicht am Domänenkontroller anmelden, um es zu deaktivieren.
+
+00:11:17.530 --> 00:11:19.190
+Sie können dies direkt über das Defender-Portal tun.
+
+00:11:19.590 --> 00:11:22.950
+Deaktivieren Sie das Konto, erzwingen Sie eine Kennwort-Zurücksetzung oder fordern Sie einen Anmeldeversuch an.
+
+00:11:23.370 --> 00:11:27.210
+Der Sensor kommuniziert mit Ihrem lokalen Active Directory und nimmt die Änderung sofort vor.
+
+00:11:28.110 --> 00:11:30.350
+Das ist die Stärke, wenn der Sensor auf Ihrem Domänenkontroller installiert.
+
+00:11:30.750 --> 00:11:32.050
+Er hört nicht nur zu, er kann auch handeln.
+
+00:11:32.470 --> 00:11:34.210
+Sie können auch E-Mail-Benachrichtigungen konfigurieren.
+
+00:11:34.750 --> 00:11:37.610
+Wenn ein kritischer Alarm ausgelöst wird, erhält Ihr Sicherheits-Team sofort eine E-Mail.
+
+00:11:38.190 --> 00:11:40.130
+Sie müssen das Dashboard nicht rund um die Uhr überwachen.
+
+00:11:40.130 --> 00:11:41.590
+Das System benachrichtigt Sie.
+
+00:11:41.850 --> 00:11:44.610
+Und da die Warnungen dem Mitra-ATT-NCK-Framework zugeordnet sind,
+
+00:11:44.970 --> 00:11:48.110
+wissen Sie genau, mit welcher Art von Angriff Sie es zu tun haben, noch bevor Sie das Portal öffnen.
+
+00:11:48.870 --> 00:11:51.990
+Über die Grundlagen hinaus gibt es einige erweiterte Funktionen, die man kennen sollte.
+
+00:11:52.750 --> 00:11:54.310
+Honeypods, Tagging und Ausschlussregeln.
+
+00:11:54.730 --> 00:11:55.910
+Lassen Sie uns über Honeypod-Konten sprechen.
+
+00:11:56.350 --> 00:11:59.270
+Diese werden auch als Honey-Tokens bezeichnet und sind genau das, wonach Sie klingen.
+
+00:11:59.730 --> 00:12:02.590
+Gefälschte Benutzerkonten, die Sie speziell erstellen, um Angreifer anzulocken.
+
+00:12:03.190 --> 00:12:06.350
+Sie geben Ihnen einen verlockenden Namen wie Exchange-Admin oder Domänen-Backup-Dienst.
+
+00:12:06.810 --> 00:12:09.190
+Sie weisen Ihnen eine Gruppenmitgliedschaft mit vermeintlich hohen Projekten.
+
+00:12:09.190 --> 00:12:10.270
+Aber hier ist der Haken.
+
+00:12:10.710 --> 00:12:11.910
+Diese Konten haben keinen wirklichen Nutzen.
+
+00:12:12.330 --> 00:12:13.570
+Niemand sollte sich jemals bei Ihnen anmelden.
+
+00:12:13.950 --> 00:12:15.370
+Sie werden für keinen legitimen Zweck verwendet.
+
+00:12:15.810 --> 00:12:16.690
+Sie warten einfach nur dort.
+
+00:12:17.330 --> 00:12:19.750
+Wenn sich jemand bei einem Honeypod-Konto anmeldet, wissen Sie es sofort.
+
+00:12:20.390 --> 00:12:22.490
+Nicht, weil Sie eine benutzerdefinierte Überwachung eingerichtet
+
+00:12:22.490 --> 00:12:24.290
+oder eine komplexe Erkennungsregel geschrieben haben,
+
+00:12:24.370 --> 00:12:27.350
+sondern weil Defender for Identity weiß, dass dieses Konto niemals verwendet werden darf.
+
+00:12:27.630 --> 00:12:29.430
+In dem Moment, in dem sich jemand damit authentifiziert,
+
+00:12:29.490 --> 00:12:31.510
+wird ein Alarm ausgelöst und Sie wissen genau, was passiert ist.
+
+00:12:31.750 --> 00:12:34.110
+Ein Angreifer hat Ihr Lockvogelkonto gefunden und versucht es zu benutzen.
+
+00:12:34.390 --> 00:12:37.070
+Das ist kein Fehlalarm, das ist ein bestätigter Eindringversuch.
+
+00:12:37.070 --> 00:12:40.850
+Sie können diese im Defender-Portal unter Einstellungen, Identitäten und Token einrichten.
+
+00:12:41.410 --> 00:12:42.450
+Das dauert etwa 30 Sekunden.
+
+00:12:43.050 --> 00:12:44.430
+Entitäts-Tagging ist eine weitere Funktion.
+
+00:12:44.790 --> 00:12:48.610
+Sie können bestimmte Benutzergeräte oder Gruppen zur zusätzlichen Überwachung als sensibel markieren.
+
+00:12:49.450 --> 00:12:50.330
+Belegen Sie, was das bedeutet.
+
+00:12:50.650 --> 00:12:53.010
+Wenn Sie ein Domain-Administrator-Konto als sensibel markieren,
+
+00:12:53.110 --> 00:12:56.250
+überwacht Defender for Identity jede einzelne Aktion dieses Kontos genauer.
+
+00:12:57.050 --> 00:13:00.050
+Jede Abweichung vom normalen Verhalten wird mit höherer Priorität gekennzeichnet.
+
+00:13:00.670 --> 00:13:03.090
+Jede laterale Bewegung, die dieses Konto betrifft, wird eskaliert.
+
+00:13:03.090 --> 00:13:05.810
+Es ist, als würde man einen GPS-Tracker an seinen wertvollsten Vermögensverdnern.
+
+00:13:06.270 --> 00:13:07.430
+Und dann gibt es noch Ausschlussregeln.
+
+00:13:07.770 --> 00:13:10.990
+Manchmal lösen legitime Sicherheitstools oder Admin-Prozesse Fehlalarme aus.
+
+00:13:11.490 --> 00:13:14.610
+Ihr Schwachstellen-Scanner könnte sich möglicherweise gegenüber jedem Computer im Netzwerk authentifizieren.
+
+00:13:15.070 --> 00:13:15.850
+Das sieht verdächtig aus.
+
+00:13:16.110 --> 00:13:19.150
+Ihre Backup-Software greift möglicherweise zu ungewöhnlichen Zeiten auf Domain-Controller zu.
+
+00:13:19.450 --> 00:13:20.450
+Das sieht ebenfalls verdächtig aus.
+
+00:13:20.930 --> 00:13:24.250
+Sie können bestimmte IP-Adressen, Geräte oder Benutzer von Erkennungsregeln ausschließen,
+
+00:13:24.510 --> 00:13:26.910
+damit diese Fehlalarme Ihre Warteschlange nicht überladen.
+
+00:13:28.210 --> 00:13:30.470
+Globale Ausschlüsse gelten für alle Erkennungsregeln.
+
+00:13:31.250 --> 00:13:32.630
+Regelspezifische Ausschlüsse sind gezielt.
+
+00:13:33.330 --> 00:13:34.150
+Das Ziel bleibt gleich.
+
+00:13:34.330 --> 00:13:37.350
+Rauschen, reduzieren, damit sich Ihr Sicherheitsteam auf echte Bedrohungen konzentriert.
+
+00:13:37.710 --> 00:13:39.210
+Defender for Identity arbeitet nicht allein.
+
+00:13:39.650 --> 00:13:41.230
+Schauen wir uns an, wie es in das Gesamtbild passt.
+
+00:13:41.950 --> 00:13:44.030
+Wie es in das Sicherheitsökosystem von Microsoft passt.
+
+00:13:44.730 --> 00:13:48.330
+Wie fügt sich Defender for Identity als unersumfassendere Sicherheitsbild von Microsoft ein?
+
+00:13:48.970 --> 00:13:51.030
+Trachten Sie es als ein Teil des Defender XDR-Puzzles.
+
+00:13:51.370 --> 00:13:54.790
+Jedes Tool ist für sich genommen nützlich, aber die wahre Stärke zeigt sich im Zusammenspiel.
+
+00:13:55.510 --> 00:13:57.150
+Defender for Endpoint schützt Ihre Geräte.
+
+00:13:57.990 --> 00:14:01.030
+Es prüft jeden Laptop und Server auf Marware und verdächtige Netzwerkaktivitäten.
+
+00:14:01.030 --> 00:14:06.810
+Defender for Office 365 schützt Ihre E-Mail- und Kollaborationstools und erkennt Phishingversuche sowie schädliche Anhänge.
+
+00:14:07.590 --> 00:14:13.050
+Und Defender for Identity überwacht Ihre Benutzerkonten auf gestohlene Anmeldedaten, laterale Bewegungen und Domänenkontrolle.
+
+00:14:13.050 --> 00:14:15.730
+Jedes Tool ist einzeln nützlich, aber der entscheidende Punkt ist.
+
+00:14:15.790 --> 00:14:18.230
+Gemeinsam tauschen Sie Signale aus und verknüpfen Informationen.
+
+00:14:19.290 --> 00:14:21.710
+Stellen Sie sich eine verdächtige Anmeldung an einem Domänenkontroller vor.
+
+00:14:22.150 --> 00:14:26.530
+Diese Anmeldung könnte mit einer Phishing-Mail zusammenhängen, die Defender for Office 36560 bereits erkannt hat.
+
+00:14:26.930 --> 00:14:30.030
+Der Angreifer hat das Postfach kompromittiert und versucht nun, sich lateral im Netzwerk zu bewegen.
+
+00:14:30.610 --> 00:14:32.170
+Defender for Identity erkennt die Anmeldung.
+
+00:14:32.330 --> 00:14:34.250
+Defender for Office 36565 die E-Mail.
+
+00:14:34.250 --> 00:14:37.630
+Und die Microsoft Defender XDR-Plattform erstellt einen einzigen Vorfall.
+
+00:14:38.290 --> 00:14:41.090
+Das ist der Unterschied zwischen isolierten Warnungen und einer vollständigen Angriffsgeschichte.
+
+00:14:41.610 --> 00:14:44.950
+Es lässt sich zudem in Microsoft Sentinel integrieren, das Cloud-Native-CM von Microsoft.
+
+00:14:45.530 --> 00:14:47.970
+Dort führen Sie Advanced Hunting und benutzerdefinierte Erkennungen durch.
+
+00:14:48.430 --> 00:14:54.310
+Sie können Kusto-Abfragen schreiben, die Ihre gesamten Defender-Daten durchsuchen, Identität, Endpunkte, E-Mails, Cloud-Apps und Muster finden,
+
+00:14:54.310 --> 00:14:56.130
+die automatische Regeln nicht immer erfassen.
+
+00:14:57.290 --> 00:14:59.530
+Und es arbeitet mit Microsoft Enter ID Protection zusammen.
+
+00:14:59.830 --> 00:15:00.390
+Das ist der Unterschied.
+
+00:15:00.390 --> 00:15:04.290
+Enter ID Protection kümmert sich um Cloud-basierte Anmeldelrisiken, wie zum Beispiel risikobehaftet.
