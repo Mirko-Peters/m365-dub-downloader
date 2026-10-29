@@ -31,6 +31,9 @@ def clean(html):
 
 
 CREDITS_OUT = False
+import threading
+_ULOCK = threading.Lock()
+USAGE = {"in": 0, "out": 0, "calls": 0}
 
 
 def _post(prompt, max_tokens):
@@ -58,6 +61,14 @@ def _post(prompt, max_tokens):
                 time.sleep(15 * (attempt + 1))
                 continue
             raise
+    try:
+        u = r.get("usage") or {}
+        with _ULOCK:
+            USAGE["in"] += int(u.get("input_tokens", 0)) + int(u.get("cache_creation_input_tokens", 0)) + int(u.get("cache_read_input_tokens", 0))
+            USAGE["out"] += int(u.get("output_tokens", 0))
+            USAGE["calls"] += 1
+    except Exception:
+        pass
     return "".join(b.get("text", "") for b in r["content"])
 
 
@@ -306,6 +317,17 @@ def main():
                 changed.add(vid)
                 json.dump(store[vid], open(ROOT / "data" / "articles" / f"{vid}.json", "w", encoding="utf-8"), ensure_ascii=False, indent=1)
     print(len(changed), "Videos aktualisiert,", len(jobs), "Artikel versucht")
+    if USAGE["calls"]:
+        sp = ROOT / "data" / "spend.json"
+        try:
+            sd = json.load(open(sp, encoding="utf-8")) if sp.exists() else {}
+        except Exception:
+            sd = {}
+        mk = time.strftime("%Y-%m", time.gmtime())
+        m = sd.setdefault(mk, {"input_tokens": 0, "output_tokens": 0, "calls": 0})
+        m["input_tokens"] += USAGE["in"]; m["output_tokens"] += USAGE["out"]; m["calls"] += USAGE["calls"]
+        json.dump(sd, open(sp, "w", encoding="utf-8"), indent=1)
+        print("Verbrauch dieser Lauf (Tokens):", USAGE, "| Monat gesamt:", m)
 
 
 if __name__ == "__main__":
