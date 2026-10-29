@@ -13,9 +13,9 @@ REDIRECT = "https://dub.m365.fm/callback"
 
 
 def _key():
-    sec = os.environ.get("SPREAKER_CLIENT_SECRET", "")
+    sec = os.environ.get("SPREAKER_CLIENT_SECRET", "").strip()
     if not sec:
-        sys.exit("SPREAKER_CLIENT_SECRET fehlt")
+        fail("SPREAKER_CLIENT_SECRET fehlt")
     return base64.urlsafe_b64encode(hashlib.sha256(("m365dub|" + sec).encode()).digest())
 
 
@@ -33,10 +33,18 @@ def save(d):
     FILE.write_bytes(Fernet(_key()).encrypt(json.dumps(d).encode()))
 
 
+def fail(msg):
+    print(f"::error::{msg}")
+    sys.exit(1)
+
+
 def exchange(data):
-    r = requests.post(TOKEN_URL, data={**data, "client_id": os.environ["SPREAKER_CLIENT_ID"], "client_secret": os.environ["SPREAKER_CLIENT_SECRET"]}, timeout=60)
+    cid, sec = os.environ.get("SPREAKER_CLIENT_ID", "").strip(), os.environ.get("SPREAKER_CLIENT_SECRET", "").strip()
+    if not cid or not sec:
+        fail("Secret SPREAKER_CLIENT_ID oder SPREAKER_CLIENT_SECRET fehlt/leer im Repo (Settings > Secrets > Actions).")
+    r = requests.post(TOKEN_URL, data={**data, "client_id": cid, "client_secret": sec}, timeout=60)
     if r.status_code != 200:
-        sys.exit(f"Spreaker-Token-Fehler {r.status_code}: {r.text[:200]}")
+        fail(f"Spreaker-Token-Fehler {r.status_code}: {r.text[:300]} (Code abgelaufen/schon benutzt? Neu anmelden und sofort einfuegen; Callback-URL muss {REDIRECT} sein.)")
     return r.json()
 
 
@@ -52,7 +60,7 @@ def connect(code):
 def refresh():
     d = load()
     if not d or not d.get("refresh_token"):
-        sys.exit("Kein Refresh-Token vorhanden – Workflow 'Spreaker verbinden' neu ausfuehren.")
+        fail("Kein Refresh-Token vorhanden – Workflow 'Spreaker verbinden' neu ausfuehren.")
     j = exchange({"grant_type": "refresh_token", "refresh_token": d["refresh_token"]})
     d["access_token"] = j["access_token"]
     if j.get("refresh_token"):
