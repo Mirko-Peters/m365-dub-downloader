@@ -37,3 +37,6 @@ Stand: 2026-10-29. Reihenfolge nach Absprache mit Mirko; alles mit Schema.org-Ve
 ## Sponsoring-Matching (vom Nutzer, 30.10.)
 - Firmen können privat angeben, ob sie Events sponsern wollen, plus Kriterien (Themen, Format, Mindest-Publikum, Regionen, Budget, Notizen) – **gebaut** (Tabelle `org_sponsor`, nur Inhaber/Admins sehen/ändern, nie öffentlich/exportiert).
 - Offen: Veranstalter-Seite, sobald es Events gibt – Veranstalter sehen nur „sucht Sponsoren: ja/nein“ + die Kriterien passender Firmen (kein Export, nur eingeloggt als Veranstalter), Kontaktaufnahme über die Plattform.
+
+## Struktur (vom Nutzer, 30.10.): Mitglieder, Firmen und Events getrennt
+- Drei eigene Bereiche mit eigenen Verzeichnissen, Seiten und Menüpunkten: Mitglieder (`/community/members/`, gebaut), Firmen (`/community/companies/`, gebaut), Events (`/community/events/`, geplant) – Events haben eigene Veranstalter-Konten/Rollen und sind nicht Teil des Firmenprofils; Verknüpfung nur per Relation (Firma/Person ↔ organizer/sponsor/speaker).
