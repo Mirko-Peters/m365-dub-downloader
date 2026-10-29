@@ -295,6 +295,17 @@ def author_box(lang):
 
 
 YT_JS = """<script>document.querySelectorAll('.yt').forEach(function(b){b.addEventListener('click',function(){var i=document.createElement('iframe');i.src='https://www.youtube-nocookie.com/embed/'+b.dataset.id+'?autoplay=1&rel=0';i.allow='accelerometer;autoplay;encrypted-media;picture-in-picture';i.allowFullscreen=true;i.title='YouTube';b.innerHTML='';b.appendChild(i)},{once:true})});</script>"""
+EXTRA = (("amazon_show", "Amazon Music"), ("deezer_show", "Deezer"), ("iheart_show", "iHeart"), ("podcastaddict_show", "Podcast Addict"), ("podchaser_show", "Podchaser"))
+
+
+def extra_btns(sh):
+    return "".join(f'<a class="btn" href="{sh[k]}" rel="noopener">{n}</a>' for k, n in EXTRA if sh.get(k))
+
+
+def same_as(l, sh):
+    return [f"https://www.spreaker.com/show/{LANGS[l][3]}"] + [sh[k] for k in ("apple_show", "spotify_show", "amazon_show", "deezer_show", "iheart_show", "podcastaddict_show", "podchaser_show") if sh.get(k)]
+
+
 PLAT_JS = """<script>(function(){try{var ua=navigator.userAgent||"",pl=navigator.platform||"";var apple=/iPhone|iPad|iPod|Macintosh|Mac OS X/.test(ua)||/Mac|iPhone|iPad/.test(pl)||(navigator.maxTouchPoints>1&&/Mac/.test(pl));
 var d=document.documentElement;if(apple)d.className+=" apple-first";var pick=document.querySelector(apple?'[data-p=apple]':'[data-p=spotify]')||document.querySelector('[data-p=spotify]')||document.querySelector('[data-p=apple]')||document.querySelector('[data-p=spreaker]');if(pick)pick.className+=" main"}catch(e){}})();</script>"""
 
@@ -366,7 +377,7 @@ def build():
              "image": f"{BASE}/assets/og-default.png", "isAccessibleForFree": True, "keywords": e.get("tags", ""),
              "about": [{"@type": "Thing", "name": t.strip()} for t in (e.get("tags") or "").split(",")[:5] if t.strip() and "m365.fm" not in t],
              **({"transcript": tr} if tr else {}),
-             "partOfSeries": {"@type": "PodcastSeries", "name": seo.get(l, {}).get("title", "M365.FM"), "url": f"https://www.spreaker.com/show/{LANGS[l][3]}"},
+             "partOfSeries": {"@type": "PodcastSeries", "name": seo.get(l, {}).get("title", "M365.FM"), "url": f"https://www.spreaker.com/show/{LANGS[l][3]}", "sameAs": same_as(l, plat.get(l, {}))},
              "author": {"@id": f"{BASE}/about/mirko-peters/#person"}},
             {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [
                 {"@type": "ListItem", "position": 1, "name": "M365.FM", "item": f"{BASE}/"},
@@ -386,7 +397,7 @@ def build():
         btns = ""
         if apple: btns += f'<a class="btn" data-p="apple" href="{apple}" rel="noopener">Apple Podcasts</a>'
         if spot: btns += f'<a class="btn" data-p="spotify" href="{spot}" rel="noopener">Spotify</a>'
-        btns += f'<a class="btn" data-p="spreaker" href="{spk}" rel="noopener">🎧 {esc(ui[0])}</a>'
+        btns += f'<a class="btn" data-p="spreaker" href="{spk}" rel="noopener">🎧 {esc(ui[0])}</a>' + extra_btns(sh)
         btns += f'<a class="btn" href="{yt}" rel="noopener">▶ {esc(ui[1])}</a>'
         if tr: btns += f'<a class="btn" href="{tr}">📄 {esc(ui[2])}</a>'
         rel = "".join(f'<a class="row" href="{url_of(x)}"><h3>{esc(x["e"]["title"])}</h3></a>' for x in more)
@@ -425,7 +436,7 @@ def build():
         ld = [{"@context": "https://schema.org", "@type": "PodcastSeries", "@id": f"{BASE}/{l}/#series", "name": title, "url": f"{BASE}/{l}/",
                "description": d, "inLanguage": LANGS[l][1], "webFeed": f"https://www.spreaker.com/show/{LANGS[l][3]}/episodes/feed", "image": f"{BASE}/assets/og-default.png",
                "numberOfEpisodes": len(newest),
-               "sameAs": [x for x in [f"https://www.spreaker.com/show/{LANGS[l][3]}", plat.get(l, {}).get("apple_show"), plat.get(l, {}).get("spotify_show")] if x],
+               "sameAs": same_as(l, plat.get(l, {})),
                "author": {"@id": f"{BASE}/about/mirko-peters/#person"}, "publisher": {"@id": f"{BASE}/#org"}},
               {"@context": "https://schema.org", "@type": "CollectionPage", "name": title, "url": f"{BASE}/{l}/", "inLanguage": LANGS[l][1],
                "mainEntity": {"@type": "ItemList", "numberOfItems": len(newest),
@@ -435,7 +446,7 @@ def build():
         sbtn = ""
         if sh.get("apple_show"): sbtn += f'<a class="btn" data-p="apple" href="{sh["apple_show"]}">Apple Podcasts</a>'
         if sh.get("spotify_show"): sbtn += f'<a class="btn" data-p="spotify" href="{sh["spotify_show"]}">Spotify</a>'
-        sbtn += f'<a class="btn" data-p="spreaker" href="https://www.spreaker.com/show/{LANGS[l][3]}">🎧 {esc(ui[0])}</a><a class="btn" href="https://www.m365.fm">m365.fm</a>'
+        sbtn += f'<a class="btn" data-p="spreaker" href="https://www.spreaker.com/show/{LANGS[l][3]}">🎧 {esc(ui[0])}</a>' + extra_btns(sh) + '<a class="btn" href="https://www.m365.fm">m365.fm</a>'
         nvid = len({i["vid"] for i in newest})
         body = f"""{header(l, lang_switch(l, alts_home, active))}
 <main class="wrap"><div class="kicker">{esc(LANGS[l][0])} · M365.FM</div><h1>{esc(title)}</h1><p class="lede">{esc(d)}</p>
