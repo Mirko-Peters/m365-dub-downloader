@@ -74,7 +74,9 @@ footer{margin-top:80px}
 .fshare{position:fixed;z-index:40;display:flex;gap:0;background:var(--bg);border:1px solid var(--bd);left:0;top:50%;transform:translateY(-50%);flex-direction:column;border-left:0}
 .fshare b{font:600 .65rem "Barlow Condensed",sans-serif;letter-spacing:.14em;text-transform:uppercase;color:var(--mut);padding:8px 0 6px;text-align:center;writing-mode:horizontal-tb}
 .fshare a,.fshare button{display:block;width:44px;height:44px;line-height:44px;text-align:center;border:0;border-top:1px solid var(--bd);background:transparent;color:var(--fg);font:600 .9rem "Barlow Condensed",sans-serif;letter-spacing:.04em;text-decoration:none;cursor:pointer;padding:0}
-.fshare a:hover,.fshare button:hover{background:var(--ac);color:#fff}
+.fshare a:hover,.fshare button:hover{background:transparent;color:var(--bc,var(--ac))}
+.fshare .ic,footer .ic{display:block;margin:auto;transition:color .15s}.fshare a,.fshare button{display:flex;align-items:center;justify-content:center;color:var(--mut)}.fshare a:hover .ic,.fshare button:hover .ic{color:var(--bc)}
+footer a.soc{display:inline-flex;align-items:center;gap:6px;color:var(--mut)}footer a.soc .ic{width:18px;height:18px;margin:0;color:currentColor}footer a.soc:hover{color:var(--bc)}footer a.soc:hover .ic{color:var(--bc)}
 @media(max-width:1180px){.fshare{top:auto;bottom:0;left:0;right:0;transform:none;flex-direction:row;border:0;border-top:1px solid var(--bd)}.fshare b{display:none}.fshare a,.fshare button{flex:1;width:auto;border-top:0;border-left:1px solid var(--bd)}body{padding-bottom:46px}}
 
 """
