@@ -97,6 +97,7 @@ async function api(env, request, url, path) {
   const need = () => (user ? null : J({ error: "login" }, 401));
   const db = env.DB;
 
+  if (path === "/api/health") return J({ ok: true }, 200);
   if (path === "/api/me") {
     if (method === "GET") return J({ user: user ? { id: user.id, name: user.name, bio: user.bio, lang: user.lang, admin: user.admin, editor: user.editor, ...(await stats(db, user.id)) } : null });
     if (need()) return need();
