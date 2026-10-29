@@ -1,0 +1,2086 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:02.040
+Sie verbringen den halben Tag damit, auf Genehmigungen zu warten.
+
+00:00:02.440 --> 00:00:04.600
+Jemand ist im Urlaub, ein anderer hat die E-Mail übersehen
+
+00:00:04.600 --> 00:00:08.660
+und wenn die Entscheidung endlich eintrifft, ist der Kontext der Anfrage bereits hinfällig.
+
+00:00:09.480 --> 00:00:12.040
+Ein unternehmerisches Fegefeuer, in dem der Fortschritt von Leuten gebremst wird,
+
+00:00:12.080 --> 00:00:12.840
+die behaupten, beschäftigt sind.
+
+00:00:13.060 --> 00:00:14.800
+Stellen Sie sich nun ein System vor, der schlichtweg nicht wartet.
+
+00:00:15.220 --> 00:00:17.880
+Ein Workflow, der genau in dem Moment fortfährt, in dem die Bedingungen erfüllt sind.
+
+00:00:18.460 --> 00:00:20.460
+Hier kommen die Agent Flows von Microsoft Co-Pilot Studio
+
+00:00:20.460 --> 00:00:22.440
+ins Spiel der Bürokratiekiller im Gewand der Automatisierung.
+
+00:00:22.960 --> 00:00:24.280
+Hier wird die KI zu ihrem ersten Prüfer.
+
+00:00:24.780 --> 00:00:26.720
+Sie liest die Daten, gleicht sie mit Richtlinien ab
+
+00:00:26.720 --> 00:00:30.800
+und entscheidet funniert über Genehmigung oder Ablehnung, noch bevor ein Mensch blinzeln kann.
+
+00:00:31.480 --> 00:00:33.580
+Nur Grenzwertfälle landen im Posteingang eines Managers.
+
+00:00:33.700 --> 00:00:35.780
+Das bedeutet Geschwindigkeit ohne Einbußen bei der Kontrolle.
+
+00:00:36.380 --> 00:00:39.680
+Und anders als herkömmliche Genehmigungsprozesse, die an komplexen Bedingungen scheitern,
+
+00:00:40.100 --> 00:00:44.160
+skalieren diese KI-gesteuerten Abläufe und verzweigen, validieren und prüfen sich selbst.
+
+00:00:45.420 --> 00:00:49.340
+In dieser Anleitung zeige ich Ihnen, wie Sie ein mehrstufiges bedingtes Genehmigungssystem aufbauen,
+
+00:00:49.340 --> 00:00:52.140
+das schneller entscheidet, als Ihre Kollegen die allen Antwortentaste finden können.
+
+00:00:52.140 --> 00:00:56.980
+Sie erfahren, wie Sie eine KI-Stufe mit benutzerdefinierter Logik einrichten,
+
+00:00:57.260 --> 00:01:01.320
+gezielte menschliche Prüfungen ergänzen, dynamische Bedingungen für intelligentes Routing entwerfen
+
+00:01:01.320 --> 00:01:03.780
+und eine echte Dokumentenvalidierung zur Compliance integrieren.
+
+00:01:04.920 --> 00:01:08.020
+Am Ende verfügen Sie über einen automatisierten Prozess, der weiß, wann er wie eine Maschine denken
+
+00:01:08.020 --> 00:01:09.600
+und wann er menschlichem Urteilsvermögen dir vorzugibt.
+
+00:01:09.840 --> 00:01:10.960
+Lassen Sie auf in einer Warteschlange zu stehen.
+
+00:01:11.380 --> 00:01:12.640
+Lassen Sie die Logik die Führung übernehmen.
+
+00:01:13.140 --> 00:01:14.680
+Das Problem mit herkömmlichen Genehmigungen.
+
+00:01:15.680 --> 00:01:18.580
+Traditionelle Genehmigungsketten sind eine tragische Neuauflage derselben Ineffizienz.
+
+00:01:18.580 --> 00:01:20.240
+Jemand reicht ein Formular ein.
+
+00:01:20.480 --> 00:01:22.920
+E-Mails fliegen hin und her, Tabellen laufen auseinander und
+
+00:01:22.920 --> 00:01:25.840
+zwischen all den Weiterleitungen weiß niemand mehr, welche Version die Finale war.
+
+00:01:26.320 --> 00:01:28.140
+Jeder Beteiligte erzeugt Verzögerungen, keinen Mehrwert.
+
+00:01:28.740 --> 00:01:31.160
+Der Prozess verwaltet nicht die Arbeit, er produziert Latenz.
+
+00:01:32.000 --> 00:01:35.000
+Typische Power-Automate-Genehmigungsabläufe versuchen, dies zu lösen, stoßen,
+
+00:01:35.400 --> 00:01:37.080
+aber an ihre Grenzen, sobald es nuanciert wird.
+
+00:01:37.700 --> 00:01:40.860
+Ein einziger Genehmigungspfad funktioniert gut, wenn Sie nur ein Ja oder Nein benötigen.
+
+00:01:41.460 --> 00:01:45.020
+Sobald Sie Management ebenen, Ausgabengrenzen oder spezielle Regeln hinzufügen,
+
+00:01:45.120 --> 00:01:46.360
+beginnt das Design zu zersplittern.
+
+00:01:46.360 --> 00:01:49.060
+Sie enden damit, Bedingungen wie Matroschka-Puppen zu verschachteln
+
+00:01:49.060 --> 00:01:51.420
+und elegant, instabil und nach sechs Monaten unmöglich zu debatten.
+
+00:01:51.800 --> 00:01:54.600
+Ein defekter Connector und das gesamte System versagt geräuschlos.
+
+00:01:55.300 --> 00:01:58.780
+Menschen werden zum Flaschenhals oder, um es brutal genau zu sagen, zu Latenzknoten.
+
+00:01:59.240 --> 00:02:02.060
+Jede Nachricht, die sie erhalten, wird zu einem weiteren asynchronen Hin und Her.
+
+00:02:02.820 --> 00:02:06.320
+E-Mail als Genehmigungsmechanismus ist so, als würde man in einer Glasfaserwelt Brieftauben einsetzen.
+
+00:02:06.780 --> 00:02:08.360
+Es funktioniert technisch gesehen, sollte es aber nicht.
+
+00:02:08.720 --> 00:02:10.180
+Microsoft Co-Pilot Studio tritt an.
+
+00:02:10.580 --> 00:02:13.100
+Dies ist nicht nur eine schrittweise Weiterentwicklung von Power Automate.
+
+00:02:13.100 --> 00:02:17.240
+Es führt Agent Flows ein, Genehmigungssysteme, die von KI angetrieben
+
+00:02:17.240 --> 00:02:21.380
+und vollständig in die Datenquellen, Rollen und Logikstrukturen Ihres Unternehmens integriert sind.
+
+00:02:22.280 --> 00:02:25.580
+Es schlägt eine Brücke zwischen deterministischer Richtlinendurchsetzung und adoptiver Entscheidungsfindung.
+
+00:02:26.080 --> 00:02:28.580
+Die Genialität liegt in der Art und Weise, wie es die Stufen voneinander treten.
+
+00:02:29.220 --> 00:02:30.740
+Automatisiert, wo Sie Geschwindigkeit brauchen.
+
+00:02:31.000 --> 00:02:32.580
+Menschlich, wo Validierung erforderlich ist.
+
+00:02:33.060 --> 00:02:34.640
+Betrachten Sie es als eine neu entwickelte Rechnung.
+
+00:02:34.640 --> 00:02:40.600
+Die KI-Stufe bewertet feste Regeln, Betragsgrenzen, Kategorien und Datumsbereiche mit klinischer Effizienz.
+
+00:02:41.540 --> 00:02:45.100
+Wenn eine Entscheidung zweideutig ist, wird der Prozess an eine menschliche Instanz eskaliert,
+
+00:02:45.220 --> 00:02:47.200
+ohne dass triviale Fälle in der Warteschlange landen.
+
+00:02:47.660 --> 00:02:49.420
+Das allein eliminiert exponentielle Verzögerung.
+
+00:02:49.980 --> 00:02:54.860
+Anstatt dass zehn Personen nacheinander prüfen, erledigt die KI 80% sofort und leitet nur Ausnahmefälle weiter.
+
+00:02:55.920 --> 00:02:59.000
+Und der Co-Pilot Studio verfolgt alles über seinen Dataverse-Rückgrat
+
+00:02:59.000 --> 00:03:02.820
+und erstellt verifizierbare Protokolle, ohne dass Ihr Team E-Mail-Archive durchsuchen muss.
+
+00:03:02.820 --> 00:03:05.540
+Frühere Workflows wurden für Menschen entwickelt.
+
+00:03:06.180 --> 00:03:08.840
+Agenten-Flows sind um sie herum aufgebaut und beziehen Menschen nur ein,
+
+00:03:08.900 --> 00:03:10.860
+wenn Interpretation statt Wiederholung gefragt ist.
+
+00:03:11.440 --> 00:03:13.340
+Sobald Sie sehen, wie diese Architektur funktioniert,
+
+00:03:13.460 --> 00:03:16.300
+wirken herkömmliche Genehmigungen primitiv wie Buchführung bei Kerzenlicht.
+
+00:03:17.020 --> 00:03:19.620
+Es geht um einfache Ziele, Compliance, Konsistenz und Skalierbarkeit.
+
+00:03:20.380 --> 00:03:22.680
+Moderne Abläufe ersticken ohne automatisierte Validierung.
+
+00:03:22.980 --> 00:03:25.560
+Und KI-gestützte Logik ist heute der Standard für Zuverlässigkeit.
+
+00:03:26.240 --> 00:03:29.620
+Beim Umstieg von statischen auf bedingte prüfbare Agenten-Flows hören Sie auf,
+
+00:03:29.620 --> 00:03:33.420
+Genehmigungen reaktiv zu verwalten und behandeln Sie als lebende Systeme.
+
+00:03:34.240 --> 00:03:36.860
+Der Unterschied liegt nicht nur an der Geschwindigkeit, sondern an der strukturellen Vernunft.
+
+00:03:37.800 --> 00:03:40.120
+Die KI-Stufe aufbauen, den ersten Genehmiger anlernen.
+
+00:03:40.840 --> 00:03:43.880
+Jetzt kommt der interessante Teil, das Training Ihres ersten digitalen Bürokraten.
+
+00:03:44.580 --> 00:03:47.420
+Die KI-Stufe ist der logische Torwächter Ihres Genehmigungsprozesses.
+
+00:03:47.940 --> 00:03:49.500
+Ihre Aufgabe ist es nicht, wie ein Mensch zu denken,
+
+00:03:49.620 --> 00:03:52.140
+sondern strukturiertes Denken mit übermenschlicher Konsistenz anzuwenden.
+
+00:03:52.620 --> 00:03:56.260
+Sie liest Anweisungen, prüft sie gegen Eingaben und gibt eines von zwei Urteilen aus.
+
+00:03:56.640 --> 00:03:57.700
+Genehmigt oder abgelehnt.
+
+00:03:57.700 --> 00:03:59.300
+Keine Politik, keine Kaffeepausen.
+
+00:04:00.000 --> 00:04:01.640
+Wir beginnen mit der Definition eines neuen Agenten-Flows.
+
+00:04:01.940 --> 00:04:04.200
+Bei der Erstellung steht die KI-Stufe im Mittelpunkt wie
+
+00:04:04.200 --> 00:04:06.680
+ein leeres Prüfungsblatt, das auf den Lösungsschlüssel wartet.
+
+00:04:07.040 --> 00:04:09.180
+Der Auslöser kommt meist aus Dataverse, einem Datensatz,
+
+00:04:09.280 --> 00:04:11.340
+der in Ihrer Forderungs- oder Spesentabelle hinzugefügt oder geändert.
+
+00:04:11.740 --> 00:04:14.040
+Sobald ein Anspruch erstellt wird, aktiviert sich diese Stufe,
+
+00:04:14.140 --> 00:04:15.720
+bewertet die Daten und entscheidet entsprechend.
+
+00:04:16.540 --> 00:04:18.160
+Innerhalb der Stufe ist das wichtigste Feld
+
+00:04:18.160 --> 00:04:20.000
+die Anweisungsprompt des Gehirn des Vorgangs.
+
+00:04:20.780 --> 00:04:21.700
+Hier beschreiben Sie die Genehmigungslogik
+
+00:04:22.260 --> 00:04:23.920
+in einfacher, aber präziser Sprache.
+
+00:04:24.280 --> 00:04:26.080
+Schreiben Sie es so, als würden Sie einen Anwalt anweisen,
+
+00:04:26.080 --> 00:04:27.960
+der niemals improvisiert. Zum Beispiel
+
+00:04:27.960 --> 00:04:30.140
+Genehmigen Sie den Anspruch, wenn der Betrag
+
+00:04:30.140 --> 00:04:32.140
+unter 500 liegt, die Beschreibung körperliche oder psychische
+
+00:04:32.140 --> 00:04:34.040
+Gesundheit unterstützt und das Kaufdatum innerhalb von
+
+00:04:34.040 --> 00:04:35.980
+30 Tagen vor der Einreichung legt, legt.
+
+00:04:36.600 --> 00:04:37.780
+Ablehnen, wenn eine Regel nicht erfüllt ist.
+
+00:04:38.260 --> 00:04:39.420
+Das ist alles binäre Klarheit.
+
+00:04:40.000 --> 00:04:41.800
+Definieren Sie als nächstes Ihre dynamischen Eingaben.
+
+00:04:42.240 --> 00:04:44.040
+Betrachten Sie sie als Variablen, die echte Daten
+
+00:04:44.040 --> 00:04:45.960
+in Ihre Logik einspeisen. Sie werden höchstwahrscheinlich
+
+00:04:45.960 --> 00:04:48.200
+einen Betrag, eine Beschreibung und ein Kaufdatum einbeziehen.
+
+00:04:48.680 --> 00:04:50.080
+Jeder wird als Inhalt, Text oder
+
+00:04:50.080 --> 00:04:52.160
+Zahlen, Eingabe hinzugefügt, die die KI
+
+00:04:52.160 --> 00:04:53.900
+bei einer Entscheidung durchläuft.
+
+00:04:55.040 --> 00:04:56.620
+Copilot Studio klassifiziert
+
+00:04:56.620 --> 00:04:58.480
+diese Eingaben nach Typ, Text, Zahl
+
+00:04:58.480 --> 00:05:00.420
+oder Bilddokument. Wählen Sie richtig,
+
+00:05:00.560 --> 00:05:02.280
+denn das Mischen von Typen, etwa eine
+
+00:05:02.280 --> 00:05:04.380
+als Text gespeicherte Zahl, verwirrt
+
+00:05:04.380 --> 00:05:06.240
+Mensch und Maschine. Stellen Sie
+
+00:05:06.240 --> 00:05:08.160
+unter jeder Eingabe Beispieldaten für Tests bereit.
+
+00:05:08.640 --> 00:05:10.220
+Dies dient als Gerüst, während Sie die Logik
+
+00:05:10.220 --> 00:05:12.020
+kalibrieren. Geben Sie beispielsweise einen
+
+00:05:12.020 --> 00:05:13.640
+Beispielantrag ein, wie Fitness-Yoga-Matte,
+
+00:05:13.980 --> 00:05:16.240
+Betrag 300, Kaufdatum 22. August,
+
+00:05:16.460 --> 00:05:18.180
+Kai Gust. Wenn Sie auf Testen
+
+00:05:18.180 --> 00:05:19.900
+klicken, führt Copilot Studio das
+
+00:05:19.900 --> 00:05:22.060
+Reasoning-Modell aus, GPT-basiert im Hintergrund
+
+00:05:22.060 --> 00:05:24.200
+und gibt eine Entscheidung sowie eine Erklärung
+
+00:05:24.200 --> 00:05:25.860
+aus. Wenn das Ergebnis Ihrer
+
+00:05:25.860 --> 00:05:28.200
+Erwartungen spricht, gut. Wenn nicht,
+
+00:05:28.640 --> 00:05:29.740
+mangelt es Ihren Anweisungen an
+
+00:05:29.740 --> 00:05:31.660
+Determiniertheit. Und genau da machen die meisten
+
+00:05:31.660 --> 00:05:33.640
+Anfänger Fehler. Vage oder zweideutige
+
+00:05:33.640 --> 00:05:35.420
+Formulierungen wie angemessener Ausgabe oder
+
+00:05:35.420 --> 00:05:37.540
+kürzlicher Kauf sind Gift für die KI, sind
+
+00:05:37.540 --> 00:05:39.200
+Gift für die KI. Das System kann keine
+
+00:05:39.200 --> 00:05:40.480
+Unternehmensstimmung lesen, es benötigt
+
+00:05:40.480 --> 00:05:42.220
+mathematische Definitionen. Verfeinern Sie
+
+00:05:42.220 --> 00:05:43.700
+daher Ihre Anweisungen unermüdlich, bis die
+
+00:05:43.700 --> 00:05:46.160
+Testergebnisse konsistent sind. Jedes Mal, wenn Sie
+
+00:05:46.160 --> 00:05:47.100
+umformulieren, stimmen Sie die
+
+00:05:47.100 --> 00:05:48.560
+Beurteilungsengine auf Reproduzierbarkeit
+
+00:05:48.560 --> 00:05:50.340
+ab. Das Muster, das Sie wollen, ist
+
+00:05:50.340 --> 00:05:51.760
+identischer Input, führt jedes Mal zu
+
+00:05:51.760 --> 00:05:54.080
+identischem Output. Maschinenlogik, kein
+
+00:05:54.080 --> 00:05:56.580
+Büroklatsch. Sobald Ihr prompt zuverlässige
+
+00:05:56.580 --> 00:05:57.840
+Entscheidungen über mehrere Testfälle
+
+00:05:57.840 --> 00:05:59.580
+hinweg liefert, haben Sie Ihren KI-Genehmiger
+
+00:05:59.580 --> 00:06:01.980
+effektiv trainiert. Speisen Sie nun die echten
+
+00:06:01.980 --> 00:06:04.060
+dynamischen Daten ein, indem Sie Tokmas Dataverse
+
+00:06:04.060 --> 00:06:05.520
+verwenden, wie Antragsbetrag, Kauf- oder
+
+00:06:05.520 --> 00:06:07.780
+Einreichungsdatum. Diese ersetzen Ihre
+
+00:06:07.780 --> 00:06:10.120
+Testwerte während der Live-Durchläufe. Ab
+
+00:06:10.120 --> 00:06:12.240
+diesem Punkt bewertet die KI jeden Antrag im
+
+00:06:12.240 --> 00:06:14.500
+Kontext und gibt ein Genehmigungsurteil ab,
+
+00:06:14.500 --> 00:06:16.600
+sobald neue Daten erscheinen. Bevor Sie den
+
+00:06:16.600 --> 00:06:17.860
+Sieg verkünden, führen Sie iterative
+
+00:06:17.860 --> 00:06:19.720
+Tests durch. Ändern Sie den Betrag auf
+
+00:06:19.720 --> 00:06:21.660
+600, lehnt er ab? Ändern Sie das Datum
+
+00:06:21.660 --> 00:06:22.720
+auch vor drei Monaten, wird es als
+
+00:06:22.720 --> 00:06:24.060
+ungültig markiert? Fügen Sie einen
+
+00:06:24.060 --> 00:06:25.580
+unsinnigen Antrag hinzu wie iPad-Kauf,
+
+00:06:25.660 --> 00:06:27.280
+erkennt er die Unstimmigkeit? Jeder
+
+00:06:27.280 --> 00:06:28.420
+Durchlauf sollte eine konsistente
+
+00:06:28.420 --> 00:06:30.220
+Ursache-Wirkungsbeziehung zeigen. Wenn die
+
+00:06:30.220 --> 00:06:31.620
+Antworten schwanken, liegt das Problem an der
+
+00:06:31.620 --> 00:06:33.340
+Klarheit Ihres Prompts, nicht am KI-Modell.
+
+00:06:34.040 --> 00:06:35.520
+Wenn konsistente Muster entstehen,
+
+00:06:35.680 --> 00:06:37.240
+etablieren Sie eine Namenskonvention für
+
+00:06:37.240 --> 00:06:39.660
+Ihre Inhaltsvariable. Präfixe wie SDA-
+
+00:06:39.660 --> 00:06:41.040
+Untragsbetrag für Zeichenfolgen oder
+
+00:06:41.040 --> 00:06:42.400
+nun unter Kaufdatum für numerische
+
+00:06:42.400 --> 00:06:44.720
+Werte. Diese kleine Disziplin verhindert
+
+00:06:44.720 --> 00:06:46.340
+Chaos, wenn Sie später zu mehrstufiger
+
+00:06:46.340 --> 00:06:49.180
+Logik erweitern. In diesem Stadium kann
+
+00:06:49.180 --> 00:06:50.620
+Ihr automatisierter Genehmiger nun
+
+00:06:50.620 --> 00:06:52.100
+unabhängige Entscheidungen auf Basis von
+
+00:06:52.100 --> 00:06:53.940
+Richtlinien ohne Aufsicht treffen. Aber
+
+00:06:53.940 --> 00:06:55.440
+Automatisierung ist keine Diktatur, sondern
+
+00:06:55.440 --> 00:06:56.960
+Delegation. Die Maschine sorgt für
+
+00:06:56.960 --> 00:06:58.140
+Geschwindigkeit und Präzision, nicht für
+
+00:06:58.140 --> 00:06:59.660
+das Urteilsverfahren. Für Gensfälle
+
+00:06:59.660 --> 00:07:01.500
+benötigen Sie eine Eskalation, einen
+
+00:07:01.500 --> 00:07:03.080
+Menschen in the Loop, der überprüft, was
+
+00:07:03.080 --> 00:07:04.760
+die KI ablehnt oder als unsicher erachtet.
+
+00:07:05.400 --> 00:07:06.820
+Hier kommt die nächste Stufe ins Spiel
+
+00:07:06.820 --> 00:07:08.060
+und so wird die Autorität zwischen
+
+00:07:08.060 --> 00:07:10.980
+Silizium und Personal geteilt. Hinzufügen
+
+00:07:10.980 --> 00:07:12.680
+menschlicher Aufsicht, mehrstufiger und
+
+00:07:12.680 --> 00:07:14.800
+bedingter Logik. Sobald Ihre KI sicher
+
+00:07:14.800 --> 00:07:16.020
+Anträge beurteilt, können Sie das
+
+00:07:16.020 --> 00:07:17.740
+hinzufügen, was Bürokratien ironischerweise
+
+00:07:17.740 --> 00:07:19.660
+als menschliche Note bezeichnen. Im
+
+00:07:19.660 --> 00:07:21.420
+Co-Pilot-Studio bedeutet das eine
+
+00:07:21.420 --> 00:07:23.220
+manuelle Phase, einen Kontrollpunkt, an
+
+00:07:23.220 --> 00:07:24.540
+dem eine echte Person eine Entscheidung
+
+00:07:24.540 --> 00:07:26.060
+treffen kann. Betrachten Sie es als
+
+00:07:26.060 --> 00:07:28.180
+Sicherheitsventil. Alles Vorhersehbare
+
+00:07:28.180 --> 00:07:30.320
+läuft automatisch durch. Alles
+
+00:07:30.320 --> 00:07:31.640
+Nuancierte landet auf dem Schreibtisch
+
+00:07:31.640 --> 00:07:33.120
+eines Managers. Sie beginnen im
+
+00:07:33.120 --> 00:07:34.620
+Genehmigungsdesigner, indem Sie direkt nach
+
+00:07:34.620 --> 00:07:35.740
+der KI-Phase eine manuelle Stufe
+
+00:07:35.740 --> 00:07:37.780
+hinzufügen. Dies schafft ein zweites Tor in
+
+00:07:37.780 --> 00:07:39.620
+Ihrem Agenten-Workflow. Die Übergabe ist
+
+00:07:39.620 --> 00:07:41.240
+bedingt. Nur wenn das Urteil der KI
+
+00:07:41.240 --> 00:07:42.420
+genehmigt lautet, gehen wir zur
+
+00:07:42.420 --> 00:07:44.860
+menschlichen Phase über. Wenn die KI
+
+00:07:44.860 --> 00:07:46.200
+abgelehnt sagt, endet der Prozess
+
+00:07:46.200 --> 00:07:48.100
+sofort. Warum Zeit damit verschwenden,
+
+00:07:48.220 --> 00:07:49.460
+Manager zu fragen, was die Richtlinie
+
+00:07:49.460 --> 00:07:51.560
+bereits ausgeschlossen hat. Effizienz ist
+
+00:07:51.560 --> 00:07:53.000
+selektive Aufmerksamkeit getarnt als
+
+00:07:53.000 --> 00:07:54.380
+Automatisierung. Lassen Sie uns ein
+
+00:07:54.380 --> 00:07:55.880
+Beispielszenario einrichten. Angenommen,
+
+00:07:55.960 --> 00:07:57.200
+ein Mitarbeiter reicht einen Spesenantrag
+
+00:07:57.200 --> 00:07:58.140
+für eine Fitnessstudio-Mitgliedschaft
+
+00:07:58.140 --> 00:07:59.860
+ein. Die kann nämlich dies, da alle
+
+00:07:59.860 --> 00:08:01.160
+Kriterien der Richtlinie entsprechen.
+
+00:08:01.900 --> 00:08:03.000
+Diese Entscheidung löst nun eine
+
+00:08:03.000 --> 00:08:04.740
+manuelle Phase auf Management-Ebene namens
+
+00:08:04.740 --> 00:08:07.300
+Manager-Genehmigung aus. Im Hintergrund
+
+00:08:07.300 --> 00:08:08.880
+konfigurieren Sie diese Stufe mit einem
+
+00:08:08.880 --> 00:08:10.720
+Titel wie Antragsgenehmigung von
+
+00:08:10.720 --> 00:08:13.200
+Antragsteller. Diese Variablen beziehen
+
+00:08:13.200 --> 00:08:15.780
+datendynamisch aus Dataverse. Im Feld
+
+00:08:15.780 --> 00:08:17.220
+zugewiesen am definieren Sie, wer die
+
+00:08:17.220 --> 00:08:18.520
+Aufgabe erhält, typischerweise der
+
+00:08:18.520 --> 00:08:20.920
+Manager des Antragstellers. Um dieses
+
+00:08:20.920 --> 00:08:22.460
+Routing zu automatisieren, ermöglicht
+
+00:08:22.460 --> 00:08:23.840
+Copilot Studio die Integration des
+
+00:08:23.840 --> 00:08:26.280
+Office 365 Users Connectors. Rufen Sie
+
+00:08:26.280 --> 00:08:27.720
+zuerst den Benutzerdatensatz desjenigen
+
+00:08:27.720 --> 00:08:29.100
+ab, der den Antrag erstellt hat, mit der
+
+00:08:29.100 --> 00:08:30.560
+Aktion Zeile nach ID abrufen in der
+
+00:08:30.560 --> 00:08:32.580
+Benutzertabelle in Dataverse. Dies ruft die
+
+00:08:32.580 --> 00:08:34.360
+Informationen des Antragstellers ab. Als
+
+00:08:34.360 --> 00:08:35.880
+nächstes ruft die Aktion Manager ab, rufen
+
+00:08:35.880 --> 00:08:37.020
+den Manager dieses Benutzers über
+
+00:08:37.020 --> 00:08:38.540
+dessen primäre E-Mail-Adresse ab. Geben
+
+00:08:38.540 --> 00:08:40.020
+Sie dieses Ergebnis als Variable wie
+
+00:08:40.020 --> 00:08:41.540
+STR-Manager-E-Mail in Ihre manuelle
+
+00:08:41.540 --> 00:08:43.380
+Phase zurück. Das Ergebnis, keine
+
+00:08:43.380 --> 00:08:44.640
+Hardcodierung, keine veralteten
+
+00:08:44.640 --> 00:08:46.220
+Hierarchie. Manager wechselnde Hierarchie
+
+00:08:46.220 --> 00:08:48.440
+aktualisiert sich von selbst. Jetzt
+
+00:08:48.440 --> 00:08:49.820
+folgt die bedingte Verzweigung, der
+
+00:08:49.820 --> 00:08:50.840
+eigentliche Grund für die Existenz
+
+00:08:50.840 --> 00:08:52.540
+mehrstufige Genehmigung. Sie können
+
+00:08:52.540 --> 00:08:53.800
+Logik direkt in den Agentenflow
+
+00:08:53.800 --> 00:08:55.920
+einbauen. Wenn der Antragsbetrag größer
+
+00:08:55.920 --> 00:08:57.280
+oder gleich 150 ist, fügen Sie eine
+
+00:08:57.280 --> 00:08:58.200
+zusätzliche Stufe für eine
+
+00:08:58.200 --> 00:08:59.500
+Admin-Genehmigung hinzu, verändern.
+
+00:08:59.500 --> 00:09:01.560
+Anderfalls beenden Sie den Prozess. Dies
+
+00:09:01.560 --> 00:09:03.820
+verwandelt eine einfache zweistufige
+
+00:09:03.820 --> 00:09:04.940
+Routine in einen mehrstufigen
+
+00:09:04.940 --> 00:09:05.900
+Entscheidungsbaum, der sich dem
+
+00:09:05.900 --> 00:09:07.460
+Kontext anpasst. Geringwertige
+
+00:09:07.460 --> 00:09:08.360
+Anträge werden von einer Person
+
+00:09:08.360 --> 00:09:09.680
+gebracht. Höherwertige oder
+
+00:09:09.680 --> 00:09:10.680
+riskante Anträge werden für
+
+00:09:10.680 --> 00:09:12.260
+zusätzliche Kontrollen eskaliert. Fügen
+
+00:09:12.260 --> 00:09:13.600
+Sie im Designer eine Bedingungsaktion
+
+00:09:13.600 --> 00:09:14.700
+ein, bevor Sie den Flow schließen.
+
+00:09:15.200 --> 00:09:16.340
+Referenzieren Sie Ihre numerische
+
+00:09:16.340 --> 00:09:17.240
+Variable, zum Beispiel
+
+00:09:17.240 --> 00:09:18.980
+Eintragsbetrag. Wählen Sie den
+
+00:09:18.980 --> 00:09:20.800
+Operator größer oder gleich und
+
+00:09:20.800 --> 00:09:22.460
+setzen Sie den Schwellenwert zum
+
+00:09:22.460 --> 00:09:24.820
+B-150. Fügen Sie im
+
+00:09:24.820 --> 00:09:25.820
+Venn-Wahr-Zweig eine weitere
+
+00:09:25.820 --> 00:09:27.120
+manuelle Phase in Admin-Genehmigung
+
+00:09:27.120 --> 00:09:28.560
+hinzu. Weisen Sie diese einem
+
+00:09:28.560 --> 00:09:29.620
+festen Genehmiger zu wie dem
+
+00:09:29.620 --> 00:09:31.240
+Compliance-Administer. Beenden Sie
+
+00:09:31.240 --> 00:09:32.200
+den Venn-Falsch-Zweig mit
+
+00:09:32.200 --> 00:09:34.020
+Genehmigten. Der Effekt? Der
+
+00:09:34.020 --> 00:09:35.140
+Workflow verhält sich wie eine
+
+00:09:35.140 --> 00:09:36.720
+rationale Organisation statt wie ein
+
+00:09:36.720 --> 00:09:38.540
+universeller Flaschenhals. Ein
+
+00:09:38.540 --> 00:09:39.420
+wenig praktischer Humor ist hier
+
+00:09:39.420 --> 00:09:41.200
+angebracht. Ja, Delegation
+
+00:09:41.200 --> 00:09:42.160
+erfordert immer noch Vertrauen,
+
+00:09:42.280 --> 00:09:43.820
+nicht Wunschdenken. Vergeben Sie
+
+00:09:43.820 --> 00:09:44.580
+keine weitreichenden
+
+00:09:44.580 --> 00:09:45.460
+Sicherheitsrollen, die alles
+
+00:09:45.460 --> 00:09:47.060
+genehmigen. Beschränken Sie die
+
+00:09:47.060 --> 00:09:48.120
+Berechtigungen auf relevante
+
+00:09:48.120 --> 00:09:49.100
+Benutzer oder Gruppen über die
+
+00:09:49.100 --> 00:09:50.160
+rollenbasierte Zugriffskontrolle
+
+00:09:50.160 --> 00:09:51.460
+von Data. Andernfalls
+
+00:09:51.460 --> 00:09:52.920
+automatisieren Sie das Karten. Das
+
+00:09:52.920 --> 00:09:54.000
+Testen der Struktur zeigt, wie
+
+00:09:54.000 --> 00:09:55.080
+reibungslos jedes Teil ineinander
+
+00:09:55.080 --> 00:09:56.780
+greift. Wenn ein Anspruch unter
+
+00:09:56.780 --> 00:09:58.660
+150 Dollar die KI-Prüfung besteht,
+
+00:09:58.900 --> 00:09:59.680
+endet der Ablauf nach der
+
+00:09:59.680 --> 00:10:01.380
+Genehmigung durch den Manage. Bei
+
+00:10:01.380 --> 00:10:02.880
+Beträgen über 150 Dollar stellt
+
+00:10:02.880 --> 00:10:04.040
+das System den Vorgang höflich für
+
+00:10:04.040 --> 00:10:05.180
+die Admin-Prüfung zurück, bevor er
+
+00:10:05.180 --> 00:10:06.720
+abgeschlossen wird. Jeder Pfad
+
+00:10:06.720 --> 00:10:07.940
+hinterlässt einen Prüffad, das
+
+00:10:07.940 --> 00:10:08.960
+KI-Begründungsprotokoll mit
+
+00:10:08.960 --> 00:10:10.160
+Zeitstempel versehene Genehmigungen
+
+00:10:10.160 --> 00:10:11.420
+und aufgezeichnete Ergebnisse, die in
+
+00:10:11.420 --> 00:10:12.600
+Data-Wes gespeichert. Niemand kann
+
+00:10:12.600 --> 00:10:13.540
+später behaupten, das habe ich nie
+
+00:10:13.540 --> 00:10:15.300
+gesehen. Die Datenbank beweist das
+
+00:10:15.300 --> 00:10:16.520
+Gegenteil. Achten Sie bei der
+
+00:10:16.520 --> 00:10:17.640
+Verfeinerung auf disziplinierte
+
+00:10:17.640 --> 00:10:19.260
+Namenskonvention. Stellen Sie
+
+00:10:19.260 --> 00:10:20.900
+menschliche Phasen klar voran, wie
+
+00:10:20.900 --> 00:10:22.220
+Manager genehmigt oder Admin
+
+00:10:22.220 --> 00:10:23.160
+genehmigt, damit Sie Zweige
+
+00:10:26.780 --> 00:10:28.680
+abstritt kommen. Sobald Sie zufrieden
+
+00:10:28.680 --> 00:10:29.660
+sind, veröffentlichen Sie es und
+
+00:10:29.660 --> 00:10:30.620
+testen Sie es mit Realszenar.
+
+00:10:30.820 --> 00:10:31.700
+Obachten Sie, wie sich die Kette
+
+00:10:31.700 --> 00:10:33.560
+entfaltet. Die KI bewertet sofort.
+
+00:10:34.100 --> 00:10:35.200
+Der Manager erhält eine gezielte
+
+00:10:35.200 --> 00:10:36.740
+Genehmigungsaufgabe. Der Admin
+
+00:10:36.740 --> 00:10:37.740
+schaltet sich nur ein, wenn die
+
+00:10:37.740 --> 00:10:39.020
+Bedingungen es erforderen. Das
+
+00:10:39.020 --> 00:10:40.400
+Ergebnis fühlt sich weniger nach
+
+00:10:40.400 --> 00:10:41.700
+einer Automatisierung an, die alles
+
+00:10:41.700 --> 00:10:42.920
+erledigt, sondern eher wie eine
+
+00:10:42.920 --> 00:10:44.200
+transparente Hierarchie, die sich
+
+00:10:44.200 --> 00:10:45.520
+selbst verwaltet. Diese
+
+00:10:45.520 --> 00:10:46.600
+mehrschichtige Orchestrierung
+
+00:10:46.600 --> 00:10:48.040
+eröffnet zudem ein neues Feld, die
+
+00:10:48.040 --> 00:10:49.780
+Dokumentenvalidierung. Denn
+
+00:10:49.780 --> 00:10:51.180
+manchmal lügt ein Formularfeld, aber
+
+00:10:51.180 --> 00:10:52.940
+der Beleg nicht. Der nächste
+
+00:10:52.940 --> 00:10:54.120
+Schritt besteht darin, die KI die
+
+00:10:54.120 --> 00:10:55.120
+physischen Beweise prüfen zu
+
+00:10:56.780 --> 00:10:58.340
+ist. Ihr setzt die Belegvalidierung
+
+00:10:58.340 --> 00:10:59.200
+an, die Bürokratie in
+
+00:10:59.200 --> 00:11:00.160
+verifizierbarer Wissenschaft
+
+00:11:00.160 --> 00:11:02.560
+verwandelt. Dynamische Eingaben
+
+00:11:02.560 --> 00:11:04.080
+und Dokumentenvalidierung. Sprechen
+
+00:11:04.080 --> 00:11:05.000
+wir über Belege, die kleinen
+
+00:11:05.000 --> 00:11:06.060
+zegnitterten Papierstücke, die
+
+00:11:06.060 --> 00:11:07.400
+auf mysteriöse Weise zu kritischen
+
+00:11:07.400 --> 00:11:08.520
+Beweisen werden, sobald jemand
+
+00:11:08.520 --> 00:11:10.700
+eine Rückerstattung möchte. In einem
+
+00:11:10.700 --> 00:11:12.280
+manuellen Genehmigungsprozess überprüfen
+
+00:11:12.280 --> 00:11:13.240
+Menschen diese durch bloßes
+
+00:11:13.240 --> 00:11:14.700
+Hinsehen. Das sieht nach einer
+
+00:11:14.700 --> 00:11:15.600
+Yogamatte aus, nicht nach einer
+
+00:11:15.600 --> 00:11:17.480
+Yacht. In einem automatisierten
+
+00:11:17.480 --> 00:11:18.820
+Prozess lassen wir die KI dieselbe
+
+00:11:18.820 --> 00:11:19.980
+Prüfung ohne Ermittlungserscheinungen
+
+00:11:19.980 --> 00:11:21.960
+durchführen. In den Agent-Flows
+
+00:11:21.960 --> 00:11:23.040
+von Copilot Studio wird die
+
+00:11:23.040 --> 00:11:23.900
+Dokumentenvalidierung durch
+
+00:11:23.900 --> 00:11:24.960
+dynamische Inhaltseingaben
+
+00:11:24.960 --> 00:11:26.120
+lebendig, insbesondere durch die
+
+00:11:26.120 --> 00:11:27.280
+Möglichkeit, ein Bild oder eine
+
+00:11:27.280 --> 00:11:28.740
+Datei an ihre Genehmigungslogik zu
+
+00:11:28.740 --> 00:11:30.580
+übergeben. Dies verleiht Ihrem
+
+00:11:30.580 --> 00:11:31.780
+KI-Genehmiger einen dritten Sinn
+
+00:11:31.780 --> 00:11:33.580
+aus EFM. Anstatt sich nur auf
+
+00:11:33.580 --> 00:11:34.900
+Textfelder zu verlassen, liest das
+
+00:11:34.900 --> 00:11:36.120
+Modell das Dokument und vergleicht
+
+00:11:36.120 --> 00:11:36.880
+das Geschriebene mit dem
+
+00:11:36.880 --> 00:11:38.620
+Hochgeladenen. Hier ist die
+
+00:11:38.620 --> 00:11:40.600
+Struktur. Innerhalb Ihrer KI-Phase
+
+00:11:40.600 --> 00:11:41.360
+fügen Sie einen neuen
+
+00:11:41.360 --> 00:11:42.860
+Eingabetyp hinzu, der Bild oder
+
+00:11:42.860 --> 00:11:44.660
+Dokument heißt. Beschriften Sie ihn
+
+00:11:44.660 --> 00:11:46.940
+klar etwa als Belegdatei. Laden Sie
+
+00:11:46.940 --> 00:11:47.700
+einen Beispielbeleg für
+
+00:11:47.700 --> 00:11:48.960
+Testzwecke hoch. Dies geht nicht
+
+00:11:48.960 --> 00:11:49.960
+live, sondern trainiert nur das
+
+00:11:49.960 --> 00:11:51.840
+Logik-Layout. Passen Sie nun Ihre
+
+00:11:51.840 --> 00:11:53.000
+Anweisungsprompt an, um die
+
+00:11:53.000 --> 00:11:54.000
+Dokumentenkreuzvalidierung
+
+00:11:54.000 --> 00:11:55.460
+einzubeziehen. Sie erweitern Ihre
+
+00:11:55.460 --> 00:11:57.040
+bisherige Logik. Genehmigen Sie den
+
+00:11:57.040 --> 00:11:57.840
+Anspruch, wenn alles Folgende
+
+00:11:57.840 --> 00:11:59.380
+zutrifft. Betrag 500, Anspruchsdetails
+
+00:11:59.380 --> 00:12:00.120
+unterstützen physische oder
+
+00:12:00.120 --> 00:12:01.100
+psychische Gesundheit. Kaufdatum
+
+00:12:01.100 --> 00:12:02.240
+innerhalb von 30 Tagen. Kaufdatum
+
+00:12:02.240 --> 00:12:03.040
+innerhalb von 30 Tagen und das
+
+00:12:03.040 --> 00:12:03.700
+Belegdokument stimmt mit dem
+
+00:12:03.700 --> 00:12:04.700
+deklarierten Artikelbetrag und Datum
+
+00:12:04.700 --> 00:12:05.880
+überein. Artikelbetrag und Datum
+
+00:12:05.880 --> 00:12:07.160
+überein. Diese vierte Bedingung
+
+00:12:07.160 --> 00:12:08.500
+verwandelt Ihren KI-Genehmiger
+
+00:12:08.500 --> 00:12:09.800
+vom Richtlinienvollstrecker zum
+
+00:12:09.800 --> 00:12:12.080
+forensischen Buchhalter. Wenn der Test
+
+00:12:12.080 --> 00:12:13.760
+läuft, extrahiert das Modell lesbaren
+
+00:12:13.760 --> 00:12:15.440
+Text aus dem Dokument und prüft die
+
+00:12:15.440 --> 00:12:16.320
+Übereinstimmung mit Ihren
+
+00:12:16.320 --> 00:12:18.640
+strukturierten Eingaben. Wenn auf der
+
+00:12:18.640 --> 00:12:20.100
+Quittung eine Fitnessmatte für 300
+
+00:12:20.100 --> 00:12:21.800
+Dollar am 22. August steht und Ihr
+
+00:12:21.800 --> 00:12:23.300
+Antrag etwas anderes besagt, wird das
+
+00:12:23.300 --> 00:12:25.260
+Ergebnis abgelehnt. Für die
+
+00:12:25.260 --> 00:12:26.580
+Implementierung müssen Sie das
+
+00:12:26.580 --> 00:12:27.600
+Dokument abrufen, bevor die
+
+00:12:27.600 --> 00:12:29.380
+Genehmigung erfolgt. Verwenden Sie
+
+00:12:29.380 --> 00:12:30.360
+die Aktion Datei oder Bild
+
+00:12:30.360 --> 00:12:32.180
+herunterladen aus Dataverse. Wählen
+
+00:12:32.180 --> 00:12:33.400
+Sie dieselbe Tabelle, in der sich der
+
+00:12:33.400 --> 00:12:34.300
+Antragsdatensatz befindet,
+
+00:12:34.380 --> 00:12:35.860
+wahrscheinlich Claims. Wählen Sie unter
+
+00:12:35.860 --> 00:12:37.880
+Dateispalte das Anhangsfeld, oft so
+
+00:12:37.880 --> 00:12:40.200
+etwas wie Quittung genannt. Geben Sie
+
+00:12:40.200 --> 00:12:41.760
+dann die Zeilen-ID dynamisch über den
+
+00:12:41.760 --> 00:12:43.120
+Trigger an, den eindeutigen
+
+00:12:43.120 --> 00:12:45.620
+Bezeichner des Antrags. Diese Aktion
+
+00:12:45.620 --> 00:12:47.020
+liefert Dateimetadaten und den Inhalt
+
+00:12:47.020 --> 00:12:48.240
+zurück, aber hier lauert eine kleine
+
+00:12:48.240 --> 00:12:50.280
+Falle. Die Inhaltsausgabe muss leicht
+
+00:12:50.280 --> 00:12:51.700
+angepasst werden, damit die KI sie
+
+00:12:51.700 --> 00:12:53.960
+korrekt interpretieren kann. Wenn Sie
+
+00:12:53.960 --> 00:12:55.500
+den Dateienhalt Ihrer Dokumenteingabe
+
+00:12:55.500 --> 00:12:56.720
+zuordnen, öffnen Sie den
+
+00:12:56.720 --> 00:12:58.200
+Ausdruckseditor und hängen Sie Content
+
+00:12:58.200 --> 00:13:00.980
+an die Bodyreferenz an. Diese kleine
+
+00:13:00.980 --> 00:13:02.120
+Anpassung liefert die tatsächlichen
+
+00:13:02.120 --> 00:13:03.260
+Dateibytes anstelle der
+
+00:13:03.260 --> 00:13:05.320
+Metadaten-Wrapper. Lassen Sie dies weg
+
+00:13:05.320 --> 00:13:06.600
+und Ihre KI wird freudig leere
+
+00:13:06.600 --> 00:13:08.420
+Quittung genannt. Kommen wir zur
+
+00:13:08.420 --> 00:13:09.960
+Synchronisierung der Achillesferse von
+
+00:13:09.960 --> 00:13:12.420
+Dokumenten-Workflows. Die meisten
+
+00:13:12.420 --> 00:13:13.880
+Dataverse-Tabellen speichern Anhänge
+
+00:13:13.880 --> 00:13:15.180
+erst nach dem ersten Speichern des
+
+00:13:15.180 --> 00:13:17.080
+Datensatzes. Wenn Ihr Flow bei
+
+00:13:17.080 --> 00:13:18.360
+Erstellung auslöst, startet er auf,
+
+00:13:18.460 --> 00:13:21.500
+bevor die Datei existiert. Symptom.
+
+00:13:21.620 --> 00:13:22.620
+Der Flow schlägt fehl oder der
+
+00:13:22.620 --> 00:13:24.360
+Quittungsinhalt ist leer. Die Lösung
+
+00:13:24.360 --> 00:13:25.780
+ist elegant. Ändern Sie die
+
+00:13:25.780 --> 00:13:26.680
+Triggerbedingung auf bei
+
+00:13:26.680 --> 00:13:28.080
+Elementänderung, beschränken Sie sie
+
+00:13:28.080 --> 00:13:29.520
+aber darauf, nur auszulösen, wenn
+
+00:13:29.520 --> 00:13:31.340
+sich die Quittungsspalte ändert. Auf
+
+00:13:31.340 --> 00:13:32.520
+diese Weise beginnt die Validierung
+
+00:13:32.520 --> 00:13:33.860
+genau hin, in dem Moment, in dem
+
+00:13:33.860 --> 00:13:35.020
+jemand eine Datei hochlädt oder
+
+00:13:35.020 --> 00:13:37.080
+ersetzt. Öffnen Sie zur
+
+00:13:37.080 --> 00:13:38.180
+Konfiguration die Triggereinstellungen,
+
+00:13:39.020 --> 00:13:40.420
+wählen Sie geänderte Spalten und
+
+00:13:40.420 --> 00:13:41.740
+fügen Sie den logischen Namen Ihrer
+
+00:13:41.740 --> 00:13:43.160
+Quittungsspalte ein, den Sie unter
+
+00:13:43.160 --> 00:13:44.940
+den erweiterten Dataverse-Spaltendetails
+
+00:13:44.940 --> 00:13:47.100
+finden, sobald alles eingestellt ist,
+
+00:13:47.140 --> 00:13:48.620
+veröffentlicht. Jetzt verhält sich
+
+00:13:48.620 --> 00:13:50.240
+Ihre Automatisierung höflich. Sie
+
+00:13:50.240 --> 00:13:51.600
+wartet, bis tatsächlich etwas zu
+
+00:13:51.600 --> 00:13:53.340
+validieren ist. Wenn der Antrag mit
+
+00:13:53.340 --> 00:13:54.440
+einer neuen Quittung aktualisiert
+
+00:13:54.440 --> 00:13:56.120
+wird, startet der Flow neu. Er lädt die
+
+00:13:56.120 --> 00:13:57.600
+Datei herunter, leitet sie durch die
+
+00:13:57.600 --> 00:13:58.920
+KI-Stufe und prüft alle Eingaben
+
+00:13:58.920 --> 00:14:01.980
+gegeneinander. Äh, bei Unstimmigkeiten
+
+00:14:01.980 --> 00:14:04.260
+wie falscher Betrag, veraltetes Datum
+
+00:14:04.260 --> 00:14:06.380
+oder inkonsistente Beschreibungen lehnt die
+
+00:14:06.380 --> 00:14:08.160
+KI mit Begründung ab. Das
+
+00:14:08.160 --> 00:14:09.080
+Begründungsprotokoll könnte lauten,
+
+00:14:09.080 --> 00:14:10.600
+Der beantragte Betrag von 305 Dollar
+
+00:14:10.600 --> 00:14:11.480
+unterscheidet sich von der Gesamtsumme
+
+00:14:11.480 --> 00:14:12.320
+auf dem Dokument von Dokument von
+
+00:14:12.320 --> 00:14:13.440
+Dokument von Dokument von 300 Dollar.
+
+00:14:13.560 --> 00:14:14.700
+Das ist Compliance ohne Beschwerde.
+
+00:14:15.040 --> 00:14:16.980
+Der praktische Nutzen? Jede Einreichung
+
+00:14:16.980 --> 00:14:18.860
+wird selbst revidiert. Mitarbeiter können
+
+00:14:18.860 --> 00:14:20.160
+keine fragwürdigen Quittungen oder
+
+00:14:20.160 --> 00:14:21.480
+Wagenbeschreibungen mehr durchschmuggeln.
+
+00:14:22.640 --> 00:14:24.540
+Die KI-Urteil Dataverse liefert den
+
+00:14:24.540 --> 00:14:26.320
+Beweis und beide machen keine Kaffeepause.
+
+00:14:27.540 --> 00:14:29.200
+Also nein, Dokumentenvalidierung ist
+
+00:14:29.200 --> 00:14:31.220
+kein Overkill. Es ist ein Immungedächtnis
+
+00:14:31.220 --> 00:14:33.880
+für Ihre Workflows. Ausreißer werden auf
+
+00:14:33.880 --> 00:14:35.300
+molekularer Ebene entdeckt, bei den
+
+00:14:35.300 --> 00:14:37.540
+Zeichen auf den echten Quittungen. Und der
+
+00:14:37.540 --> 00:14:38.780
+menschliche Prüfer wird vom manuellen
+
+00:14:38.780 --> 00:14:40.000
+Kontrolleur zum Ausnahmebehandler.
+
+00:14:40.400 --> 00:14:41.660
+Herzlichen Glückwunsch, Sie haben soeben
+
+00:14:41.660 --> 00:14:42.980
+die Ehrlichkeit an sich automatisiert.
+
+00:14:43.940 --> 00:14:45.800
+Zuverlässigkeit aufbauen. Testen,
+
+00:14:46.160 --> 00:14:47.440
+versionieren und veröffentlichen.
+
+00:14:47.880 --> 00:14:49.220
+Jede Automatisierung sieht perfekt aus,
+
+00:14:49.280 --> 00:14:50.960
+bis sie tatsächlich läuft. Deshalb ist
+
+00:14:50.960 --> 00:14:52.440
+Zuverlässigkeit keine Phase, sondern eine
+
+00:14:52.440 --> 00:14:54.300
+Disziplin. Copilot Studio macht diese
+
+00:14:54.300 --> 00:14:55.500
+Disziplin überraschend einfach durch
+
+00:14:55.500 --> 00:14:56.880
+Versionierung, Tests und Veröffentlichung
+
+00:14:56.880 --> 00:14:58.180
+Steuerelemente, die direkt in
+
+00:14:58.180 --> 00:15:00.340
+Agentenflows eingebettet sind. Beginnen Sie
+
+00:15:00.340 --> 00:15:02.640
+mit iterativen Tests. Jeder Genehmigungsflow
+
+00:15:02.640 --> 00:15:04.840
+ist ein Miniaturökosystem. Ob sein einziger
+
+00:15:04.840 --> 00:15:06.220
+falsch benannte Variable Name kann Chaos
+
+00:15:06.220 --> 00:15:08.220
+zugesachen. Behandeln Sie Tests daher wie
+
+00:15:08.220 --> 00:15:10.380
+einen wissenschaftlichen Prozess. Änderungen
+
+00:15:10.380 --> 00:15:11.820
+isolieren, Daten anwenden, Ergebnisse
+
+00:15:11.820 --> 00:15:14.340
+beobachten. Im Flow Editor können Sie in
+
+00:15:14.340 --> 00:15:16.060
+Copilot Studio Beispiel Daten simulieren,
+
+00:15:16.240 --> 00:15:17.880
+ohne Produktionstrigger bereitzustellen.
+
+00:15:18.460 --> 00:15:19.700
+Füttern Sie abweichende Szenarien,
+
+00:15:20.160 --> 00:15:22.500
+zu hohe Beträge, veraltete Daten, irrelevante
+
+00:15:22.500 --> 00:15:23.780
+Artikelnamen und stellen Sie sicher, dass
+
+00:15:23.780 --> 00:15:26.040
+jedes das korrekte Urteil liefert. Gehen Sie
+
+00:15:26.040 --> 00:15:27.720
+dann zu Namenskonventionen. Langweilig?
+
+00:15:28.080 --> 00:15:30.260
+Absolut. Essentiell. Wichtiger als Luft.
+
+00:15:30.660 --> 00:15:31.780
+Stellen Sie jeder Variable System als
+
+00:15:31.780 --> 00:15:34.020
+ein Präfix. STR für Strings, Näm für Zahlen,
+
+00:15:34.120 --> 00:15:36.100
+DLC für Dateien. Beschriften Sie ebenso
+
+00:15:36.100 --> 00:15:38.520
+Aktionen explizit. Belegdatei herunterladen,
+
+00:15:38.660 --> 00:15:40.220
+Managergenehmigung prüfen, Anspruchstatus
+
+00:15:40.220 --> 00:15:41.660
+aktualisieren. Denn wenn in drei Monaten
+
+00:15:41.660 --> 00:15:43.100
+jemand fragt, warum Aktion 7 nicht
+
+00:15:43.100 --> 00:15:44.460
+funktioniert, werden Sie froh sein, dass
+
+00:15:44.460 --> 00:15:45.940
+Hinweise hilfreicher sind als Archäologie.
+
+00:15:46.960 --> 00:15:48.500
+Sobald individuelle Tests erfolgreich sind,
+
+00:15:48.560 --> 00:15:50.020
+weiten Sie dies auf Grenzwaldszenarien aus.
+
+00:15:50.500 --> 00:15:51.960
+Geben Sie vor, ein inkompetenter Benutzer zu
+
+00:15:51.960 --> 00:15:54.180
+sein. Keinen Beleg hochladen, ein Datum
+
+00:15:54.180 --> 00:15:56.140
+auf nächstes Jahr ändern, 500 statt 5,0
+
+00:15:56.140 --> 00:15:58.640
+eingeben. Bestätigen Sie, dass die KI dies
+
+00:15:58.640 --> 00:16:00.780
+erklärt und ablehnt, ohne abzustürzen. Das sind
+
+00:16:00.780 --> 00:16:01.820
+keine hypothetischen Fehler, das sind
+
+00:16:01.820 --> 00:16:04.200
+Generalproben für die Realität. Je mehr
+
+00:16:04.200 --> 00:16:05.960
+Fehlerfälle Sie vorab neutralisieren, desto
+
+00:16:05.960 --> 00:16:07.240
+weniger Teams-Nachrichten erhalten Sie
+
+00:16:07.240 --> 00:16:08.480
+nachts um zwei, dass der Flow wieder
+
+00:16:08.480 --> 00:16:10.860
+gestoppt hat. Veröffentlichung führt
+
+00:16:10.860 --> 00:16:13.220
+Governance ein. Jedes Mal, wenn Sie eine
+
+00:16:13.220 --> 00:16:14.660
+wichtige Änderung speichern, erstellt
+
+00:16:14.660 --> 00:16:16.040
+Copala Studio im Hintergrund eine neue
+
+00:16:16.040 --> 00:16:17.740
+Version. Sie können jederzeit zurückkehren.
+
+00:16:18.120 --> 00:16:20.040
+Keine Angst vor dem Überschreiben. Nutzen Sie
+
+00:16:20.040 --> 00:16:21.940
+dies, um experimentelle Sandbox-Logik von
+
+00:16:21.940 --> 00:16:24.240
+der Produktion zu trennen. Ein Flow namens
+
+00:16:24.240 --> 00:16:25.660
+Anspruchsgenehmigung-Dev ein anderer
+
+00:16:25.660 --> 00:16:27.440
+Anspruchsgenehmigung-Pod. Testen Sie in
+
+00:16:27.440 --> 00:16:28.880
+Dev, veröffentlichen Sie erst, wenn es stabil ist.
+
+00:16:29.580 --> 00:16:30.980
+Denken Sie daran, Zuverlässigkeit bedeutet
+
+00:16:30.980 --> 00:16:32.840
+nicht nur Korrektheit, sondern Kontrolle bei
+
+00:16:32.840 --> 00:16:35.580
+Veränderungen. Nutzen Sie nach der
+
+00:16:35.580 --> 00:16:37.200
+Veröffentlichung die Aktivitätsprotokolle.
+
+00:16:37.500 --> 00:16:38.980
+Sie sind nicht dekorativ, sie sind
+
+00:16:38.980 --> 00:16:40.520
+rechtssichere Aufzeichnungen von KI und
+
+00:16:40.520 --> 00:16:42.420
+menschlichen Interaktionen. Zeitstempel,
+
+00:16:42.500 --> 00:16:44.060
+Identitäten der Genehmiger, Zusammenfassung
+
+00:16:44.060 --> 00:16:45.280
+der Begründung. Überprüfen Sie diese
+
+00:16:45.280 --> 00:16:46.860
+Protokolle regelmäßig. Muster offenbaren
+
+00:16:46.860 --> 00:16:49.040
+sich von selbst. Welche Regeln lösen die
+
+00:16:49.040 --> 00:16:50.440
+meisten Ablehnungen aus? Welche Manager
+
+00:16:50.440 --> 00:16:51.860
+haben die KI überstimmend, wie oft greifen
+
+00:16:51.860 --> 00:16:54.000
+Compliance-Schritte? Äh... Diese
+
+00:16:54.000 --> 00:16:55.380
+Erkenntnisse verfeinern sowohl Richtlinien
+
+00:16:55.380 --> 00:16:57.600
+als auch Design. Eine weitere subtile Best
+
+00:16:57.600 --> 00:16:59.880
+Practice? Automatisieren Sie Status-Aktualisierung
+
+00:16:59.880 --> 00:17:01.320
+zurück in Dataverse-Datensätze am Ende
+
+00:17:01.320 --> 00:17:03.240
+jedes Zweigs. Die Aktion zum Aktualisieren
+
+00:17:03.240 --> 00:17:04.520
+einer Zeile sollte ein klares Feld
+
+00:17:04.520 --> 00:17:05.980
+festlegen, etwa Anspruchstatus gleich
+
+00:17:05.980 --> 00:17:07.660
+genehmigt oder abgelehnt. Dieser
+
+00:17:07.660 --> 00:17:09.080
+sichtbare Endpunkt stärkt das Vertrauen.
+
+00:17:09.620 --> 00:17:10.900
+Benutzer sehen Entscheidungen direkt in
+
+00:17:10.900 --> 00:17:12.500
+ihren eigenen Tabellenansichten. Keine
+
+00:17:12.500 --> 00:17:13.780
+separaten Tracking-Tabellen, keine
+
+00:17:13.780 --> 00:17:15.740
+Phantom-Genehmigung. Sobald Ihr System
+
+00:17:15.740 --> 00:17:17.220
+alle Tests besteht, veröffentlichen Sie
+
+00:17:17.220 --> 00:17:19.000
+mit ruhigem Gewissen. Im Gegensatz zu
+
+00:17:19.000 --> 00:17:20.540
+früheren Generationen von Power Automate
+
+00:17:20.540 --> 00:17:22.640
+Flows behalten Agenten Flows kontextbezogene
+
+00:17:22.640 --> 00:17:24.200
+Metadaten, das KI-Entscheidungsschema,
+
+00:17:24.300 --> 00:17:25.440
+dynamische Inhaltsbindungen und
+
+00:17:25.440 --> 00:17:28.220
+Versionstags bei, bei. Das Ergebnis ist
+
+00:17:28.220 --> 00:17:29.520
+nicht nur ein laufender Prozess, sondern
+
+00:17:29.520 --> 00:17:31.080
+reproduzierbares Artefakt, eine
+
+00:17:31.080 --> 00:17:33.060
+prüfbare Automatisierung. Die letzte
+
+00:17:33.060 --> 00:17:34.420
+Zuverlässigkeitsprüfung ist mental.
+
+00:17:34.880 --> 00:17:36.560
+Vermeiden Sie Over-Engineering. Manchmal
+
+00:17:36.560 --> 00:17:38.220
+zeigt ein fehlerhafter Ablauf zu komplexen
+
+00:17:38.220 --> 00:17:39.340
+Regeln auf, nicht technische Fehler.
+
+00:17:40.100 --> 00:17:41.320
+Optimieren Sie Logik, wo immer möglich.
+
+00:17:41.880 --> 00:17:43.280
+Weniger Stufen, klare Anweisungen,
+
+00:17:43.420 --> 00:17:46.040
+minimale Mehrdeutigkeit. Automatisierung
+
+00:17:46.040 --> 00:17:47.520
+ist keine Willkür, sondern unnötige
+
+00:17:47.520 --> 00:17:50.400
+Komplexität. Wenn Sie diese Stufe
+
+00:17:50.400 --> 00:17:51.280
+abschließen, erreicht Ihr
+
+00:17:51.280 --> 00:17:52.780
+Genehmigungssystem betriebliche Reife,
+
+00:17:52.880 --> 00:17:54.180
+getestet, versioniert, problemlos
+
+00:17:54.180 --> 00:17:55.580
+rückgängig zu machen und verifizierbar.
+
+00:17:55.580 --> 00:17:57.800
+Jedes Ergebnis, vom KI-Urteil bis zur
+
+00:17:57.800 --> 00:17:59.040
+administrativen Abzeichnung, hinterlässt
+
+00:17:59.040 --> 00:18:00.260
+einen digitalen Fußabdruck, der einer
+
+00:18:00.260 --> 00:18:01.440
+Prüfung standhält. Das ist
+
+00:18:01.440 --> 00:18:02.920
+quantifizierte Zuverlässigkeit, kein
+
+00:18:02.920 --> 00:18:04.020
+Gefühl, kein Glück, sondern
+
+00:18:04.020 --> 00:18:05.640
+strukturierte Logik, treu aufgezeichnet
+
+00:18:05.640 --> 00:18:06.580
+von den Tools, die Sie für sich
+
+00:18:06.580 --> 00:18:08.040
+denken lassen, während Sie schlafen.
+
+00:18:09.340 --> 00:18:11.180
+Ergebnis und realer Nutzen. Was
+
+00:18:11.180 --> 00:18:12.440
+passiert, wenn man Bürokratie-Dermatik
+
+00:18:12.440 --> 00:18:13.860
+überlässt? Die Genehmigung
+
+00:18:13.860 --> 00:18:15.680
+wartet nicht mehr. Ein KI-gestützter,
+
+00:18:15.740 --> 00:18:17.160
+mehrstufiger Agentenfloor verkürzt die
+
+00:18:17.160 --> 00:18:18.580
+Bearbeitungszeit von Tagen auf Minuten,
+
+00:18:18.700 --> 00:18:19.620
+da Entscheidungen nicht mehr von der
+
+00:18:19.620 --> 00:18:20.900
+Verfügbarkeit im Kalender abhängen.
+
+00:18:21.800 --> 00:18:23.200
+Jeder Antrag, der objektive
+
+00:18:23.200 --> 00:18:24.380
+Richtlinien erfüllt, wird sofort
+
+00:18:24.380 --> 00:18:26.480
+genehmigt. Jeder Ausnahmefall landet
+
+00:18:26.480 --> 00:18:27.620
+ordentlich in der Warteschlange eines
+
+00:18:27.620 --> 00:18:29.240
+Managers, inklusive bereits angehängtem
+
+00:18:29.240 --> 00:18:31.220
+Kontext. Menschen treffen Werturteile,
+
+00:18:31.320 --> 00:18:32.500
+keine bürokratischen Bestätigungen.
+
+00:18:33.200 --> 00:18:34.380
+Die Auswirkung zeigt sich zuerst als
+
+00:18:34.380 --> 00:18:36.200
+Zeitersparnung. Eine Kostenerstattung,
+
+00:18:36.280 --> 00:18:37.380
+die früher vier E-Mails und zwei
+
+00:18:37.380 --> 00:18:38.540
+Erinnerungen erforderte, ist jetzt von
+
+00:18:38.540 --> 00:18:40.700
+dem Mittagessen erledigt. Abteilungen
+
+00:18:40.700 --> 00:18:42.420
+erleben kürzere Bearbeitungszyklen,
+
+00:18:42.700 --> 00:18:44.020
+weniger Leerlaufzeiten und perfekt
+
+00:18:44.020 --> 00:18:46.160
+protokollierte Entscheidungswege. Der
+
+00:18:46.160 --> 00:18:47.580
+Genehmigungsmechanismus wird auf, eine
+
+00:18:47.580 --> 00:18:49.500
+Unterbrechung zu sein. Er wird zur
+
+00:18:49.500 --> 00:18:51.520
+Infrastruktur. Dann folgt die
+
+00:18:51.520 --> 00:18:52.960
+Fehlerreduzierung. Durch die
+
+00:18:52.960 --> 00:18:54.240
+Durchsetzung deterministischer Regeln
+
+00:18:54.240 --> 00:18:55.700
+mittels KI entfernen sie subjektive
+
+00:18:55.700 --> 00:18:56.940
+Schwankungen, das Übel manueller
+
+00:18:56.940 --> 00:18:58.800
+Genehmigungen. Kein nicht dachte, das
+
+00:18:58.800 --> 00:19:00.220
+zählt als Gesundheit und Wellness mehr.
+
+00:19:01.300 --> 00:19:02.580
+Die KI interpretiert Kriterien jedes
+
+00:19:02.580 --> 00:19:04.640
+Mal auf dieselbe Weise. Konsistenz lässt
+
+00:19:04.640 --> 00:19:06.160
+sich in der administrativen Logik besser
+
+00:19:06.160 --> 00:19:07.720
+skalieren als mitgeführt. Manager
+
+00:19:07.720 --> 00:19:09.100
+befassen sich nur noch mit Anomalien,
+
+00:19:09.300 --> 00:19:10.200
+selbst diese kommen mit einem
+
+00:19:10.200 --> 00:19:12.060
+Audit-Trail. Dateneingaben,
+
+00:19:12.240 --> 00:19:13.700
+Entscheidungshistorie, Modellerklärung.
+
+00:19:14.160 --> 00:19:15.240
+Audits verwandeln sich von Panikübungen
+
+00:19:15.780 --> 00:19:17.860
+in höfliche Verifizierungen. Auf
+
+00:19:17.860 --> 00:19:19.280
+organisatorischer Ebene ist das nicht
+
+00:19:19.280 --> 00:19:20.620
+nur schneller, sondern auch sicherer.
+
+00:19:20.620 --> 00:19:22.500
+Compliance verlässt sich nicht auf
+
+00:19:22.500 --> 00:19:23.900
+Erinnerung oder Stimmung. Die ist
+
+00:19:23.900 --> 00:19:25.700
+integriert. Die Dataverse-Protokolle
+
+00:19:25.700 --> 00:19:27.000
+zeigen, wer wann und warum genehmigt
+
+00:19:27.000 --> 00:19:29.220
+hat. Diese Transparenz unterbindet eine
+
+00:19:29.220 --> 00:19:30.600
+Kultur der Abkürzungen, da jede
+
+00:19:30.600 --> 00:19:32.100
+Entscheidung nun dauerhaft durchsuchbar
+
+00:19:32.100 --> 00:19:34.360
+ist. Und philosophisch gesehen ändert
+
+00:19:34.360 --> 00:19:35.940
+sich der Workflow von Mensch zuerst mit
+
+00:19:35.940 --> 00:19:37.560
+KI-Unterstützung hin zu KI zuerst mit
+
+00:19:37.560 --> 00:19:39.280
+menschlicher Korrektur. Praktische
+
+00:19:39.280 --> 00:19:41.160
+Governance, keine Science-Witchen. KI
+
+00:19:41.160 --> 00:19:42.080
+übernimmt die Regeldurchsetzung,
+
+00:19:42.180 --> 00:19:43.180
+Menschen übernehmen das Urteils für
+
+00:19:43.180 --> 00:19:44.580
+Systeme. Die hybride Form erzeugt
+
+00:19:44.580 --> 00:19:45.900
+fairere, schnellere und letztlich
+
+00:19:45.900 --> 00:19:47.880
+vertrauenswürdigere Systeme. Denn sie
+
+00:19:47.880 --> 00:19:48.560
+sich vor, sie erklären das einem
+
+00:19:48.560 --> 00:19:49.920
+Wirtschaftsprüfer. Das Lächeln, das
+
+00:19:49.920 --> 00:19:51.120
+darauf folgt, ist die Automatisierung
+
+00:19:51.120 --> 00:19:53.180
+allein schon wert. Also da haben sie es.
+
+00:19:53.540 --> 00:19:54.700
+Microsoft Copilot Studio ist nicht
+
+00:19:54.700 --> 00:19:55.340
+einfach nur ein weiteres
+
+00:19:55.340 --> 00:19:57.040
+Automatisierungstuch. Es ist der Ort, an
+
+00:19:57.040 --> 00:19:58.060
+dem die Unentschlossenheit ihres
+
+00:19:58.060 --> 00:19:58.900
+Unternehmens endlich in den
+
+00:19:58.900 --> 00:20:00.400
+Ruhestand geht. Sie bauen eine
+
+00:20:00.400 --> 00:20:01.880
+Genehmigungs-Engine, die in Bedingungen
+
+00:20:01.880 --> 00:20:03.460
+denken, verantwortungsbewusst eskalieren,
+
+00:20:03.680 --> 00:20:05.460
+Belege mit der Realität abgleichen und
+
+00:20:05.460 --> 00:20:07.500
+jeden Schritt dokumentieren kann. Das ist
+
+00:20:07.500 --> 00:20:08.180
+kein Workflow, das ist ein
+
+00:20:08.180 --> 00:20:09.760
+Governance-Modell. Wenn sie sich nur an
+
+00:20:09.760 --> 00:20:12.320
+eines erinnern, dann an dies. KI sollte
+
+00:20:12.320 --> 00:20:13.820
+Entscheidungen vorhersehbar und Menschen
+
+00:20:13.820 --> 00:20:15.960
+außergewöhnlich machen. Hören Sie auf,
+
+00:20:16.020 --> 00:20:17.000
+aus Gewohnheit alles über Menschen
+
+00:20:17.000 --> 00:20:18.500
+laufen zu lassen. Überlassen Sie die
+
+00:20:18.500 --> 00:20:19.820
+Routine der Logik, damit sich Manager
+
+00:20:19.820 --> 00:20:21.560
+um Ausnahmen kümmern können. Wenn Sie
+
+00:20:21.560 --> 00:20:22.900
+dieser Leitfaden vor einer weiteren
+
+00:20:22.900 --> 00:20:24.120
+Woche mit ausstehenden Manager-
+
+00:20:24.120 --> 00:20:25.200
+Prüfungen bewahrt hat, ziehen Sie ein
+
+00:20:25.200 --> 00:20:27.400
+Abo in Betracht. Das nächste Tutorial
+
+00:20:27.400 --> 00:20:28.800
+befasst sich eingehen mit fortgeschrittenen
+
+00:20:28.800 --> 00:20:30.400
+Copilot Studio-Automatisierungen, bei
+
+00:20:30.400 --> 00:20:31.480
+denen diese Agenten-Flows mit
+
+00:20:31.480 --> 00:20:32.480
+Power-Plattform-Analysen und
+
+00:20:32.480 --> 00:20:33.800
+adaptiven Richtlinien verbunden werden.
+
+00:20:34.580 --> 00:20:35.840
+Sichern Sie sich Ihren Upgrade-Pfad,
+
+00:20:35.940 --> 00:20:36.880
+abonnieren Sie, aktivieren Sie
+
+00:20:36.880 --> 00:20:37.960
+Benachrichtigungen und lassen Sie neue
+
+00:20:37.960 --> 00:20:39.080
+Episoden automatisch bereitstellen.
+
+00:20:39.360 --> 00:20:40.560
+Keine manuellen Prüfungen, keine
+
+00:20:40.560 --> 00:20:42.120
+verpassten Releases, nur kontinuierliche
+
+00:20:42.120 --> 00:20:43.200
+Bereitstellung von nützlichen Wissen.
+
+00:20:43.460 --> 00:20:43.800
+Fortfahren.

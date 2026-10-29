@@ -1,0 +1,1087 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:03.320
+Kennen Sie dieses ungute Gefühl, wenn sich Ihr Powerpages-Formular nicht validieren lässt
+
+00:00:03.320 --> 00:00:06.940
+und die Fehlermeldungen etwa so hilfreich sind wie ein 404-Fehler im Gehirn?
+
+00:00:07.640 --> 00:00:09.260
+Genau diesen Schwachpunkt werden wir heute beheben.
+
+00:00:09.960 --> 00:00:10.980
+Wir behandeln fünf Schritte.
+
+00:00:11.340 --> 00:00:14.780
+Optimierung von Liquid-Templates, Beschleunigung von JavaScript und Formularvalidierung,
+
+00:00:14.980 --> 00:00:19.260
+verständliche Code-Erklärungen, Integration von HTML mit Bootstrap für Responsive Layouts
+
+00:00:19.260 --> 00:00:21.380
+und Vereinfachung von Web-API-Aufrufen.
+
+00:00:22.420 --> 00:00:26.180
+Ein kurzer Hinweis vorab, Sie benötigen 4S Code mit der Power-Plattform-Tools-Erweiterung,
+
+00:00:26.180 --> 00:00:31.720
+GitHub-Copilot-Chat und Ihre Website-Inhalte, die über die Power-Plattform-CLI mit Dataverse-Authentifizierung heruntergeladen wurden.
+
+00:00:32.360 --> 00:00:34.000
+Dieses Setup macht Copilot-Kontext bewusst.
+
+00:00:34.380 --> 00:00:36.700
+Sobald das steht, hört Copilot auf, wahllos Codeschnipsel zu liefern.
+
+00:00:37.060 --> 00:00:39.820
+Er liefert kontextuellen, iterativen Code, der das Ausprobieren auf ein Minimum reduziert.
+
+00:00:40.080 --> 00:00:43.040
+Ich zeige Ihnen die exakten Prompts, damit Sie die Ergebnisse selbst nachvollziehen können.
+
+00:00:43.760 --> 00:00:46.240
+Und da der meiste Ärger bei JavaScript beginnt, schauen wir uns an, was passiert,
+
+00:00:46.340 --> 00:00:48.840
+wenn sich Ihre Formularfehler wie ein natürlicher 1er-Würfelwurf anfühlen.
+
+00:00:49.640 --> 00:00:54.960
+Wenn JavaScript sich wie ein natürlicher 1er anfühlt, kann es eine eigentlich einfache Formularprüfung schnell in ein Desaster verwandeln.
+
+00:00:54.960 --> 00:01:00.020
+Ein einziger falscher Tastenschlag reicht aus und anstatt fehlerhafte Eingaben zu stoppen, bricht der gesamte Ablauf zusammen.
+
+00:01:00.460 --> 00:01:05.620
+Meist sitzen Sie dann vor dem Bildschirm und fragen sich, wie Banane jemals an Ihrer sorgfältig geschriebenen Valigierungslogik vorbeikommen konnte.
+
+00:01:06.480 --> 00:01:09.940
+Sie kennen das Spiel, ein harmlos wirkendes Formular, ein Validator, der Unsinn filtern soll
+
+00:01:09.940 --> 00:01:12.760
+und ein schlauer Benutzer, der genau das eintippt, womit Sie nicht gerechnet haben.
+
+00:01:13.740 --> 00:01:17.740
+Plötzlich explodieren Ihre Konsolenprotokolle vor Beschwerden und jeder VS-Code-Tab fühlt sich wie eine Sackgasse.
+
+00:01:18.280 --> 00:01:20.020
+Die kleinen Fehler schmerzen am meisten.
+
+00:01:20.880 --> 00:01:24.760
+Ein fehlendes Semikolon oder ein Scope-Bug, der im Kopf sind, ergibt sich aber beim Ausführen des Codes,
+
+00:01:24.760 --> 00:01:25.640
+das wie Gift auswirkt.
+
+00:01:26.440 --> 00:01:30.040
+Diese winzigen Ausrutscher tauchen ständig in echten Deployments auf und erklären,
+
+00:01:30.240 --> 00:01:33.460
+warum fehlerhafte Validierung ein so vertrautes Ticket in der Web-Entwicklung ist.
+
+00:01:34.320 --> 00:01:35.600
+Normalerweise ist die Ansatzrohe gewalt.
+
+00:01:36.100 --> 00:01:39.340
+Sie ändern eine Zeile, aktualisieren, werden durch einen neuen Fehler zurückgeworfen
+
+00:01:39.340 --> 00:01:41.260
+und wiederholen den Zyklus, bis endlich etwas funktioniert.
+
+00:01:42.220 --> 00:01:45.960
+Ein ganzer Abend verfliegt und das Endergebnis ist oft nur ein notdürftig gepflegtes Skript, das gerade zuläuft.
+
+00:01:46.460 --> 00:01:47.740
+Keine Eleganz, kein Lerneffekt.
+
+00:01:48.080 --> 00:01:51.100
+Deshalb fühlt sich das Debugging der Validierung wie der klassische natürliche Eins an.
+
+00:01:52.120 --> 00:01:54.100
+Sie würfeln zwar, aber die Chancen stehen gegen Sie.
+
+00:01:54.680 --> 00:01:55.540
+Hier kommt Co-Pilot ins Spiel.
+
+00:01:56.180 --> 00:02:01.740
+Allgemeine Co-Pilot-Vorschläge helfen manchmal, aber oft sehen sie aus wie zufällige Fragmente aus einem halbvergessenen Questlog.
+
+00:02:02.520 --> 00:02:03.900
+Vom Ansatz her nützlich im Detail falsch.
+
+00:02:04.360 --> 00:02:06.960
+Das liegt daran, dass der einfache Co-Pilot die Eigenheiten von Powerpages nicht kennt.
+
+00:02:06.960 --> 00:02:11.260
+Aber fügen Sie den Add Powerpages Teilnehmer hinzu und plötzlich spuckt ihr kein Standardcode mehr aus,
+
+00:02:11.340 --> 00:02:14.000
+sondern bietet kontextbewussten Code, der perfekt auf ihre Umgebung zugeschnitten ist.
+
+00:02:14.680 --> 00:02:18.740
+Microsoft hat es für Powerpages Besonderheiten wie Liquid-Templates und Dataverse-Bindungen entwickelt,
+
+00:02:18.860 --> 00:02:22.180
+wodurch Vorschläge genau die Funktionen berücksichtigen, die sie oft vor Probleme stellen.
+
+00:02:23.380 --> 00:02:25.100
+Es geht nicht nur um das Erstellen von Snippets.
+
+00:02:25.300 --> 00:02:29.020
+Die Add Powerpages-Longeration kann auch spezifische Powerpages-Konstrukte erklären,
+
+00:02:29.020 --> 00:02:33.020
+damit sie nicht nur kopieren und hoffen, sondern wirklich verstehen, warum ein Skript tut, was es tut.
+
+00:02:33.820 --> 00:02:36.660
+Dadurch fühlt sich das Debugging weniger wie ein Herumirren mit verbundenen Augen an,
+
+00:02:36.660 --> 00:02:39.660
+sondern eher wie die Zusammenarbeit mit jemandem, der dasselbe Verlies bereits gemeistert hat.
+
+00:02:40.140 --> 00:02:42.680
+Sie können beispielsweise buchstäblich diesen Prompt in den Co-Pilot-Chat eingeben.
+
+00:02:43.320 --> 00:02:45.960
+Add Powerpages schreibe JavaScript-Code für die Formularfeld-Validierung,
+
+00:02:46.060 --> 00:02:48.160
+um zu prüfen, ob der Wert im Telefonfeld das richtige Format hat.
+
+00:02:49.280 --> 00:02:52.340
+Das ist keine bloße Theorie, sondern eine reproduzierbare, demobereite Eingabe,
+
+00:02:52.400 --> 00:02:53.660
+die Sie später in dieser Anleitung sehen werden.
+
+00:02:54.100 --> 00:02:56.180
+Der zurückgegebene Code ist kein vages Web-Snippet,
+
+00:02:56.180 --> 00:02:59.820
+sondern direkt anwendbar und darauf ausgelegt, in Ihrem Powerpages-Kontext zu kompilieren.
+
+00:03:00.700 --> 00:03:02.220
+Diese Vorhersehbarkeit ist die eigentliche Well-No.
+
+00:03:02.620 --> 00:03:05.600
+Beim generischen Co-Pilot fühlt es sich an, als hätten Sie einen Baden engagiert,
+
+00:03:05.600 --> 00:03:07.080
+der zwar den richtigen Akkord spielen könnte,
+
+00:03:07.140 --> 00:03:09.300
+aber meistens hat die Melodie nichts mit dem aktuellen Kampf zu tun.
+
+00:03:09.620 --> 00:03:12.240
+Mit Add Powerpages ist es eher so, als würden Sie mit einem Waldläufer reisen,
+
+00:03:12.320 --> 00:03:13.700
+der bereits weiß, wo sich die Fallstricke verbergt.
+
+00:03:14.120 --> 00:03:16.040
+Die Aufgabe besteht weniger darin, Fallen zu überleben,
+
+00:03:16.120 --> 00:03:18.200
+sondern mehr darin, klare Benutzererfahrungen zu gestalten.
+
+00:03:19.040 --> 00:03:20.860
+Das Tool ersetzt nicht Ihr Urteilsvermögen, es schärft es.
+
+00:03:21.320 --> 00:03:23.320
+Sie entscheiden weiterhin, was als gültige Eingabe gilt
+
+00:03:23.320 --> 00:03:24.880
+und wie Fehler den Benutzer leiten sollen.
+
+00:03:25.580 --> 00:03:28.420
+Doch anstatt Zeit mit Syntax-Fehlern und Tippfehlern bei bulischen Werten zu verschwenden,
+
+00:03:28.720 --> 00:03:31.020
+investieren Sie Ihre Energie darin, den Arbeitsablauf intuitiv zu gestalten.
+
+00:03:31.020 --> 00:03:34.420
+Richtig gehandhabt hören diese Validierungsschritte auf, Hindernisse zu sein
+
+00:03:34.420 --> 00:03:37.160
+und werden zu einem Teil eines reibungslosen Ablaufs für jeden, der das Formular nutzt.
+
+00:03:37.680 --> 00:03:39.620
+Das mag sich nicht nach einem spektakulären Sieg anfühlen,
+
+00:03:39.680 --> 00:03:41.080
+aber das Verhindern grundlegender Fehler
+
+00:03:41.080 --> 00:03:43.600
+bewahrt Sie später vor einer Flut an einfachen Support-Tickets.
+
+00:03:44.560 --> 00:03:47.760
+Sobald Co-Pilot die Fleißarbeit der Erstellung präziser Validierungscodes übernimmt,
+
+00:03:47.920 --> 00:03:51.240
+verschiebt sich Ihre Zeit vom Überlebensmodus hin zur gezielten Optimierung des App-Verhaltens.
+
+00:03:52.080 --> 00:03:53.820
+Dieser Unterschied ist wichtig, denn wenn Sie sehen,
+
+00:03:53.820 --> 00:03:56.160
+wie gut gezielte Befehle den Ablauf der Code-Generierung verändern,
+
+00:03:56.280 --> 00:03:58.400
+fangen Sie an, sich zu fragen, was diese Befehle noch freischalten können.
+
+00:03:58.400 --> 00:04:02.600
+Und genau dann wird der echte Vorteil der Nutzung von Co-Pilot mit Powerpages deutlich.
+
+00:04:03.560 --> 00:04:05.260
+Mit Co-Pilot-Befehlen den entscheidenden Vorteil erzielt.
+
+00:04:05.680 --> 00:04:08.560
+Ein Vorteil zu haben bedeutet hier, die richtigen Befehle für Co-Pilot zu kennen,
+
+00:04:08.640 --> 00:04:10.620
+anstatt darauf zu hoffen, dass das Glück auf Ihrer Seite ist.
+
+00:04:11.620 --> 00:04:14.020
+Das ist die wahre Stärke der Nutzung des App-Powerpages-Teilnehmers.
+
+00:04:14.540 --> 00:04:16.720
+Er verwandelt den Co-Pilot-Chat von einem generischen Helfer
+
+00:04:16.720 --> 00:04:20.280
+an einen kontextbezogenen Partner, der speziell für Ihre Powerpages-Umgebung entwickelt wurde.
+
+00:04:20.520 --> 00:04:21.600
+So rufen Sie ihn auf.
+
+00:04:22.040 --> 00:04:23.980
+Öffnen Sie in VS Code das Co-Pilot-Chat-Fenster
+
+00:04:23.980 --> 00:04:26.720
+und geben Sie Ihren Prompt mit den vorangestellten App-Powerpages ein.
+
+00:04:26.720 --> 00:04:31.600
+Dieses Tag signalisiert Co-Pilot, das Powerpages-Modul anstelle des Standardmodus zu laden.
+
+00:04:32.800 --> 00:04:36.820
+Sie können nach Validatoren, Liquid-Snippets oder sogar Dataverse-gebundenen Aufrufen fragen
+
+00:04:36.820 --> 00:04:40.520
+und Co-Pilot passt seine Antworten an das System an, für das Sie tatsächlich programmieren.
+
+00:04:41.760 --> 00:04:43.840
+Damit das funktioniert, benötigen Sie zunächst die richtige Ausstattung.
+
+00:04:44.420 --> 00:04:45.860
+Visual Studio Code muss installiert sein.
+
+00:04:45.980 --> 00:04:49.080
+Ebenso die Power-Plattform-Tools-Erweiterung, die GitHub-Copilot-Chat-Erweiterung
+
+00:04:49.080 --> 00:04:52.320
+und die Power-Plattform-CLI authentifiziert gegenüber Ihrer Dataverse-Umgebung.
+
+00:04:52.320 --> 00:04:57.140
+Der Authentifizierungsschritt ist am wichtigsten, da Co-Pilot Ihre Umgebung erst versteht,
+
+00:04:57.180 --> 00:05:00.160
+wenn Sie die Website-Inhalte bei angemeldetem Zustand im VS Code geladen haben.
+
+00:05:00.900 --> 00:05:01.900
+Ohne das ist alles nur Rat.
+
+00:05:02.500 --> 00:05:03.640
+Noch ein wichtiger Hinweis zu Governance.
+
+00:05:03.980 --> 00:05:06.840
+Einige Co-Pilot-Funktionen für Powerpages befinden sich noch in der Vorschau
+
+00:05:06.840 --> 00:05:09.740
+und Mandanten-Administratoren steuern deren Aktivierung über den Corporance-Einstellungen.
+
+00:05:10.140 --> 00:05:10.500
+Einstellung.
+
+00:05:11.260 --> 00:05:13.760
+Wundern Sie sich also nicht, wenn hier gezeigte Funktionen Ihnen im Unternehmen deaktivieren.
+
+00:05:14.080 --> 00:05:15.280
+Das ist eine Admin-Einstellung, kein Fehler.
+
+00:05:15.720 --> 00:05:17.340
+Hier ist der Unterschied, sobald Sie alles eingerichtet haben.
+
+00:05:17.340 --> 00:05:20.380
+Der normale Co-Pilot ist so, als würden Sie einen Baden um Rad auf dem Schlachtfeld bitten.
+
+00:05:20.980 --> 00:05:23.580
+Sie erhalten eine nette Melodie, vielleicht einen allgemeinen Kommentar,
+
+00:05:23.660 --> 00:05:27.280
+aber keinerlei Details, die Sie bei Liquid-Vorlagen oder Dataverse-Entitätsfeldern benötigen.
+
+00:05:28.380 --> 00:05:31.620
+Der Powerpages-Teilnehmer gleicht eher einem Waldläufer, der das Gelände bereits erkundet hat.
+
+00:05:32.320 --> 00:05:35.180
+Es ist nicht nur Code, der kompiliert, sondern Code, der die richtigen Bindungen davoranziert,
+
+00:05:35.260 --> 00:05:38.680
+in Formularvalidatoren passt und mit der Funktionsweise von Powerpages übereinstimmt.
+
+00:05:40.080 --> 00:05:41.880
+Eine Metapher, ein Kontrast, ein Ergebnis.
+
+00:05:42.680 --> 00:05:45.840
+Nutzbare, kontextbezogene Ergebnisse statt zerbrechlicher, generischer Snippet.
+
+00:05:46.100 --> 00:05:47.080
+Sprechen wir über Ergebnisse.
+
+00:05:47.420 --> 00:05:49.740
+Wenn Sie den normal Co-Pilot nach einer Validierungsroutine fragen,
+
+00:05:49.860 --> 00:05:52.600
+erhalten Sie wahrscheinlich ein Skript, das in einem einfachen HTML-Formular funktioniert.
+
+00:05:52.940 --> 00:05:55.440
+Wenn Sie es jedoch in Powerpages einfügen, stoßen Sie auf blinde Flecken.
+
+00:05:55.740 --> 00:05:58.620
+Keine Erkennung des Entitätsschemas, keine Ahnung, was Liquid-Tags bewirken
+
+00:05:58.620 --> 00:06:00.700
+und definitiv kein Bewusstsein für Dataverse-Regeln.
+
+00:06:01.520 --> 00:06:03.620
+Es läuft hier mit Klebeband, klebrig, aber unzuverlässig.
+
+00:06:04.060 --> 00:06:06.340
+Stellen Sie die gleiche Anfrage mit AddPowerpages voran
+
+00:06:06.340 --> 00:06:08.740
+und plötzlich erhalten Sie Validatoren, die nicht nur laufen,
+
+00:06:08.740 --> 00:06:11.440
+sondern die richtigen Entitätsfeldreferenzen ansprechen, die Sie wirklich brauchen.
+
+00:06:11.860 --> 00:06:15.240
+Gleiche Anfrage, kontextangepasste Ausgabe, keine nächtlichen Korrektursitzungen mehr nötigen.
+
+00:06:15.240 --> 00:06:17.400
+Und dabei geht es nicht nur um das Generieren von Skripten.
+
+00:06:17.780 --> 00:06:21.980
+Befehle wie AddPowerpages, ExplainTheFollowingCode oder PercentIncludePageCopyPercent
+
+00:06:21.980 --> 00:06:26.000
+bieten Ihnen leicht verständliche Erklärungen zu Liquid- oder Powerpages-spezifischen Konstrukten.
+
+00:06:26.680 --> 00:06:29.100
+Sie kopieren nicht blind, sondern bauen tatsächlich Verständnis auf.
+
+00:06:29.840 --> 00:06:32.900
+Das ist eine andere Art von Stärke, weil Sie die Ruhen lernen, während Sie sie gleichzeitig anwenden.
+
+00:06:33.900 --> 00:06:36.680
+Je länger Sie mit diesen Befehlen arbeiten, desto mehr verändert sich Ihr Workflow.
+
+00:06:36.680 --> 00:06:41.600
+Anstatt nachts um zwei Uhr alleine Fehler zu beheben, betrachten Sie Co-Pilot als ein zweites Paar Augen,
+
+00:06:41.680 --> 00:06:44.480
+das bereits weiß, was bei 90% ähnlicher Bild schiefgelaufen ist.
+
+00:06:44.720 --> 00:06:44.960
+Äh.
+
+00:06:45.860 --> 00:06:49.060
+Die Befehle liefern Ihnen keine Cheatcodes, sondern Einblicke und funktionierende Beispiele,
+
+00:06:49.160 --> 00:06:50.800
+die die Besonderheiten Ihrer Umgebung berücksichtigen.
+
+00:06:51.260 --> 00:06:53.080
+Sie bewahren Dich vor endlosen Überarbeitungsschleifen.
+
+00:06:53.460 --> 00:06:55.960
+In einer normalen Co-Pilot-Rolle landest Du irgendwo im Mittelfeld.
+
+00:06:56.500 --> 00:06:59.340
+Ein ordentliches Skript, etwas Nacharbeit, ein wenig ausprobieren, bis es passt.
+
+00:07:00.200 --> 00:07:03.140
+In einer AddPowerpages-Rolle fühlt es sich wie ein natürlicher 20er-Wurfer.
+
+00:07:03.140 --> 00:07:07.040
+Validierungsskripte fügen sich perfekt in Dein Powerpages-Formular ein,
+
+00:07:07.140 --> 00:07:10.020
+Liquid Includes funktionieren sofort und Dataverse-Bindungen werfen keine Fehler.
+
+00:07:10.660 --> 00:07:14.460
+Das ist kein Glück, sondern das Ergebnis, wenn Co-Pilot das Terrain kennt, für das Du programmierst.
+
+00:07:15.280 --> 00:07:17.220
+Dieser Vorteil bringt Dir jedoch nur den ersten Entwurf.
+
+00:07:17.720 --> 00:07:20.020
+Ein funktionierender Schnipsel bedeutet noch keine fertige Anwendung.
+
+00:07:20.760 --> 00:07:24.600
+Benutzer geben seltsame Dinge ein, Fehlermeldungen brauchen, Details und Skripte müssen über das Grundgerüst,
+
+00:07:24.660 --> 00:07:26.040
+das Dir der Co-Pilot liefert, hinauswachsen.
+
+00:07:26.600 --> 00:07:28.100
+Und genau hier beginnt die nächste Herausforderung.
+
+00:07:29.440 --> 00:07:31.440
+Vom Skript-Skelett zum vollwertigen Code-Weg.
+
+00:07:31.440 --> 00:07:34.200
+Dorthin beginnt, wie bei den meisten Validierungen, bei der Basis.
+
+00:07:35.520 --> 00:07:36.560
+Du erhältst einen ersten Entwurf.
+
+00:07:36.900 --> 00:07:39.820
+Ein einfaches Skript, das zwar technisch läuft, aber nur den offensichtlichsten Unsinn blockiert.
+
+00:07:40.720 --> 00:07:43.120
+Stell es Dir wie einen Kämpfer auf Stufe 1 mit einem Pappschild vor.
+
+00:07:43.980 --> 00:07:47.740
+Es hält ein oder zwei schwache Treffer aus, aber sobald ein echter Benutzer loslegt, zersplittert das Ding.
+
+00:07:48.300 --> 00:07:51.840
+Jeder, der schon einmal ein Formular bereitgestellt hat, weiß, dass das Skript in seinem Anfangszustand nie lange hält.
+
+00:07:51.840 --> 00:07:58.600
+Du sicherst Dich gegen einfache Fehler ab, aber dann fügt Dein Benutzer ein Emoji in ein Telefonfeld ein oder gibt ein morgiges Datum als Geburtsdatum an.
+
+00:07:59.140 --> 00:08:04.400
+Plötzlich bricht Deine Verteidigung zusammen, Tickets landen in Deinem Posteingang und Du bleibst auf einer brüchigen Validierung sitzen, die kaum mehr macht, als hilflos zu rinken.
+
+00:08:04.980 --> 00:08:07.620
+Das Kernproblem ist nicht nur die Abdeckung der Validierung, sondern das Feedback.
+
+00:08:08.180 --> 00:08:12.460
+Eine Nachricht wie ungültige Eingabe ist das Software-Äquivalent einer verschlossenen Tür ohne Hinweisschild.
+
+00:08:12.460 --> 00:08:16.700
+Sie sagt dem Benutzer nichts, also raten Sie, scheitern erneut und werfen das Problem schließlich bei Dir ab.
+
+00:08:17.240 --> 00:08:20.300
+Dann vervielfachen sich Deine Helpdesk-Tickets aus den immer gleichen vorhersehbaren Gründen.
+
+00:08:20.920 --> 00:08:23.720
+Das ist der Wendepunkt. Diese Pub-Skripte müssen nicht zerbrechlich bleiben.
+
+00:08:24.520 --> 00:08:27.520
+Mit Co-Pilot akzeptierst Du nicht einfach das Skelett, Du baust es zu einer Rüstung aus.
+
+00:08:28.280 --> 00:08:30.780
+Der Arbeitsablauf ist einfach als Vier-Schritte-Schleife zu merken.
+
+00:08:31.360 --> 00:08:36.380
+Skelett generieren, Co-Pilot um bessere Fehlermeldungen bitten, Grenzfälle behandeln und schließlich bereitstellen.
+
+00:08:37.420 --> 00:08:40.960
+Jeder Schritt wertet den dünnen Griff zu einer echten Waffe auf, der Du im Einsatz vertrauen kannst.
+
+00:08:40.960 --> 00:08:43.480
+Co-Pilot arbeitet in einer Sitzung, was das Ganze schnell macht.
+
+00:08:44.300 --> 00:08:49.680
+Da Du Dich im selben Chat befindest, aus dem das Skelett stammt, tippst Du einfach Code aktualisieren und detaillierte Fehlermeldungen schreiben unten.
+
+00:08:50.640 --> 00:08:54.660
+Co-Pilot fängt nicht bei Null an, sondern aktualisiert buchstäblich den Code, den Du direkt in Deinem Editor hast.
+
+00:08:55.420 --> 00:08:58.400
+Kein Hin- und Herwechseln zwischen Browser-Tabs oder das Neuerstellen von Prompts von Gründen.
+
+00:08:58.860 --> 00:09:02.060
+Es ist iterativ nicht bloß das Kopieren, nein. Und Du kannst die Auswirkungen sofort sehen.
+
+00:09:02.420 --> 00:09:03.460
+Stell den Vor- und Nachher-Effekt vor.
+
+00:09:03.900 --> 00:09:05.720
+Ihr erster Entwurf meldet ungültige Eingabe.
+
+00:09:05.720 --> 00:09:11.380
+Nach einer Verfeinerung heißt es, Telefonnummer darf nur Ziffern enthalten und muss mindestens 10 Zeichen lang sein.
+
+00:09:12.100 --> 00:09:13.920
+Diese Klarheit verbessert das Nutzererlebnisgrundlegen.
+
+00:09:14.360 --> 00:09:16.040
+Statt vor einer Wand stehen Sie nun an einem Leitfaden.
+
+00:09:16.720 --> 00:09:18.860
+Sie wissen, was schiefgelaufen ist und wie Sie es selbst beheben können.
+
+00:09:19.260 --> 00:09:21.740
+Kein Ticket, kein Ärger, weniger Zeitverlust für Sie.
+
+00:09:22.500 --> 00:09:24.980
+Fragen Sie bei Randfällen nach und Co-Pilot erweitert die Schutzschicht.
+
+00:09:25.720 --> 00:09:28.280
+Müssen Sie prüfen, ob sich Sonderzeichen in Zahlenfelder einschleichen?
+
+00:09:28.800 --> 00:09:30.380
+Fragen Sie Co-Pilot direkt im selben Thread.
+
+00:09:30.380 --> 00:09:33.000
+Wünschen Sie differenziertere Antworten für verschiedene Fehlertypen?
+
+00:09:33.600 --> 00:09:34.420
+Derselbe Arbeitsablauf.
+
+00:09:34.680 --> 00:09:38.700
+Mit jedem Mal wird das Skript robuster und, zwar mit Kontext zu Ihrer Powerpages-Umgebung,
+
+00:09:38.860 --> 00:09:40.880
+nicht nur mit generischem Webcode im Webcode.
+
+00:09:41.460 --> 00:09:43.480
+Was sich wirklich ändert, ist die Art und Weise, wie Sie Fehler beheben.
+
+00:09:43.940 --> 00:09:47.240
+Sie bekämpfen nicht mehr kaputte Syntaxzeilen, sondern formen funktionierende Entwürfe.
+
+00:09:48.200 --> 00:09:51.900
+Co-Pilot liefert Ihnen bereits eine funktionierende Basis, sodass Sie Ihre Energie in das Feintuning stecken können.
+
+00:09:52.260 --> 00:09:57.140
+Statt mit Syntax-Eigenheiten zu experimentieren, gestalten Sie gezielt, wie der Code mit dem Nutzer kommuniziert.
+
+00:09:57.700 --> 00:10:00.260
+Das reduziert Überarbeitungen und senkt das Support-Aufkommen.
+
+00:10:00.760 --> 00:10:05.720
+Wenn Sie diesen Prozess betrachten, Grundgerüst, Nachrichten verfeinern, gegen Randfälle absichern, bereitstellen,
+
+00:10:05.820 --> 00:10:09.660
+merken Sie, dass Sie nicht nur Datenchaos verhindern, sondern aktiv die künftige Support-Last senken.
+
+00:10:09.960 --> 00:10:10.140
+Sink.
+
+00:10:10.620 --> 00:10:13.740
+Jede sorgfältig formulierte Fehlermeldung bedeutet ein Warum. Funktioniert das nicht?
+
+00:10:14.000 --> 00:10:14.880
+Minus in einiger Warteschlag.
+
+00:10:15.600 --> 00:10:19.200
+Jede abgedeckte Randfall bedeutet ein instabiles Feld weniger, das in der Produktion Probleme verursacht.
+
+00:10:19.920 --> 00:10:24.800
+Wenn die Verfeinerungen von Co-Pilot integriert sind, existiert das Grundgerüst zwar noch unter der Rüstung, aber es ist völlig verändert.
+
+00:10:24.800 --> 00:10:32.620
+Was als Notlösung begann, wird zu etwas, das robust genug für Produktionsdaten ist, mit Feedback, das den Nutzer schult, statt ihn auszusperren, starren.
+
+00:10:32.620 --> 00:10:37.240
+Wie ein Papierschild, das zu einer Panzerplatte geschmiedet wurde, verändert es das Erlebnis auf beiden Seiten des Bildschirms.
+
+00:10:37.980 --> 00:10:42.240
+Und während skriptbasierte Validierung nur ein Teil des Puzzles ist, gibt es ein größeres Schlachtfeld drumherum.
+
+00:10:42.720 --> 00:10:47.660
+Der Code kann gepanzert sein, doch die Frage bleibt, wie verwalten Sie die gesamte Struktur, ohne an Geschwindigkeit zu verlieren.
+
+00:10:48.380 --> 00:10:49.780
+Hier zeigt sich die nächste Herausforderung.
+
+00:10:50.040 --> 00:10:52.620
+Nicht im Skript selbst, sondern in der Art, wie Sie die Landkarte Ihrer Website handhaben.
+
+00:10:52.620 --> 00:10:56.500
+Bearbeitung der Dungeon-Karte mit CLI und VS Code
+
+00:10:56.500 --> 00:11:00.640
+Wenn Sie über einzelne Skripte hinausgehen und Ihre gesamte Website verwalten wollen, reicht Ruhegewalt.
+
+00:11:00.980 --> 00:11:03.520
+Beim Bearbeiten nicht aus. Sie brauchen eine ordentliche Karte.
+
+00:11:04.420 --> 00:11:09.980
+Die Dungeon-Karte mit CLI und VS Code zu bearbeiten bedeutet, nicht mehr blind durch Gänge zu irren, sondern jeden Korridor klar im Blick zu haben.
+
+00:11:10.720 --> 00:11:17.000
+Die umständliche Methode ist das Jonglieren mit Browser-Tabs im Designstudio, das Hin- und Herspringen zum Terminal und das Verschieben von Dateien nur um eine kleine Änderung vorzunehmen.
+
+00:11:17.000 --> 00:11:18.880
+Es funktioniert zwar wirklich, aber schwerfällig.
+
+00:11:19.240 --> 00:11:23.100
+Der integrierte Weg besteht darin, alle Website-Inhalte lokal mit der Power-Plattform-CLI herunterzuladen
+
+00:11:23.100 --> 00:11:27.340
+und dann über die Power-Plattform-Tools-Erweiterung in VS Code zu bearbeiten und bereitzustellen.
+
+00:11:27.420 --> 00:11:30.000
+Ein Workflow, kein unnötiges Hin und Her. So funktioniert es.
+
+00:11:30.460 --> 00:11:34.400
+Bevor Sie irgendetwas tun, authentifizieren Sie sich gegenüber Ihrer Dataverse-Umgebung.
+
+00:11:34.920 --> 00:11:38.480
+Dennen Sie es sich so vor, als würden Sie die Haustür aufschließen, damit die CLI überhaupt auf Ihre Website zugreifen kann.
+
+00:11:39.300 --> 00:11:44.180
+Sobald Sie authentifiziert sind, führen Sie einen einzigen Befehl aus, um die Website-Inhalte in Ihren lokalen Arbeitsbereich herunterzuladen.
+
+00:11:44.180 --> 00:11:48.360
+Dieser Abruf lädt die Templates, Skripte, CSS-Dateien und Assets herunter.
+
+00:11:49.180 --> 00:11:52.040
+Eine vollständige Kopie der Erkenntnisse Ihrer Website auf Ihrem Computer.
+
+00:11:52.800 --> 00:11:57.540
+Auch Co-Pilot profitiert davon, denn mit den lokalen Dateien kann er sich auf umgebungsspezifische Entitäten beziehen,
+
+00:11:57.700 --> 00:11:59.400
+statt nur allgemeine Vermutungen anzustellen.
+
+00:12:00.280 --> 00:12:01.620
+Ab diesem Punkt bleiben Sie komplett in Vollscope.
+
+00:12:02.020 --> 00:12:04.620
+Möchten Sie ein Liquid-Template anpassen? Die Datei liegt direkt an.
+
+00:12:04.900 --> 00:12:07.800
+Die Validierungslogik? Öffnen Sie die JavaScript-Datei direkt daneben.
+
+00:12:08.020 --> 00:12:11.340
+Und da alles zentralisiert ist, sehen Sie in Echtzeit, wie die Teile zusammenhängen,
+
+00:12:11.380 --> 00:12:13.980
+statt ständig zwischen verschiedenen Tools ohne Gesamtkontext zu wechseln.
+
+00:12:14.960 --> 00:12:18.140
+Die Power-Plattform-Tools-Erweiterung macht die CLI-Befehle übersichtlich.
+
+00:12:18.760 --> 00:12:20.620
+Sie haben zwar immer noch die Rohrbefehlszelle zur Verfügung,
+
+00:12:20.740 --> 00:12:23.060
+aber sie befindet sich jetzt im integrierten Terminal von Voice Code,
+
+00:12:23.160 --> 00:12:25.480
+direkt verbunden mit dem Arbeitsbereich, in dem Sie programmieren.
+
+00:12:26.560 --> 00:12:29.000
+Das bedeutet, Sie müssen sich nicht jedes Mal lange Zeichenfolgen merken,
+
+00:12:29.060 --> 00:12:30.380
+wenn Sie dieselben Befehle ausführen.
+
+00:12:31.340 --> 00:12:32.220
+Herunterladen, Bereitstellen.
+
+00:12:32.720 --> 00:12:33.680
+Ein reibungsloser Kreislauf.
+
+00:12:33.960 --> 00:12:35.740
+Keine verbleibenden Fragmente, die aus dem Takt geraten.
+
+00:12:35.740 --> 00:12:37.600
+Auch die Bereitstellung selbst wird vereinfacht.
+
+00:12:37.600 --> 00:12:41.220
+Nach den Änderungen verwenden Sie denselben CLI-basierten Workflow,
+
+00:12:41.380 --> 00:12:43.980
+um die Änderungen zurück in Ihre Power-Pages-Umgebung zu pushen.
+
+00:12:44.500 --> 00:12:47.580
+Das schließt den Kreis ohne die üblichen doppelten Arbeitsschritte oder Versionskonflikte.
+
+00:12:48.060 --> 00:12:50.180
+Sie kopieren keine Ordner manuell und müssen nicht hoffen,
+
+00:12:50.300 --> 00:12:52.000
+dass Ihre Browser Sie zum Licht abgelaufen ist.
+
+00:12:52.560 --> 00:12:55.460
+Sie behalten alles in einer Umgebung, die Sie tatsächlich kontrollieren.
+
+00:12:56.180 --> 00:12:58.140
+Und der Produktivitätsgewinn zeigt sich besonders,
+
+00:12:58.240 --> 00:12:59.860
+wenn Sie Co-Pilot in diesen Kreislauf einbinden.
+
+00:13:00.260 --> 00:13:01.780
+Statt isolierte Schnipsel zu jonglieren,
+
+00:13:01.780 --> 00:13:05.800
+finden Ihre Ad-Power-Pages-Prompts nun im selben Arbeitsbereich statt wie Ihre Website-Inhalte.
+
+00:13:06.340 --> 00:13:08.480
+Sie können ein Validierungsskript anpassen und sofort testen,
+
+00:13:08.560 --> 00:13:10.440
+wie es mit den Liquid-Templates zweiter interagiert.
+
+00:13:11.200 --> 00:13:13.940
+Es ist eine Umgebung, ein Kontext, ein Schritt von der Frage zur Antwort.
+
+00:13:14.920 --> 00:13:16.760
+Um es konkret zu machen, zeige ich es Ihnen in einer kurzen Demo.
+
+00:13:17.260 --> 00:13:19.700
+Führen Sie einen CLI-Befehl aus, um Ihre Website abzurufen,
+
+00:13:19.800 --> 00:13:23.080
+öffnen Sie sowohl die Liquid-Datei einer Seite als auch deren Validierungsskript in 4SCode
+
+00:13:23.080 --> 00:13:25.920
+und bitten Sie dann Ad-Power-Pages, die Fehlermeldung zu verbessern.
+
+00:13:26.400 --> 00:13:27.300
+Das ist der gesamte Prozess.
+
+00:13:27.900 --> 00:13:31.120
+Den Plan vor Augen, die Dateien griffbereit, der KI-Assistent auf Abruf.
+
+00:13:32.580 --> 00:13:36.120
+Der wahre Gewinn liegt nicht darin, mehr Tools hinzuzufügen, sondern sie zu konsolidieren.
+
+00:13:36.840 --> 00:13:40.480
+Sie eliminieren Kontextwechsel, bleiben fokussiert und arbeiten in einem stabilen Rahmen,
+
+00:13:40.680 --> 00:13:43.220
+in dem Programmierung, Inhalte und Unterstützung aufeinander abgestimmt sind.
+
+00:13:43.920 --> 00:13:47.260
+Es spart Zeit, aber noch wichtiger ist, dass Sie keine Energie für Ablenkungen verschwenden,
+
+00:13:47.380 --> 00:13:48.500
+statt für den eigentlichen Aufbau.
+
+00:13:48.700 --> 00:13:48.900
+Stach!
+
+00:13:49.580 --> 00:13:53.640
+Mit der Karte endlich in Ihren Händen stolpern Sie nicht mehr herum und fragen sich, wo der nächste Engpass ist.
+
+00:13:54.360 --> 00:13:57.160
+Aber selbst wenn das Layout des Dungeons klar ist, bleiben manche Kämpfe.
+
+00:13:57.780 --> 00:14:00.060
+Denn wenn der Boss als Haufen von Debug-Federn getarnt auftaucht,
+
+00:14:00.060 --> 00:14:02.360
+ist der eigentliche Test, ob Sie sein Angriffsmuster lesen können.
+
+00:14:02.680 --> 00:14:02.900
+Husche!
+
+00:14:03.860 --> 00:14:06.080
+Und das ist ein Kampf, in den viele Entwickler immer noch blind hineingehen.
+
+00:14:07.020 --> 00:14:08.940
+Bosskämpfe beim Debuggen mit Co-Pilot meistern.
+
+00:14:09.440 --> 00:14:11.960
+Manchmal besteht die wahre Herausforderung gar nicht darin, neuen Code zu schreiben,
+
+00:14:12.040 --> 00:14:14.940
+sondern herauszufinden, warum etwas, das eigentlich in Ordnung schien, plötzlich fehlerhaft reagiert.
+
+00:14:15.980 --> 00:14:18.760
+Genau hier kommen Bosskämpfe beim Debuggen mit Co-Pilot ins Spiel.
+
+00:14:20.400 --> 00:14:22.120
+Das Debuggen in Powerpages kann sich anfühlen,
+
+00:14:22.160 --> 00:14:24.940
+als würde man sich mit einem Bossmonster duellieren, das seine Angriffsmuster verbirgt.
+
+00:14:24.940 --> 00:14:26.240
+Fehler sehen willkürlich aus.
+
+00:14:26.560 --> 00:14:28.020
+Die Protokolle schreien ohne Kontext.
+
+00:14:28.660 --> 00:14:29.860
+Sie durchsuchen lange Skripte.
+
+00:14:30.100 --> 00:14:34.780
+Unsicher, ob das Problem die Syntax, ein fehlerhaftes Liquid-Tag oder die nicht kooperierenden Dataverse-Bindungen sind.
+
+00:14:35.300 --> 00:14:37.560
+Was eine schnelle Lösung hätte sein sollen, verschlingt eine ganze Sitzung,
+
+00:14:37.600 --> 00:14:39.160
+weil Sie Zeile für Zeile Kauderwelsch übersetzen.
+
+00:14:39.840 --> 00:14:40.820
+Liquid macht das noch schwieriger.
+
+00:14:41.540 --> 00:14:42.740
+Ein winziges Tag kann die Seite verändern.
+
+00:14:43.460 --> 00:14:45.440
+Manchmal sauber, manchmal auf spektakuläre Weise falsch.
+
+00:14:46.600 --> 00:14:49.160
+Ein Prozent-Inklude-Prozent fügt Inhalte problemlos ein.
+
+00:14:50.360 --> 00:14:53.180
+Ein anderes in einem leicht geänderten Kontext zerstört das gesamte Layout.
+
+00:14:53.180 --> 00:14:55.400
+Dataverse-Bindungen sorgen für zusätzliche Reiben.
+
+00:14:55.880 --> 00:14:58.740
+Sie können auf einem Formular korrekt aufgelöst werden und auf einem anderen lautlos fehlschlagen.
+
+00:14:59.260 --> 00:15:01.300
+Die eigene Anleitung von Microsoft erkennt diese Eigenheit an.
+
+00:15:01.960 --> 00:15:04.840
+Liquid und Dataverse verhalten sich je nach Platzierung unterschiedlich, was bedeutet.
+
+00:15:05.160 --> 00:15:08.440
+Das einfach so lange verschieben, bis es funktioniert, zu ihrem inoffiziellen Workflow wird.
+
+00:15:09.320 --> 00:15:12.440
+Genau hier verbessert der Co-Pilot in Power Pages ihre Erfolgschancen.
+
+00:15:13.160 --> 00:15:15.420
+Anstatt einen Nachmittag mit blinden Experimenten zu verschwenden,
+
+00:15:15.840 --> 00:15:17.180
+können Sie den Code ins Rampenlicht rücken.
+
+00:15:17.720 --> 00:15:18.480
+Sie tippen einfach.
+
+00:15:18.480 --> 00:15:22.660
+At Power Pages erkläre den folgenden Code, Prozent-Inklude-Page-Copy-Prozent,
+
+00:15:23.100 --> 00:15:25.100
+in den Copy-The-Chat, in den Co-Pilot-Chat.
+
+00:15:25.540 --> 00:15:27.400
+Kein Herumgerede, keine allgemeinen Ratschläge.
+
+00:15:28.100 --> 00:15:31.760
+Das Ergebnis ist eine verständliche Erklärung, die erläutert, was das Tag tut, was es einbindet
+
+00:15:31.760 --> 00:15:34.540
+und warum seine Position auf der Seite das Verhalten beeinflusst.
+
+00:15:35.180 --> 00:15:39.140
+Im Grunde hören Sie auf zu raten und haben endlich ein lesbares Skripte-Angriffsmuster des Bosses.
+
+00:15:39.820 --> 00:15:42.680
+Um das Beste daraus zu machen, strukturieren Sie Ihr Debugging wie eine kurze Demo.
+
+00:15:43.300 --> 00:15:44.720
+Identifizieren Sie zuerst den fehlerhaften Code-Schnips.
+
+00:15:44.720 --> 00:15:46.800
+Ein Formular stürzt nach einem Include-Tag ab.
+
+00:15:47.380 --> 00:15:50.260
+Geben Sie zweitens den exakten Code mit dem Erklärungsbefehl den Co-Pilot ein.
+
+00:15:50.800 --> 00:15:54.740
+Drittens nutzen Sie die Erklärung von Co-Pilot für eine kleine Umschreibung oder Layout-Anpassung.
+
+00:15:55.140 --> 00:15:55.640
+Testen Sie dann.
+
+00:15:56.000 --> 00:15:57.960
+Die Schritte sind kompakt erklären, anwenden, testen.
+
+00:15:58.220 --> 00:16:00.780
+Sie sehen Ergebnisse, ohne in endlosem Ausprobieren gefangen zu sein.
+
+00:16:01.200 --> 00:16:02.640
+Und Co-Pilot geht weit über das Übersetzen hinaus.
+
+00:16:03.040 --> 00:16:04.460
+Im selben Chat können Sie um eine Lösung bitten.
+
+00:16:05.060 --> 00:16:08.120
+Co-Pilot kann beispielsweise vorschlagen, die Verschachtelung des Includes anzupassen,
+
+00:16:08.200 --> 00:16:10.280
+damit sie zum Layout passt oder JavaScript so zu optimieren,
+
+00:16:10.280 --> 00:16:14.840
+das ein Event-Händler feuert, ohne die Konsole zum Absturz zu bringen, ohne die Konsole zum Absturz zu bringen.
+
+00:16:15.000 --> 00:16:17.640
+Da es kontextbezogen in Ihrem Powerpages-Workspace arbeitet,
+
+00:16:18.080 --> 00:16:21.340
+bezieht sich der Rat direkt auf Ihre Umgebung, statt im allgemeinen Webraum zu schweben.
+
+00:16:22.000 --> 00:16:24.440
+Das ist der Unterschied zwischen einem zufälligen Trankverkäufer und jemandem,
+
+00:16:24.560 --> 00:16:26.300
+der den Endgegner wirklich kennt, gegen den Sie kämpfen.
+
+00:16:26.760 --> 00:16:27.600
+Der Nutzen ist unmittelbar.
+
+00:16:28.020 --> 00:16:30.480
+Statt einen halben Tag damit zu verbringen, eine defekte Bindung zu isolieren,
+
+00:16:30.580 --> 00:16:32.400
+gelangen Sie direkt zum Verständnis, warum Sie fehlschlägen.
+
+00:16:32.700 --> 00:16:35.500
+Das macht das Debugging von mühsamem Zufallsspiel zu etwas taktischem.
+
+00:16:35.940 --> 00:16:38.240
+Sie sehen, was kaputt war, wenden einen gezielten Patch an und bestätigen,
+
+00:16:38.240 --> 00:16:42.100
+ob sich das Verhalten stabilisiert. Es fühlt sich weniger wie das Ziehen von Würfeln aus einem verfluchten Beutel an,
+
+00:16:42.140 --> 00:16:43.560
+sondern mehr wie das Reagieren auf sichtbare Muster.
+
+00:16:43.980 --> 00:16:45.060
+Ist der Kontrast in der Praxis?
+
+00:16:45.620 --> 00:16:47.260
+Früher ließ sie eine Fehlermeldung wie
+
+00:16:47.260 --> 00:16:50.260
+Etwas ist schiefgelaufen, endlos um das Problem kreisen.
+
+00:16:51.240 --> 00:16:55.040
+Mit Co-Pilots-Erklärung erfahren Sie, dass das Include-Tag ein spezifisches Seitenfragment lädt
+
+00:16:55.040 --> 00:16:57.780
+und durch Ihre Platzierung einen erforderlichen Container überschrieb.
+
+00:16:58.840 --> 00:17:01.880
+Sie schreien die Platzierung wie vom Co-Pilot vorgeschlagen, umtesten erneut das Formulabel-Lapcheck.
+
+00:17:02.560 --> 00:17:04.860
+In drei Schritten gelangen Sie von der Verwirrung zur Lösung.
+
+00:17:05.720 --> 00:17:07.520
+Natürlich gibt es eine Regel, die man wiederholen muss.
+
+00:17:07.520 --> 00:17:10.120
+Co-Pilot macht gute Vorschläge, aber das ist keine Garantie.
+
+00:17:10.940 --> 00:17:13.160
+Überprüfen und testen Sie immer, bevor Sie in die Produktion gehen.
+
+00:17:13.660 --> 00:17:17.340
+Betrachten Sie die Ausgaben, mal Strategiehilfe nicht als sofortige Beute, die Sie blind ausrüsten können.
+
+00:17:17.840 --> 00:17:20.020
+Sie sparen Zeit, aber Ihr Urteilsvermögen hält das System stabil.
+
+00:17:20.720 --> 00:17:23.920
+Sobald Sie diesen Feedback-Kreislauf aus Erklären, Anpassen und Bestätigen aufgebaut haben,
+
+00:17:24.000 --> 00:17:25.240
+schwindet der Respekt vor dem Debugging.
+
+00:17:25.960 --> 00:17:28.040
+Liquid wirkt nicht mehr wie ein chaotischer Trickstar,
+
+00:17:28.280 --> 00:17:30.300
+Dataverse-Eigenheiten sind keine völligen Rätsel mehr
+
+00:17:30.300 --> 00:17:33.480
+und selbst JavaScript-Überraschungen werden zu handhabbaren Gegenangriffen.
+
+00:17:33.480 --> 00:17:35.920
+Ein Bosskampf bleibt eine Herausforderung,
+
+00:17:36.040 --> 00:17:38.880
+aber Sie kämpfen mit Durchblick statt Treffer aus zufälligen Winkeln einzustecken
+
+00:17:38.880 --> 00:17:40.940
+und dieser Perspektivwechsel ist der eigentliche Sieg.
+
+00:17:41.600 --> 00:17:43.880
+Das Debugging mit Co-Pilot beseitigt nicht die Begegnung selbst.
+
+00:17:44.580 --> 00:17:47.240
+Sie programmieren weiterhin, testen weiterhin und beheben weiterhin Fehler,
+
+00:17:47.360 --> 00:17:50.320
+aber Sie verschwenden keine Energie mehr damit, rätselhafte Ausgaben zu interpretieren,
+
+00:17:50.440 --> 00:17:53.460
+sondern nutzen zuverlässige Vorteile, was den Grundstein für das letzte Stück legt.
+
+00:17:54.140 --> 00:17:57.760
+Wozu all diese Änderungen führen, sobald Sie einen Schritt zurücktreten und das größere Ziel betrachten?
+
+00:17:57.760 --> 00:17:59.820
+Das Fazit läuft auf Folgendes hinaus.
+
+00:18:00.380 --> 00:18:02.740
+Co-Pilot überspringt keine Kämpfe, er verändert, wie sie es angeht.
+
+00:18:03.460 --> 00:18:06.840
+Sie bewegen sich weg von fragilem Ausprobieren hin zu KI-gestütztem Code,
+
+00:18:07.000 --> 00:18:09.920
+der sich selbst erklärt, auf Befehl verfeinert wird und Abläufe erstellt,
+
+00:18:10.160 --> 00:18:11.900
+die Benutzer ohne Frust bewältigen können.
+
+00:18:12.760 --> 00:18:13.880
+Hier sind Ihre fünf Erfolge.
+
+00:18:14.000 --> 00:18:17.260
+Liquid-Vorlagen optimieren, JavaScript- und Formularvalidierung beschleunigen,
+
+00:18:17.400 --> 00:18:19.540
+verständliche Erklärungen für knifflige Snippets erhalten,
+
+00:18:19.760 --> 00:18:22.140
+HTML und Bootstrap für Responsive Layouts einfügen
+
+00:18:22.140 --> 00:18:24.820
+und Web-AP-Aufrufe ohne Rätselraten vereinfachen.
+
+00:18:24.820 --> 00:18:27.100
+Einige Funktionen befinden sich noch in der Vorschau.
+
+00:18:27.480 --> 00:18:30.780
+Mandanten-Administratoren aktivieren diese über den Co-Pelder-Tab im Power-Plattform-Admin-Set.
+
+00:18:31.040 --> 00:18:33.420
+Fragen Sie also bei Ihrem Administrator nach, falls Funktionen fehlen sollten.
+
+00:18:34.060 --> 00:18:35.280
+Boss besiegt, Beute gesichert.
+
+00:18:35.780 --> 00:18:38.620
+Aktivieren Sie den Abonnieren-Buff, läuten Sie die Glocke für zukünftige Demos
+
+00:18:38.620 --> 00:18:41.220
+und hinterlassen Sie einen Kommentar mit dem Anvalidierungs- oder Liquid-Problem,
+
+00:18:41.300 --> 00:18:42.420
+das Co-Pilot als nächstes angeht.
+
+00:18:42.620 --> 00:18:45.160
+Wir werden zukünftige Anleitungen auf Ihre schwierigsten Anliegen zuschneiden.
+
+00:18:45.160 --> 00:18:56.660
+Untertitelung des ZDF, 2020
