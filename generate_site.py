@@ -441,6 +441,20 @@ def con_bar(lang):
     return (f'<div class="mbar"><a href="https://m365con.net" rel="noopener"><b>{esc(BAR_T.get(lang, BAR_T["en"]))}</b> · 11–22 Jan 2027 · 120 sessions<i>→ m365con.net</i></a></div>')
 
 
+COMMUNITY_API = os.environ.get("COMMUNITY_API", "https://api.dub.m365.fm")
+_CI = json.loads((ROOT / "data" / "community_i18n.json").read_text("utf-8")) if (ROOT / "data" / "community_i18n.json").exists() else {}
+
+
+def community_tags(lang, vid=None, mode=""):
+    """Skripte/Stile fuer Community-Widgets (blenden sich aus, wenn die API nicht erreichbar ist)."""
+    t = dict(_CI.get("en", {}))
+    t.update(_CI.get(lang, {}))
+    priv = f"{BASE}/{'datenschutz' if lang == 'de' else 'privacy'}/"
+    cfg = {"api": COMMUNITY_API, "lang": lang, "vid": vid, "t": t, "privacy": priv, "communityUrl": f"{BASE}/{lang}/community/"}
+    return (f'<link rel="stylesheet" href="{BASE}/assets/community.css">'
+            f'<script>window.M365C={json.dumps(cfg, ensure_ascii=False).replace("</", "<\\/")}</script><script defer src="{BASE}/assets/community.js"></script>')
+
+
 _ABOUT_L = set(json.loads((ROOT / "data" / "about_i18n.json").read_text("utf-8"))) if (ROOT / "data" / "about_i18n.json").exists() else set()
 
 
@@ -454,12 +468,13 @@ def header(lang, switch):
         home = f"{BASE}/{lang}/"
         menu = [(ui[3], home), (ui[5], about_url(lang)), ("M365Con", "https://m365con.net"), ("m365.fm", "https://www.m365.fm")]
         menu.insert(1, ((TOP_L if lang in TOP_REAL else REC_L).get(lang, "Top"), f"{BASE}/{lang}/top/"))
+        menu.insert(2, (_CI.get(lang, _CI.get("en", {})).get("community", "Community"), f"{BASE}/{lang}/community/"))
     else:
         home = f"{BASE}/"
         menu = [("Languages", f"{BASE}/#languages"), ("About Mirko Peters", f"{BASE}/about/mirko-peters/"), ("M365Con", "https://m365con.net"), ("m365.fm", "https://www.m365.fm")]
     if not switch:
         items = [(x, LANGS[x][0], f"{BASE}/{x}/", LANGS[x][1]) for x in LANGS if (ROOT / "episodes").exists()]
-        switch = lang_dropdown("en", items, "")
+        switch = lang_dropdown(lang if lang in LANGS else "en", items, "")
     return site_header(home, home, menu, switch, con_bar(lang))
 
 
@@ -765,8 +780,9 @@ def build():
 {author_box(l)}
 </article>
 {('<h2>' + esc(ui[4]) + '</h2><div class="list">' + rel + '</div>') if rel else ''}
-<p style="margin-top:1.6em"><a class="btn" href="{BASE}/{l}/">{esc(ui[3])} →</a></p></main>
-{footer(l)}{PLAT_JS}{INFO_JS}"""
+<p style="margin-top:1.6em"><a class="btn" href="{BASE}/{l}/">{esc(ui[3])} →</a></p>
+<section id="c-comments"></section><section id="c-sub"></section></main>
+{footer(l)}{PLAT_JS}{INFO_JS}{community_tags(l, vid)}"""
         OG_COVER[canonical] = art_svg(vid, LANGS[l][0], lang=l)
         write(f'{l}/{it["slug"]}/index.html',
               page(l, e["title"], short(intro), canonical, body, alts, ld, extra_head=f'<meta property="article:section" content="{esc(cat_name(pc, l))}">' + "".join(f'<meta property="article:tag" content="{esc(t)}">' for t in tagraw[l][vid])))
@@ -804,7 +820,7 @@ def build():
 <div class="stats"><div><b>{len(newest)}</b><span>{esc(ui[3])}</span></div><div><b>{nvid}</b><span>Videos</span></div><div><b>{len(active)}</b><span>Languages</span></div></div>
 <div class="sec"><div class="kicker">01 · {esc(ui[3])}</div><div class="thumbs">{thumbs}</div></div></main>
 {m365con_band()}
-<main class="wrap">{faq_html(l, "FAQ")}{author_box(l)}</main>{footer(l)}{PLAT_JS}"""
+<main class="wrap"><section id="c-curator"></section><section id="c-sub"></section>{faq_html(l, "FAQ")}{author_box(l)}</main>{footer(l)}{PLAT_JS}{community_tags(l)}"""
         write(f"{l}/index.html", page(l, title, short(d), f"{BASE}/{l}/", body, alts_home, ld, og_type="website"))
         sitemap.append((f"{BASE}/{l}/", TODAY, alts_home))
 
@@ -849,6 +865,12 @@ def build():
     for path, fn, lg, ttl in (("impressum", SL.impressum_de, "de", "Impressum"), ("legal", SL.impressum_en, "en", "Legal notice"),
                               ("datenschutz", SL.privacy_de, "de", "Datenschutz"), ("privacy", SL.privacy_en, "en", "Privacy policy")):
         write(f"{path}/index.html", page(lg, f"{ttl} – M365.FM", ttl, f"{BASE}/{path}/", f"{header(lg, '')}<main class=\"wrap\" style=\"max-width:46em\">{fn()}</main>{footer(lg)}", og_type="website", noindex=True))
+
+    # Community-Seite je Sprache (noindex) + Service Worker fuer Web-Push
+    for l in active:
+        ct = _CI.get(l, _CI.get("en", {})).get("community", "Community")
+        write(f"{l}/community/index.html", page(l, f"{ct} – M365.FM {LANGS[l][0]}", ct, f"{BASE}/{l}/community/", f'{header(l, "")}<main class="wrap" style="max-width:48em"><div id="c-page"></div></main>{footer(l)}{community_tags(l)}', og_type="website", noindex=True))
+    shutil.copy(ROOT / "assets" / "sw.js", OUT / "sw.js")
 
     # Entity-Seite
     A_EN = json.loads((ROOT / "data" / "about_en.json").read_text("utf-8"))
