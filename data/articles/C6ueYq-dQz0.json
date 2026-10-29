@@ -27,6 +27,24 @@
      "text": "Die Antwort läuft zurück durchs Gateway; Logs und Metriken entstehen zentral an einer Stelle."
     }
    ]
-  }
+  },
+  "faq": [
+   {
+    "q": "Was ist ein API-Gateway und was macht es?",
+    "a": "Ein API-Gateway ist ein zentraler Einstiegspunkt zwischen Clients und Backenddiensten. Jede Anfrage läuft zuerst durch das Gateway, das entscheidet, wohin sie geleitet wird, ob sie erlaubt ist und was zurückgeschickt wird. Clients sprechen nie direkt mit den Backends."
+   },
+   {
+    "q": "Welche Aufgaben übernimmt ein API-Gateway?",
+    "a": "Die Kernaufgaben sind Routing, zentrale Authentifizierung und Autorisierung, Ratenbegrenzung mit Drosselung und Load Balancing sowie Datentransformation. Sie arbeiten in einer Pipeline zusammen. Zusätzlich liefert das Gateway Logs, Metriken und Analysen aus einem zentralen Punkt."
+   },
+   {
+    "q": "Ab wann brauche ich ein API-Gateway?",
+    "a": "Bei nur einem oder zwei Diensten brauchen Sie wahrscheinlich keines, da Routing und Authentifizierung auch selbst umsetzbar sind. Ab drei Diensten oder wenn Sie APIs für externe Clients freigeben, wächst die Komplexität schnell, und ein Gateway zahlt sich in der Regel aus."
+   },
+   {
+    "q": "Wie schützt ein API-Gateway meine Backend-Dienste vor Überlastung?",
+    "a": "Das Gateway begrenzt über Ratenbegrenzung und Drosselung, wie viele Anfragen ein Client stellen darf, etwa pro Nutzer, API-Schlüssel oder IP-Adresse. Zusätzlich verteilt es Anfragen per Load Balancing und Gesundheitschecks auf funktionierende Instanzen. So erreichen Lastspitzen die Backends nicht ungefiltert."
+   }
+  ]
  }
 }

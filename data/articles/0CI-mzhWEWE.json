@@ -25,6 +25,24 @@
      "Ihr Team benötigt direkten Zugriff auf Domain-Controller"
     ]
    }
-  }
+  },
+  "faq": [
+   {
+    "q": "Was ist Microsoft Entra Domain Services und wofür braucht man es?",
+    "a": "Microsoft Entra Domain Services ist eine verwaltete Windows-Domäne in Ihrem Azure-Netzwerk, deren Domain-Controller Microsoft betreibt. Sie ermöglicht Azure-VMs und älteren Apps Domänenbeitritt, LDAP, Kerberos, NTLM, DNS und Gruppenrichtlinien, ohne dass Sie eigene Domain-Controller aufbauen müssen."
+   },
+   {
+    "q": "Kann Entra ID das klassische Active Directory komplett ersetzen?",
+    "a": "Nein. Entra ID ist für Cloud-Anmeldungen, Single Sign-On und Multifaktor-Authentifizierung zuständig, ist aber kein vollständiges Active Directory. Ältere Apps, die Domänenbeitritt, LDAP, Kerberos oder Gruppenrichtlinien erwarten, können eine moderne Cloud-Anmeldenachricht nicht lesen und brauchen eine klassische Domäne."
+   },
+   {
+    "q": "Warum können sich Benutzer nach der Aktivierung von Domain Services nicht an der Domäne anmelden?",
+    "a": "Kerberos und NTLM brauchen eine geschützte Form der Passwortdaten, die bei der Cloud-Anmeldung nicht automatisch entsteht. Cloud-Benutzer müssen daher meist ihr Passwort ändern, nachdem Domain Services aktiviert wurde. Bis dahin klappt Microsoft 365, die Domäne im alten Stil aber nicht."
+   },
+   {
+    "q": "Wann sollte ich Entra Domain Services nicht verwenden?",
+    "a": "Nicht geeignet ist der Dienst, wenn eine App LDAP-Schreibzugriff oder Schemaänderungen braucht, Ihr Team direkten Zugriff auf Domain-Controller oder Domain-Administrator-Rechte benötigt oder Sie ein komplexes Verzeichnisdesign betreiben wollen. Neue Cloud-Apps sollten sich direkt über Entra ID anmelden."
+   }
+  ]
  }
 }
