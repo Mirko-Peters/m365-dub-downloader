@@ -9,6 +9,7 @@ from datetime import date
 from pathlib import Path
 import hashlib
 from site_content import FAQ
+from site_taxonomy import (CATS, ORDER, TOPICS, TAGW, cat_name, classify, tags_of, tag_slug, tag_url, related, autolink)
 
 ROOT = Path(__file__).parent
 OUT = ROOT / "docs"
@@ -126,6 +127,43 @@ footer{border-top:1px solid var(--fg);margin-top:64px;padding:26px 0 48px;font-s
 .faq details{border-bottom:1px solid var(--bd);padding:14px 0}.faq summary{cursor:pointer;font:700 1.15rem/1.35 Didot,"Bodoni 72",Georgia,"Noto Serif",serif}.faq p{margin:.6em 0 0;color:var(--mut)}
 .cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:22px;margin:16px 0}.cols h3{margin:.1em 0 .3em;font:700 1.15rem Didot,"Bodoni 72",Georgia,serif}.cols p{margin:0;color:var(--mut);font-size:.96rem}
 @media (max-width:560px){body{font-size:16px}.panel{padding:14px}.btn{padding:10px 16px}}"""
+_LR = {"latin": "U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD",
+       "latin-ext": "U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF"}
+FONT_CSS = "".join(
+    f'@font-face{{font-family:"{fam}";font-style:normal;font-weight:{w};font-display:swap;src:url(/assets/fonts/{fn}-{sub}-{w}-normal.woff2) format("woff2");unicode-range:{_LR[sub]}}}'
+    for fam, fn, ws in (("Barlow Condensed", "barlow-condensed", (500, 600, 700)), ("Barlow", "barlow", (400, 500, 600)))
+    for w in ws for sub in ("latin", "latin-ext")) + "\n"
+INDUSTRY = """
+:root{--bg:#f3f3f2;--fg:#17191c;--mut:#5d6470;--ac:#3b6391;--card:#fff;--bd:#17191c24;--ink:#1a1d21;--onink:#eef0f3}
+@media (prefers-color-scheme:dark){:root{--bg:#101214;--fg:#e9ecef;--mut:#98a0ab;--ac:#82a7d4;--card:#16191c;--bd:#e9ecef26;--ink:#1d2126;--onink:#eef0f3}}
+body{font-family:"Barlow",-apple-system,"Segoe UI",Inter,Roboto,"Noto Sans",system-ui,sans-serif}
+.serif,h1,h2,h3,h4,.brand,.tile b,.num,.row h3,.thumb h3,.faq summary,.cols h3,.stats b,.ifacts b,.info figcaption,.points li:before,.author .badge{font-family:"Barlow Condensed","Arial Narrow","Noto Sans",system-ui,sans-serif}
+h1,h2{text-transform:uppercase;font-weight:600;letter-spacing:.01em}
+h1{font-size:clamp(2.1rem,6vw,4.4rem);line-height:1;letter-spacing:0}
+article h1{font-size:clamp(1.8rem,4.2vw,3rem);line-height:1.05}
+h2{font-size:1.7rem;letter-spacing:.02em}
+.brand{text-transform:uppercase;letter-spacing:.04em;font-weight:700}.brand i{color:var(--ac)}
+.top{border-bottom:1px solid var(--bd)}
+nav.langs{font-family:"Barlow Condensed",sans-serif;font-weight:500;letter-spacing:.12em}nav.langs a[aria-current]{border-bottom:2px solid var(--ac)}
+.kicker{display:flex;align-items:center;gap:14px;font-family:"Barlow Condensed",sans-serif;font-weight:600;letter-spacing:.16em;color:var(--ac)}.kicker:after{content:"";flex:1;height:1px;background:var(--bd)}
+.row h3,.thumb h3,.faq summary,.cols h3{font-weight:600;font-size:1.4rem;line-height:1.15}
+.btn{border-radius:0;font-family:"Barlow Condensed",sans-serif;font-weight:600;letter-spacing:.1em;padding:9px 18px;border-color:var(--fg)}
+.btn.main{background:var(--ac);border-color:var(--ac);color:#fff}.btn:hover{background:var(--ac);border-color:var(--ac);color:#fff}
+.panel,.cover,.yt,.info,.portrait,.author .badge,.author img.badge{border-radius:0}.panel iframe{border-radius:0}
+.panel{background:var(--ink)}.band{background:var(--ink)}
+.tile,.thumb{position:relative}
+.tile{padding:28px 18px 18px;border:1px solid var(--bd);margin:-1px 0 0 -1px}.grid{border:0}
+.tile:before,.tile:after{content:"+";position:absolute;top:-10px;font:300 19px/1 "Barlow",sans-serif;color:var(--mut)}.tile:before{left:-5px}.tile:after{right:-5px}
+.tile b{font-weight:600;font-size:1.7rem}.tile:hover{background:var(--ink);color:var(--onink)}
+.stats{border-color:var(--bd)}.stats b{color:var(--ac);font-weight:600}.points,.list{border-top:1px solid var(--bd)}.points li:before{color:var(--ac);font-weight:600}
+.author,.share,footer{border-color:var(--bd)}.author .badge{background:var(--ac);color:#fff}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0 16px}
+.chip{display:inline-block;padding:2px 10px;border:1px solid var(--bd);font:600 .8rem/1.7 "Barlow Condensed",sans-serif;letter-spacing:.09em;text-transform:uppercase;text-decoration:none;color:var(--mut)}
+.chip.cat{border-color:var(--ac);color:var(--ac)}.chip:hover{background:var(--ac);border-color:var(--ac);color:#fff}
+.ilink{text-decoration:underline;text-decoration-color:var(--ac);text-decoration-thickness:2px;text-underline-offset:3px}
+.info{background:var(--card)}.isteps i{border-radius:0;background:var(--ac)}.icol{border-top-color:var(--ac)}.ifacts div{border-left-color:var(--ac)}
+"""
+CSS = FONT_CSS + CSS + INDUSTRY
 
 
 def esc(s): return html.escape(s or "", quote=True)
@@ -214,7 +252,7 @@ def share_html(lang, url, title):
             "if(navigator.share){navigator.share({title:t,url:u}).catch(function(){})}else if(navigator.clipboard){navigator.clipboard.writeText(u).then(function(){var o=b.textContent;b.textContent='✓';setTimeout(function(){b.textContent=o},1500)})}})});</script>")
 
 
-def page(lang, title, desc, canonical, body, alternates=None, jsonld=None, xdefault=None, og_type="article", extra_head=""):
+def page(lang, title, desc, canonical, body, alternates=None, jsonld=None, xdefault=None, og_type="article", extra_head="", noindex=False):
     hl = LANGS[lang][1] if lang in LANGS else "en"
     d = LANGS[lang][2] if lang in LANGS else "ltr"
     loc = LANGS[lang][4] if lang in LANGS else "en_US"
@@ -224,7 +262,7 @@ def page(lang, title, desc, canonical, body, alternates=None, jsonld=None, xdefa
             alt += f'<link rel="alternate" hreflang="{LANGS[l][1]}" href="{u}">\n'
         alt += f'<link rel="alternate" hreflang="x-default" href="{xdefault or BASE + "/"}">\n'
     ld = "".join(f'<script type="application/ld+json">{json.dumps(j, ensure_ascii=False)}</script>\n' for j in (jsonld or []))
-    if canonical.endswith("404.html"):
+    if canonical.endswith("404.html") or noindex:
         ogimg = f"{BASE}/assets/og-default.png"
     else:
         rel = canonical.replace(BASE, "").strip("/") or "index"
@@ -237,7 +275,7 @@ def page(lang, title, desc, canonical, body, alternates=None, jsonld=None, xdefa
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>{esc(seo_title(title) if og_type == "article" else title)}</title>
 <meta name="description" content="{esc(desc)}">
-<meta name="author" content="Mirko Peters"><meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1">
+<meta name="author" content="Mirko Peters"><meta name="robots" content="{'noindex,follow' if noindex else 'index,follow,max-image-preview:large,max-snippet:-1'}">
 <link rel="canonical" href="{canonical}">
 {alt}<meta property="og:type" content="{og_type}"><meta property="og:title" content="{esc(title)}"><meta property="og:description" content="{esc(desc)}">
 <meta property="og:url" content="{canonical}"><meta property="og:locale" content="{loc}"><meta property="og:site_name" content="M365.FM">
@@ -279,7 +317,7 @@ def art_svg(seed, big, small="M365.FM · AI"):
     return (f'<svg viewBox="0 0 1200 420" xmlns="http://www.w3.org/2000/svg" role="img" aria-hidden="true" focusable="false">'
             f'<defs><linearGradient id="g{h % 99999}" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="hsl({h1},55%,24%)"/><stop offset="1" stop-color="hsl({h2},60%,11%)"/></linearGradient></defs>'
             f'<rect width="1200" height="420" fill="url(#g{h % 99999})"/>{bars}'
-            f'<text x="60" y="92" font-family="Didot,Georgia,serif" font-size="64" font-weight="700" fill="#f6f1ea">{esc(big)}</text>'
+            f'<text x="60" y="92" font-family="Barlow Condensed,Arial Narrow,sans-serif" font-size="68" font-weight="700" fill="#f6f1ea">{esc(big)}</text>'
             f'<text x="60" y="388" font-family="system-ui,sans-serif" font-size="22" letter-spacing="5" fill="#f6f1ea" opacity=".8">{esc(small.upper())}</text>'
             f'<circle cx="1120" cy="66" r="14" fill="#b4233c"/></svg>')
 
@@ -423,6 +461,43 @@ def build():
         p.parent.mkdir(parents=True, exist_ok=True)
         p.write_text(content, encoding="utf-8")
 
+    # Taxonomie: Kategorien (video-weit) + sprachbezogene Tags
+    cat_of = {}
+    for vid, langs in eps.items():
+        texts = [langs.get("de", next(iter(langs.values())))["title"]] + [e.get("tags", "") for e in langs.values()]
+        cat_of[vid] = classify(texts)
+    tagraw = {l: {} for l in by_lang}      # lang -> vid -> [Tags in dieser Sprache]
+    for (vid, l), it in items.items():
+        tagraw[l][vid] = tags_of(it["e"])
+    tagsets = {l: {v: {t.lower() for t in ts} for v, ts in d.items()} for l, d in tagraw.items()}
+    catsets = {l: {v: set(cat_of[v]) for v in d} for l, d in tagraw.items()}
+    tagidx = {l: {} for l in by_lang}      # lang -> slug -> {"label", "items"}
+    for (vid, l), it in items.items():
+        for t in tagraw[l][vid]:
+            s = tag_slug(t)
+            if s:
+                tagidx[l].setdefault(s, {"label": t, "items": []})["items"].append(it)
+    catidx = {l: {} for l in by_lang}      # lang -> cat -> items
+    for (vid, l), it in items.items():
+        for c in cat_of[vid]:
+            catidx[l].setdefault(c, []).append(it)
+    cat_url = lambda l, c: f"{BASE}/{l}/c/{c}/"
+    autolink_log = []
+
+    def chips_html(l, it):
+        out = "".join(f'<a class="chip cat" href="{cat_url(l, c)}">{esc(cat_name(c, l))}</a>' for c in ORDER if c in cat_of[it["vid"]] and c in catidx[l])
+        for t in tagraw[l][it["vid"]]:
+            s = tag_slug(t)
+            if s and len(tagidx[l][s]["items"]) >= 2:
+                out += f'<a class="chip" rel="tag" href="{tag_url(BASE, l, t)}">{esc(t)}</a>'
+            elif s:
+                out += f'<span class="chip">{esc(t)}</span>'
+        return f'<div class="chips">{out}</div>' if out else ""
+
+    def topics_nav(l):
+        cs = "".join(f'<a class="chip cat" href="{cat_url(l, c)}">{esc(cat_name(c, l))} · {len(catidx[l][c])}</a>' for c in ORDER if c in catidx[l])
+        return f'<h2>{esc(TOPICS.get(l, "Topics"))}</h2><div class="chips">{cs}</div>'
+
     # Episoden-Seiten
     for (vid, l), it in items.items():
         e = it["e"]; ui = UI[l]
@@ -432,7 +507,7 @@ def build():
         spk = f'https://www.spreaker.com/episode/{it["eid"]}'
         yt = f"https://youtu.be/{vid}"
         tr = e.get("tr") or ""
-        more = [x for x in by_lang[l] if x["vid"] != vid][:6]
+        more = related(it, by_lang[l], tagsets[l], catsets[l])
         ld = [
             {"@context": "https://schema.org", "@type": "PodcastEpisode", "name": e["title"], "description": strip_tags(intro),
              "url": canonical, "inLanguage": LANGS[l][1], "datePublished": it["date"],
@@ -454,8 +529,14 @@ def build():
             person_ld(), org_ld(),
         ]
         ld[0]["video"] = {"@id": canonical + "#video"}
+        pc = [c for c in ORDER if c in cat_of[vid]][0]
+        ld[0]["genre"] = cat_name(pc, l)
+        ld[0]["keywords"] = ", ".join(tagraw[l][vid]) or e.get("tags", "")
         art = articles.get(vid, {}).get(l, {})
         art_html = art.get("html", "")
+        if art_html:
+            art_html, _lk = autolink(art_html, it, by_lang[l], tagraw[l], url_of)
+            autolink_log.append(((vid, l), _lk))
         if art_html and art.get("info"):
             ih = info_html(art["info"])
             art_html = re.sub(r"(</p>)", r"\1" + ih.replace("\\", "\\\\"), art_html, count=1) if ih else art_html
@@ -463,7 +544,7 @@ def build():
             ld.append({"@context": "https://schema.org", "@type": "Article", "headline": e["title"][:110], "inLanguage": LANGS[l][1],
                        "datePublished": it["date"], "dateModified": it["date"], "mainEntityOfPage": canonical,
                        "author": {"@id": f"{BASE}/about/mirko-peters/#person"}, "publisher": {"@id": f"{BASE}/#org"},
-                       "wordCount": len(strip_tags(art_html).split())})
+                       "wordCount": len(strip_tags(art_html).split()), "articleSection": cat_name(pc, l), "keywords": ", ".join(tagraw[l][vid])})
         lis = "".join(f"<li>{x}</li>" for x in bullets)
         el = elinks.get(f"{vid}:{l}", {}); sh = plat.get(l, {})
         apple = el.get("apple") or sh.get("apple_show"); spot = el.get("spotify") or sh.get("spotify_show")
@@ -482,7 +563,7 @@ def build():
 <div class="crumbs"><a href="{BASE}/{l}/">{esc(ui[7])}</a> / {esc(LANGS[l][0])} / {it["date"]}</div>
 <div class="kicker">M365.FM · {esc(LANGS[l][0])}</div>
 <h1>{esc(e["title"])}</h1>
-<p class="lede">{intro}</p>
+{chips_html(l, it)}<p class="lede">{intro}</p>
 <figure class="cover" style="margin-inline:0">{art_svg(vid, LANGS[l][0], "M365.FM · " + ui[0])}</figure>
 <div class="panel"><iframe src="https://widget.spreaker.com/player?episode_id={it["eid"]}&amp;theme=light&amp;playlist=false" height="131" loading="lazy" title="{esc(e["title"])}"></iframe>
 <div class="btns">{btns}</div>{"<p class=showrow>M365.FM ▸ " + showrow + "</p>" if showrow else ""}</div>
@@ -497,7 +578,7 @@ def build():
 <p style="margin-top:1.6em"><a class="btn" href="{BASE}/{l}/">{esc(ui[3])} →</a></p></main>
 {footer(l)}{PLAT_JS}"""
         write(f'{l}/{it["slug"]}/index.html',
-              page(l, e["title"], short(intro), canonical, body, alts, ld))
+              page(l, e["title"], short(intro), canonical, body, alts, ld, extra_head=f'<meta property="article:section" content="{esc(cat_name(pc, l))}">' + "".join(f'<meta property="article:tag" content="{esc(t)}">' for t in tagraw[l][vid])))
         sitemap.append((canonical, it["date"], alts))
 
     # Sprach-Startseiten
@@ -525,9 +606,10 @@ def build():
         if sh.get("spotify_show"): sbtn += f'<a class="btn" data-p="spotify" href="{sh["spotify_show"]}">Spotify</a>'
         sbtn += f'<a class="btn" data-p="spreaker" href="https://www.spreaker.com/show/{LANGS[l][3]}">🎧 {esc(ui[0])}</a>' + extra_btns(sh) + '<a class="btn" href="https://www.m365.fm">m365.fm</a>'
         nvid = len({i["vid"] for i in newest})
+        topics_html = topics_nav(l)
         body = f"""{header(l, lang_switch(l, alts_home, active))}
 <main class="wrap"><div class="kicker">{esc(LANGS[l][0])} · M365.FM</div><h1>{esc(title)}</h1><p class="lede">{esc(d)}</p>
-<div class="btns">{sbtn}</div>
+<div class="btns">{sbtn}</div>{topics_html}
 <div class="stats"><div><b>{len(newest)}</b><span>{esc(ui[3])}</span></div><div><b>{nvid}</b><span>Videos</span></div><div><b>{len(active)}</b><span>Languages</span></div></div>
 <h2>{esc(ui[3])}</h2><div class="thumbs">{thumbs}</div></main>
 {m365con_band()}
@@ -582,6 +664,47 @@ def build():
           f"{BASE}/about/mirko-peters/", about, None, [{"@context": "https://schema.org", "@type": "ProfilePage", "@id": f"{BASE}/about/mirko-peters/#profile", "url": f"{BASE}/about/mirko-peters/", "name": "Mirko Peters", "dateModified": TODAY, "mainEntity": {"@id": f"{BASE}/about/mirko-peters/#person"}}, person_ld(), org_ld(), event_ld(), faq_ld("en")], og_type="profile"))
     sitemap.append((f"{BASE}/about/mirko-peters/", TODAY, None))
 
+    # Kategorie-Seiten (indexierbar, in Sitemap) und Tag-Seiten (noindex,follow – nur für die interne Verlinkung)
+    def rows_html(lst):
+        return "".join(f'<a class="row" href="{url_of(x)}"><h3>{esc(x["e"]["title"])}</h3><p>{esc(short(parse_desc(x["e"]["desc"])[0], 150))}</p></a>' for x in lst)
+
+    def list_page(l, kind, label, lst, canonical, alts, noindex):
+        ui = UI[l]
+        lst = sorted(lst, key=lambda i: (i["date"], i["vid"]), reverse=True)
+        others = "".join(f'<a class="chip cat" href="{cat_url(l, c)}">{esc(cat_name(c, l))}</a>' for c in ORDER if c in catidx[l])
+        desc = short(f"{label} – {len(lst)} · " + " · ".join(strip_tags(x["e"]["title"]).split(":")[0] for x in lst[:3]), 155)
+        ld = [] if noindex else [
+            {"@context": "https://schema.org", "@type": "CollectionPage", "name": label, "url": canonical, "inLanguage": LANGS[l][1],
+             "isPartOf": {"@id": f"{BASE}/#website"}, "about": {"@type": "Thing", "name": label},
+             "mainEntity": {"@type": "ItemList", "numberOfItems": len(lst), "itemListElement": [{"@type": "ListItem", "position": n + 1, "url": url_of(i)} for n, i in enumerate(lst[:50])]}},
+            {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [
+                {"@type": "ListItem", "position": 1, "name": "M365.FM", "item": f"{BASE}/"}, {"@type": "ListItem", "position": 2, "name": LANGS[l][0], "item": f"{BASE}/{l}/"},
+                {"@type": "ListItem", "position": 3, "name": label, "item": canonical}]}]
+        body = f"""{header(l, lang_switch(l, alts or {}, active))}
+<main class="wrap"><div class="crumbs"><a href="{BASE}/{l}/">{esc(ui[7])}</a> / {esc(LANGS[l][0])}</div>
+<div class="kicker">{esc(kind)} · {esc(LANGS[l][0])}</div><h1>{esc(label)}</h1>
+<p class="mut">{len(lst)} × {esc(ui[3])}</p>
+<h2>{esc(ui[3])}</h2><div class="list">{rows_html(lst)}</div>
+<h2>{esc(TOPICS.get(l, "Topics"))}</h2><div class="chips">{others}</div>
+<p style="margin-top:1.6em"><a class="btn" href="{BASE}/{l}/">{esc(ui[3])} →</a></p></main>{footer(l)}"""
+        return page(l, label, desc, canonical, body, alts, ld, og_type="website", noindex=noindex)
+
+    ncat = ntag = 0
+    for l in active:
+        for c in ORDER:
+            if c not in catidx[l]:
+                continue
+            alts = {x: cat_url(x, c) for x in active if c in catidx[x]}
+            u = cat_url(l, c)
+            write(f"{l}/c/{c}/index.html", list_page(l, TOPICS.get(l, "Topics"), cat_name(c, l), catidx[l][c], u, alts, False))
+            sitemap.append((u, TODAY, alts))
+            ncat += 1
+        for s, d in tagidx[l].items():
+            if len(d["items"]) >= 2:
+                write(f"{l}/tag/{s}/index.html", list_page(l, TAGW.get(l, "Tag"), d["label"], d["items"], tag_url(BASE, l, d["label"]), None, True))
+                ntag += 1
+    print(ncat, "Kategorie-Seiten,", ntag, "Tag-Seiten (noindex),", sum(len(v) for _, v in autolink_log), "automatische interne Links in", sum(1 for _, v in autolink_log if v), "Artikeln")
+
     # Sitemap, robots, llms.txt, IndexNow
     def sm_file(entries):
         x = ['<?xml version="1.0" encoding="UTF-8"?>', '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">']
@@ -608,9 +731,47 @@ def build():
         idx.append(f"<sitemap><loc>{BASE}/{f}</loc><lastmod>{lm}</lastmod></sitemap>")
     idx.append("</sitemapindex>")
     write("sitemap.xml", "\n".join(idx))
-    write("robots.txt", f"User-agent: *\nAllow: /\n\nSitemap: {BASE}/sitemap.xml\n")
-    write("llms.txt", f"# M365.FM – Mirko Peters\n\n> AI-dubbed podcast episodes about Microsoft 365, Copilot, Azure and Power Platform by Microsoft MVP Mirko Peters, in {len(active)} languages.\n\n"
-          f"- [About Mirko Peters]({BASE}/about/mirko-peters/)\n" + "".join(f"- [{LANGS[l][0]}]({BASE}/{l}/)\n" for l in active))
+    write("robots.txt", f"User-agent: *\nAllow: /\n\n# KI-Suchen und Assistenten ausdrücklich erlaubt\n" + "".join(f"User-agent: {b}\nAllow: /\n\n" for b in ("GPTBot", "OAI-SearchBot", "ChatGPT-User", "ClaudeBot", "Claude-User", "Claude-SearchBot", "PerplexityBot", "Google-Extended", "Applebot-Extended", "Bingbot")) + f"Sitemap: {BASE}/sitemap.xml\n")
+    # llms.txt (Überblick), llms-full.txt (alle Folgen), agent.json (Maschinen-Beschreibung), episodes.json (Datenfeed)
+    summ = (f"AI-dubbed podcast episodes about Microsoft 365, Copilot, Azure, Power Platform and AI governance by Microsoft MVP Mirko Peters, "
+            f"in {len(active)} languages. Each episode has its own page with player, YouTube video, key points, transcript link and links to Spotify, Amazon Music, Deezer and more.")
+    L = [f"# M365.FM international – Mirko Peters", "", f"> {summ}", "",
+         "Author: Mirko Peters (Microsoft MVP), host of the M365.FM podcast and the m365 Show on YouTube, organizer of M365Con (free online conference, 2027-01-11 to 2027-01-22).", "",
+         "## Core", f"- [About Mirko Peters]({BASE}/about/mirko-peters/): profile, expertise, links", f"- [Full episode list]({BASE}/llms-full.txt): every episode with title, language and summary",
+         f"- [Machine-readable feed]({BASE}/episodes.json): all episodes as JSON", f"- [Agent card]({BASE}/agent.json): capabilities for AI agents", f"- [Sitemap]({BASE}/sitemap.xml)", "",
+         "## Languages"]
+    for l in active:
+        L.append(f"- [{LANGS[l][0]}]({BASE}/{l}/): {len(by_lang[l])} episodes – topics: " + ", ".join(cat_name(c, l) for c in ORDER if c in catidx[l]))
+    L += ["", "## Topics (English labels; localized per language)"]
+    for c in ORDER:
+        L.append(f"- {cat_name(c, 'en')}: " + ", ".join(f"[{l}]({cat_url(l, c)})" for l in active if c in catidx[l]))
+    write("llms.txt", "\n".join(L) + "\n")
+    F = [f"# M365.FM international – all episodes", "", f"> {summ}", ""]
+    for l in active:
+        F += [f"## {LANGS[l][0]} ({l})", ""]
+        for x in by_lang[l]:
+            F.append(f"- [{strip_tags(x['e']['title'])}]({url_of(x)}) – {x['date']} – " + short(parse_desc(x["e"]["desc"])[0], 200))
+        F.append("")
+    write("llms-full.txt", "\n".join(F))
+    feed = [{"id": x["vid"], "language": l, "title": strip_tags(x["e"]["title"]), "url": url_of(x), "date": x["date"], "summary": short(parse_desc(x["e"]["desc"])[0], 300),
+             "categories": [cat_name(c, "en") for c in ORDER if c in cat_of[x["vid"]]], "tags": tagraw[l][x["vid"]], "youtube": f"https://youtu.be/{x['vid']}",
+             "spreaker": f"https://www.spreaker.com/episode/{x['eid']}", "alternates": {k: url_of(v) for k, v in by_vid[x["vid"]].items()}}
+            for l in active for x in by_lang[l]]
+    write("episodes.json", json.dumps({"name": "M365.FM international", "author": "Mirko Peters", "generated": TODAY, "count": len(feed), "episodes": feed}, ensure_ascii=False))
+    write("agent.json", json.dumps({
+        "schemaVersion": "1.0", "name": "M365.FM international", "description": summ, "url": f"{BASE}/", "version": TODAY,
+        "provider": {"organization": "M365.FM", "url": "https://www.m365.fm", "person": "Mirko Peters", "personUrl": f"{BASE}/about/mirko-peters/"},
+        "documentationUrl": f"{BASE}/llms.txt", "license": "Content © Mirko Peters / M365.FM. Citation with link to the episode page welcome.",
+        "capabilities": {"streaming": False, "readOnly": True, "authentication": "none"},
+        "languages": [LANGS[l][1] for l in active],
+        "interfaces": {"llms": f"{BASE}/llms.txt", "llmsFull": f"{BASE}/llms-full.txt", "episodesJson": f"{BASE}/episodes.json", "sitemap": f"{BASE}/sitemap.xml",
+                       "rss": {l: f"https://www.spreaker.com/show/{LANGS[l][3]}/episodes/feed" for l in active}},
+        "skills": [
+            {"id": "find-episode", "name": "Find an episode", "description": "Find podcast episodes about Microsoft 365, Copilot, Azure, Power Platform, security and AI governance in a given language. Use episodes.json (filter by language, categories, tags) and link to the episode page.", "inputModes": ["text"], "outputModes": ["application/json", "text/html"]},
+            {"id": "translate-link", "name": "Same episode in another language", "description": "Each episode page lists its alternate-language versions (hreflang / 'alternates' in episodes.json).", "inputModes": ["text"], "outputModes": ["application/json"]},
+            {"id": "about-author", "name": "About Mirko Peters", "description": "Microsoft MVP, M365.FM host, M365Con organizer – see the about page.", "inputModes": ["text"], "outputModes": ["text/html"]}],
+    }, ensure_ascii=False, indent=1))
+    write(".well-known/agent.json", (OUT / "agent.json").read_text(encoding="utf-8"))
     write(f"{INDEXNOW_KEY}.txt", INDEXNOW_KEY)
     if _dom:
         write("CNAME", _dom)
