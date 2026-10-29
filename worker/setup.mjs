@@ -69,9 +69,9 @@ console.log("Fertig. Worker: https://api.dub.m365.fm");
   const H = { Authorization: "Bearer " + process.env.CLOUDFLARE_API_TOKEN }, A = process.env.CLOUDFLARE_ACCOUNT_ID;
   const g = async (p) => { try { return await (await fetch("https://api.cloudflare.com/client/v4" + p, { headers: H })).json(); } catch (e) { return { success: false, errors: [String(e)] }; } };
   const d = await g(`/accounts/${A}/workers/domains`);
-  console.log("Worker-Domains:", JSON.stringify((d.result || []).map((x) => x.hostname + "->" + x.service)), d.success ? "" : JSON.stringify(d.errors));
+  console.log("::notice::Worker-Domains:", JSON.stringify((d.result || []).map((x) => x.hostname + "->" + x.service)), d.success ? "" : JSON.stringify(d.errors));
   const z = await g("/zones?name=m365.fm"); const zid = z.result?.[0]?.id;
   const r = await g(`/zones/${zid}/dns_records?per_page=100`);
-  console.log("DNS (dub/api):", JSON.stringify((r.result || []).filter((x) => /dub|api/.test(x.name)).map((x) => `${x.type} ${x.name} -> ${String(x.content).slice(0, 40)}`)), r.success ? "" : JSON.stringify(r.errors));
-  try { const t = await fetch("https://api.dub.m365.fm/api/health"); console.log("Test api.dub.m365.fm:", t.status, (await t.text()).slice(0, 80)); } catch (e) { console.log("Test api.dub.m365.fm: nicht erreichbar", String(e.cause?.code || e)); }
+  console.log("::notice::DNS (dub/api):", JSON.stringify((r.result || []).filter((x) => /dub|api/.test(x.name)).map((x) => `${x.type} ${x.name} -> ${String(x.content).slice(0, 40)}`)), r.success ? "" : JSON.stringify(r.errors));
+  try { const t = await fetch("https://api.dub.m365.fm/api/health"); console.log("::notice::Test api.dub.m365.fm:", t.status, (await t.text()).slice(0, 80)); } catch (e) { console.log("Test api.dub.m365.fm: nicht erreichbar", String(e.cause?.code || e)); }
 }
