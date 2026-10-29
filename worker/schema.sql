@@ -85,3 +85,107 @@ CREATE TABLE IF NOT EXISTS wiki_reports (
   created INTEGER NOT NULL,
   PRIMARY KEY (rev_id, user_id)
 );
+CREATE TABLE IF NOT EXISTS entity_rev (        -- Entitaetsdatenbank: Community-Revisionen (Basisdaten liegen statisch in data/entities.json)
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  eid TEXT NOT NULL,
+  data TEXT NOT NULL,                          -- JSON des ganzen Eintrags
+  summary TEXT NOT NULL DEFAULT '',
+  user_id INTEGER NOT NULL,                    -- 0 = geloeschtes Konto
+  status TEXT NOT NULL,                        -- live | pending | rejected | old
+  created INTEGER NOT NULL
+);
+CREATE INDEX IF NOT EXISTS idx_entity_rev ON entity_rev(eid, status, created);
+CREATE TABLE IF NOT EXISTS profiles (          -- oeffentliche Experten-Profile (nur mit public=1 sichtbar)
+  user_id INTEGER PRIMARY KEY,
+  public INTEGER NOT NULL DEFAULT 0,
+  handle TEXT UNIQUE,
+  headline TEXT NOT NULL DEFAULT '',
+  about TEXT NOT NULL DEFAULT '',              -- lange Bio (Klartext)
+  company TEXT NOT NULL DEFAULT '',
+  job TEXT NOT NULL DEFAULT '',
+  country TEXT NOT NULL DEFAULT '',
+  show_org INTEGER NOT NULL DEFAULT 1,         -- Firmenzugehoerigkeit oeffentlich zeigen
+  updated INTEGER NOT NULL
+);
+CREATE TABLE IF NOT EXISTS programs (          -- Microsoft-Programme: mvp | mct | rd | msa | ms_employee | partner
+  owner_type TEXT NOT NULL,                    -- u (Person) | o (Firma)
+  owner_id INTEGER NOT NULL,
+  program TEXT NOT NULL,
+  year INTEGER NOT NULL DEFAULT 0,
+  url TEXT NOT NULL DEFAULT '',                -- Nachweis-Link
+  verified INTEGER NOT NULL DEFAULT 0,         -- von Editor/Admin bestaetigt
+  PRIMARY KEY (owner_type, owner_id, program)
+);
+CREATE TABLE IF NOT EXISTS expertise (
+  owner_type TEXT NOT NULL,
+  owner_id INTEGER NOT NULL,
+  eid TEXT NOT NULL,
+  level INTEGER NOT NULL DEFAULT 2,            -- 1 lerne | 2 praktiziere | 3 Experte
+  verified INTEGER NOT NULL DEFAULT 0,
+  PRIMARY KEY (owner_type, owner_id, eid)
+);
+CREATE INDEX IF NOT EXISTS idx_exp_eid ON expertise(eid);
+CREATE TABLE IF NOT EXISTS certs (
+  user_id INTEGER NOT NULL,
+  eid TEXT NOT NULL,                           -- Entitaet vom Typ cert
+  year INTEGER NOT NULL DEFAULT 0,
+  url TEXT NOT NULL DEFAULT '',
+  PRIMARY KEY (user_id, eid)
+);
+CREATE TABLE IF NOT EXISTS channels (          -- Social-Media-Kanaele, optional mit Feed
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  owner_type TEXT NOT NULL,
+  owner_id INTEGER NOT NULL,
+  kind TEXT NOT NULL,
+  url TEXT NOT NULL,
+  feed TEXT NOT NULL DEFAULT '',               -- RSS/Atom-URL (https)
+  fetched INTEGER NOT NULL DEFAULT 0,
+  fails INTEGER NOT NULL DEFAULT 0,
+  UNIQUE(owner_type, owner_id, url)
+);
+CREATE TABLE IF NOT EXISTS feed_items (        -- nur Titel, Link und Datum (kein Volltext)
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  channel_id INTEGER NOT NULL,
+  owner_type TEXT NOT NULL,
+  owner_id INTEGER NOT NULL,
+  url TEXT NOT NULL UNIQUE,
+  title TEXT NOT NULL,
+  published INTEGER NOT NULL,
+  hidden INTEGER NOT NULL DEFAULT 0
+);
+CREATE INDEX IF NOT EXISTS idx_feed_owner ON feed_items(owner_type, owner_id, published);
+CREATE INDEX IF NOT EXISTS idx_feed_pub ON feed_items(published);
+CREATE TABLE IF NOT EXISTS item_votes (
+  item_id INTEGER NOT NULL,
+  user_id INTEGER NOT NULL,
+  created INTEGER NOT NULL,
+  PRIMARY KEY (item_id, user_id)
+);
+CREATE TABLE IF NOT EXISTS endorsements (
+  owner_id INTEGER NOT NULL,                   -- Person
+  eid TEXT NOT NULL,
+  by_id INTEGER NOT NULL,
+  created INTEGER NOT NULL,
+  PRIMARY KEY (owner_id, eid, by_id)
+);
+CREATE TABLE IF NOT EXISTS orgs (              -- Firmen-Konten
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  handle TEXT NOT NULL UNIQUE,
+  name TEXT NOT NULL,
+  tagline TEXT NOT NULL DEFAULT '',
+  about TEXT NOT NULL DEFAULT '',
+  website TEXT NOT NULL DEFAULT '',
+  country TEXT NOT NULL DEFAULT '',
+  size TEXT NOT NULL DEFAULT '',               -- 1 | 2-10 | 11-50 | 51-200 | 201-1000 | 1000+
+  public INTEGER NOT NULL DEFAULT 0,
+  created INTEGER NOT NULL
+);
+CREATE TABLE IF NOT EXISTS org_members (
+  org_id INTEGER NOT NULL,
+  user_id INTEGER NOT NULL,
+  role TEXT NOT NULL DEFAULT 'member',         -- owner | admin | member
+  status TEXT NOT NULL DEFAULT 'pending',      -- pending | active
+  created INTEGER NOT NULL,
+  PRIMARY KEY (org_id, user_id)
+);
+CREATE INDEX IF NOT EXISTS idx_om_user ON org_members(user_id);

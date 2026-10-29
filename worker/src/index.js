@@ -2,6 +2,9 @@
 import { json, cors, cookie, makeSession, readSession, cleanText, cleanName, randomToken, rateLimit, isLang, esc, b64u, sign, verify } from "./util.js";
 import { evalBadges, stats, topUsers, badgesFor, award } from "./badges.js";
 import { runDigest, sendMail } from "./digest.js";
+import { handleEntity } from "./entities.js";
+import { handleProfiles, deleteUserData } from "./profiles.js";
+import { refreshFeeds } from "./feeds.js";
 import { handleWiki } from "./wiki.js";
 
 const PROVIDERS = {
@@ -115,6 +118,7 @@ async function api(env, request, url, path) {
         db.prepare("DELETE FROM comments WHERE user_id=?").bind(id), db.prepare("DELETE FROM user_badges WHERE user_id=?").bind(id),
         db.prepare("DELETE FROM push_subs WHERE user_id=?").bind(id), db.prepare("DELETE FROM wiki_reports WHERE user_id=?").bind(id), db.prepare("DELETE FROM wiki_rev WHERE user_id=? AND status IN ('pending','rejected')").bind(id), db.prepare("UPDATE wiki_rev SET user_id=0 WHERE user_id=?").bind(id), db.prepare("DELETE FROM curators WHERE user_id=?").bind(id), db.prepare("DELETE FROM users WHERE id=?").bind(id),
       ]);
+      await deleteUserData(db, id);
       return J({ ok: true }, 200, { "set-cookie": cookie("m365s", "", 0) });
     }
   }
@@ -177,6 +181,8 @@ async function api(env, request, url, path) {
     return J({ ok: true });
   }
 
+  if (path.startsWith("/api/entity") || path.startsWith("/api/admin/entity")) { const e = await handleEntity(env, request, url, path, user, J); if (e) return e; }
+  if (/^\/api\/(profile|profiles|endorse|vote|feed|org|orgs)(\/|$)/.test(path) || path === "/api/admin/verify" || path === "/api/admin/feed-hide") { const p = await handleProfiles(env, request, url, path, user, J); if (p) return p; }
   if (path === "/api/wiki" || path.startsWith("/api/wiki/") || path.startsWith("/api/admin/wiki")) { const w = await handleWiki(env, request, url, path, user, J); if (w) return w; }
 
   if (path === "/api/curator" && method === "GET") {
@@ -273,5 +279,5 @@ export default {
       return json({ error: "server" }, 500, env, request);
     }
   },
-  async scheduled(event, env, ctx) { ctx.waitUntil(runDigest(env)); },
+  async scheduled(event, env, ctx) { if (event.cron === "0 6 * * *") ctx.waitUntil(runDigest(env)); ctx.waitUntil(refreshFeeds(env).catch(() => 0)); },
 };

@@ -108,7 +108,9 @@ WT = {
             empty="Noch keine Community-Hinweise – sei der Erste mit einem Tipp.", edit="Bearbeiten", add="Hinweis ergänzen", summary="Was hast du geändert? (optional)", save="Speichern", saved_live="Veröffentlicht. Danke!", saved_pending="Danke! Dein Hinweis erscheint nach der Prüfung.", too_short="Bitte schreibe mindestens 20 Zeichen.", unchanged="Keine Änderung gefunden.", rate="Zu viele Änderungen – bitte später noch einmal versuchen.", error="Etwas ist schiefgelaufen. Bitte versuche es erneut.",
             rules="Nur Text, keine Links oder Werbung. Bleib sachlich und hilfreich.", pending_own="Du hast einen Hinweis in der Prüfung. Speichern ersetzt ihn.", history="Verlauf", pending="Wartet auf Prüfung", approve="Veröffentlichen", reject="Ablehnen"),
 }
-WCSS = """<style>.wk{margin:.6em 0}.wk-body{white-space:pre-wrap;line-height:1.7;max-width:46em}.wk-meta,.wk-empty{color:var(--mut)}.wk-link{font:inherit;background:none;border:0;color:var(--ac);text-decoration:underline;cursor:pointer;padding:0}
+WT['en'].update({'rules': 'Write plain text with simple markup (toolbar). Sources go in via “Source”; no other links or advertising. Keep it factual and cite where you can.', 'toc': 'Contents', 'refs': 'Sources', 'back': 'Back to text', 'cn': 'source needed', 'toolbar': 'Formatting', 'tb_h': 'Heading', 'tb_b': 'Bold', 'tb_i': 'Italic', 'tb_ul': 'Bulleted list', 'tb_ol': 'Numbered list', 'tb_q': 'Quote', 'tb_link': 'Link to a term', 'tb_ref': 'Add source', 'tb_cn': 'Mark as needing a source', 'link_ph': 'Search for a term…', 'insert': 'Insert', 'cancel': 'Cancel', 'ref_title': 'Title of the source', 'ref_pub': 'Publisher (optional)', 'ref_date': 'Date (optional)', 'preview': 'Preview', 'back_edit': 'Back to editing', 'bad_ref': 'A source needs a title and an https:// link (no link shorteners, max. 25).', 'current': 'current', 'changes': 'Show changes', 'added': 'Added', 'removed': 'Removed', 'restore': 'Restore this version'})
+WT['de'].update({'rules': 'Schreibe Text mit einfacher Formatierung (Werkzeugleiste). Quellen fügst du über „Quelle“ ein; sonst keine Links oder Werbung. Bleib sachlich und belege, wo du kannst.', 'toc': 'Inhalt', 'refs': 'Quellen', 'back': 'Zurück zum Text', 'cn': 'Beleg fehlt', 'toolbar': 'Formatierung', 'tb_h': 'Überschrift', 'tb_b': 'Fett', 'tb_i': 'Kursiv', 'tb_ul': 'Aufzählung', 'tb_ol': 'Nummerierte Liste', 'tb_q': 'Zitat', 'tb_link': 'Auf einen Begriff verlinken', 'tb_ref': 'Quelle hinzufügen', 'tb_cn': 'Als belegbedürftig markieren', 'link_ph': 'Begriff suchen…', 'insert': 'Einfügen', 'cancel': 'Abbrechen', 'ref_title': 'Titel der Quelle', 'ref_pub': 'Herausgeber (optional)', 'ref_date': 'Datum (optional)', 'preview': 'Vorschau', 'back_edit': 'Zurück zum Bearbeiten', 'bad_ref': 'Eine Quelle braucht einen Titel und einen https://-Link (keine Kurzlinks, max. 25).', 'current': 'aktuell', 'changes': 'Änderungen anzeigen', 'added': 'Hinzugefügt', 'removed': 'Entfernt', 'restore': 'Diese Version wiederherstellen'})
+WCSS = """<style>.wk{margin:.6em 0}.wk-body{line-height:1.7;max-width:46em}.wk-body h3{font-size:1.2em;margin:1.2em 0 .3em}.wk-body h4{font-size:1.05em;margin:1em 0 .3em}.wk-body blockquote{margin:.8em 0;padding:.1em 1em;border-inline-start:3px solid var(--ac);color:var(--mut)}.wk-fn a,.wk-back{text-decoration:none;font-weight:700}.wk-cn{color:var(--mut);font-size:.8em}.wk-toc{border:1px solid var(--bd);border-radius:.6em;padding:.5em 1em;display:inline-block;margin:.5em 0;background:var(--card)}.wk-toc ol{margin:.3em 0;padding-inline-start:1.3em}.wk-refs{font-size:.92rem;padding-inline-start:1.5em}.wk-refs li{margin:.25em 0}.wk-refh{font-size:1rem;margin:1.2em 0 .2em}.wk-bar{display:flex;flex-wrap:wrap;gap:.3em;margin:.4em 0}.wk-tb{font:inherit;min-width:2.5rem;min-height:2.5rem;cursor:pointer;border:1px solid var(--bd);border-radius:.5em;background:var(--card);color:var(--fg)}.wk-panel{border:1px dashed var(--bd);border-radius:.5em;padding:.4em .7em;margin:.4em 0}.wk-panel[hidden],.wk-prev[hidden]{display:none}.wk-prev{border:1px solid var(--bd);border-radius:.5em;padding:.5em 1em;margin:.4em 0;background:var(--bg)}.wk input[aria-invalid=true]{border-color:#b00020}.wk-hl{list-style:none;padding:0}.wk-hl>li{margin:.5em 0}.wk-dl{font:.85rem/1.5 ui-monospace,monospace;margin:.4em 0;max-height:16em;overflow:auto;border:1px solid var(--bd);border-radius:.4em;padding:.3em .6em;white-space:pre-wrap}.wk-add{border-inline-start:4px solid #1a7f37;padding-inline-start:.4em}.wk-del{border-inline-start:4px solid #b00020;padding-inline-start:.4em;text-decoration:line-through}.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}.wk-meta,.wk-empty{color:var(--mut)}.wk-link{font:inherit;background:none;border:0;color:var(--ac);text-decoration:underline;cursor:pointer;padding:0}
 .wk-edit,.wk-hist{margin:1em 0;border:1px solid var(--bd);border-radius:.7em;padding:.6em 1em;background:var(--card)}.wk-edit summary,.wk-hist summary{cursor:pointer;font-weight:700}.wk textarea,.wk input[type=text]{width:100%;box-sizing:border-box;font:inherit;padding:.5em;border:1px solid var(--bd);border-radius:.5em;background:var(--bg);color:var(--fg);margin:.4em 0}
 .wk .btn{font:inherit;cursor:pointer;border:1px solid var(--bd);border-radius:.5em;padding:.45em 1em;background:var(--card);color:var(--fg);text-decoration:none;display:inline-block;margin:.2em .3em .2em 0}.wk .btn.main{background:var(--ac);color:var(--onac);border-color:var(--ac)}.wk-pend{border-top:1px solid var(--bd);padding:.5em 0}</style>"""
 
@@ -123,10 +125,106 @@ def fetch_wiki(api, lang):
         return {}
 
 
-def wiki_block(lang, term_id, api, base, static):
+_INL = re.compile(r"\{\{ref\|([^{}]*)\}\}|\{\{cn\}\}|\[\[([a-z0-9-]{2,48})(?:\|([^\[\]]{1,80}))?\]\]|\*\*([^*]+?)\*\*|\*([^*\s][^*]*?)\*")
+
+
+def wiki_render(body, links, w):
+    """Spiegel von assets/wiki.js renderWiki: Wiki-Markup -> sicheres HTML. Rueckgabe (html, refs)."""
+    refs, keys, seen = [], {}, set()
+
+    def inline(text):
+        out = []
+        while text:
+            m = _INL.search(text)
+            if not m:
+                out.append(esc(text)); break
+            out.append(esc(text[:m.start()]))
+            g = m.group(0)
+            if g.startswith("{{ref|"):
+                p = m.group(1).split("|")
+                p += [""] * (4 - len(p))
+                key = p[1] + "|" + p[0]
+                n = keys.get(key)
+                if not n:
+                    refs.append({"title": p[0], "url": p[1], "pub": p[2], "date": p[3]}); n = keys[key] = len(refs)
+                idattr = "" if n in seen else f' id="wkfn-{n}"'
+                seen.add(n)
+                out.append(f'<sup class="wk-fn"><a href="#wkref-{n}"{idattr}>[{n}]</a></sup>')
+            elif g == "{{cn}}":
+                out.append(f'<sup class="wk-cn"><span>[{esc(w["cn"])}]</span></sup>')
+            elif m.group(2):
+                t = links.get(m.group(2))
+                out.append(f'<a href="{esc(t[1])}">{esc(m.group(3) or t[0])}</a>' if t else esc(m.group(3) or m.group(2)))
+            elif m.group(4) is not None:
+                out.append(f"<strong>{inline(m.group(4))}</strong>")
+            else:
+                out.append(f"<em>{inline(m.group(5))}</em>")
+            text = text[m.end():]
+        return "".join(out)
+
+    out, para, lst, heads, hn = [], [], [None], [], [0]
+
+    def flush_p():
+        if para:
+            out.append(f"<p>{inline(' '.join(para))}</p>"); para.clear()
+
+    def flush_l():
+        if lst[0]:
+            out.append(f"</{lst[0]}>"); lst[0] = None
+
+    for ln in body.split("\n"):
+        if not ln.strip():
+            flush_p(); flush_l(); continue
+        m = re.match(r"^(#{2,3})\s+(.+)$", ln)
+        if m:
+            flush_p(); flush_l()
+            lv = 3 if len(m.group(1)) == 2 else 4
+            hn[0] += 1
+            hid = f"wk-h-{hn[0]}"
+            out.append(f'<h{lv} id="{hid}">{inline(m.group(2))}</h{lv}>')
+            if lv == 3:
+                heads.append((hid, re.sub(r"\*|\[\[[^\]|]*\|?|\]\]|\{\{[^}]*\}\}", "", m.group(2))))
+            continue
+        m = re.match(r"^(-|\d+\.)\s+(.+)$", ln)
+        if m:
+            flush_p()
+            tag = "ul" if m.group(1) == "-" else "ol"
+            if lst[0] != tag:
+                flush_l(); out.append(f"<{tag}>"); lst[0] = tag
+            out.append(f"<li>{inline(m.group(2))}</li>"); continue
+        m = re.match(r"^>\s?(.+)$", ln)
+        if m:
+            flush_p(); flush_l(); out.append(f"<blockquote><p>{inline(m.group(1))}</p></blockquote>"); continue
+        flush_l(); para.append(ln.strip())
+    flush_p(); flush_l()
+    html_ = "".join(out)
+    if len(heads) >= 3:
+        toc = f'<nav class="wk-toc" aria-label="{esc(w["toc"])}"><b>{esc(w["toc"])}</b><ol>' + "".join(f'<li><a href="#{i}">{esc(t)}</a></li>' for i, t in heads) + "</ol></nav>"
+        html_ = toc + html_
+    if refs:
+        from urllib.parse import urlparse
+        def host(u):
+            try:
+                return (urlparse(u).hostname or u).removeprefix("www.")
+            except Exception:
+                return u
+        html_ += f'<h3 class="wk-refh">{esc(w["refs"])}</h3><ol class="wk-refs">' + "".join(
+            f'<li id="wkref-{i + 1}"><a href="#wkfn-{i + 1}" class="wk-back" aria-label="{esc(w["back"])}">↑</a> {esc(r["title"] + (" – " + r["pub"] if r["pub"] else "") + (" (" + r["date"] + ")" if r["date"] else ""))} · '
+            f'<a href="{esc(r["url"])}" rel="nofollow ugc noopener" target="_blank">{esc(host(r["url"]))}</a></li>' for i, r in enumerate(refs)) + "</ol>"
+    return html_, refs
+
+
+def gloss_links(lang, base):
+    """id -> [Name, URL] aller verlinkbaren Begriffe (Glossar; Entitaeten kommen dazu, sobald es Seiten gibt)."""
+    gb = f"{base}/glossary/" if lang == "en" else f"{base}/{lang}/glossary/"
+    return {x["id"]: [x["name"], f"{gb}{x['id']}/"] for x in GLOSS}
+
+
+def wiki_block(lang, term_id, api, base, static, links=None):
     w = WT.get(lang, WT["en"])
-    cfg = json.dumps({"api": api, "term": term_id, "lang": lang, "t": w}, ensure_ascii=False).replace("</", "<\\/")
-    st = f'<div class="wk-static wk-body">{esc(static["body"])}</div>' if static else ""
+    links = links or {}
+    cfg = json.dumps({"api": api, "term": term_id, "lang": lang, "t": w, "links": {k: v for k, v in links.items() if k != term_id}}, ensure_ascii=False).replace("</", "<\\/")
+    st = f'<div class="wk-static wk-body">{wiki_render(static["body"], links, w)[0]}</div>' if static else ""
     return (f'{WCSS}<section aria-labelledby="wk-h"><h2 id="wk-h">{esc(w["h"])}</h2><p class="mut">{esc(w["intro"])}</p><div id="c-wiki">{st}</div></section>'
             f'<script>window.M365W={cfg}</script><script defer src="{base}/assets/wiki.js"></script>')
 
@@ -195,7 +293,7 @@ def build_learn(ctx):
                 catlink = f'<p><a href="{BASE}/de/path/{x["cat"]}/">{esc(t["paths"])}: {esc(cat_name(x["cat"], "de"))}</a></p>'
             eb = (f'<h2>{esc(t["term_eps"].replace("{t}", x["name"]))}</h2>{ep_list(eps)}') if eps else ""
             b = shell(lang, f'<nav aria-label="breadcrumb"><a href="{gb}">{esc(t["glossary"])}</a></nav><h1>{esc(x["name"])}</h1><p style="font-size:1.1em">{esc(d0)}</p>{eb}{catlink}'
-                            f'{wiki_block(lang, x["id"], WIKI_API, BASE, stat.get(x["id"]))}<h2>{esc(t["glossary"])}</h2><ul>{rl}</ul>')
+                            f'{wiki_block(lang, x["id"], WIKI_API, BASE, stat.get(x["id"]), gloss_links(lang, BASE))}<h2>{esc(t["glossary"])}</h2><ul>{rl}</ul>')
             write(f"{rel}/{x['id']}/index.html", page(lang, f'{x["name"]} – {t["glossary"]} | M365.FM', d0[:155], u, b, None, gloss_ld(lang, u, x), og_type="website", extra_head=LCSS))
             sitemap.append((u, TODAY, None))
 

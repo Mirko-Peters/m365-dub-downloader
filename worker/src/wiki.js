@@ -8,7 +8,23 @@ const now = () => Math.floor(Date.now() / 1000);
 const TRUST_POINTS = 25;   // ab so vielen Punkten duerfen Beitraege sofort live gehen
 const AUTO_REVERT = 3;     // so viele Meldungen blenden eine Revision aus
 
-const clean = (s) => cleanText(s, 1500).replace(/https?:\/\/\S+/gi, "").replace(/www\.\S+/gi, "").replace(/[<>]/g, "").trim();
+const MAX_BODY = 12000, MAX_REFS = 25;
+const BAD_HOST = /(^|\.)(bit\.ly|t\.co|tinyurl\.com|goo\.gl|is\.gd|ow\.ly|buff\.ly|cutt\.ly|rebrand\.ly|shorturl\.at)$/i;
+// Markup: ## / ### Ueberschriften, **fett**, *kursiv*, - Listen, 1. Listen, > Zitat, [[id|Text]] interne Links,
+// {{ref|Titel|https://url|Herausgeber|Datum}} Quelle als Fussnote, {{cn}} = Beleg fehlt. Links sonst nur ueber Quellen.
+function sanitize(raw) {
+  let s = cleanText(raw, MAX_BODY).replace(/[<>]/g, ""), err = null, n = 0;
+  s = s.split(/(\{\{ref\|[^{}]*\}\})/).map((part, i) => {
+    if (i % 2 === 0) return part.replace(/https?:\/\/\S+/gi, "").replace(/www\.\S+/gi, "");
+    const p = part.slice(6, -2).split("|").map((x) => x.trim().replace(/[\[\]]/g, ""));
+    const [title, u, pub, date] = p;
+    let url; try { url = new URL(u || ""); } catch { err = "bad_ref"; return ""; }
+    if (!title || url.protocol !== "https:" || (u || "").length > 300 || BAD_HOST.test(url.hostname) || url.username || url.password) { err = "bad_ref"; return ""; }
+    if (++n > MAX_REFS) { err = "too_many_refs"; return ""; }
+    return `{{ref|${title.slice(0, 200)}|${url.href}|${(pub || "").slice(0, 80)}|${(date || "").slice(0, 20)}}}`;
+  }).join("").trim();
+  return { body: s, err };
+}
 
 async function liveOf(db, term, lang) {
   return await db.prepare(
@@ -23,7 +39,7 @@ export async function handleWiki(env, request, url, path, user, J) {
     const term = url.searchParams.get("term"), lang = url.searchParams.get("lang");
     if (!TERM.test(term || "") || !okLang(lang)) return J({ error: "bad_request" }, 400);
     const live = await liveOf(db, term, lang);
-    const hist = ((await db.prepare("SELECT r.id,r.summary,r.created,COALESCE(u.name,'') name FROM wiki_rev r LEFT JOIN users u ON u.id=r.user_id WHERE r.term=? AND r.lang=? AND r.status IN ('live','old') ORDER BY r.created DESC LIMIT 10").bind(term, lang).all()).results || []);
+    const hist = ((await db.prepare("SELECT r.id,r.body,r.summary,r.created,r.status,COALESCE(u.name,'') name FROM wiki_rev r LEFT JOIN users u ON u.id=r.user_id WHERE r.term=? AND r.lang=? AND r.status IN ('live','old') ORDER BY r.created DESC LIMIT 15").bind(term, lang).all()).results || []);
     let mine = null, trusted = false;
     if (user) {
       mine = await db.prepare("SELECT id,body,created FROM wiki_rev WHERE term=? AND lang=? AND user_id=? AND status='pending' ORDER BY created DESC LIMIT 1").bind(term, lang, user.id).first();
@@ -35,8 +51,9 @@ export async function handleWiki(env, request, url, path, user, J) {
   if (path === "/api/wiki" && method === "POST") {
     if (need()) return need();
     const b = await request.json().catch(() => ({}));
-    const term = b.term, lang = b.lang, body = clean(b.body), summary = cleanText(b.summary || "", 140).replace(/[<>]/g, "");
+    const term = b.term, lang = b.lang, san = sanitize(b.body), body = san.body, summary = cleanText(b.summary || "", 140).replace(/[<>]/g, "");
     if (!TERM.test(term || "") || !okLang(lang)) return J({ error: "bad_request" }, 400);
+    if (san.err) return J({ error: san.err }, 400);
     if (body.length < 20) return J({ error: "too_short" }, 400);
     if (!(await rateLimit(db, `wiki:h:${user.id}`, 6, 3600)) || !(await rateLimit(db, `wiki:d:${user.id}`, 25, 86400))) return J({ error: "rate_limit" }, 429);
     const cur = await liveOf(db, term, lang);
