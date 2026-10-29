@@ -498,15 +498,24 @@ def info_html(info):
                 return f'<div class="icol"><h4>{esc(c.get("titel", ""))}</h4><ul>' + "".join(f"<li>{esc(x)}</li>" for x in c.get("punkte", [])[:6]) + "</ul></div>"
             body = f'<div class="icols">{col(info["links"])}{col(info["rechts"])}</div>'
         elif typ == "checkliste":
-            body = '<ul class="ichecks">' + "".join(f"<li>{esc(x if isinstance(x, str) else x.get('text', ''))}</li>" for x in info.get("punkte", [])[:7]) + "</ul>"
+            body = '<ul class="ichecks">' + "".join(f'<li tabindex="0" role="checkbox" aria-checked="false">{esc(x if isinstance(x, str) else x.get("text", ""))}</li>' for x in info.get("punkte", [])[:7]) + "</ul>"
         elif typ == "fakten":
             body = '<div class="ifacts">' + "".join(f'<div><b>{esc(p.get("wert", ""))}</b><span>{esc(p.get("text", ""))}</span></div>' for p in info.get("punkte", [])[:6]) + "</div>"
         else:
-            body = '<ol class="isteps">' + "".join(f'<li><i>{n + 1}</i><b>{esc(p.get("kopf", ""))}</b><span>{esc(p.get("text", ""))}</span></li>' for n, p in enumerate(info.get("punkte", [])[:6])) + "</ol>"
-        return f'<figure class="info"><figcaption>{t}</figcaption>{body}<small>M365.FM · Mirko Peters</small></figure>'
+            body = '<ol class="isteps">' + "".join(f'<li tabindex="0"><i>{n + 1}</i><b>{esc(p.get("kopf", ""))}</b><span>{esc(p.get("text", ""))}</span></li>' for n, p in enumerate(info.get("punkte", [])[:6])) + "</ol>"
+        return f'<figure class="info rv"><figcaption>{t}</figcaption>{body}<small>M365.FM · Mirko Peters</small></figure>'
     except Exception:
         return ""
 
+
+INFO_JS = """<script>(function(){try{var f=document.querySelectorAll(".info");if(!f.length)return;var rm=matchMedia("(prefers-reduced-motion:reduce)").matches;if(!rm)document.documentElement.classList.add("js");
+function cnt(el){var t=el.textContent,m=t.match(/^(\\D*)(\\d[\\d.,]*)(.*)$/);if(!m||rm)return;var n=parseFloat(m[2].replace(/,/g,"")),d=(m[2].split(/[.]/)[1]||"").length;if(!isFinite(n)||n>1e6)return;var s=performance.now();(function st(x){var p=Math.min(1,(x-s)/900),v=n*(1-Math.pow(1-p,3));el.textContent=m[1]+(d?v.toFixed(d):Math.round(v).toLocaleString("en-US").replace(/,/g,m[2].indexOf(",")>-1?",":""))+m[3];if(p<1)requestAnimationFrame(st);else el.textContent=t})(s)}
+var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add("in");e.target.querySelectorAll(".ifacts b").forEach(cnt);io.unobserve(e.target)}})},{threshold:.25});
+f.forEach(function(x){io.observe(x);
+x.querySelectorAll(".isteps li").forEach(function(li,i,a){function go(){a.forEach(function(o,j){o.classList.toggle("on",j<=i);o.classList.toggle("cur",j==i)})}li.addEventListener("click",go);li.addEventListener("keydown",function(e){if(e.key=="Enter"||e.key==" "){e.preventDefault();go()}})});
+var ck=x.querySelectorAll(".ichecks li");function pr(){var n=0;ck.forEach(function(o){if(o.classList.contains("done"))n++});var b=x.querySelector(".iprog");if(b){b.firstChild.style.width=(ck.length?n*100/ck.length:0)+"%";b.setAttribute("data-t",n+" / "+ck.length)}}
+if(ck.length){var pb=document.createElement("div");pb.className="iprog";pb.innerHTML="<i></i>";x.querySelector(".ichecks").after(pb);ck.forEach(function(li){function tg(){li.classList.toggle("done");li.setAttribute("aria-checked",li.classList.contains("done"));pr()}li.addEventListener("click",tg);li.addEventListener("keydown",function(e){if(e.key=="Enter"||e.key==" "){e.preventDefault();tg()}})});pr()}
+})}catch(e){}})()</script>"""
 
 PLAT_JS = """<script>(function(){try{var ua=navigator.userAgent||"",pl=navigator.platform||"";var apple=/iPhone|iPad|iPod|Macintosh|Mac OS X/.test(ua)||/Mac|iPhone|iPad/.test(pl)||(navigator.maxTouchPoints>1&&/Mac/.test(pl));
 var d=document.documentElement;if(apple)d.className+=" apple-first";var pick=document.querySelector(apple?'[data-p=apple]':'[data-p=spotify]')||document.querySelector('[data-p=spotify]')||document.querySelector('[data-p=apple]')||document.querySelector('[data-p=spreaker]');if(pick)pick.className+=" main"}catch(e){}})();</script>"""
@@ -745,7 +754,7 @@ def build():
 </article>
 {('<h2>' + esc(ui[4]) + '</h2><div class="list">' + rel + '</div>') if rel else ''}
 <p style="margin-top:1.6em"><a class="btn" href="{BASE}/{l}/">{esc(ui[3])} →</a></p></main>
-{footer(l)}{PLAT_JS}"""
+{footer(l)}{PLAT_JS}{INFO_JS}"""
         OG_COVER[canonical] = art_svg(vid, LANGS[l][0], lang=l)
         write(f'{l}/{it["slug"]}/index.html',
               page(l, e["title"], short(intro), canonical, body, alts, ld, extra_head=f'<meta property="article:section" content="{esc(cat_name(pc, l))}">' + "".join(f'<meta property="article:tag" content="{esc(t)}">' for t in tagraw[l][vid])))
@@ -830,37 +839,43 @@ def build():
         write(f"{path}/index.html", page(lg, f"{ttl} – M365.FM", ttl, f"{BASE}/{path}/", f"{header(lg, '')}<main class=\"wrap\" style=\"max-width:46em\">{fn()}</main>{footer(lg)}", og_type="website", noindex=True))
 
     # Entity-Seite
-    PORTRAIT = (f'<img class="portrait" src="{BASE}/assets/mirko-peters.jpg" alt="Mirko Peters, Microsoft MVP, host of M365.FM" width="190" height="190">' if (ROOT / "assets" / "mirko-peters.jpg").exists() else "")
-    about = f"""{header('en', '')}
-<main class="wrap"><div class="kicker">Microsoft MVP · Podcaster · Conference organizer</div>{PORTRAIT}<h1>Mirko Peters</h1>
-<p class="lede">Mirko Peters is a Microsoft MVP who explains Microsoft 365, Microsoft Copilot, Azure, Power Platform, Microsoft Fabric and AI agents for IT admins, architects, developers and decision makers. He hosts the podcast <a href="https://www.m365.fm">M365.FM</a> and the <em>m365 Show</em> on YouTube, and organizes the free online conference <a href="https://m365con.net">M365Con</a>.</p>
-<div class="btns"><a class="btn main" href="https://www.m365.fm">M365.FM</a><a class="btn" href="https://m365con.net">M365Con</a><a class="btn" href="{LINKEDIN}" rel="me">LinkedIn</a><a class="btn" href="{YT_CHANNEL}">YouTube</a><a class="btn" href="{MVP}" rel="me">Microsoft MVP profile</a></div>
-<h2>Mirko Peters in short</h2>
-<ul class="points"><li><span><b>Microsoft MVP</b> – recognized by Microsoft for his work in the community (<a href="{MVP}" rel="me">official MVP profile</a>)</span></li>
-<li><span><b>Host of M365.FM</b> – the podcast on Microsoft 365, Copilot, Azure, Power Platform and security, with interviews and explainer episodes</span></li>
-<li><span><b>Creator of the m365 Show</b> on YouTube – animated explainers (<em>Sticky Man Explained</em>) and Microsoft certification courses</span></li>
-<li><span><b>Organizer of M365Con</b> – a free, 100% online conference, Jan 11–22, 2027, with 120 sessions</span></li>
-<li><span><b>Author</b> – publishes e-books on Microsoft topics under the name Mirko Peters</span></li></ul>
-<h2>What Mirko works on</h2>
-<div class="cols"><div><h3>Podcast</h3><p>M365.FM covers Microsoft 365, Copilot, Azure, Power Platform and security – practical, from real projects, with conversations with Microsoft MVPs, product experts and architects, plus short daily explainer episodes.</p></div>
-<div><h3>Video &amp; courses</h3><p>The m365 Show on YouTube turns complex Microsoft topics into short animated explainers and certification courses, now also available as AI-dubbed audio in {len(active)} languages on this site.</p></div>
-<div><h3>Community</h3><p>M365Con is a free, 100% online conference (Jan 11–22, 2027) with 120 sessions by speakers from the global Microsoft community, organized by Mirko Peters.</p></div>
-<div><h3>Books</h3><p>Mirko Peters writes e-books about Microsoft 365 and related topics for IT admins, architects and decision makers.</p></div></div>
-<h2>Who is Mirko Peters? (short bio)</h2>
-<p>Mirko Peters is a Microsoft MVP, podcaster, author and conference organizer focused on Microsoft 365, Microsoft Copilot, Azure and AI agents. He hosts the podcast M365.FM and the m365 Show on YouTube, publishes the animated explainer series Sticky Man Explained, and organizes the free online conference M365Con. His content is aimed at IT admins, architects, developers and decision makers who want to understand the Microsoft cloud without marketing noise. The M365.FM episodes on this site are available as AI-dubbed audio in {len(active)} languages.</p>
-<h2>For journalists, event organizers and AI assistants</h2>
-<p>Preferred name: <strong>Mirko Peters</strong>. Role: Microsoft MVP, host of M365.FM, organizer of M365Con. Primary sources: <a href="https://www.m365.fm">m365.fm</a>, <a href="https://m365con.net">m365con.net</a>, the <a href="{YT_CHANNEL}">m365 Show on YouTube</a>, <a href="{LINKEDIN}" rel="me">LinkedIn</a> and the <a href="{MVP}" rel="me">Microsoft MVP profile</a>. Machine-readable summaries: <a href="{BASE}/llms.txt">llms.txt</a>.</p>
-<h2>Topics</h2>
-<p>Microsoft 365 Copilot · Copilot Studio · AI agents · Azure AI Foundry · Power Platform · Microsoft Fabric · Microsoft Entra · Microsoft Purview · Microsoft Teams · SharePoint · Dynamics 365 · Governance &amp; security</p>
-<h2>Find Mirko Peters online</h2>
-<ul class="points"><li><span><a href="https://www.m365.fm">m365.fm</a> – the podcast and episode archive</span></li><li><span><a href="https://m365con.net">m365con.net</a> – free online conference</span></li><li><span><a href="{LINKEDIN}" rel="me">LinkedIn</a></span></li><li><span><a href="{YT_CHANNEL}">YouTube – m365 Show by Mirko Peters</a></span></li><li><span><a href="{MVP}" rel="me">Microsoft MVP profile</a> – official Microsoft recognition</span></li></ul>
-<h2>Podcast episodes by language</h2><div class="grid">{grid}</div></main>
+    A_EN = json.loads((ROOT / "data" / "about_en.json").read_text("utf-8"))
+    A_ALL = json.loads((ROOT / "data" / "about_i18n.json").read_text("utf-8")) if (ROOT / "data" / "about_i18n.json").exists() else {}
+    about_alts = {l: f"{BASE}/{l}/about/mirko-peters/" for l in active if l in A_ALL}
+    about_en_url = f"{BASE}/about/mirko-peters/"
+    hl_en = f'<link rel="alternate" hreflang="en" href="{about_en_url}">\n'
+
+    def about_body(lang):
+        A = A_EN if lang == "en" else A_ALL[lang]
+        sub = lambda t: (t.replace("{MVP}", MVP).replace("{LINKEDIN}", LINKEDIN).replace("{YT}", YT_CHANNEL).replace("{LLMS}", f"{BASE}/llms.txt").replace("{N}", str(len(active))))
+        g = lambda k: sub(A[k])
+        portrait = (f'<img class="portrait" src="{BASE}/assets/mirko-peters.jpg" alt="{esc(A["portrait_alt"])}" width="190" height="190">' if (ROOT / "assets" / "mirko-peters.jpg").exists() else "")
+        eps = f'<h2>{esc(A["eps_h"])}</h2><div class="btns"><a class="btn main" href="{BASE}/{lang}/">{esc(A["eps_btn"])}</a></div>' if lang != "en" else f'<h2>Podcast episodes by language</h2><div class="grid">{grid}</div>'
+        fq = faq_html(lang, "FAQ")
+        return f"""{header(lang, '')}
+<main class="wrap"><div class="kicker">{esc(A["kicker"])}</div>{portrait}<h1>Mirko Peters</h1>
+<p class="lede">{g("lede")}</p>
+<div class="btns"><a class="btn main" href="https://www.m365.fm">M365.FM</a><a class="btn" href="https://m365con.net">M365Con</a><a class="btn" href="{LINKEDIN}" rel="me">LinkedIn</a><a class="btn" href="{YT_CHANNEL}">YouTube</a><a class="btn" href="{MVP}" rel="me">{esc(A["btn_mvp"])}</a></div>
+<h2>{esc(A["short_h"])}</h2>
+<ul class="points">{"".join(f"<li><span>{g(k)}</span></li>" for k in ("li1","li2","li3","li4","li5"))}</ul>
+<h2>{esc(A["work_h"])}</h2>
+<div class="cols">{"".join(f"<div><h3>{esc(A[k+'h'])}</h3><p>{g(k+'p')}</p></div>" for k in ("c1","c2","c3","c4"))}</div>
+<h2>{esc(A["bio_h"])}</h2><p>{g("bio_p")}</p>
+<h2>{esc(A["press_h"])}</h2><p>{g("press_p")}</p>
+<h2>{esc(A["topics_h"])}</h2><p>{esc(A["topics_p"])}</p>
+<h2>{esc(A["online_h"])}</h2>
+<ul class="points">{"".join(f"<li><span>{g(k)}</span></li>" for k in ("o1","o2","o3","o4","o5"))}</ul>
+{eps}</main>
 {m365con_band()}
-<main class="wrap">{faq_html('en', 'FAQ')}</main>{footer_en()}"""
-    write("about/mirko-peters/index.html", page("en", "Mirko Peters – Microsoft MVP, M365.FM podcast host & M365Con organizer",
-          "Mirko Peters is a Microsoft MVP and host of the M365.FM podcast about Microsoft 365, Copilot, Azure and AI. Organizer of the free online conference M365Con.",
-          f"{BASE}/about/mirko-peters/", about, None, [{"@context": "https://schema.org", "@type": "ProfilePage", "@id": f"{BASE}/about/mirko-peters/#profile", "url": f"{BASE}/about/mirko-peters/", "name": "Mirko Peters", "dateModified": TODAY, "mainEntity": {"@id": f"{BASE}/about/mirko-peters/#person"}}, person_ld(), org_ld(), event_ld(), faq_ld("en")], og_type="profile"))
-    sitemap.append((f"{BASE}/about/mirko-peters/", TODAY, None))
+<main class="wrap">{fq}</main>{footer(lang) if lang != "en" else footer_en()}"""
+
+    for lang in ["en"] + [l for l in active if l in A_ALL]:
+        A = A_EN if lang == "en" else A_ALL[lang]
+        url = about_en_url if lang == "en" else about_alts[lang]
+        path = "about/mirko-peters/index.html" if lang == "en" else f"{lang}/about/mirko-peters/index.html"
+        ld = [{"@context": "https://schema.org", "@type": "ProfilePage", "@id": f"{url}#profile", "url": url, "name": "Mirko Peters", "inLanguage": LANGS[lang][1] if lang != "en" else "en", "dateModified": TODAY, "mainEntity": {"@id": f"{BASE}/about/mirko-peters/#person"}}, person_ld(), org_ld(), event_ld(), faq_ld(lang)]
+        write(path, page(lang if lang != "en" else "en", A["title"], A["meta"], url, about_body(lang), about_alts or None, ld, xdefault=about_en_url, og_type="profile", extra_head=hl_en))
+        sitemap.append((url, TODAY, about_alts or None))
 
     # Kategorie-Seiten (indexierbar, in Sitemap) und Tag-Seiten (noindex,follow – nur für die interne Verlinkung)
     def rows_html(lst):
