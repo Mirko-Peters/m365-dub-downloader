@@ -277,6 +277,26 @@ def consent_html(lang):
             "document.getElementById('cc1').onclick=function(){set('1')};document.getElementById('cc0').onclick=function(){set('0')}})();</script>")
 
 
+def ext_links(html_):
+    """Externe Links (andere Domain als die Seite) immer in neuem Tab oeffnen, mit rel=noopener."""
+    host = BASE.split("//")[-1]
+    def fix(m):
+        tag = m.group(0)
+        mh = re.search(r'href="(https?://[^"/]+)', tag)
+        if not mh or mh.group(1).split("//")[-1] == host:
+            return tag
+        if "target=" not in tag:
+            tag = tag[:-1] + ' target="_blank">'
+        mr = re.search(r'rel="([^"]*)"', tag)
+        if mr:
+            if "noopener" not in mr.group(1):
+                tag = tag.replace(mr.group(0), f'rel="{mr.group(1)} noopener"', 1)
+        else:
+            tag = tag[:-1] + ' rel="noopener">'
+        return tag
+    return re.sub(r"<a\s[^>]*>", fix, html_)
+
+
 def page(lang, title, desc, canonical, body, alternates=None, jsonld=None, xdefault=None, og_type="article", extra_head="", noindex=False):
     hl = LANGS[lang][1] if lang in LANGS else "en"
     d = LANGS[lang][2] if lang in LANGS else "ltr"
@@ -310,7 +330,7 @@ def page(lang, title, desc, canonical, body, alternates=None, jsonld=None, xdefa
 {extra_head}<style>{CSS}</style>
 {ld}</head>
 <body>
-{body}
+{ext_links(body)}
 {consent_html(lang)}
 </body></html>
 """
