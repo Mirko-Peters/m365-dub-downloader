@@ -177,15 +177,19 @@
     me().then(function (u) {
       if (!u) root.appendChild(loginBox());
       else {
-        var name = h("input", { type: "text", maxlength: 40, value: u.name, "aria-label": tt("your_name") }), bio = h("textarea", { rows: 3, maxlength: 280, placeholder: tt("bio_ph"), "aria-label": tt("bio_ph") });
-        bio.value = u.bio || "";
+        var name = h("input", { type: "text", maxlength: 40, value: u.name, "aria-label": tt("your_name") }), mode = h("select", { "aria-label": tt("nm_label") }), opts = u.name_opts || {};
+        [["short", "nm_short"], ["full", "nm_full"], ["first", "nm_first"], ["handle", "nm_handle"], ["custom", "nm_custom"]].forEach(function (x) { if (x[0] !== "custom" && !opts[x[0]]) return; mode.appendChild(h("option", { value: x[0], text: tt(x[1]) + (opts[x[0]] ? " – " + opts[x[0]] : "") })); });
+        mode.value = u.name_mode || "short"; if (mode.value !== (u.name_mode || "short")) mode.value = "custom";
+        function syncName() { var c = mode.value === "custom"; name.hidden = !c; nlab.hidden = !c; if (!c) name.value = opts[mode.value] || name.value; }
+        var nlab = h("label", { text: tt("your_name") }); mode.addEventListener("change", syncName);
         var ok = h("span", { class: "cok" });
         var lic = liCard(u, function () { setTimeout(function () { location.reload(); }, 800); }, true) || (u.badges.indexOf("li_follower") < 0 ? null : h("a", { class: "btn", href: LI_URL, target: "_blank", rel: "noopener", text: tt("li_follow") }));
         if (lic) root.appendChild(lic);
+        setTimeout(syncName, 0);
         root.appendChild(h("div", { class: "cprof" }, [
           h("h2", { text: tt("profile") }), h("p", { class: "cmut", text: u.points + " " + tt("points") + " · " + u.comments + " " + tt("comments_count") + " · " + u.likes + " " + tt("likes_count") }),
-          h("label", { text: tt("your_name") }), name, bio,
-          h("div", { class: "btns" }, [h("button", { type: "button", class: "btn main", text: tt("save"), onclick: function () { api("/api/me", { method: "POST", body: { name: name.value, bio: bio.value, lang: LANG } }).then(function (r) { ok.textContent = r.s === 200 ? "✓ " + tt("saved") : tt("error"); }); } }),
+          h("label", { text: tt("nm_label") }), mode, nlab, name, h("p", { class: "cmut", text: tt("nm_hint") }),
+          h("div", { class: "btns" }, [h("button", { type: "button", class: "btn main", text: tt("save"), onclick: function () { api("/api/me", { method: "POST", body: { name: name.value, name_mode: mode.value, lang: LANG } }).then(function (r) { ok.textContent = r.s === 200 ? "✓ " + tt("saved") : tt("error"); }); } }),
             h("button", { type: "button", class: "btn", text: tt("signout"), onclick: function () { api("/api/logout", { method: "POST" }).then(function () { location.reload(); }); } }), ok]),
           h("details", { class: "cdel" }, [h("summary", { text: tt("delete_account") }), h("p", { class: "cmut", text: tt("delete_account_d") }), h("button", { type: "button", class: "btn", text: tt("delete_account_btn"), onclick: function () { if (confirm(tt("delete_account_d"))) api("/api/me", { method: "DELETE" }).then(function () { location.reload(); }); } })])]));
       }

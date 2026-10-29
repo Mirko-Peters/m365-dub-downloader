@@ -206,3 +206,10 @@ CREATE TABLE IF NOT EXISTS org_sponsor (
   criteria TEXT NOT NULL DEFAULT '{}',   -- JSON: topics, format, min_audience, regions, budget, notes
   updated INTEGER NOT NULL
 );
+
+-- Anzeigename-Einstellung: echter Name (nur fuer den Nutzer selbst sichtbar) + gewaehlter Modus
+CREATE TABLE IF NOT EXISTS user_prefs (
+  user_id INTEGER PRIMARY KEY,
+  real_name TEXT,
+  name_mode TEXT NOT NULL DEFAULT 'short'   -- short | full | first | handle | custom
+);

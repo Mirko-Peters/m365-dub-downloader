@@ -35,6 +35,23 @@ function shortName(full) {
 const safeReturn = (env, u) => { try { const x = new URL(u); return x.origin === env.SITE ? x.href : env.SITE + "/"; } catch { return env.SITE + "/"; } };
 const isAdmin = (env, u) => (env.ADMIN_SUBS || "").split(",").map((s) => s.trim()).includes(`${u.provider}:${u.sub}`);
 
+const firstName = (full) => cleanName(full).split(" ").filter(Boolean)[0] || "";
+async function namePrefs(db, user) {
+  const r = await db.prepare("SELECT real_name,name_mode FROM user_prefs WHERE user_id=?").bind(user.id).first();
+  const pr = await db.prepare("SELECT handle FROM profiles WHERE user_id=?").bind(user.id).first();
+  const real = r?.real_name || "";
+  return { name_mode: r?.name_mode || "short", name_opts: { short: real ? shortName(real) : "", full: real, first: firstName(real), handle: pr?.handle || "" } };
+}
+// Rechnet den Anzeigenamen aus dem gewaehlten Modus; liefert null bei "custom" (dann gilt der eingegebene Name)
+async function applyNameMode(db, user, b) {
+  const mode = ["short", "full", "first", "handle", "custom"].includes(b.name_mode) ? b.name_mode : null;
+  if (!mode) return null;
+  const { name_opts: o } = await namePrefs(db, user);
+  await db.prepare("INSERT INTO user_prefs(user_id,name_mode) VALUES(?,?) ON CONFLICT(user_id) DO UPDATE SET name_mode=excluded.name_mode").bind(user.id, mode).run();
+  if (mode === "custom") return null;
+  return cleanName(o[mode]) || null;
+}
+
 async function upsertUser(env, provider, sub, name) {
   const db = env.DB;
   let u = await db.prepare("SELECT * FROM users WHERE provider=? AND sub=?").bind(provider, sub).first();
@@ -42,6 +59,8 @@ async function upsertUser(env, provider, sub, name) {
     const r = await db.prepare("INSERT INTO users(provider,sub,name,created) VALUES(?,?,?,?)").bind(provider, sub, shortName(name), now()).run();
     u = await db.prepare("SELECT * FROM users WHERE id=?").bind(r.meta.last_row_id).first();
   }
+  const rn = cleanName(name);
+  if (rn) await env.DB.prepare("INSERT INTO user_prefs(user_id,real_name) VALUES(?,?) ON CONFLICT(user_id) DO UPDATE SET real_name=excluded.real_name").bind(u.id, rn).run();
   await evalBadges(env, u.id);
   return u;
 }
@@ -112,11 +131,12 @@ async function api(env, request, url, path) {
     return J({ ok: true });
   }
   if (path === "/api/me") {
-    if (method === "GET") return J({ user: user ? { id: user.id, name: user.name, bio: user.bio, lang: user.lang, admin: user.admin, editor: user.editor, provider: user.provider, ...(await stats(db, user.id)) } : null });
+    if (method === "GET") return J({ user: user ? { ...(await namePrefs(db, user)), id: user.id, name: user.name, bio: user.bio, lang: user.lang, admin: user.admin, editor: user.editor, provider: user.provider, ...(await stats(db, user.id)) } : null });
     if (need()) return need();
     if (method === "POST") {
       const b = await request.json().catch(() => ({}));
-      const name = cleanName(b.name || user.name) || user.name, bio = cleanText(b.bio ?? user.bio, 280).replace(/https?:\/\/\S+/g, ""), lang = isLang(b.lang) ? b.lang : user.lang;
+      const nm = await applyNameMode(db, user, b);
+      const name = nm || cleanName(b.name || user.name) || user.name, bio = cleanText(b.bio ?? user.bio, 280).replace(/https?:\/\/\S+/g, ""), lang = isLang(b.lang) ? b.lang : user.lang;
       await db.prepare("UPDATE users SET name=?,bio=?,lang=? WHERE id=?").bind(name, bio, lang, user.id).run();
       return J({ ok: true });
     }
