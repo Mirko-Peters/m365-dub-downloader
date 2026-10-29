@@ -43,6 +43,50 @@
     "q": "Wann sollte ich Entra Domain Services nicht verwenden?",
     "a": "Nicht geeignet ist der Dienst, wenn eine App LDAP-Schreibzugriff oder Schemaänderungen braucht, Ihr Team direkten Zugriff auf Domain-Controller oder Domain-Administrator-Rechte benötigt oder Sie ein komplexes Verzeichnisdesign betreiben wollen. Neue Cloud-Apps sollten sich direkt über Entra ID anmelden."
    }
+  ],
+  "infos": [
+   {
+    "titel": "Der Weg der Identitäten: die Einbahnstraße",
+    "typ": "schritte",
+    "punkte": [
+     {
+      "kopf": "Lokales Active Directory",
+      "text": "Hybrid-Unternehmen pflegen Benutzer und Gruppen im Büro-Verzeichnis, das als Quelle dient."
+     },
+     {
+      "kopf": "Synchronisierung zu Entra ID",
+      "text": "Identitäten gelangen nach Entra ID, wo der primäre Identitätsdatensatz bleibt."
+     },
+     {
+      "kopf": "Kopie in Domain Services",
+      "text": "Benutzer und Gruppen werden in die verwaltete Domäne kopiert, damit ältere Apps sie nutzen können."
+     },
+     {
+      "kopf": "Passwort neu setzen",
+      "text": "Cloud-Benutzer ändern ihr Passwort, damit die geschützte Form für Kerberos und NTLM entsteht."
+     },
+     {
+      "kopf": "Nutzung durch Legacy-Apps",
+      "text": "Azure-VMs und ältere Apps greifen per LDAP, Kerberos und NTLM auf die Kopie zu."
+     },
+     {
+      "kopf": "Pflege nur an der Quelle",
+      "text": "Änderungen erfolgen in Entra ID oder im lokalen AD, nie in der verwalteten Domäne."
+     }
+    ]
+   },
+   {
+    "titel": "Wann Entra Domain Services nicht die richtige Wahl ist",
+    "typ": "checkliste",
+    "punkte": [
+     "Die App braucht LDAP-Schreibzugriff auf das Verzeichnis.",
+     "Die App muss das Active-Directory-Schema ändern.",
+     "Ihr Team benötigt direkten Zugriff auf Domain-Controller oder Domain-Administrator-Rechte.",
+     "Sie wollen ein kompliziertes Verzeichnisdesign nach eigenen Vorstellungen aufbauen und betreiben.",
+     "Eine neue Cloud-App sollte sich direkt über Entra ID anmelden.",
+     "In diesen Fällen besser Active Directory selbst betreiben, lokal oder auf Azure-VMs."
+    ]
+   }
   ]
  }
 }

@@ -49,6 +49,42 @@
     "q": "Comment sécuriser Copilot et éviter les fuites de données dans Microsoft 365 ?",
     "a": "Auditez les permissions, supprimez les groupes « tout le monde », étiquetez systématiquement les contenus et activez le DSPM pour l'IA de Purview. Associez les étiquettes à des politiques DLP et de rétention, puis renforcez avec l'accès conditionnel, l'authentification multifacteur et la DLP de Defender."
    }
+  ],
+  "infos": [
+   {
+    "titel": "Admin center, Purview et Defender : rôles complémentaires",
+    "typ": "fakten",
+    "punkte": [
+     {
+      "wert": "Admin center",
+      "text": "Système de contrôle du tenant : licences, paramètres de Copilot et activation des plugins."
+     },
+     {
+      "wert": "Purview",
+      "text": "Contrôle douanier : classifie, étiquette, applique rétention et DLP, identifie les risques via DSPM."
+     },
+     {
+      "wert": "Defender",
+      "text": "Bras armé : application à l'exécution, alertes, DLP sur terminaux, blocage des actions risquées."
+     },
+     {
+      "wert": "Chevauchement",
+      "text": "Sans étiquettes Purview ou sans Defender, le contenu circule sans classification et les violations passent."
+     }
+    ]
+   },
+   {
+    "titel": "Gouvernance Copilot : erreurs à éviter",
+    "typ": "checkliste",
+    "punkte": [
+     "Ne pas voir la licence comme une clé magique, car le RBAC reste en vigueur.",
+     "Ne pas donner à tous les mêmes licences et le même accès, au nom de l'équité.",
+     "Ne pas isoler admin center, Purview et Defender comme des outils facultatifs.",
+     "Ne pas laisser le contenu non étiqueté : le filtre Purview deviendrait inopérant.",
+     "Ne pas ignorer le DPA, les conditions de produits et la résidence des données, Bing inclus.",
+     "Ne pas compter sur la mémoire des employés plutôt que sur des règles de plateforme."
+    ]
+   }
   ]
  },
  "it": {
@@ -101,6 +137,52 @@
     "q": "Come posso impedire a Copilot di elaborare dati riservati?",
     "a": "Applica etichette di riservatezza in modo coerente e abbinale a criteri DLP di Purview, così Copilot non può riassumere o elaborare file altamente riservati. Esegui valutazioni DSPM per l'IA, ripulisci le autorizzazioni e aggiungi accesso condizionale, autenticazione a più fattori e Defender Endpoint DLP."
    }
+  ],
+  "infos": [
+   {
+    "titel": "Due approcci alle licenze Copilot",
+    "typ": "vergleich",
+    "links": {
+     "titel": "Licenze e accessi uguali per tutti",
+     "punkte": [
+      "L'equità coincide con licenze identiche e accesso identico.",
+      "Copilot pesca nelle librerie dei contratti e nei registri delle risorse umane.",
+      "Emergono e-mail dei dirigenti rimaste condivise in eccesso.",
+      "Un'idea nobile con conseguenze pesanti."
+     ]
+    },
+    "rechts": {
+     "titel": "Licenze secondo esigenze e ruoli",
+     "punkte": [
+      "Le licenze seguono le esigenze reali degli utenti.",
+      "I ruoli definiscono zone di accesso rigorose.",
+      "La finanza interroga solo dati finanziari.",
+      "Copilot riflette un'architettura dell'informazione disciplinata."
+     ]
+    }
+   },
+   {
+    "titel": "Admin Center, Purview e Defender: chi fa cosa",
+    "typ": "fakten",
+    "punkte": [
+     {
+      "wert": "Admin Center",
+      "text": "Sistema di controllo del tenant: licenze, impostazioni di Copilot, plug-in e canali di aggiornamento."
+     },
+     {
+      "wert": "Purview",
+      "text": "La dogana: classifica, etichetta, ispeziona, applica conservazione, DLP, DSPM per l'IA e audit."
+     },
+     {
+      "wert": "Defender",
+      "text": "Il braccio esecutivo: regole in tempo reale, avvisi e DLP per Endpoint."
+     },
+     {
+      "wert": "Insieme",
+      "text": "Senza etichette Purview i contenuti non sono classificati; senza Defender le regole non vengono fatte rispettare."
+     }
+    ]
+   }
   ]
  },
  "pt": {
@@ -152,6 +234,54 @@
    {
     "q": "O que verificar antes de ativar o Microsoft 365 Copilot e distribuir licenças?",
     "a": "Verifique se a cobertura do DPA e dos termos do produto está documentada, mapeie compromissos de residência de dados por região, como as fronteiras da UE, e estabeleça uma base de referência para as políticas. Só depois a TI deve atribuir licenças."
+   }
+  ],
+  "infos": [
+   {
+    "titel": "Licença x RBAC: quem decide o quê",
+    "typ": "vergleich",
+    "links": {
+     "titel": "Licença",
+     "punkte": [
+      "Define o que pode existir legalmente no tenant",
+      "Habilita os recursos do Copilot no Word, Excel e Outlook",
+      "Não amplia permissões de acesso a dados",
+      "Não é uma chave mestra",
+      "Não se estende a contas de convidado entre tenants"
+     ]
+    },
+    "rechts": {
+     "titel": "RBAC",
+     "punkte": [
+      "Decide quem passa pela porta",
+      "Impõe permissões pela identidade do tenant",
+      "O Copilot só mostra dados que o usuário já pode acessar",
+      "Mantém fechados os espaços privados, como os do CFO",
+      "Exige revisar permissões e grupos com auditoria"
+     ]
+    }
+   },
+   {
+    "titel": "Controles técnicos: o papel de cada ferramenta",
+    "typ": "fakten",
+    "punkte": [
+     {
+      "wert": "Centro de Administração",
+      "text": "Atribui licenças, define configurações do tenant, ativa plugins e escolhe quem recebe o Copilot."
+     },
+     {
+      "wert": "Purview",
+      "text": "Classifica, rotula, aplica retenção e DLP, descobre riscos com DSPM e registra auditoria."
+     },
+     {
+      "wert": "Defender",
+      "text": "Cuida de alertas, DLP de endpoint e interrompe conteúdo do Copilot quando regras são acionadas."
+     },
+     {
+      "wert": "Sobreposição",
+      "text": "Sem rótulos do Purview o conteúdo flui sem classificação; sem o Defender, violações passam direto."
+     }
+    ]
    }
   ]
  },

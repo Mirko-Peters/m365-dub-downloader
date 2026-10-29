@@ -49,6 +49,58 @@
     "q": "Welche Grenzen und Stolpersteine gibt es bei Data Activator?",
     "a": "Data Activator unterliegt den Kapazitätsmodellen und Service-Limits von Fabric. Beim Skalieren steigen Latenz und Auslastung, und die Engine kann gedrosselt werden. Auch langsame Quellen oder Zielsysteme, etwa ein ERP mit 15-Minuten-Batch, verzögern das Ergebnis. Zu viele Trigger belasten zudem andere Workloads."
    }
+  ],
+  "infos": [
+   {
+    "titel": "Dashboard vs. Data Activator",
+    "typ": "vergleich",
+    "links": {
+     "titel": "Klassisches Dashboard",
+     "punkte": [
+      "Zeigt, was passiert, und dient eher der Nachbesprechung",
+      "Aktualisierung alle 15 oder 30 Minuten, manchmal nur stündlich",
+      "Ein Mensch muss bemerken, entscheiden und die Maßnahme ausführen",
+      "Dieser Mensch wird zum Flaschenhals",
+      "Verfolgt Entwicklungen, ohne selbst zu handeln"
+     ]
+    },
+    "rechts": {
+     "titel": "Fabric Data Activator",
+     "punkte": [
+      "Hört zu und reagiert auf Ereignisströme in nahezu Echtzeit",
+      "Reaktion je nach Quelle innerhalb von Sekunden",
+      "Löst Aktionen aus, etwa API-Aufrufe oder Webhooks",
+      "Kann Pipelines anhalten, bevor fehlerhafte Daten ins Warehouse gelangen",
+      "Verbindet Erkenntnisse direkt mit Handlungen"
+     ]
+    }
+   },
+   {
+    "titel": "Stolpersteine beim Skalieren",
+    "typ": "fakten",
+    "punkte": [
+     {
+      "wert": "Proof of Concept",
+      "text": "Schwachstellen bleiben im kleinen Test meist unsichtbar und zeigen sich erst beim Skalieren."
+     },
+     {
+      "wert": "Externe Quellen",
+      "text": "Ist das Verarbeitungsintervall der Quelle langsamer als die Zielreaktionszeit, kommt die Automatisierung zu spät."
+     },
+     {
+      "wert": "Gemeinsamer Pool",
+      "text": "Jeder Trigger belastet dieselbe Fabric-Kapazität wie BI-Aktualisierungen, Datenflüsse und Warehouse-Abfragen."
+     },
+     {
+      "wert": "15 Minuten",
+      "text": "Ein ERP mit Batch-Läufen im 15-Minuten-Takt verzögert das Ergebnis trotz sofortigem Trigger."
+     },
+     {
+      "wert": "Ressourcen",
+      "text": "Trigger-Auswertung, Transformationen und ausgehende API-Aufrufe verbrauchen Rechenleistung aus demselben Pool."
+     }
+    ]
+   }
   ]
  }
 }
