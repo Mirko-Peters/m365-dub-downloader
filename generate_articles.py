@@ -8,7 +8,7 @@ from pathlib import Path
 ROOT = Path(__file__).parent
 MODEL = os.environ.get("ARTICLE_MODEL", "claude-sonnet-5-5")
 LIMIT = int(os.environ.get("ARTICLE_LIMIT", "90"))
-WORKERS = int(os.environ.get("ARTICLE_WORKERS", "4"))
+WORKERS = int(os.environ.get("ARTICLE_WORKERS", "10"))
 NAMES = {"de": "Deutsch", "es": "Spanisch", "fr": "Französisch", "it": "Italienisch", "pt": "Portugiesisch", "nl": "Niederländisch",
          "pl": "Polnisch", "id": "Indonesisch", "ru": "Russisch", "uk": "Ukrainisch", "ar": "Arabisch", "he": "Hebräisch", "hi": "Hindi",
          "ja": "Japanisch", "ko": "Koreanisch", "ml": "Malayalam", "pa": "Punjabi", "ta": "Tamil", "te": "Telugu"}
@@ -51,7 +51,16 @@ Transkript:
     body = json.dumps({"model": MODEL, "max_tokens": 9000, "messages": [{"role": "user", "content": prompt}]}).encode()
     req = urllib.request.Request("https://api.anthropic.com/v1/messages", body, {
         "x-api-key": os.environ["ANTHROPIC_API_KEY"], "anthropic-version": "2023-06-01", "content-type": "application/json"})
-    r = json.load(urllib.request.urlopen(req, timeout=180))
+    r = None
+    for attempt in range(5):
+        try:
+            r = json.load(urllib.request.urlopen(req, timeout=240))
+            break
+        except urllib.error.HTTPError as ex:
+            if ex.code in (429, 500, 502, 503, 529) and attempt < 4:
+                time.sleep(15 * (attempt + 1))
+                continue
+            raise
     raw = "".join(b.get("text", "") for b in r["content"])
     html, _, info = raw.partition("---INFOGRAFIK---")
     inf = None
@@ -106,8 +115,7 @@ def main():
             if res:
                 store[vid][l] = res
                 changed.add(vid)
-    for vid in changed:
-        json.dump(store[vid], open(ROOT / "data" / "articles" / f"{vid}.json", "w", encoding="utf-8"), ensure_ascii=False, indent=1)
+                json.dump(store[vid], open(ROOT / "data" / "articles" / f"{vid}.json", "w", encoding="utf-8"), ensure_ascii=False, indent=1)
     print(len(changed), "Videos aktualisiert,", len(jobs), "Artikel versucht")
 
 
