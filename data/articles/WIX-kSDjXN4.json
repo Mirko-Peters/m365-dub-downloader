@@ -1082,204 +1082,6 @@
    }
   ]
  },
- "es": {
-  "html": "<p>Desplegar un agente de IA en un entorno empresarial no consiste solo en lanzar un modelo y esperar que responda bien. Cuando creas un agente en Azure AI Foundry, lo colocas en un entorno gestionado donde cada mensaje, llamada a una herramienta y paso de ejecución queda registrado y se puede rastrear.</p>\n<p>Ese rastro documental convierte un experimento impredecible en un sistema disciplinado, auditable y apto para la empresa. En este artículo repasamos los elementos que lo hacen posible: la tríada de modelo, instrucciones y herramientas, y los tres niveles de registro (hilos, ejecuciones y pasos de ejecución).</p>\n\n<h2>Agentes de Azure AI Foundry: modelo, instrucciones y herramientas</h2>\n<p>Al configurar un agente en Foundry no abres una simple ventana de chat. Nombras a un responsable de equipo digital, pensado para cumplir misiones con un diseño claro. Ese diseño descansa en tres componentes:</p>\n<ul>\n<li><strong>El modelo</strong> es el cerebro. Se encarga del razonamiento y del lenguaje: analiza lo que escribe una persona, planifica pasos y redacta respuestas.</li>\n<li><strong>Las instrucciones</strong> son la orden de la misión. Evitan que el modelo divague y lo centran en los resultados que realmente necesitas.</li>\n<li><strong>Las herramientas</strong> son el equipamiento: ejecución de código, conectores de búsqueda, APIs de informes o cualquier sistema externo que conectes al agente.</li>\n</ul>\n<p>Un agente de Azure AI se construye explícitamente sobre esta tríada. Sin ella no hay reproducibilidad ni auditabilidad, solo generación de texto sin comprobante.</p>\n\n<h3>Una analogía para entenderlo</h3>\n<p>Imagina un capitán en el campo de batalla. El modelo es su entrenamiento de combate. Las instrucciones son el briefing: proteger el convoy, extraer datos de un conjunto de contratos o informar los resultados en un formato concreto. Las herramientas marcan su especialización. Un intérprete de código equivale a un gancho para escalar muros, y un conector de SharePoint o un MCP personalizado es como una radio segura que alimenta el plan con datos en vivo. Con los tres elementos juntos, el agente no improvisa: ejecuta una misión con registros y puntos de control.</p>\n\n<h3>Flexibilidad en la elección del modelo</h3>\n<p>En la mayoría de las aplicaciones de chat solo hay un modelo y un prompt, sin un sentido formal de órdenes ni orquestación de herramientas. El servicio de agentes de Foundry garantiza que las tres capas estén presentes. Además, no te ata a un único modelo: puedes cambiar entre los del catálogo de Foundry, usar uno potente para estrategias complejas, uno más ligero para tareas sencillas o integrar opciones como Mistral. Eliges el que mejor encaje con la misión.</p>\n\n<h2>Riesgos y errores frecuentes cuando faltan capas</h2>\n<p>Si falta alguna de las tres capas, los problemas aparecen enseguida y en un contexto empresarial no son una molestia menor:</p>\n<ul>\n<li><strong>Resultados inconsistentes.</strong> Un resumen de contrato dice una cosa y el siguiente la contradice sutilmente.</li>\n<li><strong>Pérdida de trazabilidad.</strong> Ningún registro estructurado recoge cómo se elaboró la respuesta.</li>\n<li><strong>Depuración a ciegas.</strong> Los desarrolladores no pueden seguir la cadena de razonamiento y acaban adivinando.</li>\n<li><strong>Auditoría con capturas de pantalla.</strong> Sin conversaciones persistentes, el comportamiento se reconstruye con recuerdos vagos, algo que no sirve cuando cumplimiento pide pruebas o soporte necesita reproducir un error.</li>\n<li><strong>Cajas negras.</strong> Una respuesta que parece correcta no dice si el agente consultó una API externa y ejecutó código o si simplemente improvisó texto.</li>\n</ul>\n<p>Foundry integra barreras de seguridad en el propio diseño. Las instrucciones actúan como un reglamento fijo, el conjunto de herramientas puede limitarse estrictamente o ampliarse según el caso de uso, y el modelo puede cambiarse libremente, pero siempre dentro de una estructura que exige responsabilidad. Cuando un sistema se audita o algo falla, hace falta un diario, y en Foundry ese diario son los hilos.</p>\n\n<h2>Hilos en Azure AI Foundry: el registro persistente de cada conversación</h2>\n<p>Un hilo no es una ventana de chat informal que desaparece al cerrarla. Es una sesión de conversación persistente. Cada intercambio se almacena, ya provenga de una persona, del agente o de otro agente en una configuración multiagente, y el historial puede revisarse mucho después de que termine el chat.</p>\n<p>Los hilos tampoco son transcripciones estáticas. Son contenedores estructurados que gestionan automáticamente el truncamiento: mantienen el contexto activo dentro de los límites del modelo y conservan una pista de auditoría completa. El agente tiene continuidad y la empresa tiene gobernanza.</p>\n\n<h3>Mensajes con contexto completo</h3>\n<p>Las entradas del hilo son mensajes, y un mensaje no se limita a texto. Puede incluir una imagen, una hoja de cálculo o un bloque de código generado. Cada uno lleva una marca de tiempo y una etiqueta de rol (usuario o asistente). Al inspeccionar un hilo ves qué se dijo, quién lo dijo, cuándo y qué tipo de contenido intervino. Un responsable de cumplimiento puede abrirlo y ver la solicitud exacta enviada ayer, el gráfico que produjo el agente y el momento en que ocurrió cada evento.</p>\n\n<h3>Por qué importa para auditoría y desarrollo</h3>\n<p>Es como el cuaderno de una campaña de Dungeons & Dragons, donde se anota qué ciudades se visitaron y qué botín se obtuvo, de modo que las discusiones sobre detalles olvidados se disuelven. En la práctica, esto aporta valor a dos grupos:</p>\n<ul>\n<li><strong>Auditoría y cumplimiento:</strong> reguladores o equipos internos ven la secuencia completa, con la solicitud, la respuesta, las herramientas usadas y los tiempos.</li>\n<li><strong>Desarrollo:</strong> si el agente generó un fragmento de código incorrecto, se retrocede por el hilo hasta la solicitud para ver cómo llegó a esa conclusión.</li>\n</ul>\n<p>Si un flujo de trabajo extrae lenguaje legal, el registro muestra la petición original, la respuesta generada y si se emplearon herramientas de apoyo. Si varios agentes se reparten tareas, su intercambio también queda documentado.</p>\n\n<h2>Ejecuciones: el momento en que el agente entra en acción</h2>\n<p>El hilo contiene el historial, las órdenes y el contexto. La <strong>ejecución</strong> (run) es el disparador que hace que el agente tome ese contexto y lo lleve a cabo. El hilo puede decir «analiza el CSV» o «dibuja un gráfico de línea», pero es la ejecución la que procesa la solicitud a través del modelo, las instrucciones y las herramientas. El agente puede buscar datos adicionales, procesar números o llamar al intérprete de código para generar un artefacto.</p>\n<p>Las ejecuciones no son una caja negra: se monitorizan y tienen seguimiento de estado. Normalmente verás estados como en cola, en progreso, requiere acción, completado o fallido. Los ejemplos del SDK suelen consultar estos estados en un bucle, lo que da visibilidad no solo de lo que se hace, sino de cuándo sucede.</p>\n\n<h2>Pasos de ejecución: trazabilidad paso a paso</h2>\n<p>Saber que una ejecución terminó no basta. En entornos empresariales hay que saber qué ocurrió dentro. Los pasos de ejecución eliminan la suposición, porque cada ejecución se registra paso a paso: qué resultados generó el modelo, qué herramientas invocó, qué cálculos realizó y qué mensajes produjo.</p>\n<p>Es algo parecido a la notación del ajedrez, pero para IA: obtener archivo, ejecutar bloque de código, devolver gráfico, cada acción con su hora y en orden, para poder repetirla más tarde.</p>\n\n<h3>Beneficios para desarrolladores y cumplimiento</h3>\n<ul>\n<li><strong>Depuración forense.</strong> Si una consulta de búsqueda era errónea o se coló un error matemático, puedes recorrer la línea de tiempo, identificar el fallo exacto y corregirlo, en lugar de adivinar.</li>\n<li><strong>Explicaciones con pruebas.</strong> Cuando un auditor pregunta cómo se generó un resumen, no hace falta describir el razonamiento del modelo en abstracto: tienes la llamada, la herramienta, el paso del intérprete y la respuesta ensamblada, todo con sello de tiempo.</li>\n<li><strong>Reproducibilidad.</strong> Si hay que volver a ejecutar un flujo, se puede seguir la misma secuencia, y si se cuestiona un resultado, se puede reproducir.</li>\n</ul>\n<p>Con hilos, ejecuciones y pasos tienes el diario, la activación y el registro detallado. Juntos convierten una IA improvisada en un compañero de equipo cuyas acciones se pueden rastrear, probar y defender.</p>\n\n<h2>Herramientas del agente: del texto a la acción, con seguridad</h2>\n<p>Las herramientas son lo que convierte a un agente en un trabajador. En lugar de describir cómo revisar un documento o hacer un cálculo, el agente lo hace y devuelve el resultado. Foundry ofrece tres categorías de capacidad.</p>\n\n<h3>1. Herramientas integradas</h3>\n<p>Incluyen el intérprete de código, la búsqueda de Bing, los conectores de SharePoint, Microsoft Fabric y Azure AI Search. Con ellas, el agente puede analizar datos, extraer archivos, buscar contenido empresarial y generar gráficos o informes sin conexiones personalizadas.</p>\n\n<h3>2. Herramientas personalizadas: OpenAPI y MCP</h3>\n<p>Foundry permite registrar herramientas propias mediante especificaciones OpenAPI y el Model Context Protocol (MCP). Este último se describe como el USB-C de las herramientas de IA: en lugar de escribir envoltorios a mano cada vez que conectas agentes a servidores MCP remotos, el sistema gestiona automáticamente el descubrimiento, el versionado y la invocación. Eso reduce la carga de integración, sobre todo si hay muchos sistemas que conectar. Además, las herramientas pueden vincularse a Logic Apps, lo que da acceso a más de 1.400 conectores existentes, de modo que se reutilizan los que la empresa ya emplea con plataformas CRM, ERP o ITSM en lugar de recodificar adaptadores.</p>\n\n<h3>3. Llamadas observables</h3>\n<p>Cada llamada a una herramienta se registra a nivel de paso, con identidad, entradas, salidas y marcas de tiempo. La operación de los agentes no se basa en la fe, sino en un libro de contabilidad: ves qué se invocó, confirmas que se respetaron los permisos y conservas registros permanentes.</p>\n\n<h3>Un ejemplo práctico</h3>\n<p>Subes un archivo CSV como mensaje a un hilo. El agente llama al intérprete de código dentro de sus pasos de ejecución, procesa el archivo y genera un gráfico, que vuelve como imagen adjunta visible en el propio registro del hilo. No escribiste un analizador ni una visualización: diste una instrucción y el agente eligió la herramienta, la ejecutó y devolvió un archivo listo para un informe. Es un comportamiento documentado en los ejemplos del SDK.</p>\n\n<h3>Seguridad e identidad</h3>\n<p>Cuando las herramientas se conectan a sistemas como SharePoint o Fabric, lo hacen mediante autenticación delegada gestionada por Microsoft Entra. Si ayer no tenías autorización para leer un archivo, el agente no esquivará esa barrera hoy. Identidad y permisos permanecen intactos, y cada llamada es rastreable: quién la invocó, qué se envió y qué se recibió. Así el agente actúa dentro de los límites que TI ya conoce.</p>\n\n<h2>Conclusiones prácticas para tu equipo</h2>\n<ul>\n<li>Define siempre las tres capas de un agente: modelo, instrucciones y herramientas. Sin ellas no hay reproducibilidad ni auditabilidad.</li>\n<li>Elige el modelo según la tarea del catálogo de Foundry y mantén fijo el reglamento mediante las instrucciones.</li>\n<li>Limita o amplía el conjunto de herramientas según el caso de uso.</li>\n<li>Usa los hilos como registro permanente de conversaciones, con roles, marcas de tiempo y tipos de contenido.</li>\n<li>Monitoriza el estado de las ejecuciones y revisa los pasos de ejecución para depurar y responder a auditorías con pruebas.</li>\n<li>Aprovecha las herramientas integradas, OpenAPI, MCP y los conectores de Logic Apps antes de construir puentes de API frágiles.</li>\n<li>Apóyate en la autenticación delegada con Microsoft Entra para conservar identidad y permisos.</li>\n<li>Para empezar: crea un proyecto de prueba, un agente básico, ejecuta un hilo e inspecciona los pasos de ejecución en el SDK o en el portal para confirmar que los registros coinciden con lo ocurrido.</li>\n</ul>\n\n<h2>Fazit</h2>\n<p>Azure AI Foundry ofrece una forma repetible de construir agentes con cerebro, reglamento y equipamiento, y deja constancia de cada acción en hilos, ejecuciones y pasos de ejecución. Para quienes desarrollan y para quienes auditan, el mensaje es el mismo: ejecución reproducible, auditable y con visibilidad sobre todo el ciclo de vida. Con pruebas en lugar de promesas, la IA deja de ser un experimento improvisado y pasa a ser un operador controlado, útil en producción.</p>",
-  "model": "claude-sonnet-5-5",
-  "info": {
-   "titel": "Agentes auditables en Azure AI Foundry",
-   "typ": "schritte",
-   "punkte": [
-    {
-     "kopf": "Define la tríada",
-     "text": "Modelo, instrucciones y herramientas: la base de un agente reproducible y auditable."
-    },
-    {
-     "kopf": "Registra en hilos",
-     "text": "Cada mensaje queda guardado con rol, marca de tiempo y tipo de contenido."
-    },
-    {
-     "kopf": "Lanza ejecuciones",
-     "text": "La ejecución activa al agente y muestra estados como en cola, en progreso o fallido."
-    },
-    {
-     "kopf": "Revisa los pasos",
-     "text": "Cada herramienta invocada y cada cálculo se registran en orden para depurar y auditar."
-    },
-    {
-     "kopf": "Conecta herramientas",
-     "text": "Herramientas integradas, OpenAPI y MCP, con permisos protegidos mediante Microsoft Entra."
-    },
-    {
-     "kopf": "Prueba y verifica",
-     "text": "Crea un agente básico, ejecuta un hilo e inspecciona los pasos en el SDK o el portal."
-    }
-   ]
-  },
-  "faq": [
-   {
-    "q": "¿Qué componentes forman un agente de IA en Azure AI Foundry?",
-    "a": "Un agente de Azure AI Foundry se construye sobre tres componentes: el modelo, que razona y redacta; las instrucciones, que marcan la misión y evitan que divague; y las herramientas, como ejecución de código, búsqueda o APIs. Sin esta tríada no hay reproducibilidad ni auditabilidad."
-   },
-   {
-    "q": "¿Qué es un hilo en Azure AI Foundry y para qué sirve?",
-    "a": "Un hilo es una sesión de conversación persistente que almacena cada intercambio, ya sea de una persona, del agente o de otro agente. Gestiona automáticamente el truncamiento del contexto y conserva una pista de auditoría completa. Los mensajes llevan marca de tiempo, rol y tipo de contenido."
-   },
-   {
-    "q": "¿Cuál es la diferencia entre una ejecución y un paso de ejecución en Azure AI Foundry?",
-    "a": "La ejecución (run) es el disparador que hace que el agente procese el contexto del hilo mediante modelo, instrucciones y herramientas, y tiene estados como en cola, completado o fallido. Los pasos de ejecución registran en detalle qué hizo el agente: herramientas invocadas, cálculos y mensajes producidos."
-   },
-   {
-    "q": "¿Qué tipos de herramientas admite un agente de Azure AI Foundry y cómo se gestiona la seguridad?",
-    "a": "Foundry ofrece herramientas integradas (intérprete de código, Bing, SharePoint, Fabric, Azure AI Search) y personalizadas mediante OpenAPI y MCP, además de conectores de Logic Apps. Las conexiones usan autenticación delegada con Microsoft Entra, de modo que se respetan permisos, y cada llamada queda registrada."
-   }
-  ],
-  "infos": [
-   {
-    "titel": "Sin capas frente a tríada completa",
-    "typ": "vergleich",
-    "links": {
-     "titel": "Cuando faltan capas",
-     "punkte": [
-      "Resultados inconsistentes entre un resumen de contrato y el siguiente",
-      "Ningún registro estructurado de cómo se elaboró la respuesta",
-      "Depuración a ciegas: los desarrolladores acaban adivinando",
-      "Auditoría con capturas de pantalla y recuerdos vagos",
-      "Cajas negras: no se sabe si hubo API o código"
-     ]
-    },
-    "rechts": {
-     "titel": "Con modelo, instrucciones y herramientas",
-     "punkte": [
-      "Las instrucciones actúan como un reglamento fijo",
-      "El modelo puede cambiarse libremente según la misión",
-      "Las herramientas se limitan o amplían según el caso de uso",
-      "Hay reproducibilidad y auditabilidad de cada acción",
-      "Cada paso queda registrado y es rastreable"
-     ]
-    }
-   },
-   {
-    "titel": "Tres niveles de registro en Foundry",
-    "typ": "fakten",
-    "punkte": [
-     {
-      "wert": "Hilos",
-      "text": "Sesión de conversación persistente con mensajes, roles, marcas de tiempo y tipos de contenido."
-     },
-     {
-      "wert": "Ejecuciones",
-      "text": "Disparador que lleva el contexto a la acción, con estados monitorizables como en cola o fallido."
-     },
-     {
-      "wert": "Pasos",
-      "text": "Registro paso a paso de herramientas invocadas, cálculos realizados y mensajes producidos."
-     },
-     {
-      "wert": "1.400",
-      "text": "Conectores de Logic Apps disponibles para reutilizar los sistemas que la empresa ya emplea."
-     }
-    ]
-   }
-  ]
- },
- "fr": {
-  "html": "<p>Lorsque vous déployez une IA dans Azure AI Foundry, vous ne lancez pas simplement un gros modèle de langage dans la nature. Vous le placez dans un environnement d'exécution géré, où les messages, les appels d'outils et les étapes d'exécution pertinents sont consignés et tracés. L'IA cesse d'être un électron libre et devient un système discipliné que l'on peut gouverner.</p>\n<p>Cet article présente les briques qui rendent cela possible : l'agent et sa triade (modèle, instructions, outils), les threads, les exécutions (runs), les étapes d'exécution et la boîte à outils. Ensemble, elles rendent vos expériences vérifiables et prêtes pour l'entreprise.</p>\n\n<h2>Un agent Azure AI Foundry repose sur trois piliers : modèle, instructions et outils</h2>\n<p>Configurer un agent dans Foundry ne revient pas à ouvrir une simple fenêtre de chat. Vous nommez en quelque sorte un chef d'escouade : un capitaine de terrain conçu pour des missions, et non un stagiaire qui complète du texte. Sa conception repose sur trois éléments fondamentaux.</p>\n<ul>\n<li><strong>Le modèle</strong> est le cerveau. Il gère le raisonnement et le langage : il analyse les mots humains, planifie les étapes et rédige les réponses.</li>\n<li><strong>Les instructions</strong> sont les ordres de mission. Elles empêchent le modèle de dériver vers l'improvisation et l'ancrent dans les résultats dont vous avez réellement besoin.</li>\n<li><strong>Les outils</strong> sont l'équipement : exécution de code, connecteurs de recherche, API de reporting ou tout système tiers que vous connectez.</li>\n</ul>\n<p>Sans cette triade, vous n'obtenez ni reproductibilité ni auditabilité, seulement de la génération de texte sans reçu.</p>\n\n<h3>Une métaphore pour mieux comprendre</h3>\n<p>Le modèle correspond à l'entraînement au combat du capitaine. Les instructions sont le briefing : protéger le convoi, extraire des données d'un ensemble de contrats, rapporter les résultats dans un format précis. Les outils apportent la spécialisation : un interpréteur de code pour exécuter des analyses, ou une radio sécurisée, comme un connecteur SharePoint ou un connecteur MCP personnalisé, qui alimente le plan en données en direct. Quand les trois sont réunis, l'agent n'improvise pas : il exécute une mission avec des journaux et des points de contrôle.</p>\n\n<h3>Un cerveau interchangeable</h3>\n<p>Dans la plupart des API de chat, vous n'avez qu'un modèle et une invite. Une fois la conversation lancée, il n'existe aucune notion formelle d'ordres ni d'orchestration d'outils. Le service d'agents de Foundry garantit au contraire la présence des trois couches. Vous n'êtes pas non plus lié à un seul modèle : le catalogue Foundry permet de choisir GPT-4 pour une stratégie complexe, un modèle plus léger pour des tâches simples, ou encore d'intégrer Mistral. Vous choisissez ce qui convient à la mission.</p>\n\n<h2>Les risques d'une IA sans structure : incohérence, opacité, débogage à l'aveugle</h2>\n<p>Que se passe-t-il si l'une de ces couches manque ? Les conséquences sont concrètes, et c'est là que se trouvent les principaux pièges.</p>\n<ul>\n<li><strong>Des résultats incohérents</strong> : un résumé de contrat se lit d'une façon, le suivant le contredit subtilement.</li>\n<li><strong>Une perte de traçabilité</strong> : aucun journal structuré ne montre comment la réponse a été obtenue.</li>\n<li><strong>Un débogage par conjecture</strong> : les développeurs ne peuvent pas retracer la chaîne de raisonnement.</li>\n</ul>\n<p>En entreprise, ce n'est pas un simple inconvénient. C'est un risque réel qui bloque la confiance et l'adoption. Foundry y répond par des garde-fous intégrés : les instructions jouent le rôle d'un manuel de règles à suivre, l'ensemble d'outils peut être défini de façon stricte ou étendue selon le cas d'usage, et le modèle reste interchangeable, mais toujours dans un cadre qui impose la responsabilité.</p>\n\n<h2>Les threads : le journal persistant de chaque conversation</h2>\n<p>Dans Azure AI Foundry, un thread n'est pas une fenêtre de discussion qui disparaît à la fermeture. C'est une session de conversation persistante. Chaque échange y est stocké, qu'il vienne de vous, de l'agent ou d'un autre agent dans une configuration multi-agent. L'historique reste consultable longtemps après la fin de la discussion.</p>\n<p>Un thread n'est pas une simple transcription statique, mais un conteneur structuré. Il gère automatiquement la troncature : le contexte actif reste dans les limites du modèle, tandis qu'une piste d'audit complète est conservée. L'agent continue donc de comprendre la conversation en cours, et l'entreprise garde un enregistrement permanent et consultable. L'agent y gagne en continuité, l'organisation en gouvernance.</p>\n\n<h3>Des messages riches et horodatés</h3>\n<p>Les entrées du thread sont des messages. Un message peut contenir du texte, mais aussi une image, un fichier tableur ou un bloc de code généré. Chacun est horodaté et étiqueté avec un rôle (utilisateur ou assistant). En inspectant un thread, vous voyez ce qui a été dit, par qui, quand, et quel type de contenu était concerné. Un responsable de la conformité peut ainsi retrouver la demande soumise la veille, le graphique produit en réponse et le moment où les deux événements se sont produits.</p>\n\n<h3>Audit, conformité et débogage</h3>\n<p>Pour les régulateurs et les équipes d'audit interne, un thread donne immédiatement la séquence complète : la demande de l'utilisateur, la réponse de l'agent, les outils impliqués et le moment de chaque événement. Pour les développeurs, il fait office de mode débogage : si un agent a produit un mauvais extrait de code, on remonte jusqu'à la demande d'origine. Si plusieurs agents se répartissent les tâches, leurs échanges sont également consignés.</p>\n<p>Sans thread, on en est réduit aux captures d'écran et à une mémoire floue, ce qui ne tient pas quand la conformité demande des preuves ou que le support doit reproduire un bug. Pas d'enregistrement signifie pas de preuve, et pas de trace signifie pas de correction. Avec les threads, chaque conversation devient une preuve structurée.</p>\n\n<h2>Les exécutions (runs) : le moment où l'agent passe à l'action</h2>\n<p>Le thread contient le contexte : la conversation, les ordres, les éléments de référence. Une exécution est le déclencheur qui active l'agent pour qu'il prenne ce contexte et le traite réellement. Les threads se souviennent, les exécutions agissent. Le thread peut contenir la demande d'analyser un fichier CSV ou de tracer un graphique linéaire ; c'est l'exécution qui fait passer cette demande par les instructions, le modèle et les outils. L'agent peut alors chercher des données supplémentaires, traiter des chiffres ou appeler l'interpréteur de code pour générer un artefact.</p>\n<p>Une exécution n'est pas une boîte noire : elle est surveillée et son état est suivi. Vous rencontrez généralement des statuts comme :</p>\n<ul>\n<li>mise en file d'attente ;</li>\n<li>en cours ;</li>\n<li>action requise ;</li>\n<li>terminée ;</li>\n<li>échouée.</li>\n</ul>\n<p>Les exemples de SDK interrogent souvent ces états dans une boucle. Vous savez donc non seulement ce qui se fait, mais aussi quand cela se produit.</p>\n\n<h2>Les étapes d'exécution : la notation d'échecs de l'IA</h2>\n<p>Reste une question : que s'est-il réellement passé pendant l'exécution ? Une réponse peut sembler correcte, mais sans détail, impossible de savoir si l'agent a appelé une API externe, écrit du code ou simplement improvisé du texte. Cette opacité est dangereuse en entreprise : c'est comme découvrir une partie d'échecs en cours et s'entendre dire « faites-nous confiance ». Impossible de la rejouer ou de vérifier qu'aucun coup n'était illégal.</p>\n<p>Les étapes d'exécution lèvent cette incertitude. Chaque exécution est enregistrée étape par étape : sorties du modèle, outils invoqués, calculs exécutés, messages produits. C'est la notation d'échecs de l'IA. On y lit, dans l'ordre, la récupération du fichier, l'exécution du bloc de code, puis le renvoi de l'artefact du graphique, chaque action étant horodatée.</p>\n\n<h3>Ce que cela change pour chaque équipe</h3>\n<ul>\n<li><strong>Développeurs</strong> : au lieu de deviner si la requête de recherche était mauvaise ou si une erreur de calcul s'est glissée, ils parcourent la chronologie, repèrent le raté exact et le corrigent. Le débogage devient une analyse médico-légale.</li>\n<li><strong>Conformité et audit</strong> : à la question « comment ce résumé a-t-il été généré ? », on répond avec des reçus (l'appel d'outil, les tables de l'interpréteur, la réponse assemblée), pas avec une description abstraite du raisonnement du modèle. Le risque est couvert par une preuve plutôt que par une promesse.</li>\n<li><strong>Exploitation</strong> : si un flux de travail doit être relancé, on suit la même séquence ; si un résultat est contesté, on peut le rejouer.</li>\n</ul>\n<p>Le thread est le journal de la conversation, l'exécution est le déclencheur, et les étapes d'exécution forment le journal coup par coup. Ensemble, ils transforment une IA improvisée en coéquipier dont on peut suivre, tester et défendre les actions.</p>\n\n<h2>Outils, MCP et sécurité : transformer un agent bavard en agent qui travaille</h2>\n<p>Les outils font passer l'agent de la parole à l'action. Au lieu de décrire comment vérifier un document ou effectuer un calcul, il le fait et renvoie le résultat. C'est ce qui donne de la valeur à la plateforme en entreprise, au-delà de l'effet de démonstration. Foundry distingue trois catégories de fonctionnalités.</p>\n\n<h3>1. Les outils intégrés</h3>\n<p>Ils comprennent l'interpréteur de code, la recherche Bing, les connecteurs SharePoint et Microsoft Fabric, ainsi qu'Azure AI Search. L'agent peut analyser des données, extraire des fichiers, rechercher du contenu d'entreprise et créer des graphiques ou des rapports sans code personnalisé. Les réponses bavardes deviennent des livrables concrets, que l'on peut inspecter et réutiliser.</p>\n\n<h3>2. Les outils personnalisés et le MCP</h3>\n<p>Vous pouvez enregistrer vos propres outils via des spécifications OpenAPI ou le Model Context Protocol (MCP). Le MCP est présenté comme l'USB-C des outils d'IA : au lieu d'écrire des wrappers à la main à chaque connexion avec un serveur MCP distant, le système gère la découverte, la gestion des versions et l'invocation des outils. La charge d'intégration diminue nettement, surtout quand l'environnement compte des dizaines de systèmes à relier.</p>\n<p>Les outils peuvent aussi se connecter à des applications logiques, ce qui ouvre l'accès à plus de 1 400 connecteurs SaaS et sur site existants. Plutôt que de recoder des adaptateurs pour les plateformes CRM, ERP ou ITSM, vous vous appuyez sur les connecteurs que l'entreprise utilise déjà, sans ponts d'API fragiles.</p>\n\n<h3>3. Des appels d'outils observables</h3>\n<p>Chaque appel est consigné au niveau des étapes, avec l'identité, les entrées, les sorties et les horodatages. La vue opérationnelle ressemble donc à un registre : vous voyez ce qui a été invoqué, vous confirmez que les autorisations ont été respectées et vous conservez les enregistrements pour la conformité.</p>\n<p>Un exemple documenté dans les échantillons de SDK : vous envoyez un fichier CSV sous forme de message dans un thread, l'agent appelle l'interpréteur de code dans ses étapes d'exécution, traite le fichier et génère un graphique. Ce dernier revient en image jointe, visible directement dans le journal du thread. Vous n'avez écrit ni analyseur ni module de visualisation.</p>\n\n<h3>La sécurité au cœur du dispositif</h3>\n<p>Lorsque les outils se connectent à des systèmes comme SharePoint ou Fabric, ils s'appuient sur l'identité de l'utilisateur via Microsoft Entra. Si vous n'aviez pas le droit de lire un fichier hier, l'agent ne contournera pas cette limite aujourd'hui. Identité et autorisations restent intactes, condition pour obtenir l'aval des équipes de conformité. Chaque appel reste traçable : qui l'a invoqué, ce qui a été envoyé, ce qui a été reçu.</p>\n\n<h2>Points clés à retenir pour des agents IA traçables en entreprise</h2>\n<ul>\n<li>Construisez chaque agent sur la triade <strong>modèle + instructions + outils</strong> pour obtenir des résultats reproductibles et auditables.</li>\n<li>Choisissez le modèle selon la mission : GPT-4 pour les stratégies complexes, un modèle plus léger pour les tâches simples, ou un autre modèle du catalogue.</li>\n<li>Utilisez les <strong>threads</strong> comme journal persistant : messages horodatés, rôles identifiés, historique consultable et gestion automatique de la troncature.</li>\n<li>Considérez l'<strong>exécution</strong> comme le déclencheur de l'action et surveillez ses statuts (en file d'attente, en cours, action requise, terminée, échouée).</li>\n<li>Exploitez les <strong>étapes d'exécution</strong> pour déboguer précisément, rejouer un résultat contesté et répondre aux auditeurs avec des preuves.</li>\n<li>Combinez outils intégrés, outils personnalisés (OpenAPI, MCP) et connecteurs d'applications logiques pour relier l'agent à vos systèmes existants.</li>\n<li>Vérifiez que l'accès aux données d'entreprise respecte l'identité et les autorisations de l'utilisateur.</li>\n<li>Pour démarrer : créez un projet de test, un agent de base, exécutez un thread, puis inspectez les étapes d'exécution dans le SDK ou le portail, afin de confirmer que vos journaux correspondent à ce qui s'est réellement passé.</li>\n</ul>\n\n<h2>Conclusion</h2>\n<p>Azure AI Foundry ne se contente pas d'envoyer des invites à un modèle. La plateforme offre un moyen reproductible de créer des agents dotés d'un cerveau, d'un manuel de règles et d'une boîte à outils, dont chaque action est consignée dans des threads, des exécutions et des étapes d'exécution. Pour les responsables du développement comme pour ceux de la conformité, l'enjeu est le même : disposer d'une IA dont on peut suivre, rejouer et défendre le travail, avec un contrôle et une visibilité sur tout le cycle de vie de l'agent.</p>",
-  "model": "claude-sonnet-5-5",
-  "info": {
-   "titel": "Azure AI Foundry : une IA traçable de bout en bout",
-   "typ": "schritte",
-   "punkte": [
-    {
-     "kopf": "Définir l'agent",
-     "text": "Associer un modèle, des instructions claires et des outils : la triade qui garantit reproductibilité et auditabilité."
-    },
-    {
-     "kopf": "Ouvrir un thread",
-     "text": "Une conversation persistante conserve chaque message horodaté, avec son rôle, et une piste d'audit complète."
-    },
-    {
-     "kopf": "Lancer l'exécution",
-     "text": "Le run active l'agent, qui traite le contexte avec ses outils ; son statut est suivi."
-    },
-    {
-     "kopf": "Lire les étapes",
-     "text": "Chaque appel d'outil, calcul et message est enregistré dans l'ordre, pour déboguer et rejouer."
-    },
-    {
-     "kopf": "Connecter les outils",
-     "text": "Outils intégrés, OpenAPI et MCP, avec identité et autorisations respectées et appels observables."
-    }
-   ]
-  },
-  "faq": [
-   {
-    "q": "Quels sont les trois piliers d'un agent Azure AI Foundry ?",
-    "a": "Un agent Azure AI Foundry repose sur le modèle, les instructions et les outils. Le modèle assure le raisonnement et le langage, les instructions cadrent la mission, et les outils (code, recherche, API) permettent d'agir. Sans cette triade, il n'y a ni reproductibilité ni auditabilité."
-   },
-   {
-    "q": "À quoi sert un thread dans Azure AI Foundry ?",
-    "a": "Un thread est une session de conversation persistante qui stocke tous les échanges : messages horodatés avec leur rôle (utilisateur ou assistant), texte, images ou fichiers. Il gère la troncature du contexte tout en conservant une piste d'audit complète, utile pour la conformité et le débogage."
-   },
-   {
-    "q": "Quelle est la différence entre un thread, une exécution et les étapes d'exécution ?",
-    "a": "Le thread est le journal de la conversation et contient le contexte. L'exécution (run) est le déclencheur qui active l'agent pour traiter ce contexte. Les étapes d'exécution forment le journal détaillé, coup par coup, des sorties du modèle, outils invoqués et calculs, avec horodatage."
-   },
-   {
-    "q": "Comment Azure AI Foundry sécurise-t-il l'accès aux données d'entreprise par les outils ?",
-    "a": "Lorsque les outils se connectent à des systèmes comme SharePoint ou Fabric, ils s'appuient sur l'identité de l'utilisateur via Microsoft Entra. L'agent ne peut donc pas contourner les autorisations existantes. Chaque appel reste traçable : qui l'a invoqué, ce qui a été envoyé et reçu."
-   }
-  ],
-  "infos": [
-   {
-    "titel": "IA sans structure ou agent Foundry",
-    "typ": "vergleich",
-    "links": {
-     "titel": "IA sans structure",
-     "punkte": [
-      "Résultats incohérents d'un résumé de contrat à l'autre",
-      "Aucun journal structuré pour retracer la réponse",
-      "Débogage par conjecture, sans chaîne de raisonnement",
-      "Confiance et adoption bloquées en entreprise"
-     ]
-    },
-    "rechts": {
-     "titel": "Agent Azure AI Foundry",
-     "punkte": [
-      "Triade modèle, instructions et outils pour des résultats reproductibles",
-      "Threads, exécutions et étapes consignés et horodatés",
-      "Débogage précis grâce à la chronologie des étapes",
-      "Modèle interchangeable dans un cadre qui impose la responsabilité"
-     ]
-    }
-   },
-   {
-    "titel": "Les trois catégories d'outils de Foundry",
-    "typ": "fakten",
-    "punkte": [
-     {
-      "wert": "Intégrés",
-      "text": "Interpréteur de code, Bing, SharePoint, Fabric et Azure AI Search sans code personnalisé."
-     },
-     {
-      "wert": "MCP",
-      "text": "L'USB-C des outils d'IA : le système gère découverte, versions et invocation."
-     },
-     {
-      "wert": "1 400",
-      "text": "Connecteurs SaaS et sur site accessibles via les applications logiques."
-     },
-     {
-      "wert": "Observables",
-      "text": "Chaque appel consigne identité, entrées, sorties et horodatages au niveau des étapes."
-     },
-     {
-      "wert": "Entra",
-      "text": "Les outils respectent l'identité et les autorisations de l'utilisateur."
-     }
-    ]
-   }
-  ]
- },
  "ja": {
   "html": "<p>Azure AI Foundry にAIをデプロイするとき、行っているのは巨大なモデルを立ち上げることだけではありません。管理されたランタイムにエージェントを配置すると、メッセージ、ツール呼び出し、実行ステップといった関連アクションがすべてログに記録され、追跡できるようになります。これによりAIは、制御不能な存在から、管理可能で規律あるシステムへと変わります。</p>\n<p>この記事では、エンタープライズ対応と監査可能性を支える仕組みを整理します。エージェントの基本設計である「モデル・指示・ツール」から、「スレッド」「ラン」「ランステップ」という記録の構造、ツール連携とセキュリティまでを順に見ていきます。</p>\n\n<h2>Azure AI Foundry のエージェントを構成する3つの要素</h2>\n<p>Foundry でエージェントをセットアップすることは、単にチャットウィンドウを開くことではありません。明確な設計に基づいてミッションを遂行する「現場の隊長」を任命するようなものです。その設計は、次の3つの要素に集約されます。</p>\n<ul>\n<li><strong>モデル</strong>:推論と言語を担う頭脳です。人間の言葉を解析し、ステップを計画し、応答を起案します。</li>\n<li><strong>指示</strong>:ミッションの命令にあたります。エージェントが勝手な方向にそれるのを防ぎ、本当に必要な成果につなぎ止めます。</li>\n<li><strong>ツール</strong>:エージェントの装備です。コード実行、検索コネクタ、レポート用API、接続するサードパーティシステムなどが含まれます。</li>\n</ul>\n<p>Azure AIエージェントはこの3要素から明確に構築されており、これがなければ再現性も観察性も得られません。残るのは、証拠のないテキスト生成だけです。</p>\n\n<h3>隊長にたとえると分かりやすい</h3>\n<p>モデルは隊長の戦闘訓練、指示はミッションのブリーフィング、ツールは専門的な装備です。ブリーフィングの内容は「契約セットからデータを抽出せよ」「結果を特定のフォーマットで報告せよ」といったものです。これが方針を統一し、予測可能な行動を可能にします。コードインタープリターは分析を実行する道具、SharePoint やカスタムのMCPコネクタはライブデータを計画に送り込む無線機にあたります。</p>\n<p>3つが揃ったエージェントは即興では動かず、ログとチェックポイントを伴ってミッションを遂行します。</p>\n\n<h3>モデルは自由に切り替えられる</h3>\n<p>多くのチャットAPIで得られるのは、モデルとプロンプトだけです。命令やツールオーケストレーションという正式な概念はありません。Foundry のエージェントサービスは、3つの層がすべて揃うことを保証します。しかも、ひとつのモデルに縛られることもありません。Foundry カタログ内のモデルを自由に切り替えられます。</p>\n<ul>\n<li>複雑な戦略には GPT-4</li>\n<li>軽量なタスクにはより小型のモデル</li>\n<li>Mistral や DeepSeek の導入も可能</li>\n</ul>\n<p>ミッションに合わせて選べる柔軟性が、画一的な存在と適応力のある司令官との違いです。</p>\n\n<h2>層が欠けると何が起きるのか:企業にとってのリスク</h2>\n<p>指示やツールといった層が欠けていると、まず出力が一貫性を失います。同じ契約書の要約でも、毎回違う内容になりかねません。そうなるとデバッグは当てずっぽうの作業になります。</p>\n<p>これは企業にとって些細な問題ではありません。信頼と導入を阻む現実的なリスクです。</p>\n<p>Foundry はこの問題に直接対処します。</p>\n<ul>\n<li>ガードレールがエージェントに組み込まれている</li>\n<li>指示は必ず守るべき普遍のルールブックとして機能する</li>\n<li>ツールセットは、ユースケースに応じて厳密に制限することも拡張することもできる</li>\n<li>モデルは入れ替え可能だが、常に説明責任を強制する構造の中で動く</li>\n</ul>\n<p>その結果、規律ある振る舞い、予測可能な出力、可視化された手順、エンタープライズコネクタやカスタムAPIによる責任ある拡張が得られます。AIを魔法の会話術として売り込むのではなく、ログを記録し、命令に従い、適切な装備を備えたチームメイトを組織に迎えるという考え方です。</p>\n\n<h2>スレッド:監査証跡の土台となる永続的な会話記録</h2>\n<p>優れた隊長は、あらゆるミッションの記録を慎重に残します。システム監査や実行の失敗時に、その記録が必要になるからです。Foundry でその記録にあたるのが<strong>スレッド</strong>です。</p>\n<p>スレッドは、閉じた瞬間に消えるチャットウィンドウではありません。持続可能な会話セッションです。ユーザーからの発言も、エージェントからの発言も、マルチエージェント環境における別のエージェントからの発言も、すべてここに保存されます。</p>\n\n<h3>モデルの制限を保ちつつ、記録は残す</h3>\n<p>スレッドは単なる静的な記録ではなく、自動的に切り捨て処理を行う構造化コンテナです。モデルの制限内でアクティブなコンテキストを維持しながら、完全な監査証跡を保存します。エージェントは進行中の会話を理解し続け、企業はレビュー可能な記録を永続的に保持できます。エージェントには継続性を、ビジネスにはガバナンスをもたらす仕組みです。</p>\n\n<h3>メッセージの中身</h3>\n<p>スレッドのエントリーはメッセージで構成されます。プレーンテキストに限らず、画像、スプレッドシートファイル、生成されたコードブロックも格納できます。各メッセージにはタイムスタンプと、ユーザーまたはアシスタントという役割ラベルが付きます。何が言われたかだけでなく、誰が、いつ、どのような形式で言ったのかまで確認できます。</p>\n<p>たとえばコンプライアンス担当者は、昨日送信されたテキストのリクエスト、エージェントが回答として生成したグラフ画像、その両方の発生時刻を記録から確認できます。</p>\n\n<h3>なぜこの記録が重要なのか</h3>\n<ul>\n<li><strong>監査・コンプライアンス</strong>:規制当局や内部監査チームは、ユーザーのリクエスト、エージェントの回答、使用されたツール、発生時刻の流れを即座に確認できます。</li>\n<li><strong>開発者</strong>:エージェントが誤ったコードを生成した場合、スレッドをそのリクエスト時点まで巻き戻し、原因を正確に追跡できます。</li>\n<li><strong>マルチエージェント</strong>:複数のエージェントが相談してタスクを分担した場合も、そのやり取りがすべてログに残ります。</li>\n</ul>\n<p>会話を保持しないシステムでは、スクリーンショットや曖昧な記憶に頼ることになります。証拠を求められたときも、バグを再現したいときも、それでは通用しません。記録がなければ証拠はなく、追跡できなければ修正もできません。</p>\n\n<h2>ラン:スレッドの内容を実際の実行に変える</h2>\n<p>ログはあくまで日記にすぎません。本当のアクションは、エージェントがスレッドの内容を読み取り、実行に移したときに始まります。</p>\n<p>スレッドは会話の履歴、指示、コンテキストを保持しています。<strong>ラン</strong>は、エージェントがそのコンテキストを受け取って実行に移すためのトリガーです。つまり、スレッドは記憶し、ランは実行します。スレッドに「CSVを分析して」「折れ線グラフを描いて」と書かれていても、実際にモデルの指示とツールを通じて処理するのはランの役目です。外部データの取得、数値の計算、コードインタープリターの呼び出しによる成果物の生成が、ここで行われます。</p>\n\n<h3>ランはブラックボックスではない</h3>\n<p>ランは、監視され、ステータスが追跡される実行プロセスです。通常、キュー待ち、進行中、アクション待ち、完了、失敗といった状態を確認できます。SDKのサンプルでは、ループでこれらの状態を繰り返しポーリングします。これにより、何が行われるかだけでなく、いつ行われるかも把握できます。</p>\n\n<h2>ランステップ:AIの一挙手一投足を残す実行ログ</h2>\n<p>ランのステータスが分かっても、内部で実際に何が起きたかまでは分かりません。回答がまともに見えても、外部APIを呼んだのか、コードを書いたのか、文章をでっち上げただけなのか、判別できないのです。この不透明さはエンタープライズ環境では危険です。</p>\n<p>この問題を解消するのが<strong>ランステップ</strong>です。すべてのランはステップごとに記録され、次の点が分かります。</p>\n<ul>\n<li>どのモデル出力が生成されたか</li>\n<li>どのツールが呼び出されたか</li>\n<li>どの計算が行われたか</li>\n<li>どのメッセージが生成されたか</li>\n</ul>\n<p>チェスの棋譜のように、「ファイルを取得」「コードブロックを実行」「グラフを出力」といった行動が時刻とともに順番に書き留められます。そのため、後から再現できます。</p>\n\n<h3>開発者にとっての価値</h3>\n<p>ランステップがなければ、最終的な回答を前にしても、どう導かれたのか見当がつきません。検索クエリが間違っていたのか、計算ミスが紛れ込んだのか、推測するしかありません。ランステップがあればタイムラインをたどって誤りの箇所を特定し、修正できます。デバッグは当てずっぽうの作業から、科学的な検証へと変わります。</p>\n\n<h3>コンプライアンスにとっての価値</h3>\n<p>「この要約はどのように生成されたのか」と監査担当者に問われたとき、モデルの推論を抽象的な言葉で説明する必要はありません。ツール呼び出し、インタープリターのステップ、組み立てられた回答が、タイムスタンプ付きで手元にあるからです。説明が統制に変わり、物語ではなく証拠を示せます。ワークフローを再実行する場合も、同じ手順をなぞるだけです。結果に疑義が生じても、再現して確認できます。</p>\n\n<h2>ツールとセキュリティ:実務で使えるエージェントにする</h2>\n<p>スレッド、ラン、ランステップを操作するには、SDKによる構造化された方法があります。個々のAPI呼び出しに溺れることなく、エージェントを起動し、実行をトリガーし、ステップを読み戻せます。ドキュメントの確認方法や計算手順を説明するだけでなく、エージェントが実際に実行して結果を返せる点が、デモで終わらず企業現場で価値を持つ理由です。</p>\n\n<h3>3つの能力カテゴリー</h3>\n<ol>\n<li><strong>組み込みツール</strong>:コードインタープリター、SharePoint や Microsoft Fabric のコネクタなど。回答にとどまらず、検証や再利用が可能な成果物まで範囲を広げます。</li>\n<li><strong>カスタムツール</strong>:OpenAPI仕様やモデルコンテキストプロトコル(MCP)を通じて登録できます。MCPはAIツールのUSB-Cのような存在で、リモートのMCPサーバーに接続しても、ラッパーを手書きする必要はありません。ツールの検出、バージョン管理、呼び出しはシステムが自動で処理するため、数十のシステムを連携させる環境ほど統合の負担が軽くなります。</li>\n<li><strong>観測可能な呼び出し</strong>:すべてのツール呼び出しは、ステップ単位でID、入力、出力、タイムスタンプとともに記録されます。運用担当者にとってエージェントは「信じて任せる魔法」ではなく、台帳のようなものです。</li>\n</ol>\n\n<h3>CSV分析の流れ</h3>\n<p>クイックスタートのデモでは、CSVファイルをメッセージとしてスレッドにアップロードします。エージェントは実行ステップ内でコードインタープリターを呼び出し、ファイルを処理してグラフを生成します。成果物は画像として返され、スレッドログ内で直接確認できます。パーサーや可視化ツールを自作する必要はなく、指示を出せば、エージェントがツールを選んで実行し、レポートに貼り付けられるファイルを返します。これはSDKサンプルで文書化されている動作です。</p>\n\n<h3>既存システムとの統合と権限管理</h3>\n<p>ツールを Logic Apps にリンクすれば、エージェントは1400以上のSaaSおよびオンプレミスのコネクタにアクセスできます。CRM、ERP、ITSMプラットフォーム向けのアダプターを書き直す代わりに、ビジネスですでに稼働しているコネクタに設定を行うだけで済みます。</p>\n<p>セキュリティ面では、SharePoint や Fabric のような企業システムに接続する際、Microsoft Entra を介した On-Behalf-Of(代理)認証を使います。ファイルを読む権限がなければ、エージェントがその壁を突破することはありません。IDと権限は維持され、誰が呼び出し、何を送信し、何を受信したのかも追跡できます。これがコンプライアンスチームの承認を得るための条件になります。</p>\n\n<h2>実践のためのポイント</h2>\n<ul>\n<li>エージェントは「モデル・指示・ツール」の3要素で設計する。どれが欠けても再現性と観察性は失われる。</li>\n<li>モデルはタスクに合わせて Foundry カタログから選び、指示をルールブックとして明確に書く。</li>\n<li>スレッドを永続的な会話記録として活用し、リクエスト、回答、使用ツール、時刻を監査に備えて残す。</li>\n<li>ランのステータスを監視し、ランステップで何がどの順に行われたかを確認する。</li>\n<li>ツールはユースケースに応じて制限・拡張し、MCPやOpenAPI、既存コネクタで統合の手間を減らす。</li>\n<li>企業システムとの接続では、Microsoft Entra のOn-Behalf-Of認証によって権限を維持する。</li>\n<li>まずテストプロジェクトを立ち上げて基本エージェントを作成し、スレッドを実行して、SDKまたはポータルでランステップを確認する。</li>\n</ul>\n\n<h2>まとめ</h2>\n<p>Azure AI Foundry は、モデルにプロンプトを投げるだけの場ではありません。指示とツールを備えたエージェントを、再現可能な形で構築するための基盤です。エージェントの動作はスレッド、ラン、ランステップに記録され、開発リードもコンプライアンス担当者も、ライフサイクル全体を可視化し、統制できます。まずは小さなテストプロジェクトで実行ステップを確認し、ログが実際の出来事と一致していることを確かめるのが、導入への確実な第一歩です。</p>",
   "model": "claude-sonnet-5-5",
@@ -1373,6 +1175,195 @@
      {
       "wert": "On-Behalf-Of認証",
       "text": "Microsoft Entra経由でIDと権限を維持し、誰が何を送受信したか追跡できる"
+     }
+    ]
+   }
+  ]
+ },
+ "es": {
+  "html": "<p>Desplegar una IA en Azure AI Foundry no equivale a lanzar un modelo sobredimensionado y esperar lo mejor. Foundry la coloca en un entorno gestionado donde cada acción, cada mensaje, cada llamada a herramientas y cada paso de ejecución queda registrado y es rastreable. Eso es lo que separa un experimento impredecible de un sistema auditable y apto para la empresa.</p>\n<p>Este artículo explica cómo encajan las piezas: el agente y su diseño, los hilos, las ejecuciones, los pasos de ejecución y las herramientas. También explica por qué, juntas, convierten una IA improvisada en un compañero de equipo cuyas acciones puedes rastrear, probar y defender.</p>\n\n<h2>Agentes de Azure AI en Foundry: modelo, instrucciones y herramientas</h2>\n<p>Cuando configuras un agente en Foundry no abres una simple ventana de chat. Nombras a un responsable de misión, con un diseño claro basado en tres engranajes: el modelo, las instrucciones y las herramientas. Un agente de Azure AI está construido explícitamente sobre esta tríada. Sin ella no hay reproducibilidad ni auditabilidad, solo generación de texto sin comprobante.</p>\n<ul>\n  <li><strong>El modelo</strong> es el cerebro. Se encarga del razonamiento y del lenguaje: analiza el texto humano, planifica pasos y redacta respuestas.</li>\n  <li><strong>Las instrucciones</strong> son la orden de la misión. Evitan que el modelo divague y lo centran en los resultados que realmente necesitas, por ejemplo proteger un flujo concreto, extraer datos de un conjunto de contratos o informar los resultados en un formato específico.</li>\n  <li><strong>Las herramientas</strong> son el equipamiento: ejecución de código, conectores de búsqueda, APIs de informes o cualquier sistema externo que conectes al agente.</li>\n</ul>\n<p>Cuando los tres elementos se unen, el agente no improvisa: ejecuta una misión con registros y puntos de control.</p>\n\n<h3>Flexibilidad en la elección del modelo</h3>\n<p>En la mayoría de las aplicaciones de chat solo tienes un modelo y un prompt, sin un sentido formal de órdenes ni orquestación de herramientas. El servicio de agentes de Foundry garantiza que las tres capas estén presentes. Además, no quedas atado a un único modelo: puedes cambiar entre los del catálogo de Foundry. Puedes elegir uno potente para una estrategia compleja, uno más ligero para tareas sencillas o incluso integrar Mistral. Eliges lo que mejor se adapte a cada misión.</p>\n\n<h2>Riesgos y errores frecuentes cuando faltan capas</h2>\n<p>Conviene entender qué ocurre si falta alguna de las tres capas, porque en una empresa estos problemas no son una molestia menor: bloquean la confianza y la adopción.</p>\n<ul>\n  <li><strong>Resultados inconsistentes:</strong> un resumen de contrato dice una cosa y el siguiente la contradice de forma sutil.</li>\n  <li><strong>Pérdida de trazabilidad:</strong> ningún registro estructurado captura cómo se elaboró la respuesta.</li>\n  <li><strong>Depuración a ciegas:</strong> los desarrolladores no pueden seguir la cadena de razonamiento y acaban adivinando.</li>\n  <li><strong>Seguimiento con medios frágiles:</strong> sin conversaciones persistentes, intentas reconstruir el comportamiento con capturas de pantalla o recuerdos vagos, lo que no sirve cuando cumplimiento pide pruebas o soporte debe reproducir un error.</li>\n  <li><strong>Respuestas opacas:</strong> una respuesta puede parecer correcta, pero sin detalle no sabes si el agente consultó una API externa y ejecutó código o si simplemente improvisó texto.</li>\n</ul>\n<p>Foundry integra barreras de seguridad en el propio diseño. Las instrucciones actúan como un reglamento fijo que debe seguirse. El conjunto de herramientas puede limitarse estrictamente o ampliarse según el caso de uso. El modelo puede cambiarse libremente, pero siempre dentro de una estructura que exige responsabilidad.</p>\n\n<h2>Hilos en Azure AI Foundry: el registro persistente de cada conversación</h2>\n<p>Un hilo no es una ventana de chat casual que desaparece al cerrarla. Es una sesión de conversación persistente. Cada intercambio se almacena, ya provenga de un usuario, del agente o de otro agente en una configuración multiagente. El historial puede revisarse mucho después de que termine el chat.</p>\n<p>Los hilos tampoco son transcripciones estáticas. Son contenedores estructurados que gestionan automáticamente el truncamiento: mantienen el contexto activo dentro de los límites del modelo y preservan una pista de auditoría completa. El agente conserva la continuidad de la conversación y la empresa obtiene un registro permanente y revisable.</p>\n\n<h3>Qué contiene un mensaje</h3>\n<p>Las entradas del hilo son mensajes, y un mensaje no se limita al texto. Puede incluir una imagen, un archivo de hoja de cálculo o un bloque de código generado. Cada uno lleva una marca de tiempo y una etiqueta de rol, usuario o asistente. Al inspeccionar un hilo ves qué se dijo, quién lo dijo, cuándo y qué tipo de contenido estaba implicado. Un responsable de cumplimiento puede abrirlo y ver la solicitud exacta enviada ayer, el gráfico que el agente produjo como respuesta y el momento en que ocurrió cada evento.</p>\n\n<h3>Valor para auditoría y desarrollo</h3>\n<p>Para auditoría y cumplimiento, los reguladores o los equipos internos pueden abrir un hilo y ver de inmediato la secuencia completa: la solicitud, la respuesta, las herramientas utilizadas y el momento de cada paso. Si un flujo de trabajo extrae lenguaje legal, el registro muestra la solicitud original, la respuesta generada y si se usaron herramientas de apoyo. Si varios agentes se reparten tareas, su intercambio también queda registrado.</p>\n<p>Para los desarrolladores, el mismo registro sirve como herramienta de depuración. Si un agente produjo un fragmento de código incorrecto, pueden retroceder en el hilo hasta la petición y ver cómo llegó a esa conclusión. Cada conversación se convierte en evidencia estructurada, y así los hilos transforman chats caóticos en algo listo para producción.</p>\n\n<h2>Ejecuciones y pasos de ejecución: de la conversación a la acción trazable</h2>\n<p>El hilo guarda el historial, las órdenes y el contexto. La <strong>ejecución</strong> es el disparador que hace que el agente tome ese contexto y lo lleve a cabo. El hilo puede contener la petición «analiza el CSV» o «dibuja un gráfico de línea», pero es la ejecución la que procesa esa solicitud a través de las instrucciones y herramientas del modelo. El agente puede buscar datos adicionales, procesar números o llamar al intérprete de código para generar un artefacto.</p>\n\n<h3>Estados de una ejecución</h3>\n<p>Las ejecuciones no son una caja negra: se monitorizan y tienen seguimiento de estado. Normalmente verás estados como en cola, en progreso, requiere acción, completado o fallido. Los ejemplos del SDK suelen consultar estos estados en un bucle. Así sabes no solo qué se hace, sino también cuándo sucede.</p>\n\n<h3>Pasos de ejecución: el detalle que elimina las suposiciones</h3>\n<p>Saber que una ejecución terminó no basta. Los pasos de ejecución registran, uno a uno, qué resultados generó el modelo, qué herramientas invocó, qué cálculos ejecutó y qué mensajes produjo. Es como una notación de ajedrez para la IA: cada acción queda escrita en orden, con su hora, por ejemplo obtener un archivo, ejecutar un bloque de código y devolver un gráfico.</p>\n<ul>\n  <li><strong>Para desarrolladores:</strong> si hay una consulta de búsqueda errónea o un error matemático, puedes recorrer la línea de tiempo, identificar el fallo exacto y corregirlo. La depuración pasa de la suposición al análisis forense.</li>\n  <li><strong>Para cumplimiento:</strong> cuando un auditor pregunta cómo se generó un resumen, no hace falta describir el razonamiento del modelo en abstracto. Se presentan pruebas documentadas: la llamada, la herramienta, el paso del intérprete y la respuesta ensamblada, todo con marca de tiempo.</li>\n  <li><strong>Para operaciones:</strong> si un flujo debe repetirse, se puede seguir la misma secuencia; si un resultado se cuestiona, se puede reproducir.</li>\n</ul>\n<p>Con la ejecución completa y sus pasos obtienes evidencia auditable y reproducible de cómo se crearon los resultados. Es el cambio de promesas a pruebas.</p>\n\n<h2>Herramientas del agente: integradas, personalizadas y observables</h2>\n<p>Las herramientas son lo que convierte a un agente en alguien que trabaja, no solo en alguien que conversa. En lugar de describir cómo revisar un documento o hacer un cálculo, el agente puede hacerlo y devolver el resultado. Foundry ofrece tres categorías de capacidad.</p>\n\n<h3>1. Herramientas integradas</h3>\n<p>Incluyen el intérprete de código, la búsqueda de Bing, los conectores de SharePoint, Microsoft Fabric y Azure AI Search. Con ellas el agente puede analizar datos, extraer archivos, buscar contenido empresarial y crear gráficos o informes sin conexiones personalizadas.</p>\n\n<h3>2. Herramientas personalizadas: OpenAPI y MCP</h3>\n<p>Puedes registrar herramientas propias mediante especificaciones OpenAPI y el Model Context Protocol (MCP). MCP se compara con el USB-C de las herramientas de IA: al conectar agentes a servidores MCP remotos, el sistema gestiona automáticamente el descubrimiento, el versionado y la invocación de herramientas, sin escribir envoltorios manuales cada vez. Esto reduce de forma notable la carga de integración cuando hay muchos sistemas que conectar.</p>\n<p>Las herramientas también pueden vincularse a aplicaciones lógicas, lo que da acceso a más de 1.400 conectores existentes. En lugar de reescribir adaptadores para plataformas CRM, ERP o ITSM, configuras los conectores que la empresa ya utiliza.</p>\n\n<h3>3. Llamadas observables</h3>\n<p>Cada llamada a una herramienta se registra a nivel de paso, con identidad, entradas, salidas y marcas de tiempo. La vista operativa es, por tanto, un libro de contabilidad y no un acto de fe: puedes ver qué se invocó, confirmar que se respetaron los permisos y conservar registros permanentes para cumplimiento.</p>\n\n<h3>Un ejemplo práctico con un CSV</h3>\n<p>Subes un archivo CSV como mensaje a un hilo. El agente llama al intérprete de código dentro de los pasos de ejecución, procesa el archivo y genera un gráfico. El resultado vuelve como imagen adjunta, visible directamente en el registro del hilo. No escribiste ningún analizador ni visualización: diste una instrucción y el agente eligió la herramienta, la ejecutó y devolvió un archivo que puedes incluir en un informe.</p>\n\n<h2>Seguridad y gobernanza: identidad, permisos y trazabilidad</h2>\n<p>La seguridad es la pregunta que sigue de inmediato. Cuando las herramientas se conectan a sistemas empresariales como SharePoint o Fabric, lo hacen con autenticación delegada mediada por Microsoft Entra. Si ayer no tenías autorización para leer un archivo, el agente no sortea esa barrera hoy. Identidad y permisos permanecen intactos, y es la única forma en que los equipos de cumplimiento dan su aprobación.</p>\n<p>Además, cada llamada es rastreable: quién la invocó, qué se envió y qué se recibió. El resultado son agentes que consultan datos reales, los procesan y actúan dentro de los límites que TI ya conoce. Sin herramientas conectadas de forma responsable y registradas de forma fiable, el agente se queda en una sesión de chat que presume mucho pero no hace el trabajo.</p>\n\n<h2>Claves prácticas para agentes auditables en Foundry</h2>\n<ul>\n  <li>Diseña cada agente con la tríada completa: modelo, instrucciones y herramientas.</li>\n  <li>Usa las instrucciones como reglamento fijo y limita o amplía las herramientas según el caso de uso.</li>\n  <li>Elige el modelo del catálogo según la tarea: más potente para lo complejo, más ligero para lo sencillo.</li>\n  <li>Apóyate en los hilos como registro persistente de mensajes, con rol, marca de tiempo y tipo de contenido.</li>\n  <li>Monitoriza el estado de las ejecuciones: en cola, en progreso, requiere acción, completado o fallido.</li>\n  <li>Inspecciona los pasos de ejecución para depurar errores y responder a auditorías con pruebas.</li>\n  <li>Aprovecha las herramientas integradas, OpenAPI y MCP antes de escribir integraciones frágiles.</li>\n  <li>Conecta los sistemas empresariales con autenticación delegada de Microsoft Entra para respetar los permisos existentes.</li>\n  <li>Empieza con un proyecto de prueba: crea un agente básico, ejecuta un hilo y revisa los pasos de ejecución en el SDK o en el portal.</li>\n</ul>\n\n<h2>Conclusión</h2>\n<p>Foundry ofrece una forma repetible de construir agentes con cerebro, reglamento y un kit de herramientas, y cada acción que realizan queda registrada en hilos, ejecuciones y pasos de ejecución. Para el responsable de desarrollo y para el equipo de cumplimiento el mensaje es el mismo: ejecución reproducible y auditable, con control y visibilidad de todo el ciclo de vida a través de SDKs como el de .NET. La mejor manera de comprobarlo es crear un agente de prueba, ejecutar un hilo y revisar que los registros coincidan con lo ocurrido.</p>",
+  "model": "claude-sonnet-5-5",
+  "info": {
+   "titel": "Agentes auditables en Azure AI Foundry",
+   "typ": "schritte",
+   "punkte": [
+    {
+     "kopf": "Diseñar el agente",
+     "text": "Define modelo, instrucciones y herramientas: la tríada que da reproducibilidad y auditabilidad."
+    },
+    {
+     "kopf": "Abrir un hilo",
+     "text": "Sesión persistente que guarda mensajes con rol, marca de tiempo y tipo de contenido."
+    },
+    {
+     "kopf": "Lanzar la ejecución",
+     "text": "El agente procesa el contexto del hilo; su estado se monitoriza hasta completarse o fallar."
+    },
+    {
+     "kopf": "Usar herramientas",
+     "text": "Intérprete de código, SharePoint, OpenAPI o MCP, con permisos delegados mediante Microsoft Entra."
+    },
+    {
+     "kopf": "Revisar los pasos",
+     "text": "Cada llamada y cálculo queda registrado para depurar, reproducir y demostrar cumplimiento."
+    }
+   ]
+  },
+  "faq": [
+   {
+    "q": "¿Qué es un agente de Azure AI en Foundry y de qué se compone?",
+    "a": "Un agente de Azure AI en Foundry se construye sobre una tríada: el modelo, que razona y redacta; las instrucciones, que son la orden de la misión y evitan que divague; y las herramientas, como ejecución de código, búsqueda o APIs. Juntas permiten reproducibilidad y auditabilidad."
+   },
+   {
+    "q": "¿Qué diferencia hay entre un hilo, una ejecución y los pasos de ejecución en Azure AI Foundry?",
+    "a": "El hilo es una sesión de conversación persistente que guarda todos los mensajes con rol, marca de tiempo y tipo de contenido. La ejecución es el disparador que hace que el agente actúe sobre ese contexto. Los pasos de ejecución registran, en orden y con hora, cada herramienta invocada y cada resultado."
+   },
+   {
+    "q": "¿Qué herramientas puede usar un agente en Azure AI Foundry?",
+    "a": "Foundry ofrece herramientas integradas, como el intérprete de código, la búsqueda de Bing, SharePoint, Microsoft Fabric y Azure AI Search. También permite registrar herramientas personalizadas mediante OpenAPI y el Model Context Protocol (MCP), además de acceder a más de 1.400 conectores a través de aplicaciones lógicas. Cada llamada queda registrada."
+   },
+   {
+    "q": "¿Cómo garantiza Azure AI Foundry la seguridad y el cumplimiento de los agentes?",
+    "a": "Cuando las herramientas se conectan a sistemas como SharePoint o Fabric, usan autenticación delegada mediante Microsoft Entra, de modo que se respetan los permisos existentes. Además, cada llamada es rastreable: quién la invocó, qué se envió y qué se recibió, con marcas de tiempo que sirven como prueba en auditorías."
+   }
+  ],
+  "infos": [
+   {
+    "titulo": "Riesgos cuando faltan capas en un agente",
+    "titel": "Riesgos cuando faltan capas en un agente",
+    "typ": "checkliste",
+    "punkte": [
+     "Resultados inconsistentes: un resumen contradice sutilmente al siguiente",
+     "Pérdida de trazabilidad: ningún registro estructurado explica cómo se elaboró la respuesta",
+     "Depuración a ciegas: no se puede seguir la cadena de razonamiento",
+     "Seguimiento frágil con capturas de pantalla o recuerdos vagos",
+     "Respuestas opacas: no se sabe si hubo herramientas o improvisación"
+    ]
+   },
+   {
+    "titel": "Tres categorías de herramientas en Foundry",
+    "typ": "fakten",
+    "punkte": [
+     {
+      "wert": "Integradas",
+      "text": "Intérprete de código, Bing, SharePoint, Microsoft Fabric y Azure AI Search sin conexiones personalizadas."
+     },
+     {
+      "wert": "OpenAPI y MCP",
+      "text": "Herramientas propias; MCP gestiona descubrimiento, versionado e invocación sin envoltorios manuales."
+     },
+     {
+      "wert": "1.400",
+      "text": "Conectores existentes accesibles mediante aplicaciones lógicas para CRM, ERP o ITSM."
+     },
+     {
+      "wert": "Observables",
+      "text": "Cada llamada se registra con identidad, entradas, salidas y marcas de tiempo."
+     }
+    ]
+   }
+  ]
+ },
+ "fr": {
+  "html": "<p>Déployer une IA dans Azure AI Foundry, ce n'est pas simplement lancer un grand modèle de langage et espérer que tout se passe bien. L'agent évolue dans un environnement d'exécution géré, où les actions, les messages, les appels d'outils et les étapes d'exécution pertinents sont consignés et tracés. L'IA cesse d'être un électron libre pour devenir un système discipliné, que l'on peut gouverner.</p>\n<p>Trois notions forment cette trace écrite : les <strong>threads</strong>, les <strong>exécutions (runs)</strong> et les <strong>étapes d'exécution (run steps)</strong>. Cet article montre comment elles s'articulent avec les outils de l'agent pour rendre vos projets d'IA vérifiables et prêts pour l'entreprise.</p>\n\n<h2>Agent Azure AI Foundry : la triade modèle, instructions et outils</h2>\n<p>Un agent Azure AI est construit explicitement sur trois éléments fondamentaux. Sans eux, on n'obtient ni reproductibilité ni auditabilité, seulement de la génération de texte « sans reçu ».</p>\n<ul>\n<li><strong>Le modèle</strong> est le cerveau. Il gère le raisonnement et le langage : il analyse les demandes, planifie les étapes et rédige les réponses.</li>\n<li><strong>Les instructions</strong> sont les ordres de mission. Elles empêchent le modèle de dériver et l'ancrent dans les résultats réellement attendus, par exemple extraire des données d'un ensemble de contrats et rapporter les résultats dans un format précis.</li>\n<li><strong>Les outils</strong> sont l'équipement : exécution de code, connecteurs de recherche, API de reporting ou tout système tiers que vous connectez.</li>\n</ul>\n<p>Une métaphore parlante est celle du capitaine de terrain. Le modèle est son entraînement, les instructions sont son briefing et les outils lui apportent des spécialisations, comme un interpréteur de code pour exécuter des analyses ou un connecteur SharePoint ou MCP personnalisé qui l'alimente en données en direct. Réunis, ces trois éléments font que l'agent n'improvise pas : il exécute une mission, avec des journaux et des points de contrôle.</p>\n<h3>Une flexibilité qui ne sacrifie pas la structure</h3>\n<p>Dans la plupart des API de chat, vous n'avez qu'un modèle et une invite. Dès que le modèle se met à répondre, il n'existe aucune notion formelle d'ordres ni d'orchestration d'outils. Le service d'agents de Foundry garantit au contraire que les trois couches sont présentes.</p>\n<p>Vous n'êtes pas non plus lié à un seul cerveau. Le catalogue Foundry permet de basculer entre plusieurs modèles : GPT-4 pour une stratégie complexe, un modèle plus léger pour des tâches simples, ou encore un modèle comme Mistral. Le modèle peut être échangé librement, mais toujours dans le cadre d'une structure qui impose la responsabilité.</p>\n\n<h2>Les threads : le journal de mission persistant</h2>\n<p>Dans Azure AI Foundry, un thread n'est pas une fenêtre de discussion ordinaire qui disparaît quand on la ferme. C'est une session de conversation <strong>persistante</strong>. Chaque échange y est stocké, qu'il vienne de l'utilisateur, de l'agent ou d'un autre agent dans une configuration multi-agent. L'historique reste consultable longtemps après la fin de la discussion.</p>\n<p>Un thread n'est pas une simple transcription statique, mais un conteneur structuré. Il gère automatiquement la troncature : le contexte actif reste dans les limites du modèle, tandis qu'une piste d'audit complète est conservée. L'agent continue donc de comprendre la conversation en cours, et l'entreprise garde un enregistrement permanent et consultable. L'agent y gagne en continuité, l'organisation en gouvernance.</p>\n<h3>Des messages riches et horodatés</h3>\n<p>Les entrées du thread sont des messages. Un message ne se limite pas à du texte brut : il peut contenir une image, un fichier tableur ou un bloc de code généré. Chacun est horodaté et associé à un rôle (utilisateur ou assistant). En inspectant un thread, on voit donc ce qui a été dit, par qui, quand et avec quel type de contenu.</p>\n<p>Un responsable de la conformité peut ainsi ouvrir un enregistrement et retrouver la demande exacte soumise la veille, le graphique produit en réponse et le moment précis où les deux événements se sont produits. On pense au carnet de notes d'une campagne de jeu de rôle : en y consignant les lieux visités et le butin, on évite les disputes sur des détails oubliés.</p>\n<h3>Audit, débogage et preuve</h3>\n<p>Pour l'audit et la conformité, les régulateurs ou les équipes internes visualisent immédiatement la séquence complète : demande de l'utilisateur, réponse de l'agent, outils impliqués et chronologie. Pour les développeurs, le même enregistrement sert de mode débogage : face à un mauvais extrait de code, on remonte jusqu'à la demande d'origine pour comprendre comment l'agent en est arrivé là. Quand plusieurs agents se répartissent des tâches, leurs échanges sont eux aussi consignés.</p>\n<p>Sans threads, on en est réduit aux captures d'écran et aux souvenirs approximatifs, ce qui ne tient pas quand la conformité demande des preuves ou que le support doit reproduire un bug. Avec eux, chaque conversation devient une preuve structurée.</p>\n\n<h2>Les exécutions (runs) : le moment où l'agent passe à l'action</h2>\n<p>Le thread contient le contexte : les ordres, l'historique, les demandes. Mais un journal reste un journal. Une <strong>exécution</strong> est le déclencheur qui active l'agent pour qu'il prenne ce contexte et le traite réellement. Les threads se souviennent, les exécutions agissent. L'exécution est le bouton de lancement.</p>\n<p>Si le thread contient la demande d'analyser un fichier CSV ou de tracer un graphique linéaire, l'exécution est le moment où l'agent traite cette requête avec ses instructions, son modèle et ses outils. Il peut chercher des données supplémentaires, traiter des chiffres ou appeler l'interpréteur de code pour générer un artefact.</p>\n<h3>Des états suivis, pas une boîte noire</h3>\n<p>Les exécutions sont surveillées et suivies par états. On rencontre typiquement les statuts suivants :</p>\n<ul>\n<li>mise en file d'attente ;</li>\n<li>en cours ;</li>\n<li>action requise ;</li>\n<li>terminée ;</li>\n<li>échouée.</li>\n</ul>\n<p>Les exemples du SDK interrogent souvent ces états dans une boucle. On sait ainsi non seulement ce qui se fait, mais aussi quand cela se produit.</p>\n\n<h2>Les étapes d'exécution (run steps) : la notation d'échecs de l'IA</h2>\n<p>Reste une question : que s'est-il réellement passé pendant l'exécution ? Une réponse peut sembler correcte, mais sans détail, impossible de savoir si l'agent a appelé une API externe, écrit du code ou simplement improvisé du texte. Dans un environnement d'entreprise, cette opacité est dangereuse : c'est comme voir un échiquier en pleine partie et s'entendre dire « faites-nous confiance ».</p>\n<p>Les étapes d'exécution lèvent ces doutes. Chaque exécution est enregistrée pas à pas, avec les sorties du modèle, les outils invoqués, les calculs effectués et les messages produits. C'est la notation d'échecs de l'IA : récupération du fichier, exécution du bloc de code, renvoi de l'artefact du graphique, chaque action étant écrite dans l'ordre pour pouvoir être rejouée.</p>\n<h3>Ce que cela change pour chaque équipe</h3>\n<ul>\n<li><strong>Développeurs :</strong> face à une requête de recherche erronée ou à une erreur de calcul, on fait défiler la chronologie, on repère le raté exact et on le corrige. Le débogage devient une analyse quasi médico-légale plutôt qu'une conjecture.</li>\n<li><strong>Conformité :</strong> à la question « comment ce résumé a-t-il été généré ? », on répond avec des reçus : appel d'outil, calculs de l'interpréteur, réponse assemblée, horodatage. Des preuves remplacent le récit, et le risque se transforme en responsabilité démontrable.</li>\n<li><strong>Exploitation :</strong> si un workflow doit être relancé, on suit la même séquence ; si un résultat est contesté, on peut le rejouer.</li>\n</ul>\n<p>Avec les threads pour le journal, les exécutions pour l'action et les étapes d'exécution pour le détail mouvement par mouvement, l'IA improvisée devient un coéquipier dont on peut suivre, tester et défendre les actions.</p>\n\n<h2>Outils et intégrations d'entreprise : de l'agent bavard à l'agent qui travaille</h2>\n<p>Ce sont les outils qui font passer l'agent de la parole à l'action. Au lieu de décrire comment analyser un document ou exécuter un calcul, il le fait et renvoie le résultat. C'est ce qui rend la plateforme utile en entreprise, et pas seulement impressionnante en démonstration. Foundry propose trois grandes catégories de fonctionnalités.</p>\n<h3>1. Les outils intégrés</h3>\n<p>On y trouve l'interpréteur de code, la recherche Bing, les connecteurs SharePoint et Microsoft Fabric, ainsi qu'Azure AI Search. L'agent peut analyser des données, traiter des fichiers, chercher dans le contenu de l'entreprise et créer des graphiques ou des rapports, sans code personnalisé. Les réponses bavardes deviennent des produits de travail tangibles, que l'on peut inspecter et réutiliser.</p>\n<h3>2. Les outils personnalisés</h3>\n<p>Foundry ne vous limite pas à ce que Microsoft fournit. Vous pouvez enregistrer vos propres outils via des spécifications OpenAPI ou via le Model Context Protocol (MCP), présenté comme l'USB-C des outils d'IA. Lorsque des agents se connectent à des serveurs MCP distants, le système gère automatiquement la découverte, la gestion des versions et l'invocation des outils, sans qu'il faille écrire des wrappers à la main. L'effort d'intégration diminue nettement, surtout quand des dizaines de systèmes doivent communiquer.</p>\n<h3>3. Des appels d'outils observables</h3>\n<p>Chaque appel est consigné au niveau des étapes, avec l'identité, les entrées, les sorties et les horodatages. La vue opérationnelle est un registre : on voit ce qui a été invoqué, on confirme que les autorisations ont été respectées et on conserve des enregistrements permanents pour la conformité.</p>\n<h3>Un exemple concret</h3>\n<p>Imaginez que vous déposiez un fichier CSV comme message dans un thread. L'agent appelle l'interpréteur de code dans ses étapes d'exécution, traite le fichier et génère un graphique. Celui-ci revient en pièce jointe, visible directement dans le journal du thread. Vous n'avez écrit ni analyseur ni module de visualisation : vous avez donné une instruction, l'agent a choisi l'outil et renvoyé un fichier prêt à glisser dans un rapport.</p>\n<h3>Connecteurs et sécurité</h3>\n<p>Les outils peuvent se connecter à Logic Apps, ce qui ouvre l'accès à plus de 1 400 connecteurs SaaS et sur site. Plutôt que de recoder des adaptateurs pour des plateformes CRM, ERP ou ITSM, on s'appuie sur les connecteurs déjà utilisés par l'entreprise, sans fragiles ponts d'API.</p>\n<p>Côté sécurité, lorsque les outils accèdent à des systèmes comme SharePoint ou Fabric, ils s'authentifient au nom de l'utilisateur avec Microsoft Entra. Si vous n'aviez pas le droit de lire un fichier hier, l'agent ne contournera pas cette limite aujourd'hui. L'identité et les autorisations restent intactes, condition indispensable pour que les équipes de conformité donnent leur accord. Chaque appel reste traçable : qui l'a invoqué, ce qui a été envoyé, ce qui a été reçu.</p>\n\n<h2>Erreurs et risques à éviter : que se passe-t-il quand les couches manquent ?</h2>\n<p>Les pièges apparaissent quand l'une des couches est absente, par exemple lorsqu'on se contente d'une API de chat avec une simple invite.</p>\n<ul>\n<li><strong>Des résultats incohérents :</strong> un résumé de contrat se lit d'une façon, le suivant le contredit subtilement.</li>\n<li><strong>Une perte de traçabilité :</strong> aucun journal structuré ne montre comment la réponse a été obtenue.</li>\n<li><strong>Un débogage à l'aveugle :</strong> sans pouvoir retracer la chaîne de raisonnement, les développeurs en sont réduits à des suppositions.</li>\n<li><strong>Un suivi par captures d'écran :</strong> sans threads, la mémoire floue remplace la preuve, ce qui ne tient pas face à un audit.</li>\n<li><strong>Des agents sans outils :</strong> on obtient une session de chat qui parle beaucoup, mais ne fait jamais le travail.</li>\n</ul>\n<p>En entreprise, ce n'est pas un simple inconvénient : c'est un vrai risque, qui bloque la confiance et l'adoption. Foundry y répond avec des garde-fous intégrés. Les instructions jouent le rôle de règles à suivre, l'ensemble d'outils peut être défini de façon stricte ou étendue selon le cas d'usage, et le modèle reste interchangeable dans un cadre qui impose la responsabilité.</p>\n\n<h2>Points clés à retenir</h2>\n<ul>\n<li>Construisez chaque agent sur la triade <strong>modèle, instructions, outils</strong> pour obtenir reproductibilité et auditabilité.</li>\n<li>Choisissez le modèle du catalogue Foundry adapté à la mission : GPT-4 pour une stratégie complexe, un modèle plus léger pour les tâches simples.</li>\n<li>Utilisez les <strong>threads</strong> comme journal persistant : messages horodatés, rôles, images, fichiers et code générés, avec gestion automatique de la troncature.</li>\n<li>Voyez l'<strong>exécution</strong> comme le déclencheur de l'action et surveillez ses statuts : en file d'attente, en cours, action requise, terminée, échouée.</li>\n<li>Exploitez les <strong>étapes d'exécution</strong> pour déboguer, auditer et rejouer ce que l'agent a fait.</li>\n<li>Combinez outils intégrés, outils personnalisés (OpenAPI, MCP) et connecteurs Logic Apps pour intégrer l'agent à votre système d'information.</li>\n<li>Comptez sur l'authentification au nom de l'utilisateur pour que les autorisations existantes restent respectées.</li>\n<li>Pour démarrer : lancez un projet de test, créez un agent de base, exécutez un thread, puis inspectez les étapes d'exécution dans le SDK ou le portail pour vérifier que vos journaux correspondent à ce qui s'est réellement passé.</li>\n</ul>\n\n<h2>Conclusion</h2>\n<p>Azure AI Foundry propose une méthode reproductible pour créer des agents dotés d'un cerveau, d'un manuel de règles et d'une boîte à outils, dont chaque action est consignée dans des threads, des exécutions et des étapes d'exécution. Pour les responsables du développement comme pour ceux de la conformité, l'intérêt est le même : un contrôle et une visibilité complets sur le cycle de vie de l'agent, avec des preuves plutôt que des promesses. C'est ce qui permet de passer d'une IA improvisée à un opérateur gouverné, dont on peut défendre chaque décision.</p>",
+  "model": "claude-sonnet-5-5",
+  "info": {
+   "titre": "Azure AI Foundry : une IA traçable de bout en bout",
+   "typ": "schritte",
+   "punkte": [
+    {
+     "kopf": "Définir l'agent",
+     "text": "Modèle, instructions et outils forment la triade qui garantit reproductibilité et auditabilité."
+    },
+    {
+     "kopf": "Ouvrir un thread",
+     "text": "Session persistante qui stocke chaque message horodaté, avec rôle, image, fichier ou code généré."
+    },
+    {
+     "kopf": "Lancer l'exécution",
+     "text": "Le run active l'agent sur le contexte du thread, avec des statuts suivis jusqu'à la fin."
+    },
+    {
+     "kopf": "Inspecter les étapes",
+     "text": "Chaque appel d'outil, calcul et message est enregistré dans l'ordre pour être rejoué."
+    },
+    {
+     "kopf": "Connecter les outils",
+     "text": "Outils intégrés, OpenAPI, MCP et Logic Apps, avec les autorisations de l'utilisateur respectées."
+    },
+    {
+     "kopf": "Auditer et déboguer",
+     "text": "Les journaux servent de preuves pour la conformité et de piste précise pour les développeurs."
+    }
+   ]
+  },
+  "faq": [
+   {
+    "q": "Quels sont les trois éléments d'un agent Azure AI Foundry ?",
+    "a": "Un agent Azure AI Foundry repose sur trois éléments : le modèle, qui assure le raisonnement et le langage ; les instructions, qui servent d'ordres de mission et évitent les dérives ; et les outils, comme l'interpréteur de code, les connecteurs ou les API. Cette triade garantit reproductibilité et auditabilité."
+   },
+   {
+    "q": "Quelle est la différence entre un thread, une exécution et une étape d'exécution dans Azure AI Foundry ?",
+    "a": "Le thread est le journal persistant de la conversation : messages horodatés, rôles et fichiers. L'exécution (run) est le déclencheur qui pousse l'agent à traiter ce contexte. Les étapes d'exécution (run steps) détaillent pas à pas ce qui s'est passé : outils appelés, calculs effectués et messages produits."
+   },
+   {
+    "q": "Comment Azure AI Foundry gère-t-il la sécurité et les autorisations quand l'agent accède à SharePoint ou Fabric ?",
+    "a": "Quand les outils accèdent à des systèmes comme SharePoint ou Fabric, ils s'authentifient au nom de l'utilisateur avec Microsoft Entra. Si l'utilisateur n'avait pas le droit de lire un fichier, l'agent ne contourne pas cette limite. Chaque appel reste traçable : qui l'a invoqué, ce qui a été envoyé et reçu."
+   },
+   {
+    "q": "Quels types d'outils peut-on connecter à un agent Azure AI Foundry ?",
+    "a": "Foundry propose des outils intégrés (interpréteur de code, recherche Bing, SharePoint, Microsoft Fabric, Azure AI Search), des outils personnalisés enregistrés via OpenAPI ou le Model Context Protocol (MCP), et des connecteurs Logic Apps donnant accès à plus de 1 400 connecteurs SaaS et sur site."
+   }
+  ],
+  "infos": [
+   {
+    "titel": "API de chat simple vs agent Azure AI Foundry",
+    "typ": "vergleich",
+    "links": {
+     "titre": "API de chat avec simple invite",
+     "titel": "API de chat avec simple invite",
+     "punkte": [
+      "Un modèle et une invite, sans notion formelle d'ordres",
+      "Aucun journal structuré de la façon dont la réponse a été obtenue",
+      "Débogage à l'aveugle, réduit à des suppositions",
+      "Suivi par captures d'écran et mémoire floue",
+      "Session de chat qui parle beaucoup mais ne fait pas le travail"
+     ]
+    },
+    "rechts": {
+     "titel": "Agent Azure AI Foundry",
+     "punkte": [
+      "Trois couches garanties : modèle, instructions et outils",
+      "Actions, appels d'outils et étapes tracés dans des journaux",
+      "Débogage par la chronologie, jusqu'au raté exact",
+      "Chaque conversation devient une preuve structurée dans un thread",
+      "Les outils font passer l'agent de la parole à l'action"
+     ]
+    }
+   },
+   {
+    "titel": "Les outils et intégrations d'entreprise de Foundry",
+    "typ": "fakten",
+    "punkte": [
+     {
+      "wert": "Intégrés",
+      "text": "Interpréteur de code, Bing, SharePoint, Microsoft Fabric et Azure AI Search, sans code personnalisé."
+     },
+     {
+      "wert": "OpenAPI et MCP",
+      "text": "Outils personnalisés enregistrés ; découverte, versions et invocation gérées automatiquement pour les serveurs MCP distants."
+     },
+     {
+      "wert": "1 400+",
+      "text": "Connecteurs SaaS et sur site accessibles via Logic Apps, sans recoder d'adaptateurs."
+     },
+     {
+      "wert": "Microsoft Entra",
+      "text": "Authentification au nom de l'utilisateur : les autorisations existantes restent intactes."
+     },
+     {
+      "wert": "Traçabilité",
+      "text": "Chaque appel consigné avec identité, entrées, sorties et horodatages."
      }
     ]
    }

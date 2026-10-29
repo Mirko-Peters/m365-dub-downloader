@@ -1,0 +1,91 @@
+{
+ "de": {
+  "html": "<p>Ein Power-Pages-Formular, das sich nicht sauber validieren lässt, kostet schnell einen ganzen Abend. Eine Zeile ändern, aktualisieren, vom nächsten Fehler ausgebremst werden und wieder von vorn beginnen: Am Ende steht oft ein notdürftig geflicktes Skript, das gerade so läuft. Keine Eleganz, kein Lerneffekt.</p>\n<p>GitHub Copilot in Visual Studio Code kann diesen Kreislauf durchbrechen, wenn Sie den Chat-Teilnehmer <strong>@powerpages</strong> nutzen. Dieser Artikel zeigt, wie Sie damit Formularvalidierung verbessern, Code verstehen, Ihre Website lokal bearbeiten und Fehler in Liquid-Templates eingrenzen. Die Einsatzgebiete reichen von der Optimierung von Liquid-Templates über schnelleres JavaScript und schnellere Formularvalidierung und verständliche Code-Erklärungen bis zu HTML mit Bootstrap für responsive Layouts und einfacheren Web-API-Aufrufen.</p>\n\n<h2>@powerpages in GitHub Copilot Chat: Kontext statt Standardcode</h2>\n<p>Der allgemeine Copilot liefert oft Fragmente, die im Ansatz nützlich, im Detail aber falsch sind. Er kennt die Eigenheiten von Power Pages nicht. Fügen Sie den Teilnehmer <strong>@powerpages</strong> hinzu, bekommen Sie keinen Standardcode mehr, sondern Vorschläge, die auf Ihre Umgebung zugeschnitten sind. Das Modul berücksichtigt Besonderheiten wie Liquid-Templates und Dataverse-Bindungen.</p>\n<p>Der Unterschied zeigt sich an einer einfachen Validierungsroutine. Der normale Copilot erzeugt ein Skript, das in einem schlichten HTML-Formular funktioniert. In Power Pages stößt es auf blinde Flecken: Es erkennt das Entitätsschema nicht, weiß nichts über Liquid-Tags und ignoriert Dataverse-Regeln. Mit vorangestelltem <strong>@powerpages</strong> erhalten Sie dagegen Validatoren, die die passenden Entitätsfeldreferenzen ansprechen.</p>\n<h3>So rufen Sie @powerpages auf</h3>\n<p>Öffnen Sie in VS Code das Copilot-Chat-Fenster und stellen Sie Ihrem Prompt <strong>@powerpages</strong> voran. Dieses Tag signalisiert Copilot, das Power-Pages-Modul statt des Standardmodus zu laden. Ein reproduzierbarer Beispiel-Prompt lautet sinngemäß: „@powerpages schreibe JavaScript-Code für die Formularfeld-Validierung, um zu prüfen, ob der Wert im Telefonfeld das richtige Format hat.“ Sie können ebenso nach Validatoren, Liquid-Snippets oder Dataverse-gebundenen Aufrufen fragen.</p>\n<h3>Voraussetzungen für den Kontext</h3>\n<ul>\n<li>Visual Studio Code ist installiert.</li>\n<li>Die Power-Plattform-Tools-Erweiterung ist installiert.</li>\n<li>Die GitHub-Copilot-Chat-Erweiterung ist installiert.</li>\n<li>Die Power-Plattform-CLI ist gegenüber Ihrer Dataverse-Umgebung authentifiziert.</li>\n<li>Die Website-Inhalte sind über die CLI heruntergeladen und in VS Code geladen.</li>\n</ul>\n<p>Der Authentifizierungsschritt ist der wichtigste. Copilot versteht Ihre Umgebung erst, wenn die Website-Inhalte bei angemeldetem Zustand in VS Code vorliegen. Ohne diese Basis bleibt es bei allgemeinen Ratschlägen.</p>\n<p>Beachten Sie außerdem die Governance: Einige Copilot-Funktionen für Power Pages befinden sich noch in der Vorschau. Mandanten-Administratoren steuern deren Aktivierung in den Copilot-Einstellungen der Power-Plattform-Administration. Fehlen Funktionen, ist das eine Admin-Einstellung und kein Fehler.</p>\n\n<h2>Formularvalidierung verbessern: vom Skript-Skelett zur robusten Lösung</h2>\n<p>Der erste Entwurf ist meist nur ein Skelett. Das Skript läuft technisch, blockiert aber nur den offensichtlichsten Unsinn. Sobald ein echter Benutzer ein Emoji in ein Telefonfeld einfügt oder ein Datum in der Zukunft als Geburtsdatum angibt, bricht die Validierung zusammen.</p>\n<p>Das Kernproblem ist oft das Feedback. Eine Meldung wie „Ungültige Eingabe“ ist wie eine verschlossene Tür ohne Hinweisschild. Der Benutzer rät, scheitert erneut und landet am Ende im Support.</p>\n<h3>Die Vier-Schritte-Schleife</h3>\n<ol>\n<li><strong>Skelett generieren:</strong> Lassen Sie sich mit @powerpages einen ersten Validierungscode erstellen.</li>\n<li><strong>Bessere Fehlermeldungen anfordern:</strong> Bitten Sie im selben Chat darum, den Code zu aktualisieren und detaillierte Fehlermeldungen zu schreiben.</li>\n<li><strong>Grenzfälle behandeln:</strong> Lassen Sie zum Beispiel Sonderzeichen in Zahlenfeldern abfangen oder Fehlertypen unterschiedlich beantworten.</li>\n<li><strong>Bereitstellen:</strong> Testen Sie das Ergebnis und stellen Sie es bereit.</li>\n</ol>\n<p>Weil Sie im selben Chat bleiben, aus dem das Skelett stammt, fängt Copilot nicht bei null an. Er aktualisiert den Code, der bereits in Ihrem Editor liegt. Sie wechseln nicht zwischen Browser-Tabs und müssen Prompts nicht neu aufbauen.</p>\n<h3>Vorher und nachher</h3>\n<p>Aus „Ungültige Eingabe“ wird nach der Verfeinerung etwa: „Telefonnummer darf nur Ziffern enthalten und muss mindestens 10 Zeichen lang sein.“ Der Benutzer weiß dann, was schiefgelaufen ist und wie er es selbst beheben kann. Das verbessert das Nutzererlebnis und senkt das Ticketaufkommen. Jede sorgfältig formulierte Meldung entlastet die Support-Warteschlange, jeder abgedeckte Randfall bedeutet ein instabiles Feld weniger in der Produktion.</p>\n<p>Ihre Rolle ändert sich dabei: Sie kämpfen nicht mehr mit kaputter Syntax, sondern formen einen funktionierenden Entwurf. Was als Notlösung beginnt, wird robust genug für Produktionsdaten. Die Entscheidung, was als gültige Eingabe gilt und wie Fehler den Benutzer leiten, bleibt aber bei Ihnen.</p>\n\n<h2>Power-Pages-Website lokal bearbeiten: Power-Plattform-CLI und VS Code</h2>\n<p>Sobald Sie über einzelne Skripte hinausgehen, brauchen Sie einen Überblick über die gesamte Website. Die umständliche Methode jongliert mit Browser-Tabs im Designstudio, springt zum Terminal und verschiebt Dateien, nur um eine kleine Änderung vorzunehmen. Der integrierte Weg hält alles in einer Umgebung.</p>\n<h3>Der Ablauf</h3>\n<ul>\n<li><strong>Authentifizieren:</strong> Melden Sie sich zuerst gegenüber Ihrer Dataverse-Umgebung an. Erst dann kann die CLI auf Ihre Website zugreifen.</li>\n<li><strong>Herunterladen:</strong> Ein einziger Befehl lädt die Website-Inhalte in Ihren lokalen Arbeitsbereich: Templates, Skripte, CSS-Dateien und Assets.</li>\n<li><strong>Bearbeiten:</strong> Liquid-Template und zugehörige JavaScript-Datei öffnen Sie direkt nebeneinander in VS Code.</li>\n<li><strong>Bereitstellen:</strong> Mit demselben CLI-basierten Workflow pushen Sie die Änderungen zurück in Ihre Power-Pages-Umgebung.</li>\n</ul>\n<p>Die Power-Plattform-Tools-Erweiterung macht die CLI-Befehle übersichtlicher. Die Kommandozeile steht weiterhin im integrierten Terminal von VS Code zur Verfügung, direkt verbunden mit Ihrem Arbeitsbereich. So vermeiden Sie manuelles Kopieren von Ordnern und doppelte Arbeitsschritte.</p>\n<p>Auch Copilot profitiert: Mit den lokalen Dateien kann er sich auf umgebungsspezifische Entitäten beziehen, statt allgemein zu raten. Ihre @powerpages-Prompts laufen im selben Arbeitsbereich wie Ihre Website-Inhalte. Ein typischer Ablauf: Website per CLI abrufen, Liquid-Datei einer Seite und deren Validierungsskript in VS Code öffnen und @powerpages bitten, die Fehlermeldung zu verbessern. Der Gewinn liegt weniger in zusätzlichen Tools als darin, sie zu bündeln. Sie vermeiden Kontextwechsel und bleiben fokussiert.</p>\n\n<h2>Debugging in Power Pages: Liquid und Dataverse verständlich erklärt</h2>\n<p>Manchmal besteht die Herausforderung nicht darin, neuen Code zu schreiben, sondern zu verstehen, warum etwas plötzlich fehlerhaft reagiert. Fehler wirken willkürlich, Protokolle liefern keinen Kontext. Ist es die Syntax, ein fehlerhaftes Liquid-Tag oder eine unkooperative Dataverse-Bindung?</p>\n<p>Liquid macht das schwieriger: Ein Include-Tag fügt an einer Stelle problemlos Inhalt ein, in leicht verändertem Kontext zerstört es das Layout. Dataverse-Bindungen lösen auf einem Formular korrekt auf und schlagen auf einem anderen lautlos fehl. Auch die Microsoft-Dokumentation erkennt an, dass sich Liquid und Dataverse je nach Platzierung unterschiedlich verhalten. Dann wird „so lange verschieben, bis es funktioniert“ schnell zum inoffiziellen Workflow.</p>\n<h3>Erklären, anwenden, testen</h3>\n<p>Mit dem Erklärbefehl rücken Sie den Code ins Rampenlicht. Geben Sie im Copilot-Chat <strong>@powerpages</strong> gefolgt von der Aufforderung ein, den folgenden Code zu erklären, und fügen Sie das betreffende Liquid-Snippet ein. Sie erhalten eine verständliche Erläuterung, was das Tag tut, was es einbindet und warum seine Position das Verhalten beeinflusst.</p>\n<ol>\n<li>Identifizieren Sie den fehlerhaften Codeabschnitt, etwa ein Formular, das nach einem Include-Tag abstürzt.</li>\n<li>Geben Sie genau diesen Code mit dem Erklärbefehl in den Chat ein.</li>\n<li>Nutzen Sie die Erklärung für eine kleine Umschreibung oder Layout-Anpassung.</li>\n<li>Testen Sie das Ergebnis.</li>\n</ol>\n<p>Im Beispiel zeigt die Erklärung, dass das Include-Tag ein bestimmtes Seitenfragment lädt und durch die Platzierung einen erforderlichen Container überschreibt. Sie verschieben das Tag wie vorgeschlagen, testen das Formular erneut und sind in drei Schritten von der Verwirrung bei der Lösung. Im selben Chat können Sie auch um Korrekturen bitten, etwa die Verschachtelung eines Includes anzupassen oder JavaScript so zu optimieren, dass ein Event-Handler feuert, ohne die Konsole zum Absturz zu bringen.</p>\n<p>So wird aus Ausprobieren ein taktisches Vorgehen, und Sie lernen die Regeln, während Sie sie anwenden.</p>\n\n<h2>Häufige Fehler und Stolpersteine</h2>\n<ul>\n<li><strong>Prompt ohne @powerpages:</strong> Der Standardmodus kennt Liquid, Entitätsschema und Dataverse-Regeln nicht. Das Ergebnis läuft vielleicht in einem einfachen HTML-Formular, aber nicht zuverlässig in Power Pages.</li>\n<li><strong>Fehlende Authentifizierung:</strong> Ohne angemeldete CLI und geladene Website-Inhalte fehlt Copilot der Kontext.</li>\n<li><strong>Erstentwurf ungeprüft übernehmen:</strong> Das Skelett fängt nur offensichtliche Fehler ab. Emojis im Telefonfeld oder unplausible Datumsangaben bringen es schnell zu Fall.</li>\n<li><strong>Vage Fehlermeldungen:</strong> „Ungültige Eingabe“ hilft niemandem und erzeugt Support-Tickets.</li>\n<li><strong>Funktionen scheinbar „kaputt“:</strong> Vorschaufunktionen können vom Mandanten-Administrator deaktiviert sein.</li>\n<li><strong>Blindes Vertrauen:</strong> Copilot macht gute Vorschläge, aber keine Garantie. Prüfen und testen Sie immer, bevor Sie in Produktion gehen.</li>\n</ul>\n\n<h2>Praktische Takeaways</h2>\n<ul>\n<li>Stellen Sie Ihren Prompts im Copilot-Chat <strong>@powerpages</strong> voran, damit das Power-Pages-Modul geladen wird.</li>\n<li>Richten Sie VS Code, Power-Plattform-Tools, GitHub-Copilot-Chat und die authentifizierte Power-Plattform-CLI ein und laden Sie die Website-Inhalte herunter.</li>\n<li>Arbeiten Sie iterativ im selben Chat: Skelett erzeugen, Fehlermeldungen verbessern, Grenzfälle abdecken, bereitstellen.</li>\n<li>Formulieren Sie Fehlermeldungen so konkret, dass Benutzer das Problem selbst beheben können.</li>\n<li>Lassen Sie sich Liquid- und Power-Pages-Konstrukte erklären, bevor Sie sie verschieben oder umschreiben.</li>\n<li>Bearbeiten und deployen Sie Ihre Website in einem Workflow: herunterladen, bearbeiten, zurückspielen.</li>\n<li>Fehlen Funktionen, fragen Sie Ihren Mandanten-Administrator, ob die Vorschaufunktionen aktiviert sind.</li>\n<li>Testen Sie jede Copilot-Ausgabe, bevor sie in Produktion geht.</li>\n</ul>\n\n<h2>Fazit</h2>\n<p>Copilot nimmt Ihnen das Entwickeln nicht ab, aber er verändert die Arbeitsweise: weg vom fragilen Ausprobieren, hin zu kontextbezogenem Code, der sich erklären und auf Zuruf verfeinern lässt. Mit <strong>@powerpages</strong>, einer sauber authentifizierten CLI und dem lokalen Arbeitsbereich in VS Code verbringen Sie weniger Zeit mit Syntaxfehlern und Rätselraten. Ihre Energie fließt in verständliche Validierung, stabile Liquid-Templates und Formulare, die Benutzer ohne Frust ausfüllen können. Das Urteilsvermögen bleibt dabei bei Ihnen: Prüfen Sie die Vorschläge und testen Sie sie, bevor sie live gehen.</p>",
+  "model": "claude-sonnet-5-5",
+  "info": {
+   "titel": "Power-Pages-Validierung mit @powerpages reparieren",
+   "typ": "schritte",
+   "punkte": [
+    {
+     "kopf": "Umgebung einrichten",
+     "text": "VS Code, Power-Plattform-Tools, Copilot Chat und authentifizierte CLI nutzen; Website-Inhalte herunterladen."
+    },
+    {
+     "kopf": "Skelett generieren",
+     "text": "Im Copilot-Chat @powerpages voranstellen und einen ersten Validierungscode erstellen lassen."
+    },
+    {
+     "kopf": "Fehlermeldungen verbessern",
+     "text": "Im selben Chat den Code aktualisieren und konkrete, hilfreiche Meldungen schreiben lassen."
+    },
+    {
+     "kopf": "Grenzfälle absichern",
+     "text": "Sonderzeichen und andere Randfälle abdecken, damit das Skript produktionsreif wird."
+    },
+    {
+     "kopf": "Code erklären lassen",
+     "text": "Liquid-Tags und Bindungen erklären lassen, anpassen und anschließend testen."
+    },
+    {
+     "kopf": "Prüfen und bereitstellen",
+     "text": "Vorschläge immer testen, dann per CLI-Workflow zurück in die Power-Pages-Umgebung pushen."
+    }
+   ]
+  },
+  "faq": [
+   {
+    "q": "Was ist @powerpages in GitHub Copilot Chat und wie rufe ich es auf?",
+    "a": "@powerpages ist ein Chat-Teilnehmer in GitHub Copilot, der das Power-Pages-Modul statt des Standardmodus lädt. Sie öffnen in VS Code das Copilot-Chat-Fenster und stellen Ihrem Prompt @powerpages voran. So berücksichtigt Copilot Liquid-Templates, Entitätsschema und Dataverse-Bindungen."
+   },
+   {
+    "q": "Welche Voraussetzungen brauche ich, damit Copilot meine Power-Pages-Umgebung versteht?",
+    "a": "Sie benötigen Visual Studio Code, die Power-Plattform-Tools-Erweiterung und die GitHub-Copilot-Chat-Erweiterung. Außerdem muss die Power-Plattform-CLI gegenüber Dataverse authentifiziert sein, und die Website-Inhalte müssen heruntergeladen und in VS Code geladen sein. Ohne Anmeldung bleibt Copilot bei allgemeinen Ratschlägen."
+   },
+   {
+    "q": "Wie verbessere ich die Formularvalidierung in Power Pages mit GitHub Copilot?",
+    "a": "Arbeiten Sie in vier Schritten im selben Chat: Mit @powerpages ein Validierungsskelett erzeugen, detailliertere Fehlermeldungen anfordern, Grenzfälle wie Sonderzeichen in Zahlenfeldern abdecken und das Ergebnis testen und bereitstellen. Copilot aktualisiert dabei den Code, der bereits im Editor liegt."
+   },
+   {
+    "q": "Warum fehlen in Power Pages einige Copilot-Funktionen?",
+    "a": "Einige Copilot-Funktionen für Power Pages befinden sich noch in der Vorschau. Mandanten-Administratoren steuern deren Aktivierung in den Copilot-Einstellungen der Power-Plattform-Administration. Fehlen Funktionen, ist das meist eine Admin-Einstellung und kein Fehler. Fragen Sie in diesem Fall Ihren Administrator."
+   }
+  ],
+  "infos": [
+   {
+    "titel": "Allgemeiner Copilot vs. @powerpages",
+    "typ": "vergleich",
+    "links": {
+     "titel": "Allgemeiner Copilot",
+     "punkte": [
+      "Liefert oft Fragmente, die im Detail falsch sind",
+      "Kennt das Entitätsschema nicht",
+      "Weiß nichts über Liquid-Tags",
+      "Ignoriert Dataverse-Regeln"
+     ]
+    },
+    "rechts": {
+     "titel": "Mit @powerpages",
+     "punkte": [
+      "Lädt das Power-Pages-Modul statt des Standardmodus",
+      "Vorschläge sind auf Ihre Umgebung zugeschnitten",
+      "Berücksichtigt Liquid-Templates und Dataverse-Bindungen",
+      "Validatoren sprechen passende Entitätsfeldreferenzen an"
+     ]
+    }
+   },
+   {
+    "titel": "Checkliste: Voraussetzungen und Stolpersteine",
+    "typ": "checkliste",
+    "punkte": [
+     "Visual Studio Code und Power-Plattform-Tools-Erweiterung sind installiert",
+     "GitHub-Copilot-Chat-Erweiterung ist installiert",
+     "Power-Plattform-CLI ist gegenüber Dataverse authentifiziert",
+     "Website-Inhalte sind heruntergeladen und in VS Code geladen",
+     "Prompts beginnen mit @powerpages",
+     "Vorschaufunktionen sind vom Mandanten-Administrator aktiviert",
+     "Jede Copilot-Ausgabe wird getestet, bevor sie in Produktion geht"
+    ]
+   }
+  ]
+ }
+}

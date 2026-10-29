@@ -31,6 +31,71 @@
      "text": "Azure Cost Management, Tagging aller Ressourcen und geklärte Datenfragen halten Ausgaben und Risiken unter Kontrolle."
     }
    ]
-  }
+  },
+  "faq": [
+   {
+    "q": "Warum scheitern KI-Projekte in der Power Platform oft nach der Demo?",
+    "a": "Viele Teams glauben, ein Connector zu Azure genüge. In der Demo mit zwei Nutzern klappt das. Mit echten Nutzern, Daten und Lasten tauchen dann Leistungsprobleme, unsinnige Antworten und Datenschutzrisiken auf, weil Flow, Endpunkt und Sicherheitsebene nicht sauber zusammenspielen oder skalieren."
+   },
+   {
+    "q": "Wie funktioniert Azure OpenAI mit Power Apps und Dynamics 365?",
+    "a": "Vier Akteure sind beteiligt: Power Apps oder Dynamics 365 sammeln die Eingaben, Power Automate bereitet die Daten auf und leitet sie weiter, der Azure OpenAI Endpunkt liefert die KI-Ergebnisse, und Azure API Management sichert und drosselt die Zugriffe. Power Apps sprechen nicht direkt mit Azure OpenAI."
+   },
+   {
+    "q": "Wozu braucht man Azure API Management bei KI-Endpunkten?",
+    "a": "API Management erzwingt Authentifizierung und Autorisierung bei jeder Anforderung, begrenzt die Zahl der Anfragen und protokolliert, wer wann auf was zugegriffen hat. So verhindert es, dass defekte Apps oder durchgesickerte API-Schlüssel den Endpunkt überlasten, hohe Kosten verursachen oder Compliance-Risiken auslösen."
+   },
+   {
+    "q": "Wie behält man Kosten und Governance bei KI in der Power Platform im Griff?",
+    "a": "Azure Cost Management bietet Dashboards, Warnungen und Ausgabenobergrenzen. Zusätzlich hilft das Tagging aller Ressourcen wie Endpunkte, Flows und Apps, um Ausgaben pro Team nachzuverfolgen. Das Center of Excellence Starter Kit erstellt ein Inventar, warnt bei verdächtigen Mustern und kann Richtlinien durchsetzen."
+   }
+  ],
+  "infos": [
+   {
+    "titel": "Drei KI-Anwendungsfälle im Vergleich",
+    "typ": "vergleich",
+    "links": {
+     "titel": "Stimmungsanalyse",
+     "punkte": [
+      "Kurze Eingaben von ein bis zwei Sätzen plus passendem Prompt",
+      "Schnelle Antworten bei Kosten von Bruchteilen eines Cents",
+      "Kaum Kontext nachzuverfolgen",
+      "Leicht zu verwalten, zu drosseln und selten neu zu schreiben"
+     ]
+    },
+    "rechts": {
+     "titel": "Textgenerierung im großen Maßstab",
+     "punkte": [
+      "Verarbeitet hunderte Token und braucht länger für die Antwort",
+      "Individuelle Anweisungen erhöhen die Komplexität, etwa je Kunde",
+      "Tausende Eingaben überfluten den Endpunkt, der Durchsatz sinkt",
+      "Die Azure-Rechnung steigt deutlich",
+      "Jede Prompt-Variation verändert Zeit-, Kosten- und Sicherheitsprofil"
+     ]
+    }
+   },
+   {
+    "titel": "Die vier Akteure hinter jeder Enterprise-KI",
+    "typ": "fakten",
+    "punkte": [
+     {
+      "wert": "Power Apps / Dynamics 365",
+      "text": "Hier interagieren Endbenutzer; die Anwendung löst KI-Anforderungen aus und sammelt Eingaben."
+     },
+     {
+      "wert": "Power Automate",
+      "text": "Der Flow erfasst Daten, formatiert sie, maskiert sensible Felder und leitet sie weiter."
+     },
+     {
+      "wert": "Azure OpenAI",
+      "text": "Das „Gehirn“ liefert Stimmungsanalysen, Zusammenfassungen und generierte Kundenantworten."
+     },
+     {
+      "wert": "API Management",
+      "text": "Der Türsteher sorgt für Authentifizierung, Drosselung und einen nachvollziehbaren Prüfpfad."
+     }
+    ]
+   }
+  ]
  }
 }

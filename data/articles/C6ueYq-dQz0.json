@@ -45,6 +45,45 @@
     "q": "Wie schützt ein API-Gateway meine Backend-Dienste vor Überlastung?",
     "a": "Das Gateway begrenzt über Ratenbegrenzung und Drosselung, wie viele Anfragen ein Client stellen darf, etwa pro Nutzer, API-Schlüssel oder IP-Adresse. Zusätzlich verteilt es Anfragen per Load Balancing und Gesundheitschecks auf funktionierende Instanzen. So erreichen Lastspitzen die Backends nicht ungefiltert."
    }
+  ],
+  "infos": [
+   {
+    "titel": "Mit und ohne API-Gateway im Vergleich",
+    "typ": "vergleich",
+    "links": {
+     "titel": "Ohne Gateway",
+     "punkte": [
+      "Clients sprechen jeden Service direkt an und kennen alle Adressen",
+      "Jeder Dienst verwaltet seine eigene Authentifizierung, oft inkonsistent",
+      "Lastspitzen überfluten die Backends direkt und können Abstürze auslösen",
+      "Logs und Metriken müssen bei jedem Dienst einzeln eingesammelt werden",
+      "Altsysteme müssen umgeschrieben werden oder Clients müssen sich anpassen"
+     ]
+    },
+    "rechts": {
+     "titel": "Mit Gateway",
+     "punkte": [
+      "Clients kennen nur eine einzige URL: die des Gateways",
+      "Authentifizierung und Autorisierung werden zentral an einer Stelle geprüft",
+      "Ratenbegrenzung und Load Balancing schützen die Backends vor Überlastung",
+      "Logs, Metriken und Analysen kommen gebündelt aus einem Punkt",
+      "Datentransformation macht Umschreiben von Backends überflüssig"
+     ]
+    }
+   },
+   {
+    "titel": "Brauchen Sie ein API-Gateway?",
+    "typ": "checkliste",
+    "punkte": [
+     "Ihre Anwendung besteht aus drei oder mehr Diensten",
+     "Sie geben APIs für externe Clients frei",
+     "Authentifizierungsprüfungen sind über mehrere Dienste verstreut",
+     "Clients müssen mehrere Service-Adressen und Fehlerarten kennen",
+     "Lastspitzen könnten Ihre Backends überfluten",
+     "Ein Altsystem soll ohne Umbau mit modernen Clients sprechen",
+     "Sie wünschen zentrale Logs und Metriken zu Fehlern, Latenzen und Last"
+    ]
+   }
   ]
  }
 }

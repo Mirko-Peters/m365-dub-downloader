@@ -27,6 +27,54 @@
      "text": "Regelmäßig Delta-Abfragen ausführen, um verpasste Änderungen nachträglich zu erfassen."
     }
    ]
-  }
+  },
+  "infos": [
+   {
+    "titel": "Polling oder Änderungsbenachrichtigungen",
+    "typ": "vergleich",
+    "links": {
+     "titel": "Polling",
+     "punkte": [
+      "App fragt alle paar Minuten bei Microsoft Graph an",
+      "Anfragen ohne Änderung sind verschwendet",
+      "Änderungen werden erst im nächsten Zyklus bemerkt",
+      "Zu aggressives Abfragen führt zu Drosselung",
+      "Geplante Jobs sind langsam und fehleranfällig"
+     ]
+    },
+    "rechts": {
+     "titel": "Änderungsbenachrichtigungen",
+     "punkte": [
+      "Graph sendet einen HTTP-POST an Ihren Endpunkt",
+      "Zustellung automatisch im Moment des Ereignisses",
+      "Kein ständiges Prüfen, Ressourcen werden gespart",
+      "Ereignisgesteuert und sofort",
+      "Drosselung wird vermieden"
+     ]
+    }
+   },
+   {
+    "titel": "Der richtige Zustellkanal",
+    "typ": "fakten",
+    "punkte": [
+     {
+      "wert": "Webhooks",
+      "text": "Einfachste Variante, geeignet bei niedrigem bis mittlerem Volumen, etwa einige hundert pro Stunde."
+     },
+     {
+      "wert": "Event Hubs",
+      "text": "Für große Mengen: bewältigt Millionen Ereignisse pro Sekunde, App liest im eigenen Tempo."
+     },
+     {
+      "wert": "Event Grid",
+      "text": "Serverlose Option für Azure Functions oder Logic Apps mit automatischen Wiederholungsversuchen."
+     },
+     {
+      "wert": "Dead-Lettering",
+      "text": "Event Grid übernimmt es automatisch, zusammen mit den Wiederholungsversuchen."
+     }
+    ]
+   }
+  ]
  }
 }
