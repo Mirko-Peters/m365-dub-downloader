@@ -1,5 +1,5 @@
 // Abzeichen und Punkte. Anzeigenamen stehen im Frontend (data/community_i18n.json), hier nur IDs und Regeln.
-export const BADGE_ORDER = ["curator", "voice", "polyglot", "helpful", "early_bird", "streak", "commentator", "guardian", "notified", "first_comment", "newcomer"];
+export const BADGE_ORDER = ["editor", "wiki_author", "curator", "voice", "polyglot", "helpful", "early_bird", "streak", "commentator", "guardian", "notified", "first_comment", "newcomer"];
 
 let epCache = { at: 0, map: null };
 export async function episodeDates(env) {
@@ -23,6 +23,11 @@ export async function evalBadges(env, uid) {
   const db = env.DB, now = Math.floor(Date.now() / 1000), got = [];
   const c = await db.prepare("SELECT COUNT(*) n, COUNT(DISTINCT lang) l FROM comments WHERE user_id=? AND status='ok'").bind(uid).first();
   const lk = await db.prepare("SELECT COUNT(*) n FROM likes l JOIN comments c ON c.id=l.comment_id WHERE c.user_id=? AND l.user_id<>?").bind(uid, uid).first();
+  const ro = await db.prepare("SELECT role FROM users WHERE id=?").bind(uid).first();
+  if (ro?.role === "editor") { if (await award(db, uid, "editor")) got.push("editor"); }
+  else await db.prepare("DELETE FROM user_badges WHERE user_id=? AND badge='editor'").bind(uid).run();
+  const wk = await db.prepare("SELECT COUNT(*) n FROM wiki_rev WHERE user_id=? AND status IN ('live','old')").bind(uid).first().catch(() => ({ n: 0 }));
+  if (wk.n >= 1 && (await award(db, uid, "wiki_author"))) got.push("wiki_author");
   const rules = [["newcomer", true], ["first_comment", c.n >= 1], ["commentator", c.n >= 10], ["voice", c.n >= 50], ["helpful", lk.n >= 10], ["polyglot", c.l >= 3]];
   for (const [b, ok] of rules) if (ok && (await award(db, uid, b))) got.push(b);
   // Early bird: Kommentar innerhalb von 24 h nach Erscheinen der Folge

@@ -1,8 +1,8 @@
 /* M365.FM Community: Kommentare, Abos, Kurator, Profil. Nutzt window.M365C = {api, lang, vid, t}. Texte nur per textContent. */
 (function () {
   var C = window.M365C; if (!C || !C.api) return;
-  var T = C.t || {}, API = C.api, LANG = C.lang, ICON = { newcomer: "🌱", first_comment: "💬", commentator: "🗣️", voice: "📣", helpful: "🤝", early_bird: "🐦", polyglot: "🌍", streak: "🔥", curator: "🏆", notified: "🔔", guardian: "🛡️" };
-  var BADGES = ["newcomer", "first_comment", "commentator", "voice", "helpful", "early_bird", "polyglot", "streak", "curator", "notified", "guardian"];
+  var T = C.t || {}, API = C.api, LANG = C.lang, ICON = { editor: "✏️", wiki_author: "📖", newcomer: "🌱", first_comment: "💬", commentator: "🗣️", voice: "📣", helpful: "🤝", early_bird: "🐦", polyglot: "🌍", streak: "🔥", curator: "🏆", notified: "🔔", guardian: "🛡️" };
+  var BADGES = ["editor", "wiki_author", "newcomer", "first_comment", "commentator", "voice", "helpful", "early_bird", "polyglot", "streak", "curator", "notified", "guardian"];
   var tt = function (k) { return T[k] || k; };
   function h(tag, a, kids) {
     var e = document.createElement(tag);
@@ -31,6 +31,25 @@
         h("a", { class: "btn main", href: API + "/auth/login/google?return=" + ret, rel: "nofollow", text: tt("signin_google") }),
         h("a", { class: "btn", href: API + "/auth/login/microsoft?return=" + ret, rel: "nofollow", text: tt("signin_ms") })]),
       h("small", {}, [tt("signin_note") + " ", h("a", { href: C.privacy, text: tt("privacy") })])]);
+  }
+
+
+  /* ---------- Team (nur Admin): Editoren ernennen ---------- */
+  function teamPanel() {
+    var res = h("ul", { class: "cteam-list" }), q = h("input", { type: "text", placeholder: "Name", "aria-label": "Name", maxlength: 40 });
+    function load() {
+      api("/api/admin/users?q=" + encodeURIComponent(q.value)).then(function (r) {
+        res.textContent = "";
+        (r.j.users || []).forEach(function (x) {
+          var ed = x.role === "editor";
+          res.appendChild(h("li", {}, [h("span", { text: "#" + x.id + " " + x.name + (ed ? " ✏️" : "") + " " }),
+            h("button", { type: "button", class: "btn", text: ed ? "Editor entfernen / Remove editor" : "Zum Editor machen / Make editor", onclick: function () { api("/api/admin/role/" + x.id, { method: "POST", body: { role: ed ? "user" : "editor" } }).then(load); } })]));
+        });
+      });
+    }
+    q.addEventListener("input", function () { clearTimeout(q._t); q._t = setTimeout(load, 300); });
+    load();
+    return h("section", { class: "ccard" }, [h("h2", { text: "Team" }), h("p", { class: "cmut", text: "Editoren veröffentlichen Wiki-Beiträge direkt und prüfen fremde Beiträge. / Editors publish wiki notes directly and review others." }), h("label", {}, [q]), res]);
   }
 
   /* ---------- Kommentare ---------- */
@@ -154,6 +173,7 @@
       }
       var bd = h("div", { class: "cbadges" }, BADGES.map(function (b) { var got = u && u.badges.indexOf(b) > -1; return h("div", { class: "cbadge" + (got ? " got" : "") }, [h("span", { class: "cb big", text: ICON[b] }), h("div", {}, [h("b", { text: tt("b_" + b) }), h("span", { class: "cmut", text: tt("b_" + b + "_d") })])]); }));
       root.appendChild(h("h2", { text: tt("badges") })); root.appendChild(bd);
+      if (u && u.admin) root.appendChild(teamPanel());
       var cur = h("section", { class: "ccard" }), sub = h("section", { class: "ccard" });
       root.appendChild(cur); root.appendChild(sub); mountCurator(cur, true); mountSub(sub);
     }).catch(function () { root.hidden = false; root.appendChild(h("p", { class: "cmut", role: "status", text: tt("error") })); });

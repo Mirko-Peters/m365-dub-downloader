@@ -100,6 +100,36 @@ var wrap=el("p");wrap.appendChild(pb);wrap.appendChild(document.createTextNode("
 show()}
 var sb=el("button","ln-btn",T.start.replace("{n}",N));sb.type="button";sb.addEventListener("click",start);box.appendChild(sb)}catch(e){}})();</script>"""
 
+WT = {
+ "en": dict(h="Community wiki", intro="Short info above, community knowledge below: add practical tips, examples or corrections. New contributions are reviewed first; trusted members publish directly.", login="Sign in to add or edit.", by="Edited by {n} · {d}", anon="Community", report="Report", reported="Thanks, reported.",
+            empty="No community notes yet – be the first to add a tip.", edit="Edit", add="Add a note", summary="What did you change? (optional)", save="Save", saved_live="Published. Thank you!", saved_pending="Thank you! Your note will appear after review.", too_short="Please write at least 20 characters.", unchanged="No changes found.", rate="Too many edits – please try again later.", error="Something went wrong. Please try again.",
+            rules="Plain text only, no links or advertising. Keep it factual and helpful.", pending_own="You have a note waiting for review. Saving replaces it.", history="History", pending="Waiting for review", approve="Publish", reject="Reject"),
+ "de": dict(h="Community-Wiki", intro="Oben die Kurzinfo, unten das Wissen der Community: ergänze praktische Tipps, Beispiele oder Korrekturen. Neue Beiträge werden zuerst geprüft, bewährte Mitglieder veröffentlichen direkt.", login="Melde dich an, um zu ergänzen oder zu bearbeiten.", by="Bearbeitet von {n} · {d}", anon="Community", report="Melden", reported="Danke, gemeldet.",
+            empty="Noch keine Community-Hinweise – sei der Erste mit einem Tipp.", edit="Bearbeiten", add="Hinweis ergänzen", summary="Was hast du geändert? (optional)", save="Speichern", saved_live="Veröffentlicht. Danke!", saved_pending="Danke! Dein Hinweis erscheint nach der Prüfung.", too_short="Bitte schreibe mindestens 20 Zeichen.", unchanged="Keine Änderung gefunden.", rate="Zu viele Änderungen – bitte später noch einmal versuchen.", error="Etwas ist schiefgelaufen. Bitte versuche es erneut.",
+            rules="Nur Text, keine Links oder Werbung. Bleib sachlich und hilfreich.", pending_own="Du hast einen Hinweis in der Prüfung. Speichern ersetzt ihn.", history="Verlauf", pending="Wartet auf Prüfung", approve="Veröffentlichen", reject="Ablehnen"),
+}
+WCSS = """<style>.wk{margin:.6em 0}.wk-body{white-space:pre-wrap;line-height:1.7;max-width:46em}.wk-meta,.wk-empty{color:var(--mut)}.wk-link{font:inherit;background:none;border:0;color:var(--ac);text-decoration:underline;cursor:pointer;padding:0}
+.wk-edit,.wk-hist{margin:1em 0;border:1px solid var(--bd);border-radius:.7em;padding:.6em 1em;background:var(--card)}.wk-edit summary,.wk-hist summary{cursor:pointer;font-weight:700}.wk textarea,.wk input[type=text]{width:100%;box-sizing:border-box;font:inherit;padding:.5em;border:1px solid var(--bd);border-radius:.5em;background:var(--bg);color:var(--fg);margin:.4em 0}
+.wk .btn{font:inherit;cursor:pointer;border:1px solid var(--bd);border-radius:.5em;padding:.45em 1em;background:var(--card);color:var(--fg);text-decoration:none;display:inline-block;margin:.2em .3em .2em 0}.wk .btn.main{background:var(--ac);color:var(--onac);border-color:var(--ac)}.wk-pend{border-top:1px solid var(--bd);padding:.5em 0}</style>"""
+
+
+def fetch_wiki(api, lang):
+    """Freigegebene Community-Texte zum Seitenbau holen (statisch, damit sie indexierbar sind). Fehler -> leer."""
+    import urllib.request
+    try:
+        with urllib.request.urlopen(urllib.request.Request(f"{api}/api/wiki/export?lang={lang}", headers={"user-agent": "m365-dub-build"}), timeout=10) as r:
+            return {x["term"]: x for x in json.loads(r.read().decode("utf-8")).get("items", [])}
+    except Exception:
+        return {}
+
+
+def wiki_block(lang, term_id, api, base, static):
+    w = WT.get(lang, WT["en"])
+    cfg = json.dumps({"api": api, "term": term_id, "lang": lang, "t": w}, ensure_ascii=False).replace("</", "<\\/")
+    st = f'<div class="wk-static wk-body">{esc(static["body"])}</div>' if static else ""
+    return (f'{WCSS}<section aria-labelledby="wk-h"><h2 id="wk-h">{esc(w["h"])}</h2><p class="mut">{esc(w["intro"])}</p><div id="c-wiki">{st}</div></section>'
+            f'<script>window.M365W={cfg}</script><script defer src="{base}/assets/wiki.js"></script>')
+
 
 def build_learn(ctx):
     """ctx: dict mit write, page, header, footer, footer_en, BASE, LANGS, active, by_lang, catidx, articles, url_of,
@@ -143,8 +173,10 @@ def build_learn(ctx):
         return [{"@context": "https://schema.org", "@type": "DefinedTerm", "name": term["name"], "description": definition(term, lang)[0], "url": url,
                  "inDefinedTermSet": setname}]
 
+    WIKI_API = g.get("api", "https://api.dub.m365.fm")
     for lang in ["en", "de"]:
         t = T(lang)
+        stat = fetch_wiki(WIKI_API, lang)
         gb = f"{BASE}/glossary/" if lang == "en" else f"{BASE}/{lang}/glossary/"
         rel = "glossary" if lang == "en" else f"{lang}/glossary"
         terms = sorted(GLOSS, key=lambda x: x["name"].lower())
@@ -163,7 +195,7 @@ def build_learn(ctx):
                 catlink = f'<p><a href="{BASE}/de/path/{x["cat"]}/">{esc(t["paths"])}: {esc(cat_name(x["cat"], "de"))}</a></p>'
             eb = (f'<h2>{esc(t["term_eps"].replace("{t}", x["name"]))}</h2>{ep_list(eps)}') if eps else ""
             b = shell(lang, f'<nav aria-label="breadcrumb"><a href="{gb}">{esc(t["glossary"])}</a></nav><h1>{esc(x["name"])}</h1><p style="font-size:1.1em">{esc(d0)}</p>{eb}{catlink}'
-                            f'<h2>{esc(t["glossary"])}</h2><ul>{rl}</ul>')
+                            f'{wiki_block(lang, x["id"], WIKI_API, BASE, stat.get(x["id"]))}<h2>{esc(t["glossary"])}</h2><ul>{rl}</ul>')
             write(f"{rel}/{x['id']}/index.html", page(lang, f'{x["name"]} – {t["glossary"]} | M365.FM', d0[:155], u, b, None, gloss_ld(lang, u, x), og_type="website", extra_head=LCSS))
             sitemap.append((u, TODAY, None))
 

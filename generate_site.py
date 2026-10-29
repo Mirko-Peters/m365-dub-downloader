@@ -1044,7 +1044,7 @@ def build():
 
     LRN.build_learn(dict(write=write, page=page, header=header, footer=footer, footer_en=footer_en, BASE=BASE, LANGS=LANGS, active=active, by_lang=by_lang, catidx=catidx,
                         articles=articles, url_of=url_of, cat_name=cat_name, ORDER=ORDER, strip_tags=strip_tags, anchor_title=anchor_title, short=short, parse_desc=parse_desc,
-                        sitemap=sitemap, TODAY=TODAY, SCORE={l: (_QUI.get(l, {}).get("score") or _QUI["en"]["score"]) for l in list(LANGS) + ["en"]}))
+                        sitemap=sitemap, TODAY=TODAY, api=COMMUNITY_API, SCORE={l: (_QUI.get(l, {}).get("score") or _QUI["en"]["score"]) for l in list(LANGS) + ["en"]}))
 
     PRS.build_press(dict(write=write, page=page, header=header, footer=footer, footer_en=footer_en, BASE=BASE, LANGS=LANGS, sitemap=sitemap, TODAY=TODAY, n_eps=len(items), n_langs=len(active),
                          EMAIL=SL.CONTACT_EMAIL, MVP=MVP, LINKEDIN=LINKEDIN, YT=YT_CHANNEL, person_ld=person_ld, org_ld=org_ld))

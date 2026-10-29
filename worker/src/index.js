@@ -2,6 +2,7 @@
 import { json, cors, cookie, makeSession, readSession, cleanText, cleanName, randomToken, rateLimit, isLang, esc, b64u, sign, verify } from "./util.js";
 import { evalBadges, stats, topUsers, badgesFor, award } from "./badges.js";
 import { runDigest, sendMail } from "./digest.js";
+import { handleWiki } from "./wiki.js";
 
 const PROVIDERS = {
   google: {
@@ -78,9 +79,9 @@ async function auth(env, request, url, path) {
 }
 
 async function me(env, uid) {
-  const u = await env.DB.prepare("SELECT id,provider,sub,name,bio,lang,banned FROM users WHERE id=?").bind(uid).first();
+  const u = await env.DB.prepare("SELECT id,provider,sub,name,bio,lang,banned,role FROM users WHERE id=?").bind(uid).first();
   if (!u || u.banned) return null;
-  return { ...u, admin: isAdmin(env, u) };
+  return { ...u, admin: isAdmin(env, u), editor: u.role === "editor" };
 }
 
 function pubComment(c, mine, liked, badges, admin) {
@@ -97,7 +98,7 @@ async function api(env, request, url, path) {
   const db = env.DB;
 
   if (path === "/api/me") {
-    if (method === "GET") return J({ user: user ? { id: user.id, name: user.name, bio: user.bio, lang: user.lang, admin: user.admin, ...(await stats(db, user.id)) } : null });
+    if (method === "GET") return J({ user: user ? { id: user.id, name: user.name, bio: user.bio, lang: user.lang, admin: user.admin, editor: user.editor, ...(await stats(db, user.id)) } : null });
     if (need()) return need();
     if (method === "POST") {
       const b = await request.json().catch(() => ({}));
@@ -111,7 +112,7 @@ async function api(env, request, url, path) {
         db.prepare("DELETE FROM likes WHERE user_id=? OR comment_id IN (SELECT id FROM comments WHERE user_id=?)").bind(id, id),
         db.prepare("DELETE FROM reports WHERE user_id=? OR comment_id IN (SELECT id FROM comments WHERE user_id=?)").bind(id, id),
         db.prepare("DELETE FROM comments WHERE user_id=?").bind(id), db.prepare("DELETE FROM user_badges WHERE user_id=?").bind(id),
-        db.prepare("DELETE FROM push_subs WHERE user_id=?").bind(id), db.prepare("DELETE FROM curators WHERE user_id=?").bind(id), db.prepare("DELETE FROM users WHERE id=?").bind(id),
+        db.prepare("DELETE FROM push_subs WHERE user_id=?").bind(id), db.prepare("DELETE FROM wiki_reports WHERE user_id=?").bind(id), db.prepare("DELETE FROM wiki_rev WHERE user_id=? AND status IN ('pending','rejected')").bind(id), db.prepare("UPDATE wiki_rev SET user_id=0 WHERE user_id=?").bind(id), db.prepare("DELETE FROM curators WHERE user_id=?").bind(id), db.prepare("DELETE FROM users WHERE id=?").bind(id),
       ]);
       return J({ ok: true }, 200, { "set-cookie": cookie("m365s", "", 0) });
     }
@@ -174,6 +175,8 @@ async function api(env, request, url, path) {
     await db.batch([db.prepare("DELETE FROM likes WHERE comment_id=?").bind(+m[1]), db.prepare("DELETE FROM reports WHERE comment_id=?").bind(+m[1]), db.prepare("DELETE FROM comments WHERE id=? OR parent_id=?").bind(+m[1], +m[1])]);
     return J({ ok: true });
   }
+
+  if (path === "/api/wiki" || path.startsWith("/api/wiki/") || path.startsWith("/api/admin/wiki")) { const w = await handleWiki(env, request, url, path, user, J); if (w) return w; }
 
   if (path === "/api/curator" && method === "GET") {
     const lang = url.searchParams.get("lang");
@@ -241,6 +244,17 @@ async function api(env, request, url, path) {
       return J({ reports: rows });
     }
     if ((m = /^\/api\/admin\/(hide|show)\/(\d+)$/.exec(path)) && method === "POST") { await db.prepare("UPDATE comments SET status=? WHERE id=?").bind(m[1] === "hide" ? "hidden" : "ok", +m[2]).run(); return J({ ok: true }); }
+    if (path === "/api/admin/users" && method === "GET") {
+      const q = cleanName(url.searchParams.get("q") || "").replace(/[%_]/g, "");
+      const rows = (await db.prepare("SELECT id,name,role,banned FROM users WHERE name LIKE ? ORDER BY (role='editor') DESC, id DESC LIMIT 20").bind(`%${q}%`).all()).results || [];
+      return J({ users: rows });
+    }
+    if ((m = /^\/api\/admin\/role\/(\d+)$/.exec(path)) && method === "POST") {
+      const b = await request.json().catch(() => ({})), role = b.role === "editor" ? "editor" : "user";
+      await db.prepare("UPDATE users SET role=? WHERE id=?").bind(role, +m[1]).run();
+      await evalBadges(env, +m[1]);
+      return J({ ok: true, role });
+    }
     if ((m = /^\/api\/admin\/ban\/(\d+)$/.exec(path)) && method === "POST") { await db.prepare("UPDATE users SET banned=1 WHERE id=?").bind(+m[1]).run(); return J({ ok: true }); }
   }
   return J({ error: "not_found" }, 404);

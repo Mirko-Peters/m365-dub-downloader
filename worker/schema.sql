@@ -68,3 +68,20 @@ CREATE TABLE IF NOT EXISTS email_subs (
 CREATE INDEX IF NOT EXISTS idx_email_token ON email_subs(token);
 CREATE TABLE IF NOT EXISTS meta (k TEXT PRIMARY KEY, v TEXT NOT NULL);
 CREATE TABLE IF NOT EXISTS ratelimit (k TEXT PRIMARY KEY, n INTEGER NOT NULL, win INTEGER NOT NULL);
+CREATE TABLE IF NOT EXISTS wiki_rev (          -- Community-Wiki: Revisionen je Glossarbegriff und Sprache
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  term TEXT NOT NULL,
+  lang TEXT NOT NULL,
+  body TEXT NOT NULL,
+  summary TEXT NOT NULL DEFAULT '',
+  user_id INTEGER NOT NULL,                    -- 0 = geloeschtes Konto
+  status TEXT NOT NULL,                        -- live | pending | rejected | old
+  created INTEGER NOT NULL
+);
+CREATE INDEX IF NOT EXISTS idx_wiki_term ON wiki_rev(term, lang, status, created);
+CREATE TABLE IF NOT EXISTS wiki_reports (
+  rev_id INTEGER NOT NULL,
+  user_id INTEGER NOT NULL,
+  created INTEGER NOT NULL,
+  PRIMARY KEY (rev_id, user_id)
+);
