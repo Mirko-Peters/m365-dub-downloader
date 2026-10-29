@@ -1,0 +1,925 @@
+{
+ "de": {
+  "html": "<p>Auf der Bühne wirken KI-Demos makellos. Im Unternehmensalltag zeigt sich dann, dass Copilots und Agenten ohne Grounding, Bewertung und Governance Antworten erfinden, die überzeugend klingen und trotzdem falsch sind. Dieser Artikel zeigt, wie du Halluzinationen mit Retrieval Augmented Generation (RAG) und Azure AI Search in den Griff bekommst. Er erklärt auch, warum Agenten klare Grenzen brauchen und weshalb Azure AI Foundry eine Fabrik mit Regeln ist und keine Spielzeugkiste.</p>\n<p>Die Kernaussage vorab: Die Technik ist selten das Problem. Es fehlen meist aufbereitete Daten, Evaluierung und Kontrolle.</p>\n\n<h2>Warum multimodale Apps in der Praxis scheitern</h2>\n<p>Multimodale Modelle verarbeiten Text, Bilder, Sprache und Video. In der Demo bekommen sie saubere Prompts und perfekte Bilder. Im echten Betrieb sieht die Eingabe anders aus: verpixelte Ausweiskopien aus der Personalabteilung, PDFs, die schon mehrere Fax-Generationen hinter sich haben, oder Rechnungen, die mit einer schlechten Handykamera fotografiert wurden.</p>\n<p>Hier gilt weiterhin „Garbage in, Garbage out“, egal wie viel GPU-Leistung dahintersteht. Ohne gut indizierte Daten und ein sauberes Retrieval muss das Modell mit Datenmüll improvisieren. Das Ergebnis ist ein Chatbot, der selbstbewusst eine neue Q3-Rabattrichtlinie behauptet, die es nie gab. Er ist dabei nicht „eigenwillig“ geworden, er hat schlicht die falschen Daten abgerufen.</p>\n\n<h3>RAG: das Modell mit der eigenen Wissensquelle verbinden</h3>\n<p>Ein Sprachmodell kennt dein Unternehmen nicht. Bei Retrieval Augmented Generation verbindest du es deshalb mit deiner Wissensquelle: Das System ruft einen passenden Datenausschnitt ab, und das Modell formuliert die Antwort auf dieser Grundlage. Ist der Abgleich präzise, werden die Antworten nützlich. Ist er schlampig, beginnt das Modell zu improvisieren. Azure AI Studio und Azure AI Foundry setzen beide auf dieses Muster und unterstützen verschiedene Modalitäten wie Sprache, Vision, Audio und Video-Retrieval.</p>\n\n<h3>Hybridsuche und semantisches Reranking in Azure AI Search</h3>\n<p>Ein einzelnes angeschlossenes Retrieval reicht nicht. Für stimmige Ergebnisse braucht es eine hybride Suche aus Keyword- und Vektorsuche. Ein semantischer Reranker, der in Azure AI Search integriert ist, ergänzt sie. Das System gleicht wörtliche Treffer mit der semantischen Bedeutung ab und ordnet die Ergebnisse so, dass der passende Kontext oben steht. In einer multimodalen Umgebung kann das Modell so auch mit schiefen Scans und unscharfen Bildern umgehen, statt Compliance-Richtlinien frei zu erfinden.</p>\n\n<h2>Evaluatoren: Groundedness, Relevanz und Kohärenz messen</h2>\n<p>Viele Einführungen scheitern, weil Unternehmen vom ersten Tag an perfekte Ergebnisse erwarten, aber kein Budget für Bewertungsschleifen einplanen. Ohne Prüfungen auf Fundierung, Relevanz und Kohärenz fallen Abweichungen erst auf, wenn die Nutzer bereits frustriert sind. Der Output klingt korrekt, wurde aber nie mit der Quellenwahrheit abgeglichen. Niemand würde eine neue Datenbank ohne Überwachung betreiben. Bei KI wird genau das aber oft wie eine Plug-and-Play-Box behandelt.</p>\n<p>Die Observability-Funktionen und integrierten Evaluatoren von Azure AI Foundry sind dafür vorgesehen. Sie messen Fundiertheit, Relevanz, Kohärenz und Quellentreue. Ohne sie rätst du nur, ob dein Agent klug ist oder sich in höflichem Ton Dinge ausdenkt. Mit ihnen kannst du eingreifen und nachjustieren, sobald die Ausgabe abweicht.</p>\n<p>Wie viel Unterschied das macht, zeigt Carvana als Kundenbeispiel aus dem Foundry-Umfeld. Dort wurde Self-Service-KI nützlich, weil die Suche optimiert, die Agenten fundiert und die Beobachtbarkeit ausgebaut wurden. Andere haben einen generischen Chatbot ohne Fundierung und Bewertung auf die Supportseite gesetzt. Garantiefälle landeten dann als Sales-Leads, Support-Warteschlangen liefen über, und die Glaubwürdigkeit litt. Der Azure Stack war derselbe, das Ergebnis das Gegenteil.</p>\n\n<h2>Agenten: hilfreicher Mitarbeiter oder teurer Briefbeschwerer?</h2>\n<p>Ein Agent koordiniert Modelle, Daten, Trigger und Aktionen, ähnlich einem Verkehrspolizisten für automatisierte Workflows. Mal leitet er alles reibungslos, mal winkt er das Falsche durch.</p>\n\n<h3>Copilot und Agent sind nicht dasselbe</h3>\n<p>Ein Copilot ist im Kern ein Prompt-Assistent: Du fragst, er antwortet, und du behältst die Kontrolle. Agenten dagegen entscheiden und handeln, ohne auf dich zu warten. Sie befolgen vage Anweisungen buchstabengetreu, selbst wenn das Ergebnis keinen Sinn ergibt.</p>\n<p>Ein Beispiel aus dem Service-Umfeld: Eng begrenzt erstellt ein Agent nur bei echten Problemen echte Tickets und spart Stunden. Ohne Grenzen kann er den Helpdesk mit Phantom-Tickets und falschen Warnmeldungen überfluten, etwa weil er ein Fehlerprotokoll falsch gelesen hat.</p>\n<p>Viele Teams geben ihrem Agenten eine Stellenbeschreibung, die wie ein Wahlversprechen klingt: Prozesse optimieren, Erkenntnisse liefern, Menschen helfen. Agenten ohne klaren Aufgabenbereich erfinden dann Probleme, duplizieren Datensätze oder hängen in Endlosschleifen. Ohne enge Begrenzung, Validierungsschritte und Telemetrie ist der Agent ein leichtsinniger Praktikant mit Adminrechten.</p>\n\n<h3>Die passenden Bausteine im Microsoft Stack</h3>\n<ul>\n<li><strong>Copilot Studio:</strong> der Low-Code-Bereich, in dem du das Verhalten von Agenten über Flows, Prompts und Event-Trigger entwirfst.</li>\n<li><strong>Agent-Service von AI Foundry:</strong> das Unternehmensgerüst, das Agenten mit Beobachtbarkeit, Überwachung, Protokollen und Metriken in die Produktion bringt, mit eingebauter menschlicher Aufsicht.</li>\n</ul>\n\n<h3>Drei Fragen, ob dein Agent nützlich ist</h3>\n<ol>\n<li>Reduziert er die Arbeitszeit der Mitarbeiter, oder ziehen ihn Fehlerbehebungsaufgaben in die Zeitfalle?</li>\n<li>Erfasst du Metriken wie Fundiertheit, Flüssigkeit und Kohärenz, oder starrst du nur auf Marketing-Dashboards?</li>\n<li>Hast du Telemetrie, die Abweichungen erkennt, bevor sich Nutzer beschweren?</li>\n</ol>\n<p>Wer eine dieser Fragen nicht bejahen kann, hat laut dieser Checkliste keinen intelligenten Agenten, sondern einen teuren Bildschirmschoner.</p>\n\n<h2>Autonome Agenten: wenn niemand mehr zusieht</h2>\n<p>Autonome Agenten sind der Punkt, an dem der Hype gefährlich wird. Copilots sind reaktiv, Agenten proaktiv: Sie überwachen den Servicezustand, bearbeiten Sicherheitssignale oder führen Workflows automatisch aus. Das Versprechen ist real, aber sie warten nicht auf Erlaubnis. Eine Fehlentscheidung wirkt sofort und skaliert durch die gesamte Umgebung.</p>\n<p>Wichtig ist der Kontext: Autonome Agenten in Copilot Studio befinden sich derzeit in der Vorschauphase. Das bedeutet nicht „kaputt“, aber ungeprüft in der realen Welt. Microsoft selbst verweist auf Lifecycle-Governance-Leitplanken und das Copilot-Kontrollsystem, bevor an einen breiten Rollout zu denken ist.</p>\n\n<h3>Ein realistisches Fehlerszenario</h3>\n<p>Ein autonomer Helpdesk-Agent darf auf Anmeldeanomalien reagieren. In der Demo mit fünf Nutzern funktioniert das einwandfrei. In der Produktion treffen unvorhergesehene Eingaben ein, und der Agent setzt aufgrund falsch positiver Ergebnisse massenhaft Konten zurück. Im ungünstigen Fall legt das den Betrieb zum Monatsabschluss lahm.</p>\n\n<h3>Die Überlebens-Checkliste vor jeder Automatisierung</h3>\n<ol>\n<li><strong>Identitäts- und Zugriffsbeschränkungen:</strong> minimale Rechte statt pauschaler Adminrechte.</li>\n<li><strong>Protokollierung und Rollback:</strong> jede Aktion hinterlässt eine prüfbare Spur, und jede schwerwiegende Aktion hat einen Rückweg.</li>\n<li><strong>Inhalts- und Verhaltensfilter:</strong> Azure AI Content Safety und Wissenskonfiguration halten einen übereifrigen Bot davon ab, unangemessen zu antworten oder vom Skript abzuweichen.</li>\n</ol>\n<p>Dazu kommt eine ethische Ebene. Ein HR-Agent, der Mitarbeiter automatisch als riskant markiert, oder ein Finanzagent, der Lieferantenzahlungen fälschlich als Betrug einstuft, verursacht Fehler mit menschlichen, rechtlichen und Compliance-Folgen. Verzerrungen in Trainings- oder Abrufdaten verschwinden nicht, nur weil ein System in der Vorschau läuft. Deshalb braucht es Stufentests, Genehmigungsworkflows, Audits und Dashboards, die jeden Schritt des Agenten zeigen. Der Mensch bleibt das Sicherheitsnetz, wie bei einem Autopiloten im Flugzeug, der immer mit manueller Übersteuerung ausgelegt ist.</p>\n\n<h2>Azure AI Foundry: Fabrik statt Spielzeugkiste</h2>\n<p>Azure AI Foundry ist Microsofts Plattform für alles rund um KI-Entwicklung. Viele Teams behandeln sie wie einen Ikea-Besuch: ein paar glänzende Modelle einpacken, Konnektoren dazu und ohne Anleitung zusammenschrauben. Heraus kommt ein Demo-Spielzeug, das beim ersten unordentlichen PDF eines echten Nutzers umkippt.</p>\n\n<h3>Was Foundry bietet</h3>\n<ul>\n<li>einen Modellkatalog mit Angeboten mehrerer Anbieter, darunter Microsoft, OpenAI und Meta</li>\n<li>Anpassungsoptionen wie Retrieval Augmented Generation, Feintuning und Destillation</li>\n<li>einen Agentendienst zur Orchestrierung</li>\n<li>Werkzeuge wie Promptflow für Bewertung und Debugging</li>\n<li>Sicherheitsfunktionen: Identitäts- und Zugriffskontrollen, Inhaltsfilter und Observability-Dashboards</li>\n</ul>\n<p>Der Werkzeugkasten ist also nicht leer. Das Problem entsteht, wenn Administratoren glauben, sie müssten nur einen GPT-4-Turbo-Schalter umlegen. Sinnvoll eingesetzt bedeutet Foundry: Identitätsgrenzen setzen, Prozesse mit Sicherheitsfiltern umgeben, Observability nutzen und die Aufgabe dem passenden Modell zuordnen statt dem größten.</p>\n\n<h3>Zwei Praxisbeispiele</h3>\n<p>Ein Team richtete einen Foundry-Copilot für SharePoint ein und gab dabei vertrauliche Personaldaten an 20 Praktikanten weiter. Das war ein Compliance-Desaster, das integrierte Zugriffsregeln verhindert hätten.</p>\n<p>Ein anderes Unternehmen setzte GPT-4 Turbo zur Verschlagwortung von Produktfotos ein. Im Labor mit sauberen Studiofotos lief alles perfekt. In der Produktion kamen unscharfe Handyfotos aus dem Lager, und die KI stufte Kinderwagen als Bürostühle ein und machte aus UPC-Etiketten erfundene Seriennummern.</p>\n\n<h3>Die Kostenfalle</h3>\n<p>Die Preisgestaltung ist nutzungsabhängig und an die jeweils genutzten Dienste gebunden. Jeder Connector, jeder Abrufaufruf und jeder Nachrichtenzähler wird dem Tenant berechnet. Verbrauchsbasierte Preise funktionieren, wenn du mit dem Azure-Preiskalkulator planst, die Nutzung verfolgst und optimierst. Sonst wartet eine Überraschungsrechnung.</p>\n\n<h2>Verantwortungsvolle KI: Governance als Überlebensstrategie</h2>\n<p>Verantwortungsvolle KI klingt in Keynotes nach Fairness und Transparenz. In der Praxis bedeutet sie Konfigurationen, Audits, Filter und Governance-Schritte. Sie ist der Sicherheitsgurt, nicht der Sportwagen.</p>\n<p>Konkret gehören dazu Zugriffsrichtlinien, die unter Druck standhalten, Filter, die schädliche Prompts blockieren, und Protokolle, die detailliert genug sind, um nachzuweisen, wie eine Antwort entstanden ist. HR-Copilots werden von Finanzdaten isoliert, und Bereichsregeln sorgen dafür, dass Team-Bots nicht in SharePoint-Geheimnisse eindringen. Was passiert, wenn das fehlt, zeigt ein Bot ohne Tenant-Einschränkung am HR-Repository: Auf eine Frage zu Versicherungsleistungen veröffentlicht er Gehaltsbänder im Chat. Das ist eine Datenschutzverletzung und ein Schaden für die Akzeptanz.</p>\n\n<h3>Die Werkzeuge dafür</h3>\n<p>Azure AI Content Safety filtert gewalttätige, obszöne und anstößige Eingaben und Antworten, bevor sie Nutzer erreichen. Das ist die Grundhygiene. Foundry und Copilot Studio ergänzen sie um Evaluierungspipelines mit Groundedness-Checks, Relevanzbewertung, Transparenz-Dashboards und Erklärbarkeit. Schwellenwerte lassen sich anpassen, Ein- und Ausgaben filtern.</p>\n<p>Microsoft investiert hier stark: 34.000 Vollzeit-Ingenieure für Sicherheit und 15.000 Partner mit Sicherheitsexpertise. Doch keiner von ihnen konfiguriert deinen Tenant. Identitäten sichern, Daten isolieren, Verschlüsselung anwenden und Richtlinien konfigurieren bleibt deine Aufgabe.</p>\n\n<h3>Governance über den gesamten Lebenszyklus</h3>\n<p>Der empfohlene Zyklus lautet: testen, freigeben, veröffentlichen, prüfen, iterieren. Wer einmal ausliefert und dann abschaltet, scheitert, denn Modelle entwickeln sich, Prompts ändern sich und Ergebnisse driften ab. Governance bremst dabei nicht das Tempo, sie verhindert, dass Tempo zum Absturz führt. Wie Leitplanken an einer Bergstraße werden sie erst dann geschätzt, wenn es steil bergab geht.</p>\n\n<h2>Häufige Fehler und Stolpersteine</h2>\n<ul>\n<li><strong>Plug-and-Play-Denken:</strong> Foundry oder Copilot Studio sind nicht die Falle, der Glaube an reines Plug-and-Play ist es.</li>\n<li><strong>Datenmüll im Index:</strong> Ohne aufbereitete und indizierte Daten hilft auch kein starkes Modell.</li>\n<li><strong>Keine Evaluierungspipelines:</strong> Prototypen aus der Sandbox gehen ohne Prüfung auf Fundiertheit, Sprachgewandtheit, Relevanz und Kohärenz live. Nutzer bemerken die Abweichung, das Vertrauen sinkt, und die Finanzierung wird gestrichen.</li>\n<li><strong>Vage Agenten-Aufträge:</strong> Ohne enge Begrenzung, Validierung und Telemetrie entsteht Chaos.</li>\n<li><strong>Zu weitreichende Rechte:</strong> Pauschale Adminrechte und fehlende Tenant-Abgrenzung führen zu Datenlecks.</li>\n<li><strong>Fehlendes Kostenmonitoring:</strong> Nutzungsabhängige Preise ohne Planung und Nachverfolgung enden in Überraschungsrechnungen.</li>\n<li><strong>Governance als Nachgedanke:</strong> Identitätsabgrenzung und Inhaltssicherheit gehören zur Grundausstattung und werden nicht nachträglich angeflanscht.</li>\n</ul>\n\n<h2>Praktische Takeaways</h2>\n<ul>\n<li>Fundiere dein System mit Azure AI Search, mit hybrider Suche und semantischem Reranking, bevor du an den Livegang denkst.</li>\n<li>Nutze die Observability von Azure AI Foundry und Promptflow von Anfang an und lass bei jedem Test die integrierten Evaluatoren laufen.</li>\n<li>Miss Fundiertheit, Relevanz, Kohärenz und Quellentreue, und richte Telemetrie ein, die Abweichungen früh meldet.</li>\n<li>Begrenze Agenten eng, gib ihnen minimale Rechte, und sorge für Protokollierung und Rollback.</li>\n<li>Setze Azure AI Content Safety und Wissenskonfiguration als Filter ein.</li>\n<li>Behalte den Menschen als Sicherheitsnetz im Prozess, mit Stufentests und Genehmigungsworkflows.</li>\n<li>Schätze Kosten mit dem Azure-Preiskalkulator und verfolge die Nutzung.</li>\n<li>Befolge die Reihenfolge: erst Governance, dann Experimente, zuletzt Produktion.</li>\n</ul>\n\n<h2>Fazit</h2>\n<p>KI-Systeme halluzinieren vor allem dann, wenn Daten nicht aufbereitet, Antworten nicht gemessen und Agenten nicht begrenzt werden. Mit Hybridsuche und semantischem Reranking in Azure AI Search, den Evaluatoren in Azure AI Foundry und einer konsequenten Governance liefern Copilots und Agenten Antworten, die in der Realität verankert bleiben. Verantwortung bremst dabei nicht, sie macht die Lösung produktionstauglich. Tools ändern sich, aber die Taktik bleibt: Identitätsmanagement und Beobachtbarkeit zuerst, dann Prototypen, dann echte Produktion.</p>",
+  "model": "claude-sonnet-5-5",
+  "info": {
+   "titel": "Halluzinationen stoppen: RAG richtig fundieren",
+   "typ": "schritte",
+   "punkte": [
+    {
+     "kopf": "Daten aufbereiten",
+     "text": "Chaotische Eingaben indizieren, denn ohne gute Datenbasis bleibt es bei Garbage in, Garbage out."
+    },
+    {
+     "kopf": "Hybrid suchen",
+     "text": "Azure AI Search kombiniert Keyword- und Vektorsuche mit semantischem Reranking für den passenden Kontext."
+    },
+    {
+     "kopf": "Evaluatoren einsetzen",
+     "text": "Fundiertheit, Relevanz, Kohärenz und Quellentreue mit Foundry-Evaluatoren und Promptflow von Anfang an messen."
+    },
+    {
+     "kopf": "Agenten begrenzen",
+     "text": "Minimale Rechte, klare Aufgaben, Protokollierung, Rollback und Content-Safety-Filter vor jeder Automatisierung."
+    },
+    {
+     "kopf": "Governance-Zyklus leben",
+     "text": "Testen, freigeben, veröffentlichen, prüfen, iterieren: erst Governance, dann Experimente, zuletzt Produktion."
+    }
+   ]
+  },
+  "faq": [
+   {
+    "q": "Wie kann man KI-Halluzinationen in Unternehmen reduzieren?",
+    "a": "Halluzinationen lassen sich mit Retrieval Augmented Generation und Azure AI Search eindämmen. Das Modell greift auf aufbereitete, indizierte Unternehmensdaten zu. Dazu kommen Evaluatoren für Fundiertheit und Relevanz, klare Grenzen für Agenten und Governance. Die Technik ist selten das Problem."
+   },
+   {
+    "q": "Was ist Retrieval Augmented Generation (RAG) und warum ist es wichtig?",
+    "a": "Bei RAG verbindest du ein Sprachmodell mit deiner eigenen Wissensquelle. Das System ruft einen passenden Datenausschnitt ab, und das Modell formuliert die Antwort darauf. Das ist wichtig, weil ein Sprachmodell dein Unternehmen nicht kennt und bei schlampigem Abgleich anfängt zu improvisieren."
+   },
+   {
+    "q": "Was ist der Unterschied zwischen einem Copilot und einem KI-Agenten?",
+    "a": "Ein Copilot ist im Kern ein Prompt-Assistent: Du fragst, er antwortet, und du behältst die Kontrolle. Agenten dagegen entscheiden und handeln selbstständig, ohne auf dich zu warten. Deshalb brauchen sie enge Begrenzung, Validierungsschritte und Telemetrie, sonst können sie Fehler im großen Maßstab verursachen."
+   },
+   {
+    "q": "Was sollte man vor dem Einsatz autonomer KI-Agenten absichern?",
+    "a": "Vergib minimale Rechte statt pauschaler Adminrechte. Sorge für Protokollierung und Rollback, damit jede Aktion nachvollziehbar und umkehrbar ist. Setze Inhalts- und Verhaltensfilter wie Azure AI Content Safety ein. Außerdem sollte der Mensch als Sicherheitsnetz mit Genehmigungsworkflows und Stufentests eingebunden bleiben."
+   }
+  ],
+  "infos": [
+   {
+    "titel": "Copilot und Agent im Vergleich",
+    "typ": "vergleich",
+    "links": {
+     "titel": "Copilot",
+     "punkte": [
+      "Im Kern ein Prompt-Assistent: Du fragst, er antwortet",
+      "Du behältst die Kontrolle über jede Aktion",
+      "Reaktiv: Er wartet auf deine Eingabe",
+      "Fehler bleiben meist überschaubar"
+     ]
+    },
+    "rechts": {
+     "titel": "Agent",
+     "punkte": [
+      "Entscheidet und handelt, ohne auf dich zu warten",
+      "Befolgt vage Anweisungen buchstabengetreu",
+      "Proaktiv: Er überwacht Zustände und führt Workflows aus",
+      "Fehlentscheidungen wirken sofort und skalieren durch die Umgebung",
+      "Braucht enge Grenzen, Validierung und Telemetrie"
+     ]
+    }
+   },
+   {
+    "titel": "Überlebens-Checkliste vor jeder Automatisierung",
+    "typ": "checkliste",
+    "punkte": [
+     "Minimale Rechte vergeben statt pauschaler Adminrechte",
+     "Jede Aktion protokollieren, damit eine prüfbare Spur entsteht",
+     "Für jede schwerwiegende Aktion einen Rollback-Weg vorsehen",
+     "Azure AI Content Safety und Wissenskonfiguration als Filter einsetzen",
+     "Stufentests und Genehmigungsworkflows einrichten",
+     "Dashboards nutzen, die jeden Schritt des Agenten zeigen",
+     "Den Menschen als Sicherheitsnetz mit manueller Übersteuerung behalten"
+    ]
+   }
+  ]
+ },
+ "es": {
+  "html": "<p>Las demos de IA multimodal lucen impecables: un prompt, una imagen limpia y una respuesta perfecta. En una empresa real el brillo desaparece rápido. Los copilots y los agentes se tambalean cuando no tienen fundamentos, y el resultado son alucinaciones que parecen respuestas fiables.</p>\n<p>Este artículo explica cómo frenar esas alucinaciones con RAG fundamentado, búsqueda híbrida y semántica en Azure AI Search, evaluadores de calidad y una gobernanza que se aplica desde el primer día. También repasa dónde suelen fallar los equipos con Azure AI Foundry y Copilot Studio.</p>\n\n<h2>Por qué las aplicaciones multimodales fallan en el mundo real</h2>\n<p>Las demostraciones funcionan con entradas cuidadosamente preparadas. En producción nadie entrega a tu modelo capturas de pantalla impecables ni CSV revisados por un comité de estándares. Recursos Humanos envía documentos de identidad de calidad dudosa, Compras arrastra PDF que parecen haber pasado por varias generaciones de fax y alguien de Finanzas fotografía una factura con la cámara rota de un Android.</p>\n<p>Los modelos multimodales pueden manejar texto, imágenes, voz y vídeo, pero necesitan datos bien indexados y una buena recuperación para trabajar en condiciones desordenadas. Si no los tienen, les pides que improvisen sobre basura, y ninguna cantidad de GPU arregla el principio de «entra basura, sale basura».</p>\n<p>La conclusión es directa: la IA multimodal no colapsa por falta de inteligencia. Colapsa porque los datos no están preparados, indexados ni monitoreados.</p>\n\n<h2>RAG fundamentado con búsqueda híbrida y reordenador semántico en Azure AI Search</h2>\n<h3>Qué hace la generación aumentada por recuperación</h3>\n<p>El modelo no conoce tu negocio. Con la generación aumentada por recuperación (RAG) lo conectas a una fuente de conocimiento: el sistema recupera una porción de datos y la respuesta se construye en torno a ella. Si la coincidencia es precisa, las respuestas son útiles y fundamentadas. Si es descuidada, el modelo improvisa y dice tonterías con total confianza. Así se llega a un chatbot que asegura que tu empresa tiene una política de descuentos que no existe. No se ha vuelto consciente: simplemente recuperó los datos equivocados.</p>\n<p>Azure AI Studio y Azure AI Foundry se apoyan en este patrón y admiten distintas modalidades: lenguaje, visión, voz e incluso recuperación de vídeo. Pero el RAG solo es tan bueno como los datos que utiliza.</p>\n<h3>Por qué no basta con conectar un método de recuperación</h3>\n<p>Para obtener resultados coherentes necesitas una búsqueda híbrida que combine palabras clave y vectores, rematada con un reordenador semántico integrado en Azure AI Search. Así el sistema equilibra las coincidencias literales con el significado de los resultados y entrega al modelo un contexto adecuado. Con esa base, una configuración multimodal puede manejar escaneos torcidos e imágenes borrosas en lugar de inventarse tu política de cumplimiento de la nada.</p>\n\n<h2>Evaluación continua: fundamentación, relevancia y coherencia</h2>\n<p>Muchos lanzamientos fracasan porque se espera un resultado pulido desde el primer día y no se destina presupuesto a ciclos de evaluación. Sin controles de fundamentación, relevancia y coherencia en segundo plano, la desviación no se nota hasta que los usuarios ya se han visto afectados. La respuesta suena correcta, pero nadie la contrastó con una fuente de verdad. Nadie pondría en marcha una base de datos nueva sin supervisión, y con la IA multimodal ocurre justo eso.</p>\n<p>Carvana es un ejemplo de cómo hacerlo bien. Su servicio automático con IA resultó realmente útil porque ajustaron la recuperación, fundamentaron adecuadamente a sus agentes e invirtieron en observabilidad. En el extremo opuesto están las empresas que añadieron un chatbot genérico a su página de soporte sin fundamentación ni evaluación: reclamos de garantía clasificados como prospectos de ventas, colas de soporte saturadas y credibilidad destruida. La infraestructura era la misma, pero los resultados fueron opuestos.</p>\n\n<h2>Agentes de IA: ¿útiles o costosos pisapapeles?</h2>\n<p>Un agente coordina modelos, datos, activadores y acciones, como un agente de tráfico para tu flujo de trabajo automatizado. A veces lo dirige todo con fluidez y a veces deja pasar el caos. La diferencia entre la definición clara y la realidad desordenada es donde muchos equipos pierden el control.</p>\n<h3>Copiloto y agente no son lo mismo</h3>\n<p>Un copiloto es un asistente: respondes tú, decides tú y mantienes el control. Un agente toma decisiones sin esperar y sigue tus instrucciones vagas al pie de la letra, aunque el resultado no tenga sentido. Con alcance limitado, un agente de soporte genera tickets reales solo para problemas genuinos y ahorra horas de trabajo humano. Sin límites, puede enterrar al servicio técnico en alertas falsas sobre fallos críticos de impresoras que funcionan bien.</p>\n<p>Muchos equipos dan a su agente una descripción de puesto que parece una promesa de campaña: optimizar procesos, proporcionar información, ayudar a la gente. En la práctica eso equivale a decirle que haga lo que quiera. Los agentes sin alcance definido inventan problemas, duplican registros y entran en bucles infinitos. Sin validación ni telemetría, la herramienta nueva es un becario imprudente con derechos de administrador.</p>\n<h3>Las piezas de Microsoft</h3>\n<ul>\n<li><strong>Copilot Studio:</strong> espacio de bajo código donde se diseña el comportamiento del agente con flujos, prompts y disparadores de eventos.</li>\n<li><strong>Agent Service de Azure AI Foundry:</strong> la estructura empresarial para llevar agentes a producción con monitoreo, registros y métricas, pensada para automatizar con supervisión humana.</li>\n</ul>\n<h3>Lista de verificación: ¿tu agente es realmente útil?</h3>\n<ol>\n<li>¿Reduce las horas de trabajo humano o arrastra a tu personal a tareas de depuración?</li>\n<li>¿Capturas métricas como fundamentación, fluidez y coherencia, o solo miras paneles bonitos?</li>\n<li>¿Tienes telemetría para detectar desviaciones antes de que los usuarios se quejen?</li>\n</ol>\n<p>Si fallas en alguna, no tienes un agente inteligente, sino un protector de pantalla costoso.</p>\n\n<h2>La trampa de los agentes autónomos</h2>\n<p>Los copilots son reactivos; los agentes autónomos son proactivos. En lugar de esperar a que alguien escriba un prompt, vigilan la salud del servicio, gestionan señales de seguridad o ejecutan flujos de trabajo por sí solos. La promesa de eficiencia es real, pero hay que tener en cuenta el contexto: los agentes autónomos en Copilot Studio siguen en versión preliminar. Eso no significa que estén rotos, pero sí que no se han probado a fondo en el mundo real. Microsoft insiste en que antes de un despliegue masivo hacen falta salvaguardas de gobernanza del ciclo de vida y un sistema de control de Copilot.</p>\n<p>Un escenario realista: un agente de soporte con autoridad para responder a anomalías de inicio de sesión funciona de maravilla en una prueba con cinco usuarios. Al llegar las entradas ruidosas de producción, empieza a restablecer cuentas en masa por falsos positivos y puede paralizar las operaciones de fin de mes. No hay que renunciar a la tecnología, sino construir primero la red de seguridad.</p>\n<h3>Tres elementos esenciales antes de automatizar</h3>\n<ul>\n<li><strong>Alcance de identidad y acceso:</strong> derechos mínimos para el agente, nunca administrador general.</li>\n<li><strong>Registro y reversión:</strong> cada acción deja un rastro auditable y cada acción seria tiene una ruta de vuelta atrás.</li>\n<li><strong>Filtros de contenido comprobados:</strong> la seguridad de contenido de Azure AI evita respuestas inapropiadas o que el bot se salga del guión.</li>\n</ul>\n<p>La dimensión ética lo hace aún más crítico. Un agente de RR. HH. que marque empleados como riesgosos o un agente financiero que retenga pagos a proveedores por clasificarlos mal como fraude provocan fallos con impacto humano y consecuencias legales y de cumplimiento. El sesgo en los datos de entrenamiento o de recuperación no desaparece por usar una versión preliminar empresarial. Por eso hacen falta paneles que muestren cada paso del agente, que verifiquen si su resultado fue fundamentado, relevante y coherente con la política, y opciones con supervisión humana. Funciona como el piloto automático de un avión: muy útil, pero siempre con anulación manual. O como enseñar a conducir a un adolescente: te sientas en el asiento del pasajero, pones límites y te aseguras de poder pisar el freno.</p>\n\n<h2>Azure AI Foundry: fábrica o campo de minas</h2>\n<p>Azure AI Foundry es la propuesta insignia de Microsoft para todo lo relacionado con la IA. Muchos equipos lo tratan como una tienda de muebles: miran el catálogo, eligen un par de modelos llamativos, añaden conectores y montan algo sin instrucciones. El resultado es un juguete de demostración que se derrumba cuando un usuario real sube un PDF desordenado.</p>\n<h3>Qué ofrece realmente</h3>\n<ul>\n<li>Un catálogo de modelos de Microsoft, OpenAI, Meta, Mistral y otros.</li>\n<li>Opciones de personalización: generación aumentada por recuperación, ajuste fino y destilación.</li>\n<li>Un servicio de agentes para orquestación.</li>\n<li>Herramientas como Prompt flow para evaluación y depuración.</li>\n<li>Funciones de seguridad: controles de identidad y acceso, filtros de seguridad de contenido y paneles de observabilidad.</li>\n</ul>\n<p>Foundry es una planta de fábrica, no la caja de juguetes de un hackatón. Eso implica establecer límites de identidad, envolver cada canalización con seguridad de contenido, usar la observabilidad para distinguir una respuesta fundamentada de una política inventada y elegir el modelo adecuado para cada tarea en lugar del más grande solo porque suena inteligente.</p>\n<h3>Dos casos de fallo</h3>\n<p>Un copiloto conectado a Foundry y SharePoint expuso datos restringidos de RR. HH. a becarios. No fue una genialidad, sino un desastre de cumplimiento que unas reglas de acceso habrían evitado. En otro caso, una organización usó GPT-4 Turbo para etiquetar fotos de producto: en el laboratorio, con fotos de estudio limpias, todo era perfecto. En producción llegaron fotos borrosas hechas con teléfonos y el sistema confundía productos y convertía códigos UPC en números de serie falsos.</p>\n<h3>El coste por consumo</h3>\n<p>El precio de Foundry se basa en el consumo y depende de los servicios concretos que uses. Cada conector, cada llamada de recuperación y cada mensaje se factura a tu inquilino. Si no estimas con la calculadora de precios de Azure y no supervisas el uso, tu equipo financiero recibirá una factura sorpresa.</p>\n\n<h2>IA responsable: gobernanza que se configura, no se declama</h2>\n<p>La IA responsable no es una diapositiva con palabras como equidad y transparencia. En el día a día son configuración, auditorías, filtros y pasos de gobernanza. Es el cinturón de seguridad, no el coche deportivo. Eso significa políticas de acceso que no cedan bajo presión, filtros que bloqueen instrucciones dañinas y registros lo bastante detallados para satisfacer a un regulador. También implica aislar los copilots de RR. HH. de los datos financieros, fijar reglas de alcance para que los bots no se filtren en secretos de SharePoint y etiquetar registros para demostrar cómo se formó una respuesta.</p>\n<p>La versión fea de ignorarlo es conectar un bot al repositorio de RR. HH. sin delimitar el inquilino. Un usuario pregunta por el seguro médico y el bot, muy servicial, publica las bandas salariales de los empleados en el chat. La forma más rápida de matar la adopción no es una mala experiencia de usuario, sino una filtración confidencial.</p>\n<p>La seguridad de contenido filtra instrucciones y respuestas violentas, obscenas u ofensivas, pero es solo higiene básica. Foundry y Copilot Studio ofrecen además procesos de evaluación con verificaciones de fundamentación, puntuación de relevancia y paneles de transparencia y explicabilidad, con los que puedes ajustar umbrales y filtrar entradas y salidas.</p>\n<p>Microsoft respalda la seguridad con 34.000 ingenieros equivalentes a tiempo completo y 15.000 socios con experiencia en seguridad. Aun así, ninguno de ellos está en tu inquilino configurando tus reglas de acceso. Asegurar identidades, configurar el aislamiento de datos, aplicar cifrado y definir políticas sigue siendo tu trabajo.</p>\n<p>El método es un ciclo de vida con puntos de control: probar, aprobar, lanzar, auditar e iterar. Los modelos evolucionan, las instrucciones cambian y los resultados se desvían. La gobernanza no frena la velocidad, sino que evita que la velocidad te destruya.</p>\n\n<h2>Errores comunes y piedras en el camino</h2>\n<ul>\n<li>Conectar un método de recuperación sin búsqueda híbrida ni reordenamiento semántico.</li>\n<li>No presupuestar ciclos de evaluación y descubrir la desviación cuando los usuarios ya la sufren.</li>\n<li>Dar a los agentes descripciones de puesto vagas y sin alcance definido.</li>\n<li>Lanzar agentes autónomos en versión preliminar sin gobernanza, registro, reversión ni supervisión humana.</li>\n<li>Tratar Foundry como una caja de juguetes y activar un modelo grande creyendo que ya está listo para producción.</li>\n<li>Llevar prototipos de un entorno de pruebas con datos limpios a producción sin canalizaciones de evaluación.</li>\n<li>No estimar ni supervisar los costes por consumo.</li>\n<li>Añadir identidad y seguridad de contenido «después» en vez de incluirlas desde el diseño.</li>\n</ul>\n\n<h2>Takeaways prácticos</h2>\n<ul>\n<li>Fundamenta tu sistema con Azure AI Search usando búsqueda híbrida y reordenamiento semántico antes de salir a producción.</li>\n<li>Ejecuta evaluadores de fundamentación, relevancia, coherencia y fluidez en cada prompt, y no solo en el lanzamiento.</li>\n<li>Usa la observabilidad de Azure AI Foundry desde el primer día y conecta los flujos de prompts.</li>\n<li>Define el alcance de cada agente con límites claros y exige telemetría para detectar desviaciones.</li>\n<li>Aplica a los agentes derechos mínimos, registro con ruta de reversión y filtros de contenido comprobados.</li>\n<li>Mantén la supervisión humana en las decisiones con impacto en personas, cumplimiento o pagos.</li>\n<li>Estima los costes con la calculadora de precios de Azure y monitorea el uso.</li>\n<li>Sigue el orden: gobernanza primero, experimentación después, producción al final.</li>\n</ul>\n\n<h2>Fazit</h2>\n<p>La trampa no es Azure AI Foundry ni Copilot Studio, sino creer que basta con activarlos. Las herramientas para evitar las alucinaciones existen: búsqueda híbrida y semántica, evaluadores, observabilidad, filtros de contenido y control de identidad. Solo la gobernanza convierte un prototipo en un sistema de producción en el que los usuarios pueden confiar, y por eso la IA responsable acaba siendo la que sobrevive.</p>",
+  "model": "claude-sonnet-5-5",
+  "info": {
+   "titel": "De prototipo a producción sin alucinaciones",
+   "typ": "schritte",
+   "punkte": [
+    {
+     "kopf": "Gobernanza primero",
+     "text": "Define identidad, acceso y seguridad de contenido antes de experimentar y mucho antes de producción."
+    },
+    {
+     "kopf": "Fundamenta con RAG",
+     "text": "Usa Azure AI Search con búsqueda híbrida y reordenador semántico para dar buen contexto al modelo."
+    },
+    {
+     "kopf": "Evalúa siempre",
+     "text": "Mide fundamentación, relevancia, coherencia y fluidez en cada prompt, no solo al lanzar."
+    },
+    {
+     "kopf": "Limita los agentes",
+     "text": "Alcance claro, derechos mínimos, registro con reversión y supervisión humana."
+    },
+    {
+     "kopf": "Observa y controla costes",
+     "text": "Activa telemetría desde el día uno y estima el consumo con la calculadora de Azure."
+    },
+    {
+     "kopf": "Producción al final",
+     "text": "Prueba, aprueba, lanza, audita e itera con puntos de control en cada ciclo."
+    }
+   ]
+  },
+  "faq": [
+   {
+    "q": "¿Por qué fallan las aplicaciones de IA multimodal en producción aunque funcionen bien en las demos?",
+    "a": "Las demos usan entradas cuidadosamente preparadas, pero en producción llegan documentos de mala calidad, PDF degradados y fotos borrosas. La IA multimodal no falla por falta de inteligencia, sino porque los datos no están preparados, indexados ni monitoreados. Entra basura, sale basura."
+   },
+   {
+    "q": "¿Cómo se pueden reducir las alucinaciones de la IA con RAG en Azure AI Search?",
+    "a": "Hay que conectar el modelo a una fuente de conocimiento mediante RAG y usar una búsqueda híbrida que combine palabras clave y vectores, con un reordenador semántico. Así el modelo recibe un contexto adecuado y no improvisa políticas inexistentes. Además, conviene evaluar continuamente fundamentación, relevancia y coherencia."
+   },
+   {
+    "q": "¿Cuál es la diferencia entre un copiloto y un agente de IA?",
+    "a": "Un copiloto es un asistente: tú respondes, decides y mantienes el control. Un agente toma decisiones sin esperar y sigue instrucciones vagas al pie de la letra. Sin alcance definido puede inventar problemas, duplicar registros o entrar en bucles infinitos, por lo que necesita límites, validación y telemetría."
+   },
+   {
+    "q": "¿Qué medidas hay que tomar antes de automatizar con agentes autónomos en Copilot Studio?",
+    "a": "Los agentes autónomos siguen en versión preliminar, así que antes de un despliegue masivo se necesitan tres elementos: derechos mínimos de identidad y acceso, registro con ruta de reversión de cada acción seria, y filtros de contenido comprobados. También hay que mantener supervisión humana en decisiones críticas."
+   }
+  ],
+  "infos": [
+   {
+    "titulo": "Copiloto frente a agente",
+    "titel": "Copiloto frente a agente",
+    "typ": "vergleich",
+    "links": {
+     "titel": "Copiloto",
+     "punkte": [
+      "Es un asistente: respondes tú, decides tú.",
+      "Mantienes el control en todo momento.",
+      "Es reactivo: espera a que alguien escriba un prompt.",
+      "Su riesgo es menor al no actuar por sí solo."
+     ]
+    },
+    "rechts": {
+     "titel": "Agente autónomo",
+     "punkte": [
+      "Toma decisiones sin esperar y sigue instrucciones vagas al pie de la letra.",
+      "Es proactivo: vigila servicios y ejecuta flujos por sí solo.",
+      "Sin alcance definido inventa problemas, duplica registros y entra en bucles.",
+      "En Copilot Studio sigue en versión preliminar.",
+      "Exige gobernanza y supervisión humana antes del despliegue masivo."
+     ]
+    }
+   },
+   {
+    "titel": "Tres elementos antes de automatizar",
+    "typ": "fakten",
+    "punkte": [
+     {
+      "wert": "Identidad",
+      "text": "Derechos mínimos para el agente, nunca administrador general."
+     },
+     {
+      "wert": "Reversión",
+      "text": "Cada acción deja rastro auditable y las serias tienen ruta de vuelta atrás."
+     },
+     {
+      "wert": "Contenido",
+      "text": "Filtros comprobados evitan respuestas inapropiadas o que el bot se salga del guión."
+     },
+     {
+      "wert": "Supervisión",
+      "text": "Paneles que muestran cada paso del agente y opciones con supervisión humana."
+     }
+    ]
+   }
+  ]
+ },
+ "fr": {
+  "html": "<p>Une démo d'IA multimodale impressionne toujours. En production, les mêmes scénarios se heurtent à des scans de travers, des photos floues et des instructions trop vagues. Le modèle n'est pas en cause : les réponses ne tiennent que si elles reposent sur des données fiables, bien indexées et contrôlées en continu.</p>\n<p>Cet article montre comment limiter les hallucinations avec un RAG solide, la recherche hybride et sémantique d'Azure AI Search et des évaluateurs de pertinence et de cohérence. Il aborde aussi les agents, les agents autonomes, Azure AI Foundry et la gouvernance, qui décident de la survie d'un projet IA en entreprise.</p>\n\n<h2>Pourquoi les applications multimodales échouent dans le monde réel</h2>\n<p>Sur scène, le présentateur envoie une requête texte, une image nette ou une entrée vocale, et le modèle renvoie un graphique parfait ou un résumé de contrat précis. En entreprise, les démos fonctionnent avec des entrées idéales, alors que le travail quotidien produit des entrées médiocres.</p>\n<p>Les RH fournissent des cartes d'identité floues. Les achats importent des PDF dont la qualité rappelle un fax recopié cinq fois. Quelqu'un en finance photographie une facture avec un téléphone à l'écran fêlé. Les modèles multimodaux traitent texte, images, voix et vidéo, mais ils ont besoin de données bien indexées et d'une récupération efficace. Sans cela, on leur demande d'improviser sur des déchets, et aucune puissance de calcul ne corrige le principe « garbage in, garbage out ».</p>\n<p>Le multimodal ne s'effondre donc pas parce que l'IA manque d'intelligence. Il s'effondre parce que les données ne sont ni préparées, ni indexées, ni surveillées.</p>\n\n<h2>RAG : ancrer les réponses avec Azure AI Search</h2>\n<p>La génération augmentée par récupération (RAG) part d'un constat simple : le modèle ne connaît pas votre métier. Vous le connectez donc à une source de connaissances. Il en récupère un fragment et construit sa réponse autour.</p>\n<p>Si la correspondance est précise, la réponse est solide. Si elle est bâclée, le modèle improvise avec aplomb. C'est ainsi qu'un chatbot annonce une nouvelle politique de remise pour le T3 qui n'existe pas. Il n'a pas pris conscience de quoi que ce soit : il a simplement extrait les mauvaises données.</p>\n<h3>Recherche hybride et reclassement sémantique</h3>\n<p>Une seule méthode de récupération ne suffit pas. Pour des résultats cohérents, il faut :</p>\n<ul>\n<li>une <strong>recherche hybride</strong> qui combine mots-clés et vecteurs ;</li>\n<li>un <strong>reclasseur sémantique</strong> intégré à Azure AI Search.</li>\n</ul>\n<p>Le système équilibre ainsi les correspondances littérales et le sens, puis réorganise les résultats pour placer le contexte pertinent en tête. Dans une configuration multimodale, le modèle peut alors exploiter des scans de travers et des images floues au lieu d'inventer une politique de conformité.</p>\n<p>Azure AI Studio et Azure AI Foundry reposent tous deux sur ce modèle et couvrent plusieurs modalités : langage, vision, parole et recherche vidéo. Le RAG reste toutefois aussi bon que les données qu'on lui fournit.</p>\n\n<h2>Évaluer en continu : ancrage, pertinence et cohérence</h2>\n<p>Beaucoup d'entreprises attendent des résultats parfaits dès le premier jour mais ne prévoient aucun budget pour les boucles d'évaluation. Sans vérification de l'ancrage, de la pertinence et de la cohérence, la dérive n'apparaît que lorsque les utilisateurs en font les frais. La réponse semble correcte, mais personne ne l'a comparée à la source de référence.</p>\n<p>On ne déploierait jamais une nouvelle base de données sans supervision. Pourtant, des dirigeants lancent l'IA multimodale en production comme une boîte magique.</p>\n<h3>Deux trajectoires avec la même pile Azure</h3>\n<p>Carvana montre qu'une autre voie existe. L'entreprise a rendu son IA en libre-service réellement utile en ajustant la recherche, en ancrant correctement ses agents et en investissant dans l'observabilité. Un bot gadget est devenu un outil de confiance pour les clients.</p>\n<p>À l'inverse, certaines entreprises ont posé un chatbot générique sur leur page de support, sans ancrage ni évaluation. Résultat : des réclamations de garantie confondues avec des prospects, une file d'attente saturée et une crédibilité en lambeaux.</p>\n<p>Les évaluateurs intégrés d'Azure AI Foundry ne sont pas facultatifs. C'est la méthode documentée pour mesurer l'ancrage, la pertinence, la cohérence et la fidélité à la source.</p>\n\n<h2>Agents, copilotes et agents autonomes : où se situe le risque ?</h2>\n<p>Un agent coordonne modèles, données, déclencheurs et actions, un peu comme un agent de circulation pour vos flux de travail automatisés. Parfois tout s'écoule sans heurt, parfois non.</p>\n<h3>Copilote ou agent</h3>\n<p>Un copilote est un compagnon de saisie : vous demandez, il répond, vous gardez le contrôle. Un agent prend des décisions sans vous attendre et suit des instructions vagues à la lettre, même quand le résultat n'a aucun sens. Une « fiche de poste » du type « optimiser les processus, fournir des idées, aider les gens » revient à lui dire de faire n'importe quoi. Il peut alors dupliquer des enregistrements, tourner en boucle ou inventer des problèmes à résoudre.</p>\n<p>Un agent mal encadré peut aussi noyer un système de tickets sous de fausses alertes sur des pannes d'imprimantes qui fonctionnent très bien. Strictement cadré, il ne crée des tickets que pour de vrais problèmes et fait gagner des heures.</p>\n<h3>Le piège de l'autonomie</h3>\n<p>Les copilotes sont réactifs, les agents autonomes sont proactifs : ils surveillent la santé des services, traitent des signaux de sécurité ou lancent des flux sans attendre de requête. La promesse d'efficacité est réelle, mais ces agents n'attendent aucune autorisation, et leurs erreurs se propagent immédiatement.</p>\n<p>Dans Copilot Studio, les agents autonomes sont actuellement en préversion. Cela ne veut pas dire défectueux, mais cela impose de tester. Microsoft indique elle-même qu'il faut des garde-fous, une gouvernance du cycle de vie et le système de contrôle de Copilot avant tout déploiement à grande échelle.</p>\n<p>Prenons un agent de support autonome chargé de répondre aux anomalies de connexion. Si des données parasites arrivent en production, il peut réinitialiser massivement des centaines de comptes sur la base de faux positifs et paralyser les opérations de fin de mois. Ce mode de défaillance est celui que l'on choisit en ignorant le cadrage.</p>\n<p>Trois impératifs précèdent toute automatisation sophistiquée :</p>\n<ol>\n<li><strong>Périmètre des identités et des accès</strong> : des droits minimaux, jamais un rôle d'administrateur global.</li>\n<li><strong>Journalisation et retour en arrière</strong> : chaque action laisse une trace auditable, et chaque action sérieuse dispose d'un chemin de retour.</li>\n<li><strong>Filtres de contenu et de comportement</strong> : Azure AI Content Safety et la configuration des connaissances empêchent le bot de sortir du script.</li>\n</ol>\n<p>La dimension éthique pèse tout autant. Un agent RH qui signale des employés comme « à risque » ou un agent financier qui bloque des paiements fournisseurs classés à tort comme frauduleux provoquent des échecs à impact humain, avec des conséquences juridiques et de conformité. Les biais des données d'entraînement ou de récupération ne disparaissent pas parce que l'on est en préversion. Il faut donc de l'observabilité et une supervision humaine : le pilote automatique d'un avion reste utile, mais il garde une commande manuelle.</p>\n\n<h2>Azure AI Foundry : une usine, pas un magasin Ikea</h2>\n<p>Azure AI Foundry est la plateforme de Microsoft pour tout ce qui touche à l'IA. Elle propose notamment :</p>\n<ul>\n<li>un catalogue de modèles (Microsoft, OpenAI, Meta, Mistral et d'autres) ;</li>\n<li>des options de personnalisation : RAG, réglage fin et distillation ;</li>\n<li>un service d'agent pour l'orchestration ;</li>\n<li>des outils comme Prompt flow pour l'évaluation et le débogage ;</li>\n<li>des fonctions de sécurité : contrôles d'accès, filtres de sécurité et tableaux de bord.</li>\n</ul>\n<p>Côté outils, Copilot Studio est l'espace low-code où l'on conçoit le comportement des agents : flux, prompts, déclencheurs d'événements. L'agent service d'Azure AI Foundry est l'infrastructure d'entreprise qui les déploie en production, avec surveillance, journaux et métriques.</p>\n<p>Le problème vient de la manière dont trop d'équipes abordent Foundry : elles piochent quelques modèles, ajoutent des connecteurs et assemblent le tout sans mode d'emploi. Elles obtiennent un jouet de démonstration qui s'effondre au premier PDF complexe.</p>\n<h3>Ce que cela suppose concrètement</h3>\n<ul>\n<li>définir des limites d'identité pour que seules les bonnes personnes accèdent au bon modèle ;</li>\n<li>intégrer des filtres de sécurité de contenu dans chaque pipeline ;</li>\n<li>utiliser l'observabilité pour distinguer une réponse étayée d'une invention ;</li>\n<li>choisir le modèle adapté à la tâche plutôt que le plus gros.</li>\n</ul>\n<p>Un copilote connecté à SharePoint a ainsi exposé par erreur des données RH restreintes à 20 stagiaires : un désastre de conformité évitable avec des règles d'accès intégrées. Dans un autre cas, un modèle qui étiquetait des photos de produits impressionnait en laboratoire avec des clichés de studio nets. En production, face à des photos floues prises au téléphone, il a étiqueté des poussettes comme des chaises de bureau et transformé des codes-barres en numéros de série fictifs.</p>\n<h3>Facturation à la consommation</h3>\n<p>La tarification est basée sur la consommation et liée aux services utilisés. Chaque connecteur, chaque appel de récupération et chaque compteur de messages est facturé, avec son propre modèle. Sans estimation préalable avec le calculateur Azure ni suivi de l'usage, la facture réserve des surprises.</p>\n\n<h2>IA responsable : des configurations, pas un slogan</h2>\n<p>Sur le terrain, l'IA responsable ressemble plus à de la maintenance serveur qu'à de l'innovation : politiques d'accès solides, filtres qui bloquent réellement les requêtes malveillantes, journaux assez détaillés pour satisfaire un régulateur. Il faut aussi isoler les copilotes RH des données financières, définir des règles de portée pour que les bots d'équipe n'accèdent pas aux sites SharePoint sensibles et étiqueter les journaux pour prouver comment une réponse a été formée.</p>\n<p>Le scénario catastrophe est simple : un bot branché sur le répertoire RH sans délimitation de locataire publie les grilles de salaire en réponse à une question sur les avantages sociaux. Une fuite de données sensibles tue l'adoption plus sûrement qu'une mauvaise interface.</p>\n<p>Azure AI Content Safety filtre les requêtes et réponses violentes, obscènes ou offensantes, mais c'est le strict minimum. Foundry et Copilot Studio ajoutent des pipelines d'évaluation : vérification de fiabilité, score de pertinence, transparence et explicabilité. Vous pouvez ajuster les seuils, filtrer entrées et sorties et obliger les bots à justifier leurs réponses.</p>\n<p>Microsoft investit massivement dans la sécurité, mais personne chez elle ne configure vos règles d'accès. Sécuriser les identités, isoler les données, appliquer le chiffrement et configurer les politiques reste votre responsabilité.</p>\n<h3>La gouvernance du cycle de vie</h3>\n<p>La méthode recommandée tient en cinq verbes : tester, approuver, publier, auditer, itérer. Les équipes qui déploient une fois puis abandonnent finissent par déraper, car les modèles évoluent, les prompts changent et les résultats s'égarent. La gouvernance n'est pas de la bureaucratie : elle empêche un bot interne d'inventer des politiques dans Teams pendant que tout le monde dort. Être responsable ne ralentit pas, cela évite que la vitesse ne vous porte préjudice.</p>\n\n<h2>Erreurs fréquentes et pièges à éviter</h2>\n<ul>\n<li><strong>Croire que la plateforme est plug and play</strong> : Foundry et Copilot Studio ne sont pas le problème, c'est cette croyance qui l'est.</li>\n<li><strong>Se contenter d'une seule méthode de récupération</strong> au lieu de la recherche hybride avec reclassement sémantique.</li>\n<li><strong>Déployer un prototype sans plan d'évaluation</strong> : sans évaluateurs de fiabilité, de fluidité, de pertinence et de cohérence, on déploie à l'aveugle.</li>\n<li><strong>Donner aux agents des missions vagues</strong> et des droits trop larges.</li>\n<li><strong>Ignorer la télémétrie</strong>, et ne voir la dérive qu'une fois les utilisateurs mécontents.</li>\n<li><strong>Négliger la gestion des identités et la sécurité du contenu</strong>, qui font partie de la base et ne s'ajoutent pas après coup.</li>\n<li><strong>Ne pas estimer les coûts</strong> ni surveiller la consommation.</li>\n<li><strong>Choisir le plus gros modèle</strong> par principe plutôt que le modèle adapté à la tâche.</li>\n</ul>\n\n<h2>Les points essentiels à retenir</h2>\n<ul>\n<li>Ancrez votre RAG avec Azure AI Search : recherche hybride (mots-clés et vecteurs) plus reclassement sémantique.</li>\n<li>Prévoyez dès le départ des boucles d'évaluation sur l'ancrage, la pertinence, la cohérence et la fidélité à la source.</li>\n<li>Testez vos agents avec trois questions : réduisent-ils le travail humain, mesurez-vous les bons indicateurs, une télémétrie détecte-t-elle les dérives ?</li>\n<li>Donnez aux agents des droits minimaux, journalisez chaque action et prévoyez un retour en arrière.</li>\n<li>Traitez les agents autonomes de Copilot Studio, en préversion, avec prudence : tests, flux d'approbation, audit et supervision humaine.</li>\n<li>Activez l'observabilité d'Azure AI Foundry dès le premier jour et intégrez les filtres de sécurité à chaque pipeline.</li>\n<li>Estimez les coûts avec le calculateur Azure et surveillez la consommation.</li>\n<li>Appliquez le cycle tester, approuver, publier, auditer, itérer.</li>\n</ul>\n\n<h2>Conclusion</h2>\n<p>Les hallucinations ne sont pas une fatalité : elles apparaissent quand les données sont mal préparées, mal indexées et mal surveillées, et quand les agents agissent sans cadre. Les outils existent, de la recherche hybride d'Azure AI Search aux évaluateurs d'Azure AI Foundry. Seule la gouvernance transforme un prototype séduisant en système de production fiable. Le principe se résume ainsi : gouvernance d'abord, expérimentation ensuite, production en dernier.</p>",
+  "model": "claude-sonnet-5-5",
+  "info": {
+   "titre": "Du prototype IA à la production fiable",
+   "typ": "schritte",
+   "punkte": [
+    {
+     "kopf": "Ancrer les données",
+     "text": "Recherche hybride et reclassement sémantique dans Azure AI Search pour des réponses fondées sur vos sources."
+    },
+    {
+     "kopf": "Évaluer en continu",
+     "text": "Mesurer ancrage, pertinence, cohérence et fidélité à la source avec les évaluateurs d'Azure AI Foundry."
+    },
+    {
+     "kopf": "Cadrer les agents",
+     "text": "Droits minimaux, journalisation, retour en arrière et filtres de contenu avant toute autonomie."
+    },
+    {
+     "kopf": "Observer et superviser",
+     "text": "Télémétrie, tableaux de bord et supervision humaine pour détecter les dérives avant les utilisateurs."
+    },
+    {
+     "kopf": "Gouverner le cycle",
+     "text": "Tester, approuver, publier, auditer, itérer : la gouvernance précède la production."
+    }
+   ]
+  },
+  "faq": [
+   {
+    "q": "Pourquoi les applications d'IA multimodale échouent-elles en production ?",
+    "a": "Elles échouent non par manque d'intelligence du modèle, mais parce que les données ne sont ni préparées, ni indexées, ni surveillées. En production, les entrées sont médiocres : scans de travers, photos floues, PDF de mauvaise qualité. Sans données fiables, le principe « garbage in, garbage out » s'applique."
+   },
+   {
+    "q": "Comment limiter les hallucinations d'une IA avec le RAG et Azure AI Search ?",
+    "a": "Il faut ancrer le modèle dans une source de connaissances fiable, avec une recherche hybride combinant mots-clés et vecteurs, plus un reclasseur sémantique intégré à Azure AI Search. Il faut aussi évaluer en continu l'ancrage, la pertinence et la cohérence des réponses, car le RAG reste aussi bon que ses données."
+   },
+   {
+    "q": "Quelle est la différence entre un copilote et un agent autonome, et quels sont les risques ?",
+    "a": "Un copilote est réactif : vous demandez, il répond et vous gardez le contrôle. Un agent autonome est proactif : il agit sans attendre de requête ni d'autorisation, donc ses erreurs se propagent immédiatement. Il faut des droits minimaux, une journalisation avec retour en arrière, des filtres de contenu et une supervision humaine."
+   },
+   {
+    "q": "Quelle gouvernance appliquer pour déployer l'IA en entreprise avec Azure AI Foundry ?",
+    "a": "La méthode recommandée tient en cinq verbes : tester, approuver, publier, auditer, itérer. Activez l'observabilité d'Azure AI Foundry dès le premier jour, intégrez des filtres de sécurité à chaque pipeline, définissez des limites d'identité et estimez les coûts avec le calculateur Azure, car la facturation dépend de la consommation."
+   }
+  ],
+  "infos": [
+   {
+    "titel": "Copilote ou agent autonome : où se situe le risque ?",
+    "typ": "vergleich",
+    "links": {
+     "titel": "Copilote",
+     "punkte": [
+      "Compagnon de saisie : vous demandez, il répond",
+      "Réactif : il attend votre requête",
+      "Vous gardez le contrôle sur chaque réponse",
+      "Les erreurs restent visibles avant toute action"
+     ]
+    },
+    "rechts": {
+     "titel": "Agent autonome",
+     "punkte": [
+      "Prend des décisions sans vous attendre",
+      "Proactif : surveille les services et lance des flux",
+      "Suit des instructions vagues à la lettre",
+      "N'attend aucune autorisation, ses erreurs se propagent immédiatement",
+      "En préversion dans Copilot Studio : tests indispensables"
+     ]
+    }
+   },
+   {
+    "titel": "Checkliste avant d'automatiser avec des agents",
+    "typ": "checkliste",
+    "punkte": [
+     "Accorder des droits minimaux, jamais un rôle d'administrateur global",
+     "Journaliser chaque action de façon auditable",
+     "Prévoir un chemin de retour pour chaque action sérieuse",
+     "Activer Azure AI Content Safety et configurer les connaissances",
+     "Donner aux agents des missions précises, pas des consignes vagues",
+     "Activer l'observabilité et la télémétrie dès le premier jour",
+     "Maintenir une supervision humaine, avec audit et flux d'approbation"
+    ]
+   }
+  ]
+ },
+ "it": {
+  "html": "<p>Una demo multimodale ben costruita sembra magia: un prompt, un'immagine pulita, magari un comando vocale, e il modello restituisce un grafico perfetto o il riassunto di un contratto. Poi arriva l'azienda reale, con i suoi documenti sfocati e i suoi PDF illeggibili, e l'incanto svanisce.</p>\n<p>In questo articolo vediamo perché le allucinazioni dell'IA nascono quasi sempre da dati non preparati e da una governance assente, e come si risolvono con il grounding. Parliamo di RAG con Azure AI Search ibrida e semantica, di valutatori, di agenti e di Azure AI Foundry.</p>\n\n<h2>Perché le app multimodali falliscono nel mondo reale</h2>\n<p>La differenza è semplice: le demo girano su input perfetti, gli ambienti di lavoro girano su materiale scadente. In produzione nessuno fornisce al modello screenshot curati o file CSV formattati da un comitato di standardizzazione. Le risorse umane caricano documenti d'identità sfocati. L'ufficio acquisti trascina dentro PDF che sembrano fax di quinta generazione. In amministrazione qualcuno fotografa una fattura con la fotocamera di un vecchio Android.</p>\n<p>I modelli multimodali sanno gestire testo, immagini, voce e video, ma in condizioni disordinate hanno bisogno di dati ben indicizzati e di un buon recupero delle informazioni. Altrimenti si chiede al modello di improvvisare sulla spazzatura. Nessuna spesa in GPU risolve il problema del «garbage in, garbage out».</p>\n<p>Il modello inoltre non conosce la tua azienda. Per questo lo si collega a una fonte di conoscenza, ed è esattamente ciò che fa la Retrieval Augmented Generation.</p>\n\n<h2>RAG con Azure AI Search: ricerca ibrida e riordinamento semantico</h2>\n<p>Con la RAG il sistema recupera una porzione di dati e costruisce la risposta attorno a essa. Se la corrispondenza è precisa, le risposte sono utili e fondate. Se è approssimativa, il modello va a braccio e produce assurdità con sicurezza. È così che nasce il chatbot convinto che l'azienda abbia una nuova politica di sconti per il terzo trimestre, che in realtà non esiste. Non è diventato senziente: ha semplicemente estratto i dati sbagliati.</p>\n<p>Azure AI Studio e Azure AI Foundry si basano entrambi su questo schema e supportano diverse modalità: linguaggio, visione, voce e persino recupero video. Ma la RAG vale quanto i dati su cui poggia, e non basta inserire un metodo di recupero qualsiasi.</p>\n\n<h3>Ricerca ibrida e riordinatore semantico</h3>\n<p>Per ottenere risultati coerenti serve una ricerca ibrida, che combina parole chiave e vettori, completata dal riordinatore semantico integrato in Azure AI Search. Il sistema bilancia così le corrispondenze letterali con il significato e riordina i risultati, portando in cima il contesto corretto. Inserito in una configurazione multimodale, questo approccio aiuta il modello a gestire scansioni storte e immagini sfocate, invece di inventare dal nulla una policy di conformità.</p>\n\n<h3>Valutatori: fondatezza, pertinenza, coerenza</h3>\n<p>Molte implementazioni falliscono perché le aziende pretendono risultati perfetti dal primo giorno ma non stanziano budget per i cicli di valutazione. Senza controlli in background su fondatezza, pertinenza e coerenza, lo scostamento emerge solo quando gli utenti ne subiscono le conseguenze. L'output sembra corretto, ma nessuno l'ha verificato. Eppure nessuno metterebbe in produzione un nuovo database senza monitoraggio.</p>\n<p>Carvana mostra che si può fare diversamente. Ha reso l'IA self-service davvero utile ottimizzando il recupero, ancorando correttamente i propri agenti e investendo nell'osservabilità. Così ha trasformato quello che poteva essere l'ennesimo bot giocattolo in qualcosa di cui i clienti potevano fidarsi. Al contrario, c'è chi ha incollato un chatbot generico alla pagina di supporto, senza grounding né valutazione: richieste di garanzia scambiate per opportunità di vendita, code di assistenza intasate e credibilità compromessa. Lo stack tecnologico era lo stesso, il risultato opposto.</p>\n<p>La multimodalità non crolla perché l'IA non è abbastanza intelligente, ma perché i dati non sono preparati, indicizzati o monitorati.</p>\n\n<h2>Agenti e agenti autonomi: utili o costosi fermacarte?</h2>\n<p>Un agente coordina modelli, dati, trigger e azioni: è un po' il vigile urbano dei flussi di lavoro automatizzati. A volte dirige tutto senza intoppi, altre volte combina disastri. Sulla carta basta dargli istruzioni e puntarlo verso dati e app. Nella pratica può risolvere un problema ricorrente alle due di notte, oppure creare una coda di ticket fantasma perché ha letto male un registro errori.</p>\n<p>Un esempio con ServiceNow: se ben limitato, l'agente crea ticket solo per problemi autentici e restituisce ore preziose alle persone. Se lasciato libero, può seppellire il desk sotto una valanga di falsi allarmi.</p>\n\n<h3>Copilot e agenti non sono la stessa cosa</h3>\n<p>Copilot è fondamentalmente un assistente per i prompt: tu chiedi, lui risponde, e il controllo resta a te. Gli agenti invece decidono senza aspettarti e seguono alla lettera istruzioni vaghe, anche quando i risultati non hanno senso. Molti team scrivono per il proprio agente una descrizione del lavoro simile a una promessa elettorale («ottimizzare i processi, fornire insight, aiutare le persone»). Senza limiti, gli agenti inventano problemi da risolvere, duplicano record e si bloccano in loop infiniti.</p>\n\n<h3>Gli strumenti Microsoft e la lista di controllo</h3>\n<p>Copilot Studio è lo spazio low-code in cui si progetta il comportamento dell'agente, con flussi di prompt e trigger di eventi. Azure AI Foundry Agent Service è l'impalcatura aziendale che porta gli agenti in produzione con osservabilità: monitoraggio, log e metriche, in un'ottica di automazione con supervisione umana. Per capire se un agente è davvero utile, poniti tre domande:</p>\n<ol>\n<li>Riduce le ore di lavoro umano o trascina il personale in attività di debugging?</li>\n<li>Stai raccogliendo metriche come fondatezza, fluidità e coerenza, o guardi solo dashboard da marketing?</li>\n<li>Hai una telemetria attiva per individuare le derive prima che gli utenti inizino a lamentarsi?</li>\n</ol>\n<p>Se una risposta è negativa, hai un costoso salvaschermo, non un agente utile.</p>\n\n<h3>La trappola dell'agente autonomo</h3>\n<p>Gli agenti autonomi non aspettano un prompt: monitorano la salute dei servizi, gestiscono segnali di sicurezza ed eseguono flussi di lavoro in automatico. I copiloti si fermano e attendono, gli agenti autonomi no. Quando sbagliano, il danno è immediato e si propaga nell'intero tenant. Gli agenti autonomi in Copilot Studio sono ancora in anteprima, e la stessa Microsoft indica la necessità di governance del ciclo di vita e di controlli di console prima di una distribuzione su larga scala.</p>\n<p>Un rischio realistico: un agente di helpdesk autonomo con l'autorità di rispondere alle anomalie di accesso funziona bene in una demo con cinque utenti. In produzione, con più rumore, potrebbe iniziare a resettare in massa centinaia di account per falsi positivi, bloccando magari le operazioni di fine mese.</p>\n\n<h2>Azure AI Foundry: fabbrica o campo minato</h2>\n<p>Foundry è la «fabbrica» di Microsoft per tutto ciò che riguarda l'IA. Offre:</p>\n<ul>\n<li>un catalogo di modelli che spazia tra Microsoft, OpenAI, Meta, Mistral, DeepSeek e altri;</li>\n<li>opzioni di personalizzazione come RAG, fine tuning e distillazione;</li>\n<li>un servizio di orchestrazione degli agenti;</li>\n<li>strumenti come prompt flow per valutazione e debug;</li>\n<li>funzioni di sicurezza: controlli di accesso, filtri di content safety e dashboard di osservabilità.</li>\n</ul>\n<p>Il problema non è la mancanza di strumenti, ma l'idea che basti attivare un modello come GPT-4 Turbo per essere pronti alla produzione. Usare Foundry bene significa definire i confini di identità, integrare la sicurezza dei contenuti in ogni pipeline e usare l'osservabilità per distinguere una risposta basata sui fatti da una politica aziendale inventata.</p>\n\n<h3>Due casi dal campo</h3>\n<p>Un team ha collegato un copilot di Foundry a SharePoint ed è riuscito a esporre dati riservati delle risorse umane a 20 stagisti: un disastro di conformità evitabile con regole di accesso adeguate. In un'altra organizzazione, GPT-4 Turbo era stato usato per etichettare foto di prodotto. In laboratorio, con immagini da studio, tutto perfetto. In produzione le foto erano sfocate, scattate col telefono in magazzino, e l'IA ha etichettato male alcuni elementi e trasformato codici UPC in numeri di serie falsi.</p>\n\n<h3>Il prezzo basato sul consumo</h3>\n<p>Il prezzo di Foundry è a consumo ed è legato ai servizi che utilizzi: ogni connettore, ogni chiamata di recupero, ogni contatore di messaggi viene addebitato sul tenant. La flessibilità è un vantaggio, ma senza stime con il calcolatore dei prezzi di Azure e senza monitoraggio dell'uso la fattura può riservare brutte sorprese.</p>\n\n<h2>IA responsabile: governance, filtri e ciclo di vita</h2>\n<p>«IA responsabile» fa bella figura in una slide, ma sul campo significa configurazioni, audit, filtri e procedure di governance, più simili alla manutenzione dei server che all'innovazione. È la cintura di sicurezza, non l'auto sportiva. In pratica servono policy di accesso che reggano sotto pressione, filtri che blocchino davvero i prompt dannosi e log abbastanza dettagliati da soddisfare un ispettore. Significa isolare i copiloti dai dati finanziari, impostare regole di ambito perché i team non vedano i segreti di SharePoint e taggare i log per dimostrare come è nata una risposta.</p>\n<p>Il rischio è concreto: un bot collegato direttamente a un repository SharePoint senza delimitare il tenant, a una domanda sui benefit assicurativi, pubblica nella chat le fasce salariali dei dipendenti. Il risultato è una violazione della privacy e un danno di fiducia. Il modo più rapido per uccidere l'adozione è la fuga di dati sensibili.</p>\n\n<h3>Cosa mettere in campo</h3>\n<p>Il punto di partenza è Azure AI Content Safety, che filtra prompt e risposte violente o offensive prima che arrivino agli utenti. È però solo l'igiene di base. Il livello successivo sono le pipeline di valutazione: controlli di fondatezza, punteggi di pertinenza, dashboard di trasparenza e spiegabilità, con soglie regolabili e filtri su input e output.</p>\n<p>Microsoft investe molto: 34.000 ingegneri a tempo pieno dedicati alla sicurezza e 15.000 partner con competenze specifiche. Ma nessuno di loro lavora dentro il tuo tenant a definire le tue regole. Blindare l'identità, isolare i dati, applicare la crittografia e configurare le policy resta compito tuo.</p>\n<p>La governance del ciclo di vita segue una ricetta semplice: testa, approva, rilascia, controlla, itera. Chi rilascia una volta e poi abbandona il sistema finisce per esplodere, perché i modelli evolvono, i prompt cambiano e gli output deviano. La governance non è burocrazia: responsabile non significa lento, significa impedire che la velocità ti metta fuori strada. Come i guardrail sui tornanti di montagna, perimetri, policy, filtri e log non frenano la corsa, ti tengono lontano dal precipizio.</p>\n\n<h2>Errori frequenti e stolpersteine</h2>\n<ul>\n<li><strong>Trattare Foundry o Copilot Studio come plug and play</strong>, saltando identità e osservabilità.</li>\n<li><strong>Affidarsi a un recupero approssimativo</strong>, senza ricerca ibrida e riordinamento semantico.</li>\n<li><strong>Non prevedere budget per le valutazioni</strong> di fondatezza, pertinenza e coerenza.</li>\n<li><strong>Dare agli agenti istruzioni vaghe e ambiti troppo ampi</strong>, magari con privilegi da amministratore.</li>\n<li><strong>Portare in produzione un prototipo senza pipeline di valutazione</strong>: gli utenti notano la deriva, la fiducia cala e i fondi vengono tagliati.</li>\n<li><strong>Ignorare i costi a consumo</strong> e non monitorare l'uso.</li>\n<li><strong>Testare solo con dati puliti</strong>, mentre in produzione arrivano foto sfocate e scansioni storte.</li>\n<li><strong>Aggiungere sicurezza dei contenuti e ambito dell'identità solo alla fine</strong>, invece di considerarli parte del pacchetto base.</li>\n</ul>\n\n<h2>Takeaway pratici</h2>\n<ul>\n<li>Cura, indicizza e monitora i dati prima di pensare al modello: è lì che si decide la qualità delle risposte.</li>\n<li>Usa Azure AI Search con ricerca ibrida (parole chiave e vettori) e semantic re-ranking prima di andare live.</li>\n<li>Esegui i valutatori integrati su ogni test e attiva l'osservabilità di Azure AI Foundry fin dal primo giorno.</li>\n<li>Limita gli agenti: diritti minimi di identità e accesso, niente ruoli di amministrazione totale.</li>\n<li>Registra ogni azione e prevedi un rollback per quelle importanti.</li>\n<li>Applica filtri su contenuto e comportamento con Azure AI Content Safety.</li>\n<li>Mantieni l'intervento umano come dispositivo di sicurezza, soprattutto per gli agenti autonomi ancora in anteprima.</li>\n<li>Stima i costi con il calcolatore dei prezzi di Azure e controlla l'uso nel tempo.</li>\n<li>Adotta un ciclo continuo: testa, approva, rilascia, controlla, itera.</li>\n</ul>\n\n<h2>Conclusione</h2>\n<p>Le allucinazioni dell'IA non sono un destino inevitabile, ma il sintomo di dati non preparati, di recupero approssimativo e di controlli mancanti. Con una RAG ancorata ai dati tramite Azure AI Search ibrida e semantica, valutatori costanti e agenti ben delimitati, anche fatture, contratti e immagini imperfette producono risposte aderenti alla realtà. Gli strumenti ci sono, ma solo la governance trasforma un prototipo in un sistema di produzione affidabile: prima la governance, poi la sperimentazione, infine la produzione.</p>",
+  "model": "claude-sonnet-5-5",
+  "info": {
+   "titel": "Dal prototipo alla produzione con RAG ancorato ai dati",
+   "typ": "schritte",
+   "punkte": [
+    {
+     "kopf": "Dati preparati",
+     "text": "Indicizza e monitora i dati: spazzatura in ingresso significa risposte inaffidabili in uscita."
+    },
+    {
+     "kopf": "Ricerca ibrida",
+     "text": "Azure AI Search combina parole chiave e vettori, con riordinamento semantico del contesto corretto."
+    },
+    {
+     "kopf": "Valutatori attivi",
+     "text": "Misura fondatezza, pertinenza e coerenza con l'osservabilità di Azure AI Foundry fin dal primo giorno."
+    },
+    {
+     "kopf": "Agenti con limiti",
+     "text": "Diritti minimi, log, rollback e filtri di Content Safety, con l'umano come freno di sicurezza."
+    },
+    {
+     "kopf": "Governance continua",
+     "text": "Testa, approva, rilascia, controlla, itera: la governance trasforma i prototipi in produzione."
+    }
+   ]
+  },
+  "faq": [
+   {
+    "q": "Perché l'intelligenza artificiale va in allucinazione e come si possono evitare le allucinazioni?",
+    "a": "Le allucinazioni nascono quasi sempre da dati non preparati, recupero approssimativo e controlli mancanti, non da scarsa intelligenza del modello. Si riducono con il grounding: una RAG basata su Azure AI Search ibrida e semantica, valutatori costanti e agenti ben delimitati da una governance chiara."
+   },
+   {
+    "q": "Cos'è la ricerca ibrida con riordinamento semantico in Azure AI Search e a cosa serve nella RAG?",
+    "a": "La ricerca ibrida combina parole chiave e vettori ed è completata dal riordinatore semantico integrato in Azure AI Search. Bilancia corrispondenze letterali e significato e porta in cima il contesto corretto. Così il modello gestisce meglio scansioni storte e immagini sfocate, invece di inventare risposte, come una policy inesistente."
+   },
+   {
+    "q": "Qual è la differenza tra Copilot e un agente autonomo?",
+    "a": "Copilot è un assistente per i prompt: tu chiedi, lui risponde e il controllo resta a te. Gli agenti decidono senza aspettarti e seguono alla lettera istruzioni vaghe. Gli agenti autonomi non aspettano un prompt, eseguono flussi in automatico e, se sbagliano, il danno è immediato e si propaga nel tenant."
+   },
+   {
+    "q": "Quali misure servono per usare Azure AI Foundry in produzione in modo responsabile?",
+    "a": "Servono policy di accesso solide, isolamento dei dati sensibili, crittografia, Azure AI Content Safety per filtrare prompt e risposte, pipeline di valutazione e log dettagliati. La governance del ciclo di vita segue questi passi: testa, approva, rilascia, controlla, itera. Queste configurazioni restano compito dell'azienda, non di Microsoft."
+   }
+  ],
+  "infos": [
+   {
+    "titel": "Copilot e agenti autonomi a confronto",
+    "typ": "vergleich",
+    "links": {
+     "titel": "Copilot",
+     "punkte": [
+      "È un assistente per i prompt: tu chiedi, lui risponde.",
+      "Il controllo resta sempre a te.",
+      "Si ferma e attende la richiesta successiva.",
+      "Gli errori restano limitati alla singola risposta."
+     ]
+    },
+    "rechts": {
+     "titel": "Agenti autonomi",
+     "punkte": [
+      "Decidono senza aspettarti e non attendono un prompt.",
+      "Seguono alla lettera istruzioni vaghe, anche senza senso.",
+      "Monitorano servizi, gestiscono segnali di sicurezza ed eseguono flussi in automatico.",
+      "Quando sbagliano, il danno è immediato e si propaga nel tenant.",
+      "In Copilot Studio sono ancora in anteprima."
+     ]
+    }
+   },
+   {
+    "titel": "Checklist per un'IA affidabile in produzione",
+    "typ": "checkliste",
+    "punkte": [
+     "Cura, indicizza e monitora i dati prima di pensare al modello.",
+     "Usa Azure AI Search con ricerca ibrida e semantic re-ranking.",
+     "Esegui i valutatori su ogni test e attiva l'osservabilità subito.",
+     "Limita gli agenti: diritti minimi di identità, niente ruoli da amministratore.",
+     "Registra ogni azione e prevedi un rollback per quelle importanti.",
+     "Applica filtri su contenuto e comportamento con Azure AI Content Safety.",
+     "Stima i costi con il calcolatore Azure e controlla l'uso."
+    ]
+   }
+  ]
+ },
+ "nl": {
+  "html": "<p>Een multimodale demo ziet er op het podium foutloos uit: een nette prompt, een scherpe afbeelding en een model dat een perfecte samenvatting van een contract levert. In een echt bedrijf verdwijnt die glans snel. Dan komen er wazige scans, vijf keer gefaxte PDF's en foto's van facturen met een gebarsten telefooncamera binnen. De vraag is dan niet of je AI slim genoeg is, maar of je antwoorden gefundeerd blijven.</p>\n<p>In dit artikel lees je hoe je AI-hallucinaties voorkomt met Retrieval Augmented Generation (RAG) en Azure AI Search. Ook komt aan bod waarom evaluatie, governance en een strakke afbakening van agents bepalen of Azure AI Foundry en Copilot Studio in productie standhouden.</p>\n\n<h2>Waarom multimodale AI-apps in productie falen</h2>\n<p>Demo's draaien op perfecte invoer, werkplekken draaien op rommel. Dat is de echte kloof. In productie levert niemand zorgvuldig geënsceneerde screenshots aan. HR voert wazige identiteitsbewijzen in, Inkoop sleept PDF's binnen die al meerdere keren zijn gefaxt en Finance fotografeert facturen onder slechte omstandigheden.</p>\n<p>Multimodale modellen kunnen tekst, afbeeldingen, spraak en video verwerken. Om onder rommelige omstandigheden te presteren hebben ze wel goed geïndexeerde data en retrieval nodig. Anders laat je het model improviseren op basis van afval. Geen enkel GPU-budget lost <em>garbage in, garbage out</em> op.</p>\n<p>Multimodaal faalt dus meestal niet omdat de AI te dom is. Het faalt omdat de data niet is voorbereid, geïndexeerd of gemonitord.</p>\n\n<h2>RAG met Azure AI Search: hybride zoeken en semantische herrangschikking</h2>\n<p>Het model kent jouw bedrijf niet. Met RAG koppel je het daarom aan een kennisbron: het haalt een stukje data op en bouwt het antwoord daaromheen. Is de match scherp, dan krijg je bruikbare, gefundeerde antwoorden. Is de match slordig, dan gaat het model freestylen en levert het zelfverzekerde onzin. Zo ontstaat een chatbot die zweert dat er een nieuw Q3-kortingsbeleid bestaat dat nergens is vastgelegd. Het model is niet bewust geworden, het heeft simpelweg de verkeerde data opgehaald.</p>\n<p>Azure AI Studio en Azure AI Foundry leunen beide op dit patroon. Ze ondersteunen verschillende modaliteiten: taal, visie, spraak en zelfs video-retrieval. Maar RAG is slechts zo goed als de data die erin zit.</p>\n<h3>Eén retrievalmethode is niet genoeg</h3>\n<p>Wie maar één zoekmethode implementeert en denkt dat het klaar is, mist het addertje onder het gras. Voor consistente resultaten heb je nodig:</p>\n<ul>\n<li><strong>Hybride zoeken</strong>: een combinatie van trefwoorden en vectoren.</li>\n<li><strong>Een semantische herrangschikker</strong>, die in Azure AI Search is ingebouwd.</li>\n</ul>\n<p>Zo balanceert het systeem letterlijke trefwoordresultaten met semantische betekenis. Daarna worden de resultaten opnieuw gerangschikt, zodat de juiste context bovenaan staat. In een multimodale opzet kan het model daardoor beter omgaan met scheve scans en wazige afbeeldingen, in plaats van een nalevingsbeleid uit het niets te verzinnen.</p>\n\n<h2>Evaluatie en observability: meten of antwoorden kloppen</h2>\n<p>Veel implementaties mislukken omdat organisaties vanaf dag één perfecte resultaten verwachten, maar niets begroten voor evaluatierondes. Zonder achtergrondcontroles op betrouwbaarheid (groundedness), relevantie en samenhang merk je afwijkingen pas op als de gebruiker al is afgehaakt. De output klinkt correct, maar niemand heeft hem getoetst aan de bronwaarheid.</p>\n<p>Je zou nooit een nieuwe database in gebruik nemen zonder monitoring. Toch gaat multimodale AI vaak in productie alsof het een plug-and-play-toverdoos is.</p>\n<p>Azure AI Foundry biedt hiervoor observability-functies en ingebouwde evaluators. Daarmee meet je onderbouwing, relevantie, samenhang en waarheidsgetrouwheid. Dat zijn geen optionele extra's, het is de gedocumenteerde manier om te bepalen of je agent slim is of gewoon beleefd uit zijn nek kletst.</p>\n<p>Carvana is een van de klantverhalen die laat zien dat het anders kan. Het bedrijf maakte zijn self-service AI nuttig door retrieval te verfijnen, agents goed te funderen en te investeren in observability. Dat verschilt sterk van bedrijven die een generieke chatbot zonder fundering of evaluatie op hun supportpagina plakten. Daar belandden garantieclaims verkeerd, liepen supportwachtrijen vol en leed de geloofwaardigheid schade. Het was dezelfde Azure-stack met het tegenovergestelde resultaat.</p>\n\n<h2>Copilot, agent of autonome agent: waar de risico's zitten</h2>\n<p>Een agent coördineert modellen, data, triggers en acties, als een verkeersregelaar voor geautomatiseerde workflows. Soms regelt hij alles soepel, soms stuurt hij de verkeerde voertuigen naar binnen.</p>\n<h3>Het verschil tussen copilot en agent</h3>\n<p>Een copilot is een assistent voor je prompts: jij stelt de vraag en jij houdt de controle. Agents beslissen zonder op jou te wachten en volgen vage instructies tot op de letter, ook als de uitkomst nergens op slaat. Een functieomschrijving als \"optimaliseer processen, bied inzichten, help mensen\" klinkt als een verkiezingsbelofte en geeft de bot vrij spel.</p>\n<p>Een voorbeeld uit ServiceNow laat het verschil zien. Strikt afgebakend maakt de AI alleen echte tickets aan voor werkelijke problemen. Losgelaten kan hij de helpdesk bedelven onder valse meldingen over kritieke printerstoringen op hardware die prima werkt.</p>\n<h3>Autonome agents: de preview-valkuil</h3>\n<p>Autonome agents zijn proactief: ze bewaken de status van services, verwerken beveiligingssignalen of voeren workflows automatisch uit. De belofte is reëel, maar autonome agents in Copilot Studio zijn momenteel nog in preview. Dat betekent niet dat ze kapot zijn, wel dat ze nog niet zijn beproefd in de complexe echte wereld. Zelfs Microsoft benadrukt dat governance voor de levenscyclus en beheer via de Copilot-console op orde moeten zijn voordat je breed uitrolt.</p>\n<p>Neem een autonome helpdesk-agent die mag reageren op inlogafwijkingen. In een demo met vijf gebruikers werkt dat perfect. In productie kan dezelfde agent op basis van valse positieven honderden accounts massaal resetten en zo de operatie aan het eind van de maand platleggen.</p>\n<p>In de Microsoft-stack zijn er twee bouwstenen. Copilot Studio is de low-code plek waar makers het gedrag van agents ontwerpen met flows, prompts en event triggers. De Agent Service in Azure AI Foundry is de bedrijfsmatige basis om agents met monitoring, logs en statistieken in productie te brengen, met ingebouwd menselijk toezicht.</p>\n\n<h2>Azure AI Foundry: fabriek of mijnenveld?</h2>\n<p>Azure AI Foundry is Microsoft's vlaggenschip voor alles wat met AI te maken heeft. Te veel teams behandelen het als een Ikea: ze grijpen een paar grote taalmodellen, voegen connectors toe en schroeven zonder handleiding iets in elkaar. Dat levert een speelgoeddemo op die omvalt zodra een gebruiker een rommelige PDF uploadt.</p>\n<p>Wat Foundry daadwerkelijk biedt:</p>\n<ul>\n<li>een modelcatalogus met onder meer Microsoft, OpenAI, Meta, Mistral en DeepSeek;</li>\n<li>aanpassingsopties zoals RAG, fine-tuning en distillatie;</li>\n<li>een Agent Service voor orkestratie;</li>\n<li>tools zoals Prompt Flow voor evaluatie en debugging;</li>\n<li>beveiligingsbaselines, identiteits- en toegangsbeheer, contentfilters en observability-dashboards.</li>\n</ul>\n<p>De gereedschapskist is dus niet leeg. Het probleem is dat teams denken dat ze alleen de GPT-4 Turbo-schakelaar hoeven om te zetten om productieklaar te zijn. Foundry is een fabrieksvloer, geen speeltuin voor je hackathon. Dat betekent identiteitsgrenzen instellen, contentbeveiliging aan elke pipeline toevoegen, observability gebruiken en de taak koppelen aan het juiste model in plaats van het grootste.</p>\n\n<h2>Veelgemaakte fouten en stolpersteine</h2>\n<h3>Demo-data versus werkelijkheid</h3>\n<p>Een organisatie gebruikte GPT-4 Turbo om productfoto's te taggen. Met strakke studiofoto's was het in het lab een succes. In productie waren het wazige telefoonfoto's uit het magazijn en bestempelde de AI kinderwagens als bureaustoelen en maakte hij van UPC-labels valse serienummers.</p>\n<h3>Geen toegangsregels</h3>\n<p>Een Foundry-copilot op SharePoint deelde vertrouwelijke oude data met twintig stagiairs. Dat was een compliance-ramp die met ingebouwde toegangsregels te voorkomen was geweest. Ook een bot die direct op een HR-repository is aangesloten zonder tenantscoping kan salarisschalen in de chat publiceren. Eén lek van gevoelige gegevens doodt adoptie sneller dan slechte UX.</p>\n<h3>De factuurvalstrik</h3>\n<p>De prijzen van Foundry zijn verbruiksgebaseerd en gekoppeld aan de services die je gebruikt. Elk onderdeel heeft een eigen facturatiemodel. Wie de Azure-prijscalculator niet gebruikt en het verbruik niet bijhoudt, krijgt een onaangename verrassing op de rekening.</p>\n<h3>Van sandbox direct naar productie</h3>\n<p>In de sandbox voelt alles soepel: schone demogegevens, direct resultaat. Het wordt gevaarlijk als teams het prototype zonder evaluatiepijplijnen naar productie duwen. Dan zien gebruikers de afwijkingen, daalt het vertrouwen en wordt de financiering teruggeschroefd. Dat is geen falen van het platform, maar van governance.</p>\n\n<h2>Verantwoorde AI: governance als vangrail</h2>\n<p>Verantwoorde AI klinkt mooi op een keynote-slide, maar in de praktijk is het configuratie, audits, filters en governance. Het lijkt meer op serveronderhoud dan op innovatie. Het is de autogordel, niet de sportwagen.</p>\n<p>Concreet gaat het om toegangsbeleid dat onder druk standhoudt, filters die schadelijke prompts echt blokkeren en logboeken die gedetailleerd genoeg zijn voor een toezichthouder. Bijvoorbeeld door HR-copilots te isoleren van financiële gegevens en te kunnen bewijzen hoe een antwoord tot stand kwam.</p>\n<h3>Tools én eigen verantwoordelijkheid</h3>\n<p>Azure AI Content Safety filtert gewelddadige en aanstootgevende prompts en antwoorden voordat ze gebruikers bereiken. Foundry en Copilot Studio voegen daar evaluatiepijplijnen aan toe, met controles op feitelijkheid, relevantiescores, transparantie, dashboards en uitlegbaarheid. Je kunt drempelwaarden aanpassen, input en output filteren en bots dwingen hun bronnen te tonen.</p>\n<p>Microsoft zet hier zwaar op in, met 34.000 full-time ingenieurs voor beveiliging en 15.000 partners met diepgaande expertise. Toch zit geen van hen in jouw tenant. Identiteiten beveiligen, data isoleren, versleuteling toepassen en beleid configureren blijft jouw taak. Is je scoping slordig, dan ben jij verantwoordelijk voor het lek.</p>\n<h3>Lifecycle governance en human-in-the-loop</h3>\n<p>Modellen evolueren, prompts verschuiven en outputs dwalen af. Daarom werk je in cycli van testen, goedkeuren, releasen en itereren, met checkpoints per ronde. Teams die één keer releasen en daarna niet meer omkijken, gaan vroeg of laat de mist in. Daarbij hoort human-in-the-loop: de mens blijft de uiteindelijke veiligheidsmaatregel, zoals een automatische piloot altijd een handmatige override heeft.</p>\n<p>Ook ethiek speelt mee. Een agent die medewerkers ten onrechte als riskant markeert, of betalingen aan leveranciers vasthoudt omdat hij ze als fraude classificeert, veroorzaakt fouten met menselijke en juridische gevolgen. Bias in trainingsdata of retrieval verdwijnt niet omdat je in preview draait.</p>\n<p>Verantwoordelijkheid remt de snelheid niet, het voorkomt dat snelheid jou remt. Net als vangrails op een bergweg houden scopes, policies, filters en logs je niet tegen, maar uit het nieuws.</p>\n\n<h2>Praktische takeaways</h2>\n<ul>\n<li>Bouw RAG nooit op één retrievalmethode: combineer hybride zoeken met semantische herrangschikking in Azure AI Search.</li>\n<li>Test met rommelige, realistische invoer, niet met nette demodata.</li>\n<li>Begroot evaluatierondes en meet groundedness, relevantie, coherentie en waarheidsgetrouwheid met de ingebouwde evaluators.</li>\n<li>Gebruik Foundry-observability en Prompt Flow vanaf de eerste dag.</li>\n<li>Geef agents een strakke afbakening, minimale rechten en geen algemene beheerdersrollen.</li>\n<li>Zorg dat elke actie een controleerbaar spoor achterlaat en dat serieuze acties terug te draaien zijn.</li>\n<li>Voeg content- en gedragsfilters toe, zoals Azure AI Content Safety.</li>\n<li>Houd een mens in de loop en laat autonome agents in preview eerst door staging-tests en goedkeuringsworkflows gaan.</li>\n<li>Kies het model dat bij de taak past, niet automatisch het grootste.</li>\n<li>Volg het verbruik met de Azure-prijscalculator om verrassingen te voorkomen.</li>\n<li>Onthoud de volgorde: governance eerst, experimenten daarna, productie als laatste.</li>\n</ul>\n\n<h2>Conclusie</h2>\n<p>AI-hallucinaties zijn zelden een kwestie van een te zwak model. Meestal ontbreken goede retrieval, evaluatie en governance. Met hybride zoeken en semantische herrangschikking in Azure AI Search, constante evaluatie van onderbouwing en relevantie en strak afgebakende agents blijven antwoorden in de realiteit in plaats van in fantasie. Azure AI Foundry en Copilot Studio leveren de benodigde onderdelen, maar het blijft jouw taak om ze als infrastructuur te behandelen en niet als plug-and-play-oplossing. Wie governance voorop zet, houdt AI-projecten niet alleen draaiende, maar ook houdbaar.</p>",
+  "model": "claude-sonnet-5-5",
+  "info": {
+   "titel": "AI-hallucinaties stoppen met RAG en governance",
+   "typ": "schritte",
+   "punten": [],
+   "punkte": [
+    {
+     "kopf": "Data voorbereiden",
+     "text": "Indexeer rommelige invoer goed: scans, PDF's en foto's, zodat retrieval betrouwbare context kan leveren."
+    },
+    {
+     "kopf": "Hybride zoeken",
+     "text": "Combineer trefwoorden en vectoren in Azure AI Search met semantische herrangschikking voor de juiste context."
+    },
+    {
+     "kopf": "Continu evalueren",
+     "text": "Meet groundedness, relevantie en samenhang met ingebouwde evaluators en observability van Azure AI Foundry."
+    },
+    {
+     "kopf": "Agents afbakenen",
+     "text": "Minimale rechten, logging met rollback en content- en gedragsfilters voorkomen ontspoorde automatisering."
+    },
+    {
+     "kopf": "Mens blijft betrokken",
+     "text": "Human-in-the-loop, staging-tests en goedkeuringsworkflows voordat autonome agents live gaan."
+    },
+    {
+     "kopf": "Governance eerst",
+     "text": "Eerst governance, dan experimenten, productie als laatste. Test, keur goed, release en itereer."
+    }
+   ]
+  },
+  "faq": [
+   {
+    "q": "Hoe voorkom je AI-hallucinaties met RAG en Azure AI Search?",
+    "a": "Koppel het model via RAG aan een kennisbron en zorg voor scherpe retrieval. Combineer in Azure AI Search hybride zoeken (trefwoorden plus vectoren) met een semantische herrangschikker, zodat de juiste context bovenaan staat. Een slordige match laat het model onzin verzinnen."
+   },
+   {
+    "q": "Waarom falen multimodale AI-apps in productie terwijl de demo perfect werkte?",
+    "a": "Demo's draaien op perfecte invoer, terwijl bedrijven wazige scans, meermaals gefaxte PDF's en slechte foto's aanleveren. Multimodale AI faalt meestal niet omdat het model te dom is, maar omdat de data niet is voorbereid, geïndexeerd of gemonitord."
+   },
+   {
+    "q": "Wat is het verschil tussen een copilot en een agent?",
+    "a": "Een copilot is een assistent voor je prompts: jij stelt de vraag en houdt de controle. Agents beslissen zonder op jou te wachten en volgen vage instructies letterlijk, ook als de uitkomst nergens op slaat. Daarom hebben agents een strakke afbakening nodig."
+   },
+   {
+    "q": "Hoe meet je of de antwoorden van een AI-agent in Azure AI Foundry kloppen?",
+    "a": "Gebruik de observability-functies en ingebouwde evaluators van Azure AI Foundry. Daarmee meet je onderbouwing (groundedness), relevantie, samenhang en waarheidsgetrouwheid. Begroot evaluatierondes vanaf het begin, anders merk je afwijkingen pas op wanneer gebruikers al zijn afgehaakt."
+   }
+  ],
+  "infos": [
+   {
+    "titel": "Copilot versus agent",
+    "typ": "vergleich",
+    "links": {
+     "titel": "Copilot",
+     "punkte": [
+      "Assistent voor je prompts",
+      "Jij stelt de vraag",
+      "Jij houdt de controle",
+      "Wacht op jouw input"
+     ]
+    },
+    "rechts": {
+     "titel": "Agent",
+     "punkte": [
+      "Beslist zonder op jou te wachten",
+      "Volgt vage instructies tot op de letter",
+      "Strikt afgebakend: alleen echte tickets aanmaken",
+      "Losgelaten: helpdesk vol valse meldingen"
+     ]
+    }
+   },
+   {
+    "titel": "Checklist voor betrouwbare AI in productie",
+    "typ": "checkliste",
+    "punkte": [
+     "Combineer hybride zoeken met semantische herrangschikking in Azure AI Search",
+     "Test met rommelige, realistische invoer in plaats van nette demodata",
+     "Begroot evaluatierondes en meet groundedness, relevantie en coherentie",
+     "Geef agents strakke afbakening en minimale rechten",
+     "Zorg voor een controleerbaar spoor en terug te draaien acties",
+     "Houd een mens in de loop bij autonome agents",
+     "Volg het verbruik met de Azure-prijscalculator"
+    ]
+   }
+  ]
+ },
+ "pl": {
+  "html": "<p>Demo systemów multimodalnych wygląda na scenie bezbłędnie. W prawdziwej firmie wygląda inaczej: pojawiają się niewyraźne skany, kolejne kopie faksów i zdjęcia robione w pośpiechu. Do tego dochodzą agenci, którzy działają bez nadzoru, i koszty, które rosną niezauważone. Ten artykuł pokazuje, jak ograniczyć halucynacje i ryzyko w praktyce. Opiera się na RAG ugruntowanym w danych z Azure AI Search, na ewaluacji odpowiedzi oraz na zarządzaniu w Azure AI Foundry i Copilot Studio.</p>\n<p>Główna teza jest prosta: modele nie zawodzą dlatego, że są mało inteligentne. Zawodzą, bo dane nie są przygotowane, zaindeksowane i monitorowane, a wdrożenie traktuje się jak rozwiązanie plug and play.</p>\n\n<h2>Dlaczego aplikacje multimodalne zawodzą w rzeczywistym świecie</h2>\n<p>Demo działa na nieskazitelnych danych wejściowych, a miejsca pracy działają na śmieciach. Dział kadr przekazuje niewyraźne skany dowodów osobistych. Dział zakupów wrzuca PDF-y, które są piątą kopią z faksu. Ktoś w finansach fotografuje fakturę pękniętym aparatem w telefonie z Androidem.</p>\n<p>Modele multimodalne obsługują tekst, obrazy, głos i wideo, ale w takich warunkach potrzebują dobrze zaindeksowanych danych i sprawnego wyszukiwania. Bez nich model improwizuje na złych danych. Żadne wydatki na GPU nie obejdą zasady „garbage in, garbage out”.</p>\n<h3>Co się dzieje, gdy model nie zna Twojego biznesu</h3>\n<p>Model nie zna Twojej firmy, więc trzeba go połączyć ze źródłem wiedzy. Tak działa Retrieval Augmented Generation (RAG): system pobiera fragment danych i na jego podstawie tworzy odpowiedź. Jeśli dopasowanie jest precyzyjne, odpowiedzi są użyteczne i ugruntowane. Jeśli jest niedbałe, model wypluwa pewne siebie bzdury. Efektem bywa chatbot, który przysięga, że firma ma nową politykę rabatową na Q3, choć żadna nie istnieje. Nie zyskał świadomości, po prostu pobrał błędne dane.</p>\n\n<h2>RAG, wyszukiwanie hybrydowe i semantyczny reranking w Azure AI Search</h2>\n<p>Azure AI Studio i Azure AI Foundry opierają się na wzorcu RAG. Wspierają język, wizję, mowę, a nawet wyszukiwanie wideo. RAG jest jednak tylko tak dobry jak jego dane, a jedna metoda wyszukiwania zwykle nie wystarcza.</p>\n<p>Spójne wyniki wymagają połączenia kilku elementów:</p>\n<ul>\n<li><strong>wyszukiwania hybrydowego</strong>, czyli słów kluczowych i wektorów razem,</li>\n<li><strong>semantycznego rerankera</strong> wbudowanego w Azure AI Search.</li>\n</ul>\n<p>Dzięki temu system równoważy dosłowne trafienia słów kluczowych ze znaczeniem semantycznym i układa wyniki tak, by najważniejszy kontekst był na górze. W systemie multimodalnym model lepiej radzi sobie wtedy z krzywymi skanami i niewyraźnymi obrazami, zamiast zmyślać politykę firmy.</p>\n\n<h2>Ewaluacja: ugruntowanie, trafność i spójność</h2>\n<p>Wiele wdrożeń kończy się porażką, bo przedsiębiorstwa oczekują świetnych rezultatów od pierwszego dnia, ale nie planują budżetu na pętle ewaluacyjne. Bez kontroli rzetelności, trafności i spójności błędy wychodzą na jaw dopiero wtedy, gdy użytkownicy są zawiedzeni. Odpowiedź brzmi poprawnie, ale nikt nie porównał jej z prawdą źródłową. Nowej bazy danych nie wdrożylibyśmy bez monitoringu, a multimodalną AI zbyt często wrzuca się do produkcji jak magiczne pudełko.</p>\n<h3>Dwa przykłady, ten sam stos technologiczny</h3>\n<p>Carvana to historia klienta Foundry. Firma uczyniła samoobsługową AI użyteczną dzięki dopracowaniu wyszukiwania, odpowiedniemu osadzeniu agentów i inwestycji w obserwowalność. Z kolei firmy, które dokleiły generycznego chatbota do strony wsparcia bez osadzenia i ewaluacji, znają skutki: reklamacje gwarancyjne pomylone z leadami sprzedażowymi, przepełnione kolejki i zniszczona wiarygodność.</p>\n<p>Wbudowane ewaluatory Azure i Foundry mierzą ugruntowanie, trafność, spójność i zgodność ze źródłem. To nie są opcjonalne dodatki. Bez nich zgadujesz, czy agent jest mądry, czy tylko zmyśla uprzejmym tonem.</p>\n\n<h2>Kopiloty a agenci: pomocnik czy drogi wygaszacz ekranu</h2>\n<p>Kopilot to w zasadzie pomocnik do promptów: ty pytasz, on odpowiada, a ty zachowujesz kontrolę. Agent koordynuje modele, dane, wyzwalacze i akcje, a decyzje podejmuje, nie czekając na ciebie. Przypomina policjanta kierującego ruchem w zautomatyzowanych przepływach pracy. Czasem robi to płynnie, a czasem wpuszcza na skrzyżowanie trzy wywrotki i samochód cyrkowy.</p>\n<p>Agent bez określonego zakresu działania może zasypać kolejkę setką fałszywych zgłoszeń, bo źle odczytał dziennik błędów. Może też duplikować rekordy albo zapętlać się bez końca. W serwisie z ściśle określonym zakresem tworzy zgłoszenia tylko dla realnych problemów i oszczędza ludziom godziny pracy. Opis stanowiska w stylu „optymalizuj procesy, dostarczaj analizy, pomagaj ludziom” oznacza w praktyce działanie bez ograniczeń.</p>\n<h3>Narzędzia Microsoftu</h3>\n<ul>\n<li><strong>Copilot Studio</strong> to środowisko low-code do projektowania zachowań agenta, przepływów, promptów i wyzwalaczy zdarzeń.</li>\n<li><strong>Agent Service</strong> w Azure i Foundry to szkielet korporacyjny do wdrażania agentów na produkcję. Dodajesz w nim monitorowanie, logi i metryki, a całość jest zaprojektowana z wbudowanym nadzorem człowieka.</li>\n</ul>\n<h3>Lista kontrolna użyteczności agenta</h3>\n<ol>\n<li>Czy agent redukuje godziny pracy ludzi, czy wciąga pracowników w usuwanie jego błędów?</li>\n<li>Czy mierzysz ugruntowanie, płynność i spójność, czy tylko patrzysz na ładne pulpity?</li>\n<li>Czy masz telemetrię, która wykryje odchylenia, zanim użytkownicy zaczną składać reklamacje?</li>\n</ol>\n<p>Jeśli na któreś pytanie odpowiedź brzmi „nie”, masz drogi wygaszacz ekranu, a nie inteligentnego agenta.</p>\n\n<h2>Pułapka autonomicznego agenta</h2>\n<p>Kopiloty są reaktywne, agenci proaktywni. Autonomiczny agent monitoruje stan usług, obsługuje sygnały bezpieczeństwa albo samodzielnie uruchamia przepływy pracy. Microsoft przedstawia to jako mniej pracy ludzkiej, szybsze wykrywanie i płynniejsze operacje. Pułapka polega na tym, że taki agent nie czeka na pozwolenie, a zła decyzja rozprzestrzenia się natychmiast w całym środowisku.</p>\n<p>Autonomiczni agenci w Copilot Studio są obecnie w fazie preview. To nie znaczy, że system jest zepsuty, ale że nie sprawdzono go w nieprzewidywalnym świecie rzeczywistym. Sam Microsoft wskazuje, że przed szerokim wdrożeniem potrzebne są zabezpieczenia zarządzania cyklem życia i konsola Copilot.</p>\n<p>Wyobraź sobie agenta pomocy technicznej z uprawnieniami do reagowania na anomalie logowania. W demo z pięcioma użytkownikami działa idealnie. Po zetknięciu z chaotycznymi danymi produkcyjnymi może zacząć masowo resetować setki kont na podstawie błędnych wyników, co mogłoby sparaliżować operacje na koniec miesiąca.</p>\n<h3>Trzy obowiązkowe punkty przed automatyzacją</h3>\n<ul>\n<li><strong>Zakres tożsamości i dostępu:</strong> agent dostaje minimalne uprawnienia, bez ogólnych ról administratora.</li>\n<li><strong>Logowanie i wycofywanie zmian:</strong> każde działanie zostawia ślad do audytu, a każda poważna akcja ma ścieżkę odwrotu.</li>\n<li><strong>Filtry treści i zachowania:</strong> Azure AI Content Safety i konfiguracja wiedzy powstrzymują bota przed niestosownymi odpowiedziami i wychodzeniem poza scenariusz.</li>\n</ul>\n<p>Dochodzi do tego warstwa etyczna. Agent HR oznaczający pracowników jako ryzykownych albo agent finansowy wstrzymujący płatności dla dostawców błędnie uznanych za oszustów to awarie o ludzkim wymiarze, z konsekwencjami prawnymi i regulacyjnymi. Potrzebne są pulpity pokazujące każdy krok agenta i sprawdzające, czy wynik był rzetelny, istotny i zgodny z zasadami, a także opcja z człowiekiem w pętli decyzyjnej. To działa jak autopilot w samolocie, który zawsze można przejąć ręcznie. Przypomina też naukę jazdy: siedzisz na miejscu pasażera, wyznaczasz granice i masz hamulec, który możesz sam nacisnąć.</p>\n\n<h2>Azure AI Foundry: fabryka czy pole minowe</h2>\n<p>Azure AI Foundry to flagowa platforma Microsoftu do tworzenia rozwiązań AI. Zbyt wiele zespołów traktuje ją jak IKEA: wędrują po katalogu, chwytają błyszczące duże modele językowe, dorzucają łączniki i skręcają coś bez instrukcji. Powstaje zabawka pokazowa, która pada przy pierwszym niechlujnym PDF-ie.</p>\n<h3>Co faktycznie oferuje Foundry</h3>\n<ul>\n<li>katalog modeli, m.in. od Microsoft, OpenAI, Meta, Mistral i DeepSeek,</li>\n<li>opcje dostosowywania: RAG, dostrajanie (fine-tuning) i destylację,</li>\n<li>usługę agentową do orkiestracji,</li>\n<li>narzędzia typu Prompt Flow do ewaluacji i debugowania,</li>\n<li>podstawy bezpieczeństwa: kontrolę tożsamości i dostępu, filtry treści oraz panele obserwacyjne.</li>\n</ul>\n<p>To komplet części do budowy kopilotów, agentów i autonomicznych procesów. Foundry to hala fabryczna, a nie pudełko z zabawkami z hackathonu. W praktyce oznacza to granice tożsamości, zabezpieczenia treści w każdym potoku, narzędzia obserwacji i dopasowanie modelu do zadania, zamiast wybierania największego, bo brzmi mądrze.</p>\n<h3>Częste błędy i stolpersteiny</h3>\n<ul>\n<li><strong>Brak granic dostępu.</strong> Zespół podłączył kopilota z Foundry do SharePointa i ujawnił ograniczone dane HR. Tej katastrofie zgodności dało się zapobiec wbudowanymi regułami dostępu.</li>\n<li><strong>Testy tylko na czystych danych.</strong> Organizacja użyła GPT-4 Turbo do tagowania zdjęć produktów. W laboratorium, na zdjęciach studyjnych, wypadło to znakomicie. W produkcji były to rozmyte zdjęcia z telefonu w magazynie, więc wózki dziecięce zostały oznaczone jako krzesła biurowe, a kody UPC zamienione w fikcyjne numery seryjne.</li>\n<li><strong>Pułapka rozliczeniowa.</strong> Cennik Foundry opiera się na zużyciu i jest powiązany z konkretnymi usługami. Każdy łącznik, wywołanie pobierania danych i licznik wiadomości jest rozliczany w ramach tenanta. Bez oszacowania kosztów w kalkulatorze cen Azure i śledzenia zużycia dział finansowy dostanie niespodziewaną fakturę.</li>\n<li><strong>Prototyp na produkcję bez ewaluacji.</strong> Pominięcie oceny ugruntowania, płynności, trafności i spójności oznacza wdrożenie na ślepo. Użytkownicy widzą błędy, zaufanie spada, a zarząd obcina finansowanie. To porażka zarządzania, nie platformy.</li>\n</ul>\n<p>Rozwiązanie jest w samej platformie: obserwowalność od pierwszego dnia, podłączone przepływy promptów, wbudowane narzędzia ewaluacyjne uruchamiane przy każdym teście oraz ugruntowanie przez Azure AI Search z wyszukiwaniem hybrydowym i semantycznym rerankingiem, zanim system w ogóle wystartuje. Tożsamość i bezpieczeństwo treści muszą być częścią specyfikacji, a nie dodatkiem na później.</p>\n\n<h2>Odpowiedzialna AI w praktyce: zarządzanie i cykl życia</h2>\n<p>W codziennej pracy odpowiedzialna AI to nie filozofia, tylko konfiguracja: audyty, filtry i kroki nadzorcze, bliższe konserwacji serwerów niż innowacji. To pasy bezpieczeństwa, nie samochód sportowy. Oznacza polityki dostępu, filtry blokujące szkodliwe zapytania i logi na tyle szczegółowe, by pokazać, jak powstała odpowiedź. Oznacza też izolowanie kopilotów HR od danych finansowych i ustalanie reguł zakresu, by boty nie wyciekały danych z SharePointa.</p>\n<p>Czarny scenariusz: bot podpięty do bazy HR bez ograniczenia zakresu. Użytkownik pyta o świadczenia ubezpieczeniowe, a bot publikuje na czacie widełki płacowe pracowników. Skutkiem są naruszenie prywatności i regulatorzy na karku.</p>\n<h3>Warstwy ochrony</h3>\n<p>Podstawą jest Azure AI Content Safety, które filtruje agresywne, wulgarne i obraźliwe zapytania oraz odpowiedzi, zanim trafią do użytkowników. To jednak tylko podstawowa higiena. Foundry i Copilot Studio dokładają potoki ewaluacyjne: weryfikację rzetelności, ocenę trafności, pulpity przejrzystości i wyjaśnialność modelu. Można dostosować progi, filtrować wejścia i wyjścia oraz zmusić boty do uzasadniania działań.</p>\n<p>Microsoft angażuje w bezpieczeństwo 34 tysiące inżynierów pełnoetatowych i 15 tysięcy partnerów. Żaden z nich nie ustawia jednak reguł dostępu w Twoim tenancie. Zabezpieczenie tożsamości, izolacja danych, szyfrowanie i konfiguracja polityk pozostają Twoim zadaniem.</p>\n<p>Zarządzanie cyklem życia to cykl: testuj, zatwierdzaj, wdrażaj, audytuj, iteruj. Modele ewoluują, prompty się zmieniają, a wyniki odbiegają od normy, więc zespoły, które wdrażają raz i zapominają, kończą porażką. Odpowiedzialność nie spowalnia pracy, tylko chroni przed skutkami szybkości bez kontroli.</p>\n\n<h2>Praktyczne wnioski</h2>\n<ul>\n<li>Nie polegaj na jednej metodzie wyszukiwania: łącz wyszukiwanie hybrydowe z semantycznym rerankingiem w Azure AI Search.</li>\n<li>Testuj na brudnych, realnych danych: niewyraźnych skanach, rozmytych zdjęciach, kolejnych kopiach dokumentów.</li>\n<li>Od początku mierz ugruntowanie, trafność, spójność i płynność wbudowanymi ewaluatorami.</li>\n<li>Ściśle określ zakres działania agenta i nadaj mu minimalne uprawnienia.</li>\n<li>Zapewnij logi, ślad audytowy i ścieżkę wycofania każdej poważnej akcji.</li>\n<li>Włącz filtry treści (Azure AI Content Safety) i zaplanuj człowieka w pętli decyzyjnej.</li>\n<li>Autonomicznych agentów w fazie preview traktuj jako testy etapowe, nie gotową produkcję.</li>\n<li>Szacuj koszty kalkulatorem cen Azure i śledź zużycie, bo rozliczenie opiera się na zużyciu.</li>\n<li>Stosuj kolejność: najpierw zarządzanie, potem eksperymenty, na końcu produkcja.</li>\n</ul>\n\n<h2>Podsumowanie</h2>\n<p>Pułapką nie jest ani Foundry, ani Copilot Studio, tylko przekonanie, że działają na zasadzie plug and play. Narzędzia do ugruntowania odpowiedzi, ewaluacji, kontroli dostępu i obserwowalności są dostępne i udokumentowane. To jednak zarządzanie zmienia prototyp w prawdziwą produkcję. Kto najpierw zadba o tożsamość, dane i monitoring, dostaje AI, która przetrwa kontakt z rzeczywistością i regulatorami. Kto je pominie, ryzykuje halucynacje, wycieki danych i niekontrolowane koszty.</p>",
+  "model": "claude-sonnet-5-5",
+  "info": {
+   "titel": "Jak wdrożyć AI w Azure bez halucynacji i chaosu",
+   "typ": "schritte",
+   "punkty": [],
+   "punkte": [
+    {
+     "kopf": "Określ zakres i tożsamość",
+     "text": "Nadaj agentowi minimalne uprawnienia, bez ogólnych ról administratora, i wyznacz granice dostępu do danych."
+    },
+    {
+     "kopf": "Ugruntuj odpowiedzi",
+     "text": "Użyj RAG z Azure AI Search: wyszukiwanie hybrydowe plus semantyczny reranking."
+    },
+    {
+     "kopf": "Mierz jakość",
+     "text": "Uruchamiaj ewaluatory ugruntowania, trafności i spójności przy każdym teście, nie dopiero po skargach."
+    },
+    {
+     "kopf": "Dodaj zabezpieczenia",
+     "text": "Włącz Azure AI Content Safety, logi z możliwością audytu i ścieżkę wycofania zmian."
+    },
+    {
+     "kopf": "Zostaw człowieka w pętli",
+     "text": "Monitoruj kroki agenta na pulpitach i zachowaj możliwość ręcznej interwencji."
+    },
+    {
+     "kopf": "Zarządzaj cyklem życia",
+     "text": "Testuj, zatwierdzaj, wdrażaj, audytuj i iteruj, zamiast wdrażać raz i zapominać."
+    }
+   ]
+  },
+  "faq": [
+   {
+    "q": "Dlaczego aplikacje multimodalne AI zawodzą w firmie, mimo że demo działało bezbłędnie?",
+    "a": "Demo działa na nieskazitelnych danych, a w firmach pojawiają się niewyraźne skany, kolejne kopie faksów i rozmyte zdjęcia. Modele zawodzą nie dlatego, że są mało inteligentne, lecz dlatego, że dane nie są przygotowane, zaindeksowane i monitorowane. Obowiązuje zasada „garbage in, garbage out”."
+   },
+   {
+    "q": "Jak ograniczyć halucynacje modelu AI za pomocą RAG i Azure AI Search?",
+    "a": "Połącz RAG z wyszukiwaniem hybrydowym, czyli słowami kluczowymi i wektorami razem, oraz z semantycznym rerankerem wbudowanym w Azure AI Search. System równoważy dosłowne trafienia ze znaczeniem i układa najważniejszy kontekst na górze. Dzięki temu model rzadziej zmyśla, np. nieistniejącą politykę firmy."
+   },
+   {
+    "q": "Czym różni się kopilot od agenta AI i jakie ryzyko niesie autonomiczny agent?",
+    "a": "Kopilot jest reaktywny: ty pytasz, on odpowiada, a ty zachowujesz kontrolę. Agent koordynuje modele, dane i akcje oraz podejmuje decyzje bez czekania na człowieka. Zła decyzja autonomicznego agenta rozprzestrzenia się natychmiast w całym środowisku, np. przez masowe resetowanie kont. Autonomiczni agenci w Copilot Studio są w fazie preview."
+   },
+   {
+    "q": "Jakie zabezpieczenia wdrożyć, zanim zautomatyzuję agentów w Azure AI Foundry i Copilot Studio?",
+    "a": "Trzy obowiązkowe punkty: minimalne uprawnienia tożsamości i dostępu, bez ogólnych ról administratora; logowanie z audytem i ścieżką wycofania poważnych akcji; filtry treści, np. Azure AI Content Safety. Zaplanuj też człowieka w pętli decyzyjnej i szacuj koszty, bo rozliczenie opiera się na zużyciu."
+   }
+  ],
+  "infos": [
+   {
+    "titel": "Kopilot a agent autonomiczny",
+    "typ": "vergleich",
+    "links": {
+     "titel": "Kopilot",
+     "punkte": [
+      "Pomocnik do promptów: ty pytasz, on odpowiada",
+      "Użytkownik zachowuje kontrolę nad wynikiem",
+      "Działa reaktywnie",
+      "Nie podejmuje decyzji bez udziału człowieka"
+     ]
+    },
+    "rechts": {
+     "titel": "Agent autonomiczny",
+     "punkte": [
+      "Koordynuje modele, dane, wyzwalacze i akcje",
+      "Podejmuje decyzje, nie czekając na człowieka",
+      "Działa proaktywnie, np. monitoruje stan usług",
+      "Zła decyzja rozprzestrzenia się natychmiast w środowisku",
+      "W Copilot Studio jest obecnie w fazie preview"
+     ]
+    }
+   },
+   {
+    "titel": "Częste błędy we wdrożeniach AI",
+    "typ": "fakten",
+    "punkte": [
+     {
+      "wert": "Dostęp",
+      "text": "Brak granic dostępu ujawnił ograniczone dane HR po podłączeniu do SharePointa."
+     },
+     {
+      "wert": "Czyste dane",
+      "text": "Testy tylko na zdjęciach studyjnych kończą się pomyłkami na rozmytych zdjęciach z magazynu."
+     },
+     {
+      "wert": "Rozliczenia",
+      "text": "Cennik opiera się na zużyciu, więc brak szacowania kosztów oznacza niespodziewaną fakturę."
+     },
+     {
+      "wert": "Ewaluacja",
+      "text": "Prototyp bez oceny ugruntowania i trafności to wdrożenie na ślepo."
+     }
+    ]
+   }
+  ]
+ },
+ "he": {
+  "html": "<p>הדגמה של בינה מלאכותית מולטי-מודלית על הבמה נראית תמיד מושלמת: הנחיית טקסט, תמונה נקייה, והמודל מחזיר תרשים מדויק או סיכום חוזה חד. בארגון האמיתי המציאות שונה לגמרי, והפער הזה הוא מקור רוב הכשלים. בינה מלאכותית שאינה מעוגנת בנתונים נכונים ממציאה תשובות בביטחון מלא.</p>\n<p>המאמר סוקר איך מונעים הזיות עם Retrieval Augmented Generation (RAG) ו-Azure AI Search, איך מודדים איכות באמצעות מעריכים, ואילו גבולות וכללי ממשל חייבים להיות במקום לפני שנותנים לסוכנים לפעול בייצור.</p>\n\n<h2>למה אפליקציות מולטי-מודליות נכשלות בעולם האמיתי</h2>\n<p>בייצור אף אחד לא מזין את המודל בצילומי מסך מסודרים או בקובצי CSV מושלמים. משאבי אנוש מעלים תעודות זהות מטושטשות. מחלקת הרכש גוררת קובצי PDF שעברו כמה דורות של פקס. מישהו בכספים מצלם חשבונית במצלמה של טלפון אנדרואיד סדוק.</p>\n<p>מודלים מולטי-מודליים יודעים לעבד טקסט, תמונות, קול ווידאו, אבל בתנאים מבולגנים כאלה הם זקוקים לנתונים מעוגנים היטב ולשליפה טובה. בלי אלה המודל מאלתר, ושום הוצאה על GPU לא תתקן את זה. הכלל הוא: קלט גרוע מייצר פלט גרוע.</p>\n<p>הכשל אינו חוסר חכמה של המודל. הנתונים פשוט אינם מוכנים, אינם מאורגנים ואינם מנוטרים.</p>\n\n<h2>RAG ו-Azure AI Search: חיפוש היברידי ודירוג סמנטי</h2>\n<h3>מהו RAG ולמה הוא נחוץ</h3>\n<p>המודל לא מכיר את העסק שלכם. לכן מחברים אותו למקור ידע: הוא שולף פיסת מידע ומנסח את התשובה סביבה. כשההתאמה מדויקת, התשובות מבוססות ושימושיות. כשהשליפה מרושלת, המודל מייצר שטויות בביטחון. צ'אטבוט שמתאר \"מדיניות הנחות חדשה לרבעון השלישי\" שלא קיימת לא הפך לישות תבונית. הוא שלף את הנתונים הלא נכונים.</p>\n<p>Azure AI Studio ו-Azure AI Foundry נשענים על התבנית הזאת ותומכים בכל סוגי המודליות: שפה, ראייה, דיבור ואפילו שליפת וידאו. אבל RAG טוב רק כמו הנתונים שלו.</p>\n<h3>שליפה אחת לא מספיקה</h3>\n<p>אי אפשר לחבר שיטת שליפה אחת ולהסתפק בכך. כדי לקבל תוצאות עקביות מומלץ לשלב:</p>\n<ul>\n<li><strong>חיפוש היברידי</strong> שמשלב מילות מפתח ווקטורים;</li>\n<li><strong>דירוג סמנטי</strong> (semantic ranker) המובנה ב-Azure AI Search.</li>\n</ul>\n<p>השילוב מאזן בין התאמה מילולית של מילות מפתח לבין משמעות, ואז מסדר מחדש את התוצאות כך שההקשר הנכון מופיע בראש. בהגדרה מולטי-מודלית זה מאפשר למודל להתמודד עם תמונות מטושטשות וסריקות עקומות במקום להמציא מדיניות מהאוויר.</p>\n\n<h2>הערכה מתמשכת: ביסוס, רלוונטיות ועקביות</h2>\n<p>ארגונים רבים מצפים לתוצאות מושלמות מהיום הראשון, אבל לא מתקצבים מעגלי הערכה. בלי בדיקות ביסוס (groundedness), רלוונטיות ועקביות שרצות ברקע, הסטייה מתגלה רק אחרי שהמשתמשים נפגעו. הפלט נשמע נכון, אבל אף אחד לא אימת אותו מול המקור. לעולם לא הייתם מפעילים מאגר נתונים חדש בלי ניטור, ובכל זאת בינה מלאכותית מולטי-מודלית מושקת לא פעם כאילו הייתה קופסת קסם של \"חבר והפעל\".</p>\n<p>המעריכים והכלים לניטור המובנים ב-Azure AI Foundry אינם תוספת אופציונלית. הם הדרך המתועדת למדוד ביסוס, רלוונטיות, קוהרנטיות ונאמנות למקור. בלעדיהם אתם רק מנחשים אם המערכת חכמה או שהיא ממציאה דברים בטון מנומס.</p>\n<p>יש דוגמה חיובית: אחת החברות מסיפורי הלקוחות של Foundry הפכה בינה מלאכותית לשירות עצמי אמין על ידי כיוונון השליפה, ביסוס נכון של הסוכנים והשקעה בהערכה. מנגד, חברות שהצמידו צ'אטבוט גנרי לדף התמיכה בלי ביסוס והערכה ראו תוצאה הפוכה על אותה תשתית של Azure: תורי תמיכה עמוסים וירידה באמינות.</p>\n\n<h2>סוכנים מול קופיילוטים: עוזר אמיתי או משקולת יקרה</h2>\n<p>סוכן מתאם מודלים, נתונים, טריגרים ופעולות, בערך כמו שוטר תנועה לזרימות העבודה האוטומטיות. הפער בין ההגדרה הנקייה למציאות המבולגנת הוא המקום שבו צוותים מחליקים.</p>\n<p>ההבחנה החשובה: קופיילוט הוא לוויה והנחיה. אתם שואלים, הוא עונה, ואתם נשארים בשליטה. סוכן מחליט החלטות בלי לחכות לכם ומציית להוראות מעורפלות כלשונן, גם כשהתוצאה לא הגיונית. סוכן שקיבל תיאור תפקיד בנוסח \"ליעל תהליכים, לספק תובנות, לעזור לאנשים\" יכול להמציא בעיות כדי לפתור אותן, לשכפל רשומות או להיכנס ללולאה אינסופית. בסביבת ServiceNow, למשל, סוכן מוגבל יפתח כרטיסים אמיתיים רק לבעיות אמיתיות. סוכן ללא גבולות עלול להציף את התמיכה בהתראות על תקלות קריטיות במדפסות תקינות.</p>\n<h3>הכלים של מייקרוסופט</h3>\n<ul>\n<li><strong>Copilot Studio</strong> הוא סביבת ה-low-code לעיצוב התנהגות סוכנים, זרימות, הנחיות וטריגרים של אירועים.</li>\n<li><strong>Agent Service</strong> ב-Azure AI Foundry הוא התשתית הארגונית להפעלת סוכנים בייצור, עם ניטור, יומנים ומדדים ועם אוטומציה שמובנה בה פיקוח אנושי.</li>\n</ul>\n<h3>שלוש שאלות לבדיקת סוכן</h3>\n<ol>\n<li>האם הוא מצמצם שעות עבודה, או שהצוות מבזבז זמן על ניפוי שגיאות שלו?</li>\n<li>האם אתם עוקבים אחר מדדים כמו ביסוס, שטף וקוהרנטיות, או רק מביטים בלוחות בקרה יפים?</li>\n<li>האם הטמעתם טלמטריה, כדי לזהות סטיות לפני שמשתמשים מתלוננים?</li>\n</ol>\n<p>אם התשובה לאחת מהן שלילית, אין לכם סוכן חכם אלא שומר מסך יקר.</p>\n\n<h2>סוכנים אוטונומיים: איך בונים קודם רשת ביטחון</h2>\n<p>קופיילוטים הם תגובתיים, סוכנים אוטונומיים פרואקטיביים. הם מנטרים את בריאות השירות, מטפלים בתקלות ומריצים תהליכים אוטומטית, גם כשאיש לא צופה. ההבטחה אמיתית, אבל סוכנים אוטונומיים ב-Copilot Studio נמצאים כיום בתצוגה מקדימה (Preview). זה לא אומר שהמערכת שבורה, אבל זה אומר שהיא טרם נבחנה מספיק בעולם האמיתי. גם מייקרוסופט עצמה מדברת על מעקות בטיחות וניהול מחזור חיים לפני פריסה רחבה.</p>\n<p>דמיינו סוכן דלפק עזרה אוטונומי שמורשה להגיב לחריגות בהתחברות. בהדגמה עם חמישה משתמשים הכול עובד. בייצור, עם קלט רועש, הוא עלול לאפס המוני חשבונות על סמך תוצאות חיוביות שגויות, ואפילו לשבש פעולות סוף חודש.</p>\n<h3>רשימת ההישרדות: שלושה דברים לפני כל אוטומציה</h3>\n<ol>\n<li><strong>הגדרת היקף של זהות וגישה:</strong> הרשאות מינימליות לסוכן, בלי תפקידי ניהול גורפים.</li>\n<li><strong>רישום ושחזור:</strong> כל פעולה משאירה עקבות שניתן לבקר, ולכל פעולה רצינית יש מסלול חזרה.</li>\n<li><strong>מסנני תוכן והתנהגות:</strong> Azure AI Content Safety והגדרות ידע שמונעים תשובות לא הולמות וחריגה מהתסריט.</li>\n</ol>\n<p>יש גם ממד אתי. סוכן משאבי אנוש שמסמן עובדים כ\"בעלי סיכון\", או סוכן כספים שעוצר תשלומים לספקים בגלל סיווג שגוי כהונאה, גורם לנזק אנושי ולהשלכות משפטיות ורגולטוריות. הטיות בנתוני אימון או שליפה לא נעלמות בגלל שמריצים גרסת Enterprise Preview.</p>\n<p>לכן נדרשת יכולת תצפית (Observability): לוחות מחוונים שמראים כל צעד של הסוכן ובודקים אם הפלט היה מבוסס, רלוונטי ועקבי עם המדיניות. נדרשת גם אפשרות של אדם בלולאה, כמו טייס אוטומטי במטוס שתמיד מאפשר שליטה ידנית. זה דומה ללמד מתבגר לנהוג: יושבים לידו, מציבים גבולות ומתקינים בלמים שאפשר ללחוץ עליהם בעצמכם.</p>\n\n<h2>Azure AI Foundry: מפעל או שדה מוקשים</h2>\n<p>Azure AI Foundry הוא המיזם הדגל של מייקרוסופט לבניית בינה מלאכותית, ובו מצויים:</p>\n<ul>\n<li>קטלוג מודלים של מייקרוסופט, OpenAI, Meta, Mistral, DeepSeek ואחרים;</li>\n<li>אפשרויות התאמה כמו RAG, כיוונון עדין (fine-tuning) וזיקוק מודלים;</li>\n<li>Agent Service לתזמור סוכנים;</li>\n<li>כלים כמו Prompt Flow להערכה וניפוי שגיאות;</li>\n<li>תכונות להבטחת ביסוס, בקרות זהות וגישה, מסנני בטיחות תוכן ולוחות מחוונים לתצפית.</li>\n</ul>\n<p>הארגז מלא. הבעיה היא שצוותים רבים מתייחסים אליו כמו לאיקאה: מסתובבים בקטלוג, תופסים כמה מודלים נוצצים, מחברים משהו בלי הוראות, ומקבלים צעצוע ברמת דמו שקורס כשמשתמש אמיתי מעלה PDF מבולגן. Foundry הוא רצפת ייצור, לא ארגז צעצועים.</p>\n\n<h3>טעויות נפוצות ואבני נגף</h3>\n<ul>\n<li><strong>דילוג על בקרת גישה:</strong> צוות חיבר קופיילוט ב-Foundry ל-SharePoint וחשף בטעות נתוני משאבי אנוש רגישים. כללי גישה מובנים היו מונעים זאת.</li>\n<li><strong>הדגמה מעבדתית מול שטח:</strong> ארגון הריץ GPT-4 Turbo לתיוג תמונות מוצרים. תמונות סטודיו נקיות עבדו מצוין, אבל בצילומי טלפון מטושטשים מהמחסן המודל זיהה עגלות תינוק כרהיטי משרד וסיפק מספרים סידוריים שגויים במקום תוויות UPC.</li>\n<li><strong>הזנחת העלויות:</strong> התמחור ב-Foundry מבוסס צריכה וקשור לכל שירות ולכל קריאה. בלי הערכה במחשבון התמחור של Azure ומעקב אחר השימוש, צוות הכספים יופתע מהחשבונית.</li>\n<li><strong>אב טיפוס בסנדבוקס שעולה לייצור בלי הערכות:</strong> נתוני הדגמה נקיים יוצרים אפקט \"וואו\", אבל בלי בדיקות ביסוס, שטף, רלוונטיות ועקביות מופיעות סטיות בפלט, האמון יורד וההנהלה מקצצת בתקציב. זה כישלון משילות, לא כישלון של הפלטפורמה.</li>\n<li><strong>בחירת המודל הגדול ביותר רק כי הוא נשמע חכם</strong> במקום להתאים מודל למשימה.</li>\n</ul>\n<p>הפתרון נמצא בפלטפורמה עצמה: כלי התצפית מהיום הראשון, Prompt Flow, מעריכים מובנים בכל בדיקה, וביסוס עם Azure AI Search בחיפוש היברידי ובדירוג סמנטי לפני עלייה לאוויר. גם הגדרת זהויות והבטחת תוכן צריכות להיות חלק מהמפרט הטכני ולא תוספת מאוחרת.</p>\n\n<h2>בינה מלאכותית אחראית וניהול מחזור חיים</h2>\n<p>בפועל בינה מלאכותית אחראית אינה פילוסופיה אלא הגדרות, ביקורות, מסננים וצעדי ממשל, ויש בה יותר מתחזוקת שרתים מאשר מחדשנות נוצצת. היא חגורת הבטיחות, לא מכונית המרוץ. זה אומר:</p>\n<ul>\n<li>מדיניות גישה שלא קורסת תחת לחץ;</li>\n<li>מסננים שבאמת חוסמים הנחיות פוגעניות;</li>\n<li>יומנים מפורטים דיים כדי להראות לרגולטור איך נוצרה תשובה;</li>\n<li>הפרדה בין קופיילוט משאבי אנוש לנתונים פיננסיים והגדרת היקף כך שבוטים לא יגיעו לסודות ב-SharePoint.</li>\n</ul>\n<p>הצד המכוער של הדילוג על כך: בוט שמחובר ישירות למאגר משאבי האנוש בלי הגדרת היקף, שעונה על שאלה בנושא ביטוח ומפרסם בצ'אט את טווחי השכר של עובדים. דליפה אחת כזאת הורגת אימוץ מהר יותר מכל חוויית משתמש גרועה.</p>\n<p>נקודת ההתחלה היא Azure AI Content Safety, שמסנן הנחיות ותגובות אלימות, מגונות או פוגעניות, אבל זו רמת היגיינה בסיסית בלבד. Foundry ו-Copilot Studio מוסיפים שכבות הערכה: בדיקות אמינות, דירוג רלוונטיות ולוחות מחוונים לשקיפות והסברתיות, כך שאפשר להתאים ספים ולסנן קלטים ופלטים.</p>\n<p>מייקרוסופט משקיעה בתחום בהיקף עצום, עם 34 אלף מהנדסים במשרה מלאה המוקדשים להבטחה ועוד 15 אלף שותפים. אבל אף אחד מהם אינו בתוך הדייר (tenant) שלכם. נעילת זהויות, בידוד נתונים, הצפנה ומדיניות נשארים באחריותכם.</p>\n<p>המתכון המומלץ הוא ניהול מחזור חיים: בדיקה, אישור, הפצה, ביקורת וחזרה על התהליך. מודלים מתפתחים, הנחיות משתנות ותוצרים סוטים, ולכן גרסה שמשחררים פעם אחת ועוזבים נוטה להתפוצץ. אחריות לא מאטה את הצוות. היא מונעת מהמהירות להרוג אתכם, כמו מעקות בטיחות בכביש הררי.</p>\n\n<h2>טיפים מעשיים לסיכום</h2>\n<ul>\n<li>אל תסתמכו על שיטת שליפה אחת: שלבו חיפוש היברידי של מילות מפתח ווקטורים עם דירוג סמנטי ב-Azure AI Search.</li>\n<li>הריצו מעריכים לביסוס, רלוונטיות, קוהרנטיות ונאמנות למקור כבר מהיום הראשון ולא רק לפני ההשקה.</li>\n<li>הגדירו לכל סוכן היקף צר, הרשאות מינימליות ותיאור תפקיד מדויק.</li>\n<li>הבטיחו רישום פעולות, מסלול חזרה ואדם בלולאה בכל פעולה משמעותית.</li>\n<li>הפעילו Azure AI Content Safety ומסנני התנהגות כבסיס, והוסיפו שכבות הערכה.</li>\n<li>התייחסו לסוכנים אוטונומיים, שנמצאים בתצוגה מקדימה, כאל טכנולוגיה שנדרשת בה זהירות ובדיקה לפני פריסה רחבה.</li>\n<li>בדקו את מודל התמחור לפי צריכה במחשבון של Azure ועקבו אחר השימוש.</li>\n<li>התאימו את המודל למשימה במקום לבחור את הגדול ביותר.</li>\n<li>הטמיעו ניהול מחזור חיים: בדיקה, אישור, הפצה, ביקורת, חזרה.</li>\n</ul>\n\n<h2>סיכום</h2>\n<p>בינה מלאכותית מולטי-מודלית לא נכשלת כי היא אינה חכמה מספיק. היא נכשלת כשהנתונים אינם מעוגנים, כשאין הערכה שוטפת וכשסוכנים פועלים בלי גבולות. הכלים קיימים: RAG עם חיפוש היברידי ודירוג סמנטי, מעריכים מובנים, Content Safety ותצפית. אבל רק ממשל נכון הופך אב טיפוס למערכת ייצור אמינה. הכלל לזכירה: ממשל קודם, ניסויים אחר כך, ייצור בסוף. הכלים ישתנו, אבל עקרונות ההישרדות יישארו.</p>",
+  "model": "claude-sonnet-5-5",
+  "info": {
+   "titel": "איך עוצרים הזיות של AI בייצור",
+   "typ": "schritte",
+   "punkte": [
+    {
+     "kopf": "עיגון בנתונים",
+     "text": "חיבור המודל למקור ידע בעזרת RAG, כדי שיענה על בסיס מידע אמיתי."
+    },
+    {
+     "kopf": "שליפה חכמה",
+     "text": "חיפוש היברידי של מילות מפתח ווקטורים, בתוספת דירוג סמנטי ב-Azure AI Search."
+    },
+    {
+     "kopf": "הערכה מתמשכת",
+     "text": "מעריכים למדידת ביסוס, רלוונטיות, קוהרנטיות ונאמנות למקור, כבר מהיום הראשון."
+    },
+    {
+     "kopf": "גבולות לסוכנים",
+     "text": "היקף צר, הרשאות מינימליות, רישום פעולות, מסלול חזרה ומסנני תוכן."
+    },
+    {
+     "kopf": "ממשל ופיקוח",
+     "text": "ניהול מחזור חיים ואדם בלולאה: בדיקה, אישור, הפצה, ביקורת וחזרה."
+    }
+   ]
+  },
+  "faq": [
+   {
+    "q": "למה אפליקציות בינה מלאכותית מולטי-מודליות נכשלות בייצור?",
+    "a": "הכשל אינו חוסר חכמה של המודל. בייצור הקלט מבולגן: תעודות מטושטשות, קובצי PDF שעברו פקס וצילומי חשבוניות גרועים. כשהנתונים אינם מעוגנים, מאורגנים ומנוטרים, ואין הערכה שוטפת וגבולות לסוכנים, המודל מאלתר וממציא תשובות בביטחון."
+   },
+   {
+    "q": "איך מונעים הזיות במודלים עם RAG ו-Azure AI Search?",
+    "a": "מחברים את המודל למקור ידע ומשלבים כמה שיטות שליפה: חיפוש היברידי שמשלב מילות מפתח ווקטורים, ודירוג סמנטי ב-Azure AI Search. השילוב מאזן בין התאמה מילולית למשמעות ומעלה את ההקשר הנכון לראש התוצאות, כך שהמודל מבסס את תשובותיו."
+   },
+   {
+    "q": "מה ההבדל בין קופיילוט לסוכן בינה מלאכותית?",
+    "a": "קופיילוט הוא לוויה והנחיה: אתם שואלים, הוא עונה ואתם נשארים בשליטה. סוכן מחליט ופועל בלי לחכות לכם, ומציית להוראות מעורפלות כלשונן. לכן סוכן ללא גבולות עלול להמציא בעיות, לשכפל רשומות או להיכנס ללולאה אינסופית."
+   },
+   {
+    "q": "מה צריך להכין לפני שמפעילים סוכן אוטונומי בייצור?",
+    "a": "שלושה דברים: הגדרת היקף זהות וגישה עם הרשאות מינימליות, רישום ושחזור כך שכל פעולה ניתנת לביקורת ויש מסלול חזרה, ומסנני תוכן והתנהגות כמו Azure AI Content Safety. כמו כן נדרשים תצפית ואדם בלולאה, וסוכנים אוטונומיים ב-Copilot Studio עדיין בתצוגה מקדימה."
+   }
+  ],
+  "infos": [
+   {
+    "titel": "קופיילוט מול סוכן",
+    "typ": "vergleich",
+    "links": {
+     "titel": "קופיילוט",
+     "punkte": [
+      "לוויה והנחיה: אתם שואלים והוא עונה",
+      "אתם נשארים בשליטה",
+      "תגובתי ולא יוזם",
+      "קטן הסיכון להחלטות שלא נבדקו"
+     ]
+    },
+    "rechts": {
+     "titel": "סוכן",
+     "punkte": [
+      "מחליט החלטות בלי לחכות לכם",
+      "מציית להוראות מעורפלות כלשונן",
+      "עלול להמציא בעיות, לשכפל רשומות או להיכנס ללולאה",
+      "בלי גבולות עלול להציף את התמיכה בהתראות שווא"
+     ]
+    }
+   },
+   {
+    "titel": "שלושה דברים לפני כל אוטומציה",
+    "typ": "fakten",
+    "punkte": [
+     {
+      "wert": "זהות וגישה",
+      "text": "הרשאות מינימליות לסוכן, בלי תפקידי ניהול גורפים."
+     },
+     {
+      "wert": "רישום ושחזור",
+      "text": "כל פעולה משאירה עקבות לביקורת, ולכל פעולה רצינית יש מסלול חזרה."
+     },
+     {
+      "wert": "מסנני תוכן",
+      "text": "Azure AI Content Safety והגדרות ידע מונעים תשובות לא הולמות וחריגה מהתסריט."
+     },
+     {
+      "wert": "תצפית ואדם בלולאה",
+      "text": "לוחות מחוונים מראים כל צעד, ותמיד אפשר לעבור לשליטה ידנית."
+     }
+    ]
+   }
+  ]
+ },
+ "hi": {
+  "html": "<p>AI के जवाब अक्सर डेमो में बेहद भरोसेमंद लगते हैं, लेकिन असली कंपनी के डेटा और असली यूज़र्स के सामने वही सिस्टम गलत जानकारी गढ़ने लगता है। इसे हैलुसिनेशन कहते हैं। बिना ग्राउंडिंग के Copilot जैसे समाधान ऐसे जवाब दे सकते हैं जो सही दिखते हैं पर सच नहीं होते।</p>\n<p>इस लेख में हम देखेंगे कि Retrieval Augmented Generation (RAG), Azure AI Search के Hybrid और Semantic फ़ीचर और Evaluators मिलकर हैलुसिनेशन कैसे रोकते हैं। साथ ही यह भी कि एजेंट्स, गवर्नेंस और Azure AI Foundry को प्रोडक्शन में सुरक्षित तरीके से कैसे इस्तेमाल करें।</p>\n\n<h2>AI हैलुसिनेशन क्या है और ग्राउंडिंग क्यों ज़रूरी है</h2>\n<p>डेमो में सब कुछ जादू जैसा लगता है, क्योंकि वहाँ इनपुट साफ़ और नियंत्रित होते हैं। प्रोडक्शन में मॉडल को सही जवाब देने के लिए अच्छी तरह व्यवस्थित डेटा और सटीक रिट्रीवल चाहिए। अगर आप मॉडल से सिर्फ़ अनुमान से बात करवाते हैं, तो नतीजा वही होगा: कचरा अंदर, कचरा बाहर।</p>\n<p>इसका एक विशिष्ट उदाहरण है कि AI किसी ऐसी \"Q3 Discount Policy\" का हवाला दे दे जो असल में मौजूद ही नहीं है। मॉडल ने कुछ चुराया नहीं होता। उसके पास ठोस आधार नहीं था, इसलिए उसने खाली जगह को अपनी कल्पना से भर दिया।</p>\n<p>ग्राउंडिंग का मतलब है कि मॉडल के हर उत्तर का आधार आपका सत्यापित डेटा हो। Azure AI Studio और Azure AI Foundry दोनों इसी पैटर्न पर टिके हैं। वे अलग-अलग तरह के डेटा का समर्थन करते हैं: भाषा, Vision, Speech और यहाँ तक कि Video Retrieval भी। पर यहीं एक ज़रूरी बात है: RAG उतना ही अच्छा है जितना उसका डेटा।</p>\n\n<h2>Azure AI Search में Hybrid Search और Semantic Re-Ranking</h2>\n<p>सिर्फ़ कोई एक रिट्रीवल विधि जोड़ देना काफ़ी नहीं है। सटीक नतीजों के लिए Azure AI Search में Hybrid (Keyword और Vector Search) के साथ Semantic Re-Ranker का इस्तेमाल करना चाहिए।</p>\n<h3>Hybrid Search क्या करता है</h3>\n<p>Hybrid Search शाब्दिक Keyword मिलान और अर्थ पर आधारित (semantic) खोज के बीच संतुलन बनाता है। इससे सिस्टम सिर्फ़ मिलते-जुलते शब्द नहीं पकड़ता, बल्कि सवाल का मतलब भी समझता है।</p>\n<h3>Semantic Re-Ranking की भूमिका</h3>\n<p>Re-Ranker मिले हुए नतीजों को दोबारा क्रमबद्ध करता है, ताकि सबसे सही संदर्भ सबसे ऊपर रहे। मॉडल को जितना सटीक संदर्भ मिलता है, उसे कुछ गढ़ने की ज़रूरत उतनी कम पड़ती है।</p>\n<h3>Multimodal सेटअप के साथ</h3>\n<p>इन्हें Multimodal सेटअप में जोड़ने पर मॉडल टेढ़े-मेढ़े, स्कैन किए हुए और धुंधली तस्वीरों वाले दस्तावेज़ों को भी समझ सकता है। तब वह नीतियों या सामग्री को मनगढ़ंत तरीके से तैयार करने के बजाय असल सामग्री पर भरोसा करता है।</p>\n\n<h2>RAG रोलआउट विफल क्यों होते हैं</h2>\n<p>कई एंटरप्राइज़ पहले दिन से बेहतरीन नतीजे चाहते हैं, लेकिन मूल्यांकन (evaluation) लूप के लिए बजट नहीं रखते। प्रासंगिकता और सुसंगतता की जाँच के बिना समस्या तब तक पकड़ में नहीं आती, जब तक उपयोगकर्ता परेशान न हो जाएँ। आउटपुट सही लगता है, पर उसे किसी ने मूल स्रोत से मिलाकर नहीं देखा।</p>\n<p>सोचिए, आप बिना मॉनिटरिंग के कोई डेटाबेस प्रोडक्शन में नहीं डालेंगे। फिर भी multimodal AI को अक्सर प्लग-इन-और-चलाओ जादुई बॉक्स की तरह लॉन्च कर दिया जाता है।</p>\n<h3>एक ही स्टैक, दो उलटे नतीजे</h3>\n<p>एक Foundry ग्राहक ने रिट्रीवल को ट्यून किया, अपने एजेंट्स को ठीक से ग्राउंड किया और observability में निवेश किया। इससे उनका सेल्फ़-सर्विस AI सचमुच उपयोगी बना और ग्राहक उस पर भरोसा कर सके। दूसरी तरफ़ कुछ कंपनियों ने बिना ग्राउंडिंग या मूल्यांकन के सपोर्ट पेज पर साधारण चैटबॉट लगा दिया। नतीजा: वारंटी दावे सेल्स लीड के रूप में दर्ज हुए, सपोर्ट कतारें भर गईं और भरोसा टूट गया। स्टैक एक ही था, परिणाम उलटे।</p>\n<p>निष्कर्ष साफ़ है: multimodal सिस्टम इसलिए नहीं ढहते कि AI पर्याप्त स्मार्ट नहीं है, बल्कि इसलिए कि डेटा ठीक से तैयार, अनुक्रमित (indexed) और मॉनिटर नहीं किया गया। Hybrid Search, Semantic Re-Ranking और निरंतर मूल्यांकन के साथ आप चालान, अनुबंध, तस्वीरें और ऑडियो नोट्स जैसी चीज़ें ऐसे उत्तरों के साथ प्रोसेस कर सकते हैं जो कल्पना पर नहीं, वास्तविकता पर आधारित हों।</p>\n\n<h2>Evaluators से Groundedness और Coherence कैसे मापें</h2>\n<p>Azure AI Foundry की Observability सुविधाएँ और इनबिल्ट Evaluators वैकल्पिक चीज़ें नहीं हैं। ये Groundedness, प्रासंगिकता (relevance), सुसंगतता (coherence) और स्रोत की सत्यता मापने का प्रमाणित तरीका हैं। इनके बिना आप सिर्फ़ अंदाज़ा लगा रहे हैं कि आपका सिस्टम स्मार्ट है या विनम्र लहजे में मनगढ़ंत बातें बना रहा है।</p>\n<p>Evaluators के साथ आप आउटपुट में विचलन आने पर आत्मविश्वास से हस्तक्षेप कर सकते हैं और उसे ठीक कर सकते हैं। Foundry और Copilot Studio की मूल्यांकन पाइपलाइनें Groundedness चेक, प्रासंगिकता स्कोरिंग, पारदर्शिता डैशबोर्ड और व्याख्यात्मकता जैसी सुविधाएँ देती हैं। आप थ्रेशहोल्ड समायोजित कर सकते हैं, इनपुट और आउटपुट दोनों को फ़िल्टर कर सकते हैं और बॉट से उसका काम दिखाने को कह सकते हैं।</p>\n\n<h2>AI एजेंट: उपयोगी सहायक या महँगा शोपीस</h2>\n<p>ग्राउंडिंग ठीक हो जाए तो अगला जोखिम सामने आता है। डेटा पाइपलाइन साफ़ होने पर भी उसे चलाने वाला एजेंट लड़खड़ा सकता है। एजेंट मॉडल, डेटा, ट्रिगर और क्रियाओं का समन्वय करता है, यानी ट्रैफ़िक पुलिस जैसा। कभी वह सब कुछ सुचारु रूप से निर्देशित करता है, कभी अव्यवस्था पैदा कर देता है।</p>\n<h3>Copilot और एजेंट में फ़र्क</h3>\n<p>Copilot आपके प्रॉम्प्ट का जवाब देता है और हमेशा आपके नियंत्रण में रहता है। एजेंट आपका इंतज़ार किए बिना खुद कदम उठाते हैं और अस्पष्ट निर्देशों का भी अक्षरशः पालन करते हैं, भले ही नतीजे का कोई अर्थ न बने।</p>\n<h3>दायरा सीमित क्यों रखें</h3>\n<p>सीमित दायरे में एजेंट सचमुच असली समस्याओं के लिए टिकट बनाता है और इंसानी घंटे बचाता है। खुला छोड़ देने पर वह हेल्पडेस्क को सही हार्डवेयर पर प्रिंटर खराब होने जैसी फ़र्ज़ी चेतावनियों से भर सकता है। कई टीमें एजेंट को \"प्रक्रियाएँ अनुकूलित करें, अंतर्दृष्टि दें, लोगों की मदद करें\" जैसा चुनावी वादों वाला जॉब डिस्क्रिप्शन दे देती हैं। ऐसे बिना दायरे वाले एजेंट रिकॉर्ड डुप्लिकेट कर सकते हैं या अंतहीन लूप में फँस सकते हैं।</p>\n<h3>Microsoft स्टैक में क्या कहाँ आता है</h3>\n<p>Copilot Studio वह लो-कोड जगह है जहाँ मेकर्स एजेंट का व्यवहार, फ़्लो, प्रॉम्प्ट और इवेंट ट्रिगर डिज़ाइन करते हैं। AI Foundry की Agent Service वह एंटरप्राइज़ ढाँचा है जो इन्हें observability के साथ प्रोडक्शन में चलाता है, जहाँ आप monitoring, logs और metrics जोड़ते हैं।</p>\n\n<h2>Autonomous एजेंट्स का जाल और सुरक्षा चेकलिस्ट</h2>\n<p>Autonomous एजेंट वहाँ होते हैं जहाँ प्रचार खतरनाक हो जाता है। वे अनुमति का इंतज़ार नहीं करते, इसलिए गलत फ़ैसले का नुकसान तुरंत होता है और पूरे tenant में फैल सकता है। छोटे डेमो में सब ठीक चलता है, पर प्रोडक्शन में शोरभरे इनपुट आने पर एजेंट गलत नतीजों के आधार पर सैकड़ों रिकॉर्ड रीसेट करना शुरू कर सकता है। इससे महीने के अंत का कामकाज तक ठप हो सकता है। समाधान तकनीक छोड़ना नहीं, बल्कि पहले सुरक्षा अपनाना है। किसी भी autonomous ऑटोमेशन से पहले तीन काम ज़रूरी हैं:</p>\n<ol>\n<li><strong>पहचान और एक्सेस का दायरा तय करें:</strong> एजेंट को न्यूनतम अधिकार दें, सभी एडमिन रोल नहीं।</li>\n<li><strong>लॉगिंग और रोलबैक:</strong> हर कार्रवाई का ऑडिट योग्य निशान हो और हर गंभीर कार्रवाई को पलटने का रास्ता हो।</li>\n<li><strong>कंटेंट और व्यवहार फ़िल्टर:</strong> Azure में एजेंट सेफ़्टी और नॉलेज कॉन्फ़िगरेशन ऐसे फ़िल्टर देते हैं जो एजेंट को अनुचित उत्तर देने या स्क्रिप्ट से भटकने से रोकते हैं।</li>\n</ol>\n<p>एथिक्स की परत इसे और अहम बनाती है। कल्पना कीजिए कि कोई HR एजेंट कर्मचारियों को जोखिम भरा पता दे दे, या कोई फ़ाइनेंस एजेंट सप्लायर के भुगतान को धोखाधड़ी मानकर रोक दे। ये मामूली गलतियाँ नहीं हैं, इनके कानूनी और अनुपालन संबंधी परिणाम होते हैं।</p>\n<h3>Human in the loop</h3>\n<p>Microsoft ऐसे पैटर्न का उल्लेख करता है जहाँ इंसान अंतिम सुरक्षा कवच बना रहे। इसे फ़्लाइट ऑटोपायलट की तरह समझें: बेहद उपयोगी, पर manual override के साथ। यह किसी किशोर को ड्राइविंग सिखाने जैसा है। आप चाबी सौंपकर गाड़ी से उतर नहीं जाते। आप बगल में बैठते हैं, सीमाएँ तय करते हैं और ऐसा ब्रेक रखते हैं जिसे खुद दबा सकें। stage testing, approval workflow और audit के बिना सीधे live जाना अपने tenant का stress test करना है।</p>\n\n<h2>Azure AI Foundry: फ़ैक्टरी या बारूदी सुरंग</h2>\n<p>Azure AI Foundry Microsoft की फ़्लैगशिप पेशकश है, यानी AI के हर काम के लिए एक फ़ैक्टरी। इसमें शामिल हैं:</p>\n<ul>\n<li>मॉडल कैटलॉग, जिसमें Microsoft, OpenAI, Meta, Mistral और DeepSeek जैसे मॉडल हैं</li>\n<li>कस्टमाइज़ेशन के लिए RAG, Fine Tuning और Distillation</li>\n<li>ऑर्केस्ट्रेशन के लिए Agent Service</li>\n<li>मूल्यांकन और डिबगिंग के लिए prompt flow जैसे टूल</li>\n<li>सुरक्षा के बुनियादी फ़ीचर: identity और access control, content safety फ़िल्टर और observability डैशबोर्ड</li>\n</ul>\n<p>समस्या खाली टूलबॉक्स नहीं है। समस्या यह है कि बहुत से लोग GPT-4 Turbo का स्विच ऑन करने को ही \"प्रोडक्शन के लिए तैयार\" मान लेते हैं। Foundry फ़ैक्टरी फ़्लोर है, हैकथॉन का खिलौनों का डिब्बा नहीं।</p>\n\n<h2>आम गलतियाँ और स्टंबलिंग ब्लॉक्स</h2>\n<h3>गलत मॉडल चुनना और असली इनपुट को नज़रअंदाज़ करना</h3>\n<p>काम के हिसाब से सही मॉडल चुनना चाहिए, सिर्फ़ इसलिए सबसे बड़ा मॉडल नहीं कि वह स्मार्ट सुनाई देता है। एक संगठन ने प्रोडक्ट फ़ोटो टैगिंग के लिए GPT-4 Turbo चलाया। लैब में साफ़ स्टूडियो फ़ोटो पर नतीजे शानदार थे। प्रोडक्शन में इनपुट वेयरहाउस की धुंधली फ़ोन तस्वीरें निकलीं। AI ने स्टूल को ऑफ़िस चेयर के रूप में टैग कर दिया और UPC लेबल को नकली सीरियल नंबर में बदल दिया। इससे भरोसे को झटका लगा और लागत भी बढ़ी।</p>\n<h3>पहचान और एक्सेस की अनदेखी</h3>\n<p>SharePoint पर Foundry का सेटअप करते समय एक टीम ने अनजाने में प्रतिबंधित HR डेटा इंटर्न्स के सामने उजागर कर दिया। यह चालाकी नहीं, अनुपालन आपदा थी, जिसे इनबिल्ट access नियमों से टाला जा सकता था। इसी तरह tenant scoping के बिना HR रिपॉज़िटरी से जुड़ा बॉट किसी साधारण सवाल के जवाब में चैट में कर्मचारियों के वेतन का ब्योरा डाल सकता है। इससे प्राइवेसी का उल्लंघन, मनोबल की समस्या और नियामकों की नज़र, सब एक साथ आ सकते हैं।</p>\n<h3>बिलिंग की अनदेखी</h3>\n<p>Foundry की कीमत खपत पर आधारित है। हर कनेक्टर, हर रिट्रीवल कॉल और हर मैसेज मीटर का बिल आपके tenant के खाते में जाता है। Azure Pricing Calculator से अनुमान न लगाने और उपयोग को ट्रैक न करने पर फ़ाइनेंस टीम को चौंकाने वाले इनवॉइस मिल सकते हैं।</p>\n<h3>प्रोटोटाइप को सीधे प्रोडक्शन में डालना</h3>\n<p>सैंडबॉक्स में प्रोटोटाइप बनाना आसान होता है, पर कई टीमें बिना evaluation पाइपलाइन के उसे प्रोडक्शन में धकेल देती हैं। Groundedness, Fluency, Relevance और Coherence के Evaluators छोड़ने का मतलब अँधेरे में डिप्लॉय करना है। फिर उपयोगकर्ता आउटपुट में बदलाव देखते हैं, भरोसा गिरता है और एक्ज़ीक्यूटिव फ़ंडिंग रोक देते हैं। यह प्लेटफ़ॉर्म की नहीं, टीमों की गवर्नेंस की विफलता है।</p>\n\n<h2>Responsible AI और Lifecycle Governance</h2>\n<p>Responsible AI कॉन्फ़िगरेशन, ऑडिट, फ़िल्टर और शासन के ठोस कदमों का नाम है। इसके लिए ऐसी access नीतियाँ चाहिए जो दबाव में न झुकें, ऐसे फ़िल्टर जो हानिकारक प्रॉम्प्ट को सचमुच रोकें, और इतने विस्तृत लॉग कि नियामक संतुष्ट हो सके। व्यवहार में इसका मतलब है HR Copilot को फ़ाइनेंस डेटा से अलग रखना, scoping नियम तय करना ताकि टीम के बॉट SharePoint के गोपनीय डेटा तक न पहुँचें, और लॉग इस तरह टैग करना कि साबित हो सके कि कोई उत्तर कैसे बना।</p>\n<p>Azure AI Content Safety हिंसक, अश्लील और आपत्तिजनक प्रॉम्प्ट और प्रतिक्रियाओं को उपयोगकर्ता तक पहुँचने से पहले फ़िल्टर करता है, लेकिन यह सिर्फ़ बुनियादी सुरक्षा है। अगली परत मूल्यांकन पाइपलाइनों की है। Microsoft सुरक्षा के लिए 34,000 पूर्णकालिक इंजीनियर और 15,000 विशेषज्ञ साझेदार लगाने की बात करता है। फिर भी आपके tenant के भीतर पहचान सुरक्षित करना, डेटा अलगाव सेट करना और नीतियाँ कॉन्फ़िगर करना आपकी ही ज़िम्मेदारी है।</p>\n<h3>टेस्ट, मंज़ूरी, रिलीज़, ऑडिट</h3>\n<p>Lifecycle Governance एक चक्र है: टेस्ट करें, मंज़ूरी दें, रिलीज़ करें, ऑडिट करें और दोहराएँ। हर चरण पर चेकपॉइंट होने से आप ड्रिफ़्ट को समस्या बनने से पहले पकड़ लेते हैं। मॉडल विकसित होते हैं, प्रॉम्प्ट बदलते हैं और आउटपुट भटक जाते हैं, इसलिए एक बार का काम काफ़ी नहीं है। गवर्नेंस लालफ़ीताशाही नहीं है। यह गति को खत्म नहीं करती, बल्कि गति को आपको खत्म करने से रोकती है।</p>\n\n<h2>व्यावहारिक सीख: हैलुसिनेशन रोकने की चेकलिस्ट</h2>\n<ul>\n<li>RAG को साफ़, अनुक्रमित और मॉनिटर किए गए डेटा पर खड़ा करें, क्योंकि कचरा अंदर होगा तो कचरा ही बाहर आएगा।</li>\n<li>Azure AI Search में Hybrid Search (Keyword और Vector) के साथ Semantic Re-Ranker इस्तेमाल करें।</li>\n<li>पहले दिन से Groundedness, Relevance, Coherence और Fluency के इनबिल्ट Evaluators चलाएँ और मूल्यांकन के लिए बजट रखें।</li>\n<li>एजेंट का दायरा, वैलिडेशन स्टेप और telemetry पहले तय करें। जाँचें कि वह मानवी घंटे घटाता है या नहीं।</li>\n<li>एजेंट को न्यूनतम अधिकार दें, हर कार्रवाई लॉग करें और गंभीर कार्रवाइयों के लिए रोलबैक रखें।</li>\n<li>Human in the loop और manual override बनाए रखें।</li>\n<li>काम के हिसाब से मॉडल चुनें और Azure Pricing Calculator से लागत का अनुमान लगाकर उपयोग ट्रैक करें।</li>\n<li>Identity scoping और content safety को बाद की चीज़ नहीं, शुरुआती बुनियाद मानें।</li>\n<li>टेस्ट, मंज़ूरी, रिलीज़ और ऑडिट का चक्र चलाते रहें।</li>\n</ul>\n\n<h2>निष्कर्ष</h2>\n<p>हैलुसिनेशन AI की कमज़ोरी से ज़्यादा डेटा, मूल्यांकन और गवर्नेंस की कमज़ोरी का नतीजा है। RAG, Azure AI Search के Hybrid और Semantic फ़ीचर और Evaluators मिलकर जवाबों को कल्पना से हटाकर वास्तविकता पर टिकाते हैं। Azure AI Foundry और Copilot Studio टूल देते हैं, पर उन्हें प्लग-एंड-प्ले मान लेना असली खतरा है। याद रखने का सरल सूत्र है: पहले गवर्नेंस, फिर प्रयोग, फिर प्रोडक्शन। पहचान और observability को छोड़ना अपने जोखिम पर है, क्योंकि प्रोटोटाइप को प्रोडक्शन में बदलने का काम टूल नहीं, गवर्नेंस करती है।</p>",
+  "model": "claude-sonnet-5-5",
+  "info": {
+   "titel": "AI हैलुसिनेशन रोकने की राह",
+   "typ": "schritte",
+   "punkte": [
+    {
+     "kopf": "डेटा से ग्राउंडिंग",
+     "text": "RAG को साफ़, अनुक्रमित और मॉनिटर किए गए डेटा पर आधारित करें।"
+    },
+    {
+     "kopf": "Hybrid + Semantic",
+     "text": "Azure AI Search में Keyword, Vector Search और Semantic Re-Ranker साथ इस्तेमाल करें।"
+    },
+    {
+     "kopf": "Evaluators चलाएँ",
+     "text": "Groundedness, Relevance, Coherence और Fluency पहले दिन से लगातार मापें।"
+    },
+    {
+     "kopf": "एजेंट का दायरा",
+     "text": "न्यूनतम अधिकार, लॉगिंग, रोलबैक और फ़िल्टर तय करें; इंसानी निगरानी रखें।"
+    },
+    {
+     "kopf": "Lifecycle Governance",
+     "text": "टेस्ट, मंज़ूरी, रिलीज़ और ऑडिट का चक्र चलाकर ड्रिफ़्ट पकड़ें।"
+    }
+   ]
+  },
+  "faq": [
+   {
+    "q": "AI हैलुसिनेशन क्या होता है और AI गलत जानकारी क्यों गढ़ता है?",
+    "a": "हैलुसिनेशन तब होता है जब AI सिस्टम असली कंपनी डेटा और असली यूज़र्स के सामने गलत जानकारी गढ़ने लगता है, जैसे किसी ऐसी \"Q3 Discount Policy\" का हवाला देना जो मौजूद ही नहीं है। ऐसा तब होता है जब मॉडल के पास ठोस आधार नहीं होता और वह खाली जगह को कल्पना से भर देता है।"
+   },
+   {
+    "q": "RAG और Azure AI Search से AI हैलुसिनेशन कैसे कम करें?",
+    "a": "RAG को साफ़, अनुक्रमित और मॉनिटर किए गए डेटा पर खड़ा करें। Azure AI Search में Hybrid Search (Keyword और Vector) के साथ Semantic Re-Ranker इस्तेमाल करें, ताकि सबसे सही संदर्भ सबसे ऊपर रहे। मॉडल को जितना सटीक संदर्भ मिलता है, उसे कुछ गढ़ने की ज़रूरत उतनी कम पड़ती है।"
+   },
+   {
+    "q": "Azure AI Foundry में Evaluators क्या हैं और Groundedness कैसे मापी जाती है?",
+    "a": "Azure AI Foundry के इनबिल्ट Evaluators Groundedness, प्रासंगिकता, सुसंगतता और स्रोत की सत्यता मापने का प्रमाणित तरीका हैं। इनसे आउटपुट में विचलन आने पर आप आत्मविश्वास से हस्तक्षेप कर सकते हैं। इनके बिना आप सिर्फ़ अंदाज़ा लगाते हैं कि सिस्टम स्मार्ट है या मनगढ़ंत बातें बना रहा है।"
+   },
+   {
+    "q": "Autonomous AI एजेंट को प्रोडक्शन में सुरक्षित तरीके से कैसे चलाएँ?",
+    "a": "एजेंट को सभी एडमिन रोल के बजाय न्यूनतम अधिकार दें। हर कार्रवाई का ऑडिट योग्य लॉग रखें और गंभीर कार्रवाइयों को पलटने का रास्ता रखें। कंटेंट और व्यवहार फ़िल्टर लगाएँ। साथ ही human in the loop और manual override बनाए रखें, ताकि इंसान अंतिम सुरक्षा कवच रहे।"
+   }
+  ],
+  "infos": [
+   {
+    "titel": "Copilot बनाम AI एजेंट",
+    "typ": "vergleich",
+    "links": {
+     "titel": "Copilot",
+     "punkte": [
+      "आपके प्रॉम्प्ट का जवाब देता है।",
+      "हमेशा आपके नियंत्रण में रहता है।",
+      "आपके निर्देश के बाद ही काम करता है।"
+     ]
+    },
+    "rechts": {
+     "titel": "AI एजेंट",
+     "punkte": [
+      "आपका इंतज़ार किए बिना खुद कदम उठाते हैं।",
+      "अस्पष्ट निर्देशों का भी अक्षरशः पालन करते हैं।",
+      "सीमित दायरे में असली टिकट बनाकर इंसानी घंटे बचाते हैं।",
+      "खुला छोड़ने पर फ़र्ज़ी चेतावनियों से हेल्पडेस्क भर सकते हैं।"
+     ]
+    }
+   },
+   {
+    "titel": "Azure AI Foundry में क्या-क्या शामिल है",
+    "typ": "fakten",
+    "punkte": [
+     {
+      "wert": "मॉडल कैटलॉग",
+      "text": "Microsoft, OpenAI, Meta, Mistral और DeepSeek जैसे मॉडल उपलब्ध हैं।"
+     },
+     {
+      "wert": "कस्टमाइज़ेशन",
+      "text": "RAG, Fine Tuning और Distillation से मॉडल को अपने काम के अनुरूप ढालें।"
+     },
+     {
+      "wert": "Agent Service",
+      "text": "ऑर्केस्ट्रेशन के लिए एंटरप्राइज़ ढाँचा, जो observability के साथ प्रोडक्शन में चलता है।"
+     },
+     {
+      "wert": "prompt flow",
+      "text": "मूल्यांकन और डिबगिंग के लिए उपलब्ध टूल।"
+     },
+     {
+      "wert": "सुरक्षा",
+      "text": "identity और access control, content safety फ़िल्टर और observability डैशबोर्ड।"
+     }
+    ]
+   }
+  ]
+ },
+ "ja": {
+  "html": "<p>AIが事実と異なる内容を自信満々に答えてしまう「ハルシネーション」は、Microsoft 365やAzureでCopilotやエージェントを本番導入するときに必ず直面する課題です。モデルが賢くないことが原因とは限りません。多くの場合、データが整理されておらず、検索の精度が低く、評価や監視の仕組みもなく、ガバナンスも不足していることが原因です。</p>\n<p>この記事では、Azure AI Searchを使ってRAG（検索拡張生成）を確実にグラウンディングする方法を軸に、エージェント、自律型エージェント、Azure AI Foundry、責任あるAIまで、現場で失敗しないための考え方を整理します。</p>\n\n<h2>マルチモーダルAIが現場で失敗する理由</h2>\n<p>ステージ上のマルチモーダルデモは完璧に見えます。テキストのプロンプトに鮮明な画像、場合によっては簡単な音声を入力すると、モデルは見事なグラフや簡潔な契約概要を出力します。しかし実際の企業で同じことを試すと、その輝きはすぐに消えます。デモは完璧な入力で動きますが、職場は「ゴミ」で動いているからです。</p>\n<p>本番環境では、きれいに整えられたスクリーンショットや標準化されたCSVが渡されることはありません。人事部は汚れた身分証の画像を入力し、調達部は何世代もコピーを重ねたファックス由来のPDFを持ち込み、財務部の誰かはひび割れたAndroidカメラで請求書を撮影します。マルチモーダルモデルはテキスト、画像、音声、ビデオを処理できますが、こうした乱雑な条件で機能させるには、適切にインデックス化されたデータと検索が欠かせません。そうでなければ、モデルにゴミを相手に即興で答えさせているのと同じです。どれだけGPUに投資しても、ゴミを入れればゴミが出てきます。</p>\n\n<h2>RAGとは何か：グラウンディングの基本</h2>\n<p>モデルはあなたのビジネスを知りません。そこで知識ソースに接続し、関連するデータの一部を取得させて、それに基づいて回答を組み立てさせます。これがRAGです。一致が正確なら、役に立つ根拠のある回答が得られます。一致が不正確なら、モデルは自由奔放に、自信満々のナンセンスを出力します。存在しない「第3四半期の割引ポリシー」があると断言するチャットボットは、意識を持ったわけではありません。間違ったデータを取得しただけです。</p>\n<p>Azure AI StudioとAzure AI Foundryはどちらもこのパターンに基づいており、言語、画像、音声、ビデオ検索など、さまざまなモダリティに対応しています。ただし、RAGの性能はデータの質に左右されます。</p>\n\n<h3>ハイブリッド検索とセマンティック再ランキング</h3>\n<p>多くのチームが見落としているのは、検索手法を1つ組み込めば済むわけではない、という点です。結果を安定させたいなら、キーワード検索とベクトル検索を組み合わせた<strong>ハイブリッド検索</strong>に、Azure AI Searchに組み込まれている<strong>セマンティック再ランキング</strong>を加える必要があります。文字どおりのキーワード一致と意味的な近さのバランスを取り、適切なコンテキストが上位に来るよう結果を並べ替える仕組みです。</p>\n<p>これをマルチモーダルの構成に組み込めば、歪んだスキャンやぼやけた画像でも耐えやすくなり、モデルがコンプライアンスポリシーを無から作り出す事態を避けられます。</p>\n\n<h3>評価ループを最初から予算に入れる</h3>\n<p>多くの導入が失敗する理由は、初日から洗練された結果を期待する一方で、評価ループの予算を組んでいないことにあります。妥当性（グラウンディング）、関連性、一貫性のチェックがバックグラウンドで動いていなければ、ユーザーが損をするまでドリフトに気づけません。出力はもっともらしく聞こえても、誰もソースの真実と照らして検証していないのです。監視なしで新しいデータベースを本番に出すことはないはずなのに、マルチモーダルAIは「プラグ&プレイの魔法の箱」のように扱われがちです。</p>\n<p>対照的な事例もあります。Foundryのある顧客事例では、検索の調整、エージェントの適切な基盤構築、可観測性への投資によって、セルフサービスAIを実際に役立つものにしました。一方、基盤構築も評価もないまま汎用チャットボットをサポートページに置いた企業では、保証請求が誤って販売リードとして処理され、サポートの問い合わせが膨れ上がり、信頼が失われました。同じAzureスタックでも、結果は正反対になります。</p>\n\n<h2>エージェントは役に立つのか、高価な気晴らしか</h2>\n<p>データパイプラインがクリーンでも、それを動かすシステムが暴走することがあります。エージェントはモデル、データ、トリガー、アクションを調整する、自動化ワークフローの交通整理係のような存在です。うまくいけばすべてをスムーズに誘導しますが、うまくいかなければITの予算を静かに燃やします。</p>\n\n<h3>コパイロットとエージェントの違い</h3>\n<p>CopilotとエージェントはIn同じではありません。Copilotは基本的にプロンプトの相棒で、あなたが質問し、Copilotが答え、コントロールはあなたの手元に残ります。エージェントはあなたを待たずに物事を決定し、曖昧な指示にも文字どおり従います。結果が意味をなさなくても実行を続けるため、自動化は時間を節約するか、片付けに倍の時間がかかる混乱を生むかのどちらかになります。</p>\n<p>サービスデスクで考えてみましょう。範囲を厳密に絞れば、AIは実際の問題に対してのみ実際のチケットを作成し、人間の時間を節約します。自由にさせると、問題のないハードウェアの「重大なプリンター障害」という偽のアラートでヘルプデスクを埋め尽くしかねません。多くのチームがエージェントに「プロセスの最適化」「洞察の提供」「人々の支援」といった、選挙公約のような職務記述書を渡していますが、これは事実上ボットに好き勝手を許すことです。スコープのないエージェントは、レコードを重複させ、無限ループに入り、解決すべき問題を自ら作り出します。</p>\n<p>ガードレールがないエージェントは、管理者権限を持つ無謀なインターンと変わりません。範囲設定、検証手順、テレメトリの計測がないために、早い段階で障害にぶつかる組織は少なくありません。</p>\n\n<h3>役立っているかを見極める3つのチェック</h3>\n<ul>\n<li>人件費を削減できているか。それともスタッフをデバッグ作業に巻き込んでいないか</li>\n<li>グラウンディング、流暢さ、一貫性などのメトリックを収集しているか。それともきれいなダッシュボードを眺めているだけではないか</li>\n<li>ユーザーが苦情を言い出す前にドリフトを検出できるよう、テレメトリを実装しているか</li>\n</ul>\n<p>どれかに答えられないなら、それは高価なスクリーンセーバーです。Microsoftスタックでは、Copilot Studioがフロー、プロンプト、イベントトリガーを設計するローコードの場となり、Azure AI Foundryのエージェントサービスが、可観測性を備えた本番環境へエージェントを導入するための基盤になります。監視、ログ、メトリックを追加するのもここです。解決の鍵は、Azure AI Foundryの可観測性機能と組み込みの評価ツールです。これらは根拠性、関連性、一貫性、情報源への忠実性を測るための文書化された方法で、オプションの追加機能ではありません。</p>\n\n<h2>自律型エージェントの罠</h2>\n<p>自律型エージェントは、便利さが危険に変わる場所です。AIに任せて面倒な作業を自動化し、午前2時にベッドから這い出してチケットを処理する生活をやめる、という話は役員会議では魅力的に聞こえます。しかし、自律型エージェントは許可を待ちません。Copilotはあなたのために一時停止しますが、自律型エージェントは止まらず、誤った判断をすれば損害は瞬時にテナント全体へ広がります。</p>\n<p>Microsoftはこれを、効率化、人的な無駄の削減、検出の迅速化、運用のスムーズ化として打ち出しています。約束は本物ですが、重要な前提があります。現時点でCopilot Studioの自律型エージェントはまだプレビューです。プレビューは壊れているという意味ではなく、混沌とした現実世界でまだ十分に試されていないという意味です。Microsoft自身も、広く展開する前にライフサイクルガバナンスやガードレール、Copilotの制御システムを導入する必要があると述べています。</p>\n<p>リスクを具体的に考えてみましょう。ログイン対応を超える権限を持つ自律型ヘルプデスクエージェントを作ったとします。5人のユーザーによるデモでは完璧に動きます。ところが本番でノイズの多い入力が来ると、待機する代わりに誤検知に基づいて数百のアカウントを一括リセットし始め、月末の業務を止めてしまうかもしれません。これはSFではなく、スコープ設定を怠った場合に起こりうる失敗モードです。</p>\n\n<h3>派手な自動化の前にやるべき3つのこと</h3>\n<ol>\n<li><strong>IDとアクセスのスコープ設定：</strong>エージェントには最小限の権限だけを与え、包括的な管理者ロールは与えない</li>\n<li><strong>ログ記録とロールバック：</strong>すべてのアクションに監査可能な痕跡を残し、重大なアクションには元に戻す手段を用意する</li>\n<li><strong>コンテンツと動作のフィルター：</strong>Azure AIのコンテンツセーフティやナレッジ構成で、不適切な回答やスクリプトからの逸脱を防ぐ</li>\n</ol>\n<p>倫理面ではさらに重要になります。従業員を自動的にハイリスクと判定する、不正の疑いがあるとして供給業者への支払いを保留するといった判断は、無害な癖では済まず、法務やコンプライアンス上の問題を生みます。トレーニングデータや取得データのバイアスは、エンタープライズのプレビュー環境で動かしても消えません。フィルター、チェック、人間によるフォールバックがなければ、弁護士が望まない判断を監視のないアルゴリズムに委ねることになります。</p>\n<p>可観測性はここでも必須です。エージェントの各ステップを表示し、出力が根拠に基づき、関連性があり、ポリシーに沿っているかを確認できるダッシュボードが必要です。人間がフェイルセーフとして関与する選択肢も欠かせません。飛行機の自動操縦は便利ですが、常に手動で介入できるよう設計されています。10代の若者に運転を教えるときのように、助手席に座り、境界を決め、自分で操作できるブレーキを備えておくこと。これがライフサイクルガバナンスの実践です。</p>\n\n<h2>Azure AI Foundryは工場か、地雷原か</h2>\n<p>Azure AI Foundryは、Microsoftの新しい主力であるAIの「工場」です。ところが多くのチームが、IKEAのようにカタログに目を奪われ、大規模言語モデルを手に取り、コネクタを放り込み、説明書なしで組み立ててしまいます。出来上がるのは、実際のユーザーが乱雑なPDFを1つドロップしただけで倒れる、デモ品質のおもちゃです。</p>\n\n<h3>Foundryが提供するもの</h3>\n<ul>\n<li>モデルカタログ（Microsoft、OpenAI、Meta、Mistral、DeepSeekなど）</li>\n<li>RAGやファインチューニングなどのカスタマイズオプション</li>\n<li>オーケストレーション用のエージェントサービス</li>\n<li>評価とデバッグのためのprompt flowなどのツール</li>\n<li>セキュリティの基本機能：IDとアクセス制御、コンテンツセーフティフィルター、可観測性ダッシュボード</li>\n</ul>\n<p>Copilot、エージェント、自律フローを構築し、コンプライアンスを維持するための部品は揃っています。問題はツールボックスが空であることではなく、GPT-4 Turboのスイッチを入れただけで本番対応だとみなす運用にあります。適切な人だけが適切なモデルにアクセスできるようID境界を設定し、すべてのパイプラインにコンテンツセーフティを組み込み、可観測性で回答が根拠に基づいているかを確認する必要があります。モデルも、賢そうに聞こえるからと最大のものを選ばず、仕事に合ったものを選びます。</p>\n\n<h3>よくある失敗・落とし穴</h3>\n<ul>\n<li><strong>アクセス制御の不備：</strong>あるチームがSharePointにFoundryのCopilotを組み込んだところ、制限されるべき人事データが20人のインターンに公開されました。組み込みのアクセスルールで防げたはずのコンプライアンス上の大問題です。</li>\n<li><strong>実環境を想定しないモデル選定：</strong>製品写真のタグ付けにGPT-4 Turboを使った組織では、ラボのきれいなスタジオ写真では完璧でした。しかし本番の入力は倉庫で撮ったぼやけた携帯写真で、ベビーカーをオフィスチェアと誤認し、UPCラベルを偽のシリアル番号に書き換えました。</li>\n<li><strong>従量課金の見落とし：</strong>Foundryの料金は従量制で、使うサービスごとに課金モデルがあります。コネクタ、取得呼び出し、メッセージのすべてがテナントに課金されます。Azure料金計算ツールで見積もり、使用状況を追跡しなければ、予期せぬ請求書に驚くことになります。</li>\n<li><strong>評価パイプラインなしの本番化：</strong>サンドボックスのクリーンなデータでは印象的に見えても、グラウンディング、流暢さ、関連性、一貫性の評価をスキップして本番に出せば、目隠しでデプロイするのと同じです。出力のばらつきで信頼が失われ、経営陣は資金を削減します。これはFoundryの失敗ではなく、チームのガバナンスの失敗です。</li>\n</ul>\n<p>対策は、可観測性を初日から使い、プロンプトとフローに組み込み、すべてのテストで組み込みの評価ツールを実行することです。本番稼働を考える前に、ハイブリッド検索とセマンティック再ランキングを使ったAzure AI Searchでシステムを基盤化します。これらはMicrosoftが本番の安全性のために文書化している機能です。</p>\n\n<h2>責任あるAIを実務に落とし込む</h2>\n<p>責任あるAIは、基調講演のスライドでは公平性や透明性といったキーワードと並びますが、現場では構成、監査、フィルター、ガバナンスの手順です。イノベーションというより、サーバーのメンテナンスに近い地道な作業です。責任あるAIはスポーツカーではなく、シートベルトにあたります。</p>\n<p>実務では、プレッシャーに屈しないアクセスポリシー、有害なプロンプトを実際にブロックするフィルター、規制当局を満足させられるだけ詳細なログが必要です。人事のCopilotを財務データから隔離し、SharePointの機密に入り込まないようスコープルールを設定し、回答がどう形成されたかを証明できるようログにタグ付けします。逆の例が、テナントのスコープなしでボットを人事リポジトリに直接つなぐことです。保険給付について尋ねたユーザーに従業員の給与バンドが表示されれば、プライバシー侵害、信頼低下、規制当局の監視を招きます。</p>\n<p>まずはAzure AIのコンテンツセーフティで、暴力的・不適切・不快なプロンプトやレスポンスがユーザーに届く前にフィルタリングします。ただし、これは基本的な衛生管理にすぎません。次の層として、FoundryとCopilot Studioで評価パイプラインを組み、妥当性チェック、関連性スコアリング、透明性ダッシュボード、説明可能性を整えます。</p>\n<p>Microsoftはセキュリティに専念するフルタイム相当のエンジニア34,000人と、深い専門知識を持つパートナー15,000人を擁しています。しかし、テナント内でアクセスルールを作るのはその誰でもありません。ガードレールはMicrosoftが提供しますが、IDのロックダウン、データ分離、暗号化、ポリシー構成は引き続きあなたの仕事です。スコープがずさんなら、侵害の責任もあなたにあります。</p>\n<p>本当の解決策は、ライフサイクルガバナンスです。テスト、承認、リリース、監査、反復というサイクルの各段階にチェックポイントを置けば、ドリフトが問題になる前に見つけられます。一度出荷して放置すれば、モデルは進化し、プロンプトは変わり、出力は迷走します。責任を持つことは速度を落とすことではなく、速度があなたを破滅させないようにすることです。山道のヘアピンカーブでガードレールに感謝するのと同じです。</p>\n\n<h2>実践のためのポイント</h2>\n<ul>\n<li>RAGはハイブリッド検索（キーワード＋ベクトル）にAzure AI Searchのセマンティック再ランキングを加えて構成する</li>\n<li>妥当性（グラウンディング）、関連性、一貫性の評価を、最初から継続的に実行する</li>\n<li>エージェントには明確な職務境界を設け、最小権限で運用し、テレメトリを計測する</li>\n<li>重大なアクションには監査可能なログとロールバックの手段を用意し、人間によるフォールバックも残す</li>\n<li>自律型エージェントは現状プレビューであることを踏まえ、広い展開の前にガバナンスとガードレールを整える</li>\n<li>Foundryではモデルを用途に合わせて選び、IDとアクセス制御、コンテンツセーフティを最初から組み込む</li>\n<li>Azure料金計算ツールで見積もり、使用状況を追跡して、従量課金の驚きを避ける</li>\n<li>ガバナンスを最優先、実験は2番目、本番は最後にする</li>\n</ul>\n\n<h2>まとめ</h2>\n<p>ハルシネーションを防ぐ鍵は、モデルの賢さではなく、データの準備、グラウンディング、評価、ガバナンスにあります。Azure AI Foundryもその他のツールも、プラグ&プレイの魔法の箱ではなく、ガバナンスを前提にしたインフラとして扱うべきものです。ツールは変わっても、この生き残りのための考え方は変わりません。</p>",
+  "model": "claude-sonnet-5-5",
+  "info": {
+   "titel": "ハルシネーションを防ぐ：RAGを確実にグラウンディングする",
+   "typ": "schritte",
+   "punkte": [
+    {
+     "kopf": "データを整える",
+     "text": "乱雑な入力でも動くよう、データを適切にインデックス化し、検索で根拠を取得できる状態にする。"
+    },
+    {
+     "kopf": "ハイブリッド検索",
+     "text": "キーワード検索とベクトル検索を組み合わせ、Azure AI Searchのセマンティック再ランキングを追加する。"
+    },
+    {
+     "kopf": "継続的な評価",
+     "text": "妥当性・関連性・一貫性を最初から測定し、ドリフトを早期に検出する。"
+    },
+    {
+     "kopf": "スコープと権限",
+     "text": "エージェントは最小権限で運用し、ログとロールバック、人間の介入手段を用意する。"
+    },
+    {
+     "kopf": "ガバナンス優先",
+     "text": "コンテンツセーフティと可観測性を初日から組み込み、テストから承認、監査まで繰り返す。"
+    }
+   ]
+  },
+  "faq": [
+   {
+    "q": "AIのハルシネーションを防ぐにはどうすればよいですか？",
+    "a": "モデルの賢さよりも、データの整理、検索精度、グラウンディング、評価、ガバナンスが鍵です。Azure AI SearchでRAGを基盤化し、妥当性・関連性・一貫性の評価と監視を初日から実施することで、根拠のない回答を減らせます。"
+   },
+   {
+    "q": "RAG（検索拡張生成）とは何ですか？なぜ精度が重要なのですか？",
+    "a": "モデルが知らない自社の知識ソースから関連データを取得させ、それに基づいて回答を組み立てさせる仕組みです。取得データの一致が正確なら根拠ある回答になりますが、不正確だとモデルは自信満々に誤った内容を出力してしまいます。"
+   },
+   {
+    "q": "Azure AI Searchで検索結果を安定させるにはどんな構成が必要ですか？",
+    "a": "キーワード検索とベクトル検索を組み合わせたハイブリッド検索に、Azure AI Searchに組み込まれたセマンティック再ランキングを加えます。文字どおりの一致と意味的な近さのバランスを取り、適切なコンテキストを上位に並べ、歪んだスキャンやぼやけた画像にも強くなります。"
+   },
+   {
+    "q": "CopilotとAIエージェントの違いは何ですか？導入時のリスクは？",
+    "a": "Copilotはプロンプトの相棒で、質問に答えるだけでコントロールは人間に残ります。エージェントは待たずに判断し、曖昧な指示にも文字どおり従って実行を続けます。範囲設定、最小権限、ログ、ロールバック、人間のフォールバックがないと、大きな混乱を招きます。"
+   }
+  ],
+  "infos": [
+   {
+    "titel": "Copilotとエージェントの違い",
+    "typ": "vergleich",
+    "links": {
+     "titel": "Copilot",
+     "punkte": [
+      "基本はプロンプトの相棒として動く",
+      "あなたが質問し、Copilotが答える",
+      "コントロールは常にあなたの手元に残る",
+      "自律型でもあなたのために一時停止する"
+     ]
+    },
+    "rechts": {
+     "titel": "エージェント",
+     "punkte": [
+      "あなたを待たずに物事を決定する",
+      "曖昧な指示にも文字どおり従う",
+      "結果が意味をなさなくても実行を続ける",
+      "自律型は許可を待たず止まらない",
+      "誤判断の損害がテナント全体へ広がる"
+     ]
+    }
+   },
+   {
+    "titel": "エージェント導入前の確認ポイント",
+    "typ": "checkliste",
+    "punkte": [
+     "人件費を削減できているか、デバッグ作業に巻き込んでいないか",
+     "グラウンディング、流暢さ、一貫性のメトリックを収集しているか",
+     "ドリフトを早期検出できるテレメトリを実装しているか",
+     "エージェントに最小限の権限だけを与えているか",
+     "すべてのアクションに監査可能なログを残しているか",
+     "重大なアクションに元に戻す手段を用意しているか",
+     "人間によるフォールバックの選択肢を残しているか"
+    ]
+   }
+  ]
+ },
+ "ko": {
+  "html": "<p>멀티모달 AI 데모는 늘 완벽해 보입니다. 깨끗한 이미지와 잘 쓴 프롬프트를 넣으면 모델이 정교한 차트와 계약 요약을 내놓습니다. 그러나 실제 업무 환경에 같은 시도를 하면 환상은 빠르게 깨집니다. 근거 없이 답하는 AI는 결국 그럴듯한 환각을 만들어내기 때문입니다.</p>\n<p>이 글에서는 RAG(검색 증강 생성), Azure AI Search의 하이브리드 검색과 시맨틱 기능, 그리고 근거성·관련성·일관성을 검증하는 평가 도구로 환각이 배포되는 일을 막는 방법을 정리합니다. 에이전트와 자율 에이전트의 위험, Azure AI Foundry를 운영할 때의 거버넌스까지 함께 다룹니다.</p>\n\n<h2>멀티모달 앱이 현실에서 실패하는 이유</h2>\n<p>데모는 깨끗한 입력으로 돌아가고, 실제 업무는 엉망인 데이터로 돌아갑니다. 이것이 핵심적인 차이입니다. 운영 환경에서 누구도 모델에 잘 정리된 스크린샷이나 표준화된 CSV 파일을 주지 않습니다.</p>\n<ul>\n<li>인사팀은 흐릿한 신분증 사본을 입력합니다.</li>\n<li>구매팀은 팩스로 여러 번 복사된 듯한 PDF를 가져옵니다.</li>\n<li>재무팀의 누군가는 깨진 카메라로 송장 사진을 찍어 올립니다.</li>\n</ul>\n<p>멀티모달 모델은 텍스트, 이미지, 음성, 비디오를 처리할 수 있습니다. 하지만 복잡한 상황에서 제대로 작동하려면 잘 정제된 데이터와 검색 기능이 필요합니다. 그렇지 않으면 모델에게 쓰레기 같은 데이터를 주고 즉흥 연기를 시키는 꼴입니다. GPU에 아무리 많은 돈을 써도 쓰레기를 넣으면 쓰레기가 나옵니다.</p>\n<p>멀티모달이 무너지는 이유는 AI가 충분히 똑똑하지 않아서가 아닙니다. 데이터가 준비되지 않았거나, 인덱싱되지 않았거나, 모니터링되지 않기 때문입니다.</p>\n\n<h2>RAG와 Azure AI Search로 답변을 그라운딩하는 방법</h2>\n<h3>RAG가 하는 일</h3>\n<p>모델은 여러분의 비즈니스를 모릅니다. RAG는 모델을 지식 소스에 연결해 데이터의 관련 부분을 검색하고, 그에 맞춰 답변을 구성하게 합니다. 데이터가 정확히 일치하면 유용하고 근거 있는 답변이 나옵니다. 반대로 데이터가 엉망이면 모델은 제멋대로 추측하며 자신 있게 틀린 말을 합니다. 존재하지 않는 할인 정책이 있다고 우기는 챗봇이 대표적입니다. 모델에게 자아가 있어서가 아니라 잘못된 데이터를 가져왔기 때문입니다.</p>\n<p>Azure AI Studio와 Azure AI Foundry는 모두 이 RAG 패턴을 기반으로 하며, 언어·시각·음성·비디오 검색까지 여러 모달리티를 지원합니다. 다만 RAG도 데이터가 좋아야 성능이 나옵니다.</p>\n<h3>하이브리드 검색과 시맨틱 재순위 지정</h3>\n<p>대부분의 팀이 놓치는 부분은 검색 방식을 하나만 연결해 놓고 끝났다고 생각하는 것입니다. 결과를 일관되게 유지하려면 Azure AI Search에 내장된 하이브리드 키워드·벡터 검색과 시맨틱 재순위 지정(시맨틱 리랭커)이 필요합니다.</p>\n<ul>\n<li>키워드 검색으로 문자 그대로의 일치도를 확보합니다.</li>\n<li>벡터 검색으로 의미적 유사성을 반영합니다.</li>\n<li>시맨틱 재순위 지정으로 올바른 컨텍스트가 결과 상단에 오도록 재정렬합니다.</li>\n</ul>\n<p>이렇게 하면 모델은 구겨진 스캔 문서나 흐릿한 이미지를 만나도 규정 준수 정책을 마음대로 지어내지 않고 정확하게 처리할 수 있습니다.</p>\n\n<h2>평가 루프: 환각을 배포 전에 잡는 장치</h2>\n<p>많은 도입 시도가 실패하는 이유는 첫날부터 완벽한 결과를 기대하면서 평가 루프에는 예산을 잡지 않기 때문입니다. 근거성, 관련성, 일관성을 확인하는 작업이 없으면 사용자가 피해를 보기 전까지 오류를 알아차리지 못합니다. 출력물은 그럴듯해 보이지만 아무도 원천 데이터와 대조해 검증하지 않은 것입니다.</p>\n<p>모니터링 없이 새 데이터베이스를 배포하는 사람은 없습니다. 그런데 멀티모달 AI는 플러그 앤 플레이 마법 상자처럼 곧바로 프로덕션에 투입되곤 합니다.</p>\n<p>반드시 실패로 끝날 필요는 없습니다. 한 Foundry 고객 사례에서는 검색 기능을 조정하고, 에이전트의 기반을 적절히 다지고, 관찰 가능성에 투자해 셀프 서비스 AI를 실제로 유용하게 만들었습니다. 장난감 같던 챗봇이 신뢰할 수 있는 도구가 된 것입니다. 반대로 근거성 검사나 평가 없이 일반 챗봇을 지원 페이지에 붙인 기업에서는 보증 청구가 영업 리드로 잘못 분류되고, 지원 대기열이 가득 차고, 신뢰도가 바닥으로 떨어졌습니다. 같은 Azure 스택을 썼는데도 결과는 정반대였습니다.</p>\n\n<h2>에이전트: 유용한 동료인가, 비싼 문진인가</h2>\n<p>에이전트는 모델, 데이터, 트리거, 작업을 조정하는 자동화 워크플로우의 교통경찰관과 같습니다. 잘 지휘할 때도 있지만, 그렇지 못할 때도 있습니다.</p>\n<h3>코파일럿과 에이전트의 차이</h3>\n<p>Copilot은 기본적으로 질문에 답해 주는 도우미입니다. 사용자가 질문하고 답을 얻으며 통제권은 사용자에게 있습니다. 반면 에이전트는 사용자를 기다리지 않고 스스로 판단합니다. 모호한 지침도 결과가 말이 안 되는 상황에서 문자 그대로 따릅니다.</p>\n<p>범위를 잘 설정한 에이전트는 서비스 관리 도구 안에서 진짜 문제에 대해서만 티켓을 만들어 시간을 아껴 줍니다. 방치된 에이전트는 멀쩡한 프린터에 치명적 오류가 났다는 가짜 알람으로 헬프데스크를 마비시킬 수 있습니다.</p>\n<h3>범위가 없는 에이전트의 문제</h3>\n<p>\"프로세스를 최적화하고 통찰력을 제공하고 사람들을 돕겠다\"는 식의 선거 공약 같은 직무 기술서가 문제입니다. 범위가 정해지지 않은 에이전트는 스스로 해결할 문제를 만들어 내고, 레코드를 중복 생성하고, 끝없는 루프에 빠집니다. 안전장치 없는 신규 도구는 관리자 권한을 가진 무모한 인턴과 다르지 않습니다.</p>\n<p>Microsoft 스택은 이를 위한 도구를 제공합니다. Copilot Studio는 플로우, 프롬프트, 이벤트 트리거를 설계하는 로우코드 플랫폼입니다. Azure AI Foundry의 Agent Service는 에이전트를 모니터링 가능한 상태로 배포하는 엔터프라이즈 기반이며, 모니터링·로그·메트릭을 추가할 수 있습니다.</p>\n<h3>유용한지 확인하는 세 가지 질문</h3>\n<ol>\n<li>사람의 업무 시간을 줄여 주는가, 아니면 직원을 디버깅에 매달리게 하는가?</li>\n<li>근거성, 유창성, 일관성 같은 지표를 실제로 측정하고 있는가?</li>\n<li>사용자 불만이 접수되기 전에 편향을 포착할 원격 측정 체계가 있는가?</li>\n</ol>\n<p>하나라도 답하지 못한다면 지능형 에이전트가 아니라 비싼 화면 보호기를 쓰고 있는 셈입니다. 해법은 Azure AI Foundry의 관측성 기능과 내장 평가 도구입니다. 이는 선택이 아니라 근거성, 관련성, 일관성, 원본 대비 정확성을 측정하는 방법입니다.</p>\n\n<h2>자율 에이전트의 함정: 허락을 기다리지 않는다</h2>\n<p>자율 에이전트는 반복 업무를 자동화해 새벽 2시에 티켓 대기열 때문에 불려 나오지 않게 해 준다는 점에서 매력적입니다. 문제는 이들이 허락을 기다리지 않는다는 것입니다. Copilot은 반응형이고 에이전트는 선제적입니다. 에이전트가 잘못 판단하면 피해는 즉시 발생하고 테넌트 전반으로 퍼질 수 있습니다.</p>\n<p>또 하나 짚어 둘 점이 있습니다. Copilot Studio의 자율 에이전트는 아직 프리뷰 단계입니다. 작동하지 않는다는 뜻은 아니지만, 복잡한 현실에서 검증되지 않았다는 의미입니다. Microsoft 스스로도 광범위한 배포에 앞서 수명주기 거버넌스 가이드라인과 Copilot 콘솔 체계를 먼저 갖추라고 말합니다.</p>\n<p>로그인 이상 징후에 대응하도록 권한을 준 헬프데스크 에이전트를 생각해 보세요. 소수 사용자 데모에서는 완벽하게 작동하지만, 실제 운영에서 노이즈 섞인 데이터가 들어오면 잘못된 탐지로 수백 개 계정을 일괄 초기화해 월말 업무를 마비시킬 수도 있습니다. 공상과학이 아니라 범위 설정을 건너뛸 때 나타나는 실패 방식입니다.</p>\n<h3>자동화 전에 갖출 세 가지 안전망</h3>\n<ul>\n<li><strong>ID 및 액세스 범위 설정:</strong> 최소한의 권한만 부여하고 포괄적인 관리자 역할은 주지 않습니다.</li>\n<li><strong>로깅 및 롤백:</strong> 모든 작업에 감사 가능한 기록을 남기고, 중요한 작업에는 복구 경로를 마련합니다.</li>\n<li><strong>콘텐츠 및 동작 필터:</strong> Azure AI Content Safety 등으로 부적절한 답변이나 범위 이탈을 막습니다.</li>\n</ul>\n<p>윤리적 측면에서도 중요합니다. HR 에이전트가 직원을 위험인물로 자동 표시하거나 재무 에이전트가 정상 거래를 사기로 오분류해 공급업체 대금을 보류하면, 이는 법적·규정 준수 문제를 일으키는 인적 영향 실패입니다. 그래서 에이전트의 모든 단계를 보여 주고 결과가 정책에 근거하는지 확인하는 대시보드, 그리고 사람이 개입하는 휴먼 인 더 루프 옵션이 필요합니다. 비행기 자동 조종 장치처럼 매우 유용하지만 수동 조작 기능이 항상 설계되어 있어야 합니다. 10대에게 운전을 가르칠 때 조수석에 앉아 브레이크를 밟을 수 있게 해 두는 것과 같습니다.</p>\n\n<h2>Azure AI Foundry를 쓸 때 흔한 실수와 함정</h2>\n<p>Azure AI Foundry는 Microsoft가 내세우는 \"모든 AI를 위한 공장\"입니다. 여러 제공사의 모델, RAG·파인 튜닝·증류 같은 맞춤 설정 옵션, 오케스트레이션을 위한 Agent Service, 평가와 디버깅을 위한 프롬프트 플로우, ID·액세스 제어, 콘텐츠 안전 필터, 관측성 대시보드까지 갖추고 있습니다. 문제는 도구 부족이 아니라 사용 방식입니다.</p>\n<h3>실수 1: 이케아처럼 조립하기</h3>\n<p>카탈로그에 눈이 멀어 모델 몇 개를 고르고 커넥터를 연결한 뒤 설명서 없이 조립하면, 사용자가 복잡한 PDF를 넣는 순간 무너지는 장난감 데모가 나옵니다. 가장 큰 모델이 똑똑해 보인다는 이유로 고를 것이 아니라 업무에 맞는 모델을 골라야 합니다.</p>\n<h3>실수 2: 깨끗한 데모만 믿기</h3>\n<p>제품 사진 태깅을 GPT-4 Turbo로 돌린 한 조직은 실험실에서 깔끔한 스튜디오 사진으로 박수를 받았습니다. 그러나 프로덕션에서 창고에서 찍은 흐릿한 폰 사진이 들어오자 유모차를 사무용 의자로 태그하고 UPC 라벨을 가짜 일련번호로 뒤섞었습니다. 신뢰도가 떨어졌고 비용도 치솟았습니다.</p>\n<h3>실수 3: 사용량 기반 비용을 방치하기</h3>\n<p>Foundry 가격은 사용량 기반이며 사용하는 서비스에 따라 정해집니다. 커넥터, 검색 호출, 메시지 모두 테넌트에 청구되고 각각 고유한 과금 모델이 있습니다. Azure 가격 계산기로 예상치를 확인하고 사용량을 추적하지 않으면 뜻밖의 청구서를 받게 됩니다.</p>\n<h3>실수 4: 평가 파이프라인 없이 프로토타입을 밀어붙이기</h3>\n<p>샌드박스는 매끄럽지만, 평가 없이 프로덕션으로 넘어가면 눈을 감고 배포하는 것과 같습니다. 결과 편차가 드러나고, 신뢰가 떨어지고, 예산이 삭감됩니다. 이는 플랫폼의 실패가 아니라 팀의 거버넌스 실패입니다.</p>\n<h3>실수 5: 액세스 규칙 생략하기</h3>\n<p>한 팀이 SharePoint에서 Foundry Copilot을 연결했다가 제한된 인사 데이터가 20명에게 그대로 노출되는 일이 있었습니다. 내장된 액세스 규칙으로 피할 수 있던 규정 준수 문제였습니다.</p>\n<p>해법은 첫날부터 관측 기능을 켜고, 프롬프트 플로우를 연결하고, 모든 테스트에 내장 평가기를 돌리고, 하이브리드 검색과 시맨틱 재순위 지정을 쓰는 Azure AI Search로 시스템의 근거를 마련하는 것입니다.</p>\n\n<h2>책임 있는 AI와 수명주기 거버넌스</h2>\n<p>책임 있는 AI는 스포츠카가 아니라 안전벨트입니다. 실무에서는 구성, 감사, 필터링, 거버넌스 단계로 나타납니다. 압박 속에서도 무너지지 않는 액세스 정책, 유해한 프롬프트를 실제로 차단하는 필터, 규제기관을 만족시킬 만큼 상세한 로그가 필요합니다. HR Copilot을 재무 데이터와 격리하고, 범위를 설정해 SharePoint 보안 영역 침범을 막고, 응답이 어떻게 생성됐는지 증명하도록 로그를 태깅하는 일이 여기에 속합니다.</p>\n<p>테넌트 범위 없이 봇을 인사 저장소에 바로 연결하면 어떻게 될까요? 보험 혜택을 묻는 사용자에게 봇이 직원 급여 범위를 채팅창에 공개할 수 있습니다. 개인정보 유출과 사기 저하, 규제기관의 압박이 뒤따릅니다.</p>\n<p>시작점은 Azure AI Content Safety입니다. 폭력적이거나 외설적이거나 모욕적인 프롬프트와 응답을 사용자에게 닿기 전에 걸러냅니다. 하지만 이것은 기본입니다. Foundry와 Copilot Studio에서는 근거 확인, 관련성 점수, 투명성 대시보드, 설명 가능성을 포함한 평가 파이프라인을 구축해 임계값을 조정하고 입출력을 필터링하며 모델이 왜 그런 결과를 냈는지 설명하게 만들 수 있습니다.</p>\n<p>책임 소재도 분명히 해야 합니다. Microsoft가 안전장치를 제공하더라도 ID 잠금, 데이터 격리, 암호화 적용, 정책 구성은 여러분 테넌트의 몫입니다. 진정한 해결책은 테스트, 승인, 릴리스, 감사, 그리고 반복으로 이어지는 수명주기 거버넌스입니다. 모델은 진화하고 프롬프트는 변하고 출력은 빗나갈 수 있으니, 한 번 배포하고 손을 떼면 안 됩니다.</p>\n<p>일부는 책임 있는 AI가 속도를 늦춘다고 말하지만, 오히려 속도 때문에 사고가 나는 것을 막아 줍니다. 산길의 가드레일을 욕하는 운전자는 없습니다. 범위, 정책, 필터, 로그가 하는 일도 같습니다.</p>\n\n<h2>실전 적용을 위한 핵심 정리</h2>\n<ul>\n<li>입력 데이터를 정비하세요. 흐릿한 스캔이나 사진 같은 현실의 데이터를 전제로 설계해야 합니다.</li>\n<li>RAG를 쓸 때 검색 방식 하나로 만족하지 말고, Azure AI Search의 하이브리드 검색과 시맨틱 재순위 지정을 함께 쓰세요.</li>\n<li>평가 루프 예산을 처음부터 잡고, 근거성·관련성·일관성(그리고 유창성)을 지속적으로 측정하세요.</li>\n<li>에이전트는 업무 범위를 좁게 정하고, 검증 단계와 모니터링 체계를 갖추세요.</li>\n<li>에이전트에는 최소 권한을 부여하고, 감사 가능한 로그와 롤백 경로, 콘텐츠·동작 필터를 먼저 구축하세요.</li>\n<li>자율 에이전트는 프리뷰 단계임을 고려해 사람이 개입할 수 있는 구조를 유지하세요.</li>\n<li>Foundry의 사용량 기반 과금은 가격 계산기로 예측하고 사용량을 추적하세요.</li>\n<li>첫날부터 관측성, 프롬프트 플로우, 내장 평가기를 활용하세요.</li>\n<li>테스트, 승인, 릴리스, 감사를 반복하는 수명주기 거버넌스를 운영하세요.</li>\n</ul>\n\n<h2>결론</h2>\n<p>AI 환각을 막는 열쇠는 더 큰 모델이 아니라 근거 있는 데이터와 검증 체계입니다. 하이브리드 검색과 시맨틱 재순위 지정으로 RAG를 제대로 그라운딩하고, 지속적인 평가와 관측성으로 답변을 원천 데이터와 대조하며, 에이전트의 범위와 권한을 엄격히 관리해야 합니다. Azure AI Foundry와 Copilot Studio에 필요한 도구는 이미 갖춰져 있습니다. 함정은 이 플랫폼을 플러그 앤 플레이로 여기는 태도입니다. 거버넌스를 먼저 세우고, 실험은 그다음, 운영은 마지막에 하는 순서를 지킬 때 프로토타입이 실제 운영 환경에서 살아남는 AI가 됩니다.</p>",
+  "model": "claude-sonnet-5-5",
+  "info": {
+   "titel": "환각 없는 RAG를 위한 5단계",
+   "typ": "schritte",
+   "punkte": [
+    {
+     "kopf": "데이터 정비",
+     "text": "흐릿한 스캔과 사진 같은 현실 데이터를 전제로 정제하고 인덱싱한다."
+    },
+    {
+     "kopf": "하이브리드 검색",
+     "text": "Azure AI Search의 키워드·벡터 검색과 시맨틱 재순위로 올바른 컨텍스트를 상단에 둔다."
+    },
+    {
+     "kopf": "평가 루프",
+     "text": "근거성·관련성·일관성을 첫날부터 측정하고 원천 데이터와 대조한다."
+    },
+    {
+     "kopf": "범위 제한 에이전트",
+     "text": "최소 권한, 로깅과 롤백, 콘텐츠 필터, 사람의 개입 옵션을 갖춘다."
+    },
+    {
+     "kopf": "거버넌스 우선",
+     "text": "테스트, 승인, 릴리스, 감사를 반복하며 관측성으로 운영한다."
+    }
+   ]
+  },
+  "faq": [
+   {
+    "q": "멀티모달 AI 앱이 데모에서는 잘 되는데 실제 업무에서는 실패하는 이유가 뭔가요?",
+    "a": "데모는 깨끗한 입력으로 돌아가지만, 실제 업무에는 흐릿한 신분증 사본, 여러 번 복사된 PDF, 깨진 카메라로 찍은 송장 사진 같은 엉망인 데이터가 들어오기 때문입니다. 원인은 AI가 똑똑하지 않아서가 아니라 데이터가 준비되지 않았거나, 인덱싱되지 않았거나, 모니터링되지 않아서입니다."
+   },
+   {
+    "q": "RAG와 Azure AI Search로 AI 환각을 줄이려면 어떻게 해야 하나요?",
+    "a": "RAG는 모델을 지식 소스에 연결해 관련 데이터를 검색하고 그에 맞춰 답하게 합니다. 검색 방식 하나로 만족하지 말고 Azure AI Search의 키워드·벡터 하이브리드 검색과 시맨틱 재순위 지정을 함께 써야 합니다. 그러면 올바른 컨텍스트가 상단에 오고, 모델이 정책을 마음대로 지어내는 일이 줄어듭니다."
+   },
+   {
+    "q": "자율 에이전트를 도입하기 전에 어떤 안전장치를 갖춰야 하나요?",
+    "a": "세 가지가 필요합니다. 최소 권한만 부여하는 ID 및 액세스 범위 설정, 감사 가능한 기록과 복구 경로를 남기는 로깅 및 롤백, Azure AI Content Safety 등을 활용한 콘텐츠 및 동작 필터입니다. Copilot Studio의 자율 에이전트는 아직 프리뷰 단계이므로 사람이 개입할 수 있는 구조도 유지해야 합니다."
+   },
+   {
+    "q": "Azure AI Foundry를 쓸 때 흔한 실수와 해결 방법은 무엇인가요?",
+    "a": "설명서 없이 조립하기, 깨끗한 데모만 믿기, 사용량 기반 비용 방치, 평가 파이프라인 없이 프로토타입 밀어붙이기, 액세스 규칙 생략이 대표적입니다. 첫날부터 관측성, 프롬프트 플로우, 내장 평가기를 켜고, 하이브리드 검색으로 근거를 마련하며, 가격 계산기로 비용을 예측하고 사용량을 추적해야 합니다."
+   }
+  ],
+  "infos": [
+   {
+    "titel": "Copilot과 에이전트의 차이",
+    "typ": "vergleich",
+    "links": {
+     "titel": "Copilot",
+     "punkte": [
+      "질문에 답해 주는 도우미입니다.",
+      "사용자가 질문하고 답을 얻습니다.",
+      "통제권은 사용자에게 있습니다.",
+      "반응형으로 작동합니다."
+     ]
+    },
+    "rechts": {
+     "titel": "에이전트",
+     "punkte": [
+      "사용자를 기다리지 않고 스스로 판단합니다.",
+      "모호한 지침도 문자 그대로 따릅니다.",
+      "선제적으로 작동합니다.",
+      "잘못 판단하면 피해가 테넌트 전반으로 퍼질 수 있습니다."
+     ]
+    }
+   },
+   {
+    "titel": "Azure AI Foundry 흔한 실수 5가지",
+    "typ": "fakten",
+    "punkte": [
+     {
+      "wert": "실수 1",
+      "text": "설명서 없이 이케아처럼 조립하면 복잡한 PDF에서 무너지는 데모가 나옵니다."
+     },
+     {
+      "wert": "실수 2",
+      "text": "깨끗한 스튜디오 사진만 믿으면 흐릿한 폰 사진에서 오분류가 발생합니다."
+     },
+     {
+      "wert": "실수 3",
+      "text": "사용량 기반 비용을 방치하면 뜻밖의 청구서를 받게 됩니다."
+     },
+     {
+      "wert": "실수 4",
+      "text": "평가 파이프라인 없이 프로토타입을 밀어붙이면 신뢰가 떨어지고 예산이 삭감됩니다."
+     },
+     {
+      "wert": "실수 5",
+      "text": "액세스 규칙을 생략하면 제한된 인사 데이터가 20명에게 노출될 수 있습니다."
+     }
+    ]
+   }
+  ]
+ }
+}

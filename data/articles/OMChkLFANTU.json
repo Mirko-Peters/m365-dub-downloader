@@ -49,6 +49,42 @@
     "q": "Wie erreiche ich bei Entra Cloud Sync Hochverfügbarkeit?",
     "a": "Installieren Sie mehrere Provisioning Agents in derselben Active-Directory-Domäne. Alle nutzen dieselbe Konfiguration in Microsoft Entra. Fällt ein Agent aus, setzt ein anderer die Arbeit fort. In der Produktion sollten mindestens zwei Agents laufen, damit kein Single Point of Failure entsteht."
    }
+  ],
+  "infos": [
+   {
+    "titel": "Cloud Sync oder Entra Connect",
+    "typ": "vergleich",
+    "links": {
+     "titel": "Cloud Sync passt gut",
+     "punkte": [
+      "Einfaches lokales Setup mit in der Cloud verwalteten Einstellungen",
+      "Hauptsächlich Benutzer, Gruppen und Kontakte werden benötigt",
+      "Getrennte Gesamtstrukturen ohne Kopplung der lokalen Netzwerke anbinden",
+      "Start mit einer Geschäftseinheit oder kleinen Gruppe per gruppenbasiertem Bereich"
+     ]
+    },
+    "rechts": {
+     "titel": "Entra Connect bleibt sinnvoll",
+     "punkte": [
+      "Pass-through- oder Verbund-Authentifizierung wird genutzt",
+      "Komplexe lokale Synchronisierungsregeln sind im Einsatz",
+      "Exchange-Hybrid muss Details zurück ins Active Directory schreiben",
+      "Über Jahre gewachsene benutzerdefinierte Regeln und detaillierte Filterlogik"
+     ]
+    }
+   },
+   {
+    "titel": "Häufige Stolpersteine bei der Umstellung",
+    "typ": "checkliste",
+    "punkte": [
+     "Nicht nur wegen des „neuen“ Tools umsteigen",
+     "Verborgene Abhängigkeiten wie Anmeldemethode, Exchange, Geräte und Writeback prüfen",
+     "Synchronisierungsbereich klein halten, damit Test- und Dienstkonten nicht in Microsoft 365 landen",
+     "Mappings einfach halten und Standards bevorzugen",
+     "Mindestens zwei Provisioning Agents in der Produktion einsetzen",
+     "Nicht allein auf den grünen Status verlassen, Portalprotokolle prüfen"
+    ]
+   }
   ]
  }
 }

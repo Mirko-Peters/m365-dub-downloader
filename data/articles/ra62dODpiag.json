@@ -1,0 +1,104 @@
+{
+ "de": {
+  "html": "<p>Wer mit Microsoft 365 Anwendungen baut, steht früher oder später vor derselben Frage: Wie erfährt meine App, dass sich etwas geändert hat? Der naheliegende Weg ist, Microsoft Graph immer wieder zu fragen. Das funktioniert, ist aber ineffizient und liefert trotzdem keine Echtzeitdaten.</p>\n<p>Microsoft Graph Webhooks, offiziell Änderungsbenachrichtigungen, drehen das Prinzip um: Nicht Ihre App fragt ständig nach, sondern Graph meldet sich, sobald etwas passiert. Dieser Artikel erklärt, wie das funktioniert, worauf Sie bei Einrichtung und Betrieb achten müssen und wie Sie Webhooks mit Delta-Abfragen zuverlässig machen.</p>\n\n<h2>Das Polling-Problem: Warum ständiges Nachfragen schadet</h2>\n<p>Stellen Sie sich vor, Sie erwarten einen wichtigen Brief und gehen den ganzen Tag alle zehn Minuten zum Briefkasten. Meistens ist er leer. Genau so arbeitet Polling: Die App fragt Microsoft Graph „Gibt es neue Benutzer?“, Graph antwortet „Nein“, die App wartet kurz und fragt erneut.</p>\n<h3>Verschwendete Anfragen und Drosselung</h3>\n<p>Fragt Ihre App alle fünf Minuten nach Benutzeränderungen, sind das zwölf Anfragen pro Stunde – und zwar nur für eine einzige Ressource. Kommen Gruppen, Dateien, Nachrichten und Kalenderereignisse hinzu, summieren sich pro Tag tausende unnötige Aufrufe, von denen die meisten keine einzige Änderung zurückliefern. Wenn tausende Apps gleichzeitig so vorgehen, entsteht enormer Lärm.</p>\n<p>Microsoft begrenzt deshalb die Anzahl der Aufrufe pro App. Wer zu aggressiv abfragt, wird gedrosselt, von manchen Entwicklern „Graph Jail“ genannt. Dann wird alles langsamer, und auch legitime Anfragen stauen sich.</p>\n<h3>Trotzdem keine Echtzeit</h3>\n<p>Selbst bei einer Abfrage alle fünf Minuten bekommen Sie keine Echtzeitdaten. Ändert sich eine Minute nach der letzten Abfrage etwas, erfahren Sie erst vier Minuten später davon. Sie verbrauchen also Ressourcen und verpassen trotzdem das Zeitfenster.</p>\n\n<h2>Was sind Graph Webhooks? Änderungsbenachrichtigungen erklärt</h2>\n<p>Ein Webhook ist eine HTTP-Anforderung, die automatisch gesendet wird, wenn etwas passiert. Sie fragen nicht danach, der Server schickt sie Ihnen. Ein passendes Bild ist die Türklingel: Sie stehen nicht draußen und prüfen alle paar Minuten die Tür, sondern warten, bis es klingelt.</p>\n<p>Webhooks werden manchmal „umgekehrte APIs“ genannt. Bei einer normalen API stellt Ihre App eine Anfrage und der Server antwortet. Bei einem Webhook sendet der Server die Anfrage an Ihre App. Microsoft Graph nutzt dieses Prinzip unter dem Namen Änderungsbenachrichtigungen. Gemeint ist dasselbe.</p>\n<p>Ändert sich etwas in Microsoft 365, schickt Graph eine HTTP-POST-Nachricht an eine URL, die Sie angegeben haben. Auslöser können sein:</p>\n<ul>\n<li>ein neuer Benutzer in Ihrem Mandanten</li>\n<li>eine aktualisierte Datei in SharePoint</li>\n<li>eine gesendete Nachricht in Teams</li>\n<li>ein geändertes Kalenderereignis</li>\n<li>ein neues Mitglied in einer Gruppe</li>\n</ul>\n<h3>Zwei Anwendungsfälle</h3>\n<p>Angenommen, ein Unternehmen betreibt ein Zeiterfassungssystem und möchte für neue Mitarbeiter automatisch ein Konto anlegen. Mit Webhooks abonnieren Sie die Benutzererstellung. Tritt jemand bei, erhält Ihre App eine Benachrichtigung, validiert sie und erstellt das Konto innerhalb von Sekunden.</p>\n<p>Ein zweites Beispiel ist eine SharePoint-Dokumentbibliothek, in die Belege hochgeladen werden. Statt die Bibliothek ständig abzufragen, werden Sie benachrichtigt, sobald eine Datei hinzukommt. Ihre App ruft die Datei ab, prüft, ob es ein Beleg ist, und verarbeitet sie automatisch.</p>\n\n<h2>So funktionieren Microsoft Graph Webhooks: Abonnement, Benachrichtigung, Endpunkt</h2>\n<p>Der Ablauf beruht auf drei Bausteinen:</p>\n<ol>\n<li><strong>Abonnement:</strong> Ihre Anforderung an Graph, über bestimmte Änderungen informiert zu werden. Graph speichert sie und überwacht die Ressource fortan in Ihrem Auftrag.</li>\n<li><strong>Benachrichtigung:</strong> Die eigentliche HTTP-POST-Nachricht an Ihre URL. Sie enthält Details zur Änderung, etwa welche Ressource betroffen ist, welche Art von Änderung stattfand und wann.</li>\n<li><strong>Endpunkt:</strong> Eine URL auf Ihrem Server, die diese POST-Anfragen entgegennimmt.</li>\n</ol>\n<p>Ihr Endpunkt braucht keine komplexe Logik. Er nimmt die Benachrichtigung an, bestätigt sie und gibt sie zur Verarbeitung weiter. Er muss öffentlich erreichbar sein, HTTPS sprechen und schnell antworten. Beim Polling wären es hunderte GET-Anfragen, die meist mit „Nein“ beantwortet werden. Mit Webhooks genügt eine Nachricht, wenn wirklich etwas passiert.</p>\n\n<h2>Abonnement erstellen und den Validierungshandshake bestehen</h2>\n<p>Ein Abonnement legen Sie an, indem Sie eine HTTP-POST-Anforderung an den Abonnement-Endpunkt von Microsoft Graph senden. Im Anforderungstext sind vier Angaben nötig:</p>\n<ul>\n<li><strong>Benachrichtigungs-URL:</strong> Adresse Ihres Endpunkts. Sie muss HTTPS verwenden und öffentlich erreichbar sein, da Graph sie über das Internet aufruft.</li>\n<li><strong>Ressource:</strong> Was überwacht werden soll, zum Beispiel Benutzer oder Nachrichten im Posteingang.</li>\n<li><strong>Änderungstyp:</strong> erstellt, aktualisiert, gelöscht oder eine Kombination. Wer nur neue Benutzer braucht, wählt „erstellt“.</li>\n<li><strong>Ablaufdatum und -uhrzeit:</strong> Danach sendet Graph keine Benachrichtigungen mehr.</li>\n</ul>\n<p>Optional, aber wichtig ist der <strong>Client-Status</strong>: eine geheime Zeichenfolge, die Sie selbst festlegen. Graph fügt sie in jede Benachrichtigung ein. So können Sie später prüfen, ob eine Nachricht wirklich zu Ihrem Abonnement gehört.</p>\n<h3>Der Validierungshandshake</h3>\n<p>Bevor das Abonnement live geht, prüft Graph, ob Ihr Endpunkt echt und empfangsbereit ist. Dazu sendet Graph sofort nach Ihrer Anfrage einen Testaufruf an die Benachrichtigungs-URL. Er enthält den Abfrageparameter „validationToken“, eine zufällige Zeichenfolge. Ihr Endpunkt muss dieses Token innerhalb von 10 Sekunden als reinen Text zurücksenden.</p>\n<p>Hier stolpern viele Entwickler:</p>\n<ul>\n<li>Das Token muss als einfacher Text zurückkommen, nicht als JSON und nicht als HTML.</li>\n<li>Der Content-Type-Header muss text/plain lauten.</li>\n<li>Wird die Antwort in JSON verpackt oder anders codiert, schlägt die Validierung fehl und das Abonnement wird nicht erstellt.</li>\n<li>Der Validierungsdienst von Graph unterstützt TLS 1.3 nicht zuverlässig und verhandelt TLS 1.2. Akzeptiert Ihr Endpunkt ausschließlich TLS 1.3, scheitert der Handshake, bevor Ihr Anwendungscode überhaupt läuft. Stellen Sie sicher, dass TLS 1.2 zumindest für diesen Schritt unterstützt wird.</li>\n</ul>\n<p>Der Handshake findet nur einmal pro Abonnement statt. Danach vertraut Graph Ihrem Endpunkt für die gesamte Laufzeit.</p>\n\n<h2>Benachrichtigungen verarbeiten: Sicherheit, Tempo und Drosselung</h2>\n<p>Sobald das Abonnement aktiv ist, sendet Graph bei jeder Änderung eine POST-Nachricht mit einem JSON-Objekt. Es enthält die geänderte Ressource, die Art der Änderung (erstellt, aktualisiert oder gelöscht), einen Zeitstempel und den von Ihnen festgelegten Client-Status.</p>\n<h3>Erst prüfen, dann verarbeiten</h3>\n<p>Das Erste, was Ihr Endpunkt tun sollte: den Client-Status in der Benachrichtigung mit dem gespeicherten Geheimnis vergleichen. Stimmt er nicht überein, verwerfen Sie die Nachricht sofort. Ihr Endpunkt liegt im öffentlichen Internet, jeder, der die URL kennt, könnte eine Nachricht schicken. Ohne diese Prüfung können Sie echte und gefälschte Benachrichtigungen nicht unterscheiden.</p>\n<h3>Schnell antworten</h3>\n<p>Graph erwartet innerhalb von drei Sekunden eine HTTP-Antwort der Stufe 200. Dauert das zu oft zu lange, greift eine Drosselung:</p>\n<ul>\n<li>Überschreiten mehr als 10 % der Antworten innerhalb von 10 Minuten das Zeitfenster von drei Sekunden, markiert Graph den Endpunkt als langsam. Neue Benachrichtigungen werden dann um 10 Minuten verzögert, die Echtzeit geht verloren.</li>\n<li>Überschreiten mehr als 15 % der Antworten 10 Sekunden, gilt der Endpunkt als „verworfen“. Benachrichtigungen werden dann für 10 Minuten vollständig verworfen, und verworfene Benachrichtigungen lassen sich nicht wiederherstellen.</li>\n</ul>\n<p>Die bewährte Methode lautet daher: Benachrichtigung sofort quittieren und asynchron verarbeiten. Der Endpunkt prüft den Client-Status, nimmt die Nachricht an und gibt so schnell wie möglich eine Antwort der Stufe 200 zurück, etwa 202 Accepted. Danach landet die Benachrichtigung in einer Warteschlange, etwa einer Azure-Warteschlange, einem Service Bus oder sogar einer einfachen Datenbanktabelle. Ein Hintergrund-Worker erledigt die eigentliche Arbeit.</p>\n<h3>Erreichbarkeit</h3>\n<p>Der Endpunkt muss ausnahmslos HTTPS verwenden und öffentlich zugänglich sein. Hinter einer Firewall oder einem VPN kann Graph ihn nicht erreichen. Für die Entwicklung lässt sich ein öffentlicher Tunnel zum lokalen Rechner einrichten. In der Produktion muss der Endpunkt dagegen an einem Ort liegen, an dem Graph ihn findet.</p>\n\n<h2>Abonnements verlängern und mit Delta-Abfragen absichern</h2>\n<p>Abonnements laufen ab. Die maximale Dauer hängt von der Ressource ab: Für Benutzer und Gruppen beträgt sie etwa drei Tage, für Laufwerkselemente in SharePoint oder OneDrive kann sie bis zu 30 Tage betragen. Prüfen Sie die Dokumentation für jeden Ressourcentyp. Nach Ablauf sendet Graph keine Benachrichtigungen mehr, und das fällt oft erst auf, wenn man sich wundert, warum nichts mehr passiert.</p>\n<h3>Verlängerung und Lebenszyklusbenachrichtigungen</h3>\n<p>Zum Verlängern senden Sie mit der Abonnement-ID eine PATCH-Anforderung an den Abonnement-Endpunkt und setzen ein neues Ablaufdatum. Das geht beliebig oft, solange es vor dem aktuellen Ablauf geschieht.</p>\n<p>Unterstützung bieten Lebenszyklusbenachrichtigungen. Beim Erstellen des Abonnements können Sie dafür eine eigene URL angeben. Graph meldet sich dort, wenn das Abonnement bald abläuft, wenn ein Zugriffstoken bald abläuft oder wenn sich Berechtigungen Ihrer App ändern. Sie müssen den Ablauf also nicht erraten.</p>\n<h3>Delta-Abfrage als Sicherheitsnetz</h3>\n<p>Was aber, wenn Ihr Endpunkt zeitweise ausfällt oder Benachrichtigungen verworfen werden? Hier hilft die Delta-Abfrage, ein eigenes Feature von Microsoft Graph. Sie beantwortet die Frage: „Was hat sich seit meiner letzten Prüfung geändert?“</p>\n<ol>\n<li>Der erste Aufruf der Delta-Abfrage, etwa für Benutzer, liefert alle Benutzer und zusätzlich einen Delta-Link.</li>\n<li>Diesen Link speichern Sie.</li>\n<li>Beim nächsten Mal nutzen Sie den Delta-Link und erhalten nur noch neue, aktualisierte und gelöschte Benutzer.</li>\n</ol>\n<p>Das ist, als würden Sie eine Liste mit Neuigkeiten lesen, statt jedes Mal die ganze Enzyklopädie. Die Kombination ist das empfohlene Muster: Webhooks sagen, <em>dass</em> sich etwas geändert hat, die Delta-Abfrage sagt, <em>was</em> sich geändert hat. Webhooks sorgen für Geschwindigkeit, Delta-Abfragen für Zuverlässigkeit.</p>\n<p>Typischer Ablauf:</p>\n<ol>\n<li>Webhook-Abonnement für Benutzeränderungen einrichten.</li>\n<li>Eine erste Delta-Abfrage ausführen, Basisstatus abrufen und den Delta-Link speichern.</li>\n<li>Bei einer eingehenden Benachrichtigung die Delta-Abfrage mit dem gespeicherten Link ausführen.</li>\n<li>Änderung verarbeiten und den neuen Delta-Link aus der Antwort speichern.</li>\n<li>Bei verpassten Benachrichtigungen oder abgelaufenem Abonnement die Delta-Abfrage einfach erneut ausführen.</li>\n</ol>\n\n<h2>Praxisbeispiel: Onboarding eines neuen Mitarbeiters</h2>\n<p>Die Personalabteilung legt in der Microsoft Entra ID ein Konto für einen neuen Mitarbeiter an. Weil Sie ein Webhook-Abonnement für Benutzeränderungen eingerichtet haben, bemerkt Graph das sofort und sendet einen POST an Ihren Endpunkt.</p>\n<p>Der Endpunkt prüft den Client-Status und antwortet innerhalb von drei Sekunden mit 202 Accepted. Der Hintergrund-Worker übernimmt die Benachrichtigung. Da sie nicht alle Details enthält, führt er mit dem gespeicherten Delta-Link eine Delta-Abfrage aus und erhält die vollständigen Informationen: Name, E-Mail-Adresse, Abteilung, Stellenbezeichnung und Vorgesetzte. Damit erstellt er ein Konto im externen Zeiterfassungssystem, sendet eine Willkommens-E-Mail und trägt den Mitarbeiter in die passenden Verteilerlisten ein.</p>\n<p>All das geschieht wenige Sekunden nach der Kontoerstellung, ohne Polling und ohne manuelle Schritte. Ohne Webhooks wären es hunderte Abfragen pro Tag, und es könnte trotzdem mehrere Minuten dauern, bis der neue Benutzer auffällt.</p>\n\n<h2>Häufige Fehler und Stolpersteine</h2>\n<ul>\n<li><strong>Falsches Antwortformat bei der Validierung:</strong> Das Token muss als text/plain zurückgegeben werden, nicht als JSON oder HTML.</li>\n<li><strong>Nur TLS 1.3 aktiviert:</strong> Der Handshake scheitert, weil Graph TLS 1.2 verhandelt.</li>\n<li><strong>Endpunkt nicht öffentlich oder ohne HTTPS:</strong> Graph sendet keine Benachrichtigungen an HTTP-Endpunkte oder an Adressen hinter Firewall oder VPN.</li>\n<li><strong>Zu langsame Antworten:</strong> Aufwendige Verarbeitung im Request-Zyklus führt zu Verzögerung oder zum dauerhaften Verlust von Benachrichtigungen.</li>\n<li><strong>Client-Status nicht geprüft:</strong> Gefälschte Nachrichten lassen sich dann nicht erkennen.</li>\n<li><strong>Abonnement vergessen:</strong> Ohne rechtzeitige Verlängerung enden die Benachrichtigungen unbemerkt.</li>\n<li><strong>Kein Fallback:</strong> Ohne Delta-Abfrage bleiben verpasste Änderungen verloren.</li>\n</ul>\n\n<h2>Praktische Takeaways</h2>\n<ul>\n<li>Ersetzen Sie ständiges Polling durch Webhooks, um unnötige Anfragen, Drosselung und Verzögerungen zu vermeiden.</li>\n<li>Ein Abonnement braucht Benachrichtigungs-URL, Ressource, Änderungstyp und Ablaufdatum. Ein Client-Status erhöht die Sicherheit.</li>\n<li>Beantworten Sie den Validierungshandshake binnen 10 Sekunden als text/plain und unterstützen Sie TLS 1.2.</li>\n<li>Prüfen Sie bei jeder Benachrichtigung zuerst den Client-Status.</li>\n<li>Antworten Sie innerhalb von drei Sekunden mit einem 2xx-Status und verarbeiten Sie asynchron über eine Warteschlange.</li>\n<li>Verlängern Sie Abonnements per PATCH vor Ablauf und nutzen Sie Lebenszyklusbenachrichtigungen als Erinnerung.</li>\n<li>Kombinieren Sie Webhooks mit Delta-Abfragen und speichern Sie den jeweils aktuellen Delta-Link.</li>\n<li>Prüfen Sie Ihre bestehenden Abfrageprozesse, etwa für freigegebene Postfächer, SharePoint-Bibliotheken oder Benutzer-Updates für ein HR-System, auf Webhook-Potenzial.</li>\n</ul>\n\n<h2>Fazit</h2>\n<p>Microsoft Graph Webhooks verwandeln eine ständige Fragerei in ein ereignisgesteuertes Modell: Graph meldet Änderungen, Ihre App reagiert. Das spart Anfragen, vermeidet Drosselung und bringt echte Echtzeit. Damit es zuverlässig läuft, brauchen Sie einen schnellen, sicheren HTTPS-Endpunkt, eine saubere Abonnementverwaltung und Delta-Abfragen als Sicherheitsnetz. Meist müssen Sie dafür nicht alles neu bauen, sondern können bestehende Abfragen schrittweise ersetzen.</p>",
+  "model": "claude-sonnet-5-5",
+  "info": {
+   "titel": "Graph Webhooks statt Polling",
+   "typ": "schritte",
+   "punkte": [
+    {
+     "kopf": "Abonnement erstellen",
+     "text": "POST mit Benachrichtigungs-URL, Ressource, Änderungstyp, Ablaufdatum und geheimem Client-Status an Microsoft Graph senden."
+    },
+    {
+     "kopf": "Endpunkt validieren",
+     "text": "Validierungstoken binnen 10 Sekunden als text/plain zurückgeben; TLS 1.2 muss unterstützt werden."
+    },
+    {
+     "kopf": "Benachrichtigung prüfen",
+     "text": "Client-Status vergleichen, gefälschte Nachrichten verwerfen und innerhalb von drei Sekunden mit 2xx antworten."
+    },
+    {
+     "kopf": "Asynchron verarbeiten",
+     "text": "Benachrichtigung in eine Warteschlange legen; ein Hintergrund-Worker erledigt die eigentliche Arbeit."
+    },
+    {
+     "kopf": "Delta-Abfrage nutzen",
+     "text": "Mit gespeichertem Delta-Link genau abrufen, was sich geändert hat, und verpasste Änderungen nachholen."
+    },
+    {
+     "kopf": "Abonnement verlängern",
+     "text": "Per PATCH vor Ablauf ein neues Ablaufdatum setzen; Lebenszyklusbenachrichtigungen erinnern daran."
+    }
+   ]
+  },
+  "faq": [
+   {
+    "q": "Was sind Microsoft Graph Webhooks und wie funktionieren sie?",
+    "a": "Microsoft Graph Webhooks, offiziell Änderungsbenachrichtigungen, drehen das Polling um: Ihre App fragt nicht ständig nach, sondern Graph sendet bei einer Änderung in Microsoft 365 eine HTTP-POST-Nachricht an eine von Ihnen angegebene URL. Grundlage sind Abonnement, Benachrichtigung und Endpunkt."
+   },
+   {
+    "q": "Warum scheitert der Validierungshandshake beim Erstellen eines Graph-Abonnements?",
+    "a": "Häufige Ursachen: Der Endpunkt gibt das validationToken nicht binnen 10 Sekunden als reinen Text mit Content-Type text/plain zurück, sondern als JSON oder HTML. Auch ein Endpunkt, der nur TLS 1.3 akzeptiert, lässt den Handshake scheitern, da Graph TLS 1.2 verhandelt."
+   },
+   {
+    "q": "Wie schnell muss mein Webhook-Endpunkt auf Graph-Benachrichtigungen antworten?",
+    "a": "Graph erwartet innerhalb von drei Sekunden eine HTTP-Antwort der Stufe 200. Überschreiten über 10 % der Antworten dieses Limit, wird der Endpunkt verzögert; bei über 15 % mit mehr als 10 Sekunden werden Benachrichtigungen verworfen. Empfohlen: sofort quittieren und asynchron über eine Warteschlange verarbeiten."
+   },
+   {
+    "q": "Wie verlängere ich ein Graph-Abonnement und verhindere verpasste Änderungen?",
+    "a": "Senden Sie vor Ablauf eine PATCH-Anforderung mit der Abonnement-ID und einem neuen Ablaufdatum; Lebenszyklusbenachrichtigungen erinnern daran. Gegen verpasste Änderungen kombinieren Sie Webhooks mit Delta-Abfragen: Der gespeicherte Delta-Link liefert alle neuen, geänderten und gelöschten Elemente seit der letzten Prüfung."
+   }
+  ],
+  "infos": [
+   {
+    "titel": "Polling vs. Webhooks",
+    "typ": "vergleich",
+    "links": {
+     "titel": "Polling",
+     "punkte": [
+      "App fragt Graph ständig selbst nach Änderungen",
+      "Meiste Anfragen liefern keine einzige Änderung zurück",
+      "Zu aggressives Abfragen führt zur Drosselung durch Microsoft",
+      "Keine Echtzeit: Änderungen fallen erst Minuten später auf"
+     ]
+    },
+    "rechts": {
+     "titel": "Webhooks",
+     "punkte": [
+      "Graph meldet sich selbst, sobald etwas passiert",
+      "Eine Nachricht genügt, wenn wirklich etwas geschieht",
+      "Deutlich weniger Anfragen und kaum Drosselungsrisiko",
+      "Reaktion auf Änderungen innerhalb weniger Sekunden"
+     ]
+    }
+   },
+   {
+    "titel": "Wichtige Grenzwerte bei Webhooks",
+    "typ": "fakten",
+    "punkte": [
+     {
+      "wert": "10 Sekunden",
+      "text": "Zeit, um beim Validierungshandshake das validationToken als text/plain zurückzusenden"
+     },
+     {
+      "wert": "3 Sekunden",
+      "text": "Erwartete Antwortzeit des Endpunkts mit einem 2xx-Status auf jede Benachrichtigung"
+     },
+     {
+      "wert": "10 %",
+      "text": "Langsame Antworten innerhalb von 10 Minuten: Benachrichtigungen werden um 10 Minuten verzögert"
+     },
+     {
+      "wert": "15 %",
+      "text": "Antworten über 10 Sekunden: Benachrichtigungen werden 10 Minuten lang verworfen"
+     },
+     {
+      "wert": "3 bis 30 Tage",
+      "text": "Maximale Abonnementdauer, je nach Ressource, etwa Benutzer, Gruppen oder Laufwerkselemente"
+     }
+    ]
+   }
+  ]
+ }
+}
