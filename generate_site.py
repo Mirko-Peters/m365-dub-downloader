@@ -16,7 +16,7 @@ _dom = (ROOT / "domain.txt").read_text().strip() if (ROOT / "domain.txt").exists
 BASE = os.environ.get("SITE_BASE") or (f"https://{_dom}" if _dom else "https://mirko-peters.github.io/m365-dub-downloader")
 BASE = BASE.rstrip("/")
 TODAY = date.today().isoformat()
-INDEXNOW_KEY = "c1d5e8a7b3f94a6e8d2b7f0a9c4e6b13"
+INDEXNOW_KEY = "0348df8af6514d5bae4d9f9a5ba51f57"
 
 YT_CHANNEL = "https://www.youtube.com/channel/UCIdo4tN3khKldHP3733E9JA"
 LINKEDIN = "https://www.linkedin.com/in/m365showpodcast/"

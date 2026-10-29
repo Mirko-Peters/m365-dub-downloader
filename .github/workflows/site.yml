@@ -55,7 +55,7 @@ jobs:
           import json, os, re, urllib.request
           dom = open("domain.txt").read().strip() if os.path.exists("domain.txt") else ""
           base = ("https://" + dom) if dom else os.environ["PAGE_URL"].rstrip("/")
-          key = "c1d5e8a7b3f94a6e8d2b7f0a9c4e6b13"
+          key = "0348df8af6514d5bae4d9f9a5ba51f57"
           def get(u): return urllib.request.urlopen(u, timeout=60).read().decode()
           urls = []
           for sm in re.findall(r"<loc>(.*?)</loc>", get(base + "/sitemap.xml")):
