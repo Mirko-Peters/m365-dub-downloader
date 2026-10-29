@@ -8,6 +8,24 @@
   var KINDS = ["linkedin", "github", "youtube", "x", "mastodon", "bluesky", "twitch", "blog", "podcast", "newsletter", "website", "other"], KL = { linkedin: "LinkedIn", github: "GitHub", youtube: "YouTube", x: "X", mastodon: "Mastodon", bluesky: "Bluesky", twitch: "Twitch", blog: "Blog", podcast: "Podcast", newsletter: "Newsletter", website: "Website", other: "Link" };
   function h(tag, a, kids) { var e = document.createElement(tag); for (var k in (a || {})) { if (k === "class") e.className = a[k]; else if (k === "text") e.textContent = a[k]; else if (k.slice(0, 2) === "on") e.addEventListener(k.slice(2), a[k]); else e.setAttribute(k, a[k]); } (kids || []).forEach(function (c) { if (c != null) e.appendChild(typeof c === "string" ? document.createTextNode(c) : c); }); return e; }
   function api(path, o) { o = o || {}; o.credentials = "include"; o.headers = Object.assign({ "x-requested-with": "m365" }, o.headers || {}); if (o.body && typeof o.body !== "string") { o.body = JSON.stringify(o.body); o.headers["content-type"] = "application/json"; } return fetch(X.api + path, o).then(function (r) { return r.json().then(function (j) { return { s: r.status, j: j }; }); }); }
+  var IQ = de ? { t: "Bild", up: "Bild hochladen", rm: "Entfernen", first: "Speichere zuerst dein Profil mit Profil-Adresse, dann kannst du ein Bild hochladen.", ok: "✓ Bild gespeichert.", bad: "Das Bild konnte nicht gespeichert werden (nur Bilddateien).", hint: "Wird auf 256×256 Pixel verkleinert und nur bei öffentlichem Profil angezeigt." } : { t: "Picture", up: "Upload picture", rm: "Remove", first: "Save your profile with a profile address first, then you can upload a picture.", ok: "✓ Picture saved.", bad: "The picture could not be saved (images only).", hint: "Resized to 256×256 pixels and shown only on public profiles." };
+  function imgUI(kind, handle0, img0) {
+    var w = h("div", { class: "pic" }), im = h("img", { alt: "", width: 96, height: 96, style: "border-radius:" + (kind === "u" ? "50%" : "12px") + ";object-fit:cover;background:var(--card);border:1px solid var(--bd)" }), msg = h("span", { class: "cmut", role: "status", "aria-live": "polite" });
+    var f = h("input", { type: "file", accept: "image/png,image/jpeg,image/webp", "aria-label": IQ.up, style: "display:none" });
+    function show(hd, v) { if (hd && v) { im.src = X.api + "/api/img/" + kind + "/" + hd + ".jpg?v=" + v; im.hidden = false; } else im.hidden = true; }
+    show(handle0, img0);
+    function resize(file) { return new Promise(function (res, rej) { var u = URL.createObjectURL(file), i = new Image(); i.onload = function () { var c = document.createElement("canvas"); c.width = c.height = 256; var g = c.getContext("2d"), m = Math.min(i.width, i.height), sx = (i.width - m) / 2, sy = (i.height - m) / 2; g.fillStyle = "#fff"; g.fillRect(0, 0, 256, 256); g.drawImage(i, sx, sy, m, m, 0, 0, 256, 256); URL.revokeObjectURL(u); var q = 0.88; (function t() { c.toBlob(function (b) { if (b && b.size > 140000 && q > 0.4) { q -= 0.15; t(); } else if (b) res(b); else rej(); }, "image/jpeg", q); })(); }; i.onerror = function () { rej(); }; i.src = u; }); }
+    var up = h("button", { type: "button", class: "btn", text: IQ.up, onclick: function () { if (!w.handle()) { msg.textContent = IQ.first; return; } f.click(); } });
+    var rm = h("button", { type: "button", class: "btn", text: IQ.rm, onclick: function () { api("/api/img/" + kind + "/" + w.handle(), { method: "DELETE" }).then(function () { show(null); msg.textContent = ""; }); } });
+    f.addEventListener("change", function () {
+      var file = f.files && f.files[0]; if (!file) return; msg.textContent = "…";
+      resize(file).then(function (b) { return fetch(X.api + "/api/img/" + kind + "/" + w.handle(), { method: "POST", credentials: "include", headers: { "x-requested-with": "m365", "content-type": "image/jpeg" }, body: b }).then(function (r) { return r.json(); }); })
+        .then(function (j) { if (j && j.ok) { show(w.handle(), j.img); msg.textContent = IQ.ok; } else msg.textContent = IQ.bad; }).catch(function () { msg.textContent = IQ.bad; }); f.value = "";
+    });
+    w.handle = function () { return ""; };
+    w.appendChild(h("label", { text: IQ.t, style: "display:block;margin-top:14px;font-weight:600" })); w.appendChild(h("div", { style: "display:flex;gap:12px;align-items:center;flex-wrap:wrap" }, [im, up, rm, f, msg])); w.appendChild(h("p", { class: "cmut", text: IQ.hint, style: "margin:4px 0 0;font-size:.85rem" }));
+    return w;
+  }
   var uid = 0; function lab(text, el) { var id = "pe" + (++uid); el.id = id; return h("div", {}, [h("label", { for: id, text: text, style: "display:block;margin-top:.5em;font-weight:600" }), el]); }
   var inp = function (max, v) { var e = h("input", { type: "text", maxlength: max || 120 }); e.value = v || ""; return e; };
   var chk = function (text, v) { var c = h("input", { type: "checkbox" }); c.checked = !!v; return { c: c, w: h("label", { style: "display:block;margin:.4em 0" }, [c, " " + text]) }; };
@@ -58,9 +76,11 @@
     about.value = o.about || ""; ["", "1", "2-10", "11-50", "51-200", "201-1000", "1000+"].forEach(function (s) { size.appendChild(h("option", { value: s, text: s || "–" })); }); size.value = o.size || "";
     if (org) handle.disabled = true;
     var pub = chk(Q.pub, o.public), prog = programsUI(o.programs, true), ex = pickerRows(all, function (x) { return ["product", "platform", "concept", "category"].indexOf(x.type) > -1; }, (o.expertise || []).map(function (x) { return { e: x.e, level: x.level }; }), false, Q.addexp), ch = channelsUI(o.channels);
-    [pub.w, lab(Q.handle, handle), lab(Q.orgname, name), lab(Q.tagline, tag), lab(de ? "Über uns (ohne Links)" : "About us (no links)", about), lab(Q.site, site), lab(Q.country, country), lab(Q.size, size), h("h4", { text: Q.prog }), prog, h("h4", { text: Q.exp }), ex, h("h4", { text: Q.chan }), ch].forEach(function (x) { f.appendChild(x); });
+    var pic = imgUI("o", o.handle, o.img); pic.handle = function () { return o.handle || ""; };
+    [pub.w, pic, lab(Q.handle, handle), lab(Q.orgname, name), lab(Q.tagline, tag), lab(de ? "Über uns (ohne Links)" : "About us (no links)", about), lab(Q.site, site), lab(Q.country, country), lab(Q.size, size), h("h4", { text: Q.prog }), prog, h("h4", { text: Q.exp }), ex, h("h4", { text: Q.chan }), ch].forEach(function (x) { f.appendChild(x); });
     f.appendChild(h("div", { class: "btns" }, [saveBtn(Q.save, function () {
       var e = ex.get(); if (e === null) { msg.textContent = Q.bad_expertise; return Promise.resolve(null); }
+      o.handle = handle.value.trim().toLowerCase();
       return api("/api/org", { method: "POST", body: { handle: handle.value.trim().toLowerCase(), name: name.value, tagline: tag.value, about: about.value, website: site.value.trim(), country: country.value, size: size.value, public: pub.c.checked, programs: prog.get(), expertise: e, channels: ch.get() } }).then(function (r) { if (r.s === 200 && onDone) onDone(); return r; });
     }, msg)])); f.appendChild(msg); return f;
   }
@@ -72,11 +92,12 @@
     about.value = p.about || "";
     var prog = programsUI(p.programs, false), ex = pickerRows(all, function (x) { return ["cert", "person", "event", "media"].indexOf(x.type) < 0; }, (p.expertise || []).map(function (x) { return { e: x.e, level: x.level }; }), false, Q.addexp);
     var cert = pickerRows(all, function (x) { return x.type === "cert"; }, (p.certs || []).map(function (x) { return { e: x.e, year: x.year, url: x.url }; }), true, Q.addcert), ch = channelsUI(p.channels);
-    [pub.w, lab(Q.handle, handle), lab(Q.headline, head), lab(Q.about, about), lab(Q.company, company), lab(Q.job, job), lab(Q.country, country), so.w, h("h3", { text: Q.prog }), prog, h("h3", { text: Q.exp }), ex, h("h3", { text: Q.certs }), cert, h("h3", { text: Q.chan }), ch].forEach(function (x) { sec.appendChild(x); });
+    var pic = imgUI("u", p.handle, p.img); pic.handle = function () { return p.handle || ""; };
+    [pub.w, pic, lab(Q.handle, handle), lab(Q.headline, head), lab(Q.about, about), lab(Q.company, company), lab(Q.job, job), lab(Q.country, country), so.w, h("h3", { text: Q.prog }), prog, h("h3", { text: Q.exp }), ex, h("h3", { text: Q.certs }), cert, h("h3", { text: Q.chan }), ch].forEach(function (x) { sec.appendChild(x); });
     sec.appendChild(h("div", { class: "btns" }, [saveBtn(Q.save, function () {
       var e = ex.get(), c = cert.get(); if (e === null) { msg.textContent = Q.bad_expertise; return Promise.resolve(null); } if (c === null) { msg.textContent = Q.bad_cert; return Promise.resolve(null); }
       return api("/api/profile/me", { method: "POST", body: { public: pub.c.checked, handle: handle.value.trim().toLowerCase(), headline: head.value, about: about.value, company: company.value, job: job.value, country: country.value, show_org: so.c.checked, programs: prog.get(), expertise: e, certs: c, channels: ch.get() } }).then(function (r) {
-        if (r.s === 200) msg.textContent = "✓ " + Q.saved + " " + Q.note; return null; });
+        if (r.s === 200) { p.handle = handle.value.trim().toLowerCase(); msg.textContent = "✓ " + Q.saved + " " + Q.note; } return null; });
     }, msg)]));
     sec.appendChild(msg);
     if (p.public && p.handle) sec.appendChild(h("p", {}, [h("a", { href: X.base + (de ? "/de" : "") + "/community/u/" + p.handle + "/", text: Q.open })]));

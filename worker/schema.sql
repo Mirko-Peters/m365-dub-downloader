@@ -189,3 +189,12 @@ CREATE TABLE IF NOT EXISTS org_members (
   PRIMARY KEY (org_id, user_id)
 );
 CREATE INDEX IF NOT EXISTS idx_om_user ON org_members(user_id);
+
+-- Profilbilder / Firmenlogos (klein, vom Browser auf 256x256 JPEG verkleinert; Base64)
+CREATE TABLE IF NOT EXISTS images (
+  kind TEXT NOT NULL,                 -- u | o
+  owner_id INTEGER NOT NULL,
+  data TEXT NOT NULL,
+  updated INTEGER NOT NULL,
+  PRIMARY KEY (kind, owner_id)
+);

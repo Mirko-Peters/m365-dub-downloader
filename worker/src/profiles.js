@@ -80,14 +80,16 @@ async function personView(db, uid, viewer) {
     ...(await q("SELECT 'entity' k,eid t,'' l,summary s,created c FROM entity_rev WHERE user_id=? AND status IN ('live','old') ORDER BY created DESC LIMIT 15", uid))].sort((a, b) => b.c - a.c).slice(0, 15);
   const counts = { wiki: (await db.prepare("SELECT COUNT(*) n FROM wiki_rev WHERE user_id=? AND status IN ('live','old')").bind(uid).first()).n, entity: (await db.prepare("SELECT COUNT(*) n FROM entity_rev WHERE user_id=? AND status IN ('live','old')").bind(uid).first()).n };
   const badges = (await q("SELECT badge FROM user_badges WHERE user_id=?", uid)).map((b) => b.badge);
-  return { type: "u", id: uid, handle: p.handle, name: p.name, bio: p.bio, headline: p.headline, about: p.about, company: p.company, job: p.job, country: p.country, public: !!p.public, show_org: !!p.show_org,
+  const im = await db.prepare("SELECT updated FROM images WHERE kind='u' AND owner_id=?").bind(uid).first();
+  return { type: "u", img: im?.updated || 0, id: uid, handle: p.handle, name: p.name, bio: p.bio, headline: p.headline, about: p.about, company: p.company, job: p.job, country: p.country, public: !!p.public, show_org: !!p.show_org,
     expertise: exp.map((e) => ({ ...e, verified: !!e.verified, me: !!e.me })), programs: programs.map((x) => ({ ...x, verified: !!x.verified })), certs, channels, org, contrib, counts, badges,
     items: await itemsOf(db, "i.owner_type='u' AND i.owner_id=?", [uid], viewer, 8) };
 }
 async function orgView(db, oid, viewer) {
   const o = await db.prepare("SELECT * FROM orgs WHERE id=?").bind(oid).first(); if (!o) return null;
   const q = async (sql, ...b) => (await db.prepare(sql).bind(...b).all()).results || [];
-  return { type: "o", id: o.id, handle: o.handle, name: o.name, tagline: o.tagline, about: o.about, website: o.website, country: o.country, size: o.size, public: !!o.public,
+  const im = await db.prepare("SELECT updated FROM images WHERE kind='o' AND owner_id=?").bind(oid).first();
+  return { type: "o", img: im?.updated || 0, id: o.id, handle: o.handle, name: o.name, tagline: o.tagline, about: o.about, website: o.website, country: o.country, size: o.size, public: !!o.public,
     expertise: (await q("SELECT eid e,level,verified FROM expertise WHERE owner_type='o' AND owner_id=?", oid)).map((e) => ({ ...e, verified: !!e.verified })),
     programs: (await q("SELECT program p,year,url,verified FROM programs WHERE owner_type='o' AND owner_id=?", oid)).map((x) => ({ ...x, verified: !!x.verified })),
     channels: await q("SELECT kind,url,feed FROM channels WHERE owner_type='o' AND owner_id=?", oid),
@@ -113,6 +115,37 @@ export async function handleProfiles(env, request, url, path, user, J) {
   const db = env.DB, method = request.method; let m;
   const need = () => (user ? null : J({ error: "login" }, 401));
   const body = async () => await request.json().catch(() => ({}));
+
+  // ---- Bilder (Profilbild / Firmenlogo) ----
+  if ((m = path.match(/^\/api\/img\/(u|o)\/([a-z0-9-]{2,30})(?:\.jpg)?$/))) {
+    const kind = m[1], handle = m[2];
+    if (method === "GET") {
+      const row = kind === "u"
+        ? await db.prepare("SELECT i.data,i.updated FROM images i JOIN profiles p ON p.user_id=i.owner_id AND i.kind='u' JOIN users u ON u.id=p.user_id AND u.banned=0 WHERE p.handle=? AND p.public=1").bind(handle).first()
+        : await db.prepare("SELECT i.data,i.updated FROM images i JOIN orgs o ON o.id=i.owner_id AND i.kind='o' WHERE o.handle=? AND o.public=1").bind(handle).first();
+      if (!row) return new Response("not found", { status: 404, headers: { "access-control-allow-origin": "*" } });
+      const bin = Uint8Array.from(atob(row.data), (c) => c.charCodeAt(0));
+      return new Response(bin, { headers: { "content-type": "image/jpeg", "cache-control": "public, max-age=86400", "access-control-allow-origin": "*", "cross-origin-resource-policy": "cross-origin" } });
+    }
+    if (method === "POST" || method === "DELETE") {
+      if (need()) return need();
+      let id;
+      if (kind === "u") { const p = await db.prepare("SELECT user_id FROM profiles WHERE user_id=?").bind(user.id).first(); if (!p || (await db.prepare("SELECT handle FROM profiles WHERE user_id=?").bind(user.id).first()).handle !== handle) return J({ error: "forbidden" }, 403); id = user.id; }
+      else {
+        const o = await db.prepare("SELECT o.id FROM orgs o JOIN org_members m ON m.org_id=o.id WHERE o.handle=? AND m.user_id=? AND m.status='active' AND m.role IN ('owner','admin')").bind(handle, user.id).first();
+        if (!o) return J({ error: "forbidden" }, 403); id = o.id;
+      }
+      if (method === "DELETE") { await db.prepare("DELETE FROM images WHERE kind=? AND owner_id=?").bind(kind, id).run(); return J({ ok: true }); }
+      if (!(await rateLimit(db, `img:${user.id}`, 10, 3600))) return J({ error: "rate_limit" }, 429);
+      const buf = new Uint8Array(await request.arrayBuffer());
+      if (buf.length < 200 || buf.length > 150000) return J({ error: "img_size" }, 400);
+      if (!(buf[0] === 0xff && buf[1] === 0xd8 && buf[2] === 0xff)) return J({ error: "img_type" }, 400);
+      let bin = ""; for (let i = 0; i < buf.length; i += 8192) bin += String.fromCharCode(...buf.subarray(i, i + 8192));
+      const now = Math.floor(Date.now() / 1000);
+      await db.prepare("INSERT INTO images(kind,owner_id,data,updated) VALUES(?,?,?,?) ON CONFLICT(kind,owner_id) DO UPDATE SET data=excluded.data,updated=excluded.updated").bind(kind, id, btoa(bin), now).run();
+      return J({ ok: true, img: now });
+    }
+  }
 
   // ---- eigenes Profil ----
   if (path === "/api/profile/me" && method === "GET") {
@@ -282,6 +315,7 @@ export async function handleProfiles(env, request, url, path, user, J) {
 
 // Konto loeschen: alle Profil-, Firmen- und Entitaetsdaten des Nutzers entfernen bzw. anonymisieren
 export async function deleteUserData(db, id) {
+  await db.prepare("DELETE FROM images WHERE kind='u' AND owner_id=?").bind(id).run();
   const own = (await db.prepare("SELECT org_id FROM org_members WHERE user_id=? AND role='owner'").bind(id).all()).results || [];
   const ops = [];
   for (const o of own) {

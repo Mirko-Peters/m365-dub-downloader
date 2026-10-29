@@ -37,9 +37,24 @@ def purl(BASE, lang, kind, h):
     return f"{BASE}{'/de' if lang == 'de' else ''}/community/{kind}/{h}/"
 
 
+import os as _os
+_API = _os.environ.get("COMMUNITY_API") or "https://api-dub.m365.fm"
+
+
+def img_url(kind, x):
+    return f"{_API}/api/img/{kind}/{x['handle']}.jpg?v={x['img']}" if x.get("img") else ""
+
+
+def img_tag(kind, x, alt):
+    u = img_url(kind, x)
+    return f'<img src="{esc(u)}" alt="{esc(alt)}" width="112" height="112" loading="lazy" style="float:inline-end;border-radius:{"50%" if kind == "u" else "12px"};object-fit:cover;margin-inline-start:1em">' if u else ""
+
+
 def person_ld(BASE, p, orgs_by_handle):
     pid = f"{purl(BASE, 'en', 'u', p['handle'])}#person"
     n = {"@type": "Person", "@id": pid, "name": p["name"], "url": purl(BASE, "en", "u", p["handle"]), "mainEntityOfPage": {"@id": purl(BASE, "en", "u", p["handle"]) + "#profile"}}
+    if img_url("u", p):
+        n["image"] = img_url("u", p)
     if p.get("headline"):
         n["description"] = p["headline"]
     if p.get("about"):
@@ -80,6 +95,8 @@ def person_ld(BASE, p, orgs_by_handle):
 
 def org_ld(BASE, o, people_by_handle):
     n = {"@type": "Organization", "@id": f"{purl(BASE, 'en', 'c', o['handle'])}#org", "name": o["name"], "url": o.get("website") or purl(BASE, "en", "c", o["handle"]), "mainEntityOfPage": {"@id": purl(BASE, "en", "c", o["handle"]) + "#profile"}}
+    if img_url("o", o):
+        n["logo"] = n["image"] = img_url("o", o)
     if o.get("tagline"):
         n["slogan"] = o["tagline"]
     if o.get("about"):
@@ -156,7 +173,7 @@ def build(g, people, orgs):
             ft = '<table class="mb-facts"><tbody>' + "".join(f'<tr><th scope="row">{esc(a)}</th><td>{b}</td></tr>' for a, b in facts) + "</tbody></table>" if facts else ""
             certs = "<ul>" + "".join(f'<li><a href="{eurl(BASE, lang, c["e"])}">{esc(ENTS[c["e"]]["name"])}</a>{" (" + str(c["year"]) + ")" if c.get("year") else ""}{" · " + "<a href=" + chr(34) + esc(c["url"]) + chr(34) + " rel=" + chr(34) + "nofollow ugc noopener" + chr(34) + ">✔</a>" if c.get("url") else ""}</li>' for c in p.get("certs", []) if c["e"] in ENTS) + "</ul>" if p.get("certs") else ""
             contrib = "<ul>" + "".join(f'<li><a href="{eurl(BASE, lang, c["t"])}">{esc(ENTS[c["t"]]["name"] if c["t"] in ENTS else c["t"])}</a> <span class="mut">· {esc(s["wiki"] if c["k"] == "wiki" else s["entity"])} · {datetime.fromtimestamp(c["c"], timezone.utc).strftime("%Y-%m-%d")}{" – " + esc(c["s"]) if c.get("s") else ""}</span></li>' for c in p.get("contrib", []) if c["t"] in ENTS) + "</ul>" if p.get("contrib") else ""
-            b = shell(lang, f'<nav aria-label="breadcrumb"><a href="{croot}members/">{esc(s["members"])}</a></nav><h1>{esc(p["name"])}</h1><p style="font-size:1.1em">{esc(p.get("headline", ""))}</p><p>{tags_of_p(p, li, s)}</p>{ft}'
+            b = shell(lang, f'<nav aria-label="breadcrumb"><a href="{croot}members/">{esc(s["members"])}</a></nav>{img_tag("u", p, p["name"])}<h1>{esc(p["name"])}</h1><p style="font-size:1.1em">{esc(p.get("headline", ""))}</p><p>{tags_of_p(p, li, s)}</p>{ft}'
                           + (f'<h2>{esc(s["about"])}</h2><p style="white-space:pre-line">{esc(p["about"])}</p>' if p.get("about") else "")
                           + (f'<h2>{esc(s["expertise"])}</h2>{exp_ul(p, lang, li, s)}' if p.get("expertise") else "") + (f'<h2>{esc(s["certs"])}</h2>{certs}' if certs else "")
                           + (f'<h2>{esc(s["latest"])}</h2>{items_ul(p)}' if p.get("items") else "") + (f'<h2>{esc(s["channels"])}</h2>{chan_ul(p)}' if p.get("channels") else "")
@@ -176,7 +193,7 @@ def build(g, people, orgs):
             if o.get("website"):
                 facts.append((s["site"], f'<a href="{esc(o["website"])}" rel="nofollow ugc noopener" target="_blank">{esc(o["website"].replace("https://", "").rstrip("/"))}</a>'))
             ft = '<table class="mb-facts"><tbody>' + "".join(f'<tr><th scope="row">{esc(a)}</th><td>{b_}</td></tr>' for a, b_ in facts) + "</tbody></table>" if facts else ""
-            b = shell(lang, f'<nav aria-label="breadcrumb"><a href="{croot}companies/">{esc(s["companies"])}</a></nav><h1>{esc(o["name"])}</h1><p style="font-size:1.1em">{esc(o.get("tagline", ""))}</p><p>{tags_of_p(o, li, s)}</p>{ft}'
+            b = shell(lang, f'<nav aria-label="breadcrumb"><a href="{croot}companies/">{esc(s["companies"])}</a></nav>{img_tag("o", o, o["name"])}<h1>{esc(o["name"])}</h1><p style="font-size:1.1em">{esc(o.get("tagline", ""))}</p><p>{tags_of_p(o, li, s)}</p>{ft}'
                           + (f'<h2>{esc(s["about"])}</h2><p style="white-space:pre-line">{esc(o["about"])}</p>' if o.get("about") else "")
                           + (f'<h2>{esc(s["expertise"])}</h2>{exp_ul(o, lang, li, s)}' if o.get("expertise") else "") + (f'<h2>{esc(s["team"])}</h2>{mem}' if mem else "")
                           + (f'<h2>{esc(s["latest"])}</h2>{items_ul(o)}' if o.get("items") else "") + (f'<h2>{esc(s["channels"])}</h2>{chan_ul(o)}' if o.get("channels") else "") + live_js + css)

@@ -27,3 +27,9 @@ Stand: 2026-10-29. Reihenfolge nach Absprache mit Mirko; alles mit Schema.org-Ve
 - Glossar-Definitionen in 17 weitere Sprachen übersetzen, Muttersprachler-Prüfung ml/pa/ta/te/he/ar
 - Tags schrittweise durch Glossar/Entitäten ersetzen (sichtbare Tags und Tag-Seiten entfernen, wenn die Entitäten die häufigen Tags abdecken)
 - Monatsbudget für Artikel, Popularitäts-Reihenfolge, Original-Porträt fürs Presskit
+
+## Idee: Foren je Thema (vom Nutzer, 30.10.)
+- Zu jedem Thema/jeder Entität ein Forum; **nicht indexierbar** (noindex, nur eingeloggt oder per robots/Header gesperrt, nicht im Sitemap/llms.txt).
+- Exklusive Bereiche für MVPs, MCTs, Regional Directors, Student Ambassadors usw. – auch **für ehemalige MVPs** (Former MVP).
+- Zugang nur mit **geprüfter** Mitgliedschaft: Programm-Status wird bisher von Redaktion/Admin bestätigt (`programs.verified`); dafür braucht es Nachweis-Workflow (Nachweislink/MVP-Profil, Admin-Check, ggf. Ablauf/Re-Verify jährlich, Status „aktiv“ vs. „ehemalig“ mit Jahren).
+- Offene Entscheidungen: Prüfmethode (Link zum offiziellen MVP-Profil + manuelle Bestätigung vs. Microsoft-Login-Claim), Moderation, Sichtbarkeit (komplett privat vs. lesbar für Mitglieder).
