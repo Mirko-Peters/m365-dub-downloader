@@ -1,5 +1,5 @@
 // Abzeichen und Punkte. Anzeigenamen stehen im Frontend (data/community_i18n.json), hier nur IDs und Regeln.
-export const BADGE_ORDER = ["editor", "wiki_author", "curator", "voice", "polyglot", "helpful", "early_bird", "streak", "commentator", "guardian", "notified", "first_comment", "newcomer"];
+export const BADGE_ORDER = ["editor", "wiki_author", "curator", "voice", "polyglot", "helpful", "early_bird", "streak", "commentator", "guardian", "li_follower", "notified", "first_comment", "newcomer"];
 
 let epCache = { at: 0, map: null };
 export async function episodeDates(env) {

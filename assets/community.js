@@ -1,8 +1,8 @@
 /* M365.FM Community: Kommentare, Abos, Kurator, Profil. Nutzt window.M365C = {api, lang, vid, t}. Texte nur per textContent. */
 (function () {
   var C = window.M365C; if (!C || !C.api) return;
-  var T = C.t || {}, API = C.api, LANG = C.lang, ICON = { editor: "✏️", wiki_author: "📖", newcomer: "🌱", first_comment: "💬", commentator: "🗣️", voice: "📣", helpful: "🤝", early_bird: "🐦", polyglot: "🌍", streak: "🔥", curator: "🏆", notified: "🔔", guardian: "🛡️" };
-  var BADGES = ["editor", "wiki_author", "newcomer", "first_comment", "commentator", "voice", "helpful", "early_bird", "polyglot", "streak", "curator", "notified", "guardian"];
+  var T = C.t || {}, API = C.api, LANG = C.lang, ICON = { editor: "✏️", wiki_author: "📖", newcomer: "🌱", first_comment: "💬", commentator: "🗣️", voice: "📣", helpful: "🤝", early_bird: "🐦", polyglot: "🌍", streak: "🔥", curator: "🏆", notified: "🔔", guardian: "🛡️", li_follower: "🔗" };
+  var BADGES = ["editor", "wiki_author", "newcomer", "first_comment", "commentator", "voice", "helpful", "early_bird", "polyglot", "streak", "curator", "notified", "guardian", "li_follower"];
   var tt = function (k) { return T[k] || k; };
   function h(tag, a, kids) {
     var e = document.createElement(tag);
@@ -147,6 +147,19 @@
   }
 
   /* ---------- Community-Seite: Konto, Profil, Abzeichen ---------- */
+  var LI_URL = "https://www.linkedin.com/school/m365-show";
+  function liCard(u, onDone, always) {
+    var seen = false; try { seen = localStorage.getItem("m365li") === "1"; } catch (e) {}
+    var has = u.badges.indexOf("li_follower") > -1;
+    if (has || (!always && seen)) return null;
+    var box = h("div", { class: "clogin" }), msg = h("span", { class: "cok" });
+    box.appendChild(h("b", { text: tt("li_title") })); box.appendChild(h("p", { class: "cmut", text: tt("li_text") }));
+    box.appendChild(h("div", { class: "btns" }, [
+      h("a", { class: "btn main", href: LI_URL, target: "_blank", rel: "noopener", text: tt("li_open") }),
+      h("button", { type: "button", class: "btn", text: tt("li_done"), onclick: function () { api("/api/me/li-follow", { method: "POST", body: {} }).then(function () { msg.textContent = tt("li_thanks"); try { localStorage.setItem("m365li", "1"); } catch (e) {} if (onDone) onDone(); }); } }),
+      h("button", { type: "button", class: "btn", text: tt("li_later"), onclick: function () { try { localStorage.setItem("m365li", "1"); } catch (e) {} box.hidden = true; } }), msg]));
+    return box;
+  }
   function mountPage(root) {
     var uid = new URLSearchParams(location.search).get("u");
     if (uid) {
@@ -167,6 +180,8 @@
         var name = h("input", { type: "text", maxlength: 40, value: u.name, "aria-label": tt("your_name") }), bio = h("textarea", { rows: 3, maxlength: 280, placeholder: tt("bio_ph"), "aria-label": tt("bio_ph") });
         bio.value = u.bio || "";
         var ok = h("span", { class: "cok" });
+        var lic = liCard(u, function () { setTimeout(function () { location.reload(); }, 800); }, true) || (u.badges.indexOf("li_follower") < 0 ? null : h("a", { class: "btn", href: LI_URL, target: "_blank", rel: "noopener", text: tt("li_follow") }));
+        if (lic) root.appendChild(lic);
         root.appendChild(h("div", { class: "cprof" }, [
           h("h2", { text: tt("profile") }), h("p", { class: "cmut", text: u.points + " " + tt("points") + " · " + u.comments + " " + tt("comments_count") + " · " + u.likes + " " + tt("likes_count") }),
           h("label", { text: tt("your_name") }), name, bio,

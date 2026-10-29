@@ -106,8 +106,13 @@ async function api(env, request, url, path) {
 
   if (path === "/api/health") return J({ ok: true }, 200);
   if (path === "/api/providers") return J({ providers: Object.keys(PROVIDERS).filter((k) => PROVIDERS[k].id(env) && PROVIDERS[k].secret(env)) }, 200, { "cache-control": "public, max-age=300" });
+  if (path === "/api/me/li-follow" && method === "POST") {
+    if (need()) return need();
+    await award(db, user.id, "li_follower");
+    return J({ ok: true });
+  }
   if (path === "/api/me") {
-    if (method === "GET") return J({ user: user ? { id: user.id, name: user.name, bio: user.bio, lang: user.lang, admin: user.admin, editor: user.editor, ...(await stats(db, user.id)) } : null });
+    if (method === "GET") return J({ user: user ? { id: user.id, name: user.name, bio: user.bio, lang: user.lang, admin: user.admin, editor: user.editor, provider: user.provider, ...(await stats(db, user.id)) } : null });
     if (need()) return need();
     if (method === "POST") {
       const b = await request.json().catch(() => ({}));

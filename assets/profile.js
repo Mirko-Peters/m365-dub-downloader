@@ -58,7 +58,7 @@
     about.value = o.about || ""; ["", "1", "2-10", "11-50", "51-200", "201-1000", "1000+"].forEach(function (s) { size.appendChild(h("option", { value: s, text: s || "–" })); }); size.value = o.size || "";
     if (org) handle.disabled = true;
     var pub = chk(Q.pub, o.public), prog = programsUI(o.programs, true), ex = pickerRows(all, function (x) { return ["product", "platform", "concept", "category"].indexOf(x.type) > -1; }, (o.expertise || []).map(function (x) { return { e: x.e, level: x.level }; }), false, Q.addexp), ch = channelsUI(o.channels);
-    [pub.w, lab(Q.handle, handle), lab(Q.orgname, name), lab(Q.tagline, tag), lab(Q.about, about), lab(Q.site, site), lab(Q.country, country), lab(Q.size, size), h("h4", { text: Q.prog }), prog, h("h4", { text: Q.exp }), ex, h("h4", { text: Q.chan }), ch].forEach(function (x) { f.appendChild(x); });
+    [pub.w, lab(Q.handle, handle), lab(Q.orgname, name), lab(Q.tagline, tag), lab(de ? "Über uns (ohne Links)" : "About us (no links)", about), lab(Q.site, site), lab(Q.country, country), lab(Q.size, size), h("h4", { text: Q.prog }), prog, h("h4", { text: Q.exp }), ex, h("h4", { text: Q.chan }), ch].forEach(function (x) { f.appendChild(x); });
     f.appendChild(h("div", { class: "btns" }, [saveBtn(Q.save, function () {
       var e = ex.get(); if (e === null) { msg.textContent = Q.bad_expertise; return Promise.resolve(null); }
       return api("/api/org", { method: "POST", body: { handle: handle.value.trim().toLowerCase(), name: name.value, tagline: tag.value, about: about.value, website: site.value.trim(), country: country.value, size: size.value, public: pub.c.checked, programs: prog.get(), expertise: e, channels: ch.get() } }).then(function (r) { if (r.s === 200 && onDone) onDone(); return r; });
