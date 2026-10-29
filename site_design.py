@@ -13,6 +13,7 @@ FONT_CSS = "".join(
 INDUSTRY = """
 :root{--onac:#fff;--bg:#f3f3f2;--fg:#17191c;--mut:#5d6470;--ac:#3b6391;--card:#fff;--bd:#17191c24;--ink:#1a1d21;--onink:#eef0f3}
 @media (prefers-color-scheme:dark){:root{--onac:#101214;--bg:#101214;--fg:#e9ecef;--mut:#98a0ab;--ac:#82a7d4;--card:#16191c;--bd:#e9ecef26;--ink:#1d2126;--onink:#eef0f3}}
+:root[data-theme=dark]{--onac:#101214;--bg:#101214;--fg:#e9ecef;--mut:#98a0ab;--ac:#82a7d4;--card:#16191c;--bd:#e9ecef26;--ink:#1d2126;--onink:#eef0f3;color-scheme:dark}
 body{font-family:"Barlow",-apple-system,"Segoe UI",Inter,Roboto,"Noto Sans",system-ui,sans-serif}
 .serif,h1,h2,h3,h4,.brand,.tile b,.num,.row h3,.thumb h3,.faq summary,.cols h3,.stats b,.ifacts b,.info figcaption,.points li:before,.author .badge{font-family:"Barlow Condensed","Arial Narrow","Noto Sans",system-ui,sans-serif}
 h1,h2{text-transform:uppercase;font-weight:600;letter-spacing:.01em}
