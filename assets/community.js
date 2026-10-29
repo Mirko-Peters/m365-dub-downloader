@@ -156,7 +156,7 @@
       root.appendChild(h("h2", { text: tt("badges") })); root.appendChild(bd);
       var cur = h("section", { class: "ccard" }), sub = h("section", { class: "ccard" });
       root.appendChild(cur); root.appendChild(sub); mountCurator(cur, true); mountSub(sub);
-    }).catch(function () { root.hidden = true; });
+    }).catch(function () { root.hidden = false; root.appendChild(h("p", { class: "cmut", role: "status", text: tt("error") })); });
   }
 
   function init() {
