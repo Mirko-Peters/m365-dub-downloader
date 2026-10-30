@@ -76,10 +76,10 @@ def m365(cut, by_name, ids):
 
 
 def azure(cut, by_name, ids):
-    out, url = [], BASE + "v2/azure?$orderby=modified desc&$top=200&$filter=" + urllib.parse.quote(f"modified ge {cut}T00:00:00Z")
-    pages = 0
-    while url and pages < 30:
-        j = get(url); pages += 1
+    out, flt = [], urllib.parse.quote(f"modified ge {cut}T00:00:00Z")
+    for page in range(15):
+        j = get(BASE + f"v2/azure?$orderby=modified desc&$top=200&$skip={page * 200}&$filter={flt}")
+        if not j.get("value"): break
         for x in j.get("value", []):
             eids = ["azure"]
             for p in x.get("products") or []:
@@ -89,7 +89,6 @@ def azure(cut, by_name, ids):
             when = " · ".join(f"{a.get('ring')}: {a.get('month')} {a.get('year')}" for a in av[:2] if a.get("ring"))
             out.append({"id": f"azure-{x['id']}", "src": "Azure Updates", "title": (x.get("title") or "").strip(), "desc": plain(x.get("description")),
                         "status": x.get("status") or "", "phase": [], "when": when, "created": (x.get("created") or "")[:10], "modified": (x.get("modified") or "")[:10], "eids": eids})
-        url = j.get("@odata.nextLink")
     return out
 
 
