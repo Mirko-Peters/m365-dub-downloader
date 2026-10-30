@@ -3,6 +3,7 @@
 import { cleanText, rateLimit } from "./util.js";
 
 const now = () => Math.floor(Date.now() / 1000);
+export const LANGS = ["en","de","es","fr","it","pt","nl","pl","id","ru","uk","ar","he","hi","ja","ko","ml","pa","ta","te"];
 const MAX_EPS = 2000, MAX_SHOWS = 3, TR_PER_SYNC = 25;
 let ready = false;
 async function ensure(db) {
@@ -65,7 +66,7 @@ export async function syncShow(env, s) {
       stmts.push(db.prepare("INSERT INTO show_eps(show_id,guid,slug,title,descr,pub,audio,dur,image,season,num,link,tr_url) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)").bind(s.id, it.guid, sl, it.title, it.descr, it.pub, it.audio, it.dur, it.image, it.season, it.num, it.link, it.tr_url));
     }
     for (let i = 0; i < stmts.length; i += 50) await db.batch(stmts.slice(i, i + 50));
-    await db.prepare("UPDATE shows SET title=?,descr=?,site=?,image=?,lang=?,synced=?,err='' WHERE id=?").bind(s.title || show.title, show.descr || s.descr, show.site, show.image, show.lang, now(), s.id).run();
+    await db.prepare("UPDATE shows SET title=?,descr=?,site=?,image=?,synced=?,err='' WHERE id=?").bind(s.title || show.title, show.descr || s.descr, show.site, show.image, now(), s.id).run();
     // Transkripte schrittweise nachladen
     const todo = (await db.prepare("SELECT id,tr_url FROM show_eps WHERE show_id=? AND tr_url!='' AND transcript='' ORDER BY pub DESC LIMIT ?").bind(s.id, TR_PER_SYNC).all()).results || [];
     for (const t of todo) { try { const tx = cleanTranscript(await get(t.tr_url, 3e6)); await db.prepare("UPDATE show_eps SET transcript=? WHERE id=?").bind(tx || "-", t.id).run(); } catch { await db.prepare("UPDATE show_eps SET transcript='-' WHERE id=?").bind(t.id).run(); } }
@@ -106,13 +107,14 @@ export async function handleShows(env, request, url, path, user, J) {
     const prof = await db.prepare("SELECT handle FROM profiles WHERE user_id=? AND public=1 AND handle IS NOT NULL").bind(user.id).first();
     if (!prof) return J({ error: "profile" }, 400);
     if (!b.agree) return J({ error: "agree" }, 400);   // Einwilligung: Verteilung ueber das Netzwerk, Werbung/Sponsoring auf den Show-Seiten
+    const lang = String(b.lang || "").toLowerCase(); if (!LANGS.includes(lang)) return J({ error: "lang" }, 400);   // nur vorhandene Sprachen; andere ueber Wunschliste anfragen
     const feed = safeUrl(String(b.feed || "").trim()); if (!feed) return J({ error: "feed" }, 400);
     if ((await db.prepare("SELECT COUNT(*) c FROM shows WHERE user_id=?").bind(user.id).first()).c >= MAX_SHOWS) return J({ error: "limit" }, 400);
     if (await db.prepare("SELECT 1 x FROM shows WHERE feed=?").bind(feed).first()) return J({ error: "exists" }, 400);
     let parsed; try { parsed = parseRss(await get(feed)); } catch (e) { return J({ error: "fetch" }, 400); }
     if (!parsed.items.length || !parsed.show.title) return J({ error: "rss" }, 400);
     let sl = slugify(parsed.show.title), n = 2; while (await db.prepare("SELECT 1 x FROM shows WHERE slug=?").bind(sl).first()) sl = slugify(parsed.show.title).slice(0, 55) + "-" + n++;
-    const r = await db.prepare("INSERT INTO shows(user_id,slug,title,descr,feed,site,image,lang,status,created,consent) VALUES(?,?,?,?,?,?,?,?,?,?,?)").bind(user.id, sl, parsed.show.title, parsed.show.descr, feed, parsed.show.site, parsed.show.image, parsed.show.lang, user.admin || user.editor ? "live" : "pending", now(), now()).run();
+    const r = await db.prepare("INSERT INTO shows(user_id,slug,title,descr,feed,site,image,lang,status,created,consent) VALUES(?,?,?,?,?,?,?,?,?,?,?)").bind(user.id, sl, parsed.show.title, parsed.show.descr, feed, parsed.show.site, parsed.show.image, lang, user.admin || user.editor ? "live" : "pending", now(), now()).run();
     const out = await syncShow(env, { id: r.meta.last_row_id, feed, title: parsed.show.title, descr: parsed.show.descr });
     return J({ ok: true, id: r.meta.last_row_id, eps: out.eps || 0, status: user.admin || user.editor ? "live" : "pending" });
   }
