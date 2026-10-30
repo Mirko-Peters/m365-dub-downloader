@@ -99,3 +99,7 @@ Stand: 2026-10-29. Reihenfolge nach Absprache mit Mirko; alles mit Schema.org-Ve
 Jede neue Funktion der Plattform (Log, Events, Firmen, Forum, Blog, Copilot-Bibliothek, Folgen …) bekommt zugleich ein MCP-Tool in `worker/src/mcp.js` (mit `de`-Beschreibung). Die Anleitungsseite `/community/mcp/` liest die Tool-Liste automatisch daraus (`tools/dump_mcp_tools.mjs`). Gilt für Claude, ChatGPT und Microsoft Copilot (Copilot Studio / M365-Agenten). Phase 2: OAuth für direkte Anmeldung; Phase 3: Tools für Events/Sessions, Firmen, Log, Folgen.
 
 Ausgemusterte Seiten: in `data/retired.json` eintragen (mit `to` = Nachfolger-Verknüpfung, ohne = „gibt es nicht mehr“). Wird beim Build zur Hinweisseite (noindex). Gilt bei jeder umbenannten/entfernten Seite.
+
+## Übersetzungen (Regel)
+- Fehlende EN/DE-Texte zuerst über die Community: MCP-Tool `list_translation_tasks` + `propose_entity_edit` (kostet die Plattform nichts). Nur der Rest wird mit `tools/translate_missing.py` (Haiku) im Stapel übersetzt.
+- Namen werden nie übersetzt: Session-Titel, Event-, Produkt-, Personen- und Firmennamen, Abkürzungen, Prüfungscodes.

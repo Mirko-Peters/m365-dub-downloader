@@ -11,7 +11,7 @@ import argparse, json, os, sys, urllib.request
 
 P = "data/entities.json"
 SYS = ("You translate short encyclopedia texts about Microsoft products and IT concepts between English and German. "
-       "Keep product names, feature names, abbreviations and code (e.g. Copilot Studio, Power Fx, D365FO, MS-900) unchanged. "
+       "Never translate names: product and feature names, session and event titles, person and company names, abbreviations and codes (e.g. Copilot Studio, Power Fx, D365FO, MS-900, M365Con) stay exactly as written. "
        "Keep the same length, tone and paragraph structure (blank lines between paragraphs). No links, no quotes, no commentary. "
        "Answer with a JSON object that maps each given key to its translation, and nothing else.")
 

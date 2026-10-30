@@ -38,6 +38,7 @@ const shortEnt = (e) => ({ id: e.id, name: e.name, type: e.type, description: { 
 export const HOWTO = [
   { id: "profile", en: "Fill in or improve your profile: read it with get_my_profile, show the user a draft (headline max 100 chars, bio max 1500 chars, no links), then save with update_my_profile. A public profile needs a handle (a-z, 0-9, -).", de: "Profil ausfüllen oder verbessern: mit get_my_profile lesen, dem Nutzer einen Entwurf zeigen (Kurzzeile max. 100 Zeichen, Bio max. 1500, keine Links), dann mit update_my_profile speichern. Ein öffentliches Profil braucht eine Profil-Adresse (a-z, 0-9, -).", tools: ["get_my_profile", "update_my_profile"] },
   { id: "translate-profile", en: "Make your profile available in every language: read it with get_my_profile, translate the headline and bio into the languages you want (at least en and de), show the user the translations and then call update_my_profile with translations {lang: {headline, about}}. The original text stays the base; pages show the matching language and fall back to the original.", de: "Profil in allen Sprachen anbieten: mit get_my_profile lesen, Kurzzeile und Bio in die gewünschten Sprachen übersetzen (mindestens en und de), dem Nutzer die Übersetzungen zeigen und dann update_my_profile mit translations {Sprache: {headline, about}} aufrufen. Der Originaltext bleibt die Basis; Seiten zeigen die passende Sprache und fallen sonst auf das Original zurück.", tools: ["get_my_profile", "update_my_profile"] },
+  { id: "translations", en: "Help translate: call list_translation_tasks to see entities that miss an English or German text, translate them yourself (never translate names: session titles, event, product, person and company names, abbreviations, codes stay as they are) and submit with propose_entity_edit (description_en/description_de, long_en/long_de). For your own profile use update_my_profile with translations. Missing translations are filled by the community first; the platform only runs a batch translation for what is left.", de: "Beim Übersetzen helfen: mit list_translation_tasks Entitäten sehen, denen ein englischer oder deutscher Text fehlt, selbst übersetzen (Namen nie übersetzen: Session-Titel, Event-, Produkt-, Personen- und Firmennamen, Abkürzungen und Codes bleiben unverändert) und mit propose_entity_edit einreichen (description_en/description_de, long_en/long_de). Fürs eigene Profil update_my_profile mit translations nutzen. Fehlende Übersetzungen füllt zuerst die Community; die Plattform übersetzt nur den Rest im Stapel.", tools: ["list_translation_tasks", "propose_entity_edit"] },
   { id: "expertise", en: "Add expertise: find topics with search_entities, then add_expertise with level 1 (learning), 2 (practitioner) or 3 (expert). Other members can confirm them; topics of sessions you speak at (confirmed) and of your verified certifications are added automatically as confirmed expertise.", de: "Expertise ergänzen: Themen mit search_entities finden, dann add_expertise mit Level 1 (lerne), 2 (Praktiker) oder 3 (Experte). Andere Mitglieder können sie bestätigen. Themen deiner bestätigten Sessions und deiner geprüften Zertifikate werden automatisch als bestätigte Expertise ergänzt.", tools: ["search_entities", "add_expertise"] },
   { id: "certification", en: "Add a certification: find it with search_entities (type cert), then add_certification with the year and a proof URL (Credly badge or Microsoft Learn credential). It is verified automatically or by the editors; verified certificates allow editing linked topics.", de: "Zertifikat ergänzen: mit search_entities (Typ cert) suchen, dann add_certification mit Jahr und Nachweis-Link (Credly oder Microsoft Learn). Es wird automatisch oder von der Redaktion geprüft; geprüfte Zertifikate berechtigen zum Bearbeiten verknüpfter Themen.", tools: ["search_entities", "add_certification"] },
   { id: "create-entity", en: "Create a missing topic: search first with search_entities; if nothing fits, call create_entity (name, type product/platform/concept/cert/category, short description 20-300 chars in your own words, optional relations). Always provide the short description in both English and German (translate it yourself). Then use the new id for expertise or certifications. Check the result: published directly for trusted members, otherwise it goes to the vote.", de: "Fehlendes Thema anlegen: zuerst mit search_entities suchen; findet sich nichts, create_entity aufrufen (Name, Typ product/platform/concept/cert/category, Kurzbeschreibung 20–300 Zeichen in eigenen Worten, optional Beziehungen). Die neue ID dann für Expertise oder Zertifikate nutzen. Ergebnis prüfen: für vertrauenswürdige Mitglieder sofort veröffentlicht, sonst Abstimmung.", tools: ["search_entities", "create_entity"] },
@@ -48,6 +49,7 @@ export const HOWTO = [
 ];
 
 export const TOOLS = [
+  { name: "list_translation_tasks", de: "Entitäten auflisten, denen eine Übersetzung (Englisch/Deutsch) fehlt – du übersetzt mit deiner KI und reichst sie ein.", write: false, description: "List entities whose short or long description exists in only one of English/German, with the source text. Translate the text yourself and submit it with propose_entity_edit (description_en/description_de, long_en/long_de). This is community work that costs the platform nothing. Never translate names: session titles, event names, product and feature names, person and company names, abbreviations and exam codes stay exactly as they are.", inputSchema: { type: "object", properties: { limit: { type: "number", description: "1-20, default 10" }, offset: { type: "number" } } } },
   { name: "search_entities", de: "Entitätsdatenbank durchsuchen (Produkte, Plattformen, Konzepte, Zertifizierungen, Organisationen, Personen, Events).", write: false, description: "Search the M365.FM entity database (products, platforms, concepts, certifications, organizations, people, events) by name or keyword.", inputSchema: { type: "object", properties: { query: { type: "string" }, type: { type: "string", enum: ["product", "platform", "concept", "org", "person", "cert", "event", "media", "category"] } }, required: ["query"] } },
   { name: "get_entity", de: "Eine Entität mit Beschreibung, Aliasen und Beziehungen lesen.", write: false, description: "Get one entity with all properties, relations and descriptions.", inputSchema: { type: "object", properties: { id: { type: "string" } }, required: ["id"] } },
   { name: "list_events", de: "Öffentliche Community-Events auflisten.", write: false, description: "List public community events (title, dates, mode, handle).", inputSchema: { type: "object", properties: {} } },
@@ -137,6 +139,20 @@ async function callTool(env, user, name, a) {
     if (url) { const ok = await autoVerifyCert(url, ent, user.name); status = ok ? "verified" : "pending_review"; await db.prepare("INSERT INTO cert_check(user_id,eid,status,via,created) VALUES(?,?,?,?,?) ON CONFLICT(user_id,eid) DO UPDATE SET status=excluded.status,via=excluded.via,created=excluded.created").bind(user.id, id, ok ? "verified" : "pending", ok ? "auto" : "", Math.floor(Date.now() / 1000)).run(); }
     return { ok: true, status };
   }
+  if (name === "list_translation_tasks") {
+    const all = [...(await allEntities(env)).values()], lim = Math.min(20, Math.max(1, parseInt(a.limit) || 10)), off = Math.max(0, parseInt(a.offset) || 0), tasks = [];
+    for (const e of all) {
+      if (e.outdated || e.replaced_by) continue;
+      const miss = [];
+      for (const [f, fl] of [["desc", "description"], ["long", "long"]]) {
+        const v = e[f] || {};
+        if ((v.en || "").trim() && !(v.de || "").trim()) miss.push({ field: fl, from: "en", to: "de", text: v.en });
+        if ((v.de || "").trim() && !(v.en || "").trim()) miss.push({ field: fl, from: "de", to: "en", text: v.de });
+      }
+      if (miss.length) tasks.push({ id: e.id, name: e.name, type: e.type, missing: miss });
+    }
+    return { total: tasks.length, tasks: tasks.slice(off, off + lim), how: "Translate each text. Never translate names: session titles, event names, product and feature names, person and company names, abbreviations and exam codes stay unchanged. Then call propose_entity_edit with description_en/description_de or long_en/long_de." };
+  }
   if (name === "create_entity") {
     const nm = txt(a.name, 80), id = nm.toLowerCase().normalize("NFKD").replace(/[̀-ͯ]/g, "").replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "").slice(0, 48);
     if (id.length < 2) return { error: "bad_name" };
@@ -145,7 +161,7 @@ async function callTool(env, user, name, a) {
     const req = new Request("https://x/api/entity", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ id, data, summary: "New entity (via MCP)" }) });
     const J = (d, s = 200) => new Response(JSON.stringify(d), { status: s });
     const r = await handleEntity(env, req, new URL("https://x/api/entity"), "/api/entity", user, J);
-    const out = r ? await r.json() : { error: "failed" }; return out.ok ? { ...out, id } : out;
+    const out = r ? await r.json() : { error: "failed" }; if (out.ok && (!data.desc.en || !data.desc.de)) out.todo = "Please also add the missing " + (data.desc.en ? "German" : "English") + " short description with propose_entity_edit (description_" + (data.desc.en ? "de" : "en") + "), translating it yourself."; return out.ok ? { ...out, id } : out;
   }
   if (name === "propose_entity_edit") {
     const e = (await allEntities(env)).get(String(a.id || "")); if (!e) return { error: "not_found" };
@@ -159,7 +175,9 @@ async function callTool(env, user, name, a) {
     const req = new Request("https://x/api/entity", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ id, data, summary: txt(a.summary, 200) + " (via MCP)" }) });
     const J = (d, s = 200) => new Response(JSON.stringify(d), { status: s });
     const r = await handleEntity(env, req, new URL("https://x/api/entity"), "/api/entity", user, J);
-    return r ? await r.json() : { error: "failed" };
+    const out = r ? await r.json() : { error: "failed" };
+    if (out.ok && (!data.desc.en || !data.desc.de)) out.todo = "Please also add the missing " + (data.desc.en ? "German" : "English") + " short description (description_" + (data.desc.en ? "de" : "en") + "), translating it yourself.";
+    return out;
   }
   return { error: "unknown_tool" };
 }
