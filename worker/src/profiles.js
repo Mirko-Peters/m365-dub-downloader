@@ -102,13 +102,13 @@ export async function autoVerifyCert(url, ent, name) {
 const TOPIC_T = ["product", "platform", "concept", "category"];
 export async function derivedExpertise(db, uid, handle, map) {
   const out = new Map();
-  if (handle) {
-    const rows = (await db.prepare("SELECT topics,speakers FROM event_sessions WHERE status='live' AND speakers LIKE ?").bind(`%"h":"${handle}"%`).all()).results || [];
-    for (const r of rows) {
-      let sp = [], tp = []; try { sp = JSON.parse(r.speakers || "[]"); tp = JSON.parse(r.topics || "[]"); } catch { continue; }
-      if (!sp.some((x) => x.h === handle && x.s === "confirmed")) continue;
-      for (const t of tp) { const o = out.get(t) || { via: "session", n: 0 }; o.n++; out.set(t, o); }
-    }
+  const nm = ((await db.prepare("SELECT lower(name) n FROM users WHERE id=?").bind(uid).first())?.n) || "";
+  const rows = (await db.prepare("SELECT s.topics,s.speakers,e.owner_id oid FROM event_sessions s JOIN events e ON e.id=s.event_id WHERE s.status='live' AND s.topics<>'[]'").all()).results || [];
+  for (const r of rows) {
+    let sp = [], tp = []; try { sp = JSON.parse(r.speakers || "[]"); tp = JSON.parse(r.topics || "[]"); } catch { continue; }
+    // zaehlt: per Handle oder Name zugeordnet; bestaetigt, oder vom Veranstalter selbst (Organisator nimmt seine eigene Session an)
+    if (!sp.some((x) => ((handle && x.h === handle) || (!x.h && nm && String(x.n || "").toLowerCase() === nm)) && (x.s === "confirmed" || r.oid === uid))) continue;
+    for (const t of tp) { const o = out.get(t) || { via: "session", n: 0 }; o.n++; out.set(t, o); }
   }
   const certs = ((await db.prepare("SELECT c.eid FROM certs c JOIN cert_check k ON k.user_id=c.user_id AND k.eid=c.eid WHERE c.user_id=? AND k.status='verified'").bind(uid).all()).results || []).map((r) => r.eid);
   for (const c of certs) for (const [, to] of (map.get(c)?.rel || [])) if (TOPIC_T.includes(map.get(to)?.type) && !out.has(to)) out.set(to, { via: "cert", n: 1 });
