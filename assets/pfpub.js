@@ -37,6 +37,16 @@
           sp.appendChild(document.createTextNode(" · ")); sp.appendChild(b);
         });
 
+        [].slice.call(document.querySelectorAll(".pf-certend")).forEach(function (sp) {
+          var ct = (d.certs || []).filter(function (x) { return x.e === sp.getAttribute("data-e"); })[0]; if (!ct || d.mine) return;
+          var b = h("button", { type: "button", class: "wk-link", text: ct.me ? T.confirmed : T.confirm, "aria-pressed": ct.me ? "true" : "false" });
+          b.addEventListener("click", function () {
+            var on = b.getAttribute("aria-pressed") === "true";
+            api("/api/cert-endorse", { method: on ? "DELETE" : "POST", body: { handle: handle, e: sp.getAttribute("data-e") } }).then(function (x) { if (x.s === 401) { location.href = home; return; } if (x.s === 200) { b.setAttribute("aria-pressed", on ? "false" : "true"); b.textContent = on ? T.confirm : T.confirmed; } });
+          });
+          sp.appendChild(document.createTextNode(" · ")); sp.appendChild(b);
+        });
+
         if (!d.mine) {
           var RL = de ? { colleague: "Kollege/Kollegin", manager: "Führungskraft", report: "Mitarbeiter:in", client: "Kunde/Kundin", trainer: "Trainer:in", student: "Teilnehmer:in / Schüler:in", cospeaker: "Co-Speaker / Event", podcast: "Podcast-Gast oder -Host", community: "Community", mentor: "Mentor:in / Mentee", other: "Sonstiges" } : { colleague: "Colleague", manager: "Manager", report: "Direct report", client: "Client", trainer: "Trainer", student: "Student / participant", cospeaker: "Co-speaker / event", podcast: "Podcast guest or host", community: "Community", mentor: "Mentor / mentee", other: "Other" };
           var RT = de ? { open: "Empfehlung schreiben", rel: "In welcher Beziehung stehst du zu dieser Person?", body: "Deine Empfehlung (mind. 40 Zeichen, ohne Links)", send: "Absenden", sent: "✓ Danke! Die Empfehlung erscheint, sobald die Person sie freigibt.", err: "Das hat nicht geklappt – bitte Eingaben prüfen.", hint: "Empfehlungen werden mit deinem Anzeigenamen veröffentlicht, nachdem die empfohlene Person sie freigegeben hat." } : { open: "Write a recommendation", rel: "How do you know this person?", body: "Your recommendation (at least 40 characters, no links)", send: "Send", sent: "✓ Thanks! The recommendation appears once the person approves it.", err: "That did not work – please check your input.", hint: "Recommendations are published with your display name after the recommended person approves them." };

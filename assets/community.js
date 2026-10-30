@@ -20,7 +20,7 @@
   function hideAll(sel) { document.querySelectorAll(sel).forEach(function (e) { e.hidden = true; }); }
   function date(ts) { try { return new Date(ts * 1000).toLocaleDateString(LANG); } catch (e) { return ""; } }
 
-  var PGI = { mvp: "🏆", mct: "🎓", rd: "🧭", msa: "🌟", ms_employee: "🪟", partner: "🤝" }, PGN = { mvp: "Microsoft MVP", mct: "Microsoft Certified Trainer", rd: "Microsoft Regional Director", msa: "Microsoft Student Ambassador", ms_employee: "Microsoft", partner: "Microsoft Partner" };
+  var PGI = { speaker: "🎤", mvp: "🏆", mct: "🎓", rd: "🧭", msa: "🌟", ms_employee: "🪟", partner: "🤝" }, PGN = { speaker: (document.documentElement.lang || "en").slice(0, 2) === "de" ? "Speaker bei Community-Events" : "Event speaker", mvp: "Microsoft MVP", mct: "Microsoft Certified Trainer", rd: "Microsoft Regional Director", msa: "Microsoft Student Ambassador", ms_employee: "Microsoft", partner: "Microsoft Partner" };
   function badgeEls(list, big) {
     return h("span", { class: "cbs" }, (list || []).map(function (b) { return h("span", { class: "cb" + (big ? " big" : ""), title: /^prog_/.test(b) ? PGN[b.slice(5)] : tt("b_" + b) + " – " + tt("b_" + b + "_d"), text: PGI[b.slice(5)] && /^prog_/.test(b) ? PGI[b.slice(5)] : (ICON[b] || "★") }); }));
   }
@@ -54,7 +54,18 @@
     q.addEventListener("input", function () { clearTimeout(q._t); q._t = setTimeout(load, 300); });
     load();
     var seedMsg = h("span", { class: "cmut" }), seedBtn = h("button", { type: "button", class: "btn", text: "M365Con 2027 als Event anlegen", onclick: function () { api("/api/events/seed-m365con", { method: "POST", body: {} }).then(function (r) { seedMsg.textContent = r.s === 200 ? (r.j.existed ? " bereits vorhanden" : " angelegt (nicht öffentlich) – Daten im Bereich Events pflegen") : " Fehler"; }); } });
-    return h("section", { class: "ccard" }, [h("h2", { text: "Team" }), h("p", {}, [seedBtn, seedMsg]), h("p", { class: "cmut", text: "Editoren veröffentlichen Wiki-Beiträge direkt und prüfen fremde Beiträge. / Editors publish wiki notes directly and review others." }), h("label", {}, [q]), res]);
+    var cq = h("div"), cqh = h("h3", { text: "Zertifikat-Nachweise prüfen / Verify certificates" });
+    api("/api/admin/cert-queue").then(function (r) {
+      var items = (r.j && r.j.items) || []; if (r.s !== 200 || !items.length) { cqh.hidden = true; return; }
+      items.forEach(function (it) {
+        var row = h("p", {}, [h("b", { text: (it.name || it.handle || "?") + " · " + it.e.toUpperCase() + (it.year ? " (" + it.year + ")" : "") + " " })]);
+        if (it.url) { var a = h("a", { href: it.url, target: "_blank", rel: "noopener nofollow", text: "Nachweis ↗ " }); row.appendChild(a); }
+        function dec(v) { return function () { api("/api/admin/verify", { method: "POST", body: { owner: "u:" + it.handle, kind: "cert", key: it.e, value: v } }).then(function (x) { if (x.s === 200) row.remove(); }); }; }
+        if (it.handle) { row.appendChild(h("button", { type: "button", class: "btn main", text: "Bestätigen", onclick: dec(true) })); row.appendChild(h("button", { type: "button", class: "btn", text: "Ablehnen", onclick: function () { row.remove(); } })); }
+        cq.appendChild(row);
+      });
+    });
+    return h("section", { class: "ccard" }, [h("h2", { text: "Team" }), h("p", {}, [seedBtn, seedMsg]), cqh, cq, h("p", { class: "cmut", text: "Editoren veröffentlichen Wiki-Beiträge direkt und prüfen fremde Beiträge. / Editors publish wiki notes directly and review others." }), h("label", {}, [q]), res]);
   }
 
   /* ---------- Kommentare ---------- */

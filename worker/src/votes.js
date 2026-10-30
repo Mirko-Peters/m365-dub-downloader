@@ -1,5 +1,6 @@
 // Community-Abstimmung ueber offene Aenderungen (Wiki, Entitaeten): vertrauenswuerdige Mitglieder stimmen ab
 import { stats, evalBadges } from "./badges.js";
+import { certScoped } from "./entities.js";
 const NEED = 3, TRUST = 25;
 const now = () => Math.floor(Date.now() / 1000);
 const endorsedExpert = async (db, uid) => !!(await db.prepare("SELECT 1 x FROM endorsements WHERE owner_id=? AND by_id<>? GROUP BY eid HAVING COUNT(DISTINCT by_id)>=2 LIMIT 1").bind(uid, uid).first());   // Experte, den mind. 2 andere bestaetigt haben
@@ -18,7 +19,7 @@ export async function handleVotes(env, request, url, path, user, J) {
       const mine = user ? await db.prepare("SELECT v FROM edit_votes WHERE kind=? AND rev_id=? AND user_id=?").bind(kind, r.id, user.id).first() : null;
       out.push({ id: r.id, body: r.body, summary: r.summary, name: r.name, created: r.created, net: v.net, votes: v.n, need: NEED, mine: mine?.v || 0, own: user?.id === r.user_id });
     }
-    return J({ kind, can_vote: await trusted(db, user), edits: out });
+    return J({ kind, can_vote: (await trusted(db, user)) || (kind === "entity" && (await certScoped(env, user, key))), edits: out });
   }
   if (path === "/api/edits/inbox" && request.method === "GET") {   // offene Aenderungen an meinen Entitaeten (Eigentuemer) bzw. fuer Editoren alle
     if (!user) return J({ error: "login" }, 401);
@@ -29,9 +30,9 @@ export async function handleVotes(env, request, url, path, user, J) {
   }
   if (path === "/api/edits/vote" && request.method === "POST") {
     if (!user) return J({ error: "login" }, 401);
-    if (!(await trusted(db, user))) return J({ error: "not_trusted" }, 403);
     const b = await request.json().catch(() => ({})), kind = b.kind === "entity" ? "entity" : "wiki", v = b.v === -1 ? -1 : 1, id = +b.id;
     const r = kind === "wiki" ? await db.prepare("SELECT id,term,lang,user_id,status FROM wiki_rev WHERE id=?").bind(id).first() : await db.prepare("SELECT id,eid,user_id,status FROM entity_rev WHERE id=?").bind(id).first();
+    if (!(await trusted(db, user)) && !(kind === "entity" && r && (await certScoped(env, user, r.eid)))) return J({ error: "not_trusted" }, 403);
     if (!r || r.status !== "pending") return J({ error: "not_pending" }, 404);
     if (r.user_id === user.id) return J({ error: "own_edit" }, 403);
     await db.prepare("INSERT INTO edit_votes(kind,rev_id,user_id,v,created) VALUES(?,?,?,?,?) ON CONFLICT(kind,rev_id,user_id) DO UPDATE SET v=excluded.v").bind(kind, id, user.id, v, now()).run();

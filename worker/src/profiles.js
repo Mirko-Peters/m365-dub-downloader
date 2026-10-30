@@ -1,6 +1,6 @@
 // Experten- und Firmenprofile, Programme (MVP/MCT/...), Kanaele mit Feeds, Upvotes, Bestaetigungen
 import { cleanText, rateLimit } from "./util.js";
-import { baseIds, knownIds, validate, trustedUser } from "./entities.js";
+import { baseIds, knownIds, validate, trustedUser, entityMap } from "./entities.js";
 
 export const PROGRAMS = ["mvp", "mct", "rd", "msa", "ms_employee", "partner"];
 export const RELATIONS = ["colleague", "manager", "report", "client", "trainer", "student", "cospeaker", "podcast", "community", "mentor", "other"];
@@ -84,12 +84,26 @@ async function itemsOf(db, where, binds, viewer, limit = 10) {
   return rows.map((r) => ({ id: r.id, title: r.title, url: r.url, published: r.published, kind: r.kind, votes: r.votes, voted: !!r.voted, owner: r.ot + ":" + r.oid }));
 }
 
+// Zertifikats-Nachweis: automatische Pruefung fuer Credly / Microsoft Learn (Seite muss Zertifikat und Namen des Mitglieds nennen). Sonst Pruefung durch die Redaktion.
+export async function autoVerifyCert(url, ent, name) {
+  try {
+    const u = new URL(url);
+    if (u.protocol !== "https:" || !/^(www\.)?(credly|youracclaim)\.com$|^learn\.microsoft\.com$/i.test(u.hostname)) return false;
+    const r = await fetch(url, { redirect: "manual", signal: AbortSignal.timeout(6000), headers: { "user-agent": "Mozilla/5.0 (compatible; M365FM-CertCheck/1.0)", accept: "text/html" } });
+    if (r.status !== 200) return false;
+    const text = (await r.text()).slice(0, 500000).toLowerCase();
+    const code = ((ent?.aliases || [])[0] || "").toLowerCase(), title = String(ent?.name || "").toLowerCase().replace(/\s*\([^)]*\)\s*/g, "").trim();
+    const tokens = String(name || "").toLowerCase().split(/\s+/).filter((t) => t.length > 1);
+    return !!tokens.length && tokens.every((t) => text.includes(t)) && ((code && text.includes(code)) || (title.length > 8 && text.includes(title)));
+  } catch { return false; }
+}
+
 async function personView(db, uid, viewer) {
   const p = await db.prepare("SELECT p.*,u.name,u.bio FROM profiles p JOIN users u ON u.id=p.user_id WHERE p.user_id=? AND u.banned=0").bind(uid).first(); if (!p) return null;
   const q = async (sql, ...b) => (await db.prepare(sql).bind(...b).all()).results || [];
   const exp = await q("SELECT e.eid e,e.level,e.verified,(SELECT COUNT(*) FROM endorsements n WHERE n.owner_id=e.owner_id AND n.eid=e.eid) endorsed, (SELECT COUNT(*) FROM endorsements n2 WHERE n2.owner_id=e.owner_id AND n2.eid=e.eid AND n2.by_id=?) me FROM expertise e WHERE e.owner_type='u' AND e.owner_id=? ORDER BY e.verified DESC,e.level DESC", +viewer || 0, uid);
   const programs = await q("SELECT program p,year,url,verified FROM programs WHERE owner_type='u' AND owner_id=?", uid);
-  const certs = await q("SELECT eid e,year,url FROM certs WHERE user_id=? ORDER BY year DESC", uid);
+  const certs = (await q("SELECT c.eid e,c.year,c.url,COALESCE(k.status,'') st,(SELECT COUNT(*) FROM cert_endorse n WHERE n.owner_id=c.user_id AND n.eid=c.eid) endorsed,(SELECT COUNT(*) FROM cert_endorse n2 WHERE n2.owner_id=c.user_id AND n2.eid=c.eid AND n2.by_id=?) me FROM certs c LEFT JOIN cert_check k ON k.user_id=c.user_id AND k.eid=c.eid WHERE c.user_id=? ORDER BY endorsed DESC, (k.status='verified') DESC, c.year DESC", +viewer || 0, uid)).map((x) => ({ e: x.e, year: x.year, url: x.url, verified: x.st === "verified", pending: x.st === "pending", endorsed: x.endorsed, me: !!x.me }));
   const channels = await q("SELECT kind,url,feed FROM channels WHERE owner_type='u' AND owner_id=?", uid);
   const org = p.show_org ? await db.prepare("SELECT o.handle,o.name FROM org_members m JOIN orgs o ON o.id=m.org_id WHERE m.user_id=? AND m.status='active' AND o.public=1 ORDER BY m.created LIMIT 1").bind(uid).first() : null;
   const contrib = [...(await q("SELECT 'wiki' k,term t,lang l,summary s,created c FROM wiki_rev WHERE user_id=? AND status IN ('live','old') ORDER BY created DESC LIMIT 15", uid)),
@@ -257,7 +271,20 @@ export async function handleProfiles(env, request, url, path, user, J) {
     const ce = String(b.company_eid || "").toLowerCase();
     if (ce) { if (ID.test(ce) && ((await baseIds(env)).has(ce) || (await db.prepare("SELECT 1 x FROM entity_rev WHERE eid=? AND status IN ('live','pending')").bind(ce).first()))) await db.prepare("INSERT INTO profile_company(user_id,eid) VALUES(?,?) ON CONFLICT(user_id) DO UPDATE SET eid=excluded.eid").bind(user.id, ce).run(); }
     else await db.prepare("DELETE FROM profile_company WHERE user_id=?").bind(user.id).run();
+    const oldC = Object.fromEntries(((await db.prepare("SELECT eid,url FROM certs WHERE user_id=?").bind(user.id).all()).results || []).map((x) => [x.eid, x.url]));
     await replaceLists(db, "u", user.id, { exp: ex.list, prog: pr.list, chan: ch.list, certs });
+    {   // Pruefstatus: entfernte Zertifikate/geaenderte Nachweise zuruecksetzen, neue Nachweise pruefen
+      const keep = new Set(certs.map((c) => c.e));
+      for (const e of Object.keys(oldC)) if (!keep.has(e)) await db.prepare("DELETE FROM cert_check WHERE user_id=? AND eid=?").bind(user.id, e).run();
+      const map = certs.some((c) => c.url) ? await entityMap(env) : null;
+      for (const c of certs) {
+        if (oldC[c.e] !== c.url) await db.prepare("DELETE FROM cert_check WHERE user_id=? AND eid=? AND via<>'admin'").bind(user.id, c.e).run();
+        if (!c.url) continue;
+        if (await db.prepare("SELECT 1 x FROM cert_check WHERE user_id=? AND eid=? AND status='verified'").bind(user.id, c.e).first()) continue;
+        const ok = await autoVerifyCert(c.url, map.get(c.e), user.name);
+        await db.prepare("INSERT INTO cert_check(user_id,eid,status,via,created) VALUES(?,?,?,?,?) ON CONFLICT(user_id,eid) DO UPDATE SET status=excluded.status,via=excluded.via,created=excluded.created").bind(user.id, c.e, ok ? "verified" : "pending", ok ? "auto" : "", now()).run();
+      }
+    }
     if (isPublic && handle) { const nm = user.name || handle, hl = txt(b.headline, 100); await ownedEntity(env, user, { eid: handle, type: "person", name: nm, en: `${nm} is a member of the Microsoft community${hl ? ": " + hl : ""}.`, de: `${nm} ist Mitglied der Microsoft-Community${hl ? ": " + hl : ""}.` }); }
     return J({ ok: true });
   }
@@ -287,6 +314,22 @@ export async function handleProfiles(env, request, url, path, user, J) {
       await db.prepare("INSERT OR IGNORE INTO endorsements(owner_id,eid,by_id,created) VALUES(?,?,?,?)").bind(o.id, b.e, user.id, now()).run();
     } else await db.prepare("DELETE FROM endorsements WHERE owner_id=? AND eid=? AND by_id=?").bind(o.id, b.e, user.id).run();
     return J({ ok: true });
+  }
+  if (path === "/api/cert-endorse" && (method === "POST" || method === "DELETE")) {
+    if (need()) return need();
+    const b = await body(); const o = await resolve(db, "u:" + b.handle);
+    if (!o || !ID.test(b.e || "") || o.id === user.id) return J({ error: "bad_request" }, 400);
+    if (!(await db.prepare("SELECT 1 x FROM certs WHERE user_id=? AND eid=?").bind(o.id, b.e).first())) return J({ error: "not_found" }, 404);
+    if (method === "POST") {
+      if (!(await rateLimit(db, `endorse:${user.id}`, 30, 86400))) return J({ error: "rate_limit" }, 429);
+      await db.prepare("INSERT OR IGNORE INTO cert_endorse(owner_id,eid,by_id,created) VALUES(?,?,?,?)").bind(o.id, b.e, user.id, now()).run();
+    } else await db.prepare("DELETE FROM cert_endorse WHERE owner_id=? AND eid=? AND by_id=?").bind(o.id, b.e, user.id).run();
+    return J({ ok: true });
+  }
+  if (path === "/api/admin/cert-queue" && method === "GET") {
+    if (!(user?.admin || user?.editor)) return J({ error: "forbidden" }, 403);
+    const rows = (await db.prepare("SELECT c.user_id uid,c.eid e,c.year,c.url,u.name,p.handle FROM cert_check k JOIN certs c ON c.user_id=k.user_id AND c.eid=k.eid JOIN users u ON u.id=c.user_id LEFT JOIN profiles p ON p.user_id=c.user_id WHERE k.status='pending' ORDER BY k.created LIMIT 50").all()).results || [];
+    return J({ items: rows });
   }
   if ((m = /^\/api\/vote\/(\d+)$/.exec(path)) && method === "POST") {
     if (need()) return need();
@@ -398,6 +441,10 @@ export async function handleProfiles(env, request, url, path, user, J) {
     const v = b.value ? 1 : 0;
     if (b.kind === "program" && PROGRAMS.includes(b.key)) await db.prepare("UPDATE programs SET verified=? WHERE owner_type=? AND owner_id=? AND program=?").bind(v, o.t, o.id, b.key).run();
     else if (b.kind === "exp" && ID.test(b.key || "")) await db.prepare("UPDATE expertise SET verified=? WHERE owner_type=? AND owner_id=? AND eid=?").bind(v, o.t, o.id, b.key).run();
+    else if (b.kind === "cert" && o.t === "u" && ID.test(b.key || "")) {
+      if (v) await db.prepare("INSERT INTO cert_check(user_id,eid,status,via,created) VALUES(?,?,'verified','admin',?) ON CONFLICT(user_id,eid) DO UPDATE SET status='verified',via='admin',created=excluded.created").bind(o.id, b.key, now()).run();
+      else await db.prepare("DELETE FROM cert_check WHERE user_id=? AND eid=?").bind(o.id, b.key).run();
+    }
     else return J({ error: "bad_request" }, 400);
     return J({ ok: true });
   }
@@ -427,7 +474,7 @@ export async function deleteUserData(db, id) {
     db.prepare("DELETE FROM item_votes WHERE user_id=? OR item_id IN (SELECT id FROM feed_items WHERE owner_type='u' AND owner_id=?)").bind(id, id),
     db.prepare("DELETE FROM feed_items WHERE owner_type='u' AND owner_id=?").bind(id), db.prepare("DELETE FROM channels WHERE owner_type='u' AND owner_id=?").bind(id),
     db.prepare("DELETE FROM expertise WHERE owner_type='u' AND owner_id=?").bind(id), db.prepare("DELETE FROM programs WHERE owner_type='u' AND owner_id=?").bind(id),
-    db.prepare("DELETE FROM certs WHERE user_id=?").bind(id), db.prepare("DELETE FROM endorsements WHERE owner_id=? OR by_id=?").bind(id, id),
+    db.prepare("DELETE FROM certs WHERE user_id=?").bind(id), db.prepare("DELETE FROM cert_check WHERE user_id=?").bind(id), db.prepare("DELETE FROM cert_endorse WHERE owner_id=? OR by_id=?").bind(id, id), db.prepare("DELETE FROM endorsements WHERE owner_id=? OR by_id=?").bind(id, id),
     db.prepare("DELETE FROM profiles WHERE user_id=?").bind(id),
     db.prepare("DELETE FROM entity_rev WHERE user_id=? AND status IN ('pending','rejected')").bind(id), db.prepare("UPDATE entity_rev SET user_id=0 WHERE user_id=?").bind(id));
   await db.batch(ops);

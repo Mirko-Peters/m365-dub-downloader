@@ -84,8 +84,8 @@ def person_ld(BASE, p, orgs_by_handle):
         n["worksFor"] = {"@type": "Organization", "name": p["company"]}
     n["knowsAbout"] = [{"@id": eid_of(BASE, e["e"])} for e in p.get("expertise", []) if e["e"] in ENTS]
     creds = []
-    for c in p.get("certs", []):
-        if c["e"] in ENTS:
+    for c in sorted(p.get("certs", []), key=lambda c: -c.get("endorsed", 0)):
+        if c["e"] in ENTS and c.get("verified"):
             cr = {"@type": "EducationalOccupationalCredential", "name": ENTS[c["e"]]["name"], "credentialCategory": "certification", "about": {"@id": eid_of(BASE, c["e"])}, "recognizedBy": {"@id": eid_of(BASE, "microsoft")}}
             if c.get("url"):
                 cr["url"] = c["url"]
@@ -196,7 +196,11 @@ def build(g, people, orgs, extra=None):
             if p.get("country"):
                 facts.append((s["country"], esc(p["country"])))
             ft = '<table class="mb-facts"><tbody>' + "".join(f'<tr><th scope="row">{esc(a)}</th><td>{b}</td></tr>' for a, b in facts) + "</tbody></table>" if facts else ""
-            certs = "<ul>" + "".join(f'<li><a href="{eurl(BASE, lang, c["e"])}">{esc(ENTS[c["e"]]["name"])}</a>{" (" + str(c["year"]) + ")" if c.get("year") else ""}{" · " + "<a href=" + chr(34) + esc(c["url"]) + chr(34) + " rel=" + chr(34) + "nofollow ugc noopener" + chr(34) + ">✔</a>" if c.get("url") else ""}</li>' for c in p.get("certs", []) if c["e"] in ENTS) + "</ul>" if p.get("certs") else ""
+            _cs = sorted([c for c in p.get("certs", []) if c["e"] in ENTS], key=lambda c: (-c.get("endorsed", 0), -int(bool(c.get("verified"))), -(c.get("year") or 0)))
+            certs = "<ul>" + "".join(f'<li><a href="{eurl(BASE, lang, c["e"])}">{esc(ENTS[c["e"]]["name"])}</a>{" (" + str(c["year"]) + ")" if c.get("year") else ""}'
+                                     + (' · <a href="' + esc(c["url"]) + '" rel="nofollow ugc noopener">✔ ' + ("geprüft" if lang == "de" else "verified") + "</a>" if c.get("verified") and c.get("url") else (" · ✔ " + ("geprüft" if lang == "de" else "verified") if c.get("verified") else ""))
+                                     + (f' <span class="mut">· {c["endorsed"]} ' + ("Bestätigungen" if lang == "de" else "confirmations") + "</span>" if c.get("endorsed") else "")
+                                     + f' <span class="pf-certend" data-h="{esc(p["handle"])}" data-e="{c["e"]}"></span></li>' for c in _cs) + "</ul>" if _cs else ""
             contrib = "<ul>" + "".join(f'<li><a href="{eurl(BASE, lang, c["t"])}">{esc(ENTS[c["t"]]["name"] if c["t"] in ENTS else c["t"])}</a> <span class="mut">· {esc(s["wiki"] if c["k"] == "wiki" else s["entity"])} · {datetime.fromtimestamp(c["c"], timezone.utc).strftime("%Y-%m-%d")}{" – " + esc(c["s"]) if c.get("s") else ""}</span></li>' for c in p.get("contrib", []) if c["t"] in ENTS) + "</ul>" if p.get("contrib") else ""
             b = shell(lang, f'<nav aria-label="breadcrumb"><a href="{croot}members/">{esc(s["members"])}</a></nav>{img_tag("u", p, p["name"])}<h1>{esc(p["name"])}</h1><p style="font-size:1.1em">{esc(p.get("headline", ""))}</p><p>{tags_of_p(p, li, s)}</p>{ft}'
                           + (f'<h2>{esc(s["about"])}</h2><p style="white-space:pre-line">{esc(p["about"])}</p>' if p.get("about") else "")

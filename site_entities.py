@@ -187,6 +187,17 @@ def build(g, wiki_links, experts_by_ent, ep_find):
             evl = ""
             if e["id"] in EVENTS:
                 ev_ = EVENTS[e["id"]]; evl = f'<p><a class="btn" href="{BASE}{"/de" if lang == "de" else ""}/community/events/{ev_["handle"]}/">{"Zum Event" if lang == "de" else "Go to the event"}: {esc(ev_["title"])}</a></p>'
+                _ses = ev_.get("sessions", []); _spk = {}
+                for _se in _ses:
+                    for _x in _se.get("speakers", []):
+                        _spk.setdefault(_x["n"], _x)
+                _pre = f'{BASE}{"/de" if lang == "de" else ""}/community'
+                def _sl(x):
+                    return f'<a href="{_pre}/u/{x["h"]}/">{esc(x["n"])}</a>' if x.get("h") else esc(x["n"])
+                if _ses:
+                    evl += f'<h2>{"Sessions" if lang == "de" else "Sessions"} ({len(_ses)})</h2><ul>' + "".join(f'<li>{esc(_se["title"])}' + (f' <span class="mut">· {", ".join(_sl(x) for x in _se.get("speakers", []))}</span>' if _se.get("speakers") else "") + "</li>" for _se in _ses[:150]) + "</ul>"
+                if _spk:
+                    evl += f'<h2>{"Speaker" if lang == "de" else "Speakers"} ({len(_spk)})</h2><p>' + ", ".join(_sl(x) for x in sorted(_spk.values(), key=lambda a: a["n"].lower())[:200]) + "</p>"
             if not e["desc"].get(lang if lang in ("en", "de") else "en"):
                 evl += f'<p class="mut"><a href="#en-edit">{"Diese Kurzbeschreibung gibt es noch nicht in deiner Sprache – gern ergänzen." if lang == "de" else "This short description is not yet available in your language – feel free to add it."}</a></p>'
             gloss = f'<p><a href="{BASE}/{"de/" if lang == "de" else ""}glossary/{e["id"]}/">{esc(s["glossary"])}: {esc(e["name"])}</a></p>' if e["id"] in gl_ids else ""

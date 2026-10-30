@@ -1,7 +1,8 @@
 // MCP-Server (Streamable HTTP, JSON-RPC) fuer dub.m365.fm: Lesen ohne Anmeldung, Schreiben mit persoenlichem KI-Zugangstoken.
 // Alle Schreibaktionen laufen durch dieselben Regeln wie die Website (Abstimmung, Pflichtfelder, Rate-Limits).
 import { cleanText, randomToken, sha256hex, rateLimit } from "./util.js";
-import { baseIds, handleEntity } from "./entities.js";
+import { baseIds, entityMap, handleEntity } from "./entities.js";
+import { autoVerifyCert } from "./profiles.js";
 
 const txt = (s, n) => cleanText(s, n).replace(/[<>]/g, "").replace(/https?:\/\/\S+/gi, "").replace(/\s+/g, " ").trim();
 const long = (s, n) => cleanText(s, n).replace(/[<>]/g, "").replace(/https?:\/\/\S+/gi, "").trim();
@@ -28,13 +29,7 @@ export async function handleTokens(env, request, url, path, user, J) {
 export async function deleteUserTokens(db, uid) { await db.prepare("DELETE FROM api_tokens WHERE user_id=?").bind(uid).run(); }
 
 // ---------- Daten ----------
-async function allEntities(env) {
-  const base = new Map();
-  try { const j = await (await fetch(env.SITE + "/entities.json", { cf: { cacheTtl: 600 } })).json(); for (const e of j.entities || []) base.set(e.id, e); } catch { /* ohne Basis nur DB */ }
-  const rows = (await env.DB.prepare("SELECT eid,data FROM entity_rev WHERE status='live' ORDER BY id").all()).results || [];
-  for (const r of rows) { try { base.set(r.eid, { id: r.eid, ...JSON.parse(r.data) }); } catch { /* defekte Zeile ignorieren */ } }
-  return base;
-}
+const allEntities = entityMap;
 const shortEnt = (e) => ({ id: e.id, name: e.name, type: e.type, description: { en: e.desc?.en || "", de: e.desc?.de || "" }, url: `https://dub.m365.fm/entity/${e.id}/` });
 
 export const TOOLS = [
@@ -46,6 +41,7 @@ export const TOOLS = [
   { name: "get_my_profile", de: "Das eigene Profil samt Expertise lesen.", write: true, description: "Read the signed-in member's own profile.", inputSchema: { type: "object", properties: {} } },
   { name: "update_my_profile", de: "Kurzzeile, Bio, Position, Land, Profil-Adresse und Sichtbarkeit ausfüllen oder ändern.", write: true, description: "Update the signed-in member's profile text fields. Use plain text without links. Setting 'handle' (3-30 chars a-z, 0-9, -) creates the profile; 'public' makes it visible in the directory.", inputSchema: { type: "object", properties: { handle: { type: "string" }, headline: { type: "string", description: "max 100 chars" }, about: { type: "string", description: "bio, max 1500 chars, no links" }, job: { type: "string" }, country: { type: "string" }, public: { type: "boolean" } } } },
   { name: "add_expertise", de: "Themen mit Level zur eigenen Expertise hinzufügen (andere können sie bestätigen).", write: true, description: "Add a topic (entity id) to the member's expertise with level 1=learning, 2=practitioner, 3=expert. Others can endorse it.", inputSchema: { type: "object", properties: { entity_id: { type: "string" }, level: { type: "integer", minimum: 1, maximum: 3 } }, required: ["entity_id"] } },
+  { name: "add_certification", de: "Ein Zertifikat (Entität) mit Jahr und Nachweis-Link (Credly / Microsoft Learn) zum eigenen Profil hinzufügen; wird automatisch bzw. von der Redaktion geprüft.", write: true, description: "Add a certification (entity of type cert) to the member's profile with year and optional proof URL (Credly or Microsoft Learn). Verified automatically or by the editorial team; verified certificates allow editing linked topics.", inputSchema: { type: "object", properties: { entity_id: { type: "string" }, year: { type: "integer" }, proof_url: { type: "string" } }, required: ["entity_id"] } },
   { name: "propose_entity_edit", de: "Besseren Namen oder bessere Kurzbeschreibung für eine Entität vorschlagen – sie geht in die Abstimmung.", write: true, description: "Propose a change to an entity's name or short description. It goes to the community vote (or is applied directly for trusted members). A short description in at least one language (20-300 chars) is required.", inputSchema: { type: "object", properties: { id: { type: "string" }, name: { type: "string" }, description_en: { type: "string" }, description_de: { type: "string" }, summary: { type: "string", description: "why this change" } }, required: ["id", "summary"] } },
 ];
 
@@ -99,6 +95,18 @@ async function callTool(env, user, name, a) {
     if ((await db.prepare("SELECT COUNT(*) n FROM expertise WHERE owner_type='u' AND owner_id=?").bind(user.id).first()).n >= 30) return { error: "limit" };
     await db.prepare("INSERT INTO expertise(owner_type,owner_id,eid,level,verified) VALUES('u',?,?,?,0) ON CONFLICT(owner_type,owner_id,eid) DO UPDATE SET level=excluded.level").bind(user.id, id, lvl).run();
     return { ok: true };
+  }
+  if (name === "add_certification") {
+    const id = String(a.entity_id || ""), map = await allEntities(env), ent = map.get(id);
+    if (!ent || ent.type !== "cert") return { error: "unknown_certification" };
+    let url = String(a.proof_url || "").trim(); if (url) { try { const u = new URL(url); if (u.protocol !== "https:" || u.username) url = "bad"; } catch { url = "bad"; } if (url === "bad") return { error: "bad_proof_url" }; }
+    if ((await db.prepare("SELECT COUNT(*) n FROM certs WHERE user_id=?").bind(user.id).first()).n >= 20) return { error: "limit" };
+    const yr = Math.min(2100, Math.max(0, parseInt(a.year) || 0));
+    await db.prepare("INSERT INTO certs(user_id,eid,year,url) VALUES(?,?,?,?) ON CONFLICT(user_id,eid) DO UPDATE SET year=excluded.year,url=excluded.url").bind(user.id, id, yr, url).run();
+    await db.prepare("DELETE FROM cert_check WHERE user_id=? AND eid=? AND via<>'admin'").bind(user.id, id).run();
+    let status = "unverified";
+    if (url) { const ok = await autoVerifyCert(url, ent, user.name); status = ok ? "verified" : "pending_review"; await db.prepare("INSERT INTO cert_check(user_id,eid,status,via,created) VALUES(?,?,?,?,?) ON CONFLICT(user_id,eid) DO UPDATE SET status=excluded.status,via=excluded.via,created=excluded.created").bind(user.id, id, ok ? "verified" : "pending", ok ? "auto" : "", Math.floor(Date.now() / 1000)).run(); }
+    return { ok: true, status };
   }
   if (name === "propose_entity_edit") {
     const e = (await allEntities(env)).get(String(a.id || "")); if (!e) return { error: "not_found" };

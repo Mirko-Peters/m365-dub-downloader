@@ -379,3 +379,19 @@ CREATE TABLE IF NOT EXISTS api_tokens (
   last_used INTEGER NOT NULL DEFAULT 0
 );
 CREATE INDEX IF NOT EXISTS idx_tok_user ON api_tokens(user_id);
+
+CREATE TABLE IF NOT EXISTS cert_check (        -- Pruefung von Zertifikats-Nachweisen: verified (auto/admin) oder pending (wartet auf Redaktion)
+  user_id INTEGER NOT NULL,
+  eid TEXT NOT NULL,
+  status TEXT NOT NULL DEFAULT 'pending',
+  via TEXT NOT NULL DEFAULT '',
+  created INTEGER NOT NULL DEFAULT 0,
+  PRIMARY KEY (user_id, eid)
+);
+CREATE TABLE IF NOT EXISTS cert_endorse (      -- Bestaetigungen anderer Mitglieder fuer ein Zertifikat (Zaehler)
+  owner_id INTEGER NOT NULL,
+  eid TEXT NOT NULL,
+  by_id INTEGER NOT NULL,
+  created INTEGER NOT NULL,
+  PRIMARY KEY (owner_id, eid, by_id)
+);

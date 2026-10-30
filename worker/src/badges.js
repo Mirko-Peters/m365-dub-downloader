@@ -113,6 +113,15 @@ export async function badgesFor(db, ids) {
   const pq = await db.prepare(`SELECT owner_id id, program p FROM programs WHERE owner_type='u' AND verified=1 AND owner_id IN (${ids.map(() => "?").join(",")})`).bind(...ids).all();
   const PO = ["mvp", "rd", "mct", "msa", "ms_employee", "partner"];
   for (const r of (pq.results || []).sort((a, z) => PO.indexOf(z.p) - PO.indexOf(a.p))) m.set(r.id, ["prog_" + r.p, ...(m.get(r.id) || [])]);
+  // Speaker-Abzeichen: eingeladen und bestaetigt (Session mit status confirmed beim Profil-Handle)
+  try {
+    const hs = (await db.prepare(`SELECT user_id id, handle FROM profiles WHERE handle IS NOT NULL AND user_id IN (${ids.map(() => "?").join(",")})`).bind(...ids).all()).results || [];
+    if (hs.length) {
+      const conf = new Set();
+      for (const r of (await db.prepare(`SELECT speakers FROM event_sessions WHERE status='live' AND speakers LIKE '%"confirmed"%'`).all()).results || []) { try { for (const x of JSON.parse(r.speakers || "[]")) if (x.h && x.s === "confirmed") conf.add(x.h); } catch { /* ignore */ } }
+      for (const r of hs) if (conf.has(r.handle)) m.set(r.id, [...(m.get(r.id) || []), "prog_speaker"]);
+    }
+  } catch { /* Events-Tabellen fehlen: kein Badge */ }
   return m;
 }
 

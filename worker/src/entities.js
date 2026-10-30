@@ -21,6 +21,26 @@ export async function baseIds(env) {
   } catch { return new Set(); }
 }
 
+// Alle Entitaeten (Basis + live aus der DB) als Map
+export async function entityMap(env) {
+  const base = new Map();
+  try { const j = await (await fetch(env.SITE + "/entities.json", { cf: { cacheTtl: 600 } })).json(); for (const e of j.entities || []) base.set(e.id, e); } catch { /* ohne Basis nur DB */ }
+  const rows = (await env.DB.prepare("SELECT eid,data FROM entity_rev WHERE status='live' ORDER BY id").all()).results || [];
+  for (const r of rows) { try { base.set(r.eid, { id: r.eid, ...JSON.parse(r.data) }); } catch { /* defekte Zeile ignorieren */ } }
+  return base;
+}
+
+// Wer ein geprueftes Zertifikat hat, darf direkt Themen/Konzepte bearbeiten und abstimmen, die mit diesem Zertifikat verknuepft sind
+export async function certScoped(env, user, eid) {
+  if (!user || !eid) return false;
+  const certs = ((await env.DB.prepare("SELECT c.eid FROM certs c JOIN cert_check k ON k.user_id=c.user_id AND k.eid=c.eid WHERE c.user_id=? AND k.status='verified'").bind(user.id).all()).results || []).map((r) => r.eid);
+  if (!certs.length) return false;
+  if (certs.includes(eid)) return true;
+  const map = await entityMap(env);
+  for (const c of certs) if ((map.get(c)?.rel || []).some((r) => r[1] === eid)) return true;
+  return (map.get(eid)?.rel || []).some((r) => certs.includes(r[1]));
+}
+
 // Basis + live veroeffentlichte Community-Entitaeten (z. B. direkt im Profil neu angelegt)
 export async function knownIds(env) {
   const k = await baseIds(env);
@@ -82,7 +102,7 @@ export async function handleEntity(env, request, url, path, user, J) {
     const cur = await liveOf(db, id); if (cur && cur.data === data) return J({ error: "unchanged" }, 400);
     const t = now();
     const claimed = await db.prepare("SELECT 1 x FROM entity_claims WHERE eid=? AND user_id=? AND status='verified'").bind(id, user.id).first();
-    if (claimed || (await trustedUser(db, user))) {
+    if (claimed || (await trustedUser(db, user)) || (await certScoped(env, user, id))) {
       await db.batch([db.prepare("UPDATE entity_rev SET status='old' WHERE eid=? AND status='live'").bind(id), db.prepare("INSERT INTO entity_rev(eid,data,summary,user_id,status,created) VALUES(?,?,?,?,'live',?)").bind(id, data, summary, user.id, t)]);
       await evalBadges(env, user.id); return J({ ok: true, status: "live" });
     }
