@@ -120,3 +120,8 @@ Podpage kostet 65 $/Monat (ca. 780 $/Jahr). Ziel: m365.fm komplett auf dub.m365.
 - Anmeldung `/api/event/:h/register` mit Warteliste (Plätze via `/capacity`), Sichtbarkeit in der Teilnehmerliste wählt jeder selbst (Standard aus), Block „Anmeldung" auf der Event-Seite, E-Mail-Einladung `/invite-mail` (braucht RESEND_API_KEY).
 - Speaker: MCP `list_my_speaker_requests`, `respond_speaker_request`, `update_my_session`; bestätigte Speaker pflegen Beschreibung und Aufzeichnung ihrer Session selbst (Titel/Zeit bleiben beim Team).
 - Offen: Sponsor-/Medienpartner-Bestätigung, iCal-Export, „Meine Anmeldungen" im Profil.
+
+## Event-App (Premium-Idee, später)
+- Idee: Eine eigene App für Event-Veranstalter (iOS/Android) als bezahltes Zusatzprodukt, das Veranstalter für einen kleinen Betrag bekommen. Veranstalter bekommen ihre Event-App mit Programm, Merkliste, Anmeldung, Teilnehmerliste (nur wer sichtbar sein will) und Push-Nachrichten.
+- Technik-Weg: Zuerst PWA (Manifest, Icons, Installationshinweis, Push über den vorhandenen Service Worker), danach bei Bedarf eine Hülle mit Capacitor für App Store und Play Store. Gleiche API wie die Webseite.
+- Offene Punkte: Preismodell (einmalig je Event oder Abo), Branding je Event (Logo, Farben), Zahlungsanbieter, Store-Gebühren (Apple 99 $/Jahr, Google 25 $ einmalig). Erst nach der M365Con entscheiden.
