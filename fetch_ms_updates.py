@@ -30,7 +30,7 @@ TAG = {
 
 
 def get(url):
-    req = urllib.request.Request(url, headers=UA)
+    req = urllib.request.Request(url.replace(" ", "%20"), headers=UA)
     return json.loads(urllib.request.urlopen(req, timeout=120).read().decode("utf-8"))
 
 
