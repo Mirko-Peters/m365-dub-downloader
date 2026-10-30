@@ -19,3 +19,11 @@ Wenn Premium da ist:
 - Gäste zusammenführen: `data/guest_match_report.json` (Dieter Kempeneers doppelt, Jean-Sébastien Duchêne, Mirko Peters).
 - Plattform-Abgleich dauert in CI ca. 21 Minuten (Apple-Einzelsuchen); bei Bedarf kürzen.
 - Sprach-Shows haben noch keine `apple_id` / `youtube_sources` in `data/platforms.json`.
+
+## OAuth 2.1 für den MCP-Server und Agent-Erkennung (beschlossen, nach dem Datenbank-Umzug)
+Ziel: MCP-Clients (Claude, ChatGPT, Cursor) verbinden sich mit einem Klick, statt dass ein Mitglied einen `m365_…`-Token kopiert. Gleichzeitig bestehen dann die Prüfungen auf isitagentready.com, die heute bewusst auf "fail" stehen (keine erfundenen Metadaten).
+1. Worker: `/authorize` (Anmeldung über die bestehende Sitzung plus Einwilligungsseite), `/token` (Authorization Code mit PKCE, Refresh), Schlüssel (`/jwks.json`) und Registrierung von Clients (RFC 7591). Tokens in D1, wie die bisherigen KI-Tokens widerrufbar im Profil.
+2. `/.well-known/oauth-authorization-server` (RFC 8414) mit `issuer`, `authorization_endpoint`, `token_endpoint`, `jwks_uri`, `grant_types_supported`, `response_types_supported`; optional `/.well-known/openid-configuration`.
+3. `/.well-known/oauth-protected-resource` (RFC 9728) mit `resource`, `authorization_servers`, `scopes_supported`, `bearer_methods_supported: ["header"]`; der MCP-Server antwortet bei 401 mit `WWW-Authenticate: Bearer resource_metadata="…"`.
+4. `auth.md` um `agent_auth` ergänzen. Der alte Weg über persönliche Tokens bleibt bestehen.
+5. Erst auf einer Testumgebung bauen und prüfen (Sicherheit und Anmeldung betroffen), danach mit Freigabe live schalten.
