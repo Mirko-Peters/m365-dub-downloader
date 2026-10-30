@@ -143,7 +143,8 @@ def build(g):
         also = ('<h2>Also available in other languages</h2><ul>' + "".join(f'<li><a href="{u}" hreflang="{lg}">{esc(t)}</a> <span class="mut">({lg})</span></li>' for lg, (u, t) in sorted(oa.items())) + "</ul>") if oa else ""
         gl = "".join(f'<li><a href="{root}guests/{gg["slug"]}/">{esc(gg["name"])}</a></li>' for gg in eg[e["slug"]])
         tx = f'<h2>Transcript</h2><details open><summary>Read the full transcript</summary><p style="white-space:pre-wrap;line-height:1.6">{esc(tr)}</p></details>' if len(tr) > 200 else ""
-        _im = (nrec or {}).get("image") or ""
+        _yt = re.search(r"(?:v=|youtu\.be/)([\w-]{11})", e.get("video_link") or "")
+        _im = next((u for u in ((nrec or {}).get("image"), e.get("image_path"), f"https://i.ytimg.com/vi/{_yt.group(1)}/hqdefault.jpg" if _yt else "") if (u or "").startswith("https://")), "")   # RSS-Bild, Podpage-Bild, YouTube-Vorschau
         hero = (f'<figure style="margin:1em 0"><img src="{esc(_im)}" alt="{esc("Cover: " + e["name"])}" width="700" height="700" fetchpriority="high" decoding="async" style="width:100%;max-width:420px;height:auto;aspect-ratio:1/1;object-fit:cover;border-radius:.6em"></figure>' if _im.startswith("https://") else MED.hero_svg({"id": "ep-" + e["slug"], "name": e["name"], "type": "media"}, "Podcast", "Cover: " + e["name"]))   # Folgenbild aus dem Spreaker-RSS, sonst erzeugtes Titelbild
         body = (f'<article><p class="mut">{day(e["create_time"])}{" · Season " + str(e["season"]) if e.get("season") else ""}</p><h1>{esc(e["name"])}</h1>{hero}{aud}'
                 f'<div style="margin:1em 0"><strong>{esc(plain(e.get("summary")))}</strong></div>{nkp}<div class="pp-notes">{(nnotes if nrec and nrec.get("markup") else san(e.get("show_notes")))}</div>{nfaq}{SNT.CSS if (nkp or nnotes or nfaq) else ""}'
