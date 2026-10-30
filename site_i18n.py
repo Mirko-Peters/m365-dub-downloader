@@ -32,6 +32,15 @@ _JS = Path(__file__).parent / "data" / "ui_js_i18n.json"
 def write_ui_js(out):
     """Schreibt assets/ui-<sprache>.js: Übersetzungen der Oberflächen-Skripte (assets/*.js) und die Hilfsfunktion M365L (Englisch als Rückfall)."""
     tr = json.loads(_JS.read_text("utf-8")) if _JS.exists() else {}
+    try:   # Übersetzungen aus der Community-API (Worker übersetzt mit Haiku) ergänzen
+        import urllib.request, os
+        api = os.environ.get("COMMUNITY_API", "https://api-dub.m365.fm")
+        with urllib.request.urlopen(api + "/api/ui-i18n", timeout=20) as r:
+            for lg, d in json.load(r).items():
+                for k, kk in d.items():
+                    tr.setdefault(lg, {}).setdefault(k, {}).update(kk)
+    except Exception:
+        pass
     for lg in UI_JS_LANGS:
         js = ("window.M365T=" + json.dumps(tr.get(lg, {}), ensure_ascii=False, separators=(",", ":")).replace("</", "<\\/") + ";"
               "window.M365L=function(de,k,a,b){if(de)return a;var t=window.M365T[k];if(!t)return b;var o={},x;for(x in b)o[x]=b[x];for(x in t)o[x]=t[x];return o};")

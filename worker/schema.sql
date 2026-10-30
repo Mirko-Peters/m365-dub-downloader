@@ -495,3 +495,12 @@ CREATE TABLE IF NOT EXISTS event_transfers (
   created INTEGER NOT NULL,
   UNIQUE (event_id, user_id)
 );
+
+-- Uebersetzungen der Oberflaechen-Skripte (assets/*.js) in weitere Sprachen; k = "datei.NAME|schluessel"
+CREATE TABLE IF NOT EXISTS ui_i18n (
+  lang TEXT NOT NULL,
+  k TEXT NOT NULL,
+  v TEXT NOT NULL,
+  created INTEGER NOT NULL,
+  PRIMARY KEY (lang, k)
+);

@@ -144,3 +144,7 @@ Podpage kostet 65 $/Monat (ca. 780 $/Jahr). Ziel: m365.fm komplett auf dub.m365.
 
 ## Speaker-Verknüpfung (gebaut)
 - Vom Veranstalter importierte Speaker (M365Con-Programm) bekommen einen Verknüpfungslink (Token). Der Speaker meldet sich an, legt sein öffentliches Profil an und verbindet es per Link; danach erscheinen seine Sessions auf dem Profil und bestätigen seine Expertise. Kopierbutton im Event-Editor.
+
+## Oberflächen-Übersetzung über den Worker (gebaut)
+- Der Worker übersetzt mit dem Cloudflare-Secret `ANTHROPIC_API_KEY` (Haiku) die Texte aus `ui_js_en.json` (297 Texte) in fr, es, it, nl, pt, pl: je Cron-Lauf 2 Blöcke à 40 Texte (≈ 7–8 Stunden insgesamt), gespeichert in der Tabelle `ui_i18n`, Notaus wie bei der Entitäten-Übersetzung. Der Seitenbau holt sie stündlich über `/api/ui-i18n` und schreibt `assets/ui-<sprache>.js`.
+- Status: `/api/admin/translate` (Felder `ui_done`, `ui_error`). `tools/translate_ui.py` bleibt als lokaler Weg.

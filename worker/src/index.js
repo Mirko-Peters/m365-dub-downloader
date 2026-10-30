@@ -11,7 +11,7 @@ import { handleMcp, handleTokens, deleteUserTokens } from "./mcp.js";
 import { handlePoints } from "./points.js";
 import { handleMessages, purgeMessages, deleteUserMessages } from "./messages.js";
 import { refreshFeeds } from "./feeds.js";
-import { autoTranslate, translateStatus } from "./translate.js";
+import { autoTranslate, translateStatus, uiI18nExport } from "./translate.js";
 import { handleWiki } from "./wiki.js";
 
 const PROVIDERS = {
@@ -224,6 +224,7 @@ async function api(env, request, url, path) {
   if (/^\/api\/points(\/|$)/.test(path) || path.startsWith("/api/admin/points/")) { const p = await handlePoints(env, request, url, path, user, J); if (p) return p; }
   if (/^\/api\/msg(\/|$)/.test(path)) { const p = await handleMessages(env, request, url, path, user, J); if (p) { if (user && method !== "GET") await evalBadges(env, user.id).catch(() => 0); return p; } }
   if (/^\/api\/(events?|speaker)(\/|$)/.test(path) || /^\/api\/entity\/claims?(\/|$)/.test(path) || /^\/api\/admin\/entity\/claims?$/.test(path)) { const p = await handleEvents(env, request, url, path, user, J); if (p) { if (user && method !== "GET") await evalBadges(env, user.id).catch(() => 0); return p; } }
+  if (path === "/api/ui-i18n" && request.method === "GET") return J(await uiI18nExport(env), 200, { "cache-control": "public, max-age=300" });
   if (path === "/api/admin/translate" && user?.admin) {   // Status und Notaus der Auto-Uebersetzung
     if (request.method === "POST") { const b = await request.json().catch(() => ({})); await env.DB.prepare("INSERT INTO meta(k,v) VALUES('tr_off',?) ON CONFLICT(k) DO UPDATE SET v=excluded.v").bind(b.off ? "1" : "0").run(); }
     return J(await translateStatus(env));
