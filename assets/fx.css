@@ -1,0 +1,14 @@
+/* Bewegung und Effekte (fx.js). Alles aus bei reduzierter Bewegung. */
+#fx-graph{position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none;opacity:.9}
+#fx-bar{position:fixed;left:0;top:0;height:3px;width:100%;transform-origin:0 50%;transform:scaleX(0);background:linear-gradient(90deg,var(--ac,#b4233c),var(--fg,#141210));z-index:9999;pointer-events:none}
+.fx-on main,.fx-on .wrap,.fx-on header,.fx-on footer{position:relative;z-index:1}
+.fx-r{opacity:0;transform:translateY(22px);filter:blur(6px);transition:opacity .7s cubic-bezier(.2,.7,.2,1),transform .7s cubic-bezier(.2,.7,.2,1),filter .7s;transition-delay:var(--fx-d,0s)}
+.fx-r.fx-in{opacity:1;transform:none;filter:none}
+.fx-s{position:relative;overflow:hidden}
+.fx-s::before{content:"";position:absolute;inset:0;pointer-events:none;opacity:0;transition:opacity .3s;background:radial-gradient(260px circle at var(--mx,50%) var(--my,50%),color-mix(in srgb,var(--ac,#b4233c) 22%,transparent),transparent 70%)}
+.fx-s:hover::before{opacity:1}
+.fx-s>*{position:relative}
+h1.fx-h{background:linear-gradient(100deg,var(--fg,#141210) 0%,var(--fg,#141210) 40%,var(--ac,#b4233c) 50%,var(--fg,#141210) 60%,var(--fg,#141210) 100%);background-size:250% 100%;background-position:100% 0;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;animation:fxsweep 2.4s .35s cubic-bezier(.2,.7,.2,1) 1 forwards}
+@keyframes fxsweep{to{background-position:0 0}}
+@media (prefers-reduced-motion:reduce){#fx-graph,#fx-bar{display:none}.fx-r{opacity:1;transform:none;filter:none;transition:none}h1.fx-h{animation:none;background:none;-webkit-text-fill-color:currentColor}}
+html.a11y-nomo #fx-graph,html.a11y-nomo #fx-bar{display:none}html.a11y-nomo .fx-r{opacity:1;transform:none;filter:none;transition:none}html.a11y-nomo h1.fx-h{animation:none;background:none;-webkit-text-fill-color:currentColor}
