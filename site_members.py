@@ -234,8 +234,6 @@ def build(g, people, orgs, extra=None):
                 facts.append(("E-Mail", f'<a href="mailto:{esc(ct["email"])}">{esc(ct["email"])}</a>'))
             if ct.get("phone"):
                 facts.append((T(lang, "Mobile", "Mobil"), esc(ct["phone"])))
-            if o.get("ms"):
-                facts.append(("Microsoft", "<br>".join(f'{esc(MS_A.get(m["area"], (m["area"],)*2)[li])}: {esc(MS_L.get(m["level"], (m["level"],)*2)[li])}{(" (" + esc(m["since"]) + ")") if m.get("since") else ""}' for m in o["ms"])))
             ft = '<table class="mb-facts"><tbody>' + "".join(f'<tr><th scope="row">{esc(a)}</th><td>{b}</td></tr>' for a, b in facts) + "</tbody></table>" if facts else ""
             _cs = sorted([c for c in p.get("certs", []) if c["e"] in ENTS], key=lambda c: (-c.get("endorsed", 0), -int(bool(c.get("verified"))), -(c.get("year") or 0)))
             certs = "<ul>" + "".join(f'<li><a href="{eurl(BASE, lang, c["e"])}">{esc(ENTS[c["e"]]["name"])}</a>{" (" + str(c["year"]) + ")" if c.get("year") else ""}'
@@ -262,6 +260,8 @@ def build(g, people, orgs, extra=None):
                 facts.append((s["country"], esc(o["country"])))
             if o.get("website"):
                 facts.append((s["site"], f'<a href="{esc(o["website"])}" rel="nofollow ugc noopener" target="_blank">{esc(o["website"].replace("https://", "").rstrip("/"))}</a>'))
+            if o.get("ms"):
+                facts.append(("Microsoft", "<br>".join(f'{esc(MS_A.get(m["area"], (m["area"],)*2)[li])}: {esc(MS_L.get(m["level"], (m["level"],)*2)[li])}{(" (" + esc(m["since"]) + ")") if m.get("since") else ""}' for m in o["ms"])))
             ft = '<table class="mb-facts"><tbody>' + "".join(f'<tr><th scope="row">{esc(a)}</th><td>{b_}</td></tr>' for a, b_ in facts) + "</tbody></table>" if facts else ""
             b = shell(lang, f'<nav aria-label="breadcrumb"><a href="{croot}companies/">{esc(s["companies"])}</a></nav>{img_tag("o", o, o["name"])}<h1>{esc(o["name"])}</h1><p style="font-size:1.1em">{esc(o.get("tagline", ""))}</p><p>{tags_of_p(o, li, s)}</p>{ft}'
                           + (f'<h2>{esc(s["about"])}</h2><p style="white-space:pre-line">{esc(o["about"])}</p>' if o.get("about") else "")
