@@ -17,6 +17,7 @@ import site_notes as SNT
 import site_ads as ADS
 import site_media as MED
 import site_sidebar as SBR
+import site_r2 as R2
 import glob, html, json, os, re, shutil, sys, unicodedata
 from datetime import date
 from pathlib import Path
@@ -844,7 +845,7 @@ def build():
     def write(rel, content):
         p = OUT / rel
         p.parent.mkdir(parents=True, exist_ok=True)
-        p.write_text(content, encoding="utf-8")
+        p.write_text(R2.rewrite(content) if rel.endswith(".html") else content, encoding="utf-8")
 
     # Taxonomie: Kategorien (video-weit) + sprachbezogene Tags
     cat_of = {}

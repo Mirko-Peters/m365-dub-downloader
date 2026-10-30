@@ -1,0 +1,29 @@
+name: Bilder nach R2 kopieren
+on:
+  workflow_dispatch:
+    inputs:
+      apply:
+        description: "true = wirklich hochladen (sonst nur Testlauf)"
+        default: "false"
+permissions:
+  contents: write
+jobs:
+  copy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.12" }
+      - run: pip install boto3 pillow
+      - name: Kopieren
+        env:
+          R2_ACCOUNT_ID: ${{ secrets.R2_ACCOUNT_ID }}
+          R2_BUCKET: ${{ secrets.R2_BUCKET }}
+          R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+        run: python tools/r2_upload.py ${{ inputs.apply == 'true' && '--apply' || '' }}
+      - name: Zuordnung sichern
+        if: inputs.apply == 'true'
+        run: |
+          git config user.name "github-actions"; git config user.email "actions@github.com"
+          git add data/r2_map.json && git commit -m "R2: Bildzuordnung" && git push || echo "nichts zu sichern"
