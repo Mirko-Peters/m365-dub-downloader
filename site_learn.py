@@ -95,7 +95,7 @@ function end(){box.textContent="";box.appendChild(el("h2","",T.score.replace("{s
 if(w.length){box.appendChild(el("h3","",T.weak));var ul=el("ul"),seen={};w.forEach(function(k){var q=wrong[k];if(seen[q.u])return;seen[q.u]=1;var li=el("li"),a=el("a","",q.t);a.href=q.u;li.appendChild(a);ul.appendChild(li)});box.appendChild(ul)}
 var lb=el("label","",T.name+" ");var nm=el("input","ln-nm");nm.type="text";nm.maxLength=60;lb.appendChild(nm);box.appendChild(lb);
 var cert=el("section","ln-cert");cert.id="cert";cert.appendChild(el("h2","",T.cert));var n2=el("div","nm"," ");cert.appendChild(n2);cert.appendChild(el("p","",T.cert_text.replace("{s}",sc).replace("{n}",N)));
-cert.appendChild(el("p","",new Date().toLocaleDateString(document.documentElement.lang||undefined)+" · M365.FM · dub.m365.fm"));var sm=el("small","",T.cert_note);cert.appendChild(sm);box.appendChild(cert);
+cert.appendChild(el("p","",new Date().toLocaleDateString(document.documentElement.lang||undefined)+" · M365.FM · www.m365.fm"));var sm=el("small","",T.cert_note);cert.appendChild(sm);box.appendChild(cert);
 nm.addEventListener("input",function(){n2.textContent=nm.value||" "});
 var pb=el("button","ln-btn",T.print);pb.type="button";pb.addEventListener("click",function(){window.print()});var rb=el("button","ln-btn",T.again);rb.type="button";rb.addEventListener("click",start);
 var wrap=el("p");wrap.appendChild(pb);wrap.appendChild(document.createTextNode(" "));wrap.appendChild(rb);box.appendChild(wrap)}

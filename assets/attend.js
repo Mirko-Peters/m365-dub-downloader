@@ -1,7 +1,7 @@
 /* "I'm attending M365Con 2027": Countdown (Sidebar) + Popup nach 2 Minuten Inaktivitaet. */
 (function () {
   var START = new Date("2027-01-11T00:00:00+01:00"), END = new Date("2027-01-23T00:00:00+01:00");
-  var BASE = (document.currentScript && document.currentScript.src || "").replace(/\/assets\/attend\.js.*$/, "") || "https://dub.m365.fm";
+  var BASE = (document.currentScript && document.currentScript.src || "").replace(/\/assets\/attend\.js.*$/, "") || "https://www.m365.fm";
   var URL_ = "https://m365con.net/?utm_source=m365.fm&utm_medium=popup&utm_campaign=attending2027";
   var T = {
     en: { h: "I'm attending M365Con 2027 – join me!", p: "Free online event, January 11–22, 2027 · 120+ sessions · 120+ speakers · 10 topic days.", go: "Save your free seat →", no: "Not now", x: "Close", d: "days", hh: "hours", m: "min", live: "Live now", meta: "Free online event · Jan 11–22, 2027" },
