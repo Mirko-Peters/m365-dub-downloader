@@ -18,6 +18,10 @@ S = {"en": dict(entities="Microsoft ecosystem entity database", intro="Products,
 
 
 SPEAKERS = {}   # Entitaets-ID -> zusammengefuehrter Speaker (data/speakers.json) mit Events und Sessions
+GENTEXT = {}   # Entitaet -> {en, de}: geschriebene Ueberblickstexte aus data/entity_texts/part-*.json
+for _f in sorted((Path(__file__).parent / "data" / "entity_texts").glob("part-*.json")) if (Path(__file__).parent / "data" / "entity_texts").exists() else []:
+    try: GENTEXT.update(json.loads(_f.read_text("utf-8")))
+    except Exception: pass
 EVENTS = {}   # Event-Handle -> Event (fuer Verlinkung Entitaet -> Eventseite)
 CLAIMS = {}   # eid -> Profil-Handle (uebernommene Entitaeten)
 ORGPAGES = {}   # eid -> Firmen-Handle
@@ -322,7 +326,11 @@ def build(g, wiki_links, experts_by_ent, ep_find):
                 rp = ENTS.get(e.get("replaced_by") or "")
                 oldbanner = f'<p class="en-old" role="note"><b>{esc(OLD[lang][2])}</b>' + (f' {esc(OLD[lang][3])} <a href="{root}{rp["id"]}/">{esc(rp["name"])}</a>.' if rp else "") + "</p>"
             _lt = (e.get("long") or {}).get(lang) or (e.get("long") or {}).get("en") or (e.get("long") or {}).get("de") or (EVENTS[e["id"]].get("about") if e["id"] in EVENTS else "") or ""
-            longbox = ("<h2>" + (T(lang, "Description", "Beschreibung")) + "</h2>" + "".join(f"<p>{esc(par).replace(chr(10), '<br>')}</p>" for par in _lt.split("\n\n") if par.strip())) if _lt.strip() else ""
+            _gen = ""
+            if not _lt.strip() and e["id"] in GENTEXT:   # von Claude aus den Folgen der Show zusammengestellter Text (data/entity_texts), solange es keinen redaktionellen Langtext gibt
+                _lt = GENTEXT[e["id"]].get(lang) or GENTEXT[e["id"]].get("en") or ""
+                _gen = f'<p class="mut" style="font-size:.85em">{T(lang, "Overview compiled with AI from M365.FM episodes and the facts on this page. You can improve it with the edit button below.", "Überblick, mit KI aus M365.FM-Folgen und den Fakten dieser Seite zusammengestellt. Du kannst ihn unten über „Bearbeiten“ verbessern.")}</p>' if _lt.strip() else ""
+            longbox = ("<h2>" + (T(lang, "Description", "Beschreibung")) + "</h2>" + "".join(f"<p>{esc(par).replace(chr(10), '<br>')}</p>" for par in _lt.split("\n\n") if par.strip()) + _gen) if _lt.strip() else ""
             w = WT.get(lang, WT["en"])
             data_attr = esc(json.dumps({k: e.get(k) for k in ("id", "name", "type", "aliases", "desc", "web", "docs", "wikipedia", "wikidata", "rel", "outdated", "replaced_by", "start", "end", "long", "logo", "version", "released", "license", "level", "exam", "valid_months")}, ensure_ascii=False))
             edit = f'<div id="en-edit" data-e="{data_attr}"></div>'
