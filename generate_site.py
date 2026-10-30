@@ -437,7 +437,7 @@ def page(lang, title, desc, canonical, body, alternates=None, jsonld=None, xdefa
 <meta property="og:url" content="{canonical}"><meta property="og:locale" content="{loc}"><meta property="og:site_name" content="M365.FM">
 <meta property="og:image" content="{ogimg}"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta property="og:image:alt" content="{esc(title)}">
 <meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="{esc(title)}"><meta name="twitter:description" content="{esc(desc)}"><meta name="twitter:image" content="{ogimg}">
-{extra_head}{ADS.head(BASE, body, canonical, noindex)}<style>{CSS}{ADS.CSS if ADS.active(BASE) else ''}</style>{A11Y_EARLY}
+{extra_head}{ADS.head(BASE, body, canonical, noindex)}{css_link()}{A11Y_EARLY}
 {ld}</head>
 <body>
 {ext_links(body)}
@@ -446,6 +446,20 @@ def page(lang, title, desc, canonical, body, alternates=None, jsonld=None, xdefa
 <script defer src="{BASE}/assets/attend.js"></script>
 </body></html>
 """
+
+
+_CSSF = {}
+
+
+def css_link():
+    """Das gesamte Stylesheet liegt einmal als Datei mit Inhalts-Hash unter /assets/ (statt ~33 KB inline in jeder Seite): kleinere Seiten, Browser- und CDN-Cache."""
+    if not _CSSF:
+        import hashlib
+        css = CSS + (ADS.CSS if ADS.active(BASE) else "")
+        name = "site." + hashlib.sha1(css.encode("utf-8")).hexdigest()[:10] + ".css"
+        (OUT / "assets").mkdir(parents=True, exist_ok=True); (OUT / "assets" / name).write_text(css, encoding="utf-8")
+        _CSSF["u"] = f"{BASE}/assets/{name}"
+    return f'<link rel="stylesheet" href="{_CSSF["u"]}">'
 
 
 def person_ld():
