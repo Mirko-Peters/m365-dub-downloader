@@ -39,7 +39,7 @@ def build(g, eps, people, api):
             u = f"{croot}podcast/{e['slug']}/"; au = f"{BASE}/community/u/{e['handle']}/"
             topics = [t for t in e.get("topics", []) if t in ENTS]
             tl = "".join(f'<a class="mb-tag" href="{BASE}/entity/{t}/">{esc(ENTS[t]["name"])}</a> ' for t in topics)
-            player = f'<iframe title="{esc(e["title"])}" src="https://widget.spreaker.com/player?episode_id={e["spreaker_id"]}&theme=light" width="100%" height="200" loading="lazy" style="border:0"></iframe>'
+            player = "" if not e["spreaker_id"] else f'<iframe title="{esc(e["title"])}" src="https://widget.spreaker.com/player?episode_id={e["spreaker_id"]}&theme=light" width="100%" height="200" loading="lazy" style="border:0"></iframe>'
             b = shell(lang, f'<p class="mut"><a href="{croot}podcast/">{esc(ttl)}</a></p><article><h1>{esc(e["title"])}</h1>'
                             f'<p class="mut">{esc(T(lang, "By", "Von"))} <a href="{croot}u/{e["handle"]}/">{esc(e["name"])}</a> · {iso(e["published"])}</p>{player}'
                             f'{"".join("<p>" + esc(par) + "</p>" for par in (e.get("description") or "").split(chr(10) * 2) if par.strip())}'
@@ -50,8 +50,8 @@ def build(g, eps, people, api):
                    "datePublished": iso(e["published"]), "author": {"@type": "Person", "@id": au + "#person", "name": e["name"], "url": au},
                    "partOfSeries": {"@type": "PodcastSeries", "name": "M365.FM", "url": f"{BASE}/"}, "about": [{"@id": f"{BASE}/entity/{t}/#thing"} for t in topics],
                    "associatedMedia": {"@type": "AudioObject", "contentUrl": e["ep_url"]}}]
-            write(f"{pfx2(lang)}community/podcast/{e['slug']}/index.html", page(lang, f'{e["title"]} – {ttl} | M365.FM', (e.get("description") or "")[:155], u, b, None, ld, og_type="article", extra_head=LCSS))
-            sitemap.append((u, iso(e["published"]), None))
+            write(f"{pfx2(lang)}community/podcast/{e['slug']}/index.html", page(lang, f'{e["title"]} – {ttl} | M365.FM', (e.get("description") or "")[:155], u, b, None, ld, og_type="article", extra_head=LCSS, noindex=e["title"].startswith("[Test]")))
+            if not e["title"].startswith("[Test]"): sitemap.append((u, iso(e["published"]), None))
         it = sorted(mine, key=lambda x: -x["published"]); ru = f"{croot}podcast/"
         lst = '<ul class="bl-list" style="padding:0;list-style:none">' + "".join(f'<li style="padding:.7em 0;border-bottom:1px solid var(--bd)"><a href="{croot}podcast/{e["slug"]}/"><b>{esc(e["title"])}</b></a> <span class="mut">· {esc(e["name"])} · {iso(e["published"])}</span></li>' for e in it) + "</ul>"
         b = shell(lang, f'<h1>{esc(ttl)}</h1><p class="mut">{esc(T(lang, "Podcast episodes from members of the Microsoft community, reviewed by the editors.", "Podcastfolgen von Mitgliedern der Microsoft-Community, von der Redaktion geprüft."))}</p>{lst}')

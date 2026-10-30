@@ -50,8 +50,8 @@ def build(g, vids, people, api):
                    "uploadDate": iso(v["published"]), "thumbnailUrl": f"https://i.ytimg.com/vi/{v['video_id']}/hqdefault.jpg", "embedUrl": f"https://www.youtube.com/embed/{v['video_id']}",
                    "contentUrl": f"https://youtu.be/{v['video_id']}", "author": {"@type": "Person", "@id": au + "#person", "name": v["name"], "url": au},
                    "publisher": {"@id": f"{BASE}/#org"}, "about": [{"@id": f"{BASE}/entity/{t}/#thing"} for t in topics]}]
-            write(f"{pfx2(lang)}community/video/{v['slug']}/index.html", page(lang, f'{v["title"]} – {ttl} | M365.FM', (v.get("description") or "")[:155], u, b, None, ld, og_type="video.other", extra_head=LCSS))
-            sitemap.append((u, iso(v["published"]), None))
+            write(f"{pfx2(lang)}community/video/{v['slug']}/index.html", page(lang, f'{v["title"]} – {ttl} | M365.FM', (v.get("description") or "")[:155], u, b, None, ld, og_type="video.other", extra_head=LCSS, noindex=v["title"].startswith("[Test]")))
+            if not v["title"].startswith("[Test]"): sitemap.append((u, iso(v["published"]), None))
         it = sorted(mine, key=lambda x: -x["published"]); ru = f"{croot}video/"
         lst = '<ul class="bl-list" style="padding:0;list-style:none">' + "".join(f'<li style="padding:.7em 0;border-bottom:1px solid var(--bd)"><a href="{croot}video/{v["slug"]}/"><b>{esc(v["title"])}</b></a> <span class="mut">· {esc(v["name"])} · {iso(v["published"])}</span></li>' for v in it) + "</ul>"
         b = shell(lang, f'<h1>{esc(ttl)}</h1><p class="mut">{esc(T(lang, "Videos from members of the Microsoft community on the m365 Show YouTube channel, reviewed by the editors.", "Videos von Mitgliedern der Microsoft-Community auf dem YouTube-Kanal m365 Show, von der Redaktion geprüft."))}</p>{lst}')

@@ -18,7 +18,7 @@ async function trusted(db, user) { return !!(user.admin || user.editor || user.p
 
 const postUrl = (env, lang, handle, slug) => `${env.SITE}${lang === "en" ? "" : "/" + lang}/community/u/${handle}/blog/${slug}/`;
 // Creator-Feed: veroeffentlichte Beitraege erscheinen im Feed des Profils (Kanal-Art "blog", ohne eigenen RSS-Abruf)
-async function syncFeed(env, db, uid, post, handle, live) {
+export async function syncFeed(env, db, uid, post, handle, live) {
   const url = postUrl(env, post.lang, handle, post.slug);
   if (!live) { await db.prepare("DELETE FROM feed_items WHERE url=? AND owner_type='u' AND owner_id=?").bind(url, uid).run(); return; }
   const curl = `${env.SITE}/community/u/${handle}/blog/`;
