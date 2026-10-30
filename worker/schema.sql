@@ -436,3 +436,10 @@ CREATE TABLE IF NOT EXISTS profile_i18n (       -- Profiltexte pro Sprache (Kurz
   updated INTEGER NOT NULL DEFAULT 0,
   PRIMARY KEY (user_id, lang)
 );
+
+CREATE TABLE IF NOT EXISTS tr_gap (            -- fehlende Uebersetzungen: seit wann fehlt der Text (Community hat 24 h Vorrang vor der Auto-Uebersetzung)
+  eid TEXT NOT NULL,
+  field TEXT NOT NULL,
+  first INTEGER NOT NULL,
+  PRIMARY KEY (eid, field)
+);

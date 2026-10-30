@@ -11,6 +11,7 @@ import { handleMcp, handleTokens, deleteUserTokens } from "./mcp.js";
 import { handlePoints } from "./points.js";
 import { handleMessages, purgeMessages, deleteUserMessages } from "./messages.js";
 import { refreshFeeds } from "./feeds.js";
+import { autoTranslate, translateStatus } from "./translate.js";
 import { handleWiki } from "./wiki.js";
 
 const PROVIDERS = {
@@ -223,6 +224,10 @@ async function api(env, request, url, path) {
   if (/^\/api\/points(\/|$)/.test(path) || path.startsWith("/api/admin/points/")) { const p = await handlePoints(env, request, url, path, user, J); if (p) return p; }
   if (/^\/api\/msg(\/|$)/.test(path)) { const p = await handleMessages(env, request, url, path, user, J); if (p) { if (user && method !== "GET") await evalBadges(env, user.id).catch(() => 0); return p; } }
   if (/^\/api\/(events?|speaker)(\/|$)/.test(path) || /^\/api\/entity\/claims?(\/|$)/.test(path) || /^\/api\/admin\/entity\/claims?$/.test(path)) { const p = await handleEvents(env, request, url, path, user, J); if (p) { if (user && method !== "GET") await evalBadges(env, user.id).catch(() => 0); return p; } }
+  if (path === "/api/admin/translate" && user?.admin) {   // Status und Notaus der Auto-Uebersetzung
+    if (request.method === "POST") { const b = await request.json().catch(() => ({})); await env.DB.prepare("INSERT INTO meta(k,v) VALUES('tr_off',?) ON CONFLICT(k) DO UPDATE SET v=excluded.v").bind(b.off ? "1" : "0").run(); }
+    return J(await translateStatus(env));
+  }
   if (path.startsWith("/api/ai-token")) { const k = await handleTokens(env, request, url, path, user, J); if (k) return k; }
   if (path === "/api/qa" || path.startsWith("/api/qa/")) { const q = await handleQa(env, request, url, path, user, J); if (q) return q; }
   if (path.startsWith("/api/edits/")) { const v = await handleVotes(env, request, url, path, user, J); if (v) return v; }
@@ -325,5 +330,5 @@ export default {
       return json({ error: "server" }, 500, env, request);
     }
   },
-  async scheduled(event, env, ctx) { if (event.cron === "0 6 * * *") ctx.waitUntil(runDigest(env)); ctx.waitUntil(refreshFeeds(env).catch(() => 0)); ctx.waitUntil(ensureM365Con(env).catch(() => 0)); ctx.waitUntil(purgeMessages(env.DB).catch(() => 0)); },
+  async scheduled(event, env, ctx) { if (event.cron === "0 6 * * *") ctx.waitUntil(runDigest(env)); ctx.waitUntil(refreshFeeds(env).catch(() => 0)); ctx.waitUntil(ensureM365Con(env).catch(() => 0)); ctx.waitUntil(purgeMessages(env.DB).catch(() => 0)); ctx.waitUntil(autoTranslate(env).catch(() => 0)); },
 };
