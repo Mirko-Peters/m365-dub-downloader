@@ -505,6 +505,15 @@ CREATE TABLE IF NOT EXISTS ui_i18n (
   PRIMARY KEY (lang, k)
 );
 
+CREATE TABLE IF NOT EXISTS item_guests (          -- Gaeste bei Community-Podcast und Video: invited -> confirmed | declined; nur bestaetigte erscheinen auf der Seite
+  kind TEXT NOT NULL,                              -- podcast | video
+  item_id INTEGER NOT NULL,
+  user_id INTEGER NOT NULL,
+  status TEXT NOT NULL DEFAULT 'invited',
+  created INTEGER NOT NULL,
+  PRIMARY KEY (kind, item_id, user_id)
+);
+CREATE INDEX IF NOT EXISTS idx_item_guests_user ON item_guests(user_id, status);
 CREATE TABLE IF NOT EXISTS blog_coauthors (       -- Co-Autoren eines Blog-Beitrags (wie Gaeste bei Podcast/Video): invited -> confirmed | declined; nur bestaetigte erscheinen auf der Seite
   post_id INTEGER NOT NULL,
   user_id INTEGER NOT NULL,

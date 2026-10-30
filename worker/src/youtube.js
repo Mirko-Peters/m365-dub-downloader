@@ -1,5 +1,6 @@
 // Creator-Videos fuer den YouTube-Kanal "m365 Show": Der Worker legt eine resumable Upload-Session an (privat), der Browser
 // laedt direkt zu YouTube hoch. Abstimmung -> ab Schwelle Aufgabe fuer Mirko -> Freigabe (oeffentlich schalten) in YouTube Studio.
+import { guestsOf, dropGuests } from "./credits.js";
 import { cleanText, rateLimit, isLang } from "./util.js";
 import { baseIds } from "./entities.js";
 import { sendPush } from "./push.js";
@@ -91,7 +92,8 @@ export async function handleVideo(env, request, url, path, user, J) {
       `SELECT v.id,v.title,v.description,v.lang,v.topics,v.created,v.published,v.video_id,v.ai,p.handle,u.name
        FROM yt_videos v JOIN profiles p ON p.user_id=v.user_id AND p.public=1 AND p.handle IS NOT NULL JOIN users u ON u.id=v.user_id AND u.banned=0
        WHERE v.status='published' ORDER BY v.published DESC LIMIT 1000`).all()).results || [];
-    return J({ items: rows.map((r) => ({ ...r, topics: parse(r.topics, []), slug: vidSlug(r) })) }, 200, { "cache-control": "public, max-age=300" });
+    const gs = await guestsOf(db, "video", rows.map((r) => r.id));
+    return J({ items: rows.map((r) => ({ ...r, topics: parse(r.topics, []), slug: vidSlug(r), guests: gs[r.id] || [] })) }, 200, { "cache-control": "public, max-age=300" });
   }
 
   if (path.startsWith("/api/admin/video")) {
@@ -114,7 +116,8 @@ export async function handleVideo(env, request, url, path, user, J) {
 
   if (path === "/api/video/mine" && method === "GET") {
     const rows = (await db.prepare(`SELECT ${PUB},(SELECT COUNT(*) FROM yt_votes x WHERE x.vid_id=yt_videos.id) votes FROM yt_videos WHERE user_id=? AND status<>'uploading' ORDER BY created DESC LIMIT 50`).bind(user.id).all()).results || [];
-    return J({ items: rows.map((r) => ({ ...r, video_id: r.status === "published" ? r.video_id : "", topics: parse(r.topics, []), slug: vidSlug(r) })), threshold: THRESHOLD, configured: !!(env.YT_CLIENT_ID && env.YT_CLIENT_SECRET && env.YT_REFRESH_TOKEN) });
+    const gs = await guestsOf(db, "video", rows.map((r) => r.id), true);
+    return J({ items: rows.map((r) => ({ ...r, video_id: r.status === "published" ? r.video_id : "", topics: parse(r.topics, []), slug: vidSlug(r), guests: gs[r.id] || [] })), threshold: THRESHOLD, configured: !!(env.YT_CLIENT_ID && env.YT_CLIENT_SECRET && env.YT_REFRESH_TOKEN) });
   }
 
   if (path === "/api/video/init" && method === "POST") {   // legt die resumable Upload-Session an; der Browser PUT die Datei direkt zu YouTube
@@ -159,7 +162,7 @@ export async function handleVideo(env, request, url, path, user, J) {
     const b = await request.json().catch(() => ({})), v = await db.prepare("SELECT * FROM yt_videos WHERE id=? AND (user_id=? OR ?=1)").bind(+b.id, user.id, user.admin ? 1 : 0).first(); if (!v) return J({ error: "not_found" }, 404);
     if (v.status === "published" && !user.admin) return J({ error: "published" }, 400);
     if (v.status !== "published") await dropVideo(env, v);
-    await db.batch([db.prepare("DELETE FROM yt_votes WHERE vid_id=?").bind(v.id), db.prepare("DELETE FROM yt_videos WHERE id=?").bind(v.id), db.prepare("DELETE FROM comments WHERE vid=?").bind("video" + v.id)]);
+    await db.batch([db.prepare("DELETE FROM yt_votes WHERE vid_id=?").bind(v.id), db.prepare("DELETE FROM yt_videos WHERE id=?").bind(v.id), db.prepare("DELETE FROM comments WHERE vid=?").bind("video" + v.id), db.prepare("DELETE FROM item_guests WHERE kind='video' AND item_id=?").bind(v.id)]);
     return J({ ok: true });
   }
 
