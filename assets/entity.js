@@ -81,6 +81,44 @@
       }).catch(function () { det.appendChild(h("p", { text: X.err })); });
     });
   }
+  /* ---------- Fragen & Antworten ---------- */
+  function mountQa(host) {
+    var eid = host.getAttribute("data-eid"); if (!eid) return;
+    var T = de ? { h: "Fragen und Antworten", ask: "Frage stellen", qph: "Deine Frage zu diesem Thema (10–200 Zeichen)", send: "Absenden", ans: "Antworten", aph: "Deine Antwort in eigenen Worten (20–600 Zeichen, keine Links)", up: "Hilfreich", acc: "In FAQ übernehmen", accd: "In der FAQ-Box", none: "Noch keine Fragen. Stell die erste!", login: "Zum Fragen und Antworten bitte anmelden.", err: "Das hat nicht geklappt – bitte Eingaben prüfen.", note: "Die beste Antwort erscheint in der FAQ-Box dieser Seite, sobald Eigentümer/Redaktion sie annehmen oder genug Mitglieder sie hilfreich finden.", del: "Löschen", noans: "Noch keine Antwort." }
+      : { h: "Questions and answers", ask: "Ask a question", qph: "Your question about this topic (10–200 characters)", send: "Submit", ans: "Answer", aph: "Your answer in your own words (20–600 characters, no links)", up: "Helpful", acc: "Add to FAQ", accd: "In the FAQ box", none: "No questions yet. Ask the first one!", login: "Please sign in to ask or answer.", err: "That did not work – please check your input.", note: "The best answer appears in this page's FAQ box once the owner/editors accept it or enough members find it helpful.", del: "Delete", noans: "No answer yet." };
+    var box = h("section", { class: "wk-qa" }), list = h("div"), msg = h("p", { class: "cmut", role: "status", "aria-live": "polite" });
+    box.appendChild(h("h2", { text: T.h })); box.appendChild(h("p", { class: "cmut", text: T.note })); box.appendChild(list);
+    function load() {
+      api("/api/qa?eid=" + encodeURIComponent(eid)).then(function (r) {
+        if (r.s !== 200) return; list.textContent = ""; var d = r.j;
+        if (!d.questions.length) list.appendChild(h("p", { class: "cmut", text: T.none }));
+        d.questions.forEach(function (q) {
+          var item = h("div", { class: "wk-q" }, [h("h3", { text: q.q })]);
+          if (!q.answers.length) item.appendChild(h("p", { class: "cmut", text: T.noans }));
+          q.answers.forEach(function (a) {
+            var row = h("div", { class: "wk-a" }, [h("p", { text: a.a }), h("p", { class: "cmut", text: (a.name || "") + (a.accepted ? " · ✔ " + T.accd : "") + " · " + a.votes + " 👍" })]);
+            if (d.loggedIn && !a.own) row.appendChild(h("button", { type: "button", class: "wk-link", "aria-pressed": a.me ? "true" : "false", text: (a.me ? "✓ " : "") + T.up, onclick: function () { api("/api/qa/vote", { method: "POST", body: { aid: a.id } }).then(load); } }));
+            if (d.canAccept) row.appendChild(h("button", { type: "button", class: "wk-link", text: a.accepted ? "✔ " + T.accd : T.acc, onclick: function () { api("/api/qa/accept", { method: "POST", body: { aid: a.id } }).then(load); } }));
+            if (a.own) row.appendChild(h("button", { type: "button", class: "wk-link", text: T.del, onclick: function () { api("/api/qa/delete", { method: "POST", body: { kind: "a", id: a.id } }).then(load); } }));
+            item.appendChild(row);
+          });
+          if (d.loggedIn) {
+            var ta = h("textarea", { rows: 2, maxlength: 600, placeholder: T.aph, "aria-label": T.aph, style: "width:100%" });
+            item.appendChild(h("details", { class: "wk-edit" }, [h("summary", { text: T.ans }), ta, h("button", { type: "button", class: "btn", text: T.send, onclick: function () { api("/api/qa/answer", { method: "POST", body: { qid: q.id, a: ta.value } }).then(function (x) { if (x.s === 200) load(); else msg.textContent = T.err; }); } })]));
+          }
+          if (q.own) item.appendChild(h("button", { type: "button", class: "wk-link", text: T.del, onclick: function () { api("/api/qa/delete", { method: "POST", body: { kind: "q", id: q.id } }).then(load); } }));
+          list.appendChild(item);
+        });
+        if (d.loggedIn) {
+          var qi = h("input", { type: "text", maxlength: 200, placeholder: T.qph, "aria-label": T.qph, style: "width:100%" });
+          list.appendChild(h("details", { class: "wk-edit" }, [h("summary", { text: T.ask }), qi, h("button", { type: "button", class: "btn main", text: T.send, onclick: function () { api("/api/qa/ask", { method: "POST", body: { eid: eid, q: qi.value, lang: de ? "de" : "en" } }).then(function (x) { if (x.s === 200) load(); else msg.textContent = T.err; }); } })]));
+        } else list.appendChild(h("p", { class: "cmut" }, [h("a", { href: E.base + (de ? "/de" : "") + "/community/", text: T.login })]));
+        list.appendChild(msg);
+      });
+    }
+    host.appendChild(box); load();
+  }
+  var qh = document.getElementById("en-qa"); if (qh) mountQa(qh);
   var ed = document.getElementById("en-edit"); if (ed) { try { mount(ed, JSON.parse(ed.getAttribute("data-e")), false); } catch (e) {} }
   var nw = document.getElementById("en-new"); if (nw) mount(nw, {}, true);
 })();

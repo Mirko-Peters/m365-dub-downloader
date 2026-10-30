@@ -395,3 +395,29 @@ CREATE TABLE IF NOT EXISTS cert_endorse (      -- Bestaetigungen anderer Mitglie
   created INTEGER NOT NULL,
   PRIMARY KEY (owner_id, eid, by_id)
 );
+CREATE TABLE IF NOT EXISTS entity_q (          -- Fragen zu Entitaeten
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  eid TEXT NOT NULL,
+  user_id INTEGER NOT NULL,
+  q TEXT NOT NULL,
+  lang TEXT NOT NULL DEFAULT 'en',
+  hidden INTEGER NOT NULL DEFAULT 0,
+  created INTEGER NOT NULL
+);
+CREATE INDEX IF NOT EXISTS idx_eq_eid ON entity_q(eid);
+CREATE TABLE IF NOT EXISTS entity_a (          -- Antworten
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  q_id INTEGER NOT NULL,
+  user_id INTEGER NOT NULL,
+  a TEXT NOT NULL,
+  accepted INTEGER NOT NULL DEFAULT 0,         -- vom Eigentuemer/der Redaktion angenommen
+  hidden INTEGER NOT NULL DEFAULT 0,
+  created INTEGER NOT NULL
+);
+CREATE INDEX IF NOT EXISTS idx_ea_q ON entity_a(q_id);
+CREATE TABLE IF NOT EXISTS entity_a_votes (
+  a_id INTEGER NOT NULL,
+  user_id INTEGER NOT NULL,
+  created INTEGER NOT NULL,
+  PRIMARY KEY (a_id, user_id)
+);

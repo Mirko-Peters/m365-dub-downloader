@@ -87,9 +87,9 @@ export async function ensureM365Con(env) {   // M365Con 2027 ist ein Event und g
       .bind(owner.id, "Microsoft MVP · Host of M365.FM · Organizer of M365Con", "Mirko Peters is a Microsoft MVP who explains Microsoft 365, Microsoft Copilot, Azure, Power Platform, Microsoft Fabric and AI agents for IT admins, architects, developers and decision makers. He hosts the podcast M365.FM and the M365 Show on YouTube (animated explainers and Microsoft certification courses), organizes the free online conference M365Con and publishes e-books on Microsoft topics.", "Podcast host and conference organizer", t).run();
   }
   const prof = await db.prepare("SELECT handle FROM profiles WHERE user_id=?").bind(owner.id).first();
-  if (prof?.handle === "mirko-peters") {
+  if (prof?.handle) {   // Besitzer ist der Admin (Mirko): Programm, Kanaele und 12 Expertise-Themen auch bei abweichender Profil-Adresse ergaenzen
     await db.prepare("INSERT OR IGNORE INTO programs(owner_type,owner_id,program,year,url,verified) VALUES('u',?,'mvp',0,'https://mvp.microsoft.com/de-DE/mvp/profile/9b0ca797-db5a-493a-a845-8b9158046cf5',1)").bind(owner.id).run();
-    for (const [k, u] of [["linkedin", "https://www.linkedin.com/in/m365showpodcast/"], ["youtube", "https://www.youtube.com/channel/UCIdo4tN3khKldHP3733E9JA"], ["website", "https://www.m365.fm"], ["website", "https://m365con.net"]])
+    for (const [k, u] of [["linkedin", "https://www.linkedin.com/in/m365showpodcast/"], ["youtube", "https://www.youtube.com/channel/UCIdo4tN3khKldHP3733E9JA"], ["website", "https://www.m365.fm"], ["website", "https://m365con.net"], ["github", "https://github.com/Mirko-Peters"], ["podcast", "https://www.spreaker.com/show/7393187"], ["podcast", "https://www.spreaker.com/show/6704921"]])
       await db.prepare("INSERT OR IGNORE INTO channels(owner_type,owner_id,kind,url) VALUES('u',?,?,?)").bind(owner.id, k, u).run();
     for (const eid of ["microsoft-365", "copilot", "copilot-studio", "azure", "azure-ai-foundry", "power-platform", "fabric", "purview", "teams", "sharepoint", "ai-agent", "entra-id"])
       await db.prepare("INSERT OR IGNORE INTO expertise(owner_type,owner_id,eid,level,verified) VALUES('u',?,?,3,1)").bind(owner.id, eid).run();

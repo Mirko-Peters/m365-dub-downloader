@@ -118,7 +118,7 @@ h2{font-size:1.5rem;line-height:1.2;margin:2.1em 0 .6em;font-weight:700}
 .tile b{display:block;font-size:1.5rem;line-height:1.15;font-weight:700}.tile span{font-size:.78rem;letter-spacing:.14em;text-transform:uppercase;color:var(--mut)}.tile:hover{background:var(--ink);color:var(--onink)}.tile:hover span{color:var(--onink)}
 .list{border-top:1px solid var(--fg)}.row{display:block;padding:20px 0;border-bottom:1px solid var(--bd);text-decoration:none}
 .row h3{margin:0 0 .25em;font:700 1.35rem/1.25 Didot,"Bodoni 72",Georgia,"Noto Serif",serif}.row p{margin:0;color:var(--mut);font-size:.98rem}.row:hover h3{color:var(--ac)}.row>a,.thumb>a{display:block;color:inherit;text-decoration:none}
-.author{display:flex;gap:16px;align-items:center;border-top:1px solid var(--fg);border-bottom:1px solid var(--bd);padding:18px 0;margin:36px 0}
+.auth-ch a{margin-right:.9em;font-size:.9em}.author{display:flex;gap:16px;align-items:center;border-top:1px solid var(--fg);border-bottom:1px solid var(--bd);padding:18px 0;margin:36px 0}
 .author img.badge{object-fit:cover;border:2px solid var(--ac)}.portrait{float:right;width:190px;height:190px;object-fit:cover;border-radius:50%;border:3px solid var(--ac);margin:0 0 12px 22px}
 .author .badge{flex:none;width:58px;height:58px;border-radius:50%;background:var(--ink);color:var(--onink);display:grid;place-items:center;font:700 1.15rem Didot,Georgia,serif}
 .author p{margin:0;font-size:.95rem;color:var(--mut)}.author strong{color:var(--fg);display:block;font-size:1.02rem}
@@ -631,12 +631,15 @@ AUTHOR = {}   # oeffentliches Profil des Autors (Quelle der Wahrheit), faellt au
 def author_box(lang):
     if AUTHOR.get("handle"):
         a = AUTHOR; progs = {"mvp": "Microsoft MVP", "mct": "Microsoft Certified Trainer", "rd": "Microsoft Regional Director", "msa": "Microsoft Student Ambassador"}
-        lab = " · ".join(progs[x["p"]] for x in a.get("programs", []) if x.get("verified") and x["p"] in progs)
+        icons = {"mvp": "🏆", "mct": "🎓", "rd": "🧭", "msa": "🌟"}
+        lab = " · ".join(icons[x["p"]] + " " + progs[x["p"]] for x in a.get("programs", []) if x.get("verified") and x["p"] in progs)
+        KL = {"linkedin": "LinkedIn", "github": "GitHub", "youtube": "YouTube", "x": "X", "mastodon": "Mastodon", "bluesky": "Bluesky", "twitch": "Twitch", "blog": "Blog", "podcast": "Podcast", "newsletter": "Newsletter", "website": "Web", "other": "Link"}
+        chs = "".join(f'<a href="{esc(c["url"])}" rel="me noopener">{esc(KL.get(c["kind"], "Link"))}</a> ' for c in a.get("channels", [])[:8] if c.get("url"))
         img = f'{COMMUNITY_API}/api/img/u/{a["handle"]}' if a.get("img") else (f"{BASE}/assets/mirko-peters.jpg" if (ROOT / "assets" / "mirko-peters.jpg").exists() else "")
         badge = f'<img class="badge" src="{img}" alt="{esc(a["name"])}" width="58" height="58" loading="lazy">' if img else '<div class="badge">MP</div>'
         bio = (a.get("about") or a.get("headline") or "")[:220]
         return (f'<div class="author">{badge}<div><strong><a href="{BASE}{"/de" if lang == "de" else ""}/community/u/{a["handle"]}/">{esc(a["name"])}</a>{(" · " + esc(lab)) if lab else ""}</strong>'
-                f'<p>{esc(bio)}</p></div></div>')
+                f'<p>{esc(bio)}</p>' + (f'<p class="auth-ch">{chs}</p>' if chs else "") + '</div></div>')
     ui = UI.get(lang)
     name = ui[5] if ui else "About Mirko Peters"
     bio = ui[6] if ui else "Mirko Peters is a Microsoft MVP, host of the podcast M365.FM and initiator of the free online conference M365Con."
@@ -1101,6 +1104,8 @@ def build():
         ENT.EVENTS[_ev["handle"]] = _ev
         for _t in _ev.get("topics", []):
             ENT.EVENTS.setdefault(_t, _ev)
+    for _x in (LRN._fetch_json(f"{COMMUNITY_API}/api/qa/export") or {}).get("items", []):
+        ENT.FAQ.setdefault(_x["eid"], []).append(_x)
     ENT.CLAIMS.update({c["eid"]: c["handle"] for c in _cl}); MEM.CLAIMED.update({c["handle"]: c["eid"] for c in _cl})
     ENT.build(_ctx, lambda lang: LRN.gloss_links(lang, BASE), MEM.experts_index(_people, _orgs), _ep_find)
     MEM.build(_ctx, _people, _orgs, extra={l: EVT.blocks(BASE, _events, l) for l in ("en", "de")})
