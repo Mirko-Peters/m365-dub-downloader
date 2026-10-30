@@ -1,6 +1,6 @@
 // Experten- und Firmenprofile, Programme (MVP/MCT/...), Kanaele mit Feeds, Upvotes, Bestaetigungen
 import { cleanText, rateLimit } from "./util.js";
-import { baseIds, validate, trustedUser } from "./entities.js";
+import { baseIds, knownIds, validate, trustedUser } from "./entities.js";
 
 export const PROGRAMS = ["mvp", "mct", "rd", "msa", "ms_employee", "partner"];
 export const RELATIONS = ["colleague", "manager", "report", "client", "trainer", "student", "cospeaker", "podcast", "community", "mentor", "other"];
@@ -245,7 +245,7 @@ export async function handleProfiles(env, request, url, path, user, J) {
     const ch = await checkChannels(b.channels); if (ch.err) return J({ error: ch.err }, 400);
     const ex = await checkExpertise(env, b.expertise); if (ex.err) return J({ error: ex.err }, 400);
     const pr = checkPrograms(b.programs, false); if (pr.err) return J({ error: pr.err }, 400);
-    const known = await baseIds(env), certs = [];
+    const known = await knownIds(env), certs = [];
     for (const c of (Array.isArray(b.certs) ? b.certs : []).slice(0, 20)) {
       const u = cleanUrl(c?.url, null); if (!ID.test(c?.e || "") || !known.has(c.e) || u === null) return J({ error: "bad_cert" }, 400);
       certs.push({ e: c.e, year: Math.min(2100, Math.max(0, parseInt(c.year) || 0)), url: u });

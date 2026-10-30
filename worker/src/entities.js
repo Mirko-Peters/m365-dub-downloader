@@ -21,6 +21,13 @@ export async function baseIds(env) {
   } catch { return new Set(); }
 }
 
+// Basis + live veroeffentlichte Community-Entitaeten (z. B. direkt im Profil neu angelegt)
+export async function knownIds(env) {
+  const k = await baseIds(env);
+  try { for (const r of ((await env.DB.prepare("SELECT DISTINCT eid FROM entity_rev WHERE status='live'").all()).results || [])) k.add(r.eid); } catch {}
+  return k;
+}
+
 export async function validate(env, id, raw) {
   const d = {}; const bad = (e) => ({ err: e });
   d.name = txt(raw?.name, 80); if (d.name.length < 2) return bad("bad_name");

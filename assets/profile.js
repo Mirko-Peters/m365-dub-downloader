@@ -76,14 +76,36 @@
     box.get = function () { return Object.keys(rows).filter(function (k) { return rows[k].c.checked; }).map(function (k) { return { p: k, year: +rows[k].yr.value || 0, url: rows[k].pr.value.trim() }; }); };
     return box;
   }
-  function pickerRows(all, filter, initial, withYear, labelAdd) {
+  function pickerRows(all, filter, initial, withYear, labelAdd, newType) {
     var wrap = h("div", {}), list = h("div"), dl = h("datalist", { id: "pdl" + (++uid) });
     all.filter(filter).forEach(function (x) { dl.appendChild(h("option", { value: x.name })); });
+    var NQ = de ? { mk: "Gibt es noch nicht – als neue Entität anlegen", d: "Kurzbeschreibung (mind. 20 Zeichen, eigene Worte, ohne Links)", go: "Anlegen", live: "Angelegt und übernommen.", pend: "Danke! Der neue Eintrag erscheint nach der Prüfung; danach kannst du ihn auswählen.", err: "Konnte nicht angelegt werden: ", short: "Bitte mindestens 20 Zeichen." }
+      : { mk: "Doesn't exist yet – create it as a new entity", d: "Short description (min. 20 characters, own words, no links)", go: "Create", live: "Created and selected.", pend: "Thank you! The new entry will appear after review; then you can select it.", err: "Could not be created: ", short: "Please enter at least 20 characters." };
+    function slug(n) { return n.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "").slice(0, 48); }
     function add(it) {
       var name = h("input", { type: "text", list: dl.id, placeholder: Q.pick, "aria-label": Q.pick, maxlength: 80 }), lv = h("select", { "aria-label": Q.exp }), yr = h("input", { type: "number", min: 1990, max: 2100, "aria-label": Q.year, placeholder: Q.year, style: "width:6em" }), pr = h("input", { type: "text", maxlength: 300, placeholder: Q.proof, "aria-label": Q.proof });
       Q.lvl.forEach(function (l, i) { lv.appendChild(h("option", { value: i + 1, text: l })); }); lv.value = (it && it.level) || 2; yr.value = (it && it.year) || ""; pr.value = (it && it.url) || "";
       if (it && it.e) { var t = all.filter(function (x) { return x.id === it.e; })[0]; name.value = t ? t.name : it.e; }
-      var row = h("div", { style: "display:flex;gap:.4em;flex-wrap:wrap;margin:.3em 0" }, [name].concat(withYear ? [yr, pr] : [lv], [h("button", { type: "button", class: "btn", text: Q.rm, onclick: function () { row.remove(); } })]));
+      var mkBox = h("div", { style: "flex-basis:100%", hidden: true }), mkBtn = h("button", { type: "button", class: "btn", hidden: true, text: NQ.mk });
+      function matched() { var v = name.value.trim().toLowerCase(); return all.some(function (x) { return x.name.toLowerCase() === v; }); }
+      function sync() { mkBtn.hidden = !name.value.trim() || matched(); if (mkBtn.hidden) mkBox.hidden = true; }
+      name.addEventListener("input", sync);
+      mkBtn.onclick = function () {
+        mkBox.hidden = false; mkBox.textContent = "";
+        var ta = h("textarea", { rows: 2, maxlength: 300, placeholder: NQ.d, "aria-label": NQ.d, style: "width:100%" }), go = h("button", { type: "button", class: "btn main", text: NQ.go }), ms = h("span", { class: "cmut" });
+        go.onclick = function () {
+          var nm = name.value.trim(), dsc = ta.value.trim(); if (dsc.length < 20) { ms.textContent = NQ.short; return; }
+          go.disabled = true;
+          api("/api/entity", { method: "POST", body: { id: slug(nm), data: { name: nm, type: newType || "product", aliases: [], desc: de ? { en: "", de: dsc } : { en: dsc, de: "" }, rel: [] }, summary: "" } }).then(function (r) {
+            go.disabled = false;
+            if (r.s === 200 && r.j.status === "live") { var ne = { id: slug(nm), name: nm, type: newType || "product" }; all.push(ne); dl.appendChild(h("option", { value: nm })); ms.textContent = NQ.live; mkBox.hidden = true; sync(); }
+            else if (r.s === 200) { ms.textContent = NQ.pend; name.value = ""; sync(); }
+            else ms.textContent = NQ.err + (r.j && r.j.error || "");
+          }).catch(function () { go.disabled = false; ms.textContent = NQ.err; });
+        };
+        [ta, go, ms].forEach(function (x) { mkBox.appendChild(x); });
+      };
+      var row = h("div", { style: "display:flex;gap:.4em;flex-wrap:wrap;margin:.3em 0" }, [name].concat(withYear ? [yr, pr] : [lv], [h("button", { type: "button", class: "btn", text: Q.rm, onclick: function () { row.remove(); } }), mkBtn, mkBox]));
       row._get = function () { var v = name.value.trim().toLowerCase(), hit = all.filter(function (x) { return x.name.toLowerCase() === v; })[0]; if (!hit) return v ? null : false; return withYear ? { e: hit.id, year: +yr.value || 0, url: pr.value.trim() } : { e: hit.id, level: +lv.value }; };
       list.appendChild(row);
     }
@@ -127,7 +149,7 @@
     var pub = chk(Q.pub, p.public), handle = inp(30, p.handle || me.suggest), head = inp(100, p.headline), about = h("textarea", { rows: 6, maxlength: 1500 }), company = inp(80, p.company_eid ? ((all.filter(function (x) { return x.id === p.company_eid; })[0] || {}).name || p.company) : ""), job = inp(80, p.job), country = inp(60, p.country), so = chk(Q.showorg, p.show_org !== false);
     about.value = p.about || "";
     var prog = programsUI(p.programs, false), ex = pickerRows(all, function (x) { return ["cert", "person", "event", "media"].indexOf(x.type) < 0; }, (p.expertise || []).map(function (x) { return { e: x.e, level: x.level }; }), false, Q.addexp);
-    var cert = pickerRows(all, function (x) { return x.type === "cert"; }, (p.certs || []).map(function (x) { return { e: x.e, year: x.year, url: x.url }; }), true, Q.addcert), ch = channelsUI(p.channels);
+    var cert = pickerRows(all, function (x) { return x.type === "cert"; }, (p.certs || []).map(function (x) { return { e: x.e, year: x.year, url: x.url }; }), true, Q.addcert, "cert"), ch = channelsUI(p.channels);
     var pic = imgUI("u", p.handle, p.img); pic.handle = function () { return p.handle || ""; }; pic.ensure = function () { if (!handle.value.trim()) return Promise.resolve(false); mainSave.click(); return new Promise(function (res) { var n = 0, t = setInterval(function () { if (p.handle || ++n > 30) { clearInterval(t); res(!!p.handle); } }, 200); }); };
     [pub.w, pic, lab(Q.handle, handle), lab(Q.headline, head), lab(Q.about, about), h("p", { class: "cmut", text: CQ.hint }), lab(Q.job, job), lab(Q.country, country), so.w, h("h3", { text: Q.prog }), prog, h("h3", { text: Q.exp }), ex, h("h3", { text: Q.certs }), cert, h("h3", { text: Q.chan }), ch].forEach(function (x) { sec.appendChild(x); });
     var mainSave = saveBtn(Q.save, function () {
