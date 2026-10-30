@@ -5,9 +5,11 @@ Standard ist ein Testlauf (zaehlt nur). Mit --apply wird geladen/hochgeladen und
 data/r2_map.json geschrieben (Original-URL -> https://img.m365.fm/<key>).
 Zugang ueber R2_ACCOUNT_ID, R2_BUCKET, R2_ACCESS_KEY_ID, R2_SECRET_ACCESS_KEY.
 """
-import gzip, hashlib, json, os, re, sys, urllib.request
+import gzip, hashlib, io, json, os, re, sys, urllib.request
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
+
+from PIL import Image
 
 ROOT = Path(__file__).resolve().parent.parent
 MAP = ROOT / "data" / "r2_map.json"
@@ -52,6 +54,16 @@ def main():
                 data, ct = r.read(), r.headers.get_content_type()
             if ct not in EXT or len(data) < 100 or len(data) > 15_000_000:
                 raise ValueError(f"kein Bild ({ct}, {len(data)} Byte)")
+            if ct in ("image/jpeg", "image/png"):   # als WebP speichern, wenn es kleiner wird
+                try:
+                    im = Image.open(io.BytesIO(data))
+                    im = im.convert("RGBA" if im.mode in ("RGBA", "LA", "P") else "RGB")
+                    buf = io.BytesIO()
+                    im.save(buf, "WEBP", quality=82, method=6)
+                    if len(buf.getvalue()) < len(data):
+                        data, ct = buf.getvalue(), "image/webp"
+                except Exception:
+                    pass
             key = "i/" + hashlib.sha1(u.encode()).hexdigest()[:20] + EXT[ct]
             s3.put_object(Bucket=bucket, Key=key, Body=data, ContentType=ct, CacheControl="public, max-age=31536000, immutable")
             done[u] = f"{PUBLIC}/{key}"
