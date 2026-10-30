@@ -1,20 +1,15 @@
-"""Uebersetzer-Team fuer Mirkos englische Blog-Originale (data/podpage/blog_posts.json.gz -> /show/blog/<slug>/).
+"""Uebersetzer-Team fuer Mirkos englische Blog-Originale: 19 Uebersetzer-Agenten arbeiten direkt hier in Claude (Cowork/Agent-Tool), kein API-Schluessel, kein Haiku.
 
-19 Uebersetzer-Agenten: je Sprache ein Profil in agents/blog-team/uebersetzer/<lang>.md (Stil, Anrede, Typografie,
-Microsoft-Terminologie, Glossar). Das Profil ist der Systemprompt der Sprache; uebersetzt wird guenstig mit Claude Haiku
-per Message Batch. Der Projektmanager (agents/blog-team/projektmanager.md) steuert ueber die Modi unten.
-
-Modi:
-  plan     Status + Kostenschaetzung, ohne API (kein Schluessel noetig)
-  submit   offene Uebersetzungen als Batch(es) absenden (Budget-Pruefung)
-  collect  fertige Batches abholen, pruefen (QA), speichern
-  run      collect -> submit -> warten (WAIT_MIN) -> collect
-  auto     wie run, aber nur Beitraege der letzten NEW_DAYS Tage (fuer den Zeitplan)
-  sample   Stichprobe fuer die Review-Agenten: data/blog_i18n/review/<lang>.json
-Optionen: --langs de,fr  --limit N (Beitraege je Sprache)  --order newest|oldest  --slugs a,b  --redo (gewaehlte neu)
-Daten: data/blog_i18n/<lang>/<bucket>.json.gz {slug: {h, n, seg{id: text}, ok, m, ts}}, status.json, usage.json, batches.json, qa/<lang>.json
+Ablauf einer Runde (der Projektmanager agents/blog-team/projektmanager.md steuert):
+  1. python translate_blog.py prepare [--langs de,fr] [--per-agent 2]
+     -> work/blog-i18n/<lang>/BRIEF.md (Profil + Regeln) und <key>.in.txt je Artikel (nur noch offene Segmente)
+  2. Je Sprache ein Agent: liest BRIEF.md, schreibt zu jeder <key>.in.txt eine <key>.out.txt mit denselben Markern
+  3. python translate_blog.py apply  -> Pruefung (QA), Speichern, fertige Auftraege werden entfernt, Fehler kommen in die naechste Runde
+Weitere Modi: plan (Status + Rundenschaetzung), sample (Stichprobe fuer Reviews: data/blog_i18n/review/<lang>.json)
+Quelle: data/podpage/blog_posts.json.gz (bis die Uebernahme in D1 fertig ist). Zwischenablage der Uebersetzungen: data/blog_i18n/<lang>/<bucket>.json.gz;
+Ziel ist D1 (blog_posts je Sprache), sobald die Uebernahme der englischen Beitraege abgeschlossen ist.
 """
-import gzip, hashlib, json, os, random, re, sys, time, urllib.request, urllib.error
+import gzip, hashlib, json, os, random, re, sys
 from datetime import datetime, timezone, timedelta
 from pathlib import Path
 
@@ -25,18 +20,11 @@ SRC = ROOT / "data" / "podpage" / "blog_posts.json.gz"
 LANGS = ("de", "fr", "es", "it", "nl", "pt", "pl", "id", "ru", "uk", "ar", "he", "hi", "ja", "ko", "ml", "pa", "ta", "te")
 NAMES = {"de": "German", "es": "Spanish", "fr": "French", "it": "Italian", "pt": "Brazilian Portuguese", "nl": "Dutch", "pl": "Polish", "id": "Indonesian", "ru": "Russian",
          "uk": "Ukrainian", "ar": "Arabic", "he": "Hebrew", "hi": "Hindi", "ja": "Japanese", "ko": "Korean", "ml": "Malayalam", "pa": "Punjabi (Gurmukhi)", "ta": "Tamil", "te": "Telugu"}
-MODEL = os.environ.get("TRANSLATE_MODEL", "claude-haiku-5-5")
-# Haiku 5.5 im Message Batch (50 % Rabatt), $ je 1 Mio. Tokens - wie translate_show.py
-PRICE_IN, PRICE_OUT = float(os.environ.get("PRICE_IN", "0.05")), float(os.environ.get("PRICE_OUT", "0.25"))
-BUDGET = float(os.environ.get("BLOG_BUDGET_USD") or "10")
-CHUNK = int(os.environ.get("CHUNK_CHARS", "4500"))        # Quelltext je Anfrage
-MAX_TOK = int(os.environ.get("MAX_TOKENS", "16000"))
-PER_BATCH = int(os.environ.get("PER_BATCH", "5000"))
-WAIT_MIN = int(os.environ.get("WAIT_MIN", "300"))
+WORK = ROOT / "work" / "blog-i18n"
+MODEL = os.environ.get("AGENT_MODEL", "claude-agent")   # wird nur als Herkunft gespeichert
+PER_AGENT = int(os.environ.get("PER_AGENT", "2"))         # Artikel je Agent und Runde
 NEW_DAYS = int(os.environ.get("NEW_DAYS", "14"))
 BUCKETS = 16
-# Ausgabe-Tokens je Quell-Token (Schaetzung bis Messwerte da sind; danach gilt der gemessene Wert aus usage.json)
-FACTOR = {**{l: 1.5 for l in LANGS}, "ru": 2.2, "uk": 2.2, "ar": 2.2, "he": 2.2, "ja": 1.8, "ko": 2.0, "hi": 3.5, "pa": 4.5, "ml": 5.5, "ta": 5.5, "te": 5.5}
 # Namen, die nie uebersetzt werden duerfen (Pruefung: im Quelltext vorhanden -> muss in der Uebersetzung stehen)
 KEEP = ["Microsoft 365", "Microsoft Teams", "SharePoint", "OneDrive", "Copilot Studio", "Copilot", "Power BI", "Power Apps", "Power Automate", "Power Platform", "Dataverse",
         "Azure", "Entra", "Intune", "Purview", "Defender", "Sentinel", "Fabric", "Exchange Online", "Outlook", "Excel", "PowerPoint", "Word", "Viva", "Loop", "Planner",
@@ -164,22 +152,6 @@ def system_prompt(lang):
             f"YOUR LANGUAGE PROFILE ({lang}):\n{profile(lang)}")
 
 
-def user_prompt(lang, units):
-    body = "\n".join(f"[[{i}]] {t}" for i, t in units)
-    return f"Translate every segment into {NAMES[lang]}. Keep the markers.\n\n{body}"
-
-
-def chunks(units, have):
-    """Offene Einheiten in Anfragen zu ~CHUNK Zeichen; T/D/FAQ zuerst."""
-    todo = [(i, t) for i, t in units if i not in have]
-    out, cur, n = [], [], 0
-    for u in todo:
-        if cur and n + len(u[1]) > CHUNK: out.append(cur); cur, n = [], 0
-        cur.append(u); n += len(u[1])
-    if cur: out.append(cur)
-    return out
-
-
 # ---------- Pruefung (QA) ----------
 TAG = re.compile(r"<\s*(/?[a-zA-Z0-9]+)")
 HREF = re.compile(r'href="([^"]*)"')
@@ -212,35 +184,87 @@ def parse(text):
     return res
 
 
-# ---------- API ----------
-def api(method, path, body=None, raw=False):
-    req = urllib.request.Request(path if path.startswith("http") else "https://api.anthropic.com" + path,
-                                 json.dumps(body).encode() if body is not None else None,
-                                 {"x-api-key": os.environ["ANTHROPIC_API_KEY"], "anthropic-version": "2023-06-01", "content-type": "application/json"}, method=method)
-    try:
-        r = urllib.request.urlopen(req, timeout=900).read()
-        return r if raw else json.loads(r)
-    except urllib.error.HTTPError as e:
-        msg = f"API-Fehler {e.code} {method} {path}: {e.read()[:600]!r}"; print(msg)
-        OUT.mkdir(parents=True, exist_ok=True); (OUT / "last_error.txt").write_text(msg); raise
+# ---------- Runden fuer die Agenten ----------
+def pick(a, lang, have, ps, busy):
+    n = a["per_agent"] or PER_AGENT
+    out = []
+    for p in ps:
+        if len(out) >= n: break
+        if p["slug"] in busy: continue
+        tpl, units, h = source_of(p); rec = have.get(p["slug"])
+        if a["redo"] or not rec or rec.get("h") != h: rec = {"h": h, "n": len(units), "seg": {}, "ok": False}
+        if rec.get("ok"): continue
+        out.append((p, units, h, rec))
+    return out
 
 
-def cost(tin, tout): return tin * PRICE_IN / 1e6 + tout * PRICE_OUT / 1e6
+def prepare(a):
+    """Legt fuer jede Sprache die Auftraege der naechsten Runde an (bestehende, noch nicht angewendete Auftraege bleiben)."""
+    langs, ps = select(a, posts()); total = 0
+    for lang in langs:
+        d = WORK / lang; d.mkdir(parents=True, exist_ok=True)
+        busy = {json.loads(f.read_text("utf-8").split("\n", 1)[0][2:]).get("slug") for f in d.glob("*.in.txt")}
+        have = load_lang(lang); new = pick(a, lang, have, ps, busy)
+        for p, units, h, rec in new:
+            todo = [(i, t) for i, t in units if i not in rec["seg"]]
+            head = json.dumps({"slug": p["slug"], "h": h, "lang": lang}, ensure_ascii=False)
+            (d / f"{key(p['slug'])}.in.txt").write_text(f"# {head}\n" + "\n".join(f"[[{i}]] {t}" for i, t in todo) + "\n", encoding="utf-8")
+        (d / "BRIEF.md").write_text(system_prompt(lang) + f"""
+
+## YOUR JOB IN THIS ROUND
+In the folder {d} you find one or more files `<id>.in.txt`. The first line (starting with `# {{`) is metadata - do not translate it.
+For EACH `<id>.in.txt` write a file `<id>.out.txt` in the same folder that contains ONLY the translated segments:
+every marker line from the input ([[T]], [[D]], [[Q1]], [[A1]], [[1]] ...) exactly once, same order, marker at the start of the line, followed by the {NAMES[lang]} translation.
+No metadata line, no comments, no code fences. Translate the whole file, never stop early, never summarise. Long files: write the output in one go with the Write tool.
+When done, answer with one line per file: `<id>: <number of segments> segments`.
+""", encoding="utf-8")
+        jobs = sorted(f.name for f in d.glob("*.in.txt")); total += len(jobs)
+        print(f"{lang}: {len(jobs)} Auftraege ({len(new)} neu) in {d}")
+    return total
 
 
-def measured_factor(lang):
-    u = jload("usage.json", {}).get("by_lang", {}).get(lang)
-    return (u["output_tokens"] / max(1, u["input_tokens"] - u.get("system_tokens", 0))) if u and u.get("input_tokens", 0) > 20000 else FACTOR[lang]
+def apply(a=None):
+    """Prueft alle <id>.out.txt, speichert gute Segmente, entfernt erledigte Auftraege, schreibt offene Segmente zurueck in die .in.txt."""
+    stats = {}
+    for d in sorted(WORK.glob("*")) if WORK.exists() else []:
+        lang = d.name
+        if lang not in LANGS: continue
+        have = load_lang(lang); touched = set(); qa_log = []; ok = bad = done = 0; why = {}
+        for fin in sorted(d.glob("*.in.txt")):
+            fout = fin.with_name(fin.name.replace(".in.txt", ".out.txt"))
+            if not fout.exists(): continue
+            meta = json.loads(fin.read_text("utf-8").split("\n", 1)[0][2:]); p = BY_SLUG.get(meta["slug"])
+            if not p: fin.unlink(); fout.unlink(); continue
+            tpl, units, h = source_of(p)
+            if h != meta["h"]: fin.unlink(); fout.unlink(); continue   # Original geaendert -> neu vorbereiten
+            src = dict(units); rec = have.get(p["slug"])
+            if not rec or rec.get("h") != h: rec = {"h": h, "n": len(units), "seg": {}, "ok": False}
+            for i, t in parse(fout.read_text("utf-8")).items():
+                if i not in src: continue
+                good, reason, warn = qa(lang, src[i], t)
+                if good:
+                    rec["seg"][i] = __import__("site_podpage").san(t) if ("<" in t or "&" in t) else t; ok += 1
+                    if warn: qa_log.append({"slug": p["slug"], "seg": i, "warn": warn})
+                else:
+                    bad += 1; why[reason] = why.get(reason, 0) + 1
+                    qa_log.append({"slug": p["slug"], "seg": i, "fehler": reason, "src": src[i][:160], "out": t[:160]})
+            rec["ok"] = all(i in rec["seg"] for i in src); rec["m"] = MODEL; rec["ts"] = datetime.now(timezone.utc).strftime("%Y-%m-%d")
+            have[p["slug"]] = rec; touched.add(bucket(p["slug"])); fout.unlink()
+            if rec["ok"]: fin.unlink(); done += 1
+            else:
+                todo = [(i, t) for i, t in units if i not in rec["seg"]]
+                fin.write_text(fin.read_text("utf-8").split("\n", 1)[0] + "\n" + "\n".join(f"[[{i}]] {t}" for i, t in todo) + "\n", encoding="utf-8")
+        if touched: save_lang(lang, have, touched)
+        if qa_log:
+            (OUT / "qa").mkdir(parents=True, exist_ok=True); f = OUT / "qa" / f"{lang}.json"
+            old = json.loads(f.read_text("utf-8")) if f.exists() else []
+            f.write_text(json.dumps((old + qa_log)[-500:], ensure_ascii=False, indent=1), encoding="utf-8")
+        stats[lang] = {"artikel_fertig": done, "segmente_ok": ok, "segmente_fehler": bad, "gruende": why, "offen": len(list(d.glob("*.in.txt")))}
+        print(lang, stats[lang])
+    log = jload("rounds.json", []); log.append({"ts": datetime.now(timezone.utc).isoformat()[:19], "stats": stats}); jsave("rounds.json", log[-300:])
+    return stats
 
 
-def est(lang, units):
-    src_tok = sum(len(t) for _, t in units) / 4
-    sys_tok = len(system_prompt(lang)) / 3.5
-    n_req = max(1, -(-sum(len(t) for _, t in units) // CHUNK))
-    return n_req * sys_tok + src_tok * 1.1, src_tok * measured_factor(lang)
-
-
-# ---------- Auswahl ----------
 def select(a, ps):
     langs = a["langs"]; sl = set(a["slugs"])
     if sl: ps = [p for p in ps if p["slug"] in sl]
@@ -251,125 +275,21 @@ def select(a, ps):
     return langs, ps
 
 
-def pending_cost(): return sum(b.get("est_usd", 0) for b in jload("batches.json", []))
-
-
-def spent(): u = jload("usage.json", {}); return cost(u.get("input_tokens", 0), u.get("output_tokens", 0))
-
-
-def submit(a):
-    langs, ps = select(a, posts())
-    busy = {(b2["lang"], b2["slug"]) for b in jload("batches.json", []) for b2 in b.get("items", [])}
-    reqs, items, money = [], [], 0.0
-    room = BUDGET - spent() - pending_cost()
-    for lang in langs:
-        have = load_lang(lang); sysp = system_prompt(lang); n_posts = 0
-        for p in ps:
-            if a["limit"] and n_posts >= a["limit"]: break
-            if (lang, p["slug"]) in busy: continue
-            tpl, units, h = source_of(p)
-            rec = have.get(p["slug"])
-            if a["redo"] or not rec or rec.get("h") != h: rec = {"h": h, "n": len(units), "seg": {}, "ok": False}
-            if rec.get("ok"): continue
-            n_posts += 1
-            cs = chunks(units, rec["seg"])
-            ti, to = est(lang, [u for c in cs for u in c]); c_usd = cost(ti, to)
-            if money + c_usd > room:
-                print(f"Budget erreicht ({BUDGET:.2f} $; bisher {spent():.2f} $, offen {pending_cost():.2f} $) - Rest bleibt fuer spaeter"); break
-            money += c_usd
-            for ci, c in enumerate(cs):
-                reqs.append({"custom_id": f"{lang}_{key(p['slug'])}_{ci}", "params": {"model": MODEL, "max_tokens": MAX_TOK,
-                             "system": [{"type": "text", "text": sysp, "cache_control": {"type": "ephemeral"}}],
-                             "messages": [{"role": "user", "content": user_prompt(lang, c)}]}})
-            items.append({"lang": lang, "slug": p["slug"], "h": h, "n": len(units)})
-            if a["redo"]: have[p["slug"]] = rec
-        if a["redo"]: save_lang(lang, have)
-    if not reqs:
-        print("Nichts abzusenden."); return 0
-    bl = jload("batches.json", [])
-    for i in range(0, len(reqs), PER_BATCH):
-        part = reqs[i:i + PER_BATCH]
-        ids = {r["custom_id"].rsplit("_", 1)[0] for r in part}
-        its = [it for it in items if f"{it['lang']}_{key(it['slug'])}" in ids]
-        share = money * len(part) / len(reqs)
-        b = api("POST", "/v1/messages/batches", {"requests": part})
-        bl.append({"id": b["id"], "n": len(part), "model": MODEL, "created": datetime.now(timezone.utc).isoformat()[:19], "est_usd": round(share, 3), "items": its})
-        jsave("batches.json", bl); print("Batch", b["id"], len(part), "Anfragen, geschaetzt", round(share, 2), "$")
-    return len(reqs)
-
-
-def collect():
-    bl = jload("batches.json", []); left = []; usage = jload("usage.json", {"input_tokens": 0, "output_tokens": 0, "runs": [], "by_lang": {}})
-    for b in bl:
-        st = api("GET", f"/v1/messages/batches/{b['id']}")
-        if st["processing_status"] != "ended": print(b["id"], st["processing_status"], st["request_counts"]); left.append(b); continue
-        info = {(it["lang"], key(it["slug"])): it for it in b["items"]}
-        data, touched, qa_log = {}, {}, {}
-        tin = tout = ok = bad = 0; why = {}
-        for line in api("GET", st["results_url"], raw=True).decode().splitlines():
-            r = json.loads(line); lang, k, _ = r["custom_id"].split("_")
-            it = info.get((lang, k))
-            if not it: continue
-            if lang not in data: data[lang] = load_lang(lang); touched[lang] = set()
-            res = r["result"]
-            if res["type"] != "succeeded": bad += 1; why[res["type"]] = why.get(res["type"], 0) + 1; continue
-            msg = res["message"]; u = msg["usage"]
-            ti = u["input_tokens"] + u.get("cache_read_input_tokens", 0) + u.get("cache_creation_input_tokens", 0); tin += ti; tout += u["output_tokens"]
-            bl_ = usage["by_lang"].setdefault(lang, {"input_tokens": 0, "output_tokens": 0, "system_tokens": 0})
-            bl_["input_tokens"] += ti; bl_["output_tokens"] += u["output_tokens"]; bl_["system_tokens"] += int(len(system_prompt(lang)) / 3.5)
-            text = "".join(c.get("text", "") for c in msg["content"] if c.get("type") == "text")
-            got = parse(text)
-            if msg.get("stop_reason") == "max_tokens" and got: got.pop(list(got)[-1]); why["max_tokens"] = why.get("max_tokens", 0) + 1
-            p = BY_KEY.get(k)
-            if not p: continue
-            tpl, units, h = source_of(p)
-            if h != it["h"]: continue   # Original inzwischen geaendert
-            src = dict(units)
-            rec = data[lang].get(p["slug"])
-            if not rec or rec.get("h") != h: rec = {"h": h, "n": len(units), "seg": {}, "ok": False}
-            for i, t in got.items():
-                if i not in src: continue
-                good, reason, warn = qa(lang, src[i], t)
-                if good:
-                    rec["seg"][i] = __import__("site_podpage").san(t) if "<" in t or "&" in t else t; ok += 1
-                    if warn: qa_log.setdefault(lang, []).append({"slug": p["slug"], "seg": i, "warn": warn})
-                else:
-                    bad += 1; why[reason] = why.get(reason, 0) + 1
-                    qa_log.setdefault(lang, []).append({"slug": p["slug"], "seg": i, "fehler": reason, "src": src[i][:160], "out": t[:160]})
-            rec["ok"] = all(i in rec["seg"] for i in src); rec["m"] = MODEL; rec["ts"] = datetime.now(timezone.utc).strftime("%Y-%m-%d")
-            data[lang][p["slug"]] = rec; touched[lang].add(bucket(p["slug"]))
-        for lang, d in data.items(): save_lang(lang, d, touched[lang])
-        for lang, lg in qa_log.items():
-            (OUT / "qa").mkdir(parents=True, exist_ok=True)
-            f = OUT / "qa" / f"{lang}.json"; old = json.loads(f.read_text("utf-8")) if f.exists() else []
-            f.write_text(json.dumps((old + lg)[-500:], ensure_ascii=False, indent=1), encoding="utf-8")
-        usage["input_tokens"] += tin; usage["output_tokens"] += tout
-        usage["runs"].append({"batch": b["id"], "model": b["model"], "segments_ok": ok, "segments_failed": bad, "why": why, "input_tokens": tin, "output_tokens": tout, "cost_usd": round(cost(tin, tout), 3)})
-        jsave("usage.json", usage); print(f"{b['id']}: {ok} Segmente ok, {bad} fehlgeschlagen {why}, Kosten {cost(tin, tout):.3f} $")
-    jsave("batches.json", left)
-    return len(left)
-
-
 def status():
-    ps = posts(); st = {"updated": datetime.now(timezone.utc).isoformat()[:19], "posts": len(ps), "model": MODEL, "budget_usd": BUDGET, "spent_usd": round(spent(), 3),
-                        "pending_batches": len(jload("batches.json", [])), "pending_est_usd": round(pending_cost(), 3), "langs": {}}
-    full_ti = full_to = 0
-    srcs = {p["slug"]: source_of(p) for p in ps}
+    ps = posts(); per_round = len(LANGS) * PER_AGENT
+    st = {"updated": datetime.now(timezone.utc).isoformat()[:19], "posts": len(ps), "engine": "Claude-Agenten (Cowork)", "per_agent": PER_AGENT, "langs": {}}
+    srcs = {p["slug"]: source_of(p)[2] for p in ps}; left = 0
     for lang in LANGS:
-        have = load_lang(lang); done = part = 0; ti = to = 0
-        for p in ps:
-            tpl, units, h = srcs[p["slug"]]; rec = have.get(p["slug"])
-            if rec and rec.get("h") == h and rec.get("ok"): done += 1; continue
-            if rec and rec.get("h") == h and rec.get("seg"): part += 1
-            a, b = est(lang, [u for u in units if not (rec and rec.get("h") == h and u[0] in rec.get("seg", {}))]); ti += a; to += b
+        have = load_lang(lang)
+        done = sum(1 for p in ps if (have.get(p["slug"]) or {}).get("ok") and have[p["slug"]].get("h") == srcs[p["slug"]])
         qf = OUT / "qa" / f"{lang}.json"; ql = json.loads(qf.read_text("utf-8")) if qf.exists() else []
-        st["langs"][lang] = {"name": NAMES[lang], "done": done, "partial": part, "open": len(ps) - done, "pct": round(100 * done / max(1, len(ps)), 1),
-                             "rest_est_usd": round(cost(ti, to), 2), "qa_errors_logged": sum(1 for x in ql if x.get("fehler")), "out_factor": round(measured_factor(lang), 2)}
-        full_ti += ti; full_to += to
-    st["rest_est_usd_all"] = round(cost(full_ti, full_to), 2)
+        st["langs"][lang] = {"name": NAMES[lang], "done": done, "open": len(ps) - done, "pct": round(100 * done / max(1, len(ps)), 1),
+                             "qa_errors_logged": sum(1 for x in ql if x.get("fehler")), "jobs_waiting": len(list((WORK / lang).glob("*.in.txt"))) if (WORK / lang).exists() else 0}
+        left += len(ps) - done
+    st["open_translations"] = left; st["rounds_left"] = -(-left // per_round)
     jsave("status.json", st)
-    print(f"{st['posts']} Beitraege x 19 Sprachen | ausgegeben {st['spent_usd']} $ von {BUDGET} $ | offen geschaetzt {st['rest_est_usd_all']} $")
-    for l, v in st["langs"].items(): print(f"  {l:3} {v['done']:5}/{st['posts']} fertig ({v['pct']} %), Rest ~{v['rest_est_usd']} $")
+    print(f"{st['posts']} Artikel x 19 Sprachen | offen {left} Uebersetzungen | ~{st['rounds_left']} Runden a {per_round} (19 Agenten x {PER_AGENT})")
+    for l, v in st["langs"].items(): print(f"  {l:3} {v['done']:5}/{st['posts']} fertig ({v['pct']} %)")
     return st
 
 
@@ -394,26 +314,20 @@ def args():
         return a[a.index(n) + 1] if n in a and a.index(n) + 1 < len(a) else d
     mode = a[0] if a and not a[0].startswith("-") else "plan"
     langs = [l for l in (opt("--langs") or ",".join(LANGS)).split(",") if l in LANGS]
-    return {"mode": mode, "langs": langs, "limit": int(opt("--limit", "0") or 0), "order": opt("--order", "newest"), "slugs": [s for s in opt("--slugs").split(",") if s],
-            "redo": "--redo" in a, "seed": opt("--seed")}
+    return {"mode": mode, "langs": langs, "limit": int(opt("--limit", "0") or 0), "per_agent": int(opt("--per-agent", "0") or 0), "order": opt("--order", "newest"),
+            "slugs": [s for s in opt("--slugs").split(",") if s], "redo": "--redo" in a, "seed": opt("--seed")}
 
 
-BY_KEY = {}
+BY_SLUG = {}
 
 
 def main():
-    a = args(); BY_KEY.update({key(p["slug"]): p for p in posts()})
+    a = args(); BY_SLUG.update({p["slug"]: p for p in posts()})
     m = a["mode"]
-    if m == "plan": status(); return
-    if m == "sample": sample(a); return
-    if m in ("collect", "run", "auto"): collect()
-    if m in ("submit", "run", "auto"): submit(a)
-    if m in ("run", "auto"):
-        t0 = time.time()
-        while jload("batches.json", []) and time.time() - t0 < WAIT_MIN * 60:
-            time.sleep(120)
-            if collect() == 0: break
-    status()
+    if m == "prepare": prepare(a)
+    elif m == "apply": apply(a); status()
+    elif m == "sample": sample(a)
+    else: status()
 
 
 if __name__ == "__main__":
