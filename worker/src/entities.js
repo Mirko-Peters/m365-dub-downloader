@@ -1,5 +1,6 @@
 // Entitaetsdatenbank fuer das Microsoft-Oekosystem: Community-Revisionen ueber den statischen Basisdaten (data/entities.json)
 import { cleanText, rateLimit } from "./util.js";
+import { entityTranslations } from "./autotr.js";
 import { stats, evalBadges } from "./badges.js";
 
 const ID = /^[a-z0-9-]{2,48}$/;
@@ -126,6 +127,7 @@ export async function handleEntity(env, request, url, path, user, J) {
     await db.prepare("INSERT INTO entity_rev(eid,data,summary,user_id,status,created) VALUES(?,?,?,?,'pending',?)").bind(id, data, summary, user.id, t).run();
     return J({ ok: true, status: "pending" });
   }
+  if (path === "/api/entity/tr" && method === "GET") return J({ items: await entityTranslations(env.DB) }, 200, { "cache-control": "public, max-age=300" });   // automatische Uebersetzungen (autotr.js)
   if (path === "/api/entity/export" && method === "GET") {
     const rows = (await db.prepare("SELECT r.eid,r.data,r.created,r.user_id FROM entity_rev r WHERE r.status='live'").all()).results || [];
     return J({ items: rows.map((r) => ({ id: r.eid, data: JSON.parse(r.data), created: r.created, uid: r.user_id })) }, 200, { "cache-control": "public, max-age=300" });

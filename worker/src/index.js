@@ -5,6 +5,8 @@ import { runDigest, sendMail } from "./digest.js";
 import { handleEntity } from "./entities.js";
 import { importLegacyBlog } from "./legacyblog.js";
 import { handleA2a } from "./a2a.js";
+import { autoTranslateItems, autoTranslateEntities } from "./autotr.js";
+import { entityMap } from "./entities.js";
 import { handleProfiles, deleteUserData, refreshProfilesExport } from "./profiles.js";
 import { handleEvents, deleteUserEvents, ensureM365Con } from "./events.js";
 import { handleVotes } from "./votes.js";
@@ -373,5 +375,5 @@ export default {
       return json({ error: "server" }, 500, env, request);
     }
   },
-  async scheduled(event, env, ctx) { if (event.cron === "0 6 * * *") ctx.waitUntil(runDigest(env)); ctx.waitUntil(refreshFeeds(env).catch(() => 0)); ctx.waitUntil(pollUpdates(env).catch(() => 0)); ctx.waitUntil(refreshFollowers(env).catch(() => 0)); ctx.waitUntil(ensurePastEvents(env).then(() => linkSpeakers(env)).then(() => linkSpeakerEntities(env)).catch(() => 0)); ctx.waitUntil(ensureM365Con(env).then(() => linkSpeakers(env)).then(() => linkSpeakerEntities(env)).catch(() => 0)); ctx.waitUntil(seedRoadmap(env).catch(() => 0)); ctx.waitUntil(purgeMessages(env.DB).catch(() => 0)); ctx.waitUntil(autoTranslate(env).catch(() => 0)); ctx.waitUntil(pollPodcast(env).catch(() => 0)); ctx.waitUntil(pollVideos(env).catch(() => 0)); ctx.waitUntil(syncShows(env).catch(() => 0)); ctx.waitUntil(flushOutbox(env).catch(() => 0)); ctx.waitUntil(importLegacyBlog(env).catch(() => 0)); ctx.waitUntil(refreshProfilesExport(env).catch(() => 0)); ctx.waitUntil(remindInvites(env).catch(() => 0)); },
+  async scheduled(event, env, ctx) { if (event.cron === "0 6 * * *") ctx.waitUntil(runDigest(env)); ctx.waitUntil(refreshFeeds(env).catch(() => 0)); ctx.waitUntil(pollUpdates(env).catch(() => 0)); ctx.waitUntil(refreshFollowers(env).catch(() => 0)); ctx.waitUntil(ensurePastEvents(env).then(() => linkSpeakers(env)).then(() => linkSpeakerEntities(env)).catch(() => 0)); ctx.waitUntil(ensureM365Con(env).then(() => linkSpeakers(env)).then(() => linkSpeakerEntities(env)).catch(() => 0)); ctx.waitUntil(seedRoadmap(env).catch(() => 0)); ctx.waitUntil(purgeMessages(env.DB).catch(() => 0)); ctx.waitUntil(autoTranslate(env).catch(() => 0)); ctx.waitUntil(autoTranslateItems(env).catch(() => 0)); ctx.waitUntil(autoTranslateEntities(env, entityMap).catch(() => 0)); ctx.waitUntil(pollPodcast(env).catch(() => 0)); ctx.waitUntil(pollVideos(env).catch(() => 0)); ctx.waitUntil(syncShows(env).catch(() => 0)); ctx.waitUntil(flushOutbox(env).catch(() => 0)); ctx.waitUntil(importLegacyBlog(env).catch(() => 0)); ctx.waitUntil(refreshProfilesExport(env).catch(() => 0)); ctx.waitUntil(remindInvites(env).catch(() => 0)); },
 };

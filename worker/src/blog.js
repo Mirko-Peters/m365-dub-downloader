@@ -1,5 +1,6 @@
 // Blog je Mitglied: Beitraege schreiben (Wiki-Markup mit Quellen), Pruefung fuer Neue, Upvotes, Export fuer den Seitenbau
 import { cleanText, rateLimit, isLang } from "./util.js";
+import { translatedBlogItems } from "./autotr.js";
 import { stats } from "./badges.js";
 import { baseIds } from "./entities.js";
 import { sanitize } from "./wiki.js";
@@ -61,7 +62,8 @@ export async function handleBlog(env, request, url, path, user, J) {
        WHERE b.status='live' ORDER BY b.published DESC LIMIT 6000`).all()).results || [];   // ohne html (zu gross); das holt /api/blog/html seitenweise
     const co = (await db.prepare("SELECT c.post_id,p.handle,u.name FROM blog_coauthors c JOIN profiles p ON p.user_id=c.user_id AND p.public=1 AND p.handle IS NOT NULL JOIN users u ON u.id=c.user_id AND u.banned=0 WHERE c.status='confirmed' ORDER BY c.created").all()).results || [], by = {};
     for (const c of co) (by[c.post_id] ||= []).push({ handle: c.handle, name: c.name });
-    return J({ items: rows.map((r) => ({ ...r, topics: parse(r.topics, []), keypoints: jsonList(r.keypoints), faq: jsonList(r.faq), coauthors: by[r.id] || [] })) }, 200, { "cache-control": "public, max-age=300" });
+    const trs = await translatedBlogItems(db);   // automatisch uebersetzte Fassungen (autotr.js)
+    return J({ items: rows.map((r) => ({ ...r, topics: parse(r.topics, []), keypoints: jsonList(r.keypoints), faq: jsonList(r.faq), coauthors: by[r.id] || [] })).concat(trs) }, 200, { "cache-control": "public, max-age=300" });
   }
   if (path === "/api/blog/html" && method === "GET") {   // oeffentlich, nur fuer den Seitenbau: HTML uebernommener Beitraege seitenweise
     const off = Math.max(0, +url.searchParams.get("offset") || 0), lim = Math.min(Math.max(+url.searchParams.get("limit") || 40, 1), 60);
