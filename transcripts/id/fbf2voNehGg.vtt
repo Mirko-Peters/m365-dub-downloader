@@ -1,0 +1,2326 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:03.400
+Anda tahu perasaan tidak enak saat formulir PowerPages Anda tidak bisa divalidasi,
+
+00:00:03.680 --> 00:00:07.000
+dan pesan kesalahannya tidak lebih berguna daripada 404 brain not found.
+
+00:00:07.700 --> 00:00:09.280
+Titik masalah itulah yang kita perbaiki hari ini.
+
+00:00:09.800 --> 00:00:11.020
+Kita akan membahas 5 langkah.
+
+00:00:11.360 --> 00:00:16.460
+Menyederhanakan template Liquid, mempercepat JavaScript, dan validasi formulir mendapatkan penjelasan kode.
+
+00:00:16.860 --> 00:00:20.400
+Dalam bahasa yang mudah, mengintegrasikan HTML dengan Bootstrap untuk tata letak responsif,
+
+00:00:20.480 --> 00:00:21.780
+dan menyederhanakan panggilan api web.
+
+00:00:22.480 --> 00:00:25.860
+Satu catatan singkat, Anda memerlukan VS Code dengan ekstensi Power Platform Tools,
+
+00:00:25.860 --> 00:00:31.060
+GitHub Copilot Chat, dan konten situs Anda yang ditarik melalui CLI Power Platform dengan autentikasi Dataverse.
+
+00:00:32.260 --> 00:00:34.000
+Pengaturan itu membuat Copilot sadarkan konten.
+
+00:00:34.360 --> 00:00:36.680
+Dengan itu, Copilot berhenti memberikan cuplikan kode secara acak.
+
+00:00:37.040 --> 00:00:39.740
+Copilot memberikan kode iteratif kontekstual yang mengurangi proses coba-coba.
+
+00:00:40.180 --> 00:00:42.960
+Saya akan menunjukkan perintah yang tepat agar Anda dapat mereplikasinya sendiri.
+
+00:00:43.740 --> 00:00:45.640
+Dan karena sebagian besar masalah dimulai dengan JavaScript,
+
+00:00:45.840 --> 00:00:48.920
+mari kita bahas apa yang terjadi ketika kesalahan formulir Anda terasa seperti kegagantuan.
+
+00:00:49.760 --> 00:00:51.460
+Saat JavaScript terasa seperti masalah besar,
+
+00:00:51.860 --> 00:00:55.140
+JavaScript dapat mengubah pemeriksaan formulir yang seharusnya mudah menjadi bencana dengan cepat.
+
+00:00:55.860 --> 00:00:58.740
+Satu ketukan tombol yang salah, dan alih-alih menghentikan input yang buruk.
+
+00:00:59.060 --> 00:00:59.940
+Seluruh alur pun kacau.
+
+00:01:00.380 --> 00:01:02.860
+Biasanya saat itulah Anda duduk menatap layar sambil bertanya-tanya
+
+00:01:02.860 --> 00:01:05.960
+bagaimana sesuatu yang konyol bisa melewati logika validasi yang sudah Anda tulis dengan hati.
+
+00:01:06.340 --> 00:01:08.900
+Anda tahu prosedurnya, formulir yang terlihat, tidak berbahaya,
+
+00:01:09.060 --> 00:01:10.860
+validator yang dimaksudkan untuk menyaring sampah,
+
+00:01:10.940 --> 00:01:13.100
+dan pengguna pintar yang mengetik satu hal yang tidak Anda perhitungkan.
+
+00:01:13.760 --> 00:01:15.720
+Kita tiba lopan soal Anda, meledak dengan keluhan,
+
+00:01:15.800 --> 00:01:17.880
+dan setiap TPS Code terasa seperti jalan bentuk lainnya.
+
+00:01:18.600 --> 00:01:20.120
+Kesalahan kecil adalah yang paling berdampak.
+
+00:01:20.120 --> 00:01:23.480
+Titik koma yang hilang atau bercakupan yang masuk akal di kepala Anda,
+
+00:01:23.600 --> 00:01:25.880
+tetapi berdampak fatal saat kode dijalankan.
+
+00:01:26.500 --> 00:01:29.060
+Kesalahan kecil ini sering muncul dalam penerapan nyata,
+
+00:01:29.280 --> 00:01:33.080
+dan menjelaskan mengapa validasi yang rusak menjadi tiket yang lazim dalam pengembangan web.
+
+00:01:33.080 --> 00:01:35.800
+Biasanya pendekatan Anda adalah dengan paksa.
+
+00:01:36.060 --> 00:01:37.560
+Anda mengubah satu baris, menyegarkan,
+
+00:01:38.000 --> 00:01:39.060
+ditolak oleh kesalahan lain,
+
+00:01:39.160 --> 00:01:41.600
+lalu mengulangi siklus tersebut sampai sesuatu akhirnya berhasil.
+
+00:01:42.280 --> 00:01:43.320
+Satu malam terbuang percuma,
+
+00:01:43.440 --> 00:01:45.900
+dan hasil akhirnya seringkali hanya skrip tambal sulami yang bisa berjalan.
+
+00:01:46.500 --> 00:01:47.880
+Tidak ada gangguan, tidak ada momen belajaran.
+
+00:01:48.180 --> 00:01:50.920
+Itulah mengapa debaging validasi terasa seperti kegagalan total yang klasik.
+
+00:01:52.080 --> 00:01:54.280
+Anda terus berusaha, tetapi hasilnya tidak berpihak pada Anda.
+
+00:01:54.700 --> 00:01:55.580
+Disinilah kopilot perlukan.
+
+00:01:56.180 --> 00:01:57.800
+Saran umum kopilot terkadang membantu,
+
+00:01:57.800 --> 00:02:02.000
+tetapi seringkali terlihat seperti potongan acak yang diambil dari log pencarian yang samar.
+
+00:02:02.000 --> 00:02:03.980
+Berguna dalam semangat, namun salah ada lebih.
+
+00:02:04.620 --> 00:02:06.800
+Itu karena kopilot biasanya tidak mengetahui keunikan Power Pages.
+
+00:02:07.380 --> 00:02:08.880
+Namun tambahkan partisipan Add Power Pages,
+
+00:02:08.980 --> 00:02:11.000
+dan tiba-tiba ia tidak lagi mengeluarkan kode boilerplate,
+
+00:02:11.080 --> 00:02:11.920
+melainkan kode boilerplate,
+
+00:02:12.000 --> 00:02:14.480
+melainkan menawarkan kode sadar konteks yang disesuaikan dengan lingkungan Anda.
+
+00:02:14.700 --> 00:02:17.440
+Microsoft membangunnya untuk menangani aspek spesifik Power Pages,
+
+00:02:17.540 --> 00:02:19.260
+termasuk template liquid dan binding data first,
+
+00:02:19.360 --> 00:02:22.240
+yang berarti saran-sarannya memperhitungkan fitur-fitur yang biasanya menyulitkan Anda.
+
+00:02:23.340 --> 00:02:25.160
+Dan ini bukan sekadar menghasilkan cubikan kode,
+
+00:02:25.160 --> 00:02:28.380
+integrasi Add Power Pages juga dapat menjelaskan konstruksi spesifik Power Pages,
+
+00:02:28.380 --> 00:02:30.480
+sehingga Anda tidak hanya menempelkan kode tanpa paham,
+
+00:02:30.640 --> 00:02:32.900
+tetapi benar-benar mengerti mengapa suatu skrip bekerja seperti itu.
+
+00:02:33.540 --> 00:02:36.480
+Hal itu membuat proses debug tidak lagi seperti berjalan dengan mata tertutup,
+
+00:02:36.560 --> 00:02:38.800
+melainkan seperti bekerja bersama seseorang yang sudah bersama seseorang
+
+00:02:38.800 --> 00:02:40.120
+yang sudah pernah menaklukkan tantangan yang sama.
+
+00:02:40.320 --> 00:02:42.920
+Sebagai contoh, Anda bisa langsung mengetikan perintah ini ke dalam obrolan kepela.
+
+00:02:43.300 --> 00:02:46.120
+Add Power Pages, buat kode JavaScript untuk validasi kolom formulir,
+
+00:02:46.220 --> 00:02:48.260
+guna memastikan nilai kolom telpon dalam format yang valid.
+
+00:02:49.040 --> 00:02:51.920
+Itu bukan sekadar teori, itu adalah input siap pakai yang dapat Anda tiru
+
+00:02:51.920 --> 00:02:53.600
+dan akan Anda lihat nanti dalam panduan ini.
+
+00:02:53.600 --> 00:02:56.160
+Kode yang dihasilkan bukanlah cuplikan web yang samar,
+
+00:02:56.240 --> 00:02:58.340
+melainkan kode yang dapat langsung diterapkan dan dirancang
+
+00:02:58.340 --> 00:03:00.200
+untuk dikompilasi dalam konteks Power Pages Anda.
+
+00:03:00.840 --> 00:03:02.060
+Predictabilitas itulah perubahan yang sebenarnya.
+
+00:03:02.680 --> 00:03:05.200
+Dengan kopilot umum, rasanya seperti membawa seorang penyair
+
+00:03:05.200 --> 00:03:06.720
+yang mungkin memetik nada yang tepat,
+
+00:03:06.820 --> 00:03:09.180
+tetapi seringkali lagunya tidak relevan dengan pertempuran Anda saat.
+
+00:03:09.580 --> 00:03:11.660
+Dengan Add Power Pages, rasanya lebih seperti berpergian
+
+00:03:11.660 --> 00:03:13.600
+dengan seorang penjelajah yang sudah tahu di mana jebakan tersembunyai.
+
+00:03:14.160 --> 00:03:16.220
+Pencarian menjadi bukan lagi tentang bertahan dari jebakan,
+
+00:03:16.320 --> 00:03:18.100
+melainkan tentang merancang pengalaman penggunaan jelas.
+
+00:03:18.960 --> 00:03:20.300
+Alat ini tidak menggantikan penilaian Anda,
+
+00:03:20.300 --> 00:03:21.040
+melainkan mempertajab.
+
+00:03:21.320 --> 00:03:23.460
+Anda tetap yang menentukan apa yang dianggap sebagai input valid
+
+00:03:23.460 --> 00:03:25.540
+dan bagaimana kesalahan harus memandu penggunaan.
+
+00:03:25.580 --> 00:03:27.880
+Namun, alih-alih menghabiskan waktu untuk bug sintaksis
+
+00:03:27.880 --> 00:03:28.860
+dan kesalahan ketik bulehan.
+
+00:03:29.040 --> 00:03:31.020
+Anda bisa fokus membuat alur kerja yang intuitif.
+
+00:03:31.600 --> 00:03:33.640
+Jika ditangani dengan benar, langkah-langkah validasi tersebut
+
+00:03:33.640 --> 00:03:34.660
+tidak lagi menjadi hambatan,
+
+00:03:34.800 --> 00:03:36.120
+melainkan bagian dari pengalaman yang mulus
+
+00:03:36.120 --> 00:03:37.380
+bagi siapapun yang menggunakan formulir.
+
+00:03:37.680 --> 00:03:39.360
+Mungkin tidak terasa seperti kemenangan besar,
+
+00:03:39.500 --> 00:03:40.900
+tetapi mencegah kegagalan mendasar
+
+00:03:40.900 --> 00:03:42.160
+adalah hal yang menyelamatkan Anda
+
+00:03:42.160 --> 00:03:44.000
+dari banjir tiket keluhan sederhana di masa depan.
+
+00:03:44.000 --> 00:03:46.280
+Begitu Copilot mengambil alih pekerjaan berat
+
+00:03:46.280 --> 00:03:48.060
+dalam menghasilkan kode validasi yang akurat
+
+00:03:48.060 --> 00:03:49.940
+waktu Anda beralih dari mode bertahan hidup
+
+00:03:49.940 --> 00:03:51.700
+ke peningkatan perilaku aplikasi yang sesungguhnya.
+
+00:03:52.200 --> 00:03:52.980
+Perbedaan itu penting.
+
+00:03:53.180 --> 00:03:54.700
+Karena saat Anda melihat bagaimana perintah
+
+00:03:54.700 --> 00:03:56.040
+yang tepat mengubah alur pembuatan kode,
+
+00:03:56.160 --> 00:03:58.540
+Anda mulai bertanya-tanya apalagi yang bisa dibuka oleh perintah tersebut.
+
+00:03:59.500 --> 00:04:00.620
+Dan disitulah keunggulan nyata
+
+00:04:00.620 --> 00:04:02.660
+menggunakan Copilot dengan Powerpages menjadi jelas.
+
+00:04:03.620 --> 00:04:05.120
+Mendapatkan keuntungan dengan perintah Copilot.
+
+00:04:05.580 --> 00:04:07.600
+Mendapatkan keuntungan di sini berarti mengetahui perintah
+
+00:04:07.600 --> 00:04:09.400
+yang tepat untuk diberikan kepada Copilot alih-alih
+
+00:04:09.400 --> 00:04:10.880
+hanya berharap keberuntungan berpihak pada Anda.
+
+00:04:11.600 --> 00:04:13.460
+Itulah kekuatan sebenarnya dari penggunaan partisipan
+
+00:04:13.460 --> 00:04:14.000
+at Powerpages.
+
+00:04:14.540 --> 00:04:16.660
+Hal ini mengubah obrolan Copilot dari asisten umum
+
+00:04:16.660 --> 00:04:18.080
+menjadi mitra yang seder konteks
+
+00:04:18.080 --> 00:04:20.140
+yang dibangun khusus untuk lingkungan Powerpages Anda.
+
+00:04:20.860 --> 00:04:21.640
+Begini cara menggunakannya.
+
+00:04:22.060 --> 00:04:22.880
+Di dalam VS Code,
+
+00:04:23.080 --> 00:04:24.140
+buka panel obrolan Copilot,
+
+00:04:24.340 --> 00:04:25.920
+lalu ketik perintah Anda dengan diawali
+
+00:04:25.920 --> 00:04:27.080
+at Powerpages.
+
+00:04:27.640 --> 00:04:29.380
+Tag itulah yang memberi sinyal kepada Copilot
+
+00:04:29.380 --> 00:04:31.180
+untuk membuat kecerdasan Powerpages alih-alih
+
+00:04:31.180 --> 00:04:31.900
+menggunakan mode start.
+
+00:04:32.800 --> 00:04:34.060
+Anda dapat meminta validator,
+
+00:04:34.200 --> 00:04:34.900
+cuplikan liquid,
+
+00:04:35.080 --> 00:04:36.460
+bahkan panggilan terikat dataverse,
+
+00:04:36.640 --> 00:04:38.540
+dan Copilot akan menyesuaikan jawabannya
+
+00:04:38.540 --> 00:04:40.600
+agar pas dengan sistem yang sedang Anda kerjakan.
+
+00:04:41.780 --> 00:04:42.580
+Nah, agar itu berhasil,
+
+00:04:42.700 --> 00:04:43.860
+Anda memerlukan persiapan yang tetap.
+
+00:04:44.560 --> 00:04:45.740
+Visual Studio Code terinstall,
+
+00:04:46.100 --> 00:04:47.280
+ekstensi Power Platform Tools,
+
+00:04:47.460 --> 00:04:48.640
+ekstensi GitHub Copilot Chat,
+
+00:04:48.800 --> 00:04:49.920
+dan Power Platform CLI
+
+00:04:49.920 --> 00:04:52.100
+yang telah diautentikasi ke lingkungan dataverse Anda.
+
+00:04:53.180 --> 00:04:55.000
+Langkah autentikasi adalah yang terpenting
+
+00:04:55.000 --> 00:04:56.860
+karena Copilot hanya memahami lingkungan Anda
+
+00:04:56.860 --> 00:04:58.560
+setelah Anda menarik konten situs ke VS Code
+
+00:04:58.560 --> 00:04:59.860
+saat dalam keadaan masuk.
+
+00:05:00.100 --> 00:05:00.880
+Saat dalam keadaan masuk.
+
+00:05:01.000 --> 00:05:02.000
+Tanpa itu, ia hanya akan menebak.
+
+00:05:02.380 --> 00:05:03.660
+Dan satu catatan mengenai data code.
+
+00:05:04.020 --> 00:05:05.600
+Beberapa fitur Copilot untuk Powerpages
+
+00:05:05.600 --> 00:05:06.460
+masih dalam perhatian jauh
+
+00:05:06.460 --> 00:05:07.460
+dan admin penyewa yang mengantel
+
+00:05:07.460 --> 00:05:08.700
+apakah fitur tersebut diaktifkan
+
+00:05:08.700 --> 00:05:10.240
+melalui Copilot Hub di pengaturan tata kelola.
+
+00:05:11.180 --> 00:05:12.800
+Jangan heran jika fitur yang didamakan di sini
+
+00:05:12.800 --> 00:05:13.820
+dimatikan di organisasi Anda.
+
+00:05:14.100 --> 00:05:15.440
+Itu adalah pengaturan admin, bukan Pak.
+
+00:05:15.780 --> 00:05:17.160
+Berikut perbedaannya setelah Anda menyiapkannya.
+
+00:05:17.680 --> 00:05:19.760
+Copilot biasa seperti meminta saran medan perang
+
+00:05:19.760 --> 00:05:20.440
+kepada seorang penyaih.
+
+00:05:20.880 --> 00:05:22.780
+Anda akan mendapatkan alunan musik yang menyenangkan,
+
+00:05:22.880 --> 00:05:23.580
+mungkin komentar umum,
+
+00:05:23.680 --> 00:05:25.260
+tetapi tidak ada detail yang Anda butuhkan
+
+00:05:25.260 --> 00:05:26.540
+saat berurusan dengan templat liquid
+
+00:05:26.540 --> 00:05:27.680
+atau bidang entitas dataverse.
+
+00:05:28.220 --> 00:05:29.720
+Peserta App Powerpages lebih mirip
+
+00:05:29.720 --> 00:05:31.720
+seperti seorang penjelajah yang sudah mematahkan medan tersebut.
+
+00:05:32.200 --> 00:05:33.760
+Ini bukan sekadar kode yang bisa dikompilasi,
+
+00:05:33.760 --> 00:05:35.720
+melainkan kode yang merujuk pada pengikatan yang tepat,
+
+00:05:35.940 --> 00:05:37.240
+cocok dengan validator formulir,
+
+00:05:37.400 --> 00:05:38.920
+dan selaras dengan cara kerja Powerpages.
+
+00:05:40.060 --> 00:05:42.080
+Satu metafora, satu perbandingan, satu hasilnya.
+
+00:05:42.700 --> 00:05:44.280
+Output yang berguna dan sadar konteks
+
+00:05:44.280 --> 00:05:45.720
+bukan cuplikan generik yang rapuh.
+
+00:05:46.240 --> 00:05:47.060
+Berikut bicara soal asal.
+
+00:05:47.440 --> 00:05:49.800
+Jika Anda meminta rutinitas validasi pada Copilot biasa,
+
+00:05:49.920 --> 00:05:50.960
+Anda mungkin akan mendapatkan skrip
+
+00:05:50.960 --> 00:05:52.620
+yang berfungsi di formulir HTML dasar saja.
+
+00:05:52.920 --> 00:05:54.160
+Namun, masukkan ke Powerpages
+
+00:05:54.160 --> 00:05:55.400
+dan Anda akan menemui kendaraan.
+
+00:05:55.760 --> 00:05:57.180
+Tidak ada pengenalan skema entitas,
+
+00:05:57.340 --> 00:05:58.580
+tidak tahu apa fungsi tech liquid,
+
+00:05:58.820 --> 00:06:00.700
+dan pastinya tidak sadar akan aturan dataverse.
+
+00:06:01.200 --> 00:06:02.780
+Ya, bekerja seperti serlotip menempel
+
+00:06:02.780 --> 00:06:03.640
+tapi tidak bisa diandalkan.
+
+00:06:04.080 --> 00:06:05.120
+Berikan permintaan yang sama dengan
+
+00:06:05.120 --> 00:06:06.240
+Add Powerpages di depan,
+
+00:06:06.460 --> 00:06:07.920
+dan tiba-tiba Anda mendapatkan validator
+
+00:06:07.920 --> 00:06:08.740
+yang tidak hanya berjalan,
+
+00:06:08.840 --> 00:06:10.660
+tetapi juga terikat pada rekerensi bidang entitas
+
+00:06:10.660 --> 00:06:11.580
+yang benar-benar Anda butuhkan.
+
+00:06:11.840 --> 00:06:13.820
+Permintaan sama, output disesuaikan dengan konteks,
+
+00:06:13.920 --> 00:06:15.180
+tidak perlu sesi perbaikan tengah malam.
+
+00:06:15.720 --> 00:06:17.140
+Dan ini bukan hanya soal membuat skrip.
+
+00:06:17.880 --> 00:06:19.120
+Perintah seperti Add Powerpages,
+
+00:06:19.240 --> 00:06:20.020
+jelaskan kode berikut,
+
+00:06:20.140 --> 00:06:21.700
+persen serta kan salingan halaman persen,
+
+00:06:21.800 --> 00:06:23.160
+memberi Anda penjelasan bahasa
+
+00:06:23.160 --> 00:06:24.620
+yang sederhana tentang konstruksi liquid
+
+00:06:24.620 --> 00:06:25.780
+atau Powerpages tertentu.
+
+00:06:26.660 --> 00:06:28.100
+Anda tidak sekedar saling tempel secara buta,
+
+00:06:28.100 --> 00:06:29.080
+Anda benar-benar membangun pemahaman.
+
+00:06:29.760 --> 00:06:31.100
+Itu adalah jenis kekuatan yang berbeda
+
+00:06:31.100 --> 00:06:32.420
+karena Anda mempelajari mantra sekaligus
+
+00:06:32.420 --> 00:06:32.980
+melapakan mantra-mantranya.
+
+00:06:33.940 --> 00:06:35.600
+Semakin lama Anda bekerja dengan perintah-perintah,
+
+00:06:35.660 --> 00:06:36.800
+ini semakin alur kerja Anda berubah.
+
+00:06:37.440 --> 00:06:38.960
+Alih-alih memperbaiki kesalahan sendirian
+
+00:06:38.960 --> 00:06:39.740
+pada jam 2 pagi,
+
+00:06:39.880 --> 00:06:41.760
+Anda memperlakukan kopilot seperti mata kedua
+
+00:06:41.760 --> 00:06:42.940
+yang sudah tahu apa yang rusak
+
+00:06:42.940 --> 00:06:44.660
+di 90% dari pembuatan serupa.
+
+00:06:45.860 --> 00:06:47.620
+Perintah tersebut tidak memberi Anda kode curang,
+
+00:06:47.720 --> 00:06:49.500
+tetapi memberi Anda wawasan dan sampel kerja
+
+00:06:49.500 --> 00:06:50.860
+yang menghormati konikan lingkungan Anda.
+
+00:06:51.220 --> 00:06:52.980
+Ini menyelamatkan Anda dari siklus pengejaan ulang.
+
+00:06:53.220 --> 00:06:54.520
+Pada peran kopilot biasa,
+
+00:06:54.520 --> 00:06:56.080
+Anda akan berada di posisi tengah.
+
+00:06:56.840 --> 00:06:57.340
+Skrip lumayan,
+
+00:06:57.460 --> 00:06:58.100
+perlu pengejaan ulang
+
+00:06:58.100 --> 00:06:59.440
+dan beberapa kali uji coba agar pas.
+
+00:07:00.200 --> 00:07:01.280
+Pada peran app Power Pages,
+
+00:07:01.420 --> 00:07:03.200
+rasanya seperti keberuntungan alami yang sempurna.
+
+00:07:04.460 --> 00:07:06.580
+Skrip validasi pas di formulir Power Pages Anda,
+
+00:07:06.840 --> 00:07:07.920
+penyertaan liquid berhasil,
+
+00:07:08.060 --> 00:07:09.920
+dan pengikatan data first tidak mengunculkan error.
+
+00:07:10.540 --> 00:07:11.460
+Ini bukan keberuntungan,
+
+00:07:11.660 --> 00:07:12.920
+inilah yang terjadi saat kopilot
+
+00:07:12.920 --> 00:07:14.500
+memahami lingkungan tempat Anda membuat kode.
+
+00:07:15.200 --> 00:07:17.320
+Namun, keunggulan itu hanya memberi Anda draft pertama.
+
+00:07:17.840 --> 00:07:19.920
+Cuplikan yang berfungsi bukan berarti pengalamannya, sudah selesai.
+
+00:07:20.760 --> 00:07:21.920
+Mengguna mengetik input aneh,
+
+00:07:21.920 --> 00:07:23.100
+pesan error perlu detail,
+
+00:07:23.100 --> 00:07:24.940
+dan skrip harus berkembang melampaui draft kerangka
+
+00:07:24.940 --> 00:07:25.900
+yang diberikan kopilot.
+
+00:07:26.640 --> 00:07:28.080
+Dan disitulah tantangan berikutnya dimulai.
+
+00:07:29.260 --> 00:07:31.220
+Dari kerangka skrip ke kode yang tangguh,
+
+00:07:31.460 --> 00:07:34.320
+semuanya dimulai dari validasi yang paling dasar.
+
+00:07:35.420 --> 00:07:36.540
+Anda mendapatkan draft pertama,
+
+00:07:36.860 --> 00:07:38.280
+skrip sederhana yang secara teknis berjalan,
+
+00:07:38.440 --> 00:07:40.260
+tetapi hanya memblokir hal-hal yang sangat tidak masuk akal.
+
+00:07:40.840 --> 00:07:42.420
+Anggap saja itu sebagai petarung level 1
+
+00:07:42.420 --> 00:07:43.160
+yang menggang perisekat.
+
+00:07:43.740 --> 00:07:45.700
+Itu berhasil untuk 1-2 serangan lemah,
+
+00:07:45.800 --> 00:07:46.860
+tetapi saat pengguna mulai beraksi,
+
+00:07:46.980 --> 00:07:47.660
+perisekat itu hancur.
+
+00:07:48.300 --> 00:07:49.840
+Siapapun yang pernah mengirimkan formulir tahu
+
+00:07:49.840 --> 00:07:51.960
+bahwa skrip tidak akan bertahan lama dalam kondisi awal,
+
+00:07:51.960 --> 00:07:53.940
+Anda berjaga terhadap kesalahan muda,
+
+00:07:54.040 --> 00:07:56.480
+tetapi kemudian pengguna menempelkan emoji ke kolom telepon
+
+00:07:56.480 --> 00:07:58.080
+atau menetik tanggal esok untuk tanggal esok
+
+00:07:58.080 --> 00:07:58.740
+untuk tanggal hemat.
+
+00:07:59.160 --> 00:08:00.380
+Tiba-tiba pertahanan Anda runtuh,
+
+00:08:00.560 --> 00:08:01.740
+tiket menumpuk di kotak masuk,
+
+00:08:01.860 --> 00:08:03.320
+dan Anda terjebak dengan validasi rapu
+
+00:08:03.320 --> 00:08:04.220
+yang tidak banyak membantu.
+
+00:08:05.120 --> 00:08:06.780
+Masalah utamanya bukan sekadar cakupan validasi,
+
+00:08:06.880 --> 00:08:07.540
+melainkan umpan balik.
+
+00:08:08.220 --> 00:08:09.560
+Pesan seperti input tidak valid
+
+00:08:09.560 --> 00:08:10.840
+adalah padanan perangkat lunak
+
+00:08:10.840 --> 00:08:12.480
+dari pintu terkunci tanpa petunjuk.
+
+00:08:13.160 --> 00:08:14.220
+Itu tidak beritahu pengguna apapun,
+
+00:08:14.300 --> 00:08:15.440
+jadi mereka menebak, gagal lagi,
+
+00:08:15.500 --> 00:08:16.780
+dan akhirnya melemparkan masalah terkeperan.
+
+00:08:16.780 --> 00:08:19.020
+Saat itulah tiket meja bantuan Anda berlipat ganda
+
+00:08:19.020 --> 00:08:20.540
+karena alasan yang sama dan dapat diperdiksi.
+
+00:08:20.980 --> 00:08:21.480
+Inilah perubahan.
+
+00:08:22.040 --> 00:08:23.540
+Skrip kardus itu tidak perlu tetap rapuh.
+
+00:08:24.400 --> 00:08:24.980
+Dengan Copilot,
+
+00:08:25.140 --> 00:08:26.520
+Anda tidak hanya menerima kerangka Anda
+
+00:08:26.520 --> 00:08:27.880
+mengembangkannya menjadi pelindung yang kuat.
+
+00:08:28.300 --> 00:08:29.680
+Dan alur kerjanya cukup sederhana
+
+00:08:29.680 --> 00:08:31.640
+untuk diingat seperti siklus 4 langkah
+
+00:08:31.640 --> 00:08:32.460
+buat kerangka,
+
+00:08:32.780 --> 00:08:34.300
+minta Copilot meningkatkan pesan error,
+
+00:08:34.500 --> 00:08:35.960
+tambahkan penanganan kasus khusus,
+
+00:08:36.140 --> 00:08:36.720
+lalu terapkan.
+
+00:08:37.700 --> 00:08:39.200
+Setiap langkah meningkatkan senjata tipis
+
+00:08:39.200 --> 00:08:41.000
+menjadi alat yang bisa Anda andalkan di lapangan.
+
+00:08:41.500 --> 00:08:42.560
+Copilot bekerja dalam sesi
+
+00:08:42.560 --> 00:08:43.560
+yang membuatnya cepat.
+
+00:08:43.560 --> 00:08:45.940
+Karena Anda berada dalam obrolan yang sama,
+
+00:08:46.040 --> 00:08:46.960
+dengan asal kerangka tadi,
+
+00:08:47.060 --> 00:08:48.340
+Anda cukup mengetik perbarui kode
+
+00:08:48.340 --> 00:08:49.660
+dan tulis pesan error yang detail.
+
+00:08:50.640 --> 00:08:51.840
+Copilot tidak mulai dari nol,
+
+00:08:51.940 --> 00:08:53.040
+ia benar-benar memperbarui kode
+
+00:08:53.040 --> 00:08:54.540
+yang Anda miliki langsung di editor Anda.
+
+00:08:55.420 --> 00:08:56.900
+Tidak perlu berpindah-pindah tab ramban
+
+00:08:56.900 --> 00:08:58.440
+atau membuat ulang perintah dari awal.
+
+00:08:59.080 --> 00:09:00.260
+Ini bersifat tidak tipukan sekadar berat.
+
+00:09:00.700 --> 00:09:02.160
+Dan Anda bisa melihat dampaknya secara langsung.
+
+00:09:02.420 --> 00:09:03.380
+Bayangkan sebelum dan sudahnya.
+
+00:09:03.960 --> 00:09:05.520
+Draft pertama Anda munculkan input tidak valid.
+
+00:09:06.780 --> 00:09:08.060
+Setelah satu kali perbaikan,
+
+00:09:08.580 --> 00:09:09.700
+pesannya menjadi nomor telepon
+
+00:09:09.700 --> 00:09:10.500
+harus berupa angka saja
+
+00:09:10.500 --> 00:09:11.520
+dan minimal 10 karakter.
+
+00:09:11.520 --> 00:09:13.780
+Kejelasan tersebut mengubah pengalaman pengguna.
+
+00:09:14.400 --> 00:09:15.900
+Alih-alih tembok, Anda memandu arah.
+
+00:09:16.760 --> 00:09:17.560
+Mereka tahu apa yang salah
+
+00:09:17.560 --> 00:09:18.760
+dan cara memperbaikinya sendiri.
+
+00:09:19.240 --> 00:09:20.480
+Tidak ada tiket, tidak ada keluhan.
+
+00:09:20.600 --> 00:09:21.920
+Waktu Anda pun tidak terbuang sia-sia.
+
+00:09:22.440 --> 00:09:23.800
+Dorong lagi untuk kasus-kasus ekstrem
+
+00:09:23.800 --> 00:09:25.260
+dan copilot akan memperkut perlindungan.
+
+00:09:25.740 --> 00:09:26.940
+Perlu meriksa karakter khusus
+
+00:09:26.940 --> 00:09:28.220
+yang menyelinap ke kolom numerik?
+
+00:09:29.080 --> 00:09:30.060
+Minta copilot di utas yang sama.
+
+00:09:30.820 --> 00:09:31.840
+Ingin respons yang lebih berlapis
+
+00:09:31.840 --> 00:09:32.900
+untuk berbagai jenis kegagalan?
+
+00:09:33.660 --> 00:09:34.300
+Alur kerjanya sama.
+
+00:09:34.800 --> 00:09:35.960
+Setiap kali skrip semakin kuat
+
+00:09:35.960 --> 00:09:36.680
+dan itu dilakukan
+
+00:09:36.680 --> 00:09:37.980
+dengan konteks yang terikat
+
+00:09:37.980 --> 00:09:39.160
+pada lingkungan power pages Anda,
+
+00:09:39.160 --> 00:09:40.740
+bukan sekadar kode web generik.
+
+00:09:41.460 --> 00:09:42.580
+Yang sebenarnya terjadi adalah perubahan
+
+00:09:42.580 --> 00:09:43.540
+dalam cara Anda melakukan debu.
+
+00:09:43.840 --> 00:09:45.000
+Anda berhenti memandamkan api
+
+00:09:45.000 --> 00:09:46.080
+pada baris sintaks yang rusak
+
+00:09:46.080 --> 00:09:47.560
+dan mulai membentuk draft yang berfungsi.
+
+00:09:48.320 --> 00:09:49.940
+Copilot sudah memberi Anda dasar yang berfungsi
+
+00:09:49.940 --> 00:09:51.700
+jadi energi Anda tercura untuk menyempurnakan.
+
+00:09:52.460 --> 00:09:54.240
+Alih-alih coba-coba pada karyan sintaks Anda
+
+00:09:54.240 --> 00:09:55.440
+dengan sengaja membentuk
+
+00:09:55.440 --> 00:09:57.240
+bagaimana kode berkomunikasi dengan pengguna.
+
+00:09:57.760 --> 00:09:58.920
+Hal itu memangkas jam kerja ulang
+
+00:09:58.920 --> 00:10:00.240
+dan mengurangi pergantian dukungan.
+
+00:10:00.800 --> 00:10:02.480
+Saat Anda melihatnya melalui siklus tersebut,
+
+00:10:02.580 --> 00:10:03.820
+kerangka, perbaikan pesan,
+
+00:10:03.940 --> 00:10:05.240
+penguatan terhadap kasus ekstrem,
+
+00:10:05.240 --> 00:10:06.400
+penerapan Anda menyadari
+
+00:10:06.400 --> 00:10:08.000
+bahwa Anda tidak hanya mencegah kekacauan data
+
+00:10:08.000 --> 00:10:08.960
+tetapi juga secara aktif
+
+00:10:08.960 --> 00:10:10.280
+mengurangi beban dukungan di masa mendat.
+
+00:10:10.680 --> 00:10:12.120
+Setiap pesan kesaran yang dibuat dengan baik
+
+00:10:12.120 --> 00:10:12.800
+adalah satu tiket
+
+00:10:12.800 --> 00:10:13.800
+mengapa ini tidak berhasil
+
+00:10:13.800 --> 00:10:14.860
+yang berkurang dari antara Anda.
+
+00:10:15.600 --> 00:10:16.920
+Setiap kasus ekstrem yang ditangani
+
+00:10:16.920 --> 00:10:18.000
+berarti satu kolom rapu
+
+00:10:18.000 --> 00:10:19.240
+yang tidak akan meledak saat produksi.
+
+00:10:20.060 --> 00:10:21.640
+Saat perbaikan Copilot sudah berlapis,
+
+00:10:21.740 --> 00:10:23.200
+kerangkanya tetap ada di balik pelindung
+
+00:10:23.200 --> 00:10:24.480
+tetapi sudah berubah total.
+
+00:10:25.780 --> 00:10:27.040
+Apa yang dimulai sebagai solusi
+
+00:10:27.040 --> 00:10:28.060
+sementara menjadi sesuatu
+
+00:10:28.060 --> 00:10:29.600
+yang cukup tangguh untuk data produksi
+
+00:10:29.600 --> 00:10:30.440
+dengan umpan balik
+
+00:10:30.440 --> 00:10:31.180
+yang mendidik pengguna
+
+00:10:31.180 --> 00:10:32.400
+alih-alih menghalangi mereka.
+
+00:10:33.220 --> 00:10:33.980
+Seperti berisai kertas
+
+00:10:33.980 --> 00:10:35.040
+yang ditempa menjadi pelat baja,
+
+00:10:35.240 --> 00:10:36.380
+ini mengubah suasana pertarungan
+
+00:10:36.380 --> 00:10:37.180
+di kedua sisi layar.
+
+00:10:37.880 --> 00:10:39.000
+Dan meskipun validasi skrip
+
+00:10:39.000 --> 00:10:40.200
+adalah satu bagian dari teka-teki,
+
+00:10:40.340 --> 00:10:41.420
+ada medan pertempuran
+
+00:10:41.420 --> 00:10:43.100
+yang lebih besar di sekitar kodenya
+
+00:10:43.100 --> 00:10:43.780
+bisa diperkuat.
+
+00:10:44.020 --> 00:10:44.980
+Tetapi pertanyaannya adalah
+
+00:10:44.980 --> 00:10:45.920
+bagaimana Anda mengelola
+
+00:10:45.920 --> 00:10:47.000
+seluruh struktur di dalamnya
+
+00:10:47.000 --> 00:10:47.660
+tanpa melambat.
+
+00:10:48.420 --> 00:10:49.780
+Disitulah tantangan berikutnya muncul,
+
+00:10:50.000 --> 00:10:50.980
+bukan pada skripnya sendiri,
+
+00:10:51.140 --> 00:10:51.900
+melainkan pada cara Anda
+
+00:10:51.900 --> 00:10:52.820
+menangani peta situsan.
+
+00:10:54.340 --> 00:10:55.220
+Mengedit peta dungeon
+
+00:10:55.220 --> 00:10:56.340
+dengan CLI dan VS Code.
+
+00:10:57.140 --> 00:10:57.940
+Saat Anda ingin melangkah
+
+00:10:57.940 --> 00:10:58.840
+lebih jauh dari skrip tunggal
+
+00:10:58.840 --> 00:11:00.200
+dan mulai mengelola seluruh situs Anda,
+
+00:11:00.300 --> 00:11:00.860
+Anda membutuhkan.
+
+00:11:01.060 --> 00:11:02.360
+Lebih dari sekadar pengeditan kasar,
+
+00:11:02.720 --> 00:11:03.580
+Anda membutuhkan peta yang terkait.
+
+00:11:04.200 --> 00:11:05.060
+Mengedit peta dungeon
+
+00:11:05.060 --> 00:11:06.280
+dengan CLI dan VS Code
+
+00:11:06.280 --> 00:11:07.340
+adalah cara Anda berhenti
+
+00:11:07.340 --> 00:11:08.220
+menyusuri lorong buta
+
+00:11:08.220 --> 00:11:08.860
+dan tetap menjaga
+
+00:11:08.860 --> 00:11:10.160
+setiap koridor terlihat jelas.
+
+00:11:10.580 --> 00:11:11.460
+Cara yang berantakan adalah
+
+00:11:11.460 --> 00:11:12.480
+mengelola tab di studio
+
+00:11:12.480 --> 00:11:12.980
+di scene browser
+
+00:11:12.980 --> 00:11:13.720
+berpindah ke terminal,
+
+00:11:14.060 --> 00:11:15.240
+lalu memindahkan file ke sana kemari
+
+00:11:15.240 --> 00:11:16.520
+hanya untuk membuat perubahan kecil.
+
+00:11:16.760 --> 00:11:17.660
+Hanya untuk membuat perubahan kecil.
+
+00:11:17.780 --> 00:11:18.140
+Memang berhasil,
+
+00:11:18.240 --> 00:11:18.740
+tapi terasa kaku.
+
+00:11:19.320 --> 00:11:20.200
+Cara terintegrasi adalah
+
+00:11:20.200 --> 00:11:21.400
+mengundur semua konten situs Anda
+
+00:11:21.400 --> 00:11:21.960
+secara lokal
+
+00:11:21.960 --> 00:11:23.060
+dengan Power Platform CLI,
+
+00:11:23.160 --> 00:11:24.400
+lalu mengedit dan menyebarkannya
+
+00:11:24.400 --> 00:11:25.940
+melalui ekstensi Power Platform Tools
+
+00:11:25.940 --> 00:11:26.600
+di VS Code,
+
+00:11:26.760 --> 00:11:27.300
+di VS Code.
+
+00:11:27.440 --> 00:11:28.060
+Satu alur kerja
+
+00:11:28.060 --> 00:11:28.960
+tanpa langkah-langkah merupakan.
+
+00:11:29.380 --> 00:11:29.920
+Begini caranya.
+
+00:11:30.520 --> 00:11:31.520
+Sebelum melakukan apapun,
+
+00:11:31.700 --> 00:11:32.820
+Anda harus melakukan autentikasi
+
+00:11:32.820 --> 00:11:33.980
+terhadap lingkungan dataverse Anda.
+
+00:11:34.900 --> 00:11:35.840
+Anggap saja ini sebagai
+
+00:11:35.840 --> 00:11:36.660
+membuka pintu depan
+
+00:11:36.660 --> 00:11:38.320
+agar CLI dapat menjangkau situs Anda.
+
+00:11:39.360 --> 00:11:40.360
+Setelah terautentikasi,
+
+00:11:40.480 --> 00:11:41.680
+Anda menjalankan satu perintah
+
+00:11:41.680 --> 00:11:42.900
+untuk mengunduk konten situs web
+
+00:11:42.900 --> 00:11:44.060
+ke ruang kerja lokal Anda.
+
+00:11:45.100 --> 00:11:46.120
+Proses itu akan menarik
+
+00:11:46.120 --> 00:11:48.280
+template, skrip, CSS, dan aset.
+
+00:11:49.280 --> 00:11:50.040
+Salinan lengkap
+
+00:11:50.040 --> 00:11:50.940
+wawasan situs Anda
+
+00:11:50.940 --> 00:11:51.880
+ada di mesin Anda.
+
+00:11:52.820 --> 00:11:54.120
+Co-pilot juga mendapat manfaat
+
+00:11:54.120 --> 00:11:55.780
+karena dengan file lokal yang tersedia,
+
+00:11:56.060 --> 00:11:57.260
+ia dapat merujuk entitas spesifik
+
+00:11:57.260 --> 00:11:58.020
+lingkungan alih-alih
+
+00:11:58.020 --> 00:11:59.080
+memberikan tebakan umum.
+
+00:12:00.320 --> 00:12:00.820
+Sejak saat itu,
+
+00:12:00.920 --> 00:12:01.840
+Anda selalu berada di VS Code.
+
+00:12:02.160 --> 00:12:03.200
+Ingin menyesuaikan tempat liquid?
+
+00:12:03.740 --> 00:12:04.480
+Kan ada tempat di sana.
+
+00:12:04.880 --> 00:12:05.740
+Memperbaiki logika parit.
+
+00:12:06.140 --> 00:12:06.960
+Buka file javascript
+
+00:12:06.960 --> 00:12:07.760
+yang ada di sebelahnya.
+
+00:12:08.180 --> 00:12:09.260
+Dan karena semuanya terpusat,
+
+00:12:09.380 --> 00:12:10.380
+Anda melihat secara real-time
+
+00:12:10.380 --> 00:12:11.400
+bagaimana bagian-bagiannya
+
+00:12:11.400 --> 00:12:12.080
+terhubung alih-alih
+
+00:12:12.080 --> 00:12:12.800
+berpindahan teralat
+
+00:12:12.800 --> 00:12:14.240
+tanpa konteks gambaran yang lebih besar.
+
+00:12:15.340 --> 00:12:16.520
+Ekstensi Power Platform Tools
+
+00:12:16.520 --> 00:12:17.500
+membuat perintah CLI
+
+00:12:17.500 --> 00:12:18.280
+lebih mudah dipahami.
+
+00:12:20.940 --> 00:12:22.700
+Berada di terminal terintegrasi VS Code
+
+00:12:22.700 --> 00:12:23.700
+terikat ke ruang kerja
+
+00:12:23.700 --> 00:12:25.200
+tempat Anda coding.
+
+00:12:26.480 --> 00:12:27.300
+Itu berarti tidak perlu
+
+00:12:27.300 --> 00:12:28.600
+menghafal deretan perintah panjang
+
+00:12:28.600 --> 00:12:29.560
+setiap kali menjalankan
+
+00:12:29.560 --> 00:12:30.520
+perintah singkat yang sama.
+
+00:12:31.520 --> 00:12:32.300
+Undo edit, sebarkan.
+
+00:12:32.960 --> 00:12:33.580
+Siklus yang lancar.
+
+00:12:34.000 --> 00:12:34.820
+Tidak ada fragment sisa
+
+00:12:34.820 --> 00:12:35.480
+yang tidak sinkron.
+
+00:12:35.960 --> 00:12:37.240
+Penyebaran pun jadi lebih mudah.
+
+00:12:38.280 --> 00:12:39.260
+Setelah melakukan pengeditan,
+
+00:12:39.420 --> 00:12:40.400
+Anda menggunakan alur kerja
+
+00:12:40.400 --> 00:12:41.460
+berbasis CLI yang sama
+
+00:12:41.460 --> 00:12:42.700
+untuk mendorong perubahan kembali
+
+00:12:42.700 --> 00:12:43.960
+ke lingkungan Power Pages Anda.
+
+00:12:44.480 --> 00:12:45.220
+Itu menutup siklus
+
+00:12:45.220 --> 00:12:46.120
+tanpa penanganan ganda
+
+00:12:46.120 --> 00:12:47.620
+atau kesalahan versi yang biasa terjadi.
+
+00:12:48.100 --> 00:12:49.180
+Anda tidak menyalin folder
+
+00:12:49.180 --> 00:12:49.860
+secara manual
+
+00:12:49.860 --> 00:12:51.400
+atau berharap sesi browser Anda
+
+00:12:51.400 --> 00:12:52.040
+belum habis.
+
+00:12:52.640 --> 00:12:53.900
+Anda menjaga segalanya
+
+00:12:53.900 --> 00:12:54.640
+dalam satu lingkungan
+
+00:12:54.640 --> 00:12:55.540
+yang benar-benar Anda kenalikan.
+
+00:12:56.420 --> 00:12:57.520
+Dan peningkatan produktivitas
+
+00:12:57.520 --> 00:12:58.220
+benar-benar terlihat
+
+00:12:58.220 --> 00:12:59.040
+setelah Anda menambahkan
+
+00:12:59.040 --> 00:13:00.020
+copy-up ke dalam siklus itu.
+
+00:13:00.280 --> 00:13:00.940
+Alih-alih mengelola
+
+00:13:00.940 --> 00:13:02.120
+potongan kode yang terputus,
+
+00:13:02.240 --> 00:13:02.800
+sekarang perintah
+
+00:13:02.800 --> 00:13:03.780
+Add Power Pages Anda
+
+00:13:03.780 --> 00:13:04.620
+terjadi di ruang kerja
+
+00:13:04.620 --> 00:13:05.860
+yang sama dengan konten situs Anda.
+
+00:13:06.420 --> 00:13:07.180
+Anda dapat mengubah
+
+00:13:07.180 --> 00:13:07.860
+skrip validasi
+
+00:13:07.860 --> 00:13:09.040
+dan segera menguji interaksinya
+
+00:13:09.040 --> 00:13:09.840
+dengan template liquid
+
+00:13:09.840 --> 00:13:10.540
+di tab terdekat.
+
+00:13:11.260 --> 00:13:11.960
+Ini satu lingkungan,
+
+00:13:12.040 --> 00:13:12.460
+satu konteks,
+
+00:13:12.580 --> 00:13:14.000
+satu langkah dari pertanyaan kejawaban.
+
+00:13:14.980 --> 00:13:15.520
+Agar lebih konkret,
+
+00:13:15.520 --> 00:13:16.200
+saya akan menunjukkannya
+
+00:13:16.200 --> 00:13:16.780
+dalam demo singkat.
+
+00:13:17.520 --> 00:13:18.660
+Jalankan satu perintah CLE
+
+00:13:18.660 --> 00:13:19.700
+untuk menarik situs Anda,
+
+00:13:19.980 --> 00:13:20.900
+buka file liquid halaman
+
+00:13:20.900 --> 00:13:21.740
+dan skrip validasinya
+
+00:13:21.740 --> 00:13:22.360
+di VS Code,
+
+00:13:22.480 --> 00:13:23.580
+lalu minta Add Power Pages
+
+00:13:23.580 --> 00:13:24.680
+untuk memperbarui
+
+00:13:24.680 --> 00:13:25.740
+pesan kesalahan.
+
+00:13:26.420 --> 00:13:27.340
+Itulah keseluruhan siklusnya.
+
+00:13:27.960 --> 00:13:28.660
+Peta di depan Anda,
+
+00:13:28.800 --> 00:13:29.620
+file dalam jangkauan.
+
+00:13:29.980 --> 00:13:31.020
+Asisten AI siap sedia.
+
+00:13:32.840 --> 00:13:33.660
+Menangan sesungguhnya
+
+00:13:33.660 --> 00:13:34.340
+bukanlah menambah
+
+00:13:34.340 --> 00:13:35.040
+lebih banyak alat,
+
+00:13:35.140 --> 00:13:36.240
+melainkan mengonsolidasikannya.
+
+00:13:36.980 --> 00:13:37.780
+Anda menghilangkan
+
+00:13:37.780 --> 00:13:38.660
+pergantian konteks,
+
+00:13:38.840 --> 00:13:39.380
+tetap fokus,
+
+00:13:39.600 --> 00:13:40.960
+dan bekerja dalam kerangka stabil
+
+00:13:40.960 --> 00:13:41.720
+di mana pengodian,
+
+00:13:41.880 --> 00:13:42.180
+konten,
+
+00:13:42.260 --> 00:13:43.160
+dan bantuan selaras.
+
+00:13:43.880 --> 00:13:44.660
+Ini menghemat waktu,
+
+00:13:44.780 --> 00:13:45.620
+tetapi yang lebih penting,
+
+00:13:45.740 --> 00:13:46.940
+mencegah Anda menghabiskan energi
+
+00:13:46.940 --> 00:13:47.980
+untuk gangguan alih-alih fokus
+
+00:13:47.980 --> 00:13:48.960
+pada pembangunan yang sebenarnya.
+
+00:13:49.620 --> 00:13:50.540
+Dengan peta di tangan,
+
+00:13:50.640 --> 00:13:51.700
+Anda tidak lagi meraba-raba
+
+00:13:51.700 --> 00:13:52.300
+bertanya-tanya
+
+00:13:52.300 --> 00:13:53.500
+di mana hambatan berikutnya.
+
+00:13:54.580 --> 00:13:54.900
+Namun,
+
+00:13:55.080 --> 00:13:56.420
+meski tetap letak dungeon sudah jelas,
+
+00:13:56.560 --> 00:13:57.680
+beberapa pertarungan tetap ada.
+
+00:13:57.940 --> 00:13:58.720
+Karena saat bos muncul
+
+00:13:58.720 --> 00:13:59.920
+bergedok tumpukan error debak,
+
+00:14:00.040 --> 00:14:00.860
+ujian sebenarnya adalah
+
+00:14:00.860 --> 00:14:01.920
+apakah Anda bisa membaca
+
+00:14:01.920 --> 00:14:02.660
+pola serangannya.
+
+00:14:03.900 --> 00:14:04.680
+Dan itulah pertempuran
+
+00:14:04.680 --> 00:14:05.320
+yang banyak pengembang
+
+00:14:05.320 --> 00:14:06.020
+hadapi dengan buta.
+
+00:14:07.000 --> 00:14:07.960
+Mendebak pertarungan bos
+
+00:14:07.960 --> 00:14:08.780
+dengan bantuan copilot.
+
+00:14:09.340 --> 00:14:10.380
+Terkadang ujian sesungguhnya
+
+00:14:10.380 --> 00:14:11.460
+bukanlah menulis kode baru,
+
+00:14:11.560 --> 00:14:12.280
+melainkan mencari tahu
+
+00:14:12.280 --> 00:14:13.500
+mengapa sesuatu yang Anda anggap
+
+00:14:13.500 --> 00:14:14.060
+baik-baik saja
+
+00:14:14.060 --> 00:14:15.060
+tiba-tiba menjadi masalah.
+
+00:14:16.120 --> 00:14:16.820
+Disitulah mendebak
+
+00:14:16.820 --> 00:14:17.460
+pertarungan bos
+
+00:14:17.460 --> 00:14:19.000
+dengan bantuan copilot berperan.
+
+00:14:20.420 --> 00:14:21.220
+Mendebak power pages
+
+00:14:21.220 --> 00:14:22.020
+bisa terasa seperti
+
+00:14:22.020 --> 00:14:22.720
+bertukar serangan
+
+00:14:22.720 --> 00:14:23.500
+dengan monster bos
+
+00:14:23.500 --> 00:14:24.860
+yang menyembunyikan pola serangannya.
+
+00:14:25.480 --> 00:14:26.160
+Erot riad ajak.
+
+00:14:26.660 --> 00:14:27.740
+Log berteriak tanpa konteks.
+
+00:14:28.740 --> 00:14:29.760
+Anda menggalis script panjang
+
+00:14:29.760 --> 00:14:30.520
+tanpa yakin
+
+00:14:30.520 --> 00:14:31.480
+apakah masalahnya adalah
+
+00:14:31.480 --> 00:14:31.940
+sintaks,
+
+00:14:32.020 --> 00:14:32.680
+kesalahan tech liquid,
+
+00:14:32.860 --> 00:14:33.700
+atau bending data first
+
+00:14:33.700 --> 00:14:34.620
+yang tidak mau bekerjasama.
+
+00:14:35.220 --> 00:14:35.780
+Apa yang seharusnya
+
+00:14:35.780 --> 00:14:36.620
+menjadi perbaikan cepat
+
+00:14:36.620 --> 00:14:37.200
+malah menghabiskan
+
+00:14:37.200 --> 00:14:37.820
+satu sesi penuh
+
+00:14:37.820 --> 00:14:38.620
+karena Anda menjemahkan
+
+00:14:38.620 --> 00:14:39.260
+kode yang membingungkan
+
+00:14:39.260 --> 00:14:39.680
+pada sedemik.
+
+00:14:39.860 --> 00:14:40.440
+Liquid membuat ini
+
+00:14:40.440 --> 00:14:40.840
+lebih sulit.
+
+00:14:41.580 --> 00:14:42.100
+Sebuatan kecil
+
+00:14:42.100 --> 00:14:42.820
+bisa mengubah halaman.
+
+00:14:43.400 --> 00:14:44.240
+Terkadang dengan rapi,
+
+00:14:44.420 --> 00:14:45.540
+terkadang sangat kacau.
+
+00:14:46.920 --> 00:14:47.880
+Satu persen include persen
+
+00:14:47.880 --> 00:14:48.540
+memasukkan konten
+
+00:14:48.540 --> 00:14:49.160
+tanpa masalah.
+
+00:14:50.420 --> 00:14:51.220
+Yang lain dalam konteks
+
+00:14:51.220 --> 00:14:51.840
+sedikit berbeda
+
+00:14:51.840 --> 00:14:52.440
+justru merusak
+
+00:14:52.440 --> 00:14:53.280
+seluruh tata letak Anda.
+
+00:14:53.980 --> 00:14:54.500
+Binding data first
+
+00:14:54.500 --> 00:14:55.280
+menambah hambatan lagi.
+
+00:14:55.800 --> 00:14:56.780
+Binding mungkin terselesaikan
+
+00:14:56.780 --> 00:14:57.360
+dengan benar pada
+
+00:14:57.360 --> 00:14:58.240
+satu formulir dan gagal
+
+00:14:58.240 --> 00:14:58.960
+secara diam-diam perifat.
+
+00:14:59.300 --> 00:15:00.300
+Panduan dari Microsoft sendiri
+
+00:15:00.300 --> 00:15:01.200
+mengakui keunikan ini.
+
+00:15:01.200 --> 00:15:02.860
+Liquid dan data first
+
+00:15:02.860 --> 00:15:03.760
+berperilaku berbeda
+
+00:15:03.760 --> 00:15:04.680
+tergantung penempatan
+
+00:15:04.680 --> 00:15:06.140
+yang berarti memindahkannya
+
+00:15:06.140 --> 00:15:06.820
+sampai berfungsi
+
+00:15:06.820 --> 00:15:07.540
+menjadi alur kerja
+
+00:15:07.540 --> 00:15:08.360
+tidak resmi Anda.
+
+00:15:09.220 --> 00:15:10.220
+Disitulah partisipan
+
+00:15:10.220 --> 00:15:11.240
+Copilot di Powerpages
+
+00:15:11.240 --> 00:15:12.140
+mengembah peluang Anda.
+
+00:15:13.420 --> 00:15:14.180
+Alih-alih menghabiskan
+
+00:15:14.180 --> 00:15:15.280
+sore dengan eksperimen buta
+
+00:15:15.280 --> 00:15:16.060
+Anda bisa menyeroti
+
+00:15:16.060 --> 00:15:16.960
+kode tersebut.
+
+00:15:17.840 --> 00:15:18.600
+Anda cukup mengetik
+
+00:15:18.600 --> 00:15:19.500
+at Powerpages
+
+00:15:19.500 --> 00:15:20.520
+jelaskan kode berikut
+
+00:15:20.520 --> 00:15:22.140
+persen include page copy
+
+00:15:22.140 --> 00:15:22.680
+persen
+
+00:15:22.680 --> 00:15:23.440
+ke dalam
+
+00:15:23.440 --> 00:15:24.680
+obrolan Copilot.
+
+00:15:25.200 --> 00:15:26.400
+Tanpa bahasa basi
+
+00:15:26.400 --> 00:15:27.360
+tanpa saran umum.
+
+00:15:28.080 --> 00:15:28.880
+Hasilnya adalah
+
+00:15:28.880 --> 00:15:30.040
+penjelasan bahasa sederhana
+
+00:15:30.040 --> 00:15:31.480
+yang menerangkan fungsi tag tersebut
+
+00:15:31.480 --> 00:15:32.280
+apa yang ditariknya
+
+00:15:32.280 --> 00:15:33.260
+dan mengapa posisinya
+
+00:15:33.260 --> 00:15:34.580
+di halaman mengaruhi perilaku.
+
+00:15:35.260 --> 00:15:35.560
+Intinya
+
+00:15:35.560 --> 00:15:36.640
+Anda berhenti menebak
+
+00:15:36.640 --> 00:15:37.780
+dan akhirnya memiliki skrip
+
+00:15:37.780 --> 00:15:38.340
+yang dapat dibaca
+
+00:15:38.340 --> 00:15:39.320
+tentang gerakan bos tersebut.
+
+00:15:39.920 --> 00:15:40.740
+Untuk memanfaatkannya
+
+00:15:40.740 --> 00:15:42.060
+susun proses debugging Anda
+
+00:15:42.060 --> 00:15:42.820
+seperti demo singkat.
+
+00:15:43.460 --> 00:15:43.740
+Pertama
+
+00:15:43.740 --> 00:15:44.780
+identifikasi cupli kamar masak
+
+00:15:44.780 --> 00:15:45.920
+sebuah formula rusak
+
+00:15:45.920 --> 00:15:46.520
+setelah tag include.
+
+00:15:47.380 --> 00:15:47.660
+Kedua
+
+00:15:47.660 --> 00:15:48.620
+masukkan kode yang tepat
+
+00:15:48.620 --> 00:15:49.100
+ke Copilot
+
+00:15:49.100 --> 00:15:50.180
+dengan perintah jelaskan.
+
+00:15:50.820 --> 00:15:51.160
+Ketiga
+
+00:15:51.160 --> 00:15:52.440
+gunakan penjelasan Copilot
+
+00:15:52.440 --> 00:15:53.580
+untuk penulisan ulang kecil
+
+00:15:53.580 --> 00:15:54.740
+atau penyesuaian tata letak.
+
+00:15:55.140 --> 00:15:55.340
+Lalu
+
+00:15:55.340 --> 00:15:56.860
+langkah-langkahnya ringkas
+
+00:15:56.860 --> 00:15:57.660
+jelaskan terapkan.
+
+00:15:57.920 --> 00:15:59.000
+Anda melihat hasil
+
+00:15:59.000 --> 00:15:59.540
+tanpa terjebak
+
+00:15:59.540 --> 00:16:00.720
+dalam proses coba-coba yang tak ada.
+
+00:16:00.900 --> 00:16:01.800
+Dan Copilot melangkah
+
+00:16:01.800 --> 00:16:02.680
+lebih jauh dari sekadar terjemah.
+
+00:16:02.960 --> 00:16:03.780
+Dalam obrolan yang sama
+
+00:16:03.780 --> 00:16:04.640
+Anda bisa minta perbaikan.
+
+00:16:05.160 --> 00:16:05.500
+Misalnya
+
+00:16:05.500 --> 00:16:06.800
+Copilot dapat menyarankan
+
+00:16:06.800 --> 00:16:07.960
+penyesuaian penempatan include
+
+00:16:07.960 --> 00:16:09.400
+agar selaras dengan tata letak Anda
+
+00:16:09.400 --> 00:16:10.480
+atau mengubah javascript
+
+00:16:10.480 --> 00:16:11.280
+agar event handler
+
+00:16:11.280 --> 00:16:12.600
+berjalan tanpa membuat
+
+00:16:12.600 --> 00:16:13.440
+console error
+
+00:16:13.440 --> 00:16:14.800
+tanpa membuat console error.
+
+00:16:15.020 --> 00:16:16.400
+Karena berjalan dengan sadar konteks
+
+00:16:16.400 --> 00:16:17.840
+di ruang kerja power pages Anda
+
+00:16:17.840 --> 00:16:19.060
+saran yang diberikan terhubung
+
+00:16:19.060 --> 00:16:20.000
+langsung ke lingkungan Anda
+
+00:16:20.000 --> 00:16:21.520
+bukan mengambang di ruang web umum.
+
+00:16:22.080 --> 00:16:22.720
+Itulah perbedaan
+
+00:16:22.720 --> 00:16:23.900
+antara penjual ramuan acak
+
+00:16:23.900 --> 00:16:25.040
+dengan seseorang yang benar-benar
+
+00:16:25.040 --> 00:16:26.340
+mengenal bos yang sedang Anda lawan.
+
+00:16:26.800 --> 00:16:27.600
+Manfaatnya langsung terasa.
+
+00:16:28.020 --> 00:16:29.260
+Daripada menghabiskan setengah hari
+
+00:16:29.260 --> 00:16:30.740
+untuk mengisolasi satu binding yang rusak
+
+00:16:30.740 --> 00:16:31.580
+Anda langsung memahami
+
+00:16:31.580 --> 00:16:32.380
+mengapa hal itu gagal.
+
+00:16:32.680 --> 00:16:33.860
+Hal itu mengubah proses dibaging
+
+00:16:33.860 --> 00:16:34.840
+dari sesuatu yang membosankan
+
+00:16:34.840 --> 00:16:35.760
+dan acak menjadi sesuatu yang tak.
+
+00:16:35.980 --> 00:16:36.960
+Anda melihat apa yang rusak
+
+00:16:36.960 --> 00:16:38.260
+menerapkan perbaikan yang tepat sasaran
+
+00:16:38.260 --> 00:16:39.420
+dan mengonfirmasi apakah perilakunya.
+
+00:16:39.560 --> 00:16:40.580
+Rasanya tidak lagi seperti
+
+00:16:40.580 --> 00:16:41.980
+mengundi dadu dari kantong terkutuk
+
+00:16:41.980 --> 00:16:42.940
+melainkan seperti bereaksi
+
+00:16:42.940 --> 00:16:43.660
+terhadap pelayan terian.
+
+00:16:43.980 --> 00:16:44.820
+Berikut adalah perbandingannya
+
+00:16:44.820 --> 00:16:45.220
+dalam praktek.
+
+00:16:45.580 --> 00:16:45.980
+Sebelumnya
+
+00:16:45.980 --> 00:16:46.940
+pesan kesalahan seperti
+
+00:16:46.940 --> 00:16:48.080
+something went wrong
+
+00:16:48.080 --> 00:16:49.140
+membuat Anda berputar-putar
+
+00:16:49.140 --> 00:16:50.520
+tanpa henti menghadapi masalah tersebut.
+
+00:16:51.240 --> 00:16:52.180
+Dengan penjelasan Copilot
+
+00:16:52.180 --> 00:16:52.860
+Anda tahu bahwa
+
+00:16:52.860 --> 00:16:54.040
+tag include memuat fragment
+
+00:16:54.040 --> 00:16:54.940
+halaman tertentu
+
+00:16:54.940 --> 00:16:56.460
+dan pada penempatan Anda
+
+00:16:56.460 --> 00:16:57.860
+itu menimpa wadah yang diperlukan.
+
+00:16:58.900 --> 00:16:59.860
+Anda menulis ulang penempatan
+
+00:16:59.860 --> 00:17:00.580
+sesuai saran Copilot
+
+00:17:00.580 --> 00:17:01.280
+melakukan tes ulang
+
+00:17:01.280 --> 00:17:01.960
+dan fungung berpinduk.
+
+00:17:02.560 --> 00:17:03.240
+Dalam tiga langkah
+
+00:17:03.240 --> 00:17:04.320
+Anda beralih dari kebingungan
+
+00:17:04.320 --> 00:17:04.940
+menuju solusi.
+
+00:17:05.900 --> 00:17:06.640
+Tentu saja ada aturan
+
+00:17:06.640 --> 00:17:07.240
+yang perlu diulang.
+
+00:17:07.900 --> 00:17:09.280
+Copilot memberikan saran yang kuat
+
+00:17:09.280 --> 00:17:10.260
+tetapi bukan jaminan.
+
+00:17:10.940 --> 00:17:11.740
+Slouting jawaban uji
+
+00:17:11.740 --> 00:17:13.100
+sebelum menerapkannya ke produksi.
+
+00:17:13.100 --> 00:17:14.520
+Anggaplah output tersebut
+
+00:17:14.520 --> 00:17:15.460
+sebagai panduan strategi
+
+00:17:15.460 --> 00:17:16.160
+bukan jalan instan
+
+00:17:16.160 --> 00:17:16.940
+yang bisa langsung Anda pakai
+
+00:17:16.940 --> 00:17:17.380
+tanpa melihat.
+
+00:17:17.780 --> 00:17:18.720
+Saran tersebut menghemat waktu
+
+00:17:18.720 --> 00:17:19.380
+tapi penilaian Anda
+
+00:17:19.380 --> 00:17:20.360
+lain menjaga sistem tetap setelah.
+
+00:17:20.680 --> 00:17:21.480
+Setelah Anda membangun
+
+00:17:21.480 --> 00:17:22.180
+alur umpan balik
+
+00:17:22.180 --> 00:17:23.080
+jelaskan sesuaikan
+
+00:17:23.080 --> 00:17:24.060
+konfirmasi Anda akan
+
+00:17:24.060 --> 00:17:24.800
+mengurangi rasa gentara
+
+00:17:24.800 --> 00:17:25.600
+terhadap proses debaging.
+
+00:17:26.120 --> 00:17:27.000
+Liquid tidak lagi terasa
+
+00:17:27.000 --> 00:17:27.980
+seperti penipu yang kacau
+
+00:17:27.980 --> 00:17:28.960
+keanehan Dataverse
+
+00:17:28.960 --> 00:17:29.960
+berhenti misteri total
+
+00:17:29.960 --> 00:17:30.780
+dan bahkan penjutan
+
+00:17:30.780 --> 00:17:31.780
+JavaScript berubah
+
+00:17:31.780 --> 00:17:32.600
+menjadi serangan balik
+
+00:17:32.600 --> 00:17:33.400
+yang dapat dikelola.
+
+00:17:34.220 --> 00:17:34.900
+Pertarungan boss
+
+00:17:34.900 --> 00:17:35.800
+tetap menjadi tantangan
+
+00:17:35.800 --> 00:17:36.620
+tetapi Anda bertarung
+
+00:17:36.620 --> 00:17:37.400
+dengan visi alih-alih
+
+00:17:37.400 --> 00:17:37.960
+menerima serangan
+
+00:17:37.960 --> 00:17:38.980
+dari sudut yang tidak terduga
+
+00:17:38.980 --> 00:17:39.980
+dan perubahan perspektif
+
+00:17:39.980 --> 00:17:41.060
+itulah kemenangan yang sungguhnya.
+
+00:17:41.600 --> 00:17:42.120
+Melakukan debaging
+
+00:17:42.120 --> 00:17:42.620
+dengan Copilot
+
+00:17:42.620 --> 00:17:43.020
+di dalamnya
+
+00:17:43.020 --> 00:17:44.020
+tidak menghilangkan tantangannya.
+
+00:17:44.540 --> 00:17:45.520
+Anda tetap menulis kode
+
+00:17:45.520 --> 00:17:46.260
+tetap menguji
+
+00:17:46.260 --> 00:17:47.480
+tetap memecahkan masalah
+
+00:17:47.480 --> 00:17:48.240
+tetapi Anda berhenti
+
+00:17:48.240 --> 00:17:48.960
+membuang energi
+
+00:17:48.960 --> 00:17:50.160
+untuk menatap output misterius
+
+00:17:50.160 --> 00:17:50.840
+dan mulai bergerak
+
+00:17:50.840 --> 00:17:51.800
+dengan keunggulan yang andal
+
+00:17:51.800 --> 00:17:52.780
+yang menyiapkan panggung
+
+00:17:52.780 --> 00:17:53.540
+untuk bagian akhir.
+
+00:17:54.380 --> 00:17:55.580
+Apa arti dari semua perubahan ini
+
+00:17:55.580 --> 00:17:56.620
+ketika Anda mundur selangkah
+
+00:17:56.620 --> 00:17:57.760
+dan melihat misi yang lebih besar?
+
+00:17:58.800 --> 00:17:59.620
+Kesimpulannya adalah ini.
+
+00:18:00.400 --> 00:18:01.180
+Copilot tidak melewatkan
+
+00:18:01.180 --> 00:18:01.680
+pertarungan
+
+00:18:01.680 --> 00:18:02.700
+melainkan mengubah cerana beli.
+
+00:18:03.320 --> 00:18:04.380
+Anda beralih dari coba-coba
+
+00:18:04.380 --> 00:18:05.240
+yang rentan menuju kode
+
+00:18:05.240 --> 00:18:06.000
+berbantuan AI
+
+00:18:06.000 --> 00:18:07.140
+yang menjelaskan dirinya sendiri
+
+00:18:07.140 --> 00:18:08.520
+disempurnakan sesuai perintah
+
+00:18:08.520 --> 00:18:09.680
+dan membangun alur
+
+00:18:09.680 --> 00:18:11.260
+yang benar-benar bisa dilalui pengguna
+
+00:18:11.260 --> 00:18:11.940
+tanpa harus berhenti
+
+00:18:11.940 --> 00:18:12.380
+karena kesal.
+
+00:18:12.840 --> 00:18:13.740
+Berikut adalah lima.
+
+00:18:13.900 --> 00:18:14.520
+Keunggulan Anda
+
+00:18:14.520 --> 00:18:15.740
+menyederhanakan tablat liquid
+
+00:18:15.740 --> 00:18:16.600
+mempercepat javascript
+
+00:18:16.600 --> 00:18:17.800
+dan validasi formulir
+
+00:18:17.800 --> 00:18:19.120
+mendapatkan penjelasan sederhana
+
+00:18:19.120 --> 00:18:20.280
+untuk potongan kode yang rumit
+
+00:18:20.280 --> 00:18:21.720
+menyisipkan HTML dan bootstrap
+
+00:18:21.720 --> 00:18:22.720
+untuk tata letak responsif
+
+00:18:22.720 --> 00:18:24.080
+serta mempermudah panggilan API web
+
+00:18:24.080 --> 00:18:24.920
+tanpa menebak-nebak.
+
+00:18:24.920 --> 00:18:26.960
+Beberapa fitur masih sudah menurut?
+
+00:18:27.520 --> 00:18:28.720
+Admin penyewa mengaktifkannya
+
+00:18:28.720 --> 00:18:29.600
+melalui hub co-pilot
+
+00:18:29.600 --> 00:18:30.840
+di pusat admin power platform
+
+00:18:30.840 --> 00:18:31.940
+jadi tanyakan kepada mereka
+
+00:18:31.940 --> 00:18:33.280
+jika ada bagian yang tampak hilang.
+
+00:18:34.040 --> 00:18:35.340
+Oskalah, jarahan diamankan.
+
+00:18:35.720 --> 00:18:36.800
+Gunakan buff langganan,
+
+00:18:37.080 --> 00:18:38.520
+nyalakan lonceng untuk demo mendatang
+
+00:18:38.520 --> 00:18:39.400
+dan tinggalkan komentar
+
+00:18:39.400 --> 00:18:40.600
+tentang satu masalah validasi
+
+00:18:40.600 --> 00:18:41.660
+atau liquid yang ingin Anda lihat
+
+00:18:41.660 --> 00:18:42.700
+di atas si co-pilot selanjutnya.
+
+00:18:42.920 --> 00:18:43.660
+Kami akan mempertajam
+
+00:18:43.660 --> 00:18:44.300
+panduan mendatang
+
+00:18:44.300 --> 00:18:45.060
+untuk masalah tersulitan.

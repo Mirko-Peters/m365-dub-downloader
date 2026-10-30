@@ -1,0 +1,787 @@
+WEBVTT
+
+00:00:00.140 --> 00:00:07.520
+Klaar voor 10 dagen Microsoft 365, Copilot, AI, Azure en de mensen die de toekomst van werk vormgeven?
+
+00:00:07.880 --> 00:00:12.460
+Deze januari is M365, kom terug en we pakken groter uit.
+
+00:00:12.800 --> 00:00:18.580
+Doe mee voor live sessies, praktijkdemos en praktische kennis van MVP's en experts uit de hele wereld.
+
+00:00:18.820 --> 00:00:21.520
+Geen algemene dia's, geen eindeloos jargon.
+
+00:00:21.520 --> 00:00:28.520
+We pakken de echte uitdagingen aan Copilot Studio, AI Agents, Fabric, Beveiliging, Governance en Automatisering.
+
+00:00:28.520 --> 00:00:34.960
+Automatisering. Of je nu een IT-professional, ontwikkelaar of zakelijk leider bent, er zijn sessies speciaal voor jou.
+
+00:00:35.280 --> 00:00:40.440
+Met 10 volle dagen kun je diverse technologieën verkennen en in contact komen met een wereldwijde community.
+
+00:00:40.900 --> 00:00:44.540
+Kijk live mee en neem praktische inzichten mee terug naar je organisatie.
+
+00:00:44.900 --> 00:00:49.160
+Januari 2027, 10 dagen, 1 Microsoft Community.
+
+00:00:49.160 --> 00:00:51.200
+De registratie is nu geopend.
+
+00:00:51.860 --> 00:00:55.920
+Ga naar M365.com.net en verzeker je vandaag nog van een plek.
+
+00:00:55.920 --> 00:00:58.940
+Dat is M365.com.net.
+
+00:01:00.280 --> 00:01:04.840
+Meld je nu aan op M365.com.net en we zien je live in januari.
+
+00:01:05.060 --> 00:01:08.640
+Je hebt een app gebouwd die werkt, dan voeg je een andere service toe en nog een...
+
+00:01:08.640 --> 00:01:10.980
+...en plotseling wordt het verkeer daartussen een nachtmerrie.
+
+00:01:11.160 --> 00:01:14.120
+Dus, wat is nu precies een API Gateway en heb je er echt een nodig?
+
+00:01:14.120 --> 00:01:17.920
+Aan het einde van deze aflevering begrijp je wat een API Gateway doet,
+
+00:01:18.160 --> 00:01:22.500
+waarom het de chaos van het beheren van meerdere services oplost en hoe je weet of je er een nodig hebt.
+
+00:01:22.500 --> 00:01:27.120
+Laten we beginnen met het probleem, dan de onderdelen en vervolgens hoe alles samenkomt.
+
+00:01:27.740 --> 00:01:29.360
+Het probleem, te veel deuren.
+
+00:01:29.700 --> 00:01:32.080
+Stel je voor dat je een bedrijf runt dat snel groeit.
+
+00:01:32.260 --> 00:01:36.940
+Je hebt een salesteam op de derde verdieping, de boekhouding in de kelder en IT in de achtervleugel.
+
+00:01:37.180 --> 00:01:43.020
+Stel je nu voor dat elk van die afdelingen zijn eigen voordeur, eigen telefoonnummer en eigen beveiliger heeft die niet met de andere praat.
+
+00:01:43.020 --> 00:01:46.040
+Als je een bezoeker bent die een pakketje wil afleveren, veel succes.
+
+00:01:46.260 --> 00:01:51.100
+Je moet precies weten welke deur je moet gebruiken, welke beveiliger je moet spreken en wat je moet doen als die beveiliger pauze heeft.
+
+00:01:51.100 --> 00:01:56.360
+Dat is precies wat er gebeurt wanneer je app meerdere back-end services heeft en elke client zijn rechtstreeks aanroept.
+
+00:01:56.540 --> 00:02:04.460
+De client, of het nu een mobiele app, een website of een andere service is, moet weten waar elke service zich bevindt, hoe je bij elk moet verifiëren en wat je moet doen als er iets misgaat.
+
+00:02:04.640 --> 00:02:09.380
+Elke afzonderlijke service moet zijn eigen beveiliging, eigen rate limiting en eigen foutafhandeling afhandelen.
+
+00:02:09.580 --> 00:02:12.500
+Dat is dubbel werk en het is makkelijk voor zaken om inconsistent te worden.
+
+00:02:12.760 --> 00:02:13.740
+Neem bijvoorbeeld een bank.
+
+00:02:13.940 --> 00:02:17.200
+Zij hebben aparte services voor rekeningen, betalingen, leningen en fraudedetectie.
+
+00:02:17.360 --> 00:02:19.720
+Op de oude manier wordt elk daarvan rechtstreeks blootgesteld.
+
+00:02:19.720 --> 00:02:25.600
+Een mobiele app moet vier verschillende URL's, vier verschillende authenticatie methoden en vier verschillende manieren voor foutafhandeling kennen.
+
+00:02:25.820 --> 00:02:32.320
+Dat is vier keer de complexiteit en vier keer zoveel kans dat er iets misgaat en dat is de chaos die een API Gateway moet oplossen.
+
+00:02:32.580 --> 00:02:33.720
+Dus, wat is de oplossing?
+
+00:02:34.020 --> 00:02:35.220
+Wat is een API Gateway?
+
+00:02:35.480 --> 00:02:38.320
+Zie een API Gateway voor je als de receptie van een hotel.
+
+00:02:38.620 --> 00:02:44.400
+Wanneer je binnenkomt, hoef je niet te weten op welke verdieping de schoonmaak is, waar de keuken is of hoe je de onderhoudsdienst bereikt.
+
+00:02:44.400 --> 00:02:48.680
+Je loopt gewoon naar de receptie, vertelt wat je nodig hebt en zij regelen de rest.
+
+00:02:48.880 --> 00:02:54.400
+Ze sturen je verzoek door naar de juiste persoon, controleren of je daar mag zijn en handelen eenvoudige verzoeken zelf af.
+
+00:02:54.520 --> 00:02:57.120
+Een API Gateway doet hetzelfde voor je software.
+
+00:02:57.420 --> 00:03:01.460
+Het is één enkel toegangspunt dat tussen je clients en je back-end services staat.
+
+00:03:01.700 --> 00:03:03.480
+Elk verzoek gaat eerst door de Gateway.
+
+00:03:03.840 --> 00:03:07.420
+Deze beslist waar het heen gaat, of het is toegestaan en wat er wordt teruggestuurd.
+
+00:03:07.680 --> 00:03:09.280
+Dit is overigens geen nieuw idee.
+
+00:03:09.540 --> 00:03:13.400
+Reverse proxies bestaan al decennia, maar de API Gateway is essentieel geworden met microservices.
+
+00:03:13.400 --> 00:03:17.460
+Wanneer je je app opdeelt in veel kleine services, heb je plotseling veel deuren.
+
+00:03:17.660 --> 00:03:19.180
+De Gateway geeft je één voordeur.
+
+00:03:19.380 --> 00:03:24.780
+In de Azure wereld is Azure API Management het volledige platform en de Gateway de kerncomponent die het verkeer afhandelt.
+
+00:03:24.940 --> 00:03:26.680
+Maar het patroon is overal hetzelfde.
+
+00:03:26.860 --> 00:03:28.920
+Eén toegangspunt, gecentraliseerde controle.
+
+00:03:29.200 --> 00:03:30.220
+Elk verzoek komt binnen.
+
+00:03:30.480 --> 00:03:33.280
+De Gateway controleert het, routeert het en stuurt het antwoord terug.
+
+00:03:33.440 --> 00:03:35.740
+De client spreekt nooit rechtstreeks met je back-end services.
+
+00:03:36.040 --> 00:03:37.360
+Deze praat alleen met de Gateway.
+
+00:03:37.660 --> 00:03:39.680
+Laten we eens kijken wat dat precies betekent.
+
+00:03:39.880 --> 00:03:42.080
+Beginnend bij de meest basale taak, routing.
+
+00:03:42.080 --> 00:03:44.200
+Deel 1. Verkeer routeren.
+
+00:03:44.400 --> 00:03:46.980
+De eenvoudigste taak van een API Gateway is routing.
+
+00:03:47.180 --> 00:03:48.900
+Elk verzoek naar de juiste service sturen.
+
+00:03:49.140 --> 00:03:50.820
+Denk eens na over hoe een website werkt.
+
+00:03:51.020 --> 00:03:53.300
+Wanneer je op een link klikt, verstuurt je browser een verzoek.
+
+00:03:53.480 --> 00:03:54.620
+Dat verzoek bevat een pad.
+
+00:03:54.820 --> 00:03:57.780
+Als het pad Users is, weet de Gateway dat het naar de gebruikerservice moet.
+
+00:03:57.920 --> 00:04:00.160
+Als het Orders is, gaat het naar de bestelservice.
+
+00:04:00.460 --> 00:04:03.460
+De Gateway leest het pad, bepaalt waar het heen moet en stuurt het door.
+
+00:04:03.720 --> 00:04:06.940
+Zonder Gateway moeten je clients elke individuele service URL kennen.
+
+00:04:06.940 --> 00:04:11.800
+De mobiele app heeft het adres nodig van de gebruikerservice, de bestelservice, de betaalservice en de katalogerservice.
+
+00:04:12.060 --> 00:04:13.960
+Dat is een heleboel URL's om te beheren.
+
+00:04:14.100 --> 00:04:16.980
+En als een van die adressen verandert, moet je elke client bijwerken.
+
+00:04:17.180 --> 00:04:19.200
+Met een Gateway kennen clients slechts één URL.
+
+00:04:19.500 --> 00:04:20.640
+Het adres van de Gateway.
+
+00:04:20.900 --> 00:04:23.040
+Het maakt ze niet uit waar de services zich daadwerkelijk bevinden.
+
+00:04:23.260 --> 00:04:26.080
+Ze sturen hun verzoek simpelweg naar de Gateway en die regelt de rest.
+
+00:04:26.320 --> 00:04:29.860
+Dit is een van de meest voorkomende API Gateway toepassingen, resource gebaseerde routing.
+
+00:04:30.100 --> 00:04:32.920
+Het onderzoek naar Apache API SIX benoemt dit expliciet.
+
+00:04:32.920 --> 00:04:37.420
+Je routeert op basis van het pad, de HTTP-methode, headers en zelfs de geolocatie van de client.
+
+00:04:37.620 --> 00:04:41.120
+Als iemand in Europa een verzoek stuurt, kun je die naar een Europees datacenter routeren.
+
+00:04:41.280 --> 00:04:44.320
+Als iemand in de VS een verzoek stuurt, gaan ze naar een Amerikaans datacenter.
+
+00:04:44.500 --> 00:04:46.240
+De client merkt helemaal niets van dit proces.
+
+00:04:46.480 --> 00:04:47.960
+Ze krijgen gewoon een snel antwoord.
+
+00:04:48.160 --> 00:04:49.600
+Routing regelt ook versiebeheer.
+
+00:04:49.820 --> 00:04:51.840
+Stel dat je een nieuwe versie van je gebruikerservice hebt.
+
+00:04:52.020 --> 00:04:56.000
+De oude clients gebruiken nog V1-users en de nieuwe clients gebruiken V2-users.
+
+00:04:56.200 --> 00:04:58.300
+De Gateway routeert ze naar verschillende backends.
+
+00:04:58.520 --> 00:05:01.180
+Oude clients blijven werken terwijl je de nieuwe versie uitrolt.
+
+00:05:01.180 --> 00:05:03.880
+Je kunt je back-end wijzigen zonder je clients te storen.
+
+00:05:04.040 --> 00:05:07.400
+Dat is erg belangrijk bij het beheren van een live applicatie met echte gebruikers.
+
+00:05:07.620 --> 00:05:09.040
+Denk aan een e-commerce platform.
+
+00:05:09.300 --> 00:05:13.180
+Je hebt aparte services voor de catalogus, het winkelwagentje, de checkout- en gebruikersaccounts.
+
+00:05:13.900 --> 00:05:17.020
+Zonder Gateway moet een mobiele app 4 verschillende URL's kennen.
+
+00:05:17.260 --> 00:05:18.980
+Met een Gateway kent de app er slechts één.
+
+00:05:19.160 --> 00:05:24.840
+De Gateway leest het pad, catalogus, winkelwagentje, checkout, account en stuurt elk verzoek naar de juiste service.
+
+00:05:25.220 --> 00:05:26.940
+Eenvoudige routing is het makkelijke deel.
+
+00:05:27.120 --> 00:05:29.060
+De volgende taak is waar het echt nuttig wordt.
+
+00:05:29.060 --> 00:05:31.160
+Deel 2. Beveiliging bij de voordeur.
+
+00:05:31.340 --> 00:05:33.620
+Elke API-aanroep moet worden gecontroleerd.
+
+00:05:33.820 --> 00:05:34.780
+Wie doet dit verzoek?
+
+00:05:34.840 --> 00:05:36.160
+Heeft diegene de juiste rechten?
+
+00:05:36.420 --> 00:05:39.360
+Zonder Gateway moet elke service zijn eigen authenticatie regelen.
+
+00:05:39.580 --> 00:05:42.260
+Dat betekent dubbel werk en het is makkelijk om fouten te maken.
+
+00:05:42.500 --> 00:05:47.940
+De ene service controleert tokens misschien goed, een andere slaat een stap over en weer een andere gebruikt een totaal andere methode.
+
+00:05:48.200 --> 00:05:51.000
+Zo krijg je inconsistente beveiliging in je hele applicatie.
+
+00:05:51.220 --> 00:05:52.380
+De Gateway verandert dat.
+
+00:05:52.540 --> 00:05:55.480
+Het regelt authenticatie en autorisatie op één centrale plek.
+
+00:05:55.480 --> 00:05:59.280
+Eén plek om te controleren, één plek om af te dwingen, één plek om bij te werken als beleid verandert.
+
+00:05:59.480 --> 00:06:01.420
+Dat is een belangrijke beveiligingsbestpractice.
+
+00:06:01.600 --> 00:06:07.180
+Het valideert API-sleutels, JWTs, OAuth tokens of certificaten bij elk individueel verzoek.
+
+00:06:07.300 --> 00:06:09.180
+Elk verzoek doorloopt dezelfde controle.
+
+00:06:09.480 --> 00:06:10.460
+Geen uitzonderingen.
+
+00:06:10.640 --> 00:06:12.340
+De Gateway kan ook regels afdwingen.
+
+00:06:12.500 --> 00:06:15.620
+Je kunt zeggen, deze API-sleutel mag alleen de leesendpoints aanroepen.
+
+00:06:15.780 --> 00:06:19.240
+Of deze client heeft alleen toegang tot de katalige service, niet tot de betalingsservice.
+
+00:06:19.480 --> 00:06:23.080
+Je definieert gedetailleerde rechten op Gateway-niveau en ze worden automatisch toegepast.
+
+00:06:23.080 --> 00:06:26.020
+Back-end-services hoeven zich nooit zorgen te maken over autorisatie.
+
+00:06:26.180 --> 00:06:28.800
+Ze verwerken simpelweg het verzoek en sturen de gegevens terug.
+
+00:06:28.960 --> 00:06:29.760
+Hier is het punt.
+
+00:06:30.000 --> 00:06:33.040
+De Gateway is de centrale plek om toegang in te trekken als er iets misgaat.
+
+00:06:33.180 --> 00:06:36.500
+Als de API-sleutel van een klant is gecompromitteerd, trek je deze in bij de Gateway.
+
+00:06:36.700 --> 00:06:37.860
+Een wijziging, klaar.
+
+00:06:37.980 --> 00:06:40.500
+Je hoeft geen enkele service bij te werken of iets opnieuw op te starten.
+
+00:06:40.640 --> 00:06:42.920
+Het volgende verzoek van die sleutel wordt direct afgewezen.
+
+00:06:43.120 --> 00:06:44.200
+Neem een concreet voorbeeld.
+
+00:06:44.420 --> 00:06:46.600
+Een bank heeft een betalingsservice en een facturatieservice.
+
+00:06:46.880 --> 00:06:49.660
+Alleen de betalingsservice heeft schrijftoegang nodig tot het facturatiesysteem.
+
+00:06:49.660 --> 00:06:50.980
+De Gateway blinkt dit af.
+
+00:06:50.980 --> 00:06:54.320
+Als een client via het verkeerde eindpunt naar het facturatiesysteem probeert te schrijven,
+
+00:06:54.440 --> 00:06:55.400
+blokkeert de Gateway dit.
+
+00:06:55.540 --> 00:06:57.780
+De facturatieservice ziet het verzoek niet is.
+
+00:06:57.980 --> 00:07:02.300
+De Gateway ondersteunt ook Mutual, TLS en WAF integratie voor diepere beveiliging.
+
+00:07:02.480 --> 00:07:04.680
+Maar in de kern is het je eerste verdedigingslinie.
+
+00:07:04.960 --> 00:07:08.280
+Beveiliging is één ding, maar wat als er te veel verzoeken tegelijk binnenkomen?
+
+00:07:08.820 --> 00:07:09.300
+Deel 3.
+
+00:07:09.960 --> 00:07:10.440
+Verkeersbeheer
+
+00:07:10.440 --> 00:07:13.860
+Wat gebeurt er als 10.000 gebruikers tegelijkertijd je app bezoeken?
+
+00:07:14.020 --> 00:07:17.060
+Misschien heb je een flitsverkoop, een virale productlancering,
+
+00:07:17.060 --> 00:07:20.380
+of is het een normale dinsdag en besluit iedereen tegelijk in te loggen.
+
+00:07:20.380 --> 00:07:24.580
+Zonder Gateway worden je back-end services direct bestookt en kunnen ze crashen.
+
+00:07:24.740 --> 00:07:26.500
+Niet langzaam, maar allemaal tegelijk.
+
+00:07:26.700 --> 00:07:28.700
+Dat is waar verkeersbeheer om de hoek komt kijken.
+
+00:07:28.980 --> 00:07:31.980
+De Gateway kan beperken hoeveel verzoeken elke client kan indienen.
+
+00:07:32.220 --> 00:07:34.440
+Rate limiting en throttling zijn standaard functies.
+
+00:07:34.680 --> 00:07:37.320
+Jij stelt de regels in bij de Gateway en deze dwingt ze af.
+
+00:07:37.440 --> 00:07:39.360
+Je back-end services merken niets van de piek.
+
+00:07:39.460 --> 00:07:42.760
+Je kunt quota instellen per gebruiker, per API-sleutel of per IP-adres.
+
+00:07:43.020 --> 00:07:44.880
+Stel dat je een gratis versie van je API hebt.
+
+00:07:45.080 --> 00:07:47.040
+Gratis gebruikers krijgen 100 verzoeken per uur.
+
+00:07:47.200 --> 00:07:48.960
+Premium gebruikers krijgen er 10.000.
+
+00:07:48.960 --> 00:07:51.960
+De Gateway volgt elk verzoek en dwingt de limieten af bij de poort.
+
+00:07:52.100 --> 00:07:56.800
+Een gratis gebruiker bereikt de limiet en de Gateway stuurt een beleefde melding om het later opnieuw te proberen.
+
+00:07:56.960 --> 00:07:59.420
+De back-end services weten niet eens dat er een verzoek was.
+
+00:07:59.660 --> 00:08:02.340
+Ze blijven rustig doorgaan met het bedienen van de betalende klanten.
+
+00:08:02.580 --> 00:08:04.260
+De Gateway regelt ook load balancing.
+
+00:08:04.540 --> 00:08:08.840
+Als je meerdere instanties van dezelfde service hebt draaien, verdeelt de Gateway de verzoeken daarover.
+
+00:08:09.080 --> 00:08:12.720
+Instantie 1 krijgt een verzoek, instantie 2 de volgende, instantie 3 de volgende.
+
+00:08:12.900 --> 00:08:13.920
+Het gaat automatisch.
+
+00:08:14.100 --> 00:08:16.700
+En als één instantie uitvalt, leidt de Gateway het verkeer om naar een andere.
+
+00:08:16.700 --> 00:08:19.540
+Klanten merken er niets van. Ze krijgen gewoon hun antwoord.
+
+00:08:19.740 --> 00:08:22.160
+Load balancing met gezondheidschecks houdt alles soepel draaiende.
+
+00:08:22.420 --> 00:08:25.060
+De Gateway pinkt elk instantie om er zeker van te zijn dat deze actief is.
+
+00:08:25.220 --> 00:08:27.480
+Als dat niet zo is, stopt het met het sturen van verkeer daarheen.
+
+00:08:27.680 --> 00:08:29.960
+Dit is vooral belangrijk voor APIs met veel verkeer.
+
+00:08:30.220 --> 00:08:33.200
+Zonder Gateway raakt een piek in het verkeer je services direct.
+
+00:08:33.780 --> 00:08:35.940
+Met de Gateway raakt de piek eerst de Gateway.
+
+00:08:36.200 --> 00:08:39.940
+Deze vangt het op, verspreidt het en beschermt je services tegenover belasting.
+
+00:08:39.940 --> 00:08:43.380
+Oké, maar wat als de data niet klopt wanneer deze aankomt?
+
+00:08:44.720 --> 00:08:46.680
+Deel 4, datatransformatie.
+
+00:08:46.920 --> 00:08:50.380
+Soms komt de data die je client verstuurt niet overeen met wat je bekend verwacht.
+
+00:08:50.580 --> 00:08:53.640
+Misschien verstuurt de client JSON, maar begrijpt je bekend alleen XML.
+
+00:08:54.040 --> 00:08:55.740
+Misschien komen de veldnamen niet overeen.
+
+00:08:55.900 --> 00:08:59.020
+De client gebruikt, first name, en je bekend verwacht, voornaam.
+
+00:08:59.220 --> 00:09:00.780
+Deze verschillen maken dingen kapot.
+
+00:09:00.780 --> 00:09:04.220
+Op de oude manier moest je elke client aanpassen of de bekend herschrijven.
+
+00:09:04.440 --> 00:09:05.140
+Niet ideaal.
+
+00:09:05.340 --> 00:09:08.340
+De Gateway kan de data transformeren voordat deze de bekend bereikt.
+
+00:09:08.340 --> 00:09:09.520
+Zie het als een vertaler.
+
+00:09:09.760 --> 00:09:13.080
+Hij zit in het midden en kan de data wijzigen bij binnenkomst, bij vertrek, of beide.
+
+00:09:13.280 --> 00:09:15.640
+Dat is verzoek en responstransformatie in een notendop.
+
+00:09:15.800 --> 00:09:17.140
+Laat me je een echt voorbeeld geven.
+
+00:09:17.380 --> 00:09:19.660
+Stel, je hebt een legacy systeem dat XML verwacht.
+
+00:09:19.820 --> 00:09:21.120
+Het draait al 15 jaar.
+
+00:09:21.320 --> 00:09:22.060
+Het werkt prima.
+
+00:09:22.340 --> 00:09:23.720
+Maar nu bouw je een nieuwe mobiele app.
+
+00:09:23.940 --> 00:09:25.180
+En mobiele apps spreken JSON.
+
+00:09:25.540 --> 00:09:29.540
+Zonder Gateway zou je het legacy systeem moeten herschrijven of de app dwingen XML te sturen.
+
+00:09:29.540 --> 00:09:31.460
+Met een Gateway hoef je geen van beide te doen.
+
+00:09:31.660 --> 00:09:32.900
+De mobiele app verstuurt JSON.
+
+00:09:33.240 --> 00:09:34.620
+De Gateway zet dit om naar XML.
+
+00:09:34.980 --> 00:09:36.520
+Het systeem ontvangt wat het verwacht.
+
+00:09:36.520 --> 00:09:38.800
+De mobiele app krijgt een antwoord terug, al in JSON.
+
+00:09:39.100 --> 00:09:40.460
+Niemand hoefde iets te herschrijven.
+
+00:09:40.700 --> 00:09:41.660
+Dat is het mooie ervan.
+
+00:09:41.900 --> 00:09:45.940
+De Gateway kan ook headers toevoegen of verwijderen, URL's wijzigen of gevoelige data maskeren.
+
+00:09:46.180 --> 00:09:48.300
+Stel je voor dat een antwoord een creditcardnummer bevat.
+
+00:09:48.500 --> 00:09:50.140
+Je wilt niet dat dit teruggaat naar de client.
+
+00:09:50.360 --> 00:09:54.320
+De Gateway kan het eruit filteren voordat het antwoord vertrekt, of het vervangen door een gmaskeerde versie.
+
+00:09:54.480 --> 00:09:55.940
+De bekend hoeft nooit te veranderen.
+
+00:09:56.140 --> 00:09:57.220
+De Gateway regelt het.
+
+00:09:57.360 --> 00:09:59.720
+Dit is vooral handig bij het moderniseren van oude systemen.
+
+00:09:59.860 --> 00:10:01.300
+Je hoeft de bekend niet te herschrijven.
+
+00:10:01.480 --> 00:10:03.160
+Je hoeft clients niet te dwingen tot wijzigingen.
+
+00:10:03.340 --> 00:10:04.640
+Je past alleen de Gateway aan.
+
+00:10:04.640 --> 00:10:06.920
+Het is als een talk op een internationale conferentie.
+
+00:10:07.040 --> 00:10:10.520
+Iedereen spreekt zijn eigen taal, maar de talk zorgt ervoor dat iedereen elkaar begrijpt.
+
+00:10:10.680 --> 00:10:12.300
+De Gateway is die talk voor je software.
+
+00:10:12.560 --> 00:10:15.760
+Dus, routering, beveiliging, throttling, transformatie, dat is een hoop.
+
+00:10:15.900 --> 00:10:17.120
+Maar het zijn geen vier losse dingen.
+
+00:10:17.380 --> 00:10:18.960
+Laat me zien hoe ze met elkaar verbonden zijn.
+
+00:10:19.140 --> 00:10:20.300
+Hoe alles samenkomt.
+
+00:10:20.420 --> 00:10:21.040
+Het zit zo.
+
+00:10:21.320 --> 00:10:23.040
+Deze vier taken staan niet op zichzelf.
+
+00:10:23.260 --> 00:10:26.300
+Ze werken samen bij elk verzoek, telkens wanneer er een verzoek binnenkomt.
+
+00:10:26.420 --> 00:10:28.120
+De Gateway controleert de authenticatie.
+
+00:10:28.300 --> 00:10:29.640
+Hij valideert de snelheidslimiet.
+
+00:10:29.760 --> 00:10:31.060
+Hij routeert naar de juiste service.
+
+00:10:31.300 --> 00:10:32.820
+Het transformeert de data indien nodig.
+
+00:10:32.820 --> 00:10:34.280
+Het ontvangt de respons terug.
+
+00:10:34.280 --> 00:10:36.000
+Het transformeert die ook indien nodig.
+
+00:10:36.220 --> 00:10:37.880
+Vervolgens stuurt het alles terug naar de client.
+
+00:10:38.080 --> 00:10:38.720
+Een pipeline.
+
+00:10:38.980 --> 00:10:42.540
+Elke stap gebeurt automatisch, op volgorde, zonder dat een service erover na hoeft te denken.
+
+00:10:42.740 --> 00:10:44.740
+De echte kracht is niet één specifieke functie.
+
+00:10:44.900 --> 00:10:45.940
+Het is de integratie.
+
+00:10:46.180 --> 00:10:49.340
+Je kunt een nieuw beveiligingsbeleid toevoegen zonder de routing aan te passen.
+
+00:10:49.480 --> 00:10:51.840
+De bekend service wijzigen zonder de client aan te passen.
+
+00:10:52.000 --> 00:10:54.760
+Je kunt de snelheidslimieten updaten zonder iets opnieuw te hoeven deployen.
+
+00:10:54.940 --> 00:10:58.000
+Elk onderdeel is onafhankelijk, maar ze werken allemaal in dezelfde pipeline.
+
+00:10:58.280 --> 00:11:01.860
+En omdat alles door één plek gaat, krijg je volledig inzicht in wat er gebeurt.
+
+00:11:01.860 --> 00:11:04.840
+Logs, statistieken, analytics, allemaal vanaf één punt.
+
+00:11:05.020 --> 00:11:10.160
+Je kunt zien hoeveel verzoeken er binnenkwamen, welke mislukten, welke traag waren, welke clients de meeste resources gebruiken.
+
+00:11:10.360 --> 00:11:13.340
+Zonder gateway zou je die data van elke service afzonderlijk moeten verzamelen.
+
+00:11:13.560 --> 00:11:15.180
+Met een gateway is het daar allemaal aanwezig.
+
+00:11:15.400 --> 00:11:16.420
+Dat is het grote inzicht.
+
+00:11:16.640 --> 00:11:18.060
+De gateway is niet zomaar een router.
+
+00:11:18.300 --> 00:11:20.660
+Het is een controlecentrum voor je volledige API-platform.
+
+00:11:20.860 --> 00:11:23.980
+Elk verzoek, elke respons, elke fout, alles stroomt door één plek.
+
+00:11:24.120 --> 00:11:26.420
+Je hebt één centraal overzicht voor alles wat er gebeurt.
+
+00:11:26.600 --> 00:11:27.860
+Dus, hoe gebruik je dit eigenlijk?
+
+00:11:27.960 --> 00:11:29.860
+Laten we bespreken wat je hier nu mee kunt doen.
+
+00:11:30.160 --> 00:11:31.040
+Praktische inzichten.
+
+00:11:31.320 --> 00:11:32.220
+Laten we eerlijk zijn.
+
+00:11:32.420 --> 00:11:35.620
+Als je één of twee services hebt, heb je waarschijnlijk nog geen API-gateway nodig.
+
+00:11:35.820 --> 00:11:37.060
+Je kunt de routing zelf afhandelen.
+
+00:11:37.380 --> 00:11:38.740
+Authenticatie beheren in elke service.
+
+00:11:38.940 --> 00:11:40.600
+Het is niet elegant, maar het werkt.
+
+00:11:40.760 --> 00:11:45.420
+Maar zodra je drie services hebt of APIs blootstelt aan externe clients, neemt de complexiteit snel toe.
+
+00:11:45.580 --> 00:11:47.320
+De gateway verdient zichzelf snel terug.
+
+00:11:47.500 --> 00:11:48.800
+Dus, wat is je beste eerste zet?
+
+00:11:49.200 --> 00:11:50.720
+Centraliseer authenticatie bij de gateway.
+
+00:11:51.000 --> 00:11:52.020
+Doe dat voor alles anders.
+
+00:11:52.260 --> 00:11:52.940
+Kies één service.
+
+00:11:53.120 --> 00:11:54.740
+Verplaats de authenticatie-check naar de gateway.
+
+00:11:54.740 --> 00:11:57.300
+Je zult direct merken dat je service code schoner wordt.
+
+00:11:57.500 --> 00:12:00.320
+Geen logica voor tokenvalidatie meer die overal verspreid staat.
+
+00:12:00.520 --> 00:12:03.680
+Niet meer afvragen of je het in elke service op dezelfde manier hebt geïmplementeerd.
+
+00:12:03.880 --> 00:12:06.860
+De gateway regelt het één keer en elke service profiteert ervan.
+
+00:12:07.080 --> 00:12:07.700
+Volgende stap.
+
+00:12:07.880 --> 00:12:08.500
+Rate limiting.
+
+00:12:08.800 --> 00:12:11.320
+Zelfs een simpele limiet beschermt je bekend tegenover belasting.
+
+00:12:11.600 --> 00:12:14.280
+Begin met iets bazaals, zoals 100 verzoeken per minuut per client.
+
+00:12:14.500 --> 00:12:16.740
+Dat voorkomt dat een op hol geslagen client je services platlegt.
+
+00:12:16.740 --> 00:12:17.600
+Je kunt praten.
