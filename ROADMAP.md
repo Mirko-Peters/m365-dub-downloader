@@ -190,3 +190,7 @@ Podpage kostet 65 $/Monat (ca. 780 $/Jahr). Ziel: m365.fm komplett auf dub.m365.
 - Offen/ungetestet live: Spreaker-API-Details (Entwurf + Audio nachladen; Token-Rechte), Stick-Man-Video nach Veröffentlichung, Follow für Podcast-Autoren (nutzt vorerst das Blog-Follow), E-Mail-Benachrichtigungen (Mailsystem später).
 
 - Präzisierung (30.10.): Bei 25 Stimmen bekommt Mirko die Benachrichtigung „Stick-Man-Video erstellen und in Spreaker freigeben“ (Web-Push, im Reiter Podcast als 🎬-Aufgabe, MCP-Tool `list_podcast_todo`); E-Mail dazu mit dem Mailsystem. Veröffentlichen macht Mirko selbst in Spreaker.
+
+## Startseite als Inhalts-Hub (gebaut, 30.10.)
+- Startseite (`/`) und die Sprach-Startseiten zeigen jetzt gemischte Inhalte (Blog, Community-Podcast, kommende Events, Stick-Man-Videos) nach Datum mit Filter-Chips; Stick-Man-Videos sind ein Filter-Punkt (`site_home.py`). Titel/Beschreibung der Wurzelseite auf Community umgestellt; die Sprach-Startseiten behalten ihre SEO-Titel.
+- Offen: weitere Filter (Mitglieder neu, Wiki/Glossar-Änderungen, Microsoft-News), eigene Seite nur für Stick-Man-Videos, Sprach-Startseiten stärker auf Community umstellen, Hero der Sprach-Startseiten übersetzen.
