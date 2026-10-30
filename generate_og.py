@@ -52,28 +52,51 @@ body:before{{content:"";position:absolute;inset:0;background-image:linear-gradie
 </style><body dir="{d}">{mid}<div class=f><div class=b>M365<i>.</i>FM <span style="color:#82a7d4;font-size:30px;letter-spacing:4px">DUB</span></div><div class=s>Mirko Peters · Microsoft MVP<br>dub.m365.fm</div></div></body>"""
 
 
+CARD_VERSION = 1   # bei Aenderungen am Kartenlayout erhoehen, dann werden alle Bilder neu gezeichnet
+
+
 def main():
     mf = DOCS / "og-manifest.json"
     if not mf.exists():
         return
     items = json.load(open(mf, encoding="utf-8"))
     default = DOCS / "assets" / "og-default.png"
-    ok = 0
+    ok = reused = 0
+    cache = Path(__file__).parent / ".ogcache"   # Bilder aus frueheren Laeufen (Workflow-Cache), Schluessel = Hash der Karteninhalte
+    cache.mkdir(exist_ok=True)
+    key = lambda it: hashlib.sha1(json.dumps([it, CARD_VERSION], sort_keys=True, ensure_ascii=False).encode()).hexdigest()
+    todo = []
+    for it in items:
+        out = DOCS / it["path"]; hit = cache / (key(it) + ".png")
+        out.parent.mkdir(parents=True, exist_ok=True)
+        if hit.exists():
+            shutil.copy(hit, out); reused += 1
+        else:
+            todo.append(it)
+    live = {key(it) + ".png" for it in items}
+    for f in cache.glob("*.png"):   # Bilder zu nicht mehr vorhandenen Seiten verwerfen, damit der Cache klein bleibt
+        if f.name not in live:
+            f.unlink()
+    print(reused, "Bilder aus dem Cache,", len(todo), "neu zu zeichnen")
     try:
+        if not todo:
+            raise StopIteration
         from playwright.sync_api import sync_playwright
         with sync_playwright() as pw:
             br = pw.chromium.launch()
             pg = br.new_page(viewport={"width": 1200, "height": 630})
-            for it in items:
+            for it in todo:
                 out = DOCS / it["path"]
-                out.parent.mkdir(parents=True, exist_ok=True)
                 try:
                     pg.set_content(card(it))
                     pg.screenshot(path=str(out))
+                    shutil.copy(out, cache / (key(it) + ".png"))
                     ok += 1
                 except Exception as e:
                     print("OG Fehler", it["path"], str(e)[:80])
             br.close()
+    except StopIteration:
+        pass
     except Exception as e:
         print("Playwright nicht verfügbar:", str(e)[:120])
     for it in items:  # Fallback
@@ -81,7 +104,7 @@ def main():
         if not out.exists() and default.exists():
             out.parent.mkdir(parents=True, exist_ok=True)
             shutil.copy(default, out)
-    print(ok, "von", len(items), "Teilen-Bildern erzeugt")
+    print(ok + reused, "von", len(items), "Teilen-Bildern bereit")
 
 
 if __name__ == "__main__":

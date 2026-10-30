@@ -20,6 +20,14 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with: { python-version: "3.12" }
+      - name: Cache fuer Browser und Teilen-Bilder
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cache/ms-playwright
+            .ogcache
+          key: build-cache-${{ github.run_id }}
+          restore-keys: build-cache-
       - name: Spreaker-Daten holen (Top-Liste, veroeffentlichte Folgen)
         continue-on-error: true
         env:
@@ -79,6 +87,7 @@ jobs:
           fi
       - name: Spotify-Folgenlinks einsammeln (ohne API) – nur täglich/manuell, bei Pushes gilt der gespeicherte Stand
         if: github.event_name != 'push'
+        timeout-minutes: 12
         continue-on-error: true
         run: |
           pip install playwright
@@ -98,7 +107,9 @@ jobs:
             git add data/show_notes && git commit -m "Show Notes aus Spreaker aktualisiert" -q
             git pull --rebase -q && git push -q
           fi
-      - name: Folgenlinks zu Apple, Spotify, Deezer, YouTube zuordnen
+      - name: Folgenlinks zu Apple, Spotify, Deezer, YouTube zuordnen (taeglich/manuell, bei Pushes gilt der gespeicherte Stand)
+        if: github.event_name != 'push'
+        timeout-minutes: 15
         continue-on-error: true
         env:
           SPOTIFY_CLIENT_ID: ${{ secrets.SPOTIFY_CLIENT_ID }}
