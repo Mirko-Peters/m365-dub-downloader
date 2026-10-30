@@ -565,6 +565,8 @@ def con_bar(lang):
 
 
 import site_home as HUB
+import site_design as _SD
+_SD.EN_URL = f"{BASE}/show/"
 globals_ctx = None
 COMMUNITY_API = os.environ.get("COMMUNITY_API", "https://api-dub.m365.fm")
 _CI = json.loads((ROOT / "data" / "community_i18n.json").read_text("utf-8")) if (ROOT / "data" / "community_i18n.json").exists() else {}
@@ -593,7 +595,6 @@ def header(lang, switch):
         home = f"{BASE}/{lang}/"
         menu = []
         menu.insert(0, (LRN.T(lang)["learn"], f"{BASE}/{lang}/learn/"))
-        menu.append(("Show (EN)", f"{BASE}/show/"))
         if (ROOT / "data" / "live.json").exists():
             menu.append(("M365 Show Live", f"{BASE}/{lang}/live/" if lang == "de" else f"{BASE}/live/"))
         menu.insert(0, (_CI.get(lang, _CI.get("en", {})).get("profile", "Profile"), f"{BASE}/{lang}/community/"))

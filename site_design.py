@@ -185,8 +185,13 @@ def flag(code, base, name=""):
     return f'<img class="fl" src="{base}/assets/flags/{FLAG.get(code, "gb")}.svg" width="22" height="16" alt="{_e(name)}" loading="lazy">'
 
 
+EN_URL = ""
+
+
 def lang_dropdown(cur, items, base):
     """items: (code, native name, url, hreflang). Dropdown mit Flaggen."""
+    if EN_URL and not any(x[0] == "en" for x in items):
+        items = [("en", "English", EN_URL, "en")] + list(items)
     cur_i = next((x for x in items if x[0] == cur), None)
     label = (cur_i[0] if cur_i else cur).upper()
     links = "".join(f'<a href="{_e(u)}" hreflang="{_e(h)}" lang="{_e(h)}"{" aria-current=page" if c == cur else ""}>{flag(c, base, n)}{_e(n)}</a>' for c, n, u, h in items)
