@@ -20,9 +20,9 @@
     var f = h("div", { class: "wk-form en-form" }), msg = h("p", { class: "wk-msg", role: "status", "aria-live": "polite" });
     function field(label, el) { var id = "en-" + Math.random().toString(36).slice(2, 8); el.id = id; return h("div", {}, [h("label", { for: id, text: label, style: "display:block;margin-top:.5em;font-weight:600" }), el]); }
     var name = h("input", { type: "text", maxlength: 80 }), type = h("select"), al = h("input", { type: "text", maxlength: 700 }), den = h("textarea", { rows: 3, maxlength: 600 }), dde = h("textarea", { rows: 3, maxlength: 600 });
-    var web = h("input", { type: "text", maxlength: 250 }), docs = h("input", { type: "text", maxlength: 250 }), wp = h("input", { type: "text", maxlength: 250 }), wd = h("input", { type: "text", maxlength: 12 }), sum = h("input", { type: "text", maxlength: 140, placeholder: X.sum, "aria-label": X.sum });
+    var web = h("input", { type: "text", maxlength: 250 }), docs = h("input", { type: "text", maxlength: 250 }), wp = h("input", { type: "text", maxlength: 250 }), wd = h("input", { type: "text", maxlength: 12 }), od = h("input", { type: "checkbox" }), rb = h("input", { type: "text", maxlength: 48 }), sum = h("input", { type: "text", maxlength: 140, placeholder: X.sum, "aria-label": X.sum });
     Object.keys(TYPES).forEach(function (k) { type.appendChild(h("option", { value: k, text: TYPES[k][li] })); });
-    name.value = e.name || ""; type.value = e.type || "product"; al.value = (e.aliases || []).join(", "); den.value = (e.desc || {}).en || ""; dde.value = (e.desc || {}).de || ""; web.value = e.web || ""; docs.value = e.docs || ""; wp.value = e.wikipedia || ""; wd.value = e.wikidata || "";
+    name.value = e.name || ""; type.value = e.type || "product"; al.value = (e.aliases || []).join(", "); den.value = (e.desc || {}).en || ""; dde.value = (e.desc || {}).de || ""; web.value = e.web || ""; docs.value = e.docs || ""; wp.value = e.wikipedia || ""; wd.value = e.wikidata || ""; od.checked = !!e.outdated; rb.value = e.replaced_by || "";
     var idv = e.id || "", idInp = null;
     if (isNew) { idInp = h("input", { type: "text", maxlength: 48, pattern: "[a-z0-9-]{2,48}" }); }
     var dl = h("datalist", { id: "en-dl" }); all.forEach(function (x) { dl.appendChild(h("option", { value: x.name })); });
@@ -40,7 +40,7 @@
       var rl = [], bad = false; [].slice.call(rels.children).forEach(function (r) { var v = r._get(); if (v === null) bad = true; else if (v) rl.push(v); });
       if (bad) { msg.textContent = X.bad_relation; return; }
       var id = isNew ? (idInp.value.trim() || slug(name.value)) : idv;
-      var data = { name: name.value, type: type.value, aliases: al.value.split(",").map(function (x) { return x.trim(); }).filter(Boolean), desc: { en: den.value, de: dde.value }, web: web.value.trim(), docs: docs.value.trim(), wikipedia: wp.value.trim(), wikidata: wd.value.trim(), rel: rl };
+      var data = { name: name.value, type: type.value, aliases: al.value.split(",").map(function (x) { return x.trim(); }).filter(Boolean), desc: { en: den.value, de: dde.value }, web: web.value.trim(), docs: docs.value.trim(), wikipedia: wp.value.trim(), wikidata: wd.value.trim(), rel: rl, outdated: od.checked, replaced_by: rb.value.trim().toLowerCase(), start: e.start, end: e.end };
       save.disabled = true;
       api("/api/entity", { method: "POST", body: { id: id, data: data, summary: sum.value } }).then(function (r) {
         save.disabled = false;
@@ -50,7 +50,7 @@
     } });
     [h("p", { class: "cmut", text: X.rules + (isNew ? " " + X.hint_new : "") }), field(X.name, name)].forEach(function (x) { f.appendChild(x); });
     if (isNew) f.appendChild(field("ID (a-z, 0-9, -)", idInp));
-    [field(X.type, type), field(X.aliases, al), field(X.den, den), field(X.dde, dde), field(X.web, web), field(X.docs, docs), field(X.wp, wp), field(X.wd, wd), h("h3", { text: X.rel }), dl, rels,
+    [field(X.type, type), field(X.aliases, al), field(X.den, den), field(X.dde, dde), field(X.web, web), field(X.docs, docs), field(X.wp, wp), field(X.wd, wd), h("label", { class: "cmut" }, [od, document.createTextNode(" " + (de ? "Nicht mehr aktuell (Seite bleibt, wird aber standardmäßig ausgeblendet)" : "No longer current (page stays, hidden by default)"))]), field(de ? "Ersetzt durch (ID der neuen Entität, optional)" : "Replaced by (ID of the new entity, optional)", rb), h("h3", { text: X.rel }), dl, rels,
       h("button", { type: "button", class: "btn", text: X.add, onclick: function () { relRow("related_to", ""); } }), field(X.sum, sum), h("div", { class: "btns" }, [save]), msg].forEach(function (x) { f.appendChild(x); });
     return f;
   }

@@ -41,6 +41,9 @@ export async function validate(env, id, raw) {
     if (!PRED.includes(p) || !ID.test(to || "") || to === id || !(known.has(to) || dbIds.has(to))) return bad("bad_relation");
     const k = p + ">" + to; if (!seen.has(k)) { seen.add(k); d.rel.push([p, to]); }
   }
+  d.outdated = !!raw.outdated;   // nicht mehr aktuell: Seite bleibt, wird aber standardmaessig ausgeblendet
+  d.replaced_by = String(raw.replaced_by || "").trim();
+  if (d.replaced_by) { if (!ID.test(d.replaced_by) || d.replaced_by === id || !(known.has(d.replaced_by) || dbIds.has(d.replaced_by))) return bad("bad_relation"); d.outdated = true; }
   for (const k of ["same_as", "job", "start", "end"]) if (raw[k] !== undefined && k !== "same_as") d[k] = txt(raw[k], 40);
   return { data: d };
 }
