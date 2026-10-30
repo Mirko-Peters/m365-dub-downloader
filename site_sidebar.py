@@ -4,6 +4,7 @@ from html import escape as esc
 from pathlib import Path
 D = Path(__file__).parent / "data"
 TYPE_L = {"product": "Product", "concept": "Concept", "cert": "Certification", "platform": "Platform", "org": "Organization", "event": "Event", "person": "Person", "media": "Media", "category": "Topic"}
+STOP = {"access", "project", "compliance", "governance", "automation", "prompt", "actions", "polling", "agent", "agents", "lists", "forms", "flow", "loop", "word", "bing", "stream", "sites", "pages", "tasks", "security", "identity", "copilot", "microsoft", "azure", "m365", "teams"}
 TYPE_PRIO = {"product": 0, "person": 1, "cert": 2, "platform": 3, "concept": 4, "event": 5, "org": 6, "media": 7, "category": 9}
 GSRC = "https://www.google.com/preferences/source?q=m365.fm"
 CON = "https://m365con.net/?utm_source=m365.fm&utm_medium=sidebar&utm_campaign=attending2027"
@@ -19,6 +20,7 @@ class Index:
             if e["type"] in ("category",) or e["id"] == "mirko-peters": continue
             for n in [e["name"]] + list(e.get("aliases") or []):
                 n = (n or "").strip()
+                if " " not in n and n.lower() in STOP and n.lower() != e["name"].lower(): continue
                 if len(n) < (6 if e.get("guest") else 4) and n not in ("Teams", "Excel", "Word", "Azure", "Loop", "Viva", "Bing"): continue
                 names.setdefault(n.lower(), e["id"])
             self.by[e["id"]] = e
@@ -31,7 +33,7 @@ class Index:
         cnt = {}
         for m in self.rx.finditer(text):
             i = self.names.get(m.group(1).lower()); cnt[i] = cnt.get(i, 0) + 1
-        ids = sorted(cnt, key=lambda i: (-min(cnt[i], 3), TYPE_PRIO.get(self.by[i]["type"], 8), -cnt[i]))
+        ids = sorted(cnt, key=lambda i: (self.by[i]["name"].lower() in STOP, -min(cnt[i], 3), TYPE_PRIO.get(self.by[i]["type"], 8), -cnt[i]))
         return [self.by[i] for i in ids[:k]]
 
 
