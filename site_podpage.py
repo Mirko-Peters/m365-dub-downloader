@@ -2,6 +2,7 @@ import site_sidebar as SBR
 """Englische Show-Seite (Nachbau von www.m365.fm / Podpage) unter /show/: Folgen, Seiten, Hosts, Sponsoren, Reviews, Gaeste (als Personen-Entitaeten).
 Daten: data/podpage/*.json(.gz); Audio/Transkript aus data/en_episodes.json (fetch_en_episodes.py). Videos sind bewusst ausgeschlossen."""
 import site_notes as SNT
+import site_media as MED
 import gzip, json, re, html as _h
 from html.parser import HTMLParser
 from pathlib import Path
@@ -239,12 +240,16 @@ def build(g):
     ebyslug = {e["slug"]: e for e in eps}
     for p in bposts:
         ep = ebyslug.get(bp_ep(p) or "")
-        body = (f'<article><p class="mut">{bday(p)}</p><h1>{esc(p["title"])}</h1><div class="pp-notes">{fixlinks(san(p["html"]))}</div>'
+        _bi = thumb_of(ep, SNT.get("en", title=ep["name"])) if ep else ""   # Titelbild: Thumbnail der verlinkten Folge, sonst erzeugtes Bild
+        _hero = (f'<figure style="margin:1em 0"><img src="{esc(_bi)}" alt="{esc("Cover: " + ep["name"])}" width="640" height="360" fetchpriority="high" decoding="async" style="width:100%;max-width:640px;height:auto;aspect-ratio:16/9;object-fit:cover;border-radius:.6em"></figure>' if _bi
+                 else MED.hero_svg({"id": "blog-" + p["slug"], "name": p["title"], "type": "media"}, "Blog", "Titelbild: " + p["title"]))
+        body = (f'<article><p class="mut">{bday(p)}</p><h1>{esc(p["title"])}</h1>{_hero}<div class="pp-notes">{fixlinks(san(p["html"]))}</div>'
                 + (f'<p><strong>Listen to the episode:</strong> <a href="{ep_url(ep)}">{esc(ep["name"])}</a></p>' if ep else "") + "</article>"
                 + f'<p><a href="{root}blog/">← All articles</a></p>')
         ld = {"@context": "https://schema.org", "@type": "BlogPosting", "headline": p["title"], "url": bp_url(p), "mainEntityOfPage": bp_url(p), "datePublished": p.get("iso") or "", "dateModified": p.get("modified") or p.get("iso") or "",
               "description": p.get("desc") or "", "inLanguage": "en", "author": {"@id": f"{BASE}/entity/mirko-peters/#entity"}, "publisher": {"@type": "Organization", "name": NAME, "url": root}, "isPartOf": {"@type": "Blog", "name": f"{NAME} blog", "url": f"{root}blog/"}}
         if ep: ld["about"] = {"@type": "PodcastEpisode", "name": ep["name"], "url": ep_url(ep)}
+        if _bi: ld["image"] = _bi
         faq = [q for q in (p.get("faq") or []) if q.get("name") and (q.get("acceptedAnswer") or {}).get("text")]
         lds = [ld] + ([{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": faq}] if faq else [])
         pub(f"blog/{p['slug']}/", p["title"], p.get("desc") or plain(p["html"])[:200], body, lds, "article", last=bday(p) or TODAY)
