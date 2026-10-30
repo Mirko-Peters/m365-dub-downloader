@@ -103,3 +103,10 @@ Ausgemusterte Seiten: in `data/retired.json` eintragen (mit `to` = Nachfolger-Ve
 ## Übersetzungen (Regel)
 - Fehlende EN/DE-Texte zuerst über die Community: MCP-Tool `list_translation_tasks` + `propose_entity_edit` (kostet die Plattform nichts). Nur der Rest wird mit `tools/translate_missing.py` (Haiku) im Stapel übersetzt.
 - Namen werden nie übersetzt: Session-Titel, Event-, Produkt-, Personen- und Firmennamen, Abkürzungen, Prüfungscodes.
+
+## Podpage-Ablösung (nach der Konferenz M365Con, Jan 2027)
+Podpage kostet 65 $/Monat (ca. 780 $/Jahr). Ziel: m365.fm komplett auf dub.m365.fm umziehen und Podpage kündigen. Bis zur Konferenz wird dub.m365.fm weiter ausgebaut; Podpage bleibt unverändert.
+- Inventur M365 FM Podcast (Stand 30.10.2026): 1.115 Episoden, 2.426 Videos, 5 Hosts, 13 Links, 6 Sponsoren. Blog, Seiten, Gäste, Bewertungen, Weiterleitungen, Downloads und Shop waren wegen Podpage-Serverfehler (502) nicht abrufbar, erneut prüfen.
+- Schritte: 1) alles als JSON ins Repo sichern (Podpage-MCP, read-only), 2) Seiten für Videos, Hosts, Sponsoren, Links, Blog/Seiten im Generator ergänzen, 3) Weiterleitungen aller alten Podpage-URLs, 4) Domain www.m365.fm umziehen (Suchplätze erhalten), 5) erst dann Podpage kündigen.
+- Nur mit Server nötig: Kontaktformular, Sprachnachrichten, Newsletter, Bewertungen (Worker + Resend/R2). Shop weglassen oder extern verlinken.
+- Weitere Podpage-Podcasts im Konto: "Business → IT | IT → Business" und "DataScience Show Podcast" (bei der Ablösung mitprüfen).
