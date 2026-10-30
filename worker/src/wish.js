@@ -53,6 +53,9 @@ export async function handleWish(env, request, url, path, user, J) {
 
 // Offene Punkte der Plattform als "planned" in die Roadmap eintragen (einmalig je Titel, Eigentuemer = Admin)
 const PLAN = [
+  ["Englische Show (/show/) in weitere Sprachen übersetzen", "Titel, Zusammenfassungen und Seiten zuerst in 5–6 Sprachen (ca. 25–30 $, mit Batch weniger); Show Notes und Transkripte nur für die meistgehörten Folgen. Vollständig 19 Sprachen: ca. 95 $ (ohne Show Notes), ca. 2.000 $ mit Show Notes. Wartet auf Sprachauswahl und Anthropic-Credits."],
+  ["Podpage-Import vervollständigen: Gäste (178) und Blogposts", "Podpage-API lieferte Bad Gateway. Gäste als Personen-Entitäten (site_podpage.make_guest_entities), Blog nach /show/blog/."],
+  ["Podcast-Umzug: Bedingungen, Werbeplatz, eigener Feed je Show", "Nutzungsbedingungen mit Einnahmenbeteiligung juristisch formulieren, Werbe-/Sponsoring-Platz auf /shows/, M365.FM-Feed je Show mit itunes:new-feed-url."],
   ["Microsoft-Login (Entra-App, Anmeldung mit Microsoft-Konto)", "Benötigt Entra-App und die Secrets MS_CLIENT_ID / MS_CLIENT_SECRET."],
   ["Mail-System (Benachrichtigungen per E-Mail)", "Resend-Anbindung; E-Mail bei Antworten, Roadmap-Statuswechseln und neuen Updates."],
   ["Roadmap & Wunschliste: Benachrichtigung bei Statuswechsel", "E-Mail und Push, wenn ein Wunsch übernommen oder umgesetzt wird."],
