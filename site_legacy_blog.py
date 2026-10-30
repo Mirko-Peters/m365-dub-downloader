@@ -4,6 +4,7 @@ bleiben aber statisch (HTML mit Tabellen und Bildern bleibt vollstaendig erhalte
 import ast, re, zlib
 from datetime import datetime, timezone
 
+import site_media as MED
 import site_podpage as P
 import site_r2 as R2
 import site_sidebar as SBR
@@ -36,6 +37,7 @@ def url_of(BASE, slug):
 def items(BASE):
     posts = [p for p in P.load("blog_posts") if p.get("title") and p.get("html")]
     eslug = {e["slug"] for e in P.load("episodes") if e.get("published") not in (False, "False") and e.get("hidden") not in (True, "True")}
+    eps_by_slug = {e["slug"]: e for e in P.load("episodes") if e["slug"] in eslug}
     bslug = {p["slug"] for p in posts}
     ix = SBR.Index()
 
@@ -54,6 +56,12 @@ def items(BASE):
     for p in sorted(posts, key=lambda x: x.get("iso") or "", reverse=True):
         html = fix(P.san(p["html"]))
         text = P.plain(html)
+        if not re.search(r"<img\b", html):   # Titelbild wie frueher: Bild der verlinkten Folge, sonst erzeugtes Bild
+            _ep = next((eps_by_slug[m] for m in re.findall(r'/show/episodes/([^/"]+)/', html) if m in eps_by_slug), None)
+            _u = (_ep or {}).get("image_path") or ""
+            _hero = (f'<img src="{P.esc(_u)}" alt="{P.esc("Cover: " + _ep["name"])}" width="640" height="360" fetchpriority="high" decoding="async" style="width:100%;max-width:640px;height:auto;aspect-ratio:16/9;object-fit:cover;border-radius:8px">'
+                     if _u.startswith("https://") and "None" not in _u and _ep else MED.hero_svg({"id": "blog-" + p["slug"], "name": p["title"], "type": "media"}, "Blog", "Titelbild: " + p["title"]))
+            html = f'<figure style="margin:1em 0">{_hero}</figure>' + html
         topics = [e["id"] for e in ix.match(p["title"] + " " + text[:3000], k=6)]
         pub = _ts(p.get("iso")); upd = _ts(p.get("modified")) or pub
         out.append({"id": 900_000_000 + zlib.crc32(p["slug"].encode()) % 90_000_000, "handle": HANDLE, "name": NAME, "slug": p["slug"], "title": p["title"], "summary": (p.get("desc") or "")[:400],
