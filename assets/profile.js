@@ -4,7 +4,7 @@
   var X = window.M365X, root = document.getElementById("c-expert"); if (!X || !root || /[?&]u=/.test(location.search)) return;
   var orgHost = document.createElement("div"); orgHost.id = "c-orgs"; root.parentNode.insertBefore(orgHost, root.nextSibling);
   (function tabs() {   // Reiter: Konto | Profil | Firmen | Events | Nachrichten
-    var de0 = (X.lang || "en") === "de", T0 = [["c-page", de0 ? "Konto" : "Account"], ["c-expert", de0 ? "Profil" : "Profile"], ["c-orgs", de0 ? "Firmen" : "Companies"], ["c-events", "Events"], ["c-blog", "Blog"], ["c-podcast", "Podcast"], ["c-messages", de0 ? "Nachrichten" : "Messages"]];
+    var de0 = (X.lang || "en") === "de", T0 = [["c-page", de0 ? "Konto" : "Account"], ["c-expert", de0 ? "Profil" : "Profile"], ["c-orgs", de0 ? "Firmen" : "Companies"], ["c-events", "Events"], ["c-blog", "Blog"], ["c-podcast", "Podcast"], ["c-video", de0 ? "Videos" : "Videos"], ["c-guests", de0 ? "Gäste" : "Guests"], ["c-messages", de0 ? "Nachrichten" : "Messages"]];
     var bar = document.createElement("div"); bar.setAttribute("role", "tablist"); bar.className = "ctabs";
     function show(id) { T0.forEach(function (t) { var el = document.getElementById(t[0]); if (el) el.hidden = t[0] !== id; }); [].forEach.call(bar.children, function (b) { b.setAttribute("aria-selected", b.dataset.t === id ? "true" : "false"); }); try { history.replaceState(null, "", "#" + id); } catch (e) {} }
     T0.forEach(function (t) { var b = document.createElement("button"); b.type = "button"; b.className = "ctab"; b.setAttribute("role", "tab"); b.dataset.t = t[0]; b.textContent = t[1]; b.onclick = function () { show(t[0]); }; bar.appendChild(b); });

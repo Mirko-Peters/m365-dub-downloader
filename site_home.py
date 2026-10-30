@@ -8,8 +8,8 @@ _C = {}
 
 def _load(api):
     if not _C:
-        import site_blog, site_podcast, site_events
-        _C["posts"] = site_blog.fetch_posts(api); _C["eps"] = site_podcast.fetch_eps(api); _C["events"] = site_events.fetch_events(api)
+        import site_blog, site_podcast, site_events, site_video
+        _C["cv"] = site_video.fetch_videos(api); _C["posts"] = site_blog.fetch_posts(api); _C["eps"] = site_podcast.fetch_eps(api); _C["events"] = site_events.fetch_events(api)
     return _C
 
 
@@ -38,13 +38,17 @@ def hub(g, lang, base, api, videos, vid_html, root=False):
         d = (ev.get("start") or "")[:10]
         if d and d >= today:
             cards.append((d, "event", f'<div class="hub-card" data-k="event"><a href="{croot}events/{ev["handle"]}/"><div class="kicker">{esc(T(lang, "Event", "Event"))}</div><h3>{esc(ev["title"])}</h3></a><p class="mut">{esc(d)}{(" · " + esc(ev["summary"][:110])) if ev.get("summary") else ""}</p></div>'))
+    for e in C["cv"]:
+        if ok(e["lang"]):
+            d = __import__("datetime").datetime.fromtimestamp(e["published"]).strftime("%Y-%m-%d")
+            cards.append((d, "creatorvideo", f'<div class="thumb" data-k="creatorvideo"><a href="{base}{pfx(e["lang"])}/community/video/{e["slug"]}/"><figure class="cover" style="margin-inline:0"><img src="https://i.ytimg.com/vi/{e["video_id"]}/hqdefault.jpg" alt="" loading="lazy" width="480" height="360"></figure><h3>{esc(e["title"])}</h3></a><p>{esc(e["name"])} · {d}</p></div>'))
     for v in videos[:24]:
         cards.append((str(v["date"])[:10], "video", vid_html(v).replace('<div class="thumb">', '<div class="thumb" data-k="video">', 1)))
     cards.sort(key=lambda x: x[0], reverse=True)
     counts = {}
     for _, k, _h in cards: counts[k] = counts.get(k, 0) + 1
-    labels = [("all", T(lang, "All", "Alle")), ("blog", "Blog"), ("podcast", "Podcast"), ("event", T(lang, "Events", "Events")), ("video", T(lang, "Stick-man videos", "Stick-Man-Videos"))]
+    labels = [("all", T(lang, "All", "Alle")), ("blog", "Blog"), ("podcast", "Podcast"), ("event", T(lang, "Events", "Events")), ("creatorvideo", T(lang, "Creator videos", "Creator-Videos")), ("video", T(lang, "Stick-man videos", "Stick-Man-Videos"))]
     chips = "".join(f'<button type="button" class="hub-f" data-k="{k}" aria-pressed="false">{esc(l)}{"" if k == "all" else " · " + str(counts.get(k, 0))}</button>' for k, l in labels if k == "all" or counts.get(k))
     cta = (f'<p><a class="btn main" href="{croot}">{esc(T(lang, "Join the community", "Zur Community"))}</a> '
-           f'<a class="btn" href="{croot}blog/">Blog</a> <a class="btn" href="{croot}podcast/">Podcast</a> <a class="btn" href="{croot}events/">Events</a></p>')
+           f'<a class="btn" href="{croot}blog/">Blog</a> <a class="btn" href="{croot}podcast/">Podcast</a> <a class="btn" href="{croot}events/">Events</a> <a class="btn" href="{croot}guests/">{esc(T(lang, "Guest exchange", "Gäste-Börse"))}</a></p>')
     return (CSS + f'<div role="group" aria-label="{esc(T(lang, "Filter", "Filter"))}">{chips}</div><div id="hub" class="thumbs">' + "".join(h for _, _k, h in cards) + "</div>" + cta + JS.replace("%N%", "18"))

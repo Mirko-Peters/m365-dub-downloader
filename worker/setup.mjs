@@ -62,7 +62,7 @@ if (!have.includes("VAPID_PRIVATE_JWK") || !have.includes("VAPID_PUBLIC")) {
   put("VAPID_PRIVATE_JWK", JSON.stringify(jwk)); put("VAPID_PUBLIC", pub);
 }
 // Vom Betreiber gelieferte Secrets (GitHub-Secrets -> Umgebung); nur setzen, wenn vorhanden
-for (const k of ["GOOGLE_CLIENT_ID", "GOOGLE_CLIENT_SECRET", "MS_CLIENT_ID", "MS_CLIENT_SECRET", "LINKEDIN_CLIENT_ID", "LINKEDIN_CLIENT_SECRET", "RESEND_API_KEY", "SPREAKER_TOKEN", "ADMIN_SUBS"]) if (process.env[k]) put(k, process.env[k]);
+for (const k of ["GOOGLE_CLIENT_ID", "GOOGLE_CLIENT_SECRET", "MS_CLIENT_ID", "MS_CLIENT_SECRET", "LINKEDIN_CLIENT_ID", "LINKEDIN_CLIENT_SECRET", "RESEND_API_KEY", "SPREAKER_TOKEN", "YT_CLIENT_ID", "YT_CLIENT_SECRET", "YT_REFRESH_TOKEN", "ADMIN_SUBS"]) if (process.env[k]) put(k, process.env[k]);
 console.log("Fertig. Worker: https://api-dub.m365.fm");
 // Nachpruefung: Custom Domain und DNS-Eintrag
 {

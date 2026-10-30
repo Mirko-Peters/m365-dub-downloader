@@ -1,5 +1,5 @@
 // Abzeichen und Punkte. Anzeigenamen stehen im Frontend (data/community_i18n.json), hier nur IDs und Regeln.
-export const BADGE_ORDER = ["editor", "wiki_author", "author", "podcaster", "curator", "voice", "polyglot", "helpful", "early_bird", "streak", "commentator", "guardian", "li_follower", "founder", "team_member", "organizer", "speaker", "recommender", "recommended", "endorsed", "endorser", "connector", "profile_pro", "entity_owner", "sponsor_open", "notified", "first_comment", "newcomer"];
+export const BADGE_ORDER = ["editor", "wiki_author", "author", "podcaster", "videomaker", "curator", "voice", "polyglot", "helpful", "early_bird", "streak", "commentator", "guardian", "li_follower", "founder", "team_member", "organizer", "speaker", "recommender", "recommended", "endorsed", "endorser", "connector", "profile_pro", "entity_owner", "sponsor_open", "notified", "first_comment", "newcomer"];
 
 let epCache = { at: 0, map: null };
 export async function episodeDates(env) {
@@ -32,6 +32,8 @@ export async function evalBadges(env, uid) {
   if (bl.n >= 1 && (await award(db, uid, "author"))) got.push("author");
   const pd = await db.prepare("SELECT COUNT(*) n FROM pod_episodes WHERE user_id=? AND status='published'").bind(uid).first().catch(() => ({ n: 0 }));
   if (pd.n >= 1 && (await award(db, uid, "podcaster"))) got.push("podcaster");
+  const yv = await db.prepare("SELECT COUNT(*) n FROM yt_videos WHERE user_id=? AND status='published'").bind(uid).first().catch(() => ({ n: 0 }));
+  if (yv.n >= 1 && (await award(db, uid, "videomaker"))) got.push("videomaker");
   const rules = [["newcomer", true], ["first_comment", c.n >= 1], ["commentator", c.n >= 10], ["voice", c.n >= 50], ["helpful", lk.n >= 10], ["polyglot", c.l >= 3]];
   for (const [b, ok] of rules) if (ok && (await award(db, uid, b))) got.push(b);
   // Early bird: Kommentar innerhalb von 24 h nach Erscheinen der Folge
@@ -89,10 +91,10 @@ export async function stats(db, uid) {
     endo_r: await n("SELECT COUNT(*) n FROM endorsements WHERE owner_id=?", uid), endo_g: await n("SELECT COUNT(*) n FROM endorsements WHERE by_id=?", uid),
     speaker: await n("SELECT COUNT(*) n FROM event_sessions WHERE speakers LIKE '%\"s\":\"confirmed\"%' AND speakers LIKE '%\"h\":\"' || COALESCE((SELECT handle FROM profiles WHERE user_id=?),'-') || '\"%'", uid),
     pub: await n("SELECT COUNT(*) n FROM profiles WHERE user_id=? AND public=1", uid),
-    blog: await n("SELECT COUNT(*) n FROM blog_posts WHERE user_id=? AND status='live'", uid), pod: await n("SELECT COUNT(*) n FROM pod_episodes WHERE user_id=? AND status='published'", uid), blog_v: await n("SELECT COUNT(*) n FROM blog_votes v JOIN blog_posts b ON b.id=v.post_id WHERE b.user_id=? AND v.user_id<>?", uid, uid),
+    blog: await n("SELECT COUNT(*) n FROM blog_posts WHERE user_id=? AND status='live'", uid), vids: await n("SELECT COUNT(*) n FROM yt_videos WHERE user_id=? AND status='published'", uid), pod: await n("SELECT COUNT(*) n FROM pod_episodes WHERE user_id=? AND status='published'", uid), blog_v: await n("SELECT COUNT(*) n FROM blog_votes v JOIN blog_posts b ON b.id=v.post_id WHERE b.user_id=? AND v.user_id<>?", uid, uid),
   };
   // Punkteskala: Kommentar 1, erhaltener Like 1, Wiki-/Entitaets-Aenderung 3, Bestaetigung 2/1, Empfehlung 5/5, Firma gruenden 30, beitreten 5, Event 50, bestaetigter Speaker 100, oeffentliches Profil 10, Abzeichen je 5
-  const earned = c.n * 1 + l.n * 1 + badges.length * 5 + a.wiki * 3 + a.ent * 3 + a.orgs_owned * 30 + a.orgs_joined * 5 + a.events * 50 + a.speaker * 100 + a.rec_w * 5 + a.rec_r * 5 + Math.min(a.endo_r, 20) * 2 + Math.min(a.endo_g, 20) + a.pub * 10 + Math.min(a.blog, 20) * 5 + Math.min(a.blog_v, 200) + Math.min(a.pod, 20) * 20;
+  const earned = c.n * 1 + l.n * 1 + badges.length * 5 + a.wiki * 3 + a.ent * 3 + a.orgs_owned * 30 + a.orgs_joined * 5 + a.events * 50 + a.speaker * 100 + a.rec_w * 5 + a.rec_r * 5 + Math.min(a.endo_r, 20) * 2 + Math.min(a.endo_g, 20) + a.pub * 10 + Math.min(a.blog, 20) * 5 + Math.min(a.blog_v, 200) + Math.min(a.pod, 20) * 20 + Math.min(a.vids, 20) * 20;
   const spent = await n("SELECT COALESCE(SUM(cost),0) n FROM points_spent WHERE user_id=?", uid);
   return { comments: c.n, likes: l.n, badges, points: earned, earned, spent, balance: earned - spent };
 }

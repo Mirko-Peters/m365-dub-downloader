@@ -561,3 +561,42 @@ CREATE TABLE IF NOT EXISTS pod_votes (
   created INTEGER NOT NULL,
   PRIMARY KEY (ep_id, user_id)
 );
+
+CREATE TABLE IF NOT EXISTS guest_listings (      -- Gaeste-Boerse: speaker = ich bin als Gast/Speaker verfuegbar, host = ich suche Gaeste/Speaker (Podcast, YouTube, Event ...)
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  user_id INTEGER NOT NULL,
+  kind TEXT NOT NULL,
+  title TEXT NOT NULL DEFAULT '',                -- host: Name der Show/des Kanals/Events; speaker: Kurzthema
+  formats TEXT NOT NULL DEFAULT '[]',
+  langs TEXT NOT NULL DEFAULT '[]',
+  topics TEXT NOT NULL DEFAULT '[]',             -- Entitaets-IDs (bis 10)
+  note TEXT NOT NULL DEFAULT '',
+  link TEXT NOT NULL DEFAULT '',
+  active INTEGER NOT NULL DEFAULT 1,
+  created INTEGER NOT NULL,
+  updated INTEGER NOT NULL
+);
+CREATE INDEX IF NOT EXISTS idx_guest_kind ON guest_listings(kind, active);
+
+CREATE TABLE IF NOT EXISTS yt_videos (          -- Creator-Videos fuer den YouTube-Kanal m365 Show: uploading -> submitted (privat auf YouTube) -> review (Schwelle) -> published | rejected | expired
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  user_id INTEGER NOT NULL,
+  title TEXT NOT NULL,
+  description TEXT NOT NULL DEFAULT '',
+  lang TEXT NOT NULL DEFAULT 'en',
+  topics TEXT NOT NULL DEFAULT '[]',
+  status TEXT NOT NULL DEFAULT 'uploading',
+  video_id TEXT NOT NULL DEFAULT '',
+  ai INTEGER NOT NULL DEFAULT 0,
+  note TEXT NOT NULL DEFAULT '',
+  created INTEGER NOT NULL,
+  updated INTEGER NOT NULL,
+  published INTEGER NOT NULL DEFAULT 0
+);
+CREATE INDEX IF NOT EXISTS idx_yt_status ON yt_videos(status, created);
+CREATE TABLE IF NOT EXISTS yt_votes (
+  vid_id INTEGER NOT NULL,
+  user_id INTEGER NOT NULL,
+  created INTEGER NOT NULL,
+  PRIMARY KEY (vid_id, user_id)
+);
