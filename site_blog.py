@@ -3,6 +3,7 @@ import json
 from datetime import datetime, timezone
 from site_i18n import COMM_LANGS, pfx, pfx2, T
 from site_learn import ENTS, esc, _fetch_json, LCSS, WT, wiki_render, wiki_images, WCSS
+import site_notes as SNT
 
 
 def fetch_posts(api):
@@ -56,12 +57,13 @@ def build(g, posts, people, api):
             topics = [t for t in p.get("topics", []) if t in ENTS]
             tl = "".join(f'<a class="mb-tag" href="{links_l[t][1]}">{esc(ENTS[t]["name"])}</a> ' for t in topics)
             vote = f'<p><button type="button" class="bl-vote" data-s="{esc(p["slug"])}" aria-pressed="false" aria-label="Upvote">▲ <span class="n">{p.get("votes", 0)}</span></button></p>'
+            _kp, _fq, _fld = SNT.sections(p.get("keypoints"), p.get("faq"), lang)   # Kernpunkte und FAQ aus eigenen Feldern
             cos = [c for c in (p.get("coauthors") or []) if c.get("handle") in pb and c["handle"] != p["handle"]]
             co_html = "".join(f' {esc(T(lang, "and", "und"))} <a href="{croot}u/{c["handle"]}/" rel="author">{esc(pb[c["handle"]]["name"])}</a>' for c in cos) if len(cos) == 1 else "".join(f', <a href="{croot}u/{c["handle"]}/" rel="author">{esc(pb[c["handle"]]["name"])}</a>' for c in cos)
             upd_html = f' · {esc(T(lang, "Updated", "Aktualisiert"))} <time datetime="{iso(p["updated"])}">{iso(p["updated"])}</time>' if p.get("updated") and iso(p["updated"]) != iso(p["published"]) else ""
             b = shell(lang, f'{WCSS}{CSS}<p class="mut"><a href="{croot}blog/">{esc(title_blog)}</a> · <a href="{croot}u/{p["handle"]}/blog/">{esc(a["name"])}</a></p><article class="wk-body"><h1>{esc(p["title"])}</h1>'
                             f'<p class="mut">{esc(T(lang, "By", "Von"))} <a href="{croot}u/{p["handle"]}/" rel="author">{esc(a["name"])}</a>{co_html}{esc(" · ")}<time datetime="{iso(p["published"])}">{iso(p["published"])}</time>{upd_html}</p>'
-                            f'{("<p>" + esc(p["summary"]) + "</p>") if p.get("summary") else ""}{body_html}</article><p>{tl}</p>{vote}'
+                            f'{("<p>" + esc(p["summary"]) + "</p>") if p.get("summary") else ""}{_kp}{body_html}{_fq}{SNT.CSS if (_kp or _fq) else ""}</article><p>{tl}</p>{vote}'
                             f'<p><button type="button" class="bl-vote bl-follow" data-h="{esc(p["handle"])}" aria-pressed="false"><span class="t">{esc(T(lang, "Follow this blog", "Blog abonnieren"))}</span></button> <a href="{croot}u/{p["handle"]}/blog/feed.xml">RSS</a></p>'
                             f'<section id="c-comments"></section>'
                             f'<script>{VOTEJS.replace("%API%", api).replace("%H%", p["handle"])}</script><script>{FOLLOWJS.replace("%API%", api).replace("%FOLLOW%", esc(T(lang, "Follow this blog", "Blog abonnieren"))).replace("%FOLLOWING%", esc(T(lang, "Following", "Abonniert")))}</script>'
@@ -69,7 +71,7 @@ def build(g, posts, people, api):
             ld = [{"@context": "https://schema.org", "@type": "BlogPosting", "@id": u + "#post", "mainEntityOfPage": u, "headline": p["title"], "description": p.get("summary") or "",
                    "inLanguage": lang, **({"image": [i["url"] for i in wiki_images(p["body"])]} if wiki_images(p["body"]) else {}), "datePublished": iso(p["published"]), "dateModified": iso(p.get("updated") or p["published"]),
                    "author": [{"@type": "Person", "@id": au + "#person", "name": a["name"], "url": au}] + [{"@type": "Person", "@id": f"{BASE}/community/u/{c['handle']}/#person", "name": pb[c["handle"]]["name"], "url": f"{BASE}/community/u/{c['handle']}/"} for c in cos],
-                   "about": [{"@id": f"{BASE}/entity/{t}/#thing"} for t in topics], "citation": [{"@type": "CreativeWork", "name": r["title"], "url": r["url"]} for r in refs]}]
+                   "about": [{"@id": f"{BASE}/entity/{t}/#thing"} for t in topics], "citation": [{"@type": "CreativeWork", "name": r["title"], "url": r["url"]} for r in refs]}] + _fld
             noidx = p.get("votes", 0) < INDEX_VOTES
             write(f"{pfx2(lang)}community/u/{p['handle']}/blog/{p['slug']}/index.html", page(lang, f'{p["title"]} – {a["name"]} | M365.FM', (p.get("summary") or "")[:155], u, b, None, ld, og_type="article", extra_head=LCSS, noindex=noidx))
             if not noidx:
