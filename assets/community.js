@@ -202,6 +202,10 @@
         ibox.appendChild(h("h2", { text: "✏️ " + n + " offene Änderungsvorschläge" }));
         (r.j.entity || []).forEach(function (x) { ibox.appendChild(h("p", {}, [h("a", { href: "/entity/" + x.eid + "/", text: x.eid }), " – " + x.name + (x.summary ? ": " + x.summary : "")])); });
         (r.j.wiki || []).forEach(function (x) { ibox.appendChild(h("p", { class: "cmut", text: "Wiki: " + x.term + " (" + x.lang + ") – " + x.name })); }); });
+      var ebox = h("div", { class: "ccard" }); root.appendChild(ebox);
+      api("/api/events/mine").then(function (r) { var l = (r.j && r.j.events) || []; if (r.s !== 200 || !l.length) return; var de = (document.documentElement.lang || "en").slice(0, 2) === "de";
+        ebox.appendChild(h("h2", { text: de ? "Meine Events" : "My events" }));
+        l.forEach(function (e) { ebox.appendChild(h("p", {}, [h("b", { text: e.title }), " · " + e.start + (e.public ? "" : (de ? " · nicht öffentlich" : " · not public")) + " ", h("a", { class: "btn", href: "#c-events", text: de ? "Bearbeiten" : "Edit" }), " ", h("a", { href: (de ? "/de" : "") + "/community/events/" + e.handle + "/", text: de ? "Öffentliche Seite" : "Public page" })])); }); });
       var pbox = h("div", { class: "ccard" }, [h("h2", { text: tt("points_t") })]); root.appendChild(pbox);
       api("/api/points").then(function (pr) { if (pr.s !== 200) return; var d = pr.j, msg = h("p", { class: "cok", role: "status", "aria-live": "polite" });
         pbox.appendChild(h("p", { text: tt("points_bal").replace("{b}", d.balance).replace("{e}", d.earned) }));
