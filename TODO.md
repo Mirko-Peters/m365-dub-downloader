@@ -9,6 +9,12 @@ Wenn Premium da ist:
 2. In GitHub unter Settings → Secrets → Actions `SPOTIFY_CLIENT_ID` und `SPOTIFY_CLIENT_SECRET` eintragen.
 3. Den Workflow "Site" einmal manuell starten: `sync_platforms.py` nutzt die Secrets automatisch (bisher 375 von 1000 englischen Folgen verlinkt).
 
+## Apple Podcasts und YouTube für die Show (Dezember 2026)
+`@m365-show` ist der Hauptkanal auf YouTube; der Podcast läuft dort als Playlist/Feed. Der Podcast ist bei Apple Podcasts und YouTube noch nicht angelegt beziehungsweise nicht verifiziert. Im Dezember nachziehen:
+1. Apple Podcasts Connect: Show einreichen/verifizieren (die ID `1810175174` in `data/platforms.json` prüfen, ob sie zur eigenen, verifizierten Show gehört).
+2. YouTube: Podcast-Playlist (`PLNdQ7ciTZo2k` in `data/platforms.json`, `youtube_sources`) als Podcast einreichen und prüfen, ob die ID stimmt.
+3. Danach `sync_platforms.py` einmal manuell laufen lassen (Workflow „Site“ starten), damit Folgenlinks zugeordnet werden.
+
 ## Weitere offene Punkte
 - Gäste zusammenführen: `data/guest_match_report.json` (Dieter Kempeneers doppelt, Jean-Sébastien Duchêne, Mirko Peters).
 - Plattform-Abgleich dauert in CI ca. 21 Minuten (Apple-Einzelsuchen); bei Bedarf kürzen.

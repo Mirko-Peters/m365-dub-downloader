@@ -14,6 +14,7 @@ import site_mcp as MCPS
 import site_seo as SEOR
 import site_live as LIVE
 import site_notes as SNT
+import site_ads as ADS
 import site_media as MED
 import glob, html, json, os, re, shutil, sys, unicodedata
 from datetime import date
@@ -413,6 +414,7 @@ def page(lang, title, desc, canonical, body, alternates=None, jsonld=None, xdefa
         ogimg = f"{BASE}/og/{rel}.png"
         body = body.replace("<footer>", share_html(lang, canonical, title) + "<footer>", 1)
     body = single_main(body)
+    body = ADS.inject(BASE, body, lang, canonical, noindex)
     if 'id="main"' in body:
         body = f'<a class="skip" href="#main">{esc(SKIP_T.get(lang, SKIP_T["en"]))}</a>' + body
     return f"""<!doctype html>
@@ -428,7 +430,7 @@ def page(lang, title, desc, canonical, body, alternates=None, jsonld=None, xdefa
 <meta property="og:url" content="{canonical}"><meta property="og:locale" content="{loc}"><meta property="og:site_name" content="M365.FM">
 <meta property="og:image" content="{ogimg}"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta property="og:image:alt" content="{esc(title)}">
 <meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="{esc(title)}"><meta name="twitter:description" content="{esc(desc)}"><meta name="twitter:image" content="{ogimg}">
-{extra_head}<style>{CSS}</style>{A11Y_EARLY}
+{extra_head}{ADS.head(BASE, body, canonical, noindex)}<style>{CSS}{ADS.CSS if ADS.active(BASE) else ''}</style>{A11Y_EARLY}
 {ld}</head>
 <body>
 {ext_links(body)}
@@ -1383,6 +1385,9 @@ def build():
     write(f"{INDEXNOW_KEY}.txt", INDEXNOW_KEY)
     if _dom:
         write("CNAME", _dom)
+    if ADS.ads_txt(BASE):
+        write("ads.txt", ADS.ads_txt(BASE))
+    print("AdSense:", json.dumps(ADS.status(BASE)))
     write("callback/index.html", """<!doctype html><meta charset=utf-8><meta name=robots content="noindex,nofollow"><meta name=viewport content="width=device-width,initial-scale=1"><title>Anmeldung</title>
 <body style="font-family:system-ui,sans-serif;background:#101214;color:#e9ecef;padding:40px;max-width:640px;margin:auto"><h2>Anmeldung</h2><p id=m>Kein Code in der Adresse.</p>
 <pre id=c style="white-space:pre-wrap;word-break:break-all;background:#1d2126;padding:14px;border:1px solid #444"></pre><button id=b style="display:none;padding:10px 18px">Code kopieren</button>
