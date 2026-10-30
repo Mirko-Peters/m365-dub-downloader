@@ -2,7 +2,7 @@ name: Website bauen und veröffentlichen
 on:
   push:
     branches: [main]
-    paths: ["episodes/**", "data/**", "domain.txt", "sync_platforms.py", "tools/build_speakers.py", "platform_match.py", "show_notes.py", "sync_show_notes.py", "generate_og.py", "site_*.py", "site_taxonomy.py", "check_links.py", "check_schema.py", "assets/**", "generate_articles.py", "scrape_spotify.py", "fetch_en_episodes.py", "fetch_en_titles.py", "generate_site.py", "generate_covers.py", "sync_spreaker.py", "spreaker_auth.py", "site_cover.py", "site_design.py", "site_money.py", "site_legal.py", "shows_seo.json", ".github/workflows/site.yml"]
+    paths: ["episodes/**", "data/**", "domain.txt", "sync_platforms.py", "sync_live.py", "site_live.py", "tools/build_speakers.py", "platform_match.py", "show_notes.py", "sync_show_notes.py", "generate_og.py", "site_*.py", "site_taxonomy.py", "check_links.py", "check_schema.py", "assets/**", "generate_articles.py", "scrape_spotify.py", "fetch_en_episodes.py", "fetch_en_titles.py", "generate_site.py", "generate_covers.py", "sync_spreaker.py", "spreaker_auth.py", "site_cover.py", "site_design.py", "site_money.py", "site_legal.py", "shows_seo.json", ".github/workflows/site.yml"]
   schedule:
     - cron: "17 5 * * *"
   workflow_dispatch:
@@ -100,13 +100,27 @@ jobs:
             git add data/show_notes && git commit -m "Show Notes aus Spreaker aktualisiert" -q
             git pull --rebase -q && git push -q
           fi
+      - name: M365 Show (Livestreams) von YouTube holen
+        continue-on-error: true
+        env:
+          YT_COOKIES: ${{ secrets.YT_COOKIES }}
+        run: |
+          pip install -q yt-dlp
+          if [ -n "$YT_COOKIES" ]; then printf '%s\n' "$YT_COOKIES" > cookies.txt; fi
+          python sync_live.py
+          rm -f cookies.txt
+          if [ -n "$(git status --porcelain data/live.json)" ]; then
+            git config user.name "m365-site-bot"; git config user.email "actions@users.noreply.github.com"
+            git add data/live.json && git commit -m "M365 Show: Streams aktualisiert" -q
+            git pull --rebase -q && git push -q
+          fi
       - name: Folgenlinks zu Apple, Spotify, Deezer, YouTube zuordnen
         continue-on-error: true
         env:
           SPOTIFY_CLIENT_ID: ${{ secrets.SPOTIFY_CLIENT_ID }}
           SPOTIFY_CLIENT_SECRET: ${{ secrets.SPOTIFY_CLIENT_SECRET }}
         run: |
-          pip install -q yt-dlp
+          pip install -q yt-dlp ytmusicapi
           python sync_platforms.py
           if [ -n "$(git status --porcelain data/episode_links.json data/episode_links_report.json data/platforms.json)" ]; then
             git config user.name "m365-site-bot"; git config user.email "actions@users.noreply.github.com"
