@@ -99,22 +99,42 @@ def spotify_candidates(lang, ids, ctx):
     return out
 
 
+def youtube_rss(pid):
+    """Die neuesten 15 Videos einer Wiedergabeliste ueber den RSS-Feed (ohne Anmeldung, schnell)."""
+    import xml.etree.ElementTree as ET
+    ns = {"a": "http://www.w3.org/2005/Atom", "y": "http://www.youtube.com/xml/schemas/2015"}
+    raw = urllib.request.urlopen(urllib.request.Request(f"https://www.youtube.com/feeds/videos.xml?playlist_id={pid}", headers={"User-Agent": "Mozilla/5.0"}), timeout=20).read()
+    return [{"title": e.findtext("a:title", "", ns), "url": f"https://www.youtube.com/watch?v={e.findtext('y:videoId', '', ns)}", "date": (e.findtext("a:published", "", ns) or "")[:10]}
+            for e in ET.fromstring(raw).findall("a:entry", ns)]
+
+
 def youtube_candidates(lang, ids, ctx):
     srcs = ids.get("youtube_sources") or []
     if not srcs:
         return []
+    out = []
+    for u in srcs:   # RSS: die neuesten 15, klappt auch wenn yt-dlp blockiert wird
+        m = re.search(r"list=([\w-]+)", u)
+        if not m:
+            continue
+        if len(m.group(1)) < 24:
+            print(f"YouTube {lang}: Playlist-ID '{m.group(1)}' sieht abgeschnitten aus (echte IDs haben meist 34 Zeichen)")
+        try:
+            out += youtube_rss(m.group(1))
+        except Exception as e:
+            print(f"YouTube-RSS {lang} {m.group(1)}: {str(e)[:100]}")
     try:
         import yt_dlp
     except ImportError:
-        print("YouTube-Abgleich uebersprungen: yt-dlp nicht installiert (pip install yt-dlp)"); return []
-    out = []
-    with yt_dlp.YoutubeDL({"quiet": True, "extract_flat": True, "skip_download": True, "ignoreerrors": True}) as y:
+        print("YouTube: yt-dlp nicht installiert, nur RSS (pip install yt-dlp)"); return out
+    with yt_dlp.YoutubeDL({"quiet": True, "extract_flat": True, "skip_download": True, "ignoreerrors": True, "playlistend": 1200, "socket_timeout": 20, "retries": 1, "extractor_retries": 1}) as y:
         for u in srcs:
             info = y.extract_info(u, download=False) or {}
             for e in info.get("entries") or []:
                 if e and e.get("id") and e.get("title"):
                     d = e.get("upload_date") or ""
                     out.append({"title": e["title"], "url": f"https://www.youtube.com/watch?v={e['id']}", "date": f"{d[:4]}-{d[4:6]}-{d[6:8]}" if len(d) == 8 else ""})
+    print(f"YouTube {lang}: {len(out)} Kandidaten")
     return out
 
 
