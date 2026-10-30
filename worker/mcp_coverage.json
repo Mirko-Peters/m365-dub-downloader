@@ -46,6 +46,12 @@
   "/api/admin/run-daily": {
    "skip": "Admin-Funktionen: bewusst nicht per KI-Token; Admin-Listen laufen über list_*_todo, list_event_transfers"
   },
+  "/api/admin/show": {
+   "skip": "Admin-Funktionen: bewusst nicht per KI-Token (Freigabe von Shows durch die Redaktion)"
+  },
+  "/api/admin/show/status": {
+   "skip": "Admin-Funktionen: bewusst nicht per KI-Token (Freigabe von Shows durch die Redaktion)"
+  },
   "/api/admin/translate": {
    "skip": "Admin-Funktionen: bewusst nicht per KI-Token; Admin-Listen laufen über list_*_todo, list_event_transfers"
   },
@@ -72,6 +78,16 @@
   },
   "/api/blog": {
    "skip": "Zähler/Listen nur für die Seitenanzeige (Stimmen, Follower) - in list_blog_posts enthalten"
+  },
+  "/api/blog/coauthor": {
+   "tools": [
+    "respond_coauthor_request"
+   ]
+  },
+  "/api/blog/coauthor/mine": {
+   "tools": [
+    "list_my_coauthor_requests"
+   ]
   },
   "/api/blog/delete": {
    "tools": [
@@ -465,6 +481,51 @@
   "/api/recommend/inbox": {
    "tools": [
     "list_my_recommendations"
+   ]
+  },
+  "/api/seo/check": {
+   "tools": [
+    "check_seo"
+   ]
+  },
+  "/api/seo/mine": {
+   "tools": [
+    "list_my_seo"
+   ]
+  },
+  "/api/seo/preview": {
+   "tools": [
+    "check_seo_text"
+   ]
+  },
+  "/api/seo/suggest": {
+   "tools": [
+    "suggest_entities"
+   ]
+  },
+  "/api/show/delete": {
+   "tools": [
+    "delete_show"
+   ]
+  },
+  "/api/show/export": {
+   "tools": [
+    "list_shows"
+   ]
+  },
+  "/api/show/mine": {
+   "tools": [
+    "list_my_shows"
+   ]
+  },
+  "/api/show/save": {
+   "tools": [
+    "move_podcast_show"
+   ]
+  },
+  "/api/show/sync": {
+   "tools": [
+    "sync_show"
    ]
   },
   "/api/speaker/claim": {

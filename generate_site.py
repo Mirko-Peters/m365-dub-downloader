@@ -11,6 +11,7 @@ from site_i18n import COMM_LANGS
 import site_members as MEM
 import site_events as EVT
 import site_mcp as MCPS
+import site_seo as SEOR
 import glob, html, json, os, re, shutil, sys, unicodedata
 from datetime import date
 from pathlib import Path
@@ -122,7 +123,7 @@ h2{font-size:1.5rem;line-height:1.2;margin:2.1em 0 .6em;font-weight:700}
 .auth-ch a{margin-right:.9em;font-size:.9em}.author{display:flex;gap:16px;align-items:center;border-top:1px solid var(--fg);border-bottom:1px solid var(--bd);padding:18px 0;margin:36px 0}
 .author img.badge{object-fit:cover;border:2px solid var(--ac)}.portrait{float:right;width:190px;height:190px;object-fit:cover;border-radius:50%;border:3px solid var(--ac);margin:0 0 12px 22px}
 .author .badge{flex:none;width:58px;height:58px;border-radius:50%;background:var(--ink);color:var(--onink);display:grid;place-items:center;font:700 1.15rem Didot,Georgia,serif}
-.author p{margin:0;font-size:.95rem;color:var(--mut)}.author strong{color:var(--fg);display:block;font-size:1.02rem}
+.author p{margin:0;font-size:.95rem;color:var(--mut)}.author .auth-ex{margin:.5em 0 0}.author .auth-ul{list-style:none;display:flex;flex-wrap:wrap;gap:.35em .5em;padding:0;margin:.2em 0 0}.author .auth-ul li{border:1px solid var(--bd);border-radius:1em;padding:.05em .7em;font-size:.88rem}.author strong{color:var(--fg);display:block;font-size:1.02rem}
 .mut{color:var(--mut);font-size:.9rem}.crumbs{font-size:.78rem;letter-spacing:.12em;text-transform:uppercase;color:var(--mut);margin-top:26px}.crumbs a{text-decoration:none}
 footer{border-top:1px solid var(--fg);margin-top:64px;padding:26px 0 48px;font-size:.85rem;color:var(--mut)}footer a{margin-right:14px}
 .info{margin:1.6em 0;padding:20px 22px;border:1px solid var(--ln,#d9cfc2);background:#fff8;border-radius:6px}.info figcaption{font-family:Didot,"Bodoni 72",Georgia,serif;font-size:1.25rem;margin-bottom:14px}.info small{display:block;margin-top:12px;opacity:.6;font-size:.75rem}
@@ -453,12 +454,19 @@ def person_ld():
             d["description"] = (a.get("about") or a.get("headline"))[:500]
         if a.get("headline"):
             d["jobTitle"] = a["headline"][:100]
+        names = _ent_names()
+        ex = [e["e"] for e in a.get("expertise", []) if e.get("e") in names][:12]
+        if ex:   # Expertise als Verweise auf die Entitaeten der Seite (Wissensgraph) neben den festen Themen
+            have = {str(x).lower() for x in d.get("knowsAbout", []) if isinstance(x, str)}
+            d["knowsAbout"] = list(d.get("knowsAbout", [])) + [{"@type": "Thing", "name": names[e], "@id": f"{BASE}/entity/{e}/#entity"} for e in ex if names[e].lower() not in have]
+        cr = [{"@type": "EducationalOccupationalCredential", "name": names[c["e"]], "url": f"{BASE}/entity/{c['e']}/"} for c in a.get("certs", []) if c.get("e") in names and c.get("verified")][:6]
+        if cr:
+            d["hasCredential"] = cr
         ch = [c["url"] for c in a.get("channels", []) if c.get("url")]
         d["sameAs"] = list(dict.fromkeys(list(d.get("sameAs", [])) + ch))
         d["url"] = f"{BASE}/community/u/{a['handle']}/"
         if a.get("img"):
             d["image"] = f"{COMMUNITY_API}/api/img/u/{a['handle']}"
-        d["knowsAbout"] = list(dict.fromkeys(d.get("knowsAbout", []) + [x.get("name") or x["e"] for x in a.get("expertise", []) if x.get("name") or x.get("e")]))[:40]
     return d
 
 
@@ -638,25 +646,62 @@ AUTHOR_HANDLE = "mirko-peters"
 AUTHOR = {}   # oeffentliches Profil des Autors (Quelle der Wahrheit), faellt auf festen Text zurueck
 
 
+def _ent_names():
+    """id -> Name der Entitaeten (fuer Expertise-Links in der Author-Box); einmal geladen."""
+    global _ENT_NAMES
+    try:
+        return _ENT_NAMES
+    except NameError:
+        try:
+            _ENT_NAMES = {e["id"]: e["name"] for e in json.loads((ROOT / "data" / "entities.json").read_text(encoding="utf-8"))}
+        except Exception:
+            _ENT_NAMES = {}
+        return _ENT_NAMES
+
+
+def _sentences(text, limit):
+    """Bio auf ganze Saetze kuerzen (nie mitten im Wort), damit Suchmaschinen und KI-Antworten ein vollstaendiges Zitat bekommen."""
+    text = " ".join((text or "").split())
+    if len(text) <= limit:
+        return text
+    cut = text[:limit]
+    k = max(cut.rfind(". "), cut.rfind("! "), cut.rfind("? "))
+    return cut[:k + 1] if k > limit * 0.5 else cut.rsplit(" ", 1)[0] + "…"
+
+
 def author_box(lang):
+    """Author-Box mit schema.org-Auszeichnung (Person, gleiche @id wie das JSON-LD), Expertise als Entitaets-Links, Zertifikaten und sameAs-Kanaelen:
+    macht den Autor fuer Suchmaschinen und KI-Antworten (GEO) als geprueften Experten erkennbar (E-E-A-T)."""
+    de = lang == "de"; ent = f"{BASE}/entity/mirko-peters/#entity"; pref = f'{BASE}/{"de/" if de else ""}'
+    L = dict(about="Über den Autor" if de else "About the author", exp="Expertise" if de else "Expertise", cert="Zertifizierungen" if de else "Certifications", prof="Profil ansehen" if de else "View profile")
     if AUTHOR.get("handle"):
         a = AUTHOR; progs = {"mvp": "Microsoft MVP", "mct": "Microsoft Certified Trainer", "rd": "Microsoft Regional Director", "msa": "Microsoft Student Ambassador"}
         icons = {"mvp": "🏆", "mct": "🎓", "rd": "🧭", "msa": "🌟"}
-        lab = " · ".join(icons[x["p"]] + " " + progs[x["p"]] for x in a.get("programs", []) if x.get("verified") and x["p"] in progs)
+        vp = [x["p"] for x in a.get("programs", []) if x.get("verified") and x["p"] in progs]
+        lab = " · ".join(icons[x] + " " + progs[x] for x in vp)
         KL = {"linkedin": "LinkedIn", "github": "GitHub", "youtube": "YouTube", "x": "X", "mastodon": "Mastodon", "bluesky": "Bluesky", "twitch": "Twitch", "blog": "Blog", "podcast": "Podcast", "newsletter": "Newsletter", "website": "Web", "other": "Link"}
-        chs = "".join(f'<a href="{esc(c["url"])}" rel="me noopener">{esc(KL.get(c["kind"], "Link"))}</a> ' for c in a.get("channels", [])[:8] if c.get("url"))
+        chs = "".join(f'<a href="{esc(c["url"])}" rel="me noopener" itemprop="sameAs">{esc(KL.get(c["kind"], "Link"))}</a> ' for c in a.get("channels", [])[:8] if c.get("url"))
         img = f'{COMMUNITY_API}/api/img/u/{a["handle"]}' if a.get("img") else (f"{BASE}/assets/mirko-peters.jpg" if (ROOT / "assets" / "mirko-peters.jpg").exists() else "")
-        badge = f'<img class="badge" src="{img}" alt="{esc(a["name"])}" width="58" height="58" loading="lazy">' if img else '<div class="badge">MP</div>'
-        bio = (a.get("about") or a.get("headline") or "")[:220]
-        return (f'<div class="author">{badge}<div><strong><a href="{BASE}{"/de" if lang == "de" else ""}/community/u/{a["handle"]}/">{esc(a["name"])}</a>{(" · " + esc(lab)) if lab else ""}</strong>'
-                f'<p>{esc(bio)}</p>' + (f'<p class="auth-ch">{chs}</p>' if chs else "") + '</div></div>')
+        badge = f'<img class="badge" src="{img}" alt="{esc(a["name"])}" width="58" height="58" loading="lazy" itemprop="image">' if img else '<div class="badge">MP</div>'
+        bio = _sentences(a.get("about") or a.get("headline") or "", 360)
+        names = _ent_names(); ex = sorted([e for e in a.get("expertise", []) if e.get("e") in names], key=lambda e: (-int(bool(e.get("verified") or e.get("via"))), -(e.get("level") or 0)))[:6]
+        exh = "".join(f'<li><a href="{pref}entity/{e["e"]}/" itemprop="knowsAbout">{esc(names[e["e"]])}</a></li>' for e in ex)
+        cs = [c for c in a.get("certs", []) if c.get("e") in names and c.get("verified")][:4]
+        csh = "".join(f'<li itemprop="hasCredential" itemscope itemtype="https://schema.org/EducationalOccupationalCredential"><a href="{pref}entity/{c["e"]}/" itemprop="name">{esc(names[c["e"]])}</a></li>' for c in cs)
+        job = esc((a.get("headline") or progs.get(vp[0], "") if vp else a.get("headline") or "")[:100])
+        return (f'<aside class="author" itemscope itemtype="https://schema.org/Person" itemid="{ent}" aria-label="{esc(L["about"])}"><link itemprop="sameAs" href="{ent}">{badge}<div>'
+                f'<strong><a href="{pref}community/u/{a["handle"]}/" rel="author" itemprop="url"><span itemprop="name">{esc(a["name"])}</span></a>{(" · " + esc(lab)) if lab else ""}</strong>'
+                + (f'<meta itemprop="jobTitle" content="{job}">' if job else "") + f'<p itemprop="description">{esc(bio)}</p>'
+                + (f'<p class="auth-ex"><b>{esc(L["exp"])}:</b></p><ul class="auth-ul">{exh}</ul>' if exh else "")
+                + (f'<p class="auth-ex"><b>{esc(L["cert"])}:</b></p><ul class="auth-ul">{csh}</ul>' if csh else "")
+                + (f'<p class="auth-ch">{chs}</p>' if chs else "") + '</div></aside>')
     ui = UI.get(lang)
-    name = ui[5] if ui else "About Mirko Peters"
     bio = ui[6] if ui else "Mirko Peters is a Microsoft MVP, host of the podcast M365.FM and initiator of the free online conference M365Con."
     photo = (ROOT / "assets" / "mirko-peters.jpg").exists()
-    badge = (f'<img class="badge" src="{BASE}/assets/mirko-peters.jpg" alt="Mirko Peters, Microsoft MVP" width="58" height="58" loading="lazy">' if photo else '<div class="badge">MP</div>')
-    return (f'<div class="author">{badge}<div><strong><a href="{about_url(lang)}">Mirko Peters</a> · Microsoft MVP</strong>'
-            f'<p>{esc(bio)}</p></div></div>')
+    badge = (f'<img class="badge" src="{BASE}/assets/mirko-peters.jpg" alt="Mirko Peters, Microsoft MVP" width="58" height="58" loading="lazy" itemprop="image">' if photo else '<div class="badge">MP</div>')
+    return (f'<aside class="author" itemscope itemtype="https://schema.org/Person" itemid="{ent}" aria-label="{esc(L["about"])}"><link itemprop="sameAs" href="{ent}">{badge}<div>'
+            f'<strong><a href="{about_url(lang)}" rel="author" itemprop="url"><span itemprop="name">Mirko Peters</span></a> · <span itemprop="jobTitle">Microsoft MVP</span></strong>'
+            f'<p itemprop="description">{esc(bio)}</p></div></aside>')
 
 
 YT_JS = """<script>document.querySelectorAll('.yt').forEach(function(b){b.addEventListener('click',function(){var i=document.createElement('iframe');i.src='https://www.youtube-nocookie.com/embed/'+b.dataset.id+'?autoplay=1&rel=0';i.allow='accelerometer;autoplay;encrypted-media;picture-in-picture';i.allowFullscreen=true;i.title='YouTube';b.innerHTML='';b.appendChild(i)},{once:true})});</script>"""
@@ -1056,7 +1101,7 @@ def build():
     # Community-Seite je Sprache (noindex) + Service Worker fuer Web-Push
     for l in list(active) + ["en"]:
         ct = _CI.get(l, _CI.get("en", {})).get("profile", "Profile")
-        write("community/index.html" if l == "en" else f"{l}/community/index.html", page(l, f"{ct} – M365.FM" + ("" if l == "en" else f" {LANGS[l][0]}"), ct, (f"{BASE}/community/" if l == "en" else f"{BASE}/{l}/community/"), f'{header(l, "")}<main class="wrap" style="max-width:48em"><h1 id="c-h1">{esc(ct)}</h1><div id="c-page"></div><div id="c-expert"></div><div id="c-events"></div><div id="c-blog"></div><div id="c-podcast"></div><div id="c-shows"></div><div id="c-video"></div><div id="c-library"></div><div id="c-guests"></div><div id="c-feed"></div><div id="c-wish"></div><div id="c-messages"></div></main>{footer(l)}{community_tags(l)}<script>window.M365X={{api:"{COMMUNITY_API}",base:"{BASE}",lang:"{l}"}}</script><script defer src="{BASE}/assets/profile.js"></script><script defer src="{BASE}/assets/events.js"></script><script defer src="{BASE}/assets/editor.js"></script><script defer src="{BASE}/assets/blog.js"></script><script defer src="{BASE}/assets/podcast.js"></script><script defer src="{BASE}/assets/shows.js"></script><script defer src="{BASE}/assets/video.js"></script><script defer src="{BASE}/assets/library.js"></script><script defer src="{BASE}/assets/guests.js"></script><script defer src="{BASE}/assets/feeditems.js"></script><script defer src="{BASE}/assets/wish.js"></script><script defer src="{BASE}/assets/messages.js"></script>', og_type="website", extra_head=LRN.WCSS, noindex=True))
+        write("community/index.html" if l == "en" else f"{l}/community/index.html", page(l, f"{ct} – M365.FM" + ("" if l == "en" else f" {LANGS[l][0]}"), ct, (f"{BASE}/community/" if l == "en" else f"{BASE}/{l}/community/"), f'{header(l, "")}<main class="wrap" style="max-width:48em"><h1 id="c-h1">{esc(ct)}</h1><div id="c-page"></div><div id="c-expert"></div><div id="c-events"></div><div id="c-blog"></div><div id="c-podcast"></div><div id="c-shows"></div><div id="c-video"></div><div id="c-library"></div><div id="c-guests"></div><div id="c-feed"></div><div id="c-wish"></div><div id="c-messages"></div></main>{footer(l)}{community_tags(l)}<script>window.M365X={{api:"{COMMUNITY_API}",base:"{BASE}",lang:"{l}"}}</script><script defer src="{BASE}/assets/profile.js"></script><script defer src="{BASE}/assets/events.js"></script><script defer src="{BASE}/assets/editor.js"></script><script defer src="{BASE}/assets/seo.js"></script><script defer src="{BASE}/assets/blog.js"></script><script defer src="{BASE}/assets/podcast.js"></script><script defer src="{BASE}/assets/shows.js"></script><script defer src="{BASE}/assets/video.js"></script><script defer src="{BASE}/assets/library.js"></script><script defer src="{BASE}/assets/guests.js"></script><script defer src="{BASE}/assets/feeditems.js"></script><script defer src="{BASE}/assets/wish.js"></script><script defer src="{BASE}/assets/messages.js"></script>', og_type="website", extra_head=LRN.WCSS, noindex=True))
     shutil.copy(ROOT / "assets" / "sw.js", OUT / "sw.js")
     if (ROOT / "data" / "m365con_program.json").exists():
         shutil.copy(ROOT / "data" / "m365con_program.json", OUT / "m365con_program.json")
@@ -1153,6 +1198,11 @@ def build():
     import site_podpage as PP
     PP.build(_ctx)
     MCPS.build(_ctx)
+    try:   # SEO-Check-Seite (noindex): Episoden + Community-Inhalte
+        _urls = {f'{i["vid"]}:{l}': url_of(i) for l in active for i in by_lang[l] if i.get("vid")}
+        SEOR.build(_ctx, _people, _posts, PODS.fetch_eps(COMMUNITY_API), VIDS.fetch_videos(COMMUNITY_API), (LRN._fetch_json(f"{COMMUNITY_API}/api/feed/export") or {}).get("items", []), SEOR.author_info(AUTHOR), _urls)
+    except Exception as _e:
+        import traceback; traceback.print_exc(); print("SEO page failed:", _e)
 
     PRS.build_press(dict(write=write, page=page, header=header, footer=footer, footer_en=footer_en, BASE=BASE, LANGS=LANGS, sitemap=sitemap, TODAY=TODAY, n_eps=len(items), n_langs=len(active),
                          EMAIL=SL.CONTACT_EMAIL, MVP=MVP, LINKEDIN=LINKEDIN, YT=YT_CHANNEL, person_ld=person_ld, org_ld=org_ld))
