@@ -104,10 +104,10 @@ export async function autoVerifyCert(url, ent, name) {
 // Bestaetigte (abgeleitete) Expertise: Themen aus bestaetigten Speaker-Sessions und aus geprueften Zertifikaten - nicht selbst gewaehlt
 const TOPIC_T = ["product", "platform", "concept", "category"];
 // via: session (bestaetigte Session), cert (geprueftes Zertifikat), post (eigene veroeffentlichte Beitraege zum Thema)
-export async function derivedExpertise(db, uid, handle, map) {
+export async function derivedExpertise(db, uid, handle, map, pre) {
   const out = new Map();
   const nm = ((await db.prepare("SELECT lower(name) n FROM users WHERE id=?").bind(uid).first())?.n) || "";
-  const rows = (await db.prepare("SELECT s.topics,s.speakers,e.owner_id oid FROM event_sessions s JOIN events e ON e.id=s.event_id WHERE s.status='live' AND s.topics<>'[]'").all()).results || [];
+  const rows = pre || (await db.prepare("SELECT s.topics,s.speakers,e.owner_id oid FROM event_sessions s JOIN events e ON e.id=s.event_id WHERE s.status='live' AND s.topics<>'[]'").all()).results || [];   // pre: im Export einmal fuer alle Profile geladen
   for (const r of rows) {
     let sp = [], tp = []; try { sp = JSON.parse(r.speakers || "[]"); tp = JSON.parse(r.topics || "[]"); } catch { continue; }
     // zaehlt: per Handle oder Name zugeordnet; bestaetigt, oder vom Veranstalter selbst (Organisator nimmt seine eigene Session an)
@@ -371,12 +371,13 @@ export async function handleProfiles(env, request, url, path, user, J) {
     const os = (await db.prepare("SELECT id FROM orgs WHERE public=1 ORDER BY created DESC LIMIT 200").all()).results || [];
     const people = [], orgs = [];
     const emap = await entityMap(env);
-    for (const u of us) {
-      const v = await personView(db, u.user_id, 0); if (!v) continue;
-      const have = new Set(v.expertise.map((e) => e.e));   // bestaetigte Expertise aus Sessions/Zertifikaten ergaenzen
-      for (const [eid, d] of await derivedExpertise(db, u.user_id, v.handle, emap)) if (emap.has(eid)) { const ex = v.expertise.find((e) => e.e === eid); if (ex) ex.via = d.via; else v.expertise.push({ e: eid, level: 2, verified: false, endorsed: 0, me: false, via: d.via, confirmed: true }); }
-      delete v.id; people.push(v);
-    }
+    const sess = (await db.prepare("SELECT s.topics,s.speakers,e.owner_id oid FROM event_sessions s JOIN events e ON e.id=s.event_id WHERE s.status='live' AND s.topics<>'[]'").all()).results || [];   // einmal fuer alle Profile
+    const one = async (u) => {
+      const v = await personView(db, u.user_id, 0); if (!v) return null;
+      for (const [eid, d] of await derivedExpertise(db, u.user_id, v.handle, emap, sess)) if (emap.has(eid)) { const ex = v.expertise.find((e) => e.e === eid); if (ex) ex.via = d.via; else v.expertise.push({ e: eid, level: 2, verified: false, endorsed: 0, me: false, via: d.via, confirmed: true }); }   // bestaetigte Expertise aus Sessions/Zertifikaten ergaenzen
+      delete v.id; return v;
+    };
+    for (let k = 0; k < us.length; k += 6) for (const v of await Promise.all(us.slice(k, k + 6).map((u) => one(u).catch(() => null)))) if (v) people.push(v);   // in Gruppen parallel, Reihenfolge bleibt; ein defektes Profil stoppt den Export nicht
     for (const o of os) { const v = await orgView(db, o.id, 0); if (v) { delete v.id; orgs.push(v); } }
     return J({ people, orgs }, 200, { "cache-control": "public, max-age=300" });
   }
