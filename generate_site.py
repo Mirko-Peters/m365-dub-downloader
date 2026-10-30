@@ -857,7 +857,7 @@ def build():
         art = articles.get(vid, {}).get(l, {})
         art_html = art.get("html", "")
         if art_html:
-            art_html, _lk = autolink(art_html, it, by_lang[l], tagraw[l], url_of, money=LRN.drop_glossed(SM.registry_for(MONEY, l)))
+            art_html, _lk = autolink(art_html, it, [], tagraw[l], url_of, money=LRN.drop_glossed(SM.registry_for(MONEY, l)))
             autolink_log.append(((vid, l), _lk))
             art_html = LRN.gloss_link(art_html, l, BASE)
         if art_html and art.get("info"):
