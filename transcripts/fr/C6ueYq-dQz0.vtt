@@ -1,0 +1,814 @@
+WEBVTT
+
+00:00:00.270 --> 00:00:07.870
+Prêt pour 10 jours consacrés à Microsoft 365, Copilot, l'IA, Azure et aux acteurs qui façonnent l'avenir du travail à…
+
+00:00:07.870 --> 00:00:12.050
+En janvier prochain, la M365Con est de retour et nous voyons les choses en grand.
+
+00:00:12.870 --> 00:00:18.110
+Rejoignez-nous pour des sessions en direct, des démos concrètes et des connaissances pratiques partagées par des MVP et des experts du monde entier.
+
+00:00:18.770 --> 00:00:21.150
+Pas de diapositives génériques, pas de jargon interminable.
+
+00:00:21.950 --> 00:00:23.130
+Nous abordons les vrais défis.
+
+00:00:23.750 --> 00:00:28.590
+Copilot Studio, agent, IA, fabrique, sécurité, gouvernance et automatisation.
+
+00:00:28.590 --> 00:00:34.170
+Que vous soyez professionnel de l'IT, développeur ou dirigeant, des sessions sont conçues pour vous.
+
+00:00:35.490 --> 00:00:39.810
+Pendant 10 jours complets, explorez de nombreuses technologies et connectez-vous à une communauté mondiale.
+
+00:00:40.950 --> 00:00:44.290
+Regardez en direct et rapportez des idées pratiques au sein de votre entreprise.
+
+00:00:45.210 --> 00:00:50.610
+Janvier 2027, 10 jours. Une seule communauté. Microsoft. Les inscriptions sont ouvertes dès maintenant.
+
+00:00:51.890 --> 00:00:55.550
+Rendez-vous sur m365con.net pour réserver votre place dès aujourd'hui.
+
+00:00:55.550 --> 00:00:58.250
+C'est m365con.net
+
+00:00:58.250 --> 00:01:04.530
+Inscrivez-vous sur m365con.net et nous nous retrouverons en direct en janvier.
+
+00:01:05.450 --> 00:01:10.650
+Vous avez créé une application fonctionnelle, puis ajoutez un service puis un autre, et diriger le trafic entre eux devient soudain un cauchemar.
+
+00:01:11.210 --> 00:01:14.130
+Alors qu'est-ce qu'une passerelle d'API et en avez-vous vraiment besoin ?
+
+00:01:14.130 --> 00:01:21.730
+A la fin de cet épisode, vous comprendrez le rôle d'une passerelle d'API, pourquoi elle résout le chaos de la gestion multiservices et comment savoir si vous en avez besoin.
+
+00:01:23.270 --> 00:01:26.310
+Commençons par le problème, puis les composants et enfin leur fonctionnement combiné.
+
+00:01:27.710 --> 00:01:28.950
+Le problème, trop de portes d'entrée.
+
+00:01:29.850 --> 00:01:31.630
+Imaginez que vous dirigez une entreprise en pleine croissance.
+
+00:01:32.390 --> 00:01:36.510
+Vous avez l'équipe commerciale au troisième étage, la comptabilité au sous-sol et l'informatique dans l'aile arrière.
+
+00:01:37.270 --> 00:01:42.530
+Imaginez maintenant que chaque département possède sa propre porte, son propre numéro de téléphone et son propre agent de sécurité qui ne communique pas avec les autres.
+
+00:01:43.490 --> 00:01:45.630
+Si vous êtes un visiteur essayant de déposer un colis, bon courage.
+
+00:01:46.350 --> 00:01:50.230
+Vous devez savoir exactement quelle porte utiliser, à quel garde parler et que faire quand cet agent est en pause.
+
+00:01:51.130 --> 00:01:55.750
+C'est exactement ce qui se passe quand votre application a plusieurs services back-end et que chaque client appelle directement chacun d'entre eux.
+
+00:01:56.530 --> 00:02:04.150
+Le client, qu'il s'agisse d'une application mobile, d'un site web ou d'un autre service, doit savoir où se trouve chaque service, comment s'y authentifier et quoi faire en cas de panne.
+
+00:02:04.150 --> 00:02:09.230
+Chaque service doit gérer sa propre sécurité, sa propre limitation de débit et sa propre gestion des erreurs.
+
+00:02:09.670 --> 00:02:12.150
+C'est un travail en double et il est facile pour les choses de devenir incohérentes.
+
+00:02:12.790 --> 00:02:13.630
+Prenons l'exemple d'une banque.
+
+00:02:13.890 --> 00:02:16.810
+Elle dispose de services distincts pour les comptes, les paiements, les prêts et la détection des fraudes.
+
+00:02:17.270 --> 00:02:19.050
+A l'ancienne, chacun d'eux est exposé directement.
+
+00:02:19.730 --> 00:02:24.770
+Une application mobile doit connaître quatre URL différentes, quatre méthodes d'authentification et quatre façons de gérer les erreurs.
+
+00:02:25.470 --> 00:02:31.730
+Ces quatre fois plus de complexité et quatre fois plus de risque de problème, c'est ce chaos qu'une passerelle d'API est censée corriger.
+
+00:02:32.510 --> 00:02:34.050
+Alors, quelle est la solution ?
+
+00:02:34.050 --> 00:02:35.670
+Qu'est-ce qu'une passerelle d'API ?
+
+00:02:35.670 --> 00:02:37.970
+Imaginez une passerelle d'API comme la réception d'un hôtel.
+
+00:02:38.550 --> 00:02:44.130
+Quand vous entrez, vous n'avez pas besoin de savoir à quel étage se trouve le ménage, où est la cuisine ou comment joindre l'entretien.
+
+00:02:44.690 --> 00:02:48.130
+Vous allez simplement à la réception, vous dites ce dont vous avez besoin et il s'occupe du reste.
+
+00:02:48.930 --> 00:02:50.850
+Il dirige votre demande vers la bonne personne.
+
+00:02:51.090 --> 00:02:53.870
+Vérifie si vous avez le droit d'être là et gère même les requêtes simples eux-mêmes.
+
+00:02:54.630 --> 00:02:56.670
+Une passerelle d'API fait la même chose pour votre logiciel.
+
+00:02:57.450 --> 00:03:00.330
+C'est un point d'entrée unique situé entre vos clients et vos services back-end.
+
+00:03:00.330 --> 00:03:03.430
+Chaque requête passe d'abord par la passerelle.
+
+00:03:03.770 --> 00:03:07.330
+Elle décide où l'envoyer, si elle l'autorise et ce qu'elle doit renvoyer.
+
+00:03:07.870 --> 00:03:08.890
+Ce n'est pas une idée nouvelle.
+
+00:03:09.510 --> 00:03:11.110
+Les proxys inversés existent depuis des décennies.
+
+00:03:11.430 --> 00:03:13.870
+Mais la passerelle d'API est devenue essentielle avec les microservices.
+
+00:03:14.410 --> 00:03:17.170
+Lorsque vous divisez votre application en plusieurs petits services, vous avez soudainement beaucoup de bains.
+
+00:03:17.570 --> 00:03:18.890
+La passerelle vous offre une porte d'entrée unique.
+
+00:03:19.250 --> 00:03:22.050
+Dans le monde Azure, Azure API Management est la plateforme complète
+
+00:03:22.050 --> 00:03:24.350
+et la passerelle est le composant central qui gère le trafic.
+
+00:03:24.350 --> 00:03:26.390
+Le modèle reste le même partout.
+
+00:03:27.050 --> 00:03:28.630
+Un seul point d'entrée, un contrôle centralisé.
+
+00:03:29.190 --> 00:03:29.870
+Chaque requête arrive.
+
+00:03:30.450 --> 00:03:33.050
+La passerelle la vérifie, la chemine et renvoie la réponse.
+
+00:03:33.590 --> 00:03:35.630
+Le client ne communique jamais directement avec vos services back-end.
+
+00:03:35.910 --> 00:03:36.930
+Communique uniquement avec la passerelle.
+
+00:03:37.370 --> 00:03:38.710
+Analysons ce que cela signifie concrètement.
+
+00:03:39.470 --> 00:03:41.670
+Commençons par la tâche la plus élémentaire, le routage.
+
+00:03:42.770 --> 00:03:43.950
+Première partie, le routage du trafic.
+
+00:03:44.750 --> 00:03:48.930
+La fonction la plus simple d'une passerelle d'API est le routage qui dirige chaque requête vers le bon service.
+
+00:03:49.550 --> 00:03:50.690
+Pensez au fonctionnement d'un site web.
+
+00:03:51.010 --> 00:03:52.910
+Lorsque vous cliquez sur un lien, votre navigateur envoie une requête.
+
+00:03:52.910 --> 00:03:54.230
+Cette requête possède un chemin.
+
+00:03:54.590 --> 00:03:57.250
+Si le chemin est user, la passerelle sait qu'elle doit l'envoyer au service utilisateur.
+
+00:03:57.770 --> 00:03:59.690
+S'il s'agit de order, elle va vers le service de commande.
+
+00:04:00.230 --> 00:04:03.330
+La passerelle lit le chemin, détermine où il doit aller et le transmet.
+
+00:04:03.990 --> 00:04:06.550
+Sans passerelle, vos clients doivent connaître chaque URL de service.
+
+00:04:07.210 --> 00:04:11.670
+L'application mobile a besoin de l'adresse du service utilisateur, du service de commande, du service de paiement et du service catalogue.
+
+00:04:12.170 --> 00:04:13.270
+Cela fait beaucoup d'URL à gérer.
+
+00:04:14.130 --> 00:04:16.770
+Et si l'une de ces adresses change, vous devez mettre à jour chaque client.
+
+00:04:17.390 --> 00:04:19.070
+Avec une passerelle, les clients ne connaissent qu'une seule URL.
+
+00:04:19.670 --> 00:04:20.450
+L'adresse de la passerelle.
+
+00:04:20.450 --> 00:04:22.510
+Ils ne se soucient pas de savoir où les services résident, rien.
+
+00:04:22.910 --> 00:04:25.510
+Ils envoient simplement leur requête à la passerelle qui s'occupe du reste.
+
+00:04:26.330 --> 00:04:28.730
+C'est l'un des cas d'usage les plus courants d'une passerelle API, le routage.
+
+00:04:28.970 --> 00:04:32.150
+Par ressources, les recherches sur Apache SpaceX le mentionnent explicitement.
+
+00:04:32.830 --> 00:04:37.270
+Vous routez selon le chemin, la méthode HTTP, les entêtes, voire la géolocalisation du client.
+
+00:04:37.710 --> 00:04:40.870
+Si quelqu'un en Europe envoie une requête, vous pouvez le router vers un centre de données européen.
+
+00:04:41.510 --> 00:04:44.390
+Si quelqu'un aux Etats-Unis envoie une requête, il est dirigé vers un centre de données américain.
+
+00:04:44.790 --> 00:04:45.970
+Le client n'a aucune idée que cela se produit.
+
+00:04:46.410 --> 00:04:47.570
+Il obtient simplement une réponse rapide.
+
+00:04:47.930 --> 00:04:49.050
+Le routage gère aussi le versionnage.
+
+00:04:49.770 --> 00:04:51.450
+Imaginons que vous ayez une nouvelle version de votre service utilisateur.
+
+00:04:51.450 --> 00:04:56.050
+Les anciens clients utilisent toujours « slash vv1 slash user » et les nouveaux « slash user ».
+
+00:04:56.050 --> 00:04:57.770
+La passerelle les route vers des back-ends différents.
+
+00:04:58.470 --> 00:05:00.870
+Les anciens clients continuent de fonctionner pendant que vous déployez la nouvelle version.
+
+00:05:01.430 --> 00:05:03.510
+Vous pouvez modifier votre back-end sans perturber vos clients.
+
+00:05:04.190 --> 00:05:06.930
+C'est un avantage majeur quand vous gérez une application en production avec de vrais utilisateurs.
+
+00:05:07.610 --> 00:05:08.630
+Pensez à une plateforme d'e-commerce.
+
+00:05:09.210 --> 00:05:12.870
+Vous avez des services distincts pour le catalogue, le panier, le paiement et les comptes utilisateurs.
+
+00:05:13.710 --> 00:05:16.670
+Sans passerelle, une application mobile doit connaître quatre URL différentes.
+
+00:05:17.390 --> 00:05:18.570
+Avec une passerelle, elles n'en connaissent qu'une.
+
+00:05:18.570 --> 00:05:24.830
+La passerelle lit le chemin, catalogue, panier, paiement, compte et envoie chaque requête au bon service.
+
+00:05:25.290 --> 00:05:26.430
+Le routage simple et la partie facile.
+
+00:05:26.850 --> 00:05:28.650
+La fonction suivante est là où cela devient vraiment utile.
+
+00:05:29.370 --> 00:05:30.790
+Deuxième partie, la sécurité à l'entrée.
+
+00:05:31.610 --> 00:05:33.210
+Chaque appel d'API doit être vérifié.
+
+00:05:33.690 --> 00:05:34.890
+Qui fait cette requête ?
+
+00:05:34.890 --> 00:05:36.450
+A-t-il les bonnes permissions ?
+
+00:05:36.450 --> 00:05:39.110
+Sans passerelle, chaque service doit gérer sa propre authentification.
+
+00:05:39.550 --> 00:05:41.770
+Cela signifie un travail dupliqué et il est facile de faire des erreurs.
+
+00:05:42.270 --> 00:05:43.850
+Un service peut vérifier les jetons correctement,
+
+00:05:44.450 --> 00:05:47.170
+un autre peut sauter une étape et un troisième peut utiliser une méthode différente.
+
+00:05:47.170 --> 00:05:51.070
+Vous vous retrouvez avec une sécurité incohérente sur toute votre application.
+
+00:05:51.410 --> 00:05:52.110
+La passerelle change cela.
+
+00:05:52.530 --> 00:05:54.790
+Elle gère l'authentification et l'autorisation en un point central.
+
+00:05:55.730 --> 00:05:59.090
+Un seul endroit pour vérifier, appliquer et mettre à jour les politiques quand elles changent.
+
+00:05:59.470 --> 00:06:00.490
+C'est une excellente pratique de sécurité.
+
+00:06:01.170 --> 00:06:06.530
+Elle valide les clés API, les JWT, les jetons OOS ou les certificats sur chaque requête.
+
+00:06:07.410 --> 00:06:08.910
+Chaque requête passe par la même vérification.
+
+00:06:09.510 --> 00:06:09.950
+Sans exception.
+
+00:06:09.950 --> 00:06:12.270
+La passerelle peut aussi imposer des règles.
+
+00:06:12.650 --> 00:06:15.070
+Vous voulez dire, cette clé API ne peut appeler que les points de terminaison en lecture.
+
+00:06:15.710 --> 00:06:18.710
+Ou, ce client ne peut accéder qu'au service catalogue, pas au service de paiement.
+
+00:06:19.650 --> 00:06:22.870
+Vous définissez des permissions précises au niveau de la passerelle et elles s'appliquent automatiquement.
+
+00:06:23.450 --> 00:06:25.570
+Les services back-end n'ont jamais associé de l'autorisation.
+
+00:06:26.230 --> 00:06:28.450
+Se contentent de traiter la requête et de renvoyer les données.
+
+00:06:28.910 --> 00:06:29.570
+Voici le point crucial.
+
+00:06:29.890 --> 00:06:32.570
+La passerelle est un lieu unique pour révoquer l'accès en cas de problème.
+
+00:06:32.570 --> 00:06:36.350
+Si la clé API d'un client est compromise, vous la révoquez au niveau de la passerelle.
+
+00:06:36.870 --> 00:06:37.570
+Un changement s'est fait.
+
+00:06:38.050 --> 00:06:40.170
+Vous n'avez pas besoin de mettre à jour chaque service ou de redémarrer quoi que ce soit.
+
+00:06:40.550 --> 00:06:42.790
+La requête suivante utilisant cette clé est immédiatement rejetée.
+
+00:06:43.190 --> 00:06:43.930
+Prenons un exemple concret.
+
+00:06:44.290 --> 00:06:46.250
+Une banque dispose d'un service de paiement et d'un service de facturation.
+
+00:06:46.850 --> 00:06:49.270
+Seul le service de paiement a besoin d'un accès en écriture au système de facturation.
+
+00:06:49.590 --> 00:06:50.730
+La passerelle fait respecter cette règle.
+
+00:06:51.050 --> 00:06:53.810
+Si un client tente d'écrire dans le système de facturation via le mauvais point de terminaison,
+
+00:06:53.930 --> 00:06:54.870
+la passerelle bloque la requête.
+
+00:06:55.450 --> 00:06:57.290
+Le service de facturation ne voit même jamais la requête.
+
+00:06:57.290 --> 00:07:01.710
+La passerelle peut aussi prendre en charge le TLS mutuel et l'intégration de WAF pour une protection accrue.
+
+00:07:02.290 --> 00:07:03.990
+Mais à la base, c'est votre première ligne de défense.
+
+00:07:04.750 --> 00:07:05.830
+La sécurité est une chose.
+
+00:07:06.110 --> 00:07:08.610
+Mais qu'en est-il lorsqu'il y a trop de requêtes à la fois ?
+
+00:07:08.610 --> 00:07:10.010
+Troisième partie, la gestion du trafic.
+
+00:07:10.730 --> 00:07:14.110
+Que se passe-t-il lorsque 10 08 utilisateurs accèdent à votre application en même temps ?
+
+00:07:14.110 --> 00:07:16.150
+Peut-être lancez-vous une vente flash, un produit devient viral,
+
+00:07:16.250 --> 00:07:19.710
+ou c'est juste un mardi normal et tout le monde a décidé de se connecter en même temps.
+
+00:07:20.570 --> 00:07:24.230
+Sans passerelle, vos services back-end sont directement submergés et peuvent planter.
+
+00:07:24.750 --> 00:07:26.070
+Pas lentement, mais tous en même temps.
+
+00:07:26.070 --> 00:07:28.270
+C'est là qu'intervient la gestion du trafic.
+
+00:07:28.890 --> 00:07:31.490
+La passerelle peut limiter le nombre de requêtes que chaque client peut effectuer.
+
+00:07:32.330 --> 00:07:34.290
+La limitation de débit et le bridage sont des fonctionnalités standards.
+
+00:07:34.750 --> 00:07:36.910
+Vous définissez les règles au niveau de la passerelle et elles les appliquent.
+
+00:07:37.370 --> 00:07:39.050
+Vos services back-end ne ressentent jamais le pic de charge.
+
+00:07:39.670 --> 00:07:42.590
+Vous pouvez définir des quotas par utilisateur, par clé API ou par adresse IP.
+
+00:07:43.130 --> 00:07:44.510
+Disons que vous avez une offre gratuite pour votre API.
+
+00:07:45.070 --> 00:07:46.850
+Les utilisateurs gratuits bénéficient de 100 requêtes par an.
+
+00:07:47.110 --> 00:07:48.570
+Les utilisateurs premium vendent 10 08.
+
+00:07:48.570 --> 00:07:51.250
+La passerelle suit chaque requête et applique ses limites dès l'entrée.
+
+00:07:51.950 --> 00:07:53.630
+Lorsqu'un utilisateur gratuit atteint ses limites,
+
+00:07:53.630 --> 00:07:56.350
+la passerelle renvoie un message poli demandant de réessayer plus tard.
+
+00:07:57.150 --> 00:07:59.330
+Les services back-end ne savent même pas qu'une requête a été émise
+
+00:07:59.330 --> 00:08:01.650
+et continuent de fonctionner normalement pour les clients payants.
+
+00:08:02.490 --> 00:08:04.070
+La passerelle gère également l'équilibrage de charge.
+
+00:08:04.730 --> 00:08:06.530
+Si vous avez plusieurs instances du même service,
+
+00:08:06.690 --> 00:08:08.650
+la passerelle répartit les requêtes entre elles.
+
+00:08:09.230 --> 00:08:11.150
+L'instance 1 reçoit une requête, l'instance 2 la suivante,
+
+00:08:11.250 --> 00:08:12.690
+et ainsi de suite, et ainsi de suite.
+
+00:08:13.210 --> 00:08:13.790
+C'est automatique.
+
+00:08:13.790 --> 00:08:16.610
+Si l'instance tombe en panne, la passerelle redirige le trafic vers une autre.
+
+00:08:16.890 --> 00:08:17.810
+Les clients ne s'en aperçoivent jamais.
+
+00:08:18.010 --> 00:08:18.910
+Ils ressortent simplement leur réponse.
+
+00:08:19.670 --> 00:08:22.030
+L'équilibrage de charge avec des contrôles de santé assure un bon fonctionnement.
+
+00:08:22.570 --> 00:08:24.790
+La passerelle interroge chaque instance pour s'assurer qu'elle est opérationnelle.
+
+00:08:25.290 --> 00:08:26.770
+Si ce n'est pas le cas, elle cesse de lui envoyer du trafic.
+
+00:08:27.190 --> 00:08:28.990
+C'est particulièrement important pour les API à fort trafic.
+
+00:08:30.030 --> 00:08:32.550
+Sans passerelle, un pic de trafic frappe vos services directement.
+
+00:08:33.550 --> 00:08:35.930
+Avec la passerelle, le pic la frappe d'abord.
+
+00:08:36.150 --> 00:08:39.510
+Elle l'absorbe, le répartit et protège vos services de la surcharge.
+
+00:08:40.550 --> 00:08:42.790
+D'accord, mais que faire si les données arrivent sous un mauvais format ?
+
+00:08:42.790 --> 00:08:46.510
+Quatrième partie, la transformation des données.
+
+00:08:47.210 --> 00:08:50.070
+Parfois, les données envoyées par votre client ne correspondent pas aux attentes du back-end.
+
+00:08:50.750 --> 00:08:53.370
+Peut-être que le client envoie du JSON, mais que votre back-end ne comprend que le XML.
+
+00:08:54.130 --> 00:08:55.470
+Peut-être que les noms des champs ne correspondent pas.
+
+00:08:55.790 --> 00:08:58.390
+Le client utilise quand même prénom et que votre back-end atteint de quand et que.
+
+00:08:59.390 --> 00:09:00.450
+Ces incohérences créent des problèmes.
+
+00:09:01.010 --> 00:09:03.910
+Avant, il fallait corriger chaque client ou réécrire le back-end.
+
+00:09:04.430 --> 00:09:04.810
+Pas idéal.
+
+00:09:05.250 --> 00:09:07.870
+La passerelle peut transformer les données avant qu'elle n'atteigne le back-end.
+
+00:09:08.550 --> 00:09:09.310
+Et là, comme un traducteur.
+
+00:09:09.650 --> 00:09:12.370
+Elle se place au milieu et peut modifier les données à l'entrée, à la sortie
+
+00:09:12.370 --> 00:09:12.930
+ou les deux.
+
+00:09:13.390 --> 00:09:15.350
+C'est la transformation des requêtes et réponses en quelques mots.
+
+00:09:15.910 --> 00:09:16.990
+Laissez-moi vous donner un exemple concret.
+
+00:09:17.330 --> 00:09:18.970
+Imaginez un système ancien qui attend du XML.
+
+00:09:19.750 --> 00:09:20.750
+Il tourne depuis 15 ans.
+
+00:09:21.170 --> 00:09:21.770
+Il fonctionne très bien.
+
+00:09:22.090 --> 00:09:24.510
+Mais vous créez une appli mobile et les applis mobiles utilisent le JSON.
+
+00:09:25.370 --> 00:09:28.710
+Sans passerelle, vous devriez réécrire le vieux système ou forcer l'appli à envoyer
+
+00:09:28.710 --> 00:09:29.150
+du XML.
+
+00:09:30.090 --> 00:09:31.350
+Avec une passerelle, vous n'avez pas à faire ça.
+
+00:09:31.790 --> 00:09:32.850
+L'appli mobile envoie du JSON.
+
+00:09:33.190 --> 00:09:34.450
+La passerelle le convertit en XML.
+
+00:09:34.850 --> 00:09:36.230
+Le système reçoit exactement ce qu'il attend.
+
+00:09:36.370 --> 00:09:38.530
+L'appli mobile reçoit une réponse déjà au format JSON.
+
+00:09:38.990 --> 00:09:40.230
+Personne n'a eu besoin de réécrire quoi que ce soit.
+
+00:09:40.230 --> 00:09:41.270
+C'est là toute sa beauté.
+
+00:09:41.590 --> 00:09:44.950
+La passerelle peut aussi ajouter ou retirer des entêtes, changer des URL, masquer des
+
+00:09:44.950 --> 00:09:45.130
+données.
+
+00:09:46.270 --> 00:09:48.030
+Imaginez qu'une réponse contienne un numéro de carte d'engueur.
+
+00:09:48.450 --> 00:09:49.790
+Vous ne voulez pas qu'il soit renvoyé au client.
+
+00:09:50.430 --> 00:09:53.910
+La passerelle peut le retirer avant l'envoi ou le remplacer par une version masquée.
+
+00:09:54.630 --> 00:09:55.750
+Le backend n'a jamais besoin de changer.
+
+00:09:56.210 --> 00:09:57.030
+La passerelle s'en occupe.
+
+00:09:57.350 --> 00:09:59.430
+C'est particulièrement utile pour moderniser d'anciens systèmes.
+
+00:09:59.890 --> 00:10:00.930
+Vous n'avez pas à réécrire le backend.
+
+00:10:01.330 --> 00:10:02.590
+Vous n'avez pas à forcer les clients à changer.
+
+00:10:03.290 --> 00:10:04.270
+Il suffit de modifier la passerelle.
+
+00:10:04.630 --> 00:10:06.470
+C'est comme un interprète lors d'une conférence internationale.
+
+00:10:06.470 --> 00:10:09.690
+Chacun parle sa langue, mais l'interprète s'assure que tout le monde se comprend.
+
+00:10:10.450 --> 00:10:12.270
+La passerelle est cette interprète pour vos logiciels.
+
+00:10:13.030 --> 00:10:15.390
+Routage, sécurité, limitation, transformation, ça fait beaucoup.
+
+00:10:15.910 --> 00:10:17.210
+Mais ce ne sont pas quatre choses distinctes.
+
+00:10:17.510 --> 00:10:18.530
+Laissez-moi vous montrer comment ils se connectent.
+
+00:10:18.990 --> 00:10:19.770
+Comment tout cela s'article.
+
+00:10:20.130 --> 00:10:20.810
+Voici le point essentiel.
+
+00:10:21.410 --> 00:10:22.750
+Ces quatre tâches ne sont pas isolées.
+
+00:10:23.230 --> 00:10:26.210
+Elles fonctionnent ensemble sur chaque requête dès qu'elles arrivent.
+
+00:10:26.650 --> 00:10:27.950
+La passerelle vérifie l'authentification.
+
+00:10:28.550 --> 00:10:29.470
+Elle valide la limite de débit.
+
+00:10:29.970 --> 00:10:30.830
+Elle route vers le bon service.
+
+00:10:31.210 --> 00:10:32.410
+Il transforme les données si nécessaire.
+
+00:10:32.990 --> 00:10:33.910
+Il reçoit la réponse en retour.
+
+00:10:34.410 --> 00:10:35.630
+Il la transforme aussi si besoin.
+
+00:10:35.630 --> 00:10:37.310
+Ensuite, il renvoie le tout au client.
+
+00:10:37.710 --> 00:10:38.230
+Un seul pipeline.
+
+00:10:38.630 --> 00:10:40.030
+Chaque étape se déroule automatiquement.
+
+00:10:40.310 --> 00:10:42.410
+Dans l'ordre, sans qu'aucun service n'ait à s'en soucier.
+
+00:10:42.790 --> 00:10:44.450
+La vraie puissance ne réside pas dans une fonctionnalité.
+
+00:10:44.850 --> 00:10:45.470
+C'est l'intégration.
+
+00:10:46.170 --> 00:10:48.790
+Vous pouvez ajouter une nouvelle règle de sécurité sans toucher au routage.
+
+00:10:49.690 --> 00:10:51.410
+Le service backend sans modifier le client.
+
+00:10:52.170 --> 00:10:54.130
+Vous pouvez mettre à jour les limites de débit sans rien redéployer.
+
+00:10:54.930 --> 00:10:57.350
+Chaque élément est indépendant, mais ils fonctionnent tous dans le même pipeline.
+
+00:10:58.130 --> 00:10:59.330
+Et comme tout passe par un seul endroit,
+
+00:10:59.450 --> 00:11:01.310
+vous obtenez une visibilité complète sur ce qui se passe.
+
+00:11:02.630 --> 00:11:04.490
+Journaux métriques analysent tout depuis un point unique.
+
+00:11:04.490 --> 00:11:06.510
+Vous pouvez voir combien de requêtes sont arrivées,
+
+00:11:06.710 --> 00:11:08.090
+lesquelles ont échoué, lesquelles étaient lentes,
+
+00:11:08.190 --> 00:11:09.870
+quels clients utilisent le plus de ressources.
+
+00:11:10.570 --> 00:11:13.410
+Sans passerelle, vous devriez collecter ces données depuis chaque service individuellement.
+
+00:11:13.970 --> 00:11:15.030
+Avec une passerelle, tout est déjà là.
+
+00:11:15.350 --> 00:11:16.230
+C'est là que réside l'essentiel.
+
+00:11:16.410 --> 00:11:17.650
+La passerelle n'est pas juste un routeur.
+
+00:11:18.130 --> 00:11:20.090
+C'est un centre de contrôle pour toute votre plateforme API.
+
+00:11:20.830 --> 00:11:23.650
+Chaque requête, chaque réponse, chaque erreur, tout transite par un seul endroit.
+
+00:11:24.150 --> 00:11:26.190
+Vous disposez d'une vue centralisée sur tout ce qui se passe.
+
+00:11:26.610 --> 00:11:28.110
+Alors comment l'utiliser concrètement ?
+
+00:11:28.110 --> 00:11:29.290
+Parlons de ce que vous pouvez faire dès maintenant.
+
+00:11:30.090 --> 00:11:30.830
+Des conseils pratiques.
+
+00:11:31.270 --> 00:11:31.810
+Voyons réaliste.
+
+00:11:31.810 --> 00:11:35.330
+Si vous avez un ou deux services, vous n'avez probablement pas encore besoin d'une passerelle d'API.
+
+00:11:35.910 --> 00:11:38.330
+Vous pouvez gérer le routage vous-même, gérer l'authentification dans chaque service.
+
+00:11:38.770 --> 00:11:39.970
+Ce n'est pas élégant, mais ça fonctionne.
+
+00:11:40.430 --> 00:11:43.570
+Mais dès que vous atteignez trois services ou que vous exposez des API à des clients externes,
+
+00:11:43.710 --> 00:11:45.350
+la complexité augmente rapidement.
+
+00:11:46.030 --> 00:11:47.150
+La passerelle devient vite rentable.
+
+00:11:47.650 --> 00:11:49.010
+Alors, quelle est votre meilleure première étape ?
+
+00:11:49.010 --> 00:11:50.570
+Centralisez l'authentification sur la passerelle.
+
+00:11:50.790 --> 00:11:51.810
+Faites cela avant toute autre chose.
+
+00:11:52.050 --> 00:11:54.490
+Choisissez un service, déplacez sa vérification d'authentification vers la passerelle.
+
+00:11:54.610 --> 00:11:57.050
+Vous remarquerez immédiatement que le code de votre service devient plus propre.
+
+00:11:57.690 --> 00:11:59.970
+Fini la logique de validation de jetons éparpillées partout.
+
+00:11:59.970 --> 00:12:03.090
+Plus besoin de vous demander si vous l'avez implémenté de la même manière dans chaque service.
+
+00:12:03.690 --> 00:12:06.190
+La passerelle s'en occupe une fois, et chaque service en bénéficie.
+
+00:12:06.890 --> 00:12:08.350
+Étape suivante, la limitation de dépôt.
+
+00:12:09.210 --> 00:12:11.270
+Même une limite simple protège votre back-end d'une surcharge.
+
+00:12:11.610 --> 00:12:14.310
+Commencez par quelque chose de basique, comme 100 requêtes par minute par client.
+
+00:12:14.810 --> 00:12:16.810
+Cela empêche un client incontrôlé de faire tomber vos services.
+
+00:12:17.110 --> 00:12:17.430
+Vous pouvez pareil.
