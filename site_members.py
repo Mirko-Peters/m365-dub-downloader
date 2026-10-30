@@ -200,6 +200,9 @@ def build(g, people, orgs, extra=None):
         croot = f"{BASE}/community/" if lang == "en" else f"{BASE}/de/community/"
         # ---- Personen-Seiten ----
         for p in people:
+            _tr = (p.get("i18n") or {}).get(lang) or {}   # Profiltexte in der Sprache der Seite, sonst Original
+            if _tr.get("headline") or _tr.get("about"):
+                p = {**p, "headline": _tr.get("headline") or p.get("headline"), "about": _tr.get("about") or p.get("about")}
             u = purl(BASE, lang, "u", p["handle"])
             org = p.get("org")
             facts = []

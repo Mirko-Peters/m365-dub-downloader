@@ -427,3 +427,12 @@ CREATE TABLE IF NOT EXISTS profile_private (   -- Kontakt-/Adressdaten: standard
   vis_city TEXT NOT NULL DEFAULT 'none', vis_zip TEXT NOT NULL DEFAULT 'none', vis_street TEXT NOT NULL DEFAULT 'none', vis_email TEXT NOT NULL DEFAULT 'none', vis_phone TEXT NOT NULL DEFAULT 'none',
   updated INTEGER NOT NULL DEFAULT 0
 );
+
+CREATE TABLE IF NOT EXISTS profile_i18n (       -- Profiltexte pro Sprache (Kurzzeile, Bio); Grundtext bleibt in profiles
+  user_id INTEGER NOT NULL,
+  lang TEXT NOT NULL,
+  headline TEXT NOT NULL DEFAULT '',
+  about TEXT NOT NULL DEFAULT '',
+  updated INTEGER NOT NULL DEFAULT 0,
+  PRIMARY KEY (user_id, lang)
+);
