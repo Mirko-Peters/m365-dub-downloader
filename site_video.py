@@ -40,15 +40,17 @@ def build(g, vids, people, api):
             topics = [t for t in v.get("topics", []) if t in ENTS]
             tl = "".join(f'<a class="mb-tag" href="{BASE}/entity/{t}/">{esc(ENTS[t]["name"])}</a> ' for t in topics)
             player = f'<div style="position:relative;padding-top:56.25%"><iframe title="{esc(v["title"])}" src="https://www.youtube-nocookie.com/embed/{v["video_id"]}" loading="lazy" allowfullscreen style="position:absolute;inset:0;width:100%;height:100%;border:0"></iframe></div>'
+            gs = [g for g in (v.get("guests") or []) if g.get("handle") != v["handle"]]
+            guests_html = (f'<p class="mut">{esc(T(lang, "Guests", "Gäste"))}: ' + ", ".join(f'<a href="{croot}u/{g["handle"]}/">{esc(g["name"])}</a>' for g in gs) + "</p>") if gs else ""
             b = shell(lang, f'<p class="mut"><a href="{croot}video/">{esc(ttl)}</a></p><article><h1>{esc(v["title"])}</h1>'
-                            f'<p class="mut">{esc(T(lang, "By", "Von"))} <a href="{croot}u/{v["handle"]}/">{esc(v["name"])}</a> · {iso(v["published"])}</p>{player}'
+                            f'<p class="mut">{esc(T(lang, "By", "Von"))} <a href="{croot}u/{v["handle"]}/" rel="author">{esc(v["name"])}</a> · {iso(v["published"])}</p>{guests_html}{player}'
                             f'{"".join("<p>" + esc(par) + "</p>" for par in (v.get("description") or "").split(chr(10) * 2) if par.strip())}'
                             f'{"<p class=mut>" + esc(T(lang, "The author disclosed the use of AI.", "Die Autorin bzw. der Autor hat den KI-Einsatz offengelegt.")) + "</p>" if v.get("ai") else ""}</article><p>{tl}</p>'
                             f'<p><a class="btn" href="https://youtu.be/{v["video_id"]}" rel="noopener">{esc(T(lang, "Watch on YouTube", "Auf YouTube ansehen"))}</a> <a href="{croot}video/feed.xml">RSS</a></p><section id="c-comments"></section>'
                             + (ctags(lang, "video%d" % v["id"]) if ctags else ""))
             ld = [{"@context": "https://schema.org", "@type": "VideoObject", "@id": u + "#video", "url": u, "name": v["title"], "description": (v.get("description") or "")[:500], "inLanguage": lang,
                    "uploadDate": iso(v["published"]), "thumbnailUrl": f"https://i.ytimg.com/vi/{v['video_id']}/hqdefault.jpg", "embedUrl": f"https://www.youtube.com/embed/{v['video_id']}",
-                   "contentUrl": f"https://youtu.be/{v['video_id']}", "author": {"@type": "Person", "@id": au + "#person", "name": v["name"], "url": au},
+                   "contentUrl": f"https://youtu.be/{v['video_id']}", "author": {"@type": "Person", "@id": au + "#person", "name": v["name"], "url": au}, **({"actor": [{"@type": "Person", "@id": f"{BASE}/community/u/{g['handle']}/#person", "name": g["name"], "url": f"{BASE}/community/u/{g['handle']}/"} for g in gs]} if gs else {}),
                    "publisher": {"@id": f"{BASE}/#org"}, "about": [{"@id": f"{BASE}/entity/{t}/#thing"} for t in topics]}]
             write(f"{pfx2(lang)}community/video/{v['slug']}/index.html", page(lang, f'{v["title"]} – {ttl} | M365.FM', (v.get("description") or "")[:155], u, b, None, ld, og_type="video.other", extra_head=LCSS, noindex=v["title"].startswith("[Test]")))
             if not v["title"].startswith("[Test]"): sitemap.append((u, iso(v["published"]), None))

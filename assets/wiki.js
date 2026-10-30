@@ -10,25 +10,27 @@
   function date(ts) { try { return new Date(ts * 1000).toLocaleDateString(W.lang === "en" ? undefined : W.lang); } catch (e) { return ""; } }
 
   /* ---------- Darstellung ---------- */
-  var INL = /\{\{ref\|([^{}]*)\}\}|\{\{cn\}\}|\[\[([a-z0-9-]{2,48})(?:\|([^\[\]]{1,80}))?\]\]|\*\*([^*]+?)\*\*|\*([^*\s][^*]*?)\*/;
+  var INL = /\{\{img\|([^{}|]*)\|([^{}]*)\}\}|\{\{ref\|([^{}]*)\}\}|\{\{cn\}\}|\[\[([a-z0-9-]{2,48})(?:\|([^\[\]]{1,80}))?\]\]|\*\*([^*]+?)\*\*|\*([^*\s][^*]*?)\*/;
   function host(u) { try { return new URL(u).hostname.replace(/^www\./, ""); } catch (e) { return u; } }
   function inline(text, ctx, parent) {
     while (text) {
       var m = INL.exec(text);
       if (!m) { parent.appendChild(txt(text)); break; }
       if (m.index) parent.appendChild(txt(text.slice(0, m.index)));
-      if (m[0].indexOf("{{ref|") === 0) {
-        var p = m[1].split("|"), key = p[1] + "|" + p[0], n = ctx.keys[key];
+      if (m[0].indexOf("{{img|") === 0) {
+        var im = h("img", { src: m[1], alt: m[2], loading: "lazy", decoding: "async", referrerpolicy: "no-referrer" }); im.style.maxWidth = "100%"; im.style.height = "auto"; parent.appendChild(im);
+      } else if (m[0].indexOf("{{ref|") === 0) {
+        var p = m[3].split("|"), key = p[1] + "|" + p[0], n = ctx.keys[key];
         if (!n) { ctx.refs.push({ title: p[0], url: p[1], pub: p[2] || "", date: p[3] || "" }); n = ctx.keys[key] = ctx.refs.length; }
         var fa = h("a", { href: "#wkref-" + n, text: "[" + n + "]" }); if (!ctx.seen[n]) { fa.id = "wkfn-" + n; ctx.seen[n] = 1; }
         parent.appendChild(h("sup", { class: "wk-fn" }, [fa]));
       } else if (m[0] === "{{cn}}") {
         parent.appendChild(h("sup", { class: "wk-cn" }, [h("span", { text: "[" + T.cn + "]" })]));
-      } else if (m[2]) {
-        var t = L[m[2]];
-        if (t) parent.appendChild(h("a", { href: t[1], text: m[3] || t[0] })); else parent.appendChild(txt(m[3] || m[2]));
-      } else if (m[4] != null) { var b = h("strong"); inline(m[4], ctx, b); parent.appendChild(b); }
-      else { var i = h("em"); inline(m[5], ctx, i); parent.appendChild(i); }
+      } else if (m[4]) {
+        var t = L[m[4]];
+        if (t) parent.appendChild(h("a", { href: t[1], text: m[5] || t[0] })); else parent.appendChild(txt(m[5] || m[4]));
+      } else if (m[6] != null) { var b = h("strong"); inline(m[6], ctx, b); parent.appendChild(b); }
+      else { var i = h("em"); inline(m[7], ctx, i); parent.appendChild(i); }
       text = text.slice(m.index + m[0].length);
     }
   }

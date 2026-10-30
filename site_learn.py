@@ -126,7 +126,12 @@ def fetch_wiki(api, lang):
         return {}
 
 
-_INL = re.compile(r"\{\{ref\|([^{}]*)\}\}|\{\{cn\}\}|\[\[([a-z0-9-]{2,48})(?:\|([^\[\]]{1,80}))?\]\]|\*\*([^*]+?)\*\*|\*([^*\s][^*]*?)\*")
+_INL = re.compile(r"\{\{img\|([^{}|]*)\|([^{}]*)\}\}|\{\{ref\|([^{}]*)\}\}|\{\{cn\}\}|\[\[([a-z0-9-]{2,48})(?:\|([^\[\]]{1,80}))?\]\]|\*\*([^*]+?)\*\*|\*([^*\s][^*]*?)\*")
+
+
+def wiki_images(body):
+    """Bilder im Wiki-Markup ({{img|https://bild|Alt}}) fuer JSON-LD (image) und SEO."""
+    return [{"url": m.group(1), "alt": m.group(2)} for m in re.finditer(r"\{\{img\|([^{}|]*)\|([^{}]*)\}\}", body or "")]
 
 
 def wiki_render(body, links, w):
@@ -141,8 +146,10 @@ def wiki_render(body, links, w):
                 out.append(esc(text)); break
             out.append(esc(text[:m.start()]))
             g = m.group(0)
-            if g.startswith("{{ref|"):
-                p = m.group(1).split("|")
+            if g.startswith("{{img|"):
+                out.append(f'<img src="{esc(m.group(1))}" alt="{esc(m.group(2))}" loading="lazy" decoding="async" referrerpolicy="no-referrer" style="max-width:100%;height:auto">')
+            elif g.startswith("{{ref|"):
+                p = m.group(3).split("|")
                 p += [""] * (4 - len(p))
                 key = p[1] + "|" + p[0]
                 n = keys.get(key)
@@ -153,13 +160,13 @@ def wiki_render(body, links, w):
                 out.append(f'<sup class="wk-fn"><a href="#wkref-{n}"{idattr}>[{n}]</a></sup>')
             elif g == "{{cn}}":
                 out.append(f'<sup class="wk-cn"><span>[{esc(w["cn"])}]</span></sup>')
-            elif m.group(2):
-                t = links.get(m.group(2))
-                out.append(f'<a href="{esc(t[1])}">{esc(m.group(3) or t[0])}</a>' if t else esc(m.group(3) or m.group(2)))
-            elif m.group(4) is not None:
-                out.append(f"<strong>{inline(m.group(4))}</strong>")
+            elif m.group(4):
+                t = links.get(m.group(4))
+                out.append(f'<a href="{esc(t[1])}">{esc(m.group(5) or t[0])}</a>' if t else esc(m.group(5) or m.group(4)))
+            elif m.group(6) is not None:
+                out.append(f"<strong>{inline(m.group(6))}</strong>")
             else:
-                out.append(f"<em>{inline(m.group(5))}</em>")
+                out.append(f"<em>{inline(m.group(7))}</em>")
             text = text[m.end():]
         return "".join(out)
 

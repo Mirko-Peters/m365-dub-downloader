@@ -42,14 +42,15 @@
   }
   function load() {
     api("/api/video/mine").then(function (r) {
-      mineBox.textContent = ""; var d = r.j || {}; if (!d.items) return; mineBox.appendChild(h("h3", { text: Q.mine }));
+      mineBox.textContent = ""; var d = r.j || {}; if (!d.items) return; if (U.credits) U.credits.invites(mineBox, load); mineBox.appendChild(h("h3", { text: Q.mine }));
       if (!d.items.length) mineBox.appendChild(h("p", { class: "mut", text: Q.none }));
       d.items.forEach(function (p) {
         var li = h("p", {}, [h("b", { text: p.title }), h("span", { class: "mut", text: " · " + (Q["st_" + p.status] || p.status) + " · " + p.votes + " " + Q.votes })]);
         if (p.note) li.appendChild(h("span", { class: "mut", text: " · " + p.note }));
         if (p.status === "published") li.appendChild(h("a", { class: "btn", href: X.base + pfx(p.lang) + "/community/video/" + p.slug + "/", text: Q.published, style: "margin-inline-start:.5em" }));
         else li.appendChild(h("button", { type: "button", class: "btn", text: Q.del_, style: "margin-inline-start:.5em", onclick: function () { if (confirm(Q.confirmdel)) api("/api/video/delete", { method: "POST", body: { id: p.id } }).then(load); } }));
-        mineBox.appendChild(li); if (U.seo) mineBox.appendChild(h("details", {}, [h("summary", { class: "mut", text: "SEO-Check / SEO check" }), U.seo.box({ kind: "video", id: p.id })]));
+        mineBox.appendChild(li); if (U.credits) mineBox.appendChild(h("details", {}, [h("summary", { class: "mut", text: "Gäste / Guests" }), U.credits.box("video", p, load)]));
+        if (U.seo) mineBox.appendChild(h("details", {}, [h("summary", { class: "mut", text: "SEO-Check / SEO check" }), U.seo.box({ kind: "video", id: p.id })]));
       });
     });
     api("/api/video/list").then(function (r) {

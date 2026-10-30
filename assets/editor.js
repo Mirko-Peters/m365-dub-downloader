@@ -2,19 +2,20 @@
 (function () {
   var U = window.M365U; if (!U) return;
   var h = U.h, de = (window.M365X || {}).lang === "de";
-  var T = de ? { h2: "Überschrift", h3: "Zwischenüberschrift", b: "Fett", i: "Kursiv", ul: "Liste", ol: "Nummerierte Liste", q: "Zitat", link: "Link auf ein Thema", ref: "Quelle einfügen", write: "Schreiben", prev: "Vorschau", empty: "Hier erscheint die Vorschau, sobald du schreibst.", chars: "Zeichen", refs: "Quellen", rtitle: "Titel der Quelle", rurl: "https://…", rpub: "Herausgeber", rdate: "Datum", add: "Einfügen", topic: "Thema-ID (z. B. power-bi)", ttext: "Linktext", bold: "fetter Text", ital: "kursiver Text", txt: "Text", vis: "Visuell", html: "HTML", md: "Markdown", htmlhint: "HTML einfügen oder bearbeiten – erlaubt sind Überschriften, Absätze, Listen, Zitate, fett und kursiv; alles andere wird beim Wechsel entfernt.", undo: "Rückgängig", redo: "Wiederholen", clear: "Formatierung entfernen", mdhint: "Markdown mit Live-Vorschau." }
-    : { h2: "Heading", h3: "Subheading", b: "Bold", i: "Italic", ul: "List", ol: "Numbered list", q: "Quote", link: "Link to a topic", ref: "Insert source", write: "Write", prev: "Preview", empty: "The preview appears as soon as you start writing.", chars: "characters", refs: "Sources", rtitle: "Source title", rurl: "https://…", rpub: "Publisher", rdate: "Date", add: "Insert", topic: "Topic id (e.g. power-bi)", ttext: "Link text", bold: "bold text", ital: "italic text", txt: "text", vis: "Visual", html: "HTML", md: "Markdown", htmlhint: "Paste or edit HTML – headings, paragraphs, lists, quotes, bold and italic are kept; everything else is removed when you switch.", undo: "Undo", redo: "Redo", clear: "Clear formatting", mdhint: "Markdown with live preview." };
+  var T = de ? { img: "Bild einfügen (https, .jpg/.png/.webp, Alt-Text Pflicht)", imgurl: "Bild-Adresse (https://…/bild.jpg)", imgalt: "Alt-Text (beschreibt das Bild, mind. 5 Zeichen)", h2: "Überschrift", h3: "Zwischenüberschrift", b: "Fett", i: "Kursiv", ul: "Liste", ol: "Nummerierte Liste", q: "Zitat", link: "Link auf ein Thema", ref: "Quelle einfügen", write: "Schreiben", prev: "Vorschau", empty: "Hier erscheint die Vorschau, sobald du schreibst.", chars: "Zeichen", refs: "Quellen", rtitle: "Titel der Quelle", rurl: "https://…", rpub: "Herausgeber", rdate: "Datum", add: "Einfügen", topic: "Thema-ID (z. B. power-bi)", ttext: "Linktext", bold: "fetter Text", ital: "kursiver Text", txt: "Text", vis: "Visuell", html: "HTML", md: "Markdown", htmlhint: "HTML einfügen oder bearbeiten – erlaubt sind Überschriften, Absätze, Listen, Zitate, fett und kursiv; alles andere wird beim Wechsel entfernt.", undo: "Rückgängig", redo: "Wiederholen", clear: "Formatierung entfernen", mdhint: "Markdown mit Live-Vorschau." }
+    : { img: "Insert image (https, .jpg/.png/.webp, alt text required)", imgurl: "Image URL (https://…/image.jpg)", imgalt: "Alt text (describes the image, min. 5 characters)", h2: "Heading", h3: "Subheading", b: "Bold", i: "Italic", ul: "List", ol: "Numbered list", q: "Quote", link: "Link to a topic", ref: "Insert source", write: "Write", prev: "Preview", empty: "The preview appears as soon as you start writing.", chars: "characters", refs: "Sources", rtitle: "Source title", rurl: "https://…", rpub: "Publisher", rdate: "Date", add: "Insert", topic: "Topic id (e.g. power-bi)", ttext: "Link text", bold: "bold text", ital: "italic text", txt: "text", vis: "Visual", html: "HTML", md: "Markdown", htmlhint: "Paste or edit HTML – headings, paragraphs, lists, quotes, bold and italic are kept; everything else is removed when you switch.", undo: "Undo", redo: "Redo", clear: "Clear formatting", mdhint: "Markdown with live preview." };
 
   function inline(s, parent, ctx) {
     var ED = ctx.edit;
-    var re = /\{\{ref\|([^{}]*)\}\}|\{\{cn\}\}|\[\[([^\]|]+)\|?([^\]]*)\]\]|\*\*([^*]+)\*\*|\*([^*]+)\*/, m;
+    var re = /\{\{img\|([^{}|]*)\|([^{}]*)\}\}|\{\{ref\|([^{}]*)\}\}|\{\{cn\}\}|\[\[([^\]|]+)\|?([^\]]*)\]\]|\*\*([^*]+)\*\*|\*([^*]+)\*/, m;
     while ((m = re.exec(s))) {
       if (m.index) parent.appendChild(document.createTextNode(s.slice(0, m.index)));
-      if (m[1] != null) { var p = m[1].split("|"); ctx.refs.push(p); var sup = h("sup", { class: "ed-ref", text: "[" + ctx.refs.length + "]" }); if (ED) { sup.setAttribute("data-ref", m[1]); sup.setAttribute("contenteditable", "false"); } parent.appendChild(sup); }
+      if (m[0].indexOf("{{img|") === 0) { var im = h("img", { src: m[1], alt: m[2], loading: "lazy", referrerpolicy: "no-referrer" }); im.style.maxWidth = "100%"; im.style.height = "auto"; if (ED) { im.setAttribute("data-img", m[1] + "|" + m[2]); im.setAttribute("contenteditable", "false"); } parent.appendChild(im); }
+      else if (m[3] != null) { var p = m[3].split("|"); ctx.refs.push(p); var sup = h("sup", { class: "ed-ref", text: "[" + ctx.refs.length + "]" }); if (ED) { sup.setAttribute("data-ref", m[3]); sup.setAttribute("contenteditable", "false"); } parent.appendChild(sup); }
       else if (m[0] === "{{cn}}") { var cn = h("sup", { class: "ed-cn", text: "[?]" }); if (ED) { cn.setAttribute("data-cn", "1"); cn.setAttribute("contenteditable", "false"); } parent.appendChild(cn); }
-      else if (m[2] != null) { var tp = h("span", { class: "ed-topic", text: m[3] || m[2] }); if (ED) tp.setAttribute("data-topic", m[2]); parent.appendChild(tp); }
-      else if (m[4] != null) parent.appendChild(h("strong", { text: m[4] }));
-      else parent.appendChild(h("em", { text: m[5] }));
+      else if (m[4] != null) { var tp = h("span", { class: "ed-topic", text: m[5] || m[4] }); if (ED) tp.setAttribute("data-topic", m[4]); parent.appendChild(tp); }
+      else if (m[6] != null) parent.appendChild(h("strong", { text: m[6] }));
+      else parent.appendChild(h("em", { text: m[7] }));
       s = s.slice(m.index + m[0].length);
     }
     if (s) parent.appendChild(document.createTextNode(s));
@@ -42,7 +43,8 @@
       if (c.nodeType === 3) { o += ws(c.nodeValue); return; }
       if (c.nodeType !== 1) return;
       var t = c.tagName.toLowerCase(), x;
-      if (t === "sup" && c.hasAttribute("data-ref")) o += "{{ref|" + c.getAttribute("data-ref") + "}}";
+      if (t === "img") { var iu = c.getAttribute("data-img") || ((c.getAttribute("src") || "") + "|" + (c.getAttribute("alt") || "")); o += "{{img|" + iu.replace(/[{}]/g, "") + "}}"; }
+      else if (t === "sup" && c.hasAttribute("data-ref")) o += "{{ref|" + c.getAttribute("data-ref") + "}}";
       else if (t === "sup" && c.hasAttribute("data-cn")) o += "{{cn}}";
       else if (c.hasAttribute("data-topic")) o += "[[" + c.getAttribute("data-topic") + "|" + ws(c.textContent).trim() + "]]";
       else if (t === "br") o += " ";
@@ -128,6 +130,13 @@
         var st = selText(); fields([["id", T.topic], ["t", T.ttext, st]], function (v) {
           if (!v[0]) return false; var id = v[0].toLowerCase().replace(/[^a-z0-9-]/g, "-"), tx = v[1] || v[0];
           if (mode === "vis") { var sp = h("span", { class: "ed-topic", text: tx }); sp.setAttribute("data-topic", id); insertNode(sp); } else mput("[[" + id + "|" + tx + "]]", "", "");
+        });
+      }),
+      btn("🖼", T.img, function () {
+        fields([["u", T.imgurl], ["a", T.imgalt, selText()]], function (v) {
+          if (!/^https:\/\/\S+\.(jpe?g|png|webp|gif|avif)(\?\S*)?$/i.test(v[0]) || v[1].length < 5) return false;
+          var val = v[0] + "|" + v[1].replace(/[{}|\[\]]/g, "");
+          if (mode === "vis") { var im = h("img", { src: v[0], alt: v[1], referrerpolicy: "no-referrer" }); im.style.maxWidth = "100%"; im.style.height = "auto"; im.setAttribute("data-img", val); im.setAttribute("contenteditable", "false"); insertNode(im); } else mput("{{img|" + val + "}}", "", "");
         });
       }),
       btn("[1] " + T.refs, T.ref, function () {

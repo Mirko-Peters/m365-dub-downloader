@@ -39,7 +39,8 @@ def build(g, people, posts, pods, vids, feed, author, urls):
             if kind == "podcast" and x.get("status") not in (None, "published"):
                 continue
             items.append({"kind": kind, "id": x.get("id"), "title": x.get("title", ""), "summary": x.get("summary", ""), "description": x.get("description", ""), "body": x.get("body", ""),
-                          "lang": x.get("lang") or "en", "topics": x.get("topics", []), "handle": x.get("handle", ""), "author": author_info(by.get(x.get("handle")))})
+                          "lang": x.get("lang") or "en", "topics": x.get("topics", []), "handle": x.get("handle", ""),
+                          "author": ({**author_info(by.get(x.get("handle"))), "coauthors": len(x.get("coauthors") or x.get("guests") or [])} if by.get(x.get("handle")) else None)})
     rep = run({"author": author, "items": items, "urls": urls})
     if not rep:
         return
