@@ -1,0 +1,35 @@
+name: Show uebersetzen (Haiku, Batch)
+on:
+  workflow_dispatch:
+    inputs:
+      langs: { description: "Sprachen, kommagetrennt (leer = alle 19)", required: false, default: "" }
+      limit: { description: "Nur die neuesten N Folgen (leer = alle)", required: false, default: "" }
+permissions:
+  contents: write
+concurrency: { group: translate-show, cancel-in-progress: false }
+jobs:
+  translate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.12" }
+      - name: Batch absenden, abwarten, Ergebnis speichern
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          LANGS_IN: ${{ inputs.langs }}
+          LIMIT_IN: ${{ inputs.limit }}
+        run: |
+          ARGS=""
+          [ -n "$LANGS_IN" ] && ARGS="$ARGS --langs $LANGS_IN"
+          [ -n "$LIMIT_IN" ] && ARGS="$ARGS --limit $LIMIT_IN"
+          python translate_show.py $ARGS
+      - name: Ergebnis committen
+        if: always()
+        run: |
+          if [ -n "$(git status --porcelain data/podpage_i18n)" ]; then
+            git config user.name "m365-site-bot"; git config user.email "actions@users.noreply.github.com"
+            git add data/podpage_i18n && git commit -m "Show-Uebersetzungen (Haiku, Batch)"
+            git pull --rebase -q && git push -q
+          fi
