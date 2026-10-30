@@ -1412,6 +1412,28 @@ def build():
             {"id": "about-author", "name": "About Mirko Peters", "description": "Microsoft MVP, M365.FM host, M365Con organizer – see the about page.", "inputModes": ["text"], "outputModes": ["text/html"]}],
     }, ensure_ascii=False, indent=1))
     write(".well-known/agent.json", (OUT / "agent.json").read_text(encoding="utf-8"))
+    _api = "https://api-dub.m365.fm"   # RFC 9727: API-Katalog + OpenAPI-Beschreibung der oeffentlichen Schnittstellen
+    _j = {"application/json": {"schema": {"type": "object"}}}
+    write("openapi.json", json.dumps({
+        "openapi": "3.1.0",
+        "info": {"title": "M365.FM Community API", "version": "1.0.0", "description": "Public, read-only endpoints of the M365.FM community platform (experts, entities, blog) and the MCP server at /mcp. Everything else requires sign-in.", "contact": {"name": "Mirko Peters", "url": f"{BASE}/about/"}},
+        "servers": [{"url": _api}],
+        "paths": {
+            "/api/health": {"get": {"summary": "Health check", "responses": {"200": {"description": "Service is up", "content": _j}}}},
+            "/api/experts": {"get": {"summary": "Experts for a topic, including related topics", "parameters": [
+                {"name": "e", "in": "query", "required": True, "schema": {"type": "string"}, "description": "Entity id"},
+                {"name": "hops", "in": "query", "schema": {"type": "integer", "default": 2}},
+                {"name": "limit", "in": "query", "schema": {"type": "integer", "default": 12, "maximum": 30}}],
+                "responses": {"200": {"description": "Experts", "content": _j}, "404": {"description": "Unknown entity"}}}},
+            "/api/entity/export": {"get": {"summary": "Community revisions of entities", "responses": {"200": {"description": "Entities", "content": _j}}}},
+            "/api/blog/export": {"get": {"summary": "Published community blog posts of public profiles", "responses": {"200": {"description": "Posts", "content": _j}}}},
+            "/mcp": {"post": {"summary": "Model Context Protocol server (JSON-RPC over HTTP)", "requestBody": {"content": _j}, "responses": {"200": {"description": "JSON-RPC response", "content": _j}}}}}},
+        ensure_ascii=False, indent=1))
+    write(".well-known/api-catalog", json.dumps({"linkset": [{
+        "anchor": f"{_api}/api",
+        "service-desc": [{"href": f"{BASE}/openapi.json", "type": "application/vnd.oai.openapi+json"}],
+        "service-doc": [{"href": f"{BASE}/llms.txt", "type": "text/plain"}],
+        "status": [{"href": f"{_api}/api/health", "type": "application/json"}]}]}, indent=1))
     write(f"{INDEXNOW_KEY}.txt", INDEXNOW_KEY)
     if _dom:
         write("CNAME", _dom)
