@@ -1070,12 +1070,6 @@ def build():
 {m365con_band()}
 <main class="wrap">{fq}</main>{footer(lang) if lang != "en" else footer_en()}"""
 
-    # Alte About-Seiten: nur noch Weiterleitung auf die Entität (Profil = Entität)
-    for lang in ["en"] + [l for l in active if l in A_ALL]:
-        path = "about/mirko-peters/index.html" if lang == "en" else f"{lang}/about/mirko-peters/index.html"
-        tgt = f"{BASE}/de/entity/mirko-peters/" if lang == "de" else f"{BASE}/entity/mirko-peters/"
-        write(path, f'<!doctype html><html lang="{lang}"><head><meta charset="utf-8"><title>Mirko Peters</title><link rel="canonical" href="{tgt}"><meta name="robots" content="noindex"><meta http-equiv="refresh" content="0;url={tgt}"></head><body><a href="{tgt}">Mirko Peters</a><script>location.replace("{tgt}")</script></body></html>')
-
     LRN.build_learn(dict(write=write, page=page, header=header, footer=footer, footer_en=footer_en, BASE=BASE, LANGS=LANGS, active=active, by_lang=by_lang, catidx=catidx,
                         articles=articles, url_of=url_of, cat_name=cat_name, ORDER=ORDER, strip_tags=strip_tags, anchor_title=anchor_title, short=short, parse_desc=parse_desc,
                         sitemap=sitemap, TODAY=TODAY, api=COMMUNITY_API, SCORE={l: (_QUI.get(l, {}).get("score") or _QUI["en"]["score"]) for l in list(LANGS) + ["en"]}))
