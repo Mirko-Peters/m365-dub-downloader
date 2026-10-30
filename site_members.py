@@ -32,7 +32,10 @@ def _fetch_export(url):
         with urllib.request.urlopen(urllib.request.Request(url, headers={"user-agent": "m365-dub-build"}), timeout=120) as r:
             age = r.headers.get("x-export-age"); stale = r.headers.get("x-export-stale")
             print(f"Profil-Export: HTTP {r.status}, Alter {age}s{', veraltet' if stale else ''}", file=sys.stderr)
-            return json.loads(r.read().decode("utf-8"))
+            j = json.loads(r.read().decode("utf-8"))
+            if j.get("failed"):
+                print(f"Profil-Export: {j['failed']} Profile fehlgeschlagen, erster Fehler: {(j.get('errors') or ['?'])[0]}", file=sys.stderr)
+            return j
     except Exception as e:
         print(f"Profil-Export Fehler: {type(e).__name__}: {str(e)[:160]}", file=sys.stderr)
         return None
