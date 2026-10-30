@@ -1,5 +1,5 @@
+# AdSense: Schritte für den Umzug
 
-## AdSense auf www.m365.fm (Umzug)
 Die Seite ist vorbereitet (`site_ads.py`, `data/adsense.json`); bis zur Freischaltung erscheint nichts (Meta-Tag, Skript, ads.txt und Anzeigenblöcke sind aus).
 
 1. Domain umziehen: `domain.txt` auf `www.m365.fm` setzen (erzeugt auch `CNAME`), DNS bei der Domain, Worker-CORS/Login-Weiterleitungen und Search Console auf die neue Domain prüfen, alte Domain per 301 weiterleiten.
