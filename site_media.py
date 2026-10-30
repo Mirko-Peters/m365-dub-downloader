@@ -2,7 +2,6 @@
 - hero_svg: Titelbild (Name, Typ, Farbe nach Typ)
 - relation_svg: Beziehungskarte mit echten Verknuepfungen (anklickbar)
 - timeline_svg: Folgen-Zeitleiste, wenn mindestens zwei Folgen mit Datum vorhanden sind
-- checklist: interaktive Lern-Checkliste aus vorhandenen Verknuepfungen, Folgen und Links; Haken bleiben im Browser (localStorage)
 Alle Inhalte stammen aus vorhandenen Daten, es wird nichts dazuerfunden."""
 import hashlib
 from html import escape as esc
@@ -82,16 +81,4 @@ def timeline_svg(eps, alt):
     return f'<figure class="en-fig">{"".join(out)}<figcaption class="mut">{esc(alt)}</figcaption></figure>'
 
 
-def checklist(e, steps, title, done_label):
-    """steps: [(text, url|None)] -> interaktive Liste mit Fortschritt, gespeichert in localStorage."""
-    if len(steps) < 3:
-        return ""
-    li = "".join(f'<li><label><input type="checkbox" data-i="{i}"> {(f"<a href=" + chr(34) + esc(u) + chr(34) + ">" + esc(t) + "</a>") if u else esc(t)}</label></li>' for i, (t, u) in enumerate(steps))
-    return (f'<section class="en-chk" data-k="m365-chk-{esc(e["id"])}"><h2>{esc(title)}</h2><p class="mut"><span class="en-chk-n">0</span>/{len(steps)} {esc(done_label)}</p>'
-            f'<progress max="{len(steps)}" value="0" aria-hidden="true"></progress><ul>{li}</ul></section>'
-            "<script>(function(){var s=document.currentScript.previousElementSibling,k=s.dataset.k,b=[].slice.call(s.querySelectorAll('input')),v={};try{v=JSON.parse(localStorage.getItem(k)||'{}')}catch(x){}"
-            "function u(){var n=b.filter(function(c){return c.checked}).length;s.querySelector('.en-chk-n').textContent=n;s.querySelector('progress').value=n}"
-            "b.forEach(function(c){c.checked=!!v[c.dataset.i];c.addEventListener('change',function(){v[c.dataset.i]=c.checked?1:0;try{localStorage.setItem(k,JSON.stringify(v))}catch(x){}u()})});u()})();</script>")
-
-
-CSS = ".en-fig{margin:1.2em 0}.en-fig svg{width:100%;height:auto;display:block;border-radius:.5em}.en-fig figcaption{font-size:.85em;margin-top:.3em}.en-chk{border:1px solid var(--bd);border-radius:.5em;padding:.6em 1em;margin:1.2em 0;background:var(--card)}.en-chk ul{list-style:none;padding:0;margin:.5em 0}.en-chk li{margin:.4em 0}.en-chk progress{width:100%;height:.5em}"
+CSS = ".en-fig{margin:1.2em 0}.en-fig svg{width:100%;height:auto;display:block;border-radius:.5em}.en-fig figcaption{font-size:.85em;margin-top:.3em}"

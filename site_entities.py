@@ -279,14 +279,6 @@ def build(g, wiki_links, experts_by_ent, ep_find):
             rel_items = [(k, f"{root}{x}/", ENTS[x]["name"]) for k, v in groups.items() for x in dict.fromkeys(v)]
             relmap = MED.relation_svg(e, rel_items, T(lang, f"Relationship map of {e['name']}: linked topics", f"Beziehungskarte {e['name']}: verknüpfte Themen"))
             tline = MED.timeline_svg([(x.get("date", ""), g["anchor_title"](x["e"]["title"]), url_of(x)) for x in eps], T(lang, f"Timeline of episodes about {e['name']}", f"Zeitleiste der Folgen zu {e['name']}"))
-            steps = [(T(lang, f"Understand what {e['name']} is (see the description above)", f"Verstehen, was {e['name']} ist (siehe Beschreibung oben)"), None)]
-            steps += [(T(lang, f"Look at {n} ({k})", f"{n} ansehen ({k})"), u) for k, u, n in rel_items[:4]]
-            if e.get("docs"):
-                steps.append((T(lang, "Read the official documentation", "Offizielle Dokumentation lesen"), e["docs"]))
-            if e.get("exam"):
-                steps.append((T(lang, f"Plan the exam {e['exam']}", f"Prüfung {e['exam']} einplanen"), None))
-            steps += [(T(lang, f"Listen: {g['anchor_title'](x['e']['title'])}", f"Anhören: {g['anchor_title'](x['e']['title'])}"), url_of(x)) for x in eps[:3]]
-            chk = MED.checklist(e, steps, T(lang, "Learning checklist", "Lern-Checkliste"), T(lang, "done", "erledigt"))
             ex = experts_by_ent.get(e["id"], [])
             ehtml = ""
             if ex:
@@ -307,7 +299,7 @@ def build(g, wiki_links, experts_by_ent, ep_find):
             faqbox += f'<div id="en-qa" data-eid="{e["id"]}"></div>'
             wb = wiki_block(lang, e["id"], api, BASE, stat.get(e["id"]), wiki_links(lang))
             b = shell(lang, f'<nav aria-label="breadcrumb"><a href="{root}">{esc(s["entities"])}</a></nav><h1>{esc(e["name"])}</h1><p class="mut">{esc(TL[e["type"]][li])}</p><p style="font-size:1.1em">{esc(d)}</p>{oldbanner}{claim_html(e["id"], lang)}{hero}{longbox}{ft}{evl}{gloss}'
-                          f'{faqbox}{relmap}<div class="en-rel">{rb}</div>{tline}{eb}{chk}{SU.block(lang, e["id"])}{wb}{("<h2>" + esc(s["experts"]) + "</h2>" + ehtml) if ehtml else ""}{edit}'
+                          f'{faqbox}{relmap}<div class="en-rel">{rb}</div>{tline}{eb}{SU.block(lang, e["id"])}{wb}{("<h2>" + esc(s["experts"]) + "</h2>" + ehtml) if ehtml else ""}{edit}'
                           f'<script>window.M365E={{api:"{api}",lang:"{lang}",base:"{BASE}",s:{json.dumps({k: s[k] for k in ("edit_e",)}, ensure_ascii=False)}}}</script><script defer src="{BASE}/assets/entity.js"></script>')
             node = ent_ld(BASE, e, lang, gl_ids)
             ld = [{"@context": "https://schema.org", "@type": "WebPage", "@id": u + "#page", "url": u, "name": e["name"], "inLanguage": lang, "mainEntity": node, "dateModified": TODAY,
