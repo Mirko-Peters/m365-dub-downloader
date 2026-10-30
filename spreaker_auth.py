@@ -75,3 +75,9 @@ if __name__ == "__main__":
         connect(sys.argv[2])
     elif len(sys.argv) > 1 and sys.argv[1] == "refresh":
         refresh()
+    elif len(sys.argv) > 1 and sys.argv[1] == "env":   # erneuert und legt den Token maskiert als SPREAKER_TOKEN in $GITHUB_ENV (fuer den Worker-Deploy)
+        tok = refresh()
+        print(f"::add-mask::{tok}")
+        with open(os.environ["GITHUB_ENV"], "a") as f:
+            f.write(f"SPREAKER_TOKEN={tok}\n")
+        print("Spreaker-Token erneuert.")

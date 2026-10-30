@@ -1,10 +1,14 @@
 name: Community-API (Cloudflare Worker) einrichten und veröffentlichen
 on:
+  schedule:
+    - cron: "50 5 * * *"   # taeglich: Spreaker-Token per OAuth erneuern und neu ausrollen
   workflow_dispatch:
   push:
     branches: [main]
     paths: ["worker/**", ".github/workflows/worker.yml"]
 concurrency: { group: worker, cancel-in-progress: false }
+permissions:
+  contents: write
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -12,6 +16,21 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with: { node-version: 22 }
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.12" }
+      - name: Spreaker-Token per OAuth erneuern
+        continue-on-error: true
+        env:
+          SPREAKER_CLIENT_ID: ${{ secrets.SPREAKER_CLIENT_ID }}
+          SPREAKER_CLIENT_SECRET: ${{ secrets.SPREAKER_CLIENT_SECRET }}
+        run: |
+          pip install -q requests cryptography
+          python spreaker_auth.py env
+          if [ -n "$(git status --porcelain data/spreaker_auth.enc)" ]; then
+            git config user.name "m365-site-bot"; git config user.email "actions@users.noreply.github.com"
+            git add data/spreaker_auth.enc && git commit -q -m "Spreaker-Token erneuert (verschlüsselt) [skip ci]"
+            git pull --rebase -q && git push -q
+          fi
       - name: Zugangsdaten prüfen
         run: |
           if [ -z "$CLOUDFLARE_API_TOKEN" ] || [ -z "$CLOUDFLARE_ACCOUNT_ID" ]; then echo "::warning::CLOUDFLARE_API_TOKEN / CLOUDFLARE_ACCOUNT_ID fehlen (GitHub Secrets) – Community-API wird nicht veröffentlicht. Siehe worker/README.md"; echo "skip=1" >> $GITHUB_ENV; fi
@@ -42,7 +61,7 @@ jobs:
           GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
           LINKEDIN_CLIENT_ID: ${{ secrets.LINKEDIN_CLIENT_ID }}
           LINKEDIN_CLIENT_SECRET: ${{ secrets.LINKEDIN_CLIENT_SECRET }}
-          SPREAKER_TOKEN: ${{ secrets.SPREAKER_TOKEN }}
+          SPREAKER_TOKEN: ${{ env.SPREAKER_TOKEN || secrets.SPREAKER_TOKEN }}
           GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
           MS_CLIENT_ID: ${{ secrets.MS_CLIENT_ID }}
           MS_CLIENT_SECRET: ${{ secrets.MS_CLIENT_SECRET }}
