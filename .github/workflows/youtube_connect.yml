@@ -18,8 +18,8 @@ jobs:
       - run: pip install requests cryptography
       - name: Code gegen Token tauschen
         env:
-          YT_CLIENT_ID: ${{ secrets.YT_CLIENT_ID }}
-          YT_CLIENT_SECRET: ${{ secrets.YT_CLIENT_SECRET }}
+          YT_CLIENT_ID: ${{ secrets.YT_CLIENT_ID || secrets.GOOGLE_CLIENT_ID }}
+          YT_CLIENT_SECRET: ${{ secrets.YT_CLIENT_SECRET || secrets.GOOGLE_CLIENT_SECRET }}
           CODE: ${{ inputs.code }}
         run: python yt_auth.py connect "$CODE"
       - name: Speichern und Worker neu ausrollen

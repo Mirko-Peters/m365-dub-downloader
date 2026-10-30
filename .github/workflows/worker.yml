@@ -50,7 +50,7 @@ jobs:
       - name: YouTube-Token bereitstellen
         continue-on-error: true
         env:
-          YT_CLIENT_SECRET: ${{ secrets.YT_CLIENT_SECRET }}
+          YT_CLIENT_SECRET: ${{ secrets.YT_CLIENT_SECRET || secrets.GOOGLE_CLIENT_SECRET }}
         run: |
           pip install -q requests cryptography
           [ -f data/yt_auth.enc ] && python yt_auth.py env || echo "Noch nicht mit YouTube verbunden."
@@ -72,8 +72,8 @@ jobs:
           GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
           MS_CLIENT_ID: ${{ secrets.MS_CLIENT_ID }}
           MS_CLIENT_SECRET: ${{ secrets.MS_CLIENT_SECRET }}
-          YT_CLIENT_ID: ${{ secrets.YT_CLIENT_ID }}
-          YT_CLIENT_SECRET: ${{ secrets.YT_CLIENT_SECRET }}
+          YT_CLIENT_ID: ${{ secrets.YT_CLIENT_ID || secrets.GOOGLE_CLIENT_ID }}
+          YT_CLIENT_SECRET: ${{ secrets.YT_CLIENT_SECRET || secrets.GOOGLE_CLIENT_SECRET }}
           YT_REFRESH_TOKEN: ${{ env.YT_REFRESH_TOKEN || secrets.YT_REFRESH_TOKEN }}
           RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
           ADMIN_SUBS: ${{ secrets.ADMIN_SUBS }}
