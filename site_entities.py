@@ -307,6 +307,16 @@ def build(g, wiki_links, experts_by_ent, ep_find):
                 ehtml = "<ul>" + "".join(f'<li><a href="{BASE}{pfx(lang)}/community/{"u" if x["kind"] == "u" else "c"}/{x["handle"]}/">{esc(x["name"])}</a>{" ✔" if x.get("verified") else ""}<span class="mut"> · {esc(x.get("headline", "")[:80])}</span></li>' for x in ex[:12]) + "</ul>"
             elif e["type"] in ("product", "platform", "concept", "category"):
                 ehtml = f'<p class="mut">{esc(s["noexperts"])}</p>'
+            if lang in ("en", "de") and rel_items:   # Experten zu verwandten Themen (ein Schritt im Entitaetsgraphen), mit Angabe, ueber welches Thema sie passen
+                _seen, _rx = {x["handle"] for x in ex}, []
+                for _k, _u, _n in rel_items:
+                    for x in experts_by_ent.get(_u.rstrip("/").rsplit("/", 1)[-1], []):
+                        if x["kind"] == "u" and x["handle"] not in _seen:
+                            _seen.add(x["handle"]); _rx.append((x, _n))
+                    if len(_rx) >= 8: break
+                if _rx:
+                    ehtml += f'<h3>{T(lang, "Experts on related topics", "Experten zu verwandten Themen")}</h3><ul>' + "".join(
+                        f'<li><a href="{BASE}{pfx(lang)}/community/u/{x["handle"]}/">{esc(x["name"])}</a>{" ✔" if x.get("verified") else ""}<span class="mut"> · {T(lang, "via", "über")} {esc(n)}</span></li>' for x, n in _rx[:8]) + "</ul>"
             oldbanner = ""
             if is_old(e, TODAY):
                 rp = ENTS.get(e.get("replaced_by") or "")
