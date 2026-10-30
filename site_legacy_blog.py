@@ -5,6 +5,7 @@ import ast, re, zlib
 from datetime import datetime, timezone
 
 import site_podpage as P
+import site_r2 as R2
 import site_sidebar as SBR
 
 HANDLE, NAME = "mirko-peters", "Mirko Peters"
@@ -67,7 +68,6 @@ PER = 100
 def publish(write, BASE):
     """Dateien fuer den Worker (worker/src/legacyblog.js): SITE/blog-import/index.json und part-N.json. Nur solange data/blog_import.json "enabled": true ist."""
     import json
-import site_r2 as R2
     from pathlib import Path
     cfg = Path(__file__).parent / "data" / "blog_import.json"
     if not cfg.exists() or not json.loads(cfg.read_text("utf-8")).get("enabled"):
