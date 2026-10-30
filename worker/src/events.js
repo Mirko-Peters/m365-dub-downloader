@@ -442,7 +442,7 @@ export async function handleEvents(env, request, url, path, user, J) {
     let sp = parse(se?.speakers, []);
     if (b.decline) { sp = sp.map((x) => (x.t === tok ? { ...x, s: "declined" } : x)); await db.batch([db.prepare("UPDATE event_sessions SET speakers=? WHERE id=?").bind(JSON.stringify(sp), se.id), db.prepare("DELETE FROM speaker_invites WHERE token=?").bind(tok)]); return J({ ok: true, declined: true }); }
     if (!pr) return J({ error: "need_profile" }, 409);
-    sp = sp.map((x) => (x.t === tok ? { h: pr.handle, n: x.n, ...(x.e ? { e: x.e } : {}), s: "confirmed" } : x));
+    sp = sp.map((x) => (x.t === tok ? { h: pr.handle, n: x.n, e: x.e || pr.handle, s: "confirmed" } : x));   // e = eigene Personen-Entitaet (Profil-Adresse), falls keine andere hinterlegt ist
     await db.batch([db.prepare("UPDATE event_sessions SET speakers=? WHERE id=?").bind(JSON.stringify(sp), se.id), db.prepare("DELETE FROM speaker_invites WHERE token=?").bind(tok)]);
     let claimed = false; if (i.eid) claimed = await claimEntity(db, i.eid, user.id, "invite");
     return J({ ok: true, handle: pr.handle, claimed });
