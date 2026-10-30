@@ -65,7 +65,7 @@ def main():
             if e["slug"] in have[l]: continue
             cid = f"{l}__{e['id']}"; key[cid] = e["slug"]
             src = P.san(e["show_notes"])[:MAXC]
-            reqs.append({"custom_id": cid, "params": {"model": MODEL, "max_tokens": 5000,
+            reqs.append({"custom_id": cid, "params": {"model": MODEL, "max_tokens": 6000, "thinking": {"type": "disabled"},
                 "system": f"Translate this podcast show-notes HTML into {NAMES[l]}. Keep the HTML tags and structure (p, ul, li, h2, h3, strong, em, a href). Keep product names (Microsoft 365, Copilot, Power BI, Azure ...) and URLs untranslated. Reply with the translated HTML only.",
                 "messages": [{"role": "user", "content": src}]}})
     if not reqs: print("Nichts zu tun"); return

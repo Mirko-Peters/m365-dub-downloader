@@ -19,7 +19,9 @@ Stand: 2026-10-29. Reihenfolge nach Absprache mit Mirko; alles mit Schema.org-Ve
 
 ## Podcast-Umzug (gebaut, Betrieb offen)
 - Mitglieder ziehen per RSS-URL zu M365.FM um (`/shows/<slug>/`), Import + Tagesabgleich + Transkripte; Freigabe durch Team, Einwilligung wird gespeichert.
-- Offen: Nutzungsbedingungen/Einnahmenbeteiligung rechtlich formulieren, Werbe-/Sponsoring-Platz auf Show-Seiten, eigener M365.FM-Feed je Show (`itunes:new-feed-url`).
+- Einnahmen: Werbung auf den Show-Seiten gehört M365.FM, eigenes Sponsoring des Podcasters bleibt bei ihm. Später Bezahl-Option: solange bezahlt wird, ist die Werbung auf seiner Show abgeschaltet.
+- Geplant: Umzug über die Spreaker-API (Show im M365.FM-Konto anlegen, Folgen hochladen, neuen Feed ausgeben) als GitHub-Action-Job; klären: Tarif/Speicher, neue Folgen nachziehen.
+- Offen: Nutzungsbedingungen rechtlich formulieren, Werbe-/Sponsoring-Platz auf Show-Seiten, eigener M365.FM-Feed je Show (`itunes:new-feed-url`).
 
 ## Backlog (später, wenn die Plattform genutzt wird)
 - **LinkedIn Events Management API** (Standard Tier, Self-Service): Events von Veranstaltern automatisch mit LinkedIn synchronisieren (anlegen/ändern, Anmeldungen, Leads). Vorher klären: Rechte/Endpunkte in der technischen Doku, ob ein Eintrag auf der Firmenseite „M365 Show“ möglich ist. Bis dahin: „Auf LinkedIn teilen“ + Anfrage „Auf M365 Show vorstellen“ mit Prüfung durch das Team.
