@@ -1,0 +1,2650 @@
+WEBVTT
+
+00:00:00.320 --> 00:00:07.000
+Prêt pour 10 jours consacrés à Microsoft 365, Copilot, l'IA, Azure et aux acteurs qui façonnent l'avenir du travail est…
+
+00:00:07.900 --> 00:00:12.100
+En janvier prochain, la M365Con est de retour et nous voyons encore plus grand.
+
+00:00:12.920 --> 00:00:18.000
+Rejoignez-nous pour des sessions en direct, des démos concrètes et les conseils pratiques d'experts et de MVPs du monde entier à…
+
+00:00:18.800 --> 00:00:21.020
+Pas de diapositif générique, pas de jargon inutile.
+
+00:00:22.080 --> 00:00:28.000
+Nous abordons les vrais défis. Copilot Studio, Agent, IA, Fabrique, Sécurité, Gouvernance et Automatisation.
+
+00:00:30.000 --> 00:00:34.300
+Que vous soyez professionnel de l'IT, développeur ou dirigeant, des sessions sont conçues pour vous.
+
+00:00:35.560 --> 00:00:40.000
+Avec 10 jours complets, explorez de multiples technologies et connectez-vous à une communauté mondiale.
+
+00:00:41.040 --> 00:00:44.220
+Suivez des sessions en direct et rapportez des perspectives pratiques à votre organisation.
+
+00:00:45.260 --> 00:00:50.720
+Janvier 2027, 10 jours. Une seule communauté, Microsoft. Les inscriptions sont ouvertes.
+
+00:00:52.500 --> 00:00:54.880
+Réservez votre place dès aujourd'hui.
+
+00:00:56.420 --> 00:00:58.720
+Rendez-vous sur m365.net à…
+
+00:01:00.000 --> 00:01:04.620
+Inscrivez-vous sur m365.net et nous nous retrouvons en direct en janvier.
+
+00:01:05.400 --> 00:01:08.420
+Avez-vous parfois l'impression que vos déploiements Power Platform sont une boîte noire ?
+
+00:01:08.420 --> 00:01:12.460
+Lancez-vous une mise à jour en retenant votre souffle, en espérant que tout fonctionne entre le dev, le test et la prod.
+
+00:01:13.980 --> 00:01:18.420
+Et si vous pouviez contrôler et visualiser chaque étape de votre processus ALM via GitHub Actions,
+
+00:01:18.780 --> 00:01:20.520
+sans devinette ni bricolage manuel.
+
+00:01:21.960 --> 00:01:27.520
+Levons le voile sur la façon dont les composants, le contrôle de source, l'automatisation et les variables sécurisées s'articulent réellement.
+
+00:01:27.520 --> 00:01:29.780
+Il ne s'agit pas d'un M-Git-Pap.
+
+00:01:30.380 --> 00:01:34.280
+C'est ce cas qu'une que la plupart oublient pour que vos prochains déploiements ne soient plus un mystère.
+
+00:01:35.100 --> 00:01:38.520
+Alors pourquoi l'ALM Power Platform ressemble-t-il à un labyrinthe ?
+
+00:01:39.180 --> 00:01:42.160
+Si vous avez déjà tenté de déployer une Power App avec cette incertitude persistante,
+
+00:01:42.240 --> 00:01:44.720
+craignant qu'un élément important ne soit passé à la trappe, vous n'êtes pas seul.
+
+00:01:46.850 --> 00:01:49.310
+Sur le papier, Power Platform promet un développement facile,
+
+00:01:49.310 --> 00:01:52.230
+mais derrière cette façade, l'ALM est tout sauf simple.
+
+00:01:53.410 --> 00:01:55.550
+Une application web se déploie depuis le contrôle de source,
+
+00:01:55.810 --> 00:01:59.010
+se construit dans un pipeline et arrive en production avec un comportement prévisible.
+
+00:02:00.070 --> 00:02:03.210
+Power Platform, à l'inverse, dissimule une partie de sa logique
+
+00:02:03.210 --> 00:02:07.690
+dans des interfaces drag-and-drop des connecteurs et des formules invisibles dans Git-E.
+
+00:02:08.590 --> 00:02:10.310
+Même en suivant scrupuleusement les guides administratifs,
+
+00:02:11.030 --> 00:02:13.970
+on rencontre des échecs étranges et difficiles à diagnostiquer
+
+00:02:13.970 --> 00:02:16.450
+une fois l'appli sortie du développement.
+
+00:02:17.390 --> 00:02:19.130
+Branchons-nous sur les guides ALM qui circulent.
+
+00:02:19.930 --> 00:02:22.850
+La plupart vous expliquent simplement comment exporter un fichier zip de solution
+
+00:02:22.850 --> 00:02:23.910
+pour l'importer ailleurs.
+
+00:02:24.610 --> 00:02:25.650
+Assez simple, n'est-ce pas ?
+
+00:02:25.650 --> 00:02:26.830
+Pourtant, le comment qu'une couche du problème.
+
+00:02:27.410 --> 00:02:28.690
+Ce qu'ils omettent, c'est le cas pourquoi.
+
+00:02:29.630 --> 00:02:31.450
+Pourquoi les déploiements Power Platform échouent-ils
+
+00:02:31.450 --> 00:02:33.890
+d'une manière que le code classique ne connaît jamais ?
+
+00:02:33.890 --> 00:02:35.430
+C'est cela qui génère une confusion permanente.
+
+00:02:36.050 --> 00:02:39.390
+Le cœur du problème est que la logique, les connexions et la configuration des Power Apps
+
+00:02:39.390 --> 00:02:41.370
+ne sont pas stockées comme du code traditionnel.
+
+00:02:41.370 --> 00:02:44.810
+Il ne suffit pas de cloner un dépôt et de vérifier les tests unitaires.
+
+00:02:45.690 --> 00:02:47.530
+Ainsi, lorsque vous tentez de déplacer votre application,
+
+00:02:47.770 --> 00:02:51.170
+toutes ces dépendances cachées, connexions à Outlook, SharePoint ou API personnalisées
+
+00:02:51.170 --> 00:02:53.370
+ne suivent pas toujours correctement dans le fichier zip.
+
+00:02:53.750 --> 00:02:54.030
+Zip.
+
+00:02:54.670 --> 00:02:55.270
+Voici le scénario.
+
+00:02:55.690 --> 00:02:57.910
+Vous avez une application toute neuve qui fonctionne dans l'environnement de développement.
+
+00:02:58.390 --> 00:03:00.130
+Vous exportez une solution, vous l'importez en test
+
+00:03:00.130 --> 00:03:01.490
+et soudain le flux ne fonctionne plus.
+
+00:03:02.070 --> 00:03:03.070
+C'est vraiment un simple problème de fichier.
+
+00:03:03.590 --> 00:03:05.390
+En réalité, les connexions pointent au mauvais endroit,
+
+00:03:05.650 --> 00:03:07.050
+les autorisations ne correspondent pas
+
+00:03:07.050 --> 00:03:08.810
+et les politiques de données bloquent des connexions
+
+00:03:08.810 --> 00:03:11.150
+qui semblaient pourtant valides quelques minutes auparavant.
+
+00:03:12.370 --> 00:03:14.390
+Maintenant, imaginez faire cela sur trois environnements,
+
+00:03:14.530 --> 00:03:16.690
+dev, test et prod, chacun utilisant des connexions,
+
+00:03:17.050 --> 00:03:19.170
+des politiques de protection des données, des approbateurs
+
+00:03:19.170 --> 00:03:21.230
+et des garde-fous administratifs différents.
+
+00:03:21.990 --> 00:03:23.330
+Vous ne pouvez pas vous contenter de copier-coller.
+
+00:03:24.210 --> 00:03:26.990
+Les recherches confirment ce que les administrateurs et les créateurs constatent chaque semaine.
+
+00:03:27.930 --> 00:03:29.830
+La majorité des déploiements Power Platform échoués
+
+00:03:29.830 --> 00:03:31.570
+proviennent de références de connecteurs manquantes
+
+00:03:31.570 --> 00:03:33.450
+ou de variables d'environnement mal gérées.
+
+00:03:33.450 --> 00:03:36.630
+Une référence de connecteurs manquantes signifie simplement
+
+00:03:36.630 --> 00:03:39.450
+que le flux ne parvient pas à trouver sa connexion Outlook ou Dataverse.
+
+00:03:40.390 --> 00:03:42.450
+Donc, dès que vous essayez d'exécuter votre application,
+
+00:03:42.630 --> 00:03:44.170
+votre flux dans un autre environnement,
+
+00:03:44.270 --> 00:03:46.230
+vous obtenez des erreurs d'exécution.
+
+00:03:46.230 --> 00:03:50.490
+Et parce que les variables d'environnement fonctionnent différemment dans Power Platform
+
+00:03:50.490 --> 00:03:52.330
+par rapport aux autres produits Microsoft 365,
+
+00:03:52.490 --> 00:03:54.530
+elles piègent même les développeurs expérimentés.
+
+00:03:55.810 --> 00:03:57.310
+Les variables sont censées gérer les points de terminaison,
+
+00:03:57.410 --> 00:03:59.070
+les clés ou les configurations spécifiques aux locataires.
+
+00:03:59.950 --> 00:04:02.550
+Mais si quelqu'un oublie de les mettre à jour après l'exportation d'une solution,
+
+00:04:02.690 --> 00:04:05.570
+un changement pourtant anodin peut bloquer une application en production,
+
+00:04:05.730 --> 00:04:06.410
+ou à production.
+
+00:04:06.930 --> 00:04:08.570
+Beaucoup d'entre nous tombent dans le même piège au début.
+
+00:04:09.370 --> 00:04:11.710
+Vous pourriez penser qu'exporter une solution en zip regroupe tout le nécessaire,
+
+00:04:11.710 --> 00:04:14.090
+mais cela ignore en réalité les références de connecteurs dynamiques.
+
+00:04:14.870 --> 00:04:16.590
+Par exemple, supposons que vous ayez une application
+
+00:04:16.590 --> 00:04:19.010
+qui utilise un connecteur HTTP pour un service tiers en développement.
+
+00:04:19.870 --> 00:04:21.210
+Lorsque vous l'importez en test ou en production,
+
+00:04:21.410 --> 00:04:23.330
+cette instance de connecteurs exacte n'existera pas.
+
+00:04:24.090 --> 00:04:27.070
+La référence de connecteurs dans votre application pointe vers un objet manquant,
+
+00:04:27.490 --> 00:04:29.530
+et les flux de la solution tombent discrètement en panne
+
+00:04:29.530 --> 00:04:31.890
+jusqu'à ce qu'un utilisateur ou un administrateur recrée
+
+00:04:31.890 --> 00:04:34.310
+et remappe manuellement les connexions.
+
+00:04:35.650 --> 00:04:37.410
+Si vous avez plusieurs créateurs ou administrateurs,
+
+00:04:37.610 --> 00:04:39.310
+il est encore plus facile de perdre le fil,
+
+00:04:39.310 --> 00:04:42.890
+et personne ne veut devoir justifier pourquoi caisse a marché en développement requêt.
+
+00:04:44.510 --> 00:04:46.610
+Autre difficulté, les principaux de service.
+
+00:04:47.850 --> 00:04:49.970
+La plupart des gens commencent par utiliser des comptes utilisateurs
+
+00:04:49.970 --> 00:04:51.550
+pour exporter et importer des solutions,
+
+00:04:51.650 --> 00:04:52.710
+car c'est plus rapide pour débuter.
+
+00:04:53.830 --> 00:04:56.450
+Mais quand vous essayez d'automatiser avec GitHub Actions ou tout système CI,
+
+00:04:56.630 --> 00:04:59.110
+utiliser les identifiants d'une personne mènent rapidement et n'a pas à somme.
+
+00:04:59.970 --> 00:05:01.510
+Vous rencontrerez des problèmes d'autorisation,
+
+00:05:01.710 --> 00:05:02.830
+parfois sans message d'erreur clair,
+
+00:05:02.910 --> 00:05:04.490
+ou déclencherez même des audits de conformité
+
+00:05:04.490 --> 00:05:06.070
+parce que vous effectuez des déploiements critiques
+
+00:05:06.070 --> 00:05:07.990
+avec un compte personnel au lieu d'un compte personnel,
+
+00:05:07.990 --> 00:05:09.710
+au lieu d'un compte dédié à l'automatisation.
+
+00:05:10.550 --> 00:05:11.730
+Les principaux de service,
+
+00:05:12.070 --> 00:05:14.410
+essentiellement des identités d'applications créées dans Azure AD,
+
+00:05:14.610 --> 00:05:16.450
+gèrent toutes les autorisations, la journalisation
+
+00:05:16.450 --> 00:05:18.370
+et l'audit dont votre pipeline a besoin.
+
+00:05:19.310 --> 00:05:22.770
+Sans eux, votre chaîne d'automatisation devient un patchwork de transfert interpersonnel,
+
+00:05:23.010 --> 00:05:25.790
+et vous ne savez jamais qui a modifié quoi, hein ?
+
+00:05:25.790 --> 00:05:27.650
+Le contrôle de version devient également une inconnue totale.
+
+00:05:28.430 --> 00:05:29.130
+Avec du code classique,
+
+00:05:29.210 --> 00:05:31.330
+vous disposez d'historique de validation et d'outils d'analyse des modifications.
+
+00:05:32.270 --> 00:05:34.650
+Les fichiers de solutions Power Platform ne représentent que des instantanés,
+
+00:05:34.650 --> 00:05:36.570
+ce qui signifie que vous manquez de suivi granulaire des changements.
+
+00:05:37.690 --> 00:05:40.250
+La logique cachée dans les formules d'écran d'une application Canva
+
+00:05:40.250 --> 00:05:43.450
+ou dans des flux peu documentés n'est visible qu'après une nouvelle exportation.
+
+00:05:44.390 --> 00:05:46.190
+Si quelqu'un modifie un paramètre de flux dans l'interface,
+
+00:05:46.290 --> 00:05:47.990
+bon courage pour comprendre pourquoi les environnements navals
+
+00:05:47.990 --> 00:05:49.170
+se comportent soudainement différemment.
+
+00:05:49.170 --> 00:05:53.610
+Résultat, gérer la LM pour Power Platform ressemble à un puzzle
+
+00:05:53.610 --> 00:05:56.310
+dont il manque la moitié des pièces, ou du moins cachées, sous la boîte.
+
+00:05:57.610 --> 00:06:00.430
+Les dépendances invisibles, les connecteurs spécifiques à l'environnement
+
+00:06:00.430 --> 00:06:05.190
+et les variables absentes du code compliquent le flux de travail habituel des développeurs.
+
+00:06:06.630 --> 00:06:08.670
+Et c'est sans compter que les environnements de production
+
+00:06:08.670 --> 00:06:11.750
+ont presque toujours des permissions plus strictes des politiques d'odées différentes
+
+00:06:11.750 --> 00:06:15.430
+et des exigences d'audit invisibles en développement ou en test.
+
+00:06:15.430 --> 00:06:19.910
+Il y a un avantage. Cette complexité n'est pas aléatoire.
+
+00:06:20.870 --> 00:06:23.690
+Il existe une raison pratique pour laquelle Power Platform gère les sources,
+
+00:06:23.870 --> 00:06:26.770
+les variables et les connecteurs de manière si unique.
+
+00:06:27.610 --> 00:06:30.430
+La plateforme permet aux utilisateurs métiers de créer des applications puissantes
+
+00:06:30.430 --> 00:06:31.430
+sans se soucier du code.
+
+00:06:32.510 --> 00:06:35.370
+L'effet secondaire, c'est que vous, en tant que responsable de l'automatisation,
+
+00:06:35.650 --> 00:06:37.950
+devez surveiller ce qui se cache sous le capot.
+
+00:06:38.890 --> 00:06:41.150
+Si vous savez où passent ces fils invisibles, vous pouvez corriger
+
+00:06:41.150 --> 00:06:45.410
+ou éviter la plupart des pièges qui font dérailler l'ALM de Power Platform.
+
+00:06:45.430 --> 00:06:49.710
+Si tout cela semble difficile à gérer, vous n'avez pas tort.
+
+00:06:50.410 --> 00:06:53.490
+Mais il existe 4 piliers ALM qui aident réellement à démêler cet écheveau.
+
+00:06:54.050 --> 00:06:55.630
+Sources, construction, test et déploiement.
+
+00:06:56.370 --> 00:06:58.070
+Chacun a ses particularités dans Power Platform.
+
+00:06:58.470 --> 00:07:01.010
+Mais ensemble, ils remettent de l'ordre dans ce qui semble être un chaos.
+
+00:07:02.570 --> 00:07:03.510
+Le système ALM central.
+
+00:07:03.650 --> 00:07:05.030
+Sources, construction, test, déploiement.
+
+00:07:05.670 --> 00:07:08.350
+Chaque fois que quelqu'un demande un pipeline Power Platform qui fonctionne,
+
+00:07:08.490 --> 00:07:11.710
+la première chose qui vient à l'esprit sont ces 4 piliers ALM fondamentaux.
+
+00:07:11.830 --> 00:07:14.110
+Sources, construction, test, déploiement.
+
+00:07:14.110 --> 00:07:18.530
+11. Dans le développement traditionnel, on pourrait presque le faire des yeux fermés.
+
+00:07:19.010 --> 00:07:20.790
+Power Platform ne vous facilite pas autant la tâche.
+
+00:07:21.630 --> 00:07:23.570
+Soudainement, Okami Sursuk ne signifie plus Koduk.
+
+00:07:24.210 --> 00:07:25.810
+Cela signifie gérer des fichiers de solution,
+
+00:07:26.090 --> 00:07:28.370
+exporter des lots compressés contenant des applications,
+
+00:07:28.670 --> 00:07:32.370
+des flux et parfois des connecteurs prétendant faire partie de la source.
+
+00:07:32.370 --> 00:07:37.950
+Commençons par les bases, puis analysons ce qui rend chaque pilier un peu étrange dans cette unidaire.
+
+00:07:38.750 --> 00:07:39.890
+Vous avez votre fichier zip de solution.
+
+00:07:40.370 --> 00:07:41.550
+Ce n'est pas du code au sens habituel du terme.
+
+00:07:42.330 --> 00:07:45.050
+Ouvrez-le et vous êtes accueilli par des fichiers descriptifs XML et JSON,
+
+00:07:45.250 --> 00:07:47.550
+et non par la logique que vous trouverez en TypeScript ou C-Shob.
+
+00:07:47.550 --> 00:07:50.310
+Pourtant, c'est cela la source pour Power Platform.
+
+00:07:50.910 --> 00:07:52.270
+Les équipes se font souvent piéger ici.
+
+00:07:52.850 --> 00:07:55.370
+Cela semble portable jusqu'à ce que vous réalisiez que la plupart des changements,
+
+00:07:55.550 --> 00:07:58.350
+comme la mise à jour d'une formule sur un écran ou l'ajustement de la logique d'un flux,
+
+00:07:58.450 --> 00:08:01.850
+ne sont pas visibles avant l'exportation d'un nouveau fichier zip de solution d'une.
+
+00:08:02.410 --> 00:08:04.590
+Alors oui, vous pouvez versionner ces fichiers de solution dans Git,
+
+00:08:04.810 --> 00:08:07.910
+mais à moins d'être discipliné sur l'exportation après chaque modification pertinente,
+
+00:08:08.010 --> 00:08:09.550
+votre historique comportera des lacunes flagrantes.
+
+00:08:10.550 --> 00:08:11.550
+Vient ensuite la configuration.
+
+00:08:11.550 --> 00:08:15.570
+Pour des applications classiques, vous pourriez stocker les chaînes de connexion dans un fichier de configuration
+
+00:08:15.570 --> 00:08:16.990
+et en rester là, et en rester là.
+
+00:08:17.270 --> 00:08:20.270
+Power Platform dissimule des données spécifiques à l'environnement à l'intérieur de ces solutions.
+
+00:08:21.750 --> 00:08:23.710
+Il ne s'agit pas seulement de variables d'environnement,
+
+00:08:23.870 --> 00:08:26.250
+mais de références, de connecteurs, de points de terminaison dynamiques,
+
+00:08:26.350 --> 00:08:28.450
+de rôles et d'autorisations regroupés avec la logique métier.
+
+00:08:29.810 --> 00:08:31.750
+Si vous oubliez de les mettre à jour avant l'exportation,
+
+00:08:31.910 --> 00:08:33.330
+depuis le développement ou le test,
+
+00:08:33.470 --> 00:08:35.910
+vous verrouillez des pointeurs vers le mauvais emplacement.
+
+00:08:36.470 --> 00:08:38.950
+J'ai vu des équipes valider religieusement leurs fichiers zip de solution
+
+00:08:38.950 --> 00:08:42.290
+pour finalement déployer et réaliser que la moitié de leur application
+
+00:08:42.290 --> 00:08:44.590
+communique toujours avec le dataverse de développement au lieu de la production.
+
+00:08:44.590 --> 00:08:47.450
+Car personne n'a remappé les références des connecteurs 4.
+
+00:08:48.210 --> 00:08:49.170
+Ensuite, nous avons la compilation.
+
+00:08:50.290 --> 00:08:52.410
+Le mot build exévoque généralement la compilation de codes
+
+00:08:52.410 --> 00:08:55.010
+et l'observation de coches vertes dans un travail d'intégration continue.
+
+00:08:55.990 --> 00:08:59.290
+Avec Power Platform, le processus de build consiste à stocker ses paquets zip,
+
+00:08:59.430 --> 00:09:01.610
+à revérifier le schéma et à valider les dépendances.
+
+00:09:02.730 --> 00:09:04.010
+Dans un pipeline GitHub Actions,
+
+00:09:04.190 --> 00:09:06.390
+un travail de build récupère votre fichier de solution validé
+
+00:09:06.390 --> 00:09:08.950
+puis utilise l'interface CLI Power Platform de Microsoft
+
+00:09:08.950 --> 00:09:11.170
+pour déballer, valider et remballer la solution.
+
+00:09:11.870 --> 00:09:14.370
+L'étape de validation est là où la magie ou le carreau opère.
+
+00:09:14.590 --> 00:09:17.150
+Elle peut détecter des références rompues ou des actions non prises en charge.
+
+00:09:18.030 --> 00:09:21.150
+Pire encore, si une modification dans votre flux repose sur un connecteur personnalisé
+
+00:09:21.150 --> 00:09:22.850
+qui n'a jamais été intégré au contrôle de version,
+
+00:09:23.110 --> 00:09:25.810
+votre build empaquette silencieusement quelque chose d'incomplet.
+
+00:09:26.610 --> 00:09:27.710
+C'est là que les choses deviennent délicates.
+
+00:09:28.330 --> 00:09:30.210
+Ces travaux de build ne servent pas tant à compiler
+
+00:09:30.210 --> 00:09:31.710
+qu'à orchestrer une exportation fiable
+
+00:09:31.710 --> 00:09:34.630
+et à s'assurer que le contenu est prêt à être déployé.
+
+00:09:34.630 --> 00:09:37.510
+Les équipes qui sautent cette étape ou la précipite
+
+00:09:37.510 --> 00:09:39.670
+se retrouvent vite dans des situations où un build réussit techniquement
+
+00:09:39.670 --> 00:09:40.290
+et où ce qui arrive.
+
+00:09:40.750 --> 00:09:43.470
+En UAT ou en production manque de la moitié des fonctionnalités prévues.
+
+00:09:43.670 --> 00:09:44.930
+Manque de la moitié des fonctionnalités prévues.
+
+00:09:45.230 --> 00:09:47.330
+Microsoft continue de promouvoir l'idée que les fichiers de solution
+
+00:09:47.330 --> 00:09:49.790
+rendent l'ALM portable, mais il y a toujours une note de bas de page.
+
+00:09:50.650 --> 00:09:53.190
+La portabilité dépend de la bonne configuration des connecteurs
+
+00:09:53.190 --> 00:09:54.630
+et des rôles à travers les environnements.
+
+00:09:55.290 --> 00:09:56.530
+Les tests constituent le bouton source suivant.
+
+00:09:56.890 --> 00:09:58.090
+Dans un pipeline d'applications web,
+
+00:09:58.190 --> 00:10:00.190
+les tests automatisés peuvent exécuter des tests unitaires
+
+00:10:00.190 --> 00:10:01.730
+ou des vérifications d'interface utilisateur.
+
+00:10:01.730 --> 00:10:05.330
+Pour Power Platform, ce qui compte comme un test reste sujet à débat.
+
+00:10:06.190 --> 00:10:07.950
+Parfois, il s'agit de la validation de la solution.
+
+00:10:08.290 --> 00:10:09.930
+En d'autres termes, la solution s'ouvre-t-elle
+
+00:10:09.930 --> 00:10:12.710
+et les dépendances clés sont-elles résolues ?
+
+00:10:12.710 --> 00:10:14.470
+D'autres fois, il s'agit d'exécuter des flux de tests
+
+00:10:14.470 --> 00:10:16.590
+ou de vérifier que les connecteurs répandent correctement
+
+00:10:16.590 --> 00:10:17.570
+dans un environnement de test.
+
+00:10:18.690 --> 00:10:20.190
+Bien souvent, les tests sont manuels
+
+00:10:20.190 --> 00:10:22.510
+car la validation de la logique métier dans une application Canvas
+
+00:10:22.510 --> 00:10:24.530
+n'est pas encore intégrée aux pipelines automatisés.
+
+00:10:25.790 --> 00:10:27.690
+Pourtant, vous pouvez automatiser des vérifications
+
+00:10:27.690 --> 00:10:29.090
+pour détecter les connecteurs manquants,
+
+00:10:29.370 --> 00:10:30.210
+valider les flux critiques
+
+00:10:30.210 --> 00:10:31.930
+ou même tester un environnement pour confirmer
+
+00:10:31.930 --> 00:10:33.110
+que les identifiants fonctionnent.
+
+00:10:34.230 --> 00:10:35.530
+Le déploiement est ce qui rend les choses compliquées.
+
+00:10:35.930 --> 00:10:37.250
+Lorsqu'une application standard est déployée,
+
+00:10:37.290 --> 00:10:39.110
+vous envoyez simplement un artefact web sur Azure.
+
+00:10:39.950 --> 00:10:41.690
+Avec Power Platform, vous devez mapper les connexions,
+
+00:10:41.850 --> 00:10:43.670
+assigner les autorisations, mettre à jour les secrets
+
+00:10:43.670 --> 00:10:45.070
+et changer les variables d'environnement.
+
+00:10:45.510 --> 00:10:47.650
+Et enfin, déclencher une importation via un principal de service.
+
+00:10:47.910 --> 00:10:48.730
+Jamais un compte classique.
+
+00:10:48.950 --> 00:10:49.610
+Jamais un compte classique.
+
+00:10:50.030 --> 00:10:51.370
+Sinon, vous serez bloqué par des audits
+
+00:10:51.370 --> 00:10:52.190
+et des refus d'accès.
+
+00:10:53.670 --> 00:10:55.710
+GitHub Actions peut unifier ce processus,
+
+00:10:55.910 --> 00:10:57.270
+mais seulement si chaque tâche sait
+
+00:10:57.270 --> 00:10:58.190
+quel environnement cibler
+
+00:10:58.190 --> 00:10:59.390
+et quel secret utiliser.
+
+00:11:00.610 --> 00:11:02.190
+J'ai vu des équipes essayer de gagner du temps
+
+00:11:02.190 --> 00:11:03.650
+en utilisant un seul jeu d'identifiant
+
+00:11:03.650 --> 00:11:04.630
+pour le développement et la production,
+
+00:11:04.850 --> 00:11:05.810
+ce qui est une recette pour le chaos,
+
+00:11:05.950 --> 00:11:06.510
+les fuites de données,
+
+00:11:06.710 --> 00:11:07.510
+les erreurs d'autorisation
+
+00:11:07.510 --> 00:11:09.630
+et les bugs qui n'apparaissent que dans un seul environnement.
+
+00:11:11.170 --> 00:11:12.230
+Prenons l'exemple d'une équipe réelle
+
+00:11:12.230 --> 00:11:13.130
+à laquelle j'ai travaillé il y a quelques mois.
+
+00:11:14.110 --> 00:11:15.210
+Ils faisaient presque tout correctement.
+
+00:11:15.430 --> 00:11:16.070
+Dépôt guide standard,
+
+00:11:16.270 --> 00:11:17.150
+fichier solution versionné
+
+00:11:17.150 --> 00:11:17.830
+et branchement clair.
+
+00:11:18.910 --> 00:11:20.530
+Leur pipeline échouait systématiquement au déploiement.
+
+00:11:21.330 --> 00:11:22.250
+Ils ne prenaient jamais la peine
+
+00:11:22.250 --> 00:11:23.570
+d'échanger des variables d'environnement
+
+00:11:23.570 --> 00:11:25.250
+ou de mettre à jour les références des connecteurs
+
+00:11:25.250 --> 00:11:26.430
+avant l'importation en production.
+
+00:11:27.110 --> 00:11:27.890
+Cela laissait des flux clés
+
+00:11:27.890 --> 00:11:29.190
+pointer vers les mauvais points de terminaison
+
+00:11:29.190 --> 00:11:30.250
+avec des données qui s'écoulaient
+
+00:11:30.250 --> 00:11:30.990
+vers les mauvais systèmes.
+
+00:11:31.990 --> 00:11:32.450
+La solution,
+
+00:11:32.810 --> 00:11:34.430
+des étapes scriptées dans leur pipeline GitHub
+
+00:11:34.430 --> 00:11:35.390
+qui échangeaient des variables
+
+00:11:35.390 --> 00:11:36.570
+et remappaient chaque connecteur
+
+00:11:36.570 --> 00:11:37.450
+lors de l'importation.
+
+00:11:38.490 --> 00:11:40.230
+Les conseils de Microsoft à ce sujet sont très clairs.
+
+00:11:41.050 --> 00:11:42.070
+Utilisez les fichiers solution
+
+00:11:42.070 --> 00:11:43.030
+pour transférer des éléments
+
+00:11:43.030 --> 00:11:43.810
+entre les environnements,
+
+00:11:44.230 --> 00:11:45.670
+mais gérez toujours les références de connecteurs
+
+00:11:45.670 --> 00:11:46.610
+et le mappage des rôles
+
+00:11:46.610 --> 00:11:47.510
+au sein de votre pipeline.
+
+00:11:48.930 --> 00:11:50.070
+Ils soulignent que sauter ces étapes
+
+00:11:50.070 --> 00:11:51.510
+est la première cause de panne des applications,
+
+00:11:51.710 --> 00:11:52.690
+surtout à mesure que les environnements
+
+00:11:52.690 --> 00:11:53.390
+sont sécurisés.
+
+00:11:54.650 --> 00:11:56.090
+Une fois que vous traitez le code source,
+
+00:11:56.230 --> 00:11:56.710
+la construction,
+
+00:11:56.950 --> 00:11:57.970
+le test et le déploiement
+
+00:11:57.970 --> 00:11:58.790
+comme des éléments liés
+
+00:11:58.790 --> 00:11:59.990
+et non comme des étapes isolées,
+
+00:12:00.170 --> 00:12:01.170
+il est plus facile de comprendre
+
+00:12:01.170 --> 00:12:03.110
+pourquoi tant de projets ALM échouent
+
+00:12:03.110 --> 00:12:04.430
+et comment résoudre les problèmes
+
+00:12:04.430 --> 00:12:05.430
+au lieu de croiser les doigts.
+
+00:12:07.410 --> 00:12:07.730
+Ensuite,
+
+00:12:07.930 --> 00:12:09.070
+voyons comment GitHub Actions
+
+00:12:09.070 --> 00:12:09.950
+coordonne cette danse,
+
+00:12:10.070 --> 00:12:10.730
+les déclencheurs,
+
+00:12:10.870 --> 00:12:11.370
+le branchement
+
+00:12:11.370 --> 00:12:12.770
+et la séparation des tâches
+
+00:12:12.770 --> 00:12:13.830
+qui rendent votre automatisation
+
+00:12:13.830 --> 00:12:14.490
+Power Platform
+
+00:12:14.490 --> 00:12:16.570
+à la fois flexible et sécurisée.
+
+00:12:17.790 --> 00:12:18.430
+GitHub Actions
+
+00:12:18.430 --> 00:12:19.230
+pour relier les points
+
+00:12:19.230 --> 00:12:20.330
+grâce aux déclencheurs et aux tâches.
+
+00:12:20.330 --> 00:12:22.570
+Si vous avez déjà attendu
+
+00:12:22.570 --> 00:12:23.830
+la fin d'un pipeline GitHub Actions
+
+00:12:23.830 --> 00:12:25.090
+après la mise à jour d'une Power App,
+
+00:12:25.190 --> 00:12:26.230
+vous savez que l'automatisation
+
+00:12:26.230 --> 00:12:27.370
+n'est ni instantanée
+
+00:12:27.370 --> 00:12:27.850
+ni magique.
+
+00:12:29.410 --> 00:12:30.070
+La plupart des équipes
+
+00:12:30.070 --> 00:12:30.630
+se heurtent à se mûrir
+
+00:12:30.630 --> 00:12:31.450
+juste après l'excitation
+
+00:12:31.450 --> 00:12:32.470
+de voir leur premier flux de travail
+
+00:12:32.470 --> 00:12:33.170
+s'exécuter.
+
+00:12:34.210 --> 00:12:35.150
+Vous configurez un script,
+
+00:12:35.290 --> 00:12:36.470
+vous le reliez à votre dépôt
+
+00:12:36.470 --> 00:12:37.290
+et vous vous attendez
+
+00:12:37.290 --> 00:12:38.690
+à ce que chaque nouveau commis
+
+00:12:38.690 --> 00:12:39.730
+se déploie parfaitement
+
+00:12:39.730 --> 00:12:41.190
+dans tous les environnements.
+
+00:12:41.830 --> 00:12:42.870
+Puis la réalité vous rattrape.
+
+00:12:43.450 --> 00:12:44.790
+Au lieu de simplement lancer un script,
+
+00:12:44.930 --> 00:12:45.490
+GitHub Actions
+
+00:12:45.490 --> 00:12:46.430
+utilise une chaîne logique
+
+00:12:46.430 --> 00:12:47.770
+basée sur des déclencheurs,
+
+00:12:47.910 --> 00:12:48.290
+des tâches
+
+00:12:48.290 --> 00:12:50.290
+et des transferts entre environnements.
+
+00:12:51.450 --> 00:12:52.330
+Cet ordre et cette structure
+
+00:12:52.330 --> 00:12:53.170
+empêchent les déploiements
+
+00:12:53.170 --> 00:12:54.370
+de devenir un enchevêtrement
+
+00:12:54.370 --> 00:12:54.990
+d'étapes échouées
+
+00:12:54.990 --> 00:12:56.070
+et d'erreurs étranges.
+
+00:12:56.970 --> 00:12:57.930
+Le point de départ de ce système
+
+00:12:57.930 --> 00:12:58.590
+est le déclencheur.
+
+00:13:00.370 --> 00:13:01.550
+La plupart des débutants
+
+00:13:01.550 --> 00:13:02.330
+créent un workflow
+
+00:13:02.330 --> 00:13:03.670
+qui se déclenche à chaque push-up
+
+00:13:03.670 --> 00:13:05.090
+ou lorsqu'une pull request
+
+00:13:05.090 --> 00:13:07.390
+arrive dans la branche principale.
+
+00:13:08.670 --> 00:13:09.150
+En apparence,
+
+00:13:09.230 --> 00:13:10.130
+cela ressemble à une bonne pratique.
+
+00:13:10.570 --> 00:13:11.190
+Pourquoi ne pas exécuter
+
+00:13:11.190 --> 00:13:12.750
+votre pipeline à chaque modification ?
+
+00:13:12.750 --> 00:13:13.290
+Voici le problème.
+
+00:13:13.290 --> 00:13:14.970
+Si vous ne définissez un déclencheur
+
+00:13:14.970 --> 00:13:15.890
+que sur la branche principale,
+
+00:13:15.990 --> 00:13:17.030
+tout est canalisé par une voie unique.
+
+00:13:17.530 --> 00:13:18.390
+Que faire si les modifications
+
+00:13:18.390 --> 00:13:19.110
+doivent aller en dev
+
+00:13:19.110 --> 00:13:20.570
+mais pas en test ou en prod ?
+
+00:13:20.570 --> 00:13:21.370
+Que faire si vous êtes prêt
+
+00:13:21.370 --> 00:13:21.790
+pour la prod
+
+00:13:21.790 --> 00:13:22.350
+mais que les tests
+
+00:13:22.350 --> 00:13:24.510
+sont encore en cours de validation ?
+
+00:13:24.510 --> 00:13:25.410
+Les équipes qui utilisent
+
+00:13:25.410 --> 00:13:26.410
+des déclencheurs universels
+
+00:13:26.410 --> 00:13:27.590
+rencontrent souvent des problèmes,
+
+00:13:27.710 --> 00:13:28.610
+des fonctionnalités destinées
+
+00:13:28.610 --> 00:13:29.030
+au développement
+
+00:13:29.030 --> 00:13:29.930
+se retrouvent en production
+
+00:13:29.930 --> 00:13:31.330
+où des déploiements de tests
+
+00:13:31.330 --> 00:13:32.490
+écrasent soudainement
+
+00:13:32.490 --> 00:13:34.530
+les paramètres de prod et prod.
+
+00:13:35.250 --> 00:13:36.450
+Vous pouvez ramifier les workflows
+
+00:13:36.450 --> 00:13:37.270
+pour chaque environnement
+
+00:13:37.270 --> 00:13:38.210
+dev, test, prod
+
+00:13:38.210 --> 00:13:40.050
+et configurer des déclencheurs
+
+00:13:40.050 --> 00:13:41.150
+très spécifiques pour chacun.
+
+00:13:42.250 --> 00:13:42.730
+Par exemple,
+
+00:13:42.850 --> 00:13:43.590
+configurer un workflow
+
+00:13:43.590 --> 00:13:44.990
+qui ne s'exécute que sur les push-up
+
+00:13:44.990 --> 00:13:45.730
+vers une branche dev
+
+00:13:45.730 --> 00:13:47.510
+ou lancer un workflow différent
+
+00:13:47.510 --> 00:13:48.830
+lorsqu'une fusion est effectuée
+
+00:13:48.830 --> 00:13:49.670
+vers la branche de prod.
+
+00:13:50.790 --> 00:13:52.050
+Cette approche offre plus de contrôle
+
+00:13:52.050 --> 00:13:53.210
+et sépare clairement les travaux
+
+00:13:53.210 --> 00:13:54.250
+en cours des changements réels
+
+00:13:54.250 --> 00:13:55.110
+mais beaucoup d'équipes
+
+00:13:55.110 --> 00:13:56.650
+ne revoient jamais leurs déclencheurs
+
+00:13:56.650 --> 00:13:57.510
+après les avoir créés.
+
+00:13:57.510 --> 00:13:59.870
+C'est ainsi que des secrets
+
+00:13:59.870 --> 00:14:00.470
+d'un environnement
+
+00:14:00.470 --> 00:14:01.470
+peuvent glisser dans un autre
+
+00:14:01.470 --> 00:14:02.510
+et que des configurations
+
+00:14:02.510 --> 00:14:03.610
+destinées aux dev
+
+00:14:03.610 --> 00:14:05.190
+finissent en prod par accident.
+
+00:14:06.030 --> 00:14:06.690
+Une équipe avec laquelle
+
+00:14:06.690 --> 00:14:07.190
+j'ai travaillé
+
+00:14:07.190 --> 00:14:08.030
+a tenté d'exécuter
+
+00:14:08.030 --> 00:14:09.050
+tout son processus ALM
+
+00:14:09.050 --> 00:14:09.990
+à partir d'un seul workflow.
+
+00:14:10.870 --> 00:14:11.370
+Pendant un temps,
+
+00:14:11.470 --> 00:14:12.290
+cela semblait fonctionner
+
+00:14:12.290 --> 00:14:13.830
+jusqu'à ce que quelqu'un remarque
+
+00:14:13.830 --> 00:14:14.710
+que la chaîne de connexion
+
+00:14:14.710 --> 00:14:15.850
+à la base de données de production
+
+00:14:15.850 --> 00:14:17.470
+apparaissait dans l'environnement de dev.
+
+00:14:18.190 --> 00:14:19.130
+Ils n'avaient pas réalisé
+
+00:14:19.130 --> 00:14:20.190
+que leurs secrets étaient partagés
+
+00:14:20.190 --> 00:14:20.830
+entre les tâches.
+
+00:14:21.790 --> 00:14:22.810
+Et une fois le code déplacé
+
+00:14:22.810 --> 00:14:23.770
+entre les environnements,
+
+00:14:23.890 --> 00:14:24.710
+ces secrets ont suivi.
+
+00:14:25.070 --> 00:14:25.790
+Ce n'était pas un plantage
+
+00:14:25.790 --> 00:14:26.430
+ou une erreur évidente.
+
+00:14:26.430 --> 00:14:27.510
+C'était silencieux.
+
+00:14:28.790 --> 00:14:29.650
+Ce type de fuite de données
+
+00:14:29.650 --> 00:14:30.670
+est plus courant qu'on ne le pense
+
+00:14:30.670 --> 00:14:31.770
+surtout si vous ne configurez pas
+
+00:14:31.770 --> 00:14:32.730
+vos workflows pour séparer
+
+00:14:32.730 --> 00:14:33.590
+les secrets et les variables
+
+00:14:33.590 --> 00:14:34.030
+d'environnement.
+
+00:14:35.450 --> 00:14:36.450
+Chaque tâche dans un workflow
+
+00:14:36.450 --> 00:14:37.190
+GitHub Actions
+
+00:14:37.190 --> 00:14:38.350
+gère une partie précise
+
+00:14:38.350 --> 00:14:39.090
+du processus.
+
+00:14:39.950 --> 00:14:40.710
+Une tâche peut gérer
+
+00:14:40.710 --> 00:14:41.830
+l'exportation de la solution
+
+00:14:41.830 --> 00:14:42.810
+depuis un environnement
+
+00:14:42.810 --> 00:14:43.490
+source.
+
+00:14:44.510 --> 00:14:45.550
+Une autre tâche s'occupe
+
+00:14:45.550 --> 00:14:46.370
+de la validation,
+
+00:14:46.550 --> 00:14:47.050
+du déballage,
+
+00:14:47.210 --> 00:14:48.130
+de l'analyse des métadonnées,
+
+00:14:48.650 --> 00:14:49.930
+de la vérification des dépendances
+
+00:14:49.930 --> 00:14:51.390
+et de la présence des connecteurs.
+
+00:14:53.170 --> 00:14:54.050
+Vient ensuite la tâche
+
+00:14:54.050 --> 00:14:54.910
+qui prépare les variables
+
+00:14:54.910 --> 00:14:56.170
+spécifiques à l'environnement.
+
+00:14:56.430 --> 00:14:58.070
+adaptant la solution à sa cible.
+
+00:14:59.030 --> 00:14:59.970
+La dernière tâche déclenche
+
+00:14:59.970 --> 00:15:01.010
+le processus d'importation
+
+00:15:01.010 --> 00:15:02.230
+en utilisant des principaux
+
+00:15:02.230 --> 00:15:03.030
+de service pour appliquer
+
+00:15:03.030 --> 00:15:03.450
+les changements
+
+00:15:03.450 --> 00:15:04.530
+dans le bon environnement.
+
+00:15:05.030 --> 00:15:05.490
+On pourrait voir
+
+00:15:05.490 --> 00:15:06.310
+les variables d'environnement
+
+00:15:06.310 --> 00:15:06.770
+et les secrets
+
+00:15:06.770 --> 00:15:07.730
+comme de simples espaces
+
+00:15:07.730 --> 00:15:08.110
+réservés,
+
+00:15:08.230 --> 00:15:08.690
+mais en pratique,
+
+00:15:08.990 --> 00:15:09.770
+ce sont eux qui assurent
+
+00:15:09.770 --> 00:15:11.030
+la cohésion de l'ensemble.
+
+00:15:11.030 --> 00:15:13.470
+Les chaînes de connexion
+
+00:15:13.470 --> 00:15:14.190
+clé d'API
+
+00:15:14.190 --> 00:15:15.310
+et mots de passe partagés
+
+00:15:15.310 --> 00:15:15.950
+doivent être
+
+00:15:15.950 --> 00:15:17.450
+échangées entre les tâches
+
+00:15:17.450 --> 00:15:18.270
+sans jamais franchir
+
+00:15:18.270 --> 00:15:19.410
+les limites de sécurité.
+
+00:15:20.710 --> 00:15:21.950
+Dans la LM Power Platform,
+
+00:15:22.050 --> 00:15:22.350
+vous pouvez avoir
+
+00:15:22.350 --> 00:15:23.210
+une connexion dataverse
+
+00:15:23.210 --> 00:15:24.350
+différente pour chaque environnement
+
+00:15:24.350 --> 00:15:24.990
+ou devoir changer
+
+00:15:24.990 --> 00:15:26.110
+de point de terminaison
+
+00:15:26.110 --> 00:15:26.750
+selon le flux
+
+00:15:26.750 --> 00:15:27.790
+ou l'application PowerApp
+
+00:15:27.790 --> 00:15:28.150
+visée.
+
+00:15:28.150 --> 00:15:30.770
+Si vous réutilisez
+
+00:15:30.770 --> 00:15:31.170
+les variables
+
+00:15:31.170 --> 00:15:32.170
+ou connaissez des secrets en dur,
+
+00:15:32.510 --> 00:15:33.050
+vous aboutissez
+
+00:15:33.050 --> 00:15:33.890
+à un pipeline fragile
+
+00:15:33.890 --> 00:15:34.430
+ou pire,
+
+00:15:34.550 --> 00:15:34.870
+à des risques
+
+00:15:34.870 --> 00:15:35.830
+de sécurité majeurs.
+
+00:15:37.030 --> 00:15:38.030
+Le processus d'importation
+
+00:15:38.030 --> 00:15:38.930
+doit extraire les secrets
+
+00:15:38.930 --> 00:15:40.110
+uniquement du bon coffre-fort
+
+00:15:40.110 --> 00:15:40.730
+pour que la production
+
+00:15:40.730 --> 00:15:41.590
+ne soit pas exposée
+
+00:15:41.590 --> 00:15:42.470
+aux erreurs de test
+
+00:15:42.470 --> 00:15:43.450
+ou de développement.
+
+00:15:44.950 --> 00:15:45.470
+Pour les secrets
+
+00:15:45.470 --> 00:15:46.330
+dans GitHub Actions,
+
+00:15:46.490 --> 00:15:47.470
+visualisez chaque environnement
+
+00:15:47.470 --> 00:15:48.310
+comme ayant son propre
+
+00:15:48.310 --> 00:15:49.270
+coffre-fort numérique,
+
+00:15:49.410 --> 00:15:50.290
+une boîte verrouillée
+
+00:15:50.290 --> 00:15:51.270
+accessible uniquement
+
+00:15:51.270 --> 00:15:52.030
+par les bonnes tâches.
+
+00:15:53.510 --> 00:15:54.130
+GitHub vous offre
+
+00:15:54.130 --> 00:15:54.810
+des contrôles précis.
+
+00:15:56.010 --> 00:15:56.590
+Vous pouvez limiter
+
+00:15:56.590 --> 00:15:57.010
+les secrets
+
+00:15:57.010 --> 00:15:58.070
+des environnements spécifiques
+
+00:15:58.070 --> 00:15:59.090
+afin qu'une tâche de développement
+
+00:15:59.090 --> 00:15:59.730
+ne puisse accéder
+
+00:15:59.730 --> 00:16:00.670
+aux identifiants de production
+
+00:16:00.670 --> 00:16:01.550
+et inversement.
+
+00:16:02.690 --> 00:16:03.970
+Configurer ses coffres-forts
+
+00:16:03.970 --> 00:16:04.610
+et même si quelqu'un
+
+00:16:04.610 --> 00:16:05.330
+modifie le pipeline
+
+00:16:05.330 --> 00:16:05.990
+de manière risquée,
+
+00:16:06.150 --> 00:16:06.750
+les règles de protection
+
+00:16:06.750 --> 00:16:07.590
+d'environnement
+
+00:16:07.590 --> 00:16:08.970
+empêcheront en toute erreur
+
+00:16:08.970 --> 00:16:09.570
+de se propager.
+
+00:16:10.270 --> 00:16:11.190
+La documentation de Microsoft
+
+00:16:11.190 --> 00:16:11.950
+comme celle de GitHub
+
+00:16:11.950 --> 00:16:13.230
+insiste fortement sur ce point.
+
+00:16:13.930 --> 00:16:14.390
+Il recommande
+
+00:16:14.390 --> 00:16:15.090
+des règles de protection
+
+00:16:15.090 --> 00:16:15.650
+d'environnement
+
+00:16:15.650 --> 00:16:16.590
+et un cloisonnement strict
+
+00:16:16.590 --> 00:16:17.030
+et des secrets
+
+00:16:17.030 --> 00:16:17.750
+pour stopper les fuites
+
+00:16:17.750 --> 00:16:18.410
+inter-environnement
+
+00:16:18.410 --> 00:16:19.370
+avant même qu'elles ne surviennent.
+
+00:16:20.750 --> 00:16:21.750
+Sans ce type de protection,
+
+00:16:22.110 --> 00:16:23.030
+même les flux ALM
+
+00:16:23.030 --> 00:16:23.770
+les mieux conçus
+
+00:16:23.770 --> 00:16:24.350
+s'effondrent.
+
+00:16:25.490 --> 00:16:26.110
+Imaginez un flux
+
+00:16:26.110 --> 00:16:27.010
+déployant en production
+
+00:16:27.010 --> 00:16:27.750
+tout en conservant
+
+00:16:28.070 --> 00:16:28.990
+de connexion de développement
+
+00:16:28.990 --> 00:16:30.690
+ou un environnement de test
+
+00:16:30.690 --> 00:16:31.450
+accédant soudainement
+
+00:16:31.450 --> 00:16:32.210
+aux données de production.
+
+00:16:32.890 --> 00:16:33.530
+Cela ne provoque pas
+
+00:16:33.530 --> 00:16:34.390
+toujours des pannes visibles.
+
+00:16:35.230 --> 00:16:35.970
+Parfois, cela déclenche
+
+00:16:35.970 --> 00:16:36.690
+simplement des alertes
+
+00:16:36.690 --> 00:16:37.290
+de conformité
+
+00:16:37.290 --> 00:16:38.190
+ou remplit les journaux
+
+00:16:38.190 --> 00:16:38.770
+d'erreurs subtiles
+
+00:16:38.770 --> 00:16:39.370
+qui s'accumulent
+
+00:16:39.370 --> 00:16:40.570
+pour créer de plus gros problèmes.
+
+00:16:41.170 --> 00:16:41.530
+C'est pourquoi
+
+00:16:41.530 --> 00:16:42.270
+le branchement des flux
+
+00:16:42.270 --> 00:16:43.110
+et le cloisonnement des secrets
+
+00:16:43.110 --> 00:16:44.450
+ne sont pas que des sujets avancés.
+
+00:16:44.670 --> 00:16:45.750
+Non, c'est le filet de sécurité
+
+00:16:45.750 --> 00:16:46.790
+qui empêche votre automatisation
+
+00:16:46.790 --> 00:16:48.010
+de se désagréger silencieusement.
+
+00:16:48.570 --> 00:16:49.670
+Il est également utile
+
+00:16:49.670 --> 00:16:50.390
+de diviser les flux,
+
+00:16:50.530 --> 00:16:51.410
+non seulement par environnement
+
+00:16:51.410 --> 00:16:52.710
+mais aussi par responsabilité.
+
+00:16:54.130 --> 00:16:55.190
+Le code qui exporte
+
+00:16:55.190 --> 00:16:55.930
+et valide les solutions
+
+00:16:55.930 --> 00:16:56.850
+ne devraient même pas savoir
+
+00:16:56.850 --> 00:16:57.630
+comment déployer
+
+00:16:57.630 --> 00:16:59.130
+ou échanger des secrets.
+
+00:17:00.070 --> 00:17:01.170
+Si chaque tâche gère
+
+00:17:01.170 --> 00:17:01.990
+une partie du puzzle,
+
+00:17:02.170 --> 00:17:03.270
+il devient beaucoup plus facile
+
+00:17:03.270 --> 00:17:04.190
+d'identifier les pannes,
+
+00:17:04.270 --> 00:17:05.390
+d'effectuer des retours arrière
+
+00:17:05.390 --> 00:17:06.030
+et d'auditer
+
+00:17:06.030 --> 00:17:07.510
+les modifications après coup.
+
+00:17:08.530 --> 00:17:09.210
+Les secrets restent
+
+00:17:09.210 --> 00:17:09.830
+dans leur coffre,
+
+00:17:09.990 --> 00:17:10.650
+les tâches respectent
+
+00:17:10.650 --> 00:17:11.790
+des permissions bien définies
+
+00:17:11.790 --> 00:17:12.870
+et les échecs du pipeline
+
+00:17:12.870 --> 00:17:13.670
+pointent directement
+
+00:17:13.670 --> 00:17:14.870
+vers la partie à corriger.
+
+00:17:16.710 --> 00:17:18.150
+Comprendre comment GitHub Actions
+
+00:17:18.150 --> 00:17:18.950
+transmet le travail
+
+00:17:18.950 --> 00:17:19.770
+d'une tâche à l'autre
+
+00:17:19.770 --> 00:17:20.550
+tout en maintenant.
+
+00:17:20.890 --> 00:17:21.730
+Les secrets isolés
+
+00:17:21.730 --> 00:17:22.530
+et les déclencheurs
+
+00:17:22.530 --> 00:17:23.370
+clairement définis
+
+00:17:23.370 --> 00:17:24.250
+transforment la LM
+
+00:17:24.250 --> 00:17:25.150
+d'une simple expérience
+
+00:17:25.150 --> 00:17:26.110
+en une pratique fiable,
+
+00:17:26.350 --> 00:17:27.910
+sécurisée et prévisible.
+
+00:17:29.470 --> 00:17:30.550
+Cette segmentation des flux
+
+00:17:30.550 --> 00:17:31.590
+ne consiste pas seulement
+
+00:17:31.590 --> 00:17:32.790
+à suivre les meilleures pratiques.
+
+00:17:34.310 --> 00:17:34.790
+C'est ce qui bloque
+
+00:17:34.790 --> 00:17:36.130
+les fuites de sécurité silencieuses
+
+00:17:36.130 --> 00:17:37.310
+et les écrasements accidentels
+
+00:17:37.310 --> 00:17:38.090
+tout en éliminant
+
+00:17:38.090 --> 00:17:38.870
+toute une catégorie
+
+00:17:38.870 --> 00:17:39.790
+d'erreurs invisibles
+
+00:17:39.790 --> 00:17:40.710
+avant qu'elles n'affectent
+
+00:17:40.710 --> 00:17:41.530
+vos environnements.
+
+00:17:42.930 --> 00:17:43.610
+Maintenant que les éléments
+
+00:17:43.610 --> 00:17:44.310
+fonctionnent ensemble
+
+00:17:44.310 --> 00:17:45.330
+grâce à une automatisation
+
+00:17:45.330 --> 00:17:46.190
+correctement cloisonnée,
+
+00:17:46.330 --> 00:17:46.970
+il est temps de s'attaquer
+
+00:17:46.970 --> 00:17:48.150
+à un autre point de friction,
+
+00:17:48.610 --> 00:17:51.010
+ce connecteur principaux de service
+
+00:17:51.010 --> 00:17:52.430
+et ces petits pièges critiques
+
+00:17:52.430 --> 00:17:53.110
+qui peuvent bloquer
+
+00:17:53.110 --> 00:17:53.750
+vos déploiements
+
+00:17:53.750 --> 00:17:54.670
+au moment où
+
+00:17:54.670 --> 00:17:55.550
+vous prenez confiance.
+
+00:17:57.150 --> 00:17:58.290
+Principes des services secrets
+
+00:17:58.290 --> 00:17:58.910
+et problèmes liés
+
+00:17:58.910 --> 00:17:59.610
+aux connecteurs.
+
+00:18:00.390 --> 00:18:01.150
+Si vous avez déjà essayé
+
+00:18:01.150 --> 00:18:02.170
+de transférer une power app
+
+00:18:02.170 --> 00:18:02.870
+ou un flot du dev
+
+00:18:02.870 --> 00:18:03.330
+vers la prod,
+
+00:18:03.450 --> 00:18:04.250
+vous connaissez l'histoire.
+
+00:18:06.330 --> 00:18:07.290
+Tout fonctionne parfaitement
+
+00:18:07.290 --> 00:18:08.030
+dans un environnement
+
+00:18:08.030 --> 00:18:08.910
+puis dès que vous changez,
+
+00:18:09.190 --> 00:18:09.710
+tout s'arrête
+
+00:18:09.710 --> 00:18:10.890
+ou affiche des erreurs
+
+00:18:10.890 --> 00:18:11.990
+de connexion mystérieuses.
+
+00:18:11.990 --> 00:18:14.170
+Ce n'est pas propre
+
+00:18:14.170 --> 00:18:15.170
+à une équipe spécifique.
+
+00:18:15.910 --> 00:18:16.650
+Chaque administrateur
+
+00:18:16.650 --> 00:18:17.230
+Power Platform
+
+00:18:17.230 --> 00:18:18.170
+finit par se heurter
+
+00:18:18.170 --> 00:18:18.710
+à ce mur.
+
+00:18:20.090 --> 00:18:20.890
+La racine du problème
+
+00:18:20.890 --> 00:18:22.070
+réside dans le comportement
+
+00:18:22.070 --> 00:18:22.710
+des connecteurs
+
+00:18:22.710 --> 00:18:23.810
+et des secrets en coulisses.
+
+00:18:25.190 --> 00:18:26.070
+Vous ne pouvez pas simplement
+
+00:18:26.070 --> 00:18:27.230
+exporter un zip de solution
+
+00:18:27.230 --> 00:18:27.810
+du développement
+
+00:18:27.810 --> 00:18:29.330
+et espérer qu'il fonctionne ailleurs
+
+00:18:29.330 --> 00:18:30.630
+car les connexions
+
+00:18:30.630 --> 00:18:32.350
+dépendent de l'environnement.
+
+00:18:33.270 --> 00:18:33.930
+Prenons les références
+
+00:18:33.930 --> 00:18:34.830
+de connecteurs pour commencer.
+
+00:18:35.750 --> 00:18:36.490
+Dans Power Platform,
+
+00:18:36.650 --> 00:18:37.690
+un connecteur n'est jamais juste
+
+00:18:37.690 --> 00:18:38.590
+une information statique
+
+00:18:38.590 --> 00:18:39.730
+intégrée à votre application.
+
+00:18:40.770 --> 00:18:41.410
+Il est dynamique,
+
+00:18:41.530 --> 00:18:41.970
+modifiable,
+
+00:18:41.990 --> 00:18:42.690
+et souvent unique
+
+00:18:42.690 --> 00:18:43.370
+par environnement.
+
+00:18:44.110 --> 00:18:44.770
+Lorsque vous exportez
+
+00:18:44.770 --> 00:18:45.330
+votre solution,
+
+00:18:45.470 --> 00:18:46.390
+les références de connecteurs
+
+00:18:46.390 --> 00:18:47.550
+agissent presque comme des signers.
+
+00:18:47.990 --> 00:18:48.490
+Ils pointent vers
+
+00:18:48.490 --> 00:18:49.290
+des objets de connexion
+
+00:18:49.290 --> 00:18:50.550
+qui n'existent que dans l'environnement
+
+00:18:50.550 --> 00:18:51.530
+où ils ont été créés.
+
+00:18:51.910 --> 00:18:52.170
+Créés.
+
+00:18:52.690 --> 00:18:53.830
+Ainsi, lors de l'importation
+
+00:18:53.830 --> 00:18:54.610
+en test ou en prod.
+
+00:18:54.810 --> 00:18:56.150
+Votre point de terminaison HTTP
+
+00:18:56.150 --> 00:18:57.530
+ou votre lien Dataverse
+
+00:18:57.530 --> 00:18:59.050
+ne sont pas forcément recréés
+
+00:18:59.050 --> 00:19:00.670
+à l'identique Nikon.
+
+00:19:01.070 --> 00:19:01.650
+C'est là que les équipes
+
+00:19:01.650 --> 00:19:02.110
+se font piéger.
+
+00:19:03.670 --> 00:19:05.710
+Si le dev utilise un connecteur
+
+00:19:05.710 --> 00:19:06.990
+pour des données de test
+
+00:19:06.990 --> 00:19:08.330
+et que cette configuration
+
+00:19:08.330 --> 00:19:09.730
+n'est pas reflétée en prod,
+
+00:19:10.190 --> 00:19:11.530
+votre flux ou appli
+
+00:19:11.530 --> 00:19:13.390
+échoue ou bloque
+
+00:19:13.390 --> 00:19:14.450
+à la connexion.
+
+00:19:16.620 --> 00:19:17.480
+Beaucoup essaient de contourner
+
+00:19:17.480 --> 00:19:18.180
+cela en partageant
+
+00:19:18.180 --> 00:19:19.280
+des identifiants utilisateurs
+
+00:19:19.280 --> 00:19:20.100
+entre les environnements.
+
+00:19:21.080 --> 00:19:21.600
+Ils pensent
+
+00:19:21.600 --> 00:19:22.340
+qu'en utilisant
+
+00:19:22.340 --> 00:19:22.980
+le même compte
+
+00:19:22.980 --> 00:19:23.520
+ou mot de passe
+
+00:19:23.520 --> 00:19:23.920
+qu'en dev,
+
+00:19:24.140 --> 00:19:25.200
+cela fonctionnera peut-être
+
+00:19:25.200 --> 00:19:26.160
+en prod,
+
+00:19:26.160 --> 00:19:28.560
+en réalité cela entraîne
+
+00:19:28.560 --> 00:19:29.380
+une multitude de problèmes
+
+00:19:29.380 --> 00:19:30.220
+des refus d'autorisation,
+
+00:19:30.360 --> 00:19:31.000
+déclenchement d'audit
+
+00:19:31.000 --> 00:19:31.560
+de conformité.
+
+00:19:32.600 --> 00:19:33.720
+Les conseils de Microsoft
+
+00:19:33.720 --> 00:19:34.220
+sont clairs.
+
+00:19:34.320 --> 00:19:35.220
+Utiliser des identifiants
+
+00:19:35.220 --> 00:19:36.180
+utilisateurs individuels
+
+00:19:36.180 --> 00:19:37.180
+pour des déploiements automatisés
+
+00:19:37.180 --> 00:19:37.720
+n'est ni viable
+
+00:19:37.720 --> 00:19:38.440
+ni sécurisé.
+
+00:19:39.380 --> 00:19:40.400
+Cela rend votre automatisation
+
+00:19:40.400 --> 00:19:41.500
+dépendante des réinitialisations
+
+00:19:41.500 --> 00:19:42.000
+de mot de passe
+
+00:19:42.000 --> 00:19:42.740
+et peut laisser des traces
+
+00:19:42.740 --> 00:19:43.520
+confuses dans vos journaux
+
+00:19:43.520 --> 00:19:43.880
+d'audit.
+
+00:19:45.140 --> 00:19:46.760
+Il n'y a pas de responsabilité claire
+
+00:19:46.760 --> 00:19:47.740
+et les autorisations
+
+00:19:47.740 --> 00:19:48.600
+bloquent le pipeline
+
+00:19:48.600 --> 00:19:49.900
+quand l'utilisateur initial
+
+00:19:49.900 --> 00:19:51.020
+est supprimé
+
+00:19:51.020 --> 00:19:52.300
+ou perd ses accès.
+
+00:19:53.920 --> 00:19:54.360
+Entrez en scène
+
+00:19:54.360 --> 00:19:54.860
+et les points de service.
+
+00:19:55.180 --> 00:19:56.280
+Si vous n'en avez jamais utilisé,
+
+00:19:56.720 --> 00:19:57.840
+imaginez un principal de service
+
+00:19:57.840 --> 00:19:58.940
+comme une paire de mains numériques
+
+00:19:58.940 --> 00:20:00.080
+dédiée à l'automatisation.
+
+00:20:02.000 --> 00:20:03.380
+Contrairement à un utilisateur normal,
+
+00:20:03.660 --> 00:20:04.540
+un principal de service
+
+00:20:04.540 --> 00:20:05.540
+est lié à l'enregistrement
+
+00:20:05.540 --> 00:20:06.060
+d'une application
+
+00:20:06.060 --> 00:20:07.100
+dans Azure AD
+
+00:20:07.100 --> 00:20:08.280
+par une personne réelle.
+
+00:20:09.200 --> 00:20:09.980
+Lui accordez les permissions
+
+00:20:09.980 --> 00:20:10.760
+minimales nécessaires
+
+00:20:10.760 --> 00:20:11.500
+pour effectuer vos tâches
+
+00:20:11.500 --> 00:20:11.960
+de déploiement.
+
+00:20:11.960 --> 00:20:13.620
+Cela semble simple
+
+00:20:13.620 --> 00:20:14.740
+mais le bénéfice est immense.
+
+00:20:15.800 --> 00:20:16.440
+Au lieu de dépendre
+
+00:20:16.440 --> 00:20:17.080
+d'un utilisateur
+
+00:20:17.080 --> 00:20:18.200
+qui pourrait quitter l'entreprise,
+
+00:20:18.420 --> 00:20:19.660
+les déploiements restent cohérents,
+
+00:20:19.720 --> 00:20:20.760
+auditables et traçables.
+
+00:20:22.440 --> 00:20:22.980
+Chaque environnement
+
+00:20:22.980 --> 00:20:23.780
+n'accède qu'aux connexions
+
+00:20:23.780 --> 00:20:24.720
+et ressources appropriées
+
+00:20:24.720 --> 00:20:25.520
+et tout changement
+
+00:20:25.520 --> 00:20:27.080
+est consigné sous ce compte
+
+00:20:27.080 --> 00:20:27.640
+robot.
+
+00:20:29.040 --> 00:20:29.760
+En cas de défaillance,
+
+00:20:29.920 --> 00:20:30.360
+vous disposez
+
+00:20:30.360 --> 00:20:31.300
+d'une piste d'audit claire
+
+00:20:31.300 --> 00:20:32.120
+et n'obtenez pas
+
+00:20:32.120 --> 00:20:32.680
+de flux orphelin
+
+00:20:32.680 --> 00:20:33.680
+impossible à réparer.
+
+00:20:35.060 --> 00:20:35.780
+Sur le problème
+
+00:20:35.780 --> 00:20:36.800
+du mappage des connecteurs,
+
+00:20:37.520 --> 00:20:38.400
+considérons ce qui se passe
+
+00:20:38.400 --> 00:20:39.660
+lorsque les environnements divergent.
+
+00:20:40.800 --> 00:20:41.260
+Peut-être que l'équipe
+
+00:20:41.260 --> 00:20:41.640
+de développement
+
+00:20:41.640 --> 00:20:42.380
+a obtenu l'approbation
+
+00:20:42.380 --> 00:20:43.000
+pour un nouveau connecteur
+
+00:20:43.000 --> 00:20:43.440
+personnalisé.
+
+00:20:43.820 --> 00:20:44.420
+Disons qu'il interroge
+
+00:20:44.420 --> 00:20:45.220
+une API de bac à sable
+
+00:20:45.220 --> 00:20:45.580
+sandbox.
+
+00:20:46.740 --> 00:20:47.400
+Au moment de passer
+
+00:20:47.400 --> 00:20:47.880
+en production,
+
+00:20:48.080 --> 00:20:49.080
+ce connecteur n'est pas seulement
+
+00:20:49.080 --> 00:20:49.440
+absent,
+
+00:20:49.540 --> 00:20:50.380
+il pourrait même être interdit
+
+00:20:50.380 --> 00:20:51.260
+par les politiques de données
+
+00:20:51.260 --> 00:20:52.020
+de leur réalisation.
+
+00:20:52.820 --> 00:20:53.720
+Si vous oubliez de remapper,
+
+00:20:53.940 --> 00:20:54.860
+l'application appelle
+
+00:20:54.860 --> 00:20:56.240
+le mauvais point de terminaison
+
+00:20:56.240 --> 00:20:57.060
+ou tombe complètement
+
+00:20:57.060 --> 00:20:57.620
+en panne
+
+00:20:57.620 --> 00:20:58.860
+ou...
+
+00:20:58.860 --> 00:20:59.800
+j'ai vu cela durement éprouvé
+
+00:20:59.800 --> 00:21:00.160
+dans un groupe
+
+00:21:00.160 --> 00:21:00.800
+de santé récemment.
+
+00:21:01.800 --> 00:21:02.500
+Un mappage de connecteur
+
+00:21:02.500 --> 00:21:03.180
+manqué a entraîné
+
+00:21:03.180 --> 00:21:03.940
+l'utilisation de données
+
+00:21:03.940 --> 00:21:04.680
+de test en production
+
+00:21:04.680 --> 00:21:05.280
+et a failli créer
+
+00:21:05.280 --> 00:21:06.220
+un incident de conformité.
+
+00:21:07.360 --> 00:21:08.500
+Leur pipeline automatisé
+
+00:21:08.500 --> 00:21:09.260
+a tout exporté
+
+00:21:09.260 --> 00:21:09.760
+comme prévu,
+
+00:21:09.960 --> 00:21:10.500
+mais la référence
+
+00:21:10.500 --> 00:21:11.080
+du connecteur
+
+00:21:11.080 --> 00:21:11.640
+dans la solution
+
+00:21:11.640 --> 00:21:12.240
+pointait toujours
+
+00:21:12.240 --> 00:21:13.040
+vers une ancienne base
+
+00:21:13.040 --> 00:21:13.740
+de données de test
+
+00:21:13.740 --> 00:21:14.300
+non signalée
+
+00:21:14.300 --> 00:21:15.140
+par Power Platform
+
+00:21:15.140 --> 00:21:16.020
+jusqu'à ce que
+
+00:21:16.020 --> 00:21:16.640
+de vraies données
+
+00:21:16.640 --> 00:21:17.280
+circulent dans
+
+00:21:17.280 --> 00:21:18.260
+les mauvais tuyaux
+
+00:21:18.260 --> 00:21:20.960
+les variables d'environnement
+
+00:21:20.960 --> 00:21:21.860
+interviennent pour soulager
+
+00:21:21.860 --> 00:21:22.760
+une partie de cette douleur.
+
+00:21:23.540 --> 00:21:24.380
+Contrairement au code agent
+
+00:21:24.380 --> 00:21:25.320
+dur des points de terminaison
+
+00:21:25.320 --> 00:21:26.360
+ou des clés API,
+
+00:21:26.480 --> 00:21:27.140
+les variables d'environnement
+
+00:21:27.140 --> 00:21:27.860
+permettent de séparer
+
+00:21:27.860 --> 00:21:28.300
+ce qui change
+
+00:21:28.300 --> 00:21:29.200
+selon les environnements
+
+00:21:29.200 --> 00:21:30.180
+de ce qui reste identique.
+
+00:21:31.080 --> 00:21:31.680
+Vous pouvez échanger
+
+00:21:31.680 --> 00:21:32.460
+les points de terminaison,
+
+00:21:32.580 --> 00:21:33.040
+les clés API
+
+00:21:33.040 --> 00:21:33.760
+ou d'autres secrets
+
+00:21:33.760 --> 00:21:34.440
+à chaque déploiement
+
+00:21:34.440 --> 00:21:35.060
+sans réécrire
+
+00:21:35.060 --> 00:21:36.120
+votre application
+
+00:21:36.120 --> 00:21:36.820
+ou votre flux.
+
+00:21:38.060 --> 00:21:38.580
+Par exemple,
+
+00:21:38.680 --> 00:21:39.380
+un flux fonctionnant
+
+00:21:39.380 --> 00:21:39.880
+avec une table
+
+00:21:39.880 --> 00:21:40.820
+Dataverse de développement
+
+00:21:40.820 --> 00:21:41.900
+peut être reconfiguré
+
+00:21:41.900 --> 00:21:42.540
+à l'importation
+
+00:21:42.540 --> 00:21:43.380
+pour utiliser la table
+
+00:21:43.380 --> 00:21:43.840
+de production
+
+00:21:43.840 --> 00:21:44.820
+en changeant simplement
+
+00:21:44.820 --> 00:21:45.740
+la variable d'environnement
+
+00:21:45.740 --> 00:21:46.600
+dans votre processus
+
+00:21:46.600 --> 00:21:47.120
+de déploiement.
+
+00:21:48.260 --> 00:21:49.600
+Les pipelines GitHub Actions
+
+00:21:49.600 --> 00:21:50.200
+rendent cela pratique.
+
+00:21:50.780 --> 00:21:51.660
+Chaque tâche peut injecter
+
+00:21:51.660 --> 00:21:52.320
+la bonne valeur
+
+00:21:52.320 --> 00:21:52.900
+au bon moment.
+
+00:21:53.800 --> 00:21:54.240
+Mais même ici,
+
+00:21:54.320 --> 00:21:55.360
+la discipline est essentielle.
+
+00:21:56.160 --> 00:21:56.900
+Oubliez de mettre à jour
+
+00:21:56.900 --> 00:21:57.300
+une variable
+
+00:21:57.300 --> 00:21:58.300
+ou laissez les secrets
+
+00:21:58.300 --> 00:21:59.440
+fuiter entre les environnements
+
+00:21:59.440 --> 00:22:00.500
+et, soudainement,
+
+00:22:00.800 --> 00:22:01.680
+votre flux de travail
+
+00:22:01.680 --> 00:22:02.500
+est exposé.
+
+00:22:03.420 --> 00:22:04.180
+Microsoft souligne
+
+00:22:04.180 --> 00:22:05.140
+la nécessité de définir
+
+00:22:05.140 --> 00:22:05.540
+soigneusement
+
+00:22:05.540 --> 00:22:06.220
+la portée des secrets
+
+00:22:06.220 --> 00:22:07.400
+et de mapper intentionnellement
+
+00:22:07.400 --> 00:22:08.460
+les références des connecteurs.
+
+00:22:10.020 --> 00:22:10.960
+Leur politique de prévention
+
+00:22:10.960 --> 00:22:11.700
+de la perte de données,
+
+00:22:11.900 --> 00:22:12.220
+DLP,
+
+00:22:12.500 --> 00:22:13.320
+existe pour une raison,
+
+00:22:13.460 --> 00:22:14.240
+empêcher les informations
+
+00:22:14.240 --> 00:22:15.140
+sensibles de passer
+
+00:22:15.140 --> 00:22:16.060
+d'un environnement à l'autre
+
+00:22:16.060 --> 00:22:16.600
+ou d'apparaître
+
+00:22:16.600 --> 00:22:17.260
+au mauvais endroit.
+
+00:22:18.260 --> 00:22:19.180
+Si vous essayez
+
+00:22:19.180 --> 00:22:19.760
+de les contourner
+
+00:22:19.760 --> 00:22:20.820
+en partageant des variables
+
+00:22:20.820 --> 00:22:21.560
+ou des connexions,
+
+00:22:21.880 --> 00:22:22.540
+vous vous heurterez
+
+00:22:22.540 --> 00:22:23.960
+au contrôle de sécurité
+
+00:22:23.960 --> 00:22:25.060
+ou de conformité
+
+00:22:25.060 --> 00:22:25.880
+de l'entreprise.
+
+00:22:26.840 --> 00:22:27.560
+Plus important encore,
+
+00:22:27.640 --> 00:22:28.500
+vous perdez en prévisibilité
+
+00:22:28.500 --> 00:22:29.340
+car il n'y a plus de frontière
+
+00:22:29.340 --> 00:22:30.160
+entre ce qui est destiné
+
+00:22:30.160 --> 00:22:30.900
+au développement,
+
+00:22:31.120 --> 00:22:31.540
+au test
+
+00:22:31.540 --> 00:22:32.640
+ou à la production.
+
+00:22:33.640 --> 00:22:34.060
+L'avantage,
+
+00:22:34.160 --> 00:22:34.840
+lorsque vous réussissez
+
+00:22:34.840 --> 00:22:35.240
+tout cela,
+
+00:22:35.320 --> 00:22:36.360
+est difficile à surestimer.
+
+00:22:37.040 --> 00:22:37.780
+Les principaux de services
+
+00:22:37.780 --> 00:22:38.560
+combinés à des variables
+
+00:22:38.560 --> 00:22:39.720
+d'environnement bien gérées
+
+00:22:39.720 --> 00:22:40.480
+et des connecteurs
+
+00:22:40.480 --> 00:22:41.280
+correctement mappés
+
+00:22:41.280 --> 00:22:42.480
+transforment votre pipeline.
+
+00:22:43.020 --> 00:22:43.460
+Vos déploiements
+
+00:22:43.460 --> 00:22:44.160
+deviennent prévisibles.
+
+00:22:44.160 --> 00:22:45.480
+En cas de problème,
+
+00:22:45.580 --> 00:22:45.940
+vous disposez
+
+00:22:45.940 --> 00:22:46.260
+d'une chaîne
+
+00:22:46.260 --> 00:22:47.200
+de responsabilité claire
+
+00:22:47.200 --> 00:22:48.200
+et savez exactement
+
+00:22:48.200 --> 00:22:48.640
+où chercher.
+
+00:22:49.160 --> 00:22:49.600
+S'agissait-il
+
+00:22:49.600 --> 00:22:50.520
+d'un mappage de connecteurs,
+
+00:22:50.600 --> 00:22:50.980
+d'une variable
+
+00:22:50.980 --> 00:22:52.820
+ou d'une autorisation manquante ?
+
+00:22:52.820 --> 00:22:53.620
+Les auditeurs peuvent suivre
+
+00:22:53.620 --> 00:22:54.040
+les changements
+
+00:22:54.040 --> 00:22:54.880
+et il n'y a pas d'incertitude
+
+00:22:54.880 --> 00:22:55.480
+lorsqu'une personne
+
+00:22:55.480 --> 00:22:56.180
+quitte l'organisation
+
+00:22:56.180 --> 00:22:57.040
+ou change ses mots de passe.
+
+00:22:57.040 --> 00:22:59.120
+Tout revient traiter les secrets,
+
+00:22:59.300 --> 00:22:59.820
+les connecteurs
+
+00:22:59.820 --> 00:23:00.620
+et les principes de services
+
+00:23:00.620 --> 00:23:01.560
+comme s'ils étaient essentiels.
+
+00:23:01.560 --> 00:23:31.540
+de la police.

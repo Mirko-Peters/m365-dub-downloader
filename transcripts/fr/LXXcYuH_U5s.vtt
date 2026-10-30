@@ -1,0 +1,2530 @@
+WEBVTT
+
+00:00:00.430 --> 00:00:06.890
+Prêt pour 10 jours consacrés à Microsoft 365, Copilot, l'IA, Azure et aux personnes qui façonnent l'avenir du travail.
+
+00:00:07.910 --> 00:00:12.110
+En janvier prochain, la M365Con est de retour et nous voyons encore plus grand.
+
+00:00:12.870 --> 00:00:18.230
+Rejoignez-nous pour des sessions en direct, des démos concrètes et des connaissances pratiques partagées par des MVP et des experts du secteur du monde entier.
+
+00:00:18.770 --> 00:00:21.090
+Pas de diapositives génériques, pas de jargon interminable.
+
+00:00:21.950 --> 00:00:22.990
+Nous abordons les vrais défis.
+
+00:00:23.670 --> 00:00:28.790
+Copilot Studio, les agents IA, Fabrique, la sécurité, la gouvernance et l'automatisation.
+
+00:00:28.790 --> 00:00:34.310
+Que vous soyez professionnel de l'informatique, développeur ou dirigeant d'entreprise, des sessions sont conçues pour vous.
+
+00:00:35.550 --> 00:00:40.070
+Avec 10 jours complets, vous pourrez explorer de multiples technologies et vous connecter à une communauté mondiale.
+
+00:00:40.990 --> 00:00:44.250
+Suivez le direct et rapportez des idées concrètes au sein de votre organisation.
+
+00:00:45.210 --> 00:00:47.810
+Janvier 2027, 10 jours, une seule communauté.
+
+00:00:48.110 --> 00:00:50.790
+Microsoft, les inscriptions sont désormais ouvertes.
+
+00:00:51.890 --> 00:00:55.650
+Rendez-vous sur M365Con.net pour réserver votre place dès aujourd'hui.
+
+00:00:55.650 --> 00:00:58.390
+C'est M365Con.net.
+
+00:01:00.310 --> 00:01:04.650
+Inscrivez-vous sur M365Con.net et nous nous retrouverons en direct en janvier.
+
+00:01:04.650 --> 00:01:12.190
+Si vous avez déjà ouvert une solution et vous êtes immédiatement senti submergé par cet enchevêtrement de fichiers, de références et de bugs étant votre moindre erreur, vous n'êtes pas seul, vous n'êtes pas seul.
+
+00:01:12.430 --> 00:01:14.870
+La plupart des développeurs travaillent de manière réactive, corrigeant ici des bouquements.
+
+00:01:15.350 --> 00:01:19.670
+Le mode agent de GitHub Copilot vise à conserver un contexte plus large et à coordonner les modifications entre les fichiers.
+
+00:01:20.350 --> 00:01:24.950
+Dans cette vidéo, nous allons montrer à quoi ressemble ce flux de travail au sein d'un vrai projet, Toinnet et Azure.
+
+00:01:25.490 --> 00:01:28.230
+Nous parcourons une solution en direct et montrons le résultat avant et après l'utilisation de l'agent.
+
+00:01:28.230 --> 00:01:35.790
+Vous verrez comment générer du code multifiché avec moins d'efforts, résoudre plus rapidement les erreurs transversales et même utiliser une description en gage clair pour structurer des fonctionnalités.
+
+00:01:36.690 --> 00:01:41.010
+Avant d'en arriver là, commençons par le coût caché de la boucle de débogage dans laquelle beaucoup d'entre nous vivent au quotidien.
+
+00:01:42.030 --> 00:01:43.350
+Le coût caché du débogage par AftStore.
+
+00:01:43.910 --> 00:01:45.790
+Vous asseyez pour corriger une erreur qui semble assez simple.
+
+00:01:46.590 --> 00:01:49.910
+L'application ne compile pas et la console signale une ligne dans votre fichier de projet principal.
+
+00:01:50.610 --> 00:01:55.930
+Vous modifiez la méthode, recompilez et pensez avoir résolu le problème, jusqu'à ce que le même message réapparaisse sous une forme légèrement différente.
+
+00:01:55.930 --> 00:01:59.150
+Une autre demi-heure s'écoule avant que vous ne repériez le vrai problème.
+
+00:01:59.710 --> 00:02:02.110
+Une dépendance manquante, dissimulée dans un autre dossier du projet.
+
+00:02:02.770 --> 00:02:07.050
+Le temps que la référence soit corrigée et que vous redéployez, la majeure partie de votre après-midi s'est évaporé en rafistolage.
+
+00:02:07.610 --> 00:02:09.830
+Le travail sur la fonctionnalité prévue est repoussé à demain.
+
+00:02:10.310 --> 00:02:11.850
+Ce schéma est si courant qu'il en semble normal.
+
+00:02:12.370 --> 00:02:15.090
+En apparence, vous avancez car chaque bug corrigé ressemble à une victoire.
+
+00:02:16.170 --> 00:02:17.210
+En pratique, vous tournez en rond.
+
+00:02:17.810 --> 00:02:20.190
+La boucle s'est codée, compilée, erreur, corrigée, recommencé.
+
+00:02:20.190 --> 00:02:26.610
+Des heures s'envolent à poursuivre une chaîne de causes et d'effets et le résultat net est un progrès réactif plutôt que des améliorations significatives.
+
+00:02:27.210 --> 00:02:29.830
+Combien d'entre vous ont déjà perdu une après-midi entière dans cette même boucle ?
+
+00:02:29.830 --> 00:02:31.770
+Laissez un commentaire court, je lirai les meilleures réponses.
+
+00:02:32.830 --> 00:02:36.830
+Ce qui rend ce cycle épuisant, c'est que les outils progressent alors que les habitudes restent les mêmes.
+
+00:02:37.790 --> 00:02:41.190
+Les éditeurs ajoutent des fonctions, les frameworks évoluent et les intégrations s'approfondissent.
+
+00:02:41.910 --> 00:02:43.410
+Mais le débogage reste réactif.
+
+00:02:44.130 --> 00:02:46.490
+C'est comme essayer de contenir un incendie grandissant avec un seau d'eau.
+
+00:02:46.490 --> 00:02:52.530
+Chaque départ de feu est traité sur le moment, mais les causes profondes persistent, garantissant presque que le prochain brasier gagne au rasier.
+
+00:02:53.090 --> 00:02:55.070
+Et à chaque changement d'onglet, le coût caché augmente.
+
+00:02:55.710 --> 00:02:59.430
+Vous passez d'une classe de service à un fichier de configuration, puis sautez vers un graphe de dépendance.
+
+00:03:00.190 --> 00:03:04.350
+Chaque changement vous sort du fil conducteur de votre logique et impose une réinitialisation mentale, mentale.
+
+00:03:04.610 --> 00:03:09.370
+Ce ne sont pas seulement les secondes perdues à changer de fenêtre, c'est l'effort mental de reconstruire le contexte sans cesse.
+
+00:03:10.270 --> 00:03:12.530
+File de la journée, ces petites interruptions s'accumulent et deviennent pesantes.
+
+00:03:12.530 --> 00:03:16.250
+Pour les développeurs, cette fatigue se traduit par de la frustration et une perte de temps.
+
+00:03:17.190 --> 00:03:19.830
+Pour les équipes travaillant sur des projets d'entreprise, l'impact se multiplie.
+
+00:03:20.670 --> 00:03:26.070
+Les cycles de débogage ralentissent les sprints, retardent les lancements et créent un backlog qui croit plus vite qu'il ne diminue.
+
+00:03:26.890 --> 00:03:30.570
+La gradation de la dette technique n'est qu'un effet secondaire des heures perdues à éteindre des incendies.
+
+00:03:31.570 --> 00:03:35.590
+De nombreuses équipes signalent qu'une grande partie de leur temps de développement est aspirée par le débogage réactif.
+
+00:03:35.730 --> 00:03:37.530
+Ce n'est pas la partie la plus passionnante de l'ingénierie.
+
+00:03:37.870 --> 00:03:40.910
+Personne n'établit de roadmap en prévoyant de corriger cinq fois la même erreur de dépendance.
+
+00:03:40.910 --> 00:03:44.070
+Pourtant, c'est là que par la bande passante, semaine après semaine.
+
+00:03:44.990 --> 00:03:50.730
+Quand la correction d'erreur devient synonyme de progrès, les nouvelles fonctionnalités passent au second plan et l'architecture souffre en silence.
+
+00:03:51.730 --> 00:03:54.850
+La vérité dérangeante est que le débogage à la va-vite ne fait pas que ralentir les choses.
+
+00:03:55.590 --> 00:03:58.150
+Il renforce une culture de la réaction au détriment de la conception.
+
+00:03:58.750 --> 00:04:01.910
+Vous passez votre temps à arroser des flammes au lieu de construire des systèmes ?
+
+00:04:02.450 --> 00:04:07.390
+Cela maintient le produit à flot à court terme, mais limite la capacité d'une équipe à passer à l'échelle et à livrer en toute confiance.
+
+00:04:08.010 --> 00:04:09.950
+Alors attardons-nous sur cette image, la lutte contre les incendies.
+
+00:04:09.950 --> 00:04:12.210
+Courir au foyer, jeter de l'eau, passer à la suite.
+
+00:04:12.870 --> 00:04:15.350
+Le problème n'est pas que les développeurs ne sont pas doués pour ça. Ils le sont.
+
+00:04:16.130 --> 00:04:17.810
+Le problème, c'est que les flammes ne s'arrêtent jamais vraiment.
+
+00:04:18.350 --> 00:04:23.530
+Elles se déplacent, surgissant dans de nouveaux fichiers, projets ou configurations, maintenant tout le monde, en mode réaction plutôt qu'en création.
+
+00:04:23.990 --> 00:04:24.610
+Plutôt qu'en création.
+
+00:04:25.290 --> 00:04:29.370
+Cela soulève une question, que se passe-t-il si ce cycle ne repose pas uniquement sur vous ?
+
+00:04:29.370 --> 00:04:36.110
+Si les tâches répétitives, la boucle de traçage, de bascule et de correction, pouvaient être gérées différemment, pendant que vous restez concentré sur la construction ?
+
+00:04:36.110 --> 00:04:40.630
+Car si la pression liée à cette lutte est évidente, il existe un autre point critique que nous n'avons pas encore abordé.
+
+00:04:41.410 --> 00:04:44.330
+La vraie difficulté survient quand votre projet n'est pas juste un fichier ou un module.
+
+00:04:44.330 --> 00:04:47.470
+C'est quand la correction nécessaire touche plusieurs couches à la fois.
+
+00:04:48.390 --> 00:04:53.330
+Imaginez ouvrir une solution où la logique s'étend sur différents projets, services et bibliothèques.
+
+00:05:01.310 --> 00:05:03.390
+Chaos multifichiers contre contrôle du contexte par l'IA.
+
+00:05:04.530 --> 00:05:07.850
+Quand les projets couvrent plusieurs couches, le vrai défi n'est pas d'écrire du code.
+
+00:05:08.770 --> 00:05:10.330
+C'est de maintenir tous les éléments en cohérence.
+
+00:05:10.990 --> 00:05:15.510
+C'est ici que la tension entre chaos multifichiers et contrôle contextuel assisté par l'IA apparaît le plus clairement.
+
+00:05:16.290 --> 00:05:18.950
+Prenons une vaste solution d'un net avec une douzaine de projets ou plus.
+
+00:05:18.950 --> 00:05:21.770
+Toute nouvelle fonctionnalité touche généralement plusieurs couches en même temps.
+
+00:05:22.630 --> 00:05:26.990
+Un contrôleur à un endroit, un service à un autre et des fichiers de configuration ailleurs.
+
+00:05:27.990 --> 00:05:31.630
+Avant d'écrire une seule ligne, vous passez du temps à tracer les références et vérifier les dépendances
+
+00:05:31.630 --> 00:05:34.330
+en espérant qu'un petit changement ne provoque pas d'erreurs en cascade.
+
+00:05:34.930 --> 00:05:37.310
+Ce flux de travail n'est pas une exception.
+
+00:05:37.770 --> 00:05:41.870
+C'est la norme dans les applications d'entreprise, surtout quand les services Azure entretrent en jeu.
+
+00:05:42.830 --> 00:05:44.450
+La structure de ces systèmes n'est pas plane.
+
+00:05:45.410 --> 00:05:48.170
+Les interfaces, les injections de dépendances et les références interprojets
+
+00:05:48.170 --> 00:05:49.270
+jouent toutes un rôle.
+
+00:05:49.990 --> 00:05:52.990
+Avec Azure, certaines dépendances sortent du dossier de la solution, fonction,
+
+00:05:53.430 --> 00:05:58.430
+liaison de service bus, paramètre de ressources, connexion de stockage, connexion de stockage.
+
+00:05:59.050 --> 00:06:02.010
+Vous coordonnez le code de votre IDE, les fichiers de configuration sur disque
+
+00:06:02.010 --> 00:06:03.550
+et les services définis dans le cloud.
+
+00:06:04.450 --> 00:06:06.090
+Aucun d'eux ne se soucie de vos besoins en ergonomie.
+
+00:06:06.550 --> 00:06:09.650
+A chaque changement de contexte, vous gaspillez de l'énergie à reconstruire la vue d'ensemble.
+
+00:06:10.650 --> 00:06:13.050
+La plupart d'entre nous tentent de jongler avec ce contexte dans leur mémoire de trap.
+
+00:06:13.050 --> 00:06:16.370
+Au début, c'est gérable, mais à mesure que le projet grandit, les erreurs s'infiltrent.
+
+00:06:16.810 --> 00:06:19.570
+Vous ajoutez une méthode au service, mais oubliez son enregistrement dans l'injection de dépendance.
+
+00:06:19.890 --> 00:06:23.550
+Vous codez une fonction Azure et réalisez plus tard que la liaison n'a jamais été ajoutée au host.json
+
+00:06:23.550 --> 00:06:25.390
+ou au modèle de déploiement ou au modèle de déploiement.
+
+00:06:25.570 --> 00:06:28.390
+Rien ne vous alerte avant l'exécution au moment où vous devriez construire au lieu de déboli.
+
+00:06:28.990 --> 00:06:30.090
+Le code en lui-même n'est pas le plus dur.
+
+00:06:30.550 --> 00:06:31.690
+C'est la coordination entre les fichiers.
+
+00:06:32.030 --> 00:06:34.150
+Tout le monde connaît cette sensation de passer d'un onglet à l'autre.
+
+00:06:34.150 --> 00:06:37.090
+du contrôleur au service, puis au modèle et au config
+
+00:06:37.090 --> 00:06:40.830
+pour finalement oublier pourquoi vous avez ouvert ce fichier.
+
+00:06:41.770 --> 00:06:44.390
+C'est une petite interruption répétée des dizaines de fois par jour.
+
+00:06:45.170 --> 00:06:48.290
+Ces interactions s'accumulent, créant une friction qui ralentit la progression réelle.
+
+00:06:49.030 --> 00:06:51.210
+Le résultat est une livraison plus lente, non pas à cause de l'écriture,
+
+00:06:51.270 --> 00:06:53.530
+mais parce que maintenir la synchronisation accapare votre concentration.
+
+00:06:54.350 --> 00:06:56.270
+Cette charge augmente dans les projets privilégiant le cloud.
+
+00:06:57.090 --> 00:06:59.350
+Azure dissémine les paramètres clés à plusieurs endroits.
+
+00:06:59.350 --> 00:07:02.770
+Fichiers de configuration locaux, variables d'environnement,
+
+00:07:03.290 --> 00:07:05.870
+modèles ARM ou BSEP et pipelines CI, CZD.
+
+00:07:07.050 --> 00:07:08.610
+Ce qui ressemble à une demande de fonctionnalité unique
+
+00:07:08.610 --> 00:07:10.270
+s'étend souvent sur quatre niveaux d'abstraction.
+
+00:07:11.450 --> 00:07:12.570
+Cette complexité n'est pas optionnelle.
+
+00:07:12.950 --> 00:07:14.690
+Elle est intégrée au fonctionnement même de l'écosystème.
+
+00:07:15.550 --> 00:07:17.630
+C'est là que le mode Agent représente un tournant potentiel.
+
+00:07:18.190 --> 00:07:19.650
+Au lieu de vous laisser gérer toute cette orchestration,
+
+00:07:19.790 --> 00:07:22.090
+il est conçu pour maintenir un contexte global sur plusieurs fichiers.
+
+00:07:23.030 --> 00:07:25.350
+Cela signifie que lorsque vous demandez une modification à un niveau,
+
+00:07:25.550 --> 00:07:26.450
+les autres ne sont pas ignorés.
+
+00:07:27.370 --> 00:07:29.330
+Dans la démonstration, je créerai une nouvelle fonction Azure.
+
+00:07:29.350 --> 00:07:30.430
+pour montrer comment l'agent aide,
+
+00:07:30.610 --> 00:07:31.730
+en générant le corps de la méthode,
+
+00:07:31.850 --> 00:07:33.170
+en produisant la configuration de liaison,
+
+00:07:33.350 --> 00:07:34.170
+en mettant Azure host.
+
+00:07:35.490 --> 00:07:37.790
+Et même en suggérant l'enregistrement d'injections des dépendances appropriées.
+
+00:07:38.130 --> 00:07:39.650
+C'est généralement un processus en plusieurs étapes
+
+00:07:39.650 --> 00:07:40.850
+dispersées dans différents fichiers.
+
+00:07:41.370 --> 00:07:43.150
+Un agent peut rationaliser cela en un seul flux.
+
+00:07:44.090 --> 00:07:45.590
+Il ne s'agit pas de remplacer votre jugement,
+
+00:07:45.950 --> 00:07:47.330
+mais d'éliminer les tâches répétitives
+
+00:07:47.330 --> 00:07:49.490
+pour vous concentrer sur les choix de... conception.
+
+00:07:50.890 --> 00:07:52.750
+Les humains peuvent garder un plan approximatif en tête
+
+00:07:52.750 --> 00:07:53.850
+ou esquisser sur un tableau blanc.
+
+00:07:54.750 --> 00:07:56.610
+Une IA peut suivre les détails fichiers par fichier
+
+00:07:56.610 --> 00:07:57.510
+sans perdre le fil.
+
+00:07:57.510 --> 00:08:00.070
+Ce qui représente une charge cognitive énorme pour nous
+
+00:08:00.070 --> 00:08:01.550
+est un contexte de base pour l'agent.
+
+00:08:02.370 --> 00:08:03.890
+En pratique, la différence consiste à passer
+
+00:08:03.890 --> 00:08:05.090
+d'une gestion fragmentée des onglets
+
+00:08:05.090 --> 00:08:06.810
+à des changements orchestrés qui restent synchronisés.
+
+00:08:07.350 --> 00:08:08.510
+Je montrerai également la pluriquest
+
+00:08:08.510 --> 00:08:10.070
+ou le diff générés par l'agent pendant la démo
+
+00:08:10.070 --> 00:08:10.910
+afin que vous voyez exactement
+
+00:08:10.910 --> 00:08:12.310
+quelles modifications ont été effectuées.
+
+00:08:12.910 --> 00:08:13.910
+Cette visibilité est importante.
+
+00:08:14.230 --> 00:08:15.710
+Vous gardez le contrôle total pour examiner
+
+00:08:15.710 --> 00:08:16.330
+et approuver,
+
+00:08:16.430 --> 00:08:17.690
+tandis que le travail fastidieux de mise à jour
+
+00:08:17.690 --> 00:08:18.630
+des fichiers est fait pour vous.
+
+00:08:19.230 --> 00:08:20.090
+Au lieu de passer l'après-midi
+
+00:08:20.090 --> 00:08:20.850
+à assembler des morceaux,
+
+00:08:20.950 --> 00:08:21.930
+vous dirigez le changement une fois,
+
+00:08:22.110 --> 00:08:23.230
+confirmez les mises à jour générées
+
+00:08:23.230 --> 00:08:24.930
+et passez à la conception de haut niveau.
+
+00:08:24.930 --> 00:08:27.430
+Le soulagement ne vient pas seulement
+
+00:08:27.430 --> 00:08:28.810
+de l'économie de clics ou de frappes,
+
+00:08:29.030 --> 00:08:30.030
+mais du fait de rester concentré
+
+00:08:30.030 --> 00:08:31.250
+sur la résolution de problèmes réels
+
+00:08:31.250 --> 00:08:32.430
+plutôt que de retracer les connexions
+
+00:08:32.430 --> 00:08:33.330
+entre une douzaine de fichiers.
+
+00:08:34.690 --> 00:08:35.750
+Cet avantage est le plus évident
+
+00:08:35.750 --> 00:08:36.590
+lorsque les choses cassent,
+
+00:08:36.650 --> 00:08:38.170
+car même avec une meilleure gestion du contexte,
+
+00:08:38.250 --> 00:08:39.150
+les systèmes tombent en panne,
+
+00:08:39.210 --> 00:08:40.150
+les configurations dérivent
+
+00:08:40.150 --> 00:08:41.570
+et les références erronées réapparaissent.
+
+00:08:42.470 --> 00:08:43.690
+C'est là que commence le test suivant,
+
+00:08:43.830 --> 00:08:44.990
+comment les erreurs sont traquées
+
+00:08:44.990 --> 00:08:46.790
+et résolues une fois qu'elles apparaissent.
+
+00:08:47.730 --> 00:08:49.210
+De la chasse aux erreurs au correctif autonome.
+
+00:08:49.710 --> 00:08:50.330
+Pensez au nombre de fois
+
+00:08:50.330 --> 00:08:51.510
+où vous tombez sur un message d'erreur
+
+00:08:51.510 --> 00:08:52.990
+qui pointe directement vers un seul fichier.
+
+00:08:53.710 --> 00:08:54.750
+Vous suivez la trace de la pile
+
+00:08:54.750 --> 00:08:55.590
+jusqu'à la méthode nommée,
+
+00:08:55.790 --> 00:08:56.730
+effectuez un petit ajustement
+
+00:08:56.730 --> 00:08:57.610
+et relancez la compilation.
+
+00:08:58.470 --> 00:08:59.790
+Cela semble être la solution évidente
+
+00:08:59.790 --> 00:09:00.910
+jusqu'à ce que la même erreur
+
+00:09:00.910 --> 00:09:03.150
+réapparaisse sous une forme légèrement différente.
+
+00:09:03.730 --> 00:09:04.530
+C'est alors que vous réalisez
+
+00:09:04.530 --> 00:09:05.190
+que la trace de la pile
+
+00:09:05.190 --> 00:09:05.990
+ne montrait que le symptôme.
+
+00:09:06.710 --> 00:09:07.950
+Le véritable problème réside ailleurs,
+
+00:09:08.050 --> 00:09:08.970
+peut-être dans une case auxiliaire
+
+00:09:08.970 --> 00:09:10.190
+ou cachée dans un fichier de configuration
+
+00:09:10.190 --> 00:09:11.410
+que vous n'avez pas ouvert de la semaine.
+
+00:09:12.090 --> 00:09:13.450
+Chaque développeur a déjà été confronté
+
+00:09:13.450 --> 00:09:14.110
+à ce genre d'égarement.
+
+00:09:14.470 --> 00:09:15.230
+Ce qui semble être le problème
+
+00:09:15.230 --> 00:09:15.990
+n'est pas forcément là
+
+00:09:15.990 --> 00:09:16.730
+où se trouve la solution.
+
+00:09:17.150 --> 00:09:18.070
+Cela fait perdre beaucoup de temps.
+
+00:09:18.070 --> 00:09:19.070
+Vous ajustez une chose,
+
+00:09:19.150 --> 00:09:19.810
+reconstruisez, attendez.
+
+00:09:20.670 --> 00:09:21.250
+Puis une nouvelle erreur
+
+00:09:21.250 --> 00:09:21.890
+survient en vous maintenant,
+
+00:09:21.970 --> 00:09:22.470
+un autre fichier,
+
+00:09:22.690 --> 00:09:23.410
+une autre modification
+
+00:09:23.410 --> 00:09:24.250
+et une nouvelle reconstruction.
+
+00:09:25.030 --> 00:09:26.130
+La boucle semble productive
+
+00:09:26.130 --> 00:09:26.770
+car vous bougez,
+
+00:09:26.870 --> 00:09:27.710
+tapez, recompilez,
+
+00:09:27.810 --> 00:09:28.730
+mais en réalité,
+
+00:09:28.890 --> 00:09:30.430
+il s'agit plus d'essais et erreurs
+
+00:09:30.430 --> 00:09:31.790
+que de résolutions réelles.
+
+00:09:32.550 --> 00:09:33.970
+Ce cycle peut engloutir des heures,
+
+00:09:34.270 --> 00:09:35.790
+ne laissant que des correctifs superficiels
+
+00:09:35.790 --> 00:09:36.670
+sans réel avancer
+
+00:09:36.670 --> 00:09:38.330
+sur la fonctionnalité initiale.
+
+00:09:38.890 --> 00:09:39.510
+Le cours réel ici,
+
+00:09:39.590 --> 00:09:40.290
+c'est l'opportunité manque.
+
+00:09:41.230 --> 00:09:42.530
+Pris dans ce rythme de reconstruction
+
+00:09:42.530 --> 00:09:43.310
+et de tentative,
+
+00:09:43.430 --> 00:09:44.130
+vous ne résolvez pas
+
+00:09:44.130 --> 00:09:44.910
+les problèmes métiers
+
+00:09:44.910 --> 00:09:45.690
+et ne livrez pas
+
+00:09:45.690 --> 00:09:46.950
+les fonctionnalités attendues.
+
+00:09:48.070 --> 00:09:49.250
+L'élan se perd dans les conjectures
+
+00:09:49.250 --> 00:09:50.030
+plutôt que dans la conception.
+
+00:09:50.750 --> 00:09:51.770
+C'est une activité intense
+
+00:09:51.770 --> 00:09:52.170
+sur le moment,
+
+00:09:52.630 --> 00:09:53.510
+mais ces heures ne servent guère
+
+00:09:53.510 --> 00:09:54.390
+qu'à empêcher le système
+
+00:09:54.390 --> 00:09:54.930
+de se casser.
+
+00:09:56.310 --> 00:09:56.770
+Pour une équipe,
+
+00:09:56.850 --> 00:09:57.850
+cette agitation superficielle
+
+00:09:57.850 --> 00:09:58.450
+ralentit tout
+
+00:09:58.450 --> 00:09:59.750
+et crée un retard de fonctionnalités
+
+00:09:59.750 --> 00:10:00.730
+qui ne cesse de s'accumuler.
+
+00:10:01.370 --> 00:10:03.190
+C'est là qu'un flux de travail
+
+00:10:03.190 --> 00:10:03.830
+basé sur un agent
+
+00:10:03.830 --> 00:10:04.710
+commence à faire la différence.
+
+00:10:05.270 --> 00:10:05.690
+L'idée n'est pas
+
+00:10:05.690 --> 00:10:06.350
+de s'arrêter à la ligne
+
+00:10:06.350 --> 00:10:06.910
+mise en évidence
+
+00:10:06.910 --> 00:10:07.710
+par votre trace de pile.
+
+00:10:08.290 --> 00:10:09.270
+Il est conçu pour maintenir
+
+00:10:09.270 --> 00:10:10.570
+un contexte au niveau du système
+
+00:10:10.570 --> 00:10:11.830
+en se demandant
+
+00:10:11.830 --> 00:10:12.530
+non pas seulement
+
+00:10:12.530 --> 00:10:13.570
+ce que ce fichier doit faire,
+
+00:10:13.850 --> 00:10:14.470
+mais quels changements
+
+00:10:14.470 --> 00:10:15.430
+sont nécessaires partout
+
+00:10:15.430 --> 00:10:17.490
+pour rétablir la cohérence.
+
+00:10:18.550 --> 00:10:18.910
+En pratique,
+
+00:10:19.010 --> 00:10:19.470
+cela signifie
+
+00:10:19.470 --> 00:10:20.150
+qu'il peut proposer
+
+00:10:20.150 --> 00:10:20.770
+des modifications
+
+00:10:20.770 --> 00:10:21.890
+couvrant plusieurs fichiers.
+
+00:10:22.470 --> 00:10:22.850
+Par exemple,
+
+00:10:22.970 --> 00:10:23.610
+vous verrez dans la démo
+
+00:10:23.610 --> 00:10:24.050
+qu'une méthode
+
+00:10:24.050 --> 00:10:24.930
+nécessitant des changements
+
+00:10:24.930 --> 00:10:25.390
+peut entraîner
+
+00:10:25.390 --> 00:10:26.470
+des suggestions d'édition
+
+00:10:26.470 --> 00:10:27.050
+dans les configs
+
+00:10:27.050 --> 00:10:28.270
+ou modèles de déploiement associés
+
+00:10:28.270 --> 00:10:30.290
+plutôt que de vous laisser les chercher.
+
+00:10:31.110 --> 00:10:32.090
+C'est le saut de l'autocomplétion
+
+00:10:32.090 --> 00:10:33.210
+vers quelque chose de plus vaste.
+
+00:10:34.310 --> 00:10:35.530
+L'autocomplétion finit des lignes,
+
+00:10:35.710 --> 00:10:37.110
+un agent coordonne entre les fichiers
+
+00:10:37.110 --> 00:10:38.910
+et cette coordination est cruciale
+
+00:10:38.910 --> 00:10:40.050
+quand les erreurs ne sont pas isolées.
+
+00:10:41.010 --> 00:10:41.930
+Prenons un scénario courant.
+
+00:10:42.690 --> 00:10:43.850
+Vous avez créé une nouvelle Function App,
+
+00:10:43.850 --> 00:10:44.710
+mais une fois déployé,
+
+00:10:44.770 --> 00:10:45.930
+le déclencheur de fil d'attente échoue
+
+00:10:45.930 --> 00:10:46.890
+car la liaison ne correspond pas
+
+00:10:46.890 --> 00:10:47.730
+à la signature de la méthode.
+
+00:10:49.050 --> 00:10:49.370
+Normalement,
+
+00:10:49.430 --> 00:10:50.150
+vous fouillez les logs,
+
+00:10:50.710 --> 00:10:51.770
+identifiez la mauvaise liaison,
+
+00:10:51.910 --> 00:10:52.890
+ajustez manuellement le JSON,
+
+00:10:53.010 --> 00:10:53.330
+la fonction,
+
+00:10:53.510 --> 00:10:54.150
+et modifiez peut-être
+
+00:10:54.150 --> 00:10:55.130
+votre modèle d'infrastructure
+
+00:10:55.130 --> 00:10:56.150
+si une valeur est discordante.
+
+00:10:58.050 --> 00:10:59.250
+Chaque étape est une quête séparée
+
+00:10:59.250 --> 00:11:00.030
+et chaque correctif
+
+00:11:00.030 --> 00:11:01.230
+déclenche une nouvelle exécution de test.
+
+00:11:02.070 --> 00:11:02.730
+Avec le mode agent,
+
+00:11:02.830 --> 00:11:03.690
+le flux de travail est différent.
+
+00:11:04.430 --> 00:11:05.010
+Il peut proposer
+
+00:11:05.010 --> 00:11:05.930
+la modification de code,
+
+00:11:06.030 --> 00:11:07.010
+générer la bonne liaison JSON
+
+00:11:07.010 --> 00:11:08.050
+et afficher les corrections
+
+00:11:08.050 --> 00:11:09.030
+pour les scripts de déploiement
+
+00:11:09.030 --> 00:11:09.890
+s'ils sont désalignés.
+
+00:11:10.950 --> 00:11:11.410
+Vous révisez,
+
+00:11:11.510 --> 00:11:12.270
+confirmez et avancez
+
+00:11:13.850 --> 00:11:14.210
+manuellement,
+
+00:11:14.730 --> 00:11:15.670
+et la confiance est d'essentiel ici.
+
+00:11:16.070 --> 00:11:16.910
+Personne ne devrait à l'impression
+
+00:11:16.910 --> 00:11:17.930
+que des modifications invisibles
+
+00:11:17.930 --> 00:11:18.690
+se produisent en arrière-plan.
+
+00:11:18.990 --> 00:11:19.890
+C'est pourquoi le processus de revue
+
+00:11:19.890 --> 00:11:20.210
+est important.
+
+00:11:20.610 --> 00:11:21.110
+Dans cette démo,
+
+00:11:21.150 --> 00:11:22.090
+nous allons parcourir cela ensemble.
+
+00:11:22.590 --> 00:11:23.230
+L'agent suggère
+
+00:11:23.230 --> 00:11:24.130
+les changements coordonnés.
+
+00:11:24.530 --> 00:11:25.210
+Nous ouvrirons le diff
+
+00:11:25.210 --> 00:11:26.190
+pour examiner précisément
+
+00:11:26.190 --> 00:11:26.830
+ce qu'il a généré,
+
+00:11:27.170 --> 00:11:28.210
+exécuter nos tests unitaires,
+
+00:11:28.630 --> 00:11:29.810
+valider la compilation localement
+
+00:11:29.810 --> 00:11:30.770
+et seulement alors choisir
+
+00:11:30.770 --> 00:11:31.710
+d'accepter ou de rejeter
+
+00:11:31.710 --> 00:11:32.350
+les modifications.
+
+00:11:33.510 --> 00:11:34.270
+Cette boucle de validation
+
+00:11:34.270 --> 00:11:34.950
+vous permet de garder
+
+00:11:34.950 --> 00:11:35.650
+le contrôle total
+
+00:11:35.650 --> 00:11:36.230
+tout en éliminant
+
+00:11:36.230 --> 00:11:36.870
+les tâches répétitives.
+
+00:11:37.710 --> 00:11:38.430
+Il est important de souligner
+
+00:11:38.430 --> 00:11:39.330
+que les agents peuvent aider
+
+00:11:39.330 --> 00:11:39.830
+à aller plus vite,
+
+00:11:39.950 --> 00:11:40.530
+mais ils ne remplacent pas
+
+00:11:40.530 --> 00:11:41.530
+les bonnes pratiques d'ingénierie.
+
+00:11:42.370 --> 00:11:43.230
+Vous devez toujours considérer
+
+00:11:43.230 --> 00:11:43.730
+les revues de code
+
+00:11:43.730 --> 00:11:44.470
+et l'intégration continue
+
+00:11:44.470 --> 00:11:45.390
+comme des garde-fous non négociables.
+
+00:11:45.710 --> 00:11:46.310
+Laissez l'IA réduire
+
+00:11:46.310 --> 00:11:47.110
+le temps passé à enquêter
+
+00:11:47.110 --> 00:11:48.010
+mais conservez les contrôles
+
+00:11:48.010 --> 00:11:49.170
+automatisés et la revue humaine
+
+00:11:49.170 --> 00:11:50.290
+comme filet de sécurité,
+
+00:11:50.570 --> 00:11:51.270
+comme filet de sécurité.
+
+00:11:51.670 --> 00:11:52.370
+Cet équilibre résout
+
+00:11:52.370 --> 00:11:53.090
+le problème de confiance
+
+00:11:53.090 --> 00:11:54.250
+et garantit que le gain de vitesse
+
+00:11:54.250 --> 00:11:55.430
+ne compromet pas la stabilité.
+
+00:11:56.050 --> 00:11:56.850
+La différence de vitesse
+
+00:11:56.850 --> 00:11:57.450
+n'est pas théorique.
+
+00:11:57.990 --> 00:11:58.830
+Là où la chasse aux erreurs
+
+00:11:58.830 --> 00:11:59.630
+et les correctifs manuels
+
+00:11:59.630 --> 00:12:00.590
+peuvent prendre une demi-journée,
+
+00:12:00.690 --> 00:12:01.570
+des suggestions coordonnées
+
+00:12:01.570 --> 00:12:02.210
+peuvent réduire cela
+
+00:12:02.210 --> 00:12:02.850
+à quelques minutes
+
+00:12:02.850 --> 00:12:04.570
+et le temps ainsi gagné
+
+00:12:04.570 --> 00:12:05.450
+est réinvesti dans le travail
+
+00:12:05.450 --> 00:12:05.990
+sur lequel vous voulez
+
+00:12:05.990 --> 00:12:07.170
+vraiment dépenser votre énergie.
+
+00:12:07.770 --> 00:12:08.310
+Les fonctionnalités
+
+00:12:08.310 --> 00:12:09.150
+que vos utilisateurs remarquent
+
+00:12:09.150 --> 00:12:10.030
+et les décisions architecturales
+
+00:12:10.030 --> 00:12:11.010
+qui améliorent votre base de code.
+
+00:12:11.910 --> 00:12:12.630
+Au lieu de jouer les pompiers
+
+00:12:12.630 --> 00:12:13.150
+à l'exécution,
+
+00:12:13.250 --> 00:12:13.810
+vous pouvez concevoir
+
+00:12:13.810 --> 00:12:14.830
+avec confiance dès le départ.
+
+00:12:15.590 --> 00:12:16.590
+Ainsi, la boucle de débogage
+
+00:12:16.590 --> 00:12:17.470
+ne définit plus nécessairement
+
+00:12:17.470 --> 00:12:17.770
+votre journée.
+
+00:12:18.390 --> 00:12:19.250
+Avec un agent suggérant
+
+00:12:19.250 --> 00:12:20.110
+des mises à jour interfichiers,
+
+00:12:20.190 --> 00:12:20.890
+vous passez d'une recherche
+
+00:12:20.890 --> 00:12:22.050
+dispersée à un rythme de revue
+
+00:12:22.050 --> 00:12:23.050
+et d'approbation...
+
+00:12:23.050 --> 00:12:24.810
+Vous arrêtez de tourner en rond
+
+00:12:24.810 --> 00:12:25.450
+parmi les erreurs
+
+00:12:25.450 --> 00:12:26.670
+et commencez à traiter le débogage
+
+00:12:26.670 --> 00:12:27.590
+comme une étape structurée
+
+00:12:27.590 --> 00:12:28.390
+presque automatisée
+
+00:12:28.390 --> 00:12:29.390
+et de votre flux de travail.
+
+00:12:30.390 --> 00:12:31.250
+Ce changement libère
+
+00:12:31.250 --> 00:12:32.050
+de l'espace cognitif
+
+00:12:32.050 --> 00:12:32.630
+et du temps pour créer
+
+00:12:32.630 --> 00:12:33.250
+des fonctionnalités
+
+00:12:33.250 --> 00:12:33.970
+pas seulement pour corriger
+
+00:12:33.970 --> 00:12:34.810
+des défauts.
+
+00:12:34.890 --> 00:12:35.550
+Et une fois que la correction
+
+00:12:35.550 --> 00:12:36.390
+d'erreur consiste moins
+
+00:12:36.390 --> 00:12:37.190
+à traquer les symptômes,
+
+00:12:37.290 --> 00:12:37.830
+cela ouvre la porte
+
+00:12:37.830 --> 00:12:38.750
+à quelque chose de plus grand,
+
+00:12:38.950 --> 00:12:39.230
+ce grand,
+
+00:12:39.730 --> 00:12:40.490
+la manière dont vous pourriez
+
+00:12:40.490 --> 00:12:41.550
+initier des fonctionnalités entières
+
+00:12:41.550 --> 00:12:42.430
+de la même manière structurée.
+
+00:12:43.250 --> 00:12:44.490
+Imaginez si le même flux de travail
+
+00:12:44.490 --> 00:12:45.870
+qui propose des correctifs coordonnés
+
+00:12:45.870 --> 00:12:46.490
+pouvait aussi prendre
+
+00:12:46.490 --> 00:12:47.810
+une spécification en langage clair
+
+00:12:47.810 --> 00:12:48.650
+et construire une structure
+
+00:12:48.650 --> 00:12:49.610
+fonctionnelle autour.
+
+00:12:50.830 --> 00:12:51.430
+C'est là que commence
+
+00:12:51.430 --> 00:12:52.510
+la prochaine étape du développement.
+
+00:12:53.730 --> 00:12:54.490
+Le développement piloté
+
+00:12:54.490 --> 00:12:55.210
+par les spécifications.
+
+00:12:56.410 --> 00:12:56.930
+L'un des changements
+
+00:12:56.930 --> 00:12:57.610
+les plus intéressants
+
+00:12:58.390 --> 00:12:59.270
+c'est de ne penser qu'en termes
+
+00:12:59.270 --> 00:13:00.150
+de fichiers et de méthodes
+
+00:13:00.150 --> 00:13:01.310
+pour commencer à formuler travail
+
+00:13:01.310 --> 00:13:02.190
+en langage clair.
+
+00:13:03.250 --> 00:13:03.830
+C'est là qu'intervient
+
+00:13:03.830 --> 00:13:04.570
+le développement piloté
+
+00:13:04.570 --> 00:13:05.330
+par les spécifications,
+
+00:13:05.530 --> 00:13:05.870
+sans les lourdes.
+
+00:13:06.310 --> 00:13:06.910
+Imaginez rédiger
+
+00:13:06.910 --> 00:13:07.950
+une simple demande de fonctionnalités.
+
+00:13:08.570 --> 00:13:09.370
+Ajoutez un flux de rapports
+
+00:13:09.370 --> 00:13:10.510
+qui génère des résumés mensuels,
+
+00:13:10.710 --> 00:13:11.910
+les stocks et les rends disponibles
+
+00:13:11.910 --> 00:13:13.570
+via une page d'administration.
+
+00:13:14.290 --> 00:13:15.350
+Au lieu de recevoir seulement
+
+00:13:15.350 --> 00:13:16.330
+quelques extraits isolés,
+
+00:13:16.510 --> 00:13:17.830
+vous obtenez une structure fonctionnelle
+
+00:13:17.830 --> 00:13:18.330
+déjà mappée
+
+00:13:18.330 --> 00:13:19.350
+à travers votre application.
+
+00:13:20.150 --> 00:13:20.890
+Contrôleurs ébauchés,
+
+00:13:21.170 --> 00:13:21.690
+modèles créés,
+
+00:13:21.830 --> 00:13:22.590
+services enregistrés
+
+00:13:22.590 --> 00:13:23.810
+et configurations connectés.
+
+00:13:24.690 --> 00:13:25.710
+Ce passage de la description
+
+00:13:25.710 --> 00:13:26.250
+de l'intention
+
+00:13:26.250 --> 00:13:27.630
+à l'apparition d'une structure concrète
+
+00:13:27.630 --> 00:13:28.310
+dans votre projet
+
+00:13:28.310 --> 00:13:29.230
+est là où cette approche
+
+00:13:29.230 --> 00:13:30.250
+devient enfin pratique
+
+00:13:30.250 --> 00:13:31.170
+plutôt que théorique.
+
+00:13:31.450 --> 00:13:32.010
+Plutôt que théorique.
+
+00:13:32.370 --> 00:13:33.510
+Dans les configurations traditionnelles,
+
+00:13:33.730 --> 00:13:34.310
+le développement axé
+
+00:13:34.310 --> 00:13:35.010
+sur les spécifications
+
+00:13:35.010 --> 00:13:35.630
+a une réputation longue.
+
+00:13:35.870 --> 00:13:36.750
+Dans les grandes organisations,
+
+00:13:36.890 --> 00:13:37.710
+cela signifie généralement
+
+00:13:37.710 --> 00:13:38.610
+de longs documents de besoin,
+
+00:13:38.710 --> 00:13:39.370
+des fiches de conception
+
+00:13:39.370 --> 00:13:40.130
+sur plusieurs pages
+
+00:13:40.130 --> 00:13:40.970
+et des diagrammes rigides
+
+00:13:40.970 --> 00:13:41.790
+qui ralentissent tout le monde.
+
+00:13:42.290 --> 00:13:42.770
+Ils sont logiques
+
+00:13:42.770 --> 00:13:43.730
+dans les secteurs réglementés
+
+00:13:43.730 --> 00:13:44.470
+ou les équipes mondiales,
+
+00:13:44.530 --> 00:13:45.390
+mais pour le code au quotidien,
+
+00:13:45.450 --> 00:13:46.230
+la plupart des développeurs
+
+00:13:46.230 --> 00:13:47.390
+les évitent, les évitent.
+
+00:13:47.950 --> 00:13:48.650
+Rédiger et maintenir
+
+00:13:48.650 --> 00:13:49.610
+des spécifications détaillées
+
+00:13:49.610 --> 00:13:50.170
+entraîne des coûts
+
+00:13:50.170 --> 00:13:50.730
+pour lesquels personne
+
+00:13:50.730 --> 00:13:51.550
+n'a la patience ni le temps.
+
+00:13:52.270 --> 00:13:53.250
+C'est un travail supplémentaire
+
+00:13:53.250 --> 00:13:53.670
+qui s'ajoute
+
+00:13:53.670 --> 00:13:54.790
+au déploiement des fonctionnalités
+
+00:13:54.790 --> 00:13:55.830
+et à l'approche des échéances,
+
+00:13:55.990 --> 00:13:56.670
+ces cycles de travail
+
+00:13:56.670 --> 00:13:57.810
+sont généralement sacrifiés.
+
+00:13:58.350 --> 00:13:59.030
+Ironie est évidente,
+
+00:13:59.170 --> 00:13:59.650
+les développeurs
+
+00:13:59.650 --> 00:14:00.070
+aiment en réalité
+
+00:14:00.070 --> 00:14:01.030
+penser à une échelle plus large.
+
+00:14:01.930 --> 00:14:02.710
+Connaître la structure
+
+00:14:02.710 --> 00:14:03.730
+à l'avance est rassurant.
+
+00:14:04.130 --> 00:14:04.970
+Le problème ne réside pas
+
+00:14:04.970 --> 00:14:05.490
+dans l'intention,
+
+00:14:05.590 --> 00:14:06.130
+mais dans l'entretien.
+
+00:14:06.450 --> 00:14:07.210
+Dès que la spécification
+
+00:14:07.210 --> 00:14:08.310
+commence à se désynchroniser
+
+00:14:08.310 --> 00:14:08.790
+de la réalité,
+
+00:14:09.070 --> 00:14:10.210
+sa maintenance devient un fardeau.
+
+00:14:10.610 --> 00:14:10.910
+C'est pourquoi
+
+00:14:10.910 --> 00:14:11.990
+une grande partie du travail réel
+
+00:14:11.990 --> 00:14:12.890
+dérive vers l'improvisation
+
+00:14:12.890 --> 00:14:14.170
+plutôt que vers une conception complète
+
+00:14:14.170 --> 00:14:14.950
+même dans les entreprises
+
+00:14:14.950 --> 00:14:15.790
+qui prônent techniquement
+
+00:14:15.790 --> 00:14:17.090
+une planification rigoureuse.
+
+00:14:17.730 --> 00:14:19.130
+Un workflow basé sur des agents
+
+00:14:19.130 --> 00:14:19.790
+offre une alternative.
+
+00:14:20.450 --> 00:14:20.910
+Au lieu d'exiger
+
+00:14:20.910 --> 00:14:22.010
+un document de conception soignée,
+
+00:14:22.150 --> 00:14:22.490
+il peut t'aider
+
+00:14:22.490 --> 00:14:23.490
+à traduire une spécification
+
+00:14:23.490 --> 00:14:24.150
+en langage clair
+
+00:14:24.150 --> 00:14:24.730
+en une structure
+
+00:14:24.730 --> 00:14:25.470
+que vous pouvez affiner.
+
+00:14:26.130 --> 00:14:27.370
+Pas besoin de diagramme UML
+
+00:14:27.370 --> 00:14:28.630
+ou de carte d'interface manuscrite,
+
+00:14:28.730 --> 00:14:30.050
+il suffit de demander
+
+00:14:30.050 --> 00:14:31.530
+la création d'un module de reporting
+
+00:14:31.530 --> 00:14:32.410
+avec un nouveau point
+
+00:14:32.410 --> 00:14:33.250
+de terminaison API,
+
+00:14:33.470 --> 00:14:34.350
+de le lier au stockage
+
+00:14:34.350 --> 00:14:35.290
+et de le sécuriser
+
+00:14:35.290 --> 00:14:36.490
+avec un accès basé sur les rôles.
+
+00:14:36.770 --> 00:14:37.850
+Et le système génère une base
+
+00:14:37.850 --> 00:14:38.330
+dans les fichiers
+
+00:14:38.330 --> 00:14:39.830
+de votre solution Donet.
+
+00:14:40.190 --> 00:14:41.370
+Et dans la démo,
+
+00:14:41.550 --> 00:14:42.490
+je lirai une spécification
+
+00:14:42.490 --> 00:14:43.190
+en langage clair,
+
+00:14:43.550 --> 00:14:44.290
+puis je montrerai
+
+00:14:44.290 --> 00:14:44.870
+les fichiers produits
+
+00:14:44.870 --> 00:14:45.750
+par l'agent contrôleur,
+
+00:14:45.930 --> 00:14:46.890
+modèles et enregistrements
+
+00:14:46.890 --> 00:14:47.330
+de services
+
+00:14:47.330 --> 00:14:48.890
+en soulignant les points
+
+00:14:48.890 --> 00:14:49.770
+nécessitant encore
+
+00:14:49.770 --> 00:14:50.490
+un ajustement manuel.
+
+00:14:51.390 --> 00:14:52.150
+Ainsi, vous pourrez juger
+
+00:14:52.150 --> 00:14:53.050
+la qualité par vous-même.
+
+00:14:53.890 --> 00:14:54.910
+Cela crée un terrain d'entente
+
+00:14:54.910 --> 00:14:56.050
+entre deux modes de développement.
+
+00:14:56.990 --> 00:14:57.710
+À côté, le coding,
+
+00:14:57.830 --> 00:14:58.650
+un vibe coding EGMET
+
+00:14:58.650 --> 00:14:59.510
+fragile pour les systèmes
+
+00:14:59.510 --> 00:14:59.970
+à long terme.
+
+00:15:01.330 --> 00:15:02.470
+De l'autre, la conception pilotée
+
+00:15:02.470 --> 00:15:03.290
+par les spécifications,
+
+00:15:03.690 --> 00:15:03.930
+fiable,
+
+00:15:04.110 --> 00:15:05.070
+mais incroyablement lente.
+
+00:15:06.470 --> 00:15:07.430
+Avec l'assistance d'un agent,
+
+00:15:07.510 --> 00:15:08.070
+vous décrivez l'idée
+
+00:15:08.070 --> 00:15:08.850
+avec du mot naturel,
+
+00:15:08.930 --> 00:15:09.670
+la structure apparaît
+
+00:15:09.670 --> 00:15:10.590
+et vous pouvez itérer
+
+00:15:10.590 --> 00:15:11.190
+presque aussi vite
+
+00:15:11.190 --> 00:15:11.990
+qu'avec le vibe coding
+
+00:15:12.490 --> 00:15:13.090
+avant les avantages
+
+00:15:13.090 --> 00:15:13.990
+d'une structure organisée.
+
+00:15:14.410 --> 00:15:15.070
+Reprenons cet exemple
+
+00:15:15.070 --> 00:15:15.790
+de workflow de reporting.
+
+00:15:16.510 --> 00:15:16.870
+Habituellement,
+
+00:15:16.990 --> 00:15:17.830
+vous devriez créer le modèle,
+
+00:15:18.210 --> 00:15:19.150
+construire le service de données,
+
+00:15:19.550 --> 00:15:20.330
+connecter le contrôleur,
+
+00:15:20.450 --> 00:15:21.730
+configurer la sécurité
+
+00:15:21.730 --> 00:15:23.190
+et tout relier au démarrage.
+
+00:15:23.850 --> 00:15:24.630
+Cela implique de naviguer
+
+00:15:24.630 --> 00:15:25.510
+entre de multiples fichiers
+
+00:15:25.510 --> 00:15:26.290
+en espérant que la cohérence
+
+00:15:26.290 --> 00:15:26.750
+soit présente.
+
+00:15:27.270 --> 00:15:27.790
+Avec cette approche,
+
+00:15:27.870 --> 00:15:28.730
+la structure est mise en place
+
+00:15:28.730 --> 00:15:29.330
+instantanément.
+
+00:15:30.050 --> 00:15:30.830
+Les économies réelles
+
+00:15:30.830 --> 00:15:31.410
+ne viennent pas tant
+
+00:15:31.410 --> 00:15:32.310
+de la réduction du nombre
+
+00:15:32.310 --> 00:15:32.910
+de lignes saisies
+
+00:15:32.910 --> 00:15:33.850
+que de l'évitement des erreurs
+
+00:15:33.850 --> 00:15:34.450
+entre les fichiers,
+
+00:15:34.550 --> 00:15:35.430
+comme oublier d'enregistrer
+
+00:15:35.430 --> 00:15:36.030
+un nouveau service
+
+00:15:36.030 --> 00:15:36.890
+après l'avoir construit.
+
+00:15:37.230 --> 00:15:38.190
+Bien sûr, la question du style
+
+00:15:38.190 --> 00:15:38.750
+se pose toujours.
+
+00:15:38.750 --> 00:15:40.210
+Une IA va-t-elle imposer
+
+00:15:40.210 --> 00:15:40.830
+du code standard
+
+00:15:40.830 --> 00:15:42.470
+ou ignorer les conventions ?
+
+00:15:42.470 --> 00:15:42.870
+En pratique,
+
+00:15:42.970 --> 00:15:43.790
+les agents reflètent souvent
+
+00:15:43.790 --> 00:15:44.610
+les modèles existants
+
+00:15:44.610 --> 00:15:45.730
+du projet dans leurs suggestions.
+
+00:15:46.750 --> 00:15:47.110
+Dans la démo,
+
+00:15:47.190 --> 00:15:47.790
+vous verrez les deux aspects.
+
+00:15:48.710 --> 00:15:49.530
+Les endroits où la structure
+
+00:15:49.530 --> 00:15:50.110
+des contrôleurs
+
+00:15:50.110 --> 00:15:51.250
+correspond parfaitement à la nôtre
+
+00:15:51.250 --> 00:15:52.150
+et ceux où ces suggestions
+
+00:15:52.150 --> 00:15:53.490
+se sont écartés de la réalité.
+
+00:15:54.430 --> 00:15:55.170
+Ce mélange est important.
+
+00:15:55.690 --> 00:15:56.290
+Vous saurez ce en quoi
+
+00:15:56.290 --> 00:15:57.030
+vous pouvez avoir confiance
+
+00:15:57.030 --> 00:15:57.490
+et ce que vous devez
+
+00:15:57.490 --> 00:15:58.050
+encore ajuster.
+
+00:15:58.610 --> 00:15:59.130
+Le résultat final
+
+00:15:59.130 --> 00:15:59.730
+n'est pas du code standard
+
+00:15:59.730 --> 00:16:00.270
+des erreurs répétitifs.
+
+00:16:00.530 --> 00:16:01.190
+C'est toujours votre projet,
+
+00:16:01.390 --> 00:16:02.370
+simplement avec moins de travail
+
+00:16:02.370 --> 00:16:03.350
+manuel de mise en place.
+
+00:16:04.230 --> 00:16:05.290
+Vous conservez votre vitesse
+
+00:16:05.290 --> 00:16:06.090
+tout en vous appuyant
+
+00:16:06.090 --> 00:16:06.570
+sur une base
+
+00:16:06.570 --> 00:16:07.450
+que vous pourrez affiner
+
+00:16:07.450 --> 00:16:08.250
+pour évoluer.
+
+00:16:09.090 --> 00:16:10.110
+Plutôt que de limiter
+
+00:16:10.110 --> 00:16:10.610
+la conception
+
+00:16:10.610 --> 00:16:11.910
+aux seuls architectes patients,
+
+00:16:12.030 --> 00:16:12.730
+elle devient un outil
+
+00:16:12.730 --> 00:16:13.570
+pour tout développeur
+
+00:16:13.570 --> 00:16:15.030
+souhaitant expérimenter rapidement
+
+00:16:15.030 --> 00:16:16.530
+sans sacrifier l'ordre.
+
+00:16:18.010 --> 00:16:19.050
+Lorsque cela s'intègre
+
+00:16:19.050 --> 00:16:20.030
+à votre flux quotidien,
+
+00:16:20.450 --> 00:16:21.710
+la spécification ne semble plus
+
+00:16:21.710 --> 00:16:22.650
+être une étape formelle
+
+00:16:22.650 --> 00:16:24.290
+mais un raccourci léger.
+
+00:16:25.170 --> 00:16:26.110
+Vous décrivez votre intention,
+
+00:16:26.390 --> 00:16:27.250
+le système pose les bases
+
+00:16:27.250 --> 00:16:27.990
+et vous vous concentrez
+
+00:16:27.990 --> 00:16:29.110
+sur le façonnage des détails.
+
+00:16:29.730 --> 00:16:30.410
+L'impact majeur
+
+00:16:30.410 --> 00:16:31.030
+ne vient pas seulement
+
+00:16:31.030 --> 00:16:31.650
+du code généré
+
+00:16:31.650 --> 00:16:33.110
+mais de ce que les économies
+
+00:16:33.110 --> 00:16:33.750
+de temps signifient
+
+00:16:33.750 --> 00:16:34.690
+semaine après semaine.
+
+00:16:35.410 --> 00:16:35.650
+Plus d'heures
+
+00:16:35.650 --> 00:16:36.350
+pour les fonctionnalités
+
+00:16:36.350 --> 00:16:37.230
+moins de tâches fastidieuses
+
+00:16:37.230 --> 00:16:37.710
+de configuration.
+
+00:16:38.510 --> 00:16:39.430
+Cela nous amène directement
+
+00:16:39.430 --> 00:16:39.850
+à la question
+
+00:16:39.850 --> 00:16:40.670
+qui préoccupe le plus
+
+00:16:40.670 --> 00:16:41.370
+chaque développeur.
+
+00:16:41.950 --> 00:16:42.550
+Ce que ces changements
+
+00:16:42.550 --> 00:16:43.410
+représentent concrètement
+
+00:16:43.410 --> 00:16:45.730
+en termes de productivité ?
+
+00:16:45.730 --> 00:16:46.630
+Le gain de productivité.
+
+00:16:47.390 --> 00:16:47.910
+La vraie question
+
+00:16:47.910 --> 00:16:48.390
+n'est pas de savoir
+
+00:16:48.390 --> 00:16:48.910
+si vous gagnez
+
+00:16:48.910 --> 00:16:49.830
+quelques minutes ici ou là
+
+00:16:49.830 --> 00:16:51.230
+mais comment ces petits changements
+
+00:16:51.230 --> 00:16:51.690
+s'accumulent
+
+00:16:51.690 --> 00:16:52.430
+pour former des heures
+
+00:16:52.430 --> 00:16:53.130
+significatives
+
+00:16:53.130 --> 00:16:53.730
+sur une semaine.
+
+00:16:55.250 --> 00:16:55.690
+C'est là tout le gain
+
+00:16:55.690 --> 00:16:56.230
+de productivité.
+
+00:16:56.770 --> 00:16:57.410
+Récupérer du temps
+
+00:16:57.410 --> 00:16:58.170
+qui s'échappe généralement
+
+00:16:58.170 --> 00:16:58.850
+inaperçu à cause
+
+00:16:58.850 --> 00:16:59.630
+des changements de contexte
+
+00:16:59.630 --> 00:17:00.730
+et des cycles de builds répétés
+
+00:17:00.730 --> 00:17:01.650
+et des corrections manuelles.
+
+00:17:02.510 --> 00:17:03.390
+La plupart des développeurs
+
+00:17:03.390 --> 00:17:04.230
+acceptent ces petites pertes
+
+00:17:04.230 --> 00:17:05.290
+comme faisant partie du travail.
+
+00:17:05.790 --> 00:17:06.370
+10 minutes à chercher
+
+00:17:06.370 --> 00:17:07.210
+une valeur de configuration
+
+00:17:07.210 --> 00:17:08.210
+15 autres à relancer
+
+00:17:08.210 --> 00:17:09.130
+après une référence oubliée
+
+00:17:09.130 --> 00:17:10.190
+ou à basculer entre les fichiers
+
+00:17:10.190 --> 00:17:11.150
+pour vérifier les connexions
+
+00:17:11.150 --> 00:17:12.050
+pour vérifier les connexions.
+
+00:17:12.290 --> 00:17:12.810
+Prise isolément
+
+00:17:12.810 --> 00:17:13.570
+ces pertes sont mineures.
+
+00:17:14.090 --> 00:17:14.510
+Mais cumulées
+
+00:17:14.510 --> 00:17:15.390
+sur un sprint complet
+
+00:17:15.390 --> 00:17:16.330
+elles déterminent
+
+00:17:16.330 --> 00:17:17.970
+la valeur réelle produite.
+
+00:17:18.910 --> 00:17:19.350
+Ce qui ressemble
+
+00:17:19.350 --> 00:17:19.750
+à une routine
+
+00:17:19.750 --> 00:17:20.570
+masque un frein réel
+
+00:17:20.570 --> 00:17:21.510
+sur les délais de livraison.
+
+00:17:22.450 --> 00:17:22.910
+Le poids caché
+
+00:17:22.910 --> 00:17:23.370
+ne réside pas
+
+00:17:23.370 --> 00:17:24.090
+dans les temps de compilation
+
+00:17:24.090 --> 00:17:25.010
+ou la vitesse de frappe.
+
+00:17:25.430 --> 00:17:26.610
+Il réside dans le rythme saccadé
+
+00:17:26.610 --> 00:17:27.550
+imposé à votre concentration.
+
+00:17:28.050 --> 00:17:28.690
+Chaque fois que vous passez
+
+00:17:28.690 --> 00:17:29.310
+d'un fichier à l'autre
+
+00:17:29.310 --> 00:17:30.690
+votre cerveau doit se réinitialiser.
+
+00:17:31.390 --> 00:17:32.310
+Cette réinitialisation a un coût.
+
+00:17:32.610 --> 00:17:33.330
+Déléguer les corrections
+
+00:17:33.330 --> 00:17:34.330
+répétitives à un agent
+
+00:17:34.330 --> 00:17:35.230
+allège ce fardeau.
+
+00:17:36.010 --> 00:17:36.750
+Au lieu de reconstruire
+
+00:17:36.750 --> 00:17:37.730
+constamment votre contexte
+
+00:17:37.730 --> 00:17:38.910
+vous consacrez votre concentration
+
+00:17:38.910 --> 00:17:39.470
+là où elle compte
+
+00:17:39.470 --> 00:17:40.670
+résoudre les problèmes
+
+00:17:40.670 --> 00:17:41.590
+de conception majeurs.
+
+00:17:42.870 --> 00:17:43.330
+Beaucoup d'équipes
+
+00:17:43.330 --> 00:17:44.290
+ne suivent pas ces micro-coups
+
+00:17:44.290 --> 00:17:44.910
+car ils n'apparaissent
+
+00:17:44.910 --> 00:17:45.790
+ni dans l'historique Git.
+
+00:17:47.070 --> 00:17:47.630
+Le travail inutile
+
+00:17:47.630 --> 00:17:48.210
+n'est pas consigné
+
+00:17:48.210 --> 00:17:49.170
+mais il consomme tout de même
+
+00:17:49.170 --> 00:17:49.630
+de l'énergie.
+
+00:17:50.490 --> 00:17:51.070
+Et à mesure que les bases
+
+00:17:51.070 --> 00:17:51.550
+de code s'étendent
+
+00:17:51.550 --> 00:17:52.330
+cette friction ne s'ajoute pas
+
+00:17:52.330 --> 00:17:53.050
+de manière linéaire.
+
+00:17:53.970 --> 00:17:54.790
+Plus de couches signifient
+
+00:17:54.790 --> 00:17:55.450
+plus de dépendance
+
+00:17:55.450 --> 00:17:56.170
+à garder en mémoire
+
+00:17:56.170 --> 00:17:56.750
+et plus de chances
+
+00:17:56.750 --> 00:17:57.350
+de perdre du temps
+
+00:17:57.350 --> 00:17:58.170
+à aligner la structure
+
+00:17:58.170 --> 00:17:59.330
+avant de pouvoir avancer.
+
+00:18:00.330 --> 00:18:01.090
+Les flux de travail basés
+
+00:18:01.090 --> 00:18:01.550
+sur des agents
+
+00:18:01.550 --> 00:18:02.030
+changent la donne
+
+00:18:02.030 --> 00:18:02.770
+en ciblant directement
+
+00:18:02.770 --> 00:18:03.190
+ces pertes.
+
+00:18:03.670 --> 00:18:04.330
+Ils ne se contentent pas
+
+00:18:04.330 --> 00:18:04.990
+de remplir des méthodes
+
+00:18:04.990 --> 00:18:05.350
+plus rapides.
+
+00:18:05.690 --> 00:18:06.470
+Ils réduisent les boucles
+
+00:18:06.470 --> 00:18:06.990
+de recherche,
+
+00:18:07.070 --> 00:18:08.090
+de correction et de relance
+
+00:18:08.090 --> 00:18:08.570
+qui grignotent
+
+00:18:08.570 --> 00:18:09.150
+vos après-midi.
+
+00:18:09.950 --> 00:18:10.770
+Les équipes utilisant
+
+00:18:10.770 --> 00:18:11.150
+des agents
+
+00:18:11.150 --> 00:18:11.730
+rapportent souvent
+
+00:18:11.730 --> 00:18:12.610
+une réduction du temps
+
+00:18:12.610 --> 00:18:13.670
+nécessaire pour se débloquer.
+
+00:18:14.370 --> 00:18:14.910
+Dans cette vidéo
+
+00:18:14.910 --> 00:18:15.930
+nous ferons une démonstration
+
+00:18:15.930 --> 00:18:16.370
+avant-après
+
+00:18:16.370 --> 00:18:17.030
+pour que vous puissiez
+
+00:18:17.030 --> 00:18:17.750
+juger de l'impact.
+
+00:18:18.530 --> 00:18:19.270
+Je chronomètrerai
+
+00:18:19.270 --> 00:18:19.850
+l'implémentation
+
+00:18:19.850 --> 00:18:20.770
+de la même fonctionnalité
+
+00:18:20.770 --> 00:18:21.670
+Azure manuellement
+
+00:18:21.670 --> 00:18:22.450
+puis avec l'agent
+
+00:18:22.450 --> 00:18:23.010
+afin que vous puissiez
+
+00:18:23.010 --> 00:18:23.730
+constater le gain
+
+00:18:23.730 --> 00:18:25.030
+de productivité concrètement.
+
+00:18:25.930 --> 00:18:26.930
+D'un point de vue commercial
+
+00:18:26.930 --> 00:18:27.710
+la valeur se reflète
+
+00:18:27.710 --> 00:18:28.610
+dans la vélocité des projets.
+
+00:18:29.430 --> 00:18:30.050
+Des cycles plus rapides
+
+00:18:30.050 --> 00:18:30.530
+ne concernent pas
+
+00:18:30.530 --> 00:18:31.230
+uniquement la satisfaction
+
+00:18:31.230 --> 00:18:31.730
+des développeurs.
+
+00:18:32.150 --> 00:18:32.590
+Ils déterminent
+
+00:18:32.590 --> 00:18:33.190
+si les fonctionnalités
+
+00:18:33.190 --> 00:18:34.050
+sont livrées dans cette version
+
+00:18:34.050 --> 00:18:35.110
+ou repoussées de plusieurs trimestres.
+
+00:18:35.570 --> 00:18:36.510
+Ils influencent la dette technique
+
+00:18:36.510 --> 00:18:37.530
+car moins de correctifs
+
+00:18:37.530 --> 00:18:38.030
+et de régressions
+
+00:18:38.030 --> 00:18:38.850
+s'accumulent dans le backlog.
+
+00:18:40.250 --> 00:18:40.930
+Un flux plus fluide
+
+00:18:40.930 --> 00:18:41.490
+permet aux équipes
+
+00:18:41.490 --> 00:18:42.190
+d'avancer sereinement
+
+00:18:42.190 --> 00:18:42.750
+au lieu de corriger
+
+00:18:42.750 --> 00:18:44.010
+le travail du sprint précédent.
+
+00:18:45.270 --> 00:18:45.710
+Cette cohérence
+
+00:18:45.710 --> 00:18:46.730
+réduit les interventions d'urgence
+
+00:18:46.730 --> 00:18:47.550
+et renforce la qualité
+
+00:18:47.550 --> 00:18:48.050
+et les livraisons
+
+00:18:48.050 --> 00:18:48.590
+sur le long terme.
+
+00:18:49.210 --> 00:18:50.010
+Il y a aussi le facteur humain.
+
+00:18:50.710 --> 00:18:51.310
+Une journée passée
+
+00:18:51.310 --> 00:18:51.950
+à traquer des erreurs
+
+00:18:51.950 --> 00:18:53.050
+et plus n'importe quel ingénieur.
+
+00:18:53.770 --> 00:18:54.370
+Une fois fatigué,
+
+00:18:54.530 --> 00:18:55.190
+la conception propre
+
+00:18:55.190 --> 00:18:55.770
+devient difficile,
+
+00:18:56.010 --> 00:18:56.670
+les détails nous échappent
+
+00:18:56.670 --> 00:18:57.350
+et les erreurs s'immiscent.
+
+00:18:58.150 --> 00:18:59.070
+En confiant les corrections
+
+00:18:59.070 --> 00:18:59.990
+mécaniques à un agent,
+
+00:19:00.230 --> 00:19:00.750
+les développeurs
+
+00:19:00.750 --> 00:19:01.710
+restent alertes plus longtemps.
+
+00:19:02.790 --> 00:19:03.670
+Cette concentration accrue
+
+00:19:03.670 --> 00:19:04.250
+améliore à la fois
+
+00:19:04.250 --> 00:19:05.390
+la productivité et la qualité.
+
+00:19:06.350 --> 00:19:07.210
+Lorsque vous n'êtes pas freiné
+
+00:19:07.210 --> 00:19:08.190
+par des frictions répétées,
+
+00:19:08.330 --> 00:19:09.230
+vous êtes libre de penser
+
+00:19:09.230 --> 00:19:09.730
+globalement
+
+00:19:09.730 --> 00:19:10.590
+et de mieux planifier.
+
+00:19:11.290 --> 00:19:12.050
+La différence en pratique
+
+00:19:12.050 --> 00:19:12.710
+ressemble à ceci.
+
+00:19:13.130 --> 00:19:13.990
+Une nouvelle fonction Azure
+
+00:19:13.990 --> 00:19:14.970
+avec de multiples liaisons
+
+00:19:14.970 --> 00:19:15.930
+et intégration de services
+
+00:19:15.930 --> 00:19:16.970
+peut prendre deux jours complets
+
+00:19:16.970 --> 00:19:17.550
+sans aide.
+
+00:19:18.870 --> 00:19:19.690
+Entre la configuration,
+
+00:19:19.870 --> 00:19:20.990
+les tests et le retour en arrière
+
+00:19:20.990 --> 00:19:22.270
+dû à des références incohérentes,
+
+00:19:22.370 --> 00:19:23.470
+la tâche s'éternise.
+
+00:19:24.370 --> 00:19:25.010
+Avec l'aide d'un agent,
+
+00:19:25.150 --> 00:19:25.590
+la même fonction
+
+00:19:25.590 --> 00:19:26.130
+peut être réalisée
+
+00:19:26.130 --> 00:19:26.850
+en une demi-journée.
+
+00:19:27.750 --> 00:19:28.970
+Non pas parce que l'on bâcle le travail,
+
+00:19:29.090 --> 00:19:29.910
+mais parce que la configuration
+
+00:19:29.910 --> 00:19:31.050
+interfichée et l'orchestration
+
+00:19:31.050 --> 00:19:31.990
+sont réussies du premier coup.
+
+00:19:32.710 --> 00:19:33.610
+Le calendrier se réduit
+
+00:19:33.610 --> 00:19:34.710
+en éliminant les faux départs
+
+00:19:34.710 --> 00:19:35.610
+et les efforts redondants.
+
+00:19:36.530 --> 00:19:37.110
+Certains développeurs
+
+00:19:37.110 --> 00:19:38.050
+expriment une inquiétude légitime.
+
+00:19:38.390 --> 00:19:39.310
+Le fait de s'appuyer sur une IA
+
+00:19:39.310 --> 00:19:39.810
+pour la maintenance
+
+00:19:39.810 --> 00:19:41.270
+émousse-t-il vos propres compétences,
+
+00:19:41.270 --> 00:19:42.730
+cette perspective oublie souvent
+
+00:19:42.730 --> 00:19:43.410
+ce qui est en train de changer.
+
+00:19:44.230 --> 00:19:45.650
+Déléguer la configuration répétitive
+
+00:19:45.650 --> 00:19:46.670
+n'affaiblit pas votre expertise,
+
+00:19:46.850 --> 00:19:47.350
+elle la préserve
+
+00:19:47.350 --> 00:19:48.450
+pour la conception et l'architecture
+
+00:19:48.450 --> 00:19:49.610
+où votre jugement fait la différence.
+
+00:19:50.290 --> 00:19:50.650
+En réalité,
+
+00:19:50.750 --> 00:19:51.290
+vous gagnez de l'espace
+
+00:19:51.290 --> 00:19:52.190
+pour exercer une résolution
+
+00:19:52.190 --> 00:19:53.010
+de problèmes de haut niveau
+
+00:19:53.010 --> 00:19:54.290
+plutôt que de gaspiller votre énergie
+
+00:19:54.290 --> 00:19:55.190
+en correction, correction.
+
+00:19:55.610 --> 00:19:56.370
+Si vous testez cela,
+
+00:19:56.570 --> 00:19:57.270
+commentez le nombre d'heures
+
+00:19:57.270 --> 00:19:57.990
+que vous avez récupérées
+
+00:19:57.990 --> 00:19:58.510
+au cours d'un sprint.
+
+00:19:58.930 --> 00:20:00.110
+J'intégrerai les réponses intéressantes
+
+00:20:00.110 --> 00:20:00.750
+dans mes prochaines vidéos.
+
+00:20:01.450 --> 00:20:02.490
+Savoir comment les autres équipes
+
+00:20:02.490 --> 00:20:03.130
+vivent ce changement
+
+00:20:03.130 --> 00:20:04.270
+donne à chacun une meilleure idée
+
+00:20:04.270 --> 00:20:04.910
+de la valeur réelle
+
+00:20:04.910 --> 00:20:06.490
+au-delà des démonstrations.
+
+00:20:06.490 --> 00:20:08.310
+Une note de prudence toutefois,
+
+00:20:08.390 --> 00:20:09.090
+l'automatisation aide
+
+00:20:09.090 --> 00:20:10.170
+mais la sécurité reste essentielle.
+
+00:20:10.990 --> 00:20:11.790
+Exécutez toujours vos tests
+
+00:20:11.790 --> 00:20:12.670
+et utilisez la revue de code
+
+00:20:12.670 --> 00:20:13.610
+pour valider les modifications
+
+00:20:13.610 --> 00:20:14.250
+créées par l'agent.
+
+00:20:15.070 --> 00:20:15.930
+Faites confiance à la réduction
+
+00:20:15.930 --> 00:20:16.770
+des tâches fastidieuses
+
+00:20:16.770 --> 00:20:17.890
+mais conservez les mêmes garde-fous.
+
+00:20:18.630 --> 00:20:19.730
+Le gain de vitesse ne porte ses fruits
+
+00:20:19.730 --> 00:20:20.870
+que si la qualité reste constante.
+
+00:20:21.470 --> 00:20:22.150
+Des tests solides
+
+00:20:22.150 --> 00:20:23.270
+et une revue de PR intelligente
+
+00:20:23.270 --> 00:20:24.090
+protègent votre pipeline
+
+00:20:24.090 --> 00:20:25.530
+de livraison d'une automatisation fragile.
+
+00:20:26.290 --> 00:20:27.090
+L'avantage ne réside pas
+
+00:20:27.090 --> 00:20:27.830
+dans la production rapide
+
+00:20:27.830 --> 00:20:28.370
+de lignes de code
+
+00:20:28.370 --> 00:20:30.010
+mais dans la libération d'espace
+
+00:20:30.010 --> 00:20:31.810
+pour créer des solutions plus robustes.
+
+00:20:31.890 --> 00:20:32.830
+Avec moins de fatigue et moins d'eux.

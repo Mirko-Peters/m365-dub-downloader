@@ -1,0 +1,949 @@
+WEBVTT
+
+00:00:00.140 --> 00:00:07.520
+Klaar voor 10 dagen Microsoft 365, Copilot, AI, Azure en de mensen die de toekomst van werk vormgeven?
+
+00:00:07.860 --> 00:00:12.400
+Deze januari is M365, kom terug en we pakken groter uit.
+
+00:00:12.660 --> 00:00:18.300
+Doe mee voor live sessies, praktijkdemo's en praktische kennis van MVP's en experts van over de hele wereld.
+
+00:00:18.520 --> 00:00:21.820
+Geen algemene presentaties, geen eindeloze modewoorden.
+
+00:00:21.820 --> 00:00:29.140
+We pakken de echte uitdagingen aan Copilot Studio, AI Agents, Fabric, Beveiliging, Governance en Automatisering.
+
+00:00:29.140 --> 00:00:34.900
+Of je nu IT-professional, ontwikkelaar of zakelijk leider bent, er zijn sessies speciaal voor jou.
+
+00:00:35.260 --> 00:00:40.500
+Met 10 volledige dagen kun je verschillende technologieën verkennen en contact leggen met een wereldwijde community.
+
+00:00:40.900 --> 00:00:44.540
+Kijk live mee en neem praktische inzichten mee terug naar je organisatie.
+
+00:00:44.880 --> 00:00:49.140
+Januari 2027, 10 dagen, 1 Microsoft Community.
+
+00:00:49.640 --> 00:00:51.200
+Registratie is nu geopend.
+
+00:00:51.820 --> 00:00:55.880
+Ga naar m365.com.net en verzeker je vandaag nog van een plek.
+
+00:00:56.660 --> 00:00:58.920
+Dat is m365.com.net.
+
+00:01:00.140 --> 00:01:04.900
+Meld je nu aan op m365.com.net, dan zien we je live in januari.
+
+00:01:05.100 --> 00:01:11.900
+Als je ooit een oplossing hebt geopend en je meteen overweldigd voelde door het web van bestanden, verwijzingen en bugs die je opwachten, dan ben je niet alleen.
+
+00:01:12.120 --> 00:01:15.260
+De meeste ontwikkelaars werken reactief, hier wat patchen, daar wat debuggen.
+
+00:01:15.420 --> 00:01:20.380
+De agentmodus van GitHub Copilot is bedoeld om bredere context te behouden en wijzigingen over bestanden heen te coördineren.
+
+00:01:20.520 --> 00:01:25.080
+In deze video laten we zien hoe die workflow eruit ziet in een echt podcast.net en Azure project.
+
+00:01:25.080 --> 00:01:28.080
+We lopen door een live oplossing en laten het verschil zien voor en na agentwijzigingen.
+
+00:01:28.800 --> 00:01:36.400
+Je ziet hoe je code voor meerdere bestanden genereert met minder overhead, fouten tussen bestanden sneller oplost en zelfs een specificatie in gewone taal gebruikt om features op te zetten.
+
+00:01:36.580 --> 00:01:41.520
+Maar voordat we zover zijn, laten we beginnen met de verborgen kosten van de debugging loop waar zo vele van ons dagelijks in zitten.
+
+00:01:41.520 --> 00:01:46.380
+De verborgen kosten van ad hoc debuggen. Je gaat zitten om een fout te herstellen die simpel genoeg lijkt.
+
+00:01:46.580 --> 00:01:50.520
+De applicatie bouwt niet en de console geeft een foutmelding op een regel in je hoofdprojectbestand.
+
+00:01:50.680 --> 00:01:56.240
+Je past de methode aan, compileert opnieuw en denkt dat je het hebt opgelost, totdat dezelfde melding in een iets andere vorm verschijnt.
+
+00:01:56.380 --> 00:01:59.240
+Er gaat weer een half uur voorbij voordat je het werkelijke probleem ontdekt.
+
+00:01:59.420 --> 00:02:02.540
+Een ontbrekende afhankelijkheid die diep in een andere projectmap verborgen zat.
+
+00:02:02.760 --> 00:02:07.320
+Tegen de tijd dat de verwijzing is gecorrigeerd en je opnieuw implementeert, is het grootste deel van je middag opgegaan aan labwerk.
+
+00:02:07.320 --> 00:02:12.340
+Het geplande werk aan features schuift door naar morgen. Dit patroon is zo gebruikelijk dat het normaal aanvoelt.
+
+00:02:12.500 --> 00:02:15.960
+Op het eerste gezicht boek je vooruitgang, omdat elke bak die je verhelpt als een overwinning voelt.
+
+00:02:16.140 --> 00:02:21.020
+In de praktijk draai je in cirkels. De lus is coderen, compileren, fout, herstellen, herhalen.
+
+00:02:21.160 --> 00:02:26.800
+Uren verdwijnen in het achtervolgen van oorzaak en gevolg en het netto resultaat is reactieve vooruitgang in plaats van zinvolle verbeteringen.
+
+00:02:26.920 --> 00:02:29.560
+Hoeveel van jullie zijn al eens een middag kwijtgeraakt aan precies deze lus?
+
+00:02:29.780 --> 00:02:32.580
+Laat een reactie van één zin achter, ik zal de beste antwoorden doorlezen.
+
+00:02:32.580 --> 00:02:37.580
+Wat deze cyclus zo uitputtend maakt is dat de tools om ons heen blijven verbeteren, terwijl het patroon gelijk blijft.
+
+00:02:37.700 --> 00:02:43.900
+Editors krijgen nieuwe functies, frameworks evolueren en integraties worden diepgaander, maar debuggen vereist nog steeds een reactieve aanpak.
+
+00:02:44.040 --> 00:02:46.940
+Het is alsof je een groeiende brand probeert te blussen met een emmer water.
+
+00:02:47.180 --> 00:02:52.720
+Elke uitslaande brand wordt op dat moment aangepakt, maar de onderliggende oorzaken blijven bestaan, wat de volgende brand bijna garandeert.
+
+00:02:52.880 --> 00:02:55.300
+En met elke tabbladwissel stijgen de verborgen kosten.
+
+00:02:55.540 --> 00:02:59.580
+Je verplaatst je van een serviceklasse naar een configuratiebestand en springt daarna door naar een afhankelijkhedengrafie.
+
+00:02:59.580 --> 00:03:04.360
+Elke verschuiving haalt je uit de logische lijn waar je mee bezig bent en dwingt je tot een mentale reset.
+
+00:03:04.520 --> 00:03:09.760
+Het zijn niet alleen de seconden die je kwijt bent aan het wisselen van vensters, het is de mentale tol van het telkens opnieuw opbouwen van context.
+
+00:03:10.020 --> 00:03:12.940
+Gedurende de dag stapelen die kleine resets zich op tot een zware last.
+
+00:03:13.180 --> 00:03:16.800
+Voor individuele ontwikkelaars uit de vermoeidheid zich in frustratie en verloren tijd.
+
+00:03:17.040 --> 00:03:20.500
+Voor teams die aan bedrijfsprojecten werken, wordt de impact vermenigvuldigd.
+
+00:03:20.660 --> 00:03:26.600
+Debugging lussen halen, sprinttelen onderuit, vertragen de lancering van functies en creëren een backlog die sneller groeit dan hij krimpt.
+
+00:03:26.600 --> 00:03:31.280
+De toename van technische schuld is slechts een ander bij effect van uren die verloren gaan aan brandjes blussen.
+
+00:03:31.500 --> 00:03:35.420
+Veel teams melden dat een groot deel van hun ontwikkeltijd opgaat aan reactief debuggen.
+
+00:03:35.580 --> 00:03:37.680
+Het is niet het meest boeiende onderdeel van engineering.
+
+00:03:38.000 --> 00:03:41.880
+Niemand plant een roadmap rondom met vijf keer moeten oplossen van hetzelfde afhankelijkheidsconflict.
+
+00:03:42.020 --> 00:03:44.540
+Toch is dit waar de capaciteit week na week naartoe gaat.
+
+00:03:44.800 --> 00:03:51.320
+Wanneer het verhelpen van fouten de definitie van vooruitgang wordt, raakt het bouwen van nieuwe functies op de achtergrond en leidt de architectuur in stilte.
+
+00:03:51.320 --> 00:03:58.400
+De ongemakkelijke waarheid is dat ad hoc debuggen het proces niet alleen vertraagt, het versterkt een cultuur van reactie in plaats van ontwerp.
+
+00:03:58.540 --> 00:04:02.080
+Je besteedt tijd aan het blussen van branden in plaats van aan het bouwen van systemen.
+
+00:04:02.260 --> 00:04:07.540
+Dat houdt het product op korte termijn misschien in de lucht, maar het beperkt de schaalbaarheid van een team en de zekerheid waarmee ze kunnen releasen.
+
+00:04:07.700 --> 00:04:12.660
+Dus laten we even stilstaan bij dat beeld, brandjes blussen, naar de hotspot rennen, water er overheen en weer door.
+
+00:04:12.820 --> 00:04:15.000
+Het probleem is niet dat ontwikkelaars er niet goed in zijn.
+
+00:04:15.220 --> 00:04:16.000
+Dat zijn ze wel.
+
+00:04:16.000 --> 00:04:18.180
+Het probleem is dat de vlammen nooit echt doven.
+
+00:04:18.400 --> 00:04:25.180
+Ze verplaatsen zich gewoon, laaien op in nieuwe bestanden, nieuwe projecten, nieuwe configuraties en houden iedereen in de responsmodus in plaats van de creatiemodus.
+
+00:04:25.400 --> 00:04:28.940
+Dat roept de vraag op, wat gebeurt er als de cyclus niet alleen op jouw schouders rust?
+
+00:04:29.200 --> 00:04:36.400
+Wat als de repetitieve onderdelen, de lus van traceren, schakelen en patchen, anders beheerd zouden kunnen worden terwijl jij je blijft focussen op bouwen?
+
+00:04:36.580 --> 00:04:41.020
+Want hoewel de druk van het brandjes blussen duidelijk is, is er nog een pijnpunt dat we nog niet hebben besproken.
+
+00:04:41.220 --> 00:04:44.860
+De echte last komt wanneer je project niet uit slechts één bestand of module bestaat.
+
+00:04:44.860 --> 00:04:48.320
+Dat is wanneer de oplossing die je nodig hebt meerdere lagen tegelijk beslaat.
+
+00:04:48.500 --> 00:04:54.660
+Stel je voor dat je een oplossing opent waarbij de logica verspreidt is over verschillende projecten, services en bibliotheken.
+
+00:04:54.840 --> 00:05:00.340
+Het onderdeel dat je nodig hebt staat op drie plekken tegelijk en het overzicht behouden is al een strijd op zich.
+
+00:05:01.000 --> 00:05:03.900
+Chaos in meerdere bestanden versus AI contextbeheer.
+
+00:05:04.140 --> 00:05:08.260
+Wanneer projecten meerdere lagen beslaan, is het schrijven van code niet de echte uitdaging.
+
+00:05:08.480 --> 00:05:10.940
+Het is het bij elkaar houden van alle bewegende onderdelen.
+
+00:05:10.940 --> 00:05:15.900
+Dit is waar de spanning tussen de chaos van meerdere bestanden en AI gestuurde contextcontrole het duidelijkst wordt.
+
+00:05:16.120 --> 00:05:19.180
+Neem een grote .NET oplossing met wel twaalf of meer projecten.
+
+00:05:19.360 --> 00:05:22.300
+Elke nieuwe functionaliteit raakt meestal verschillende lagen tegelijk.
+
+00:05:22.480 --> 00:05:27.720
+Een controller op de ene plek, een service op een andere en een set configuratiebestanden die ergens anders staan.
+
+00:05:27.960 --> 00:05:31.880
+Voordat je één regel schrijft, ben je tijd kwijt aan het nagaan van verwijzingen en afhankelijkheden,
+
+00:05:32.100 --> 00:05:35.620
+in de hoop dat een kleine wijziging niet leidt tot onverwachte fouten verderop in de keten.
+
+00:05:35.620 --> 00:05:42.620
+Die workflow is geen uitzondering. Het is normaal bij bedrijfsapplicaties, zeker zodra Azure services en integraties erbij komen kijken.
+
+00:05:42.860 --> 00:05:45.080
+De structuur van deze systemen is niet plat.
+
+00:05:45.420 --> 00:05:49.920
+Interfaces, dependency injection mappings en cross-project verwijzingen spelen allemaal een rol.
+
+00:05:50.120 --> 00:05:57.620
+Met Azure in de mix stappen sommige afhankelijkheden volledig buiten de oplossingsmap, function apps, servicebus bindings, resource instellingen, opslagverbindingen.
+
+00:05:57.620 --> 00:06:03.880
+Je coördineert tussen code in je IDE, configuratiebestanden op schijf en services gedefinieerd in de cloud.
+
+00:06:04.100 --> 00:06:06.320
+Geen van hen geeft erom dat je liever minder wilt klikken.
+
+00:06:06.500 --> 00:06:10.340
+Elke keer dat je van context wisselt, verbruikt je energie om het grotere geheel te reconstrueren.
+
+00:06:10.540 --> 00:06:13.240
+De meeste van ons proberen die context in het werkgeheugen te jong leren.
+
+00:06:13.440 --> 00:06:16.640
+In het begin is het te doen, maar naarmate het project groeit, sluipen er fouten in.
+
+00:06:16.780 --> 00:06:19.940
+Je voegt een nieuwe methode toe aan de service, maar vergeet de registratie.
+
+00:06:20.080 --> 00:06:25.120
+Je programmeert een Azure functie en merkt pas later dat de binding nooit is toegevoegd aan host, JSON of het deployment schabloon.
+
+00:06:25.120 --> 00:06:28.580
+Niets waarschuwt je tot runtime wanneer je aan het debuggen bent in plaats van aan het bouwen.
+
+00:06:28.740 --> 00:06:30.380
+De code zelf is niet het moeilijke deel.
+
+00:06:30.580 --> 00:06:32.240
+Het is de coördinatie tussen bestanden.
+
+00:06:32.460 --> 00:06:39.120
+Iedereen kent het gevoel van heen en weer springen tussen tabbladen, van een controller naar een service, dan naar een model, dan in configuratiebestanden en dan weer terug,
+
+00:06:39.240 --> 00:06:41.700
+om vervolgens te vergeten waarom je dat bestand ook alweer had geopend.
+
+00:06:41.860 --> 00:06:44.920
+Het is een kleine onderbreking die tientallen keren per dag herhaald wordt.
+
+00:06:45.140 --> 00:06:48.660
+Die interacties stapelen zich op en creëren wrijving die echte vooruitgang vertraagt.
+
+00:06:48.860 --> 00:06:54.300
+Het resultaat is een tragere oplevering, niet omdat het schrijven langzaam gaat, maar omdat het synchroniseren van alles je focus steelt.
+
+00:06:54.300 --> 00:06:56.880
+Deze overhead groeit in cloud-first projecten.
+
+00:06:57.000 --> 00:07:06.540
+Azure verspreidt belangrijke instellingen over meerdere locaties, lokale configuratiebestanden, omgevingsvariabelen, arm of bicep templates en CI-CD pipelines.
+
+00:07:06.820 --> 00:07:10.680
+Wat een enkel verzoek om een nieuwe functie lijkt, beslaat vaak vier abstractielagen.
+
+00:07:10.940 --> 00:07:12.620
+Deze complexiteit is geen optie.
+
+00:07:12.800 --> 00:07:15.380
+Het zit ingebakken in de manier waarop het ecosysteem werkt.
+
+00:07:15.520 --> 00:07:17.980
+En hier komt agentmode in beeld als een mogelijke verandering.
+
+00:07:18.180 --> 00:07:22.980
+In plaats van die hele orkestratie aan jou over te laten, is het ontworpen om bredere context over meerdere bestanden vast te houden.
+
+00:07:22.980 --> 00:07:27.320
+Dat betekent dat wanneer je vraagt om een wijziging in één laag, de andere lagen niet worden genegeerd.
+
+00:07:27.460 --> 00:07:34.640
+In de demo maak ik een nieuwe Azure functie en laat ik zien hoe de agent helpt door de method body te genereren, de binding config te maken en een host bij te werken.
+
+00:07:34.980 --> 00:07:37.700
+JSON en zelfs de juiste de registratie voor te stellen.
+
+00:07:37.940 --> 00:07:41.320
+Dat is meestal een proces in meerdere stappen dat verspreid is over verschillende bestanden.
+
+00:07:41.520 --> 00:07:43.620
+Een agent kan dit stroomlijnen tot één workflow.
+
+00:07:43.960 --> 00:07:50.600
+Dit gaat niet over het vervangen van jouw oordeel, maar over het wegnemen van repetitief administratief werk, zodat jij je op de echte ontwerpkeuzes kunt richten.
+
+00:07:50.600 --> 00:07:54.220
+Mensen kunnen een ruwe schets in hun hoofd houden of op een whiteboard tekenen.
+
+00:07:54.360 --> 00:07:57.840
+Een AI kan de details per bestand bijhouden zonder de rode draad te verliezen.
+
+00:07:58.060 --> 00:08:02.160
+Wat voor ons aanvoelt als een enorme cognitieve belasting, is voor de agent slechts basiscontext.
+
+00:08:02.340 --> 00:08:07.160
+Het verschil in de praktijk is de overgang van gefragmenteerd tabbladenbeheer naar jorchestreerde wijzigingen die in sync blijven.
+
+00:08:07.160 --> 00:08:12.580
+Ik zal tijdens de demo ook de door de agent gemaakte pull request of diff laten zien, zodat je precies kunt zien welke bewerkingen er zijn uitgevoerd.
+
+00:08:12.740 --> 00:08:14.020
+Die zichtbaarheid is belangrijk.
+
+00:08:14.220 --> 00:08:19.060
+Je behoudt volledige controle om te beoordelen en goed te keuren, terwijl het voorbereidende werk van het bijwerken van meerdere bestanden voor je wordt gedaan.
+
+00:08:19.240 --> 00:08:26.100
+Dus in plaats van een hele middag besteden aan het aan elkaar knopen van fragmenten, stuur je de wijziging één keer aan, bevestig je de gegenereerde updates en ga je door met het ontwerp op een hoger niveau.
+
+00:08:26.320 --> 00:08:34.180
+De opluchting zit niet alleen in bespaarde klikken of toetsaanslagen, maar in de focus op het oplossen van echte problemen in plaats van het herleiden van hoe een dozijn bestanden met elkaar verbonden is.
+
+00:08:34.180 --> 00:08:42.280
+Dit voordeel wordt het duidelijkst wanneer dingen kapot gaan, want zelfs met betere contextverwerking falen systemen, verlopen configuraties en sluipen er weer foutieve verwijzingen in.
+
+00:08:42.420 --> 00:08:47.260
+En daar begint de volgende test hoe fouten worden opgespoord en opgelost zodra ze de kop opsteken.
+
+00:08:47.480 --> 00:08:49.580
+Van foutenjacht naar autonome oplossingen.
+
+00:08:49.820 --> 00:08:53.440
+Denk eens aan hoe vaak je een foutmelding krijgt die direct naar één bestand wijst.
+
+00:08:53.600 --> 00:08:58.240
+Je volgt de stacktrace naar de methode die wordt genoemd, maakt een kleine aanpassing en drukt op opnieuw opbouwen.
+
+00:08:58.400 --> 00:09:03.360
+Het voelt als de voor de hand liggende oplossing, totdat dezelfde fout weer verschijnt, maar dan in een iets andere vorm.
+
+00:09:03.360 --> 00:09:06.160
+Op dat moment besef je dat de stacktrace alleen het symptoom toonde.
+
+00:09:06.360 --> 00:09:11.760
+Het werkelijke probleem ligt ergens anders, misschien in een ondersteunende klasse of verborgen in een configuratiebestand dat je de hele week niet hebt geopend.
+
+00:09:11.920 --> 00:09:14.280
+Elke ontwikkelaar heeft met dat soort misleiding te maken gehad.
+
+00:09:14.460 --> 00:09:16.920
+Wat het probleem lijkt, is vaak niet de plek waar de oplossing hoort.
+
+00:09:17.140 --> 00:09:20.620
+Dit vreet razendsnel tijd. Je past iets aan, herbouwt en wacht.
+
+00:09:20.820 --> 00:09:25.040
+Dan begroet een nieuwe foutje, wat leidt tot een ander bestand, nog een aanpassing en weer een herbouw.
+
+00:09:25.180 --> 00:09:31.980
+De lus lijkt productief omdat je bezig bent, typt en hercompileert, maar onder de oppervlakte is het meer vallen en opstaan dan echte oplossing.
+
+00:09:31.980 --> 00:09:38.460
+Die cyclus kan uren opsloeken en je achterlaten met kleine oppervlakkige correcties, zonder echte vooruitgang op de functie waarmee je begon.
+
+00:09:38.640 --> 00:09:40.840
+De werkelijke kosten hier zijn gemiste kansen.
+
+00:09:41.000 --> 00:09:47.680
+Terwijl je vast zit in het ritme van herbouwen en opnieuw proberen, los je geen zakelijke problemen op en lever je geen functionaliteit waar je gebruikers op wachten.
+
+00:09:47.920 --> 00:09:50.840
+Momentum gaat verloren aan giswerk in plaats van aan ontwerp.
+
+00:09:50.880 --> 00:09:55.680
+Het voelt op dat moment actief, maar die uren leveren weinig op behalve het systeem draaiende houden.
+
+00:09:55.680 --> 00:10:02.060
+Binnen een team vertraagt deze oppervlakkige beweging alles en ontstaat er een achterstand van functies die maar vooruit blijven schuiven.
+
+00:10:02.240 --> 00:10:04.760
+Hier begint een agent workflow er anders uit te zien.
+
+00:10:04.960 --> 00:10:08.340
+Het idee is niet om te stoppen bij de ene regel die je stacktrace markeert.
+
+00:10:08.540 --> 00:10:14.080
+In plaats daarvan is het ontworpen om context op systeemniveau te bewaren en vraagt het niet alleen wat dit bestand moet doen,
+
+00:10:14.240 --> 00:10:18.040
+maar welke reeks wijzigingen nodig is voor verbonden onderdelen om consistentie te herstellen.
+
+00:10:18.240 --> 00:10:22.260
+In de praktijk betekent dit dat je ziet dat het bewerkingen voorstelt die meerdere bestanden beslaan.
+
+00:10:22.260 --> 00:10:25.280
+In de demo zul je bijvoorbeeld zien dat wanneer een methode wijzigingen vereist,
+
+00:10:25.420 --> 00:10:29.320
+het bij passende aanpassingen kan voorstellen in gerelateerde configuraties of deployment schablonen,
+
+00:10:29.440 --> 00:10:30.840
+in plaats van dat jij ze zelf moet zoeken.
+
+00:10:31.080 --> 00:10:33.660
+Dat is de sprong van automatisch aanvullen naar iets breders.
+
+00:10:34.020 --> 00:10:37.400
+Automatisch aanvullen voltooit regels, een agent coördineert over bestanden heen,
+
+00:10:37.560 --> 00:10:40.520
+en die coördinatie is cruciaal wanneer fouten niet netjes op één plek staan.
+
+00:10:40.760 --> 00:10:42.440
+Neem een veel voorkomend Azure scenario.
+
+00:10:42.780 --> 00:10:48.340
+Je hebt een nieuwe function-app gebouwd, maar na implementatie faalt de Q-trigger omdat de binding niet overeenkomt met de methode-signatuur.
+
+00:10:48.560 --> 00:10:51.740
+Normaal gesproken spit je door Lux, zoek je uit welke binding niet klopt,
+
+00:10:51.740 --> 00:10:57.440
+pas je de function-yason handmatig aan en wijzig je misschien zelfs je infrastructuur-schabloon als daar ook een waarde niet matcht.
+
+00:10:57.740 --> 00:11:01.500
+Elke stap is een aparte zoektocht en elke correctie triggert een nieuwe te strong.
+
+00:11:01.700 --> 00:11:03.820
+Met de agent-modus is de workflow anders.
+
+00:11:04.080 --> 00:11:05.540
+Deze kan de codewijziging voorstellen,
+
+00:11:05.720 --> 00:11:10.500
+de juiste function-yason binding genereren en bewerkingen voor deployment scripts tonen als die niet op elkaar zijn afgestemd.
+
+00:11:10.600 --> 00:11:14.400
+Je beoordeelt, bevestigt en gaat verder zonder uren te besteden aan het bij elkaar puzzelen van elke laag.
+
+00:11:14.520 --> 00:11:15.860
+En vertrouwen is hier de sleutel.
+
+00:11:16.020 --> 00:11:18.700
+Niemand hoort het gevoel te hebben dat er onzichtbare wijzigingen op de achtergrond plaatsvinden.
+
+00:11:18.920 --> 00:11:20.580
+Daarom is het beoordelingsproces zo belangrijk.
+
+00:11:20.580 --> 00:11:22.520
+In deze demo lopen we er samen doorheen.
+
+00:11:22.700 --> 00:11:24.860
+De agent stelt de gecoördineerde wijzigingen voor.
+
+00:11:25.020 --> 00:11:27.700
+We openen de div om precies te inspecteren wat er is gegenereerd,
+
+00:11:27.900 --> 00:11:29.040
+draaien onze unit-tests,
+
+00:11:29.280 --> 00:11:33.120
+valideren de beeldlokaal en kiezen pas daarna of we de bewerkingen accepteren of afwijzen.
+
+00:11:33.300 --> 00:11:37.000
+Die validatie lushoudt je volledig in controle terwijl het saaie werk wordt weggenomen.
+
+00:11:37.200 --> 00:11:38.540
+Het is de moeite waard om te benadrukken,
+
+00:11:38.660 --> 00:11:40.160
+agents kunnen helpen om sneller te werken,
+
+00:11:40.340 --> 00:11:42.120
+maar ze vervangen geen goede engineering-praktijken.
+
+00:11:42.300 --> 00:11:45.760
+Je moet codereviews en CI nog steeds als ononderhandelbare poortwachters blijven zien.
+
+00:11:45.760 --> 00:11:48.380
+Laat de AI de tijd die je aan speurwerk besteedt verminderen,
+
+00:11:48.560 --> 00:11:51.220
+maar hou geautomatiseerde checks en menselijke controle als vangnet.
+
+00:11:51.380 --> 00:11:53.140
+Die balans lost het vertrouwensprobleem op
+
+00:11:53.140 --> 00:11:55.780
+en zorgt ervoor dat de snelheidswinst de stabiliteit niet ondermijnt.
+
+00:11:55.920 --> 00:11:57.920
+Het snelheidsverschil is niet theoretisch.
+
+00:11:58.160 --> 00:12:01.240
+Waar fouten opsporen en handmatig patchen een halve dag in beslag kan nemen,
+
+00:12:01.480 --> 00:12:03.580
+kunnen gecoördineerde suggesties dit tot minuten beperken.
+
+00:12:03.760 --> 00:12:07.280
+En de teruggewonnen tijd vloeit terug naar het werk waar je echt energie in wilt steken.
+
+00:12:07.480 --> 00:12:09.080
+De functies die je gebruikers opmerken,
+
+00:12:09.280 --> 00:12:11.660
+de architectuurbeslissingen die je codebasis verbeteren.
+
+00:12:11.660 --> 00:12:15.480
+In plaats van brandjes blussen tijdens runtime, kun je vooraf met vertrouwen ontwerpen.
+
+00:12:15.660 --> 00:12:18.020
+Dus de debugging-lus hoeft je dag niet langer te bepalen.
+
+00:12:18.240 --> 00:12:20.700
+Met een agent die updates over meerdere bestanden voorstelt,
+
+00:12:21.000 --> 00:12:23.860
+verschuif je van lukraak zoeken naar een ritme van beoordelen en goedkeuren.
+
+00:12:24.040 --> 00:12:28.060
+Je stopt met in cirkels dwalen door fouten en begint debugging te behandelen als een gestructureerde,
+
+00:12:28.240 --> 00:12:29.980
+bijna geautomatiseerde stap in je workflow.
+
+00:12:30.220 --> 00:12:33.440
+Die verschuiving maakt cognitieve ruimte en agendauren vrij voor het bouwen van functies,
+
+00:12:33.560 --> 00:12:34.800
+in plaats van alleengebreken herstellen.
+
+00:12:34.980 --> 00:12:37.900
+En zodra het oplossen van fouten minder gaat over symptoombestrijding,
+
+00:12:38.120 --> 00:12:39.520
+opent dit de deur naar iets groters.
+
+00:12:39.520 --> 00:12:42.920
+Hoe je hele functies op dezelfde gestructureerde manier zou kunnen starten.
+
+00:12:43.120 --> 00:12:46.280
+Stel je voor dat dezelfde workflow die gecoördineerde fix is voorstelt,
+
+00:12:46.440 --> 00:12:50.600
+ook een specificatie in gewone taal kan nemen en daar een werkende structuur omheen vormt.
+
+00:12:50.760 --> 00:12:53.080
+Dat is waar de volgende fase van ontwikkeling begint.
+
+00:12:53.680 --> 00:12:55.860
+Specificatie gestuurde ontwikkeling zonder de overhead.
+
+00:12:56.040 --> 00:13:00.600
+Een van de meest interessante verschuivingen komt wanneer je stopt met alleen in termen van bestanden en methoden te denken,
+
+00:13:00.780 --> 00:13:02.600
+en werk in plaats daarvan in gewone taal kadert.
+
+00:13:02.760 --> 00:13:06.020
+Dat is waar specificatie gestuurde ontwikkeling zonder de overhead om de hoek komt kijken.
+
+00:13:06.300 --> 00:13:08.600
+Stel je voor dat je een simpel functieverzoek uitschrijft.
+
+00:13:08.600 --> 00:13:11.820
+Voeg een rapportage workflow toe die maandelijkse samenvattingen genereert,
+
+00:13:12.000 --> 00:13:14.220
+deze opslaat en beschikbaar maakt via een beheerpagina.
+
+00:13:14.420 --> 00:13:16.840
+In plaats van slechts een paar geïsoleerde fragmenten te krijgen,
+
+00:13:17.100 --> 00:13:19.900
+kom je terug met een werkende structuur die al over je hele app is uitgezet.
+
+00:13:20.160 --> 00:13:24.600
+Controllers opgezet, modellen aangemaakt, services geregistreerd en configuratie gekoppeld.
+
+00:13:24.780 --> 00:13:28.820
+Die stap van het beschrijven van intentie naar het zien verschijnen van een concreet raamwerk in je project
+
+00:13:28.820 --> 00:13:31.960
+is waar deze aanpak eindelijk praktisch in plaats van theoretisch aanvoelt.
+
+00:13:32.140 --> 00:13:35.720
+In traditionele opstellingen heeft Spec First Ontwikkeling een zware reputatie.
+
+00:13:35.720 --> 00:13:38.800
+In grote organisaties betekent het meestal lange documenten met vereisten,
+
+00:13:39.020 --> 00:13:42.120
+ontwerpsheets van meerdere pagina's en rigide diagrammen die iedereen vertragen.
+
+00:13:42.300 --> 00:13:45.240
+Ze zijn zinvol in gereguleerde industrieën of wereldwijd verspreide teams,
+
+00:13:45.460 --> 00:13:47.680
+maar voor dagelijks coderen slaan de meeste ontwikkelaars ze over.
+
+00:13:47.880 --> 00:13:51.960
+Het schrijven en bijhouden van gedetailleerde specificaties kost tijd en geduld die niemand heeft.
+
+00:13:52.160 --> 00:13:54.540
+Het is extra werk bovenop het opleveren van functies,
+
+00:13:54.780 --> 00:13:58.020
+en naarmate deadlines naderen, worden die extra taken meestal opgeofferd.
+
+00:13:58.180 --> 00:14:01.660
+De ironie is duidelijk, ontwikkelaars denken eigenlijk graag in grote lijnen.
+
+00:14:01.660 --> 00:14:06.300
+De structuur vooraf kennen is geruststellend. Het probleem is niet de intentie, maar het onderhoud.
+
+00:14:06.540 --> 00:14:10.640
+Zodra de specificatie niet meer strookt met de werkelijkheid, wordt het onderhoud een last.
+
+00:14:10.920 --> 00:14:14.880
+Daarom neigt het echte werk vaak naar improvisatie in plaats van volledig ontwerp,
+
+00:14:15.040 --> 00:14:17.720
+zelfs bij bedrijven die officieel zwaar inzetten op planning.
+
+00:14:17.940 --> 00:14:19.880
+Een agent workflow biedt een alternatief.
+
+00:14:20.080 --> 00:14:22.300
+In plaats van een gepolijst ontwerp document te eisen,
+
+00:14:22.460 --> 00:14:26.260
+kan het helpen een specificatie in gewone taal te vertalen naar een opzet die je kunt verfijnen.
+
+00:14:26.260 --> 00:14:30.000
+Je hebt geen UML-diagrammen of handgeschreven interface-maps nodig.
+
+00:14:30.180 --> 00:14:34.120
+Je kunt simpelweg zeggen, maak een rapportage-module met een nieuw API-inpoint,
+
+00:14:34.320 --> 00:14:37.540
+koppel deze aan opslag en beveilig het met op rollen gebaseerde toegang,
+
+00:14:37.740 --> 00:14:40.520
+waarna het systeem een basis genereert in je puntnet-oplossing.
+
+00:14:40.740 --> 00:14:43.300
+In de demo lees ik een specificatie in gewone taal voor,
+
+00:14:43.460 --> 00:14:45.400
+laat ik de bestanden zien die de agent heeft gemaakt,
+
+00:14:45.620 --> 00:14:48.140
+controllers, modellen en service-registratie,
+
+00:14:48.280 --> 00:14:51.020
+en wijs ik de punten aan die nog handmatige verfijning vereisten.
+
+00:14:51.300 --> 00:14:53.340
+Zo kun je de kwaliteit zelf beoordelen.
+
+00:14:53.340 --> 00:14:56.400
+Dit creëert een middenweg tussen twee manieren van ontwikkelen.
+
+00:14:56.560 --> 00:15:01.240
+Aan de ene kant is er FIBE-coding, snel en vrij, maar kwetsbaar voor systemen op lange termijn.
+
+00:15:01.400 --> 00:15:05.720
+Aan de andere kant is er SPEC-driven design, betrouwbaar, maar tergend traag.
+
+00:15:05.840 --> 00:15:08.400
+Met ondersteuning van een agent schets je het idee in natuurlijke taal,
+
+00:15:08.640 --> 00:15:11.780
+verschijnt het raamwerk en kun je bijna net zo snel itereren als bij FIBE-coding,
+
+00:15:11.980 --> 00:15:14.380
+terwijl je de voordelen van een georganiseerde structuur behoudt.
+
+00:15:14.520 --> 00:15:16.200
+Neem nog eens die rapportage-workflow.
+
+00:15:16.460 --> 00:15:19.300
+Normaal gesproken moet je het model maken, de dataservice bouwen,
+
+00:15:19.300 --> 00:15:23.260
+de controller koppelen, beveiliging configureren en alles in de opstartfase verbinden.
+
+00:15:23.480 --> 00:15:27.120
+Dat betekent schakelen tussen meerdere bestanden in de hoop dat de consistentie behouden blijft.
+
+00:15:27.300 --> 00:15:29.820
+Met deze aanpak staat het raamwerk in één keer op zijn plek.
+
+00:15:30.000 --> 00:15:34.100
+De echte winst zit hem minder in het type van minder regels en meer in het vermijden van fouten tussen bestanden,
+
+00:15:34.300 --> 00:15:37.040
+zoals vergeten een nieuwe service te registreren nadat je deze al hebt gebouwd.
+
+00:15:37.280 --> 00:15:39.180
+Natuurlijk is er altijd de vraag over stijl.
+
+00:15:39.400 --> 00:15:42.160
+Zal een i-standaardcode afdelingen of conventies negeren?
+
+00:15:42.280 --> 00:15:46.400
+In de praktijk weerspiegelen agents in hun suggesties vaak bestaande patronen in het project.
+
+00:15:46.400 --> 00:15:48.420
+In de demo zul je beide kanten zien.
+
+00:15:48.600 --> 00:15:54.040
+Plekken waar het de controllerstructuur van ons Team Perfect volgde en plekken waar de aannames niet helemaal aansloten.
+
+00:15:54.260 --> 00:15:55.200
+Die mix is belangrijk.
+
+00:15:55.540 --> 00:15:58.080
+Je zult weten wat je kunt vertrouwen en wat je nog moet aanpassen.
+
+00:15:58.280 --> 00:16:00.460
+Het eindresultaat is geen eenheidsworst aan code.
+
+00:16:00.680 --> 00:16:04.240
+Het voelt nog steeds als jouw project, alleen met minder handmatig voorbereidend werk.
+
+00:16:04.420 --> 00:16:08.800
+Je behoudt snelheid en vertrouwt nog steeds op een basis die je kunt verfijnen voor toekomstige groei.
+
+00:16:08.800 --> 00:16:17.420
+In plaats van dat specificatiewerk beperkt blijft tot architecten met geduld voor diagrammen, wordt het een tool voor elke ontwikkelaar die snel wil experimenteren zonder orde op te offeren.
+
+00:16:17.880 --> 00:16:24.760
+En wanneer dit onderdeel wordt van je dagelijkse flow, voelt specificatie niet meer als een formele bedrijfstap, maar als een lichtgewicht afkorting.
+
+00:16:24.920 --> 00:16:29.580
+Je beschrijft je intentie, het systeem legt het fundament en jij focust je op het vormgeven van de details.
+
+00:16:29.840 --> 00:16:35.220
+De grotere impact komt niet alleen van de code die je genereert, maar van wat de tijdsbesparing week na week betekent.
+
+00:16:35.400 --> 00:16:38.000
+Meer uren voor functies, minder zwoegen bij de opzet.
+
+00:16:38.000 --> 00:16:41.660
+Dat brengt ons direct bij de vraag waar elke ontwikkelaar het meest om geeft.
+
+00:16:41.860 --> 00:16:45.480
+Wat deze veranderingen daadwerkelijk opleveren in termen van productiviteit.
+
+00:16:45.680 --> 00:16:47.180
+De productiviteitswinst.
+
+00:16:47.360 --> 00:16:54.440
+De echte vraag is niet of je hier en daar een paar minuten bespaart, maar hoe die kleine verschuivingen optellen tot betekenisvolle uren in een week.
+
+00:16:54.800 --> 00:16:56.460
+Dit is de productiviteitswinst.
+
+00:16:56.620 --> 00:17:02.020
+Tijd terugwinnen die normaal onopgemerkt weglekt door context switches, herhaalde beeldscycli en handmatige aanpassingen.
+
+00:17:02.280 --> 00:17:05.640
+De meeste ontwikkelaars accepteren die kleine verliezen als een onderdeel van het werk.
+
+00:17:05.640 --> 00:17:12.180
+10 minuten hier om een configuratiewaarde te zoeken, nog eens 15 minuten opnieuw draaien na een gemiste verwijzing, of schakelen tussen bestanden om verbindingen te checken.
+
+00:17:12.320 --> 00:17:18.440
+Op zichzelf lijken ze klein, maar bij elkaar opgeteld over een volledige sprint, bepalen ze hoeveel werkelijke waarde er wordt opgeleverd.
+
+00:17:18.580 --> 00:17:22.240
+Wat lijkt op routinematige beweging, verbergt een echte vertraging in de opleveringstermijnen.
+
+00:17:22.380 --> 00:17:25.080
+Het verborgen gewicht zit niet in compileertijden of typesnelheid.
+
+00:17:25.260 --> 00:17:28.020
+Het zit in het stopstartritme dat aan je concentratie wordt opgelegd.
+
+00:17:28.020 --> 00:17:31.140
+Elke keer dat je van het ene bestand naar het andere gaat, reset je brein.
+
+00:17:31.320 --> 00:17:32.560
+Die reset heeft een prijs.
+
+00:17:32.980 --> 00:17:35.800
+Repetitieve correcties uitbesteden aan een agent verlicht die last.
+
+00:17:35.980 --> 00:17:41.920
+In plaats van constant context te reconstrueren, besteed je focus waar het telt, het oplossen van de grotere ontwerpvraagstukken.
+
+00:17:42.140 --> 00:17:46.680
+Veel teams houden deze microkosten niet bij omdat ze niet in JIRA tickets of gitgeschiedenis verschijnen.
+
+00:17:46.900 --> 00:17:50.040
+Werk dat nergens toe leidt wordt niet gelogd, maar kost nog steeds energie.
+
+00:17:50.200 --> 00:17:53.660
+En naarmate codebezes schalen, voegt deze wrijving zich niet alleen lineair toe.
+
+00:17:53.660 --> 00:18:00.000
+Meer lagen betekenen meer afhankelijkheden om in het geheugen te houden en meer kansen om tijd te verliezen met simpelweg de structuur uitlijnen voordat je verder kunt.
+
+00:18:00.180 --> 00:18:03.480
+Agent Workflows veranderen de rekensom door deze lekken direct aan te pakken.
+
+00:18:03.660 --> 00:18:05.660
+Ze vullen niet alleen sneller methoden stups in.
+
+00:18:05.860 --> 00:18:09.600
+Ze verminderen de lussen van zoeken, patchen en opnieuw draaien die middagen opslokken.
+
+00:18:09.760 --> 00:18:14.080
+Teams die Agent Workflows gebruiken, rapporteren in veel gevallen een kortere tijd tot de blokkering.
+
+00:18:14.280 --> 00:18:18.520
+In deze video demonstreren we een voor en na taak zodat je de impact zelf kunt beoordelen.
+
+00:18:18.520 --> 00:18:23.160
+Ik meet de tijd die nodig is om dezelfde Azure functie handmatig te implementeren en daarna met de agent.
+
+00:18:23.160 --> 00:18:25.640
+Zodat je de productiviteitswinst concreet kunt zien.
+
+00:18:25.840 --> 00:18:29.020
+Vanuit zakelijk perspectief is de waarde zichtbaar in de projectsnelheid.
+
+00:18:29.280 --> 00:18:32.040
+Snellere cycli gaan niet alleen over de tevredenheid van ontwikkelaars.
+
+00:18:32.260 --> 00:18:35.540
+Ze bepalen of functies in deze release verschijnen of kwartalen opschuiven.
+
+00:18:35.740 --> 00:18:39.580
+Ze beïnvloeden technische schuld doordat er minder hacks en regressies in de backlog belanden.
+
+00:18:39.780 --> 00:18:44.620
+Een soepelere flow laat Teams vooruitgang boeken in plaats van kapot werk uit de voorrige sprint te herstellen.
+
+00:18:44.620 --> 00:18:48.760
+Die consistentie zorgt na verloop van tijd voor minder brandjes blussen en betere opleveringen.
+
+00:18:48.920 --> 00:18:50.280
+Er is ook de menselijke factor.
+
+00:18:50.280 --> 00:18:53.620
+Een dag die verloren gaat aan het zoeken naar fouten laat elke engineer uitgeput achter.
+
+00:18:53.800 --> 00:18:58.060
+Als je vermoeid bent, wordt zorgvuldig ontwerpen lastiger, glippen details weg en sluipen er fouten in.
+
+00:18:58.240 --> 00:19:02.240
+Door mechanische correcties naar een agent te verplaatsen, blijven ontwikkelaars langer alert.
+
+00:19:02.460 --> 00:19:05.880
+Die extra focus verscherpt zowel de productiviteit als de kwaliteit.
+
+00:19:06.140 --> 00:19:10.860
+Wanneer je niet wordt afgeremd door herhaaldelijke frictie, ben je vrijer om breder te denken en effectiever te plannen.
+
+00:19:11.080 --> 00:19:13.160
+Het verschil in de praktijk ziet er als volgt uit.
+
+00:19:13.160 --> 00:19:18.620
+Een nieuwe Azure-functie met meerdere bindings- en service-integraties kan zonder hulp wel twee volle dagen duren.
+
+00:19:18.820 --> 00:19:23.940
+Tussen configuratie, testen en het corrigeren van verkeerde referenties sleept de taak zich voort.
+
+00:19:24.120 --> 00:19:27.340
+Met hulp van een agent kan diezelfde functie in een halve dag klaar zijn.
+
+00:19:27.560 --> 00:19:32.340
+Niet omdat er hoekjes worden afgesneden, maar omdat de crossfile setup en orkestratie direct goed staan.
+
+00:19:32.560 --> 00:19:35.900
+De tijdlijn krimpt door valse starts en redundant werk te elimineren.
+
+00:19:35.900 --> 00:19:38.280
+Sommige ontwikkelaars uiten een terechte zorg.
+
+00:19:38.500 --> 00:19:41.720
+Maakt het vertrouwen op AI voor onderhoud je eigen vaardigheden minder scherp?
+
+00:19:41.780 --> 00:19:43.980
+Dit perspectief mist vaak wat er werkelijk verandert.
+
+00:19:44.180 --> 00:19:50.100
+Het uitbesteden van repeterend werk verzwakt je expertise niet, maar bewaart deze voor ontwerp en architectuur waarin zich het verschil maakt.
+
+00:19:50.280 --> 00:19:55.120
+In werkelijkheid krijg je ruimte voor probleemoplossing op een hoger niveau in plaats van energie te verspillen aan correcties.
+
+00:19:55.300 --> 00:19:58.740
+Als je dit uitprobeert, laat dan in de comments weten hoeveel uur je per sprint hebt teruggewonnen.
+
+00:19:58.900 --> 00:20:01.480
+Ik zal interessante reacties in toekomstige video's verwerken.
+
+00:20:01.480 --> 00:20:07.060
+Horen hoe andere teams deze verandering ervaren, geeft iedereen een beter beeld van de werkelijke waarde voor bij demo's en voorbeelden.
+
+00:20:07.220 --> 00:20:10.520
+Toch een waarschuwing, automatisering helpt, maar veiligheid blijft cruciaal.
+
+00:20:10.700 --> 00:20:14.740
+Draai altijd je tests en gebruik code reviews om door AI gemaakte wijzigingen te valideren.
+
+00:20:14.920 --> 00:20:18.200
+Vertrouw op de vermindering van routine werk, maar behoud dezelfde vangrails.
+
+00:20:18.420 --> 00:20:21.340
+Het snelheidsverschil loont alleen als de kwaliteit stabiel blijft.
+
+00:20:21.560 --> 00:20:26.040
+Sterke tests en slimme PR reviews beschermen je release pipeline tegen fragiele automatisering.
+
+00:20:26.040 --> 00:20:31.440
+De winst zit minder in het snel produceren van regels, code en meer in het creëren van ruimte voor betere oplossingen.
+
+00:20:31.480 --> 00:20:33.060
+Met minder vermoeidheid en minder.

@@ -1,0 +1,718 @@
+WEBVTT
+
+00:00:00.220 --> 00:00:07.560
+Gotowi na 10 dni z Microsoft 365, Copilot, AI, Azure oraz ludźmi, którzy kształtują przyszłość pracy?
+
+00:00:07.860 --> 00:00:12.360
+W styczniu wraca M365Con, a tym razem mierzymy jeszcze wyżej.
+
+00:00:12.720 --> 00:00:18.380
+Dołącz do nas na sesję na żywo pokazy praktyczne i zdobądź wiedzę od MVP oraz ekspertów z całego świata.
+
+00:00:18.640 --> 00:00:21.960
+Żadnych ogólnych slajdów, żadnego natłoku pustych haseł.
+
+00:00:22.280 --> 00:00:28.920
+Zajmujemy się prawdziwymi wyzwaniami, Copilot Studio agentami, AI, Fabrik, bezpieczeństwem, ładem i automatyzacją.
+
+00:00:28.920 --> 00:00:35.200
+Niezależnie od tego, czy jesteś informatykiem, programistą czy liderem biznesowym, mamy sesje stworzone z myślą o Tobie.
+
+00:00:35.400 --> 00:00:40.620
+Podczas 10 pełnych dni poznasz różne technologie i nawiążesz kontakty z globalną społecznością.
+
+00:00:40.860 --> 00:00:44.600
+Oglądaj na żywo i zabierz praktyczne wnioski do swojej organizacji.
+
+00:00:44.880 --> 00:00:51.140
+Styczeń 2027 roku, 10 dni, jedna społeczność Microsoft. Rejestracja jest już otwarta.
+
+00:00:52.940 --> 00:00:54.880
+Zarezerwuj swoje miejsce już dziś.
+
+00:00:54.880 --> 00:00:59.080
+Adres to m365.con.net
+
+00:00:59.080 --> 00:01:03.120
+Dołącz teraz na m365.con.net.
+
+00:01:03.280 --> 00:01:04.780
+Widzimy się na żywo w styczniu.
+
+00:01:04.900 --> 00:01:08.320
+Czy masz wrażenie, że Twoje wdrożenia w Power Platform to czarna skrzynka?
+
+00:01:08.560 --> 00:01:13.580
+Wysyłasz aktualizację, wstrzymujesz oddech i masz nadzieję, że zadziała w środowiskach dev, test i prod?
+
+00:01:13.580 --> 00:01:21.300
+Co jeśli mógłbyś kontrolować i widzieć każdy etap procesu ALM za pomocą GitHub Actions bez zgadywania i ręcznych poprawek?
+
+00:01:22.260 --> 00:01:27.900
+Odsłońmy kulisy tego, jak łączą się komponenty, kontrola wersji, automatyzacja i bezpieczne zmienne.
+
+00:01:28.160 --> 00:01:30.080
+To nie jest kolejna zwykła instrukcja.
+
+00:01:30.280 --> 00:01:35.220
+To wyjaśnienie, dlaczego, które pomijają inne przewodniki, aby kolejne wdrożenie nie pozostawiało niewiadomych.
+
+00:01:35.380 --> 00:01:38.460
+Dlaczego więc ALM w Power Platform przypomina labirynt?
+
+00:01:38.460 --> 00:01:45.160
+Jeśli kiedykolwiek próbowałeś wdrożyć Power App i czułeś niepokój, że coś ważnego mogło umknąć, nie jesteś sam.
+
+00:01:46.040 --> 00:01:53.240
+Na papierze Power Platform obiecuje łatwe tworzenie aplikacji, ale pod tą przyjazną otoczką ALM jest wszystkim, tylko nieprostotą.
+
+00:01:53.500 --> 00:01:59.360
+Aplikacja internetowa wdraża się z repozytorium, buduje w potoku i trafia na produkcję w przewidywalny sposób.
+
+00:01:59.360 --> 00:02:03.220
+Power Platform natomiast ukrywa połowę logiki w interfejsach typu
+
+00:02:03.220 --> 00:02:08.240
+Przeciągnij i upuść ekranach konektorów i formułach, których nie widać w żadnym repozytorium Git.
+
+00:02:08.460 --> 00:02:16.900
+Dlatego nawet jeśli śledzisz każdy krok z ogólnych przewodników, napotykasz dziwne, trudne do zdiagnozowania awarie, gdy biznesowe aplikacje opuszczają fazę rozwoju.
+
+00:02:17.100 --> 00:02:19.800
+Przyjrzyjmy się dostępnym poradnikom dotyczącym ALM.
+
+00:02:20.020 --> 00:02:24.160
+Większość z nich przeprowadzi Cię przez eksportowanie pliku zip rozwiązania i importowanie go gdzie indziej.
+
+00:02:24.380 --> 00:02:25.460
+Wydaje się proste, prawda?
+
+00:02:25.720 --> 00:02:27.500
+Ale to jak to tylko jedna warstwa.
+
+00:02:27.500 --> 00:02:29.240
+To, co pomijają, to dlaczego?
+
+00:02:29.500 --> 00:02:33.580
+Dlaczego wdrożenia Power Platform psują się w sposób, w jaki zwykły kod nigdy się nie psuje?
+
+00:02:33.760 --> 00:02:35.980
+To właśnie powoduje niekończące się zamieszanie.
+
+00:02:35.980 --> 00:02:41.900
+U źródła problemu leży to, że logika, połączenia i konfiguracja w Power Apps nie są przechowywane jak klasyczny kod.
+
+00:02:42.080 --> 00:02:45.680
+Nie chodzi tylko o sklonowanie repozytorium i obserwowanie testów jednostkowych.
+
+00:02:45.900 --> 00:02:54.140
+Kiedy więc próbujesz przenieść aplikację, wszystkie te ukryte zależności połączenia z Outlookiem, SharePointem czy własnymi API nie zawsze przenoszą się gładko w tym pliku zip.
+
+00:02:54.340 --> 00:02:55.220
+Oto scenariusz.
+
+00:02:55.440 --> 00:02:58.240
+Masz nową, świetnie działającą aplikację w środowisku deweloperskim.
+
+00:02:58.240 --> 00:03:01.840
+Eksportujesz rozwiązanie, importujesz do testowego i nagle przepływ przestaje działać.
+
+00:03:01.980 --> 00:03:04.060
+Rzadko jest to problem związany tylko z plikiem.
+
+00:03:04.280 --> 00:03:11.940
+Zamiast tego połączenia wskazują na złe miejsce, uprawnienia się nie zgadzają, a polityki danych blokują połączenia, które jeszcze przed chwilą wydawały się poprawne.
+
+00:03:12.160 --> 00:03:21.160
+Wyobraź sobie teraz robienie tego w trzech środowiskach, dev, test i prod, gdzie każdy używa innych połączeń, polityk ochrony danych zatwierdzających i zabezpieczeń administratora.
+
+00:03:22.000 --> 00:03:23.740
+Nie da się tego po prostu przekopiować.
+
+00:03:23.740 --> 00:03:27.560
+Badania potwierdzają to, co administratorzy i twórcy widzą co tydzień.
+
+00:03:27.740 --> 00:03:34.200
+Większość nieudanych wdrożeń Power Platform wynika z brakujących odniesień do konektorów lub źle zarządzanych zmiennych środowiskowych.
+
+00:03:34.440 --> 00:03:40.360
+Brak odniesienia do konektora oznacza po prostu, że przepływ nie może znaleźć swojego połączenia z Outlookiem lub Dataverse.
+
+00:03:40.600 --> 00:03:46.560
+Dlatego w chwili, gdy próbujesz uruchomić aplikację lub przepływ w innym środowisku, otrzymujesz błędy wykonania.
+
+00:03:46.560 --> 00:03:55.360
+A ponieważ zmienne środowiskowe w Power Platform działają inaczej niż w innych produktach Microsoft 365, sprawiają one problemy nawet doświadczonym programistom.
+
+00:03:55.600 --> 00:03:59.820
+Zmienne mają obsługiwać punkty końcowe, klucze lub konfiguracje specyficzne dla dzierżawy.
+
+00:04:00.080 --> 00:04:06.480
+Jeśli jednak ktoś zapomni zaktualizować je po wyeksportowaniu rozwiązania, nawet niepozorna zmiana może zepsuć działającą aplikację.
+
+00:04:06.720 --> 00:04:08.840
+Wielu z nas wpada w tę samą pułapkę na początku.
+
+00:04:09.200 --> 00:04:14.900
+Można pomyśleć, że wyeksportowany plik zip rozwiązania zawiera wszystko, co potrzebne, ale w rzeczywistości pomija on dynamiczne odniesienia do konektorów.
+
+00:04:14.900 --> 00:04:19.640
+Załóżmy na przykład, że masz aplikację używającą konektora HTTP dla zewnętrznej usługi w środowisku dev.
+
+00:04:19.800 --> 00:04:24.100
+Podczas importu do środowiska test lub prod ta konkretna instancja konektora nie będzie istnieć.
+
+00:04:24.260 --> 00:04:34.780
+Odniesienie do konektora wewnątrz aplikacji wskazuje na brakujący obiekt, a przepływy w rozwiązaniu po cichu się psują, dopóki użytkownik lub administrator ręcznie ich nie odtworzy i nie zmapuje na nowo.
+
+00:04:34.980 --> 00:04:44.000
+Jeśli masz więcej niż jednego twórcę lub administratora, jeszcze łatwiej stracić orientację, co dokąd prowadzi, a nikt nie chce analizy po awarii w stylu u mnie na dev działało.
+
+00:04:44.000 --> 00:04:47.460
+Kolejna komplikacja – jednostki usługi – Service Principles.
+
+00:04:47.640 --> 00:04:53.280
+Większość osób zaczyna od używania kont użytkowników do eksportowania i importowania rozwiązań, bo tak szybciej.
+
+00:04:53.440 --> 00:04:59.920
+Ale próba automatyzacji za pomocą GitHub Actions lub dowolnego systemu Ci przy użyciu danych logowania konkretnej osoby szybko prowadzi do ślepego załuka.
+
+00:05:00.160 --> 00:05:10.160
+Natrafisz na mury uprawnień, czasem bez jasnych komunikatów o błędach lub nawet wywołasz audyty zgodności, ponieważ uruchamiasz krytyczne wdrożenia na koncie osobistym zamiast na koncie przeznaczonym do automatyzacji.
+
+00:05:10.160 --> 00:05:19.200
+Jednostki usługi – Service Principles, będące w istocie tożsamościami aplikacji utworzonymi w usłudze Azure Ad, obsługują wszystkie uprawnienia, logowanie i audyt potrzebne w Twoim potoku.
+
+00:05:19.460 --> 00:05:25.240
+Bez nich Twój łańcuch automatyzacji zamienia się w mozaikę przekazań między osobami i nigdy nie wiesz, kto co zmienił.
+
+00:05:25.400 --> 00:05:27.980
+Kontrola wersji również staje się wielką niewiadomą.
+
+00:05:28.220 --> 00:05:32.180
+W przypadku zwykłego kodu masz historię komitów i narzędzia do śledzenia zmian Blame Tools.
+
+00:05:32.180 --> 00:05:37.080
+Pliki rozwiązań Power Platform to tylko migawki, co oznacza brak szczegółowego śledzenia zmian.
+
+00:05:37.280 --> 00:05:43.980
+Logika ukryta w formułach ekranu aplikacji typu Canvas lub w słabo udokumentowanych przepływach nie jest widoczna, dopóki ponownie ich nie wyeksportujesz.
+
+00:05:44.160 --> 00:05:50.140
+Ktoś zmienia ustawienie przepływu w interfejsie użytkownika, a Ty musisz życzyć sobie szczęścia w odkrywaniu, dlaczego środowiska docelowe nagle zachowują się inaczej.
+
+00:05:50.340 --> 00:05:57.560
+W rezultacie zarządzanie ALM dla Power Platform przypomina układanie puzli, w których brakuje połowy elementów albo są one ukryte pod pudełkiem.
+
+00:05:57.560 --> 00:06:05.700
+Niewidoczne zależności, łączniki specyficzne dla środowiska oraz zmienne, których nie widać w kodzie, zmieniają typowy przepływ pracy programisty.
+
+00:06:06.160 --> 00:06:16.780
+A to jeszcze przed zmierzeniem się z faktem, że środowiska produkcyjne prawie zawsze mają surowsze uprawnienia, inne zasady ochrony danych i wymogi audytowe, które nie są oczywiste w fazie programowania czy testów.
+
+00:06:16.780 --> 00:06:26.820
+Ale jest też dobra strona. Ta złożoność nie jest przypadkowa. Istnieje praktyczny powód, dla którego Power Platform traktuje źródło, zmienne i łączniki w tak unikalny sposób.
+
+00:06:26.820 --> 00:06:32.340
+Platforma ma na celu umożliwienie użytkownikom biznesowym tworzenie zaawansowanych aplikacji bez martwienia się o kod.
+
+00:06:32.480 --> 00:06:38.600
+Efektem ubocznym jest to, że ty jako osoba konfigurująca automatyzację musisz śledzić to, co ukryte pod maską.
+
+00:06:38.600 --> 00:06:46.640
+Jeśli wiesz, gdzie biegną te niewidoczne przewody, możesz naprawić lub uniknąć większości błędów, które wykolejają proces ALM w Power Platform.
+
+00:06:47.080 --> 00:06:53.400
+Jeśli brzmi to jak wyzwanie, to masz rację. Istnieją jednak cztery filary ALM, które pomagają uporządkować ten bałagan.
+
+00:06:53.580 --> 00:06:56.460
+Źródło Source, kompilacja Build, testowanie Test i wdrażanie Deploy.
+
+00:06:56.460 --> 00:07:01.920
+Każdy z nich ma swoje specyficzne cechy w Power Platform, ale razem przywracają strukturę temu, co inaczej wydaje się chaosem.
+
+00:07:02.060 --> 00:07:05.680
+Podstawowy system ALM, źródło, kompilacja, testowanie, wdrażanie.
+
+00:07:05.900 --> 00:07:15.460
+Za każdym razem, gdy ktoś prosi o potok Power Platform, który po prostu działa, pierwszą rzeczą, jaka przychodzi na myśl, są te cztery filary ALM, źródło, kompilacja, testowanie, wdrażanie.
+
+00:07:15.460 --> 00:07:18.800
+W tradycyjnym świecie programowania mógłbyś to robić niemal przez sen.
+
+00:07:18.980 --> 00:07:21.520
+Power Platform nie pozwala jednak na takie ułatwienia.
+
+00:07:21.780 --> 00:07:23.880
+Nagle źródło przestaje oznaczać kod.
+
+00:07:24.060 --> 00:07:32.920
+Oznacza to zmaganie się z plikami rozwiązań, eksportowanie spakowanych paczek zawierających aplikacje, przepływy, a czasem łączniki udające część kodu źródłowego.
+
+00:07:33.220 --> 00:07:38.180
+Zacznijmy od podstaw, a potem przeanalizujmy, co sprawia, że każdy z tych filarów jest w tym świecie nieco dziwny.
+
+00:07:38.180 --> 00:07:40.060
+Masz swój plik zip z rozwiązaniem.
+
+00:07:40.260 --> 00:07:42.260
+Nie jest to kod w potocznym tego słowa znaczeniu.
+
+00:07:42.460 --> 00:07:48.460
+Otwórz to, a przywitają Cię pliki XML i JSON, a nie logika, którą znasz z TypeScripta czy C-Kratka.
+
+00:07:48.620 --> 00:07:50.680
+To jednak kod źródłowy dla Power Platform.
+
+00:07:51.040 --> 00:07:52.700
+Zespoły często się tu potykają.
+
+00:07:52.980 --> 00:08:02.340
+Wygląda na przenośne, dopóki nie zauważysz, że większość zmian, jak aktualizacja formuły czy korekta logiki przepływu, nie jest widoczna, póki nie wyeksportujesz nowego pliku zip rozwiązania.
+
+00:08:02.340 --> 00:08:10.400
+Więc tak możesz wersjonować te pliki rozwiązań w Gicie, ale jeśli nie eksportujesz ich po każdej istotnej edycji, w historii powstaną rażące luki.
+
+00:08:10.800 --> 00:08:11.340
+Teraz konfiguracja.
+
+00:08:12.280 --> 00:08:17.000
+W zwykłych aplikacjach wystarczy zapisać ciągi połączeń w pliku konfiguracyjnym i gotowe.
+
+00:08:17.200 --> 00:08:21.380
+Power Platform przemyca dane specyficzne dla środowiska wewnątrz tych rozwiązań.
+
+00:08:21.520 --> 00:08:29.300
+To nie tylko zmienne środowiskowe, to odwołania do konektorów, dynamiczne punkty końcowe, role i uprawnienia powiązane z logiką biznesową.
+
+00:08:29.300 --> 00:08:36.160
+Jeśli zapomnisz je zaktualizować przed eksportem z wersji deweloperskiej lub testowej, utrwalisz błędne wskazania.
+
+00:08:36.420 --> 00:08:47.980
+Widziałem zespoły, które religijnie komitowały pliki zip rozwiązań, a po wdrożeniu odkrywały, że połowa aplikacji wciąż łączy się z deweloperskim datavers zamiast produkcyjnym, bo nikt nie zmapował odwołań do konektorów.
+
+00:08:48.200 --> 00:08:49.580
+Następnie mamy budowanie.
+
+00:08:50.160 --> 00:08:55.620
+Słowo build kojarzy się zazwyczaj z kompilacją kodu i obserwowaniem zielonych ptaszków w zadaniu CI.
+
+00:08:55.620 --> 00:09:02.020
+W Power Platform proces budowania polega na przechowywaniu paczek zip, sprawdzaniu schematów i weryfikacji zależności.
+
+00:09:02.340 --> 00:09:11.660
+W potoku GitHub Actions zadanie budowania pobiera zatwierdzony plik rozwiązania, a następnie używa interfejsu wiersza poleceń Power Platform, by rozpakować, sprawdzić i ponownie spakować rozwiązanie.
+
+00:09:11.840 --> 00:09:14.780
+Krok weryfikacji to moment, w którym dzieje się magia lub chaos.
+
+00:09:15.040 --> 00:09:17.940
+Może on wyłapać zerwane odwołania lub nieobsługiwane akcje.
+
+00:09:17.940 --> 00:09:26.160
+Co gorsza, jeśli zmiana w przepływie opiera się na niestandardowym konektorze, który nie trafił do kontroli źródła, budowanie po cichu zapakuje niekompletny produkt.
+
+00:09:26.340 --> 00:09:28.040
+Tu sprawy stają się skomplikowane.
+
+00:09:28.260 --> 00:09:35.900
+Te zadania budowania mniej polegają na kompilacji, a bardziej na orkiestracji niezawodnego eksportu i upewnieniu się, że zawartość nadaje się do wysyłki.
+
+00:09:36.140 --> 00:09:44.640
+Zespoły, które to pomijają lub robią w pośpiechu, szybko trafiają na sytuacje, gdzie budowanie technicznie się udaje, ale to, co trafia na UAT lub produkcję, nie posiada połowy funkcji.
+
+00:09:44.640 --> 00:09:50.380
+Microsoft promuje przekaz, że pliki rozwiązań zapewniają przenośność ALM, ale zawsze jest tu jakiś przypis.
+
+00:09:50.560 --> 00:09:55.000
+Przenośność zależy od poprawnego zmapowania konektorów i skonfigurowania ról w środowiskach.
+
+00:09:55.140 --> 00:09:56.780
+Testowanie to kolejny ważny punkt.
+
+00:09:57.020 --> 00:10:02.240
+W potoku aplikacji webowej zautomatyzowane testy mogą uruchamiać testy jednostkowe lub sprawdzać interfejs użytkownika.
+
+00:10:02.500 --> 00:10:06.180
+W przypadku Power Platform to, co uznaje się za test, jest kwestią sporną.
+
+00:10:06.420 --> 00:10:12.400
+Czasami to walidacja rozwiązania, czyli czy rozwiązanie się otwiera i czy kluczowe zależności są poprawnie rozpoznawane.
+
+00:10:12.400 --> 00:10:18.100
+Innym razem to uruchamianie przepływów testowych lub sprawdzanie, czy konektory odpowiadają w środowisku testowym.
+
+00:10:18.300 --> 00:10:25.340
+Często testy wykonuje się ręcznie, ponieważ walidacja logiki biznesowej wewnątrz aplikacji typu Canvas nie jest jeszcze w pełni zintegrowana z automatycznymi potokami.
+
+00:10:25.600 --> 00:10:33.480
+Możesz jednak zautomatyzować sprawdzanie brakujących konektorów, weryfikację krytycznych przepływów, a nawet wysyłanie pingów do środowiska testowego, aby potwierdzić działanie poświadczeń.
+
+00:10:33.540 --> 00:10:35.920
+Wdrożenie to moment, w którym pojawiają się największe trudności.
+
+00:10:36.140 --> 00:10:40.040
+Przy wdrażaniu standardowej aplikacji wystarczy czasem po prostu wypchnąć artefakt internetowy na Azure.
+
+00:10:40.040 --> 00:10:49.760
+W Power Platform musisz mapować połączenia, przypisywać uprawnienia, aktualizować wpisy tajne, zmieniać zmienne środowiskowe i na koniec uruchomić import za pomocą jednostki usługi nigdy zwykłego konta.
+
+00:10:49.920 --> 00:10:52.860
+W przeciwnym razie utkniesz w audytach i odmowach dostępu.
+
+00:10:53.080 --> 00:11:00.040
+GitHub Actions może spiąć ten proces, ale tylko wtedy, gdy każde zadanie wie, w które środowisko celować i jakich wpisów tajnych użyć.
+
+00:11:00.040 --> 00:11:10.460
+Widziałem zespoły, które próbowały iść na skróty używając jednego zestawu poświadczeń dla środowiska deweloperskiego i produkcyjnego, co jest prostą drogą do chaosu, wycieków danych, błędów uprawnień i usterek widocznych tylko w jednym środowisku.
+
+00:11:10.680 --> 00:11:13.660
+Weźmy pod uwagę rzeczywisty zespół, z którym pracowałem kilka miesięcy temu.
+
+00:11:13.920 --> 00:11:18.340
+Robili większość rzeczy dobrze standardowe repozytoria Git, wersjonowane pliki zip rozwiązań i przejrzyste gałęzie.
+
+00:11:18.560 --> 00:11:20.740
+Mimo to ich potok zawsze zawodził podczas wdrażania.
+
+00:11:21.000 --> 00:11:21.300
+Dlaczego?
+
+00:11:21.620 --> 00:11:26.840
+Nigdy nie zawracali sobie głowy zamianą zmiennych środowiskowych ani aktualizacją referencji konektorów przed importem na produkcję.
+
+00:11:26.840 --> 00:11:31.740
+W efekcie kluczowe przepływy wskazywały na niewłaściwe punkty końcowe, a dane wyciekały do błędnych systemów.
+
+00:11:31.900 --> 00:11:38.220
+Rozwiązaniem były skryptowe kroki w ich potoku GitHub, które zamieniały zmienne i mapowały ponownie każdy konektor podczas importu.
+
+00:11:38.420 --> 00:11:40.600
+Wytyczne Microsoftu mówią o tym wprost.
+
+00:11:40.780 --> 00:11:48.000
+Używaj plików rozwiązań do przenoszenia elementów między środowiskami, ale zawsze obsługuj referencje konektorów i mapowanie ról w ramach swojego potoku.
+
+00:11:48.260 --> 00:11:53.840
+Wskazują oni, że pomijanie tych kroków to główna przyczyna awarii aplikacji, szczególnie gdy środowiska stają się bardziej restrykcyjne.
+
+00:11:53.840 --> 00:12:06.480
+Gdy zaczniesz traktować źródło kompilacje, testy i wdrożenie jako połączone części mechanizmu, a nie odizolowane kroki, łatwiej dostrzec, dlaczego tyle prób ALM kończy się fiaskiem i jak faktycznie rozwiązywać problemy zamiast liczyć na łód szczęścia.
+
+00:12:06.480 --> 00:12:16.480
+Następnie przejdziemy do tego, jak GitHub Actions koordynuje ten taniec, wyzwalacze, gałęzie i podział zadań, które czynią automatyzację Power Platform elastyczną i bezpieczną.
+
+00:12:16.480 --> 00:12:20.700
+GitHub Actions – łączenie kropek za pomocą wyzwalaczy i zadań.
+
+00:12:20.860 --> 00:12:28.960
+Jeśli czekałeś na zakończenie potoku GitHub Actions po aktualizacji swojej aplikacji Power App, wiesz już, że automatyzacja nie oznacza natychmiastowości i z pewnością nie oznacza magii.
+
+00:12:29.180 --> 00:12:33.880
+Większość zespołów natrafia na te ściany zaraz po ekscytacji pierwszym udanym uruchomieniem przepływu pracy.
+
+00:12:33.880 --> 00:12:41.280
+Konfigurujesz skrypt, podpinasz go pod swoje repozytorium i oczekujesz, że każdy nowy KOMI będzie płynnie wdrażany we wszystkich środowiskach.
+
+00:12:41.280 --> 00:12:50.280
+Wtedy do głosu dochodzi rzeczywistość. Zamiast po prostu uruchamiać skrypt, GitHub Actions wykorzystuje łańcuch logiczny zbudowany wokół wyzwalaczy, zadań i przekazywania danych między środowiskami.
+
+00:12:51.020 --> 00:12:56.760
+Ten porządek i struktura sprawiają, że wdrożenia nie zamieniają się w plątaninę nieudanych kroków i dziwnych błędów.
+
+00:12:56.940 --> 00:12:59.400
+Punktem wyjścia w tym systemie jest wyzwalacz.
+
+00:12:59.400 --> 00:13:07.620
+Większość początkujących tworzy przepływ pracy, który uruchamia się przy każdym wypchnięciu kodu lub gdy Pulli Quest trafia do głównej gałęzi.
+
+00:13:07.620 --> 00:13:12.900
+Na pierwszy rzut oka wygląda to na najlepszą praktykę. Dlaczego nie uruchamiać potoku za każdym razem, gdy zmienia się kod?
+
+00:13:13.020 --> 00:13:17.280
+Oto haczyk. Kiedy ustawiasz wyzwalacz tylko dla głównej gałęzi, wszystko jest kierowane jednym torem.
+
+00:13:17.460 --> 00:13:21.020
+Co jeśli zmiany mają trafić do środowiska deweloperskiego, ale nie testowego czy produkcyjnego?
+
+00:13:21.200 --> 00:13:24.260
+Co jeśli chcesz wdrożyć na produkcję, a testy nadal trwają?
+
+00:13:24.260 --> 00:13:34.980
+Zespoły, które stosują uniwersalne wyzwalacze, często napotykają problemy, gdzie funkcje dla środowisk deweloperskich trafiają na produkcję lub wdrożenia testowe nagle nadpisują ustawienia produkcyjne.
+
+00:13:35.200 --> 00:13:42.100
+Możesz rozgałęzić przepływy pracy dla każdego środowiska dev, test i prod i ustawić bardzo specyficzne wyzwalacze dla każdego z nich.
+
+00:13:42.320 --> 00:13:50.260
+Na przykład skonfiguruj przepływ uruchamiany tylko przy wypchnięciach do gałęzi dev lub inny, gdy ktoś scala zmiany z gałęzią wydania produkcyjnego.
+
+00:13:50.260 --> 00:13:58.600
+Takie podejście daje większą kontrolę i tworzy wyraźną granicę między pracą w toku a zmianami na żywo, ale wiele zespołów nigdy nie rewiduje swoich wyzwalaczy po ich utworzeniu.
+
+00:13:58.880 --> 00:14:05.460
+W ten sposób sekrety z jednego środowiska mogą przedostać się do innego, a konfiguracja dla dev trafia przypadkiem na produkcję.
+
+00:14:05.720 --> 00:14:10.540
+Jeden zespół, z którym współpracowałem, próbował uruchomić cały proces, a LM z jednego przepływu pracy.
+
+00:14:10.800 --> 00:14:17.260
+Przez pewien czas wydawało się, że jest dobrze, dopóki ktoś nie zauważył, że ciąg połączenia z produkcyjną bazą danych pojawił się w środowisku deweloperskim.
+
+00:14:17.260 --> 00:14:24.820
+Nie zdawali sobie sprawy, że ich sekrety były współdzielone między zadaniami, a kiedy kod przenosił się między środowiskami, te sekrety wyciekały wraz z nim.
+
+00:14:24.980 --> 00:14:28.000
+To nie była oczywista awaria ani błąd. Działo się to po cichu.
+
+00:14:28.200 --> 00:14:35.240
+Tego rodzaju wycieki danych zdarzają się częściej niż myślisz, zwłaszcza jeśli nie skonfigurujesz przepływów tak, aby oddzielić sekrety od zmiennych środowiskowych.
+
+00:14:35.440 --> 00:14:39.660
+Każde zadanie w przepływie pracy GitHub Actions obsługuje konkretny etap procesu.
+
+00:14:39.660 --> 00:14:51.860
+Jedno zadanie może obsługiwać eksport rozwiązania ze środowiska źródłowego, a inne zajmuje się walidacją, rozpakowywaniem, skanowaniem metadanych, sprawdzaniem zależności i weryfikacją referencji łączników.
+
+00:14:52.760 --> 00:14:58.560
+Kolejne zadanie przygotowuje zmienne środowiskowe, dostosowując rozwiązanie do docelowego środowiska.
+
+00:14:58.880 --> 00:15:04.840
+Ostatnie zadanie uruchamia proces importu przy użyciu jednostek usługi, aby zapisać zmiany w odpowiednim środowisku.
+
+00:15:04.840 --> 00:15:12.080
+Możesz myśleć o zmiennych środowiskowych i sekretach jak o podstawowych symbolach zastępczych, ale w praktyce to one spajają wszystko w całość.
+
+00:15:12.360 --> 00:15:19.920
+Ciągi połączeń, klucze API, współdzielone hasła, wszystko to musi być wymieniane między zadaniami, ale nigdy nie może wyciec poza swoje granice.
+
+00:15:20.160 --> 00:15:29.320
+W ALM Platformy Power Platform możesz mieć inne połączenie Dataverse dla każdego środowiska lub musieć zmieniać punkty końcowe w zależności od przepływu lub aplikacji Power App.
+
+00:15:29.320 --> 00:15:36.700
+Jeśli używasz ponownie zmiennych lub wpisujesz hasła na sztywno, otrzymasz albo nietrwały potok, albo, co gorsza, poważne zagrożenia bezpieczeństwa.
+
+00:15:36.900 --> 00:15:44.200
+Proces importu zależy od pobierania sekretów tylko z właściwego magazynu, aby środowisko produkcyjne nie było narażone przez błędy w testach lub fazie deweloperskiej.
+
+00:15:44.440 --> 00:15:53.100
+Dobrym modelem mentalnym dla sekretów w GitHub Actions jest wyobrażenie sobie każdego środowiska jako własnego cyfrowego sejfu, zamkniętego pudełka, które widzą tylko odpowiednie zadania.
+
+00:15:53.100 --> 00:16:02.420
+GitHub zapewnia precyzyjną kontrolę. Możesz przypisać sekrety do środowisk, więc zadanie uruchomione w fazie deweloperskiej nie uzyska dostępu do danych uwierzytelniających produkcji i odwrotnie.
+
+00:16:02.660 --> 00:16:09.740
+Skonfiguruj te sejfy, a nawet jeśli ktoś modyfikujący potok spróbuje czegoś ryzykownego, zasady ochrony środowiska zapobiegną skutkom błędu.
+
+00:16:09.980 --> 00:16:13.620
+Dokumentacja zarówno Microsoftu, jak i GitHuba kładzie na to ogromny nacisk.
+
+00:16:13.860 --> 00:16:20.160
+Zalecają one zasady ochrony środowiska i ścisłe zakresy sekretów, aby powstrzymać wycieki między środowiskami, zanim w ogóle wystąpią.
+
+00:16:20.160 --> 00:16:24.880
+Bez tego rodzaju ochrony nawet najlepiej zaprojektowane przepływy pracy ALM się rozpadają.
+
+00:16:25.120 --> 00:16:32.160
+Wyobraź sobie przepływ wdrażający na produkcję, który wciąż korzysta z ciągu połączenia deweloperskiego lub środowisko testowe nagle uzyskujące dostęp do danych produkcyjnych.
+
+00:16:32.940 --> 00:16:40.900
+Nie zawsze powoduje to widoczne awarie. Czasami oznacza to jedynie włączenie flag zgodności lub logi wypełniające się subtelnymi błędami, które powoli narastają w poważniejsze problemy.
+
+00:16:41.080 --> 00:16:45.080
+Dlatego rozgałęzianie przepływów pracy i definiowanie zakresów sekretów to nie tylko zaawansowane tematy.
+
+00:16:45.260 --> 00:16:48.860
+To siatka bezpieczeństwa, która chroni Twoją automatyzację przed cichym rozpadem.
+
+00:16:48.860 --> 00:16:53.860
+Warto również dzielić przepływy pracy nie tylko według środowisk, ale także według odpowiedzialności.
+
+00:16:54.100 --> 00:16:59.800
+Kod, który eksportuje i weryfikuje rozwiązania, nie powinien nawet wiedzieć, jak wdrażać czy podmieniać sekrety.
+
+00:17:00.160 --> 00:17:07.940
+Jeśli każde zadanie obsługuje jeden element układanki, znacznie łatwiej jest wykryć awarię, wycofać zmiany i przeprowadzić audyt po fakcie.
+
+00:17:08.280 --> 00:17:16.120
+Sekrety pozostają w swoich sejfach, zadania przestrzegają jasno określonych uprawnień, a awarie potoku wskazują dokładnie na element wymagający naprawy.
+
+00:17:16.120 --> 00:17:28.800
+Zrozumienie, jak GitHub Actions przekazuje pracę między zadaniami, utrzymując sekrety w ścisłych zakresach, a wyzwalacze jasno zdefiniowane zmienia ALM z eksperymentu w niezawodną, bezpieczną i przewidywalną praktykę.
+
+00:17:29.380 --> 00:17:33.520
+Ta segmentacja przepływu pracy nie polega tylko na spełnianiu najlepszych praktyk.
+
+00:17:33.520 --> 00:17:42.300
+To ona blokuje ciche wycieki bezpieczeństwa i przypadkowe nadpisania, eliminując całą klasę niewidocznych błędów, zanim zaczną nękać Twoje środowiska.
+
+00:17:42.620 --> 00:17:49.220
+Teraz, gdy elementy współpracują ze sobą dzięki poprawnie zakresowanej automatyzacji, czas zająć się kolejnym punktem zapalnym.
+
+00:17:49.420 --> 00:17:56.340
+Łączniki, jednostki usługi i drobne, lecz kluczowe pułapki, które mogą wstrzymać wdrożenia, gdy już poczujesz się pewnie.
+
+00:17:56.900 --> 00:17:59.780
+Tajemnicze jednostki usługi i problemy z łącznikami.
+
+00:17:59.780 --> 00:18:05.540
+Jeśli kiedykolwiek próbowałeś przenieść power-up lub flow ze środowiska deweloperskiego na produkcyjne, znasz tę historię.
+
+00:18:05.760 --> 00:18:12.980
+Wszystko działa bez zarzutu w jednym środowisku, a po przełączeniu natychmiast staje w miejscu lub pojawiają się tajemnicze błędy połączenia.
+
+00:18:13.520 --> 00:18:19.520
+Nie dotyczy to tylko jednego zespołu. Każdy administrator power platform prędzej czy później napotyka tę barierę.
+
+00:18:20.080 --> 00:18:24.220
+Istota problemu tkwi w tym, jak łączniki i sekrety zachowują się za kulisami.
+
+00:18:24.220 --> 00:18:32.980
+Nie można po prostu wyeksportować rozwiązania w pliku zip z deweloperki i oczekiwać, że zadziała gdzie indziej, bo zależności zmieniają się wraz ze środowiskiem.
+
+00:18:33.240 --> 00:18:35.100
+Zacznijmy od odwołań do łączników.
+
+00:18:35.360 --> 00:18:40.300
+Power Platform łącznik nigdy nie jest tylko statyczną porcją informacji dołączoną do aplikacji.
+
+00:18:40.560 --> 00:18:43.900
+Jest dynamiczny, zmienny i często unikalny dla każdego środowiska.
+
+00:18:44.160 --> 00:18:47.900
+Podczas eksportu rozwiązania odwołania do łączników działają niemal jak zakładki.
+
+00:18:48.140 --> 00:18:52.640
+Wskazują one na obiekty połączeń, które istnieją tylko w środowisku, w którym zostały utworzone.
+
+00:18:52.640 --> 00:19:00.660
+Dlatego po imporcie do testów lub na produkcję Twój zaawansowany punkt końcowy HTTP czy łącze Dataverse nie zawsze są odtwarzane tak samo lub wcale.
+
+00:19:00.880 --> 00:19:03.000
+To tutaj zespoły napotykają problemy.
+
+00:19:03.740 --> 00:19:10.260
+Jeśli środowisko deweloperskie używa łącznika do danych testowych, a konfiguracja nie jest odzwierciedlona na produkcji,
+
+00:19:10.420 --> 00:19:14.980
+przepływ lub aplikacja zawiodą po cichu lub zawieszą się przy pierwszej próbie połączenia.
+
+00:19:16.280 --> 00:19:20.840
+Wiele osób próbuje to obejść, współdzieląc poświadczenia użytkowników między środowiskami.
+
+00:19:20.840 --> 00:19:27.500
+Wychodzą z założenia, że jeśli użyją tego samego konta lub hasła, które stworzyło połączenie w deweloperce, może zadziała na produkcji.
+
+00:19:27.740 --> 00:19:32.520
+W rzeczywistości sprowadza to szereg problemów od odmowy uprawnień po uruchomienie kontroli zgodności.
+
+00:19:32.800 --> 00:19:39.100
+Wytyczne Microsoft są jasne, używanie poświadczeń poszczególnych użytkowników do automatycznych wdrożeń nie jest wykonalne ani bezpieczne.
+
+00:19:39.320 --> 00:19:44.580
+Uzależnia to automatyzację od resetowania haseł i może pozostawić niejasne ślady w dziennikach audytu.
+
+00:19:44.580 --> 00:19:52.780
+Brak jasnej odpowiedzialności sprawia, że uprawnienia blokują potok, gdy pierwotny użytkownik zostanie oznaczony, usunięty lub straci dostęp.
+
+00:19:53.080 --> 00:19:55.400
+Pora na jednostki usługi Service Principles.
+
+00:19:55.620 --> 00:20:01.540
+Jeśli z nimi nie pracowałeś, wyobraź sobie jednostkę usługi jako cyfrową dodatkową parę rąk stworzoną do automatyzacji.
+
+00:20:01.780 --> 00:20:08.700
+W przeciwieństwie do zwykłego użytkownika, jednostka usługi jest powiązana z rejestracją aplikacji w Azure Ad, a nie z prawdziwą osobą.
+
+00:20:08.700 --> 00:20:12.460
+Nadajesz jej minimalne uprawnienia potrzebne do wykonania zadań wdrożeniowych.
+
+00:20:12.680 --> 00:20:15.000
+Brzmi to prosto, ale korzyści są ogromne.
+
+00:20:15.220 --> 00:20:21.860
+Zamiast polegać na użytkowniku, który może odejść z organizacji lub zmienić rolę wdrożenia, pozostają spójne, sprawdzalne i możliwe do śledzenia.
+
+00:20:22.120 --> 00:20:28.520
+Każde środowisko uzyskuje dostęp tylko do odpowiednich połączeń i zasobów, a wszelkie zmiany są rejestrowane na tym koncie robota.
+
+00:20:28.780 --> 00:20:34.540
+Gdy coś zawiedzie, masz czystą ścieżkę audytu i nie zostajesz z osieroconymi przepływami, których nikt nie może naprawić.
+
+00:20:34.540 --> 00:20:40.140
+W kwestii problemu mapowania łączników rozważ, co się dzieje, gdy środowiska zaczynają się od siebie różnić.
+
+00:20:40.300 --> 00:20:43.420
+Może zespół programistów uzyskał zgodę na nowy, niestandardowy łącznik.
+
+00:20:43.620 --> 00:20:46.460
+Załóżmy, że łączy się on z interfejsem API w piaskownicy Sandbox.
+
+00:20:46.660 --> 00:20:52.780
+Kiedy przychodzi czas na przejście na produkcję, łącznik ten nie tylko może być niedostępny, ale może być nawet niedozwolony przez organizacyjne zasady ochrony danych.
+
+00:20:53.000 --> 00:20:58.260
+Jeśli zapomnisz o ponownym zmapowaniu, aplikacja odwoła się do niewłaściwego punktu końcowego lub całkowicie przestanie działać.
+
+00:20:58.260 --> 00:21:01.540
+Widziałem ostatnio, jak boleśnie odczuła to pewna grupa z sektora ochrony zdrowia.
+
+00:21:01.540 --> 00:21:07.300
+Jedno pominięte mapowanie łącznika spowodowało użycie danych testowych na produkcji i prawie wywołało incydent związany z naruszeniem przepisów.
+
+00:21:07.460 --> 00:21:15.060
+Ich zautomatyzowany potok wyeksportował wszystko zgodnie z planem, ale odwołanie do łącznika wewnątrz rozwiązania wciąż wskazywało na starą bazę danych testowych,
+
+00:21:15.240 --> 00:21:19.680
+czego Power Platform nie wykryło, dopóki prawdziwe dane nie zaczęły przepływać niewłaściwymi kanałami.
+
+00:21:19.940 --> 00:21:23.100
+Zmienne środowiskowe pomagają złagodzić część tych problemów.
+
+00:21:23.100 --> 00:21:30.860
+W przeciwieństwie do sztywnego kodowania punktów końcowych czy klucze API, zmienne środowiskowe pozwalają oddzielić to, co zmienia się między środowiskami, od tego, co pozostaje stałe.
+
+00:21:31.060 --> 00:21:37.480
+Możesz podmieniać punkty końcowe, klucze API lub inne sekrety przy każdym wdrożeniu, bez konieczności przepisywania aplikacji czy przepływu.
+
+00:21:37.680 --> 00:21:47.600
+Na przykład przepływ współpracujący z tabelą Dataverse w środowisku deweloperskim można przy imporcie skonfigurować tak, aby korzystał z tabeli produkcyjnej, po prostu zmieniając zmienną środowiskową w procesie wdrażania.
+
+00:21:47.600 --> 00:21:55.900
+Potoki GitHub Actions sprawiają, że jest to praktyczne rozwiązanie. Każde zadanie może wstrzyknąć odpowiednią wartość we właściwym czasie, ale nawet tutaj kluczem jest dyscyplina.
+
+00:21:56.140 --> 00:22:03.120
+Jeśli zapomnisz zaktualizować zmienną lub pozwolisz, by sekrety wyciekły między środowiskami, twój przepływ pracy nagle stanie się narażony na ataki.
+
+00:22:03.360 --> 00:22:09.080
+Microsoft podkreśla potrzebę starannego określania zakresu sekretów i świadomego mapowania odwołań do łączników.
+
+00:22:09.080 --> 00:22:18.480
+Ich zasady zapobiegania utracie danych DLP istnieją z konkretnego powodu, aby powstrzymać wrażliwe informacje przed przenikaniem między środowiskami lub pojawianiem się w niewłaściwym miejscu.
+
+00:22:18.660 --> 00:22:26.340
+Jeśli spróbujesz je ominąć, współdzieląc zmienne lub połączenia, natkniesz się na firmowe mechanizmy kontroli bezpieczeństwa lub zgodności z przepisami.
+
+00:22:26.540 --> 00:22:33.160
+Co ważniejsze, tracisz przewidywalność, ponieważ zaciera się granica między tym, co jest przeznaczone dla środowiska deweloperskiego, testowego lub produkcyjnego.
+
+00:22:33.360 --> 00:22:36.680
+Trudno przecenić korzyści płynące z poprawnego wykonania tych wszystkich czynności.
+
+00:22:36.680 --> 00:22:42.820
+Zasady usługi Service Principles w połączeniu z dobrze zarządzanymi zmiennymi środowiskowymi i poprawnie zmapowanymi łącznikami zmieniają Twój potok wdrożeniowy.
+
+00:22:42.980 --> 00:22:44.860
+Twoje wdrożenia stają się przewidywalne.
+
+00:22:45.080 --> 00:22:49.100
+Gdy coś się zepsuje, masz jasny łańcuch odpowiedzialności i dokładnie wiesz, gdzie szukać przyczyny.
+
+00:22:49.240 --> 00:22:52.620
+Czy to było mapowanie łącznika, zmienna, czy może brakujące uprawnienie?
+
+00:22:52.840 --> 00:22:57.620
+Audytorzy mogą śledzić zmiany i nie ma niepewności, gdy ktoś odchodzi z organizacji lub zmienia hasła.
+
+00:22:57.840 --> 00:23:02.520
+Wszystko sprowadza się do traktowania sekretów, łączników i zasad usługi tak, jakby miały one kluczowe znaczenie.

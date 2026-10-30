@@ -1,0 +1,712 @@
+WEBVTT
+
+00:00:00.240 --> 00:00:07.520
+Klaar voor 10 dagen Microsoft 365, Copilot, AI, Azure en de mensen die de toekomst van werk vormgeven?
+
+00:00:07.860 --> 00:00:12.420
+Deze januari is M365, kom terug en we pakken groter uit.
+
+00:00:12.640 --> 00:00:18.340
+Doe mee voor live sessies, praktijkdemo's en praktische kennis van MVP's en experts van over de hele wereld.
+
+00:00:18.580 --> 00:00:21.680
+Geen algemene presentaties, geen eindeloos jargon.
+
+00:00:22.000 --> 00:00:29.120
+We pakken de echte uitdagingen aan Copilot Studio, AI Agents, Fabric, Beveiliging, Governance en Automatisering.
+
+00:00:29.120 --> 00:00:35.000
+Of je nu een IT-professional, ontwikkelaar of zakelijk leider bent, er zijn sessies speciaal voor jou.
+
+00:00:35.280 --> 00:00:40.480
+Met 10 volledige dagen kun je meerdere technologieën verkennen en contact leggen met een wereldwijde community.
+
+00:00:40.860 --> 00:00:44.620
+Kijk live mee en neem praktische inzichten mee terug naar jouw organisatie.
+
+00:00:44.920 --> 00:00:51.180
+Januari 2027, 10 dagen, 1 Microsoft Community. De registratie is nu geopend.
+
+00:00:52.820 --> 00:00:58.980
+Claim vandaag nog jouw plek. Dat is M365.com.net.
+
+00:00:58.980 --> 00:01:04.820
+Meld je nu aan op M365.com.net en we zien je live in januari.
+
+00:01:05.080 --> 00:01:13.260
+Voelt het alsof jouw Power Platform implementaties een blackbox zijn, verstuur je een update, hou je je adem in en hoop je maar dat het werkt in dev, test en prod.
+
+00:01:13.620 --> 00:01:21.260
+Wat als je elke fase van je ARM-proces daadwerkelijk kon controleren en inzien met GitHub Actions, zonder giswerk of handmatig labwerk.
+
+00:01:21.260 --> 00:01:28.480
+Laten we achter de schermen kijken hoe elk onderdeel, broncodebeheer, automatisering en veilige variabelen echt met elkaar verbonden zijn.
+
+00:01:28.720 --> 00:01:35.160
+Dit is niet zomaar een walkthrough. Dit is het waarom dat de meeste handleidingen weglaten, zodat je bij je volgende implementatie niet hoeft te gissen.
+
+00:01:35.380 --> 00:01:38.060
+Dus, waarom voelt Power Platform allemaal als een dolhof?
+
+00:01:38.060 --> 00:01:46.060
+Als je ooit een Power App hebt geprobeerd te implementeren en die sluipende onzekerheid voelde, alsof er iets belangrijks door de mazen van het net is geglipt, dan ben je niet de enige.
+
+00:01:46.260 --> 00:01:53.080
+Op papier belooft Power Platform eenvoudige appontwikkeling, maar achter die vriendelijke façade is al alles behalve recht toe recht aan.
+
+00:01:53.080 --> 00:01:59.760
+Een webapp wordt geïmplementeerd vanuit broncodebeheer, gebouwd in een pipeline en komt in productie met voorspelbaar gedrag.
+
+00:02:00.160 --> 00:02:07.920
+Power Platform daarentegen verbergt de helft van de logica in drag- en drop-UIs, connectors en formules die je niet in een gitrepo ziet.
+
+00:02:08.200 --> 00:02:17.040
+Dus, zelfs als je elke stap uit die algemene beheerdershandleidingen volgt, loop je nog steeds tegen vreemde, moeilijk te diagnostiseren, fouten aan zodra bedrijfscritieke apps de ontwikkelomgeving verlaten.
+
+00:02:17.280 --> 00:02:19.920
+Laten we eens kijken naar de almgidsen die overal te vinden zijn.
+
+00:02:19.920 --> 00:02:24.360
+De meeste leiden je door het exporteren van een solution-zip en het importeren ervan op een andere plek.
+
+00:02:24.520 --> 00:02:29.120
+Simpel genoeg, toch? Maar de hoe is slechts één laag. Wat ze overslaan is de waarom.
+
+00:02:29.340 --> 00:02:33.740
+Waarom gaat een Power Platform implementatie op manieren kapot waarop normale code dat nooit doet?
+
+00:02:33.980 --> 00:02:35.860
+Dat is wat voor eindeloze verwarring zorgt.
+
+00:02:35.860 --> 00:02:42.220
+De kern van het probleem is dat logica, verbindingen en configuratie in Power Apps niet worden opgeslagen zoals klassieke code.
+
+00:02:42.400 --> 00:02:45.280
+Je kloont niet zomaar een repo om de unit-tests te bekijken.
+
+00:02:45.280 --> 00:02:54.200
+Dus wanneer je je app wilt verplaatsen, reizen al die verborgen afhankelijkheden, verbindingen met Outlook, SharePoint en aangepaste APIs niet altijd netjes mee in dat zip-bestand.
+
+00:02:54.380 --> 00:02:58.040
+Dit is het scenario. Je hebt een glimmende nieuwe app die werkt in de ontwikkelomgeving.
+
+00:02:58.220 --> 00:03:01.960
+Je exporteert een oplossing, importeert deze in test en plotseling werkt de flow niet meer.
+
+00:03:01.960 --> 00:03:11.760
+Het is zelden alleen een best-NS-probleem. In plaats daarvan wijzen verbindingen naar de verkeerde plek, kloppen machtigingen niet en blokkeren databeleid verbindingen die een paar minuten geleden nog prima werkten.
+
+00:03:12.020 --> 00:03:21.360
+Stel je nu voor dat je dit doet in drie omgevingen, dev, test en prod, waarbij elke omgeving andere verbindingen, gegevensbeschermingsbeleid, goedkeurders en beheerderscontroles gebruikt.
+
+00:03:21.500 --> 00:03:24.240
+Je kunt dit niet oplossen door simpelweg te kopiëren en plakken.
+
+00:03:24.240 --> 00:03:34.320
+Het onderzoek ondersteunt wat beheerders en makers elke week zien. Het merendeel van de mislukte Power Platform implementaties komt door ontbrekende connectorreferenties of slecht beheerde omgevingsvariabelen.
+
+00:03:34.500 --> 00:03:40.400
+Een ontbrekende connectorreferentie betekent simpelweg dat de flow zijn Outlook of dataverse verbinding niet kan vinden.
+
+00:03:40.640 --> 00:03:46.440
+Dus, zodra je je app of flow in een andere omgeving probeert uit te voeren, krijg je runtimefouten.
+
+00:03:46.440 --> 00:03:55.320
+En omdat omgevingsvariabelen in Power Platform anders werken dan in andere Microsoft 365 producten, zorgen ze zelfs bij ervaren ontwikkelaars voor problemen.
+
+00:03:55.500 --> 00:03:59.440
+Variabelen zijn bedoeld voor het afhandelen van eindpunten, sleutels of tenenspecifieke configuraties.
+
+00:04:00.140 --> 00:04:06.500
+Maar als iemand vergeet ze bij te werken na het exporteren van een oplossing, kan zelfs een onschuldig lijkende wijziging een live app kapotmaken.
+
+00:04:06.740 --> 00:04:09.000
+Vele van ons trappen in het begin in dezelfde val.
+
+00:04:09.000 --> 00:04:14.940
+Je zou kunnen denken dat het exporteren van een oplossingszip alles bundelt wat nodig is, maar het slaat dynamische connectorreferenties eigenlijk over.
+
+00:04:14.940 --> 00:04:19.600
+Stel bijvoorbeeld dat je een app hebt die een HTTP connector gebruikt voor een externe service in dev.
+
+00:04:19.740 --> 00:04:24.100
+Wanneer je deze importeert in Test of Prat, zal die specifieke connectorinstantie niet bestaan.
+
+00:04:24.300 --> 00:04:34.660
+De connectorreferentie in je app verwijst naar een ontbrekend object en flows in de oplossing stoppen stilletjes met werken totdat een gebruiker of beheerder handmatig verbindingen opnieuw maakt en toewijst.
+
+00:04:34.660 --> 00:04:44.140
+Als je meer dan één maker of beheerder hebt, is het nog makkelijker om het overzicht te verliezen over welke referentie waar hoort en niemand zit te wachten op een het werkte in dev evaluatie.
+
+00:04:44.140 --> 00:04:46.960
+Nog een complicatie, Service Principles.
+
+00:04:47.360 --> 00:04:53.460
+De meesten beginnen met het gebruik van gebruikersaccounts om oplossingen te exporteren en importeren omdat dat sneller is om mee te starten.
+
+00:04:53.660 --> 00:04:59.840
+Maar wanneer je probeert te automatiseren met GitHub Actions of welk CI-systeem dan ook, loopt het gebruik van iemands inloggegevens snel dood.
+
+00:04:59.840 --> 00:05:09.840
+Je loopt tegen machtigingsmuren aan, soms zonder duidelijke foutmeldingen, of je activeert zelfs compliance audits omdat je kritieke implementaties uitvoert onder een persoonlijk account in plaats van iets dat bedoeld is voor automatisering.
+
+00:05:09.840 --> 00:05:18.840
+Automatisering. Service Principles, in essentie app identiteiten aangemaakt in Azure AD, regelen alle machtigingen, logboeken en audits die je pipeline nodig heeft.
+
+00:05:19.100 --> 00:05:25.500
+Zonder deze verandert je automatiseringsketen in een lappendeken van overdrachten tussen personen, waardoor je nooit weet wie wat heeft gewijzigd.
+
+00:05:25.500 --> 00:05:32.000
+Ook versiebeheer wordt dan een onvoorspelbare factor. Bij reguliere code heb je commit geschiedenis en tools om wijzigingen te achterhalen.
+
+00:05:32.120 --> 00:05:37.280
+Power Platform oplossingsbestanden zijn slechts snapshots, waardoor je gedetailleerde wijzigingsregistratie mist.
+
+00:05:37.500 --> 00:05:43.980
+Logica verstopt in schermformules van een Canvas app of in gebrekkig gedocumenteerde flows is pas zichtbaar na een nieuwe export.
+
+00:05:44.200 --> 00:05:49.920
+Iemand past een flow-instelling aan in de UI en succes met achterhalen waarom downstream-omgevingen zich plotseling anders gedragen.
+
+00:05:49.920 --> 00:05:57.520
+Het eindresultaat is dat al een beheer voor Power Platform voelt als een puzzel oplossen waarvan de helft van de stukjes ontbreekt of verborgen ligt onder de doos.
+
+00:05:57.860 --> 00:06:06.080
+Onzichtbare afhankelijkheden, omgevingsspecifieke connectors en variabelen die je niet in de code ziet, verstoren de gebruikelijke workflow voor ontwikkelaars.
+
+00:06:06.720 --> 00:06:16.140
+En dat nog voordat je te maken krijgt met het feit dat productieomgevingen bijna altijd strengere machtigingen, ander databeleid en auditverrijs te hebben die in dev of test niet direct opvallen.
+
+00:06:16.140 --> 00:06:20.140
+Maar er is ook een voordeel. Deze complexiteit is niet willekeurig.
+
+00:06:20.820 --> 00:06:26.820
+Er is een praktische reden waarom Power Platform zo uniek omgaat met brombestanden, variabelen en connectors.
+
+00:06:27.200 --> 00:06:32.220
+Het stelt zakelijke gebruikers in staat krachtige apps te bouwen zonder zich zorgen te maken over code.
+
+00:06:32.460 --> 00:06:38.580
+De keerzijde is dat jij, als degene die de automatisering opzet, moet bijhouden wat er onder de motorkap gebeurt.
+
+00:06:38.580 --> 00:06:46.320
+Als je weet waar die onzichtbare draden lopen, kun je de meeste valkuilen die Power Platform Alm kunnen ontregelen, voorkomen of herstellen.
+
+00:06:46.720 --> 00:06:50.120
+Als dit allemaal als een grote uitdaging klinkt, dan heb je gelijk.
+
+00:06:50.300 --> 00:06:53.680
+Maar er zijn vier Alm pijlers die helpen om deze chaos te ontwarren.
+
+00:06:53.880 --> 00:06:56.020
+Bron, bouw, test en implementatie.
+
+00:06:56.240 --> 00:07:01.940
+Elk heeft zijn eigenaardigheden in Power Platform, maar samen brengen ze structuur aan in wat anders als chaos voelt.
+
+00:07:02.120 --> 00:07:05.680
+Het kernalmsysteem, bron, bouw, test, implementatie.
+
+00:07:05.680 --> 00:07:12.620
+Elke keer als iemand vraagt om een Power Platform Pipeline die simpelweg werkt, denk ik direct aan die vier bekende Alm pijlers.
+
+00:07:12.900 --> 00:07:15.100
+Bron, bouw, test, implementatie.
+
+00:07:15.520 --> 00:07:18.960
+In de traditionele ontwikkelwereld zou je dit bijna in je slaap kunnen doen.
+
+00:07:19.160 --> 00:07:21.360
+Power Platform maakt het je niet zo gemakkelijk.
+
+00:07:21.600 --> 00:07:23.840
+Ineens betekent, bron, niet langer code.
+
+00:07:24.180 --> 00:07:32.820
+Het betekent worstelen met oplossingsbestanden, het exporteren van gezipte bundels vol apps, flows en soms connectors die zich voordoen als onderdeel van de bron.
+
+00:07:32.820 --> 00:07:38.160
+Laten we beginnen bij de basis en daarna kijken wat elke pijler zo bijzonder maakt in deze wereld.
+
+00:07:38.300 --> 00:07:39.900
+Je hebt je zipbestand met de oplossing.
+
+00:07:40.160 --> 00:07:42.340
+Het is geen code in de gebruikelijke zin van het woord.
+
+00:07:42.560 --> 00:07:48.460
+Open het en je wordt begroet door XML en JSON bestanden, niet de logica die je in typescript of C-hashtag zou zien.
+
+00:07:48.680 --> 00:07:50.800
+Maar dit is de broncode voor Power Platform.
+
+00:07:51.040 --> 00:07:52.700
+Teams lopen hier vaak tegenaan.
+
+00:07:52.700 --> 00:08:02.200
+Het lijkt portable totdat je beseft dat de meeste wijzigingen, zoals het bijwerken van een formule of de logica van een flow, pas zichtbaar worden na het exporteren van een nieuwe solution zip.
+
+00:08:02.380 --> 00:08:10.520
+Dus ja, je kunt deze solution bestanden versie beheren in Git, maar tenzij je strikt exporteert na elke relevante wijziging, vertoont je historie grote gaten.
+
+00:08:10.760 --> 00:08:12.100
+Nu komt de configuratie.
+
+00:08:12.440 --> 00:08:16.980
+Bij gewone apps sla je verbindingsreeksen op in een configuratiebestand en ben je klaar.
+
+00:08:17.120 --> 00:08:21.160
+Power Platform smokkelt omgevingsspecifieke gegevens mee in deze solutions.
+
+00:08:21.160 --> 00:08:29.360
+Het zijn niet alleen omgevingsvariabelen, maar ook connectorverwijzingen, dynamische eindpunten, rollen en machtigingen gebundeld bij de bedrijfslogica.
+
+00:08:29.880 --> 00:08:36.080
+Als je vergeet deze bij te werken voor het exporteren vanuit dev of test, leg je verwijzingen naar de verkeerde plek vast.
+
+00:08:36.360 --> 00:08:47.880
+Ik heb gezien hoe teams trouw hun solution zip bestanden committen om er na implementatie achter te komen dat de helft van hun app nog met de dev dataverse praat in plaats van met prod, omdat niemand de connectorverwijzingen heeft aangepast.
+
+00:08:48.380 --> 00:08:49.320
+Dan hebben we de build.
+
+00:08:49.320 --> 00:08:55.520
+Het woord build roept meestal beelden op van het compileren van code en het zien van groene vinkjes in een CI-taak.
+
+00:08:55.700 --> 00:09:02.440
+Bij Power Platform draait het beeldproces om het opslaan van die zip-bundels, het controleren van schema's en het verifiëren van afhankelijkheden.
+
+00:09:02.640 --> 00:09:11.680
+In een GitHub Actions Pipeline pakt een beeldtaakje gecommiet solution bestand, waarna Microsoft's Power Platform CLI de solution uitpakt, valideert en opnieuw inpakt.
+
+00:09:11.680 --> 00:09:18.000
+De validatiestap is waar de magie of de chaos ontstaat. Het kan defecte verwijzingen of niet ondersteunde acties onderscheppen.
+
+00:09:18.220 --> 00:09:26.400
+Erger nog, als een wijziging in je flow afhankelijk is van een aangepaste connector die nooit in versiebeheer is opgenomen, verpak je beeld stilletjes iets dat incompleet is.
+
+00:09:26.400 --> 00:09:35.620
+Hier wordt het lastig. Die beeldtaken gaan minder over compileren en meer over het orkestreren van een betrouwbare export en zorgen dat de inhoud klaar is voor verzending.
+
+00:09:36.100 --> 00:09:44.660
+Teams die dit overslaan of overhaasten, belanden snel in situaties waarin een beeld technisch slaagt, maar het resultaat in uw AT of broad de helft van de beoogde functies mist.
+
+00:09:44.920 --> 00:09:50.300
+Microsoft blijft benadrukken dat solution bestanden al portable maken, maar er is altijd een voetnoot.
+
+00:09:50.700 --> 00:09:55.300
+Portabiliteit hangt af van het correct toewijzen van connectors en het instellen van rollen in alle omgevingen.
+
+00:09:55.300 --> 00:10:01.960
+Testen is de volgende knop. In een webapp-pipeline kunnen geautomatiseerde tests unit-tests of UI-checks uitvoeren.
+
+00:10:02.180 --> 00:10:06.140
+Voor Power Platform is het onderwerp, wat telt als test, nog voor voor discussie.
+
+00:10:06.360 --> 00:10:12.480
+Soms is het solution-validatie, met andere woorden, opent de solution en worden belangrijke afhankelijkheden opgelost.
+
+00:10:12.680 --> 00:10:18.240
+Andere keren is het het uitvoeren van testflows of controleren of connectors reageren in een testomgeving.
+
+00:10:18.240 --> 00:10:25.140
+Vaak is testen handmatig omdat het valideren van bedrijfslogica in een Canvas-app nog niet is gekoppeld aan geautomatiseerde pipelines.
+
+00:10:25.300 --> 00:10:33.600
+Maar je kunt controles automatiseren om ontbrekende connectors te vinden, kritieke flows te valideren of een testomgeving te pingen om te bewijzen dat inloggegevens werken.
+
+00:10:33.840 --> 00:10:35.820
+Bij de uitrol wordt de pijn pas echt voelbaar.
+
+00:10:36.060 --> 00:10:39.920
+Bij het uitrollen van een standaard-app hoef je vaak alleen een web-artefact naar Azure te pushen.
+
+00:10:39.920 --> 00:10:49.760
+Bij Power Platform moet je verbindingen koppelen, machtigingen toewijzen, secrets bijwerken, omgevingsvariabelen wisselen en een import activeren via een service principle, nooit een gewoon account.
+
+00:10:49.980 --> 00:10:52.700
+Anders zit je vast aan audits en geweigerde machtigingen.
+
+00:10:52.980 --> 00:11:00.160
+GitHub Actions kan dit proces stroomlijnen, maar alleen als elke job weet welke omgeving het moet targeten en welke secrets er gebruikt moeten worden.
+
+00:11:00.160 --> 00:11:10.520
+Ik heb teams gezien die dit probeerden te omzeilen door één set inloggegevens te gebruiken voor zowel dev als prod, een recept voor chaos, datalekken, rechtenfouten en functies die in slecht één omgeving werken.
+
+00:11:10.740 --> 00:11:13.540
+Neem een team uit de praktijk waar ik een paar maanden geleden mee werkte.
+
+00:11:13.780 --> 00:11:18.460
+Ze deden bijna alles goed, standaard git repos, versiebeheer voor solutionsips en duidelijke branching.
+
+00:11:18.600 --> 00:11:20.740
+Maar hun pipeline liep bij de uitrol steeds vast.
+
+00:11:20.740 --> 00:11:26.800
+Waarom? Ze namen nooit de moeite om omgevingsvariabelen te wisselen of connectorverwijzingen bij te werken voor de import naar productie.
+
+00:11:26.960 --> 00:11:31.720
+Hierdoor wezen belangrijke flows naar de verkeerde eindpunten en zijbelden gegevens naar de verkeerde systemen.
+
+00:11:31.900 --> 00:11:37.860
+De oplossing? Gescripte stappen in hun GitHub pipeline die variabelen wisselden en elke connector bij import opnieuw koppelde.
+
+00:11:38.040 --> 00:11:40.860
+De eigen richtlijnen van Microsoft zijn hier heel duidelijk over.
+
+00:11:41.120 --> 00:11:48.040
+Gebruik solution bestanden om onderdelen tussen omgevingen te verplaatsen, maar verwerk connectorverwijzingen en rollen altijd als onderdeel van je pipeline.
+
+00:11:48.040 --> 00:11:54.800
+Ze wijzen erop dat het overslaan van deze stappen de voornaamste reden is dat apps stuk gaan, zeker nu omgevingen strenger worden beveiligd.
+
+00:11:54.920 --> 00:11:59.760
+Als je bron, beeld, test en deploy als verbonden onderdelen ziet in plaats van losse stappen,
+
+00:12:00.040 --> 00:12:05.740
+is het makkelijker te begrijpen waarom veel aan pogingen falen en hoe je problemen oplost in plaats van te hopen op het beste.
+
+00:12:07.400 --> 00:12:12.980
+Laten we nu kijken hoe GitHub Actions dit proces coördineert met triggers, branching en job-scheiding,
+
+00:12:13.260 --> 00:12:16.980
+waardoor je power-platform-automatisering flexibel en veilig blijft.
+
+00:12:16.980 --> 00:12:20.620
+GitHub Actions, de lijm tussen triggers en jobs.
+
+00:12:20.840 --> 00:12:25.860
+Als je wel eens hebt gewacht op een voltooide GitHub Actions pipeline na het updaten van je power-app,
+
+00:12:26.080 --> 00:12:28.920
+weet je dat automatisering niet direct is en zeker geen magie.
+
+00:12:29.120 --> 00:12:33.780
+De meeste teams lopen tegen die muur aan direct na het enthousiasme van hun eerste geslaagde workflow.
+
+00:12:34.580 --> 00:12:41.100
+Je zet een script op, koppelt het aan je repository en verwacht dat elke nieuwe commit soepel wordt uitgerold naar alle omgevingen.
+
+00:12:41.100 --> 00:12:43.060
+Dan haalt de realiteit je in.
+
+00:12:43.240 --> 00:12:50.880
+In plaats van alleen een script te starten, gebruikt GitHub Actions een logische keten opgebouwd rond triggers, taken en overdrachten tussen omgevingen.
+
+00:12:51.060 --> 00:12:56.840
+Die volgorde en structuur voorkomt dat implementaties veranderen in een kluwe van mislukte stappen en vreemde fouten.
+
+00:12:57.000 --> 00:12:59.120
+Het startpunt in dit systeem is de trigger.
+
+00:12:59.120 --> 00:13:07.520
+De meeste beginners maken een workflow die wordt geactiveerd bij elke push of wanneer een pull request in de mainbranche terechtkomt.
+
+00:13:07.780 --> 00:13:09.820
+Op het eerste gezicht lijkt dat een best practice.
+
+00:13:10.100 --> 00:13:12.540
+Waarom zou je je pipeline niet uitvoeren telkens wanneer werk verandert?
+
+00:13:12.740 --> 00:13:13.960
+Dit is het addertje onder het gras.
+
+00:13:14.220 --> 00:13:17.680
+Wanneer je alleen een trigger op main instelt, wordt alles door één enkelspoor geleid.
+
+00:13:17.860 --> 00:13:20.580
+Wat als wijzigingen wel naar dev moeten, maar niet naar test of prod.
+
+00:13:20.700 --> 00:13:24.460
+Wat als je klaar bent om naar prod te pushen, maar test nog bezig is met validatie.
+
+00:13:24.460 --> 00:13:35.080
+Teams die vasthouden aan universele triggers lopen vaak tegen problemen aan waarbij functies voor ontwikkelomgevingen in productie sluipen of testimplementaties plotseling prod-instellingen overschrijven.
+
+00:13:35.360 --> 00:13:41.980
+Je kunt workflows vertakken voor elke omgeving, dev, test en prod, en voor elk zeer specifieke triggers instellen.
+
+00:13:42.820 --> 00:13:49.960
+Stel bijvoorbeeld een workflow in die alleen draait bij pushes naar een devbranche, of start een andere workflow wanneer iemand merget naar release prod.
+
+00:13:49.960 --> 00:13:58.640
+Deze aanpak biedt meer controle en creëert een duidelijke scheiding tussen werk in uitvoering en live wijzigingen, maar veel teams kijken naar het aanmaken nooit meer naar hun triggers.
+
+00:13:59.160 --> 00:14:05.340
+Dat is hoe geheimen van de ene omgeving in de andere kunnen lekken en configuratie voor dev per ongeluk in prod beland.
+
+00:14:05.700 --> 00:14:10.500
+Een team waar ik meewerkte, probeerde hun hele al een proces vanuit één enkele workflow te draaien.
+
+00:14:10.920 --> 00:14:17.560
+Een tijdje leek het prima, totdat iemand merkte dat de connection string voor de productiedatabase opdook in de devomgeving.
+
+00:14:17.560 --> 00:14:21.140
+Ze realiseerden zich niet dat hun geheimen werden gedeeld tussen taken.
+
+00:14:21.360 --> 00:14:24.580
+En zodra code tussen omgevingen bewoog, lekte die geheimen mee.
+
+00:14:24.760 --> 00:14:26.780
+Het was geen duidelijke crash- of foutmelding.
+
+00:14:26.980 --> 00:14:28.280
+Het verliep geruisloos.
+
+00:14:28.520 --> 00:14:35.040
+Dit soort datalekken komt vaker voor dan je denkt, zeker als je je workflows niet inricht om geheimen en omgevingsvariabelen te scheiden.
+
+00:14:35.240 --> 00:14:39.500
+Elke taak in een GitHub Actions workflow behandelt een duidelijk onderdeel van het proces.
+
+00:14:39.500 --> 00:14:43.420
+Eén taak kan het exporteren van de oplossing uit een bronomgeving afhandelen.
+
+00:14:43.420 --> 00:14:52.380
+Een andere taak zorgt voor validatie, uitpakken, het scannen van oplossingsmetadata, het controleren van alle afhankelijkheden en het garanderen dat connectorreferenties bestaan.
+
+00:14:52.600 --> 00:14:58.800
+Daarna volgt de taak die de omgevingsspecifieke variabelen voorbereidt en de oplossing vertaalt, zodat deze in de doelomgeving past.
+
+00:14:59.020 --> 00:15:04.980
+De laatste taak activeert het importproces met service principles om wijzigingen naar de juiste omgeving te schrijven.
+
+00:15:05.160 --> 00:15:12.000
+Je denkt misschien dat omgevingsvariabelen en geheime simpele placeholders zijn, maar in de praktijk zijn ze de lijm die alles bij elkaar houdt.
+
+00:15:12.000 --> 00:15:20.120
+Verbindingsreeksen, API-sleutels, gedeelde wachtwoorden, ze moeten allemaal tussen taken worden gewisseld, maar mogen nooit over grenzen heen lekken.
+
+00:15:20.300 --> 00:15:29.160
+In Power Platform Am heb je wellicht een andere dataverse verbinding voor elke omgeving, of moet je eindpunten wisselen afhankelijk van de flow of power app die je gebruikt.
+
+00:15:29.660 --> 00:15:36.820
+Als je variabelen hergebruikt of geheime hardcodeert, eindig je met een fragiele pipeline of, erger nog, aanzienlijke beveiligingsrisico's.
+
+00:15:36.820 --> 00:15:44.240
+Het importproces is afhankelijk van het ophalen van geheimen uit de juiste kluis, zodat productie niet wordt blootgesteld door fouten in Test of Dev.
+
+00:15:44.360 --> 00:15:53.120
+Een goed mentaal model voor geheimen in GitHub Actions is om elke omgeving te zien als een eigen digitale kluis, een afgesloten doos die alleen de juiste taken kunnen inzien.
+
+00:15:53.400 --> 00:15:55.220
+GitHub geeft je nauwkeurige controle.
+
+00:15:55.600 --> 00:16:02.140
+Je kunt geheime koppelen aan omgevingen, zodat een taak die in Dev draait geen toegang heeft tot crowd-inloggegevens en vice versa.
+
+00:16:02.140 --> 00:16:09.900
+Stel deze kluizen in en zelfs als iemand die de pipeline aanpast iets riskants probeert, voorkomen omgevingsregels dat een misstap doorslaat.
+
+00:16:10.060 --> 00:16:13.640
+De documentatie van zowel Microsoft als GitHub hamert op dit punt.
+
+00:16:13.900 --> 00:16:20.060
+Zij adviseren omgevingsregels en strikte beperking van geheimen om lekken tussen omgevingen te stoppen voordat ze beginnen.
+
+00:16:20.560 --> 00:16:24.840
+Zonder die vorm van bescherming vallen zelfs de best ontworpen ARM workflows uit elkaar.
+
+00:16:24.840 --> 00:16:32.520
+Stel je een workflow voor die naar prod implementeert terwijl deze nog een dev-verbindingsreeks vasthoudt, of een testomgeving die plotseling toegang heeft tot prod-data.
+
+00:16:32.700 --> 00:16:34.880
+Het maakt dingen niet altijd direct zichtbaar kapot.
+
+00:16:35.120 --> 00:16:40.980
+Soms betekent het gewoon dat compliance meldingen afgaan of laks volstromen met subtiele fouten die langzaam uitgroeien tot grotere problemen.
+
+00:16:41.160 --> 00:16:45.080
+Dit is waarom het vertakken van workflows en het beperken van geheimen niet alleen voor gevorderden zijn.
+
+00:16:45.260 --> 00:16:48.700
+Het is het vangen dat voorkomt dat je automatiseringsstilletjes ontrafelt.
+
+00:16:48.880 --> 00:16:54.000
+Het is ook waardevol om workflows te splitsen, niet alleen per omgeving, maar ook per verantwoordelijkheid.
+
+00:16:54.000 --> 00:16:59.840
+Code die oplossingen exporteert en valideert, zou niet eens moeten weten hoe je moet implementeren of geheimen moet wisselen.
+
+00:17:00.040 --> 00:17:08.140
+Als elke taak één puzzelstukje behandelt, wordt het veel makkelijker om te zien waar dingen breken, terug te draaien en wijzigingen achteraf te controleren.
+
+00:17:08.380 --> 00:17:16.000
+Geheimen blijven in hun kluis, taken volgen duidelijk afgebakende rechten en pipeline fouten wijzen direct naar het onderdeel dat gerepareerd moet worden.
+
+00:17:16.400 --> 00:17:23.500
+Begrijpen hoe GitHub Actions werk overdraagt tussen taken, terwijl geheimen strikt beperkt blijven en triggers duidelijk gedefinieerd zijn,
+
+00:17:23.500 --> 00:17:28.720
+maakt AM van een hoopvol experiment tot een betrouwbare, veilige en voorspelbare praktijk.
+
+00:17:29.340 --> 00:17:33.420
+Deze workflow segmentatie gaat niet alleen over het volgen van best practices.
+
+00:17:33.780 --> 00:17:42.240
+Het blokkeert stille beveiligingslekken en onbedoelde overschrijvingen en sluit een hele klasse onzichtbare fouten uit voordat ze je omgevingen gaan achtervolgen.
+
+00:17:42.240 --> 00:17:49.060
+Nu de onderdelen samenwerken door middel van goed afgebakende automatisering, is het tijd dat we een ander pijnpunt aanpakken.
+
+00:17:49.300 --> 00:17:56.760
+Connectors, service principles en de kleine maar cruciale valkuilen die uw implementaties kunnen vertragen precies wanneer u er vertrouwen in krijgt.
+
+00:17:56.940 --> 00:17:59.880
+Geheime service principles en de problemen met connectors.
+
+00:18:00.280 --> 00:18:05.300
+Als u ooit heeft geprobeerd een powerapp of flow van dev naar prod te verplaatsen, kent u het verhaal.
+
+00:18:05.300 --> 00:18:13.000
+Dingen werken vlekkeloos in de ene omgeving, maar zodra u overschakelt, loopt alles vast of krijgt u van die mysterieuze verbindingsfouten.
+
+00:18:13.480 --> 00:18:19.380
+Dit is niet uniek voor een specifiek team. Elke powerplatformbeheerder loopt uiteindelijk tegen deze muur aan.
+
+00:18:19.940 --> 00:18:24.340
+De kern van het probleem ligt in hoe connectors en geheimen zich achter de schermen gedragen.
+
+00:18:24.680 --> 00:18:32.980
+U kunt niet zomaar een oplossingszip exporteren vanuit development en verwachten dat het elders werkt, omdat de verbindingen waarvan het afhangt per omgeving verschillen.
+
+00:18:32.980 --> 00:18:35.180
+Neem bijvoorbeeld connectorreferenties.
+
+00:18:35.300 --> 00:18:40.520
+In het powerplatform is een connector nooit zomaar een statisch stukje informatie dat in uw app is gebundeld.
+
+00:18:40.700 --> 00:18:43.640
+Het is dynamisch, veranderlijk en vaak uniek per omgeving.
+
+00:18:43.880 --> 00:18:48.040
+Wanneer u uw oplossing exporteert, werken connectorreferenties bijna als bladwijzers.
+
+00:18:48.280 --> 00:18:52.380
+Ze verwijzen naar verbindingsobjecten die alleen bestaan in de omgeving waarin ze zijn gemaakt.
+
+00:18:52.620 --> 00:19:01.000
+Dus, wanneer u importeert in test of prod, wordt uw mooie HTTP-eindpunt of dataverse link niet noodzakelijkerwijs op dezelfde manier of helemaal niet opnieuw aangemaakt.
+
+00:19:01.000 --> 00:19:02.680
+Dit is waar teams de mist in gaan.
+
+00:19:02.680 --> 00:19:14.120
+Als dev een connector gebruikt voor testgegevens en die exacte configuratie niet wordt gespiegeld in prod, faalt uw flow of app stilletjes of loopt vast bij de eerste verbindingspoging.
+
+00:19:16.460 --> 00:19:20.920
+Veel mensen proberen dit te onzeilen door gebruikersgegevens te delen over omgevingen heen.
+
+00:19:20.920 --> 00:19:27.280
+Ze denken dat als je hetzelfde account of wachtwoord gebruikt dat de verbinding in dev heeft gemaakt, het misschien wel zal werken in prod.
+
+00:19:27.440 --> 00:19:32.580
+De realiteit is dat dit een hele reeks problemen uitlokt van geweigerde rechten tot het triggeren van compliance audits.
+
+00:19:32.780 --> 00:19:34.720
+De eigen richtlijnen van Microsoft zijn duidelijk.
+
+00:19:34.860 --> 00:19:39.120
+Het gebruik van individuele gebruikersgegevens voor geautomatiseerde implementaties is niet haalbaar of veilig.
+
+00:19:39.260 --> 00:19:44.620
+Het maakt uw automatisering afhankelijk van wachtwoordwijzigingen en kan zorgen voor onduidelijke sporen in uw audit logs.
+
+00:19:44.620 --> 00:19:53.120
+Er is geen duidelijke verantwoording en uiteindelijk blokkeren rechten de pipeline wanneer de oorspronkelijke gebruiker wordt gemarkeerd, verwijderd of toegang verliest.
+
+00:19:53.380 --> 00:19:54.960
+Maak kennis met service principles.
+
+00:19:55.360 --> 00:20:01.600
+Als u er nog niet mee heeft gewerkt, zie een service principle dan als een digitaal paar extra handen dat speciaal is gebouwd voor automatisering.
+
+00:20:01.840 --> 00:20:08.540
+In tegenstelling tot een gewone gebruiker is een service principle gekoppeld aan een app registratie in Azure AD, niet aan een echt persoon.
+
+00:20:08.740 --> 00:20:12.600
+U geeft het de minimale rechten die nodig zijn om uw implementatietaken uit te voeren.
+
+00:20:12.600 --> 00:20:14.840
+Dat klinkt simpel, maar de winst is groot.
+
+00:20:15.020 --> 00:20:22.040
+In plaats van te vertrouwen op een gebruiker die de organisatie kan verlaten of van rol kan veranderen, blijven implementaties consistent, controleerbaar en traceerbaar.
+
+00:20:22.220 --> 00:20:28.580
+Elke omgeving krijgt alleen toegang tot de juiste verbindingen en bronnen en alle wijzigingen worden gelogd onder dit robotaccount.
+
+00:20:28.840 --> 00:20:34.260
+Wanneer er iets misgaat, heb je een duidelijk audit trail en eindig je niet met weestromen die niemand kan repareren.
+
+00:20:34.560 --> 00:20:40.100
+Wat betreft het probleem van het koppelen van connectors, denk eens aan wat er gebeurt als omgevingen uit elkaar gaan lopen.
+
+00:20:40.100 --> 00:20:43.740
+Misschien heeft het ontwikkelteam goedkeuring gekregen voor een nieuwe aangepaste connector.
+
+00:20:43.960 --> 00:20:46.220
+Stel dat deze een sandbox API aanroept.
+
+00:20:46.440 --> 00:20:52.920
+Wanneer het tijd is om naar productie te gaan, ontbreekt die connector niet alleen, maar is deze wellicht niet eens toegestaan volgens het organisatiebeleid voor gegevens.
+
+00:20:53.140 --> 00:20:58.360
+Als je vergeet de koppeling aan te passen, roept de app het verkeerde eindpunt aan of loopt deze volledig vast.
+
+00:20:58.560 --> 00:21:01.140
+Ik zag dit onlangs hard misgaan bij een zorginstelling.
+
+00:21:01.380 --> 00:21:07.040
+Een gemiste connector koppeling leidde tot het gebruik van testgegevens in productie en veroorzaakte bijna een compliance incident.
+
+00:21:07.040 --> 00:21:19.680
+Hun geautomatiseerde pipeline exporteerde alles zoals gepland, maar de connectorverwijzing in de oplossing wees nog steeds naar een oude testdatabase die niet door het Power Platform werd opgemerkt totdat er echte gegevens door de verkeerde kanalen stroomden.
+
+00:21:20.400 --> 00:21:23.080
+Omgevingsvariabelen helpen om een deel van dit probleem te verlichten.
+
+00:21:23.080 --> 00:21:30.940
+In tegenstelling tot het hard coderen van eindpunten of API-sleutels kun je met omgevingsvariabelen scheiden wat verandert tussen omgevingen en wat hetzelfde blijft.
+
+00:21:31.100 --> 00:21:37.420
+Je kunt eindpunten, API-sleutels of andere geheimen bij elke implementatie vervangen zonder je app of stroom te herschrijven.
+
+00:21:37.600 --> 00:21:47.960
+Een stroom die bijvoorbeeld werkt met een dataverse ontwikkeltabel, kan bij het importeren opnieuw worden geconfigureerd voor de productietabel door simpelweg de omgevingsvariabelen in je implementatieproces te wijzigen.
+
+00:21:47.960 --> 00:21:53.720
+GitHub Actions Pipelines maken dit praktisch. Elke taak kan op het juiste moment de juiste waarde invoeren.
+
+00:21:53.940 --> 00:22:02.720
+Maar ook hier is discipline cruciaal. Vergeet je een variabele bij te werken of laat je geheime lekken tussen omgevingen, dan is je workflow plotseling blootgesteld.
+
+00:22:03.140 --> 00:22:09.140
+Microsoft benadrukt de noodzaak om geheime zorgvuldig af te bakenen en connectorverwijzingen bewust toe te wijzen.
+
+00:22:09.140 --> 00:22:18.240
+Hun DLP-beleid, Data Loss Prevention, bestaat met een reden om te voorkomen dat gevoelige informatie tussen omgevingen dwaalt of op de verkeerde plek opduikt.
+
+00:22:18.960 --> 00:22:26.280
+Als je probeert dit te omzeilen door variabelen of verbindingen te delen, loop je vast op de beveiligings- of compliance-controles van het bedrijf.
+
+00:22:26.900 --> 00:22:33.020
+Belangrijker nog, je verliest voorspelbaarheid omdat er geen grens meer is tussen wat bedoeld is voor ontwikkeling, testen of productie.
+
+00:22:33.020 --> 00:22:36.780
+De voordelen wanneer je dit allemaal goed aanpakt, zijn nauwelijks te overschatten.
+
+00:22:37.000 --> 00:22:42.800
+Service principles in combinatie met goed beheerde omgevingsvariabelen en correct gekoppelde connectors transformeren je pipeline.
+
+00:22:43.020 --> 00:22:49.040
+Je implementaties worden voorspelbaar. Wanneer dingen kapot gaan, heb je een duidelijke bewijslast en weet je precies waar je moet zoeken.
+
+00:22:49.240 --> 00:22:52.460
+Was het een connector-koppeling, een variabele of een gemiste machtiging?
+
+00:22:52.660 --> 00:22:57.760
+Aditors kunnen wijzigingen volgen en er is geen onzekerheid wanneer iemand de organisatie verlaat of wachtwoorden wijzigt.
+
+00:22:57.760 --> 00:23:02.540
+Het komt er allemaal op neer dat je geheime connectors en service principles behandelt alsof ze er echt toe doen.
