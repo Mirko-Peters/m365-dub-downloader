@@ -26,7 +26,7 @@ export default {
         if (to) return Response.redirect(url.origin + to + url.search, 301);
       }
     }
-    if (url.pathname === "/pa" || url.pathname.startsWith("/pa/")) return Response.redirect(url.origin + "/", 301);   // Punjabi gibt es nicht mehr
+    if (/^\/(pa|hi|ml|ta|te)(\/|$)/.test(url.pathname)) return Response.redirect(url.origin + "/", 301);   // diese Sprachen gibt es nicht mehr (Punjabi, Hindi, Malayalam, Tamil, Telugu)
     const p = url.pathname, isImg = IMG.test(p), isStatic = STATIC.test(p) || FONT.test(p);
     const cf = isImg ? { cacheEverything: true, cacheTtl: 604800, polish: "lossy", mirage: true }
       : isStatic ? { cacheEverything: true, cacheTtl: 86400 }

@@ -4,7 +4,7 @@ import { cleanText, rateLimit, esc } from "./util.js";
 import { notify } from "./mail.js";
 
 const now = () => Math.floor(Date.now() / 1000);
-export const LANGS = ["en","de","es","fr","it","pt","nl","pl","id","ru","uk","ar","he","hi","ja","ko","ml","ta","te"];
+export const LANGS = ["en","de","es","fr","it","pt","nl","pl","id","ru","uk","ar","he","ja","ko"];
 const MAX_EPS = 2000, MAX_SHOWS = 3, TR_PER_SYNC = 25;
 let ready = false;
 async function ensure(db) {

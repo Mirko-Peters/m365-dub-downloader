@@ -3,7 +3,7 @@
 import json
 from pathlib import Path
 
-COMM_LANGS = ("en", "de", "fr", "es", "it", "nl", "pt", "pl", "id", "ru", "uk", "ar", "he", "hi", "ja", "ko", "ml", "ta", "te")
+COMM_LANGS = ("en", "de", "fr", "es", "it", "nl", "pt", "pl", "id", "ru", "uk", "ar", "he", "ja", "ko")
 _P = Path(__file__).parent / "data" / "ui_i18n.json"
 _D = json.loads(_P.read_text("utf-8")) if _P.exists() else {}
 
