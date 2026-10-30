@@ -100,7 +100,7 @@ def build(g):
 
     def pub(rel, title, desc, body, ld=None, og="website", noindex=False, last=TODAY, alts=None):
         u = f"{root}{rel}"
-        side = SBR.render(SBX, BASE, root, title + " " + plain(body)[:8000], eps, SHP, nav=nav) if not noindex else SBR.render(SBX, BASE, root, "", [], {}, nav=nav)
+        side = SBR.render(SBX, BASE, root, title + " " + plain(body)[:8000], eps, SHP) if not noindex else SBR.render(SBX, BASE, root, "", [], {})   # die Karte "M365.FM Show" (Home, Episodes, Blog, Guests ...) ist entfernt; Navigation ueber den Header
         write(f"show/{rel}index.html", page("en", (title if title == NAME else f"{title} – {NAME}"), desc[:300], u, shell(body, side), alts, ld, xdefault=u, og_type=og, noindex=noindex))
         if not noindex: sitemap.append((u, last, None))
 
