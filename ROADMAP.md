@@ -131,3 +131,9 @@ Podpage kostet 65 $/Monat (ca. 780 $/Jahr). Ziel: m365.fm komplett auf dub.m365.
 - iCal: `event.ics` je Event (inkl. Sessions) mit Button auf der Event-Seite.
 - m365con.net: Wer sich hier für M365Con anmeldet, kann per Haken einwilligen, dass Name und E-Mail einmalig an HeySummit (Event 229506) gehen. Tabelle `event_transfers`; MCP-Admin-Tools `list_event_transfers` und `mark_event_transfers_done` (Adresse wird danach gelöscht). Übertragen wird mit der HeySummit-Anbindung (`create_attendee`) in einer Claude-Sitzung, die auch den dub-MCP verbunden hat – später als geplante Aufgabe automatisierbar.
 - Offen: direkter HeySummit-API-Schlüssel im Worker (dann ohne Claude-Sitzung), Mail-System (Einladungen, Bestätigungen).
+
+## Veröffentlichungs-Strecke: Podcast-Upload + YouTube-Upload (Idee)
+- Eine Folge einmal hochladen → Entwurf bei Spreaker (Podcast) und Video bei YouTube; Titel, Beschreibung, Kapitel und Sprache aus denselben Daten; Episodenseite auf dub.m365.fm entsteht automatisch.
+- YouTube: Data API `videos.insert`, OAuth-Recht „Videos hochladen". Hürden: Uploads aus ungeprüften API-Projekten bleiben zunächst privat (Audit des API-Projekts nötig, kann Wochen dauern); Kontingent ca. 1.600 von 10.000 Einheiten pro Upload und Tag (≈ 6 Videos/Tag, mehr nur per Antrag).
+- Ausführung nicht im Cloudflare-Worker (große Dateien), sondern in GitHub Actions oder lokal, ähnlich dem Dub-Downloader.
+- Reihenfolge: nach der Konferenz; vorher Google-Projekt und Audit-Antrag anstoßen, weil die Wartezeit der Engpass ist.
