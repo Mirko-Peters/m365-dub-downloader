@@ -70,9 +70,13 @@ def main():
     for l in langs:
         for e in eps:
             if e["slug"] in have[l]: continue
-            src = json.dumps({"title": e["name"], "summary": (P.plain(e.get("summary")) or P.plain(e.get("show_notes")))[:900]}, ensure_ascii=False)
+            summ = (P.plain(e.get("summary")) or P.plain(e.get("show_notes")))[:900]
+            if len(summ) == 900: summ = summ.rsplit(" ", 1)[0] + " …"
+            src = (f"Translate the following podcast episode into {NAMES[l]}. The text below is the SOURCE to translate (it is complete as given; a trailing '…' only marks a shortened summary).\n\n"
+                   f"TITLE: {e['name']}\n\nSUMMARY: {summ or '(none)'}\n\n"
+                   f"Reply with one JSON object only, no other text: {{\"title\": \"<translated title>\", \"summary\": \"<translated summary, or empty string if the summary is (none)>\"}}")
             reqs.append({"custom_id": f"{l}__{e['slug']}"[:64] if len(f"{l}__{e['slug']}") <= 64 else f"{l}__{e['id']}", "params": {"model": MODEL, "max_tokens": 4096, "thinking": {"type": "disabled"},
-                         "system": f"Translate the podcast episode title and summary into {NAMES[l]}. Keep product names (Microsoft 365, Copilot, Power BI, Azure ...) untranslated. Reply with JSON only: {{\"title\": ..., \"summary\": ...}}",
+                         "system": "You are a translation engine for podcast metadata. Always translate the SOURCE given in the user message and answer with JSON only. Keep product names (Microsoft 365, Copilot, Power BI, Azure ...) untranslated. Never ask for more text.",
                          "messages": [{"role": "user", "content": src}]}})
     if not reqs:
         print("Nichts zu uebersetzen"); return
