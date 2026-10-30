@@ -57,6 +57,9 @@ def ent_ld(BASE, e, lang, glossary_set=None):
     if t in ("product", "platform"):
         n["applicationCategory"] = ", ".join(ENTS[c]["name"] for c in rel.get("instance_of", []) if ENTS[c]["type"] == "category") or "BusinessApplication"
         n["operatingSystem"] = "Web"
+        n["@type"] = ["SoftwareApplication", "Product"]   # Software und Produkt zugleich
+        if rel.get("developed_by"):
+            n["brand"] = ref(rel["developed_by"][0])
         if rel.get("part_of"):
             n["isPartOf"] = [ref(x) for x in rel["part_of"]]
         if rel.get("developed_by"):
