@@ -15,11 +15,20 @@ Die Seite liegt auf GitHub Pages. Mit dem Cloudflare-Proxy kommen CDN-Cache, Bil
 - `site.yml` leert nach jedem Deploy den Cloudflare-Cache, damit neue Seiten sofort sichtbar sind.
 - `/show/redirects.json` – Weiterleitungsliste für den Umzug von www.m365.fm.
 
-## Umzug www.m365.fm (wenn Podpage abgelöst wird)
-1. DNS: `www` und Apex auf Proxied, Ziel egal (der Worker antwortet selbst).
-2. In `sitewrk/wrangler.toml` die auskommentierte Routenzeile aktivieren und `MIGRATED = "1"` setzen; pushen.
-3. Danach leitet der Worker `/episodes/<slug>` → `/show/episodes/<slug>/` usw. per 301 weiter, alles Unbekannte auf `/show/…`.
-4. Bei Spreaker/Apple/Spotify die Show-URL auf `https://dub.m365.fm/show/` (später `www.m365.fm`) ändern.
+## Umzug dub.m365.fm → www.m365.fm (wenn die englischen Inhalte komplett sind)
+Podpage-URLs heute: Folgen `/<slug>/`, Blog `/blog/<slug>/`, Videos `/videos/<slug>/`, Gäste `/guests/<slug>/`, Seiten `/<slug>/`. Die Plattform liefert sie unter `/show/…`; `/show/redirects.json` (vom Build erzeugt, aktuell ~1.160 Einträge) ordnet jede alte Adresse der neuen zu. `/show/redirect-conflicts.json` listet Adressen, die auch die Plattform selbst belegt (aktuell `/about` – die Plattform-Seite bleibt, Podpage-About liegt unter `/show/about/`).
+
+**Reihenfolge am Umzugstag**
+1. Vorher: Alle Inhalte (Folgen, Gäste, Blog, Seiten) fertig, Weiterleitungsliste prüfen (Stichprobe der 50 meistbesuchten alten URLs in der Google Search Console → Leistung → Seiten).
+2. `domain.txt` und `docs/CNAME` auf `www.m365.fm` ändern, im Worker `worker/wrangler.toml` die Variablen `SITE` auf `https://www.m365.fm` setzen (Login-Rückleitungen, CORS), Google/Microsoft/LinkedIn-OAuth-Rückruf-URLs ergänzen.
+3. In GitHub Pages die Custom Domain `www.m365.fm` eintragen; Cloudflare-DNS: `www` CNAME → `mirko-peters.github.io` (Proxied), Apex `m365.fm` Proxied (Dummy-A-Eintrag), Podpage-Eintrag entfernen.
+4. `sitewrk/wrangler.toml`: Routen für `www.m365.fm/*` und `m365.fm/*` aktivieren und `MIGRATED = "1"` setzen, pushen. Der Worker leitet dann per 301 um: `dub.m365.fm/*` und `m365.fm/*` → `www.m365.fm/*` (gleicher Pfad), alte Podpage-Adressen → `/show/…`, unbekannte `/blog/*` und `/videos/*` → `/show/`.
+5. Site neu bauen (alle Canonicals, hreflang, Sitemaps zeigen dann auf www), IndexNow wird automatisch gesendet.
+6. Search Console: Property `www.m365.fm` anlegen, Sitemap `https://www.m365.fm/sitemap.xml` einreichen; für `dub.m365.fm` ist „Adressänderung“ möglich (Property-Typ Domain).
+7. Spreaker, Apple Podcasts, Spotify, LinkedIn, YouTube-Beschreibungen: Show-URL auf `https://www.m365.fm/show/` ändern.
+8. 301-Regeln mindestens 12 Monate lassen; 404-Berichte in der Search Console die ersten Wochen täglich prüfen.
+
+**Videos** (`/videos/<slug>/`) waren bewusst nicht Teil der Übertragung und laufen auf `/show/`. Wenn Videoseiten Traffic haben, später auf passende Folgen oder die Videos der Plattform mappen.
 
 ## Bilder
 Cover, Teilen-Bilder und Porträts liefert der Worker mit `polish: lossy` aus; Polish erzeugt WebP/AVIF je nach Browser (`Vary: Accept`). Originale bleiben PNG/JPG im Repo.

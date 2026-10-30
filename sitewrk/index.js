@@ -8,20 +8,23 @@ const SEC = {
 };
 const IMG = /\.(png|jpe?g|gif|webp|avif|svg|ico)$/i, STATIC = /^\/(assets|covers|og)\//i, FONT = /\.(woff2?|ttf|otf)$/i;
 
-async function redirectMap(env, ctx) {
-  const key = new Request(env.ORIGIN + "/show/redirects.json");
-  const r = await fetch(key, { cf: { cacheTtl: 3600, cacheEverything: true } });
+async function redirectMap(url) {
+  const r = await fetch(url.origin + "/show/redirects.json", { cf: { cacheTtl: 3600, cacheEverything: true } });
   return r.ok ? r.json() : {};
 }
 
 export default {
   async fetch(request, env, ctx) {
     const url = new URL(request.url);
-    // Umzug: alte Podpage-Adressen auf /show/ (nur wenn MIGRATED=1 und fremder Host)
-    if (env.MIGRATED === "1" && url.hostname !== "dub.m365.fm") {
-      const map = await redirectMap(env, ctx), p = url.pathname.replace(/\/$/, "") || "/";
-      const to = p === "/" ? "/show/" : map[p] || map[p.toLowerCase()] || "/show" + p + "/";
-      return Response.redirect(env.ORIGIN + to + url.search, 301);
+    // Umzug (MIGRATED=1): dub.m365.fm und m365.fm -> www.m365.fm, alte Podpage-Adressen -> /show/ (301, damit der SEO-Traffic erhalten bleibt)
+    if (env.MIGRATED === "1") {
+      if (url.hostname === "dub.m365.fm" || url.hostname === "m365.fm") return Response.redirect("https://www.m365.fm" + url.pathname + url.search, 301);
+      const p0 = url.pathname.replace(/\/+$/, "") || "/";
+      if (p0 !== "/" && !p0.startsWith("/show") && !p0.startsWith("/shows")) {
+        const map = await redirectMap(url);
+        const to = map[p0] || map[p0.toLowerCase()] || (/^\/(blog|videos)\//.test(p0) ? "/show/" : "");
+        if (to) return Response.redirect(url.origin + to + url.search, 301);
+      }
     }
     const p = url.pathname, isImg = IMG.test(p), isStatic = STATIC.test(p) || FONT.test(p);
     const cf = isImg ? { cacheEverything: true, cacheTtl: 604800, polish: "lossy", mirage: true }

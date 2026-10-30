@@ -194,6 +194,19 @@ def build(g):
            f'<p><a href="{root}episodes/">All {len(eps)} episodes →</a></p>' + (f"<h2>Topics</h2><ul>{ct}</ul>" if ct else ""))
     ld = {"@context": "https://schema.org", "@type": "PodcastSeries", "name": NAME, "url": root, "description": plain(pod.get("description"))[:500], "inLanguage": "en", "webFeed": "https://www.spreaker.com/show/6704921/episodes/feed"}
     pub("", NAME, plain(pod.get("description")) or NAME, hub, ld)
-    # Weiterleitungsliste fuer den spaeteren Domain-Umzug
-    write("show/redirects.json", json.dumps({f"/episodes/{e['slug']}": f"/show/episodes/{e['slug']}/" for e in eps} | {f"/{s}": f"/show/{s}/" for s, _ in plist} | {f"/guests/{x['slug']}": f"/show/guests/{x['slug']}/" for x in guests}))
-    print(f"podpage: {len(eps)} Folgen, {len(guests)} Gaeste, {len(plist)} Seiten")
+    # Weiterleitungsliste fuer den Umzug (Podpage-Struktur: Folgen und Seiten direkt unter /<slug>/, Gaeste unter /guests/<slug>/, Blog /blog/<slug>/)
+    from pathlib import Path as _P
+    taken = {x.name for x in (_P(__file__).parent / "docs").iterdir()} if (_P(__file__).parent / "docs").exists() else set()
+    taken |= {"show", "shows", "community", "entity", "glossary", "learn", "assets", "updates", "de", "en", "es", "fr", "it", "pt", "nl", "pl", "id", "ru", "uk", "ar", "he", "hi", "ja", "ko", "ml", "pa", "ta", "te"}
+    rd, clash = {}, []
+    def add(old, new):
+        top = old.strip("/").split("/")[0]
+        if "/" not in old.strip("/") and top in taken: clash.append(old); return
+        rd[old] = new
+    for e in eps: add(f"/{e['slug']}", f"/show/episodes/{e['slug']}/")
+    for sl, _ in plist: add(f"/{sl}", f"/show/{sl}/")
+    for x in guests: add(f"/guests/{x['slug']}", f"/show/guests/{x['slug']}/")
+    for old, new in (("/episodes", "/show/episodes/"), ("/guests", "/show/guests/"), ("/hosts", "/show/hosts/"), ("/people", "/show/hosts/"), ("/sponsors", "/show/sponsors/"), ("/reviews", "/show/reviews/"), ("/podroll", "/show/listen/"), ("/videos", "/show/"), ("/blog", "/show/")): rd.setdefault(old, new)
+    write("show/redirects.json", json.dumps(rd))
+    write("show/redirect-conflicts.json", json.dumps(sorted(set(clash))))
+    print(f"podpage: {len(eps)} Folgen, {len(guests)} Gaeste, {len(plist)} Seiten, {len(rd)} Weiterleitungen, Konflikte mit Plattform-Seiten: {sorted(set(clash))}")
