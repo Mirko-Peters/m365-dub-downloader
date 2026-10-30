@@ -447,6 +447,7 @@ def page(lang, title, desc, canonical, body, alternates=None, jsonld=None, xdefa
 <script defer src="{BASE}/assets/attend.js"></script>
 <script defer src="{BASE}/assets/smooth.js"></script>
 <script defer src="{BASE}/assets/fx.js"></script>
+{('<script defer src="' + BASE + '/assets/viz.js"></script>') if 'class="viz"' in body else ""}
 </body></html>
 """
 

@@ -14,10 +14,12 @@ const BAD_HOST = /(^|\.)(bit\.ly|t\.co|tinyurl\.com|goo\.gl|is\.gd|ow\.ly|buff\.
 // Markup: ## / ### Ueberschriften, **fett**, *kursiv*, - Listen, 1. Listen, > Zitat, [[id|Text]] interne Links,
 // {{ref|Titel|https://url|Herausgeber|Datum}} Quelle als Fussnote, {{cn}} = Beleg fehlt. Links sonst nur ueber Quellen.
 // {{img|https://bild.jpg|Alt-Text}} Bild (https, .jpg/.png/.webp/.gif/.avif, Alt-Text 5-140 Zeichen Pflicht, max. 10).
+// {{viz|typ|Titel|a~b;a~b}} interaktive Infografik (nur mit opts.viz: Blog; Typen bars, stats, steps, timeline, compare; max. 3, 12 Zeilen, nur Text und Zahlen).
 // opts.links: {{link|https://url|Text}} erlauben (nur Show Notes der Redaktion); sonst wird der Baustein zum reinen Text. opts.max: Laenge (Standard 12000).
 export function sanitize(raw, opts = {}) {
   let s = cleanText(raw, opts.max || MAX_BODY).replace(/[<>]/g, ""), err = null, n = 0, imgs = 0, links = 0;
-  s = s.split(/(\{\{(?:ref|img|link)\|[^{}]*\}\})/).map((part, i) => {
+  let viz = 0;
+  s = s.split(/(\{\{(?:ref|img|link|viz)\|[^{}]*\}\})/).map((part, i) => {
     if (i % 2 === 0) return part.replace(/https?:\/\/\S+/gi, "").replace(/www\.\S+/gi, "");
     if (part.startsWith("{{link|")) {
       const [u, ...rest] = part.slice(7, -2).split("|"), text = rest.join(" ").trim().replace(/[\[\]{}|]/g, "").slice(0, 120);
@@ -26,6 +28,22 @@ export function sanitize(raw, opts = {}) {
       if (url.protocol !== "https:" || (u || "").length > 300 || BAD_HOST.test(url.hostname) || url.username || url.password) { err = "bad_link"; return ""; }
       if (++links > MAX_LINKS) { err = "too_many_links"; return ""; }
       return `{{link|${url.href}|${text || url.hostname}}}`;
+    }
+    if (part.startsWith("{{viz|")) {
+      if (!opts.viz) return "";
+      const [type, title, ...rest] = part.slice(6, -2).split("|"), data = rest.join(" ");
+      const clean = (x, n) => String(x || "").replace(/[{}\[\]|;~<>]/g, " ").replace(/\s+/g, " ").trim().slice(0, n);
+      const COLS = { bars: 2, stats: 2, steps: 2, timeline: 2, compare: 3 };
+      if (!COLS[type] || !clean(title, 80) || ++viz > 3) { err = "bad_viz"; return ""; }
+      const items = data.split(";").slice(0, 13).map((it) => it.split("~").slice(0, COLS[type]).map((p) => p.trim())).filter((p) => p[0]);
+      if (!items.length || (type === "compare" && items.length < 2)) { err = "bad_viz"; return ""; }
+      const rows = items.map((p, i) => {
+        const q = p.map((x) => clean(x, 90));
+        const numeric = (type === "bars" || type === "stats") ? [1] : (type === "compare" && i > 0) ? [1, 2] : [];
+        for (const k of numeric) { const n = parseFloat(String(q[k] || "0").replace(",", ".")); q[k] = String(Number.isFinite(n) ? n : 0); }
+        return q.join("~");
+      });
+      return `{{viz|${type}|${clean(title, 80)}|${rows.join(";")}}}`;
     }
     if (part.startsWith("{{img|")) {
       const [u, ...rest] = part.slice(6, -2).split("|"), alt = rest.join(" ").trim().replace(/[\[\]{}|]/g, "");

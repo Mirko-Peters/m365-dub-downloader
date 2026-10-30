@@ -5,6 +5,25 @@
   var T = de ? { linkbtn: "Link einfügen (https)", linkurl: "Adresse (https://…)", linktext: "Linktext", img: "Bild einfügen (https, .jpg/.png/.webp, Alt-Text Pflicht)", imgurl: "Bild-Adresse (https://…/bild.jpg)", imgalt: "Alt-Text (beschreibt das Bild, mind. 5 Zeichen)", h2: "Überschrift", h3: "Zwischenüberschrift", b: "Fett", i: "Kursiv", ul: "Liste", ol: "Nummerierte Liste", q: "Zitat", link: "Link auf ein Thema", ref: "Quelle einfügen", write: "Schreiben", prev: "Vorschau", empty: "Hier erscheint die Vorschau, sobald du schreibst.", chars: "Zeichen", refs: "Quellen", rtitle: "Titel der Quelle", rurl: "https://…", rpub: "Herausgeber", rdate: "Datum", add: "Einfügen", topic: "Thema-ID (z. B. power-bi)", ttext: "Linktext", bold: "fetter Text", ital: "kursiver Text", txt: "Text", vis: "Visuell", html: "HTML", md: "Markdown", htmlhint: "HTML einfügen oder bearbeiten – erlaubt sind Überschriften, Absätze, Listen, Zitate, fett und kursiv; alles andere wird beim Wechsel entfernt.", undo: "Rückgängig", redo: "Wiederholen", clear: "Formatierung entfernen", mdhint: "Markdown mit Live-Vorschau." }
     : { linkbtn: "Insert link (https)", linkurl: "Address (https://…)", linktext: "Link text", img: "Insert image (https, .jpg/.png/.webp, alt text required)", imgurl: "Image URL (https://…/image.jpg)", imgalt: "Alt text (describes the image, min. 5 characters)", h2: "Heading", h3: "Subheading", b: "Bold", i: "Italic", ul: "List", ol: "Numbered list", q: "Quote", link: "Link to a topic", ref: "Insert source", write: "Write", prev: "Preview", empty: "The preview appears as soon as you start writing.", chars: "characters", refs: "Sources", rtitle: "Source title", rurl: "https://…", rpub: "Publisher", rdate: "Date", add: "Insert", topic: "Topic id (e.g. power-bi)", ttext: "Link text", bold: "bold text", ital: "italic text", txt: "text", vis: "Visual", html: "HTML", md: "Markdown", htmlhint: "Paste or edit HTML – headings, paragraphs, lists, quotes, bold and italic are kept; everything else is removed when you switch.", undo: "Undo", redo: "Redo", clear: "Clear formatting", mdhint: "Markdown with live preview." };
 
+  /* ---------- Infografiken {{viz|typ|Titel|a~b;a~b}} ---------- */
+  var VT = de ? { viz: "Interaktive Infografik einfügen", bars: "Balken", stats: "Zahlen", steps: "Schritte", timeline: "Zeitleiste", compare: "Vorher/Nachher", title: "Titel der Grafik", label: "Bezeichnung", value: "Wert", detail: "Beschreibung", when: "Wann", what: "Was", add: "+ Zeile", del: "Zeile entfernen", ins: "Einfügen", la: "Name links", lb: "Name rechts", va: "Wert links", vb: "Wert rechts", prev: "Vorschau" }
+    : { viz: "Insert interactive infographic", bars: "Bars", stats: "Numbers", steps: "Steps", timeline: "Timeline", compare: "Before/after", title: "Graphic title", label: "Label", value: "Value", detail: "Description", when: "When", what: "What", add: "+ Row", del: "Remove row", ins: "Insert", la: "Left name", lb: "Right name", va: "Left value", vb: "Right value", prev: "Preview" };
+  var VCOLS = { bars: ["label", "value"], stats: ["label", "value"], steps: ["label", "detail"], timeline: ["when", "what"], compare: ["label", "va", "vb"] };
+  function vz(s, n) { return String(s || "").replace(/[{}\[\]|;~<>]/g, " ").replace(/\s+/g, " ").trim().slice(0, n || 90); }
+  function vizFig(type, title, data, edit) {
+    var f = h("figure", { class: "viz", "data-viz": type }), ul = h("ul", { class: "viz-fb" });
+    f.appendChild(h("figcaption", { text: title }));
+    data.split(";").forEach(function (it) { var p = it.split("~").map(function (x) { return x.trim(); }); if (!p[0]) return; ul.appendChild(h("li", { "data-a": p[0], "data-b": p[1] || "", "data-c": p[2] || "", text: p.filter(Boolean).join(" · ") })); });
+    f.appendChild(ul); f.setAttribute("data-vizmd", type + "|" + title + "|" + data); if (edit) f.setAttribute("contenteditable", "false");
+    return f;
+  }
+  function ensureViz(cb) {
+    if (window.m365Viz) return cb && cb();
+    var s = [].slice.call(document.scripts).filter(function (x) { return /editor\.js/.test(x.src); })[0], e = document.createElement("script");
+    e.src = (s ? s.src.replace(/editor\.js.*$/, "") : "/assets/") + "viz.js"; e.onload = function () { cb && cb(); }; document.head.appendChild(e);
+  }
+  function vizInit(root) { ensureViz(function () { [].forEach.call(root.querySelectorAll("figure.viz"), function (f) { window.m365Viz(f); }); }); }
+
   function inline(s, parent, ctx) {
     var ED = ctx.edit;
     var re = /\{\{img\|([^{}|]*)\|([^{}]*)\}\}|\{\{ref\|([^{}]*)\}\}|\{\{cn\}\}|\[\[([^\]|]+)\|?([^\]]*)\]\]|\*\*([^*]+)\*\*|\*([^*]+)\*|\{\{link\|([^{}|]*)\|([^{}]*)\}\}/, m;
@@ -26,12 +45,13 @@
     function fp() { if (para.length) { var p = h("p"); inline(para.join(" "), p, ctx); into.appendChild(p); para = []; } }
     body.split("\n").forEach(function (ln) {
       var m; if (!ln.trim()) { fp(); list = null; return; }
+      if ((m = /^\{\{viz\|([a-z]+)\|([^{}|]*)\|([^{}]*)\}\}$/.exec(ln.trim())) && VCOLS[m[1]]) { fp(); list = null; into.appendChild(vizFig(m[1], m[2], m[3], edit)); return; }
       if ((m = /^(#{2,3})\s+(.+)$/.exec(ln))) { fp(); list = null; var hd = h(edit ? (m[1].length === 2 ? "h2" : "h3") : (m[1].length === 2 ? "h3" : "h4")); inline(m[2], hd, ctx); into.appendChild(hd); return; }
       if ((m = /^(-|\d+\.)\s+(.+)$/.exec(ln))) { fp(); var ord = m[1] !== "-"; if (!list || list.o !== ord) { list = { o: ord, el: h(ord ? "ol" : "ul") }; into.appendChild(list.el); } var li = h("li"); inline(m[2], li, ctx); list.el.appendChild(li); return; }
       if ((m = /^>\s?(.+)$/.exec(ln))) { fp(); list = null; var q = h("blockquote"), qp = h("p"); inline(m[1], qp, ctx); q.appendChild(qp); into.appendChild(q); return; }
       list = null; para.push(ln.trim());
     });
-    fp();
+    fp(); vizInit(into);
     if (edit) { if (!into.firstChild) into.appendChild(h("p", {}, [h("br")])); return; }
     if (ctx.refs.length) { into.appendChild(h("h4", { text: T.refs })); var ol = h("ol", { class: "ed-refs" }); ctx.refs.forEach(function (r) { ol.appendChild(h("li", { text: (r[0] || "") + (r[2] ? " – " + r[2] : "") + (r[3] ? " (" + r[3] + ")" : "") + (r[1] ? " · " + r[1].replace(/^https?:\/\//, "").split("/")[0] : "") })); }); into.appendChild(ol); }
     if (!body.trim()) into.appendChild(h("p", { class: "mut", text: T.empty }));
@@ -64,7 +84,8 @@
       if (c.nodeType === 3) { buf += ws(c.nodeValue); return; }
       if (c.nodeType !== 1) return;
       var t = c.tagName.toLowerCase(), x;
-      if (/^(h1|h2)$/.test(t)) { flush(); x = inl(c).trim(); if (x) out.push("## " + x); }
+      if (t === "figure" && c.hasAttribute("data-vizmd")) { flush(); out.push("{{viz|" + c.getAttribute("data-vizmd").replace(/[{}]/g, "") + "}}"); }
+      else if (/^(h1|h2)$/.test(t)) { flush(); x = inl(c).trim(); if (x) out.push("## " + x); }
       else if (/^h[3-6]$/.test(t)) { flush(); x = inl(c).trim(); if (x) out.push("### " + x); }
       else if (t === "ul" || t === "ol") { flush(); var ls = []; c.querySelectorAll("li").forEach(function (li, k) { var y = inl(li).replace(/\s+/g, " ").trim(); if (y) ls.push((t === "ol" ? (k + 1) + ". " : "- ") + y); }); if (ls.length) out.push(ls.join("\n")); }
       else if (t === "blockquote") { flush(); x = inl(c).replace(/\s+/g, " ").trim(); if (x) out.push("> " + x); }
@@ -122,6 +143,40 @@
     }
     function btn(l, t, fn, cls) { var b = h("button", { type: "button", class: "ed-b " + (cls || ""), title: t, "aria-label": t, text: l, onclick: fn }); b.addEventListener("mousedown", function (e) { e.preventDefault(); }); return b; }
     function act(v, m) { return function () { if (mode === "vis") v(); else m(); }; }
+    // Infografik-Baustein: Typ waehlen, Zeilen eintragen, Live-Vorschau, Einfuegen
+    function buildViz() {
+      keepSel(); panel.textContent = ""; panel.hidden = false; ensureViz();
+      var type = "bars", sel = h("select", { "aria-label": VT.viz }), ti = h("input", { type: "text", maxlength: 80, placeholder: VT.title, "aria-label": VT.title }), rows = h("div", { class: "vz-ed-rows" }), pvw = h("div", { class: "vz-ed-pv", "aria-label": VT.prev }), hdr = h("div", { class: "vz-ed-hdr" });
+      ["bars", "stats", "steps", "timeline", "compare"].forEach(function (k) { sel.appendChild(h("option", { value: k, text: VT[k] })); });
+      function colLabel(k, i) { return VT[VCOLS[k][i]]; }
+      function addRow(vals) {
+        var cols = VCOLS[type], r = h("div", { class: "vz-ed-row" });
+        cols.forEach(function (c, i) { var inp = h("input", { type: "text", maxlength: 90, placeholder: colLabel(type, i), "aria-label": colLabel(type, i) }); inp.value = (vals && vals[i]) || ""; inp.addEventListener("input", prev); r.appendChild(inp); });
+        r.appendChild(h("button", { type: "button", class: "btn", text: "✕", title: VT.del, "aria-label": VT.del, onclick: function () { r.remove(); prev(); } })); rows.appendChild(r);
+      }
+      function data() {
+        var items = [];
+        if (type === "compare") { var hs = [].map.call(hdr.querySelectorAll("input"), function (x) { return vz(x.value, 30); }); items.push((hs[0] || "A") + "~" + (hs[1] || "B")); }
+        [].forEach.call(rows.children, function (r) {
+          var p = [].map.call(r.querySelectorAll("input"), function (x) { return vz(x.value, 90); });
+          if (!p[0]) return; if (type === "bars" || type === "stats") p[1] = String(parseFloat((p[1] || "0").replace(",", ".")) || 0); if (type === "compare") { p[1] = String(parseFloat((p[1] || "0").replace(",", ".")) || 0); p[2] = String(parseFloat((p[2] || "0").replace(",", ".")) || 0); }
+          items.push(p.join("~"));
+        });
+        return items.slice(0, 13).join(";");
+      }
+      function prev() { pvw.textContent = ""; var d = data(); if (!d || (type === "compare" && d.split(";").length < 2)) return; pvw.appendChild(vizFig(type, vz(ti.value, 80), d, false)); vizInit(pvw); }
+      function setType(k) { type = k; rows.textContent = ""; hdr.textContent = ""; if (k === "compare") { [VT.la, VT.lb].forEach(function (p, i) { var x = h("input", { type: "text", maxlength: 30, placeholder: p, "aria-label": p }); x.value = i ? (de ? "Nachher" : "After") : (de ? "Vorher" : "Before"); x.addEventListener("input", prev); hdr.appendChild(x); }); } var ex = { bars: [["Q1", "12"], ["Q2", "28"], ["Q3", "55"]], stats: [["Users", "1200"], ["Languages", "19"]], steps: [["Plan", ""], ["Pilot", ""], ["Roll-out", ""]], timeline: [["2025", ""], ["2026", ""]], compare: [["Cost", "100", "40"], ["Time", "8", "3"]] }[k]; ex.forEach(function (v) { addRow(v); }); prev(); }
+      sel.addEventListener("change", function () { setType(sel.value); });
+      ti.addEventListener("input", prev);
+      panel.append(sel, ti, hdr, rows, h("button", { type: "button", class: "btn", text: VT.add, onclick: function () { if (rows.children.length < 12) addRow(); } }), pvw);
+      panel.appendChild(h("button", { type: "button", class: "btn main", text: VT.ins, onclick: function () {
+        var d = data(), t = vz(ti.value, 80); if (!d || !t) { ti.focus(); return; }
+        if (mode === "vis") { var fg = vizFig(type, t, d, true); insertNode(fg); vizInit(fg.parentNode || vis); } else mput("\n\n{{viz|" + type + "|" + t + "|" + d + "}}\n\n", "", "");
+        panel.hidden = true;
+      } }));
+      panel.appendChild(h("button", { type: "button", class: "btn", text: "✕", "aria-label": "Close", onclick: function () { panel.hidden = true; if (mode === "vis") restore(); else ta.focus(); } }));
+      setType("bars"); ti.focus();
+    }
     var bar = h("div", { class: "ed-bar", role: "toolbar" }, [
       btn("H2", T.h2, act(function () { ex("formatBlock", "h2"); }, function () { mline("## "); })), btn("H3", T.h3, act(function () { ex("formatBlock", "h3"); }, function () { mline("### "); })),
       btn("¶", "Text", act(function () { ex("formatBlock", "p"); }, function () {})),
@@ -141,6 +196,7 @@
           if (mode === "vis") { var im = h("img", { src: v[0], alt: v[1], referrerpolicy: "no-referrer" }); im.style.maxWidth = "100%"; im.style.height = "auto"; im.setAttribute("data-img", val); im.setAttribute("contenteditable", "false"); insertNode(im); } else mput("{{img|" + val + "}}", "", "");
         });
       }),
+      btn("📊", VT.viz, function () { buildViz(); }),
       btn("[1] " + T.refs, T.ref, function () {
         fields([["t", T.rtitle], ["u", T.rurl], ["p", T.rpub], ["d", T.rdate]], function (v) {
           if (!v[0] || !/^https:\/\//.test(v[1])) return false;

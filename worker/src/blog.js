@@ -114,7 +114,7 @@ export async function handleBlog(env, request, url, path, user, J) {
     const title = txt(b.title || "", 140), summary = txt(b.summary || "", 300), lang = String(b.lang || "en");
     if (title.length < 5) return J({ error: "title" }, 400);
     if (!okLang(lang)) return J({ error: "bad_lang" }, 400);
-    const sb = sanitize(String(b.body || "")); if (sb.err) return J({ error: sb.err }, 400);
+    const sb = sanitize(String(b.body || ""), { viz: true }); if (sb.err) return J({ error: sb.err }, 400);
     if (b.submit && sb.body.length < 300) return J({ error: "too_short" }, 400);
     const known = await baseIds(env), topics = [];
     for (const t of (Array.isArray(b.topics) ? b.topics : []).slice(0, 10)) { if (!known.has(t)) return J({ error: "bad_topic", topic: t }, 400); if (!topics.includes(t)) topics.push(t); }
