@@ -256,6 +256,12 @@ def build(g, wiki_links, experts_by_ent, ep_find):
                     evl += f'<h2>{"Sessions" if lang == "de" else "Sessions"} ({len(_ses)})</h2><ul>' + "".join(f'<li>{esc(_se["title"])}' + (f' <span class="mut">· {", ".join(_sl(x) for x in _se.get("speakers", []))}</span>' if _se.get("speakers") else "") + "</li>" for _se in _ses[:150]) + "</ul>"
                 if _spk:
                     evl += f'<h2>{"Speaker" if lang == "de" else "Speakers"} ({len(_spk)})</h2><p>' + ", ".join(_sl(x) for x in sorted(_spk.values(), key=lambda a: a["n"].lower())[:200]) + "</p>"
+            _hit = [(_ev, _se) for _ev in EVENTS.values() for _se in _ev.get("sessions", []) if e["id"] in (_se.get("topics") or [])]
+            if _hit and e["id"] not in EVENTS:   # Sessions zu diesem Thema (Gegenrichtung zu den Themen an der Session)
+                _p2 = f'{BASE}{"/de" if lang == "de" else ""}/community'
+                _spl = lambda x: f'<a href="{_p2}/u/{x["h"]}/">{esc(x["n"])}</a>' if x.get("h") else esc(x["n"])
+                evl += f'<h2>{"Sessions zu diesem Thema" if lang == "de" else "Sessions on this topic"} ({len(_hit)})</h2><ul>' + "".join(
+                    f'<li><a href="{_p2}/events/{_ev["handle"]}/">{esc(_se["title"])}</a> <span class="mut">· {", ".join(_spl(x) for x in _se.get("speakers", []))} · {esc(_ev["title"])}</span></li>' for _ev, _se in _hit[:30]) + "</ul>"
             if not e["desc"].get(lang if lang in ("en", "de") else "en"):
                 evl += f'<p class="mut"><a href="#en-edit">{"Diese Kurzbeschreibung gibt es noch nicht in deiner Sprache – gern ergänzen." if lang == "de" else "This short description is not yet available in your language – feel free to add it."}</a></p>'
             gloss = f'<p class="mut"><a href="{BASE}/{"de/" if lang == "de" else ""}glossary/">{esc(s["glossary"])}</a></p>' if e["id"] in gl_ids else ""

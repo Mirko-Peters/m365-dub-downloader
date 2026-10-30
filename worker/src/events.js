@@ -134,6 +134,25 @@ Mirko Peters is a Microsoft MVP, podcaster, author and conference organizer focu
   }
   if (evr) {   // Themen (Entitaeten) der Programm-Sessions nachtragen, solange eine Session noch keine hat
     try {
+      {   // Themen-Abgleich: bei neuer Programm-Version (topics_version) werden fehlende Themen zu den bestehenden hinzugefuegt (Eintraege der Organisatoren bleiben)
+        const pr2 = await (await fetch(`${env.SITE}/m365con_program.json`, { cf: { cacheTtl: 0 } })).json(), ver = String(pr2.topics_version || 1);
+        const mk = await db.prepare("SELECT v FROM meta WHERE k='m365con_topics_v'").first();
+        if ((mk?.v || "1") !== ver && (pr2.sessions || []).length) {
+          const known2 = await baseIds(env);
+          if (known2.has("microsoft-fabric-apps")) {   // erst wenn die neuen Entitaeten veroeffentlicht sind
+            const cur = (await db.prepare("SELECT id,title,topics FROM event_sessions WHERE event_id=?").bind(evr.id).all()).results || [], byT = new Map(cur.map((r) => [r.title, r]));
+            const ops2 = [];
+            for (const x of pr2.sessions) {
+              const r = byT.get(String(x.title).slice(0, 140)); if (!r) continue;
+              let have = []; try { have = JSON.parse(r.topics || "[]"); } catch { have = []; }
+              const merged = [...new Set([...have, ...(x.topics || []).filter((i) => known2.has(i))])].slice(0, 8);
+              if (merged.length !== have.length) ops2.push(db.prepare("UPDATE event_sessions SET topics=? WHERE id=?").bind(JSON.stringify(merged), r.id));
+            }
+            for (let i = 0; i < ops2.length; i += 40) await db.batch(ops2.slice(i, i + 40));
+            await db.prepare("INSERT INTO meta(k,v) VALUES('m365con_topics_v',?) ON CONFLICT(k) DO UPDATE SET v=excluded.v").bind(ver).run();
+          }
+        }
+      }
       const todo = await db.prepare("SELECT COUNT(*) n FROM event_sessions WHERE event_id=? AND topics='[]'").bind(evr.id).first();
       if (todo?.n) {
         const pr = await (await fetch(`${env.SITE}/m365con_program.json`, { cf: { cacheTtl: 0 } })).json(), known = await baseIds(env);
