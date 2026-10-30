@@ -86,7 +86,7 @@
       var name = h("input", { type: "text", list: dl.id, placeholder: Q.pick, "aria-label": Q.pick, maxlength: 80 }), lv = h("select", { "aria-label": Q.exp }), yr = h("input", { type: "number", min: 1990, max: 2100, "aria-label": Q.year, placeholder: Q.year, style: "width:6em" }), pr = h("input", { type: "text", maxlength: 300, placeholder: Q.proof, "aria-label": Q.proof });
       Q.lvl.forEach(function (l, i) { lv.appendChild(h("option", { value: i + 1, text: l })); }); lv.value = (it && it.level) || 2; yr.value = (it && it.year) || ""; pr.value = (it && it.url) || "";
       if (it && it.e) { var t = all.filter(function (x) { return x.id === it.e; })[0]; name.value = t ? t.name : it.e; }
-      var stl = (withYear && it && it.e) ? h("span", { class: "cmut", text: it.verified ? (de ? "✔ geprüft" : "✔ verified") : (it.url ? (de ? "⏳ wird geprüft" : "⏳ under review") : (de ? "ohne Nachweis" : "no proof")) }) : null;
+      var stl = (withYear && it && it.e) ? h("span", { class: "cmut", text: it.verified ? (de ? "✔ geprüft" : "✔ verified") : (it.rejected ? (de ? "✖ Nachweis abgelehnt – bitte Link prüfen oder ändern" : "✖ proof rejected – please check or change the link") : it.url ? (de ? "⏳ wird geprüft" : "⏳ under review") : (de ? "ohne Nachweis" : "no proof")) }) : null;
       var mkBox = h("div", { style: "flex-basis:100%", hidden: true }), mkBtn = h("button", { type: "button", class: "btn", hidden: true, text: NQ.mk });
       function matched() { var v = name.value.trim().toLowerCase(); return all.some(function (x) { return x.name.toLowerCase() === v; }); }
       function sync() { mkBtn.hidden = !name.value.trim() || matched(); if (mkBtn.hidden) mkBox.hidden = true; }

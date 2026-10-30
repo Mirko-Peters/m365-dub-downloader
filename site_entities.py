@@ -209,7 +209,7 @@ def build(g, wiki_links, experts_by_ent, ep_find):
             ex = experts_by_ent.get(e["id"], [])
             ehtml = ""
             if ex:
-                ehtml = "<ul>" + "".join(f'<li><a href="{BASE}/community/{"u" if x["kind"] == "u" else "c"}/{x["handle"]}/">{esc(x["name"])}</a>{" ✔" if x.get("verified") else ""}<span class="mut"> · {esc(x.get("headline", "")[:80])}</span></li>' for x in ex[:12]) + "</ul>"
+                ehtml = "<ul>" + "".join(f'<li><a href="{BASE}{"/de" if lang == "de" else ""}/community/{"u" if x["kind"] == "u" else "c"}/{x["handle"]}/">{esc(x["name"])}</a>{" ✔" if x.get("verified") else ""}<span class="mut"> · {esc(x.get("headline", "")[:80])}</span></li>' for x in ex[:12]) + "</ul>"
             elif e["type"] in ("product", "platform", "concept", "category"):
                 ehtml = f'<p class="mut">{esc(s["noexperts"])}</p>'
             oldbanner = ""

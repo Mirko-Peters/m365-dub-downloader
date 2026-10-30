@@ -120,7 +120,7 @@ async function personView(db, uid, viewer) {
   const q = async (sql, ...b) => (await db.prepare(sql).bind(...b).all()).results || [];
   const exp = await q("SELECT e.eid e,e.level,e.verified,(SELECT COUNT(*) FROM endorsements n WHERE n.owner_id=e.owner_id AND n.eid=e.eid) endorsed, (SELECT COUNT(*) FROM endorsements n2 WHERE n2.owner_id=e.owner_id AND n2.eid=e.eid AND n2.by_id=?) me FROM expertise e WHERE e.owner_type='u' AND e.owner_id=? ORDER BY e.verified DESC,e.level DESC", +viewer || 0, uid);
   const programs = await q("SELECT program p,year,url,verified FROM programs WHERE owner_type='u' AND owner_id=?", uid);
-  const certs = (await q("SELECT c.eid e,c.year,c.url,COALESCE(k.status,'') st,(SELECT COUNT(*) FROM cert_endorse n WHERE n.owner_id=c.user_id AND n.eid=c.eid) endorsed,(SELECT COUNT(*) FROM cert_endorse n2 WHERE n2.owner_id=c.user_id AND n2.eid=c.eid AND n2.by_id=?) me FROM certs c LEFT JOIN cert_check k ON k.user_id=c.user_id AND k.eid=c.eid WHERE c.user_id=? ORDER BY endorsed DESC, (k.status='verified') DESC, c.year DESC", +viewer || 0, uid)).map((x) => ({ e: x.e, year: x.year, url: x.url, verified: x.st === "verified", pending: x.st === "pending", endorsed: x.endorsed, me: !!x.me }));
+  const certs = (await q("SELECT c.eid e,c.year,c.url,COALESCE(k.status,'') st,(SELECT COUNT(*) FROM cert_endorse n WHERE n.owner_id=c.user_id AND n.eid=c.eid) endorsed,(SELECT COUNT(*) FROM cert_endorse n2 WHERE n2.owner_id=c.user_id AND n2.eid=c.eid AND n2.by_id=?) me FROM certs c LEFT JOIN cert_check k ON k.user_id=c.user_id AND k.eid=c.eid WHERE c.user_id=? ORDER BY endorsed DESC, (k.status='verified') DESC, c.year DESC", +viewer || 0, uid)).map((x) => ({ e: x.e, year: x.year, url: x.url, verified: x.st === "verified", pending: x.st === "pending", rejected: x.st === "rejected", endorsed: x.endorsed, me: !!x.me }));
   const channels = await q("SELECT kind,url,feed FROM channels WHERE owner_type='u' AND owner_id=?", uid);
   const org = p.show_org ? await db.prepare("SELECT o.handle,o.name FROM org_members m JOIN orgs o ON o.id=m.org_id WHERE m.user_id=? AND m.status='active' AND o.public=1 ORDER BY m.created LIMIT 1").bind(uid).first() : null;
   const contrib = [...(await q("SELECT 'wiki' k,term t,lang l,summary s,created c FROM wiki_rev WHERE user_id=? AND status IN ('live','old') ORDER BY created DESC LIMIT 15", uid)),
@@ -307,9 +307,9 @@ export async function handleProfiles(env, request, url, path, user, J) {
       for (const e of Object.keys(oldC)) if (!keep.has(e)) await db.prepare("DELETE FROM cert_check WHERE user_id=? AND eid=?").bind(user.id, e).run();
       const map = certs.some((c) => c.url) ? await entityMap(env) : null;
       for (const c of certs) {
-        if (oldC[c.e] !== c.url) await db.prepare("DELETE FROM cert_check WHERE user_id=? AND eid=? AND via<>'admin'").bind(user.id, c.e).run();
+        if (oldC[c.e] !== c.url) await db.prepare("DELETE FROM cert_check WHERE user_id=? AND eid=? AND NOT (via='admin' AND status='verified')").bind(user.id, c.e).run();
         if (!c.url) continue;
-        if (await db.prepare("SELECT 1 x FROM cert_check WHERE user_id=? AND eid=? AND status='verified'").bind(user.id, c.e).first()) continue;
+        if (await db.prepare("SELECT 1 x FROM cert_check WHERE user_id=? AND eid=? AND status IN ('verified','rejected')").bind(user.id, c.e).first()) continue;
         const ok = await autoVerifyCert(c.url, map.get(c.e), user.name);
         await db.prepare("INSERT INTO cert_check(user_id,eid,status,via,created) VALUES(?,?,?,?,?) ON CONFLICT(user_id,eid) DO UPDATE SET status=excluded.status,via=excluded.via,created=excluded.created").bind(user.id, c.e, ok ? "verified" : "pending", ok ? "auto" : "", now()).run();
       }
@@ -478,7 +478,7 @@ export async function handleProfiles(env, request, url, path, user, J) {
     else if (b.kind === "exp" && ID.test(b.key || "")) await db.prepare("UPDATE expertise SET verified=? WHERE owner_type=? AND owner_id=? AND eid=?").bind(v, o.t, o.id, b.key).run();
     else if (b.kind === "cert" && o.t === "u" && ID.test(b.key || "")) {
       if (v) await db.prepare("INSERT INTO cert_check(user_id,eid,status,via,created) VALUES(?,?,'verified','admin',?) ON CONFLICT(user_id,eid) DO UPDATE SET status='verified',via='admin',created=excluded.created").bind(o.id, b.key, now()).run();
-      else await db.prepare("DELETE FROM cert_check WHERE user_id=? AND eid=?").bind(o.id, b.key).run();
+      else await db.prepare("INSERT INTO cert_check(user_id,eid,status,via,created) VALUES(?,?,'rejected','admin',?) ON CONFLICT(user_id,eid) DO UPDATE SET status='rejected',via='admin',created=excluded.created").bind(o.id, b.key, now()).run();
     }
     else return J({ error: "bad_request" }, 400);
     return J({ ok: true });

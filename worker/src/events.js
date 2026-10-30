@@ -87,7 +87,8 @@ export async function ensureM365Con(env) {   // M365Con 2027 ist ein Event und g
       .bind(owner.id, "Microsoft MVP · Host of M365.FM · Organizer of M365Con", "Mirko Peters is a Microsoft MVP who explains Microsoft 365, Microsoft Copilot, Azure, Power Platform, Microsoft Fabric and AI agents for IT admins, architects, developers and decision makers. He hosts the podcast M365.FM and the M365 Show on YouTube (animated explainers and Microsoft certification courses), organizes the free online conference M365Con and publishes e-books on Microsoft topics.", "Podcast host and conference organizer", t).run();
   }
   const prof = await db.prepare("SELECT handle FROM profiles WHERE user_id=?").bind(owner.id).first();
-  if (prof?.handle) {
+  const seeded = await db.prepare("SELECT 1 x FROM meta WHERE k='seed_admin_profile'").first();   // Vorbelegung nur einmal, danach gehoert das Profil dem Admin
+  if (prof?.handle && !seeded) {
     await db.prepare("UPDATE profiles SET about=? WHERE user_id=? AND length(about)<=420").bind(`Mirko Peters ist Microsoft MVP, Podcaster, Autor und Konferenzveranstalter mit Schwerpunkt auf Microsoft 365, Microsoft Copilot, Azure, Power Platform, Microsoft Fabric und KI-Agenten. Er hostet den Podcast M365.FM und die m365 Show auf YouTube mit animierten Erklärvideos (Sticky Man Explained) und Zertifizierungskursen, organisiert die kostenlose Online-Konferenz M365Con (11.–22. Januar 2027) und veröffentlicht E-Books zu Microsoft-Themen. Seine Inhalte richten sich an IT-Admins, Architekten, Entwickler und Entscheider, die die Microsoft-Cloud ohne Marketing-Rauschen verstehen wollen. Die Podcast-Episoden gibt es als KI-vertontes Audio in 19 Sprachen.
 
 Mirko Peters is a Microsoft MVP, podcaster, author and conference organizer focused on Microsoft 365, Microsoft Copilot, Azure, Power Platform, Microsoft Fabric and AI agents. He hosts the podcast M365.FM and the m365 Show on YouTube with animated explainers (Sticky Man Explained) and certification courses, organizes the free online conference M365Con (11-22 January 2027) and publishes e-books on Microsoft topics. His content is aimed at IT admins, architects, developers and decision makers who want to understand the Microsoft cloud without marketing noise. The podcast episodes are available as AI-dubbed audio in 19 languages.`, owner.id).run();   // ausfuehrliche Bio einmalig, solange nur der Kurztext steht   // Besitzer ist der Admin (Mirko): Programm, Kanaele und 12 Expertise-Themen auch bei abweichender Profil-Adresse ergaenzen
@@ -96,6 +97,7 @@ Mirko Peters is a Microsoft MVP, podcaster, author and conference organizer focu
       await db.prepare("INSERT OR IGNORE INTO channels(owner_type,owner_id,kind,url) VALUES('u',?,?,?)").bind(owner.id, k, u).run();
     for (const eid of ["microsoft-365", "copilot", "copilot-studio", "azure", "azure-ai-foundry", "power-platform", "fabric", "purview", "teams", "sharepoint", "ai-agent", "entra-id"])
       await db.prepare("INSERT OR IGNORE INTO expertise(owner_type,owner_id,eid,level,verified) VALUES('u',?,?,3,1)").bind(owner.id, eid).run();
+    await db.prepare("INSERT OR IGNORE INTO meta(k,v) VALUES('seed_admin_profile','1')").run();
   }
   await db.prepare("UPDATE users SET name='Mirko Peters' WHERE id=? AND name LIKE 'Mirko P%' AND name<>'Mirko Peters'").bind(owner.id).run();   // voller Name fuer das oeffentliche Profil
   const adm = { id: owner.id, admin: true, name: "Mirko Peters" };
