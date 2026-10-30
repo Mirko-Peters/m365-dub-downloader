@@ -1282,10 +1282,10 @@ def build():
     write(f"{INDEXNOW_KEY}.txt", INDEXNOW_KEY)
     if _dom:
         write("CNAME", _dom)
-    write("callback/index.html", """<!doctype html><meta charset=utf-8><meta name=robots content="noindex,nofollow"><meta name=viewport content="width=device-width,initial-scale=1"><title>Spreaker-Anmeldung</title>
-<body style="font-family:system-ui,sans-serif;background:#101214;color:#e9ecef;padding:40px;max-width:640px;margin:auto"><h2>Spreaker-Anmeldung</h2><p id=m>Kein Code in der Adresse.</p>
+    write("callback/index.html", """<!doctype html><meta charset=utf-8><meta name=robots content="noindex,nofollow"><meta name=viewport content="width=device-width,initial-scale=1"><title>Anmeldung</title>
+<body style="font-family:system-ui,sans-serif;background:#101214;color:#e9ecef;padding:40px;max-width:640px;margin:auto"><h2>Anmeldung</h2><p id=m>Kein Code in der Adresse.</p>
 <pre id=c style="white-space:pre-wrap;word-break:break-all;background:#1d2126;padding:14px;border:1px solid #444"></pre><button id=b style="display:none;padding:10px 18px">Code kopieren</button>
-<script>var q=new URLSearchParams(location.search),c=q.get("code");if(c){document.getElementById("m").textContent="Code (in das Programm auf dem PC einfügen):";document.getElementById("c").textContent=c;var b=document.getElementById("b");b.style.display="inline-block";b.onclick=function(){navigator.clipboard.writeText(c);b.textContent="Kopiert ✓"}}else if(q.get("error")){document.getElementById("m").textContent="Fehler: "+q.get("error")}</script></body>""")
+<script>var q=new URLSearchParams(location.search),c=q.get("code");if(c){document.getElementById("m").textContent="Code (in das Programm bzw. den GitHub-Workflow einfügen):";document.getElementById("c").textContent=c;var b=document.getElementById("b");b.style.display="inline-block";b.onclick=function(){navigator.clipboard.writeText(c);b.textContent="Kopiert ✓"}}else if(q.get("error")){document.getElementById("m").textContent="Fehler: "+q.get("error")}</script></body>""")
     write("og-manifest.json", json.dumps(OGLIST, ensure_ascii=False))
     write("404.html", page("en", "Not found", "Page not found", f"{BASE}/404.html", '<main class="wrap"><h1>404</h1><p><a class="btn" href="%s/">M365.FM</a></p></main>' % BASE))
     json.dump([u for u, _, _ in sitemap], open(ROOT / "data" / "urls.json", "w"), indent=0)
