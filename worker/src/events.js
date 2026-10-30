@@ -73,16 +73,37 @@ export async function ensureM365Con(env) {   // M365Con 2027 ist ein Event und g
   for (const a of subs) { const [pr, ...rest] = a.split(":"); owner = await db.prepare("SELECT id FROM users WHERE provider=? AND sub=?").bind(pr, rest.join(":")).first(); if (owner) break; }
   if (!owner) return;
   const t = Math.floor(Date.now() / 1000), ex = await db.prepare("SELECT id,owner_id FROM events WHERE handle='m365con-2027'").first();
-  for (const [h, nm, tg, web, eid] of [["m365fm", "M365.FM", "Podcast and community about Microsoft 365, Copilot and AI", "https://www.m365.fm", "m365fm"], ["m365con", "M365Con", "Free online convention for the Microsoft 365 community", "https://m365con.net", "m365con"]]) {
+  const adm = { id: owner.id, admin: true, name: "Mirko Peters" };
+  await ownedEntity(env, adm, { eid: "m365show", type: "media", name: "M365 Show", en: "The M365 Show is a video and podcast show about Microsoft 365, Copilot, Azure and the Power Platform with animated explainers and certification courses.", de: "Die M365 Show ist eine Video- und Podcast-Show zu Microsoft 365, Copilot, Azure und Power Platform mit animierten Erklaerungen und Zertifizierungskursen.", web: "https://m365.show" });
+  const ORGS = [
+    ["m365show", "M365 Show", "Video and podcast show about Microsoft 365, Copilot and AI", "The M365 Show brings animated explainers, interviews and Microsoft certification courses on Microsoft 365, Copilot, Azure and the Power Platform. Hosted by Mirko Peters, Microsoft MVP.", "https://m365.show", "m365show", [["youtube", "https://www.youtube.com/channel/UCIdo4tN3khKldHP3733E9JA"], ["linkedin", "https://www.linkedin.com/in/m365showpodcast/"]]],
+    ["m365fm", "M365.FM", "Podcast and community about Microsoft 365, Copilot and AI", "M365.FM is the podcast network about Microsoft 365 with 900+ conversations with Microsoft MVPs, product experts and architects, available in 19 languages.", "https://www.m365.fm", "m365fm", [["website", "https://www.m365.fm"]]],
+    ["m365con", "M365Con", "Free online convention for the Microsoft 365 community", "M365Con is the free online convention for the Microsoft community: 10 days, 120+ sessions, 120+ speakers and a daily focus topic. Organized by Mirko Peters and team.", "https://m365con.net", "m365con", [["website", "https://m365con.net"]]],
+  ];
+  for (const [h, nm, tg, about, web, eid, chs] of ORGS) {
     let o = await db.prepare("SELECT id FROM orgs WHERE handle=?").bind(h).first();
-    if (!o) { const r = await db.prepare("INSERT INTO orgs(handle,name,tagline,about,website,country,size,public,created) VALUES(?,?,?,?,?,'Germany','2-10',1,?)").bind(h, nm, tg, "", web, t).run(); o = { id: r.meta.last_row_id }; }
+    if (!o) { const r = await db.prepare("INSERT INTO orgs(handle,name,tagline,about,website,country,size,public,created) VALUES(?,?,?,?,?,'Germany','2-10',1,?)").bind(h, nm, tg, about, web, t).run(); o = { id: r.meta.last_row_id }; }
+    else await db.prepare("UPDATE orgs SET about=CASE WHEN about='' THEN ? ELSE about END, tagline=CASE WHEN tagline='' THEN ? ELSE tagline END WHERE id=?").bind(about, tg, o.id).run();
     await db.prepare("INSERT OR IGNORE INTO org_members(org_id,user_id,role,status,created) VALUES(?,?,'owner','active',?)").bind(o.id, owner.id, t).run();
     await db.prepare("INSERT OR IGNORE INTO org_entity(org_id,eid) VALUES(?,?)").bind(o.id, eid).run();
+    for (const [k, u] of chs) await db.prepare("INSERT OR IGNORE INTO channels(owner_type,owner_id,kind,url) VALUES('o',?,?,?)").bind(o.id, k, u).run();
   }
-  for (const eid of ["m365con", "m365fm", "mirko-peters"]) await db.prepare("INSERT INTO entity_claims(eid,user_id,status,via,created) VALUES(?,?,'verified','admin',?) ON CONFLICT(eid) DO NOTHING").bind(eid, owner.id, t).run();
+  for (const eid of ["m365con", "m365fm", "m365show", "mirko-peters"]) await db.prepare("INSERT INTO entity_claims(eid,user_id,status,via,created) VALUES(?,?,'verified','admin',?) ON CONFLICT(eid) DO NOTHING").bind(eid, owner.id, t).run();
   if (!ex) await db.prepare("INSERT INTO events(handle,owner_id,title,summary,about,start,end,mode,location,country,url,tickets_url,free,lang,topics,seeking_sponsor,public,created,updated) VALUES('m365con-2027',?,?,?,?,?,?,'online','Online','','https://m365con.net','https://m365con.net',1,'en','[\"m365con\"]',1,1,?,?)")
     .bind(owner.id, "M365Con 2027", "Free online convention: 10 days, 120+ sessions, 120+ speakers, a daily focus topic.", "M365Con 2027 is a free online convention about Microsoft 365, Copilot and AI with 10 days of sessions, a daily focus topic and 120+ speakers.", "2027-01-11T08:00", "2027-01-22", t, t).run();
   else if (ex.owner_id !== owner.id) await db.prepare("UPDATE events SET owner_id=? WHERE id=?").bind(owner.id, ex.id).run();
+  // Programm einmalig aus der veroeffentlichten Datei uebernehmen (Sessions + Speaker, vom Veranstalter bestaetigt)
+  const evr = await db.prepare("SELECT id FROM events WHERE handle='m365con-2027'").first();
+  if (evr && !(await db.prepare("SELECT 1 x FROM event_sessions WHERE event_id=? LIMIT 1").bind(evr.id).first())) {
+    try {
+      const pr = await (await fetch(`${env.SITE}/m365con_program.json`, { cf: { cacheTtl: 0 } })).json(), sp = pr.speakers || {};
+      const addMin = (st, m) => { const d = new Date(st + ":00Z"); d.setUTCMinutes(d.getUTCMinutes() + (m || 45)); return d.toISOString().slice(0, 16); };
+      const ops = (pr.sessions || []).slice(0, 400).map((x) => db.prepare("INSERT INTO event_sessions(event_id,title,abstract,start,end,room,track,level,lang,topics,speakers,recording_url,status,proposer_id,created) VALUES(?,?,?,?,?,'',?,'','en','[]',?,'','live',?,?)")
+        .bind(evr.id, String(x.title).slice(0, 140), String(x.abstract || "").slice(0, 1500), x.start, addMin(x.start, x.duration), x.category === "keynote" ? "Keynote" : x.category === "closing" ? "Closing" : "Expert Session",
+          JSON.stringify((x.speaker_ids || []).map((i) => sp[i]).filter(Boolean).map((p) => ({ n: String(p.name).slice(0, 80), s: "confirmed", o: 1 }))), owner.id, t));
+      for (let i = 0; i < ops.length; i += 40) await db.batch(ops.slice(i, i + 40));
+    } catch (e) { /* naechster Cron-Lauf versucht es erneut */ }
+  }
 }
 
 export async function handleEvents(env, request, url, path, user, J) {

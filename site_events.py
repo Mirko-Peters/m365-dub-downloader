@@ -111,6 +111,9 @@ def blocks(BASE, events, lang):
     return res
 
 
+EVLIVE = r'''(function(){fetch("%API%/api/events/export").then(function(r){return r.json()}).then(function(j){var have={};[].forEach.call(document.querySelectorAll(".ev-list a[href]"),function(a){have[a.getAttribute("href")]=1});var T=new Date().toISOString().slice(0,10),ups=document.querySelector(".ev-list");(j.events||[]).forEach(function(e){var u="%BASE%"+e.handle+"/";if(have[u])return;if((e.end||e.start).slice(0,10)<T)return;var ul=document.querySelector(".ev-list");if(!ul){ul=document.createElement("ul");ul.className="ev-list";document.querySelector("h1").parentNode.appendChild(ul)}var li=document.createElement("li");li.className="ev-card";var a=document.createElement("a");a.href=u;var b=document.createElement("b");b.textContent=e.title;a.appendChild(b);li.appendChild(a);var sp=document.createElement("span");sp.className="mut";sp.textContent=" · "+e.start.slice(0,10);li.appendChild(sp);ul.insertBefore(li,ul.firstChild)})}).catch(function(){})})()'''
+
+
 def build(g, events, people, orgs):
     BASE, write, page, header, footer, footer_en, LANGS = g["BASE"], g["write"], g["page"], g["header"], g["footer"], g["footer_en"], g["LANGS"]
     sitemap, TODAY = g["sitemap"], g["TODAY"]; api = g.get("api", "https://api-dub.m365.fm")
@@ -154,7 +157,7 @@ def build(g, events, people, orgs):
         li = lambda lst: "".join(f'<li class="ev-card"><a href="{eurl_(BASE, lang, e["handle"])}"><b>{esc(e["title"])}</b></a> <span class="mut">· {esc(span(e, lang))} · {esc({"online": s["online"], "onsite": s["onsite"], "hybrid": s["hybrid"]}[e["mode"]])}</span><br>{esc(e.get("summary", ""))}</li>' for e in lst)
         ru = f"{croot}events/"
         b = shell(lang, f'<h1>{esc(s["events"])}</h1><p class="mut">{esc(s["intro"])}</p><p><a class="btn main" href="{croot}#c-events">{esc(s["create"])}</a></p>'
-                  + (f'<h2>{esc(s["upcoming"])}</h2><ul class="ev-list">{li(up)}</ul>' if up else "") + (f'<h2>{esc(s["past"])}</h2><ul class="ev-list">{li(pa)}</ul>' if pa else "") + ("" if events else f'<p class="mut">{esc(s["none"])}</p>') + css)
+                  + (f'<h2>{esc(s["upcoming"])}</h2><ul class="ev-list">{li(up)}</ul>' if up else "") + (f'<h2>{esc(s["past"])}</h2><ul class="ev-list">{li(pa)}</ul>' if pa else "") + ("" if events else f'<p class="mut">{esc(s["none"])}</p>') + "<script>" + EVLIVE.replace("%API%", api).replace("%BASE%", eurl_(BASE, lang, "")) + "</script>" + css)
         ld = [{"@context": "https://schema.org", "@type": "CollectionPage", "name": s["events"], "url": ru, "description": s["intro"], "mainEntity": {"@type": "ItemList", "numberOfItems": len(events),
               "itemListElement": [{"@type": "ListItem", "position": i + 1, "item": {"@id": eurl_(BASE, "en", e["handle"]) + "#event"}} for i, e in enumerate(up + pa)]}}]
         write(f"{'de/' if lang == 'de' else ''}community/events/index.html", page(lang, f'{s["events"]} – M365.FM', s["intro"], ru, b, None, ld, og_type="website", extra_head=LCSS, noindex=noidx))
