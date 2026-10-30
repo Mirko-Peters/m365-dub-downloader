@@ -1050,6 +1050,9 @@ def build():
     shutil.copy(ROOT / "assets" / "sw.js", OUT / "sw.js")
     if (ROOT / "data" / "m365con_program.json").exists():
         shutil.copy(ROOT / "data" / "m365con_program.json", OUT / "m365con_program.json")
+    for _pf in ("m365con_program_2026.json", "m365con_program_dach.json"):
+        if (ROOT / "data" / _pf).exists():
+            shutil.copy(ROOT / "data" / _pf, OUT / _pf)
 
     # Entity-Seite
     A_EN = json.loads((ROOT / "data" / "about_en.json").read_text("utf-8"))
