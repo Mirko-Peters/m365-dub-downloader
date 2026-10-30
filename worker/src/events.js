@@ -370,6 +370,11 @@ export async function handleEvents(env, request, url, path, user, J) {
     }
   }
   // ---- Partner: Sponsoren und Medienpartner, Bestaetigung durch die Gegenseite (Firma oder Event-Team) ----
+  if (path === "/api/events/my-registrations" && method === "GET") {   // Meine Anmeldungen: Status, Sichtbarkeit, Weitergabe
+    if (need()) return need();
+    const rows = (await db.prepare("SELECT e.handle,e.title,e.start,e.end,a.status,a.visible,(SELECT t.status FROM event_transfers t WHERE t.event_id=e.id AND t.user_id=a.user_id) tr FROM event_attendees a JOIN events e ON e.id=a.event_id WHERE a.user_id=? AND e.public=1 ORDER BY e.start DESC LIMIT 100").bind(user.id).all()).results || [];
+    return J({ items: rows.map((r) => ({ handle: r.handle, title: r.title, start: r.start, end: r.end, status: r.status, visible: !!r.visible, transfer: r.tr || "" })) }, 200, { "cache-control": "no-store" });
+  }
   if (path === "/api/events/partners-mine" && method === "GET") {
     if (need()) return need();
     const toOrg = (await db.prepare("SELECT e.handle eh,e.title,o.handle oh,o.name,p.kind,p.level FROM event_partners p JOIN events e ON e.id=p.event_id JOIN orgs o ON o.id=p.org_id JOIN org_members m ON m.org_id=o.id WHERE p.status='pending' AND p.by='e' AND m.user_id=? AND m.status='active' AND m.role IN ('owner','admin','events')").bind(user.id).all()).results || [];

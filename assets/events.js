@@ -86,6 +86,21 @@
     box.appendChild(h("div", { class: "btns" }, [hd, rs, h("button", { type: "button", class: "btn main", text: TQ.add, onclick: function () { msg.textContent = ""; api("/api/event/" + ev.handle + "/team", { method: "POST", body: { handle: hd.value.trim().toLowerCase(), role: rs.value } }).then(function (r) { if (r.j && r.j.ok) { hd.value = ""; load(); } else msg.textContent = TQ.err; }); } }), msg]));
     load(); return box;
   }
+  var RQ = M365L(de, "events.RQ", { h: "Meine Anmeldungen", none: "Du bist noch für kein Event angemeldet.", going: "angemeldet", wait: "Warteliste", vis: "In der öffentlichen Teilnehmerliste zeigen", out: "Abmelden", past: "vergangen", tr: "an m365con.net übergeben", trp: "wird an m365con.net übergeben", err: "Hat nicht geklappt – Profil öffentlich?" }, { h: "My registrations", none: "You are not registered for any event yet.", going: "registered", wait: "waiting list", vis: "Show me in the public participant list", out: "Cancel registration", past: "past", tr: "passed on to m365con.net", trp: "will be passed on to m365con.net", err: "That did not work – is your profile public?" });
+  function regBox(sec, reload) {
+    api("/api/events/my-registrations").then(function (r) {
+      var l = (r.j && r.j.items) || [], box = h("div", { class: "ccard" }, [h("h3", { text: RQ.h })]), today = new Date().toISOString().slice(0, 10);
+      if (!l.length) { box.appendChild(h("p", { class: "cmut", text: RQ.none })); sec.insertBefore(box, sec.children[2] || null); return; }
+      l.forEach(function (x) {
+        var msg = h("span", { class: "cmut" }), cb = h("input", { type: "checkbox" }); cb.checked = !!x.visible;
+        cb.onchange = function () { api("/api/event/" + x.handle + "/register", { method: "POST", body: { visible: cb.checked } }).then(function (r2) { if (r2.s !== 200) { cb.checked = !cb.checked; msg.textContent = RQ.err; } else msg.textContent = ""; }); };
+        var isPast = (x.end || x.start).slice(0, 10) < today;
+        box.appendChild(h("div", { class: "ev-s" }, [h("a", { href: (de ? "/de" : "") + "/community/events/" + x.handle + "/", text: x.title }),
+          h("span", { class: "cmut", text: " · " + x.start.slice(0, 10) + " · " + (x.status === "going" ? RQ.going : RQ.wait) + (isPast ? " · " + RQ.past : "") + (x.transfer === "done" ? " · " + RQ.tr : x.transfer === "pending" ? " · " + RQ.trp : "") }),
+          h("div", { class: "btns" }, [h("label", {}, [cb, " " + RQ.vis]), isPast ? null : h("button", { type: "button", class: "btn", text: RQ.out, onclick: function () { api("/api/event/" + x.handle + "/register", { method: "DELETE" }).then(reload); } }), msg])]));
+      });
+      sec.insertBefore(box, sec.children[2] || null); });
+  }
   function proposeBox(want) {
     var sec = h("div", { class: "ccard" }, [h("h3", { text: Q.propose })]);
     fetch(X.api + "/api/events/export").then(function (r) { return r.json(); }).then(function (j) {
@@ -122,6 +137,7 @@
         h("button", { type: "button", class: "btn", text: Q.decl, onclick: function () { api("/api/speaker/respond", { method: "POST", body: { id: x.id, ok: false } }).then(function () { reload(); }); } })])])); });
       sec.insertBefore(box, sec.children[2] || null); });
     function reload() { mount(me); }
+    regBox(sec, reload);
     api("/api/events/mine").then(function (r) {
       var j = r.j || {}; sec.appendChild(h("h3", { text: Q.mine }));
       (j.events || []).forEach(function (e) { sec.appendChild(eventCard(e, j.orgs, reload)); });

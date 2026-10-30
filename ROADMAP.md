@@ -148,3 +148,7 @@ Podpage kostet 65 $/Monat (ca. 780 $/Jahr). Ziel: m365.fm komplett auf dub.m365.
 ## Oberflächen-Übersetzung über den Worker (gebaut)
 - Der Worker übersetzt mit dem Cloudflare-Secret `ANTHROPIC_API_KEY` (Haiku) die Texte aus `ui_js_en.json` (297 Texte) in fr, es, it, nl, pt, pl: je Cron-Lauf 2 Blöcke à 40 Texte (≈ 7–8 Stunden insgesamt), gespeichert in der Tabelle `ui_i18n`, Notaus wie bei der Entitäten-Übersetzung. Der Seitenbau holt sie stündlich über `/api/ui-i18n` und schreibt `assets/ui-<sprache>.js`.
 - Status: `/api/admin/translate` (Felder `ui_done`, `ui_error`). `tools/translate_ui.py` bleibt als lokaler Weg.
+
+## Meine Anmeldungen (gebaut)
+- Im Events-Bereich der Community: Block „Meine Anmeldungen" mit Status (angemeldet/Warteliste), Sichtbarkeit in der Teilnehmerliste, Hinweis zur Übergabe an m365con.net und Abmelden. API `/api/events/my-registrations`, MCP `list_my_registrations`. Die neuen Texte (`events.RQ`) übersetzt der Worker automatisch mit.
+- Offen: Abzeichen/Hinweise in der Kopfzeile („Du hast X Anmeldungen"), iCal-Sammelexport aller eigenen Events.
