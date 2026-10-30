@@ -137,3 +137,10 @@ Podpage kostet 65 $/Monat (ca. 780 $/Jahr). Ziel: m365.fm komplett auf dub.m365.
 - YouTube: Data API `videos.insert`, OAuth-Recht „Videos hochladen". Hürden: Uploads aus ungeprüften API-Projekten bleiben zunächst privat (Audit des API-Projekts nötig, kann Wochen dauern); Kontingent ca. 1.600 von 10.000 Einheiten pro Upload und Tag (≈ 6 Videos/Tag, mehr nur per Antrag).
 - Ausführung nicht im Cloudflare-Worker (große Dateien), sondern in GitHub Actions oder lokal, ähnlich dem Dub-Downloader.
 - Reihenfolge: nach der Konferenz; vorher Google-Projekt und Audit-Antrag anstoßen, weil die Wartezeit der Engpass ist.
+
+## Mehrsprachigkeit Stufe 1 (gebaut)
+- Community-Seiten (Mitglieder, Firmen, Events, Entitäten) gibt es zusätzlich auf fr, es, it, nl, pt, pl (`site_i18n.py`, Texte in `data/ui_i18n.json`). Oberfläche übersetzt; Inhalte ohne Übersetzung fallen auf Englisch zurück; Seiten dieser Sprachen sind `noindex` und stehen nicht in der Sitemap.
+- Offen: JS-Oberflächen (`assets/*.js`) in den neuen Sprachen, Texte im Code mit `if lang == "de"` (ca. 25 Stellen, derzeit englisch), Entitäten-Beschreibungen/Inhalte per MCP/Stapel, weitere 11 Sprachen, hreflang erst wenn Inhalte echt übersetzt sind.
+
+## Speaker-Verknüpfung (gebaut)
+- Vom Veranstalter importierte Speaker (M365Con-Programm) bekommen einen Verknüpfungslink (Token). Der Speaker meldet sich an, legt sein öffentliches Profil an und verbindet es per Link; danach erscheinen seine Sessions auf dem Profil und bestätigen seine Expertise. Kopierbutton im Event-Editor.

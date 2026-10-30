@@ -7,6 +7,7 @@ Basis-URL (z. B. eigene Domain):  SITE_BASE=https://international.m365.fm python
 import site_learn as LRN
 import site_press as PRS
 import site_entities as ENT
+from site_i18n import COMM_LANGS
 import site_members as MEM
 import site_events as EVT
 import site_mcp as MCPS
@@ -1108,7 +1109,7 @@ def build():
         ENT.FAQ.setdefault(_x["eid"], []).append(_x)
     ENT.CLAIMS.update({c["eid"]: c["handle"] for c in _cl}); MEM.CLAIMED.update({c["handle"]: c["eid"] for c in _cl})
     ENT.build(_ctx, lambda lang: LRN.gloss_links(lang, BASE), MEM.experts_index(_people, _orgs), _ep_find)
-    MEM.build(_ctx, _people, _orgs, extra={l: EVT.blocks(BASE, _events, l) for l in ("en", "de")})
+    MEM.build(_ctx, _people, _orgs, extra={l: EVT.blocks(BASE, _events, l) for l in COMM_LANGS})
     EVT.build(_ctx, _events, _people, _orgs)
     MCPS.build(_ctx)
 

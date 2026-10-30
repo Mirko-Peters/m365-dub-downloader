@@ -1,5 +1,6 @@
 """Mitglieder- und Firmenverzeichnis: oeffentliche Experten-Profile (nur Opt-in) mit Schema.org-Verknuepfung zu den Entitaeten."""
 import json
+from site_i18n import COMM_LANGS, pfx, pfx2, overlay
 from datetime import datetime, timezone
 from site_learn import ENTS, esc, _fetch_json, LCSS
 from site_entities import TL, eurl, eid_of
@@ -38,7 +39,7 @@ LIVEMERGE = r'''(function(){var ul=document.querySelector(".mb-list");if(!ul||!w
 
 
 def purl(BASE, lang, kind, h):
-    return f"{BASE}{'/de' if lang == 'de' else ''}/community/{kind}/{h}/"
+    return f"{BASE}{pfx(lang)}/community/{kind}/{h}/"
 
 
 REL = {"colleague": ("Colleague", "Kollege/Kollegin"), "manager": ("Manager", "Führungskraft"), "report": ("Direct report", "Mitarbeiter:in"), "client": ("Client", "Kunde/Kundin"), "trainer": ("Trainer", "Trainer:in"),
@@ -195,9 +196,9 @@ def build(g, people, orgs, extra=None):
     def chan_ul(x):
         return '<ul>' + "".join(f'<li><a href="{esc(c["url"])}" rel="me nofollow ugc noopener" target="_blank">{esc(KIND.get(c["kind"], c["kind"]))}</a> <span class="mut">{esc(c["url"].replace("https://", "").rstrip("/")[:60])}</span></li>' for c in x.get("channels", [])) + "</ul>" if x.get("channels") else ""
 
-    for lang in ("en", "de"):
-        s = S[lang]; li = 0 if lang == "en" else 1; noidx = lang == "de"
-        croot = f"{BASE}/community/" if lang == "en" else f"{BASE}/de/community/"
+    for lang in COMM_LANGS:
+        s = S[lang]; li = 1 if lang == "de" else 0; noidx = lang != "en"
+        croot = f"{BASE}{pfx(lang)}/community/"
         # ---- Personen-Seiten ----
         for p in people:
             _tr = (p.get("i18n") or {}).get(lang) or {}   # Profiltexte in der Sprache der Seite, sonst Original
@@ -233,7 +234,7 @@ def build(g, people, orgs, extra=None):
                           + rec_html(p, lang, li, pb) + (f'<h2>{esc(s["contrib"])}</h2>{contrib}' if contrib else "") + ((extra or {}).get(lang, {}).get("u", {}).get(p["handle"], "")) + live_js + css)
             node = person_ld(BASE, p, ob)
             ld = [{"@context": "https://schema.org", "@type": "ProfilePage", "@id": purl(BASE, "en", "u", p["handle"]) + "#profile", "url": u, "name": p["name"], "inLanguage": lang, "dateModified": TODAY, "mainEntity": node}]
-            write(f"{'de/' if lang == 'de' else ''}community/u/{p['handle']}/index.html", page(lang, f'{p["name"]} – {p.get("headline") or s["members"]} | M365.FM', (p.get("headline") or p.get("about") or "")[:155], u, b, None, ld, og_type="profile", extra_head=LCSS, noindex=noidx))
+            write(f"{pfx2(lang)}community/u/{p['handle']}/index.html", page(lang, f'{p["name"]} – {p.get("headline") or s["members"]} | M365.FM', (p.get("headline") or p.get("about") or "")[:155], u, b, None, ld, og_type="profile", extra_head=LCSS, noindex=noidx))
             if not noidx:
                 sitemap.append((u, TODAY, None))
         # ---- Firmen-Seiten ----
@@ -251,7 +252,7 @@ def build(g, people, orgs, extra=None):
                           + (f'<h2>{esc(s["expertise"])}</h2>{exp_ul(o, lang, li, s)}' if o.get("expertise") else "") + (f'<h2>{esc(s["team"])}</h2>{mem}' if mem else "")
                           + (f'<h2>{esc(s["latest"])}</h2>{items_ul(o)}' if o.get("items") else "") + (f'<h2>{esc(s["channels"])}</h2>{chan_ul(o)}' if o.get("channels") else "") + ((extra or {}).get(lang, {}).get("c", {}).get(o["handle"], "")) + live_js + css)
             ld = [{"@context": "https://schema.org", "@type": "ProfilePage", "@id": purl(BASE, "en", "c", o["handle"]) + "#profile", "url": u, "name": o["name"], "inLanguage": lang, "dateModified": TODAY, "mainEntity": org_ld(BASE, o, pb)}]
-            write(f"{'de/' if lang == 'de' else ''}community/c/{o['handle']}/index.html", page(lang, f'{o["name"]} – {o.get("tagline") or s["companies"]} | M365.FM', (o.get("tagline") or o.get("about") or "")[:155], u, b, None, ld, og_type="profile", extra_head=LCSS, noindex=noidx))
+            write(f"{pfx2(lang)}community/c/{o['handle']}/index.html", page(lang, f'{o["name"]} – {o.get("tagline") or s["companies"]} | M365.FM', (o.get("tagline") or o.get("about") or "")[:155], u, b, None, ld, og_type="profile", extra_head=LCSS, noindex=noidx))
             if not noidx:
                 sitemap.append((u, TODAY, None))
         # ---- Verzeichnisse ----
@@ -267,6 +268,10 @@ def build(g, people, orgs, extra=None):
             b = shell(lang, f'<h1>{esc(title)}</h1><p class="mut">{esc(intro)}</p><p><a class="btn main" href="{croot}">{esc(s["join"])}</a></p><div role="group" aria-label="{esc(s["filter"])}">{fb}</div><ul class="mb-list">{cards}</ul>{feed}{fjs}{lm}{live_js}{css}')
             ld = [{"@context": "https://schema.org", "@type": "CollectionPage", "name": title, "url": ru, "description": intro, "mainEntity": {"@type": "ItemList", "numberOfItems": len(lst), "itemListElement":
                    [{"@type": "ListItem", "position": i + 1, "item": {"@id": f"{purl(BASE, 'en', pk, it['handle'])}#{'person' if pk == 'u' else 'org'}"}} for i, it in enumerate(lst)]}}]
-            write(f"{'de/' if lang == 'de' else ''}community/{kind}/index.html", page(lang, f'{title} – M365.FM', intro, ru, b, None, ld, og_type="website", extra_head=LCSS, noindex=noidx))
+            write(f"{pfx2(lang)}community/{kind}/index.html", page(lang, f'{title} – M365.FM', intro, ru, b, None, ld, og_type="website", extra_head=LCSS, noindex=noidx))
             if not noidx:
                 sitemap.append((ru, TODAY, None))
+
+
+overlay("members.S", S)
+overlay("members.RS", RS)

@@ -1,5 +1,6 @@
 """Entitaetsdatenbank fuer das Microsoft-Oekosystem: Seiten, JSON-Exporte, Schema.org-Graph."""
 import json
+from site_i18n import COMM_LANGS, pfx, pfx2, overlay
 from pathlib import Path
 from site_learn import (ENTS, esc, ent_names, fetch_wiki, wiki_block, WCSS, LCSS, WT, GLOSS, GLOSS_JS)
 
@@ -19,7 +20,7 @@ ORGPAGES = {}   # eid -> Firmen-Handle
 
 
 def eurl(BASE, lang, i):
-    return f"{BASE}/entity/{i}/" if lang == "en" else f"{BASE}/de/entity/{i}/"
+    return f"{BASE}{pfx(lang)}/entity/{i}/"
 
 
 def eid_of(BASE, i):
@@ -147,11 +148,11 @@ def ent_ld(BASE, e, lang, glossary_set=None):
 def claim_html(eid, lang):
     oh = ORGPAGES.get(eid)
     if oh and not CLAIMS.get(eid):
-        return f'<p><a href="{BASE_}{"/de" if lang == "de" else ""}/community/c/{oh}/">{"Firmenprofil auf M365.FM" if lang == "de" else "Company profile on M365.FM"}</a></p>'
+        return f'<p><a href="{BASE_}{pfx(lang)}/community/c/{oh}/">{"Firmenprofil auf M365.FM" if lang == "de" else "Company profile on M365.FM"}</a></p>'
     h = CLAIMS.get(eid)
     if not h:
         return ""
-    return f'<p><a href="{BASE_}{"/de" if lang == "de" else ""}/community/u/{h}/">{"Profil auf M365.FM (gepflegt von der Person)" if lang == "de" else "Profile on M365.FM (maintained by the person)"}</a></p>'
+    return f'<p><a href="{BASE_}{pfx(lang)}/community/u/{h}/">{"Profil auf M365.FM (gepflegt von der Person)" if lang == "de" else "Profile on M365.FM (maintained by the person)"}</a></p>'
 
 
 OLD = {"en": ("outdated", "Also show outdated entries (e.g. past events, replaced products)", "No longer current.", "Replaced by:"),
@@ -187,11 +188,11 @@ def build(g, wiki_links, experts_by_ent, ep_find):
     sitemap.append((f"{BASE}/entities.jsonld", TODAY, None))
 
     cfg_t = lambda lang: S[lang]
-    for lang in ("en", "de"):
-        s = S[lang]; li = 0 if lang == "en" else 1
+    for lang in COMM_LANGS:
+        s = S[lang]; li = 1 if lang == "de" else 0
         stat = fetch_wiki(api, lang)
-        root = f"{BASE}/entity/" if lang == "en" else f"{BASE}/de/entity/"
-        rel = "entity" if lang == "en" else "de/entity"
+        root = f"{BASE}{pfx(lang)}/entity/"
+        rel = f"{pfx2(lang)}entity"
         # Index mit Typ-Filter
         def card(e):
             d = (e["desc"].get(lang) or e["desc"].get("en") or "")[:140]
@@ -211,8 +212,8 @@ def build(g, wiki_links, experts_by_ent, ep_find):
                "hasDefinedTerm": [{"@id": eid_of(BASE, e["id"])} for e in _terms]},
               {"@context": "https://schema.org", "@type": "CollectionPage", "name": s["entities"], "url": root, "description": s["intro"], "mainEntity": {"@type": "ItemList", "numberOfItems": len(recs), "itemListElement":
                [{"@type": "ListItem", "position": i + 1, "item": {"@id": eid_of(BASE, e["id"])}} for i, e in enumerate(sorted(recs, key=lambda x: x["name"].lower()))]}}]
-        write(f"{rel}/index.html", page(lang, f'{s["entities"]} – M365.FM', s["intro"], root, body, None, ld, og_type="website", extra_head=LCSS + WCSS + css))
-        sitemap.append((root, TODAY, None))
+        write(f"{rel}/index.html", page(lang, f'{s["entities"]} – M365.FM', s["intro"], root, body, None, ld, og_type="website", extra_head=LCSS + WCSS + css, noindex=lang not in ("en", "de")))
+        if lang in ("en", "de"): sitemap.append((root, TODAY, None))
 
         # Einzelseiten
         for e in recs:
@@ -244,12 +245,12 @@ def build(g, wiki_links, experts_by_ent, ep_find):
             ft = '<table class="en-facts"><tbody>' + "".join(f'<tr><th scope="row">{esc(a)}</th><td>{b}</td></tr>' for a, b in facts) + "</tbody></table>"
             evl = ""
             if e["id"] in EVENTS:
-                ev_ = EVENTS[e["id"]]; evl = f'<p><a class="btn" href="{BASE}{"/de" if lang == "de" else ""}/community/events/{ev_["handle"]}/">{"Zum Event" if lang == "de" else "Go to the event"}: {esc(ev_["title"])}</a></p>'
+                ev_ = EVENTS[e["id"]]; evl = f'<p><a class="btn" href="{BASE}{pfx(lang)}/community/events/{ev_["handle"]}/">{"Zum Event" if lang == "de" else "Go to the event"}: {esc(ev_["title"])}</a></p>'
                 _ses = ev_.get("sessions", []); _spk = {}
                 for _se in _ses:
                     for _x in _se.get("speakers", []):
                         _spk.setdefault(_x["n"], _x)
-                _pre = f'{BASE}{"/de" if lang == "de" else ""}/community'
+                _pre = f'{BASE}{pfx(lang)}/community'
                 def _sl(x):
                     return f'<a href="{_pre}/u/{x["h"]}/">{esc(x["n"])}</a>' if x.get("h") else esc(x["n"])
                 if _ses:
@@ -258,19 +259,19 @@ def build(g, wiki_links, experts_by_ent, ep_find):
                     evl += f'<h2>{"Speaker" if lang == "de" else "Speakers"} ({len(_spk)})</h2><p>' + ", ".join(_sl(x) for x in sorted(_spk.values(), key=lambda a: a["n"].lower())[:200]) + "</p>"
             _hit = [(_ev, _se) for _ev in EVENTS.values() for _se in _ev.get("sessions", []) if e["id"] in (_se.get("topics") or [])]
             if _hit and e["id"] not in EVENTS:   # Sessions zu diesem Thema (Gegenrichtung zu den Themen an der Session)
-                _p2 = f'{BASE}{"/de" if lang == "de" else ""}/community'
+                _p2 = f'{BASE}{pfx(lang)}/community'
                 _spl = lambda x: f'<a href="{_p2}/u/{x["h"]}/">{esc(x["n"])}</a>' if x.get("h") else esc(x["n"])
                 evl += f'<h2>{"Sessions zu diesem Thema" if lang == "de" else "Sessions on this topic"} ({len(_hit)})</h2><ul>' + "".join(
                     f'<li><a href="{_p2}/events/{_ev["handle"]}/">{esc(_se["title"])}</a> <span class="mut">· {", ".join(_spl(x) for x in _se.get("speakers", []))} · {esc(_ev["title"])}</span></li>' for _ev, _se in _hit[:30]) + "</ul>"
             if not e["desc"].get(lang if lang in ("en", "de") else "en"):
                 evl += f'<p class="mut"><a href="#en-edit">{"Diese Kurzbeschreibung gibt es noch nicht in deiner Sprache – gern ergänzen." if lang == "de" else "This short description is not yet available in your language – feel free to add it."}</a></p>'
-            gloss = f'<p class="mut"><a href="{BASE}/{"de/" if lang == "de" else ""}glossary/">{esc(s["glossary"])}</a></p>' if e["id"] in gl_ids else ""
+            gloss = f'<p class="mut"><a href="{BASE}/{pfx2(lang)}glossary/">{esc(s["glossary"])}</a></p>' if e["id"] in gl_ids else ""
             eps = ep_find(e) if lang == "de" else []
             eb = (f'<h2>{esc(s["eps"].format(t=e["name"]))}</h2><ul>' + "".join(f'<li><a href="{url_of(x)}">{esc(g["anchor_title"](x["e"]["title"]))}</a></li>' for x in eps) + "</ul>") if eps else ""
             ex = experts_by_ent.get(e["id"], [])
             ehtml = ""
             if ex:
-                ehtml = "<ul>" + "".join(f'<li><a href="{BASE}{"/de" if lang == "de" else ""}/community/{"u" if x["kind"] == "u" else "c"}/{x["handle"]}/">{esc(x["name"])}</a>{" ✔" if x.get("verified") else ""}<span class="mut"> · {esc(x.get("headline", "")[:80])}</span></li>' for x in ex[:12]) + "</ul>"
+                ehtml = "<ul>" + "".join(f'<li><a href="{BASE}{pfx(lang)}/community/{"u" if x["kind"] == "u" else "c"}/{x["handle"]}/">{esc(x["name"])}</a>{" ✔" if x.get("verified") else ""}<span class="mut"> · {esc(x.get("headline", "")[:80])}</span></li>' for x in ex[:12]) + "</ul>"
             elif e["type"] in ("product", "platform", "concept", "category"):
                 ehtml = f'<p class="mut">{esc(s["noexperts"])}</p>'
             oldbanner = ""
@@ -295,5 +296,10 @@ def build(g, wiki_links, experts_by_ent, ep_find):
                    "breadcrumb": {"@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": s["entities"], "item": root}, {"@type": "ListItem", "position": 2, "name": e["name"], "item": u}]}}]
             if _fq:
                 ld.append({"@context": "https://schema.org", "@type": "FAQPage", "@id": u + "#faq", "mainEntity": [{"@type": "Question", "name": x["q"], "acceptedAnswer": {"@type": "Answer", "text": x["a"]}} for x in _fq]})
-            write(f"{rel}/{e['id']}/index.html", page(lang, f'{e["name"]} – {TL[e["type"]][li]} | M365.FM', d[:155], u, b, None, ld, og_type="website", extra_head=LCSS + css))
-            sitemap.append((u, TODAY, None))
+            write(f"{rel}/{e['id']}/index.html", page(lang, f'{e["name"]} – {TL[e["type"]][li]} | M365.FM', d[:155], u, b, None, ld, og_type="website", extra_head=LCSS + css, noindex=lang not in ("en", "de")))
+            if lang in ("en", "de"): sitemap.append((u, TODAY, None))
+
+
+overlay("entities.S", S)
+for _l in COMM_LANGS:
+    OLD.setdefault(_l, OLD["en"])

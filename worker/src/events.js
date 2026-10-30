@@ -88,7 +88,7 @@ async function speakersCheck(db, list, prev, selfHandle) {
       const p = await db.prepare("SELECT u.name FROM profiles p JOIN users u ON u.id=p.user_id WHERE p.handle=? AND p.public=1").bind(h).first();
       if (!p) return null;
       out.push({ h, n: keep?.n || n || p.name, ...(e ? { e } : keep?.e ? { e: keep.e } : {}), s: keep?.s === "confirmed" || h === selfHandle ? "confirmed" : keep?.s === "declined" ? "declined" : "invited" });
-    } else if (n.length >= 2) out.push({ n, ...(e ? { e } : keep?.e ? { e: keep.e } : {}), s: keep?.s === "confirmed" ? "confirmed" : "invited", ...(keep?.t ? { t: keep.t } : { t: rndToken() }) });
+    } else if (n.length >= 2) out.push({ n, ...(e ? { e } : keep?.e ? { e: keep.e } : {}), s: keep?.s === "confirmed" ? "confirmed" : "invited", ...(keep?.o ? { o: 1 } : {}), ...(keep?.t ? { t: keep.t } : { t: rndToken() }) });
   }
   return out;
 }
@@ -171,6 +171,18 @@ Mirko Peters is a Microsoft MVP, podcaster, author and conference organizer focu
           JSON.stringify((x.speaker_ids || []).map((i) => sp[i]).filter(Boolean).map((p) => (pm.has(String(p.name).toLowerCase()) ? { h: pm.get(String(p.name).toLowerCase()), n: String(p.name).slice(0, 80), s: "invited" } : { n: String(p.name).slice(0, 80), s: "confirmed", o: 1 }))), owner.id, t));
       for (let i = 0; i < ops.length; i += 40) await db.batch(ops.slice(i, i + 40));
     } catch (e) { /* naechster Cron-Lauf versucht es erneut */ }
+  }
+  if (evr) {   // Verknuepfungs-Links: vom Veranstalter importierte Speaker (ohne Profil) bekommen ein Token, mit dem sie ihr Profil per Link verbinden koennen
+    try {
+      const rows = (await db.prepare("SELECT id,speakers FROM event_sessions WHERE event_id=? AND speakers LIKE '%\"o\":1%'").bind(evr.id).all()).results || [];
+      const ops = [];
+      for (const r of rows) {
+        const sp = parse(r.speakers, []); let ch = false;
+        for (const x of sp) if (x.o && !x.h && !x.t) { x.t = rndToken(); ch = true; ops.push(db.prepare("INSERT OR IGNORE INTO speaker_invites(token,event_id,session_id,name,eid,created) VALUES(?,?,?,?,?,?)").bind(x.t, evr.id, r.id, x.n, x.e || "", now())); }
+        if (ch) ops.push(db.prepare("UPDATE event_sessions SET speakers=? WHERE id=?").bind(JSON.stringify(sp), r.id));
+      }
+      for (let i = 0; i < ops.length; i += 40) await db.batch(ops.slice(i, i + 40));
+    } catch (e) { /* naechster Lauf */ }
   }
   if (evr) {   // Themen (Entitaeten) der Programm-Sessions nachtragen, solange eine Session noch keine hat
     try {

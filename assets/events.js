@@ -28,7 +28,7 @@
   function spk(list) { return csv(list).map(function (x) { var p = x.split("|"), e = (p[1] || "").trim().toLowerCase(); if (/^[a-z0-9][a-z0-9-]{2,29}$/.test(p[0].trim()) && !e) return { h: p[0].trim() }; return e ? { n: p[0].trim(), e: e } : { n: p[0].trim() }; }); }
   function spkStr(l) { return (l || []).map(function (x) { return x.h || (x.n + (x.e ? "|" + x.e : "")); }).join(", "); }
   function spkLabel(l) { return (l || []).map(function (x) { return (x.n || x.h) + (x.s && x.s !== "confirmed" ? " (" + (x.s === "declined" ? Q.declined : Q.asked) + ")" : ""); }).join(", "); }
-  function invLinks(l, st) { var out = []; (l || []).forEach(function (x) { if (x.t && x.s !== "confirmed") { var url = location.origin + location.pathname + "?invite=" + x.t + "#c-events", note = h("span", { class: "cmut" }), em = h("input", { type: "email", maxlength: 120, placeholder: Q.mailto, "aria-label": Q.mailto });
+  function invLinks(l, st) { var out = []; (l || []).forEach(function (x) { if (x.t && (x.s !== "confirmed" || x.o)) { var url = location.origin + location.pathname + "?invite=" + x.t + "#c-events", note = h("span", { class: "cmut" }), em = h("input", { type: "email", maxlength: 120, placeholder: Q.mailto, "aria-label": Q.mailto });
     function cp(txt, el) { try { navigator.clipboard.writeText(txt); el.textContent = Q.copied; } catch (er) { window.prompt(Q.invlink, txt); } }
     out.push(h("div", { class: "cmut" }, [x.n + ": ",
       h("button", { type: "button", class: "btn", text: Q.invlink, onclick: function (e) { cp(url, e.target); } }), " ",

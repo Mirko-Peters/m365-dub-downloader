@@ -1,5 +1,6 @@
 """Events und Sessions: oeffentliche Event-Seiten mit Schema.org (Event, subEvent, performer, organizer, about -> Entitaeten)."""
 import json
+from site_i18n import COMM_LANGS, pfx, pfx2, overlay
 from datetime import datetime
 from site_learn import ENTS, esc, _fetch_json, LCSS
 from site_entities import eurl, eid_of
@@ -18,7 +19,7 @@ def fetch_events(api):
 
 
 def eurl_(BASE, lang, h):
-    return f"{BASE}{'/de' if lang == 'de' else ''}/community/events/{h}/"
+    return f"{BASE}{pfx(lang)}/community/events/{h}/"
 
 
 def fdate(s, lang):
@@ -168,14 +169,14 @@ def build(g, events, people, orgs):
     shell = lambda lang, b: f'{header(lang, "")}<main class="wrap" style="max-width:56em">{b}</main>{footer(lang) if lang in LANGS else footer_en()}'
     pb = {p["handle"]: p for p in people}; ob = {o["handle"]: o for o in orgs}
     css = '<style>.ev-card{list-style:none;padding:.8em 0;border-bottom:1px solid var(--bd)}.ev-list{padding:0}.ev-s{padding:.7em 0;border-bottom:1px solid var(--bd)}.ev-s h3{margin:.1em 0}.ev-tag{display:inline-block;border:1px solid var(--bd);border-radius:2em;padding:.1em .7em;margin:.15em .3em .15em 0;font-size:.85em}</style>'
-    for lang in ("en", "de"):
-        s = S[lang]; noidx = lang == "de"; croot = f"{BASE}/community/" if lang == "en" else f"{BASE}/de/community/"
+    for lang in COMM_LANGS:
+        s = S[lang]; noidx = lang != "en"; croot = f"{BASE}{pfx(lang)}/community/"
         for ev in events:
             u = eurl_(BASE, lang, ev["handle"]); org = ev.get("organizer") or {}
             if org.get("kind") == "o" and org.get("handle") in ob:
-                oh = f'<a href="{BASE}{"/de" if lang == "de" else ""}/community/c/{org["handle"]}/">{esc(org["name"])}</a>'
+                oh = f'<a href="{BASE}{pfx(lang)}/community/c/{org["handle"]}/">{esc(org["name"])}</a>'
             elif org.get("kind") == "u" and org.get("handle") in pb:
-                oh = f'<a href="{BASE}{"/de" if lang == "de" else ""}/community/u/{org["handle"]}/">{esc(org["name"])}</a>'
+                oh = f'<a href="{BASE}{pfx(lang)}/community/u/{org["handle"]}/">{esc(org["name"])}</a>'
             else:
                 oh = esc(org.get("name", ""))
             facts = [(s["when"], esc(span(ev, lang))), (s["where"], esc({"online": s["online"], "onsite": s["onsite"], "hybrid": s["hybrid"]}[ev["mode"]] + (" · " + ev["location"] if ev.get("location") else "") + (" · " + ev["country"] if ev.get("country") else ""))),
@@ -190,10 +191,10 @@ def build(g, events, people, orgs):
             for kd in ("sponsor", "media"):
                 ps = [x for x in ev.get("partners", []) if x["kind"] == kd]
                 if ps:
-                    pt += f'<h2>{pl[kd]}</h2><ul>' + "".join(f'<li>' + (f'<a href="{BASE}{"/de" if lang == "de" else ""}/community/c/{x["handle"]}/">{esc(x["name"])}</a>' if x.get("handle") in ob else esc(x["name"])) + (f' <span class="mut">· {esc(x["level"])}</span>' if x.get("level") else "") + '</li>' for x in ps) + "</ul>"
+                    pt += f'<h2>{pl[kd]}</h2><ul>' + "".join(f'<li>' + (f'<a href="{BASE}{pfx(lang)}/community/c/{x["handle"]}/">{esc(x["name"])}</a>' if x.get("handle") in ob else esc(x["name"])) + (f' <span class="mut">· {esc(x["level"])}</span>' if x.get("level") else "") + '</li>' for x in ps) + "</ul>"
             ss = []
             for se in ev.get("sessions", []):
-                spk = ", ".join((f'<a href="{BASE}{"/de" if lang == "de" else ""}/community/u/{x["h"]}/">{esc(x["n"])}</a>' if x.get("h") in pb else f'<a href="{eurl(BASE, lang, x["e"])}">{esc(x["n"])}</a>' if x.get("e") in ENTS else esc(x["n"])) for x in se.get("speakers", []))
+                spk = ", ".join((f'<a href="{BASE}{pfx(lang)}/community/u/{x["h"]}/">{esc(x["n"])}</a>' if x.get("h") in pb else f'<a href="{eurl(BASE, lang, x["e"])}">{esc(x["n"])}</a>' if x.get("e") in ENTS else esc(x["n"])) for x in se.get("speakers", []))
                 meta = " · ".join(esc(v) for v in [fdate(se["start"], lang) if se.get("start") else "", f'{s["room"]} {se["room"]}' if se.get("room") else "", f'{s["track"]} {se["track"]}' if se.get("track") else "", f'{s["level"]} {se["level"]}' if se.get("level") else "", se.get("lang", "")] if v)
                 st = "".join(f'<a class="ev-tag" href="{eurl(BASE, lang, e)}">{esc(ENTS[e]["name"])}</a>' for e in se.get("topics", []) if e in ENTS)
                 ss.append(f'<div class="ev-s"><h3>{esc(se["title"])}</h3><p class="mut">{meta}{" · " if meta and spk else ""}{spk}{(" · " + str(se["speakers_open"]) + " " + s["tbc"]) if se.get("speakers_open") else ""}</p>' + (f'<p style="white-space:pre-line">{esc(se["abstract"])}</p>' if se.get("abstract") else "") + st
@@ -204,7 +205,7 @@ def build(g, events, people, orgs):
                       + pt + f'<h2>{"Anmeldung" if lang == "de" else "Registration"}</h2><div id="ev-reg" data-e="{esc(ev["handle"])}"></div><script>' + REGJS.replace("%API%", api).replace("%T%", json.dumps(REGT[lang], ensure_ascii=False)).replace("%CROOT%", croot) + '</script>'
                       + f'<p><a class="btn" href="{croot}?propose={esc(ev["handle"])}#c-events">{esc(s["propose"])}</a></p>' + css)
             ld = [{"@context": "https://schema.org", **event_ld(BASE, ev, pb, ob)}]
-            write(f"{'de/' if lang == 'de' else ''}community/events/{ev['handle']}/index.html", page(lang, f'{ev["title"]} – {s["events"]} | M365.FM', (ev.get("summary") or ev.get("about") or "")[:155], u, b, None, ld, og_type="website", extra_head=LCSS, noindex=noidx))
+            write(f"{pfx2(lang)}community/events/{ev['handle']}/index.html", page(lang, f'{ev["title"]} – {s["events"]} | M365.FM', (ev.get("summary") or ev.get("about") or "")[:155], u, b, None, ld, og_type="website", extra_head=LCSS, noindex=noidx))
             if lang == "en":
                 write(f"community/events/{ev['handle']}/event.ics", ics_for(ev, BASE))
             else:
@@ -219,6 +220,10 @@ def build(g, events, people, orgs):
                   + (f'<h2>{esc(s["upcoming"])}</h2><ul class="ev-list">{li(up)}</ul>' if up else "") + (f'<details class="ev-past"><summary><h2 style="display:inline">{esc(s["past"])} ({len(pa)})</h2></summary><ul class="ev-list">{li(pa)}</ul></details>' if pa else "") + ("" if events else f'<p class="mut">{esc(s["none"])}</p>') + "<script>" + EVLIVE.replace("%API%", api).replace("%BASE%", eurl_(BASE, lang, "")) + "</script>" + css)
         ld = [{"@context": "https://schema.org", "@type": "CollectionPage", "name": s["events"], "url": ru, "description": s["intro"], "mainEntity": {"@type": "ItemList", "numberOfItems": len(events),
               "itemListElement": [{"@type": "ListItem", "position": i + 1, "item": {"@id": eurl_(BASE, "en", e["handle"]) + "#event"}} for i, e in enumerate(up + pa)]}}]
-        write(f"{'de/' if lang == 'de' else ''}community/events/index.html", page(lang, f'{s["events"]} – M365.FM', s["intro"], ru, b, None, ld, og_type="website", extra_head=LCSS, noindex=noidx))
+        write(f"{pfx2(lang)}community/events/index.html", page(lang, f'{s["events"]} – M365.FM', s["intro"], ru, b, None, ld, og_type="website", extra_head=LCSS, noindex=noidx))
         if not noidx:
             sitemap.append((ru, TODAY, None))
+
+
+overlay("events.S", S)
+overlay("events.REGT", REGT)
