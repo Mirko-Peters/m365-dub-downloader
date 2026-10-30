@@ -1,10 +1,9 @@
 /* Bewegung und Effekte (fx.js). Alles aus bei reduzierter Bewegung. */
-#fx-graph{position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none;opacity:.9}
+#fx-graph{position:fixed;inset:0;width:100%;height:100%;z-index:-1;pointer-events:none;opacity:.9}
 #fx-bar{position:fixed;left:0;top:0;height:3px;width:100%;transform-origin:0 50%;transform:scaleX(0);background:linear-gradient(90deg,var(--ac,#b4233c),var(--fg,#141210));z-index:9999;pointer-events:none}
-.fx-on main,.fx-on .wrap,.fx-on header,.fx-on footer{position:relative;z-index:1}
 /* Milchglas ueber dem Hintergrundgraph: Inhalt bleibt ruhig lesbar, der Graph lebt am Rand und scheint weich durch */
-.fx-on main{-webkit-backdrop-filter:blur(14px) saturate(1.15);backdrop-filter:blur(14px) saturate(1.15);background:color-mix(in srgb,var(--bg,#fff) 68%,transparent);border-radius:14px}
-@supports not (backdrop-filter:blur(1px)){.fx-on main{background:color-mix(in srgb,var(--bg,#fff) 88%,transparent)}}
+.fx-on main,.fx-on .sbar{-webkit-backdrop-filter:blur(14px) saturate(1.15);backdrop-filter:blur(14px) saturate(1.15);background:color-mix(in srgb,var(--bg,#fff) 68%,transparent);border-radius:14px}
+@supports not (backdrop-filter:blur(1px)){.fx-on main,.fx-on .sbar{background:color-mix(in srgb,var(--bg,#fff) 88%,transparent)}}
 .fx-r{opacity:0;transform:translateY(22px);filter:blur(6px);transition:opacity .7s cubic-bezier(.2,.7,.2,1),transform .7s cubic-bezier(.2,.7,.2,1),filter .7s;transition-delay:var(--fx-d,0s)}
 .fx-r.fx-in{opacity:1;transform:none;filter:none}
 .fx-s{position:relative;overflow:hidden}
@@ -17,7 +16,7 @@ h1.fx-h{background:linear-gradient(100deg,var(--fg,#141210) 0%,var(--fg,#141210)
 html.a11y-nomo #fx-graph,html.a11y-nomo #fx-bar{display:none}html.a11y-nomo .fx-r{opacity:1;transform:none;filter:none;transition:none}html.a11y-nomo h1.fx-h{animation:none;background:none;-webkit-text-fill-color:currentColor}
 
 /* Aurora in den Markenfarben: Akzent (--ac), warmes Bernstein und Tinte, sehr langsam driftend; darueber Graph und Milchglas */
-#fx-aurora{position:fixed;inset:-10% -10%;z-index:0;pointer-events:none;overflow:hidden}
+#fx-aurora{position:fixed;inset:-10% -10%;z-index:-1;pointer-events:none;overflow:hidden}
 #fx-aurora i{position:absolute;border-radius:50%;filter:blur(70px);opacity:.34;will-change:transform;mix-blend-mode:normal}
 #fx-aurora i:nth-child(1){width:46vw;height:46vw;left:-6vw;top:-8vw;background:radial-gradient(circle at 40% 40%,var(--ac,#b4233c),transparent 68%);animation:fxa1 38s ease-in-out infinite alternate}
 #fx-aurora i:nth-child(2){width:40vw;height:40vw;right:-8vw;top:18vh;background:radial-gradient(circle at 50% 50%,color-mix(in srgb,var(--ac,#b4233c) 45%,#ffb36b),transparent 68%);animation:fxa2 46s ease-in-out infinite alternate;opacity:.28}
