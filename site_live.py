@@ -66,7 +66,7 @@ def build(g):
         desc = (ent.get("desc") or {}).get(lang) or t["lede"]
         embed = f"https://www.youtube-nocookie.com/embed/live_stream?channel={cid}&autoplay=1&rel=0"
         lead = upcoming[0] if upcoming else (arch[0] if arch else None)
-        player = (f'<div class="lv-hero"><button type="button" id="live-load" class="lv-play" data-src="{esc(embed)}" data-t="{esc(t["h"])}" style="background-image:linear-gradient(#0008,#0008),url({thumb(lead["id"])})" aria-label="{esc(t["load"])}">▶ {esc(t["load"])}</button>'
+        player = (f'<h2>{esc(t["watchh"])}</h2><div class="lv-hero"><button type="button" id="live-load" class="lv-play" data-src="{esc(embed)}" data-t="{esc(t["h"])}" style="background-image:linear-gradient(#0008,#0008),url({thumb(lead["id"])})" aria-label="{esc(t["load"])}">▶ {esc(t["load"])}</button>'
                   f'<p><a class="btn main" href="https://www.youtube.com/@m365show/live" rel="noopener">{esc(t["open"])} ↗</a> <a class="btn" href="https://www.youtube.com/@m365show?sub_confirmation=1" rel="noopener">{esc(t["sub"])}</a></p><p class="mut">{esc(t["watchp"])}</p></div>') if lead else ""
 
         def when(s):
