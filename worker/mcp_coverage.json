@@ -1,0 +1,557 @@
+{
+ "_doc": "Jede API-Route unter worker/src muss hier einem MCP-Tool zugeordnet (tools) oder mit Begründung ausgenommen (skip) sein. tools/check_mcp_coverage.mjs prüft das täglich.",
+ "routes": {
+  "/api/admin/blog": {
+   "skip": "Admin-Funktionen: bewusst nicht per KI-Token; Admin-Listen laufen über list_*_todo, list_event_transfers"
+  },
+  "/api/admin/blog/decide": {
+   "skip": "Admin-Funktionen: bewusst nicht per KI-Token; Admin-Listen laufen über list_*_todo, list_event_transfers"
+  },
+  "/api/admin/cert-queue": {
+   "skip": "Admin-Funktionen: bewusst nicht per KI-Token; Admin-Listen laufen über list_*_todo, list_event_transfers"
+  },
+  "/api/admin/demo": {
+   "skip": "Admin-Funktionen: bewusst nicht per KI-Token; Admin-Listen laufen über list_*_todo, list_event_transfers"
+  },
+  "/api/admin/entity/claim": {
+   "skip": "Admin-Funktionen: bewusst nicht per KI-Token; Admin-Listen laufen über list_*_todo, list_event_transfers"
+  },
+  "/api/admin/entity/claims": {
+   "skip": "Admin-Funktionen: bewusst nicht per KI-Token; Admin-Listen laufen über list_*_todo, list_event_transfers"
+  },
+  "/api/admin/entity/pending": {
+   "skip": "Admin-Funktionen: bewusst nicht per KI-Token; Admin-Listen laufen über list_*_todo, list_event_transfers"
+  },
+  "/api/admin/feed-hide": {
+   "skip": "Admin-Funktionen: bewusst nicht per KI-Token; Admin-Listen laufen über list_*_todo, list_event_transfers"
+  },
+  "/api/admin/podcast": {
+   "skip": "Admin-Funktionen: bewusst nicht per KI-Token; Admin-Listen laufen über list_*_todo, list_event_transfers"
+  },
+  "/api/admin/podcast/poll": {
+   "skip": "Admin-Funktionen: bewusst nicht per KI-Token; Admin-Listen laufen über list_*_todo, list_event_transfers"
+  },
+  "/api/admin/podcast/reject": {
+   "skip": "Admin-Funktionen: bewusst nicht per KI-Token; Admin-Listen laufen über list_*_todo, list_event_transfers"
+  },
+  "/api/admin/points/decide": {
+   "skip": "Admin-Funktionen: bewusst nicht per KI-Token; Admin-Listen laufen über list_*_todo, list_event_transfers"
+  },
+  "/api/admin/points/requests": {
+   "skip": "Admin-Funktionen: bewusst nicht per KI-Token; Admin-Listen laufen über list_*_todo, list_event_transfers"
+  },
+  "/api/admin/reports": {
+   "skip": "Admin-Funktionen: bewusst nicht per KI-Token; Admin-Listen laufen über list_*_todo, list_event_transfers"
+  },
+  "/api/admin/run-daily": {
+   "skip": "Admin-Funktionen: bewusst nicht per KI-Token; Admin-Listen laufen über list_*_todo, list_event_transfers"
+  },
+  "/api/admin/translate": {
+   "skip": "Admin-Funktionen: bewusst nicht per KI-Token; Admin-Listen laufen über list_*_todo, list_event_transfers"
+  },
+  "/api/admin/updates/poll": {
+   "skip": "Admin-Funktionen: bewusst nicht per KI-Token; Admin-Listen laufen über list_*_todo, list_event_transfers"
+  },
+  "/api/admin/users": {
+   "skip": "Admin-Funktionen: bewusst nicht per KI-Token; Admin-Listen laufen über list_*_todo, list_event_transfers"
+  },
+  "/api/admin/verify": {
+   "skip": "Admin-Funktionen: bewusst nicht per KI-Token; Admin-Listen laufen über list_*_todo, list_event_transfers"
+  },
+  "/api/admin/video": {
+   "skip": "Admin-Funktionen: bewusst nicht per KI-Token; Admin-Listen laufen über list_*_todo, list_event_transfers"
+  },
+  "/api/admin/video/poll": {
+   "skip": "Admin-Funktionen: bewusst nicht per KI-Token; Admin-Listen laufen über list_*_todo, list_event_transfers"
+  },
+  "/api/admin/video/reject": {
+   "skip": "Admin-Funktionen: bewusst nicht per KI-Token; Admin-Listen laufen über list_*_todo, list_event_transfers"
+  },
+  "/api/admin/wiki/pending": {
+   "skip": "Admin-Funktionen: bewusst nicht per KI-Token; Admin-Listen laufen über list_*_todo, list_event_transfers"
+  },
+  "/api/blog": {
+   "skip": "Zähler/Listen nur für die Seitenanzeige (Stimmen, Follower) - in list_blog_posts enthalten"
+  },
+  "/api/blog/delete": {
+   "tools": [
+    "delete_blog_post"
+   ]
+  },
+  "/api/blog/export": {
+   "tools": [
+    "list_blog_posts"
+   ]
+  },
+  "/api/blog/follow": {
+   "tools": [
+    "follow_blog_author"
+   ]
+  },
+  "/api/blog/followers": {
+   "skip": "Zähler/Listen nur für die Seitenanzeige (Stimmen, Follower) - in list_blog_posts enthalten"
+  },
+  "/api/blog/following": {
+   "tools": [
+    "list_blog_following"
+   ]
+  },
+  "/api/blog/mine": {
+   "tools": [
+    "list_my_blog_posts"
+   ]
+  },
+  "/api/blog/save": {
+   "tools": [
+    "save_blog_post"
+   ]
+  },
+  "/api/blog/vote": {
+   "tools": [
+    "vote_blog_post"
+   ]
+  },
+  "/api/blog/votes": {
+   "skip": "Zähler/Listen nur für die Seitenanzeige (Stimmen, Follower) - in list_blog_posts enthalten"
+  },
+  "/api/cert-endorse": {
+   "tools": [
+    "endorse_certification"
+   ]
+  },
+  "/api/comments": {
+   "skip": "Seiten-Infrastruktur (kein Nutzerfunktion)"
+  },
+  "/api/curator": {
+   "skip": "Seiten-Infrastruktur (kein Nutzerfunktion)"
+  },
+  "/api/edits/inbox": {
+   "tools": [
+    "list_my_edit_inbox"
+   ]
+  },
+  "/api/edits/pending": {
+   "tools": [
+    "list_pending_edits"
+   ]
+  },
+  "/api/edits/vote": {
+   "tools": [
+    "vote_edit"
+   ]
+  },
+  "/api/email/confirm": {
+   "skip": "Seiten-Infrastruktur (kein Nutzerfunktion)"
+  },
+  "/api/email/subscribe": {
+   "skip": "Seiten-Infrastruktur (kein Nutzerfunktion)"
+  },
+  "/api/email/unsub": {
+   "skip": "Seiten-Infrastruktur (kein Nutzerfunktion)"
+  },
+  "/api/endorse": {
+   "tools": [
+    "endorse_expertise"
+   ]
+  },
+  "/api/entity": {
+   "tools": [
+    "create_entity",
+    "propose_entity_edit"
+   ]
+  },
+  "/api/entity/claim": {
+   "tools": [
+    "claim_entity"
+   ]
+  },
+  "/api/entity/claim/mine": {
+   "tools": [
+    "list_my_entity_claims"
+   ]
+  },
+  "/api/entity/claims": {
+   "skip": "Redaktions-Prüfung der Beanspruchungen (Admin)"
+  },
+  "/api/entity/export": {
+   "tools": [
+    "search_entities",
+    "get_entity"
+   ]
+  },
+  "/api/event": {
+   "tools": [
+    "list_my_events",
+    "save_event",
+    "delete_event"
+   ]
+  },
+  "/api/events/ask-sponsor": {
+   "tools": [
+    "ask_event_sponsor"
+   ]
+  },
+  "/api/events/export": {
+   "tools": [
+    "list_events",
+    "get_event"
+   ]
+  },
+  "/api/events/for-sponsors": {
+   "tools": [
+    "list_events_for_sponsors"
+   ]
+  },
+  "/api/events/mine": {
+   "tools": [
+    "list_my_events",
+    "save_event",
+    "delete_event"
+   ]
+  },
+  "/api/events/my-registrations": {
+   "tools": [
+    "list_my_registrations",
+    "register_for_event"
+   ]
+  },
+  "/api/events/partners-mine": {
+   "tools": [
+    "list_my_event_partners",
+    "manage_event_partner"
+   ]
+  },
+  "/api/events/seed-m365con": {
+   "skip": "Einmaliges Einspielen der M365-Con-Daten (Admin)"
+  },
+  "/api/events/sponsors": {
+   "tools": [
+    "list_event_sponsors"
+   ]
+  },
+  "/api/feed": {
+   "skip": "Zähler/Listen nur für die Seitenanzeige (Stimmen, Follower) - in list_blog_posts enthalten"
+  },
+  "/api/feed/export": {
+   "tools": [
+    "list_feed_items"
+   ]
+  },
+  "/api/feed/mine": {
+   "tools": [
+    "list_my_feed_items"
+   ]
+  },
+  "/api/feed/text": {
+   "tools": [
+    "save_feed_item_text"
+   ]
+  },
+  "/api/guests/delete": {
+   "tools": [
+    "delete_guest_listing"
+   ]
+  },
+  "/api/guests/export": {
+   "tools": [
+    "list_guest_listings"
+   ]
+  },
+  "/api/guests/list": {
+   "tools": [
+    "list_guest_listings"
+   ]
+  },
+  "/api/guests/mine": {
+   "tools": [
+    "list_my_guest_matches"
+   ]
+  },
+  "/api/guests/save": {
+   "tools": [
+    "save_guest_listing"
+   ]
+  },
+  "/api/health": {
+   "skip": "Seiten-Infrastruktur (kein Nutzerfunktion)"
+  },
+  "/api/library/delete": {
+   "tools": [
+    "delete_library_item"
+   ]
+  },
+  "/api/library/export": {
+   "tools": [
+    "list_library"
+   ]
+  },
+  "/api/library/mine": {
+   "tools": [
+    "list_my_library"
+   ]
+  },
+  "/api/library/save": {
+   "tools": [
+    "save_library_item"
+   ]
+  },
+  "/api/library/vote": {
+   "tools": [
+    "vote_library_item"
+   ]
+  },
+  "/api/library/votes": {
+   "skip": "Zähler/Listen nur für die Seitenanzeige (Stimmen, Follower) - in list_blog_posts enthalten"
+  },
+  "/api/logout": {
+   "skip": "Seiten-Infrastruktur (kein Nutzerfunktion)"
+  },
+  "/api/me": {
+   "skip": "Seiten-Infrastruktur (kein Nutzerfunktion)"
+  },
+  "/api/me/li-follow": {
+   "skip": "Seiten-Infrastruktur (kein Nutzerfunktion)"
+  },
+  "/api/msg/prefs": {
+   "skip": "Benachrichtigungs-Einstellungen gehören in den Browser"
+  },
+  "/api/msg/start": {
+   "tools": [
+    "start_message"
+   ]
+  },
+  "/api/msg/threads": {
+   "tools": [
+    "list_message_threads"
+   ]
+  },
+  "/api/org": {
+   "tools": [
+    "save_org"
+   ]
+  },
+  "/api/org/mine": {
+   "tools": [
+    "list_my_orgs"
+   ]
+  },
+  "/api/orgoffer/list": {
+   "tools": [
+    "list_org_offers"
+   ]
+  },
+  "/api/orgoffer/ms": {
+   "skip": "Firmen-Daten sind über list_org_offers/search_orgs erreichbar"
+  },
+  "/api/orgoffer/save": {
+   "tools": [
+    "save_org_offer"
+   ]
+  },
+  "/api/orgs/search": {
+   "tools": [
+    "search_orgs"
+   ]
+  },
+  "/api/podcast/delete": {
+   "tools": [
+    "delete_podcast_episode"
+   ]
+  },
+  "/api/podcast/export": {
+   "tools": [
+    "list_podcast_pitches"
+   ]
+  },
+  "/api/podcast/list": {
+   "tools": [
+    "list_podcast_pitches"
+   ]
+  },
+  "/api/podcast/mine": {
+   "tools": [
+    "list_my_podcast_episodes"
+   ]
+  },
+  "/api/podcast/submit": {
+   "skip": "Audio-Upload nur auf der Website (Datei)"
+  },
+  "/api/podcast/vote": {
+   "tools": [
+    "vote_podcast_pitch"
+   ]
+  },
+  "/api/points": {
+   "tools": [
+    "get_my_points"
+   ]
+  },
+  "/api/points/redeem": {
+   "tools": [
+    "redeem_points"
+   ]
+  },
+  "/api/profile/company": {
+   "skip": "Firmen-Daten sind über list_org_offers/search_orgs erreichbar"
+  },
+  "/api/profile/me": {
+   "tools": [
+    "get_my_profile",
+    "update_my_profile",
+    "add_expertise",
+    "add_certification"
+   ]
+  },
+  "/api/profiles/export": {
+   "tools": [
+    "search_members"
+   ]
+  },
+  "/api/providers": {
+   "skip": "Seiten-Infrastruktur (kein Nutzerfunktion)"
+  },
+  "/api/push/key": {
+   "skip": "Seiten-Infrastruktur (kein Nutzerfunktion)"
+  },
+  "/api/push/subscribe": {
+   "skip": "Seiten-Infrastruktur (kein Nutzerfunktion)"
+  },
+  "/api/push/unsubscribe": {
+   "skip": "Seiten-Infrastruktur (kein Nutzerfunktion)"
+  },
+  "/api/qa": {
+   "skip": "Zähler/Listen nur für die Seitenanzeige (Stimmen, Follower) - in list_blog_posts enthalten"
+  },
+  "/api/qa/accept": {
+   "tools": [
+    "accept_answer"
+   ]
+  },
+  "/api/qa/answer": {
+   "tools": [
+    "answer_question"
+   ]
+  },
+  "/api/qa/ask": {
+   "tools": [
+    "ask_question"
+   ]
+  },
+  "/api/qa/delete": {
+   "tools": [
+    "delete_question"
+   ]
+  },
+  "/api/qa/export": {
+   "tools": [
+    "list_questions"
+   ]
+  },
+  "/api/qa/vote": {
+   "tools": [
+    "vote_answer"
+   ]
+  },
+  "/api/recommend": {
+   "tools": [
+    "recommend_member"
+   ]
+  },
+  "/api/recommend/inbox": {
+   "tools": [
+    "list_my_recommendations"
+   ]
+  },
+  "/api/speaker/confirm": {
+   "skip": "Einladung per E-Mail-Link / Bestätigung außerhalb der Anmeldung"
+  },
+  "/api/speaker/invite-send": {
+   "skip": "Einladung per E-Mail-Link / Bestätigung außerhalb der Anmeldung"
+  },
+  "/api/speaker/requests": {
+   "tools": [
+    "list_my_speaker_requests",
+    "respond_speaker_request"
+   ]
+  },
+  "/api/speaker/respond": {
+   "tools": [
+    "list_my_speaker_requests",
+    "respond_speaker_request"
+   ]
+  },
+  "/api/ui-i18n": {
+   "skip": "Seiten-Infrastruktur (kein Nutzerfunktion)"
+  },
+  "/api/updates/export": {
+   "tools": [
+    "list_platform_updates"
+   ]
+  },
+  "/api/video/confirm": {
+   "skip": "Video-Upload nur auf der Website (Datei)"
+  },
+  "/api/video/delete": {
+   "tools": [
+    "delete_video"
+   ]
+  },
+  "/api/video/export": {
+   "tools": [
+    "list_video_pitches"
+   ]
+  },
+  "/api/video/init": {
+   "skip": "Video-Upload nur auf der Website (Datei)"
+  },
+  "/api/video/list": {
+   "tools": [
+    "list_video_pitches"
+   ]
+  },
+  "/api/video/mine": {
+   "tools": [
+    "list_my_videos"
+   ]
+  },
+  "/api/video/vote": {
+   "tools": [
+    "vote_video_pitch"
+   ]
+  },
+  "/api/wiki": {
+   "tools": [
+    "get_wiki_term",
+    "propose_wiki_edit"
+   ]
+  },
+  "/api/wiki/export": {
+   "tools": [
+    "list_wiki_terms"
+   ]
+  },
+  "/api/wish/delete": {
+   "tools": [
+    "delete_wish"
+   ]
+  },
+  "/api/wish/list": {
+   "tools": [
+    "list_wishes"
+   ]
+  },
+  "/api/wish/save": {
+   "tools": [
+    "save_wish"
+   ]
+  },
+  "/api/wish/status": {
+   "skip": "Admin: Wunsch-Status"
+  },
+  "/api/wish/vote": {
+   "tools": [
+    "vote_wish"
+   ]
+  }
+ }
+}
