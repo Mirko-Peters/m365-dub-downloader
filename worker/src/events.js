@@ -1,4 +1,5 @@
 // Events (Veranstalter), Sessions mit Speakern, Sponsoren-Suche fuer Veranstalter
+import { sendMail } from "./digest.js";
 import { ownedEntity } from "./profiles.js";
 import { cleanText, rateLimit } from "./util.js";
 import { baseIds } from "./entities.js";
@@ -186,6 +187,18 @@ export async function handleEvents(env, request, url, path, user, J) {
     }
   }
   // ---- Speaker: Einladung ansehen/bestaetigen, Anfragen an bestehende Mitglieder ----
+  if (path === "/api/speaker/invite-send" && method === "POST") {   // Veranstalter laden einen Speaker per E-Mail ein (Adresse wird nicht gespeichert)
+    if (need()) return need();
+    if (!(await rateLimit(db, `invmail:${user.id}`, 20, 3600))) return J({ error: "rate_limit" }, 429);
+    const b = await body(), email = String(b.email || "").trim().toLowerCase();
+    if (!/^[^\s@<>]{1,64}@[^\s@<>]{1,120}\.[a-z]{2,}$/i.test(email)) return J({ error: "bad_email" }, 400);
+    const i = await db.prepare("SELECT i.token,i.name,s.title st,e.* FROM speaker_invites i JOIN event_sessions s ON s.id=i.session_id JOIN events e ON e.id=i.event_id WHERE i.token=?").bind(String(b.token || "")).first();
+    if (!i || !(await canManage(db, user, i))) return J({ error: "forbidden" }, 403);
+    if (!env.RESEND_API_KEY) return J({ error: "mail_off" }, 503);
+    const esc = (x) => String(x).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c])), url = `${env.SITE}/community/?invite=${i.token}#c-events`;
+    const r = await sendMail(env, email, `Speaker invitation: ${i.title}`, `<p>Hello ${esc(i.name)},</p><p>${esc(user.name)} invites you to speak at <b>${esc(i.title)}</b> (${esc(i.start)}) with the session <b>${esc(i.st)}</b>.</p><p><a href="${url}">Confirm your participation</a> (sign-in required, free).</p><p>M365.FM</p>`);
+    return r.ok ? J({ ok: true }) : J({ error: "send_failed" }, 502);
+  }
   if ((m = path.match(/^\/api\/speaker\/invite\/([a-f0-9]{36})$/)) && method === "GET") {
     const i = await db.prepare("SELECT i.name,i.eid,s.title,e.title ev,e.handle FROM speaker_invites i JOIN event_sessions s ON s.id=i.session_id JOIN events e ON e.id=i.event_id WHERE i.token=?").bind(m[1]).first();
     return i ? J({ invite: i }) : J({ error: "not_found" }, 404);
