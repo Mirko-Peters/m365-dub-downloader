@@ -1,6 +1,7 @@
 """Englische Show-Seite (Nachbau von www.m365.fm / Podpage) unter /show/: Folgen, Seiten, Hosts, Sponsoren, Reviews, Gaeste (als Personen-Entitaeten).
 Daten: data/podpage/*.json(.gz); Audio/Transkript aus data/en_episodes.json (fetch_en_episodes.py). Videos sind bewusst ausgeschlossen."""
 import site_notes as SNT
+import site_media as MED
 import gzip, json, re, html as _h
 from html.parser import HTMLParser
 from pathlib import Path
@@ -143,7 +144,7 @@ def build(g):
         gl = "".join(f'<li><a href="{root}guests/{gg["slug"]}/">{esc(gg["name"])}</a></li>' for gg in eg[e["slug"]])
         tx = f'<h2>Transcript</h2><details open><summary>Read the full transcript</summary><p style="white-space:pre-wrap;line-height:1.6">{esc(tr)}</p></details>' if len(tr) > 200 else ""
         _im = (nrec or {}).get("image") or ""
-        hero = (f'<figure style="margin:1em 0"><img src="{esc(_im)}" alt="{esc("Cover: " + e["name"])}" width="700" height="700" fetchpriority="high" decoding="async" style="width:100%;max-width:420px;height:auto;aspect-ratio:1/1;object-fit:cover;border-radius:.6em"></figure>' if _im.startswith("https://") else "")   # Folgenbild aus dem Spreaker-RSS
+        hero = (f'<figure style="margin:1em 0"><img src="{esc(_im)}" alt="{esc("Cover: " + e["name"])}" width="700" height="700" fetchpriority="high" decoding="async" style="width:100%;max-width:420px;height:auto;aspect-ratio:1/1;object-fit:cover;border-radius:.6em"></figure>' if _im.startswith("https://") else MED.hero_svg({"id": "ep-" + e["slug"], "name": e["name"], "type": "media"}, "Podcast", "Cover: " + e["name"]))   # Folgenbild aus dem Spreaker-RSS, sonst erzeugtes Titelbild
         body = (f'<article><p class="mut">{day(e["create_time"])}{" · Season " + str(e["season"]) if e.get("season") else ""}</p><h1>{esc(e["name"])}</h1>{hero}{aud}'
                 f'<div style="margin:1em 0"><strong>{esc(plain(e.get("summary")))}</strong></div>{nkp}<div class="pp-notes">{(nnotes if nrec and nrec.get("markup") else san(e.get("show_notes")))}</div>{nfaq}{SNT.CSS if (nkp or nnotes or nfaq) else ""}'
                 + (f"<p>{ext}</p>" if ext else "") + (f'<p class="mut">Host: {hl}</p>' if hl else "") + (f"<h2>Guests</h2><ul>{gl}</ul>" if gl else "") + also + tx + "</article>"
