@@ -77,3 +77,12 @@ Stand: 2026-10-29. Reihenfolge nach Absprache mit Mirko; alles mit Schema.org-Ve
 5. Die veröffentlichte Episode löst die **Stick-Man-Video-Produktion** aus (bestehende Pipeline Episode → Video); das fertige Video wird dem Mitglied zugeordnet (Link im Profil/Beitrag) – das Video ist die Belohnung für die freigegebene Episode.
 - Offen: wie die Video-Pipeline angestoßen wird (GitHub-Workflow per Dispatch aus dem Worker vs. Pipeline pollt Spreaker selbst), wo das Video erscheint (YouTube-Kanal, Episodenseite).
 - **Sprache (30.10.):** Beim Upload wird die Episodensprache gewählt; der Entwurf geht in die **Spreaker-Show dieser Sprache** (bestehende 19 M365.FM-Sprach-Shows, Zuordnung Sprache → Show-ID wie im Dub-Downloader), und Stick-Man-Video/Benachrichtigungen/Anzeige folgen derselben Sprache. Keine eigene „Community-Show“ nötig.
+
+## Stand 30.10. (nachts) – Gebaut seit der letzten Runde
+- Punkte-System (Skala + Einlösen), flüchtige Nachrichten (7 Tage, Tageslimit), Sponsor-Anfragen (2 frei, weitere 1000 Punkte), Abzeichen (nur erreichte sichtbar), Programm-Icons (MVP/MCT/RD/MSA/Mitarbeiter/Partner), verifizierte Programme dürfen bearbeiten
+- Community-Abstimmung über Wiki-/Entitäts-Änderungen (Mehrheit ab 3 Stimmen, Eigentümer entscheidet sofort), Posteingang, bestätigte Experten stimmen mit
+- Profile/Firmen/Events sind selbst verwaltete Entitäten; M365.FM/M365Con/Event/Profil für den Admin zugeordnet (Cron)
+- Community-Reiter, Glossar aus Entitäten, Kurzbeschreibung Pflicht, Autorenbox aus Profil, Artikel-Autolinks entfernt, Speaker-Einladung per E-Mail/LinkedIn-Text
+
+## Offen (neu, 30.10. nachts)
+- Schema.org-Autor in Artikeln aus dem Profil, Hover-Fenster für Personen, Abstimmungs-Anzeige/Folgen von Themen, Sofort-Anzeige neuer Profile/Events im Verzeichnis (statt stündlich), Datenschutz-Text zu flüchtigen Nachrichten, Übersetzungs-Angebote für Kurzbeschreibungen, Event-Entität mit Link zur Eventseite
