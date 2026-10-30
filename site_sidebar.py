@@ -43,10 +43,9 @@ def render(ix, BASE, root, text, latest, shp, esc_=esc):
     late = "".join(f'<li><a href="{root}episodes/{esc(e["slug"])}/">{esc(e["name"])}</a></li>' for e in latest[:5])
     listen = " ".join(f'<a href="{esc(shp[k])}" rel="noopener">{n}</a>' for k, n in (("apple_show", "Apple Podcasts"), ("spotify_show", "Spotify"), ("amazon_show", "Amazon Music"), ("deezer_show", "Deezer"), ("iheart_show", "iHeart")) if shp.get(k))
     con = (f'<section class="sb-card sb-con"><a href="{CON}" rel="noopener" aria-label="M365Con International 2027 – I\'m attending"><img src="{BASE}/assets/attending-m365con.webp" alt="I\'m attending M365Con International 2027, January 11–22, 2027, free online event" width="675" height="563" loading="lazy"></a>'
-           f'<div class="sb-count" data-m365con-countdown><span class="sb-meta">Free online event · Jan 11–22, 2027</span></div>'
            f'<a class="sb-btn" href="{CON}" rel="noopener">Save your free seat →</a></section>')
-    goog = (f'<section class="sb-card sb-g"><a href="{GSRC}" rel="noopener" target="_blank"><img src="{BASE}/assets/gsource.webp" alt="Add M365.fm as a preferred source on Google" width="647" height="192" loading="lazy"></a>'
-            f'<p>See M365.FM first in Google&nbsp;Top&nbsp;Stories.</p></section>')
+    goog = (f'<section class="sb-card sb-g"><a class="gb" href="{GSRC}" rel="noopener" target="_blank"><img src="{BASE}/assets/gsource.webp" alt="Add M365.fm as a preferred source on Google" width="647" height="192" loading="lazy"></a>'
+            f'<p>See <b>M365.FM</b> first in Google&nbsp;Top&nbsp;Stories.</p></section>')
     new = f'<section class="sb-card"><h2>Latest episodes</h2><ol class="sb-list">{late}</ol><a class="sb-more" href="{root}episodes/">All episodes →</a></section>' if late else ""
     foll = (f'<section class="sb-card"><h2>Listen &amp; follow</h2><p class="sb-links">{listen}</p><p class="sb-links"><a href="{root}listen/">All platforms</a> <a href="https://www.spreaker.com/show/6704921/episodes/feed" rel="noopener">RSS</a></p></section>') if listen else ""
     comm = (f'<section class="sb-card sb-comm"><h2>Join the community</h2><p>Free profile, expert directory, events and your own page in the knowledge graph.</p><a class="sb-btn sb-ghost" href="{BASE}/community/">Create your profile →</a></section>')
