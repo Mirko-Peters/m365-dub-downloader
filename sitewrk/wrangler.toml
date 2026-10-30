@@ -1,0 +1,13 @@
+name = "m365-dub-site"
+main = "index.js"
+compatibility_date = "2025-09-01"
+workers_dev = false
+
+# Vor GitHub Pages: nur aktiv, wenn dub.m365.fm in Cloudflare auf "Proxied" (orange Wolke) steht.
+routes = [{ pattern = "dub.m365.fm/*", zone_name = "m365.fm" }]
+# Spaeter, wenn m365.fm von Podpage auf die Plattform umzieht (MIGRATED=1 setzen):
+# routes = [{ pattern = "dub.m365.fm/*", zone_name = "m365.fm" }, { pattern = "www.m365.fm/*", zone_name = "m365.fm" }, { pattern = "m365.fm/*", zone_name = "m365.fm" }]
+
+[vars]
+ORIGIN = "https://dub.m365.fm"
+MIGRATED = "0"
