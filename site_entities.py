@@ -203,7 +203,7 @@ def build(g, wiki_links, experts_by_ent, ep_find):
                     evl += f'<h2>{"Speaker" if lang == "de" else "Speakers"} ({len(_spk)})</h2><p>' + ", ".join(_sl(x) for x in sorted(_spk.values(), key=lambda a: a["n"].lower())[:200]) + "</p>"
             if not e["desc"].get(lang if lang in ("en", "de") else "en"):
                 evl += f'<p class="mut"><a href="#en-edit">{"Diese Kurzbeschreibung gibt es noch nicht in deiner Sprache – gern ergänzen." if lang == "de" else "This short description is not yet available in your language – feel free to add it."}</a></p>'
-            gloss = f'<p><a href="{BASE}/{"de/" if lang == "de" else ""}glossary/{e["id"]}/">{esc(s["glossary"])}: {esc(e["name"])}</a></p>' if e["id"] in gl_ids else ""
+            gloss = f'<p class="mut"><a href="{BASE}/{"de/" if lang == "de" else ""}glossary/">{esc(s["glossary"])}</a></p>' if e["id"] in gl_ids else ""
             eps = ep_find(e) if lang == "de" else []
             eb = (f'<h2>{esc(s["eps"].format(t=e["name"]))}</h2><ul>' + "".join(f'<li><a href="{url_of(x)}">{esc(g["anchor_title"](x["e"]["title"]))}</a></li>' for x in eps) + "</ul>") if eps else ""
             ex = experts_by_ent.get(e["id"], [])

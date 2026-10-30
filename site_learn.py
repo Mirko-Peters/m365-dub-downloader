@@ -220,9 +220,7 @@ def gloss_links(lang, base):
     gb = f"{base}/glossary/" if lang == "en" else f"{base}/{lang}/glossary/"
     gids = {x["id"] for x in GLOSS}
     eb = f"{base}/de/entity/" if lang == "de" else f"{base}/entity/"
-    out = {i: [e["name"], eb + i + "/"] for i, e in ENTS.items()}
-    out.update({x["id"]: [x["name"], f"{gb}{x['id']}/"] for x in GLOSS})
-    return out
+    return {i: [e["name"], eb + i + "/"] for i, e in ENTS.items()}   # Entitaetsseiten uebernehmen die Glossarfunktion (Kurz- und Langbeschreibung)
 
 
 def wiki_block(lang, term_id, api, base, static, links=None):
@@ -283,24 +281,15 @@ def build_learn(ctx):
         gb = f"{BASE}/glossary/" if lang == "en" else f"{BASE}/{lang}/glossary/"
         rel = "glossary" if lang == "en" else f"{lang}/glossary"
         terms = sorted(GLOSS, key=lambda x: x["name"].lower())
-        az = az_html(terms, lang, lambda x, d, o: f'<dt><a href="{gb}{x["id"]}/">{esc(x["name"])}</a></dt><dd>{esc(d)}</dd>')
+        az = az_html(terms, lang, lambda x, d, o, lang=lang: f'<dt><a href="{BASE}/{"de/" if lang == "de" else ""}entity/{x["id"]}/">{esc(x["name"])}</a></dt><dd>{esc(d)}</dd>')
         body = shell(lang, f'<h1>{esc(t["glossary"])}</h1><p class="mut">{esc(t["glossary_intro"])}</p>{az}')
         write(f"{rel}/index.html", page(lang, f'{t["glossary"]} – M365.FM', t["glossary_intro"], gb, body, None, gloss_ld(lang, gb), og_type="website", extra_head=LCSS))
         sitemap.append((gb, TODAY, None))
-        for x in terms:
-            u = f"{gb}{x['id']}/"
-            d0 = definition(x, lang)[0]
-            same = [y for y in terms if x["cat"] and y["cat"] == x["cat"] and y["id"] != x["id"]][:6]
-            eps = eps_for("de" if lang == "de" else "de", x) if lang == "de" else []
-            rl = "".join(f'<li><a href="{gb}{y["id"]}/">{esc(y["name"])}</a></li>' for y in same)
-            catlink = ""
-            if lang == "de" and x["cat"] in g["catidx"].get("de", {}):
-                catlink = f'<p><a href="{BASE}/de/path/{x["cat"]}/">{esc(t["paths"])}: {esc(cat_name(x["cat"], "de"))}</a></p>'
-            eb = (f'<h2>{esc(t["term_eps"].replace("{t}", x["name"]))}</h2>{ep_list(eps)}') if eps else ""
-            b = shell(lang, f'<nav aria-label="breadcrumb"><a href="{gb}">{esc(t["glossary"])}</a></nav><h1>{esc(x["name"])}</h1><p style="font-size:1.1em">{esc(d0)}</p>{eb}{catlink}'
-                            f'{wiki_block(lang, x["id"], WIKI_API, BASE, stat.get(x["id"]), gloss_links(lang, BASE))}<h2>{esc(t["glossary"])}</h2><ul>{rl}</ul>')
-            write(f"{rel}/{x['id']}/index.html", page(lang, f'{x["name"]} – {t["glossary"]} | M365.FM', d0[:155], u, b, None, gloss_ld(lang, u, x), og_type="website", extra_head=LCSS))
-            sitemap.append((u, TODAY, None))
+        for x in terms:   # Einzelne Glossarseiten gibt es nicht mehr: Hinweisseite mit Verknuepfung zur Entitaet
+            u = f"{gb}{x['id']}/"; tgt = f"{BASE}/{'de/' if lang == 'de' else ''}entity/{x['id']}/"
+            tl = ("Seite ausgemustert", "Dieser Glossareintrag ist jetzt die Entität:", "Glossar") if lang == "de" else ("Page retired", "This glossary entry is now the entity:", "Glossary")
+            bb = f'<main class="wrap"><h1>{tl[0]}</h1><p>{tl[1]} <a class="btn main" href="{tgt}">{esc(x["name"])}</a></p><p><a class="btn" href="{gb}">{tl[2]}</a></p></main>'
+            write(f"{rel}/{x['id']}/index.html", page(lang, tl[0], tl[1], u, bb, None, [], noindex=True))
 
     for lang in langs_all:
         t = T(lang)
