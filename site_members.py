@@ -4,6 +4,7 @@ from datetime import datetime, timezone
 from site_learn import ENTS, esc, _fetch_json, LCSS
 from site_entities import TL, eurl, eid_of
 
+PROG_FULL = {"mvp": "Microsoft Most Valuable Professional (MVP)", "mct": "Microsoft Certified Trainer (MCT)", "rd": "Microsoft Regional Director (RD)", "msa": "Microsoft Student Ambassador (MSA)", "ms_employee": "Microsoft employee", "partner": "Microsoft Partner"}
 PROG = {"mvp": ("Microsoft MVP", "Microsoft MVP"), "mct": ("Microsoft Certified Trainer (MCT)", "Microsoft Certified Trainer (MCT)"), "rd": ("Microsoft Regional Director", "Microsoft Regional Director"),
         "msa": ("Microsoft Student Ambassador", "Microsoft Student Ambassador"), "ms_employee": ("Microsoft employee", "Microsoft-Mitarbeiter:in"), "partner": ("Microsoft Partner", "Microsoft Partner")}
 KIND = {"linkedin": "LinkedIn", "github": "GitHub", "youtube": "YouTube", "x": "X", "mastodon": "Mastodon", "bluesky": "Bluesky", "twitch": "Twitch", "blog": "Blog", "podcast": "Podcast", "newsletter": "Newsletter", "website": "Website", "other": "Link"}
@@ -73,6 +74,8 @@ def person_ld(BASE, p, orgs_by_handle):
         n["disambiguatingDescription"] = p["about"][:300]
     if p.get("job"):
         n["jobTitle"] = p["job"]
+    elif any(x.get("verified") and x["p"] == "mvp" for x in p.get("programs", [])):
+        n["jobTitle"] = PROG_FULL["mvp"]
     if p.get("country"):
         n["address"] = {"@type": "PostalAddress", "addressCountry": p["country"]}
     org = p.get("org")
@@ -90,12 +93,20 @@ def person_ld(BASE, p, orgs_by_handle):
             if c.get("url"):
                 cr["url"] = c["url"]
             creds.append(cr)
+    for x in p.get("programs", []):   # Programm-Titel (MVP, MCT, RD ...) wie Zertifikate als Credential auszeichnen
+        if x.get("verified") and x["p"] in ("mvp", "mct", "rd", "msa"):
+            cr = {"@type": "EducationalOccupationalCredential", "name": PROG_FULL[x["p"]], "credentialCategory": "award" if x["p"] in ("mvp", "rd", "msa") else "certification", "recognizedBy": {"@id": eid_of(BASE, "microsoft")}}
+            if x.get("year"):
+                cr["validFrom"] = str(x["year"])
+            if x.get("url"):
+                cr["url"] = x["url"]
+            creds.insert(0, cr)
     if creds:
         n["hasCredential"] = creds
-    aw = [PROG[x["p"]][0] for x in p.get("programs", []) if x.get("verified") and x["p"] in ("mvp", "mct", "rd", "msa")]
+    aw = [PROG_FULL[x["p"]] for x in p.get("programs", []) if x.get("verified") and x["p"] in ("mvp", "mct", "rd", "msa")]
     if aw:
         n["award"] = aw
-    mem = [{"@type": "OrganizationRole", "memberOf": {"@id": eid_of(BASE, "microsoft")}, "roleName": PROG[x["p"]][0]} for x in p.get("programs", []) if x.get("verified")]
+    mem = [{"@type": "OrganizationRole", "memberOf": {"@id": eid_of(BASE, "microsoft")}, "roleName": PROG_FULL.get(x["p"], PROG[x["p"]][0])} for x in p.get("programs", []) if x.get("verified")]
     if mem:
         n["memberOf"] = mem
     same = [c["url"] for c in p.get("channels", [])] + [x["url"] for x in p.get("programs", []) if x.get("verified") and x.get("url")]
