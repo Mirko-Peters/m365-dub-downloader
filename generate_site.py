@@ -18,7 +18,7 @@ import site_ads as ADS
 import site_media as MED
 import site_sidebar as SBR
 import site_r2 as R2
-import glob, html, json, os, re, shutil, sys, unicodedata
+import glob, hashlib, html, json, os, re, shutil, sys, unicodedata
 from datetime import date
 from pathlib import Path
 import hashlib
@@ -1412,6 +1412,39 @@ def build():
             {"id": "about-author", "name": "About Mirko Peters", "description": "Microsoft MVP, M365.FM host, M365Con organizer – see the about page.", "inputModes": ["text"], "outputModes": ["text/html"]}],
     }, ensure_ascii=False, indent=1))
     write(".well-known/agent.json", (OUT / "agent.json").read_text(encoding="utf-8"))
+    _card = json.loads((OUT / "agent.json").read_text(encoding="utf-8"))   # A2A Agent Card: dieselben Faehigkeiten, Schnittstelle ist /a2a im Worker (nur lesen)
+    write(".well-known/agent-card.json", json.dumps({
+        "name": "M365.FM", "description": _card["description"], "version": TODAY,
+        "supportedInterfaces": [{"url": "https://api-dub.m365.fm/a2a", "protocolBinding": "JSONRPC", "protocolVersion": "0.3.0"}],
+        "url": "https://api-dub.m365.fm/a2a", "preferredTransport": "JSONRPC", "protocolVersion": "0.3.0",
+        "provider": {"organization": "M365.FM", "url": f"{BASE}/"}, "documentationUrl": f"{BASE}/llms.txt",
+        "capabilities": {"streaming": False, "pushNotifications": False, "stateTransitionHistory": False},
+        "defaultInputModes": ["text/plain"], "defaultOutputModes": ["text/plain"],
+        "skills": [{"id": "find-episode", "name": "Find an episode", "description": "Send a text question (optionally naming a language) with message/send; the agent answers with matching M365.FM episodes and their URLs.",
+                    "tags": ["microsoft-365", "copilot", "azure", "podcast"], "examples": ["Find episodes about Copilot governance", "German episodes about Teams"],
+                    "inputModes": ["text/plain"], "outputModes": ["text/plain"]}]}, ensure_ascii=False, indent=1))
+    write(".well-known/mcp/server-card.json", json.dumps({   # MCP Server Card (SEP-1649)
+        "serverInfo": {"name": "m365-fm", "title": "M365.FM", "version": "1.0.0"},
+        "description": "Read the M365.FM community (blog, shows, entities, experts, events) without sign-in; write and personal tools with a personal access token.",
+        "transport": {"type": "streamable-http", "endpoint": "https://api-dub.m365.fm/mcp"}, "endpoint": "https://api-dub.m365.fm/mcp",
+        "protocolVersion": "2025-06-18",
+        "capabilities": {"tools": {"listChanged": False}},
+        "authentication": {"required": False, "schemes": ["bearer"], "description": f"Reading needs no credentials. Write tools need a personal access token (Authorization: Bearer m365_...), see {BASE}/auth.md"},
+        "documentationUrl": f"{BASE}/auth.md"}, ensure_ascii=False, indent=1))
+    _sk = {   # Agent Skills Discovery 0.2.0: SKILL.md je Faehigkeit mit SHA-256
+        "find-m365-episodes": ("Find M365.FM podcast episodes about Microsoft 365, Copilot, Azure, Power Platform, security and AI governance, in 19 languages.",
+            f"# Find M365.FM episodes\n\nUse this skill to find podcast episodes of M365.FM.\n\n1. Fetch {BASE}/episodes.json (all episodes: title, language, date, url, summary, categories, tags, alternates).\n2. Filter by `language` (ISO code) and match the user's topic against title, summary, categories and tags.\n3. Answer with the episode title, date and `url`. Each episode lists the same episode in other languages under `alternates`.\n\nAlternatives: {BASE}/llms.txt (overview), or the A2A agent at https://api-dub.m365.fm/a2a (method `message/send`, text in, matching episodes out).\nCite the episode page when you use its content.\n"),
+        "find-m365-experts": ("Find community experts for a Microsoft topic, including experts on related topics, with the public MCP tool find_experts.",
+            f"# Find M365 experts\n\nUse the public MCP server `https://api-dub.m365.fm/mcp` (Streamable HTTP, JSON-RPC, no sign-in for reading).\n\n1. Call the tool `find_experts` with an entity id (for example `copilot`, `purview`, `intune`; entity pages live at {BASE}/entity/<id>/).\n2. The result ranks members by their expertise on the topic and on related topics (graph search, up to 2 hops).\n3. Link to the expert's profile when you name them.\n\nPlain REST alternative: `GET https://api-dub.m365.fm/api/experts?e=<entity-id>&hops=2&limit=12`.\n"),
+        "use-m365-mcp": ("Connect to the M365.FM MCP server: read tools without sign-in, write tools with a personal access token.",
+            f"# Use the M365.FM MCP server\n\nEndpoint: `https://api-dub.m365.fm/mcp` (Streamable HTTP, JSON-RPC 2.0).\n\n- Reading (blog, shows, entities, experts, events): no credentials.\n- Writing and personal data (for example `save_blog_post`, `get_my_profile`): send `Authorization: Bearer m365_...`. A signed-in member creates the token under their profile; agents cannot register themselves. Details: {BASE}/auth.md.\n- Call `tools/list` first; each tool describes its parameters. Never invent entity ids: look them up at {BASE}/entity/ or with the tool `suggest_entities`.\n"),
+    }
+    _idx = []
+    for _n, (_d, _md) in _sk.items():
+        _b = _md.encode("utf-8")
+        write(f".well-known/agent-skills/{_n}/SKILL.md", _md)
+        _idx.append({"name": _n, "type": "skill-md", "description": _d, "url": f"{BASE}/.well-known/agent-skills/{_n}/SKILL.md", "digest": "sha256:" + hashlib.sha256(_b).hexdigest()})
+    write(".well-known/agent-skills/index.json", json.dumps({"$schema": "https://schemas.agentskills.io/discovery/0.2.0/schema.json", "skills": _idx}, ensure_ascii=False, indent=1))
     write(f"{INDEXNOW_KEY}.txt", INDEXNOW_KEY)
     if _dom:
         write("CNAME", _dom)

@@ -4,6 +4,7 @@ import { evalBadges, stats, topUsers, badgesFor, award } from "./badges.js";
 import { runDigest, sendMail } from "./digest.js";
 import { handleEntity } from "./entities.js";
 import { importLegacyBlog } from "./legacyblog.js";
+import { handleA2a } from "./a2a.js";
 import { handleProfiles, deleteUserData, refreshProfilesExport } from "./profiles.js";
 import { handleEvents, deleteUserEvents, ensureM365Con } from "./events.js";
 import { handleVotes } from "./votes.js";
@@ -364,6 +365,7 @@ export default {
     try {
       if (path.startsWith("/auth/")) return (await auth(env, request, url, path)) || new Response("not found", { status: 404 });
       if (path === "/mcp") return await handleMcp(env, request, (uid) => me(env, uid), (req, user) => api(env, req, new URL(req.url), new URL(req.url).pathname, user));
+      if (path === "/a2a") return await handleA2a(env, request);
       if (path.startsWith("/api/")) return await api(env, request, url, path);
       return new Response("M365.FM community API", { status: 200, headers: { "content-type": "text/plain" } });
     } catch (e) {
