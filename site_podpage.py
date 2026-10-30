@@ -130,11 +130,13 @@ def build(g):
         aud = f'<audio controls preload="none" style="width:100%" src="{esc(r["audio"])}"></audio>' if r and r.get("audio") else ""
         ext = " · ".join(f'<a href="{esc(e[x])}" rel="noopener">{n}</a>' for x, n in (("episode_apple_url_path", "Apple Podcasts"), ("episode_spotify_url_path", "Spotify"), ("episode_youtube_music_url_path", "YouTube Music")) if (e.get(x) or "").startswith("http"))
         hl = "".join(f'<a href="{BASE}/community/u/{h["slug"]}/">{esc(h["name"])}</a> ' for h in hosts if h.get("slug") == "mirko-peters")
+        oa = (g.get("orig_alts") or {}).get(e["slug"]) or {}
+        also = ('<h2>Also available in other languages</h2><ul>' + "".join(f'<li><a href="{u}" hreflang="{lg}">{esc(t)}</a> <span class="mut">({lg})</span></li>' for lg, (u, t) in sorted(oa.items())) + "</ul>") if oa else ""
         gl = "".join(f'<li><a href="{root}guests/{gg["slug"]}/">{esc(gg["name"])}</a></li>' for gg in eg[e["slug"]])
         tx = f'<h2>Transcript</h2><details open><summary>Read the full transcript</summary><p style="white-space:pre-wrap;line-height:1.6">{esc(tr)}</p></details>' if len(tr) > 200 else ""
         body = (f'<article><p class="mut">{day(e["create_time"])}{" · Season " + str(e["season"]) if e.get("season") else ""}</p><h1>{esc(e["name"])}</h1>{aud}'
                 f'<div style="margin:1em 0"><strong>{esc(plain(e.get("summary")))}</strong></div><div class="pp-notes">{san(e.get("show_notes"))}</div>'
-                + (f"<p>{ext}</p>" if ext else "") + (f'<p class="mut">Host: {hl}</p>' if hl else "") + (f"<h2>Guests</h2><ul>{gl}</ul>" if gl else "") + tx + "</article>"
+                + (f"<p>{ext}</p>" if ext else "") + (f'<p class="mut">Host: {hl}</p>' if hl else "") + (f"<h2>Guests</h2><ul>{gl}</ul>" if gl else "") + also + tx + "</article>"
                 + '<p style="display:flex;justify-content:space-between;gap:1em;margin-top:2em">' + (f'<a href="{ep_url(prev_)}">← {esc(prev_["name"][:60])}</a>' if prev_ else "<span></span>") + (f'<a href="{ep_url(next_)}">{esc(next_["name"][:60])} →</a>' if next_ else "") + "</p>")
         ld = {"@context": "https://schema.org", "@type": "PodcastEpisode", "name": e["name"], "url": ep_url(e), "datePublished": day(e["create_time"]),
               "description": plain(e.get("summary"))[:500], "partOfSeries": {"@type": "PodcastSeries", "name": NAME, "url": root}, "inLanguage": "en", "author": {"@id": f"{BASE}/entity/mirko-peters/#entity"}}
@@ -194,6 +196,19 @@ def build(g):
            f'<p><a href="{root}episodes/">All {len(eps)} episodes →</a></p>' + (f"<h2>Topics</h2><ul>{ct}</ul>" if ct else ""))
     ld = {"@context": "https://schema.org", "@type": "PodcastSeries", "name": NAME, "url": root, "description": plain(pod.get("description"))[:500], "inLanguage": "en", "webFeed": "https://www.spreaker.com/show/6704921/episodes/feed"}
     pub("", NAME, plain(pod.get("description")) or NAME, hub, ld)
-    # Weiterleitungsliste fuer den spaeteren Domain-Umzug
-    write("show/redirects.json", json.dumps({f"/episodes/{e['slug']}": f"/show/episodes/{e['slug']}/" for e in eps} | {f"/{s}": f"/show/{s}/" for s, _ in plist} | {f"/guests/{x['slug']}": f"/show/guests/{x['slug']}/" for x in guests}))
-    print(f"podpage: {len(eps)} Folgen, {len(guests)} Gaeste, {len(plist)} Seiten")
+    # Weiterleitungsliste fuer den Umzug (Podpage-Struktur: Folgen und Seiten direkt unter /<slug>/, Gaeste unter /guests/<slug>/, Blog /blog/<slug>/)
+    from pathlib import Path as _P
+    taken = {x.name for x in (_P(__file__).parent / "docs").iterdir()} if (_P(__file__).parent / "docs").exists() else set()
+    taken |= {"show", "shows", "community", "entity", "glossary", "learn", "assets", "updates", "de", "en", "es", "fr", "it", "pt", "nl", "pl", "id", "ru", "uk", "ar", "he", "hi", "ja", "ko", "ml", "pa", "ta", "te"}
+    rd, clash = {}, []
+    def add(old, new):
+        top = old.strip("/").split("/")[0]
+        if "/" not in old.strip("/") and top in taken: clash.append(old); return
+        rd[old] = new
+    for e in eps: add(f"/{e['slug']}", f"/show/episodes/{e['slug']}/")
+    for sl, _ in plist: add(f"/{sl}", f"/show/{sl}/")
+    for x in guests: add(f"/guests/{x['slug']}", f"/show/guests/{x['slug']}/")
+    for old, new in (("/episodes", "/show/episodes/"), ("/guests", "/show/guests/"), ("/hosts", "/show/hosts/"), ("/people", "/show/hosts/"), ("/sponsors", "/show/sponsors/"), ("/reviews", "/show/reviews/"), ("/podroll", "/show/listen/"), ("/videos", "/show/"), ("/blog", "/show/")): rd.setdefault(old, new)
+    write("show/redirects.json", json.dumps(rd))
+    write("show/redirect-conflicts.json", json.dumps(sorted(set(clash))))
+    print(f"podpage: {len(eps)} Folgen, {len(guests)} Gaeste, {len(plist)} Seiten, {len(rd)} Weiterleitungen, Konflikte mit Plattform-Seiten: {sorted(set(clash))}")

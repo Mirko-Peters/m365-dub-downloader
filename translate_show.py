@@ -34,7 +34,7 @@ def main():
     for l in langs:
         for e in eps:
             if e["slug"] in have[l]: continue
-            src = json.dumps({"title": e["name"], "summary": P.plain(e.get("summary"))[:1200]}, ensure_ascii=False)
+            src = json.dumps({"title": e["name"], "summary": (P.plain(e.get("summary")) or P.plain(e.get("show_notes")))[:900]}, ensure_ascii=False)
             reqs.append({"custom_id": f"{l}__{e['slug']}"[:64] if len(f"{l}__{e['slug']}") <= 64 else f"{l}__{e['id']}", "params": {"model": MODEL, "max_tokens": 700,
                          "system": f"Translate the podcast episode title and summary into {NAMES[l]}. Keep product names (Microsoft 365, Copilot, Power BI, Azure ...) untranslated. Reply with JSON only: {{\"title\": ..., \"summary\": ...}}",
                          "messages": [{"role": "user", "content": src}]}})
