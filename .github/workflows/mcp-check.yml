@@ -22,9 +22,10 @@ jobs:
         id: check
         env:
           REPORT_FILE: mcp-report.md
-          MCP_URL: ${{ github.event_name == 'pull_request' && '' || 'https://api-dub.m365.fm/mcp' }}
         run: |
           set +e
+          # Live-Abgleich nur im täglichen Lauf (nach dem Deploy) und manuell - nicht bei Push/Pull Request, dort rollt der Worker gerade erst aus
+          case "$GITHUB_EVENT_NAME" in schedule|workflow_dispatch) export MCP_URL=https://api-dub.m365.fm/mcp ;; esac
           node tools/check_mcp_coverage.mjs
           echo "code=$?" >> "$GITHUB_OUTPUT"
           cat mcp-report.md >> "$GITHUB_STEP_SUMMARY"
