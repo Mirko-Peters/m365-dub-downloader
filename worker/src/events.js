@@ -37,6 +37,12 @@ export async function canManage(db, user, ev, perm = "edit") {
   const r = await db.prepare("SELECT role FROM event_roles WHERE event_id=? AND user_id=?").bind(ev.id, user.id).first();
   return !!r && (EVENT_ROLES[r.role] || []).includes(perm);
 }
+// Freie Plaetze mit Wartelisten-Mitgliedern in Anmelde-Reihenfolge auffuellen
+export async function promoteWaitlist(db, evId, cap) {
+  if (cap <= 0) { await db.prepare("UPDATE event_attendees SET status='going' WHERE event_id=? AND status='waitlist'").bind(evId).run(); return; }
+  const going = (await db.prepare("SELECT COUNT(*) n FROM event_attendees WHERE event_id=? AND status='going'").bind(evId).first()).n;
+  if (going < cap) await db.prepare("UPDATE event_attendees SET status='going' WHERE rowid IN (SELECT rowid FROM event_attendees WHERE event_id=? AND status='waitlist' ORDER BY created LIMIT ?)").bind(evId, cap - going).run();
+}
 const EID = /^[a-z0-9-]{2,48}$/;
 const rndToken = () => [...crypto.getRandomValues(new Uint8Array(18))].map((b) => b.toString(16).padStart(2, "0")).join("");
 // Speaker pruefen. Jede Person muss die Teilnahme selbst bestaetigen (s: invited|confirmed). Bestehende Stati/Tokens bleiben erhalten.
@@ -227,7 +233,7 @@ export async function handleEvents(env, request, url, path, user, J) {
     if (need()) return need();
     const ev = await db.prepare("SELECT * FROM events WHERE handle=?").bind(m[1]).first();
     if (!(await canManage(db, user, ev, "delete"))) return J({ error: "forbidden" }, 403);
-    await db.batch([db.prepare("DELETE FROM event_roles WHERE event_id=?").bind(ev.id), db.prepare("DELETE FROM event_sessions WHERE event_id=?").bind(ev.id), db.prepare("DELETE FROM events WHERE id=?").bind(ev.id)]);
+    await db.batch([db.prepare("DELETE FROM event_roles WHERE event_id=?").bind(ev.id), db.prepare("DELETE FROM event_attendees WHERE event_id=?").bind(ev.id), db.prepare("DELETE FROM event_settings WHERE event_id=?").bind(ev.id), db.prepare("DELETE FROM event_sessions WHERE event_id=?").bind(ev.id), db.prepare("DELETE FROM events WHERE id=?").bind(ev.id)]);
     return J({ ok: true });
   }
   // Session anlegen/aendern: Veranstalter -> sofort live; andere Mitglieder -> Vorschlag (pending)
@@ -248,7 +254,11 @@ export async function handleEvents(env, request, url, path, user, J) {
     const f = [title, long(b.abstract, 1500), st, en, txt(b.room, 60), txt(b.track, 60), level, txt(b.lang, 10), JSON.stringify(tp), JSON.stringify(sp), ru];
     if (b.id) {
       const s = await db.prepare("SELECT * FROM event_sessions WHERE id=? AND event_id=?").bind(+b.id, ev.id).first(); if (!s) return J({ error: "not_found" }, 404);
-      if (!mgr && !(s.proposer_id === user.id && s.status === "pending")) return J({ error: "forbidden" }, 403);
+      if (!mgr && !(s.proposer_id === user.id && s.status === "pending")) {
+        if (!(myH && parse(s.speakers, []).some((x) => x.h === myH && x.s === "confirmed"))) return J({ error: "forbidden" }, 403);
+        await db.prepare("UPDATE event_sessions SET abstract=?,recording_url=? WHERE id=?").bind(f[1], ru, s.id).run();   // bestaetigte Speaker pflegen nur Beschreibung und Aufzeichnung
+        return J({ ok: true, limited: true });
+      }
       await db.prepare("UPDATE event_sessions SET title=?,abstract=?,start=?,end=?,room=?,track=?,level=?,lang=?,topics=?,speakers=?,recording_url=? WHERE id=?").bind(...f, s.id).run();
       await saveInvites(db, ev.id, s.id, sp);
       return J({ ok: true });
@@ -272,6 +282,50 @@ export async function handleEvents(env, request, url, path, user, J) {
     if (!m[3] && method === "DELETE") {
       if (!mgr && s.proposer_id !== user.id) return J({ error: "forbidden" }, 403);
       await db.prepare("DELETE FROM event_sessions WHERE id=?").bind(s.id).run(); return J({ ok: true });
+    }
+  }
+  // ---- Teilnehmer: anmelden (Warteliste bei vollem Event), Sichtbarkeit selbst bestimmen, abmelden ----
+  if ((m = path.match(/^\/api\/event\/([a-z0-9-]{3,40})\/(attendees|register|capacity|invite-mail)$/))) {
+    const ev = await db.prepare("SELECT * FROM events WHERE handle=?").bind(m[1]).first(); if (!ev || (!ev.public && !(await canManage(db, user, ev, "edit")))) return J({ error: "not_found" }, 404);
+    const cap = (await db.prepare("SELECT capacity FROM event_settings WHERE event_id=?").bind(ev.id).first())?.capacity || 0;
+    if (m[2] === "attendees" && method === "GET") {
+      const going = (await db.prepare("SELECT COUNT(*) n FROM event_attendees WHERE event_id=? AND status='going'").bind(ev.id).first()).n;
+      const wl = (await db.prepare("SELECT COUNT(*) n FROM event_attendees WHERE event_id=? AND status='waitlist'").bind(ev.id).first()).n;
+      const vis = (await db.prepare("SELECT u.name,p.handle FROM event_attendees a JOIN users u ON u.id=a.user_id JOIN profiles p ON p.user_id=u.id AND p.public=1 WHERE a.event_id=? AND a.status='going' AND a.visible=1 ORDER BY a.created LIMIT 200").bind(ev.id).all()).results || [];
+      const me = user ? await db.prepare("SELECT status,visible FROM event_attendees WHERE event_id=? AND user_id=?").bind(ev.id, user.id).first() : null;
+      return J({ going, waitlist: wl, capacity: cap, full: cap > 0 && going >= cap, visible: vis.map((r) => ({ name: r.name, handle: r.handle })), me: me ? { status: me.status, visible: !!me.visible } : null, can_edit: user ? await canManage(db, user, ev, "edit") : false }, 200, { "cache-control": "no-store" });
+    }
+    if (need()) return need();
+    if (m[2] === "register" && method === "POST") {
+      if (!(await rateLimit(db, `reg:${user.id}`, 40, 3600))) return J({ error: "rate_limit" }, 429);
+      const b = await body(), vis = b.visible ? 1 : 0;
+      if (vis && !(await db.prepare("SELECT 1 x FROM profiles WHERE user_id=? AND public=1").bind(user.id).first())) return J({ error: "need_profile" }, 400);
+      const cur = await db.prepare("SELECT status FROM event_attendees WHERE event_id=? AND user_id=?").bind(ev.id, user.id).first();
+      if (cur) { await db.prepare("UPDATE event_attendees SET visible=? WHERE event_id=? AND user_id=?").bind(vis, ev.id, user.id).run(); return J({ ok: true, status: cur.status }); }
+      const going = (await db.prepare("SELECT COUNT(*) n FROM event_attendees WHERE event_id=? AND status='going'").bind(ev.id).first()).n;
+      const st = cap > 0 && going >= cap ? "waitlist" : "going";
+      await db.prepare("INSERT INTO event_attendees(event_id,user_id,status,visible,created) VALUES(?,?,?,?,?)").bind(ev.id, user.id, st, vis, now()).run();
+      return J({ ok: true, status: st });
+    }
+    if (m[2] === "register" && method === "DELETE") {
+      await db.prepare("DELETE FROM event_attendees WHERE event_id=? AND user_id=?").bind(ev.id, user.id).run(); await promoteWaitlist(db, ev.id, cap);
+      return J({ ok: true });
+    }
+    if (m[2] === "capacity" && method === "POST") {
+      if (!(await canManage(db, user, ev, "edit"))) return J({ error: "forbidden" }, 403);
+      const n = Math.max(0, Math.min(100000, parseInt((await body()).capacity, 10) || 0));
+      await db.prepare("INSERT INTO event_settings(event_id,capacity) VALUES(?,?) ON CONFLICT(event_id) DO UPDATE SET capacity=excluded.capacity").bind(ev.id, n).run(); await promoteWaitlist(db, ev.id, n);
+      return J({ ok: true, capacity: n });
+    }
+    if (m[2] === "invite-mail" && method === "POST") {   // Einladung an Personen ohne Konto; Adresse wird nicht gespeichert
+      if (!(await canManage(db, user, ev, "edit"))) return J({ error: "forbidden" }, 403);
+      if (!(await rateLimit(db, `evmail:${user.id}`, 30, 3600))) return J({ error: "rate_limit" }, 429);
+      const email = String((await body()).email || "").trim().toLowerCase();
+      if (!/^[^\s@<>]{1,64}@[^\s@<>]{1,120}\.[a-z]{2,}$/i.test(email)) return J({ error: "bad_email" }, 400);
+      if (!env.RESEND_API_KEY) return J({ error: "mail_off" }, 503);
+      const esc = (x) => String(x).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c])), u = `${env.SITE}/community/events/${ev.handle}/`;
+      const r = await sendMail(env, email, `Invitation: ${ev.title}`, `<p>Hello,</p><p>${esc(user.name)} invites you to <b>${esc(ev.title)}</b> (${esc(ev.start)}).</p><p><a href="${u}">View the event and register</a> (sign-in required, free).</p><p>M365.FM</p>`);
+      return r.ok ? J({ ok: true }) : J({ error: "send_failed" }, 502);
     }
   }
   // ---- Event-Team: Rollen vergeben (Organisator, Co-Organisator, Programm-, Sponsoren-Manager, Kommunikation, Helfer) ----
@@ -419,7 +473,7 @@ export async function handleEvents(env, request, url, path, user, J) {
 export async function deleteUserEvents(db, uid) {
   const evs = (await db.prepare("SELECT id FROM events WHERE owner_id=? AND org_id IS NULL").bind(uid).all()).results || [];
   const ops = [];
-  for (const e of evs) ops.push(db.prepare("DELETE FROM event_roles WHERE event_id=?").bind(e.id), db.prepare("DELETE FROM event_sessions WHERE event_id=?").bind(e.id), db.prepare("DELETE FROM events WHERE id=?").bind(e.id));
-  ops.push(db.prepare("DELETE FROM event_sessions WHERE proposer_id=? AND status='pending'").bind(uid), db.prepare("DELETE FROM event_roles WHERE user_id=?").bind(uid));
+  for (const e of evs) ops.push(db.prepare("DELETE FROM event_roles WHERE event_id=?").bind(e.id), db.prepare("DELETE FROM event_attendees WHERE event_id=?").bind(e.id), db.prepare("DELETE FROM event_settings WHERE event_id=?").bind(e.id), db.prepare("DELETE FROM event_sessions WHERE event_id=?").bind(e.id), db.prepare("DELETE FROM events WHERE id=?").bind(e.id));
+  ops.push(db.prepare("DELETE FROM event_sessions WHERE proposer_id=? AND status='pending'").bind(uid), db.prepare("DELETE FROM event_roles WHERE user_id=?").bind(uid), db.prepare("DELETE FROM event_attendees WHERE user_id=?").bind(uid));
   if (ops.length) await db.batch(ops);
 }

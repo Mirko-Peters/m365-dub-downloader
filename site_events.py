@@ -1,4 +1,5 @@
 """Events und Sessions: oeffentliche Event-Seiten mit Schema.org (Event, subEvent, performer, organizer, about -> Entitaeten)."""
+import json
 from datetime import datetime
 from site_learn import ENTS, esc, _fetch_json, LCSS
 from site_entities import eurl, eid_of
@@ -111,6 +112,17 @@ def blocks(BASE, events, lang):
     return res
 
 
+REGJS = r'''(function(){var d=document.getElementById("ev-reg");if(!d)return;var A="%API%",E=d.getAttribute("data-e"),T=%T%,C="%CROOT%";function f(p,o){o=o||{};o.credentials="include";o.headers={"x-requested-with":"m365","content-type":"application/json"};return fetch(A+p,o).then(function(r){return r.json().then(function(j){return{s:r.status,j:j}})})}
+function el(t,x,c){var e=document.createElement(t);if(x)e.textContent=x;if(c)e.className=c;return e}
+function draw(j){d.textContent="";var line=j.going+" "+T.going+(j.waitlist?" · "+j.waitlist+" "+T.wait:"")+(j.capacity?" · "+T.cap.replace("{n}",j.capacity):"");d.appendChild(el("p",line,"mut"));
+var me=j.me;if(!me){var cb=document.createElement("input");cb.type="checkbox";var lb=el("label");lb.appendChild(cb);lb.appendChild(document.createTextNode(" "+T.vis));var b=el("button",j.full?T.joinwl:T.join,"btn main");b.type="button";b.onclick=function(){f("/api/event/"+E+"/register",{method:"POST",body:JSON.stringify({visible:cb.checked})}).then(function(r){if(r.s===401){location.href=C+"?register="+E+"#c-events";return}if(r.j.error==="need_profile"){alert(T.prof);return}load()})};d.appendChild(b);d.appendChild(el("br"));d.appendChild(lb)}
+else{d.appendChild(el("p",me.status==="going"?T.in:T.inwl));var cb2=document.createElement("input");cb2.type="checkbox";cb2.checked=me.visible;cb2.onchange=function(){f("/api/event/"+E+"/register",{method:"POST",body:JSON.stringify({visible:cb2.checked})}).then(function(r){if(r.j.error==="need_profile"){cb2.checked=false;alert(T.prof)}load()})};var l2=el("label");l2.appendChild(cb2);l2.appendChild(document.createTextNode(" "+T.vis));d.appendChild(l2);var o=el("button",T.out,"btn");o.type="button";o.onclick=function(){f("/api/event/"+E+"/register",{method:"DELETE"}).then(load)};d.appendChild(el("br"));d.appendChild(o)}
+if(j.visible&&j.visible.length){d.appendChild(el("h3",T.who));var u=el("p");j.visible.forEach(function(x,i){if(i)u.appendChild(document.createTextNode(", "));var a=el("a",x.name);a.href=C.replace(/community\/$/,"community/")+"u/"+x.handle+"/";u.appendChild(a)});d.appendChild(u)}}
+function load(){f("/api/event/"+E+"/attendees").then(function(r){if(r.s===200)draw(r.j)}).catch(function(){})}load()})()'''
+REGT = {
+    "en": {"going": "registered", "wait": "on the waiting list", "cap": "{n} places", "vis": "Show my profile in the public participant list (off by default)", "join": "Register (free)", "joinwl": "Join the waiting list", "in": "✓ You are registered.", "inwl": "You are on the waiting list and move up automatically.", "out": "Cancel registration", "prof": "Create a public profile first to be shown in the list.", "who": "Participants who chose to be listed"},
+    "de": {"going": "angemeldet", "wait": "auf der Warteliste", "cap": "{n} Plätze", "vis": "Mein Profil in der öffentlichen Teilnehmerliste zeigen (standardmäßig aus)", "join": "Anmelden (kostenlos)", "joinwl": "Auf die Warteliste", "in": "✓ Du bist angemeldet.", "inwl": "Du stehst auf der Warteliste und rückst automatisch nach.", "out": "Anmeldung zurückziehen", "prof": "Lege zuerst ein öffentliches Profil an, um in der Liste zu erscheinen.", "who": "Teilnehmende, die sich zeigen wollen"},
+}
 EVLIVE = r'''(function(){fetch("%API%/api/events/export").then(function(r){return r.json()}).then(function(j){var have={};[].forEach.call(document.querySelectorAll(".ev-list a[href]"),function(a){have[a.getAttribute("href")]=1});var T=new Date().toISOString().slice(0,10),ups=document.querySelector(".ev-list");(j.events||[]).forEach(function(e){var u="%BASE%"+e.handle+"/";if(have[u])return;if((e.end||e.start).slice(0,10)<T)return;var ul=document.querySelector(".ev-list");if(!ul){ul=document.createElement("ul");ul.className="ev-list";document.querySelector("h1").parentNode.appendChild(ul)}var li=document.createElement("li");li.className="ev-card";var a=document.createElement("a");a.href=u;var b=document.createElement("b");b.textContent=e.title;a.appendChild(b);li.appendChild(a);var sp=document.createElement("span");sp.className="mut";sp.textContent=" · "+e.start.slice(0,10);li.appendChild(sp);ul.insertBefore(li,ul.firstChild)})}).catch(function(){})})()'''
 
 
@@ -147,6 +159,7 @@ def build(g, events, people, orgs):
             b = shell(lang, f'<nav aria-label="breadcrumb"><a href="{croot}events/">{esc(s["events"])}</a></nav><h1>{esc(ev["title"])}</h1><p style="font-size:1.1em">{esc(ev.get("summary", ""))}</p>{ft}<p>{btn}</p>'
                       + (f'<h2>{esc(s["about"])}</h2><p style="white-space:pre-line">{esc(ev["about"])}</p>' if ev.get("about") else "") + (f'<h2>{esc(s["topics"])}</h2><p>{tp}</p>' if tp else "")
                       + f'<h2>{esc(s["sessions"])}</h2>' + ("".join(ss) or f'<p class="mut">{esc(s["nosess"])}</p>')
+                      + f'<h2>{"Anmeldung" if lang == "de" else "Registration"}</h2><div id="ev-reg" data-e="{esc(ev["handle"])}"></div><script>' + REGJS.replace("%API%", api).replace("%T%", json.dumps(REGT[lang], ensure_ascii=False)).replace("%CROOT%", croot) + '</script>'
                       + f'<p><a class="btn" href="{croot}?propose={esc(ev["handle"])}#c-events">{esc(s["propose"])}</a></p>' + css)
             ld = [{"@context": "https://schema.org", **event_ld(BASE, ev, pb, ob)}]
             write(f"{'de/' if lang == 'de' else ''}community/events/{ev['handle']}/index.html", page(lang, f'{ev["title"]} – {s["events"]} | M365.FM', (ev.get("summary") or ev.get("about") or "")[:155], u, b, None, ld, og_type="website", extra_head=LCSS, noindex=noidx))

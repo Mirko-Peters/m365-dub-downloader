@@ -454,3 +454,18 @@ CREATE TABLE IF NOT EXISTS event_roles (
   PRIMARY KEY (event_id, user_id)
 );
 CREATE INDEX IF NOT EXISTS idx_er_user ON event_roles(user_id);
+
+-- Teilnehmer-Anmeldung: Status going|waitlist, Sichtbarkeit steuert der Teilnehmer; Plaetze je Event in event_settings
+CREATE TABLE IF NOT EXISTS event_attendees (
+  event_id INTEGER NOT NULL,
+  user_id INTEGER NOT NULL,
+  status TEXT NOT NULL DEFAULT 'going',
+  visible INTEGER NOT NULL DEFAULT 0,
+  created INTEGER NOT NULL,
+  PRIMARY KEY (event_id, user_id)
+);
+CREATE INDEX IF NOT EXISTS idx_ea_user ON event_attendees(user_id);
+CREATE TABLE IF NOT EXISTS event_settings (
+  event_id INTEGER PRIMARY KEY,
+  capacity INTEGER NOT NULL DEFAULT 0      -- 0 = unbegrenzt
+);

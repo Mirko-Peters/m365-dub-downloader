@@ -115,3 +115,8 @@ Podpage kostet 65 $/Monat (ca. 780 $/Jahr). Ziel: m365.fm komplett auf dub.m365.
 - Tabelle `event_roles`; Rollen: Organisator (alles), Co-Organisator (Event, Programm, Sponsoring, Rollen), Programm-Manager (Sessions), Sponsoren-Manager (Anfragen), Kommunikation (Texte/Links), Helfer (nur im Team genannt). Zentrale Prüfung `canManage(db,user,ev,perm)`.
 - API `/api/event/:handle/team` (GET/POST/DELETE), MCP `get_event_team`, `set_event_role`, UI-Block „Team und Rollen" im Event-Editor.
 - Offen: Teilnehmer-Anmeldung mit Warteliste, Sponsor-/Medienpartner-Bestätigung, Einladung per E-Mail (RESEND_API_KEY).
+
+## Teilnehmer und Speaker (gebaut)
+- Anmeldung `/api/event/:h/register` mit Warteliste (Plätze via `/capacity`), Sichtbarkeit in der Teilnehmerliste wählt jeder selbst (Standard aus), Block „Anmeldung" auf der Event-Seite, E-Mail-Einladung `/invite-mail` (braucht RESEND_API_KEY).
+- Speaker: MCP `list_my_speaker_requests`, `respond_speaker_request`, `update_my_session`; bestätigte Speaker pflegen Beschreibung und Aufzeichnung ihrer Session selbst (Titel/Zeit bleiben beim Team).
+- Offen: Sponsor-/Medienpartner-Bestätigung, iCal-Export, „Meine Anmeldungen" im Profil.
