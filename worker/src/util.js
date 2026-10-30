@@ -87,6 +87,6 @@ export async function rateLimit(db, key, max, windowSec) {
   return true;
 }
 
-export const LANGS = ["de", "es", "fr", "it", "pt", "nl", "pl", "id", "ru", "uk", "ar", "he", "hi", "ja", "ko", "ml", "pa", "ta", "te"];
+export const LANGS = ["de", "es", "fr", "it", "pt", "nl", "pl", "id", "ru", "uk", "ar", "he", "hi", "ja", "ko", "ml", "ta", "te"];
 export const isLang = (l) => LANGS.includes(l);
 export const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
