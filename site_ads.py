@@ -24,6 +24,8 @@ def cfg():
 
 def active(base):
     c = cfg()
+    if c.get("enabled") is False:   # Hauptschalter in data/adsense.json: aus = kein Meta-Tag, keine ads.txt, kein Skript, keine Bloecke
+        return False
     pub = (c.get("publisher") or "").strip()
     host = base.split("//")[-1].strip("/")
     return bool(re.fullmatch(r"pub-\d{10,20}", pub)) and host == (c.get("domain") or "")
