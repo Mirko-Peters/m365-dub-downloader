@@ -1,0 +1,1300 @@
+WEBVTT
+
+00:00:00.300 --> 00:00:07.120
+Preparado para 10 dias de Microsoft 365, Copilot, IA, Azure e as pessoas que estão moldando o futuro do trabalho, IA.
+
+00:00:07.880 --> 00:00:12.080
+Em janeiro, a M3165.com está de volta e ainda maior.
+
+00:00:12.920 --> 00:00:18.120
+Junte-se a nós para sessões ao vivo, demonstrações reais e conhecimento prático com MVPs e especialistas do setor de todo o mundo.
+
+00:00:18.940 --> 00:00:21.200
+Nada de slides genéricos ou jargões intermináveis.
+
+00:00:22.020 --> 00:00:28.740
+Vamos abordar desafios reais Copilot Studio, agentes de IA, fábrica, segurança, governança e automação.
+
+00:00:28.740 --> 00:00:34.360
+Seja você um profissional de TI, desenvolvedor ou líder de negócios, há sessões projetadas para você.
+
+00:00:35.580 --> 00:00:39.940
+Com 10 dias completos, você pode explorar várias tecnologias e se conectar com uma comunidade global.
+
+00:00:40.900 --> 00:00:43.740
+Assista ao vivo e leve insights práticos para sua organização.
+
+00:00:45.160 --> 00:00:50.520
+Janeiro de 2027, 10 dias, uma única comunidade Microsoft. As inscrições já estão abertas.
+
+00:00:51.880 --> 00:00:55.500
+Acesse m3165.com.net e garanta sua vaga, hoje mesmo.
+
+00:00:55.500 --> 00:00:59.500
+É m3165.com.net e...
+
+00:00:59.500 --> 00:01:04.800
+Participe agora em m3165.com.net e nos vemos ao vivo em janeiro.
+
+00:01:05.340 --> 00:01:08.580
+Se você acha que o Copilot só mostra que você já tem permissão para ver, pense novamente.
+
+00:01:09.320 --> 00:01:13.720
+Uma permissão incorreta no Graph. De repente, sua IA pode exibir dados que sua equipe de conformidade nunca autorizou.
+
+00:01:14.580 --> 00:01:16.720
+O lado assustador, você pode nunca perceber o que está acontecendo.
+
+00:01:16.720 --> 00:01:24.400
+Neste vídeo, analisarei os riscos reais do acesso não gerenciado ao Copilot, como arquivos sensíveis, planilhas financeiras e dados confidenciais de clientes podem vazar.
+
+00:01:25.720 --> 00:01:32.900
+Depois, mostrarei como restringir o acesso, usando permissões do Graph, políticas de DLP e Perview, sem interromper a produtividade de quem realmente precisa de acesso.
+
+00:01:32.900 --> 00:01:40.220
+Quando o Copilot sabe demais, um funcionário júnior pede ao Copilot as notas da revisão de projeto do último trimestre.
+
+00:01:40.320 --> 00:01:45.320
+E o que retorna não é um resumo organizado da própria reunião, mas atas detalhadas de uma sessão privada do Conselho,
+
+00:01:45.400 --> 00:01:50.780
+incluindo decisões estratégicas, cortes orçamentários e nomes que nunca deveriam ter chegado à caixa de entrada daquela pessoa.
+
+00:01:52.120 --> 00:01:57.840
+Nenhum alerta de violação disparou ou nenhum aviso de DLP, apenas uma IA entregando silenciosamente um documento que nunca deveria ter acessado.
+
+00:01:57.840 --> 00:02:02.320
+Isso acontece porque o Copilot não para magicamente na caixa de correio ou na pasta do OneDrive de um usuário.
+
+00:02:03.480 --> 00:02:06.800
+Seu alcance é ditado pelas permissões concedidas a ele por meio do Microsoft Graph.
+
+00:02:08.560 --> 00:02:14.760
+E o Graph não é apenas um banco de dados, é o ponto central de acesso a quase todo o conteúdo no Microsoft 365, SharePoint,
+
+00:02:14.900 --> 00:02:18.980
+mensagens do Teams, eventos de calendário, OneNote e dados de CRM vinculados ao tenant.
+
+00:02:20.340 --> 00:02:22.980
+Tudo flui através do Graph se a porta certa estiver destrancada.
+
+00:02:23.380 --> 00:02:24.820
+Essa é a parte que muitos administradores deixam passar.
+
+00:02:24.820 --> 00:02:29.180
+Existe uma suposição comum de que se estou logado como eu, o Copilot só verá o que eu posso ver.
+
+00:02:30.080 --> 00:02:30.760
+Parece razoável.
+
+00:02:31.580 --> 00:02:35.620
+O problema é que o próprio Copilot geralmente é executado com um conjunto separado de permissões de aplicativo.
+
+00:02:36.620 --> 00:02:39.840
+Se essas permissões forem mais amplas do que os direitos do usuário logado,
+
+00:02:39.940 --> 00:02:43.940
+você acaba com um assistente de IA que consegue acessar muito mais do que a pessoa no teclado.
+
+00:02:45.340 --> 00:02:49.460
+E em algumas implementações, as permissões elevadas são concedidas sem que ninguém questione o porquê.
+
+00:02:51.080 --> 00:02:53.680
+Imagine um analista financeiro trabalhando numa previsão trimestral.
+
+00:02:53.680 --> 00:02:57.840
+Ele pede ao Copilot os dados atuais do pipeline dos 20 principais clientes.
+
+00:02:58.640 --> 00:03:02.120
+Em sua função normal, ele deveria apenas números de um subconjunto desses clientes.
+
+00:03:03.120 --> 00:03:06.540
+Mas, devido a como o Graph foi configurado no registro do aplicativo do Copilot,
+
+00:03:06.680 --> 00:03:10.080
+a IA puxa todo o relatório do pipeline de vendas de um site de equipe compartilhado
+
+00:03:10.080 --> 00:03:12.220
+ao qual o analista nunca teve acesso direto.
+
+00:03:12.220 --> 00:03:15.660
+Sob a perspectiva do usuário final, nada parece suspeito.
+
+00:03:16.380 --> 00:03:19.340
+Mas, do ponto de vista de segurança e conformidade, isso é uma exposição de dados sensíveis.
+
+00:03:20.340 --> 00:03:23.960
+As permissões da API do Graph são, na prática, a porta de entrada para os dados da sua organização.
+
+00:03:24.660 --> 00:03:28.740
+A Microsoft as divide em permissões delegadas, que agem em nome de um usuário logado,
+
+00:03:28.860 --> 00:03:32.500
+e permissões de aplicativo que permitem que um app opere de forma independente.
+
+00:03:33.320 --> 00:03:36.920
+Cenários do Copilot geralmente exigem permissões delegadas para recuperação de conteúdo,
+
+00:03:37.040 --> 00:03:40.580
+mas certos recursos, como resumir uma reunião do Teams na qual o usuário não estava presente,
+
+00:03:40.720 --> 00:03:44.780
+podem levar administradores a aprovar permissões de nível aplicativo, por OAS.
+
+00:03:45.860 --> 00:03:47.160
+E é aí que o perigo se instala.
+
+00:03:47.640 --> 00:03:50.480
+As permissões de aplicativo ignoram restrições individuais de usuário,
+
+00:03:50.540 --> 00:03:52.140
+a menos que você as delimite deliberadamente.
+
+00:03:52.960 --> 00:03:55.680
+Essas aprovações costumam ocorrer no início da implementação,
+
+00:03:55.800 --> 00:03:59.680
+e um administrador de TI testando o Copilot em um ambiente de desenvolvimento
+
+00:03:59.680 --> 00:04:03.860
+pode clicar em aceitar em uma solicitação de permissão apenas para concluir a configuração,
+
+00:04:03.960 --> 00:04:06.420
+replicando-a na produção sem revisar as implicações.
+
+00:04:07.300 --> 00:04:10.920
+Uma vez estabelecidas, essas permissões amplas permanecem a menos que alguém as audite ativamente.
+
+00:04:12.360 --> 00:04:15.880
+Com o tempo, à medida que novas fontes de dados se conectam ao M365,
+
+00:04:15.980 --> 00:04:18.880
+o alcance do Copilot se expande sem qualquer decisão consciente.
+
+00:04:19.660 --> 00:04:22.880
+Isso é um aumento silencioso de permissões, sem drama, sem reclamações de usuários,
+
+00:04:22.880 --> 00:04:24.880
+apenas uma ampliação gradual do escopo da IA.
+
+00:04:26.000 --> 00:04:29.660
+O desafio é que a maioria das equipes de segurança não domina quais recursos do Copilot,
+
+00:04:29.680 --> 00:04:31.780
+exigem qual nível de acesso ao Graph.
+
+00:04:32.500 --> 00:04:37.040
+Elas podem ver, ler todos os arquivos no SharePoint e presumir que está limitado ao contexto do usuário,
+
+00:04:37.120 --> 00:04:39.860
+sem perceber que a permissão é para todo locatário no nível do aplicativo.
+
+00:04:41.890 --> 00:04:45.370
+Sem mapear cenários específicos de IA para as permissões mínimas necessárias,
+
+00:04:45.610 --> 00:04:48.750
+você acaba dependendo do que foi aprovado na configuração inicial,
+
+00:04:48.750 --> 00:04:52.670
+e quanto mais amplos forem esses direitos,
+
+00:04:52.810 --> 00:04:55.750
+maior a diferença potencial entre o comportamento esperado e o real.
+
+00:04:55.750 --> 00:05:02.770
+Vale lembrar também que o resultado do Copilot não vem com rastro de permissões visível para o usuário.
+
+00:05:04.390 --> 00:05:08.410
+Se a IA recuperar conteúdo de um local que o usuário normalmente estaria impedido de acessar,
+
+00:05:08.670 --> 00:05:11.910
+não há um banner de aviso dizendo que isso está fora da sua alçada.
+
+00:05:12.970 --> 00:05:17.310
+Essa falta de transparência torna mais fácil para exposições arriscadas se misturarem aos fluxos de trabalho de app.
+
+00:05:17.310 --> 00:05:23.250
+A lição aqui é que as permissões do Graph para implementações de IA não são apenas mais uma caixa de seleção no processo de integração.
+
+00:05:24.290 --> 00:05:28.010
+Elas são uma escolha de design que molda cada interação que o Copilot terá em sua rede.
+
+00:05:28.970 --> 00:05:32.070
+Trate-as como faria com regras de firewall ou escopos de acesso VPN,
+
+00:05:32.210 --> 00:05:35.090
+de forma deliberada, revisada e revalidada periodicamente.
+
+00:05:36.090 --> 00:05:38.170
+As configurações padrão podem agilizar o início,
+
+00:05:38.250 --> 00:05:41.850
+mas também assumem que você aceita que a IA tem um alcance muito maior do que o humano por trás dela.
+
+00:05:43.270 --> 00:05:45.810
+Agora que vimos com que facilidade o escopo pode se desviar,
+
+00:05:45.810 --> 00:05:49.210
+a próxima pergunta é como encontrar essas lacunas antes que se transforme em um incidente grave.
+
+00:05:50.510 --> 00:05:51.730
+Encontrando vazamentos que transbordem.
+
+00:05:52.210 --> 00:05:54.690
+Se o Copilot já estivesse exibindo dados que não deveria, você notaria.
+
+00:05:54.870 --> 00:05:55.270
+Você notaria.
+
+00:05:55.870 --> 00:05:57.930
+Para a maioria das organizações, a resposta honesta é não.
+
+00:05:58.710 --> 00:06:02.730
+Não é que a informação seria postada em um site público ou enviada para uma lista de e-mails.
+
+00:06:03.930 --> 00:06:07.550
+O vazamento pode aparecer silenciosamente dentro de um rascunho de documento,
+
+00:06:08.070 --> 00:06:09.910
+um resumo ou uma resposta gerada por IA.
+
+00:06:10.530 --> 00:06:14.130
+E a menos que alguém note algo em comum, ele passa despercebido sem acionar alarmes.
+
+00:06:14.130 --> 00:06:18.490
+O problema de visibilidade começa com a forma como a maioria dos sistemas de monitoramento são construídos.
+
+00:06:19.030 --> 00:06:22.350
+Eles são ajustados para atividades tradicionais, como downloads de arquivos,
+
+00:06:22.470 --> 00:06:24.730
+locais de login comuns, envios de e-mails grandes,
+
+00:06:24.870 --> 00:06:28.110
+não para a forma como uma IA recupera e compila informações.
+
+00:06:29.410 --> 00:06:31.190
+Copilot não abre arquivos no sentido convencional.
+
+00:06:31.750 --> 00:06:34.990
+Ele consulta fontes de dados via Microsoft Graph, compila os resultados,
+
+00:06:35.450 --> 00:06:37.270
+e os apresenta como texto em linguagem natural.
+
+00:06:37.270 --> 00:06:41.710
+Isso significa que relatórios padrão de acesso a arquivos podem parecer limpos,
+
+00:06:41.990 --> 00:06:44.770
+enquanto a IA ainda extrai dados de locais confidenciais em segundo plano.
+
+00:06:46.030 --> 00:06:48.850
+Já vi situações em que uma empresa só percebeu que algo estava errado
+
+00:06:48.850 --> 00:06:51.250
+porque um funcionário mencionou casualmente o nome de um cliente
+
+00:06:51.250 --> 00:06:53.270
+que não estava sob a responsabilidade de seu departamento.
+
+00:06:54.410 --> 00:06:56.030
+Quando o gerente perguntou como ele sabia disso,
+
+00:06:56.110 --> 00:06:58.070
+a resposta foi o Copilot inclui no meu rascunho.
+
+00:06:58.990 --> 00:07:01.390
+Não houve chamado de incidente nem alerta automatizado,
+
+00:07:01.790 --> 00:07:03.970
+apenas um comentário casual que levou a TI a investigar.
+
+00:07:03.970 --> 00:07:07.790
+Quando eles uniram as peças, aquelas mesmas respostas da IA
+
+00:07:07.790 --> 00:07:09.870
+já haviam sido compartilhadas entre várias equipes.
+
+00:07:10.770 --> 00:07:13.990
+O Microsoft 365 oferece as ferramentas para investigar esses tipos de cenários,
+
+00:07:14.070 --> 00:07:15.430
+mas você precisa saber onde procurar.
+
+00:07:16.210 --> 00:07:20.150
+O recurso de auditoria do Purview pode registrar o acesso a dados do Copilot em detalhes.
+
+00:07:20.850 --> 00:07:23.490
+Ele só não vem com um rótulo grande e piscante de IA.
+
+00:07:24.330 --> 00:07:26.110
+Ao acessar a pesquisa de log de auditoria,
+
+00:07:26.110 --> 00:07:29.170
+você pode filtrar pelas operações específicas que o Copilot usa
+
+00:07:29.170 --> 00:07:31.610
+como consulta de pesquisa realizada ou arquivo acessado
+
+00:07:31.610 --> 00:07:34.990
+e restringir pelo ID do aplicativo vinculado à sua implantação do Copilot.
+
+00:07:35.930 --> 00:07:37.170
+Isso requer um pouco de preparação.
+
+00:07:37.650 --> 00:07:40.490
+Você precisará confirmar os detalhes do registro do aplicativo no EntryD
+
+00:07:40.490 --> 00:07:41.890
+para que possa identificar o tráfego.
+
+00:07:42.490 --> 00:07:44.030
+A partir daí trata-se de identificar padrões.
+
+00:07:44.430 --> 00:07:46.430
+Se você vir um grande volume de consultas de contas
+
+00:07:46.430 --> 00:07:48.050
+que normalmente têm pouca necessidade de dados,
+
+00:07:48.170 --> 00:07:50.990
+como uma conta de estagiário realizando 10 pesquisas complexas em uma hora,
+
+00:07:51.390 --> 00:07:52.170
+vale a pena verificar.
+
+00:07:52.170 --> 00:07:54.690
+O mesmo vale para picos repentinos de conteúdo
+
+00:07:54.690 --> 00:07:56.450
+marcado como confidencial aparecendo em departamentos
+
+00:07:56.450 --> 00:07:57.990
+que normalmente não acessam esse tipo de informação.
+
+00:07:58.570 --> 00:08:00.410
+O Purview pode sinalizar a atividade de rótulos,
+
+00:08:00.410 --> 00:08:03.110
+portanto, se uma consulta do Copilot acessar um documento rotulado,
+
+00:08:03.210 --> 00:08:04.370
+você verá isso nos registros,
+
+00:08:04.510 --> 00:08:06.870
+mesmo que a IA não tenha exibido o texto completo.
+
+00:08:08.530 --> 00:08:09.990
+Se revisões de acesso baseadas em função
+
+00:08:09.990 --> 00:08:11.370
+são outra maneira de conectar os pontos.
+
+00:08:12.210 --> 00:08:13.950
+Ao mapear quem realmente usa o Copilot
+
+00:08:13.950 --> 00:08:16.210
+e cruzar com os tipos de dados com os quais interagem,
+
+00:08:16.330 --> 00:08:18.850
+você pode identificar possíveis inconsistências precocemente.
+
+00:08:19.790 --> 00:08:22.750
+Talvez o financeiro esteja usando o Copilot intensamente para relatórios,
+
+00:08:22.810 --> 00:08:24.510
+o que faz sentido, mas por que várias contas de marketing
+
+00:08:24.510 --> 00:08:26.870
+estão acessando planilhas de folha de pagamento via consultas de IA?
+
+00:08:27.370 --> 00:08:29.630
+Essas revisões oferecem uma visão mais ampla,
+
+00:08:29.630 --> 00:08:31.790
+indo além de eventos isolados na trilha de auditoria.
+
+00:08:32.630 --> 00:08:35.390
+O problema é que painéis de monitoramento genéricos não ajudam muito aqui.
+
+00:08:36.470 --> 00:08:39.930
+Eles agregam toda a atividade do M365 em categorias amplas,
+
+00:08:40.090 --> 00:08:42.110
+o que pode fazer com que o comportamento específico da IA
+
+00:08:42.110 --> 00:08:43.910
+se misture às operações normais.
+
+00:08:45.250 --> 00:08:47.550
+Sem criar filtros ou relatórios personalizados
+
+00:08:47.550 --> 00:08:50.610
+focados no ID do aplicativo Copilot e nos padrões de uso,
+
+00:08:50.710 --> 00:08:53.510
+você está basicamente procurando grãos de areia específicos
+
+00:08:53.510 --> 00:08:54.730
+em uma praia cheia de dados.
+
+00:08:55.030 --> 00:08:57.630
+Você precisa de visibilidade direcionada, não apenas de mais vida.
+
+00:08:57.630 --> 00:09:00.110
+Não se trata de construir uma cultura de vigilância,
+
+00:09:00.190 --> 00:09:02.850
+mas de saber com certeza o que sua IA está realmente acessando.
+
+00:09:03.390 --> 00:09:06.110
+Uma abordagem de registro adequada responde a três perguntas críticas.
+
+00:09:06.470 --> 00:09:07.550
+O que o Copilot recuperou?
+
+00:09:07.870 --> 00:09:08.510
+Mencionou o consul.
+
+00:09:08.850 --> 00:09:12.070
+E essa ação estava alinhada com suas políticas de segurança e conformidade existentes?
+
+00:09:12.790 --> 00:09:15.930
+Essas respostas permitem que você resolva problemas com precisão,
+
+00:09:16.070 --> 00:09:18.470
+seja ajustando uma permissão, refinando uma rede de DLP
+
+00:09:18.470 --> 00:09:20.290
+ou restringindo atribuições de função.
+
+00:09:20.290 --> 00:09:23.850
+Sem essa clareza, você fica na base do palpite.
+
+00:09:23.950 --> 00:09:25.550
+Palpite não é uma estratégia de segurança.
+
+00:09:26.550 --> 00:09:29.490
+Portanto, em vez de esperar por outro comentário casual para te alertar,
+
+00:09:29.590 --> 00:09:32.750
+vale a pena investir tempo estruturando seu monitoramento
+
+00:09:32.750 --> 00:09:35.870
+para que a pegada do Copilot seja visível e rastreável.
+
+00:09:37.110 --> 00:09:39.410
+Dessa forma, qualquer sinal de superexposição de dados
+
+00:09:39.410 --> 00:09:41.470
+se torna um evento gerenciado, não uma surpresa.
+
+00:09:42.550 --> 00:09:44.510
+Saber onde estão os vazamentos é apenas o primeiro passo.
+
+00:09:45.130 --> 00:09:47.470
+O objetivo real é garantir que eles não aconteçam novamente,
+
+00:09:47.470 --> 00:09:51.870
+e é aí que entram as proteções certas e proteções que realmente funcionam.
+
+00:09:52.390 --> 00:09:55.330
+DLP não serve apenas para detectar e-mails com números de cartão de crédito.
+
+00:09:56.210 --> 00:10:00.570
+No contexto do Copilot, pode ser o gatilho que impede que dados sensíveis
+
+00:10:00.570 --> 00:10:04.490
+escapem para uma resposta gerada por IA que é colada em um chat do Teams
+
+00:10:04.490 --> 00:10:07.710
+ou exportada em um documento que sai do seu tenant.
+
+00:10:08.850 --> 00:10:11.350
+Ainda é a mesma ferramenta subjacente no Microsoft 365,
+
+00:10:12.170 --> 00:10:16.470
+mas a forma como você a configura para cenários de IA exige uma mentalidade diferente.
+
+00:10:16.470 --> 00:10:20.890
+A lacuna é que as políticas de DLP da maioria das organizações ainda são escritas
+
+00:10:20.890 --> 00:10:23.510
+pensando em gatilhos tradicionais, anexos de e-mail,
+
+00:10:23.890 --> 00:10:25.470
+download de arquivos para unidades USB,
+
+00:10:25.810 --> 00:10:27.870
+cópia de dados para aplicativos não aprovados,
+
+00:10:28.190 --> 00:10:28.550
+coguiu.
+
+00:10:29.310 --> 00:10:32.870
+O Copilot não aciona essas regras por padrão porque não está enviando arquivos,
+
+00:10:33.670 --> 00:10:35.190
+ele está gerando conteúdo instantaneamente.
+
+00:10:35.590 --> 00:10:39.210
+Se você pedir ao Copilot a lista completa de clientes marcados como restritos
+
+00:10:39.210 --> 00:10:41.670
+e ele recuperar isso de um documento rotulado,
+
+00:10:41.870 --> 00:10:45.510
+o resultado pode circular sem nunca acionar uma condição de DLP tradicional.
+
+00:10:45.970 --> 00:10:50.670
+É por isso que prompts e respostas de IA precisam ser explicitamente incluídos
+
+00:10:50.670 --> 00:10:51.610
+no seu escopo de DLP.
+
+00:10:53.210 --> 00:10:56.550
+Um exemplo prático, digamos que sua política proíba exportar
+
+00:10:56.550 --> 00:10:59.630
+certos documentos contratuais para fora do seu ambiente seguro.
+
+00:11:00.550 --> 00:11:03.270
+Um usuário poderia pedir ao Copilot para extrair cláusulas importantes
+
+00:11:03.270 --> 00:11:04.250
+e inseri-las em um PowerPoint.
+
+00:11:04.250 --> 00:11:07.950
+Se suas regras de DLP não monitorarem conteúdo gerado por IA,
+
+00:11:08.110 --> 00:11:11.110
+esse material sensível passará a existir em um arquivo desprotegido.
+
+00:11:12.530 --> 00:11:15.450
+Ao estender a inspeção de DLP para cobrir o output do Copilot,
+
+00:11:15.630 --> 00:11:18.890
+você pode impedir que esse PowerPoint seja salvo em um local não gerenciado
+
+00:11:18.890 --> 00:11:21.330
+ou compartilhado com um convidado externo no Teams.
+
+00:11:23.170 --> 00:11:25.330
+Configurar isso no Microsoft 365 não é complicado,
+
+00:11:25.470 --> 00:11:26.830
+mas exige um processo deliberado.
+
+00:11:27.710 --> 00:11:30.110
+Primeiro, no portal de conformidade do Microsoft Purview,
+
+00:11:30.530 --> 00:11:32.410
+vá para a sessão de prevenção contra a perda de dados
+
+00:11:32.410 --> 00:11:33.410
+e crie uma nova política.
+
+00:11:33.410 --> 00:11:37.250
+Ao escolher os locais de aplicação, inclui o Exchange, SharePoint, OneDrive,
+
+00:11:37.510 --> 00:11:41.470
+muito importante, o Teams, pois o Copilot pode apresentar dados em qualquer um deles,
+
+00:11:41.690 --> 00:11:42.770
+PIMSUS em qualquer um deles.
+
+00:11:43.230 --> 00:11:44.490
+Depois, defina as condições.
+
+00:11:45.570 --> 00:11:48.090
+Você pode segmentar tipos de informações sensíveis integrados
+
+00:11:48.090 --> 00:11:50.250
+como números de contas financeiras ou tipos personalizados
+
+00:11:50.250 --> 00:11:52.130
+que detectam seus códigos de projeto internos.
+
+00:11:53.310 --> 00:11:56.050
+E se você usar rótulos de sensibilidade de forma consistente,
+
+00:11:56.170 --> 00:11:59.430
+também pode definir a condição para disparar quando o conteúdo rotulado
+
+00:11:59.430 --> 00:12:02.410
+aparecer no resultado final de um arquivo salvo ou compartilhado.
+
+00:12:03.410 --> 00:12:04.650
+Por fim, configure as ações.
+
+00:12:05.190 --> 00:12:06.310
+Bloqueie o compartilhamento.
+
+00:12:06.570 --> 00:12:08.170
+Exiba uma dica de política para o usuário
+
+00:12:08.170 --> 00:12:10.110
+ou exija justificativa para prosseguir.
+
+00:12:10.610 --> 00:12:13.490
+Os próprios rótulos de sensibilidade são uma peça-chave para que isso funcione.
+
+00:12:14.410 --> 00:12:16.570
+No contexto de IA, o rótulo é um metadado
+
+00:12:16.570 --> 00:12:20.130
+que o Copilot pode ler exatamente como qualquer outro serviço do M3065.
+
+00:12:20.130 --> 00:12:25.310
+Se um documento altamente confidencial tiver um rótulo que restringe acesso e uso,
+
+00:12:25.450 --> 00:12:28.330
+o Copilot respeitará essas restrições ao gerar respostas,
+
+00:12:28.430 --> 00:12:30.470
+desde que as configurações de proteção dos rótulos
+
+00:12:30.470 --> 00:12:33.490
+sejam aplicadas de forma consistente nos aplicativos envolvidos.
+
+00:12:34.590 --> 00:12:38.030
+Se a IA tentar usar conteúdo com um rótulo fora de seu escopo permitido,
+
+00:12:38.210 --> 00:12:41.170
+a política de DLP vinculada a esse rótulo pode impedir a ação
+
+00:12:41.170 --> 00:12:42.750
+ou sinalizá-la para revisão.
+
+00:12:43.550 --> 00:12:47.490
+Sem essa vinculação, o rótulo é apenas uma decoração do ponto de vista de conformidade.
+
+00:12:47.490 --> 00:12:50.670
+Uma das configurações incorretas mais comuns que encontro
+
+00:12:50.670 --> 00:12:53.170
+é deixar as políticas de DLP totalmente alheias aos cenários de IA.
+
+00:12:54.170 --> 00:12:57.070
+As regras existem, mas não há conexão com o output do Copilot
+
+00:12:57.070 --> 00:12:59.530
+porque os administradores não o consideraram um canal separado.
+
+00:13:00.630 --> 00:13:03.810
+Isso cria um ponto cego, onde termos sensíveis e uma resposta gerada
+
+00:13:03.810 --> 00:13:07.230
+não são inspecionados, mesmo que o mesmo texto em um e-mail tivesse sido bloqueado.
+
+00:13:08.350 --> 00:13:11.710
+Mas, para corrigir isso, você precisa considerar os fluxos de trabalho
+
+00:13:11.710 --> 00:13:13.890
+assistidos por IA como um de seus locais de DLP
+
+00:13:13.890 --> 00:13:15.630
+e monitorá-los junto com todo o resto.
+
+00:13:15.630 --> 00:13:20.830
+Quando o DLP e os rótulos de confidencialidade são configurados corretamente e integrados,
+
+00:13:21.150 --> 00:13:24.410
+o Copilot continua útil sem se tornar um pesadelo de conformidade.
+
+00:13:25.110 --> 00:13:29.170
+Você pode deixá-lo redigir relatórios, resumir documentos e filtrar conjuntos de dados
+
+00:13:29.170 --> 00:13:33.870
+aplicando silenciosamente os mesmos limites que você esperaria em um e-mail ou mensagem no Teams.
+
+00:13:34.630 --> 00:13:36.570
+E os usuários obtêm o benefício da assistência por IA
+
+00:13:36.570 --> 00:13:39.290
+e as proteções impedem que informações de alto risco vazem.
+
+00:13:39.290 --> 00:13:42.750
+A vantagem aqui não é apenas evitar um compartilhamento excessivo ocidental.
+
+00:13:43.310 --> 00:13:46.250
+Trata-se de permitir que a tecnologia opere dentro de regras claras.
+
+00:13:47.010 --> 00:13:51.650
+Dessa forma, você não precisa recorrer a restrições generalizadas que frustram as equipes e impedem a adoção.
+
+00:13:52.770 --> 00:13:56.030
+Você pode ajustar os controles para que o marketing crie ideias com o Copilot.
+
+00:13:56.030 --> 00:14:02.270
+O financeiro realize análises e o RH gere guias de integração, cada um dentro de suas zonas permitidas.
+
+00:14:03.510 --> 00:14:05.790
+Mas controlar a saída é apenas parte do desafio.
+
+00:14:06.590 --> 00:14:12.030
+Para reduzir totalmente o risco, você também precisa decidir quem terá acesso a quais recursos de IA desde o início.
+
+00:14:13.210 --> 00:14:14.810
+Um modelo único de acesso não serve para todos.
+
+00:14:15.470 --> 00:14:19.550
+Um estagiário de marketing e um CFO deveriam realmente ter os mesmos privilégios no Copilot.
+
+00:14:19.930 --> 00:14:20.410
+No Copilot.
+
+00:14:20.830 --> 00:14:25.030
+A ideia soa absurda quando dita em voz alta, mas em muitos ambientes é exatamente assim que está configurado.
+
+00:14:26.030 --> 00:14:31.610
+O Copilot é ativado para todos, com as mesmas permissões, porque é mais rápido e fácil do que lidar com configurações específicas por função.
+
+00:14:32.830 --> 00:14:37.890
+O lado negativo é que o acesso da IA corresponde ao cenário mais aberto possível, não às necessidades de cada cargo.
+
+00:14:38.970 --> 00:14:41.170
+É aí que entram os grupos de acesso ao Copilot baseados em funções.
+
+00:14:41.630 --> 00:14:48.430
+Em vez de tratar cada usuário como intercambiável, você alinha os recursos da IA às informações e fluxos de trabalho que funções específicas realmente exigem.
+
+00:14:48.430 --> 00:14:55.870
+O marketing pode precisar de acesso a ativos de campanha e diretrizes de marca, mas não a modelos financeiros brutos.
+
+00:14:56.710 --> 00:15:00.730
+O financeiro precisa desses modelos, mas não precisa de roteiros de produtos em estágio inicial.
+
+00:15:01.430 --> 00:15:03.370
+O objetivo não é tornar o Copilot menos útil.
+
+00:15:03.890 --> 00:15:06.290
+É manter seu escopo relevante para o trabalho de cada pessoa.
+
+00:15:07.290 --> 00:15:10.250
+Os riscos da habilitação universal são maiores do que a maioria das equipes, imagina.
+
+00:15:10.250 --> 00:15:15.510
+O Copilot funciona extraindo dados que seu ambiente Microsoft 365 já possui, já possui.
+
+00:15:16.410 --> 00:15:21.530
+Se todos os funcionários tiverem acesso igual a IA, a tecnologia pode eliminar silos que você manteve intencionalmente.
+
+00:15:22.430 --> 00:15:26.650
+É assim que assistentes de RH acabam acessando detalhamentos de receita,
+
+00:15:26.890 --> 00:15:30.910
+ou um líder de operações pede ao Copilot o plano de lançamento de produto do próximo ano
+
+00:15:30.910 --> 00:15:33.510
+e obtém detalhes de design que nem foram finalizados.
+
+00:15:34.530 --> 00:15:37.830
+Nada disso parece uma violação no momento, mas a exposição é real.
+
+00:15:37.830 --> 00:15:42.330
+Acertar um modelo de acesso começa mapeando funções de trabalho para a necessidade de dados,
+
+00:15:42.470 --> 00:15:44.250
+não apenas os aplicativos que as pessoas usam,
+
+00:15:44.330 --> 00:15:47.090
+mas a profundidade e a sensibilidade dos dados que manipulam diariamente.
+
+00:15:48.710 --> 00:15:52.250
+Você pode descobrir que 70% das solicitações da sua equipe de vendas ao Copilot
+
+00:15:52.250 --> 00:15:53.910
+envolvem históricos de contas de clientes,
+
+00:15:53.970 --> 00:15:56.910
+enquanto menos de 5% acessam arquivos de contrato de alta sensibilidade.
+
+00:15:57.950 --> 00:16:00.310
+Isso sugere que você pode manter o uso da IA de forma segura
+
+00:16:00.310 --> 00:16:02.990
+dentro de certas bibliotecas do SharePoint enquanto bloqueia o restante.
+
+00:16:03.970 --> 00:16:06.430
+Faça esse exercício em cada departamento e os padrões surgirão.
+
+00:16:06.430 --> 00:16:09.990
+Assim que souber o que cada grupo deve ter, o Microsoft Enter ID,
+
+00:16:10.190 --> 00:16:13.410
+o que muitos ainda chamam de Azure ID, torna-se sua ferramenta de aplicação.
+
+00:16:14.190 --> 00:16:17.310
+Você cria grupos de segurança que correspondem às definições de suas funções
+
+00:16:17.310 --> 00:16:20.050
+e então atribui permissões do Copilot no nível do grupo.
+
+00:16:20.710 --> 00:16:23.410
+Isso pode significar habilitar certos escopos da IP e do Graph
+
+00:16:23.410 --> 00:16:25.490
+apenas para membros do grupo financeiro do Copilot,
+
+00:16:25.670 --> 00:16:28.330
+enquanto o grupo de marketing do Copilot tem um conjunto diferente.
+
+00:16:28.330 --> 00:16:32.830
+O acesso a sites confidenciais, canais do Teams ou pastas específicas do OneDrive
+
+00:16:32.830 --> 00:16:33.750
+pode seguir o mesmo modelo.
+
+00:16:34.710 --> 00:16:38.650
+A força dessa abordagem está quando ela é combinada com os controles que já abordamos.
+
+00:16:39.750 --> 00:16:43.650
+As permissões do Graph definem os limites externos do que o Copilot pode tecnicamente alcançar.
+
+00:16:44.690 --> 00:16:47.930
+As políticas de DLP monitoram a saída da IA em busca de conteúdo sensível.
+
+00:16:49.390 --> 00:16:51.370
+Grupos baseados em funções ficam no meio,
+
+00:16:51.490 --> 00:16:55.650
+garantindo que as permissões do Graph não sejam amplas demais para funções de baixa sensibilidade,
+
+00:16:55.650 --> 00:16:59.570
+e que a DLP não acabe detectando coisas que você poderia ter prevenido
+
+00:16:59.570 --> 00:17:01.110
+restringindo as fontes de entrada.
+
+00:17:02.530 --> 00:17:04.330
+Mas como qualquer sistema, isso pode ser levado longe.
+
+00:17:04.650 --> 00:17:07.170
+É tentador criar um microgrupo para cada cenário,
+
+00:17:08.210 --> 00:17:10.670
+Copilot para analista financeiro com permissões de relatório
+
+00:17:10.670 --> 00:17:12.450
+ou estagiário de marketing sem acesso a Teams
+
+00:17:12.450 --> 00:17:14.830
+e acabar com dezenas de variações.
+
+00:17:15.690 --> 00:17:18.150
+Esse nível de granularidade pode parecer preciso no papel,
+
+00:17:18.150 --> 00:17:20.370
+mas no ambiente real é uma dor de cabeça para a manutenção.
+
+00:17:21.090 --> 00:17:23.770
+Usuários mudam de cargo, projetos mudam, contratados vêm e vão.
+
+00:17:23.770 --> 00:17:26.770
+Se o modelo de grupo for muito frágil,
+
+00:17:26.990 --> 00:17:29.690
+sua equipe de TI gastará mais tempo corrigindo problemas de acesso
+
+00:17:29.690 --> 00:17:30.850
+do que melhorando a segurança.
+
+00:17:31.650 --> 00:17:32.610
+O verdadeiro objetivo é que...
+
+00:17:32.610 --> 00:17:35.350
+Um punhado de grupos de funções claras e bem definidos
+
+00:17:35.350 --> 00:17:38.190
+cobrirá a maioria dos casos de uso sem criar um gargalo administrativo.
+
+00:17:38.850 --> 00:17:41.190
+O grupo do CFO precisa de amplos poderes analíticos,
+
+00:17:41.270 --> 00:17:43.490
+mas controles rígidos sobre o compartilhamento de resultados.
+
+00:17:44.150 --> 00:17:46.910
+O grupo de estagiários recebe um escopo de dados limitado,
+
+00:17:46.910 --> 00:17:49.750
+mas capacidade suficiente para contribuir com o trabalho real.
+
+00:17:49.750 --> 00:17:52.970
+Líderes de departamento ficam no meio termo
+
+00:17:52.970 --> 00:17:54.450
+e a TI mantém a capacidade de ajustar
+
+00:17:54.450 --> 00:17:56.470
+quando projetos especiais exigirem exceções.
+
+00:17:57.750 --> 00:18:00.290
+Você não está tentando bloquear tudo a ponto de causar frustração.
+
+00:18:01.010 --> 00:18:03.250
+Você está mantendo cada experiência de arrelevante,
+
+00:18:03.410 --> 00:18:04.590
+segura e alinhada com a política.
+
+00:18:05.750 --> 00:18:07.730
+Quando você acerta, os benefícios aparecem rapidamente.
+
+00:18:08.590 --> 00:18:11.390
+Os usuários param de se surpreender com os dados que o Copilot apresenta,
+
+00:18:11.390 --> 00:18:13.630
+pois são sempre informações dentro da esfera de responsabilidade.
+
+00:18:14.390 --> 00:18:16.750
+As equipes de conformidade têm menos incidentes para investigar,
+
+00:18:16.750 --> 00:18:18.550
+porque as superexposições não ocorrem por acidente.
+
+00:18:19.730 --> 00:18:22.770
+E a TI pode finalmente avançar com novos recursos do Copilot
+
+00:18:22.770 --> 00:18:24.410
+sem se preocupar que uma implementação global
+
+00:18:24.410 --> 00:18:27.130
+erosione silenciosamente todas as fronteiras de dados
+
+00:18:27.130 --> 00:18:28.310
+que trabalharam para construir.
+
+00:18:29.430 --> 00:18:31.350
+Com acesso e proteções trabalhando juntos,
+
+00:18:31.450 --> 00:18:33.470
+você reduziu significativamente seu perfil de risco.
+
+00:18:34.850 --> 00:18:36.230
+Mas mesmo um modelo bem projetado,
+
+00:18:36.310 --> 00:18:38.130
+só importa se você puder provar que ele está funcionando
+
+00:18:38.130 --> 00:18:39.390
+tanto para você quanto para qualquer pessoa
+
+00:18:39.390 --> 00:18:40.850
+que venha com uma solicitação de auditoria.
+
+00:18:41.970 --> 00:18:43.470
+Comprovando a conformidade sem perder o ritmo.
+
+00:18:44.250 --> 00:18:45.850
+Conformidade não é apenas teatro de segurança,
+
+00:18:45.850 --> 00:18:47.890
+se é a evidência que mantém os auditores satisfeitos.
+
+00:18:48.970 --> 00:18:50.370
+Políticas e diretrizes são ótimas,
+
+00:18:50.470 --> 00:18:52.350
+mas se você não puder mostrar exatamente o que aconteceu
+
+00:18:52.350 --> 00:18:53.470
+com dados assistidos por IA,
+
+00:18:53.590 --> 00:18:55.310
+você só terá afirmações em vez de provas.
+
+00:18:56.870 --> 00:18:58.710
+Um ambiente Copilot pronto para auditoria
+
+00:18:58.710 --> 00:19:01.130
+significa que cada interação da consulta do usuário
+
+00:19:01.130 --> 00:19:02.490
+à recuperação de dados pela IA
+
+00:19:02.490 --> 00:19:05.530
+pode ser explicada e apoiada por um rastro verificável.
+
+00:19:06.590 --> 00:19:08.190
+A parte complicada é que muitas empresas acham
+
+00:19:08.190 --> 00:19:10.330
+que estão protegidas porque passam em revisões internas.
+
+00:19:11.310 --> 00:19:13.310
+Essas revisões geralmente verificam
+
+00:19:13.310 --> 00:19:15.750
+a existência de controles e alguns cenários de exemplo,
+
+00:19:15.870 --> 00:19:18.030
+mas nem sempre exigem o nível de granularidade
+
+00:19:18.030 --> 00:19:19.650
+que auditores externos esperam.
+
+00:19:21.130 --> 00:19:23.610
+Quando um avaliador externo solicita um registro
+
+00:19:23.610 --> 00:19:25.850
+de todo o conteúdo sensível que o Copilot acessou
+
+00:19:25.850 --> 00:19:26.670
+no último trimestre,
+
+00:19:27.210 --> 00:19:28.690
+junto com quem solicitou e por quê,
+
+00:19:28.930 --> 00:19:31.950
+é surpreendente a frequência com que surgem lacunas.
+
+00:19:32.730 --> 00:19:34.810
+Ou os registros estão incompletos,
+
+00:19:34.930 --> 00:19:36.810
+ou omitem totalmente os eventos relacionados à IA
+
+00:19:36.810 --> 00:19:38.810
+porque nunca foram marcados dessa forma desde o início.
+
+00:19:38.810 --> 00:19:41.930
+É aqui que o Microsoft Purview pode fazer uma grande diferença.
+
+00:19:42.830 --> 00:19:45.070
+Suas capacidades de conformidade não se resumem apenas
+
+00:19:45.070 --> 00:19:46.630
+a aplicar rótulos e políticas de DLP.
+
+00:19:47.530 --> 00:19:49.870
+Elas também reúnem as evidências forenses de que você precisa.
+
+00:19:50.810 --> 00:19:51.950
+Em um contexto de Copilot,
+
+00:19:52.070 --> 00:19:54.110
+o Purview pode registrar cada solicitação de acesso
+
+00:19:54.110 --> 00:19:55.650
+a dados relevantes, a identidade por trás dela
+
+00:19:55.650 --> 00:19:56.410
+e o local de origem.
+
+00:19:56.870 --> 00:19:58.570
+Ele também pode correlacionar esses eventos
+
+00:19:58.570 --> 00:19:59.990
+a padrões de movimentação de dados,
+
+00:20:00.090 --> 00:20:02.290
+como arquivos sensíveis sendo referenciados em rascunhos,
+
+00:20:02.670 --> 00:20:03.730
+resumos ou exportações,
+
+00:20:04.090 --> 00:20:05.570
+sem depender de autorrelato da IA.
+
+00:20:05.570 --> 00:20:08.690
+A pontuação de conformidade do Purview
+
+00:20:08.690 --> 00:20:09.830
+é mais do que uma métrica de vaidade.
+
+00:20:10.530 --> 00:20:11.790
+É um panorama de como o seu ambiente
+
+00:20:11.790 --> 00:20:13.910
+se compara aos controles recomendados pela Microsoft,
+
+00:20:14.210 --> 00:20:15.710
+incluindo aqueles que limitam diretamente
+
+00:20:15.710 --> 00:20:17.130
+os riscos relacionados à IA.
+
+00:20:18.050 --> 00:20:19.730
+Uma higiene de permissões de grafo mais forte,
+
+00:20:19.870 --> 00:20:21.470
+configurações de DLP mais rígidas
+
+00:20:21.470 --> 00:20:23.350
+se grupos baseados em funções bem mantidos
+
+00:20:23.350 --> 00:20:24.650
+contribuem para essa pontuação.
+
+00:20:25.290 --> 00:20:26.870
+Bem como a pontuação é atualizada,
+
+00:20:26.990 --> 00:20:28.670
+conforme você faz alterações,
+
+00:20:28.770 --> 00:20:30.010
+você pode ver em tempo quase real
+
+00:20:30.010 --> 00:20:31.470
+como as melhorias na governança de IA
+
+00:20:31.470 --> 00:20:32.990
+aumentam sua posição de conformidade.
+
+00:20:32.990 --> 00:20:35.630
+Pense em um exame regulatório,
+
+00:20:35.790 --> 00:20:36.930
+onde você precisa justificar
+
+00:20:36.930 --> 00:20:39.050
+por que certos dados de clientes apareceram
+
+00:20:39.050 --> 00:20:41.170
+em um relatório gerado pelo Copilot.
+
+00:20:41.950 --> 00:20:43.110
+Sem registros estruturados,
+
+00:20:43.190 --> 00:20:44.570
+essa conversa se transforma em suposições.
+
+00:20:45.270 --> 00:20:46.730
+Com o Purview configurado corretamente,
+
+00:20:46.830 --> 00:20:48.450
+você pode mostrar a solicitação de acesso
+
+00:20:48.450 --> 00:20:49.350
+em um registro de auditoria,
+
+00:20:49.450 --> 00:20:51.250
+apontar a função e as permissões que a autorizaram,
+
+00:20:51.290 --> 00:20:53.510
+e demonstrar que a saída permaneceu nos canais aprovados.
+
+00:20:54.250 --> 00:20:55.490
+Essa é uma discussão muito mais fácil
+
+00:20:55.490 --> 00:20:57.650
+do que tentar explicar um evento não documentado às pressas.
+
+00:20:58.110 --> 00:21:00.750
+O segredo é tornar a geração de relatórios de conformidade
+
+00:21:00.750 --> 00:21:02.650
+parte do seu ciclo normal de governança de TI,
+
+00:21:02.810 --> 00:21:04.930
+não apenas um projeto especial antes de uma auditoria.
+
+00:21:05.630 --> 00:21:07.170
+Relatórios automatizados ajudam muito nesse processo.
+
+00:21:07.610 --> 00:21:09.190
+O Purview pode gerar relatórios recorrentes
+
+00:21:09.190 --> 00:21:11.390
+sobre correspondências de políticas de proteção de informações,
+
+00:21:11.950 --> 00:21:14.290
+incidentes de DLP e uso de rótulos de sensibilidade.
+
+00:21:15.010 --> 00:21:16.410
+Quando esses relatórios são programados
+
+00:21:16.410 --> 00:21:17.590
+para chegar ao espaço de trabalho
+
+00:21:17.590 --> 00:21:19.090
+da sua equipe de governança todo mês,
+
+00:21:19.270 --> 00:21:22.690
+você cria uma base de atividade de IA fácil de revisar.
+
+00:21:23.690 --> 00:21:25.990
+Qualquer anomalia se destaca em relação ao padrão histórico.
+
+00:21:26.550 --> 00:21:27.750
+Usa economia de tempo se acumulou.
+
+00:21:27.750 --> 00:21:30.550
+Por exemplo, o Purview vem com relatórios pré-criados
+
+00:21:30.550 --> 00:21:33.090
+que destacam todos os incidentes envolvendo conteúdo rotulado
+
+00:21:33.090 --> 00:21:35.090
+agrupados por local ou tipo de atividade.
+
+00:21:36.170 --> 00:21:38.650
+Se uma sessão do Coopilot trouxe um documento confidencial
+
+00:21:38.650 --> 00:21:40.570
+para um resultado e sua DLP atuou sobre ele,
+
+00:21:40.670 --> 00:21:42.310
+esse incidente já aparece em um relatório
+
+00:21:42.310 --> 00:21:44.850
+sem que você precise criar uma consulta personalizada do zero.
+
+00:21:46.050 --> 00:21:48.450
+Você pode então analisar esse registro para obter mais detalhes,
+
+00:21:48.810 --> 00:21:51.170
+mas o trabalho pesado de coleta e categorização já foi feito.
+
+00:21:52.910 --> 00:21:55.590
+Outra eficiência é a integração entre a auditoria do Purview
+
+00:21:55.590 --> 00:21:58.230
+e os dados de acesso baseados em função do Microsoft 365.
+
+00:21:59.970 --> 00:22:01.770
+Como o Purview entende os grupos do Entry-ID,
+
+00:22:01.850 --> 00:22:04.210
+ele pode segmentar os logs de acesso por tipo de função.
+
+00:22:05.090 --> 00:22:06.890
+Isso significa que você pode responder rapidamente
+
+00:22:06.890 --> 00:22:08.990
+a perguntas focadas como mostre-me todas as instâncias
+
+00:22:08.990 --> 00:22:10.790
+em que funções de marketing acessaram dados rotulados
+
+00:22:10.790 --> 00:22:12.430
+como financeiros via culpados como financeiros
+
+00:22:12.430 --> 00:22:13.730
+via culpados nos últimos 90 dias.
+
+00:22:14.730 --> 00:22:16.870
+Essa capacidade de filtrar tanto por função
+
+00:22:16.870 --> 00:22:18.390
+quanto por classificação de dados
+
+00:22:18.390 --> 00:22:21.210
+é exatamente o que os avaliadores externos procuram.
+
+00:22:21.210 --> 00:22:24.110
+Pensando bem, a conformidade nesse nível não é um fardo.
+
+00:22:24.710 --> 00:22:26.930
+É uma proteção que confirma que o design da sua governança
+
+00:22:26.930 --> 00:22:27.930
+está funcionando na prática.
+
+00:22:28.830 --> 00:22:30.390
+Também elimina o estresse das auditorias,
+
+00:22:30.490 --> 00:22:31.430
+pois você não precisa garimpar.

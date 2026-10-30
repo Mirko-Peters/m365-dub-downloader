@@ -1,0 +1,793 @@
+WEBVTT
+
+00:00:00.180 --> 00:00:07.540
+Klaar voor 10 dagen Microsoft 365, Copilot, AI, Azure en de mensen die de toekomst van werk vormgeven?
+
+00:00:07.960 --> 00:00:12.380
+Deze januari is M365, kom terug en pakken we groter uit.
+
+00:00:12.700 --> 00:00:18.600
+Doe mee voor live sessies, praktijkdemos en praktische kennis van MVPs en experts van over de hele wereld.
+
+00:00:18.840 --> 00:00:21.660
+Geen algemene sliedes, geen eindeloze modewoorden.
+
+00:00:21.660 --> 00:00:29.140
+We pakken de echte uitdagingen aan Copilot Studio, AI Agents, Fabric, Beveiliging, Governance en Automatisering.
+
+00:00:29.140 --> 00:00:35.100
+Of je nu een IT-professional, ontwikkelaar of zakelijk leider bent, er zijn sessies speciaal voor jou ontworpen.
+
+00:00:35.300 --> 00:00:40.520
+Met 10 volledige dagen kun je diverse technologieën verkennen en in contact komen met een wereldwijde community.
+
+00:00:40.900 --> 00:00:44.560
+Kijk live mee en neem praktische inzichten mee terug naar je organisatie.
+
+00:00:44.900 --> 00:00:49.140
+Januari 2027, 10 dagen, 1 Microsoft Community.
+
+00:00:49.400 --> 00:00:51.160
+De registratie is nu geopend.
+
+00:00:51.880 --> 00:00:55.920
+Ga naar m365.com.net en verzeker je vandaag nog van een plek.
+
+00:00:56.680 --> 00:00:58.940
+Dat is m365.com.net.
+
+00:00:59.140 --> 00:01:04.700
+Doe mee op m365.com.net en we zien je live in januari.
+
+00:01:04.840 --> 00:01:09.020
+Als je denkt dat Copilot alleen laat zien waar je al toestemming voor hebt, denk dan nog eens na.
+
+00:01:09.200 --> 00:01:14.440
+Een verkeerde Graf toestemming en plotseling kan je AI gegevens tonen waar je compliance team nooit toestemming voor gaf.
+
+00:01:14.580 --> 00:01:17.160
+Het enge is, misschien merk je niet eens dat het gebeurt.
+
+00:01:17.360 --> 00:01:25.320
+In deze video bespreek ik de echte risico's van onbeheerde Copilot toegang en hoe gevoelige bestanden, financiële spreadsheets en vertrouwelijke klantgegevens kunnen lekken.
+
+00:01:25.320 --> 00:01:33.760
+Daarna laat ik zien hoe je dit beveiligt met brevmachtigingen, DLP-beleid en Purview zonder de productiviteit te hinderen van mensen die de toegang echt nodig hebben.
+
+00:01:33.760 --> 00:01:40.380
+Wanneer Copilot te veel weet, vraagt een junior medewerker om notices van de projectevaluatie van het vorige kwartaal.
+
+00:01:40.600 --> 00:01:45.760
+En wat terugkomt is geen nette samenvatting van hun eigen vergadering, maar gedetailleerde notulen van een besloten bestuursvergadering,
+
+00:01:46.680 --> 00:01:51.600
+inclusief strategische beslissingen, bezuinigingen en namen die nooit in die persoon zijn inbox hadden mogen belanden.
+
+00:01:51.800 --> 00:01:58.180
+Er gingen geen inbreukmeldingen af, geen DLP-waarschuwing, alleen een AI die stilletjes een document overhandigde dat het nooit had mogen aanraken.
+
+00:01:58.180 --> 00:02:03.060
+Dit gebeurt omdat Copilot niet magischerwijs stopt bij de mailbox of OneDrive-map van een gebruiker.
+
+00:02:03.220 --> 00:02:07.360
+Het bereik wordt bepaald door de machtigingen die het via Microsoft Graph heeft gekregen.
+
+00:02:07.880 --> 00:02:14.320
+En Graph is niet zomaar een database, het is het centrale toegangspunt tot bijna elk stukje content in Microsoft 365,
+
+00:02:14.620 --> 00:02:19.980
+SharePoint, Teams berichten, agenda afspraken, Wannot en CRM gegevens gekoppeld aan de tenant.
+
+00:02:20.200 --> 00:02:23.100
+Alles stroomt door Graph als de juiste deur is ontgrendeld.
+
+00:02:23.360 --> 00:02:25.160
+Dat is het punt dat veel beheerders missen.
+
+00:02:25.160 --> 00:02:29.960
+Er is een algemene aanname dat als ik ben ingelogd als mezelf, Copilot alleen ziet wat ik kan zien.
+
+00:02:30.140 --> 00:02:31.000
+Klinkt redelijk.
+
+00:02:31.440 --> 00:02:36.080
+Het probleem is dat Copilot zelf vaak draait met een aparte set applicatiemachtigingen.
+
+00:02:36.800 --> 00:02:44.040
+Als die rechten ruimer zijn dan die van de ingelogde gebruiker, krijg je een AI-assistent die veel meer kan bereiken dan de mens achter het toetsenbord.
+
+00:02:45.160 --> 00:02:50.120
+En bij sommige implementaties worden die verhoogde rechten gegeven zonder dat iemand vraagt waarom.
+
+00:02:50.740 --> 00:02:54.080
+Stel je een financieel analist voor die aan een kwartaalprognose werkt.
+
+00:02:54.080 --> 00:02:58.420
+Zij vragen Copilot om de huidige pijplijngegevens voor de top 20 accounts.
+
+00:02:58.760 --> 00:03:02.620
+In hun normale rol zouden ze alleen cijfers voor een subset van klanten moeten zien.
+
+00:03:02.840 --> 00:03:12.860
+Maar dankzij hoe Graph is afgebakend in de app-registratie van Copilot, haalt de AI het volledige verkooppijplijnrapport op van een gedeelde teamsite waartoe de analist nooit direct toegang heeft gehad.
+
+00:03:13.060 --> 00:03:16.160
+Vanuit het perspectief van de eindgebruiker ziet niets er verdacht uit.
+
+00:03:16.380 --> 00:03:20.000
+Maar vanuit beveiligings- en compliance-oogpunt is dat een gevoelige blootstelling.
+
+00:03:20.000 --> 00:03:24.000
+Graph API-rechten zijn in feite de voordeur naar de gegevens van je organisatie.
+
+00:03:24.780 --> 00:03:33.040
+Microsoft splitst deze in gedelegeerde rechten die handelen namens een ingelogde gebruiker- en applicatierechten, waarmee een app zelfstandig kan opereren.
+
+00:03:33.280 --> 00:03:45.220
+Copilot-scenario's vereisen vaak gedelegeerde rechten voor het ophalen van inhoud, maar bepaalde functies zoals het samenvatten van een teamsvergadering waar de gebruiker niet bij was, kunnen beheerders ertoe aanzetten om applicatierechten goed te keuren.
+
+00:03:45.220 --> 00:03:52.720
+En dat is waar het gevaar om de hoek komt kijken. Applicatierechten negeren individuele gebruikersbeperkingen, tenzij je ze bewust afbakend.
+
+00:03:52.940 --> 00:04:06.920
+Deze goedkeuringen gebeuren vaak vroeg in een uitrol en een IT-beheerder die copilot in een dev-tenant test, kan op accepteren klikken bij een rechtenverzoek om de installatie te voltooien en die configuratie vervolgens in productie repliceren zonder de implicaties te beoordelen.
+
+00:04:06.920 --> 00:04:19.340
+Eenmaal ingesteld, blijven die ruime rechten bestaan tenzij iemand ze actief controleert. Na verloop van tijd, naarmate nieuwe gegevensbronnen worden verbonden met M365, breidt het bereik van copilot zich uit zonder bewuste beslissing.
+
+00:04:19.580 --> 00:04:25.740
+Dat is stille rechtenuitbreiding, geen drama, geen klachten van gebruikers, gewoon een geleidelijke vergroting van het bereik van de AI.
+
+00:04:25.960 --> 00:04:32.200
+De uitdaging is dat de meeste beveiligingsteams niet goed weten welke copilot-mogelijkheden welk niveau van graph-toegang vereisen.
+
+00:04:32.200 --> 00:04:41.320
+Ze zien misschien alle bestanden lezen in SharePoint en gaan ervan uit dat dit beperkt is door de gebruikerscontext, zonder te beseffen dat de toestemming ten het breed is op applicatieniveau.
+
+00:04:41.560 --> 00:04:49.540
+Zonder specifieke AI-scenario's te koppelen aan de minimaal noodzakelijke rechten, val je terug op wat er in die eerste configuratie is goedgekeurd.
+
+00:04:50.560 --> 00:04:55.720
+En hoe ruimer die rechten, hoe groter de potentiële kloof tussen verwacht en daadwerkelijk gedrag.
+
+00:04:55.720 --> 00:05:03.540
+Het is ook goed om te onthouden dat de output van copilot geen ingebouwd rechtenoverzicht bevat dat zichtbaar is voor de gebruiker.
+
+00:05:04.200 --> 00:05:12.460
+Als de AI-inhoud ophaalt van een locatie waar de gebruiker normaal gesproken de toegang tot zou worden ontzegd, is er geen waarschuwingsbanner die zegt dat dit buiten je bevoegdheid valt.
+
+00:05:12.740 --> 00:05:17.860
+Dat gebrek aan transparantie maakt het gemakkelijker voor risicovolle blootstellingen om op te gaan in alledaagse workflows.
+
+00:05:17.860 --> 00:05:23.740
+De conclusie hier is dat graph-rechten voor AI-implementaties niet zomaar een vinkje zijn in het onboardingproces.
+
+00:05:24.020 --> 00:05:28.480
+Het is een ontwerpkeuze die elke interactie vormgeeft die copilot op je netwerk zal hebben.
+
+00:05:28.700 --> 00:05:35.620
+Behandel ze zoals je firewall-regels of VPN-toegangsbereiken zou behandelen, wel overwogen, gecontroleerd en periodiek opnieuw gevalideerd.
+
+00:05:36.340 --> 00:05:42.860
+Standaardinstellingen zorgen misschien voor een snelle start, maar ze gaan er ook vanuit dat je het prima vindt dat de AI een veel breder net uitwerpt dan de mens erachter.
+
+00:05:42.860 --> 00:05:49.720
+Nu we hebben gezien hoe gemakkelijk het bereik kan afwijken, is de volgende vraag hoe je die gaten vindt voordat ze uitgroeien tot een volledig incident.
+
+00:05:50.100 --> 00:05:51.820
+Lekken vinden voordat ze naar buiten stromen.
+
+00:05:52.040 --> 00:05:55.740
+Als copilot al data zou tonen die niet voor jou bestemd is, zou je dat überhaupt opmerken?
+
+00:05:55.940 --> 00:05:58.620
+Voor de meeste organisaties is het eerlijke antwoord nee.
+
+00:05:58.800 --> 00:06:03.720
+Het is niet zo dat de informatie op een openbare site wordt geplaatst of naar een mailinglijst wordt gestuurd.
+
+00:06:04.080 --> 00:06:10.160
+Het lek kan stilletjes verschijnen in een concept, document, een samenvatting of een door AI gegenereerd antwoord.
+
+00:06:10.160 --> 00:06:14.720
+En tenzij iemand iets ongebruikelijks opmerkt, glipt het voorbij zonder alarm te slaan.
+
+00:06:14.880 --> 00:06:18.840
+Het zichtbaarheidsprobleem begint bij hoe de meeste monitoring systemen zijn gebouwd.
+
+00:06:19.060 --> 00:06:28.880
+Ze zijn afgestemd op traditionele activiteiten, zoals best- en downloads, ongebruikelijke inloglocaties en grote e-mailverzendingen, niet op de manier waarop AI informatie ophoudt en samenstelt.
+
+00:06:29.060 --> 00:06:31.600
+Copilot opent bestanden niet in de gebruikelijke zin.
+
+00:06:31.780 --> 00:06:38.040
+Het doorzoekt databronnen via Microsoft Graph, verzamelt de resultaten en presenteert ze als tekst in natuurlijke taal.
+
+00:06:38.040 --> 00:06:45.480
+Dat betekent dat standaard rapporten over bestandstoegang schoon kunnen lijken, terwijl de AI op de achtergrond nog steeds uit gevoelige bronnen put.
+
+00:06:45.860 --> 00:06:53.900
+Ik heb situaties gezien waarin een bedrijf pas door had dat er iets mis was omdat een werknemer terloop zijn klantnaam noemde die niet binnen het takenpakket van hun afdeling viel.
+
+00:06:54.120 --> 00:06:58.540
+Toen de manager vroeg hoe ze dat wisten, was het antwoord, copilot heeft het in mijn concept gezet.
+
+00:06:58.720 --> 00:07:04.740
+Er was geen incident ticket, geen automatische melding, alleen een willekeurige opmerking die IT tot een onderzoek aanzette.
+
+00:07:04.740 --> 00:07:10.200
+Tegen de tijd dat ze het hadden uitgezocht, waren diezelfde AI-antwoorden al gedeeld met verschillende teams.
+
+00:07:10.560 --> 00:07:16.120
+Microsoft 365 biedt je de tools om dit soort scenario's te onderzoeken, maar je moet wel weten waar je moet zoeken.
+
+00:07:16.320 --> 00:07:20.600
+De auditfunctie van Purview kan de datatoegang van copilot in detail registreren.
+
+00:07:20.800 --> 00:07:23.860
+Het is alleen niet gelabeld met een groot knipperend AI-label.
+
+00:07:24.140 --> 00:07:29.120
+Zodra je in de auditlogboek zoekopdracht zit, kun je filteren op de specifieke bewerkingen die copilot gebruikt,
+
+00:07:29.120 --> 00:07:35.740
+zoals uitgevoerde zoekopdrachten of geopende bestanden, en dit verfijnen met de applicatie ID die aan jouw copilot implementatie is gekoppeld.
+
+00:07:35.960 --> 00:07:37.340
+Dat vereist wat voorbereiding.
+
+00:07:37.540 --> 00:07:42.180
+Je zult de app registratiegegevens in Entra ID willen bevestigen, zodat je het verkeer kunt identificeren.
+
+00:07:42.400 --> 00:07:44.520
+Vanaf dat punt gaat het om het herkennen van patronen.
+
+00:07:44.680 --> 00:07:48.220
+Als je een hoog volume aan zoekopdrachten ziet van accounts die normaal weinig data nodig hebben,
+
+00:07:48.400 --> 00:07:52.700
+zoals een stagiairaccount dat 10 complexe zoekopdrachten in een uur uitvoert, dan is dat het onderzoeken waard.
+
+00:07:52.900 --> 00:07:56.060
+Hetzelfde geldt voor plotselingen pieken in inhoud met het label, vertrouwelijk,
+
+00:07:56.060 --> 00:07:58.580
+die opduiken bij afdelingen die daar normaal niet mee werken.
+
+00:07:58.580 --> 00:08:03.580
+Purview kan labelactiviteit markeren als een copilot query dus een gelabeld document ophaalt,
+
+00:08:03.780 --> 00:08:07.640
+zie je dat in de laks, zelfs als de AI de volledige tekst niet heeft weergegeven.
+
+00:08:07.840 --> 00:08:12.000
+Op rollen gebaseerde toegangsbeoordelingen zijn een andere manier om de puzzelstukjes samen te voegen.
+
+00:08:12.200 --> 00:08:17.160
+Door in kaart te brengen wie copilot daadwerkelijk gebruikt en dit te kruisen met de soorten gegevens waarmee ze werken,
+
+00:08:17.360 --> 00:08:19.620
+kun je potentiële mismatches vroegtijdig opsporen.
+
+00:08:19.900 --> 00:08:23.440
+Misschien gebruikt finance copilot intensief voor rapporten, wat logisch is,
+
+00:08:23.440 --> 00:08:27.420
+maar waarom benaderen meerdere marketingaccounts salaris-spreadsheets via AI-queries?
+
+00:08:27.420 --> 00:08:31.420
+Die beoordelingen geven je een breder beeld dan alleen losse gebeurtenissen in het auditspoor.
+
+00:08:32.180 --> 00:08:36.280
+Het addertje onder het gras is dat algemene monitoring dashboards hier niet veel helpen.
+
+00:08:36.480 --> 00:08:40.420
+Ze voegen alle M365 activiteiten samen in brede categorieën,
+
+00:08:41.300 --> 00:08:44.740
+waardoor AI-specifiek gedrag kan opgaan in de normale operaties.
+
+00:08:44.740 --> 00:08:50.680
+Zonder aangepaste filters of rapporten die gericht zijn op je copilot-epid en gebruikspatronen,
+
+00:08:50.800 --> 00:08:54.620
+ben je in feite op zoek naar specifieke zandkorrels op een heel strand aan data.
+
+00:08:54.880 --> 00:08:58.060
+Je hebt gerichte zichtbaarheid nodig, niet zomaar meer zichtbaarheid.
+
+00:08:58.220 --> 00:09:03.300
+Het gaat er niet om een surveillancecultuur op te bouwen, maar om met zekerheid te weten wat je AI daadwerkelijk ophaalt.
+
+00:09:03.460 --> 00:09:06.140
+Een goede logboekstrategie beantwoordt drie kritieke vragen.
+
+00:09:06.340 --> 00:09:07.720
+Wat heeft copilot opgehaald?
+
+00:09:07.720 --> 00:09:09.060
+Wie heeft dit geactiveerd?
+
+00:09:09.200 --> 00:09:12.660
+En kwam die actie overeen met je bestaande beveiligings- en compliancebeleid?
+
+00:09:12.840 --> 00:09:15.500
+Met die antwoorden kun je problemen nauwkeurig aanpakken,
+
+00:09:15.720 --> 00:09:17.840
+of dat nu betekent dat je een machtiging aanpast,
+
+00:09:18.060 --> 00:09:21.340
+een DLP-regel verfijnd of roleinstellingen aan SharePT.
+
+00:09:21.840 --> 00:09:25.720
+Zonder die duidelijkheid blijf je gissen, en gissen is geen beveiligingsstrategie.
+
+00:09:26.360 --> 00:09:29.740
+Dus, in plaats van te wachten op een toevallige opmerking die je alarmeert,
+
+00:09:29.880 --> 00:09:33.240
+is het de moeite waard om tijd te investeren in het structureren van je monitoring,
+
+00:09:33.540 --> 00:09:36.540
+zodat de voetafdruk van copilot zichtbaar en traceerbaar is.
+
+00:09:36.540 --> 00:09:41.340
+Op deze manier wordt elk teken van overmatige blootstelling van gegevens een beheerde gebeurtenis,
+
+00:09:41.520 --> 00:09:42.180
+geen verrassing.
+
+00:09:42.460 --> 00:09:44.860
+Weten waar de lekken zitten is slechts de eerste stap.
+
+00:09:45.060 --> 00:09:48.040
+Het echte doel is ervoor zorgen dat ze niet opnieuw kunnen gebeuren,
+
+00:09:48.360 --> 00:09:50.240
+en daar komen de juiste vangrails kijken.
+
+00:09:50.540 --> 00:09:51.960
+Vangrails die ook echt werken,
+
+00:09:52.200 --> 00:09:56.040
+DLP is niet alleen bedoeld voor het opvangen van e-mails met creditcardnummers erin.
+
+00:09:56.440 --> 00:09:59.900
+In de context van copilot kan het de struikeldraad zijn die voorkomt
+
+00:09:59.900 --> 00:10:03.500
+dat gevoelige gegevens in een door AI gegenereerd antwoord terechtkomen
+
+00:10:03.500 --> 00:10:07.900
+dat in een Teams-chat wordt geplakt of wordt geëxporteerd naar een document dat je tenant verlaat.
+
+00:10:08.500 --> 00:10:12.140
+Het is nog steeds dezelfde onderliggende tool in Microsoft 365,
+
+00:10:12.780 --> 00:10:16.940
+maar de manier waarop je deze configureert voor AI-scenario's vereist een andere denkwijze.
+
+00:10:17.120 --> 00:10:21.720
+Het hiaat is dat de DLP-beleidsregels van de meeste organisaties nog steeds zijn geschreven
+
+00:10:21.720 --> 00:10:26.400
+met ouderwetse triggers in gedachten, e-mailbijlagen, best- en downloads naar USB-sticks,
+
+00:10:26.400 --> 00:10:28.840
+gegevens kopiëren naar niet-goedgekeurde apps.
+
+00:10:29.160 --> 00:10:33.280
+Copilot activeert die regels standaard niet omdat het geen bestanden verstuurt.
+
+00:10:33.460 --> 00:10:35.540
+Het genereert content op het moment zelf.
+
+00:10:35.800 --> 00:10:39.800
+Als je copilot vraagt om de volledige lijst met klanten die als beperkt zijn gemarkeerd
+
+00:10:39.800 --> 00:10:42.440
+en deze wordt opgehaald uit een gelabeld document,
+
+00:10:42.760 --> 00:10:47.160
+kan de uitvoer zich verplaatsen zonder ooit een traditionele DLP-voorwaarde te activeren.
+
+00:10:47.640 --> 00:10:52.460
+Daarom moeten AI-prompts en reacties expliciet worden opgenomen in je DLP-bereik.
+
+00:10:52.460 --> 00:10:58.140
+Een praktisch voorbeeld, stel dat je beleid het exporteren van bepaalde contractdocumenten
+
+00:10:58.140 --> 00:11:00.060
+buiten je beveiligde omgeving verbiedt.
+
+00:11:00.180 --> 00:11:05.100
+Een gebruiker kan copilot vragen om belangrijke clausules te extraheren en deze in een PowerPoint te plaatsen.
+
+00:11:05.280 --> 00:11:08.740
+Als je DLP-regels AI-gegenereerde inhoud niet controleren,
+
+00:11:08.980 --> 00:11:11.960
+bevindt dat gevoelige materiaal zich nu in een onbeschermd bestand.
+
+00:11:12.300 --> 00:11:15.720
+Door DLP-inspectie uit te breiden naar copilot-uitvoer,
+
+00:11:15.720 --> 00:11:19.820
+kun je voorkomen dat die PowerPoint wordt opgeslagen op een onbeheerde locatie
+
+00:11:19.820 --> 00:11:22.000
+of wordt gedeeld met een externe gast in Teams.
+
+00:11:22.000 --> 00:11:27.660
+Dit instellen in Microsoft 365 is niet ingewikkeld, maar het vereist wel een zorgvuldig proces.
+
+00:11:27.920 --> 00:11:32.620
+Ga eerst in de Microsoft Purview Compliance Portal naar de sectie voor gegevensverliespreventie
+
+00:11:32.620 --> 00:11:33.820
+en maak een nieuw beleid aan.
+
+00:11:34.040 --> 00:11:36.560
+Wanneer je de locaties kiest waarop het moet worden toegepast,
+
+00:11:36.820 --> 00:11:40.000
+neem dan Exchange, SharePoint, OneDrive en vooral Teams op,
+
+00:11:40.080 --> 00:11:42.920
+omdat copilot-gegevens in al deze locaties kan weergeven.
+
+00:11:43.260 --> 00:11:44.980
+Defineer vervolgens de voorwaarden.
+
+00:11:45.220 --> 00:11:48.120
+Je kunt je richten op ingebouwde gevoelige informatietypen,
+
+00:11:48.120 --> 00:11:52.820
+zoals financiële rekeningnummers of aangepaste type die je interne projectcodes detecteren.
+
+00:11:53.000 --> 00:11:55.780
+En als je consistent gebruik maakt van vertrouwelijkheidslabels,
+
+00:11:56.040 --> 00:11:58.720
+kun je de voorwaarden ook zo instellen dat deze wordt geactiveerd
+
+00:11:58.720 --> 00:12:01.860
+wanneer gelabelde inhoud verschijnt in de uiteindelijke uitvoer van een bestand
+
+00:12:01.860 --> 00:12:03.180
+dat wordt opgeslagen of gedeeld.
+
+00:12:03.600 --> 00:12:05.040
+Configureer tot slot de acties.
+
+00:12:05.320 --> 00:12:06.180
+Blokkeer het delen.
+
+00:12:06.460 --> 00:12:10.200
+Toon een beleidstip aan de gebruiker of verrijs een rechtvaardiging om door te gaan.
+
+00:12:11.160 --> 00:12:14.140
+Vertrouwelijkheidslabels zelf zijn een essentieel onderdeel om dit te laten werken.
+
+00:12:14.140 --> 00:12:20.960
+In de AI-context is het label metadata die Copilot net als elke andere M365 service kan lezen.
+
+00:12:21.320 --> 00:12:25.260
+Als een zeer vertrouwelijk document een label heeft dat toegang en gebruik beperkt,
+
+00:12:25.420 --> 00:12:29.180
+zou Copilot die beperkingen respecteren bij het genereren van antwoorden,
+
+00:12:29.440 --> 00:12:33.900
+mits de beveiligingsinstellingen van de labels consistent worden toegepast in de betreffende apps.
+
+00:12:34.380 --> 00:12:38.420
+Als de AI probeert inhoud met een label te gebruiken buiten het toegestaane bereik,
+
+00:12:38.600 --> 00:12:43.460
+kan het DLP beleid dat aan dat label is gekoppeld de actie voorkomen of markeren voor beoordeling.
+
+00:12:43.460 --> 00:12:47.820
+Zonder die koppeling is het label vanuit compliance oogpunt slechts decoratie.
+
+00:12:48.020 --> 00:12:51.140
+Een van de meest voorkomende foutieve configuraties die ik tegenkom,
+
+00:12:51.360 --> 00:12:54.320
+is dat DLP beleid totaal geen rekening houdt met AI-scenario's.
+
+00:12:54.480 --> 00:13:00.080
+De regels bestaan, maar er is geen link naar Copilot uitvoer omdat beheerders het niet als een afzonderlijk kanaal beschouwen.
+
+00:13:00.280 --> 00:13:05.340
+Dat creëert een blinde vlek waarbij gevoelige termen in een gegenereerd antwoord niet worden geïnspecteerd,
+
+00:13:05.340 --> 00:13:08.160
+ook al zou dezelfde tekst in een e-mail zijn geblokkeerd.
+
+00:13:08.160 --> 00:13:15.820
+Maar om dat op te lossen, moet je AI-ondersteunde workflows beschouwen als een van je DLP locaties en ze samen met al het andere monitoren.
+
+00:13:16.580 --> 00:13:21.580
+Wanneer DLP en vertrouwelijkheidslabels goed zijn geconfigureerd en op elkaar zijn afgestemd,
+
+00:13:21.820 --> 00:13:24.960
+kan Copilot nuttig zijn zonder een compliance hoofdpijndossier te worden.
+
+00:13:25.200 --> 00:13:29.520
+Je kunt het rapporten laten opstellen, documenten samenvatten en datasets doorzoeken,
+
+00:13:29.520 --> 00:13:33.900
+terwijl je stilletjes dezelfde grenzen handhaaft die je verwacht in een e-mail of Teamsbericht.
+
+00:13:34.080 --> 00:13:39.780
+Gebruikers profiteren van AI-ondersteuning, terwijl de beveiligingsregels voorkomen dat risicovolle informatie naar buiten lekt.
+
+00:13:39.980 --> 00:13:43.240
+Het voordeel hier is niet alleen het voorkomen van onbedoeld delen van gegevens.
+
+00:13:43.460 --> 00:13:46.920
+Het gaat erom de technologie binnen duidelijke kaders te laten opereren.
+
+00:13:47.180 --> 00:13:52.080
+Zo hoef je niet terug te vallen op algemene beperkingen die Teams frustreren en de adoptie in de weg staan.
+
+00:13:52.080 --> 00:13:56.820
+Je kunt de instellingen aanpassen, zodat marketing kan brainstormen met Copilot,
+
+00:13:57.060 --> 00:14:02.900
+finance-analyses kan draaien en ouder onboarding-gidsen kan genereren, elk binnen hun eigen toegestane zones.
+
+00:14:03.400 --> 00:14:06.220
+Maar de uitvoer beheersen is slechts een deel van de puzzel.
+
+00:14:06.420 --> 00:14:12.760
+Om het risico volledig te beperken, moet je ook beslissen wie in de eerste plaats toegang krijgt tot welke AI-mogelijkheden.
+
+00:14:13.180 --> 00:14:15.080
+Toegang is geen one-size-fits-all.
+
+00:14:16.040 --> 00:14:20.180
+Moeten een marketingstagiair en een CFO echt dezelfde Copilot-rechten hebben?
+
+00:14:20.180 --> 00:14:25.620
+Het idee klinkt absurd als je het hardop uitspreekt, maar in veel tenants is het precies zo ingesteld.
+
+00:14:25.800 --> 00:14:32.420
+Copilot wordt voor iedereen met dezelfde machtigingen ingeschakeld omdat dat sneller en eenvoudiger is dan het afhandelen van rolspecifieke configuraties.
+
+00:14:32.620 --> 00:14:38.300
+Het nadeel is dat de toegang van de AI overeenkomt met het meest open scenario, niet met de behoefte van elke rol.
+
+00:14:38.520 --> 00:14:41.740
+Dat is waar rolspecifieke Copilot toegangsgroepen om de hoek komen kijken.
+
+00:14:41.740 --> 00:14:49.340
+In plaats van elke gebruiker als inwisselbaar te behandelen, stem je AI-mogelijkheden af op de informatie en workflows die specifieke rollen daadwerkelijk nodig hebben.
+
+00:14:49.340 --> 00:14:55.880
+Marketing heeft wellicht toegang nodig tot campagne-assets en merkrichtlijnen, maar niet tot ruwe financiële modellen.
+
+00:14:56.720 --> 00:15:00.860
+Finance heeft die modellen nodig, maar ze hebben geen vroege product-roadmaps nodig.
+
+00:15:01.100 --> 00:15:03.560
+Het doel is niet om Copilot minder bruikbaar te maken.
+
+00:15:03.780 --> 00:15:07.140
+Het gaat erom de rijkwijte relevant te houden voor de functie van elk persoon.
+
+00:15:07.340 --> 00:15:10.820
+De risico's van universele activering zijn groter dan de meeste teams verwachten.
+
+00:15:10.960 --> 00:15:16.220
+Copilot werkt door gebruik te maken van de gegevens die je Microsoft 365-omgeving al bevat.
+
+00:15:16.220 --> 00:15:22.520
+Als al het personeel gelijke AI-toegang heeft, kan de technologie silo's overbruggen die je bewust in stand hebt gehouden.
+
+00:15:22.940 --> 00:15:34.120
+Zo krijg je hour-assistenten die per ongeluk omzetoverzichten zien of een operationsmanager die aan Copilot vraagt om het product-releaseplan van volgend jaar en ontwerpdetails krijgt die nog niet eens definitief zijn.
+
+00:15:34.600 --> 00:15:38.200
+Niets ervan voelt op dat moment als een inbreuk, maar het risico is reëel.
+
+00:15:38.200 --> 00:15:48.280
+Het juiste toegangsmodel begint bij het koppelen van functies aan gegevensbehoeften, niet alleen aan de applicaties die mensen gebruiken, maar aan de diepgang en gevoeligheid van de gegevens waar ze dagelijks mee werken.
+
+00:15:48.480 --> 00:15:57.420
+Je ontdekt misschien dat 70% van de verzoeken van je verkoopteam aan Copilot over klantgeschiedenis gaat, terwijl minder dan 5% betrekking heeft op zeer gevoelige contractbestanden.
+
+00:15:57.680 --> 00:16:03.600
+Dit suggereert dat u het meeste AI-gebruik veilig kunt beperken tot bepaalde SharePoint-bibliotheken, terwijl u de rest afsluit.
+
+00:16:03.600 --> 00:16:07.040
+Voer die oefening uit voor elke afdeling en er zullen patronen ontstaan.
+
+00:16:07.240 --> 00:16:14.000
+Zodra u weet wat elke groep nodig heeft, wordt Microsoft entra ID, wat velen nog Azure AD noemen, uw handhavingsstoel.
+
+00:16:14.180 --> 00:16:20.420
+U maakt beveiligingsgroepen aan die overeen komen met uw roldefinities en wijst vervolgens Copilot-machtigingen toe op groepsniveau.
+
+00:16:20.660 --> 00:16:28.960
+Dat kan betekenen dat u bepaalde Graph API-scopes alleen inschakelt voor leden van de financiële Copilot-groep, terwijl de Marketing Copilot-groep een andere set heeft.
+
+00:16:28.960 --> 00:16:34.740
+Toegang tot gevoelige sites, teams, kanalen of specifieke OneDrive-mappen kan hetzelfde model volgen.
+
+00:16:34.960 --> 00:16:39.160
+De kracht van deze aanpak is de combinatie met de controles die we al hebben behandeld.
+
+00:16:39.680 --> 00:16:44.060
+Graph-machtigingen bepalen de buitenste grenzen van wat Copilot technisch kan bereiken.
+
+00:16:44.560 --> 00:16:48.480
+DLP-beleid controleert de output van de AI op gevoelige inhoud.
+
+00:16:48.480 --> 00:17:01.120
+Op rollen gebaseerde groepen zitten daartussenin en zorgen ervoor dat Graph-machtigingen niet te ruim zijn voor minder gevoelige rollen en dat DLP geen zaken opvang die u had kunnen voorkomen door invoerbronnen te beperken.
+
+00:17:02.340 --> 00:17:04.560
+Maar zoals elk systeem kan het doorslaan.
+
+00:17:04.760 --> 00:17:07.920
+Het is verleidelijk om voor elk scenario een micro-groep aan te maken.
+
+00:17:07.920 --> 00:17:15.180
+Financieel analist, Copilot met rapportagemachtigingen of marketing stagiair zonder teamstoegang, waardoor u eindigt met tientallen variaties.
+
+00:17:15.440 --> 00:17:20.700
+Dat niveau van granulariteit ziet er op papier misschien precies uit, maar in de live omgeving is het een onderhoudsconnachtmerrie.
+
+00:17:20.920 --> 00:17:24.740
+Gebruikers veranderen van rol, projecten verschuiven, contractanten komen en gaan.
+
+00:17:24.920 --> 00:17:31.360
+Als het groepsmodel te rigide is, zal uw IT-personeel meer tijd besteden aan het oplossen van toegangsproblemen dan aan het verbeteren van de beveiliging.
+
+00:17:31.360 --> 00:17:38.760
+Het werkelijke doel is balans. Een handvol duidelijke, goed gedefinieerde rolgroepen dekt de meeste use cases zonder administratieve blokkades te creëren.
+
+00:17:38.940 --> 00:17:44.200
+De groep van de CFO heeft uitgebreide analytische krachten nodig, maar strikte controles op het delen van output.
+
+00:17:44.420 --> 00:17:50.260
+De stagiairgroep krijgt een beperkte gegevensomvang, maar voldoende capaciteit om bij te dragen aan daadwerkelijk werk.
+
+00:17:50.920 --> 00:17:57.480
+Afdelingshoofden zitten in het midden en IT behoudt de mogelijkheid om aanpassingen te doen wanneer speciale projecten uitzonderingen vereisen.
+
+00:17:57.480 --> 00:18:00.760
+U probeert niet alles tot frustrerend niveau af te sluiten.
+
+00:18:00.760 --> 00:18:05.160
+U houdt elke AI-ervaring relevant, veilig en in lijn met het beleid.
+
+00:18:05.360 --> 00:18:08.180
+Wanneer u het goed aanpakt, worden de voordelen snel zichtbaar.
+
+00:18:08.400 --> 00:18:14.140
+Gebruikers zijn niet langer verrast door de gegevens die Copilot hen presenteert, omdat het altijd iets is binnen hun verantwoordelijkheidsgebied.
+
+00:18:14.280 --> 00:18:19.600
+Compliance teams hebben minder incidenten om te onderzoeken omdat overmatige blootstelling niet per ongeluk gebeurt.
+
+00:18:19.820 --> 00:18:29.000
+En IT kan eindelijk vooruit met nieuwe Copilot-functies zonder zich zorgen te maken dat een wereldwijde uitrol stilletjes alle datagrenzen ondermijnt waar ze aan hebben gewerkt.
+
+00:18:29.000 --> 00:18:34.000
+Met toegang en vangrails die samenwerken, heeft u uw risicoprofiel aanzienlijk verkleind.
+
+00:18:34.580 --> 00:18:41.480
+Maar zelfs een goed ontworpen model is alleen nuttig als je kunt aantonen dat het werkt, zowel voor jezelf als voor iedereen die aanklopt met een auditverzoek.
+
+00:18:41.800 --> 00:18:43.800
+Compliance aantonen zonder vertraging.
+
+00:18:44.040 --> 00:18:48.540
+Compliance is niet alleen voor de bühne, het is het bewijsmateriaal dat auditors tevreden stelt.
+
+00:18:48.540 --> 00:18:56.500
+Beleid en vangrails zijn geweldig, maar als je niet precies kunt aantonen wat er met AI-ondersteunde data is gebeurd, moet je zaken beweren in plaats van bewijzen.
+
+00:18:56.500 --> 00:19:06.120
+Een audit-ready copilot-omgeving betekent dat elke interactie van de gebruikersquery tot het ophalen van data door de AI kan worden verklaard en onderbouwd met een verifiëerbaar spoor.
+
+00:19:06.360 --> 00:19:11.000
+Het lastige is dat veel bedrijven denken dat ze gedekt zijn omdat ze interne controles doorstaan.
+
+00:19:11.000 --> 00:19:19.980
+Die controles checken vaak het bestaan van maatregelen en een paar voorbeeldscenario's, maar ze eisen niet altijd de granulariteit die externe auditors verwachten.
+
+00:19:21.160 --> 00:19:32.420
+Wanneer een externe assessor vraagt om een logboek van alle gevoelige content die copilot het afgelopen kwartaal heeft geraadpleegd, inclusief wie het aanvroeg en waarom, is het verrassend hoe vaak er hiaten verschijnen.
+
+00:19:32.760 --> 00:19:39.480
+Of de logboeken zijn incompleet of ze laten AI gerelateerde gebeurtenissen volledig weg omdat ze nooit als zodanig zijn getagd.
+
+00:19:39.480 --> 00:19:42.460
+Dit is waar Microsoft Purview een groot verschil kan maken.
+
+00:19:42.680 --> 00:19:47.000
+De compliance-mogelijkheden gaan niet alleen over het toepassen van labels en DLP-beleid.
+
+00:19:47.200 --> 00:19:50.480
+Ze verzamelen ook het forensisch bewijsmateriaal dat je nodig hebt.
+
+00:19:50.660 --> 00:19:56.740
+In een copilot-context kan Purview elk relevant verzoek tot datatoegang, de identiteit erachter en de bronlocatie vastleggen.
+
+00:19:56.900 --> 00:20:06.740
+Het kan die gebeurtenissen ook correleren aan patronen van databewegingen, zoals gevoelige bestanden die worden gebruikt in concepten, samenvattingen of exporten, zonder te vertrouwen op zelfrapportage van de AI.
+
+00:20:06.740 --> 00:20:10.220
+De compliance-scoren van Purview is meer dan een ijdelheidsstatistiek.
+
+00:20:10.360 --> 00:20:17.900
+Het is een momentopname van hoe jouw omgeving scoort ten opzichte van de aanbevolen maatregelen van Microsoft, inclusief die welke AI gerelateerde risico's direct beperken.
+
+00:20:18.120 --> 00:20:25.200
+Betere hygiëne van grafiekrechten, strengere DLP-configuraties en goed onderhouden rollengebaseerde groepen dragen allemaal bij aan die scoren.
+
+00:20:25.340 --> 00:20:33.640
+En omdat de score wordt bijgewerkt terwijl je wijzigingen aanbrengt, kun je bijna in real-time zien hoe verbeteringen in AI governance je compliance-positie versterken.
+
+00:20:33.640 --> 00:20:41.400
+Denk aan een toezichthoudend onderzoek waarbij je moet rechtvaardigen waarom bepaalde klantgegevens verschenen in een door co-pilot gegenereerd rapport.
+
+00:20:41.720 --> 00:20:44.940
+Zonder gestructureerde logboekregistratie wordt dat gesprek giswerk.
+
+00:20:45.160 --> 00:20:54.000
+Met een correct geconfigureerde Purview kun je het toegangsverzoek in een audit-logboek tonen, wijzen naar de rol en machtigingen die het autoriseerde en aantonen dat de output binnen goedgekeurde kanalen bleef.
+
+00:20:54.000 --> 00:20:58.220
+Dat is een veel makkelijker gesprek dan gehaast een niet gedocumenteerde gebeurtenis moeten verklaren.
+
+00:20:58.380 --> 00:21:05.100
+De sleutel is om compliance-rapportage onderdeel te maken van je normale IT-governance-cyclus, in plaats van slechts een speciaal project voor een audit.
+
+00:21:05.780 --> 00:21:07.700
+Geautomatiseerde rapportage helpt hier enorm bij.
+
+00:21:07.880 --> 00:21:15.000
+Purview kan periodieke rapporten genereren over overeenkomsten met informatiebeveiligingsbeleid, DLP-incidenten en het gebruik van vertrouwelijkheidslabels.
+
+00:21:15.000 --> 00:21:23.040
+Wanneer die rapporten maandelijks in de werkruimte van je governance-team worden geplaatst, bouw je een basislijn van AI-activiteit op die eenvoudig te controleren is.
+
+00:21:23.220 --> 00:21:26.260
+Elke afwijking valt op ten opzichte van het historische patroon.
+
+00:21:26.460 --> 00:21:35.680
+De tijdbesparende functie stellen snel op Purview wordt bijvoorbeeld geleverd met ingebouwde rapporten die alle incidenten met gelabelde inhoud groeperen op locatie of activiteit type.
+
+00:21:35.680 --> 00:21:45.860
+Als een co-pilot-sessie een vertrouwelijk document in een uitvoer heeft getrokken en je DLP hierop heeft gereageerd, verschijnt dat incident al in een rapport zonder dat je vanaf nul een aangepaste query hoeft te bouwen.
+
+00:21:46.020 --> 00:21:51.980
+Je kunt vervolgens in dat record duiken voor meer details, maar het zware werk van verzamelen en categoriseren is al gedaan.
+
+00:21:52.280 --> 00:21:59.200
+Een andere efficiëntieslag is de integratie tussen Purview-aditing en de op rollen gebaseerde toegangsgegevens van Microsoft 365.
+
+00:21:59.860 --> 00:22:04.740
+Omdat Purview entra ID-groepen begrijpt, kan het toegangslogboeken filteren op role-type.
+
+00:22:04.740 --> 00:22:14.000
+Dat betekent dat je snelgerichte vragen kunt beantwoorden, zoals laat me alle instanties zien waarbij marketingrollen de afgelopen 90 dagen via co-pilot toegang hadden tot financieel gelabelde gegevens.
+
+00:22:14.840 --> 00:22:21.380
+Dat vermogen om te filteren op zowel rol- als gegevensclassificatie is precies waar externe beoordelaars naar op zoek zijn.
+
+00:22:21.580 --> 00:22:24.720
+Als je erover nadenkt, is compliance op dit niveau geen last.
+
+00:22:24.920 --> 00:22:28.500
+Het is een vangrail die bevestigt dat je governance-ontwerp in de praktijk werkt.
+
+00:22:28.680 --> 00:22:31.840
+Het neemt ook de stress van audits weg omdat je niet hoeft te schrapen.
