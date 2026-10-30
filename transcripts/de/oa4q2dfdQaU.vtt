@@ -1,0 +1,1303 @@
+WEBVTT
+
+00:00:00.210 --> 00:00:06.530
+Bereit für 10 Tage Microsoft 365, Co-Pilot, KI, Azure und die Menschen, die die Zukunft der Arbeit gestalten?
+
+00:00:07.070 --> 00:00:12.070
+Ah, diesen Januar ist die M365-Coin zurück und zwar noch größer, größer.
+
+00:00:12.470 --> 00:00:18.110
+Seien Sie dabei bei Live-Sessions, Demos aus der Praxis und erfahren Sie praktisches Wissen von MVPs und Branchenexperten aus aller Welt.
+
+00:00:18.790 --> 00:00:21.010
+Keine generischen Folien, keine endlosen Schlagworte.
+
+00:00:21.930 --> 00:00:23.070
+Wir stellen uns den echten Herausforderungen.
+
+00:00:23.770 --> 00:00:28.070
+Co-Pilot Studio, KI Agents, Fabric, Sicherheit, Governance und Automatisierung.
+
+00:00:28.070 --> 00:00:34.250
+Ganz gleich, ob Sie IT-Experte, Entwickler oder Führungskraft sind, es gibt für Sie konzipierte Sessions.
+
+00:00:35.490 --> 00:00:39.930
+An 10 vollen Tagen können Sie verschiedene Technologien kennenlernen und sich mit einer globalen Community vernetzen.
+
+00:00:40.890 --> 00:00:44.270
+Sehen Sie sich die Live-Übertragung an und nehmen Sie praktische Einblicke mit nach Hause in Ihr Unternehmen.
+
+00:00:45.130 --> 00:00:48.810
+Januar 2027, 10 Tage, eine Microsoft-Community.
+
+00:00:49.370 --> 00:00:50.610
+Die Registrierung ist ab sofort möglich.
+
+00:00:51.710 --> 00:00:52.950
+Gehen Sie noch heute zu Ihrem Standort.
+
+00:00:52.950 --> 00:00:58.250
+Das ist M225560-con.net.
+
+00:01:00.090 --> 00:01:04.470
+Melden Sie sich jetzt unter M325560-con.net an und wir sehen uns im Januar live.
+
+00:01:05.050 --> 00:01:07.550
+Haben Sie sich jemals gefragt, wer Ihre Daten im Power BI eigentlich sehen kann?
+
+00:01:07.990 --> 00:01:12.070
+Boiler-Alarm, es ist nicht so privat, wie Sie vielleicht denken, wenn Sie die Sicherheit auf Zeilenebene nicht beherrschen.
+
+00:01:12.070 --> 00:01:15.970
+In dieser Folge aktivieren wir nicht nur das Kontrollkästchen für die Sicherheit auf Zeilenebene,
+
+00:01:16.090 --> 00:01:20.990
+sondern analysieren die beweglichen Teile von Rollendefinitionen bis hin zu DAX ausdrücken, die stillschweigend entscheiden, wer was sieht.
+
+00:01:21.730 --> 00:01:25.910
+Die meisten Leute hören beim Einrichten auf, aber wir zeigen Ihnen, wie jede Entscheidung miteinander verknüpft ist,
+
+00:01:25.990 --> 00:01:28.610
+sodass Ihre Daten nicht nur gesperrt, sondern auf Sicherheit ausgelegt sind.
+
+00:01:30.450 --> 00:01:33.010
+Warum Sicherheit auf Zeilenebene ein System und kein Kontrollkästchen ist.
+
+00:01:33.010 --> 00:01:36.610
+Wenn Sie es gewohnt sind, eine vertrauliche Tabelle durch ein Kennwort zu schützen,
+
+00:01:36.790 --> 00:01:41.150
+wissen Sie bereits, dass zwischen Ihren Absichten und dem, was Ihre Daten tatsächlich schützt, eine Lücke klafft.
+
+00:01:41.550 --> 00:01:41.910
+Klafft.
+
+00:01:42.970 --> 00:01:45.950
+Power BI mit Sicherheit auf Zeilenebene kann sich genauso anfühlen.
+
+00:01:46.510 --> 00:01:50.010
+Sie aktivieren den RLS-Schalter, weisen ein paar Rollen zu und denken, dass alles abgesichert ist.
+
+00:01:50.410 --> 00:01:51.670
+Aber die Realität sieht anders aus.
+
+00:01:52.290 --> 00:01:57.550
+Vertrauliche Daten finden einen Weg nach draußen, wenn diese Verbindungen zwischen Rollenfiltern und Benutzern nicht sorgfältig abgebildet werden.
+
+00:01:58.290 --> 00:02:01.950
+Es wird selten über die Situation gesprochen, in denen jemand aus dem Vertriebsteam ein Dashboard öffnete
+
+00:02:01.950 --> 00:02:04.990
+und am Ende einen klaren Einblick in Zahlen erhielt, die er nie hätte sehen dürfen.
+
+00:02:06.090 --> 00:02:09.930
+Aber es kommt vor und beginnt fast immer mit der Annahme, dass RLS nur ein weiteres Kästchen ist,
+
+00:02:10.010 --> 00:02:11.770
+das während der Einrichtung abgehakt werden muss.
+
+00:02:12.670 --> 00:02:15.450
+Versetzen wir uns in die Lage von jemandem, dem Zugriff auf ein Dashboard gewährt wird,
+
+00:02:15.510 --> 00:02:17.370
+weil er denkt, er würde damit einen Kollegen mehr Befugnis erteilen.
+
+00:02:17.730 --> 00:02:18.330
+Klingt harmlos, oder?
+
+00:02:18.690 --> 00:02:23.050
+Aber in zu vielen Unternehmen bedeutet der Zugriff auf ein Dashboard den Zugriff auf alles hinter den Kulissen.
+
+00:02:24.270 --> 00:02:27.990
+Ich habe Umgebungen erlebt, in denen eine einzige globale Managerrolle Junior-Benutzern versehentlich
+
+00:02:27.990 --> 00:02:30.030
+den Zugriff auf vertrauliche HR-Daten erlaubte,
+
+00:02:30.030 --> 00:02:32.350
+nur weil die Benennung nicht der Realität entsprach.
+
+00:02:33.170 --> 00:02:34.350
+Auch das ist kein Einzelfall.
+
+00:02:34.970 --> 00:02:37.670
+Es ist eher die Regel als die Ausnahme, insbesondere wenn ein Unternehmen wächst
+
+00:02:37.670 --> 00:02:39.370
+und sich die Dashboards vervielfachen.
+
+00:02:40.450 --> 00:02:42.870
+Alle wollen schnell vorankommen, aber wenn man ohne Struktur vorgeht,
+
+00:02:42.990 --> 00:02:46.710
+entstehen kleine Lücken, die sich bei einem Audit zu klaffenden Lücken entwickeln können.
+
+00:02:47.670 --> 00:02:49.430
+Auf dem Papier könnte RS nicht einfacher klingen.
+
+00:02:50.330 --> 00:02:52.130
+Erstellen Sie eine Rolle, nennen Sie sie vielleicht Vertrieb,
+
+00:02:52.230 --> 00:02:55.810
+fügen Sie einen Filter wie Region gleich USA hinzu und ordnen Sie Ihr Benutzer zu.
+
+00:02:55.810 --> 00:02:59.850
+Hinter jedem Dropdown und Kontrollkästchen im Power BI verbirgt sich jedoch ein System,
+
+00:02:59.950 --> 00:03:02.250
+das Entscheidungen darüber trifft, welche Daten wohin übertragen werden.
+
+00:03:02.790 --> 00:03:05.990
+Wenn Sie eine Beziehung übersehen oder ein Filter einer neuen Datenquelle nicht erfasst,
+
+00:03:06.090 --> 00:03:07.590
+handelt es sich nicht nur um einen technischen Fehler.
+
+00:03:08.410 --> 00:03:10.570
+Es handelt sich um einen Sicherheitsvorfall, den nur darauf wartet, was passiert.
+
+00:03:11.130 --> 00:03:14.210
+Sie werden es erst erfahren, wenn jemand über Daten stolpert, die er nicht sehen soll.
+
+00:03:14.370 --> 00:03:15.690
+Und manchmal nicht einmal dann.
+
+00:03:16.330 --> 00:03:18.310
+Deshalb sind diese kleinen Fehler so schwer zu erkennen.
+
+00:03:19.190 --> 00:03:20.950
+Sie werden nicht durch Warnsignale benachrichtigt
+
+00:03:20.950 --> 00:03:23.750
+und Standardprüfungen gehen oft nicht tief genug, um sie zu bemerken.
+
+00:03:24.890 --> 00:03:28.910
+Was übersehen wird, ist, wie eng die RLS-Komponenten tatsächlich miteinander verbunden sind.
+
+00:03:29.810 --> 00:03:31.790
+Die meisten Tutorials führen Sie schnell durch die Einrichtung
+
+00:03:31.790 --> 00:03:34.150
+und führen Sie durch die Grundlagen der Rollenerstellung und Filterung.
+
+00:03:34.830 --> 00:03:37.530
+Sie zeigen, wie Benutzer zugeordnet und ein Vorschaufeld aktiviert wird.
+
+00:03:37.750 --> 00:03:39.530
+Aber so gut wie niemand geht darauf ein, zu untersuchen,
+
+00:03:39.590 --> 00:03:43.330
+wie sich ein Filter in der Vertriebstabelle beispielsweise auf eine Tabelle mit zugehörigen Gebieten auswirkt.
+
+00:03:44.210 --> 00:03:46.630
+Jede Logik in RLS wirkt sich auf die anderen aus.
+
+00:03:46.630 --> 00:03:50.430
+Zuweisungen, DAX-Ausdrücke und sogar die Benennung der Rollen selbst.
+
+00:03:51.170 --> 00:03:53.050
+Betrachten Sie diese Entscheidungen als isolierte Schritte
+
+00:03:53.050 --> 00:03:55.750
+und vertrauen Sie darauf, dass das System keine losen Enden aufweist.
+
+00:03:56.730 --> 00:04:00.550
+Doch ein vergessener Filter und plötzlich ist Ihre sorgfältig eingerichtete Rolle wie ein Sieb.
+
+00:04:01.670 --> 00:04:06.190
+Dies ist einer jener Bereiche, in denen die richtige Analogie keine verschlossene Tür ist.
+
+00:04:06.990 --> 00:04:08.030
+Es ist ein Geflecht aus Fäden.
+
+00:04:08.930 --> 00:04:11.350
+Sie ändern einen Teil und plötzlich kann sich das Ganze verschieben.
+
+00:04:12.050 --> 00:04:13.810
+Übersehen Sie einen Faden, haben Sie ein Leck erzeugt,
+
+00:04:13.850 --> 00:04:15.570
+das nicht einmal offensichtlich ist, bis es ausgenutzt wird.
+
+00:04:16.010 --> 00:04:17.930
+Tatsächliche Vorfälle zeigen, wie sich dies auswirkt.
+
+00:04:18.690 --> 00:04:20.950
+Insider-Geschichten von Analyse-Teams berichten von dem Moment,
+
+00:04:21.070 --> 00:04:24.770
+als der europäische Vertriebsleiter zufällig auf Daten aus der nordamerikanischen Pipeline stieß.
+
+00:04:25.810 --> 00:04:28.030
+Das war kein Einbruch, sondern ein falsch angewendeter Filter,
+
+00:04:28.170 --> 00:04:31.510
+eine unbeabsichtigte Standardeinstellung oder eine Rolle, die niemand noch einmal überprüft hatte.
+
+00:04:32.130 --> 00:04:34.030
+Es gibt aber nicht nur Horrorgeschichten aus der realen Welt.
+
+00:04:35.070 --> 00:04:39.110
+Microsofts eigene Sicherheitslückenberichte nennen falsch konfigurierte Sicherheit auf Zeilenebene
+
+00:04:39.110 --> 00:04:43.150
+als einen der Hauptgründe für die peinliche Offenlegung öffentlicher Daten in großen Unternehmen.
+
+00:04:44.470 --> 00:04:47.270
+Auf jede Schlagzeile über eine große Sicherheitsverletzung kommen Dutzende,
+
+00:04:47.370 --> 00:04:50.190
+die nicht gemeldet werden, aber hinter den Kulissen dauerhafte Folgen haben.
+
+00:04:50.190 --> 00:04:54.490
+Was diese Probleme gemeinsam haben, ist das trügerische Sicherheitsgefühl,
+
+00:04:54.490 --> 00:04:57.110
+das RLS vermittelt, wenn man es wie einen einfachen Punkt behandelt,
+
+00:04:57.370 --> 00:04:59.010
+den man von einer To-Do-Liste streichen kann.
+
+00:04:59.910 --> 00:05:03.210
+Studien von Microsofts Sicherheitsteams unterstreichen, dass das Erstellen von Filterebenen,
+
+00:05:03.290 --> 00:05:06.350
+das Stapeln von Filtern über Tabellen hinweg, das Anwenden zusätzlicher DAX-Ausdrücke
+
+00:05:06.350 --> 00:05:09.310
+oder die Verwendung von Kombinationen aus statischer und dynamischer Logik
+
+00:05:09.310 --> 00:05:11.370
+sowohl den Schutz als auch die Komplexität erhöht.
+
+00:05:11.370 --> 00:05:13.490
+Sowohl den Schutz als auch die Komplexität erhöht.
+
+00:05:13.610 --> 00:05:15.670
+Jede hinzugefügte Ebene erhöht nicht nur die Sicherheit,
+
+00:05:15.670 --> 00:05:19.830
+sondern vervielfacht auch die Anzahl der Punkte, an denen ein Konfigurationsfehler auftreten kann.
+
+00:05:21.090 --> 00:05:24.090
+Anstelle eines einfachen Wächters an der Tür haben Sie ein komplexes Netz,
+
+00:05:24.450 --> 00:05:28.250
+in dem ein übersehener Knotenpunkt monatelange Sicherheitsplanung zunichte machen kann.
+
+00:05:29.050 --> 00:05:31.610
+Lassen Sie uns auch die praktischen Realitäten nicht außer Acht lassen.
+
+00:05:32.430 --> 00:05:37.150
+Ein System mag im Test einwandfrei funktionieren, aber wenn man es in die Produktion mit echten Benutzern,
+
+00:05:37.490 --> 00:05:39.830
+echten Abteilungen und sich ständig ändernden Teams überführt,
+
+00:05:39.830 --> 00:05:43.470
+kommt es zu Situationen, in denen jemand, der im letzten Quartal das Team gewechselt hat,
+
+00:05:43.690 --> 00:05:46.490
+immer noch Zugriff auf die vierteljährlichen Finanzzahlen hat.
+
+00:05:47.890 --> 00:05:52.170
+Namen und Zuweisungen, die anfangs noch Sinn machten, werden zu mysteriösen Altlasten.
+
+00:05:53.150 --> 00:05:55.850
+Niemand möchte etwas anfassen, nur weil er weiß, dass es noch verwendet wird.
+
+00:05:56.390 --> 00:06:00.090
+Wenn Sie RLS nur beim Setup aktivieren und dann fortfahren, schützen Sie Ihre Daten nicht.
+
+00:06:00.750 --> 00:06:04.830
+Sie hoffen, dass niemand aus Neugier oder Versehen an die falsche Tür klopft.
+
+00:06:06.230 --> 00:06:07.970
+All dies führt zu einer zentralen Wahrheit.
+
+00:06:07.970 --> 00:06:09.870
+Sicherheit auf Zeilenebene ist lebendig.
+
+00:06:10.270 --> 00:06:11.410
+Sie verändert sich mit Ihrem Unternehmen.
+
+00:06:11.930 --> 00:06:14.090
+Jede Rolle, die Sie erstellen, jeder DAX-Filter, den Sie anwenden,
+
+00:06:14.210 --> 00:06:16.570
+jede Gruppe, die Sie zuweisen, das sind keine kleinen Entscheidungen.
+
+00:06:17.150 --> 00:06:19.810
+Sie fließen zusammen und bilden ein lebendiges, atmendes Schutzsystem.
+
+00:06:20.350 --> 00:06:22.090
+Wenn Sie ignoriert werden, entsteht ein Netz voller Löcher.
+
+00:06:22.470 --> 00:06:24.890
+Bevor Sie also zum nächsten Dashboard wechseln oder ein Modell übergeben,
+
+00:06:24.990 --> 00:06:26.410
+halten Sie inne und fragen Sie sich,
+
+00:06:26.970 --> 00:06:30.430
+verwalte ich tatsächlich ein Sicherheitssystem oder hoffe ich nur, dass die Umstellung ausreicht?
+
+00:06:30.430 --> 00:06:34.630
+Der nächste Teil dieser Geschichte beginnt mit dem Kernstück des Ganzen,
+
+00:06:34.990 --> 00:06:39.410
+der Filterlogik selbst und wie sie jede andere Entscheidung, die Sie treffen, steuert.
+
+00:06:40.870 --> 00:06:43.590
+Aufbau einer sicheren Grundlage, Datenfilterung und Rollendesign.
+
+00:06:44.090 --> 00:06:46.450
+Wenn Sie jemals Sicherheit auf Zeilenebene eingerichtet haben und dachten,
+
+00:06:46.530 --> 00:06:49.010
+es ginge nur darum, bestimmte Zahlen zu verbergen, sind Sie nicht allein.
+
+00:06:49.730 --> 00:06:52.470
+Der Hauptgrund für die Unübersichtlichkeit von RLS ist ein einfaches Missverständnis.
+
+00:06:52.790 --> 00:06:54.210
+Dabei geht es nicht nur um das Sichtbare,
+
+00:06:54.350 --> 00:06:56.570
+sondern um die Gestaltung der gesamten Benutzererfahrung.
+
+00:06:56.570 --> 00:07:01.330
+Ein kurzer Fehltritt und plötzlich wird eine vertrauliche Bonustabelle
+
+00:07:01.330 --> 00:07:03.110
+oder ein vertrauliches Gehalt einer Führungskraft
+
+00:07:03.110 --> 00:07:04.870
+in das Dashboard eines anderen Unternehmens übernommen.
+
+00:07:06.290 --> 00:07:09.470
+Allerdings entdecken Nutzer diese Lacks erst, wenn bereits Berichte im Umlauf sind
+
+00:07:09.470 --> 00:07:11.770
+und zu diesem Zeitpunkt kann das Zurückverfolgen schwierig werden.
+
+00:07:12.350 --> 00:07:14.830
+Das Unangenehme daran ist, dass diese Aufschlüsselung selten dramatisch ist.
+
+00:07:15.330 --> 00:07:16.890
+Meistens handelt es sich um Sonderfälle,
+
+00:07:17.090 --> 00:07:19.870
+ein US-Manager meldet sich an und sieht nur das, was er sehen soll,
+
+00:07:19.870 --> 00:07:21.890
+aber ein Londoner Kollege öffnet dasselbe Modell
+
+00:07:21.890 --> 00:07:24.490
+und findet, ohne dass es jemand bemerkt, die Zahl aus New York direkt dort.
+
+00:07:24.490 --> 00:07:28.670
+Stellen Sie sich vor, Sie erstellen ein Fabrik-Modell für den weltweiten Vertrieb.
+
+00:07:29.570 --> 00:07:32.390
+Sie möchten, dass Manager in verschiedenen Regionen nur Ihre eigenen Daten sehen.
+
+00:07:33.170 --> 00:07:35.430
+Der Reflex besteht darin, ein Filter einzufügen, etwas Einfaches.
+
+00:07:36.130 --> 00:07:38.690
+Region gleich USA oder Land gleich Großbritannien.
+
+00:07:39.770 --> 00:07:40.690
+Aber hier ist der Haken in der Sache.
+
+00:07:41.110 --> 00:07:43.530
+Wie Sie diesen Filter schreiben und wie Sie ihn in Ihr Modell einbinden,
+
+00:07:43.630 --> 00:07:46.510
+entscheidet darüber, ob Ihr System tatsächlich zusammenhält oder auseinanderfällt,
+
+00:07:46.510 --> 00:07:49.130
+sobald die Dinge komplexer werden, sobald die Dinge komplexer werden.
+
+00:07:49.210 --> 00:07:51.010
+Viele Leute gehen davon aus, dass es sich um einen kinderleichten,
+
+00:07:51.190 --> 00:07:53.030
+einzelligen DAX-Filter handelt und können dann einfach weitermachen.
+
+00:07:53.030 --> 00:07:55.750
+Allerdings verhalten sich nicht alle DAX-Funktionen gleich.
+
+00:07:56.750 --> 00:07:59.030
+Tatsächlich führen diese Nuancen später häufig zu Problemen,
+
+00:07:59.070 --> 00:08:01.230
+insbesondere beim Wechsel von Power BI Desktop zu Fabric,
+
+00:08:01.310 --> 00:08:03.390
+wo die Eigenheiten der Cloud-Ebene zum Tragen kommen.
+
+00:08:04.610 --> 00:08:07.430
+RBLS wird ziemlich schnell unübersichtlich, wenn man sich mit den Details befasst.
+
+00:08:08.210 --> 00:08:11.450
+Oft verlassen sich Benutzer auf Funktionen wie Benutzername oder Benutzerprinzipalname
+
+00:08:11.450 --> 00:08:13.150
+und vermuten, dass diese dasselbe bewirken
+
+00:08:13.150 --> 00:08:15.910
+oder Sie übernehmen einfach die Funktion, die in einem Blogbeitrag verwendet wird.
+
+00:08:15.910 --> 00:08:19.670
+Wenn Sie jedoch den Benutzernamen, der Ihren Windows-Namen in Desktop abruft,
+
+00:08:19.670 --> 00:08:23.450
+durch den Benutzerprinzipalnamen ersetzen, der Ihre E-Mail-Adresse in Fabric abruft,
+
+00:08:23.530 --> 00:08:25.230
+gerät Ihre Filterlogik plötzlich ins Wanken.
+
+00:08:26.230 --> 00:08:28.350
+Wenn bei Ihnen schon einmal ein Test in Desktop funktioniert hat,
+
+00:08:28.450 --> 00:08:31.270
+der aber nach der Veröffentlichung in Fabric zusammenbricht, ist dies wahrscheinlich der Grund.
+
+00:08:31.910 --> 00:08:33.890
+Und wenn man die falsche Wahl trifft, entstehen auf diese Weise Lücken,
+
+00:08:33.970 --> 00:08:35.970
+die den falschen Personen unbemerkt Zugriff auf Daten gewähren,
+
+00:08:36.010 --> 00:08:37.470
+mit denen Sie niemals etwas zu tun haben sollten.
+
+00:08:37.970 --> 00:08:38.730
+Gehen wir es genauer an.
+
+00:08:38.730 --> 00:08:42.330
+Für grundlegende Szenarien funktioniert eine hart kodierte Prüfung.
+
+00:08:43.130 --> 00:08:47.710
+Region gleich USA bedeutet, dass nur Zeilen mit der Region USA angezeigt werden,
+
+00:08:48.330 --> 00:08:49.590
+dass statische RLS-Funktionierung steht.
+
+00:08:50.050 --> 00:08:52.590
+Sie ist schnell, einfach und erfüllt ihren Zweck für feste Unterteilung wie Zahn.
+
+00:08:53.030 --> 00:08:54.890
+Wie ein Bericht, der nur für US-Manager bestimmt ist.
+
+00:08:55.870 --> 00:08:58.030
+Sobald jedoch jemand dynamisch Sicherheit anfordert, ändern sich die Dinge.
+
+00:08:58.550 --> 00:09:01.650
+Möglicherweise müssen Sie den Zugriff nicht nur auf Grundlage des Berichtsbetrachters festlegen,
+
+00:09:01.650 --> 00:09:03.490
+sondern auch anhand von Beziehungen in einer anderen Tabelle.
+
+00:09:03.810 --> 00:09:07.090
+Wie einer Benutzerzugriffstabelle, in der aufgeführt ist, welche Benutzer welche Regionen sehen.
+
+00:09:07.090 --> 00:09:09.610
+Ihr RLS-Filter ist nun nicht nur ein fester Wert.
+
+00:09:10.290 --> 00:09:14.410
+Es handelt sich um eine Formel, die nachschlägt, auf welche Regionen jede Person in Echtzeit zugreifen soll.
+
+00:09:15.070 --> 00:09:17.310
+Hier kann DAX Ihnen ein Stolperstein sein, wenn Sie nicht aufpassen.
+
+00:09:17.810 --> 00:09:19.930
+Sie könnten nach etwas wie dem Benutzerprinzipalnamen suchen
+
+00:09:19.930 --> 00:09:22.430
+und dann versuchen, es mit Ihrer Zugriffstabelle zu verknüpfen.
+
+00:09:23.610 --> 00:09:26.750
+Wenn Ihr DAX jedoch auf berechneten Spalten basiert oder Logik einbindet,
+
+00:09:26.830 --> 00:09:28.990
+die beim Anzeigen nicht auf den Benutzerkontext reagiert,
+
+00:09:28.990 --> 00:09:31.330
+können Sie den dynamischen Filter versehentlich beschädigen.
+
+00:09:31.770 --> 00:09:34.290
+Ein Beispiel aus der Praxis.
+
+00:09:34.450 --> 00:09:36.630
+Ein Unternehmen richtet einen dynamischen Filter ein,
+
+00:09:36.630 --> 00:09:39.170
+der auf einer berechneten Spalte in seiner Fakten-Tabelle basiert,
+
+00:09:39.290 --> 00:09:40.390
+nur um später festzustellen,
+
+00:09:40.690 --> 00:09:43.450
+dass berechnete Spalten beim Laden der Daten ausgewertet werden,
+
+00:09:43.730 --> 00:09:44.930
+nicht beim Anzeigen.
+
+00:09:46.390 --> 00:09:48.590
+Das bedeutet, dass Benutzer ihre personalisierten Zeilen nicht
+
+00:09:48.590 --> 00:09:50.250
+oder schlimmer noch, zu viele davon sehen können.
+
+00:09:50.910 --> 00:09:53.350
+Sie bemerken es erst, wenn ein Benutzer Sie anpingt und fragt,
+
+00:09:53.390 --> 00:09:54.810
+warum ein Bericht für ihn anders aussieht,
+
+00:09:54.890 --> 00:09:56.210
+als für jemand anderen im selben Team.
+
+00:09:56.630 --> 00:10:00.090
+Die Dokumentation von Microsoft und eine lange Reihe von MVP-Blog-Beiträgen
+
+00:10:00.090 --> 00:10:01.130
+schreien immer wieder von den Dächern.
+
+00:10:01.330 --> 00:10:01.690
+Vertrauen!
+
+00:10:01.850 --> 00:10:03.950
+Sie berechneten Spalten mit RLS nicht.
+
+00:10:04.250 --> 00:10:04.750
+Starbe nicht.
+
+00:10:04.750 --> 00:10:06.790
+Berechnete Spalten werden bei der Akklusion gesperrt.
+
+00:10:07.250 --> 00:10:08.390
+Sie ändern sich nicht durch den Benutzer.
+
+00:10:09.590 --> 00:10:11.810
+Damit RLS tatsächlich auf den Betrachter reagiert,
+
+00:10:12.130 --> 00:10:14.830
+muss Ihre Filterlogik als DAX-Ausdruck für Tabellen erstellt werden,
+
+00:10:15.010 --> 00:10:16.850
+die im Berichtskontext aktualisiert werden.
+
+00:10:17.890 --> 00:10:18.650
+Ignorieren Sie dies,
+
+00:10:18.810 --> 00:10:20.450
+und Ihre Dashboards verraten Sie still und heimlich,
+
+00:10:20.530 --> 00:10:21.910
+indem Sie immer dieselben Zeilen anzeigen,
+
+00:10:22.010 --> 00:10:22.890
+egal wer angemeldet ist.
+
+00:10:23.710 --> 00:10:26.910
+Statisches und dynamisches RLS ist nicht nur eine technische Unterscheidung.
+
+00:10:27.370 --> 00:10:29.770
+Es geht darum, wann und wie Daten gefiltert werden.
+
+00:10:29.770 --> 00:10:36.150
+Statisches RLS ist schnell und starr ideal, wenn Sie im Voraus genau wissen, welche Rolle
+
+00:10:36.150 --> 00:10:37.390
+welche Daten benötigt.
+
+00:10:38.330 --> 00:10:42.210
+Wenn Sie einen Bericht nur mit einer Finanz- oder Vertriebsgruppe starten, funktioniert dies.
+
+00:10:43.650 --> 00:10:46.810
+Wenn Sie jedoch dynamisch vorgehen, erfolgt jede Zugriffsentscheidung spontan in der Regel
+
+00:10:46.810 --> 00:10:50.230
+durch den Abgleich der aktuellen Benutzeridentität mit einem Eintrag in einer Nachschlagetabelle
+
+00:10:50.230 --> 00:10:50.970
+mit Berechtigungen.
+
+00:10:50.970 --> 00:10:56.130
+Diese Flexibilität ist leistungsstark, insbesondere für große Organisationen oder Bereitstellungen
+
+00:10:56.130 --> 00:10:56.950
+mit mehreren Mandanten.
+
+00:10:57.450 --> 00:11:00.050
+Doch jeder Schritt in Richtung Flexibilität führt zu mehr Komplexität,
+
+00:11:00.350 --> 00:11:02.110
+und Komplexität birgt immer versteckte Risiken.
+
+00:11:02.950 --> 00:11:06.410
+Selbst erfahrene Administratoren stolpern, weil sie glauben, dass Filter immer einfach sind.
+
+00:11:06.950 --> 00:11:09.610
+Die tatsächliche Struktur Ihrer Organisation ändert sich ständig,
+
+00:11:09.710 --> 00:11:11.170
+und Ihre DAX-Filter müssen mithalten.
+
+00:11:12.810 --> 00:11:16.050
+Viele funktionieren nicht mehr, weil sie nicht wissen, wie die RLS-Logik angewendet wird.
+
+00:11:16.250 --> 00:11:20.310
+Nicht beim Laden der Daten, sondern jedes Mal, wenn ein Benutzer mit dem Bericht interagiert.
+
+00:11:20.970 --> 00:11:24.950
+Wenn Sie das vergessen, können Sie versehentlich ganze Abschnitte Ihres Datenmodells öffnen
+
+00:11:24.950 --> 00:11:26.690
+oder blockieren, ohne es zu merken.
+
+00:11:27.570 --> 00:11:30.730
+Unterm Strich gilt, wenn Sie das Fundament falsch legen, ist alles andere, was Sie mit
+
+00:11:30.730 --> 00:11:33.150
+RLS aufbauen, von Bedeutung, von Bedeutung.
+
+00:11:34.290 --> 00:11:37.150
+Die Art und Weise, wie Sie Ihr DAX schreiben, die Art der verwendeten Filter und wo Sie sie
+
+00:11:37.150 --> 00:11:39.830
+anwenden, all das zusammen, ergibt Ihre tatsächliche Sicherheitslage.
+
+00:11:41.170 --> 00:11:44.030
+Wenn Sie die Nuancen überspringen, erhalten Sie ein Setup, das theoretisch funktioniert,
+
+00:11:44.030 --> 00:11:45.410
+in der Praxis jedoch Undichtigkeiten um.
+
+00:11:45.710 --> 00:11:48.550
+Das alles geschieht, bevor Sie überhaupt Benutzerrollen zuordnen.
+
+00:11:48.550 --> 00:11:51.670
+Genau da liegt der nächste Punkt, an dem die Dinge still und heimlich schief gehen.
+
+00:11:52.530 --> 00:11:54.670
+Rollen Benutzern zuordnen, die Zuweisungsfalle.
+
+00:11:55.270 --> 00:11:58.650
+Sie haben also Ihre Rollen eingerichtet, die Filter erstellt und auf der Modellseite sieht
+
+00:11:58.650 --> 00:11:59.430
+alles gut aus.
+
+00:12:00.350 --> 00:12:03.110
+Der nächste Schritt, die Zuweisung von Benutzern, klingt nach einem Kinderspiel.
+
+00:12:03.670 --> 00:12:06.610
+Doch genau hier fangen die meisten Sicherheitspläne auf Rollenebene langsam anzubröckeln.
+
+00:12:07.190 --> 00:12:08.910
+Hier kommt das IT-Denken ins Spiel.
+
+00:12:10.270 --> 00:12:13.610
+Die technische Logik ist vorhanden, doch jetzt müssen Sie darauf wetten, dass die menschliche
+
+00:12:13.610 --> 00:12:16.650
+Ebene Ihre Benutzer- und Gruppenzuweisungen tatsächlich mit der Realität Ihres
+
+00:12:16.650 --> 00:12:18.130
+Unternehmensablaufs übereinstimmen.
+
+00:12:18.930 --> 00:12:21.490
+Es sieht einfach aus, weil es ein Gruppenfeld in der Liste von Rollen gibt.
+
+00:12:22.070 --> 00:12:24.530
+Doch die Erfahrung zeigt, dass sich hier gerne Fehler verstecken.
+
+00:12:25.210 --> 00:12:26.210
+Stellen Sie sich Folgendes vor.
+
+00:12:26.310 --> 00:12:29.630
+Sie haben eine Managerrolle erstellt, Ihren sorgfältig erstellten Filter darauf abgelegt
+
+00:12:29.630 --> 00:12:34.190
+und die Rolle in Power BI oder Fabric einer Azure-ID-Gruppe namens Manager zugeordnet,
+
+00:12:34.510 --> 00:12:35.390
+Manager zugeordnet.
+
+00:12:35.970 --> 00:12:38.610
+Sie überprüfen alles noch einmal, holen sich vielleicht sogar eine zweite Meinung dazu
+
+00:12:38.610 --> 00:12:40.090
+und führen die Lösung für die Organisation ein.
+
+00:12:40.510 --> 00:12:41.970
+Zunächst erscheint alles noch unkompliziert.
+
+00:12:41.970 --> 00:12:43.570
+Genau das ist das Problem.
+
+00:12:43.950 --> 00:12:47.150
+Denn Gruppenlogik bleibt insbesondere in großen Organisationen selten lange einfach.
+
+00:12:47.930 --> 00:12:50.650
+Teams verschieben sich, Abteilungen werden neu organisiert, Rollen entwickeln sich weiter,
+
+00:12:50.730 --> 00:12:52.370
+Mitarbeiter verlassen ein Projekt und wechseln zum anderen.
+
+00:12:53.230 --> 00:12:56.910
+Was passiert, wenn jemand vom Vertrieb in den Betrieb wechselt und niemand die alten Gruppenmitgliedschaften
+
+00:12:56.910 --> 00:12:57.330
+bereinigt?
+
+00:12:58.010 --> 00:13:02.070
+Plötzlich ist ein Benutzer in ihrer wasserdichten LS-Blaupause an zwei Orten gleichzeitig vorhanden.
+
+00:13:03.210 --> 00:13:06.650
+Und es besteht ein echtes Risiko, dass er Zugriff auf Daten erhält, die ihm nicht mehr gehören.
+
+00:13:07.310 --> 00:13:10.190
+Man könnte leicht davon ausgehen, dass jeder in einer bestimmten Azure-ID-Gruppe dieselben
+
+00:13:10.190 --> 00:13:13.870
+Zugriffsrechte haben sollte. In der Realität können Gruppenmitgliedschaften jedoch veralten.
+
+00:13:14.410 --> 00:13:17.470
+Jemand kann in eine andere Region wechseln, aber sein Name wird nie aus der ursprünglichen
+
+00:13:17.470 --> 00:13:18.470
+Teamliste entfernt.
+
+00:13:18.870 --> 00:13:19.110
+Äh.
+
+00:13:20.690 --> 00:13:24.470
+Selbst wenn Sie als Administrator beim Aufräumen recht diszipliniert sind, kommen Gruppenbesitzer.
+
+00:13:25.010 --> 00:13:28.030
+Selten mit jeder Umstrukturierung mit, insbesondere in einem arbeitsreichen Quartal.
+
+00:13:29.490 --> 00:13:33.070
+Denken Sie auch daran, dass die Synchronisierung zwischen Azure AD und Power BI oder Fabric nicht
+
+00:13:33.070 --> 00:13:33.790
+immer sofort erfolgt.
+
+00:13:34.170 --> 00:13:37.150
+Manchmal verzögert sie sich um Stunden und das ist mehr als genug Zeit, damit jemand nach einer
+
+00:13:37.150 --> 00:13:38.610
+Änderung etwas sieht, das er nicht sehen sollte.
+
+00:13:40.190 --> 00:13:43.250
+Warten Sie auf einen nächtlichen Badge und ein ausscheidender Mitarbeiter kann mit viel
+
+00:13:43.250 --> 00:13:45.150
+mehr Kontext gehen, als Sie beabsichtigt haben.
+
+00:13:46.650 --> 00:13:49.050
+Schattenzuweisungen mögen dramatisch klingen, sind aber fast schon Routine.
+
+00:13:50.150 --> 00:13:53.570
+In den meisten realen Umgebungen kann ein einzelner Benutzer leicht in mehreren Gruppen
+
+00:13:53.570 --> 00:13:56.170
+landen, die jeweils unterschiedlichen RAS-Rollen zugeordnet sind.
+
+00:13:57.090 --> 00:13:59.230
+Das Design soll flexibel sein, was theoretisch gut ist.
+
+00:14:00.210 --> 00:14:03.490
+In der Praxis bedeutet dies, dass Sie mit einem Netz aus geerbten Berechtigungen jonglieren
+
+00:14:03.490 --> 00:14:06.490
+und es ist nicht immer klar, wer was sehen kann, es sei denn, Sie gehen der Sache manuell
+
+00:14:06.490 --> 00:14:06.770
+nach.
+
+00:14:06.770 --> 00:14:10.950
+Wenn beispielsweise Sarah von der Finanzabteilung in die Personalabteilung wechselt und niemand
+
+00:14:10.950 --> 00:14:13.790
+sie aus der Finanzgruppe herausnimmt, hat sie jetzt zwei Hüte auf, einen aktuellen und
+
+00:14:13.790 --> 00:14:14.390
+einen veralteten.
+
+00:14:15.270 --> 00:14:18.450
+Die meisten Leute bemerken es nicht einmal, bis Sarah selbst versucht, auf einen für die
+
+00:14:18.450 --> 00:14:21.850
+Finanzabteilung bestimmten Bericht zuzugreifen und sich trotzdem noch einloggen kann, lange
+
+00:14:21.850 --> 00:14:23.710
+nachdem sie in eine andere Abteilung gewechselt ist.
+
+00:14:24.670 --> 00:14:28.610
+Die Sicherheitsteams von Microsoft selbst nennen Fehler bei der Rollenzuweisung als die häufigste
+
+00:14:28.610 --> 00:14:31.390
+Ursache für die versehentliche Offenlegung von Daten in Analyseumgebungen.
+
+00:14:31.390 --> 00:14:32.990
+Die Rechnung ist einfach.
+
+00:14:33.630 --> 00:14:36.930
+Je mehr Gruppen und je mehr wechselnde Benutzer, desto leichter ist es zu übersehen.
+
+00:14:37.390 --> 00:14:40.330
+Wer tatsächlich mit welcher Rolle verknüpft ist, ist.
+
+00:14:40.810 --> 00:14:43.590
+Was die Sache noch hinterhältiger macht, ist das Fehlen eines offensichtlichen Feedbacks.
+
+00:14:44.090 --> 00:14:46.790
+Anders als bei anderen Sicherheitsfehlern erhalten Sie keine Fehlermeldung oder eine
+
+00:14:46.790 --> 00:14:47.970
+Unterbrechung der Benutzeroberfläche.
+
+00:14:48.650 --> 00:14:52.250
+Es gibt in der Regel keine automatisierte Warnung oder erzwungene Überprüfung und eine
+
+00:14:52.250 --> 00:14:56.030
+falsche Zuordnung kann monatelang im Verborgenen bleiben und erst während eines Audits oder wenn
+
+00:14:56.030 --> 00:14:58.630
+jemand auf Daten stößt, die er nicht hätte anfassen dürfen, ans Licht kommen.
+
+00:14:58.630 --> 00:15:02.650
+Selbst die besten Absichten werden durch die alltägliche Realität zunichte gemacht.
+
+00:15:03.070 --> 00:15:06.330
+Die Überprüfung von Gruppenmitgliedschaften ist eine bewährte Methode, die jeder empfiehlt,
+
+00:15:06.770 --> 00:15:09.310
+aber nur wenige Teams wenden sie tatsächlich gewissenhaft an.
+
+00:15:09.750 --> 00:15:11.750
+Aus Sicht der Administratoren ist dies eine mühsame Arbeit.
+
+00:15:12.770 --> 00:15:16.130
+Manuelle Gruppenüberprüfungen haben nicht unbedingt oberste Priorität, vor allem wenn
+
+00:15:16.130 --> 00:15:17.950
+das Analyse-Team andere Probleme bekämpft.
+
+00:15:19.310 --> 00:15:22.830
+Und in den meisten Unternehmen gibt es keinen Prozess für regelmäßige Audits, da davon ausgegangen
+
+00:15:22.830 --> 00:15:25.810
+wird, dass Änderungen in HRIT nach und nach durchgesetzt werden.
+
+00:15:25.810 --> 00:15:29.890
+Aber genau diese Annahmen führen dazu, dass Berechtigungen, Abweichen und Schattenzugriffe
+
+00:15:29.890 --> 00:15:30.530
+bestehen bleiben.
+
+00:15:31.630 --> 00:15:34.990
+Das Ergebnis ist, dass ihr RLS-Modell, egal wie präzise auf dem Papier ist, mit der Zeit
+
+00:15:34.990 --> 00:15:38.030
+nicht mehr mit den Personen beeinstimmt, die wirklich was sehen sollten.
+
+00:15:39.230 --> 00:15:42.670
+Automatisierte Prüftools können dabei helfen, diese veralteten Zuweisungen zu erkennen, aber
+
+00:15:42.670 --> 00:15:44.590
+ihre Einrichtung erfordert viel Arbeit.
+
+00:15:45.270 --> 00:15:48.770
+Sie müssen ihr Azure AD-Verbinden Änderungen kennzeichnen und möglicherweise sogar ein Workflow
+
+00:15:48.770 --> 00:15:52.890
+auslösen, wenn die Gruppenmitgliedschaften einer Person nicht mehr mit ihrer Geschäftseinheit
+
+00:15:52.890 --> 00:15:56.730
+übereinstimmt. Nicht jede Power BI-Umgebung verfügt über solche Überprüfungen, insbesondere
+
+00:15:56.730 --> 00:16:00.670
+in kleineren Abteilungen oder bei Projekten mit engen Fristen. Daher wird ein Wildwuchs
+
+00:16:00.670 --> 00:16:04.850
+der Gruppen unvermeidlich. Je länger ihr RLS-System ungenutzt bleibt, desto wahrscheinlicher
+
+00:16:04.850 --> 00:16:08.130
+ist es, dass Berechtigungen veralten oder schlimmer noch, sich auf verschiedene Ebenen ausweiten,
+
+00:16:08.170 --> 00:16:09.310
+die sie nicht einmal nachverfolgen.
+
+00:16:10.370 --> 00:16:13.390
+Was die Leute wirklich überrascht ist, dass Zuweisungen nicht nur ein Häkchen sind.
+
+00:16:14.530 --> 00:16:18.210
+Sie sind das kontinuierliche Bindeglied, das ihre Sicherheitslogik an echte Personen bindet.
+
+00:16:18.210 --> 00:16:21.630
+Lassen Sie sich selbst überlassen, wenn Sie alle cleveren DRCs der Welt nicht retten.
+
+00:16:22.230 --> 00:16:26.510
+Die Zuweisungshygiene ist ein aktiver Prozess, keine einmalige Einrichtung. Systeme entwickeln
+
+00:16:26.510 --> 00:16:29.830
+sich weiter, Benutzer werden verschoben, Ihr Modell muss diese Änderung nachverfolgen
+
+00:16:29.830 --> 00:16:32.390
+oder Sie sind auf Ihr Glück angewiesen und Glück ist keine Sicherheitsstrategie.
+
+00:16:33.390 --> 00:16:37.330
+Selbst bei den strengsten Zuweisungsprozessen kommt es in dem Moment zu einer großen Herausforderung,
+
+00:16:37.330 --> 00:16:41.450
+indem Sie Ihre sorgfältig erstellte Lösung von Power BI Desktop in Fabric übernehmen.
+
+00:16:42.070 --> 00:16:46.970
+Bis zu diesem Zeitpunkt testen die meisten Teams die lokale Sandbox auf ihrem eigenen Computer
+
+00:16:46.970 --> 00:16:48.570
+nur mit Testkonten.
+
+00:16:49.190 --> 00:16:52.870
+Das Ganze erscheint vorhersehbar, doch beim Wechsel zu Fabric treten alle möglichen subtilen
+
+00:16:52.870 --> 00:16:56.750
+Unterschiede im Benutzerkontext, bei der Gruppenauflösung und beim Authentifizierungszeitpunkt
+
+00:16:56.750 --> 00:16:57.470
+auf, auf.
+
+00:16:58.150 --> 00:17:01.710
+Hier stoßen wir auf die Macken, die niemand erwartet und warum Zuweisungen, die theoretisch
+
+00:17:01.710 --> 00:17:04.710
+perfekt erscheinen, in der Produktion spektakulär scheitern können.
+
+00:17:05.570 --> 00:17:08.850
+Von Desktop zu Fabric, die versteckten Verschiebungen im Verhalten von RLS.
+
+00:17:09.350 --> 00:17:13.010
+Wenn Sie jemals davon überzeugt waren, die Sicherheit auf Zeilenebene in Power BI Desktop vollständig
+
+00:17:13.010 --> 00:17:15.870
+unter Kontrolle zu haben, dann aber alles in die Brüche gehen sah, sobald Sie in Fabric
+
+00:17:15.870 --> 00:17:18.930
+veröffentlichen, befinden Sie sich auf vertrautem Terrain, befinden Sie sich auf vertrautem
+
+00:17:18.930 --> 00:17:19.130
+Terrain.
+
+00:17:19.370 --> 00:17:23.330
+Dies ist der Teil, über den Ihnen in RLS-Tutorials niemand etwas erzählt, der Moment, in dem die
+
+00:17:23.330 --> 00:17:26.870
+gesamte fehlerfreie Rollen- und Filterlogik mit der Realität der Cloud konfrontiert wird.
+
+00:17:27.590 --> 00:17:31.850
+Sie haben jeden Filter überprüft, jede Gruppe sorgfältig zugeordnet, sogar diese Sonderfallzuweisungen
+
+00:17:31.850 --> 00:17:32.330
+bereinigt.
+
+00:17:33.950 --> 00:17:37.390
+Sobald Sie jedoch zum Fabric-Dienst wechseln, ändern sich die Dinge auf eine Weise, die selbst
+
+00:17:37.390 --> 00:17:38.990
+erfahrene Administratoren überrascht.
+
+00:17:39.690 --> 00:17:41.330
+Beginnen wir mit dem, was Sie auf dem Desktop sehen.
+
+00:17:41.990 --> 00:17:43.510
+Die Vorschau funktioniert genau wie erwartet.
+
+00:17:43.510 --> 00:17:46.410
+Sie testen Benutzerrollen und wechseln zwischen Beispiel-Identitäten.
+
+00:17:47.170 --> 00:17:50.690
+Alles passt perfekt zusammen, die Zahlen stimmen überein und für einen Moment fühlt es sich
+
+00:17:50.690 --> 00:17:52.970
+an, als hätten Sie einen einfachen Prozess gefunden.
+
+00:17:53.610 --> 00:17:57.810
+Doch sobald Ihre Teamkollegen dieselbe Power BI-Datei in der Cloud öffnen, werden die
+
+00:17:57.810 --> 00:17:59.430
+Geschichten immer lauter.
+
+00:18:00.110 --> 00:18:03.310
+Jemand meldet, dass Zahlen außerhalb seiner Region angezeigt werden oder schlimmer noch,
+
+00:18:03.390 --> 00:18:06.610
+jemand wurde von einem Dataset ausgesperrt, das er für seine Arbeit unbedingt benötigt.
+
+00:18:07.170 --> 00:18:10.570
+Die Frustration wächst, wenn Sie feststellen, dass dasselbe RLS-Setup, das auf Ihrem Computer
+
+00:18:10.570 --> 00:18:13.330
+wasserdicht war, jetzt eher wie ein Vorschlag als wie eine Regel fungiert.
+
+00:18:14.150 --> 00:18:17.510
+Diese Verwirrung ist jedoch auf Unterschiede zurückzuführen, die Sie erst nach der Veröffentlichung
+
+00:18:17.510 --> 00:18:18.010
+sehen können.
+
+00:18:18.590 --> 00:18:22.670
+Die Cloud-Umgebung von Fabric arbeitet in einer anderen Welt, wenn es um Sicherheit, Identität
+
+00:18:22.670 --> 00:18:23.810
+und Datenkontext geht.
+
+00:18:24.790 --> 00:18:27.770
+Ein klassischer Fallstrick trifft den Kern dynamischer RLS-Muster.
+
+00:18:28.870 --> 00:18:32.850
+Auf dem Desktop ruft eine DAX-Funktion wie Username Ihre lokalen Windows-Anmeldedaten
+
+00:18:32.850 --> 00:18:33.090
+ab.
+
+00:18:33.810 --> 00:18:36.430
+Einfach, vorhersehbar und in Ihrer Umgebung beruhigend stabil.
+
+00:18:37.510 --> 00:18:40.630
+Bei Fabric ruft derselbe Benutzernamensaufruf stattdessen Ihre vollständige E-Mail-Adresse
+
+00:18:40.630 --> 00:18:40.770
+an.
+
+00:18:41.130 --> 00:18:44.290
+Das klingt unbedeutend, aber wenn Ihr Filter oder Ihre Suche auf Domain-Namen verweist
+
+00:18:44.290 --> 00:18:47.510
+oder wenn Ihre Sicherheitstabellenschlüssel Kurzformate anstelle von vollständigen E-Mails
+
+00:18:47.510 --> 00:18:51.550
+verwenden, bricht das gesamte System zusammen, sobald Benutzer die Cloud aufrufen, sobald Benutzer
+
+00:18:51.550 --> 00:18:52.190
+die Cloud aufrufen.
+
+00:18:52.690 --> 00:18:54.250
+Unweigerlich kommt es zu Beschwerden.
+
+00:18:55.150 --> 00:18:56.730
+Folgendes geschieht in realen Umgebungen.
+
+00:18:57.270 --> 00:19:00.410
+Ein Bericht zeigt eine Länderaufschlüsselung auf dem Desktop an, nach der Veröffentlichung,
+
+00:19:00.410 --> 00:19:02.870
+er hat den Benutzern jedoch globale Zahlen angezeigt.
+
+00:19:03.650 --> 00:19:06.830
+Möglicherweise stützte sich Ihr Modell auf den Benutzerprinzipalnamen, da alle Ihre
+
+00:19:06.830 --> 00:19:08.230
+Zugriffsschlüssel E-Mail-Adressen sind.
+
+00:19:08.930 --> 00:19:11.990
+Das ist eine bewährte Vorgehensweise für die Cloud, aber wenn Sie mit dem Desktop begonnen
+
+00:19:11.990 --> 00:19:15.010
+haben und nicht wussten, dass diese Verschiebung stattfindet, debuggen Sie ein Problem, das lokal
+
+00:19:15.010 --> 00:19:16.950
+nicht existiert, aber in großem Umfang explodiert.
+
+00:19:17.630 --> 00:19:20.750
+Die Wahrheit ist, dass das, was auf Ihrem Laptop funktioniert, eher ein brauchbarer Prototyp
+
+00:19:20.750 --> 00:19:21.730
+als eine fertige Lösung ist.
+
+00:19:23.130 --> 00:19:27.290
+Lokale Logik kann ein Min-Feld verbergen, das nur durch die Cloud-Authentifizierung ausgelöst
+
+00:19:27.290 --> 00:19:27.510
+wird.
+
+00:19:27.510 --> 00:19:31.390
+Es gibt auch ein paar unsichtbare Hebel, die Fabric ohne Vorwarnung betätigt.
+
+00:19:32.430 --> 00:19:35.350
+Datenaktualisierungen können beispielsweise mit anderen Anmeldeinformationen ausgelöst
+
+00:19:35.350 --> 00:19:37.670
+werden oder bei einem anderen Modellbesitzer landen, als Sie erwartet haben.
+
+00:19:38.070 --> 00:19:41.250
+Wenn der Besitzer des veröffentlichten Datasets nicht zur richtigen Gruppe gehört, sieht er
+
+00:19:41.250 --> 00:19:44.810
+möglicherweise gar keine Daten oder erhält versehentlich Zugriff auf alle Daten.
+
+00:19:45.610 --> 00:19:48.170
+Eine Änderung des Besitzes in der Cloud wirkt sich nicht nur auf Berechtigung aus.
+
+00:19:48.170 --> 00:19:52.230
+Sie kann auch Verbindungen zu Gateways unterbrechen oder die Auswertung von Anmeldeinformationen
+
+00:19:52.230 --> 00:19:53.390
+anhand von Quellsystemen ändern.
+
+00:19:53.390 --> 00:19:58.250
+Manchmal verbergen Mandanteneinstellungen veraltetes Verhalten oder greifen auf Optionen
+
+00:19:58.250 --> 00:20:01.310
+zurück, die ihre Einstellungen während der Desktop-Tests außer Kraft setzen.
+
+00:20:02.370 --> 00:20:06.070
+Bei Unternehmen mit mehrschichtigen Mandantenrichtlinien kann eine kleine Änderung wie das Umschalten
+
+00:20:06.070 --> 00:20:09.070
+der externen Freigabe die Logik darüber, wer was sieht, über Nacht ändern.
+
+00:20:09.070 --> 00:20:11.990
+Was die Leute verwirrt ist, wie subtil diese Änderungen sind.
+
+00:20:12.630 --> 00:20:14.690
+Sie schreien nicht, hey, jetzt funktioniert euer RS nicht mehr.
+
+00:20:15.610 --> 00:20:17.290
+Stattdessen funktioniert alles still und heimlich falsch.
+
+00:20:17.710 --> 00:20:21.010
+Eine kleine Änderung bei der Authentifizierung oder der Art und Weise, wie ein Modell die
+
+00:20:21.010 --> 00:20:24.410
+Gruppenmitgliedschaft bei der Anmeldung auflöst, verändert den Sicherheitskontext vollständig.
+
+00:20:24.710 --> 00:20:25.110
+Vollständig.
+
+00:20:25.290 --> 00:20:29.410
+In den Support-Foren von Microsoft wimmelt es von Administratoren, die sich Horrorgeschichten
+
+00:20:29.410 --> 00:20:31.930
+über Berichte austauschen, die jeden Desktop-Test bestanden haben.
+
+00:20:32.610 --> 00:20:36.070
+Nur um dann zusammenzubrechen, sobald Benutzer in der Cloud darauf zugreifen, zu...
+
+00:20:36.070 --> 00:20:40.930
+Sie sehen Threads, in denen Teams nach einem Rollout sich darum bemühen, alle ihre RS-Rollen
+
+00:20:40.930 --> 00:20:42.390
+zu patchen oder neu zu gestalten.
+
+00:20:43.070 --> 00:20:47.450
+Nicht, weil die Logik schlecht war, sondern weil die Umstellung auf Fabric den Identitätskontext
+
+00:20:47.450 --> 00:20:49.950
+so stark verschoben hat, dass alles unzuverlässig wurde.
+
+00:20:50.850 --> 00:20:55.190
+Selbst Cloud-Upgrades oder mandantenweite Updates können die Sicherheit in neue Richtungen lenken.
+
+00:20:55.870 --> 00:21:00.530
+Manchmal werden von Azure AD verwaltete Gruppenzuordnungen nach einem Update ein wenig anders synchronisiert
+
+00:21:00.530 --> 00:21:04.630
+als zuvor, sodass Schattenzuweisungen plötzlich eine höhere Priorität haben oder bestimmte dynamische
+
+00:21:04.630 --> 00:21:07.870
+Suchvorgänge auf Null stoßen, wo sie eine Übereinstimmung erwartet haben, wo sie eine
+
+00:21:07.870 --> 00:21:08.850
+Übereinstimmung erwartet haben.
+
+00:21:08.910 --> 00:21:09.910
+Kleine Änderungen summieren sich.
+
+00:21:10.290 --> 00:21:13.130
+Eine Optimierung in einem Teil des Stapels wirkt sich auf das gesamte Sicherheitsnetz
+
+00:21:13.130 --> 00:21:16.170
+aus und ihr zuverlässigstes Muster aus dem letzten Quartal hält heute einfach nicht
+
+00:21:16.170 --> 00:21:16.590
+mehr stand.
+
+00:21:17.850 --> 00:21:21.370
+Aus diesem Grund haben Teams in der Praxis damit begonnen, RLS-Tests des Produktionsauftrags
+
+00:21:21.370 --> 00:21:23.090
+zu betrachten und nicht nur als lokale Überprüfung.
+
+00:21:23.630 --> 00:21:26.090
+Es reicht nicht aus, auf Ihrem eigenen Laptop durch die Rollen zu klicken.
+
+00:21:26.630 --> 00:21:31.710
+Sie müssen das Modell tatsächlich in Fabric bereitstellen, echte Benutzerkonten einbinden und den
+
+00:21:31.710 --> 00:21:33.910
+durchgängigen Berechtigungsablauf durchlaufen.
+
+00:21:35.690 --> 00:21:40.030
+Nur dann erkennen Sie subtile Authentifizierungsfehler oder Diskrepanzen zwischen Gruppenzuweisungen
+
+00:21:40.030 --> 00:21:43.490
+und den aktuellen Werten, die Power BI in Azure AD für aktuell hält.
+
+00:21:44.030 --> 00:21:48.030
+Einige Organisationen führen sogar regelmäßige RLS-Audits in der Cloud durch, um zu überprüfen,
+
+00:21:48.270 --> 00:21:51.270
+ob es Abweichungen zwischen der Logik des Zuweisungsmodells und den tatsächlich von
+
+00:21:51.270 --> 00:21:52.470
+Fabric erzwungenen Werten gibt.
+
+00:21:53.350 --> 00:21:54.170
+Hier gibt es keine Abkürzung.
+
+00:21:54.790 --> 00:21:57.990
+Wenn Sie nicht mit echten Personen in der Umgebung testen, in der sich Ihr Bericht tatsächlich
+
+00:21:57.990 --> 00:22:00.770
+befindet, basiert Ihre RLS im Grunde auf Hoffnung.
+
+00:22:02.270 --> 00:22:05.670
+Die Cloud ist der letzte Schiedsrichter und die einzige Möglichkeit, um zu sehen, wie
+
+00:22:05.670 --> 00:22:09.410
+Filter und Rollen mit Identität in großem Umfang interagieren, besteht darin, Ihre RLS
+
+00:22:09.410 --> 00:22:11.350
+von Anfang an mit Blick auf die Produktion zu entwickeln.
+
+00:22:12.550 --> 00:22:16.030
+Wenn Sie diese Tests auf später verschieben, agieren Sie blind und die Folgen offengelegte
+
+00:22:16.030 --> 00:22:19.370
+Daten, frustrierte Teams oder sorgfältige Sicherheitsmaßnahmen, die durch einen versteckten
+
+00:22:19.370 --> 00:22:22.830
+Schalter zunichte gemacht wurden, verursachen viel höhere Behebungskosten, sobald der Bericht
+
+00:22:22.830 --> 00:22:23.290
+verwendet wird.
+
+00:22:23.290 --> 00:22:28.810
+Angesichts dieser Situation besteht die große Frage nicht nur darin, Ihre RLS jedes Mal
+
+00:22:28.810 --> 00:22:30.090
+zu patchen, wenn sich etwas ändert.
+
+00:22:31.030 --> 00:22:34.510
+Es geht darum, ob Sie über einen Plan verfügen, der funktioniert, wenn Ihr Fabric Setup komplizierter
+
+00:22:34.510 --> 00:22:36.330
+wird, Ihre Daten wachsen und das Unternehmen.
