@@ -120,6 +120,7 @@ jobs:
             git pull --rebase -q && git push -q
           fi
       - name: M365 Show (Livestreams) von YouTube holen
+        timeout-minutes: 8
         continue-on-error: true
         env:
           YT_COOKIES: ${{ secrets.YT_COOKIES }}
