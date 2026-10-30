@@ -6,6 +6,7 @@ import { handleEntity } from "./entities.js";
 import { handleProfiles, deleteUserData } from "./profiles.js";
 import { handleEvents, deleteUserEvents, ensureM365Con } from "./events.js";
 import { handleVotes } from "./votes.js";
+import { handleMcp, handleTokens, deleteUserTokens } from "./mcp.js";
 import { handlePoints } from "./points.js";
 import { handleMessages, purgeMessages, deleteUserMessages } from "./messages.js";
 import { refreshFeeds } from "./feeds.js";
@@ -154,7 +155,7 @@ async function api(env, request, url, path) {
         db.prepare("DELETE FROM push_subs WHERE user_id=?").bind(id), db.prepare("DELETE FROM wiki_reports WHERE user_id=?").bind(id), db.prepare("DELETE FROM wiki_rev WHERE user_id=? AND status IN ('pending','rejected')").bind(id), db.prepare("UPDATE wiki_rev SET user_id=0 WHERE user_id=?").bind(id), db.prepare("DELETE FROM curators WHERE user_id=?").bind(id), db.prepare("DELETE FROM users WHERE id=?").bind(id),
       ]);
       await deleteUserEvents(db, id);
-      await deleteUserMessages(db, id);
+      await deleteUserMessages(db, id); await deleteUserTokens(db, id);
       await deleteUserData(db, id);
       return J({ ok: true }, 200, { "set-cookie": cookie("m365s", "", 0) });
     }
@@ -221,6 +222,7 @@ async function api(env, request, url, path) {
   if (/^\/api\/points(\/|$)/.test(path) || path.startsWith("/api/admin/points/")) { const p = await handlePoints(env, request, url, path, user, J); if (p) return p; }
   if (/^\/api\/msg(\/|$)/.test(path)) { const p = await handleMessages(env, request, url, path, user, J); if (p) { if (user && method !== "GET") await evalBadges(env, user.id).catch(() => 0); return p; } }
   if (/^\/api\/(events?|speaker)(\/|$)/.test(path) || /^\/api\/entity\/claims?(\/|$)/.test(path) || /^\/api\/admin\/entity\/claims?$/.test(path)) { const p = await handleEvents(env, request, url, path, user, J); if (p) { if (user && method !== "GET") await evalBadges(env, user.id).catch(() => 0); return p; } }
+  if (path.startsWith("/api/ai-token")) { const k = await handleTokens(env, request, url, path, user, J); if (k) return k; }
   if (path.startsWith("/api/edits/")) { const v = await handleVotes(env, request, url, path, user, J); if (v) return v; }
   if (path.startsWith("/api/entity") || path.startsWith("/api/admin/entity")) { const e = await handleEntity(env, request, url, path, user, J); if (e) return e; }
   if (/^\/api\/(profile|profiles|endorse|vote|feed|org|orgs|img|recommend)(\/|$)/.test(path) || path === "/api/admin/verify" || path === "/api/admin/feed-hide") { const p = await handleProfiles(env, request, url, path, user, J); if (p) { if (user && method !== "GET") await evalBadges(env, user.id).catch(() => 0); return p; } }
@@ -313,6 +315,7 @@ export default {
     const url = new URL(request.url), path = url.pathname.replace(/\/+$/, "") || "/";
     try {
       if (path.startsWith("/auth/")) return (await auth(env, request, url, path)) || new Response("not found", { status: 404 });
+      if (path === "/mcp") return await handleMcp(env, request, (uid) => me(env, uid));
       if (path.startsWith("/api/")) return await api(env, request, url, path);
       return new Response("M365.FM community API", { status: 200, headers: { "content-type": "text/plain" } });
     } catch (e) {

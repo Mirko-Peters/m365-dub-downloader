@@ -368,3 +368,14 @@ CREATE TABLE IF NOT EXISTS edit_votes (
   created INTEGER NOT NULL,
   PRIMARY KEY(kind, rev_id, user_id)
 );
+
+-- Persoenliche KI-Zugangstokens fuer den MCP-Server (nur Hash gespeichert)
+CREATE TABLE IF NOT EXISTS api_tokens (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  hash TEXT NOT NULL UNIQUE,
+  user_id INTEGER NOT NULL,
+  label TEXT NOT NULL DEFAULT '',
+  created INTEGER NOT NULL,
+  last_used INTEGER NOT NULL DEFAULT 0
+);
+CREATE INDEX IF NOT EXISTS idx_tok_user ON api_tokens(user_id);

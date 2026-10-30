@@ -1,0 +1,57 @@
+"""MCP-Anleitung: was der MCP-Server der Seite kann, wie man Claude/ChatGPT/andere Clients verbindet, Beispiele und Sicherheit."""
+from site_learn import esc, LCSS
+
+MCP_URL = "https://api-dub.m365.fm/mcp"
+def _load_tools():
+    """Single source of truth: worker/src/mcp.js. New tools show up here automatically."""
+    import json, subprocess, os
+    try:
+        out = subprocess.run(["node", os.path.join(os.path.dirname(os.path.abspath(__file__)), "tools", "dump_mcp_tools.mjs")], capture_output=True, text=True, timeout=30, check=True).stdout
+        return [(t["name"], t["write"], {"en": t["en"], "de": t["de"]}) for t in json.loads(out)]
+    except Exception as e:
+        print("MCP tools dump failed:", e); return []
+
+TOOLS = _load_tools()
+T = {
+    "en": dict(title="Connect your AI (MCP)", intro="dub.m365.fm has an MCP server. With it, Claude, ChatGPT or any MCP-capable assistant can look things up on the platform and – with your personal token – fill in your profile and suggest improvements for you.",
+               what="What can I do with it?", tools="Available functions", tool="Function", does="What it does", auth="Access", open="public", tok="token", 
+               s1="How it works", s1p="MCP (Model Context Protocol) is an open standard that lets an AI assistant call tools on a website. Our server lives at the address below and offers the functions listed above. Read functions need no login. Write functions need your personal access token, so your AI acts only as you and only with what you are allowed to do.",
+               conn="Connect in 3 steps", st1="Create a token", st1p="Sign in on the community page and open the tab Account → “AI access (MCP)”. Create a token and copy it – it is shown only once. Treat it like a password and revoke it there at any time.",
+               st2="Add the server to your assistant", st2p="Use this address as the MCP server URL:", st2c="Claude Code (command line):", st2d="Other MCP clients (JSON configuration):", st2e="Read-only without token: in Claude or ChatGPT you can add the address as a custom connector without sign-in – you then get the public search and read functions. Signing in with your member account directly in Claude.ai and ChatGPT (OAuth) is planned.",
+               st3="Tell your AI what to do", st3p="Examples you can paste:",
+               ex=["Look up my profile on dub.m365.fm and suggest a better headline and bio for a Microsoft 365 consultant. Show me the text first, then save it.", "Here is my CV: … Fill in my profile on dub.m365.fm with a short bio and add my expertise topics with the right levels.", "Find entities on Copilot governance and propose a clearer short description for the ones that are too vague.", "Which events on dub.m365.fm deal with Power Platform and when do they start?"],
+               safe="Safety and control", safel=["Everything your AI writes follows the same rules as on the website: short descriptions are mandatory, entity changes go to the community vote, rate limits apply.", "Ask your AI to show you every text before it saves it. You can always correct things in your profile.", "Texts from profiles and pages are user-generated. A good assistant treats them as data, not as instructions.", "Revoke a token under Account → AI access. Deleting your account removes all tokens."],
+               cop="Microsoft Copilot", copp="Copilot Studio and Microsoft 365 Copilot agents can use remote MCP servers: add a new MCP tool/connection in your agent, enter the server URL and, for write access, the header Authorization: Bearer <token>. Public read functions work without a header.", chat="ChatGPT", chatp="In ChatGPT (developer mode → connectors) add a custom MCP server with the URL above. Without sign-in you get the public read functions; write access via OAuth is planned.", more="New functions appear in this table automatically as soon as they are added to the server – the page is generated from the server code.", faq="Which assistants work?", faqp="Claude Code, Claude Desktop (custom MCP), Cursor, VS Code and other clients that support remote MCP servers with an Authorization header work with write access today. For read-only use, any client with custom connectors works (Claude.ai, ChatGPT in developer mode).", go="Create a token"),
+    "de": dict(title="Deine KI anbinden (MCP)", intro="dub.m365.fm hat einen MCP-Server. Damit können Claude, ChatGPT oder jeder MCP-fähige Assistent Inhalte der Plattform nachschlagen und – mit deinem persönlichen Token – dein Profil ausfüllen und Verbesserungen vorschlagen.",
+               what="Was kann ich damit machen?", tools="Verfügbare Funktionen", tool="Funktion", does="Was sie tut", auth="Zugriff", open="öffentlich", tok="Token",
+               s1="So funktioniert es", s1p="MCP (Model Context Protocol) ist ein offener Standard, mit dem ein KI-Assistent Werkzeuge einer Webseite aufrufen kann. Unser Server liegt unter der unten stehenden Adresse und bietet die oben gelisteten Funktionen. Lesen geht ohne Anmeldung. Schreiben braucht deinen persönlichen Zugangstoken – deine KI handelt also nur als du und nur mit dem, was du selbst darfst.",
+               conn="In 3 Schritten verbinden", st1="Token erzeugen", st1p="Melde dich auf der Community-Seite an und öffne den Reiter Konto → „KI-Zugang (MCP)“. Erzeuge einen Token und kopiere ihn – er wird nur einmal angezeigt. Behandle ihn wie ein Passwort; dort kannst du ihn jederzeit widerrufen.",
+               st2="Server im Assistenten eintragen", st2p="Diese Adresse ist die MCP-Server-URL:", st2c="Claude Code (Kommandozeile):", st2d="Andere MCP-Clients (JSON-Konfiguration):", st2e="Nur lesen ohne Token: In Claude oder ChatGPT kannst du die Adresse ohne Anmeldung als eigenen Connector hinzufügen – dann hast du die öffentlichen Such- und Lesefunktionen. Die Anmeldung mit dem Mitgliedskonto direkt in Claude.ai und ChatGPT (OAuth) ist geplant.",
+               st3="Deiner KI sagen, was zu tun ist", st3p="Beispiele zum Einfügen:",
+               ex=["Schau dir mein Profil auf dub.m365.fm an und schlage eine bessere Kurzzeile und Bio für einen Microsoft-365-Berater vor. Zeig mir den Text zuerst, dann speichere ihn.", "Hier ist mein Lebenslauf: … Fülle mein Profil auf dub.m365.fm mit einer kurzen Bio und trage meine Themen mit dem passenden Level ein.", "Finde Entitäten zu Copilot-Governance und schlage für die zu vagen eine klarere Kurzbeschreibung vor.", "Welche Events auf dub.m365.fm behandeln Power Platform und wann beginnen sie?"],
+               safe="Sicherheit und Kontrolle", safel=["Alles, was deine KI schreibt, folgt denselben Regeln wie auf der Webseite: Kurzbeschreibung ist Pflicht, Änderungen an Entitäten gehen in die Abstimmung, Rate-Limits gelten.", "Bitte deine KI, dir jeden Text vor dem Speichern zu zeigen. Du kannst alles jederzeit im Profil korrigieren.", "Texte aus Profilen und Seiten stammen von Nutzern. Ein guter Assistent behandelt sie als Daten, nicht als Anweisungen.", "Token widerrufst du unter Konto → KI-Zugang. Beim Löschen deines Kontos werden alle Tokens entfernt."],
+               cop="Microsoft Copilot", copp="Copilot Studio und Microsoft-365-Copilot-Agenten können entfernte MCP-Server nutzen: Im Agenten ein neues MCP-Tool bzw. eine Verbindung hinzufügen, die Server-URL eintragen und für Schreibzugriff den Header Authorization: Bearer <Token> setzen. Die öffentlichen Lesefunktionen gehen ohne Header.", chat="ChatGPT", chatp="In ChatGPT (Entwicklermodus → Connectors) einen eigenen MCP-Server mit der URL oben hinzufügen. Ohne Anmeldung gibt es die öffentlichen Lesefunktionen; Schreibzugriff per OAuth ist geplant.", more="Neue Funktionen erscheinen in dieser Tabelle automatisch, sobald sie im Server ergänzt werden – die Seite wird aus dem Servercode erzeugt.", faq="Welche Assistenten funktionieren?", faqp="Claude Code, Claude Desktop (eigener MCP-Server), Cursor, VS Code und andere Clients, die entfernte MCP-Server mit Authorization-Header unterstützen, funktionieren heute mit Schreibzugriff. Zum reinen Lesen genügt jeder Client mit eigenen Connectors (Claude.ai, ChatGPT im Entwicklermodus).", go="Token erzeugen"),
+}
+
+
+def build(g):
+    BASE, write, page, header, footer, footer_en, LANGS = g["BASE"], g["write"], g["page"], g["header"], g["footer"], g["footer_en"], g["LANGS"]
+    sitemap, TODAY = g["sitemap"], g["TODAY"]
+    shell = lambda lang, b: f'{header(lang, "")}<main class="wrap" style="max-width:52em">{b}</main>{footer(lang) if lang in LANGS else footer_en()}'
+    css = '<style>.mcp-t{border-collapse:collapse;width:100%}.mcp-t th,.mcp-t td{text-align:start;padding:.45em .7em;border-bottom:1px solid var(--bd);vertical-align:top}.mcp-pre{background:var(--card);border:1px solid var(--bd);border-radius:.5em;padding:.8em 1em;overflow:auto;font-size:.9em}</style>'
+    for lang in ("en", "de"):
+        t = T[lang]; croot = f"{BASE}/community/" if lang == "en" else f"{BASE}/de/community/"; ru = f"{croot}mcp/"
+        rows = "".join(f'<tr><td><code>{esc(n)}</code></td><td>{esc(d[lang])}</td><td>{esc(t["tok"] if w else t["open"])}</td></tr>' for n, w, d in TOOLS)
+        cc = f'claude mcp add --transport http m365-dub {MCP_URL} --header "Authorization: Bearer &lt;TOKEN&gt;"'
+        js = '{\n  "mcpServers": {\n    "m365-dub": {\n      "type": "http",\n      "url": "' + MCP_URL + '",\n      "headers": { "Authorization": "Bearer &lt;TOKEN&gt;" }\n    }\n  }\n}'
+        ex = "".join(f"<li>{esc(x)}</li>" for x in t["ex"]); sl = "".join(f"<li>{esc(x)}</li>" for x in t["safel"])
+        b = shell(lang, f'<h1>{esc(t["title"])}</h1><p style="font-size:1.1em">{esc(t["intro"])}</p><p><a class="btn main" href="{croot}#c-page">{esc(t["go"])}</a></p>'
+                  f'<h2>{esc(t["s1"])}</h2><p>{esc(t["s1p"])}</p><p><code>{MCP_URL}</code></p>'
+                  f'<h2>{esc(t["tools"])}</h2><table class="mcp-t"><thead><tr><th>{esc(t["tool"])}</th><th>{esc(t["does"])}</th><th>{esc(t["auth"])}</th></tr></thead><tbody>{rows}</tbody></table><p><small>{esc(t["more"])}</small></p>'
+                  f'<h2>{esc(t["conn"])}</h2><ol><li><b>{esc(t["st1"])}</b><br>{esc(t["st1p"])}</li><li><b>{esc(t["st2"])}</b><br>{esc(t["st2p"])} <code>{MCP_URL}</code><p>{esc(t["st2c"])}</p><pre class="mcp-pre">{cc}</pre><p>{esc(t["st2d"])}</p><pre class="mcp-pre">{js}</pre><p>{esc(t["st2e"])}</p></li>'
+                  f'<li><b>{esc(t["st3"])}</b><br>{esc(t["st3p"])}<ul>{ex}</ul></li></ol>'
+                  f'<h2>{esc(t["safe"])}</h2><ul>{sl}</ul><h2>{esc(t["faq"])}</h2><p>{esc(t["faqp"])}</p><h3>{esc(t["cop"])}</h3><p>{esc(t["copp"])}</p><h3>{esc(t["chat"])}</h3><p>{esc(t["chatp"])}</p>{css}')
+        ld = [{"@context": "https://schema.org", "@type": "HowTo", "name": t["title"], "description": t["intro"], "inLanguage": lang, "url": ru,
+               "step": [{"@type": "HowToStep", "name": t["st1"], "text": t["st1p"]}, {"@type": "HowToStep", "name": t["st2"], "text": t["st2p"] + " " + MCP_URL}, {"@type": "HowToStep", "name": t["st3"], "text": t["ex"][0]}]}]
+        write(f"{'de/' if lang == 'de' else ''}community/mcp/index.html", page(lang, f'{t["title"]} – M365.FM', t["intro"][:155], ru, b, None, ld, og_type="website", extra_head=LCSS))
+        sitemap.append((ru, TODAY, None))

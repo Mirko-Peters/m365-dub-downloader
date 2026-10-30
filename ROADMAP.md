@@ -93,3 +93,7 @@ Stand: 2026-10-29. Reihenfolge nach Absprache mit Mirko; alles mit Schema.org-Ve
 - Plan: Sync-Schritt im Seitenbau (braucht `SPREAKER_TOKEN`) holt die Hauptshow-Episoden, ordnet sie über den Video-Link im Folgentext den YouTube-IDs zu und legt je Folge einen `en`-Eintrag in `episodes/<id>.json` an (Titel, Beschreibung, Show-ID). Danach `en` in `LANGS` (inkl. Texte TOP_L/REC_L/UI) und einen Testlauf im echten Bau, weil das Token lokal nicht ausführbar ist.
 - Risiko: betrifft den gesamten Seitenbau (500+ Seiten); bestehende Sprachen dürfen sich nicht ändern.
 - Community-Plattform bleibt mit Englisch als Basissprache (Kurzbeschreibung in einer Sprache Pflicht, weitere freiwillig).
+
+
+## Grundregel: MCP & KI-Anbindung wachsen mit
+Jede neue Funktion der Plattform (Log, Events, Firmen, Forum, Blog, Copilot-Bibliothek, Folgen …) bekommt zugleich ein MCP-Tool in `worker/src/mcp.js` (mit `de`-Beschreibung). Die Anleitungsseite `/community/mcp/` liest die Tool-Liste automatisch daraus (`tools/dump_mcp_tools.mjs`). Gilt für Claude, ChatGPT und Microsoft Copilot (Copilot Studio / M365-Agenten). Phase 2: OAuth für direkte Anmeldung; Phase 3: Tools für Events/Sessions, Firmen, Log, Folgen.

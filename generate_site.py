@@ -9,6 +9,7 @@ import site_press as PRS
 import site_entities as ENT
 import site_members as MEM
 import site_events as EVT
+import site_mcp as MCPS
 import glob, html, json, os, re, shutil, sys, unicodedata
 from datetime import date
 from pathlib import Path
@@ -1098,6 +1099,7 @@ def build():
     ENT.build(_ctx, lambda lang: LRN.gloss_links(lang, BASE), MEM.experts_index(_people, _orgs), _ep_find)
     MEM.build(_ctx, _people, _orgs, extra={l: EVT.blocks(BASE, _events, l) for l in ("en", "de")})
     EVT.build(_ctx, _events, _people, _orgs)
+    MCPS.build(_ctx)
 
     PRS.build_press(dict(write=write, page=page, header=header, footer=footer, footer_en=footer_en, BASE=BASE, LANGS=LANGS, sitemap=sitemap, TODAY=TODAY, n_eps=len(items), n_langs=len(active),
                          EMAIL=SL.CONTACT_EMAIL, MVP=MVP, LINKEDIN=LINKEDIN, YT=YT_CHANNEL, person_ld=person_ld, org_ld=org_ld))
