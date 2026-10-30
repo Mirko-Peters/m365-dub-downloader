@@ -8,6 +8,7 @@ import { handleEvents, deleteUserEvents, ensureM365Con } from "./events.js";
 import { handleVotes } from "./votes.js";
 import { handleQa, deleteUserQa } from "./qa.js";
 import { handleBlog, deleteUserBlog } from "./blog.js";
+import { handlePodcast, deleteUserPodcast, pollPodcast } from "./podcast.js";
 import { handleMcp, handleTokens, deleteUserTokens } from "./mcp.js";
 import { handlePoints } from "./points.js";
 import { handleMessages, purgeMessages, deleteUserMessages } from "./messages.js";
@@ -30,7 +31,7 @@ const PROVIDERS = {
   },
 };
 const VID = /^[A-Za-z0-9_-]{5,24}$/;
-const okCl = (vid, lang) => isLang(lang) || (lang === "en" && /^blog\d+$/.test(vid));   // Blog-Beitraege gibt es auch auf Englisch
+const okCl = (vid, lang) => isLang(lang) || (lang === "en" && /^(blog|podcast)\d+$/.test(vid));   // Blog-Beitraege gibt es auch auf Englisch
 const now = () => Math.floor(Date.now() / 1000);
 const ip = (r) => r.headers.get("cf-connecting-ip") || "0";
 const html = (body, status = 200) => new Response(`<!doctype html><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex"><body style="font-family:system-ui;max-width:32em;margin:12vh auto;padding:0 16px;line-height:1.5">${body}`, { status, headers: { "content-type": "text/html; charset=utf-8", "cache-control": "no-store" } });
@@ -114,7 +115,7 @@ async function auth(env, request, url, path) {
 }
 
 async function me(env, uid) {
-  const u = await env.DB.prepare("SELECT id,provider,sub,name,bio,lang,banned,role FROM users WHERE id=?").bind(uid).first();
+  const u = await env.DB.prepare("SELECT id,provider,sub,name,bio,lang,banned,role,created FROM users WHERE id=?").bind(uid).first();
   if (!u || u.banned) return null;
   const pro = !!(await env.DB.prepare("SELECT 1 x FROM programs WHERE owner_type='u' AND owner_id=? AND verified=1 AND program IN ('mvp','mct','rd','msa','ms_employee') LIMIT 1").bind(uid).first());
   return { ...u, admin: isAdmin(env, u), editor: u.role === "editor", pro };
@@ -159,7 +160,7 @@ async function api(env, request, url, path) {
         db.prepare("DELETE FROM push_subs WHERE user_id=?").bind(id), db.prepare("DELETE FROM wiki_reports WHERE user_id=?").bind(id), db.prepare("DELETE FROM wiki_rev WHERE user_id=? AND status IN ('pending','rejected')").bind(id), db.prepare("UPDATE wiki_rev SET user_id=0 WHERE user_id=?").bind(id), db.prepare("DELETE FROM curators WHERE user_id=?").bind(id), db.prepare("DELETE FROM users WHERE id=?").bind(id),
       ]);
       await deleteUserEvents(db, id);
-      await deleteUserMessages(db, id); await deleteUserTokens(db, id); await deleteUserQa(db, id); await deleteUserBlog(db, id);
+      await deleteUserMessages(db, id); await deleteUserTokens(db, id); await deleteUserQa(db, id); await deleteUserBlog(db, id); await deleteUserPodcast(db, id);
       await deleteUserData(db, id);
       return J({ ok: true }, 200, { "set-cookie": cookie("m365s", "", 0) });
     }
@@ -232,6 +233,7 @@ async function api(env, request, url, path) {
     return J(await translateStatus(env));
   }
   if (path.startsWith("/api/ai-token")) { const k = await handleTokens(env, request, url, path, user, J); if (k) return k; }
+  if (path.startsWith("/api/podcast/") || path.startsWith("/api/admin/podcast")) { const q = await handlePodcast(env, request, url, path, user, J); if (q) { if (user && method !== "GET") await evalBadges(env, user.id).catch(() => 0); return q; } }
   if (path === "/api/blog" || path.startsWith("/api/blog/") || path.startsWith("/api/admin/blog")) { const q = await handleBlog(env, request, url, path, user, J); if (q) { if (user && method !== "GET") await evalBadges(env, user.id).catch(() => 0); return q; } }
   if (path === "/api/qa" || path.startsWith("/api/qa/")) { const q = await handleQa(env, request, url, path, user, J); if (q) return q; }
   if (path.startsWith("/api/edits/")) { const v = await handleVotes(env, request, url, path, user, J); if (v) return v; }
@@ -334,5 +336,5 @@ export default {
       return json({ error: "server" }, 500, env, request);
     }
   },
-  async scheduled(event, env, ctx) { if (event.cron === "0 6 * * *") ctx.waitUntil(runDigest(env)); ctx.waitUntil(refreshFeeds(env).catch(() => 0)); ctx.waitUntil(ensureM365Con(env).catch(() => 0)); ctx.waitUntil(purgeMessages(env.DB).catch(() => 0)); ctx.waitUntil(autoTranslate(env).catch(() => 0)); },
+  async scheduled(event, env, ctx) { if (event.cron === "0 6 * * *") ctx.waitUntil(runDigest(env)); ctx.waitUntil(refreshFeeds(env).catch(() => 0)); ctx.waitUntil(ensureM365Con(env).catch(() => 0)); ctx.waitUntil(purgeMessages(env.DB).catch(() => 0)); ctx.waitUntil(autoTranslate(env).catch(() => 0)); ctx.waitUntil(pollPodcast(env).catch(() => 0)); },
 };

@@ -182,3 +182,9 @@ Podpage kostet 65 $/Monat (ca. 780 $/Jahr). Ziel: m365.fm komplett auf dub.m365.
 
 ## Podcast-Kanäle der Community (als Nächstes, wie der Blog)
 - Gleiche Mechanik wie Blog: Creator, Folgen, Upvotes, Follow/RSS, Kommentare, Badge „Podcaster“, Creator-Feed. Unterschied: **Prüfung durch Mirko in Spreaker** (Folge wird dort als Entwurf geprüft und freigegeben, danach Anzeige/Index); Index-Schwelle wie im Blog (Upvotes), Details (Upload direkt zu Spreaker, Show je Creator) siehe „Podcast-Upload direkt zu Spreaker“.
+
+## Community-Podcast (gebaut, 30.10.)
+- Worker `src/podcast.js`: Einreichen mit mp3 (max. 50 MB, Magic-Byte-Prüfung, Rechte-Haken, KI-Offenlegung) → **Entwurf in der Spreaker-Show der Sprache** (`POST /episodes/drafts`, danach Audio per `POST /episodes/<id>`); Abstimmung (Konten ab 24 h, nicht für eigene Folgen); ab **25 Stimmen** Status „review“ + Web-Push an Admins/Redaktion; Mirko prüft und veröffentlicht **in Spreaker**; der Cron (30 Min) erkennt `published_at`/PUBLIC und setzt „published“ (Creator-Feed, Badge „Podcaster“, 20 Punkte). Ablehnen löscht den Entwurf; 30 Tage ohne Schwelle → Entwurf wird gelöscht. Eine Einreichung pro Woche, öffentliches Profil nötig. Secret `SPREAKER_TOKEN` nötig.
+- Seiten: `/community/podcast/<id-slug>/` (PodcastEpisode, Spreaker-Player, Kommentare `vid=podcast<id>`, Themen bis 10), `/community/podcast/` und `feed.xml`; indexierbar (Redaktion hat geprüft). Reiter „Podcast“ in der Community inkl. Admin-Bereich. MCP: `list_podcast_pitches`, `vote_podcast_pitch`, `list_my_podcast_episodes`.
+- Blog und Podcast: bis zu **10 Themen (Entitäten)** je Beitrag/Folge.
+- Offen/ungetestet live: Spreaker-API-Details (Entwurf + Audio nachladen; Token-Rechte), Stick-Man-Video nach Veröffentlichung, Follow für Podcast-Autoren (nutzt vorerst das Blog-Follow), E-Mail-Benachrichtigungen (Mailsystem später).

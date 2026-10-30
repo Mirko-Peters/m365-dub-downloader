@@ -14,13 +14,13 @@
   function entList() { return ENTS ? Promise.resolve(ENTS) : fetch("/entities.json").then(function (r) { return r.json(); }).then(function (j) { ENTS = (j.entities || []).filter(function (x) { return ["product", "platform", "concept", "category", "cert"].indexOf(x.type) > -1; }); return ENTS; }).catch(function () { ENTS = []; return ENTS; }); }
   var TYPEL = { product: de ? "Produkt" : "Product", platform: de ? "Plattform" : "Platform", concept: de ? "Konzept" : "Concept", category: de ? "Kategorie" : "Category", cert: de ? "Zertifikat" : "Certification" };
   // Themen-Auswahl: Entitaeten (Produkt, Plattform, Konzept ...) per Suchfeld waehlen statt IDs tippen
-  function topicsUI(initial) {
+  function topicsUI(initial, max) {
     var ids = (initial || []).slice(), chips = h("div", { style: "display:flex;gap:.4em;flex-wrap:wrap;margin:.3em 0" }), dl = h("datalist", { id: "tdl" + (++uid) }), box = h("input", { type: "text", list: dl.id, maxlength: 80, placeholder: de ? "Thema suchen (Produkt, Plattform, Konzept …)" : "Search a topic (product, platform, concept …)", "aria-label": de ? "Thema suchen" : "Search a topic" });
     var wrap = h("div", {}, [chips, box, dl]), byLabel = {};
     function name(id) { var e = (ENTS || []).filter(function (x) { return x.id === id; })[0]; return e ? e.name : id; }
     function draw() { chips.textContent = ""; ids.forEach(function (id) { chips.appendChild(h("button", { type: "button", class: "btn", title: de ? "Entfernen" : "Remove", text: name(id) + " ✕", onclick: function () { ids = ids.filter(function (x) { return x !== id; }); draw(); } })); }); }
     entList().then(function (list) { list.forEach(function (e) { var l = e.name + " · " + (TYPEL[e.type] || e.type); byLabel[l.toLowerCase()] = e.id; byLabel[e.name.toLowerCase()] = e.id; dl.appendChild(h("option", { value: l })); }); draw(); });
-    function add() { var id = byLabel[box.value.trim().toLowerCase()]; if (id && ids.indexOf(id) < 0 && ids.length < 12) { ids.push(id); draw(); } if (id) box.value = ""; }
+    function add() { var id = byLabel[box.value.trim().toLowerCase()]; if (id && ids.indexOf(id) < 0 && ids.length < (max || 12)) { ids.push(id); draw(); } if (id) box.value = ""; }
     box.addEventListener("change", add); box.addEventListener("input", function () { if (byLabel[box.value.trim().toLowerCase()]) add(); });
     draw(); wrap.get = function () { add(); return ids.slice(); }; return wrap;
   }

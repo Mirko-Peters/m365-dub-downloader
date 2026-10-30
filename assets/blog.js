@@ -11,7 +11,7 @@
   function pfx() { return X.lang && X.lang !== "en" ? "/" + X.lang : ""; }
   function form(p, state) {
     p = p || {}; var f = h("form", { class: "bl-form" });
-    var ti = U.inp(p.title, 140), su = h("textarea", { maxlength: 300, rows: 2 }), bo = h("textarea", { maxlength: 12000, rows: 16 }), lg = U.sel(LANGS, p.lang || (X.lang || "en")), tp = U.topicsUI(p.topics || []);
+    var ti = U.inp(p.title, 140), su = h("textarea", { maxlength: 300, rows: 2 }), bo = h("textarea", { maxlength: 12000, rows: 16 }), lg = U.sel(LANGS, p.lang || (X.lang || "en")), tp = U.topicsUI(p.topics || [], 10);
     su.value = p.summary || ""; bo.value = p.body || "";
     f.appendChild(U.lab(Q.title, ti)); f.appendChild(U.lab(Q.summary, su)); f.appendChild(U.lab(Q.lang, lg));
     f.appendChild(h("div", {}, [h("b", { text: Q.topics }), tp])); f.appendChild(U.lab(Q.body, bo)); f.appendChild(h("p", { class: "mut", text: Q.hint }));

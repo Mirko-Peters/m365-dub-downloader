@@ -536,3 +536,28 @@ CREATE TABLE IF NOT EXISTS blog_follows (        -- Mitglieder abonnieren das Bl
   PRIMARY KEY (user_id, handle)
 );
 CREATE INDEX IF NOT EXISTS idx_bf_handle ON blog_follows(handle);
+
+CREATE TABLE IF NOT EXISTS pod_episodes (        -- Community-Podcast: status pitch-> submitted (Entwurf bei Spreaker) -> review (Schwelle) -> published | rejected | expired
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  user_id INTEGER NOT NULL,
+  title TEXT NOT NULL,
+  description TEXT NOT NULL DEFAULT '',
+  lang TEXT NOT NULL DEFAULT 'en',
+  topics TEXT NOT NULL DEFAULT '[]',
+  status TEXT NOT NULL DEFAULT 'submitted',
+  spreaker_id INTEGER NOT NULL DEFAULT 0,
+  show_id INTEGER NOT NULL DEFAULT 0,
+  ai INTEGER NOT NULL DEFAULT 0,                 -- KI-Einsatz offengelegt
+  note TEXT NOT NULL DEFAULT '',
+  ep_url TEXT NOT NULL DEFAULT '',
+  created INTEGER NOT NULL,
+  updated INTEGER NOT NULL,
+  published INTEGER NOT NULL DEFAULT 0
+);
+CREATE INDEX IF NOT EXISTS idx_pod_status ON pod_episodes(status, created);
+CREATE TABLE IF NOT EXISTS pod_votes (
+  ep_id INTEGER NOT NULL,
+  user_id INTEGER NOT NULL,
+  created INTEGER NOT NULL,
+  PRIMARY KEY (ep_id, user_id)
+);
