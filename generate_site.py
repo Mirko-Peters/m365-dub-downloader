@@ -894,6 +894,16 @@ def build():
         cs = "".join(f'<a class="chip cat" href="{cat_url(l, c)}">{esc(cat_name(c, l))} · {len(catidx[l][c])}</a>' for c in ORDER if c in catidx[l])
         return top_block(l) + f'<h2>{esc(TOPICS.get(l, "Topics"))}</h2><div class="chips">{cs}</div>'
 
+    # Englisches Original je Video (Podpage-Show unter /show/), Zuordnung ueber den englischen YouTube-Titel
+    ORIG = {}
+    try:
+        import site_podpage as _PPm
+        _et = json.load(open(ROOT / "data" / "en_titles.json", encoding="utf-8")) if (ROOT / "data" / "en_titles.json").exists() else {}
+        _byt = {_PPm.norm(e["name"]): e for e in _PPm.load("episodes")}
+        ORIG = {v: _byt[_PPm.norm(t)]["slug"] for v, t in _et.items() if _PPm.norm(t) in _byt}
+    except Exception as _ex:
+        print("Original-Zuordnung:", _ex)
+    ORIG_ALTS = {}
     # Episoden-Seiten
     for (vid, l), it in items.items():
         e = it["e"]; ui = UI[l]
@@ -981,7 +991,7 @@ def build():
         body = f"""{header(l, lang_switch(l, alts, [x for x in LANGS if x in alts]))}
 <main class="wrap"><article>
 <div class="crumbs"><a href="{BASE}/{l}/">{esc(ui[7])}</a> / {esc(LANGS[l][0])} / {it["date"]}</div>
-<div class="kicker">M365.FM · {esc(LANGS[l][0])}</div>
+<div class="kicker">M365.FM · {esc(LANGS[l][0])}</div>{('<p class="mut"><a href="' + BASE + '/show/episodes/' + ORIG[vid] + '/" hreflang="en">' + ("Original (English)" if l != "de" else "Original (Englisch)") + '</a></p>') if vid in ORIG else ""}
 <h1>{esc(h1_main)}</h1>{("<p class=sub>" + esc(h1_rest) + "</p>") if h1_rest else ""}
 {chips_html(l, it)}<p class="lede">{intro}</p>
 <figure class="cover" style="margin-inline:0">{art_svg(vid, LANGS[l][0], "M365.FM · " + ui[0], l)}</figure>
@@ -1002,6 +1012,7 @@ def build():
         write(f'{l}/{it["slug"]}/index.html',
               page(l, e["title"], short(intro), canonical, body, alts, ld, extra_head=f'<meta property="article:section" content="{esc(cat_name(pc, l))}">' + "".join(f'<meta property="article:tag" content="{esc(t)}">' for t in tagraw[l][vid])))
         sitemap.append((canonical, it["date"], alts))
+        if vid in ORIG: ORIG_ALTS.setdefault(ORIG[vid], {})[l] = (canonical, e["title"])
 
     # Sprach-Startseiten
     for l in active:
@@ -1158,7 +1169,7 @@ def build():
                         articles=articles, url_of=url_of, cat_name=cat_name, ORDER=ORDER, strip_tags=strip_tags, anchor_title=anchor_title, short=short, parse_desc=parse_desc,
                         sitemap=sitemap, TODAY=TODAY, api=COMMUNITY_API, SCORE={l: (_QUI.get(l, {}).get("score") or _QUI["en"]["score"]) for l in list(LANGS) + ["en"]}))
 
-    _ctx = dict(community_tags=community_tags, write=write, page=page, header=header, footer=footer, footer_en=footer_en, BASE=BASE, LANGS=LANGS, active=active, url_of=url_of, anchor_title=anchor_title, sitemap=sitemap, TODAY=TODAY, api=COMMUNITY_API)
+    _ctx = dict(community_tags=community_tags, write=write, page=page, header=header, footer=footer, footer_en=footer_en, BASE=BASE, LANGS=LANGS, active=active, url_of=url_of, anchor_title=anchor_title, sitemap=sitemap, TODAY=TODAY, api=COMMUNITY_API, orig_alts=ORIG_ALTS)
     _people, _orgs = MEM.fetch_members(COMMUNITY_API)
 
     def _ep_find(e):
