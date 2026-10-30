@@ -1,0 +1,24 @@
+name: Microsoft-Updates holen (Release-Communications-API)
+on:
+  schedule:
+    - cron: "20 4 * * *"
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency: { group: ms-updates, cancel-in-progress: false }
+jobs:
+  f:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.12" }
+      - run: python fetch_ms_updates.py
+      - name: committen
+        run: |
+          if [ -n "$(git status --porcelain data/product_updates.json)" ]; then
+            git config user.name "m365-site-bot"; git config user.email "actions@users.noreply.github.com"
+            git add data/product_updates.json && git commit -m "Microsoft-Updates aktualisiert" -q
+            git pull --rebase -q && git push -q
+          fi
