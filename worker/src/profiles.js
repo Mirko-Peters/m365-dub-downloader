@@ -3,6 +3,7 @@ import { cleanKeypoints, cleanFaq, jsonList, ensureSectionCols } from "./section
 import { sanitize } from "./wiki.js";
 import { cleanText, rateLimit } from "./util.js";
 import { baseIds, knownIds, validate, trustedUser, entityMap } from "./entities.js";
+import { findExperts } from "./experts.js";
 
 export const PROGRAMS = ["mvp", "mct", "rd", "msa", "ms_employee", "partner"];
 export const RELATIONS = ["colleague", "manager", "report", "client", "trainer", "student", "cospeaker", "podcast", "community", "mentor", "other"];
@@ -365,6 +366,11 @@ export async function handleProfiles(env, request, url, path, user, J) {
     if (!r || (!r.public && r.user_id !== user?.id)) return J({ error: "not_found" }, 404);
     const v = await personView(db, r.user_id, user?.id); if (!v) return J({ error: "not_found" }, 404);
     v.mine = r.user_id === user?.id; delete v.id; return J({ profile: v }, 200, { "cache-control": "no-store" });
+  }
+  if (path === "/api/experts" && method === "GET") {   // oeffentlich: Experten zu einem Thema, auch ueber verwandte Themen
+    const e = url.searchParams.get("e") || ""; if (!ID.test(e)) return J({ error: "bad_request" }, 400);
+    const r = await findExperts(env, e, +url.searchParams.get("hops") || 2, Math.min(+url.searchParams.get("limit") || 12, 30));
+    return r ? J(r, 200, { "cache-control": "public, max-age=300" }) : J({ error: "not_found" }, 404);
   }
   if (path === "/api/profiles/export" && method === "GET") {   // oeffentlich: fuer den statischen Seitenbau
     const us = (await db.prepare("SELECT user_id FROM profiles WHERE public=1 AND handle IS NOT NULL ORDER BY updated DESC LIMIT 300").all()).results || [];
