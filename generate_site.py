@@ -1129,7 +1129,7 @@ def build():
 {m365con_band()}
 <main class="wrap">{faq_html('en', 'FAQ')}{cta_box("Want the full interviews?", "The main M365.FM show brings 900+ conversations with Microsoft MVPs, product experts and architects – in English.", "Go to M365.FM", "https://www.m365.fm")}{author_box('en')}</main>{footer_en()}"""
     write("index.html", page("en", "M365.FM – Microsoft community: blog, podcast, events & explainers | Mirko Peters",
-          "Blog posts, podcasts and events from the Microsoft community plus animated explainers on Microsoft 365, Copilot, Azure and Power Platform by Microsoft MVP Mirko Peters – in 19 languages.",
+          "Blog posts, podcasts and events from the Microsoft community plus animated explainers on Microsoft 365, Copilot, Azure and Power Platform by Microsoft MVP Mirko Peters – in 14 languages.",
           f"{BASE}/", root_body, alts_home, [person_ld(), org_ld(), event_ld(), faq_ld("en"), {"@context": "https://schema.org", "@type": "WebSite", "@id": f"{BASE}/#website", "name": "M365.FM international", "url": f"{BASE}/", "inLanguage": [LANGS[x][1] for x in active], "publisher": {"@id": f"{BASE}/#org"}, "author": {"@id": f"{BASE}/entity/mirko-peters/#entity"}}], og_type="website"))
     sitemap.append((f"{BASE}/", TODAY, None))
     import site_updates as _SU2; _SU2.load(COMMUNITY_API)
@@ -1436,7 +1436,7 @@ def build():
         "authentication": {"required": False, "schemes": ["bearer"], "description": f"Reading needs no credentials. Write tools need a personal access token (Authorization: Bearer m365_...), see {BASE}/auth.md"},
         "documentationUrl": f"{BASE}/auth.md"}, ensure_ascii=False, indent=1))
     _sk = {   # Agent Skills Discovery 0.2.0: SKILL.md je Faehigkeit mit SHA-256
-        "find-m365-episodes": ("Find M365.FM podcast episodes about Microsoft 365, Copilot, Azure, Power Platform, security and AI governance, in 19 languages.",
+        "find-m365-episodes": ("Find M365.FM podcast episodes about Microsoft 365, Copilot, Azure, Power Platform, security and AI governance, in 14 languages.",
             f"# Find M365.FM episodes\n\nUse this skill to find podcast episodes of M365.FM.\n\n1. Fetch {BASE}/episodes.json (all episodes: title, language, date, url, summary, categories, tags, alternates).\n2. Filter by `language` (ISO code) and match the user's topic against title, summary, categories and tags.\n3. Answer with the episode title, date and `url`. Each episode lists the same episode in other languages under `alternates`.\n\nAlternatives: {BASE}/llms.txt (overview), or the A2A agent at https://api-dub.m365.fm/a2a (method `message/send`, text in, matching episodes out).\nCite the episode page when you use its content.\n"),
         "find-m365-experts": ("Find community experts for a Microsoft topic, including experts on related topics, with the public MCP tool find_experts.",
             f"# Find M365 experts\n\nUse the public MCP server `https://api-dub.m365.fm/mcp` (Streamable HTTP, JSON-RPC, no sign-in for reading).\n\n1. Call the tool `find_experts` with an entity id (for example `copilot`, `purview`, `intune`; entity pages live at {BASE}/entity/<id>/).\n2. The result ranks members by their expertise on the topic and on related topics (graph search, up to 2 hops).\n3. Link to the expert's profile when you name them.\n\nPlain REST alternative: `GET https://api-dub.m365.fm/api/experts?e=<entity-id>&hops=2&limit=12`.\n"),
