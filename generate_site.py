@@ -1070,6 +1070,20 @@ def build():
 {m365con_band()}
 <main class="wrap">{fq}</main>{footer(lang) if lang != "en" else footer_en()}"""
 
+    # Ausgemusterte Seiten: Hinweisseite mit Verknüpfung zum Nachfolger (kein Auto-Redirect), noindex
+    _RT = {"en": ("Page retired", "This page no longer exists.", "It has been replaced by:", "Home"),
+           "de": ("Seite ausgemustert", "Diese Seite gibt es nicht mehr.", "Sie wurde ersetzt durch:", "Startseite")}
+    _ret = json.loads((ROOT / "data" / "retired.json").read_text("utf-8")).get("pages", []) if (ROOT / "data" / "retired.json").exists() else []
+    for r in _ret:
+        for lang in (["en"] + list(active) if r.get("langs") else ["en"]):
+            pre = "" if lang == "en" else f"{lang}/"
+            path = pre + r["path"]
+            tl = _RT.get(lang, _RT["en"])
+            to = r.get("to")
+            tgt = (f"{BASE}/{pre}{to}" if (lang in ("en", "de") or not r.get("to_all_langs")) and lang == "de" else f"{BASE}/{to}") if to else None
+            body = f'<main class="wrap"><h1>{tl[0]}</h1><p>{tl[1]}</p>' + (f'<p>{tl[2]} <a class="btn main" href="{tgt}">{esc(r.get("name") or to)}</a></p>' if tgt else "") + f'<p><a class="btn" href="{BASE}/{pre if lang in LANGS else ""}">{tl[3]}</a></p></main>'
+            write(path + "index.html", page("de" if lang == "de" else "en", tl[0], tl[1], f"{BASE}/{path}", body, None, [], noindex=True))
+
     LRN.build_learn(dict(write=write, page=page, header=header, footer=footer, footer_en=footer_en, BASE=BASE, LANGS=LANGS, active=active, by_lang=by_lang, catidx=catidx,
                         articles=articles, url_of=url_of, cat_name=cat_name, ORDER=ORDER, strip_tags=strip_tags, anchor_title=anchor_title, short=short, parse_desc=parse_desc,
                         sitemap=sitemap, TODAY=TODAY, api=COMMUNITY_API, SCORE={l: (_QUI.get(l, {}).get("score") or _QUI["en"]["score"]) for l in list(LANGS) + ["en"]}))
