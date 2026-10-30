@@ -13,6 +13,7 @@ S = {"en": dict(entities="Microsoft ecosystem entity database", intro="Products,
      "de": dict(entities="Entitätsdatenbank zum Microsoft-Ökosystem", intro="Produkte, Plattformen, Konzepte, Zertifizierungen und Organisationen rund um Microsoft – mit Beziehungen, von der Community beschrieben und als Schema.org-Daten veröffentlicht.", new="Neues Thema anlegen", all="Alle", facts="Fakten", website="Webseite", docs="Dokumentation", wikipedia="Wikipedia", wikidata="Wikidata", type="Typ", aka="Auch bekannt als", experts="Experten und Firmen zu diesem Thema", noexperts="Dieses Thema hat noch niemand im Profil angegeben. Trag es in deinem Profil ein.", eps="Folgen zu {t}", export="Datenexport", edit_e="Eigenschaften bearbeiten", glossary="Glossar", count="{n} Einträge", up="Zuletzt bearbeitet")}
 
 
+EVENTS = {}   # Event-Handle -> Event (fuer Verlinkung Entitaet -> Eventseite)
 CLAIMS = {}   # eid -> Profil-Handle (uebernommene Entitaeten)
 ORGPAGES = {}   # eid -> Firmen-Handle
 
@@ -170,6 +171,11 @@ def build(g, wiki_links, experts_by_ent, ep_find):
             if e.get("start"):
                 facts.append(("Datum" if lang == "de" else "Date", esc(e["start"] + (" – " + e["end"] if e.get("end") else ""))))
             ft = '<table class="en-facts"><tbody>' + "".join(f'<tr><th scope="row">{esc(a)}</th><td>{b}</td></tr>' for a, b in facts) + "</tbody></table>"
+            evl = ""
+            if e["id"] in EVENTS:
+                ev_ = EVENTS[e["id"]]; evl = f'<p><a class="btn" href="{BASE}{"/de" if lang == "de" else ""}/community/events/{ev_["handle"]}/">{"Zum Event" if lang == "de" else "Go to the event"}: {esc(ev_["title"])}</a></p>'
+            if not e["desc"].get(lang if lang in ("en", "de") else "en"):
+                evl += f'<p class="mut"><a href="#en-edit">{"Diese Kurzbeschreibung gibt es noch nicht in deiner Sprache – gern ergänzen." if lang == "de" else "This short description is not yet available in your language – feel free to add it."}</a></p>'
             gloss = f'<p><a href="{BASE}/{"de/" if lang == "de" else ""}glossary/{e["id"]}/">{esc(s["glossary"])}: {esc(e["name"])}</a></p>' if e["id"] in gl_ids else ""
             eps = ep_find(e) if lang == "de" else []
             eb = (f'<h2>{esc(s["eps"].format(t=e["name"]))}</h2><ul>' + "".join(f'<li><a href="{url_of(x)}">{esc(g["anchor_title"](x["e"]["title"]))}</a></li>' for x in eps) + "</ul>") if eps else ""
@@ -183,7 +189,7 @@ def build(g, wiki_links, experts_by_ent, ep_find):
             data_attr = esc(json.dumps({k: e.get(k) for k in ("id", "name", "type", "aliases", "desc", "web", "docs", "wikipedia", "wikidata", "rel")}, ensure_ascii=False))
             edit = f'<div id="en-edit" data-e="{data_attr}"></div>'
             wb = wiki_block(lang, e["id"], api, BASE, stat.get(e["id"]), wiki_links(lang))
-            b = shell(lang, f'<nav aria-label="breadcrumb"><a href="{root}">{esc(s["entities"])}</a></nav><h1>{esc(e["name"])}</h1><p class="mut">{esc(TL[e["type"]][li])}</p><p style="font-size:1.1em">{esc(d)}</p>{claim_html(e["id"], lang)}{ft}{gloss}'
+            b = shell(lang, f'<nav aria-label="breadcrumb"><a href="{root}">{esc(s["entities"])}</a></nav><h1>{esc(e["name"])}</h1><p class="mut">{esc(TL[e["type"]][li])}</p><p style="font-size:1.1em">{esc(d)}</p>{claim_html(e["id"], lang)}{ft}{evl}{gloss}'
                           f'<div class="en-rel">{rb}</div>{eb}{wb}{("<h2>" + esc(s["experts"]) + "</h2>" + ehtml) if ehtml else ""}{edit}'
                           f'<script>window.M365E={{api:"{api}",lang:"{lang}",base:"{BASE}",s:{json.dumps({k: s[k] for k in ("edit_e",)}, ensure_ascii=False)}}}</script><script defer src="{BASE}/assets/entity.js"></script>')
             node = ent_ld(BASE, e, lang, gl_ids)

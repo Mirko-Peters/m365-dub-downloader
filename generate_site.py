@@ -442,6 +442,18 @@ def person_ld():
          "worksFor": {"@id": f"{BASE}/#org"}, "founder": [{"@id": f"{BASE}/#org"}]}
     if (ROOT / "assets" / "mirko-peters.jpg").exists():
         d["image"] = f"{BASE}/assets/mirko-peters.jpg"
+    if AUTHOR.get("handle"):   # oeffentliches Profil ist die Quelle der Wahrheit
+        a = AUTHOR
+        if a.get("about") or a.get("headline"):
+            d["description"] = (a.get("about") or a.get("headline"))[:500]
+        if a.get("headline"):
+            d["jobTitle"] = a["headline"][:100]
+        ch = [c["url"] for c in a.get("channels", []) if c.get("url")]
+        d["sameAs"] = list(dict.fromkeys(list(d.get("sameAs", [])) + ch))
+        d["url"] = f"{BASE}/community/u/{a['handle']}/"
+        if a.get("img"):
+            d["image"] = f"{COMMUNITY_API}/api/img/u/{a['handle']}"
+        d["knowsAbout"] = list(dict.fromkeys(d.get("knowsAbout", []) + [x.get("name") or x["e"] for x in a.get("expertise", []) if x.get("name") or x.get("e")]))[:40]
     return d
 
 
@@ -1074,9 +1086,13 @@ def build():
         return [it for it in by_lang.get("de", []) if any(r.search(it["e"]["title"] + " " + (it["e"].get("tags") or "")) for r in rx)][:8] if rx else []
     _cl = (LRN._fetch_json(f"{COMMUNITY_API}/api/entity/claims") or {}).get("claims", []) if hasattr(LRN, "_fetch_json") else []
     ENT.ORGPAGES.update({o["eid"]: o["handle"] for o in _orgs if o.get("eid")})
+    _events = EVT.fetch_events(COMMUNITY_API)
+    for _ev in _events:
+        ENT.EVENTS[_ev["handle"]] = _ev
+        for _t in _ev.get("topics", []):
+            ENT.EVENTS.setdefault(_t, _ev)
     ENT.CLAIMS.update({c["eid"]: c["handle"] for c in _cl}); MEM.CLAIMED.update({c["handle"]: c["eid"] for c in _cl})
     ENT.build(_ctx, lambda lang: LRN.gloss_links(lang, BASE), MEM.experts_index(_people, _orgs), _ep_find)
-    _events = EVT.fetch_events(COMMUNITY_API)
     MEM.build(_ctx, _people, _orgs, extra={l: EVT.blocks(BASE, _events, l) for l in ("en", "de")})
     EVT.build(_ctx, _events, _people, _orgs)
 

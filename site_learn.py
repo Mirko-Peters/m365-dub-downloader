@@ -447,7 +447,7 @@ def gloss_link(html_, lang, base, max_links=8):
     tgt = (lambda x: f"{base}/de/glossary/{x['id']}/") if lang == "de" else (lambda x: f"{base}/{lang}/glossary/#{x['id']}")
     gids = {x["id"] for x in GLOSS}
     cands = [(nm, x) for x in GLOSS for nm in _names(x)]
-    ents = [e for e in ENTS.values() if e["id"] not in gids and e["type"] not in ("person", "media")]
+    ents = [e for e in ENTS.values() if e["id"] not in gids and e["type"] not in ("media",)]
     for e in ents:
         x = {"id": e["id"], "name": e["name"], "en": e["desc"].get("en", ""), "de": e["desc"].get("de") or e["desc"].get("en", ""), "ent": True}
         cands += [(nm, x) for nm in ent_names(e)]
