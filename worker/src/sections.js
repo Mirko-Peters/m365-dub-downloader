@@ -42,5 +42,8 @@ export async function ensureSectionCols(db) {
       for (const c of ["keypoints TEXT NOT NULL DEFAULT '[]'", "faq TEXT NOT NULL DEFAULT '[]'"]) { try { await db.prepare(`ALTER TABLE ${t} ADD COLUMN ${c}`).run(); } catch { /* Tabelle fehlt oder Spalte vorhanden */ } }
     }
   }
+  try { await db.prepare("SELECT html FROM blog_posts LIMIT 1").first(); } catch {   // html: vollstaendiger HTML-Inhalt uebernommener Beitraege (Tabellen, Bilder, Links); leer bei normalen Wiki-Beitraegen
+    try { await db.prepare("ALTER TABLE blog_posts ADD COLUMN html TEXT NOT NULL DEFAULT ''").run(); } catch { /* Spalte existiert schon */ }
+  }
   ok = true;
 }

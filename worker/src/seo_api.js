@@ -21,13 +21,16 @@ async function authorInfo(db, uid, postId) {
   };
 }
 // Datensatz -> Eingabe fuer seoCheck. Titelbild ist immer da (die Seite erzeugt es automatisch); Bilder im Text zaehlt der Check aus dem Markup ({{img|...}}).
+// HTML uebernommener Beitraege fuer den SEO-Check in grobes Wiki-Markup umsetzen (Ueberschriften, Listen, Bilder, Absaetze)
+const htmlToWiki = (h) => String(h || "").replace(/<img\b[^>]*?src="(https:[^"]+)"[^>]*?alt="([^"]*)"[^>]*>/gi, "\n{{img|$1|$2}}\n").replace(/<h[2-4][^>]*>/gi, "\n## ").replace(/<li[^>]*>/gi, "\n- ")
+  .replace(/<\/(p|h[2-4]|ul|ol|table|tr)>/gi, "\n\n").replace(/<[^>]+>/g, " ").replace(/&amp;/g, "&").replace(/&[a-z]+;/g, " ").replace(/[ \t]+/g, " ").replace(/\n{3,}/g, "\n\n");
 function input(kind, r, author) {
   const base = { kind, lang: r.lang || "en", title: r.title, topics: jp(r.topics), header: true, author, transcript: null };
-  if (kind === "blog" || kind === "feed") return { ...base, description: r.summary || "", body: r.body || "", keypoints: jp(r.keypoints), faq: jp(r.faq) };
+  if (kind === "blog" || kind === "feed") return { ...base, description: r.summary || "", body: r.body || (r.html ? htmlToWiki(r.html) : ""), keypoints: jp(r.keypoints), faq: jp(r.faq) };
   return { ...base, description: String(r.description || "").slice(0, 300), body: r.description || "" };
 }
 const ROWS = {
-  blog: "SELECT id,title,summary,body,lang,topics,keypoints,faq,status FROM blog_posts WHERE user_id=?1",
+  blog: "SELECT id,title,summary,body,html,lang,topics,keypoints,faq,status FROM blog_posts WHERE user_id=?1",
   feed: "SELECT id,title,summary,body,'' lang,topics,keypoints,faq,'' status FROM feed_items WHERE owner_type='u' AND owner_id=?1 AND body<>''",
   podcast: "SELECT id,title,description,lang,topics,status FROM pod_episodes WHERE user_id=?1",
   video: "SELECT id,title,description,lang,topics,status FROM yt_videos WHERE user_id=?1",
