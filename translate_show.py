@@ -57,7 +57,7 @@ def main():
         u = res["message"]["usage"]; tin += u["input_tokens"]; tout += u["output_tokens"]
         if res["message"].get("stop_reason") == "max_tokens": why["max_tokens"] = why.get("max_tokens", 0) + 1
         try:
-            txt = res["message"]["content"][0]["text"]; j = json.loads(txt[txt.index("{"):txt.rindex("}") + 1]); have[l][key] = [j["title"].strip(), j["summary"].strip()]; ok += 1
+            txt = res["message"]["content"][0]["text"]; j = json.loads(txt[txt.index("{"):txt.rindex("}") + 1], strict=False); have[l][key] = [j["title"].strip(), j["summary"].strip()]; ok += 1
         except Exception:
             bad += 1
     for l in langs: (OUT / f"{l}.json").write_text(json.dumps(have[l], ensure_ascii=False), encoding="utf-8")
