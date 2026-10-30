@@ -160,7 +160,7 @@ def build(g):
         bposts = [p for p in json.loads(_gz.open(_bf, "rt", encoding="utf-8").read()) if p.get("title") and p.get("html")]
         bposts.sort(key=lambda p: p.get("iso") or "", reverse=True)
     eslug = {e["slug"] for e in eps}; bslug = {p["slug"] for p in bposts}
-    def bp_url(p): return f"{root}blog/{p['slug']}/"
+    def bp_url(p): return f"{BASE}/community/u/mirko-peters/blog/{p['slug']}/"   # Blogbeitraege sind Community-Beitraege von mirko-peters (site_legacy_blog.py)
     def fixlinks(h):
         def rep(m):
             u = m.group(1); path = _re.sub(r"^https?://(www\.)?m365\.fm", "", u)
@@ -274,29 +274,13 @@ def build(g):
         gl += f'<li style="margin:.4em 0"><a href="{root}guests/{gg["slug"]}/">{esc(gg["name"])}</a> <span class="mut">{esc(gg.get("title") or "")[:90]}</span></li>'
     if guests: pub("guests/", "Guests", f"{len(guests)} guests of the {NAME}.", f'<h1>Guests</h1><ul style="list-style:none;padding:0">{gl}</ul>')
 
-    # Blog
-    ebyslug = {e["slug"]: e for e in eps}
+    # Blog: die Beitraege sind jetzt Community-Beitraege von mirko-peters (site_legacy_blog.py + site_blog.py); hier nur Weiterleitungsseiten fuer die kurz genutzten Adressen /show/blog/...
+    def _stub(to, label):
+        return (f'<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="robots" content="noindex"><meta http-equiv="refresh" content="0;url={to}">'
+                f'<link rel="canonical" href="{to}"><title>{esc(label)}</title></head><body><p><a href="{to}">{esc(label)}</a></p></body></html>')
     for p in bposts:
-        ep = ebyslug.get(bp_ep(p) or "")
-        _bi = thumb_of(ep, SNT.get("en", title=ep["name"])) if ep else ""   # Titelbild: Thumbnail der verlinkten Folge, sonst erzeugtes Bild
-        _hero = (f'<figure style="margin:1em 0"><img src="{esc(_bi)}" alt="{esc("Cover: " + ep["name"])}" width="640" height="360" fetchpriority="high" decoding="async" style="width:100%;max-width:640px;height:auto;aspect-ratio:16/9;object-fit:cover;border-radius:.6em"></figure>' if _bi
-                 else MED.hero_svg({"id": "blog-" + p["slug"], "name": p["title"], "type": "media"}, "Blog", "Titelbild: " + p["title"]))
-        body = (f'<article><p class="mut">{bday(p)}</p><h1>{esc(p["title"])}</h1>{_hero}<div class="pp-notes">{fixlinks(san(p["html"]))}</div>'
-                + (f'<p><strong>Listen to the episode:</strong> <a href="{ep_url(ep)}">{esc(ep["name"])}</a></p>' if ep else "") + "</article>"
-                + f'<p><a href="{root}blog/">← All articles</a></p>')
-        ld = {"@context": "https://schema.org", "@type": "BlogPosting", "headline": p["title"], "url": bp_url(p), "mainEntityOfPage": bp_url(p), "datePublished": p.get("iso") or "", "dateModified": p.get("modified") or p.get("iso") or "",
-              "description": p.get("desc") or "", "inLanguage": "en", "author": {"@id": f"{BASE}/entity/mirko-peters/#entity"}, "publisher": {"@type": "Organization", "name": NAME, "url": root}, "isPartOf": {"@type": "Blog", "name": f"{NAME} blog", "url": f"{root}blog/"}}
-        if ep: ld["about"] = {"@type": "PodcastEpisode", "name": ep["name"], "url": ep_url(ep)}
-        if _bi: ld["image"] = _bi
-        faq = [q for q in (p.get("faq") or []) if q.get("name") and (q.get("acceptedAnswer") or {}).get("text")]
-        lds = [ld] + ([{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": faq}] if faq else [])
-        pub(f"blog/{p['slug']}/", p["title"], p.get("desc") or plain(p["html"])[:200], body, lds, "article", last=bday(p) or TODAY)
-    BPER = 50; bn = (len(bposts) + BPER - 1) // BPER
-    for q in range(bn):
-        part = bposts[q * BPER:(q + 1) * BPER]
-        pg = "".join(f'<a href="{root}blog/{"" if i == 0 else f"page/{i + 1}/"}"{" style=font-weight:700" if i == q else ""}>{i + 1}</a> ' for i in range(bn))
-        li = "".join(f'<li style="margin:.8em 0"><a href="{bp_url(p)}"><strong>{esc(p["title"])}</strong></a><br><span class="mut">{bday(p)}</span><br>{esc((p.get("desc") or "")[:200])}</li>' for p in part)
-        pub("blog/" if q == 0 else f"blog/page/{q + 1}/", "Blog" + (f" – page {q + 1}" if q else ""), f"{len(bposts)} articles on Microsoft 365, Azure, Power Platform and AI from the {NAME}.", f'<h1>Blog</h1><ul style="list-style:none;padding:0">{li}</ul><p>{pg}</p>', noindex=bool(q))
+        write(f"show/blog/{p['slug']}/index.html", _stub(bp_url(p), p["title"]))
+    write("show/blog/index.html", _stub(f"{BASE}/community/u/mirko-peters/blog/", "Blog"))
 
     # Hosts, Sponsoren, Reviews, Downloads, Links
     hb = "".join(f'<section><h2>{esc(h["name"])}</h2><p class="mut">{esc(h.get("title") or "")}</p>{san(h.get("bio"))}</section>' for h in hosts)
@@ -332,7 +316,7 @@ def build(g):
     shp = json.loads((D / "platforms.json").read_text("utf-8")).get("en", {}) if (D / "platforms.json").exists() else {}
     listen = " · ".join(f'<a href="{esc(shp[k])}" rel="noopener">{n}</a>' for k, n in (("apple_show", "Apple Podcasts"), ("spotify_show", "Spotify"), ("amazon_show", "Amazon Music"), ("deezer_show", "Deezer"), ("iheart_show", "iHeart"), ("youtube_show", "YouTube"), ("youtube_music_show", "YouTube Music"), ("castbox_show", "Castbox"), ("podcastaddict_show", "Podcast Addict"), ("podchaser_show", "Podchaser")) if shp.get(k))
     hub = (f'<h1>{esc(NAME)}</h1><p>{esc(plain(pod.get("description")))[:600]}</p>' + (f'<p><strong>Listen on:</strong> {listen}</p>' if listen else "") + f'<h2>Latest episodes</h2><ul style="list-style:none;padding:0">{"".join(card(e) for e in eps[:20])}</ul>'
-           f'<p><a href="{root}episodes/">All {len(eps)} episodes →</a></p>' + (f'<h2>Latest articles</h2><ul>{"".join(f"<li><a href=\"{bp_url(p)}\">{esc(p[chr(116)+chr(105)+chr(116)+chr(108)+chr(101)])}</a></li>" for p in bposts[:8])}</ul><p><a href="{root}blog/">All {len(bposts)} articles →</a></p>' if bposts else "") + (f"<h2>Topics</h2><ul>{ct}</ul>" if ct else ""))
+           f'<p><a href="{root}episodes/">All {len(eps)} episodes →</a></p>' + (f'<h2>Latest articles</h2><ul>{"".join(f"<li><a href=\"{bp_url(p)}\">{esc(p[chr(116)+chr(105)+chr(116)+chr(108)+chr(101)])}</a></li>" for p in bposts[:8])}</ul><p><a href="{BASE}/community/u/mirko-peters/blog/">All {len(bposts)} articles →</a></p>' if bposts else "") + (f"<h2>Topics</h2><ul>{ct}</ul>" if ct else ""))
     ld = {"@context": "https://schema.org", "@type": "PodcastSeries", "name": NAME, "url": root, "description": plain(pod.get("description"))[:500], "inLanguage": "en", "webFeed": "https://www.spreaker.com/show/6704921/episodes/feed", **({"sameAs": [shp[k] for k in ("apple_show", "spotify_show", "amazon_show", "deezer_show", "iheart_show", "youtube_show", "youtube_music_show", "castbox_show", "podcastaddict_show", "podchaser_show") if shp.get(k)]} if shp else {})}
     pub("", NAME, plain(pod.get("description")) or NAME, hub, ld)
     # Weiterleitungsliste fuer den Umzug (Podpage-Struktur: Folgen und Seiten direkt unter /<slug>/, Gaeste unter /guests/<slug>/, Blog /blog/<slug>/)
@@ -347,8 +331,8 @@ def build(g):
     for e in eps: add(f"/{e['slug']}", f"/show/episodes/{e['slug']}/")
     for sl, _ in plist: add(f"/{sl}", f"/show/{sl}/")
     for x in guests: add(f"/guests/{x['slug']}", f"/show/guests/{x['slug']}/")
-    for old, new in (("/episodes", "/show/episodes/"), ("/guests", "/show/guests/"), ("/hosts", "/show/hosts/"), ("/people", "/show/hosts/"), ("/sponsors", "/show/sponsors/"), ("/reviews", "/show/reviews/"), ("/podroll", "/show/listen/"), ("/videos", "/show/"), ("/blog", "/show/blog/" if bposts else "/show/")): rd.setdefault(old, new)
-    for p in bposts: rd[f"/blog/{p['slug']}"] = f"/show/blog/{p['slug']}/"
+    for old, new in (("/episodes", "/show/episodes/"), ("/guests", "/show/guests/"), ("/hosts", "/show/hosts/"), ("/people", "/show/hosts/"), ("/sponsors", "/show/sponsors/"), ("/reviews", "/show/reviews/"), ("/podroll", "/show/listen/"), ("/videos", "/show/"), ("/blog", "/community/u/mirko-peters/blog/" if bposts else "/show/")): rd.setdefault(old, new)
+    for p in bposts: rd[f"/blog/{p['slug']}"] = f"/community/u/mirko-peters/blog/{p['slug']}/"; rd[f"/show/blog/{p['slug']}"] = f"/community/u/mirko-peters/blog/{p['slug']}/"
     write("show/redirects.json", json.dumps(rd))
     write("show/redirect-conflicts.json", json.dumps(sorted(set(clash))))
     print(f"podpage: {len(eps)} Folgen, {len(guests)} Gaeste, {len(bposts)} Blogposts, {len(plist)} Seiten, {len(rd)} Weiterleitungen, Konflikte mit Plattform-Seiten: {sorted(set(clash))}")
