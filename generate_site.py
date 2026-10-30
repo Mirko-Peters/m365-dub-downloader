@@ -438,7 +438,7 @@ def page(lang, title, desc, canonical, body, alternates=None, jsonld=None, xdefa
 <meta property="og:url" content="{canonical}"><meta property="og:locale" content="{loc}"><meta property="og:site_name" content="M365.FM">
 <meta property="og:image" content="{ogimg}"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta property="og:image:alt" content="{esc(title)}">
 <meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="{esc(title)}"><meta name="twitter:description" content="{esc(desc)}"><meta name="twitter:image" content="{ogimg}">
-{extra_head}{ADS.head(BASE, body, canonical, noindex)}{css_link()}{A11Y_EARLY}
+{extra_head}{ADS.head(BASE, body, canonical, noindex)}{css_link()}<link rel="stylesheet" href="{BASE}/assets/fx.css">{A11Y_EARLY}
 {ld}</head>
 <body>
 {ext_links(body)}
@@ -446,6 +446,7 @@ def page(lang, title, desc, canonical, body, alternates=None, jsonld=None, xdefa
 {a11y_tags(lang)}
 <script defer src="{BASE}/assets/attend.js"></script>
 <script defer src="{BASE}/assets/smooth.js"></script>
+<script defer src="{BASE}/assets/fx.js"></script>
 </body></html>
 """
 
