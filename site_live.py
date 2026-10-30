@@ -54,7 +54,7 @@ def build(g):
     if not streams:
         return
     BASE, write, page, header, footer, footer_en, LANGS, sitemap, TODAY = g["BASE"], g["write"], g["page"], g["header"], g["footer"], g["footer_en"], g["LANGS"], g["sitemap"], g["TODAY"]
-    cid = data.get("channel", "")
+    cid = data.get("channel", ""); handle = data.get("handle") or "@m365show"; yt = f"https://www.youtube.com/{handle}"
     for s in streams:
         s["slug"] = f'{s["id"].lower()}-{slugify(s["title"])}'.strip("-")[:72]
     upcoming = sorted([s for s in streams if s.get("live_status") in ("is_upcoming", "is_live")], key=lambda s: s.get("start") or "")
@@ -67,7 +67,7 @@ def build(g):
         embed = f"https://www.youtube-nocookie.com/embed/live_stream?channel={cid}&autoplay=1&rel=0"
         lead = upcoming[0] if upcoming else (arch[0] if arch else None)
         player = (f'<h2>{esc(t["watchh"])}</h2><div class="lv-hero"><button type="button" id="live-load" class="lv-play" data-src="{esc(embed)}" data-t="{esc(t["h"])}" style="background-image:linear-gradient(#0008,#0008),url({thumb(lead["id"])})" aria-label="{esc(t["load"])}">▶ {esc(t["load"])}</button>'
-                  f'<p><a class="btn main" href="https://www.youtube.com/@m365show/live" rel="noopener">{esc(t["open"])} ↗</a> <a class="btn" href="https://www.youtube.com/@m365show?sub_confirmation=1" rel="noopener">{esc(t["sub"])}</a></p><p class="mut">{esc(t["watchp"])}</p></div>') if lead else ""
+                  f'<p><a class="btn main" href="{yt}/live" rel="noopener">{esc(t["open"])} ↗</a> <a class="btn" href="{yt}?sub_confirmation=1" rel="noopener">{esc(t["sub"])}</a></p><p class="mut">{esc(t["watchp"])}</p></div>') if lead else ""
 
         def when(s):
             st = s.get("start") or s.get("published") or ""
@@ -79,14 +79,15 @@ def build(g):
                     f'<div><a href="{lnk}"><strong>{esc(s["title"])}</strong></a>{f"<span class=live-badge hidden>{esc(t["livenow"])}</span>" if up else ""}<br><span class="mut">{when(s)}</span><br>{esc(short(s.get("description")))}</div></li>')
         up_html = (f'<h2>{esc(t["upc"])}</h2><ul class="lv-list">' + "".join(row(s, True) for s in upcoming) + "</ul>") if upcoming else f'<h2>{esc(t["upc"])}</h2><p class="mut">{esc(t["noupc"])}</p>'
         ar_html = (f'<h2>{esc(t["past"] if pastl else t["recent"])}</h2><ul class="lv-list">' + "".join(row(s) for s in arch[:40]) + "</ul>") if arch else ""
-        soc = " · ".join(f'<a href="{u}" rel="me noopener">{n}</a>' for n, u in SOC)
+        socl = [(n, yt if n == "YouTube" else u) for n, u in SOC]
+        soc = " · ".join(f'<a href="{u}" rel="me noopener">{n}</a>' for n, u in socl)
         body = (f'<p class="kicker">{esc(t["kicker"])}</p><h1>{esc(t["h"])}</h1><p class="lede">{esc(desc)}</p>{player}{up_html}{ar_html}<h2>{esc(t["follow"])}</h2><p>{soc}</p>{CSS}{LIVE_JS}')
         ld = [{"@context": "https://schema.org", "@type": "CreativeWorkSeries", "@id": f"{BASE}/live/#show", "name": "M365 Show", "url": root, "description": desc, "inLanguage": lang,
-               "sameAs": [u for _, u in SOC] + ["https://m365.show/", f"{BASE}/entity/m365show/"], "creator": {"@id": f"{BASE}/entity/mirko-peters/#entity"}}]
+               "sameAs": [u for _, u in socl] + ["https://m365.show/", f"{BASE}/entity/m365show/"], "creator": {"@id": f"{BASE}/entity/mirko-peters/#entity"}}]
         for s in upcoming:
             if s.get("start"):
                 ld.append({"@context": "https://schema.org", "@type": "BroadcastEvent", "name": s["title"], "startDate": s["start"], "isLiveBroadcast": True, "url": f'{root}{s["slug"]}/',
-                           "videoFormat": "HD", "publishedOn": {"@type": "BroadcastService", "name": "YouTube", "url": "https://www.youtube.com/@m365show"}})
+                           "videoFormat": "HD", "publishedOn": {"@type": "BroadcastService", "name": "YouTube", "url": yt}})
         write(f"{'de/' if lang == 'de' else ''}live/index.html", page(lang, f'{t["title"]} | M365.FM', short(desc, 155), root, shell(body), None, ld, og_type="website"))
         sitemap.append((root, TODAY, None))
         for s in streams:

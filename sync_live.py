@@ -12,7 +12,36 @@ ROOT = Path(__file__).parent
 NS = {"a": "http://www.w3.org/2005/Atom", "yt": "http://www.youtube.com/xml/schemas/2015", "m": "http://search.yahoo.com/mrss/"}
 
 
-def channel_id():
+def live_config():
+    f = ROOT / "data" / "live_config.json"
+    return json.loads(f.read_text("utf-8")) if f.exists() else {}
+
+
+def resolve_handle(handle):
+    """YouTube-Handle (@name) -> Kanal-ID (UC...) aus der oeffentlichen Kanalseite."""
+    html = fetch("https://www.youtube.com/" + handle.lstrip("/"))
+    for pat in (r'<link rel="canonical" href="https://www\.youtube\.com/channel/(UC[\w-]{22})"', r'"externalId":"(UC[\w-]{22})"', r'"channelId":"(UC[\w-]{22})"', r'/channel/(UC[\w-]{22})'):
+        m = re.search(pat, html)
+        if m:
+            return m.group(1)
+    return ""
+
+
+def channel_id(old_id=""):
+    """Reihenfolge: eingetragene ID -> Handle aus data/live_config.json -> zuletzt bekannte ID -> Kanal aus config.json (Podcast-Kanal)."""
+    lc = live_config()
+    if lc.get("channel_id"):
+        return lc["channel_id"]
+    if lc.get("handle"):
+        try:
+            cid = resolve_handle(lc["handle"])
+            if cid:
+                return cid
+            print("Handle", lc["handle"], "nicht aufloesbar - nutze letzte bekannte Kanal-ID")
+        except Exception as e:
+            print("Handle", lc["handle"], str(e)[:100])
+    if old_id:
+        return old_id
     cfg = json.loads((ROOT / "config.json").read_text("utf-8"))
     m = re.search(r"/channel/(UC[\w-]{20,})", cfg.get("youtube_channel_url", ""))
     return m.group(1) if m else ""
@@ -71,11 +100,11 @@ def ytdlp_streams(cid):
 
 
 def main():
-    cid = channel_id()
-    if not cid:
-        sys.exit("Kein Kanal in config.json (youtube_channel_url)")
     f = ROOT / "data" / "live.json"
     old = json.loads(f.read_text("utf-8")) if f.exists() else {}
+    cid = channel_id(old.get("channel", ""))
+    if not cid:
+        sys.exit("Kein Kanal: data/live_config.json (handle) oder config.json (youtube_channel_url) eintragen")
     streams = {s["id"]: s for s in old.get("streams", [])}
     try:
         for s in parse_rss(fetch(f"https://www.youtube.com/feeds/videos.xml?channel_id={cid}")):
@@ -90,7 +119,7 @@ def main():
         if s.get("live_status") in ("is_upcoming", "is_live") and yd and s["id"] not in {x["id"] for x in yd}:
             s["live_status"] = "was_live"
     arch = sorted(streams.values(), key=lambda s: s.get("start") or s.get("published") or "", reverse=True)[:300]
-    data = {"channel": cid, "handle": "@m365show", "source": "rss+yt-dlp" if yd else old.get("source", "rss"), "streams": arch}
+    data = {"channel": cid, "handle": live_config().get("handle") or "@m365show", "source": "rss+yt-dlp" if yd else old.get("source", "rss"), "streams": arch}
     txt = json.dumps(data, ensure_ascii=False, indent=1)
     if not f.exists() or json.loads(f.read_text("utf-8")) != data:
         f.write_text(txt, encoding="utf-8"); print("live.json:", len(arch), "Streams,", sum(1 for s in arch if s.get("live_status") == "is_upcoming"), "geplant,", sum(1 for s in arch if s.get("live_status") == "is_live"), "live")
