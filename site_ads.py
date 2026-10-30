@@ -39,13 +39,27 @@ def ads_txt(base):
     return f"google.com, pub-{pub}, DIRECT, f08c47fec0942fa0\n"
 
 
-def head(base):
-    """Meta-Tag und Skript fuer den <head> (leer, solange abgeschaltet)."""
+def eligible(base, body, canonical, noindex=False):
+    """Seite darf Werbung zeigen: indexierbar, keine Community-/Rechts-/Live-Seite, genug Text. Die Startseite zaehlt mit (AdSense prueft dort die Website)."""
+    if not active(base) or noindex:
+        return False
+    c = cfg(); path = canonical.replace(base, "") or "/"
+    if path in ("/", ""):
+        return True
+    if any(s in path for s in c.get("skip_paths", [])):
+        return False
+    return len(re.sub(r"<[^>]+>", "", body)) >= int(c.get("min_chars", 2500))
+
+
+def head(base, body="", canonical="", noindex=False):
+    """Meta-Tag (immer, fuer die AdSense-Pruefung) und Skript (nur auf Seiten, die Werbung zeigen duerfen; wichtig fuer Auto-Anzeigen)."""
     if not active(base):
         return ""
     pub = cfg()["publisher"]
-    return (f'<meta name="google-adsense-account" content="ca-{pub}">'
-            f'<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-{pub}" crossorigin="anonymous"></script>')
+    out = f'<meta name="google-adsense-account" content="ca-{pub}">'
+    if eligible(base, body, canonical, noindex):
+        out += f'<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-{pub}" crossorigin="anonymous"></script>'
+    return out
 
 
 def _block(lang, slot, pub):
@@ -60,9 +74,7 @@ def inject(base, body, lang, canonical, noindex=False):
         return body
     c = cfg()
     path = canonical.replace(base, "") or "/"
-    if path in ("/", "") or any(s in path for s in c.get("skip_paths", [])):
-        return body
-    if len(re.sub(r"<[^>]+>", "", body)) < int(c.get("min_chars", 2500)):
+    if path in ("/", "") or not eligible(base, body, canonical, noindex):
         return body
     pub, slots = c["publisher"], c.get("slots", {})
     if slots.get("mid"):
