@@ -53,6 +53,31 @@
     return w;
   }
   var RIQ = M365L(de, "profile.RIQ", { t: "Empfehlungen für dich", none: "Noch keine Empfehlungen.", ok: "Freigeben", no: "Ablehnen", rm: "Entfernen", pend: "wartet auf Freigabe", live: "veröffentlicht" }, { t: "Recommendations for you", none: "No recommendations yet.", ok: "Approve", no: "Reject", rm: "Remove", pend: "awaiting approval", live: "published" });
+  function suggestUI() {   // "Bist du das?": ähnliche Speaker-Einträge bei Events dem eigenen Profil zuordnen
+    var box = h("section", { class: "ccard", hidden: "" }), dis = {}; try { dis = JSON.parse(localStorage.getItem("m365-nosug") || "{}"); } catch (e) {}
+    api("/api/entity/suggest").then(function (r) {
+      var es = ((r.j || {}).suggestions || []).filter(function (x) { return !dis["e:" + x.eid]; }); if (!es.length) return;
+      box.hidden = false; if (!box.firstChild) box.appendChild(h("h2", { text: de ? "Bist du das?" : "Is this you?" }));
+      es.forEach(function (x) {
+        var row = h("p", {}, [h("a", { href: X.base + (de ? "/de" : "") + "/entity/" + x.eid + "/", target: "_blank", text: x.name }), " · " + (x.type === "org" ? (de ? "Firma – passt zu " : "company – matches ") + x.org : (de ? "Person" : "person")) + " "]);
+        row.appendChild(h("button", { type: "button", class: "btn main", text: de ? "Ja, gehört mir" : "Yes, it is mine", onclick: function () { api("/api/entity/claim", { method: "POST", body: { eid: x.eid } }).then(function (q) { row.textContent = (q.j || {}).ok ? (de ? "Anfrage gesendet – die Redaktion prüft sie." : "Request sent – the editors will review it.") : (de ? "Nicht möglich (bereits vergeben oder Limit erreicht)." : "Not possible (already claimed or limit reached)."); }); } }));
+        row.appendChild(document.createTextNode(" ")); row.appendChild(h("button", { type: "button", class: "btn", text: de ? "Nein" : "No", onclick: function () { dis["e:" + x.eid] = 1; try { localStorage.setItem("m365-nosug", JSON.stringify(dis)); } catch (e) {} row.remove(); } }));
+        box.appendChild(row);
+      });
+    });
+    api("/api/speaker/suggest").then(function (r) {
+      var list = ((r.j || {}).suggestions || []).filter(function (x) { return !dis[x.name]; }); if (!list.length) return;
+      box.hidden = false; if (!box.querySelector("h2")) box.appendChild(h("h2", { text: de ? "Bist du das?" : "Is this you?" }));
+      box.appendChild(h("p", { class: "mut", text: de ? "Wir haben Speaker bei Events gefunden, deren Name zu deinem Profil passt. Wenn du das bist, verknüpfen wir sie mit deinem Profil." : "We found speakers at events whose name matches your profile. If that is you, we link them to your profile." }));
+      list.forEach(function (x) {
+        var row = h("p", {}, [h("b", { text: x.name }), " · " + x.sessions + (de ? " Session(s) bei " : " session(s) at ") + x.events.join(", ") + " "]);
+        row.appendChild(h("button", { type: "button", class: "btn main", text: de ? "Ja, das bin ich" : "Yes, that is me", onclick: function () { api("/api/speaker/claim", { method: "POST", body: { name: x.name } }).then(function (q) { row.textContent = (q.j || {}).ok ? (de ? "Verknüpft. Bestätige die Anfrage unter Events → Speaker-Anfragen." : "Linked. Confirm the request under Events → speaker requests.") : (de ? "Das hat nicht geklappt." : "That did not work."); }); } }));
+        row.appendChild(document.createTextNode(" ")); row.appendChild(h("button", { type: "button", class: "btn", text: de ? "Nein" : "No", onclick: function () { dis[x.name] = 1; try { localStorage.setItem("m365-nosug", JSON.stringify(dis)); } catch (e) {} row.remove(); } }));
+        box.appendChild(row);
+      });
+    });
+    return box;
+  }
   function recInbox() {
     var w = h("section", { class: "ccard" }, [h("h2", { text: RIQ.t })]);
     function load() { api("/api/recommend/inbox").then(function (r) { while (w.children.length > 1) w.removeChild(w.lastChild); var l = (r.j && r.j.items) || []; if (!l.length) w.appendChild(h("p", { class: "cmut", text: RIQ.none }));
@@ -203,7 +228,7 @@
     }, msg); sec.appendChild(h("div", { class: "btns" }, [mainSave]));
     sec.appendChild(msg);
     if (p.public && p.handle) sec.appendChild(h("p", {}, [h("a", { href: X.base + (de ? "/de" : "") + "/community/u/" + p.handle + "/", text: Q.open })]));
-    root.appendChild(sec); if (p.handle) root.appendChild(recInbox());
+    root.appendChild(sec); if (p.handle) { root.insertBefore(suggestUI(), root.firstChild); root.appendChild(recInbox()); }
     // ---- Firmen ----
     var os = h("section", { class: "ccard" }, [h("h2", { text: Q.orgs })]);
     orgs.forEach(function (o) {

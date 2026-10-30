@@ -50,3 +50,23 @@ export async function ensurePastEvents(env) {
     } catch { /* naechster Lauf */ }
   }
 }
+
+// Redaktionell gepflegte Verknuepfungen: Con-Speaker (Name im Programm) <-> Community-Profil mit abweichendem Anzeigenamen
+const SPEAKER_LINKS = [{ name: "Elliot Margot", like: "Elliot M%" }];
+export async function linkSpeakers(env) {
+  const db = env.DB; let n = 0;
+  for (const L of SPEAKER_LINKS) {
+    const c = (await db.prepare("SELECT DISTINCT p.handle FROM profiles p JOIN users u ON u.id=p.user_id WHERE p.public=1 AND p.handle IS NOT NULL AND u.banned=0 AND (u.name LIKE ?1 OR p.handle LIKE lower(replace(?1,' ','-')))").bind(L.like).all()).results || [];
+    if (c.length !== 1) continue;                       // nur eindeutige Treffer verknuepfen
+    const h = c[0].handle;
+    const rows = (await db.prepare("SELECT id,speakers FROM event_sessions WHERE speakers LIKE ?").bind(`%"n":"${L.name}"%`).all()).results || [], ops = [];
+    for (const r of rows) {
+      let sp = []; try { sp = JSON.parse(r.speakers); } catch { continue; }
+      let ch = false;
+      for (const x of sp) if (x.n === L.name && x.h !== h) { if (x.t) ops.push(db.prepare("DELETE FROM speaker_invites WHERE token=?").bind(x.t)); delete x.t; delete x.o; x.h = h; x.s = "confirmed"; ch = true; n++; }
+      if (ch) ops.push(db.prepare("UPDATE event_sessions SET speakers=? WHERE id=?").bind(JSON.stringify(sp), r.id));
+    }
+    if (ops.length) await db.batch(ops);
+  }
+  return n;
+}

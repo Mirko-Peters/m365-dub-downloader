@@ -579,14 +579,14 @@ def header(lang, switch):
     ui = UI.get(lang)
     if lang in LANGS:
         home = f"{BASE}/{lang}/"
-        menu = [("M365Con", "https://m365con.net"), ("m365.fm", "https://www.m365.fm")]
+        menu = []
         menu.insert(0, (LRN.T(lang)["learn"], f"{BASE}/{lang}/learn/"))
         menu.insert(0, (_CI.get(lang, _CI.get("en", {})).get("profile", "Profile"), f"{BASE}/{lang}/community/"))
         _cl = {"de": ("Community", "Podcast", "Blog", "Videos", "Bibliothek", "Gäste")}.get(lang, ("Community", "Podcast", "Blog", "Videos", "Library", "Guests"))
         menu.insert(0, (_CI.get(lang, _CI.get("en", {})).get("community", _cl[0]), [(ui[3], home)] + [(_cl[i + 1], f"{BASE}/{lang}/community/{p}/") for i, p in enumerate(("podcast", "blog", "video", "library", "guests"))]))
     else:
         home = f"{BASE}/"
-        menu = [("Languages", f"{BASE}/#languages"), ("Community", [("Podcast", f"{BASE}/community/podcast/"), ("Blog", f"{BASE}/community/blog/"), ("Videos", f"{BASE}/community/video/"), ("Library", f"{BASE}/community/library/"), ("Guests", f"{BASE}/community/guests/")]), ("Profile", f"{BASE}/community/"), ("M365Con", "https://m365con.net"), ("m365.fm", "https://www.m365.fm")]
+        menu = [("Languages", f"{BASE}/#languages"), ("Community", [("Podcast", f"{BASE}/community/podcast/"), ("Blog", f"{BASE}/community/blog/"), ("Videos", f"{BASE}/community/video/"), ("Library", f"{BASE}/community/library/"), ("Guests", f"{BASE}/community/guests/")]), ("Profile", f"{BASE}/community/")]
     if not switch:
         items = [(x, LANGS[x][0], f"{BASE}/{x}/", LANGS[x][1]) for x in LANGS if (ROOT / "episodes").exists()]
         switch = lang_dropdown(lang if lang in LANGS else "en", items, "")
