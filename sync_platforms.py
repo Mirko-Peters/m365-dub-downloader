@@ -128,7 +128,7 @@ def podpage_candidates(lang, ids, ctx):
     eps = json.load(gzip.open(f, "rt", encoding="utf-8"))
     res = {"apple": [], "spotify": [], "youtube_music": []}
     for e in eps:
-        d = (e.get("create_time") or "")[:10]
+        d = ""   # create_time der Podpage-Sicherung ist der Importzeitpunkt, nicht das Veroeffentlichungsdatum: nur der Titel zaehlt
         for plat, field in (("apple", "episode_apple_url_path"), ("spotify", "episode_spotify_url_path"), ("youtube_music", "episode_youtube_music_url_path")):
             u = e.get(field)
             if u and u not in ("None", "False"):
@@ -171,10 +171,12 @@ def main():
         rep = report.setdefault(lang, {})
         cands = {}
         for name, fn in CONNECTORS.items():
+            t0 = time.time()
             try:
                 cands[name] = fn(lang, ids, ctx)
             except Exception as e:
                 print(name, lang, str(e)[:120])
+            print(f"{lang} {name}: {time.time() - t0:.0f} s, {len(cands.get(name, []))} Kandidaten")
         for name, lst in (podpage_candidates(lang, ids, ctx) or {}).items():
             cands.setdefault(name, []).extend(lst)
         for name, lst in cands.items():
