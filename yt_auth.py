@@ -7,7 +7,7 @@ import requests
 from cryptography.fernet import Fernet
 
 FILE = Path(__file__).parent / "data" / "yt_auth.enc"
-REDIRECT = "https://dub.m365.fm/callback"
+REDIRECT = "https://www.m365.fm/callback"
 
 
 def fail(m):

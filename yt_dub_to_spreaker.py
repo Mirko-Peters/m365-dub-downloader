@@ -1085,9 +1085,9 @@ def cmd_login(cfg, state, args) -> None:
     redirect = cfg.get("spreaker_redirect_uri") or "http://localhost/callback"
     if ":8765" in redirect:
         redirect = "http://localhost/callback"
-    ans = input(f"Callback-URL der App [{redirect}] (Enter = so lassen, 'd' = https://dub.m365.fm/callback): ").strip().lower()
+    ans = input(f"Callback-URL der App [{redirect}] (Enter = so lassen, 'd' = https://www.m365.fm/callback): ").strip().lower()
     if ans == "d":
-        redirect = "https://dub.m365.fm/callback"
+        redirect = "https://www.m365.fm/callback"
     if not cid or not sec:
         print("Client Id und Secret werden gebraucht."); return
     st = secrets.token_hex(8)
@@ -1095,7 +1095,7 @@ def cmd_login(cfg, state, args) -> None:
 
     if redirect.startswith("https://"):  # Callback-Seite auf dub.m365.fm zeigt den Code, hier einfuegen
         url = OAUTH_AUTHORIZE + "?" + urlencode({"client_id": cid, "response_type": "code", "state": st, "scope": "basic", "redirect_uri": redirect})
-        print("\nIm Browser oeffnet sich Spreaker. Bitte 'Erlauben' klicken. Danach zeigt dub.m365.fm/callback einen Code an.\n")
+        print("\nIm Browser oeffnet sich Spreaker. Bitte 'Erlauben' klicken. Danach zeigt www.m365.fm/callback einen Code an.\n")
         webbrowser.open(url)
         raw = input("Code hier einfuegen (oder die ganze Adresse): ").strip()
         m = re.search(r"code=([^&\s]+)", raw)
