@@ -13,6 +13,7 @@ import site_events as EVT
 import site_mcp as MCPS
 import site_seo as SEOR
 import site_notes as SNT
+import site_media as MED
 import glob, html, json, os, re, shutil, sys, unicodedata
 from datetime import date
 from pathlib import Path
@@ -1241,9 +1242,10 @@ def build():
             {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [
                 {"@type": "ListItem", "position": 1, "name": "M365.FM", "item": f"{BASE}/"}, {"@type": "ListItem", "position": 2, "name": LANGS[l][0], "item": f"{BASE}/{l}/"},
                 {"@type": "ListItem", "position": 3, "name": label, "item": canonical}]}]
+        hero = MED.hero_svg({"id": "cat-" + re.sub(r"\W+", "-", label.lower()), "name": label, "type": "category"}, kind, label)
         body = f"""{header(l, lang_switch(l, alts or {}, active))}
 <main class="wrap"><div class="crumbs"><a href="{BASE}/{l}/">{esc(ui[7])}</a> / {esc(LANGS[l][0])}</div>
-<div class="kicker">{esc(kind)} · {esc(LANGS[l][0])}</div><h1>{esc(label)}</h1>
+<div class="kicker">{esc(kind)} · {esc(LANGS[l][0])}</div><h1>{esc(label)}</h1>{hero}
 <p class="mut">{len(lst)} × {esc(ui[3])}</p>
 <h2>{esc(ui[3])}</h2><div class="list">{rows_html(lst)}</div>
 <h2>{esc(TOPICS.get(l, "Topics"))}</h2><div class="chips">{others}</div>
