@@ -150,12 +150,12 @@ jobs:
             git pull --rebase -q && git push -q
           fi
       - run: python generate_site.py
-      - name: Money-Keyword-Liste sichern
+      - name: Money-Keywords und Profil-Export sichern
         continue-on-error: true
         run: |
-          if [ -n "$(git status --porcelain data/money_keywords.json)" ]; then
+          if [ -n "$(git status --porcelain data/money_keywords.json data/members_export.json)" ]; then
             git config user.name "m365-site-bot"; git config user.email "actions@users.noreply.github.com"
-            git add data/money_keywords.json && git commit -m "Money-Keywords aktualisiert"
+            git add data/money_keywords.json data/members_export.json && git commit -m "Money-Keywords und Profil-Export aktualisiert"
             git pull --rebase -q && git push -q || true
           fi
       - name: Interne Links prüfen
