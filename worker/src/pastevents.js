@@ -70,3 +70,36 @@ export async function linkSpeakers(env) {
   }
   return n;
 }
+
+// Speaker der Event-Sessions mit den zusammengefuehrten Speaker-Entitaeten verknuepfen (/speakers.json aus tools/build_speakers.py):
+// - jeder Speaker-Eintrag bekommt die Entitaets-ID (e) seiner Person, auch bei abweichender Schreibweise (Koellner/Köllner, Chris/Christopher ...)
+// - redaktionell hinterlegte Profile (handle in data/speaker_manual.json, z. B. mirko-peters) werden als bestaetigt verknuepft
+// - sonst: nur ein eindeutiger, exakt gleicher Profilname (ohne Titel/Akzente) -> Zuordnung als Einladung, die das Mitglied selbst bestaetigt
+const nrmName = (s) => String(s || "").toLowerCase().normalize("NFKD").replace(/[̀-ͯ]/g, "").replace(/\b(dr|prof|mvp|mct|ing|dipl|mba|msc|bsc|phd|mag)\b\.?/g, " ").replace(/[^a-z0-9 ]+/g, " ").trim().split(/\s+/).filter(Boolean).join(" ");
+export async function linkSpeakerEntities(env) {
+  const db = env.DB; let list;
+  try { const r = await fetch(`${env.SITE}/speakers.json`, { cf: { cacheTtl: 300 } }); if (!r.ok) return 0; list = (await r.json()).speakers || []; } catch { return 0; }
+  if (!list.length) return 0;
+  const by = new Map(); for (const s of list) for (const n of [s.name, ...(s.aliases || [])]) by.set(nrmName(n), s);
+  const profs = (await db.prepare("SELECT p.handle,u.name FROM profiles p JOIN users u ON u.id=p.user_id AND u.banned=0 WHERE p.public=1 AND p.handle IS NOT NULL").all()).results || [];
+  const handles = new Set(profs.map((p) => p.handle)), pm = new Map();
+  for (const p of profs) { const k = nrmName(p.name); pm.set(k, pm.has(k) ? null : p.handle); }   // null = mehrere Profile mit demselben Namen: nicht raten
+  const rows = (await db.prepare("SELECT id,speakers FROM event_sessions WHERE speakers LIKE '%\"n\":%'").all()).results || [], ops = []; let n = 0;
+  for (const r of rows) {
+    let sp; try { sp = JSON.parse(r.speakers); } catch { continue; }
+    let ch = false;
+    for (const x of sp) {
+      const s = by.get(nrmName(x.n)); if (!s) continue;
+      if (x.e !== s.id) { x.e = s.id; ch = true; }
+      if (s.handle && handles.has(s.handle) && x.h !== s.handle) {      // redaktionell: bestaetigt
+        if (x.t) ops.push(db.prepare("DELETE FROM speaker_invites WHERE token=?").bind(x.t));
+        delete x.t; delete x.o; x.h = s.handle; x.s = "confirmed"; ch = true;
+      } else if (!x.h && !s.handle) {
+        const h = pm.get(nrmName(s.name)); if (h) { if (x.t) ops.push(db.prepare("DELETE FROM speaker_invites WHERE token=?").bind(x.t)); delete x.t; delete x.o; x.h = h; x.s = "invited"; ch = true; }
+      }
+    }
+    if (ch) { ops.push(db.prepare("UPDATE event_sessions SET speakers=? WHERE id=?").bind(JSON.stringify(sp), r.id)); n++; }
+  }
+  for (let i = 0; i < ops.length; i += 40) await db.batch(ops.slice(i, i + 40));
+  return n;
+}

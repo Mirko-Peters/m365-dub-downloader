@@ -9,7 +9,7 @@ import { handleVotes } from "./votes.js";
 import { handleQa, deleteUserQa } from "./qa.js";
 import { handleBlog, deleteUserBlog } from "./blog.js";
 import { handleUpdates, pollUpdates } from "./updates.js";
-import { ensurePastEvents, linkSpeakers } from "./pastevents.js";
+import { ensurePastEvents, linkSpeakers, linkSpeakerEntities } from "./pastevents.js";
 import { handleLibrary, deleteUserLibrary } from "./library.js";
 import { handleOrgOffers } from "./orgoffers.js";
 import { handleWish, seedRoadmap } from "./wish.js";
@@ -370,5 +370,5 @@ export default {
       return json({ error: "server" }, 500, env, request);
     }
   },
-  async scheduled(event, env, ctx) { if (event.cron === "0 6 * * *") ctx.waitUntil(runDigest(env)); ctx.waitUntil(refreshFeeds(env).catch(() => 0)); ctx.waitUntil(pollUpdates(env).catch(() => 0)); ctx.waitUntil(refreshFollowers(env).catch(() => 0)); ctx.waitUntil(ensurePastEvents(env).then(() => linkSpeakers(env)).catch(() => 0)); ctx.waitUntil(ensureM365Con(env).then(() => linkSpeakers(env)).catch(() => 0)); ctx.waitUntil(seedRoadmap(env).catch(() => 0)); ctx.waitUntil(purgeMessages(env.DB).catch(() => 0)); ctx.waitUntil(autoTranslate(env).catch(() => 0)); ctx.waitUntil(pollPodcast(env).catch(() => 0)); ctx.waitUntil(pollVideos(env).catch(() => 0)); ctx.waitUntil(syncShows(env).catch(() => 0)); ctx.waitUntil(flushOutbox(env).catch(() => 0)); ctx.waitUntil(remindInvites(env).catch(() => 0)); },
+  async scheduled(event, env, ctx) { if (event.cron === "0 6 * * *") ctx.waitUntil(runDigest(env)); ctx.waitUntil(refreshFeeds(env).catch(() => 0)); ctx.waitUntil(pollUpdates(env).catch(() => 0)); ctx.waitUntil(refreshFollowers(env).catch(() => 0)); ctx.waitUntil(ensurePastEvents(env).then(() => linkSpeakers(env)).then(() => linkSpeakerEntities(env)).catch(() => 0)); ctx.waitUntil(ensureM365Con(env).then(() => linkSpeakers(env)).then(() => linkSpeakerEntities(env)).catch(() => 0)); ctx.waitUntil(seedRoadmap(env).catch(() => 0)); ctx.waitUntil(purgeMessages(env.DB).catch(() => 0)); ctx.waitUntil(autoTranslate(env).catch(() => 0)); ctx.waitUntil(pollPodcast(env).catch(() => 0)); ctx.waitUntil(pollVideos(env).catch(() => 0)); ctx.waitUntil(syncShows(env).catch(() => 0)); ctx.waitUntil(flushOutbox(env).catch(() => 0)); ctx.waitUntil(remindInvites(env).catch(() => 0)); },
 };

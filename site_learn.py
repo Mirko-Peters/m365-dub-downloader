@@ -398,6 +398,10 @@ def load_entities(api):
     if gf.exists():
         for e in json.loads(gf.read_text("utf-8")):
             base.setdefault(e["id"], e)
+    sf = Path(__file__).parent / "data" / "speaker_entities.json"   # Speaker der M365Con-Programme (tools/build_speakers.py)
+    if sf.exists():
+        for e in json.loads(sf.read_text("utf-8")):
+            base.setdefault(e["id"], e)
     over = (_fetch_json(f"{api}/api/entity/export") or {}).get("items", [])
     for it in over:
         d = it.get("data") or {}
