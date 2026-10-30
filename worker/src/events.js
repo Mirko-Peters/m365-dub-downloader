@@ -215,6 +215,21 @@ Mirko Peters is a Microsoft MVP, podcaster, author and conference organizer focu
   }
 }
 
+
+// Aehnlichkeit Vorname + Nachname (auch Initiale, kleine Tippfehler)
+const norm = (t) => String(t || "").toLowerCase().normalize("NFKD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9 ]+/g, " ").trim().split(/\s+/).filter(Boolean);
+function lev(a, b) { const d = Array.from({ length: a.length + 1 }, (_, i) => [i]); for (let j = 1; j <= b.length; j++) d[0][j] = j; for (let i = 1; i <= a.length; i++) for (let j = 1; j <= b.length; j++) d[i][j] = Math.min(d[i - 1][j] + 1, d[i][j - 1] + 1, d[i - 1][j - 1] + (a[i - 1] === b[j - 1] ? 0 : 1)); return d[a.length][b.length]; }
+export function similarName(a, b) {
+  const x = norm(a), y = norm(b); if (x.length < 2 || y.length < 2) return false;
+  const fx = x[0], fy = y[0], lx = x[x.length - 1], ly = y[y.length - 1];
+  if (lev(fx, fy) > (Math.min(fx.length, fy.length) >= 5 ? 1 : 0)) return false;
+  return lx === ly || (lx.length === 1 && ly[0] === lx) || (ly.length === 1 && lx[0] === ly) || (Math.min(lx.length, ly.length) >= 5 && lev(lx, ly) <= 1);
+}
+async function speakerMatches(db, me) {
+  const rows = (await db.prepare("SELECT s.speakers,e.title ev FROM event_sessions s JOIN events e ON e.id=s.event_id WHERE s.speakers LIKE '%\"n\":%' AND e.public=1 LIMIT 3000").all()).results || [], by = new Map();
+  for (const r of rows) { let sp = []; try { sp = JSON.parse(r.speakers); } catch { continue; } for (const x of sp) if (x.n && !x.h && similarName(me.name, x.n)) { const o = by.get(x.n) || { name: x.n, sessions: 0, events: new Set() }; o.sessions++; o.events.add(r.ev); by.set(x.n, o); } }
+  return [...by.values()].map((o) => ({ name: o.name, sessions: o.sessions, events: [...o.events].slice(0, 4) }));
+}
 export async function handleEvents(env, request, url, path, user, J) {
   const db = env.DB, method = request.method; let m;
   const need = () => (user ? null : J({ error: "login" }, 401));
@@ -433,6 +448,26 @@ export async function handleEvents(env, request, url, path, user, J) {
     const esc = (x) => String(x).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c])), url = `${env.SITE}/community/?invite=${i.token}#c-events`;
     const r = await sendMail(env, email, `Speaker invitation: ${i.title}`, `<p>Hello ${esc(i.name)},</p><p>${esc(user.name)} invites you to speak at <b>${esc(i.title)}</b> (${esc(i.start)}) with the session <b>${esc(i.st)}</b>.</p><p><a href="${url}">Confirm your participation</a> (sign-in required, free).</p><p>M365.FM</p>`);
     return r.ok ? J({ ok: true }) : J({ error: "send_failed" }, 502);
+  }
+  if (path === "/api/speaker/suggest" && method === "GET") {   // "Bist du das?": ungebundene Speaker mit aehnlichem Namen wie das eigene Profil
+    if (need()) return need();
+    const me = await db.prepare("SELECT p.handle,u.name FROM profiles p JOIN users u ON u.id=p.user_id WHERE p.user_id=? AND p.public=1 AND p.handle IS NOT NULL").bind(user.id).first();
+    if (!me) return J({ suggestions: [] });
+    return J({ suggestions: await speakerMatches(db, me) });
+  }
+  if (path === "/api/speaker/claim" && method === "POST") {   // Nutzer bestaetigt: "das bin ich" -> Eintrag wird mit dem Profil verknuepft (Speaker-Anfrage, bestaetigt der Nutzer selbst)
+    if (need()) return need();
+    const b = await body(), me = await db.prepare("SELECT p.handle,u.name FROM profiles p JOIN users u ON u.id=p.user_id WHERE p.user_id=? AND p.public=1 AND p.handle IS NOT NULL").bind(user.id).first();
+    if (!me) return J({ error: "need_profile" }, 400);
+    const ok = (await speakerMatches(db, me)).find((x) => x.name === String(b.name || "")); if (!ok) return J({ error: "not_found" }, 404);
+    let n = 0, ops = [];
+    for (const r of (await db.prepare("SELECT id,speakers FROM event_sessions WHERE speakers LIKE ?").bind(`%"n":${JSON.stringify(ok.name).slice(0, -1)}"%`).all()).results || []) {
+      let sp = []; try { sp = JSON.parse(r.speakers); } catch { continue; } let ch = false;
+      for (const x of sp) if (x.n === ok.name && !x.h) { if (x.t) ops.push(db.prepare("DELETE FROM speaker_invites WHERE token=?").bind(x.t)); delete x.t; delete x.o; x.h = me.handle; x.s = "invited"; ch = true; n++; }
+      if (ch) ops.push(db.prepare("UPDATE event_sessions SET speakers=? WHERE id=?").bind(JSON.stringify(sp), r.id));
+    }
+    if (ops.length) await db.batch(ops);
+    return J({ ok: true, linked: n });
   }
   if ((m = path.match(/^\/api\/speaker\/invite\/([a-f0-9]{36})$/)) && method === "GET") {
     const i = await db.prepare("SELECT i.name,i.eid,s.title,e.title ev,e.handle FROM speaker_invites i JOIN event_sessions s ON s.id=i.session_id JOIN events e ON e.id=i.event_id WHERE i.token=?").bind(m[1]).first();
