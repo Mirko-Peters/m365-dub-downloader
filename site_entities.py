@@ -272,7 +272,12 @@ def build(g, wiki_links, experts_by_ent, ep_find):
                 evl += (f'<h2>{T(lang, "Speaker at", "Speaker bei")}</h2><p>' + ", ".join(f'<a href="{_p3}/events/{h}/">{esc(t)}</a>' for h, t in _evt.items()) + "</p>"
                         + f'<h2>{T(lang, "Sessions", "Sessions")} ({len(_spk["sessions"])})</h2><ul>' + "".join(
                             f'<li><a href="{_p3}/events/{s_["event"]}/">{esc(s_["title"])}</a> <span class="mut">· {esc(_evt.get(s_["event"], ""))} · {esc(s_["start"][:10])}</span></li>' for s_ in _spk["sessions"]) + "</ul>")
-            _hit = [(_ev, _se) for _ev in EVENTS.values() for _se in _ev.get("sessions", []) if e["id"] in (_se.get("topics") or [])]
+            _evu = {_ev["handle"]: _ev for _ev in EVENTS.values()}.values()   # EVENTS enthaelt ein Event unter mehreren Schluesseln (Handle und Themen): je Event nur einmal
+            _hit, _seen = [], set()
+            for _ev in _evu:
+                for _se in _ev.get("sessions", []):
+                    if e["id"] in (_se.get("topics") or []) and (_ev["handle"], _se.get("id", _se.get("title"))) not in _seen:
+                        _seen.add((_ev["handle"], _se.get("id", _se.get("title")))); _hit.append((_ev, _se))
             if _hit and e["id"] not in EVENTS:   # Sessions zu diesem Thema (Gegenrichtung zu den Themen an der Session)
                 _p2 = f'{BASE}{pfx(lang)}/community'
                 _spl = lambda x: f'<a href="{_p2}/u/{x["h"]}/">{esc(x["n"])}</a>' if x.get("h") else esc(x["n"])
