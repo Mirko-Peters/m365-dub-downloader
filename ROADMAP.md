@@ -188,3 +188,5 @@ Podpage kostet 65 $/Monat (ca. 780 $/Jahr). Ziel: m365.fm komplett auf dub.m365.
 - Seiten: `/community/podcast/<id-slug>/` (PodcastEpisode, Spreaker-Player, Kommentare `vid=podcast<id>`, Themen bis 10), `/community/podcast/` und `feed.xml`; indexierbar (Redaktion hat geprüft). Reiter „Podcast“ in der Community inkl. Admin-Bereich. MCP: `list_podcast_pitches`, `vote_podcast_pitch`, `list_my_podcast_episodes`.
 - Blog und Podcast: bis zu **10 Themen (Entitäten)** je Beitrag/Folge.
 - Offen/ungetestet live: Spreaker-API-Details (Entwurf + Audio nachladen; Token-Rechte), Stick-Man-Video nach Veröffentlichung, Follow für Podcast-Autoren (nutzt vorerst das Blog-Follow), E-Mail-Benachrichtigungen (Mailsystem später).
+
+- Präzisierung (30.10.): Bei 25 Stimmen bekommt Mirko die Benachrichtigung „Stick-Man-Video erstellen und in Spreaker freigeben“ (Web-Push, im Reiter Podcast als 🎬-Aufgabe, MCP-Tool `list_podcast_todo`); E-Mail dazu mit dem Mailsystem. Veröffentlichen macht Mirko selbst in Spreaker.

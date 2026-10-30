@@ -22,7 +22,7 @@ async function notifyAdmins(env, ep) {
   const ids = users.filter((u) => adm.includes(`${u.provider}:${u.sub}`) || u.role === "editor").map((u) => u.id);
   if (!ids.length || !env.VAPID_PRIVATE_JWK) return;
   const subs = (await db.prepare(`SELECT endpoint,p256dh,auth FROM push_subs WHERE user_id IN (${ids.map(() => "?").join(",")})`).bind(...ids).all()).results || [];
-  for (const s of subs) { try { const r = await sendPush(env, s, { title: "Podcast-Pitch bereit zur Prüfung", body: ep.title, url: `${env.SITE}/community/` }); if (r.gone) await db.prepare("DELETE FROM push_subs WHERE endpoint=?").bind(s.endpoint).run(); } catch {} }
+  for (const s of subs) { try { const r = await sendPush(env, s, { title: "Podcast: 25 Stimmen erreicht", body: "Stick-Man-Video erstellen und in Spreaker freigeben: " + ep.title, url: `${env.SITE}/community/` }); if (r.gone) await db.prepare("DELETE FROM push_subs WHERE endpoint=?").bind(s.endpoint).run(); } catch {} }
 }
 
 async function dropDraft(env, ep) { if (ep.spreaker_id && env.SPREAKER_TOKEN) await sp(env, `/episodes/${ep.spreaker_id}`, { method: "DELETE" }).catch(() => 0); }
