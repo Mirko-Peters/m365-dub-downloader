@@ -5,9 +5,14 @@ function t(t,e,i){return Math.max(t,Math.min(e,i))}var e=class{isRunning=!1;valu
     var H = document.documentElement;
     if (!globalThis.Lenis || H.classList.contains("a11y-nomo") || (window.matchMedia && (matchMedia("(prefers-reduced-motion: reduce)").matches || matchMedia("(pointer: coarse)").matches))) return;
     var st = document.createElement("style"); st.textContent = "html.lenis,html.lenis body{height:auto}.lenis:not(.lenis-autoToggle).lenis-stopped{overflow:clip}.lenis.lenis-smooth [data-lenis-prevent]{overscroll-behavior:contain}.lenis.lenis-smooth iframe{pointer-events:none}.lenis.lenis-autoToggle{transition-property:overflow;transition-duration:1ms;transition-behavior:allow-discrete}"; document.head.appendChild(st);
-    var l = new Lenis({ lerp: 0.1, wheelMultiplier: 1, smoothWheel: true, anchors: true, allowNestedScroll: true });
-    (function raf(t) { l.raf(t); requestAnimationFrame(raf); })(performance.now());
+    var l = new Lenis({ lerp: 0.1, wheelMultiplier: 1, smoothWheel: true, anchors: true, allowNestedScroll: true, autoRaf: false }), viaGsap = false;
+    (function raf(t) { if (viaGsap) return; l.raf(t); requestAnimationFrame(raf); })(performance.now());
     window.m365Lenis = l;
+    /* Lenis + GSAP parallel (Lenis-Doku): ScrollTrigger bei jedem Lenis-Scroll aktualisieren, Lenis vom GSAP-Ticker antreiben, Lag-Glaettung aus. */
+    window.m365LenisGsap = function (gsap, ST) {
+      viaGsap = true; l.on("scroll", ST.update);
+      gsap.ticker.add(function (time) { l.raf(time * 1000); }); gsap.ticker.lagSmoothing(0);
+    };
     new MutationObserver(function () { if (H.classList.contains("a11y-nomo")) { l.destroy(); } }).observe(H, { attributes: true, attributeFilter: ["class"] });
   } catch (e) {}
 })();

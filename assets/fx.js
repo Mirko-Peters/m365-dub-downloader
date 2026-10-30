@@ -1,6 +1,6 @@
 /* Effekte im Technik-Look, ohne Bibliothek und ohne externe Anfragen:
    1) lebendiger Wissensgraph im Hintergrund (Knoten = Themen, Linien = Beziehungen, reagiert auf den Mauszeiger)
-   2) Lesefortschritt oben, 3) Einblenden beim Scrollen, 4) Spotlight auf Karten, 5) Zaehler, 6) Lichtstreif auf der Hauptueberschrift.
+   2) Lesefortschritt oben, 3) Einblenden beim Scrollen (jetzt in story.js), 4) Spotlight auf Karten, 5) Zaehler, 6) Lichtstreif auf der Hauptueberschrift.
    Aus bei reduzierter Bewegung, im Barrierefreiheits-Menue "Bewegung reduzieren" und (Hintergrund) auf Touch-Geraeten und schwachen Geraeten. */
 (function () {
   try {
@@ -14,13 +14,7 @@
     function prog() { var m = H.scrollHeight - innerHeight; bar.style.transform = "scaleX(" + (m > 0 ? Math.min(1, scrollY / m) : 0) + ")"; }
     addEventListener("scroll", prog, { passive: true }); prog();
 
-    // --- 3) Einblenden beim Scrollen
-    var sel = "main h2, main h3, .hub-card, .sb-card, .tile, .card, .thumbs a, article > p:first-of-type";
-    var els = [].slice.call(document.querySelectorAll(sel)).filter(function (e) { return e.getBoundingClientRect().top > innerHeight * 0.9; });
-    if ("IntersectionObserver" in window && els.length) {
-      var io = new IntersectionObserver(function (es) { es.forEach(function (x) { if (x.isIntersecting) { x.target.classList.add("fx-in"); io.unobserve(x.target); } }); }, { rootMargin: "0px 0px -8% 0px", threshold: 0.05 });
-      els.forEach(function (e, i) { e.classList.add("fx-r"); e.style.setProperty("--fx-d", (i % 4) * 0.06 + "s"); io.observe(e); });
-    }
+    // --- 3) Einblenden: uebernimmt story.js (GSAP)
 
     // --- 4) Spotlight
     [].forEach.call(document.querySelectorAll(".hub-card, .sb-card, .tile, .card"), function (c) {
