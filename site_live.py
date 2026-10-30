@@ -61,7 +61,7 @@ def build(g):
     pastl = [s for s in streams if s.get("live_status") in ("was_live", "post_live")]
     arch = pastl or [s for s in streams if s not in upcoming]
     ent = ENTS.get("m365show") or {}
-    for lang in ("en", "de"):
+    for lang in ("en",):   # die Live-Show gibt es nur auf Englisch; /de/live/ leitet auf den deutschen Podcast um
         t = T[lang]; root = f"{BASE}{'/de' if lang == 'de' else ''}/live/"; shell = lambda b: f'{header(lang, "")}<main class="wrap" style="max-width:56em">{b}</main>{footer(lang) if lang in LANGS else footer_en()}'
         desc = (ent.get("desc") or {}).get(lang) or t["lede"]
         embed = f"https://www.youtube-nocookie.com/embed/live_stream?channel={cid}&autoplay=1&rel=0"
@@ -105,3 +105,4 @@ def build(g):
                   f'{("<h2>" + esc(t["desc"]) + "</h2>" + paras) if paras else ""}<p><a class="btn" href="https://www.youtube.com/watch?v={s["id"]}" rel="noopener">{esc(t["open"])} ↗</a></p></article>')
             write(f"{'de/' if lang == 'de' else ''}live/{s['slug']}/index.html", page(lang, f'{s["title"]} – M365 Show | M365.FM', short(d, 155) or s["title"], u, shell(sb), None, [vid], og_type="video.other"))
             sitemap.append((u, (s.get("published") or TODAY)[:10], None))
+    write("de/live/index.html", f'<!doctype html><html lang="de"><head><meta charset="utf-8"><meta name="robots" content="noindex"><meta http-equiv="refresh" content="0;url={BASE}/de/podcast/"><link rel="canonical" href="{BASE}/de/podcast/"><title>Podcast auf Deutsch</title></head><body><p><a href="{BASE}/de/podcast/">Weiter zum deutschen Podcast</a></p></body></html>')

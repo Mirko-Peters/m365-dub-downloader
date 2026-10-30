@@ -618,14 +618,13 @@ def header(lang, switch):
         home = f"{BASE}/{lang}/"
         menu = []
         menu.insert(0, (LRN.T(lang)["learn"], f"{BASE}/{lang}/learn/"))
-        if (ROOT / "data" / "live.json").exists():
-            menu.append(("M365 Show Live", f"{BASE}/{lang}/live/" if lang == "de" else f"{BASE}/live/"))
+        menu.append(("Podcast", f"{BASE}/{lang}/podcast/"))   # der gedubbte Podcast der Sprache (Spreaker-Show); die Live-Show gibt es nur auf Englisch
         menu.insert(0, (_CI.get(lang, _CI.get("en", {})).get("profile", "Profile"), f"{BASE}/{lang}/community/"))
         _cl = {"de": ("Community", "Podcast", "Blog", "Videos", "Bibliothek", "Gäste")}.get(lang, ("Community", "Podcast", "Blog", "Videos", "Library", "Guests"))
         menu.insert(0, (_CI.get(lang, _CI.get("en", {})).get("community", _cl[0]), [(ui[3], home)] + [(_cl[i + 1], f"{BASE}/{lang}/community/{p}/") for i, p in enumerate(("podcast", "blog", "video", "library", "guests"))]))
     else:
         home = f"{BASE}/"
-        menu = [("Languages", f"{BASE}/#languages"), ("Community", [("Podcast", f"{BASE}/community/podcast/"), ("Blog", f"{BASE}/community/blog/"), ("Videos", f"{BASE}/community/video/"), ("Library", f"{BASE}/community/library/"), ("Guests", f"{BASE}/community/guests/")]), ("Show", f"{BASE}/show/"), ("Profile", f"{BASE}/community/")]
+        menu = [("Languages", f"{BASE}/#languages"), ("Community", [("Podcast", f"{BASE}/community/podcast/"), ("Blog", f"{BASE}/community/blog/"), ("Videos", f"{BASE}/community/video/"), ("Library", f"{BASE}/community/library/"), ("Guests", f"{BASE}/community/guests/")]), ("Show", f"{BASE}/show/")] + ([("M365 Show Live", f"{BASE}/live/")] if (ROOT / "data" / "live.json").exists() else []) + [("Profile", f"{BASE}/community/")]
     if not switch:
         items = [(x, LANGS[x][0], f"{BASE}/{x}/", LANGS[x][1]) for x in LANGS if (ROOT / "episodes").exists()]
         switch = lang_dropdown(lang if lang in LANGS else "en", items, "")
@@ -1292,6 +1291,10 @@ def build():
 
     ncat = ntag = 0
     for l in active:
+        _pl = {"de": "Podcast auf Deutsch (KI-gedubbt)", "en": "Podcast"}.get(l, f"Podcast · {LANGS[l][0]}")
+        _pu = f"{BASE}/{l}/podcast/"; _palts = {x: f"{BASE}/{x}/podcast/" for x in active}
+        write(f"{l}/podcast/index.html", list_page(l, "Podcast", f"M365.FM {_pl}", by_lang[l], _pu, _palts, False))   # alle Folgen der Sprache (Spreaker-Show), ersetzt die Live-Seite im Menue der Sprachseiten
+        sitemap.append((_pu, TODAY, _palts))
         for c in ORDER:
             if c not in catidx[l]:
                 continue
