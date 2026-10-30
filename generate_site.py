@@ -1424,7 +1424,7 @@ def build():
                     "tags": ["microsoft-365", "copilot", "azure", "podcast"], "examples": ["Find episodes about Copilot governance", "German episodes about Teams"],
                     "inputModes": ["text/plain"], "outputModes": ["text/plain"]}]}, ensure_ascii=False, indent=1))
     write(".well-known/mcp/server-card.json", json.dumps({   # MCP Server Card (SEP-1649)
-        "serverInfo": {"name": "m365-fm", "title": "M365.FM", "version": "1.0.0"},
+        "serverInfo": {"name": "m365-dub", "title": "M365.FM Community (www.m365.fm)", "version": "1.1.0"},
         "description": "Read the M365.FM community (blog, shows, entities, experts, events) without sign-in; write and personal tools with a personal access token.",
         "transport": {"type": "streamable-http", "endpoint": "https://api-dub.m365.fm/mcp"}, "endpoint": "https://api-dub.m365.fm/mcp",
         "protocolVersion": "2025-06-18",
