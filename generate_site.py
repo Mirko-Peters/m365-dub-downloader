@@ -432,6 +432,7 @@ def page(lang, title, desc, canonical, body, alternates=None, jsonld=None, xdefa
 {ext_links(body)}
 {consent_html(lang)}
 {a11y_tags(lang)}
+<script defer src="{BASE}/assets/attend.js"></script>
 </body></html>
 """
 

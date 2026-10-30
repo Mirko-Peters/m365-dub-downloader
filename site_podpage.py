@@ -1,3 +1,4 @@
+import site_sidebar as SBR
 """Englische Show-Seite (Nachbau von www.m365.fm / Podpage) unter /show/: Folgen, Seiten, Hosts, Sponsoren, Reviews, Gaeste (als Personen-Entitaeten).
 Daten: data/podpage/*.json(.gz); Audio/Transkript aus data/en_episodes.json (fetch_en_episodes.py). Videos sind bewusst ausgeschlossen."""
 import site_notes as SNT
@@ -93,11 +94,14 @@ def build(g):
     nav = ('<nav class="mut" style="margin:0 0 1em;display:flex;gap:1em;flex-wrap:wrap">'
            + "".join(f'<a href="{root}{p}">{t}</a>' for p, t in (("", "Home"), ("episodes/", "Episodes"), *((("blog/", "Blog"),) if (PD / "blog_posts.json.gz").exists() else ()), *((("guests/", "Guests"),) if guests else ()), ("hosts/", "Hosts"), ("sponsors/", "Sponsors"), ("reviews/", "Reviews"), ("work-with-me/", "Work with me"), ("about/", "About")))
            + "</nav>")
-    shell = lambda b: f'{header("en", "")}<main class="wrap" style="max-width:52em">{nav}{b}</main>{footer_en()}'
+    shell = lambda b, side="": f'{header("en", "")}<link rel="stylesheet" href="{BASE}/assets/sbar.css"><main class="wrap shw"><div class="shmain">{nav}{b}</div>{side}</main>{footer_en()}'
+
+    SBX = SBR.Index(); SHP = json.loads((D / "platforms.json").read_text("utf-8")).get("en", {}) if (D / "platforms.json").exists() else {}
 
     def pub(rel, title, desc, body, ld=None, og="website", noindex=False, last=TODAY):
         u = f"{root}{rel}"
-        write(f"show/{rel}index.html", page("en", (title if title == NAME else f"{title} – {NAME}"), desc[:300], u, shell(body), None, ld, og_type=og, noindex=noindex))
+        side = SBR.render(SBX, BASE, root, title + " " + plain(body)[:8000], eps, SHP) if not noindex else ""
+        write(f"show/{rel}index.html", page("en", (title if title == NAME else f"{title} – {NAME}"), desc[:300], u, shell(body, side), None, ld, og_type=og, noindex=noindex))
         if not noindex: sitemap.append((u, last, None))
 
     # Gaeste je Folge: Namensnennung in Titel/Show Notes
