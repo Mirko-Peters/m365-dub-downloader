@@ -11,6 +11,7 @@ async function ensure(db) {
   if (ready) return;
   await db.batch([
     db.prepare("CREATE TABLE IF NOT EXISTS entity_invites (token TEXT PRIMARY KEY, eid TEXT NOT NULL, name TEXT NOT NULL, email TEXT NOT NULL, by_user INTEGER NOT NULL, status TEXT NOT NULL DEFAULT 'sent', created INTEGER NOT NULL, reminded INTEGER NOT NULL DEFAULT 0, UNIQUE(eid, email))"),
+    db.prepare("CREATE TABLE IF NOT EXISTS entity_contacts (eid TEXT PRIMARY KEY, email TEXT NOT NULL, name TEXT NOT NULL, created INTEGER NOT NULL)"),
     db.prepare("CREATE TABLE IF NOT EXISTS invite_block (email TEXT PRIMARY KEY, created INTEGER NOT NULL)"),
   ]);
   ready = true;
@@ -68,6 +69,18 @@ export async function handleEntityInvite(env, request, url, path, user, J) {
     const rows = (await db.prepare(`SELECT eid,name,status,created,reminded,${user.admin || user.editor ? "email" : "'' email"} FROM entity_invites WHERE ${user.admin || user.editor ? "1=1" : "by_user=?"} ORDER BY created DESC LIMIT 300`).bind(...(user.admin || user.editor ? [] : [user.id])).all()).results || [];
     return J({ items: rows, mail: !!env.RESEND_API_KEY, staff: !!(user.admin || user.editor) }, 200, { "cache-control": "no-store" });
   }
+  if (path === "/api/entityinvite/contacts" && (user.admin || user.editor)) {   // Kontaktadressen (nur DB, nie im Repo)
+    if (method === "GET") { const c = await db.prepare("SELECT COUNT(*) n FROM entity_contacts").first(); const o = await db.prepare("SELECT COUNT(*) n FROM entity_contacts c WHERE NOT EXISTS (SELECT 1 FROM entity_invites i WHERE i.eid=c.eid)").first(); return J({ contacts: c.n, not_invited: o.n }); }
+    if (method === "POST") {
+      const b = await body(), items = (Array.isArray(b.items) ? b.items : []).slice(0, 400); let n = 0;
+      for (const x of items) {
+        const eid = String(x.eid || "").toLowerCase(), email = String(x.email || "").trim().toLowerCase(), name = cleanText(x.name, 80).replace(/[<>]/g, "");
+        if (!EID.test(eid) || !name || !/^[^\s@<>]{1,64}@[^\s@<>]{1,190}\.[a-z]{2,}$/.test(email)) continue;
+        await db.prepare("INSERT INTO entity_contacts(eid,email,name,created) VALUES(?,?,?,?) ON CONFLICT(eid) DO UPDATE SET email=excluded.email,name=excluded.name").bind(eid, email, name, now()).run(); n++;
+      }
+      return J({ ok: true, saved: n });
+    }
+  }
   if (path === "/api/entityinvite/send" && method === "POST") {
     const b = await body(), staff = !!(user.admin || user.editor);
     const list = (Array.isArray(b.items) ? b.items : [b]).slice(0, staff ? 50 : 3);
@@ -75,7 +88,9 @@ export async function handleEntityInvite(env, request, url, path, user, J) {
     if (!(await rateLimit(db, `einv:${user.id}`, staff ? 200 : 5, 86400))) return J({ error: "rate_limit" }, 429);
     const out = [];
     for (const x of list) {
-      const eid = String(x.eid || "").toLowerCase(), email = String(x.email || "").trim().toLowerCase(), name = cleanText(x.name, 80).replace(/[<>]/g, "");
+      const eid = String(x.eid || "").toLowerCase();
+      let email = String(x.email || "").trim().toLowerCase(), name = cleanText(x.name, 80).replace(/[<>]/g, "");
+      if (staff && eid && !email) { const c = await db.prepare("SELECT email,name FROM entity_contacts WHERE eid=?").bind(eid).first(); if (c) { email = c.email; name = name || c.name; } }
       if (!EID.test(eid) || !name || !/^[^\s@<>]{1,64}@[^\s@<>]{1,190}\.[a-z]{2,}$/.test(email)) { out.push({ eid, error: "bad_input" }); continue; }
       if (!staff) {   // Mitglieder: nur fuer Entitaeten, die sie selbst angelegt haben
         const own = await db.prepare("SELECT 1 x FROM entity_rev WHERE eid=? AND user_id=?").bind(eid, user.id).first(); if (!own) { out.push({ eid, error: "not_yours" }); continue; }
