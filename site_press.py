@@ -72,8 +72,8 @@ def build_press(g):
             shutil.copy(A / src, out / dst)
     en, de = TXT["en"], TXT["de"]
     facts_en = "\n".join(f"{k}: {v.replace('{L}', str(L)).replace('{N}', str(N))}" for k, v in en["f"])
-    (out / "mirko-peters-bio-en.txt").write_text(f"Mirko Peters\n\n{en['about_p']}\n\nWebsite: {BASE}/about/mirko-peters/\nContact: {g['EMAIL']}\n", "utf-8")
-    (out / "mirko-peters-bio-de.txt").write_text(f"Mirko Peters\n\n{de['about_p']}\n\nWebseite: {BASE}/de/about/mirko-peters/\nKontakt: {g['EMAIL']}\n", "utf-8")
+    (out / "mirko-peters-bio-en.txt").write_text(f"Mirko Peters\n\n{en['about_p']}\n\nWebsite: {BASE}/entity/mirko-peters/\nContact: {g['EMAIL']}\n", "utf-8")
+    (out / "mirko-peters-bio-de.txt").write_text(f"Mirko Peters\n\n{de['about_p']}\n\nWebseite: {BASE}/de/entity/mirko-peters/\nKontakt: {g['EMAIL']}\n", "utf-8")
     (out / "fact-sheet-en.txt").write_text(f"M365.FM / Mirko Peters – fact sheet\n\n{facts_en}\n\nContact: {g['EMAIL']}\nPress kit: {BASE}/press/\n", "utf-8")
     (out / "colors.txt").write_text("M365.FM brand colors (light / dark)\n" + "\n".join(f"{n}: {a} / {b}" for n, a, b in COLORS) + "\nFonts: Barlow Condensed, Barlow\n", "utf-8")
     names = ["mirko-peters-bio-en.txt", "mirko-peters-bio-de.txt", "fact-sheet-en.txt", "colors.txt", "mirko-peters.jpg", "mirko-peters-800.jpg", "logo.svg", "logo-192.png", "og-default.png"]
@@ -84,7 +84,7 @@ def build_press(g):
     for lang in ("en", "de"):
         t = TXT[lang]
         url = f"{BASE}/press/" if lang == "en" else f"{BASE}/de/press/"
-        about_url = f"{BASE}/about/mirko-peters/" if lang == "en" else f"{BASE}/de/about/mirko-peters/"
+        about_url = f"{BASE}/entity/mirko-peters/" if lang == "en" else f"{BASE}/de/entity/mirko-peters/"
         ids = ["about", "media", "files", "colors", "team", "contact", "press"]
         nav = "".join(f'<a href="#{i}">{E(n)}</a>' for i, n in zip(ids, t["nav"]))
         facts = "".join(f'<dt>{E(k)}</dt><dd>{E(v.replace("{L}", str(L)).replace("{N}", str(N)))}</dd>' for k, v in t["f"])
@@ -107,6 +107,6 @@ def build_press(g):
                 f'<section id="contact"><h2>{E(t["contact"])}</h2><p>{E(t["contact_p"])}</p><p><a class="kcta" href="mailto:{g["EMAIL"]}">{g["EMAIL"]}</a></p><p class="mut">{E(t["addr"])}: Julius-Hölder-Str 60, 70597 Stuttgart, Germany</p></section>'
                 f'<section id="press"><h2>{E(t["press"])}</h2><ul class="kpl">{pl}</ul><p>{E(t["machine"])} <a href="{BASE}/llms.txt">llms.txt</a> · <a href="{BASE}/episodes.json">episodes.json</a></p><p class="mut">{E(t["usage"])}</p></section></main>'
                 f'{g["footer"](lang) if lang in g["LANGS"] else g["footer_en"]()}{JS}')
-        ld = [g["person_ld"](), g["org_ld"](), {"@context": "https://schema.org", "@type": "WebPage", "@id": f"{url}#page", "url": url, "name": t["title"], "inLanguage": lang, "about": {"@id": f"{BASE}/about/mirko-peters/#person"}, "dateModified": TODAY}]
+        ld = [g["person_ld"](), g["org_ld"](), {"@context": "https://schema.org", "@type": "WebPage", "@id": f"{url}#page", "url": url, "name": t["title"], "inLanguage": lang, "about": {"@id": f"{BASE}/entity/mirko-peters/#entity"}, "dateModified": TODAY}]
         write("press/index.html" if lang == "en" else "de/press/index.html", page(lang, t["title"], t["meta"], url, body, None, ld, og_type="website", extra_head=CSS))
         sitemap.append((url, TODAY, None))
