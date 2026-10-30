@@ -9,6 +9,9 @@
     H.classList.add("fx-on");
     var raf = window.requestAnimationFrame, coarse = mq && mq("(pointer: coarse)").matches;
 
+    // --- Aurora in den Markenfarben (reines CSS, kaum Last)
+    var au = document.createElement("div"); au.id = "fx-aurora"; au.setAttribute("aria-hidden", "true"); au.innerHTML = "<i></i><i></i><i></i>"; document.body.insertBefore(au, document.body.firstChild);
+
     // --- 2) Lesefortschritt
     var bar = document.createElement("div"); bar.id = "fx-bar"; document.body.appendChild(bar);
     function prog() { var m = H.scrollHeight - innerHeight; bar.style.transform = "scaleX(" + (m > 0 ? Math.min(1, scrollY / m) : 0) + ")"; }
