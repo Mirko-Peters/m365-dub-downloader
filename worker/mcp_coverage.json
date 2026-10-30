@@ -25,6 +25,9 @@
   "/api/admin/feed-hide": {
    "skip": "Admin-Funktionen: bewusst nicht per KI-Token; Admin-Listen laufen über list_*_todo, list_event_transfers"
   },
+  "/api/admin/mail": {
+   "skip": "Admin-Funktionen: bewusst nicht per KI-Token; Admin-Listen laufen über list_*_todo, list_event_transfers"
+  },
   "/api/admin/podcast": {
    "skip": "Admin-Funktionen: bewusst nicht per KI-Token; Admin-Listen laufen über list_*_todo, list_event_transfers"
   },
@@ -215,6 +218,30 @@
     "suggest_my_entities"
    ]
   },
+  "/api/entityinvite/accept": {
+   "tools": [
+    "accept_entity_invite"
+   ]
+  },
+  "/api/entityinvite/contacts": {
+   "skip": "Nur Redaktion/Admin: Kontaktadressen liegen bewusst nur in der DB"
+  },
+  "/api/entityinvite/decline": {
+   "skip": "Link aus der E-Mail (Token), wird im Browser geöffnet, nicht per KI"
+  },
+  "/api/entityinvite/info": {
+   "skip": "Link aus der E-Mail (Token), wird im Browser geöffnet, nicht per KI"
+  },
+  "/api/entityinvite/mine": {
+   "tools": [
+    "list_my_entity_invites"
+   ]
+  },
+  "/api/entityinvite/send": {
+   "tools": [
+    "send_entity_invites"
+   ]
+  },
   "/api/event": {
    "tools": [
     "list_my_events",
@@ -341,6 +368,37 @@
   },
   "/api/logout": {
    "skip": "Seiten-Infrastruktur (kein Nutzerfunktion)"
+  },
+  "/api/mail/confirm": {
+   "skip": "Link aus der E-Mail (Token), wird im Browser geöffnet, nicht per KI"
+  },
+  "/api/mail/me": {
+   "tools": [
+    "get_mail_settings"
+   ]
+  },
+  "/api/mail/prefs": {
+   "tools": [
+    "set_mail_pref"
+   ]
+  },
+  "/api/mail/remove": {
+   "tools": [
+    "remove_mail_address"
+   ]
+  },
+  "/api/mail/set": {
+   "tools": [
+    "set_mail_address"
+   ]
+  },
+  "/api/mail/test": {
+   "tools": [
+    "send_test_mail"
+   ]
+  },
+  "/api/mail/unsub": {
+   "skip": "Link aus der E-Mail (Token), wird im Browser geöffnet, nicht per KI"
   },
   "/api/me": {
    "skip": "Seiten-Infrastruktur (kein Nutzerfunktion)"
@@ -519,6 +577,22 @@
   "/api/recommend/inbox": {
    "tools": [
     "list_my_recommendations"
+   ]
+  },
+  "/api/reviews": {
+   "tools": [
+    "list_show_reviews",
+    "write_show_review"
+   ]
+  },
+  "/api/reviews/delete": {
+   "tools": [
+    "delete_show_review"
+   ]
+  },
+  "/api/reviews/helpful": {
+   "tools": [
+    "mark_review_helpful"
    ]
   },
   "/api/seo/check": {

@@ -1,5 +1,6 @@
 """Lern-Bereich: Glossar, Lernpfade, Übungs-Trainer (alles aus vorhandenen Daten, ohne API-Kosten)."""
 import json, re, html, os
+import site_media as MED
 from pathlib import Path
 
 ROOT = Path(__file__).parent
@@ -319,7 +320,7 @@ def build_learn(ctx):
                            f'<button type="button" class="ln-btn" data-id="{x["vid"]}" aria-pressed="false">{esc(t["mark"])}</button></li>' for i, x in enumerate(lst))
             cfg = json.dumps({"mark": t["mark"], "done": t["done"], "progress": t["progress"]}, ensure_ascii=False).replace("</", "<\\/")
             tr = f'<p><a class="ln-btn" style="text-decoration:none;display:inline-block" href="{BASE}/{lang}/trainer/?c={c}">{esc(t["trainer"])}</a></p>'
-            b = shell(lang, f'<nav aria-label="breadcrumb"><a href="{BASE}/{lang}/learn/">{esc(t["learn"])}</a></nav><h1>{esc(t["paths"])}: {esc(cat_name(c, lang))}</h1><p class="mut">{esc(t["paths_intro"])}</p>'
+            b = shell(lang, f'<nav aria-label="breadcrumb"><a href="{BASE}/{lang}/learn/">{esc(t["learn"])}</a></nav><h1>{esc(t["paths"])}: {esc(cat_name(c, lang))}</h1>{MED.hero_svg({"id": "path-" + c, "name": cat_name(c, lang), "type": "category"}, t["paths"], t["paths"] + ": " + cat_name(c, lang))}<p class="mut">{esc(t["paths_intro"])}</p>'
                             f'<div id="lnpath" data-t="{esc(cfg)}"><div class="ln-bar"><i></i></div><p class="ln-p" role="status" aria-live="polite"></p><ol class="ln-list" style="list-style:none">{rows}</ol>'
                             f'<button type="button" class="ln-btn ln-reset">{esc(t["reset"])}</button></div>{tr}{PATH_JS}')
             ld = [{"@context": "https://schema.org", "@type": "ItemList", "name": f'{t["paths"]}: {cat_name(c, lang)}', "itemListElement":
@@ -397,6 +398,10 @@ def load_entities(api):
     gf = Path(__file__).parent / "data" / "guest_entities.json"
     if gf.exists():
         for e in json.loads(gf.read_text("utf-8")):
+            base.setdefault(e["id"], e)
+    sf = Path(__file__).parent / "data" / "speaker_entities.json"   # Speaker der M365Con-Programme (tools/build_speakers.py)
+    if sf.exists():
+        for e in json.loads(sf.read_text("utf-8")):
             base.setdefault(e["id"], e)
     over = (_fetch_json(f"{api}/api/entity/export") or {}).get("items", [])
     for it in over:

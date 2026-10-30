@@ -99,23 +99,80 @@ def spotify_candidates(lang, ids, ctx):
     return out
 
 
+def youtube_rss(pid):
+    """Die neuesten 15 Videos einer Wiedergabeliste ueber den RSS-Feed (ohne Anmeldung, schnell)."""
+    import xml.etree.ElementTree as ET
+    ns = {"a": "http://www.w3.org/2005/Atom", "y": "http://www.youtube.com/xml/schemas/2015"}
+    raw = urllib.request.urlopen(urllib.request.Request(f"https://www.youtube.com/feeds/videos.xml?playlist_id={pid}", headers={"User-Agent": "Mozilla/5.0"}), timeout=20).read()
+    return [{"title": e.findtext("a:title", "", ns), "url": f"https://www.youtube.com/watch?v={e.findtext('y:videoId', '', ns)}", "date": (e.findtext("a:published", "", ns) or "")[:10]}
+            for e in ET.fromstring(raw).findall("a:entry", ns)]
+
+
 def youtube_candidates(lang, ids, ctx):
     srcs = ids.get("youtube_sources") or []
     if not srcs:
         return []
+    out = []
+    for u in srcs:   # RSS: die neuesten 15, klappt auch wenn yt-dlp blockiert wird
+        m = re.search(r"list=([\w-]+)", u)
+        if not m:
+            continue
+        if len(m.group(1)) < 24:
+            print(f"YouTube {lang}: Playlist-ID '{m.group(1)}' sieht abgeschnitten aus (echte IDs haben meist 34 Zeichen)")
+        try:
+            out += youtube_rss(m.group(1))
+        except Exception as e:
+            print(f"YouTube-RSS {lang} {m.group(1)}: {str(e)[:100]}")
     try:
         import yt_dlp
     except ImportError:
-        print("YouTube-Abgleich uebersprungen: yt-dlp nicht installiert (pip install yt-dlp)"); return []
-    out = []
-    with yt_dlp.YoutubeDL({"quiet": True, "extract_flat": True, "skip_download": True, "ignoreerrors": True}) as y:
+        print("YouTube: yt-dlp nicht installiert, nur RSS (pip install yt-dlp)"); return out
+    with yt_dlp.YoutubeDL({"quiet": True, "extract_flat": True, "skip_download": True, "ignoreerrors": True, "playlistend": 1200, "socket_timeout": 20, "retries": 1, "extractor_retries": 1}) as y:
         for u in srcs:
             info = y.extract_info(u, download=False) or {}
             for e in info.get("entries") or []:
                 if e and e.get("id") and e.get("title"):
                     d = e.get("upload_date") or ""
                     out.append({"title": e["title"], "url": f"https://www.youtube.com/watch?v={e['id']}", "date": f"{d[:4]}-{d[4:6]}-{d[6:8]}" if len(d) == 8 else ""})
+    print(f"YouTube {lang}: {len(out)} Kandidaten")
     return out
+
+
+def youtube_music_candidates(lang, ids, ctx):
+    """YouTube Music: Die Folgen-IDs sind NICHT die Video-IDs, also nicht ableitbar. Wir finden den Podcast ueber eine bekannte Folge (Podpage-Sicherung), eine
+    eingetragene ID (platforms.json "youtube_music_id") oder die Suche nach dem Show-Namen und lesen alle Folgen (inoffizielle Bibliothek ytmusicapi, ohne Anmeldung)."""
+    try:
+        from ytmusicapi import YTMusic
+    except ImportError:
+        print("YouTube Music uebersprungen: ytmusicapi nicht installiert (pip install ytmusicapi)"); return []
+    yt = YTMusic()
+    cands = [ids.get("youtube_music_id")] if ids.get("youtube_music_id") else []
+    for vid in (ctx.get("ytm_seeds") or [])[:4]:
+        if cands:
+            break
+        try:
+            ep = yt.get_episode(vid) or {}
+            cands += [x for x in (ep.get("playlistId"), (ep.get("podcast") or {}).get("id"), (ep.get("podcast") or {}).get("playlistId")) if x]
+        except Exception as e:
+            print("YouTube Music Folge", vid, str(e)[:80])
+    if not cands and ids.get("youtube_music_name"):
+        for r in yt.search(ids["youtube_music_name"], filter="podcasts", limit=5):
+            if r.get("browseId"):
+                cands.append(r["browseId"]); break
+    for pid in cands:
+        pid = re.sub(r"^MPSP", "", pid)
+        try:
+            pod = yt.get_podcast(pid, limit=None)
+        except Exception as e:
+            print("YouTube Music Podcast", pid, str(e)[:80]); continue
+        ids["youtube_music_id"] = pid
+        ids["youtube_music_show"] = f"https://music.youtube.com/playlist?list={pid}"
+        out = []
+        for e in pod.get("episodes") or []:
+            if e.get("videoId") and e.get("title"):
+                out.append({"title": e["title"], "url": f"https://music.youtube.com/podcast/{e['videoId']}", "date": ""})
+        return out
+    return []
 
 
 def podpage_candidates(lang, ids, ctx):
@@ -128,7 +185,7 @@ def podpage_candidates(lang, ids, ctx):
     eps = json.load(gzip.open(f, "rt", encoding="utf-8"))
     res = {"apple": [], "spotify": [], "youtube_music": []}
     for e in eps:
-        d = (e.get("create_time") or "")[:10]
+        d = ""   # create_time der Podpage-Sicherung ist der Importzeitpunkt, nicht das Veroeffentlichungsdatum: nur der Titel zaehlt
         for plat, field in (("apple", "episode_apple_url_path"), ("spotify", "episode_spotify_url_path"), ("youtube_music", "episode_youtube_music_url_path")):
             u = e.get(field)
             if u and u not in ("None", "False"):
@@ -136,7 +193,7 @@ def podpage_candidates(lang, ids, ctx):
     return res
 
 
-CONNECTORS = {"apple": apple_candidates, "deezer": deezer_candidates, "spotify": spotify_candidates, "youtube": youtube_candidates}
+CONNECTORS = {"apple": apple_candidates, "deezer": deezer_candidates, "spotify": spotify_candidates, "youtube": youtube_candidates, "youtube_music": youtube_music_candidates}
 
 
 def spotify_token():
@@ -170,12 +227,16 @@ def main():
             continue
         rep = report.setdefault(lang, {})
         cands = {}
+        pp = podpage_candidates(lang, ids, ctx) or {}
+        ctx["ytm_seeds"] = [c["url"].rstrip("/").split("/")[-1] for c in pp.get("youtube_music", [])][::-1]   # juengste zuerst
         for name, fn in CONNECTORS.items():
+            t0 = time.time()
             try:
                 cands[name] = fn(lang, ids, ctx)
             except Exception as e:
                 print(name, lang, str(e)[:120])
-        for name, lst in (podpage_candidates(lang, ids, ctx) or {}).items():
+            print(f"{lang} {name}: {time.time() - t0:.0f} s, {len(cands.get(name, []))} Kandidaten")
+        for name, lst in pp.items():
             cands.setdefault(name, []).extend(lst)
         for name, lst in cands.items():
             hit, open_, amb = PM.match(own, lst)
