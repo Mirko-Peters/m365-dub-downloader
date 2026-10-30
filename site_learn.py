@@ -127,6 +127,21 @@ def fetch_wiki(api, lang):
         return {}
 
 
+_VIZ = re.compile(r"^\{\{viz\|(bars|stats|steps|timeline|compare)\|([^{}|]{1,80})\|([^{}]{1,1400})\}\}$")
+
+
+def viz_html(kind, title, data):
+    """Interaktive Infografik: Text und Zahlen aus dem Beitrag; assets/viz.js baut daraus die Grafik. Ohne JS bleibt die Liste (barrierefrei)."""
+    lis = []
+    for it in data.split(";")[:13]:
+        p = [x.strip() for x in it.split("~")][:3]
+        if not p or not p[0]:
+            continue
+        p += [""] * (3 - len(p))
+        lis.append(f'<li data-a="{esc(p[0])}" data-b="{esc(p[1])}" data-c="{esc(p[2])}">{esc(" · ".join(x for x in p if x))}</li>')
+    return f'<figure class="viz" data-viz="{kind}"><figcaption>{esc(title)}</figcaption><ul class="viz-fb">{"".join(lis)}</ul></figure>' if lis else ""
+
+
 _INL = re.compile(r"\{\{img\|([^{}|]*)\|([^{}]*)\}\}|\{\{ref\|([^{}]*)\}\}|\{\{cn\}\}|\[\[([a-z0-9-]{2,48})(?:\|([^\[\]]{1,80}))?\]\]|\*\*([^*]+?)\*\*|\*([^*\s][^*]*?)\*")
 
 
@@ -175,7 +190,8 @@ def wiki_render(body, links, w):
 
     def flush_p():
         if para:
-            out.append(f"<p>{inline(' '.join(para))}</p>"); para.clear()
+            joined = " ".join(para); vm = _VIZ.match(joined)
+            out.append(viz_html(vm.group(1), vm.group(2), vm.group(3)) if vm else f"<p>{inline(joined)}</p>"); para.clear()
 
     def flush_l():
         if lst[0]:
