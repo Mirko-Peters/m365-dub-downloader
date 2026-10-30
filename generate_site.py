@@ -390,6 +390,8 @@ def single_main(html_):
 
 
 def page(lang, title, desc, canonical, body, alternates=None, jsonld=None, xdefault=None, og_type="article", extra_head="", noindex=False):
+    if lang in ("fr", "es", "it", "nl", "pt", "pl") and any(k in canonical for k in ("/community/", "/entity/", "/glossary/")):
+        extra_head += f'<script src="{BASE}/assets/ui-{lang}.js"></script>'
     hl = LANGS[lang][1] if lang in LANGS else "en"
     d = LANGS[lang][2] if lang in LANGS else "ltr"
     loc = LANGS[lang][4] if lang in LANGS else "en_US"
@@ -718,6 +720,8 @@ def build():
     (OUT / ".nojekyll").write_text("")
     if (ROOT / "assets").exists():
         shutil.copytree(ROOT / "assets", OUT / "assets")
+        from site_i18n import write_ui_js
+        write_ui_js(OUT)
 
     # veröffentlichte Folgen je Sprache sammeln
     items = {}  # (vid, lang) -> dict
