@@ -610,7 +610,19 @@ def footer(lang):
             f'<div style="margin-top:10px">© {date.today().year} Mirko Peters · M365.FM</div></div></footer>')
 
 
+AUTHOR_HANDLE = "mirko-peters"
+AUTHOR = {}   # oeffentliches Profil des Autors (Quelle der Wahrheit), faellt auf festen Text zurueck
+
+
 def author_box(lang):
+    if AUTHOR.get("handle"):
+        a = AUTHOR; progs = {"mvp": "Microsoft MVP", "mct": "Microsoft Certified Trainer", "rd": "Microsoft Regional Director", "msa": "Microsoft Student Ambassador"}
+        lab = " · ".join(progs[x["p"]] for x in a.get("programs", []) if x.get("verified") and x["p"] in progs)
+        img = f'{COMMUNITY_API}/api/img/u/{a["handle"]}' if a.get("img") else (f"{BASE}/assets/mirko-peters.jpg" if (ROOT / "assets" / "mirko-peters.jpg").exists() else "")
+        badge = f'<img class="badge" src="{img}" alt="{esc(a["name"])}" width="58" height="58" loading="lazy">' if img else '<div class="badge">MP</div>'
+        bio = (a.get("about") or a.get("headline") or "")[:220]
+        return (f'<div class="author">{badge}<div><strong><a href="{BASE}{"/de" if lang == "de" else ""}/community/u/{a["handle"]}/">{esc(a["name"])}</a>{(" · " + esc(lab)) if lab else ""}</strong>'
+                f'<p>{esc(bio)}</p></div></div>')
     ui = UI.get(lang)
     name = ui[5] if ui else "About Mirko Peters"
     bio = ui[6] if ui else "Mirko Peters is a Microsoft MVP, host of the podcast M365.FM and initiator of the free online conference M365Con."
@@ -672,6 +684,11 @@ var d=document.documentElement;if(apple)d.className+=" apple-first";var pick=doc
 
 def build():
     eps, pub, seo = load()
+    try:
+        _pp, _oo = MEM.fetch_members(COMMUNITY_API)
+        AUTHOR.update(next((x for x in _pp if x.get("handle") == AUTHOR_HANDLE), {}))
+    except Exception:
+        pass
     plat = json.load(open(ROOT / "data" / "platforms.json", encoding="utf-8")) if (ROOT / "data" / "platforms.json").exists() else {}
     articles = {p.stem: json.load(open(p, encoding="utf-8")) for p in (ROOT / "data" / "articles").glob("*.json")} if (ROOT / "data" / "articles").exists() else {}
     elinks = json.load(open(ROOT / "data" / "episode_links.json", encoding="utf-8")) if (ROOT / "data" / "episode_links.json").exists() else {}
