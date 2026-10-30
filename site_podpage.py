@@ -11,6 +11,10 @@ from site_learn import esc
 
 D = Path(__file__).parent / "data"
 PD = D / "podpage"
+SECTIONS = {}   # Folgen-Slug -> {keypoints, faq} aus data/episode_sections/part-*.json
+for _f in sorted((Path(__file__).parent / "data" / "episode_sections").glob("part-*.json")) if (Path(__file__).parent / "data" / "episode_sections").exists() else []:
+    try: SECTIONS.update(json.loads(_f.read_text("utf-8")))
+    except Exception: pass
 PER = 100
 OK_TAGS = {"p", "br", "strong", "b", "em", "i", "u", "ul", "ol", "li", "h2", "h3", "h4", "blockquote", "a", "code", "pre", "hr", "table", "thead", "tbody", "tr", "th", "td", "img"}
 SKIP = {"script", "style", "iframe", "form", "object", "embed"}
@@ -193,6 +197,8 @@ def build(g):
         r, tr = tr_for(e)
         nrec = SNT.get("en", title=e["name"])   # Spreaker-Show-Notes (oder im Editor bearbeitete Fassung) statt Podpage-Sicherung
         nkp, nnotes, nfaq, nld = SNT.blocks(nrec, "en")
+        if not nkp and not nfaq and e["slug"] in SECTIONS:   # fuer die Folge geschriebene Kernpunkte und FAQ (data/episode_sections), solange im Editor keine eigenen gepflegt sind
+            _sc = SECTIONS[e["slug"]]; nkp, nfaq, _sld = SNT.sections(_sc.get("keypoints"), _sc.get("faq"), "en"); nld = list(nld) + _sld
         prev_, next_ = (eps[k + 1] if k + 1 < len(eps) else None), (eps[k - 1] if k else None)
         aud = f'<audio controls preload="none" style="width:100%" src="{esc(r["audio"])}"></audio>' if r and r.get("audio") else ""
         elk = elinks.get(f"{nrec['id']}:en", {}) if nrec else {}
