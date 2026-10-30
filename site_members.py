@@ -1,5 +1,6 @@
 """Mitglieder- und Firmenverzeichnis: oeffentliche Experten-Profile (nur Opt-in) mit Schema.org-Verknuepfung zu den Entitaeten."""
 import json
+from pathlib import Path
 BLOGLANGS = set()
 BLOGS = {}   # handle -> Sprachen mit Beiträgen
 from site_i18n import COMM_LANGS, pfx, pfx2, overlay, T
@@ -21,8 +22,29 @@ S = {"en": dict(members="Members", companies="Companies", mintro="Experts of the
 SIZE_N = {"1": (1, 1), "2-10": (2, 10), "11-50": (11, 50), "51-200": (51, 200), "201-1000": (201, 1000), "1000+": (1001, None)}
 
 
+CACHE = Path(__file__).parent / "data" / "members_export.json"   # letzte erfolgreiche Fassung: faellt der Abruf aus, bleiben die Profilseiten erhalten
+
+
 def fetch_members(api):
-    j = _fetch_json(f"{api}/api/profiles/export") or {}
+    import sys, time
+    j = None
+    for n in range(3):   # der Export liest alle Profile nacheinander aus D1: kann dauern
+        j = _fetch_json(f"{api}/api/profiles/export", timeout=90)
+        if j and j.get("people") is not None:
+            break
+        print(f"WARNUNG: Profil-Export Versuch {n + 1}/3 fehlgeschlagen", file=sys.stderr); time.sleep(5 * (n + 1))
+    if j and j.get("people"):
+        try:
+            CACHE.write_text(json.dumps(j, ensure_ascii=False), encoding="utf-8")
+        except Exception:
+            pass
+    elif CACHE.exists():
+        print("WARNUNG: Profil-Export nicht erreichbar, nutze die gespeicherte Fassung", file=sys.stderr)
+        j = json.loads(CACHE.read_text("utf-8"))
+    else:
+        print("FEHLER: Profil-Export nicht erreichbar und keine gespeicherte Fassung: es entstehen keine Profilseiten", file=sys.stderr)
+        j = j or {}
+    print(f"Profile: {len(j.get('people', []))} Personen, {len(j.get('orgs', []))} Firmen", file=sys.stderr)
     return j.get("people", []), j.get("orgs", [])
 
 
