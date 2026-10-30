@@ -59,7 +59,7 @@ FAQ = {
 "te": [("M365.FM అంటే ఏమిటి?", "M365.FM అనేది Microsoft MVP Mirko Peters యొక్క Microsoft 365, Copilot, Azure, Power Platform, AI పాడ్‌కాస్ట్. ఈ పేజీలోని ఎపిసోడ్‌లు ఆయన యానిమేటెడ్ వివరణ వీడియోల AI డబ్ చేసిన తెలుగు వెర్షన్‌లు."),
        ("ఎపిసోడ్‌లు ఉచితమా?", "అవును. అన్ని ఎపిసోడ్‌లను ఉచితంగా వినవచ్చు; వివరణ, ముఖ్యాంశాలు, అందుబాటులో ఉన్నప్పుడు ట్రాన్స్క్రిప్ట్‌తో."),
        ("Mirko Peters ఎవరు?", "Mirko Peters ఒక Microsoft MVP; M365.FM పాడ్‌కాస్ట్ హోస్ట్, ఉచిత ఆన్‌లైన్ కాన్ఫరెన్స్ M365Con నిర్వాహకుడు.")],
-"en": [("What is M365.FM?", "M365.FM is the podcast by Microsoft MVP Mirko Peters about Microsoft 365, Copilot, Azure, Power Platform and AI. The episodes on this site are AI-dubbed versions of his animated explainer videos in 19 languages."),
+"en": [("What is M365.FM?", "M365.FM is the podcast by Microsoft MVP Mirko Peters about Microsoft 365, Copilot, Azure, Power Platform and AI. The episodes on this site are AI-dubbed versions of his animated explainer videos in 14 languages."),
        ("Are the episodes free?", "Yes. Every episode is free to listen to, with a description, key takeaways and, where available, a transcript."),
        ("Who is Mirko Peters?", "Mirko Peters is a Microsoft MVP, host of the M365.FM podcast and the m365 Show on YouTube, and organizer of the free online conference M365Con.")],
 }

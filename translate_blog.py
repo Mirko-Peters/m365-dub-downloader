@@ -1,4 +1,4 @@
-"""Uebersetzer-Team fuer Mirkos englische Blog-Originale in 19 Sprachen. Zwei Wege, gleiche Profile, gleiche Pruefung:
+"""Uebersetzer-Team fuer Mirkos englische Blog-Originale in 14 Sprachen. Zwei Wege, gleiche Profile, gleiche Pruefung:
 
 A) Haiku im Message Batch (guenstig, fuer die Masse) - laeuft als GitHub-Workflow translate-blog.yml:
    plan     Status + Kostenschaetzung (ohne Schluessel)
