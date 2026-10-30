@@ -2,12 +2,12 @@
 (function () {
   var U = window.M365U; if (!U) return;
   var h = U.h, de = (window.M365X || {}).lang === "de";
-  var T = de ? { img: "Bild einfügen (https, .jpg/.png/.webp, Alt-Text Pflicht)", imgurl: "Bild-Adresse (https://…/bild.jpg)", imgalt: "Alt-Text (beschreibt das Bild, mind. 5 Zeichen)", h2: "Überschrift", h3: "Zwischenüberschrift", b: "Fett", i: "Kursiv", ul: "Liste", ol: "Nummerierte Liste", q: "Zitat", link: "Link auf ein Thema", ref: "Quelle einfügen", write: "Schreiben", prev: "Vorschau", empty: "Hier erscheint die Vorschau, sobald du schreibst.", chars: "Zeichen", refs: "Quellen", rtitle: "Titel der Quelle", rurl: "https://…", rpub: "Herausgeber", rdate: "Datum", add: "Einfügen", topic: "Thema-ID (z. B. power-bi)", ttext: "Linktext", bold: "fetter Text", ital: "kursiver Text", txt: "Text", vis: "Visuell", html: "HTML", md: "Markdown", htmlhint: "HTML einfügen oder bearbeiten – erlaubt sind Überschriften, Absätze, Listen, Zitate, fett und kursiv; alles andere wird beim Wechsel entfernt.", undo: "Rückgängig", redo: "Wiederholen", clear: "Formatierung entfernen", mdhint: "Markdown mit Live-Vorschau." }
-    : { img: "Insert image (https, .jpg/.png/.webp, alt text required)", imgurl: "Image URL (https://…/image.jpg)", imgalt: "Alt text (describes the image, min. 5 characters)", h2: "Heading", h3: "Subheading", b: "Bold", i: "Italic", ul: "List", ol: "Numbered list", q: "Quote", link: "Link to a topic", ref: "Insert source", write: "Write", prev: "Preview", empty: "The preview appears as soon as you start writing.", chars: "characters", refs: "Sources", rtitle: "Source title", rurl: "https://…", rpub: "Publisher", rdate: "Date", add: "Insert", topic: "Topic id (e.g. power-bi)", ttext: "Link text", bold: "bold text", ital: "italic text", txt: "text", vis: "Visual", html: "HTML", md: "Markdown", htmlhint: "Paste or edit HTML – headings, paragraphs, lists, quotes, bold and italic are kept; everything else is removed when you switch.", undo: "Undo", redo: "Redo", clear: "Clear formatting", mdhint: "Markdown with live preview." };
+  var T = de ? { linkbtn: "Link einfügen (https)", linkurl: "Adresse (https://…)", linktext: "Linktext", img: "Bild einfügen (https, .jpg/.png/.webp, Alt-Text Pflicht)", imgurl: "Bild-Adresse (https://…/bild.jpg)", imgalt: "Alt-Text (beschreibt das Bild, mind. 5 Zeichen)", h2: "Überschrift", h3: "Zwischenüberschrift", b: "Fett", i: "Kursiv", ul: "Liste", ol: "Nummerierte Liste", q: "Zitat", link: "Link auf ein Thema", ref: "Quelle einfügen", write: "Schreiben", prev: "Vorschau", empty: "Hier erscheint die Vorschau, sobald du schreibst.", chars: "Zeichen", refs: "Quellen", rtitle: "Titel der Quelle", rurl: "https://…", rpub: "Herausgeber", rdate: "Datum", add: "Einfügen", topic: "Thema-ID (z. B. power-bi)", ttext: "Linktext", bold: "fetter Text", ital: "kursiver Text", txt: "Text", vis: "Visuell", html: "HTML", md: "Markdown", htmlhint: "HTML einfügen oder bearbeiten – erlaubt sind Überschriften, Absätze, Listen, Zitate, fett und kursiv; alles andere wird beim Wechsel entfernt.", undo: "Rückgängig", redo: "Wiederholen", clear: "Formatierung entfernen", mdhint: "Markdown mit Live-Vorschau." }
+    : { linkbtn: "Insert link (https)", linkurl: "Address (https://…)", linktext: "Link text", img: "Insert image (https, .jpg/.png/.webp, alt text required)", imgurl: "Image URL (https://…/image.jpg)", imgalt: "Alt text (describes the image, min. 5 characters)", h2: "Heading", h3: "Subheading", b: "Bold", i: "Italic", ul: "List", ol: "Numbered list", q: "Quote", link: "Link to a topic", ref: "Insert source", write: "Write", prev: "Preview", empty: "The preview appears as soon as you start writing.", chars: "characters", refs: "Sources", rtitle: "Source title", rurl: "https://…", rpub: "Publisher", rdate: "Date", add: "Insert", topic: "Topic id (e.g. power-bi)", ttext: "Link text", bold: "bold text", ital: "italic text", txt: "text", vis: "Visual", html: "HTML", md: "Markdown", htmlhint: "Paste or edit HTML – headings, paragraphs, lists, quotes, bold and italic are kept; everything else is removed when you switch.", undo: "Undo", redo: "Redo", clear: "Clear formatting", mdhint: "Markdown with live preview." };
 
   function inline(s, parent, ctx) {
     var ED = ctx.edit;
-    var re = /\{\{img\|([^{}|]*)\|([^{}]*)\}\}|\{\{ref\|([^{}]*)\}\}|\{\{cn\}\}|\[\[([^\]|]+)\|?([^\]]*)\]\]|\*\*([^*]+)\*\*|\*([^*]+)\*/, m;
+    var re = /\{\{img\|([^{}|]*)\|([^{}]*)\}\}|\{\{ref\|([^{}]*)\}\}|\{\{cn\}\}|\[\[([^\]|]+)\|?([^\]]*)\]\]|\*\*([^*]+)\*\*|\*([^*]+)\*|\{\{link\|([^{}|]*)\|([^{}]*)\}\}/, m;
     while ((m = re.exec(s))) {
       if (m.index) parent.appendChild(document.createTextNode(s.slice(0, m.index)));
       if (m[0].indexOf("{{img|") === 0) { var im = h("img", { src: m[1], alt: m[2], loading: "lazy", referrerpolicy: "no-referrer" }); im.style.maxWidth = "100%"; im.style.height = "auto"; if (ED) { im.setAttribute("data-img", m[1] + "|" + m[2]); im.setAttribute("contenteditable", "false"); } parent.appendChild(im); }
@@ -15,6 +15,7 @@
       else if (m[0] === "{{cn}}") { var cn = h("sup", { class: "ed-cn", text: "[?]" }); if (ED) { cn.setAttribute("data-cn", "1"); cn.setAttribute("contenteditable", "false"); } parent.appendChild(cn); }
       else if (m[4] != null) { var tp = h("span", { class: "ed-topic", text: m[5] || m[4] }); if (ED) tp.setAttribute("data-topic", m[4]); parent.appendChild(tp); }
       else if (m[6] != null) parent.appendChild(h("strong", { text: m[6] }));
+      else if (m[8] != null) { var lk = h("a", { href: m[8], text: m[9], rel: "nofollow ugc noopener", target: "_blank" }); if (ED) { lk.setAttribute("data-link", m[8] + "|" + m[9]); lk.setAttribute("contenteditable", "false"); } parent.appendChild(lk); }
       else parent.appendChild(h("em", { text: m[7] }));
       s = s.slice(m.index + m[0].length);
     }
@@ -43,7 +44,8 @@
       if (c.nodeType === 3) { o += ws(c.nodeValue); return; }
       if (c.nodeType !== 1) return;
       var t = c.tagName.toLowerCase(), x;
-      if (t === "img") { var iu = c.getAttribute("data-img") || ((c.getAttribute("src") || "") + "|" + (c.getAttribute("alt") || "")); o += "{{img|" + iu.replace(/[{}]/g, "") + "}}"; }
+      if (t === "a") { var lu = c.getAttribute("data-link") || ((c.getAttribute("href") || "") + "|" + ws(c.textContent).trim()); o += /^https:\/\//.test(lu) ? "{{link|" + lu.replace(/[{}]/g, "") + "}}" : ws(c.textContent); }
+      else if (t === "img") { var iu = c.getAttribute("data-img") || ((c.getAttribute("src") || "") + "|" + (c.getAttribute("alt") || "")); o += "{{img|" + iu.replace(/[{}]/g, "") + "}}"; }
       else if (t === "sup" && c.hasAttribute("data-ref")) o += "{{ref|" + c.getAttribute("data-ref") + "}}";
       else if (t === "sup" && c.hasAttribute("data-cn")) o += "{{cn}}";
       else if (c.hasAttribute("data-topic")) o += "[[" + c.getAttribute("data-topic") + "|" + ws(c.textContent).trim() + "]]";
@@ -145,6 +147,13 @@
           if (mode === "vis") { var sp = h("sup", { class: "ed-ref", text: "[•]" }); sp.setAttribute("data-ref", v.join("|")); sp.setAttribute("contenteditable", "false"); insertNode(sp); } else mput("{{ref|" + v.join("|") + "}}", "", "");
         });
       }, "ed-wide")]);
+    if (ta.dataset.links === "1") bar.appendChild(btn("🔗", T.linkbtn, function () {   // Link-Baustein nur fuer Show Notes (Redaktion)
+      var st = selText(); fields([["u", T.linkurl], ["t", T.linktext, st]], function (v) {
+        if (!/^https:\/\/\S+$/.test(v[0]) || !v[1]) return false;
+        var val = v[0] + "|" + v[1].replace(/[{}|\[\]]/g, "");
+        if (mode === "vis") { var a = h("a", { href: v[0], text: v[1], rel: "nofollow ugc noopener" }); a.setAttribute("data-link", val); a.setAttribute("contenteditable", "false"); insertNode(a); } else mput("{{link|" + val + "}}", "", "");
+      });
+    }));
     var tabs = [["vis", T.vis], ["html", T.html], ["md", T.md]].map(function (x) { var b = h("button", { type: "button", class: "ed-tab", text: x[1], role: "tab", onclick: function () { setMode(x[0]); } }); b.dataset.m = x[0]; b.setAttribute("aria-selected", x[0] === "vis" ? "true" : "false"); return b; });
     var tabbar = h("div", { class: "ed-tabs", role: "tablist" }, tabs);
     vis.addEventListener("input", fromVis);

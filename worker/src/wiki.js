@@ -9,15 +9,24 @@ const now = () => Math.floor(Date.now() / 1000);
 const TRUST_POINTS = 25;   // ab so vielen Punkten duerfen Beitraege sofort live gehen
 const AUTO_REVERT = 3;     // so viele Meldungen blenden eine Revision aus
 
-const MAX_BODY = 12000, MAX_REFS = 25, MAX_IMGS = 6;
+const MAX_BODY = 12000, MAX_REFS = 25, MAX_IMGS = 6, MAX_LINKS = 40;
 const BAD_HOST = /(^|\.)(bit\.ly|t\.co|tinyurl\.com|goo\.gl|is\.gd|ow\.ly|buff\.ly|cutt\.ly|rebrand\.ly|shorturl\.at)$/i;
 // Markup: ## / ### Ueberschriften, **fett**, *kursiv*, - Listen, 1. Listen, > Zitat, [[id|Text]] interne Links,
 // {{ref|Titel|https://url|Herausgeber|Datum}} Quelle als Fussnote, {{cn}} = Beleg fehlt. Links sonst nur ueber Quellen.
 // {{img|https://bild.jpg|Alt-Text}} Bild (https, .jpg/.png/.webp/.gif/.avif, Alt-Text 5-140 Zeichen Pflicht, max. 6).
-export function sanitize(raw) {
-  let s = cleanText(raw, MAX_BODY).replace(/[<>]/g, ""), err = null, n = 0, imgs = 0;
-  s = s.split(/(\{\{(?:ref|img)\|[^{}]*\}\})/).map((part, i) => {
+// opts.links: {{link|https://url|Text}} erlauben (nur Show Notes der Redaktion); sonst wird der Baustein zum reinen Text. opts.max: Laenge (Standard 12000).
+export function sanitize(raw, opts = {}) {
+  let s = cleanText(raw, opts.max || MAX_BODY).replace(/[<>]/g, ""), err = null, n = 0, imgs = 0, links = 0;
+  s = s.split(/(\{\{(?:ref|img|link)\|[^{}]*\}\})/).map((part, i) => {
     if (i % 2 === 0) return part.replace(/https?:\/\/\S+/gi, "").replace(/www\.\S+/gi, "");
+    if (part.startsWith("{{link|")) {
+      const [u, ...rest] = part.slice(7, -2).split("|"), text = rest.join(" ").trim().replace(/[\[\]{}|]/g, "").slice(0, 120);
+      if (!opts.links) return text;
+      let url; try { url = new URL((u || "").trim()); } catch { err = "bad_link"; return ""; }
+      if (url.protocol !== "https:" || (u || "").length > 300 || BAD_HOST.test(url.hostname) || url.username || url.password) { err = "bad_link"; return ""; }
+      if (++links > MAX_LINKS) { err = "too_many_links"; return ""; }
+      return `{{link|${url.href}|${text || url.hostname}}}`;
+    }
     if (part.startsWith("{{img|")) {
       const [u, ...rest] = part.slice(6, -2).split("|"), alt = rest.join(" ").trim().replace(/[\[\]{}|]/g, "");
       let url; try { url = new URL((u || "").trim()); } catch { err = "bad_image"; return ""; }

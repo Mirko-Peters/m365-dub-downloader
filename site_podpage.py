@@ -1,5 +1,6 @@
 """Englische Show-Seite (Nachbau von www.m365.fm / Podpage) unter /show/: Folgen, Seiten, Hosts, Sponsoren, Reviews, Gaeste (als Personen-Entitaeten).
 Daten: data/podpage/*.json(.gz); Audio/Transkript aus data/en_episodes.json (fetch_en_episodes.py). Videos sind bewusst ausgeschlossen."""
+import site_notes as SNT
 import gzip, json, re, html as _h
 from html.parser import HTMLParser
 from pathlib import Path
@@ -103,7 +104,8 @@ def build(g):
     gnames = sorted(((gg["name"], gg) for gg in guests if len(gg["name"]) > 5), key=lambda x: -len(x[0]))
     eg = {}
     for e in eps:
-        hay = (e["name"] + " " + plain(e.get("show_notes"))).lower()
+        _n = SNT.get("en", title=e["name"])
+        hay = (e["name"] + " " + plain(e.get("show_notes")) + " " + ((_n or {}).get("markup") or "") + " " + " ".join(p["name"] for p in (_n or {}).get("persons", []))).lower()
         eg[e["slug"]] = [gg for n, gg in gnames if n.lower() in hay][:5]
     ge = {}
     for e in eps:
@@ -124,26 +126,33 @@ def build(g):
         return f'<li style="margin:.9em 0"><a href="{ep_url(e)}"><strong>{esc(e["name"])}</strong></a><br><span class="mut">{day(e["create_time"])}{" · S" + str(e["season"]) if e.get("season") else ""}</span><br>{esc(s)}</li>'
 
     # Folgenseiten
+    elinks = json.loads((D / "episode_links.json").read_text("utf-8")) if (D / "episode_links.json").exists() else {}   # Plattform-Abgleich (sync_platforms.py)
     for k, e in enumerate(eps):
         r, tr = tr_for(e)
+        nrec = SNT.get("en", title=e["name"])   # Spreaker-Show-Notes (oder im Editor bearbeitete Fassung) statt Podpage-Sicherung
+        nkp, nnotes, nfaq, nld = SNT.blocks(nrec, "en")
         prev_, next_ = (eps[k + 1] if k + 1 < len(eps) else None), (eps[k - 1] if k else None)
         aud = f'<audio controls preload="none" style="width:100%" src="{esc(r["audio"])}"></audio>' if r and r.get("audio") else ""
-        ext = " · ".join(f'<a href="{esc(e[x])}" rel="noopener">{n}</a>' for x, n in (("episode_apple_url_path", "Apple Podcasts"), ("episode_spotify_url_path", "Spotify"), ("episode_youtube_music_url_path", "YouTube Music")) if (e.get(x) or "").startswith("http"))
+        elk = elinks.get(f"{nrec['id']}:en", {}) if nrec else {}
+        plat_links = [(n, (elk.get(pk) or e.get(fld) or "")) for n, pk, fld in (("Apple Podcasts", "apple", "episode_apple_url_path"), ("Spotify", "spotify", "episode_spotify_url_path"), ("YouTube", "youtube", None), ("YouTube Music", "youtube_music", "episode_youtube_music_url_path"), ("Deezer", "deezer", None))]
+        plat_links = [(n, u) for n, u in plat_links if u.startswith("http")]   # frisch zugeordnete Links gehen vor der Podpage-Sicherung
+        ext = " · ".join(f'<a href="{esc(u)}" rel="noopener">{n}</a>' for n, u in plat_links)
         hl = "".join(f'<a href="{BASE}/community/u/{h["slug"]}/">{esc(h["name"])}</a> ' for h in hosts if h.get("slug") == "mirko-peters")
         oa = (g.get("orig_alts") or {}).get(e["slug"]) or {}
         also = ('<h2>Also available in other languages</h2><ul>' + "".join(f'<li><a href="{u}" hreflang="{lg}">{esc(t)}</a> <span class="mut">({lg})</span></li>' for lg, (u, t) in sorted(oa.items())) + "</ul>") if oa else ""
         gl = "".join(f'<li><a href="{root}guests/{gg["slug"]}/">{esc(gg["name"])}</a></li>' for gg in eg[e["slug"]])
         tx = f'<h2>Transcript</h2><details open><summary>Read the full transcript</summary><p style="white-space:pre-wrap;line-height:1.6">{esc(tr)}</p></details>' if len(tr) > 200 else ""
         body = (f'<article><p class="mut">{day(e["create_time"])}{" · Season " + str(e["season"]) if e.get("season") else ""}</p><h1>{esc(e["name"])}</h1>{aud}'
-                f'<div style="margin:1em 0"><strong>{esc(plain(e.get("summary")))}</strong></div><div class="pp-notes">{san(e.get("show_notes"))}</div>'
+                f'<div style="margin:1em 0"><strong>{esc(plain(e.get("summary")))}</strong></div>{nkp}<div class="pp-notes">{(nnotes if nrec and nrec.get("markup") else san(e.get("show_notes")))}</div>{nfaq}{SNT.CSS if (nkp or nnotes or nfaq) else ""}'
                 + (f"<p>{ext}</p>" if ext else "") + (f'<p class="mut">Host: {hl}</p>' if hl else "") + (f"<h2>Guests</h2><ul>{gl}</ul>" if gl else "") + also + tx + "</article>"
                 + '<p style="display:flex;justify-content:space-between;gap:1em;margin-top:2em">' + (f'<a href="{ep_url(prev_)}">← {esc(prev_["name"][:60])}</a>' if prev_ else "<span></span>") + (f'<a href="{ep_url(next_)}">{esc(next_["name"][:60])} →</a>' if next_ else "") + "</p>")
         ld = {"@context": "https://schema.org", "@type": "PodcastEpisode", "name": e["name"], "url": ep_url(e), "datePublished": day(e["create_time"]),
               "description": plain(e.get("summary"))[:500], "partOfSeries": {"@type": "PodcastSeries", "name": NAME, "url": root}, "inLanguage": "en", "author": {"@id": f"{BASE}/entity/mirko-peters/#entity"}}
         if e.get("season"): ld["partOfSeason"] = {"@type": "PodcastSeason", "seasonNumber": e["season"]}
         if r and r.get("audio"): ld["associatedMedia"] = {"@type": "AudioObject", "contentUrl": r["audio"]}
+        if plat_links: ld["sameAs"] = [u for _, u in plat_links]
         if len(tr) > 200: ld["transcript"] = tr[:5000]
-        pub(f"episodes/{e['slug']}/", e.get("meta_title") or e["name"], e.get("meta_description") or plain(e.get("summary")), body, ld, "article", last=day(e.get("update_time")) or TODAY)
+        pub(f"episodes/{e['slug']}/", e.get("meta_title") or e["name"], e.get("meta_description") or plain(e.get("summary")), body, ([ld] + nld) if nld else ld, "article", last=day(e.get("update_time")) or TODAY)
 
     # Listen (paginiert)
     pages_n = (len(eps) + PER - 1) // PER

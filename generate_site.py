@@ -12,6 +12,7 @@ import site_members as MEM
 import site_events as EVT
 import site_mcp as MCPS
 import site_seo as SEOR
+import site_notes as SNT
 import glob, html, json, os, re, shutil, sys, unicodedata
 from datetime import date
 from pathlib import Path
@@ -904,6 +905,7 @@ def build():
     except Exception as _ex:
         print("Original-Zuordnung:", _ex)
     ORIG_ALTS = {}
+    SNT.load(COMMUNITY_API); SNT.publish(OUT)   # Show Notes aus Spreaker (data/show_notes) + Bearbeitungen aus dem Editor; Rohdaten fuer den Editor unter /show-notes/
     # Episoden-Seiten
     for (vid, l), it in items.items():
         e = it["e"]; ui = UI[l]
@@ -913,6 +915,9 @@ def build():
         spk = f'https://www.spreaker.com/episode/{it["eid"]}'
         yt = f"https://youtu.be/{vid}"
         tr = e.get("tr") or ""
+        _nkp, _nnotes, _nfaq, _nld = SNT.blocks(SNT.get(l, ep_id=it["eid"]), l, edited_only=True)   # nur wenn im Editor bearbeitet: Kernpunkte, Show Notes, FAQ als eigene Bloecke
+        notes_block = _nkp + _nnotes + _nfaq + (SNT.CSS if (_nkp or _nnotes or _nfaq) else "")
+        _el = {k: u for k, u in elinks.get(f"{vid}:{l}", {}).items() if u}   # zugeordnete Plattform-Folgenlinks -> sameAs
         more = related(it, by_lang[l], tagsets[l], catsets[l])
         ld = [
             {"@context": "https://schema.org", "@type": "PodcastEpisode", "name": e["title"], "description": strip_tags(intro),
@@ -921,6 +926,7 @@ def build():
              "image": f"{BASE}/og/{canonical.replace(BASE, '').strip('/')}.png", "isAccessibleForFree": True, "keywords": e.get("tags", ""),
              "about": [{"@type": "Thing", "name": t.strip()} for t in (e.get("tags") or "").split(",")[:5] if t.strip() and "m365.fm" not in t],
              **({"transcript": tr} if tr else {}),
+             **({"sameAs": list(_el.values())} if _el else {}),
              "partOfSeries": {"@type": "PodcastSeries", "name": seo.get(l, {}).get("title", "M365.FM"), "url": f"https://www.spreaker.com/show/{LANGS[l][3]}", "sameAs": same_as(l, plat.get(l, {}))},
              "author": {"@id": f"{BASE}/entity/mirko-peters/#entity"}},
             {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [
@@ -1001,7 +1007,7 @@ def build():
 <p class="mut">▶ {esc(e["title"])}</p>
 <h2>{esc(hdr)}</h2><ol class="points">{lis}</ol>
 <p class="lede" style="margin-top:1.4em">{aud}</p>
-{("<section class=article>" + art_html + "</section>") if art_html else ""}{quiz_block}{faq_block}
+{("<section class=article>" + art_html + "</section>") if art_html else ""}{quiz_block}{faq_block}{notes_block}
 {author_box(l)}
 </article>
 {('<h2>' + esc(ui[4]) + '</h2><div class="list">' + rel + '</div>') if rel else ''}
@@ -1010,7 +1016,7 @@ def build():
 {footer(l)}{PLAT_JS}{INFO_JS}{LRN.GLOSS_JS}{QUIZ_JS if quiz_block else ''}{community_tags(l, vid)}"""
         OG_COVER[canonical] = art_svg(vid, LANGS[l][0], lang=l)
         write(f'{l}/{it["slug"]}/index.html',
-              page(l, e["title"], short(intro), canonical, body, alts, ld, extra_head=f'<meta property="article:section" content="{esc(cat_name(pc, l))}">' + "".join(f'<meta property="article:tag" content="{esc(t)}">' for t in tagraw[l][vid])))
+              page(l, e["title"], short(intro), canonical, body, alts, ld + _nld, extra_head=f'<meta property="article:section" content="{esc(cat_name(pc, l))}">' + "".join(f'<meta property="article:tag" content="{esc(t)}">' for t in tagraw[l][vid])))
         sitemap.append((canonical, it["date"], alts))
         if vid in ORIG: ORIG_ALTS.setdefault(ORIG[vid], {})[l] = (canonical, e["title"])
 
@@ -1112,7 +1118,7 @@ def build():
     # Community-Seite je Sprache (noindex) + Service Worker fuer Web-Push
     for l in list(active) + ["en"]:
         ct = _CI.get(l, _CI.get("en", {})).get("profile", "Profile")
-        write("community/index.html" if l == "en" else f"{l}/community/index.html", page(l, f"{ct} – M365.FM" + ("" if l == "en" else f" {LANGS[l][0]}"), ct, (f"{BASE}/community/" if l == "en" else f"{BASE}/{l}/community/"), f'{header(l, "")}<main class="wrap" style="max-width:48em"><h1 id="c-h1">{esc(ct)}</h1><div id="c-page"></div><div id="c-expert"></div><div id="c-events"></div><div id="c-blog"></div><div id="c-podcast"></div><div id="c-shows"></div><div id="c-video"></div><div id="c-library"></div><div id="c-guests"></div><div id="c-feed"></div><div id="c-wish"></div><div id="c-messages"></div></main>{footer(l)}{community_tags(l)}<script>window.M365X={{api:"{COMMUNITY_API}",base:"{BASE}",lang:"{l}"}}</script><script defer src="{BASE}/assets/profile.js"></script><script defer src="{BASE}/assets/events.js"></script><script defer src="{BASE}/assets/editor.js"></script><script defer src="{BASE}/assets/seo.js"></script><script defer src="{BASE}/assets/credits.js"></script><script defer src="{BASE}/assets/blog.js"></script><script defer src="{BASE}/assets/podcast.js"></script><script defer src="{BASE}/assets/shows.js"></script><script defer src="{BASE}/assets/video.js"></script><script defer src="{BASE}/assets/library.js"></script><script defer src="{BASE}/assets/guests.js"></script><script defer src="{BASE}/assets/feeditems.js"></script><script defer src="{BASE}/assets/wish.js"></script><script defer src="{BASE}/assets/messages.js"></script>', og_type="website", extra_head=LRN.WCSS, noindex=True))
+        write("community/index.html" if l == "en" else f"{l}/community/index.html", page(l, f"{ct} – M365.FM" + ("" if l == "en" else f" {LANGS[l][0]}"), ct, (f"{BASE}/community/" if l == "en" else f"{BASE}/{l}/community/"), f'{header(l, "")}<main class="wrap" style="max-width:48em"><h1 id="c-h1">{esc(ct)}</h1><div id="c-page"></div><div id="c-expert"></div><div id="c-events"></div><div id="c-blog"></div><div id="c-podcast"></div><div id="c-shows"></div><div id="c-video"></div><div id="c-library"></div><div id="c-guests"></div><div id="c-feed"></div><div id="c-notes"></div><div id="c-wish"></div><div id="c-messages"></div></main>{footer(l)}{community_tags(l)}<script>window.M365X={{api:"{COMMUNITY_API}",base:"{BASE}",lang:"{l}"}}</script><script defer src="{BASE}/assets/profile.js"></script><script defer src="{BASE}/assets/events.js"></script><script defer src="{BASE}/assets/editor.js"></script><script defer src="{BASE}/assets/seo.js"></script><script defer src="{BASE}/assets/credits.js"></script><script defer src="{BASE}/assets/notes.js"></script><script defer src="{BASE}/assets/blog.js"></script><script defer src="{BASE}/assets/podcast.js"></script><script defer src="{BASE}/assets/shows.js"></script><script defer src="{BASE}/assets/video.js"></script><script defer src="{BASE}/assets/library.js"></script><script defer src="{BASE}/assets/guests.js"></script><script defer src="{BASE}/assets/feeditems.js"></script><script defer src="{BASE}/assets/wish.js"></script><script defer src="{BASE}/assets/messages.js"></script>', og_type="website", extra_head=LRN.WCSS, noindex=True))
     shutil.copy(ROOT / "assets" / "sw.js", OUT / "sw.js")
     if (ROOT / "data" / "m365con_program.json").exists():
         shutil.copy(ROOT / "data" / "m365con_program.json", OUT / "m365con_program.json")
