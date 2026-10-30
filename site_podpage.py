@@ -91,7 +91,7 @@ def build(g):
     gent = {gg["name"]: (gg["slug"] + ("-guest" if gg["slug"] not in {e["id"] for e in []} and gg["slug"] + "-guest" in ents else "")) for gg in guests}
     root = f"{BASE}/show/"; NAME = pod.get("name") or "M365.FM Podcast"
     nav = ('<nav class="mut" style="margin:0 0 1em;display:flex;gap:1em;flex-wrap:wrap">'
-           + "".join(f'<a href="{root}{p}">{t}</a>' for p, t in (("", "Home"), ("episodes/", "Episodes"), *((("guests/", "Guests"),) if guests else ()), ("hosts/", "Hosts"), ("sponsors/", "Sponsors"), ("reviews/", "Reviews"), ("work-with-me/", "Work with me"), ("about/", "About")))
+           + "".join(f'<a href="{root}{p}">{t}</a>' for p, t in (("", "Home"), ("episodes/", "Episodes"), *((("blog/", "Blog"),) if (PD / "blog_posts.json.gz").exists() else ()), *((("guests/", "Guests"),) if guests else ()), ("hosts/", "Hosts"), ("sponsors/", "Sponsors"), ("reviews/", "Reviews"), ("work-with-me/", "Work with me"), ("about/", "About")))
            + "</nav>")
     shell = lambda b: f'{header("en", "")}<main class="wrap" style="max-width:52em">{nav}{b}</main>{footer_en()}'
 
@@ -125,6 +125,36 @@ def build(g):
         s = plain(e.get("summary"))[:200]
         return f'<li style="margin:.9em 0"><a href="{ep_url(e)}"><strong>{esc(e["name"])}</strong></a><br><span class="mut">{day(e["create_time"])}{" · S" + str(e["season"]) if e.get("season") else ""}</span><br>{esc(s)}</li>'
 
+    # Blogposts (von www.m365.fm geholt, fetch_podpage_blog.py)
+    import gzip as _gz, re as _re
+    bposts = []
+    _bf = PD / "blog_posts.json.gz"
+    if _bf.exists():
+        bposts = [p for p in json.loads(_gz.open(_bf, "rt", encoding="utf-8").read()) if p.get("title") and p.get("html")]
+        bposts.sort(key=lambda p: p.get("iso") or "", reverse=True)
+    eslug = {e["slug"] for e in eps}; bslug = {p["slug"] for p in bposts}
+    def bp_url(p): return f"{root}blog/{p['slug']}/"
+    def fixlinks(h):
+        def rep(m):
+            u = m.group(1); path = _re.sub(r"^https?://(www\.)?m365\.fm", "", u)
+            if not path.startswith("/") or path.startswith("//"): return m.group(0)
+            seg = path.strip("/").split("#")[0]
+            if seg in eslug: return f'href="{root}episodes/{seg}/"'
+            if seg.startswith("blog/") and seg[5:] in bslug: return f'href="{root}blog/{seg[5:]}/"'
+            if seg == "blog": return f'href="{root}blog/"'
+            return m.group(0)
+        return _re.sub(r'href="([^"]+)"', rep, h)
+    def bp_ep(p):
+        for m in _re.finditer(r'href="([^"]+)"', p.get("html") or ""):
+            seg = _re.sub(r"^https?://(www\.)?m365\.fm", "", m.group(1)).strip("/")
+            if seg in eslug: return seg
+        return None
+    bp_by_ep = {}
+    for p in bposts:
+        k = bp_ep(p)
+        if k: bp_by_ep.setdefault(k, []).append(p)
+    def bday(p): return (p.get("iso") or "")[:10]
+
     # Folgenseiten
     elinks = json.loads((D / "episode_links.json").read_text("utf-8")) if (D / "episode_links.json").exists() else {}   # Plattform-Abgleich (sync_platforms.py)
     for k, e in enumerate(eps):
@@ -144,7 +174,8 @@ def build(g):
         tx = f'<h2>Transcript</h2><details open><summary>Read the full transcript</summary><p style="white-space:pre-wrap;line-height:1.6">{esc(tr)}</p></details>' if len(tr) > 200 else ""
         body = (f'<article><p class="mut">{day(e["create_time"])}{" · Season " + str(e["season"]) if e.get("season") else ""}</p><h1>{esc(e["name"])}</h1>{aud}'
                 f'<div style="margin:1em 0"><strong>{esc(plain(e.get("summary")))}</strong></div>{nkp}<div class="pp-notes">{(nnotes if nrec and nrec.get("markup") else san(e.get("show_notes")))}</div>{nfaq}{SNT.CSS if (nkp or nnotes or nfaq) else ""}'
-                + (f"<p>{ext}</p>" if ext else "") + (f'<p class="mut">Host: {hl}</p>' if hl else "") + (f"<h2>Guests</h2><ul>{gl}</ul>" if gl else "") + also + tx + "</article>"
+                + (f"<p>{ext}</p>" if ext else "") + (f'<p class="mut">Host: {hl}</p>' if hl else "") + (f"<h2>Guests</h2><ul>{gl}</ul>" if gl else "") + also
+                + (("<h2>Related articles</h2><ul>" + "".join(f'<li><a href="{bp_url(p)}">{esc(p["title"])}</a></li>' for p in bp_by_ep.get(e["slug"], [])[:6]) + "</ul>") if bp_by_ep.get(e["slug"]) else "") + tx + "</article>"
                 + '<p style="display:flex;justify-content:space-between;gap:1em;margin-top:2em">' + (f'<a href="{ep_url(prev_)}">← {esc(prev_["name"][:60])}</a>' if prev_ else "<span></span>") + (f'<a href="{ep_url(next_)}">{esc(next_["name"][:60])} →</a>' if next_ else "") + "</p>")
         ld = {"@context": "https://schema.org", "@type": "PodcastEpisode", "name": e["name"], "url": ep_url(e), "datePublished": day(e["create_time"]),
               "description": plain(e.get("summary"))[:500], "partOfSeries": {"@type": "PodcastSeries", "name": NAME, "url": root}, "inLanguage": "en", "author": {"@id": f"{BASE}/entity/mirko-peters/#entity"}}
@@ -177,6 +208,26 @@ def build(g):
         gl += f'<li style="margin:.4em 0"><a href="{root}guests/{gg["slug"]}/">{esc(gg["name"])}</a> <span class="mut">{esc(gg.get("title") or "")[:90]}</span></li>'
     if guests: pub("guests/", "Guests", f"{len(guests)} guests of the {NAME}.", f'<h1>Guests</h1><ul style="list-style:none;padding:0">{gl}</ul>')
 
+    # Blog
+    ebyslug = {e["slug"]: e for e in eps}
+    for p in bposts:
+        ep = ebyslug.get(bp_ep(p) or "")
+        body = (f'<article><p class="mut">{bday(p)}</p><h1>{esc(p["title"])}</h1><div class="pp-notes">{fixlinks(san(p["html"]))}</div>'
+                + (f'<p><strong>Listen to the episode:</strong> <a href="{ep_url(ep)}">{esc(ep["name"])}</a></p>' if ep else "") + "</article>"
+                + f'<p><a href="{root}blog/">← All articles</a></p>')
+        ld = {"@context": "https://schema.org", "@type": "BlogPosting", "headline": p["title"], "url": bp_url(p), "mainEntityOfPage": bp_url(p), "datePublished": p.get("iso") or "", "dateModified": p.get("modified") or p.get("iso") or "",
+              "description": p.get("desc") or "", "inLanguage": "en", "author": {"@id": f"{BASE}/entity/mirko-peters/#entity"}, "publisher": {"@type": "Organization", "name": NAME, "url": root}, "isPartOf": {"@type": "Blog", "name": f"{NAME} blog", "url": f"{root}blog/"}}
+        if ep: ld["about"] = {"@type": "PodcastEpisode", "name": ep["name"], "url": ep_url(ep)}
+        faq = [q for q in (p.get("faq") or []) if q.get("name") and (q.get("acceptedAnswer") or {}).get("text")]
+        lds = [ld] + ([{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": faq}] if faq else [])
+        pub(f"blog/{p['slug']}/", p["title"], p.get("desc") or plain(p["html"])[:200], body, lds, "article", last=bday(p) or TODAY)
+    BPER = 50; bn = (len(bposts) + BPER - 1) // BPER
+    for q in range(bn):
+        part = bposts[q * BPER:(q + 1) * BPER]
+        pg = "".join(f'<a href="{root}blog/{"" if i == 0 else f"page/{i + 1}/"}"{" style=font-weight:700" if i == q else ""}>{i + 1}</a> ' for i in range(bn))
+        li = "".join(f'<li style="margin:.8em 0"><a href="{bp_url(p)}"><strong>{esc(p["title"])}</strong></a><br><span class="mut">{bday(p)}</span><br>{esc((p.get("desc") or "")[:200])}</li>' for p in part)
+        pub("blog/" if q == 0 else f"blog/page/{q + 1}/", "Blog" + (f" – page {q + 1}" if q else ""), f"{len(bposts)} articles on Microsoft 365, Azure, Power Platform and AI from the {NAME}.", f'<h1>Blog</h1><ul style="list-style:none;padding:0">{li}</ul><p>{pg}</p>', noindex=bool(q))
+
     # Hosts, Sponsoren, Reviews, Downloads, Links
     hb = "".join(f'<section><h2>{esc(h["name"])}</h2><p class="mut">{esc(h.get("title") or "")}</p>{san(h.get("bio"))}</section>' for h in hosts)
     pub("hosts/", "Hosts", f"Hosts of the {NAME}.", f"<h1>Hosts</h1>{hb}")
@@ -204,7 +255,7 @@ def build(g):
     shp = json.loads((D / "platforms.json").read_text("utf-8")).get("en", {}) if (D / "platforms.json").exists() else {}
     listen = " · ".join(f'<a href="{esc(shp[k])}" rel="noopener">{n}</a>' for k, n in (("apple_show", "Apple Podcasts"), ("spotify_show", "Spotify"), ("amazon_show", "Amazon Music"), ("deezer_show", "Deezer"), ("iheart_show", "iHeart"), ("castbox_show", "Castbox"), ("podcastaddict_show", "Podcast Addict"), ("podchaser_show", "Podchaser")) if shp.get(k))
     hub = (f'<h1>{esc(NAME)}</h1><p>{esc(plain(pod.get("description")))[:600]}</p>' + (f'<p><strong>Listen on:</strong> {listen}</p>' if listen else "") + f'<h2>Latest episodes</h2><ul style="list-style:none;padding:0">{"".join(card(e) for e in eps[:20])}</ul>'
-           f'<p><a href="{root}episodes/">All {len(eps)} episodes →</a></p>' + (f"<h2>Topics</h2><ul>{ct}</ul>" if ct else ""))
+           f'<p><a href="{root}episodes/">All {len(eps)} episodes →</a></p>' + (f'<h2>Latest articles</h2><ul>{"".join(f"<li><a href=\"{bp_url(p)}\">{esc(p[chr(116)+chr(105)+chr(116)+chr(108)+chr(101)])}</a></li>" for p in bposts[:8])}</ul><p><a href="{root}blog/">All {len(bposts)} articles →</a></p>' if bposts else "") + (f"<h2>Topics</h2><ul>{ct}</ul>" if ct else ""))
     ld = {"@context": "https://schema.org", "@type": "PodcastSeries", "name": NAME, "url": root, "description": plain(pod.get("description"))[:500], "inLanguage": "en", "webFeed": "https://www.spreaker.com/show/6704921/episodes/feed", **({"sameAs": [shp[k] for k in ("apple_show", "spotify_show", "amazon_show", "deezer_show", "iheart_show", "castbox_show", "podcastaddict_show", "podchaser_show") if shp.get(k)]} if shp else {})}
     pub("", NAME, plain(pod.get("description")) or NAME, hub, ld)
     # Weiterleitungsliste fuer den Umzug (Podpage-Struktur: Folgen und Seiten direkt unter /<slug>/, Gaeste unter /guests/<slug>/, Blog /blog/<slug>/)
@@ -219,7 +270,8 @@ def build(g):
     for e in eps: add(f"/{e['slug']}", f"/show/episodes/{e['slug']}/")
     for sl, _ in plist: add(f"/{sl}", f"/show/{sl}/")
     for x in guests: add(f"/guests/{x['slug']}", f"/show/guests/{x['slug']}/")
-    for old, new in (("/episodes", "/show/episodes/"), ("/guests", "/show/guests/"), ("/hosts", "/show/hosts/"), ("/people", "/show/hosts/"), ("/sponsors", "/show/sponsors/"), ("/reviews", "/show/reviews/"), ("/podroll", "/show/listen/"), ("/videos", "/show/"), ("/blog", "/show/")): rd.setdefault(old, new)
+    for old, new in (("/episodes", "/show/episodes/"), ("/guests", "/show/guests/"), ("/hosts", "/show/hosts/"), ("/people", "/show/hosts/"), ("/sponsors", "/show/sponsors/"), ("/reviews", "/show/reviews/"), ("/podroll", "/show/listen/"), ("/videos", "/show/"), ("/blog", "/show/blog/" if bposts else "/show/")): rd.setdefault(old, new)
+    for p in bposts: rd[f"/blog/{p['slug']}"] = f"/show/blog/{p['slug']}/"
     write("show/redirects.json", json.dumps(rd))
     write("show/redirect-conflicts.json", json.dumps(sorted(set(clash))))
-    print(f"podpage: {len(eps)} Folgen, {len(guests)} Gaeste, {len(plist)} Seiten, {len(rd)} Weiterleitungen, Konflikte mit Plattform-Seiten: {sorted(set(clash))}")
+    print(f"podpage: {len(eps)} Folgen, {len(guests)} Gaeste, {len(bposts)} Blogposts, {len(plist)} Seiten, {len(rd)} Weiterleitungen, Konflikte mit Plattform-Seiten: {sorted(set(clash))}")

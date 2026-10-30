@@ -38,7 +38,7 @@ def one(url):
 def main():
     sm = get(B + "/sitemap.xml") or ""
     urls = [u for u in re.findall(r"<loc>([^<]+)</loc>", sm) if "/blog/" in u and u.rstrip("/") != B + "/blog"]
-    lim = int(sys.argv[1]) if len(sys.argv) > 1 else 0
+    lim = int(sys.argv[1]) if len(sys.argv) > 1 and sys.argv[1].strip() else 0
     if lim: urls = urls[:lim]
     old = {}
     try: old = {p["url"]: p for p in json.load(gzip.open(OUT, "rt", encoding="utf-8")) if not p.get("error")}
