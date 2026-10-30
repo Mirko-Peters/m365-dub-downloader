@@ -5,6 +5,7 @@ import { runDigest, sendMail } from "./digest.js";
 import { handleEntity } from "./entities.js";
 import { handleProfiles, deleteUserData } from "./profiles.js";
 import { handleEvents, deleteUserEvents } from "./events.js";
+import { handleVotes } from "./votes.js";
 import { handlePoints } from "./points.js";
 import { handleMessages, purgeMessages, deleteUserMessages } from "./messages.js";
 import { refreshFeeds } from "./feeds.js";
@@ -220,6 +221,7 @@ async function api(env, request, url, path) {
   if (/^\/api\/points(\/|$)/.test(path) || path.startsWith("/api/admin/points/")) { const p = await handlePoints(env, request, url, path, user, J); if (p) return p; }
   if (/^\/api\/msg(\/|$)/.test(path)) { const p = await handleMessages(env, request, url, path, user, J); if (p) { if (user && method !== "GET") await evalBadges(env, user.id).catch(() => 0); return p; } }
   if (/^\/api\/(events?|speaker)(\/|$)/.test(path) || /^\/api\/entity\/claims?(\/|$)/.test(path) || /^\/api\/admin\/entity\/claims?$/.test(path)) { const p = await handleEvents(env, request, url, path, user, J); if (p) { if (user && method !== "GET") await evalBadges(env, user.id).catch(() => 0); return p; } }
+  if (path.startsWith("/api/edits/")) { const v = await handleVotes(env, request, url, path, user, J); if (v) return v; }
   if (path.startsWith("/api/entity") || path.startsWith("/api/admin/entity")) { const e = await handleEntity(env, request, url, path, user, J); if (e) return e; }
   if (/^\/api\/(profile|profiles|endorse|vote|feed|org|orgs|img|recommend)(\/|$)/.test(path) || path === "/api/admin/verify" || path === "/api/admin/feed-hide") { const p = await handleProfiles(env, request, url, path, user, J); if (p) { if (user && method !== "GET") await evalBadges(env, user.id).catch(() => 0); return p; } }
   if (path === "/api/wiki" || path.startsWith("/api/wiki/") || path.startsWith("/api/admin/wiki")) { const w = await handleWiki(env, request, url, path, user, J); if (w) return w; }

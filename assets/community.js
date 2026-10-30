@@ -53,7 +53,8 @@
     }
     q.addEventListener("input", function () { clearTimeout(q._t); q._t = setTimeout(load, 300); });
     load();
-    return h("section", { class: "ccard" }, [h("h2", { text: "Team" }), h("p", { class: "cmut", text: "Editoren veröffentlichen Wiki-Beiträge direkt und prüfen fremde Beiträge. / Editors publish wiki notes directly and review others." }), h("label", {}, [q]), res]);
+    var seedMsg = h("span", { class: "cmut" }), seedBtn = h("button", { type: "button", class: "btn", text: "M365Con 2027 als Event anlegen", onclick: function () { api("/api/events/seed-m365con", { method: "POST", body: {} }).then(function (r) { seedMsg.textContent = r.s === 200 ? (r.j.existed ? " bereits vorhanden" : " angelegt (nicht öffentlich) – Daten im Bereich Events pflegen") : " Fehler"; }); } });
+    return h("section", { class: "ccard" }, [h("h2", { text: "Team" }), h("p", {}, [seedBtn, seedMsg]), h("p", { class: "cmut", text: "Editoren veröffentlichen Wiki-Beiträge direkt und prüfen fremde Beiträge. / Editors publish wiki notes directly and review others." }), h("label", {}, [q]), res]);
   }
 
   /* ---------- Kommentare ---------- */

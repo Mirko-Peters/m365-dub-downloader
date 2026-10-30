@@ -168,7 +168,21 @@
       });
       hd.appendChild(ul); box.appendChild(hd);
     }
-    if (d.admin) adminQueue();
+    if (d.admin) adminQueue(); else voteQueue();
+  }
+  function voteQueue() {
+    var de = (document.documentElement.lang || "en").slice(0, 2) === "de";
+    api("/api/edits/pending?kind=wiki&key=" + encodeURIComponent(W.term) + "&lang=" + W.lang).then(function (r) {
+      var l = (r.j.edits || []).filter(function (x) { return !x.own; }); if (r.s !== 200 || !l.length) return;
+      var sec = h("div", { class: "wk-admin" }, [h("h3", { text: de ? "Offene Änderungen – die Community stimmt ab" : "Open edits – the community votes" })]);
+      l.forEach(function (x) {
+        var pb = h("div", { class: "wk-body" }); pb.appendChild(renderWiki(x.body)); var st = h("span", { class: "cmut", text: x.net + " / " + x.need });
+        function vote(v) { api("/api/edits/vote", { method: "POST", body: { kind: "wiki", id: x.id, v: v } }).then(function (z) { if (z.s === 200) { st.textContent = z.j.net + " / " + z.j.need; if (z.j.status !== "pending") load(); } }); }
+        sec.appendChild(h("div", { class: "wk-pend" }, [h("p", { class: "cmut", text: x.name + (x.summary ? " – " + x.summary : "") }), pb,
+          r.j.can_vote ? h("div", { class: "btns" }, [h("button", { type: "button", class: "btn main", text: "👍", "aria-label": de ? "Zustimmen" : "Approve", onclick: function () { vote(1); } }), h("button", { type: "button", class: "btn", text: "👎", "aria-label": de ? "Ablehnen" : "Reject", onclick: function () { vote(-1); } }), " ", st]) : st]));
+      });
+      box.appendChild(sec);
+    });
   }
   function adminQueue() {
     api("/api/admin/wiki/pending").then(function (r) {

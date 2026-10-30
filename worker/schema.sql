@@ -359,3 +359,12 @@ CREATE TABLE IF NOT EXISTS sponsor_asks (
   created INTEGER NOT NULL,
   UNIQUE (event_id, org_id)
 );
+
+CREATE TABLE IF NOT EXISTS edit_votes (
+  kind TEXT NOT NULL,                     -- wiki | entity
+  rev_id INTEGER NOT NULL,
+  user_id INTEGER NOT NULL,
+  v INTEGER NOT NULL,                     -- 1 | -1
+  created INTEGER NOT NULL,
+  PRIMARY KEY(kind, rev_id, user_id)
+);
