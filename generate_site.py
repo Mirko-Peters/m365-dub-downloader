@@ -390,7 +390,7 @@ def single_main(html_):
 
 
 def page(lang, title, desc, canonical, body, alternates=None, jsonld=None, xdefault=None, og_type="article", extra_head="", noindex=False):
-    if lang in ("fr", "es", "it", "nl", "pt", "pl") and any(k in canonical for k in ("/community/", "/entity/", "/glossary/")):
+    if lang in COMM_LANGS[2:] and any(k in canonical for k in ("/community/", "/entity/", "/glossary/")):
         extra_head += f'<script src="{BASE}/assets/ui-{lang}.js"></script>'
     hl = LANGS[lang][1] if lang in LANGS else "en"
     d = LANGS[lang][2] if lang in LANGS else "ltr"
@@ -1044,8 +1044,6 @@ def build():
         ct = _CI.get(l, _CI.get("en", {})).get("community", "Community")
         write("community/index.html" if l == "en" else f"{l}/community/index.html", page(l, f"{ct} – M365.FM" + ("" if l == "en" else f" {LANGS[l][0]}"), ct, (f"{BASE}/community/" if l == "en" else f"{BASE}/{l}/community/"), f'{header(l, "")}<main class="wrap" style="max-width:48em"><h1 id="c-h1">{esc(ct)}</h1><div id="c-page"></div><div id="c-expert"></div><div id="c-events"></div><div id="c-messages"></div></main>{footer(l)}{community_tags(l)}<script>window.M365X={{api:"{COMMUNITY_API}",base:"{BASE}",lang:"{l}"}}</script><script defer src="{BASE}/assets/profile.js"></script><script defer src="{BASE}/assets/events.js"></script><script defer src="{BASE}/assets/messages.js"></script>', og_type="website", extra_head=LRN.WCSS, noindex=True))
     shutil.copy(ROOT / "assets" / "sw.js", OUT / "sw.js")
-    if (ROOT / "data" / "ui_js_en.json").exists():
-        shutil.copy(ROOT / "data" / "ui_js_en.json", OUT / "ui_js_en.json")
     if (ROOT / "data" / "m365con_program.json").exists():
         shutil.copy(ROOT / "data" / "m365con_program.json", OUT / "m365con_program.json")
 
@@ -1273,6 +1271,8 @@ def build():
     write("og-manifest.json", json.dumps(OGLIST, ensure_ascii=False))
     write("404.html", page("en", "Not found", "Page not found", f"{BASE}/404.html", '<main class="wrap"><h1>404</h1><p><a class="btn" href="%s/">M365.FM</a></p></main>' % BASE))
     json.dump([u for u, _, _ in sitemap], open(ROOT / "data" / "urls.json", "w"), indent=0)
+    from site_i18n import write_src
+    write_src(OUT, ROOT / "data" / "ui_js_en.json")
     print(f"{len(items)} Episodenseiten, {len(active)} Sprachen, {len(sitemap)} URLs → docs/")
 
 

@@ -2,7 +2,7 @@
 // Sicherheitsnetz: nur mit gesetztem Secret ANTHROPIC_API_KEY, Tageslimit, 24 h Wartezeit fuer die Community, Notaus ueber meta tr_off=1.
 import { entityMap } from "./entities.js";
 
-const UI_LANGS = { fr: "French", es: "Spanish", it: "Italian", nl: "Dutch", pt: "Portuguese (European)", pl: "Polish" }, UI_CHUNK = 40, UI_CHUNKS_PER_RUN = 2;
+const UI_LANGS = { fr: "French", es: "Spanish", it: "Italian", nl: "Dutch", pt: "Portuguese (European)", pl: "Polish", id: "Indonesian", ru: "Russian", uk: "Ukrainian", ar: "Arabic", he: "Hebrew", hi: "Hindi", ja: "Japanese", ko: "Korean", ml: "Malayalam", pa: "Punjabi (Gurmukhi)", ta: "Tamil", te: "Telugu" }, UI_CHUNK = 40, UI_CHUNKS_PER_RUN = 3;
 const MODEL = "claude-haiku-5-5", DAILY_CAP = 100, PER_RUN = 10, WAIT = 24 * 3600, SKIP_TYPES = ["person", "event", "org"];
 const now = () => Math.floor(Date.now() / 1000);
 const SYS = "You translate short encyclopedia texts about Microsoft products and IT concepts between English and German. " +
@@ -108,6 +108,6 @@ export async function autoTranslateUi(env) {
 
 export async function uiI18nExport(env) {   // { fr: { "datei.NAME": { schluessel: text } } }
   const rows = (await env.DB.prepare("SELECT lang,k,v FROM ui_i18n").all()).results || [], out = {};
-  for (const r of rows) { const [k, kk] = r.k.split("|"); ((out[r.lang] ||= {})[k] ||= {})[kk] = r.v; }
+  for (const r of rows) { const i = r.k.indexOf("|"), k = r.k.slice(0, i), kk = r.k.slice(i + 1); ((out[r.lang] ||= {})[k] ||= {})[kk] = r.v; }
   return out;
 }
