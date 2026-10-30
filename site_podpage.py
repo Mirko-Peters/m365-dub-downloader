@@ -276,6 +276,25 @@ def build(g):
 
     # Blog
     ebyslug = {e["slug"]: e for e in eps}
+    # Sprachfassungen der Blogartikel (Uebersetzer-Team, translate_blog.py): nur vollstaendige und zum aktuellen Original passende
+    import translate_blog as _TB, site_blog_i18n as _BUI
+    BTR = {}
+    for l in LG:
+        _have = _TB.load_lang(l)
+        if not _have: continue
+        BTR[l] = {p["slug"]: a for p in bposts for a in [_TB.assemble(p, _have.get(p["slug"]))] if a}
+    BTR = {l: v for l, v in BTR.items() if v}
+    def lfix(h, l):   # interne Links auf die Sprachfassung, wenn es sie gibt
+        def rep(m):
+            u = m.group(1)
+            if u.startswith(f"{root}blog/"):
+                sl = u[len(root) + 5:].strip("/")
+                if sl in BTR.get(l, {}): return f'href="{loc_url(l, "blog/" + sl + "/")}"'
+            if u.startswith(f"{root}episodes/"):
+                sl = u[len(root) + 9:].strip("/")
+                if sl in TRL.get(l, {}) and TRL[l][sl][0]: return f'href="{loc_url(l, "episodes/" + sl + "/")}"'
+            return m.group(0)
+        return _re.sub(r'href="([^"]+)"', rep, fixlinks(h))
     for p in bposts:
         ep = ebyslug.get(bp_ep(p) or "")
         _bi = thumb_of(ep, SNT.get("en", title=ep["name"])) if ep else ""   # Titelbild: Thumbnail der verlinkten Folge, sonst erzeugtes Bild
@@ -290,13 +309,40 @@ def build(g):
         if _bi: ld["image"] = _bi
         faq = [q for q in (p.get("faq") or []) if q.get("name") and (q.get("acceptedAnswer") or {}).get("text")]
         lds = [ld] + ([{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": faq}] if faq else [])
-        pub(f"blog/{p['slug']}/", p["title"], p.get("desc") or plain(p["html"])[:200], body, lds, "article", last=bday(p) or TODAY)
+        balts = {"en": bp_url(p), **{l: loc_url(l, f"blog/{p['slug']}/") for l in BTR if p["slug"] in BTR[l]}}
+        pub(f"blog/{p['slug']}/", p["title"], p.get("desc") or plain(p["html"])[:200], body, lds, "article", last=bday(p) or TODAY, alts=balts if len(balts) > 1 else None)
+        for l in BTR:
+            if p["slug"] not in BTR[l]: continue
+            lt, ld_, lh, lfaq = BTR[l][p["slug"]]; U = _BUI.ui(l); lu = loc_url(l, f"blog/{p['slug']}/")
+            lep = (f'<p><strong>{esc(U[2])}</strong> <a href="{loc_url(l, "episodes/" + ep["slug"] + "/") if ep["slug"] in TRL.get(l, {}) and TRL[l][ep["slug"]][0] else ep_url(ep)}">'
+                   f'{esc(TRL[l][ep["slug"]][0] if ep["slug"] in TRL.get(l, {}) and TRL[l][ep["slug"]][0] else ep["name"])}</a></p>') if ep else ""
+            lbody = (f'<article><p class="mut">{bday(p)}</p><h1>{esc(lt)}</h1>{_hero}<div class="pp-notes">{lfix(lh, l)}</div>{lep}'
+                     f'<p class="mut" style="font-size:.9em">{esc(U[3])} <a href="{bp_url(p)}" hreflang="en" lang="en">{esc(U[4])}</a></p></article>'
+                     f'<p><a href="{loc_url(l, "blog/")}">← {esc(U[1])}</a></p>')
+            lld = {**ld, "headline": lt, "url": lu, "mainEntityOfPage": lu, "description": ld_ or "", "inLanguage": LG[l][1],
+                   "isPartOf": {"@type": "Blog", "name": f"{NAME} {U[0]}", "url": loc_url(l, "blog/")},
+                   "translationOfWork": {"@type": "BlogPosting", "@id": bp_url(p), "url": bp_url(p), "inLanguage": "en", "headline": p["title"]},
+                   "translator": {"@type": "Organization", "name": "M365.FM (AI-assisted translation)"}}
+            llds = [lld] + ([{"@context": "https://schema.org", "@type": "FAQPage", "inLanguage": LG[l][1], "mainEntity": lfaq}] if lfaq else [])
+            write(f"{l}/show/blog/{p['slug']}/index.html", g["page"](l, f"{lt} – {NAME}", (ld_ or plain(lh))[:300], lu, f'{g["header"](l, "")}<main class="wrap">{lbody}</main>{g["footer"](l)}', balts, llds, xdefault=bp_url(p), og_type="article", og_of=bp_url(p)))
+            sitemap.append((lu, bday(p) or TODAY, None))
     BPER = 50; bn = (len(bposts) + BPER - 1) // BPER
     for q in range(bn):
         part = bposts[q * BPER:(q + 1) * BPER]
         pg = "".join(f'<a href="{root}blog/{"" if i == 0 else f"page/{i + 1}/"}"{" style=font-weight:700" if i == q else ""}>{i + 1}</a> ' for i in range(bn))
         li = "".join(f'<li style="margin:.8em 0"><a href="{bp_url(p)}"><strong>{esc(p["title"])}</strong></a><br><span class="mut">{bday(p)}</span><br>{esc((p.get("desc") or "")[:200])}</li>' for p in part)
         pub("blog/" if q == 0 else f"blog/page/{q + 1}/", "Blog" + (f" – page {q + 1}" if q else ""), f"{len(bposts)} articles on Microsoft 365, Azure, Power Platform and AI from the {NAME}.", f'<h1>Blog</h1><ul style="list-style:none;padding:0">{li}</ul><p>{pg}</p>', noindex=bool(q))
+    # Blog-Listen je Sprache (paginiert)
+    for l in BTR:
+        U = _BUI.ui(l); lps = [p for p in bposts if p["slug"] in BTR[l]]; ln = (len(lps) + BPER - 1) // BPER
+        for q in range(ln):
+            part = lps[q * BPER:(q + 1) * BPER]; lrel = "blog/" if q == 0 else f"blog/page/{q + 1}/"; lu = loc_url(l, lrel)
+            pg = "".join(f'<a href="{loc_url(l, "blog/" + ("" if i == 0 else f"page/{i + 1}/"))}"{" style=font-weight:700" if i == q else ""}>{i + 1}</a> ' for i in range(ln))
+            li = "".join(f'<li style="margin:.8em 0"><a href="{loc_url(l, "blog/" + p["slug"] + "/")}"><strong>{esc(BTR[l][p["slug"]][0])}</strong></a><br><span class="mut">{bday(p)}</span><br>{esc((BTR[l][p["slug"]][1] or "")[:200])}</li>' for p in part)
+            ttl = f"{U[0]} – {NAME}" + (f" ({q + 1})" if q else "")
+            write(f"{l}/show/{lrel}index.html", g["page"](l, ttl, f"{len(lps)} {U[5]} · {NAME}", lu, f'{g["header"](l, "")}<main class="wrap"><h1>{esc(U[0])}</h1><p class="mut">{len(lps)} {esc(U[5])}</p><ul style="list-style:none;padding:0">{li}</ul><p>{pg}</p></main>{g["footer"](l)}',
+                                                     None, None, xdefault=f"{root}{lrel}", og_type="website", noindex=bool(q)))
+            if not q: sitemap.append((lu, TODAY, None))
 
     # Hosts, Sponsoren, Reviews, Downloads, Links
     hb = "".join(f'<section><h2>{esc(h["name"])}</h2><p class="mut">{esc(h.get("title") or "")}</p>{san(h.get("bio"))}</section>' for h in hosts)
