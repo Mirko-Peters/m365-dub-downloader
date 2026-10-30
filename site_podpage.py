@@ -121,9 +121,32 @@ def build(g):
 
     def ep_url(e): return f"{root}episodes/{e['slug']}/"
 
+    def thumb_of(e, nrec=None):
+        """Bild der Folge: Spreaker-Folgenbild (Podpage-Sicherung oder RSS), sonst YouTube-Vorschau aus dem Video-Link, sonst leer."""
+        u = (e.get("image_path") or "")
+        if u.startswith("https://") and "None" not in u:
+            return u
+        m = re.search(r"(?:v=|youtu\.be/)([A-Za-z0-9_-]{11})", e.get("video_link") or "")
+        if m:
+            return f"https://i.ytimg.com/vi/{m.group(1)}/hqdefault.jpg"
+        i = (nrec or {}).get("image") or ""
+        return i if i.startswith("https://") else ""
+
+    def short_desc(e, nrec=None, n=180):
+        """Kurzbeschreibung: Zusammenfassung, sonst erster Absatz der Show Notes (Spreaker/Editor), sonst Meta-Beschreibung - an Wortgrenze gekuerzt."""
+        t = plain(e.get("summary")) or plain(((nrec or {}).get("markup") or "").split("\n\n")[0].replace("*", "")) or plain(e.get("meta_description")) or plain(e.get("show_notes"))
+        t = re.sub(r"\{\{(?:link|img)\|[^|{}]*\|([^{}]*)\}\}", r"\1", t)
+        if len(t) <= n:
+            return t
+        return t[:n].rsplit(" ", 1)[0].rstrip(",;:- ") + "…"
+
+    def img_tag(u, alt, size):
+        return f'<img src="{esc(u)}" alt="{esc(alt)}" width="{size}" height="{size}" loading="lazy" decoding="async" style="width:{size}px;height:{size}px;object-fit:cover;border-radius:.5rem;flex:none">' if u else ""
+
     def card(e):
-        s = plain(e.get("summary"))[:200]
-        return f'<li style="margin:.9em 0"><a href="{ep_url(e)}"><strong>{esc(e["name"])}</strong></a><br><span class="mut">{day(e["create_time"])}{" · S" + str(e["season"]) if e.get("season") else ""}</span><br>{esc(s)}</li>'
+        nr = SNT.get("en", title=e["name"])
+        s = short_desc(e, nr, 200); th = img_tag(thumb_of(e, nr), e["name"], 96)
+        return (f'<li style="margin:.9em 0;display:flex;gap:1rem;align-items:flex-start">{th}<div><a href="{ep_url(e)}"><strong>{esc(e["name"])}</strong></a><br><span class="mut">{day(e["create_time"])}{" · S" + str(e["season"]) if e.get("season") else ""}</span><br>{esc(s)}</div></li>')
 
     # Folgenseiten
     elinks = json.loads((D / "episode_links.json").read_text("utf-8")) if (D / "episode_links.json").exists() else {}   # Plattform-Abgleich (sync_platforms.py)
@@ -143,16 +166,16 @@ def build(g):
         gl = "".join(f'<li><a href="{root}guests/{gg["slug"]}/">{esc(gg["name"])}</a></li>' for gg in eg[e["slug"]])
         tx = f'<h2>Transcript</h2><details open><summary>Read the full transcript</summary><p style="white-space:pre-wrap;line-height:1.6">{esc(tr)}</p></details>' if len(tr) > 200 else ""
         body = (f'<article><p class="mut">{day(e["create_time"])}{" · Season " + str(e["season"]) if e.get("season") else ""}</p><h1>{esc(e["name"])}</h1>{aud}'
-                f'<div style="margin:1em 0"><strong>{esc(plain(e.get("summary")))}</strong></div>{nkp}<div class="pp-notes">{(nnotes if nrec and nrec.get("markup") else san(e.get("show_notes")))}</div>{nfaq}{SNT.CSS if (nkp or nnotes or nfaq) else ""}'
+                f'<div style="display:flex;gap:1rem;align-items:flex-start;margin:1em 0">{img_tag(thumb_of(e, nrec), e["name"], 160)}<div><strong>{esc(short_desc(e, nrec, 300))}</strong></div></div>{nkp}<div class="pp-notes">{(nnotes if nrec and nrec.get("markup") else san(e.get("show_notes")))}</div>{nfaq}{SNT.CSS if (nkp or nnotes or nfaq) else ""}'
                 + (f"<p>{ext}</p>" if ext else "") + (f'<p class="mut">Host: {hl}</p>' if hl else "") + (f"<h2>Guests</h2><ul>{gl}</ul>" if gl else "") + also + tx + "</article>"
                 + '<p style="display:flex;justify-content:space-between;gap:1em;margin-top:2em">' + (f'<a href="{ep_url(prev_)}">← {esc(prev_["name"][:60])}</a>' if prev_ else "<span></span>") + (f'<a href="{ep_url(next_)}">{esc(next_["name"][:60])} →</a>' if next_ else "") + "</p>")
         ld = {"@context": "https://schema.org", "@type": "PodcastEpisode", "name": e["name"], "url": ep_url(e), "datePublished": day(e["create_time"]),
-              "description": plain(e.get("summary"))[:500], "partOfSeries": {"@type": "PodcastSeries", "name": NAME, "url": root}, "inLanguage": "en", "author": {"@id": f"{BASE}/entity/mirko-peters/#entity"}}
+              "description": short_desc(e, nrec, 500), "partOfSeries": {"@type": "PodcastSeries", "name": NAME, "url": root}, "inLanguage": "en", **({"image": thumb_of(e, nrec)} if thumb_of(e, nrec) else {}), "author": {"@id": f"{BASE}/entity/mirko-peters/#entity"}}
         if e.get("season"): ld["partOfSeason"] = {"@type": "PodcastSeason", "seasonNumber": e["season"]}
         if r and r.get("audio"): ld["associatedMedia"] = {"@type": "AudioObject", "contentUrl": r["audio"]}
         if plat_links: ld["sameAs"] = [u for _, u in plat_links]
         if len(tr) > 200: ld["transcript"] = tr[:5000]
-        pub(f"episodes/{e['slug']}/", e.get("meta_title") or e["name"], e.get("meta_description") or plain(e.get("summary")), body, ([ld] + nld) if nld else ld, "article", last=day(e.get("update_time")) or TODAY)
+        pub(f"episodes/{e['slug']}/", e.get("meta_title") or e["name"], e.get("meta_description") or short_desc(e, nrec, 155), body, ([ld] + nld) if nld else ld, "article", last=day(e.get("update_time")) or TODAY)
 
     # Listen (paginiert)
     pages_n = (len(eps) + PER - 1) // PER

@@ -16,6 +16,7 @@ S = {"en": dict(entities="Microsoft ecosystem entity database", intro="Products,
      "de": dict(entities="Entitätsdatenbank zum Microsoft-Ökosystem", intro="Produkte, Plattformen, Konzepte, Zertifizierungen und Organisationen rund um Microsoft – mit Beziehungen, von der Community beschrieben und als Schema.org-Daten veröffentlicht.", new="Neues Thema anlegen", all="Alle", facts="Fakten", website="Webseite", docs="Dokumentation", wikipedia="Wikipedia", wikidata="Wikidata", type="Typ", aka="Auch bekannt als", experts="Experten und Firmen zu diesem Thema", noexperts="Dieses Thema hat noch niemand im Profil angegeben. Trag es in deinem Profil ein.", eps="Folgen zu {t}", export="Datenexport", edit_e="Eigenschaften bearbeiten", glossary="Glossar", count="{n} Einträge", up="Zuletzt bearbeitet")}
 
 
+SPEAKERS = {}   # Entitaets-ID -> zusammengefuehrter Speaker (data/speakers.json) mit Events und Sessions
 EVENTS = {}   # Event-Handle -> Event (fuer Verlinkung Entitaet -> Eventseite)
 CLAIMS = {}   # eid -> Profil-Handle (uebernommene Entitaeten)
 ORGPAGES = {}   # eid -> Firmen-Handle
@@ -144,6 +145,10 @@ def ent_ld(BASE, e, lang, glossary_set=None):
     elif t == "person":
         if e.get("job"):
             n["jobTitle"] = e["job"]
+        if e.get("company"):
+            n["worksFor"] = {"@type": "Organization", "name": e["company"]}
+        if SPEAKERS.get(e["id"], {}).get("events"):   # Auftritte als Speaker (Events der Plattform)
+            n["performerIn"] = [{"@type": "Event", "name": x["title"], "url": f"{BASE}/community/events/{x['handle']}/"} for x in SPEAKERS[e["id"]]["events"]]
     return n
 
 
@@ -259,6 +264,13 @@ def build(g, wiki_links, experts_by_ent, ep_find):
                     evl += f'<h2>{T(lang, "Sessions", "Sessions")} ({len(_ses)})</h2><ul>' + "".join(f'<li>{esc(_se["title"])}' + (f' <span class="mut">· {", ".join(_sl(x) for x in _se.get("speakers", []))}</span>' if _se.get("speakers") else "") + "</li>" for _se in _ses[:150]) + "</ul>"
                 if _spk:
                     evl += f'<h2>{T(lang, "Speakers", "Speaker")} ({len(_spk)})</h2><p>' + ", ".join(_sl(x) for x in sorted(_spk.values(), key=lambda a: a["n"].lower())[:200]) + "</p>"
+            _spk = SPEAKERS.get(e["id"])
+            if _spk and _spk.get("sessions"):   # Speaker-Profil: Auftritte und Sessions (aus den zusammengefuehrten Programmen)
+                _p3 = f'{BASE}{pfx(lang)}/community'
+                _evt = {x["handle"]: x["title"] for x in _spk.get("events", [])}
+                evl += (f'<h2>{T(lang, "Speaker at", "Speaker bei")}</h2><p>' + ", ".join(f'<a href="{_p3}/events/{h}/">{esc(t)}</a>' for h, t in _evt.items()) + "</p>"
+                        + f'<h2>{T(lang, "Sessions", "Sessions")} ({len(_spk["sessions"])})</h2><ul>' + "".join(
+                            f'<li><a href="{_p3}/events/{s_["event"]}/">{esc(s_["title"])}</a> <span class="mut">· {esc(_evt.get(s_["event"], ""))} · {esc(s_["start"][:10])}</span></li>' for s_ in _spk["sessions"]) + "</ul>")
             _hit = [(_ev, _se) for _ev in EVENTS.values() for _se in _ev.get("sessions", []) if e["id"] in (_se.get("topics") or [])]
             if _hit and e["id"] not in EVENTS:   # Sessions zu diesem Thema (Gegenrichtung zu den Themen an der Session)
                 _p2 = f'{BASE}{pfx(lang)}/community'

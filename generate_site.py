@@ -905,6 +905,12 @@ def build():
     except Exception as _ex:
         print("Original-Zuordnung:", _ex)
     ORIG_ALTS = {}
+    try:   # Speaker der M365Con-Programme: zusammengefuehrte Personen (tools/build_speakers.py) -> Entitaetsseiten und /speakers.json fuer den Worker
+        _sp = json.loads((ROOT / "data" / "speakers.json").read_text("utf-8")).get("speakers", [])
+        ENT.SPEAKERS.update({x["id"]: x for x in _sp})
+        write("speakers.json", json.dumps({"version": 1, "speakers": [{k: x[k] for k in ("id", "name", "aliases", "handle") if k in x} for x in _sp]}, ensure_ascii=False))
+    except Exception as _e:
+        print("Speaker-Daten:", _e)
     SNT.load(COMMUNITY_API); SNT.publish(OUT)   # Show Notes aus Spreaker (data/show_notes) + Bearbeitungen aus dem Editor; Rohdaten fuer den Editor unter /show-notes/
     # Episoden-Seiten
     for (vid, l), it in items.items():
