@@ -33,7 +33,7 @@ export async function pollUpdates(env, max = 3) {
   for (const s of due) {
     try {
       const ctl = new AbortController(), to = setTimeout(() => ctl.abort(), 8000);
-      const r = await fetch(s.url, { signal: ctl.signal, headers: { "user-agent": "M365FM-update-watch/1.0 (+https://dub.m365.fm)", accept: "application/rss+xml, application/atom+xml, text/xml, */*" } });
+      const r = await fetch(s.url, { signal: ctl.signal, headers: { "user-agent": "M365FM-update-watch/1.0 (+https://www.m365.fm)", accept: "application/rss+xml, application/atom+xml, text/xml, */*" } });
       clearTimeout(to); if (!r.ok) throw new Error("http " + r.status);
       const items = parseFeed((await r.text()).slice(0, 900000), 40); if (!items.length) throw new Error("empty");
       const ops = [];

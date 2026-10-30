@@ -1,0 +1,922 @@
+WEBVTT
+
+00:00:00.140 --> 00:00:07.540
+Klaar voor 10 dagen Microsoft 365, Copilot, AI, Azure en de mensen die de toekomst van werk vormgeven?
+
+00:00:07.940 --> 00:00:12.360
+Deze januari is M365, kom terug en pakken we groter uit.
+
+00:00:12.780 --> 00:00:18.540
+Doe mee voor live sessies, praktijkdemo's en praktische kennis van MVP's en experts uit de hele wereld.
+
+00:00:18.760 --> 00:00:21.620
+Geen algemene sliedes, geen eindeloze modewoorden.
+
+00:00:21.940 --> 00:00:29.100
+We pakken de echte uitdagingen aan Copilot Studio, AI Agents, Fabric, Beveiliging, Governance en Automatisering.
+
+00:00:29.100 --> 00:00:35.000
+Of je nu IT-professional, ontwikkelaar of business leader bent, er zijn sessies speciaal voor jou ontworpen.
+
+00:00:35.280 --> 00:00:40.520
+Met 10 volledige dagen kun je meerdere technologieën verkennen en in contact komen met een wereldwijde community.
+
+00:00:40.920 --> 00:00:44.500
+Kijk live en neem praktische inzichten mee terug naar je organisatie.
+
+00:00:44.880 --> 00:00:49.160
+Januari 2027, 10 dagen, 1 Microsoft Community.
+
+00:00:49.420 --> 00:00:51.160
+De registratie is nu geopend.
+
+00:00:51.880 --> 00:00:55.920
+Ga naar m365.com.net en verzeker je vandaag nog van een plek.
+
+00:00:56.220 --> 00:00:58.920
+Dat is m365.com.net.
+
+00:01:00.100 --> 00:01:04.580
+Meld je nu aan op m365.com.net en we zien je live in januari.
+
+00:01:04.840 --> 00:01:09.160
+Welkom bij een nieuwe aflevering van Microsoft Knowledge Nuggets hier op M365 FM.
+
+00:01:09.360 --> 00:01:10.740
+Ik ben je host Mirko Pirotzi.
+
+00:01:10.940 --> 00:01:14.800
+Het onderwerp van vandaag is er een waar bijna iedereen van heeft gehoord, maar weinig duidelijk kunnen uitleggen.
+
+00:01:14.920 --> 00:01:15.880
+Azure Private Link.
+
+00:01:16.060 --> 00:01:20.040
+Je hebt de optie vast wel eens gezien bij het opzetten van een opslagaccount of een SQL database.
+
+00:01:20.260 --> 00:01:21.840
+Maar wat doet het eigenlijk en heb je het echt nodig?
+
+00:01:22.080 --> 00:01:23.760
+Dit is wat de meeste mensen fout doen.
+
+00:01:23.760 --> 00:01:29.860
+Ze gaan ervan uit dat omdat de service in Azure draait, deze automatisch privé is en standaard is afgeschermd van het internet.
+
+00:01:30.120 --> 00:01:31.800
+Dat is niet waar, nog geen beetje.
+
+00:01:32.440 --> 00:01:38.380
+De meeste Azure PaaS services, zoals Opslag, SQL en Key Vault, worden standaard geleverd met een openbaar eindpunt.
+
+00:01:38.620 --> 00:01:43.560
+Dat betekent dat iedereen op het internet ze kan bereiken, zolang ze de juiste URL en inloggegevens hebben.
+
+00:01:43.560 --> 00:01:50.360
+Aan het einde van deze aflevering begrijp je wat Private Link echt is, waarom het bestaat en hoe het je verkeer buiten het openbare internet houdt.
+
+00:01:50.440 --> 00:01:52.760
+We leggen het uit aan de hand van eenvoudige analogieën.
+
+00:01:52.920 --> 00:01:58.160
+Geen marketingpraat, geen jargon, gewoon begrijpelijke taal over de oude manier met overal openbare eindpunten.
+
+00:01:58.400 --> 00:01:59.800
+Laten we beginnen met het probleem.
+
+00:02:00.000 --> 00:02:04.540
+Voordat Private Link bestond, kreeg elke Azure PaaS service standaard een openbaar eindpunt.
+
+00:02:04.740 --> 00:02:12.720
+Je maakt een opslagaccount aan en Azure geeft je iets als mijn-opslagaccount.blog.core.windows.net, die URL verwijst naar een openbaar IP-adres.
+
+00:02:12.720 --> 00:02:15.400
+Iedereen met internettoegang kan proberen er verbinding mee te maken.
+
+00:02:15.620 --> 00:02:19.300
+Stel je nu voor dat je een virtuele machine hebt die in je eigen Azure virtuele netwerk draait.
+
+00:02:19.520 --> 00:02:21.900
+Die VM moet wat bestanden lezen uit blopopslag.
+
+00:02:22.060 --> 00:02:24.240
+Je denkt dat het verkeer binnen Azure blijft, toch?
+
+00:02:24.460 --> 00:02:27.640
+Beide resources zitten in dezelfde cloud, maar zo werkt het niet.
+
+00:02:27.840 --> 00:02:34.120
+De VM moet je virtuele netwerk verlaten, over het openbare internet gaan en dan weer Azure in om dat opslagaccount te bereiken.
+
+00:02:34.340 --> 00:02:39.260
+Het is alsof je in een kamer van een kantoorpand staat en je iets uit de voorraadkast in hetzelfde gebouw moet halen.
+
+00:02:39.260 --> 00:02:43.980
+Maar in plaats van door de gang te lopen, moet je naar buiten om het blok lopen en via een andere deur weer naar binnen gaan.
+
+00:02:44.140 --> 00:02:46.420
+Het slaat nergens op, maar dat is precies wat er gebeurde.
+
+00:02:46.640 --> 00:02:47.820
+Dit is een reëel probleem.
+
+00:02:47.980 --> 00:02:52.920
+Je gegevens reizen over het openbare internet, ook al bevinden beide bronnen zich in Microsoft's eigen datacenters.
+
+00:02:53.140 --> 00:02:56.900
+Dat verkeer is versleuteld, natuurlijk, maar het is nog steeds blootgesteld aan het open internet.
+
+00:02:57.080 --> 00:03:00.200
+Het gaat nog steeds door routers en switches waar jij geen controle over hebt.
+
+00:03:00.380 --> 00:03:03.740
+En als iemand dat verkeer zou onderscheppen, zouden ze kunnen zien wat je verstuurt.
+
+00:03:03.900 --> 00:03:05.420
+Er is hier een veel voorkomende mythe.
+
+00:03:05.700 --> 00:03:08.840
+Veel mensen denken, nou, het staat in mijn abonnement, dus het is privé.
+
+00:03:08.840 --> 00:03:09.860
+Zo werkt het niet.
+
+00:03:10.040 --> 00:03:13.300
+Je abonnement is een grens voor facturering en beheer, geen netwerkgrens.
+
+00:03:13.480 --> 00:03:16.220
+Standaard zijn je Azure services bereikbaar vanaf het internet.
+
+00:03:16.460 --> 00:03:22.040
+Het enige dat ze beschermt is de authenticatie- en autorisatielaag, de sleutels, de wachtwoorden en de firewallregels.
+
+00:03:22.240 --> 00:03:23.880
+Maar het netwerkpad zelf is openbaar.
+
+00:03:24.100 --> 00:03:26.720
+Dus keek Microsoft hiernaar en zei, er moet een betere manier zijn.
+
+00:03:26.880 --> 00:03:27.900
+En die hebben ze gebouwd.
+
+00:03:28.100 --> 00:03:29.320
+Ze noemden het PrivateLink.
+
+00:03:29.520 --> 00:03:32.740
+De oplossing, een privé-eindpunt als netwerk-interfacekaart.
+
+00:03:32.740 --> 00:03:44.020
+PrivateLink is de overkoepelende service, maar het kernonderdeel dat je moet begrijpen is het privé-eindpunt, een virtuele netwerk-interfacekaart, of NIC, die in je virtuele netwerk zit en verbinding maakt met een pass-service.
+
+00:03:44.520 --> 00:03:45.520
+Dit is hoe het werkt.
+
+00:03:45.860 --> 00:03:53.260
+Je maakt een privé-eindpunt voor je opslagaccount en Azure bouwt een virtuele NIC in je virtuele netwerk met een privé-IP uit je subnet.
+
+00:03:53.260 --> 00:03:57.820
+Die NIC maakt aan de achterkant verbinding met het opslagaccount via PrivateLink.
+
+00:03:58.040 --> 00:04:05.440
+Dus, vanuit het standpunt van je VM lijkt het opslagaccount nu alsof het in je eigen netwerk leeft met een privé-IP, net als elke andere bron.
+
+00:04:05.680 --> 00:04:13.860
+Wanneer je VM verkeer naar dat opslagaccount stuurt, raakt het het privé-IP van de NIC en reist het over het Microsoft Backbone-netwerk, nooit over het openbare internet.
+
+00:04:14.060 --> 00:04:16.640
+Het verlaat nooit de interne infrastructuur van Azure.
+
+00:04:16.960 --> 00:04:19.320
+Denk erover als die beveiligde gang in het kantoorpand.
+
+00:04:19.320 --> 00:04:23.820
+In plaats van naar buiten te lopen en om het blok te gaan, loop je gewoon door de gang naar de voorraadkast.
+
+00:04:24.120 --> 00:04:25.800
+Directe verbinding, geen omweg.
+
+00:04:26.020 --> 00:04:27.960
+Nu is hier een nuance die veel mensen missen.
+
+00:04:28.140 --> 00:04:32.180
+Het inschakelen van een privaat eindpunt schakelt het publieke eindpunt niet automatisch uit.
+
+00:04:32.400 --> 00:04:34.120
+Ze kunnen beide tegelijkertijd bestaan.
+
+00:04:34.360 --> 00:04:39.760
+Als je een privaat eindpunt aanmaakt, maar de instellingen van het publieke eindpunt niet wijzigt, is je opslagaccount nog steeds bereikbaar via internet.
+
+00:04:39.960 --> 00:04:43.300
+Je moet de openbare netwerktoegang expliciet uitschakelen om het volledig af te sluiten.
+
+00:04:43.540 --> 00:04:46.100
+Veel mensen denken dat het aanmaken van een privaat eindpunt voldoende is.
+
+00:04:46.100 --> 00:04:46.900
+Dat is het niet.
+
+00:04:46.900 --> 00:04:49.180
+Je moet Azure vertellen, ik wil alleen private toegang.
+
+00:04:49.320 --> 00:04:51.560
+Laat me nog een misverstand uit de weg ruimen nu we hier toch zijn.
+
+00:04:51.720 --> 00:04:54.380
+Private Link is niet hetzelfde als een VPN of Express route.
+
+00:04:54.620 --> 00:04:57.740
+Ze lossen verschillende problemen op en we komen later op die vergelijking terug.
+
+00:04:57.920 --> 00:05:03.160
+Voor nu moet je weten dat Private Link bedoeld is voor toegang tot een specifieke service, niet om je hele netwerk met Azure te verbinden.
+
+00:05:03.340 --> 00:05:07.960
+Dus, je hebt je private eindpunt en je VM kan het opslagaccount bereiken via een privaat IP-adres.
+
+00:05:08.180 --> 00:05:10.140
+Maar hoe vindt je VM dat opslagaccount eigenlijk?
+
+00:05:10.420 --> 00:05:13.300
+Voorheen loste het de publieke URL op naar een publieke IP-adres.
+
+00:05:13.500 --> 00:05:15.220
+Nu heeft het een privaat IP-adres nodig.
+
+00:05:15.220 --> 00:05:18.940
+Hoe werkt dat? Dat is waar DNS bij komt kijken en waar we nu naar gaan kijken.
+
+00:05:19.200 --> 00:05:21.940
+DNS is het geheime ingrediënt dat alles laat werken.
+
+00:05:22.140 --> 00:05:26.860
+Je hebt je private eindpunt en je VM kan het opslagaccount bereiken via een privaat IP-adres.
+
+00:05:27.080 --> 00:05:29.800
+Maar hier is het punt, je VM kent dat IP-adres niet.
+
+00:05:29.980 --> 00:05:33.280
+Het kent de URL van het opslagaccount, iets als mijn opslagaccount.
+
+00:05:33.500 --> 00:05:35.160
+Blob.core.windows.net.
+
+00:05:35.360 --> 00:05:37.140
+Dat is de naam die het gebruikt om verbinding te maken.
+
+00:05:37.360 --> 00:05:39.740
+Dus, hoe vindt het het private IP-adres in plaats van het publieke?
+
+00:05:39.740 --> 00:05:41.740
+Dit is waar DNS het zware werk verricht.
+
+00:05:41.940 --> 00:05:46.160
+Wanneer je een privaat eindpunt aanmaakt en kiest voor integratie met een private DNS-zone,
+
+00:05:46.300 --> 00:05:48.860
+wat je zou moeten doen, maakt Azure er automatisch een voor je aan.
+
+00:05:49.060 --> 00:05:51.700
+Voor een blob-opslagaccount heet die zone private link.
+
+00:05:51.920 --> 00:05:53.780
+Blob.core.windows.net.
+
+00:05:53.960 --> 00:05:58.680
+Binnen die zone voegt Azure een a-record toe dat je opslagaccountnaam koppelt aan het private IP-adres van het eindpunt.
+
+00:05:58.900 --> 00:06:00.100
+Nu komt het slimme gedeelte.
+
+00:06:00.300 --> 00:06:02.720
+De oorspronkelijke publieke URL wordt nog steeds opgelost,
+
+00:06:02.900 --> 00:06:04.800
+maar in plaats van direct een publieke IP terug te geven,
+
+00:06:04.980 --> 00:06:07.140
+geeft het een Cineam-record terug dat naar de private zone wijst.
+
+00:06:07.140 --> 00:06:09.260
+De resolutieketen verloopt dus als volgt.
+
+00:06:09.400 --> 00:06:11.740
+Je VM vraagt om de URL van het opslagaccount.
+
+00:06:11.980 --> 00:06:14.620
+DNS geeft een Cineam terug die wijst naar mijn opslagaccount.
+
+00:06:14.920 --> 00:06:17.260
+Privatelink.blob.core.windows.net,
+
+00:06:17.420 --> 00:06:20.920
+dat zich in de private DNS-zone bevindt die gekoppeld is aan je virtuele netwerk.
+
+00:06:21.220 --> 00:06:23.320
+DNS lost dit op naar het private IP-adres.
+
+00:06:23.500 --> 00:06:27.420
+Je VM maakt verbinding met dat private IP en het verkeer komt nooit op het openbare internet.
+
+00:06:27.700 --> 00:06:29.960
+Denk erover als een receptie in een kantoorgebouw.
+
+00:06:30.120 --> 00:06:32.200
+Iemand loopt naar binnen en vraagt naar de voorraadkast,
+
+00:06:32.380 --> 00:06:34.140
+en de receptionist stuurt ze niet naar buiten.
+
+00:06:34.400 --> 00:06:36.180
+Ze wijzen ze de juiste gang binnenin aan.
+
+00:06:36.180 --> 00:06:41.320
+De private DNS-zone is als een receptioniste die het verkeer naar de juiste plek stuurt zonder het pand te verlaten.
+
+00:06:41.500 --> 00:06:43.680
+Hoe dit werkt hangt af van waar je VM zich bevindt.
+
+00:06:43.800 --> 00:06:46.440
+Als deze zich in hetzelfde virtuele netwerk bevindt als het privated point,
+
+00:06:46.600 --> 00:06:49.660
+wordt de private DNS-zone gekoppeld, waardoor resolutie automatisch plaatsvindt.
+
+00:06:49.760 --> 00:06:53.440
+Als de VM in een gekoppeld, peer-t-netwerk staat, moet je de zone ook aan dat netwerk koppelen.
+
+00:06:53.620 --> 00:06:56.980
+Voor on-premises machines via VPN of Express route wordt het complexer.
+
+00:06:57.160 --> 00:07:00.520
+Meestal stel je een DNS-forwarder in of gebruik je Azure DNS Private Resolver
+
+00:07:00.520 --> 00:07:02.680
+om ervoor te zorgen dat queries de private zone bereiken.
+
+00:07:02.680 --> 00:07:06.300
+Maar voor de meeste scenario's binnen Azure wordt de basis voor je geregeld.
+
+00:07:06.540 --> 00:07:08.860
+DNS kan complex worden in grotere omgevingen,
+
+00:07:09.020 --> 00:07:13.020
+maar voor het standaardgeval, een VM in hetzelfde virtuele netwerk als het privated point,
+
+00:07:13.200 --> 00:07:14.540
+regelt Azure dit automatisch.
+
+00:07:14.720 --> 00:07:15.940
+Je hoeft helemaal niets te doen.
+
+00:07:16.220 --> 00:07:18.480
+Laten we dit in de praktijk bekijken met een echt voorbeeld.
+
+00:07:18.660 --> 00:07:19.660
+Een praktijkvoorbeeld.
+
+00:07:19.900 --> 00:07:21.540
+Private link met Azure Storage.
+
+00:07:21.820 --> 00:07:23.020
+Laten we dit concreet maken.
+
+00:07:23.260 --> 00:07:26.540
+Stel, je hebt een virtuele machine draaien in je virtuele Azure-netwerk.
+
+00:07:26.760 --> 00:07:29.620
+Die VM moet bestanden ophalen uit een Azure Blob Storage account.
+
+00:07:29.620 --> 00:07:31.620
+Dat is een veelvoorkomende configuratie.
+
+00:07:31.780 --> 00:07:33.520
+Misschien een app die gebruikers- uploads opslaat,
+
+00:07:33.680 --> 00:07:35.780
+of een dataverwerkingstaak die uit een container leest.
+
+00:07:35.980 --> 00:07:37.720
+Zonder private link gebeurt het volgende.
+
+00:07:37.940 --> 00:07:41.860
+Je VM zoekt de publieke URL van het Storage account op en krijgt een publiek IP-adres.
+
+00:07:42.060 --> 00:07:43.700
+Verkeer verlaat je virtuele netwerk,
+
+00:07:43.960 --> 00:07:47.640
+gaat over het publieke internet en komt dan weer Azure binnen om het Storage account te bereiken.
+
+00:07:47.900 --> 00:07:49.140
+Dat is een onnodige omweg.
+
+00:07:49.400 --> 00:07:51.180
+Beide resources bevinden zich al in Azure,
+
+00:07:51.440 --> 00:07:53.820
+maar de data gaat toch via een omweg over het open internet.
+
+00:07:54.020 --> 00:07:58.100
+Met private link implementeer je een private point voor de Blob subresource van het Storage account.
+
+00:07:58.100 --> 00:08:00.940
+Dat is het specifieke onderdeel dat Blob data afhandelt.
+
+00:08:01.100 --> 00:08:04.120
+Azure maakt een virtuele nick in je virtuele netwerk met een privaat IP,
+
+00:08:04.360 --> 00:08:08.980
+stelt de private DNS-zone in en de hele DNS-resolutieketen waar we het over hadden wordt geactiveerd.
+
+00:08:09.160 --> 00:08:13.640
+Als je VM nu dezelfde URL, mystorageaccount.blob.core.windows.net, omzet,
+
+00:08:13.780 --> 00:08:15.960
+krijgt deze het private IP in plaats van het publieke.
+
+00:08:16.180 --> 00:08:22.180
+Verkeer stroomt van de VM naar het private point en vervolgens via de Microsoft backbone naar het Storage account.
+
+00:08:22.440 --> 00:08:24.620
+Het verlaat nooit het interne netwerk van Azure.
+
+00:08:24.840 --> 00:08:26.040
+Dit is het belangrijkste punt.
+
+00:08:26.040 --> 00:08:30.480
+Je applicatie verandert niet, geen aanpassingen in connection strings, geen updates aan configuratiebestanden.
+
+00:08:30.640 --> 00:08:32.060
+De URL blijft hetzelfde.
+
+00:08:32.220 --> 00:08:34.660
+Het enige wat verandert is hoe die URL wordt omgezet.
+
+00:08:34.840 --> 00:08:38.080
+Vanuit het perspectief van de app is er nog steeds verbinding met hetzelfde Storage account,
+
+00:08:38.300 --> 00:08:40.500
+maar achter de schermen is het pad van het verkeer totaal anders.
+
+00:08:40.700 --> 00:08:44.140
+En als je helemaal veilig wilt zijn, kun je het publieke endpoint volledig uitschakelen.
+
+00:08:44.320 --> 00:08:47.460
+Dat betekent dat je Storage account alleen bereikbaar is via het private endpoint.
+
+00:08:47.720 --> 00:08:49.240
+Geen enkele blootstelling aan het internet.
+
+00:08:49.500 --> 00:08:51.740
+Niemand kan zelfs maar proberen verbinding te maken van buitenaf.
+
+00:08:51.920 --> 00:08:53.340
+Nog één ding dat het vermelde waard is.
+
+00:08:53.340 --> 00:08:55.420
+Opslag accounts hebben meerdere sub-resources.
+
+00:08:55.720 --> 00:08:58.060
+Blob is er een, maar er zijn ook file, table en queue.
+
+00:08:58.200 --> 00:09:00.160
+Elk daarvan kan een eigen privé-eindpunt hebben.
+
+00:09:00.320 --> 00:09:03.160
+Je zou er een kunnen hebben voor blob-verkeer en een aparte voor file-verkeer.
+
+00:09:03.320 --> 00:09:06.300
+Of gebruik één eindpunt dat ze allemaal dekt, afhankelijk van je behoefte.
+
+00:09:06.460 --> 00:09:09.500
+Nu vraag je je misschien af, hoe verschilt dit van andere Azure-verbindingsopties?
+
+00:09:09.700 --> 00:09:11.780
+VPN, Express Route, Service eindpunten.
+
+00:09:11.980 --> 00:09:13.320
+Ze klinken allemaal vergelijkbaar.
+
+00:09:13.540 --> 00:09:14.580
+Laten we dat verduidelijken.
+
+00:09:14.780 --> 00:09:18.080
+Private Link versus VPN versus Express Route versus Service eindpunten.
+
+00:09:18.080 --> 00:09:21.980
+Dus, hoe verhoudt Private Link zich tot VPN, Express Route en Service eindpunten?
+
+00:09:22.160 --> 00:09:25.580
+Ze klinken alsof ze hetzelfde doen, maar ze lossen eigenlijk verschillende problemen op.
+
+00:09:25.640 --> 00:09:27.360
+En in veel gevallen gebruik je ze samen.
+
+00:09:27.600 --> 00:09:28.800
+Laten we beginnen met VPN.
+
+00:09:29.060 --> 00:09:33.040
+Een virtual private network verbindt je on-premises netwerk met Azure via het openbare internet.
+
+00:09:33.260 --> 00:09:36.100
+Het creëert een versleutelde tunnel tussen jouw locatie en Azure.
+
+00:09:36.340 --> 00:09:39.900
+Verkeer is versleuteld, zeker, maar het reist nog steeds over het openbare internet.
+
+00:09:40.100 --> 00:09:42.680
+De tunnel is veilig, maar de weg waar hij op ligt is openbaar.
+
+00:09:42.880 --> 00:09:44.540
+Private Link vervangt VPN niet.
+
+00:09:44.540 --> 00:09:45.600
+Het werkt daarnaast.
+
+00:09:45.740 --> 00:09:49.240
+Je zou een VPN kunnen gebruiken om je kantoor met Azure te verbinden en daarna Private Link
+
+00:09:49.240 --> 00:09:51.760
+om privé toegang te krijgen tot je opslagaccount via die verbinding.
+
+00:09:51.980 --> 00:09:53.200
+Express Route is anders.
+
+00:09:53.480 --> 00:09:56.600
+Het geeft je een toegewezen privé circuit van je datacenter naar Azure.
+
+00:09:56.840 --> 00:09:58.900
+Verkeer raakt het openbare internet helemaal niet aan.
+
+00:09:59.060 --> 00:10:02.020
+Het is alsof je je eigen privéweg rechtstreeks naar het netwerk van Microsoft hebt.
+
+00:10:02.180 --> 00:10:03.640
+Maar dit is het addertje onder het glas.
+
+00:10:03.840 --> 00:10:06.580
+Express Route alleen geeft je geen privé toegang tot paasservices.
+
+00:10:06.880 --> 00:10:10.620
+Het verbindt je netwerk met Azure, maar je opslagaccount heeft nog steeds een openbaar eindpunt.
+
+00:10:10.620 --> 00:10:14.780
+Je zou Express Route combineren met Private Link om echt privé toegang tot die services te krijgen.
+
+00:10:15.020 --> 00:10:17.060
+Service eindpunten zijn een oudere technologie.
+
+00:10:17.260 --> 00:10:21.020
+Hiermee kun je de toegang tot een Azure service beperken, zodat alleen verkeer uit je virtuele
+
+00:10:21.020 --> 00:10:21.940
+netwerk het kan bereiken.
+
+00:10:22.120 --> 00:10:24.740
+Maar het punt is, de service heeft nog steeds een openbaar eindpunt.
+
+00:10:24.920 --> 00:10:28.580
+Je voegt alleen een firewall regel toe die zegt, sta alleen verkeer van dit v-net toe.
+
+00:10:28.740 --> 00:10:31.280
+Het eindpunt zelf is nog steeds blootgesteld aan het internet.
+
+00:10:31.500 --> 00:10:35.340
+Private Link is veiliger omdat het eindpunt echt binnen je v-net zit en een privé IP heeft.
+
+00:10:35.520 --> 00:10:37.240
+Er is geen openbaar eindpunt om aan te vallen.
+
+00:10:37.240 --> 00:10:39.280
+Laat me je een eenvoudige manier geven om erover na te denken.
+
+00:10:39.480 --> 00:10:41.480
+VPN is een veilige tunnel door een openbare weg.
+
+00:10:41.660 --> 00:10:44.000
+Express Route is een privéweg die rechtstreeks naar Azure gaat.
+
+00:10:44.200 --> 00:10:47.320
+Service eindpunten zijn een bewaker bij de openbare poort die ID's controleert.
+
+00:10:47.480 --> 00:10:49.440
+Private Link is een directe gang in het gebouw.
+
+00:10:49.580 --> 00:10:50.860
+Je komt helemaal niet buiten.
+
+00:10:51.100 --> 00:10:52.420
+Dus, welke moet je gebruiken?
+
+00:10:52.640 --> 00:10:53.600
+Dat hangt ervan af.
+
+00:10:53.760 --> 00:10:57.600
+Om je kantoor met Azure te verbinden, zijn VPN of Express Route je opties.
+
+00:10:57.800 --> 00:11:01.340
+Voor het privé benaderen van paasdiensten is Private Link de gouden standaard.
+
+00:11:01.500 --> 00:11:03.500
+En voor de beste beveiliging combineer je ze.
+
+00:11:03.500 --> 00:11:08.840
+Express Route om je verkeer privé naar Azure te krijgen en daarna Private Link om vanaf daar privé je diensten te benaderen.
+
+00:11:09.040 --> 00:11:11.460
+Maar Private Link is niet alleen voor Microsoft diensten.
+
+00:11:11.660 --> 00:11:16.480
+Je kunt het ook gebruiken voor je eigen applicaties, waarbij de Private Link Service je eigen private endpoints host.
+
+00:11:16.680 --> 00:11:18.180
+Dit is iets wat veel mensen missen.
+
+00:11:18.360 --> 00:11:20.920
+Private Link is er niet alleen om Azure diensten te verbruiken.
+
+00:11:21.120 --> 00:11:24.000
+Je kunt het ook gebruiken om je eigen applicaties aan de wereld bloot te stellen.
+
+00:11:24.240 --> 00:11:26.480
+Dat is precies waar de Private Link Service voor is gebouwd.
+
+00:11:26.700 --> 00:11:28.340
+Stel je voor dat je een SaaS provider bent.
+
+00:11:28.340 --> 00:11:33.100
+Je hebt een applicatie draaien op virtuele machines achter een standaard load balancer, waar je klanten toegang toe hebben.
+
+00:11:33.500 --> 00:11:34.800
+Traditioneel had je twee opties.
+
+00:11:35.000 --> 00:11:38.660
+Alles blootstellen aan het internet of een VPN opzetten tussen jouw netwerk en dat van hen.
+
+00:11:38.900 --> 00:11:40.180
+Beide hebben grote nadelen.
+
+00:11:40.400 --> 00:11:45.380
+Publieke blootstelling stelt je bloot aan beveiligingsrisico's en VPN's zijn complex om te beheren en te onderhouden.
+
+00:11:45.580 --> 00:11:47.180
+Private Link Service lost dat op.
+
+00:11:47.340 --> 00:11:50.160
+Je maakt de service aan, koppelt deze aan je standaard load balancer...
+
+00:11:50.160 --> 00:11:53.440
+...en vervolgens kunnen je klanten een privated point in hun eigen virtuele netwerk aanmaken.
+
+00:11:53.600 --> 00:11:55.720
+Dat het point maakt direct verbinding met jouw service.
+
+00:11:55.720 --> 00:11:58.940
+Geen pering, geen VPN en absoluut geen publieke blootstelling.
+
+00:11:59.120 --> 00:12:03.520
+Het verkeer reist van hun privated point via de Microsoft backbone rechtstreeks naar jouw service.
+
+00:12:03.760 --> 00:12:05.160
+Het komt nooit op het internet.
+
+00:12:05.380 --> 00:12:11.120
+Je service krijgt een wereldwijd unieke alias, zoiets als MyApp, DoIt, Region, Azure, Private Link Service.
+
+00:12:11.360 --> 00:12:15.900
+Die alias is wat klanten gebruiken om verbinding te maken en jij hebt volledige controle over wie het kan zien.
+
+00:12:16.080 --> 00:12:21.940
+Je kunt de zichtbaarheid beperken via RBAC-rollen, specifieke abonnementen of iedereen met de alias een verbinding laten aanvragen.
+
+00:12:21.940 --> 00:12:26.620
+Elk verbindingsverzoek komt bij jou voor handmatige goedkeuring, dus je weet altijd precies wie er verbinding maakt.
+
+00:12:26.800 --> 00:12:28.820
+Voor SaaS-providers is dit een enorme verandering.
+
+00:12:29.020 --> 00:12:34.200
+In plaats van firewall-regels te openen of complexe VPN configuraties te beheren, geef je de klant simpelweg de alias.
+
+00:12:34.460 --> 00:12:37.700
+Zij maken een privated point aan, jij keurt het goed en dat is alles.
+
+00:12:37.900 --> 00:12:39.220
+Klaar, één beperking echter.
+
+00:12:39.340 --> 00:12:43.040
+De Private Link Service werkt alleen met standaard load balancers, niet met de basisversie.
+
+00:12:43.220 --> 00:12:46.260
+Als je nog een basis load balancer gebruikt, zul je eerst moeten upgraden.
+
+00:12:46.460 --> 00:12:49.780
+Dat is een kleine prijs voor de veiligheid en eenvoud die je ervoor terugkrijgt.
+
+00:12:49.780 --> 00:12:54.120
+Al die beveiliging klinkt geweldig, maar wat betekent dit eigenlijk voor je compliance-eisen en je budget?
+
+00:12:54.520 --> 00:12:56.800
+Overwegingen rondom beveiliging, compliance en kosten.
+
+00:12:57.060 --> 00:13:00.860
+Laten we bespreken wat Private Link echt betekent voor je compliance-verreisten en je portemonnee.
+
+00:13:01.000 --> 00:13:02.400
+Eerst de kant van de beveiliging.
+
+00:13:02.580 --> 00:13:06.180
+Private Link verkleint je aanvalsoppervlak door publieken endpoints volledig te elimineren.
+
+00:13:06.400 --> 00:13:07.780
+Dat is het belangrijkste voordeel.
+
+00:13:07.960 --> 00:13:11.480
+In plaats van een opslagaccount of SQL-database die vanaf het internet bereikbaar is,
+
+00:13:11.660 --> 00:13:14.300
+heb je een resource die alleen reageert op verkeer vanuit je virtuele netwerk.
+
+00:13:14.480 --> 00:13:17.200
+Geen publiek IP om te scannen, geen open poort om te onderzoeken.
+
+00:13:17.200 --> 00:13:19.280
+Het aanvalsoppervlak wordt drastisch kleiner.
+
+00:13:19.780 --> 00:13:22.880
+Nog een voordeel dat te weinig aandacht krijgt, het voorkomen van datalekken.
+
+00:13:23.060 --> 00:13:25.740
+Elk privé-eindpunt koppelt aan één specifieke resource,
+
+00:13:25.960 --> 00:13:28.560
+niet aan de hele service of alle opslagaccounts in je abonnement.
+
+00:13:28.760 --> 00:13:29.440
+Alleen aan die ene.
+
+00:13:29.600 --> 00:13:32.320
+Dus, als iemand een workload in je virtuele netwerk overneemt,
+
+00:13:32.400 --> 00:13:35.600
+kunnen ze dat privé-eindpunt niet gebruiken om andere opslagaccounts te bereiken.
+
+00:13:35.800 --> 00:13:38.180
+Ze zitten vast aan de ene resource die jij hebt goedgekeurd.
+
+00:13:38.380 --> 00:13:40.660
+Voor beveiligingsteams is die isolatie erg belangrijk.
+
+00:13:40.940 --> 00:13:43.600
+Op het gebied van compliance vinkt Private Link veel vakjes af.
+
+00:13:43.780 --> 00:13:49.480
+Regelgeving zoals HIPAA, AVG en PCI vereist vaak dat gevoelige gegevens nooit over openbare netwerken reizen.
+
+00:13:49.480 --> 00:13:52.020
+Private Link biedt een duidelijke manier om dat aan te tonen.
+
+00:13:52.160 --> 00:13:55.920
+Je verkeer blijft op de Microsoft backbone en je kunt naar de audit logs wijzen en zeggen,
+
+00:13:56.080 --> 00:13:56.920
+hier is het bewijs.
+
+00:13:57.080 --> 00:14:00.260
+Voor gereguleerde sectoren kan dat alleen al de investering rechtvaardigen.
+
+00:14:00.500 --> 00:14:03.180
+Laten we het nu over de kosten hebben, want hier worden mensen vaak verrast.
+
+00:14:03.340 --> 00:14:04.780
+Private Link is niet gratis.
+
+00:14:04.960 --> 00:14:07.240
+Je betaalt een uurtarief per privé-eindpunt,
+
+00:14:07.500 --> 00:14:09.900
+plus verwerkingskosten voor het verkeer dat er doorheen loopt.
+
+00:14:10.160 --> 00:14:14.960
+Afhankelijk van je gebruik kan het twee tot drie keer duurder zijn dan een publiek eindpunt met firewall-regels.
+
+00:14:14.960 --> 00:14:17.680
+Dat loopt snel op, zeker als je veel eindpunten hebt.
+
+00:14:17.860 --> 00:14:19.320
+Dus, hier is mijn eerlijke mening.
+
+00:14:19.560 --> 00:14:21.540
+Private Link is niet altijd de juiste keuze.
+
+00:14:21.740 --> 00:14:24.640
+Als je een ontwikkel- of testomgeving draait zonder gevoelige data,
+
+00:14:24.900 --> 00:14:27.820
+zijn publieke eindpunten met goede firewall-regels waarschijnlijk prima.
+
+00:14:28.080 --> 00:14:31.260
+Als je een openbare website host die vanaf het internet toegankelijk moet zijn,
+
+00:14:31.440 --> 00:14:32.440
+helpt Private Link je niet.
+
+00:14:32.580 --> 00:14:34.880
+Maar voor productieworkloads in gereguleerde sectoren,
+
+00:14:35.100 --> 00:14:37.940
+zoals finance, zorg en overheid, is Private Link vaak verplicht.
+
+00:14:38.100 --> 00:14:39.800
+Het is de prijs voor veilig zaken doen.
+
+00:14:40.040 --> 00:14:42.940
+Voordat je dit implementeert, zijn er een paar valkuilen waar je op moet letten.
+
+00:14:42.940 --> 00:14:44.420
+Implementatie-valkuilen.
+
+00:14:44.680 --> 00:14:47.700
+Wat beginners over het hoofd zien, laat me je wat hoofdpijn besparen.
+
+00:14:47.900 --> 00:14:50.880
+Hier zijn de meest gemaakte fouten bij het instellen van Private Link.
+
+00:14:51.100 --> 00:14:54.820
+Allereerst moet je het publieke eindpunt uitschakelen na het aanmaken van het privé-eindpunt.
+
+00:14:55.020 --> 00:14:56.300
+Dit is de grootste valkuil.
+
+00:14:56.520 --> 00:15:00.100
+Veel mensen maken het privé-eindpunt aan en denken dat het klaar is, maar dat is niet zo.
+
+00:15:00.280 --> 00:15:02.080
+Het publieke eindpunt blijft standaard actief,
+
+00:15:02.220 --> 00:15:04.460
+wat betekent dat je verkeer nog steeds via internet kan lopen.
+
+00:15:04.660 --> 00:15:08.480
+Je moet naar de netwerkinstellingen gaan en expliciet de toegang tot het openbare netwerk uitschakelen.
+
+00:15:08.480 --> 00:15:11.360
+Als je deze stap overslaat, heb je eigenlijk niets beveiligd.
+
+00:15:11.360 --> 00:15:15.260
+Vervolgens vereist DNS-omzetting voor on-premises clients extra configuratie.
+
+00:15:15.420 --> 00:15:18.420
+Als machines op kantoor via een VPN of express route verbinden,
+
+00:15:18.700 --> 00:15:21.500
+zullen ze het IP van je private endpoint niet automatisch omzetten.
+
+00:15:21.720 --> 00:15:26.760
+De private DNS-zone is gekoppeld aan je Azure Virtual Network, niet aan je on-premises DNS-survers.
+
+00:15:26.960 --> 00:15:30.340
+Je moet een DNS-forwarder instellen of Azure DNS Private Resolver gebruiken
+
+00:15:30.340 --> 00:15:32.200
+om die aanvragen de private zone te laten bereiken.
+
+00:15:32.440 --> 00:15:36.100
+Veel mensen zien dit over het hoofd en vragen zich daarna af waarom hun on-premises-apps geen verbinding kunnen maken.
+
+00:15:36.300 --> 00:15:39.600
+Daarnaast werken private endpoints niet zomaar over verschillende regio's heen.
+
+00:15:39.600 --> 00:15:44.340
+Als je virtual network in West-Europa staat en je maakt een private endpoint voor een opslagaccount in East-US,
+
+00:15:44.540 --> 00:15:45.200
+dan werkt dat niet.
+
+00:15:45.360 --> 00:15:48.660
+Het private endpoint moet zich in dezelfde regio bevinden als het virtual network.
+
+00:15:48.840 --> 00:15:52.900
+De pass-surface mag in een andere regio staan, maar het endpoint zelf moet overeen komen met de regio van het VNED.
+
+00:15:53.040 --> 00:15:54.460
+Hou hier rekening mee bij je planning.
+
+00:15:54.740 --> 00:15:55.380
+Nog één ding.
+
+00:15:56.460 --> 00:15:58.880
+Netwerkbeveiligingsgroepen zijn van invloed op de NIC van het private endpoint.
+
+00:15:59.100 --> 00:16:01.820
+Het private endpoint maakt een virtuele NIC aan in je subnet.
+
+00:16:02.020 --> 00:16:05.820
+Die NIC is onderworpen aan dezelfde NSG-regels als al het andere in dat subnet.
+
+00:16:05.820 --> 00:16:09.080
+Als je verkeer naar het NIC subnet blokkeert, zal het het endpoint niet werken.
+
+00:16:09.280 --> 00:16:11.040
+Zorg dat je NSG-regels dit toestaan.

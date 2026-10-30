@@ -1,0 +1,835 @@
+WEBVTT
+
+00:00:00.180 --> 00:00:12.460
+Gotowi na 10 dni z Microsoft 365, Copilotem, AI, Azure i ludźmi kształtującymi przyszłość pracy? W styczniu wraca M365Con i tym razem działamy z większym rozmachem.
+
+00:00:12.860 --> 00:00:21.860
+Dołącz do nas na sesje na żywo, pokazy praktyczne i wiedzę od MVP oraz ekspertów z całego świata. Żadnych ogólnych slajdów, żadnych niekończących się haseł.
+
+00:00:22.320 --> 00:00:28.820
+Stawiamy czoła realnym wyzwaniom Copilot Studio, agentom AI Fabric, bezpieczeństwu ładu i automatyzacji.
+
+00:00:29.480 --> 00:00:35.020
+Niezależnie od tego, czy jesteś informatykiem, programistą czy liderem biznesowym, mamy sesję dla Ciebie.
+
+00:00:35.400 --> 00:00:40.500
+Przez 10 pełnych dni możesz poznawać różne technologie i łączyć się z globalną społecznością.
+
+00:00:40.820 --> 00:00:44.600
+Oglądaj na żywo i zabierz praktyczne wnioski do swojej organizacji.
+
+00:00:44.900 --> 00:00:51.140
+Styczeń 2027 roku, 10 dni, jedna społeczność Microsoft. Rejestracja jest już otwarta.
+
+00:00:51.760 --> 00:00:56.600
+Wejdź na m365con.net i zapewnij sobie miejsce już dziś.
+
+00:00:56.600 --> 00:01:04.700
+Dołącz teraz na m365con.net i widzimy się na żywo w styczniu.
+
+00:01:04.800 --> 00:01:08.900
+Witajcie w kolejnym odcinku Pigułek Wiedzy o Microsoft na M365FM.
+
+00:01:09.100 --> 00:01:11.100
+Nazywam się Mirko Pirocji i będę Waszym gospodarzem.
+
+00:01:11.320 --> 00:01:14.680
+Dzisiejszy temat to coś, o czym każdy słyszał, ale niewielu potrafi jasno wyjaśnić.
+
+00:01:14.800 --> 00:01:15.920
+Azure Private Link.
+
+00:01:16.120 --> 00:01:19.200
+Pewnie widziałeś te opcje podczas tworzenia konta magazynu lub bazy SQL,
+
+00:01:19.440 --> 00:01:21.640
+ale co to właściwie robi i czy naprawdę tego potrzebujesz?
+
+00:01:21.640 --> 00:01:24.040
+Oto kwestia, w której większość ludzi się myli.
+
+00:01:24.260 --> 00:01:29.960
+Zakładają, że skoro usługa działa wewnątrz Azure, jest automatycznie prywatna i odgrodzona od internetu domyślnie.
+
+00:01:30.100 --> 00:01:31.960
+To nieprawda nawet w przybliżeniu.
+
+00:01:32.680 --> 00:01:37.640
+Większość usług Azure Pass Storage SQL Key Vault posiada publiczny punkt końcowy już w standardzie.
+
+00:01:38.420 --> 00:01:43.620
+Oznacza to, że każdy w internecie może uzyskać do nich dostęp, o ile ma odpowiedni adres URL i dane logowania.
+
+00:01:43.620 --> 00:01:50.420
+Pod koniec tego odcinka zrozumiesz, czym naprawdę jest Private Link, dlaczego istnieje i jak chroni Twój ruch przed publicznym internetem.
+
+00:01:50.620 --> 00:01:52.620
+Wyjaśnimy to za pomocą prostych analogii.
+
+00:01:52.860 --> 00:01:58.240
+Bez marketingowego bełkotu, bez żargonu, po prostu zrozumiale, stary sposób, czyli publiczne punkty końcowe wszędzie.
+
+00:01:58.480 --> 00:01:59.640
+Zacznijmy od problemu.
+
+00:01:59.820 --> 00:02:04.600
+Zanim pojawił się Private Link, każda usługa Azure Pass otrzymywała domyślnie publiczny punkt końcowy.
+
+00:02:04.780 --> 00:02:10.220
+Tworzysz konto magazynu, a Azure daje Ci coś w rodzaju moje-myślnik-konto.blog.cor.windows.net.
+
+00:02:10.220 --> 00:02:15.340
+Ten adres URL wskazuje na publiczny adres IP. Każdy z dostępem do internetu może próbować się z nim połączyć.
+
+00:02:15.540 --> 00:02:19.240
+Wyobraź sobie teraz, że masz maszynę wirtualną działającą w Twojej własnej sieci wirtualnej Azure.
+
+00:02:19.400 --> 00:02:21.840
+Ta maszyna musi odczytać kilka plików z magazynu blob.
+
+00:02:22.040 --> 00:02:24.140
+Myślisz, że ruch pozostałby wewnątrz Azure, prawda?
+
+00:02:24.340 --> 00:02:26.240
+Oba zasoby znajdują się w tej samej chmurze.
+
+00:02:26.440 --> 00:02:27.940
+Jednak w rzeczywistości tak to nie działa.
+
+00:02:28.180 --> 00:02:34.380
+Maszyna wirtualna musi opuścić Twoją sieć wirtualną, wyjść przez publiczny internet, a następnie wrócić do Azure, aby dotrzeć do konta magazynu.
+
+00:02:34.380 --> 00:02:39.260
+To tak, jakbyś stał w jednym pokoju budynku biurowego i musiał wziąć coś ze schowka w tym samym budynku.
+
+00:02:39.440 --> 00:02:43.980
+Ale zamiast przejść korytarzem, musisz wyjść na zewnątrz, obejść budynek dookoła i wrócić innymi drzwiami.
+
+00:02:44.140 --> 00:02:46.520
+To nie ma sensu, ale dokładnie tak to właśnie wyglądało.
+
+00:02:46.620 --> 00:02:47.680
+To jest poważny problem.
+
+00:02:47.920 --> 00:02:52.940
+Twoje dane wędrują przez publiczny internet, mimo że oba zasoby znajdują się wewnątrz własnych centrów danych firmy Microsoft.
+
+00:02:53.180 --> 00:02:56.800
+Ten ruch jest szyfrowany, to prawda, ale nadal jest wystawiony na otwarty internet.
+
+00:02:57.020 --> 00:03:00.220
+Wciąż przechodzi przez routery i przełączniki, nad którymi nie masz kontroli.
+
+00:03:00.220 --> 00:03:03.780
+A jeśli ktoś zdołałby przechwycić ten ruch, mógłby zobaczyć, co wysyłasz.
+
+00:03:03.940 --> 00:03:05.440
+Istnieje tu pewien powszechny mit.
+
+00:03:05.640 --> 00:03:08.900
+Wiele osób myśli, cóż, to jest w mojej subskrypcji, więc jest prywatne.
+
+00:03:09.020 --> 00:03:09.740
+To tak nie działa.
+
+00:03:09.960 --> 00:03:13.340
+Twoja subskrypcja to granica rozliczeniowa i administracyjna, a nie granica sieciowa.
+
+00:03:13.560 --> 00:03:16.420
+Domyślnie twoje usługi Azure są dostępne z poziomu internetu.
+
+00:03:16.640 --> 00:03:21.900
+Jedyną rzeczą, która je chroni, jest warstwa uwierzytelniania i autoryzacji, klucze, hasła oraz reguły zapory sieciowej.
+
+00:03:22.100 --> 00:03:26.900
+Jednak sama ścieżka sieciowa jest publiczna, więc Microsoft przyjrzał się temu i stwierdził, musi istnieć lepszy sposób.
+
+00:03:26.900 --> 00:03:32.580
+I stworzyli go. Nazwali to Private Link. Rozwiązanie to prywatny punkt końcowy jako karta sieciowa.
+
+00:03:32.780 --> 00:03:39.880
+Private Link to ogólna usługa, ale kluczowym elementem, który musisz zrozumieć, jest prywatny punkt końcowy wirtualna karta sieciowa,
+
+00:03:40.060 --> 00:03:44.100
+NIC, która znajduje się w twojej sieci wirtualnej i łączy się z usługą PAS.
+
+00:03:44.440 --> 00:03:45.300
+Oto jak to działa.
+
+00:03:45.540 --> 00:03:53.580
+Tworzysz prywatny punkt końcowy dla swojego konta magazynu, a Azure buduje wirtualną kartę NIC wewnątrz twojej sieci wirtualnej z prywatnym adresem IP z twojej podsieci.
+
+00:03:53.580 --> 00:03:57.760
+Ta karta NIC łączy się z kontem magazynu za pośrednictwem Private Link w backendzie.
+
+00:03:57.940 --> 00:04:05.640
+Więc z perspektywy twojej maszyny wirtualnej, konto magazynu wygląda teraz jakby znajdowało się wewnątrz twojej własnej sieci z prywatnym adresem IP, zupełnie jak każdy inny zasób.
+
+00:04:05.840 --> 00:04:13.980
+Kiedy twoja maszyna wirtualna wysyła ruch do tego konta magazynu, trafia on na prywatny adres IP karty NIC i podróżuje przez sieć szkieletową Microsoftu, nigdy przez publiczny internet.
+
+00:04:14.220 --> 00:04:16.480
+Nigdy nie opuszcza wewnętrznej infrastruktury Azure.
+
+00:04:16.480 --> 00:04:19.320
+Pomyśl o tym jak o bezpiecznym korytarzu w budynku biurowym.
+
+00:04:19.580 --> 00:04:23.660
+Zamiast wychodzić na zewnątrz i obchodzić budynek, po prostu idziesz korytarzem prosto do schowka.
+
+00:04:23.940 --> 00:04:25.800
+Bezpośrednie połączenie, bez objazdów.
+
+00:04:25.960 --> 00:04:28.200
+A teraz oto niuans, który wiele osób pomija.
+
+00:04:28.420 --> 00:04:32.340
+Włączenie prywatnego punktu końcowego nie wyłącza automatycznie publicznego punktu końcowego.
+
+00:04:32.620 --> 00:04:34.080
+Mogą one istnieć jednocześnie.
+
+00:04:34.320 --> 00:04:39.740
+Jeśli utworzysz prywatny punkt końcowy, ale nie zmienisz ustawień publicznego, twoje konto magazynu nadal będzie dostępne z internetu.
+
+00:04:39.940 --> 00:04:43.240
+Musisz jawnie wyłączyć dostęp do sieci publicznej, aby całkowicie je zabezpieczyć.
+
+00:04:43.240 --> 00:04:46.060
+Wiele osób uważa, że samo utworzenie prywatnego punktu końcowego wystarczy.
+
+00:04:46.200 --> 00:04:46.820
+Tak nie jest.
+
+00:04:47.020 --> 00:04:49.300
+Musisz powiedzieć platformie Azure, chcę tylko dostępu prywatnego.
+
+00:04:49.460 --> 00:04:51.700
+Pozwólcie, że wyjaśnię kolejny mit, skoro już tu jesteśmy.
+
+00:04:51.900 --> 00:04:54.460
+Private Link to nie to samo co VPN czy ExpressRoute.
+
+00:04:54.700 --> 00:04:57.620
+Rozwiązują one inne problemy i zajmiemy się tym porównaniem później.
+
+00:04:57.880 --> 00:05:02.920
+Na razie wystarczy wiedzieć, że Private Link służy do dostępu do konkretnej usługi, a nie do łączenia całej sieci z Azure.
+
+00:05:03.140 --> 00:05:07.780
+Masz już więc swój prywatny punkt końcowy i maszyna wirtualna może uzyskać dostęp do konta magazynu przez prywatny adres IP.
+
+00:05:07.980 --> 00:05:10.520
+Ale jak maszyna wirtualna faktycznie znajduje to konto magazynu?
+
+00:05:10.520 --> 00:05:13.300
+Wcześniej rozwiązywała publiczny adres URL na publiczny adres IP.
+
+00:05:13.500 --> 00:05:15.100
+Teraz potrzebuje prywatnego adresu IP.
+
+00:05:15.380 --> 00:05:15.920
+Jak to działa?
+
+00:05:16.100 --> 00:05:19.020
+Tutaj wkracza DNS i właśnie tym zajmiemy się w następnej kolejności.
+
+00:05:19.300 --> 00:05:21.900
+DNS to tajny składnik, który sprawia, że wszystko działa.
+
+00:05:22.140 --> 00:05:26.700
+Masz swój prywatny punkt końcowy i maszyna wirtualna może uzyskać dostęp do konta magazynu przez prywatny adres IP.
+
+00:05:26.900 --> 00:05:27.860
+Ale jest pewien szczegół.
+
+00:05:28.000 --> 00:05:30.060
+Twoja maszyna wirtualna nie zna tego adresu IP.
+
+00:05:30.380 --> 00:05:32.360
+Zna adres URL konta magazynu coś w stylu
+
+00:05:32.360 --> 00:05:37.000
+To nazwa, której używa do połączenia.
+
+00:05:37.260 --> 00:05:39.540
+Jak więc znajduje prywatny adres IP zamiast publicznego?
+
+00:05:39.720 --> 00:05:42.080
+W tym miejscu DNS wykonuje całą ciężką pracę.
+
+00:05:42.240 --> 00:05:48.580
+Kiedy tworzysz prywatny punkt końcowy i wybierasz integrację z prywatną strefą DNS, co powinieneś zrobić, Azure tworzy ją dla Ciebie automatycznie.
+
+00:05:48.800 --> 00:05:51.780
+Dla konta magazynu obiektów blob ta strefa nazywa się PrivateLink.
+
+00:05:51.780 --> 00:05:53.880
+Blob.core.windows.net
+
+00:05:53.880 --> 00:05:58.700
+Wewnątrz tej strefy Azure dodaje rekord, który mapuje nazwę Twojego konta magazynu na prywatny adres IP punktu końcowego.
+
+00:05:58.880 --> 00:06:00.240
+A teraz oto sprytna część.
+
+00:06:00.480 --> 00:06:06.980
+Oryginalny publiczny adres URL nadal jest rozwiązywany, ale zamiast zwracać publiczny adres IP, zwraca rekord CNAMF wskazujący na strefę prywatną.
+
+00:06:07.180 --> 00:06:09.260
+Łańcuch rozpoznawania wygląda więc następująco.
+
+00:06:09.260 --> 00:06:14.720
+Twoja maszyna wirtualna pyta o adres URL konta magazynu, a DNS zwraca CNAMF wskazujący na moje konto magazynu.
+
+00:06:14.720 --> 00:06:21.080
+PrivateLink.blob.core.windows.net, który znajduje się w prywatnej strefie DNS powiązanej z Twoją siecią wirtualną.
+
+00:06:21.340 --> 00:06:27.420
+DNS rozwiązuje go na prywatny adres IP, maszyna wirtualna łączy się z tym adresem, a ruch nigdy nie trafia do publicznego internetu.
+
+00:06:27.580 --> 00:06:29.860
+Pomyśl o tym jak o recepcji w budynku biurowym.
+
+00:06:29.860 --> 00:06:34.020
+Ktoś wchodzi i pyta o schowek na materiały, a recepcjonista nie wysyła go na zewnątrz.
+
+00:06:34.160 --> 00:06:36.320
+Wskazuje mu właściwy korytarz wewnątrz budynku.
+
+00:06:36.480 --> 00:06:41.100
+Prywatna strefa DNS działa jak recepcjonista, który kieruje ruch we właściwe miejsce bez opuszczania budynku.
+
+00:06:41.100 --> 00:06:43.940
+To, jak to działa, zależy od lokalizacji Twojej maszyny wirtualnej.
+
+00:06:44.100 --> 00:06:49.760
+Jeśli znajduje się ona w tej samej sieci wirtualnej co prywatny punkt końcowy, prywatna strefa DNS jest powiązana, więc rozpoznawanie nazw odbywa się automatycznie.
+
+00:06:49.940 --> 00:06:53.100
+Jeśli jest w sieci typu Peering, musisz powiązać strefę również z tą siecią.
+
+00:06:53.340 --> 00:06:57.060
+W przypadku maszyn lokalnych korzystających z VPN lub ExpressRoot sprawa jest bardziej złożona.
+
+00:06:57.300 --> 00:07:02.620
+Zazwyczaj konfiguruje się przesyłanie dalej DNS lub używa Azure DNS Private Resolver, aby zapewnić docieranie zapytań do prywatnej strefy.
+
+00:07:02.800 --> 00:07:06.400
+Jednak w większości scenariuszy wewnątrz Azure podstawy są obsługiwane za Ciebie.
+
+00:07:06.400 --> 00:07:14.660
+DNS może stać się skomplikowany w większych środowiskach, ale w standardowym przypadku, gdy maszyna wirtualna jest w tej samej sieci wirtualnej co prywatny punkt końcowy, Azure zajmuje się tym automatycznie.
+
+00:07:14.820 --> 00:07:16.100
+Nie musisz niczego dotykać.
+
+00:07:16.300 --> 00:07:18.260
+Zobaczmy to w działaniu na rzeczywistym przykładzie.
+
+00:07:18.420 --> 00:07:19.760
+Przegląd w świecie rzeczywistym.
+
+00:07:19.920 --> 00:07:21.760
+Private link z usługą Azure Storage.
+
+00:07:21.960 --> 00:07:23.040
+Przejdźmy do konkretów.
+
+00:07:23.220 --> 00:07:26.720
+Załóżmy, że masz maszynę wirtualną działającą w Twojej sieci wirtualnej Azure.
+
+00:07:26.920 --> 00:07:29.780
+Ta maszyna musi pobierać pliki z konta Azure Blob Storage.
+
+00:07:29.960 --> 00:07:31.160
+To typowa konfiguracja.
+
+00:07:31.160 --> 00:07:35.740
+Może to być aplikacja przechowująca przesłane przez użytkowników pliki lub proces przetwarzania danych czytający z kontenera.
+
+00:07:35.960 --> 00:07:37.900
+Bez Private link dzieje się następująca rzecz.
+
+00:07:38.060 --> 00:07:41.820
+Twoja maszyna sprawdza publiczny adres URL konta magazynu i otrzymuje publiczny adres IP.
+
+00:07:42.100 --> 00:07:47.680
+Ruch opuszcza Twoją sieć wirtualną, przechodzi przez publiczny internet, a następnie ponownie trafia do Azure, aby dotrzeć do konta magazynu.
+
+00:07:47.800 --> 00:07:49.360
+Ta droga okrężna jest zbędna.
+
+00:07:49.560 --> 00:07:53.860
+Oba zasoby znajdują się już w Azure, ale dane i tak wykonują objazd przez otwarty internet.
+
+00:07:54.160 --> 00:07:58.280
+Dzięki Private link wdrażasz prywatny punkt końcowy dla podzasobu Blob konta magazynu.
+
+00:07:58.280 --> 00:08:00.700
+To konkretny element obsługujący dane Blob.
+
+00:08:00.840 --> 00:08:08.900
+Azure tworzy wirtualną kartę sieciową w Twojej sieci wirtualnej z prywatnym adresem IP, konfiguruje prywatną strefę DNS i uruchamia cały łańcuch rozpoznawania nazw, o którym mówiliśmy.
+
+00:08:09.120 --> 00:08:15.940
+Teraz, gdy maszyna wirtualna rozpoznaje ten sam adres URL, mysterycheckout.blob.core.windows.net otrzymuje prywatny adres IP zamiast publicznego.
+
+00:08:16.160 --> 00:08:22.580
+Ruch płynie z maszyny wirtualnej do prywatnego punktu końcowego, a następnie przez sieć szkieletową Microsoftu do konta magazynu.
+
+00:08:22.780 --> 00:08:24.740
+Nigdy nie opuszcza wewnętrznej sieci Azure.
+
+00:08:24.740 --> 00:08:25.860
+Oto kluczowy punkt.
+
+00:08:25.860 --> 00:08:30.460
+Twoja aplikacja się nie zmienia. Żadnego modyfikowania ciągów połączeń, żadnego aktualizowania plików konfiguracyjnych.
+
+00:08:30.640 --> 00:08:32.100
+Adres URL pozostaje taki sam.
+
+00:08:32.320 --> 00:08:34.780
+Jedyną zmianą jest sposób rozpoznawania tego adresu URL.
+
+00:08:35.040 --> 00:08:40.360
+Z perspektywy aplikacji nadal łączy się ona z tym samym kontem magazynu, ale w tle ścieżka ruchu jest zupełnie inna.
+
+00:08:40.540 --> 00:08:44.120
+A jeśli chcesz pójść o krok dalej, możesz całkowicie wyłączyć publiczny punkt końcowy.
+
+00:08:44.300 --> 00:08:47.740
+Oznacza to, że Twoje konto magazynu będzie dostępne tylko przez prywatny punkt końcowy.
+
+00:08:47.980 --> 00:08:49.260
+Zero ekspozycji na internet.
+
+00:08:49.520 --> 00:08:51.580
+Nikt nie może nawet próbować połączyć się z zewnątrz.
+
+00:08:51.580 --> 00:08:53.360
+Warto zauważyć jeszcze jedną rzecz.
+
+00:08:53.520 --> 00:08:55.360
+Konta magazynu mają wiele podzasobów.
+
+00:08:55.520 --> 00:08:58.040
+Blob jest jednym z nich, ale są też pliki, tabele i kolejki.
+
+00:08:58.240 --> 00:09:00.280
+Każdy z nich może mieć własny prywatny punkt końcowy.
+
+00:09:00.520 --> 00:09:03.100
+Możesz mieć jeden dla ruchu blobów i oddzielny dla ruchu plików.
+
+00:09:03.240 --> 00:09:06.440
+Lub użyć pojedynczego punktu końcowego obejmującego wszystkie w zależności od potrzeb.
+
+00:09:06.660 --> 00:09:09.600
+Być może zastanawiasz się, czym różni się to od innych opcji łączności w Azure.
+
+00:09:09.820 --> 00:09:12.000
+VPN Express Route, punkty końcowe usługi.
+
+00:09:12.200 --> 00:09:13.300
+Wszystkie brzmią podobnie.
+
+00:09:13.580 --> 00:09:14.480
+Wyjaśnijmy to sobie.
+
+00:09:14.680 --> 00:09:17.940
+Private Link kontra VPN Express Route i punkty końcowe usługi.
+
+00:09:17.940 --> 00:09:21.980
+Jak więc Private Link wypada na tle VPN Express Route i punktów końcowych usługi?
+
+00:09:22.160 --> 00:09:25.420
+Wszystkie brzmią tak, jakby robiły to samo, ale rozwiązują różne problemy.
+
+00:09:25.600 --> 00:09:27.500
+W wielu przypadkach będziesz używać ich razem.
+
+00:09:27.780 --> 00:09:28.900
+Zacznijmy od VPN.
+
+00:09:29.180 --> 00:09:32.960
+Wirtualna sieć prywatna łączy Twoją sieć lokalną z Azure przez publiczny internet.
+
+00:09:33.200 --> 00:09:36.080
+Tworzy szyfrowany tunel między Twoją lokalizacją a Azure.
+
+00:09:36.320 --> 00:09:39.660
+Ruch jest szyfrowany, oczywiście, ale nadal przesyłany przez publiczny internet.
+
+00:09:39.860 --> 00:09:42.880
+Tunel jest bezpieczny, ale droga, na której się znajduje, jest publiczna.
+
+00:09:43.060 --> 00:09:44.760
+Private Link nie zastępuje VPN.
+
+00:09:44.940 --> 00:09:45.680
+Działa obok niego.
+
+00:09:45.680 --> 00:09:51.840
+Możesz użyć VPN do połączenia biura z Azure, a następnie Private Link do prywatnego dostępu do konta magazynu.
+
+00:09:52.020 --> 00:09:53.300
+Express Route jest inny.
+
+00:09:53.560 --> 00:09:56.620
+Daje Ci dedykowany prywatny obwód z centrum danych do Azure.
+
+00:09:56.880 --> 00:09:59.000
+Ruch nigdy nie dotyka publicznego internetu.
+
+00:09:59.140 --> 00:10:01.680
+To jak posiadanie własnej prywatnej drogi prosto do sieci Microsoftu.
+
+00:10:02.420 --> 00:10:03.320
+Ale jest haczyk.
+
+00:10:03.500 --> 00:10:06.600
+Sam Express Route nie zapewnia prywatnego dostępu do usług PaaS.
+
+00:10:06.740 --> 00:10:10.600
+Łączy Twoją sieć z Azure, ale Twoje konto magazynu nadal ma publiczny punkt końcowy.
+
+00:10:10.780 --> 00:10:14.800
+Połączyłbyś Express Route z Private Link, aby uzyskać prawdziwie prywatny dostęp do tych usług.
+
+00:10:14.800 --> 00:10:17.080
+Punkty końcowe usługi to starsza technologia.
+
+00:10:17.300 --> 00:10:21.880
+Pozwalają ograniczyć dostęp do usługi Azure tak, aby docierał do niej tylko ruch z Twojej sieci wirtualnej.
+
+00:10:22.040 --> 00:10:24.760
+Ale rzecz w tym, że usługa nadal ma publiczny punkt końcowy.
+
+00:10:25.000 --> 00:10:28.600
+Dodajesz tylko regułę zapory, która mówi zezwalaj tylko na ruch z tej sieci w net.
+
+00:10:28.780 --> 00:10:31.120
+Sam punkt końcowy jest nadal wystawiony na internet.
+
+00:10:31.320 --> 00:10:35.400
+Private Link jest bezpieczniejszy, ponieważ punkt końcowy znajduje się wewnątrz Twojej sieci w net i ma prywatny adres IP.
+
+00:10:35.640 --> 00:10:37.400
+Nie ma publicznego punktu końcowego do zaatakowania.
+
+00:10:37.600 --> 00:10:39.280
+Podam Ci prosty sposób, aby o tym myśleć.
+
+00:10:39.280 --> 00:10:41.500
+VPN to bezpieczny tunel przez publiczną drogę.
+
+00:10:41.660 --> 00:10:43.800
+Express Route to prywatna droga prowadząca prosto do Azure.
+
+00:10:43.960 --> 00:10:47.060
+Punkty końcowe usługi to strażnik przy publicznej bramie sprawdzający identyfikatory.
+
+00:10:47.240 --> 00:10:49.540
+Private Link to bezpośredni korytarz wewnątrz budynku.
+
+00:10:49.760 --> 00:10:52.760
+Nigdy nie wychodzisz na zewnątrz, więc którego powinieneś użyć?
+
+00:10:52.880 --> 00:10:53.400
+To zależy.
+
+00:10:53.700 --> 00:10:57.560
+Aby połączyć biuro z platformą Azure, masz do wyboru VPN lub Express Route.
+
+00:10:57.780 --> 00:11:01.040
+Do prywatnego dostępu do usług PAS standardem jest Private Link.
+
+00:11:01.200 --> 00:11:03.860
+A dla najwyższego poziomu bezpieczeństwa połącz obie te opcje.
+
+00:11:03.860 --> 00:11:08.640
+Express Route przesyła ruch do Azure prywatnie, a Private Link zapewnia prywatny dostęp do usług.
+
+00:11:08.840 --> 00:11:11.960
+Jednak Private Link służy nie tylko do obsługi usług Microsoftu.
+
+00:11:12.180 --> 00:11:16.400
+Możesz go użyć również dla własnych aplikacji, hostując prywatne punkty końcowe.
+
+00:11:16.660 --> 00:11:17.880
+Wiele osób o tym nie wie.
+
+00:11:18.080 --> 00:11:21.000
+Private Link to coś więcej niż tylko korzystanie z usług Azure.
+
+00:11:21.280 --> 00:11:24.080
+Możesz go wykorzystać, aby udostępnić własne aplikacje światu.
+
+00:11:24.340 --> 00:11:26.360
+Właśnie do tego stworzono usługę Private Link.
+
+00:11:26.600 --> 00:11:28.480
+Wyobraź sobie, że jesteś dostawcą SAS.
+
+00:11:28.700 --> 00:11:33.260
+Masz aplikację działającą na maszynach wirtualnych za standardowym modułem równoważenia obciążenia.
+
+00:11:33.260 --> 00:11:38.140
+Tradycyjnie miałeś dwie opcje – wystawić wszystko do internetu lub skonfigurować VPN.
+
+00:11:38.880 --> 00:11:40.200
+Obie mają poważne wady.
+
+00:11:40.640 --> 00:11:44.940
+Publiczne wystawienie zwiększa ryzyko, a VPN jest trudny w zarządzaniu.
+
+00:11:45.200 --> 00:11:47.460
+Private Link Service rozwiązuje ten problem.
+
+00:11:47.720 --> 00:11:52.860
+Tworzysz usługę, podłączasz ją do Load Balancera, a klienci tworzą prywatny punkt końcowy.
+
+00:11:53.040 --> 00:11:55.660
+Ten punkt końcowy łączy się bezpośrednio z Twoją usługą.
+
+00:11:55.880 --> 00:11:59.040
+Bez Peeringu, bez VPN i całkowicie bez wystawiania na publiczny dostęp.
+
+00:11:59.040 --> 00:12:03.380
+Ruch przesyłany jest z ich punktu końcowego przez sieć szkieletową Microsoftu prosto do usługi.
+
+00:12:03.600 --> 00:12:05.440
+Nigdy nie trafia do publicznego internetu.
+
+00:12:05.620 --> 00:12:08.160
+Twoja usługa otrzymuje unikalny alias, na przykład
+
+00:12:08.160 --> 00:12:11.380
+MyApp, GUID, Region, Azure, Private Link Service.
+
+00:12:11.580 --> 00:12:15.860
+Klienci używają tego aliasu do połączenia, a Ty kontrolujesz, kto go widzi.
+
+00:12:16.360 --> 00:12:21.940
+Możesz ograniczyć dostęp przez rolę RBAC, subskrypcję lub pozwolić każdemu na wysłanie prośby.
+
+00:12:22.220 --> 00:12:26.560
+Każda prośba o połączenie wymaga Twojej zgody, więc wiesz dokładnie, kto się łączy.
+
+00:12:26.560 --> 00:12:28.780
+Dla dostawców SAS to ogromna zmiana.
+
+00:12:29.060 --> 00:12:34.300
+Zamiast otwierać reguły Firewalla czy konfigurować VPN, po prostu przekazujesz klientowi alias.
+
+00:12:34.480 --> 00:12:37.500
+Klient tworzy punkt końcowy, Ty go zatwierdzasz i gotowe.
+
+00:12:37.740 --> 00:12:38.200
+Gotowe!
+
+00:12:38.520 --> 00:12:42.820
+Uwaga! Usługa Private Link działa tylko ze standardowymi modułami równoważenia obciążenia.
+
+00:12:43.100 --> 00:12:46.540
+Jeśli korzystasz z wersji Basic, musisz najpierw przeprowadzić aktualizację.
+
+00:12:46.720 --> 00:12:49.700
+To niewielka cena za zyskane bezpieczeństwo i prostotę.
+
+00:12:49.900 --> 00:12:54.240
+To wszystko brzmi świetnie, ale co oznacza dla zgodności z przepisami i budżetu?
+
+00:12:54.240 --> 00:12:56.620
+Bezpieczeństwo, zgodność i koszty.
+
+00:12:56.880 --> 00:13:00.600
+Porozmawiajmy o tym, co Private Link oznacza dla Twoich wymagań i portfela.
+
+00:13:00.840 --> 00:13:02.380
+Najpierw kwestia bezpieczeństwa.
+
+00:13:02.540 --> 00:13:06.400
+Private Link ogranicza powierzchnię ataku, całkowicie eliminując publiczne punkty końcowe.
+
+00:13:06.540 --> 00:13:07.540
+To główna korzyść.
+
+00:13:07.760 --> 00:13:11.160
+Zamiast konta magazynowego lub bazy SQL dostępnej z dowolnego miejsca w internecie,
+
+00:13:11.260 --> 00:13:14.220
+masz zasób, który odpowiada tylko na rów z wnętrza Twojej sieci wirtualnej.
+
+00:13:14.400 --> 00:13:17.280
+Brak publicznego adresu IP do skanowania, brak otwartych portów do badania.
+
+00:13:17.480 --> 00:13:19.240
+Powierzchnia ataku drastycznie się zmniejsza.
+
+00:13:19.240 --> 00:13:22.940
+Oto kolejna korzyść, której poświęca się zbyt mało uwagi, zapobieganie wyciekom danych.
+
+00:13:23.120 --> 00:13:25.940
+Każdy prywatny punkt końcowy wskazuje na konkretną instancję zasobu,
+
+00:13:26.000 --> 00:13:29.440
+a nie na całą usługę czy wszystkie konta magazynowe w subskrypcji, tylko na to jedno.
+
+00:13:29.600 --> 00:13:31.880
+Więc jeśli ktoś przejmie obciążenie w Twojej sieci wirtualnej,
+
+00:13:31.960 --> 00:13:35.400
+nie będzie mógł użyć tego prywatnego punktu końcowego, by dotrzeć do innych kont magazynowych.
+
+00:13:35.580 --> 00:13:37.960
+Jest ograniczony tylko do tego jednego zasobu, który zatwierdziłeś.
+
+00:13:38.120 --> 00:13:39.040
+Dla zespołów do spraw.
+
+00:13:39.380 --> 00:13:41.040
+Bezpieczeństwa taka izolacja to duża sprawa.
+
+00:13:41.200 --> 00:13:43.880
+W kwestii zgodności z przepisami Private Link spełnia wiele wymagań.
+
+00:13:43.880 --> 00:13:49.380
+Regulacje takie jak HIPAA, RODO czy PC i często wymagają, aby wrażliwe dane nigdy nie przesyłano przez sieci publiczne.
+
+00:13:49.540 --> 00:13:52.160
+Private Link daje Ci przejrzysty sposób, by to udowodnić.
+
+00:13:52.300 --> 00:13:57.040
+Twój ruch pozostaje w szkielecie sieci Microsoft, a Ty możesz wskazać logi audytu i powiedzieć oto dowód.
+
+00:13:57.260 --> 00:14:00.140
+Dla branż regulowanych sam ten fakt uzasadnia inwestycje.
+
+00:14:00.320 --> 00:14:03.020
+Teraz porozmawiajmy o kosztach, bo tutaj ludzie bywają zaskoczeni.
+
+00:14:03.220 --> 00:14:04.700
+Private Link nie jest darmowy.
+
+00:14:04.900 --> 00:14:09.720
+Płacisz stawkę godzinową za każdy prywatny punkt końcowy oraz opłaty za przetwarzanie danych przepływających przez niego.
+
+00:14:09.720 --> 00:14:14.960
+W zależności od wykorzystania może to być 2 do 3 razy droższe niż użycie publicznego punktu końcowego z regułami zapory.
+
+00:14:15.120 --> 00:14:17.860
+To szybko się sumuje, zwłaszcza jeśli masz wiele punktów końcowych.
+
+00:14:18.040 --> 00:14:18.720
+Oto szczere podsumowanie.
+
+00:14:19.440 --> 00:14:21.600
+Private Link nie zawsze jest właściwym wyborem.
+
+00:14:21.860 --> 00:14:24.620
+Jeśli prowadzisz środowisko programistyczne lub testowe bez wrażliwych danych,
+
+00:14:24.780 --> 00:14:27.980
+publiczne punkty końcowe z odpowiednimi regułami zapory prawdopodobnie wystarczą.
+
+00:14:28.220 --> 00:14:32.380
+Jeśli hostujesz publiczną stronę internetową dostępną z sieci, Private Link Ci nie pomoże.
+
+00:14:32.560 --> 00:14:38.040
+Ale dla środowisk produkcyjnych w branżach regulowanych, finansach, służbie zdrowia czy administracji, Private Link jest często obowiązkowy.
+
+00:14:38.040 --> 00:14:40.080
+To koszt bezpiecznego prowadzenia biznesu.
+
+00:14:40.280 --> 00:14:42.900
+Zanim to wdrożysz, musisz uważać na kilka pułapek.
+
+00:14:43.040 --> 00:14:44.120
+Pułapki wdrożeniowe.
+
+00:14:44.300 --> 00:14:45.900
+To, co początkujący przegapijają.
+
+00:14:46.100 --> 00:14:47.780
+Pozwól, że zaoszczędzę Ci bólu głowy.
+
+00:14:47.960 --> 00:14:51.140
+Oto najczęstsze błędy popełniane przy pierwszej konfiguracji Private Link.
+
+00:14:51.280 --> 00:14:54.940
+Po pierwsze, po utworzeniu prywatnego punktu końcowego musisz wyłączyć ten publiczny.
+
+00:14:55.060 --> 00:14:56.140
+To największa pułapka.
+
+00:14:56.400 --> 00:15:00.060
+Wiele osób tworzy prywatny punkt końcowy i zakłada, że to wystarczy, ale tak nie jest.
+
+00:15:00.240 --> 00:15:04.560
+Publiczny punkt końcowy domyślnie pozostaje aktywny, co oznacza, że Twój ruch nadal może przechodzić przez internet.
+
+00:15:04.560 --> 00:15:08.340
+Musisz wejść w ustawienia sieciowe i jawnie wyłączyć dostęp z sieci publicznej.
+
+00:15:08.500 --> 00:15:11.340
+Jeśli pominiesz ten krok, w rzeczywistości niczego nie zabezpieczyłeś.
+
+00:15:11.520 --> 00:15:15.240
+Następnie rozpoznawanie DNS dla klientów lokalnych wymaga dodatkowej konfiguracji.
+
+00:15:15.480 --> 00:15:18.360
+Jeśli masz w biurze maszyny łączące się przez VPN lub ExpressRoot,
+
+00:15:18.460 --> 00:15:21.580
+nie rozwiążą one automatycznie adresu IP prywatnego punktu końcowego.
+
+00:15:21.800 --> 00:15:26.600
+Prywatna strefa DNS jest powiązana z Twoją siecią wirtualną Azure, a nie z lokalnymi serwerami DNS.
+
+00:15:27.000 --> 00:15:30.400
+Musisz skonfigurować przesyłacz DNS lub użyć Azure DNS Private Resolver,
+
+00:15:30.480 --> 00:15:32.160
+aby zapytania docierały do strefy prywatnej.
+
+00:15:32.160 --> 00:15:36.200
+Wiele osób o tym zapomina, a potem dziwi się, dlaczego ich lokalne aplikacje nie mogą nawiązać połączenia.
+
+00:15:36.380 --> 00:15:39.460
+Ponadto prywatne punkty końcowe nie działają automatycznie między regionami.
+
+00:15:39.680 --> 00:15:43.160
+Jeśli Twoja sieć wirtualna jest w Europie Zachodniej, a utworzysz prywatny punkt końcowy
+
+00:15:43.160 --> 00:15:45.240
+dla konta magazynu w regionie US East, to nie zadziała.
+
+00:15:45.440 --> 00:15:48.720
+Prywatny punkt końcowy musi znajdować się w tym samym regionie, co sieć wirtualna.
+
+00:15:48.900 --> 00:15:53.020
+Usługa PAS może być w innym regionie, ale sam punkt końcowy musi odpowiadać regionowi sieci wnet.
+
+00:15:53.180 --> 00:15:54.340
+Zaplanuj to odpowiednio.
+
+00:15:54.560 --> 00:15:55.240
+Jeszcze jedno.
+
+00:15:55.440 --> 00:15:58.840
+Sieciowe grupy zabezpieczeń mają wpływ na kartę sieciową prywatnego punktu końcowego.
+
+00:15:58.840 --> 00:16:01.940
+Prywatny punkt końcowy tworzy wirtualną kartę sieciową w Twojej podsieci.
+
+00:16:02.080 --> 00:16:05.700
+Ta karta podlega tym samym regułom NSG, co pozostałe elementy w tej podsieci.
+
+00:16:05.900 --> 00:16:08.940
+Jeśli zablokujesz ruch do podsieci karty sieciowej, punkt końcowy nie będzie działał.
+
+00:16:09.060 --> 00:16:11.020
+Upewnij się, że Twoje reguły NSG zezwalają na to.

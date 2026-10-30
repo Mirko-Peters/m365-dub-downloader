@@ -9,7 +9,7 @@ from cryptography.fernet import Fernet
 ROOT = Path(__file__).parent
 FILE = ROOT / "data" / "spreaker_auth.enc"
 TOKEN_URL = "https://api.spreaker.com/oauth2/token"
-REDIRECT = "https://dub.m365.fm/callback"
+REDIRECT = "https://www.m365.fm/callback"
 
 
 def _key():

@@ -1,0 +1,784 @@
+WEBVTT
+
+00:00:00.300 --> 00:00:07.060
+Siap untuk 10 hari pembahasan Microsoft 365, Copilot, AI, Azure, dan para penggerak, masa depan dunia kerja.
+
+00:00:07.920 --> 00:00:11.960
+Januari ini, M365-Con kembali hadir dan kami tampil lebih besar.
+
+00:00:12.840 --> 00:00:18.080
+Bergabunglah untuk sesi langsung, demo dunia nyata dan pengetahuan praktis dari MVP serta pakar industri dunia.
+
+00:00:19.240 --> 00:00:23.360
+Tanpa jargon yang tak ada habisnya, kami menangani tantangan nyata.
+
+00:00:23.360 --> 00:00:28.600
+Copilot Studio, agen AI, fabrik, keamanan, tata kelola, dan otomatisasi.
+
+00:00:28.600 --> 00:00:34.420
+Baik Anda seorang profesional IT, pengembang, atau pemimpin bisnis ada sesi yang dirancang khusus untuk Anda.
+
+00:00:35.460 --> 00:00:40.000
+Selama 10 hari penuh, Anda bisa menjelajahi berbagai teknologi dan terhubung dengan komunitas global.
+
+00:00:40.880 --> 00:00:44.280
+Taksikan langsung dan bawa pulang keopasan praktis untuk organisasi Anda.
+
+00:00:45.180 --> 00:00:48.900
+Januari 2027, 10 hari, satu komunitas Microsoft.
+
+00:00:49.400 --> 00:00:50.480
+Pendaftaran sudah dibuka sekarang.
+
+00:00:51.600 --> 00:00:55.500
+Kunjungi M365-Con.net dan amankan tempat Anda hari ini.
+
+00:00:56.220 --> 00:00:58.400
+Itu di M365-Con.net.
+
+00:00:58.600 --> 00:01:04.720
+Daftar sekarang di M365-Con.net dan sampai jumpa langsung di bulan Januari.
+
+00:01:05.240 --> 00:01:10.940
+Anda telah membangun aplikasi yang berfungsi, lalu menambah layanan lain lagi, dan tiba-tiba mengarahkan lalu lintas antar layanan menjadi MVP buruk.
+
+00:01:11.200 --> 00:01:13.640
+Jadi apa sebenarnya API Gateway itu dan apakah Anda benar-benar membutuhkannya?
+
+00:01:14.120 --> 00:01:17.520
+Di akhir episode ini, Anda akan paham fungsi API Gateway mengapa,
+
+00:01:17.520 --> 00:01:21.940
+yang mengatasi kekacauan manajemen banyak layanan dan cara mengetahui apakah Anda membutuhkannya.
+
+00:01:22.940 --> 00:01:26.500
+Mari mulai dengan masalahnya, lalu komponennya, dan bagaimana semua itu sering berkaitan.
+
+00:01:26.500 --> 00:01:29.060
+Masalahnya, terlalu banyak pintu.
+
+00:01:29.740 --> 00:01:31.760
+Bayangkan Anda menjalankan perusahaan yang berkembang besar.
+
+00:01:32.420 --> 00:01:36.400
+Anda punya tim sales di lantai tiga, akutan CD, ruang bawah tanah, dan IT di side belakang.
+
+00:01:37.080 --> 00:01:39.560
+Sekarang, bayangkan setiap departemen itu punya pintu depan sendiri,
+
+00:01:39.680 --> 00:01:42.880
+nomor telepon sendiri, dan satpam sendiri, dan satpam sendiri yang tidak berkomunikasi satu sama.
+
+00:01:42.880 --> 00:01:45.680
+Jika Anda seorang pengunjung yang ingin mengantar paket, semoga berhasil.
+
+00:01:46.200 --> 00:01:47.840
+Anda harus tahu persis pintu mana yang digunakan,
+
+00:01:47.980 --> 00:01:50.700
+satpam mana yang diajak bicara, dan apa yang harus dilakukan saat satpam sedang istri.
+
+00:01:51.060 --> 00:01:53.740
+Itulah yang terjadi saat aplikasi Anda memiliki banyak layanan back-end,
+
+00:01:53.900 --> 00:01:55.860
+dan setiap klien memanggilnya satu per satu secara langsung.
+
+00:01:56.520 --> 00:01:59.580
+Klien, baik itu aplikasi seluler, situs web, atau layanan lain,
+
+00:01:59.580 --> 00:02:02.600
+harus tahu di mana setiap layanan berada, cara autentikasi dengan tiap layanan,
+
+00:02:02.840 --> 00:02:04.320
+dan apa yang harus dilakukan saat ada masalah.
+
+00:02:04.960 --> 00:02:06.880
+Setiap layanan harus menangani keamanannya sendiri,
+
+00:02:07.280 --> 00:02:09.340
+pembatasan kecepatannya sendiri, dan penanganan errornya sendiri.
+
+00:02:09.340 --> 00:02:12.560
+Itu adalah pekerjaan duplikat, dan mudah sekali bagi sistem untuk menjadi tidak konsisten.
+
+00:02:12.700 --> 00:02:13.740
+Contohnya ambil bank sebagai contoh.
+
+00:02:14.020 --> 00:02:17.040
+Mereka memiliki layanan terpisah untuk rekening pembayaran, pinjaman, dan deteksi penipuan.
+
+00:02:17.320 --> 00:02:19.340
+Dengan cara lama, setiap layanan terekspos secara langsung.
+
+00:02:19.660 --> 00:02:22.120
+Sebuah aplikasi seluler harus mengetahui 4 URL berbeda,
+
+00:02:22.200 --> 00:02:25.160
+4 metode autentikasi berbeda, dan 4 cara berbeda untuk menangani kesalahan.
+
+00:02:25.340 --> 00:02:29.080
+Itu berarti kompleksitas 4 kali lipat, dan risiko kesalahan 4 kali lebih besar,
+
+00:02:29.200 --> 00:02:31.820
+dan kekacauan itulah yang dirancang untuk diperbaiki oleh API Gateway.
+
+00:02:32.480 --> 00:02:33.240
+Jadi, apa solusinya?
+
+00:02:34.020 --> 00:02:34.780
+Apa itu API Gateway?
+
+00:02:34.780 --> 00:02:37.900
+Bayangkan API Gateway seperti resepsionis di sebuah hotel.
+
+00:02:38.540 --> 00:02:41.540
+Saat Anda masuk, Anda tidak perlu tahu di lantai mana bagian kebersihan berada,
+
+00:02:41.680 --> 00:02:44.240
+di mana dapurnya, atau cara menghubungi tim pemeliharaan.
+
+00:02:44.640 --> 00:02:46.020
+Anda cukup menghampiri meja resepsionis?
+
+00:02:46.260 --> 00:02:48.420
+Sampaikan apa yang Anda butuhkan, dan mereka yang akan mengurus sisanya.
+
+00:02:48.880 --> 00:02:50.740
+Mereka meneruskan permintaan Anda ke orang yang tepat,
+
+00:02:50.880 --> 00:02:53.480
+meriksa izin Anda, bahkan menangani permintaan dasar secara mandiri.
+
+00:02:54.280 --> 00:02:56.740
+API Gateway melakukan hal yang sama untuk perangkat lunak Anda.
+
+00:02:57.000 --> 00:03:00.600
+Ini adalah satu titik masuk yang berada di antara klien dan layanan backend.
+
+00:03:01.460 --> 00:03:03.480
+Setiap permintaan harus melalui Gateway terlebih dahulu.
+
+00:03:03.480 --> 00:03:06.220
+Gateway memutuskan ke mana permintaan dikirim, apakah diizinkan,
+
+00:03:06.400 --> 00:03:07.500
+dan apa yang harus dikirim kembali.
+
+00:03:07.860 --> 00:03:09.000
+Sekarang ini bukanlah ide baru.
+
+00:03:09.500 --> 00:03:11.100
+Reverse proxy sudah ada selama puluhan tahun,
+
+00:03:11.340 --> 00:03:13.700
+tetapi iGateway menjadi sangat penting dengan adanya microservices.
+
+00:03:14.340 --> 00:03:17.140
+Saat Anda memicau aplikasi menjadi banyak, layanan kecil Anda tiba-tiba memiliki banyak.
+
+00:03:17.600 --> 00:03:18.920
+Gateway memberi Anda satu pintu depan.
+
+00:03:19.220 --> 00:03:21.760
+Di dunia Azure, Azure API Management adalah platform lengkap,
+
+00:03:21.940 --> 00:03:24.280
+dan Gateway adalah komponen inti yang menangani lalu lintas.
+
+00:03:25.280 --> 00:03:26.500
+Namun polanya tetap sama di mana saja.
+
+00:03:27.080 --> 00:03:28.440
+Satu titik masuk, kontrol terpusat.
+
+00:03:29.120 --> 00:03:31.800
+Setiap permintaan masuk, Gateway memeriksanya, merutekannya,
+
+00:03:31.800 --> 00:03:33.160
+dan mengirimkan respons kembali.
+
+00:03:33.480 --> 00:03:35.460
+Klien tidak pernah berkomunikasi langsung dengan LMPK Anda.
+
+00:03:35.840 --> 00:03:37.020
+Klien hanya berkomunikasi dengan Gateway.
+
+00:03:37.360 --> 00:03:38.940
+Mari kita berdapat arti sebenarnya dari hal tersebut.
+
+00:03:39.500 --> 00:03:41.660
+Dimulai dengan tugas paling mendasar, yaitu perutean.
+
+00:03:42.780 --> 00:03:44.080
+Bagian pertama, merutekan lalu lintas.
+
+00:03:44.660 --> 00:03:46.720
+Tugas paling sederhana dari API Gateway adalah perutean,
+
+00:03:46.800 --> 00:03:49.000
+yaitu mengarahkan setiap permintaan kelayanan yang tepat.
+
+00:03:49.500 --> 00:03:50.600
+Pikirkan tentang cara kerjas web.
+
+00:03:50.960 --> 00:03:53.080
+Saat Anda mengeklik tautan, perang-perang Anda mengirimkan permintaan.
+
+00:03:53.320 --> 00:03:54.280
+Permintaan tersebut memiliki jalur.
+
+00:03:54.580 --> 00:03:57.320
+Jika jalurnya adalah pengguna, Gateway tahu untuk mengirimkannya kelayanan pengguna.
+
+00:03:57.400 --> 00:03:59.580
+Jika jalurnya adalah pesanan, permintaan diarahkan kelayanan.
+
+00:03:59.580 --> 00:04:03.520
+Gateway membaca jalur tersebut, menentukan kemana harus pergi, lalu meneruskannya.
+
+00:04:03.900 --> 00:04:06.620
+Tanpa Gateway, klien Anda harus mengetahui setiap URL layanan.
+
+00:04:07.220 --> 00:04:11.540
+Aplikasi seluler memerlukan alamat layanan pengguna, layanan pesanan, layanan pembayaran, dan layanan katalog.
+
+00:04:12.060 --> 00:04:13.500
+Itu adalah banyak URL yang harus diklon.
+
+00:04:14.080 --> 00:04:16.860
+Dan jika salah satu alamat tersebut berubah, Anda harus memperbarui setiap klien.
+
+00:04:17.360 --> 00:04:19.020
+Dengan Gateway, klien hanya perlu mengetahui satu URL.
+
+00:04:19.620 --> 00:04:20.380
+Alamat Gateway tersebut.
+
+00:04:20.840 --> 00:04:22.440
+Mereka tidak peduli di mana layanan sebenarnya berat.
+
+00:04:22.660 --> 00:04:25.720
+Mereka hanya mengirim permintaan ke Gateway dan Gateway yang menangani sisanya.
+
+00:04:26.300 --> 00:04:28.520
+Ini adalah salah satu kasus penggunaan API Gateway yang paling umum,
+
+00:04:28.520 --> 00:04:29.860
+yaitu perutean berbasis sumber daya.
+
+00:04:30.180 --> 00:04:32.200
+Penelitian Apache Apisiks menyebutnya secara eksplisit.
+
+00:04:32.780 --> 00:04:37.280
+Anda melakukan perutean berdasarkan path, metode HTTP, header, bahkan geolokasi klien.
+
+00:04:37.680 --> 00:04:40.920
+Jika seseorang di Eropa mengirim permintaan, Anda bisa merutekannya ke pusat data Eropa.
+
+00:04:41.440 --> 00:04:44.140
+Jika seseorang di AS mengirim permintaan, mereka diarahkan ke pusat data.
+
+00:04:44.580 --> 00:04:45.840
+Klien tidak tahu bahwa semuanya sedang terlihat.
+
+00:04:46.360 --> 00:04:47.560
+Mereka hanya menerima respon yang cepat.
+
+00:04:48.000 --> 00:04:49.300
+Perutean juga menangani pembuatan versi.
+
+00:04:49.540 --> 00:04:51.540
+Takkanlah Anda memiliki versi baru dari layanan penggunaan.
+
+00:04:51.740 --> 00:04:55.560
+Klien lama tetap menggunakan Provee 1 perusers dan klien baru menggunakan Provee Web Reusers.
+
+00:04:55.560 --> 00:04:57.900
+Gateway merutekan mereka ke back-end yang berbeda.
+
+00:04:58.480 --> 00:05:00.800
+Klien lama tetap berfungsi saat Anda meluncurkan versi baru.
+
+00:05:01.460 --> 00:05:03.480
+Anda dapat mengubah back-end tanpa merusak klien Anda.
+
+00:05:04.120 --> 00:05:06.840
+Itu sangat penting saat Anda mengelola aplikasi langsung dengan penggunaan nyata.
+
+00:05:07.400 --> 00:05:08.700
+Pikirkan tentang platform e-commerce.
+
+00:05:09.240 --> 00:05:12.840
+Anda memiliki layanan terpisah untuk katalog, keranjang belanja, check-out, dan akun pengguna.
+
+00:05:13.580 --> 00:05:16.880
+Tanpa Gateway, aplikasi seluler harus mengetahui 4 URL yang berbeda.
+
+00:05:16.960 --> 00:05:18.700
+Dengan Gateway aplikasinya Provee 1.
+
+00:05:19.120 --> 00:05:24.940
+Gateway membaca platnya, katalog, keranjang, check-out, akun, dan mengirim setiap permintaan kelainan yang tepat.
+
+00:05:25.320 --> 00:05:26.220
+Perhubungan sederhana mudah.
+
+00:05:26.840 --> 00:05:28.640
+Tugas berikutnya adalah di mana hal itu menjadi sangat berupa.
+
+00:05:29.340 --> 00:05:30.860
+Bagian 2, keamanan di pintu depan.
+
+00:05:31.580 --> 00:05:33.040
+Tiap panggilan API harus diperiksa.
+
+00:05:33.580 --> 00:05:36.060
+Tapi membuat permintaan ini, apakah mereka memiliki izin yang tepat?
+
+00:05:36.380 --> 00:05:39.200
+Tanpa Gateway, setiap layanan harus menangani autentikasinya sendiri.
+
+00:05:39.540 --> 00:05:41.800
+Itu berarti pekerjaan duplikat dan mudah sekali terjadi kesalahan.
+
+00:05:42.340 --> 00:05:44.060
+Satu layanan mungkin meriksa token dengan benar,
+
+00:05:44.060 --> 00:05:47.600
+yang lain mungkin melewatkan langkah, dan yang lain menggunakan metode yang benar-benar berbeda.
+
+00:05:48.080 --> 00:05:50.980
+Hasilnya adalah keamanan yang tidak konsisten di seluruh aplikasi Anda.
+
+00:05:51.360 --> 00:05:52.060
+Gateway mengubah hal itu.
+
+00:05:52.060 --> 00:05:55.280
+Gateway menangani autentikasi dan otorisasi di satu tempat terpusat.
+
+00:05:55.620 --> 00:05:59.280
+Satu tempat untuk memeriksa, satu tempat untuk menegakkan, satu tempat untuk memperbarui saat kebicaraan dulu.
+
+00:05:59.500 --> 00:06:00.760
+Itu adalah perhatian terbaik aman utama.
+
+00:06:01.240 --> 00:06:06.680
+Gateway mengvalidasi kunci API, JWT, token O-out, atau sertifikat pada setiap permintaan.
+
+00:06:06.680 --> 00:06:10.020
+Setiap permintaan melalui pemeriksaan yang sama. Tidak ada pengicuari.
+
+00:06:10.960 --> 00:06:15.140
+Gateway juga dapat menegakkan aturan. Anda bisa mengatakan kunci API ini hanya bisa memanggil endpoint baca.
+
+00:06:15.560 --> 00:06:18.760
+Atau, klien ini hanya bisa mengakses layanan katalog, bukan layanan pembayaran.
+
+00:06:19.480 --> 00:06:23.160
+Anda menentukan izin yang terperinci di tingkat Gateway, dan izin tersebut berlaku secara otomatis.
+
+00:06:23.460 --> 00:06:25.560
+Layanan backend tidak perlu pusing memikirkan otorisasi.
+
+00:06:26.140 --> 00:06:28.460
+Mereka hanya memproses permintaan dan mengirimkan data kembali.
+
+00:06:28.940 --> 00:06:29.360
+Inap poinnya.
+
+00:06:29.900 --> 00:06:32.720
+Gateway adalah satu tempat untuk mencabut akses saat terjadi masalah.
+
+00:06:32.720 --> 00:06:36.060
+Jika kunci API klien dikompromikan, Anda mencabutnya di Gateway.
+
+00:06:36.760 --> 00:06:40.180
+Satu perubahan selesai. Anda tidak perlu memperbarui setiap layanan atau memulai ulang apa.
+
+00:06:40.560 --> 00:06:42.700
+Permintaan berikutnya dari kunci tersebut langsung ditolak.
+
+00:06:43.220 --> 00:06:46.300
+Ambil contoh nyata, sebuah bank memiliki layanan pembayaran dan layanan penagihan.
+
+00:06:46.860 --> 00:06:49.320
+Hanya layanan pembayaran yang butuh akses tulis ke sistem penagihan.
+
+00:06:49.620 --> 00:06:50.620
+Gateway menegakkan aturan tersebut.
+
+00:06:51.060 --> 00:06:54.900
+Jika klien mencoba menulis ke sistem penagihan lewat endpoint yang salah, Gateway memblokirnya.
+
+00:06:55.460 --> 00:06:57.480
+Layanan penagihan bahkan tidak pernah melihat permintaan tersebut.
+
+00:06:57.680 --> 00:07:01.540
+Gateway juga mendukung mutual TLS dan integrasi WAF untuk perlindungan lebih mendalam.
+
+00:07:01.540 --> 00:07:04.240
+Namun pada intinya, ini adalah garis pertama Anda.
+
+00:07:04.700 --> 00:07:07.800
+Keamanan adalah satu hal, tapi bagaimana jika terlalu banyak permintaan datang sekarang?
+
+00:07:08.620 --> 00:07:10.180
+Bagian 3. Manajemen lalu lintas.
+
+00:07:10.740 --> 00:07:13.600
+Apa yang terjadi saat 10 ribu pengguna mengakses aplikasi Anda secara bersama?
+
+00:07:14.080 --> 00:07:19.580
+Mungkin Anda mengadakan flash sale, peluncuran produk viral, atau hanya hari selasa biasa saat semua orang login bersamaan.
+
+00:07:20.560 --> 00:07:24.360
+Tanpa Gateway, layanan backend Anda akan langsung dibanjiri dan bisa lumpuh.
+
+00:07:24.980 --> 00:07:26.060
+Tidak perlahan, tapi sekaligus.
+
+00:07:26.960 --> 00:07:28.320
+Disitulah manajemen lalu lintas berperan.
+
+00:07:28.320 --> 00:07:31.580
+Gateway dapat membatasi jumlah permintaan yang bisa dibuat setiap klien.
+
+00:07:32.340 --> 00:07:34.320
+Batasan laju dan throttling adalah fitur standar.
+
+00:07:34.760 --> 00:07:36.940
+Anda menetapkan aturan di Gateway dan Gateway menegakkan.
+
+00:07:37.340 --> 00:07:39.040
+Layanan backend Anda tidak akan merasakan lonjakan tersebut.
+
+00:07:39.600 --> 00:07:42.640
+Anda bisa menetapkan kuota per pengguna, per kunci API, atau per alamat IP.
+
+00:07:43.060 --> 00:07:44.760
+Misalnya Anda memiliki tingkat gratis untuk API Anda.
+
+00:07:45.120 --> 00:07:46.600
+Pengguna gratis mendapatkan 100 per jam.
+
+00:07:47.040 --> 00:07:48.320
+Pengguna premium mendapatkan 10 ribu.
+
+00:07:48.720 --> 00:07:51.420
+Gateway melacak setiap permintaan dan menegakkan batasan tersebut sejak awal.
+
+00:07:51.420 --> 00:07:56.220
+Pengguna gratis mencapai batasnya dan Gateway mengirimkan pesan sopan untuk mencoba lagi nanti.
+
+00:07:57.100 --> 00:07:59.240
+Layanan backend bahkan tidak tahu ada permintaan masuk.
+
+00:07:59.760 --> 00:08:01.720
+Mereka tetap berjalan lancar melayani pelanggan berbayar.
+
+00:08:02.460 --> 00:08:03.840
+Gateway juga menangani penyeimbangan beban.
+
+00:08:04.680 --> 00:08:08.680
+Jika Anda menjalankan beberapa instans dari layanan yang sama, Gateway menyebarkan permintaan ke sana.
+
+00:08:09.280 --> 00:08:12.460
+Instans 1 menerima permintaan, instans 2 menerima berikutnya, begitu seterusnya.
+
+00:08:12.840 --> 00:08:13.780
+Semuanya otomatis.
+
+00:08:14.160 --> 00:08:16.640
+Dan jika satu instans mati, Gateway mengarahkannya ke instans lain.
+
+00:08:16.960 --> 00:08:17.720
+Lain tidak akan bertahu.
+
+00:08:18.020 --> 00:08:18.840
+Mereka hanya menerima respons.
+
+00:08:18.840 --> 00:08:22.120
+Penyimbangan berbandingan pemeriksaan kesehatan menjaga semuanya perjalanan lain.
+
+00:08:22.460 --> 00:08:24.720
+Gateway melakukan ping ke setiap instans untuk memastikan kondisinya.
+
+00:08:25.180 --> 00:08:27.020
+Jika tidak, Gateway berhenti mengirimkan lalu lintas ke sana.
+
+00:08:27.240 --> 00:08:29.140
+Ini sangat penting untuk api dengan lalu lintas tinggi.
+
+00:08:29.820 --> 00:08:32.680
+Tanpa Gateway, lonjakan trafik akan langsung menghantam layanan Anda.
+
+00:08:33.400 --> 00:08:39.680
+Dengan Gateway, lonjakan tersebut akan tertahan di Gateway, diserap, disebarkan, dan melindungi layanan Anda agar tidak kewalahan.
+
+00:08:40.560 --> 00:08:42.680
+Oke, tapi bagaimana jika data tidak sesuai saat tiba?
+
+00:08:47.010 --> 00:08:50.190
+Terkadang data yang dikirim klien tidak sesuai dengan yang diharapkan backend Anda.
+
+00:08:50.190 --> 00:08:53.410
+Mungkin klien mengirim jason, tapi backend Anda hanya mengerti XML.
+
+00:08:54.130 --> 00:08:55.330
+Mungkin nama kolomnya tidak selaras.
+
+00:08:55.790 --> 00:08:58.190
+Klien memulakan nama depan, dan backend Anda mengharapkan nama depan.
+
+00:08:59.410 --> 00:09:00.330
+Ketidakcocokannya menyebabkan.
+
+00:09:00.610 --> 00:09:04.230
+Dengan cara lama, Anda harus memperbaiki setiap klien atau menulis ulang backend.
+
+00:09:04.470 --> 00:09:04.890
+Itu tidak dia.
+
+00:09:05.450 --> 00:09:07.650
+Gateway dapat mengubah data sebelum mencapai backend.
+
+00:09:08.390 --> 00:09:09.230
+Anggap saja sebagai penuh.
+
+00:09:09.690 --> 00:09:12.870
+Ia berada di tengah, dan dapat mengubah data saat masuk, saat keluar, atau keduanya.
+
+00:09:12.870 --> 00:09:15.450
+Itulah transformasi permintaan dan respons secara singkat.
+
+00:09:15.850 --> 00:09:16.870
+Izinkan saya memberikan contoh nyata.
+
+00:09:17.210 --> 00:09:19.150
+Katakanlah Anda memiliki sistem lama yang membutuhkan XML.
+
+00:09:19.570 --> 00:09:20.930
+Sistem itu sudah berjalan selama 15 tahun.
+
+00:09:21.190 --> 00:09:21.930
+Sistem itu bekerja di rumah.
+
+00:09:22.130 --> 00:09:25.190
+Tapi sekarang Anda sedang membangun aplikasi seluler baru, dan aplikasi seluler menggunakan JIS.
+
+00:09:25.370 --> 00:09:29.570
+Tanpa gateway, Anda harus menulis ulang sistem lama, atau memaksa aplikasi seluler mengirim XML.
+
+00:09:30.070 --> 00:09:31.470
+Dengan gateway, Anda tidak perlu melakukan geret.
+
+00:09:31.670 --> 00:09:32.810
+Aplikasi seluler mengirim JIS.
+
+00:09:33.230 --> 00:09:34.390
+Gateway mengubahnya menjadi XML.
+
+00:09:34.870 --> 00:09:36.130
+Sistem mendapatkan apa yang diharapkannya.
+
+00:09:36.610 --> 00:09:38.790
+Aplikasi seluler mendapatkan respons kembali dalam format JIS.
+
+00:09:38.790 --> 00:09:40.290
+Tidak ada yang perlu menulis ulang apapun.
+
+00:09:40.550 --> 00:09:41.170
+Itulah keindahannya.
+
+00:09:41.630 --> 00:09:45.810
+Gateway juga dapat menambah atau menghapus header, mengubah URL, atau menyamarkan data sensitif.
+
+00:09:46.270 --> 00:09:47.890
+Bayangkan sebuah respons berisi nomor kartu kredit.
+
+00:09:48.390 --> 00:09:49.930
+Anda tentu tidak ingin data itu kembali ke klien.
+
+00:09:50.390 --> 00:09:54.170
+Gateway dapat menghapusnya sebelum respons dikirim, atau menggantinya dengan versi yang disamarkan.
+
+00:09:54.630 --> 00:09:55.750
+Backend tidak perlu diubah sama sekali.
+
+00:09:56.230 --> 00:09:56.850
+Gateway melanganinya.
+
+00:09:57.330 --> 00:09:59.330
+Ini sangat berguna saat Anda memodernisasi sistem lama.
+
+00:09:59.810 --> 00:10:00.950
+Anda tidak perlu menulis ulang backend.
+
+00:10:01.310 --> 00:10:02.730
+Anda tidak perlu memaksa klien untuk berubah.
+
+00:10:03.250 --> 00:10:04.270
+Anda cukup mengubah gateway inside.
+
+00:10:04.270 --> 00:10:06.330
+Ini seperti penerjemah di konferensi internasional.
+
+00:10:06.330 --> 00:10:10.490
+Semua orang berbicara dalam bahasa mereka sendiri, tapi penerjemah memastikan semua orang saling mengerti.
+
+00:10:10.730 --> 00:10:12.310
+Gateway adalah penerjemah bagi perangkat lunaan.
+
+00:10:12.810 --> 00:10:15.330
+Jadi perutean, keamanan, throttling, transformasi itu cukup banyak.
+
+00:10:15.890 --> 00:10:17.230
+Namun itu bukan empat hal yang terpisah.
+
+00:10:17.490 --> 00:10:18.630
+Ijinkan saya menunjukkan bagaimana semuanya.
+
+00:10:18.930 --> 00:10:19.790
+Bagaimana semuanya terhubung.
+
+00:10:20.290 --> 00:10:22.650
+Begini, keempat tugas ini tidak terpisah.
+
+00:10:23.270 --> 00:10:25.070
+Semuanya bekerja bersama pada setiap permintaan.
+
+00:10:25.150 --> 00:10:26.330
+Setiap kali ada permintaan masuk.
+
+00:10:26.670 --> 00:10:27.790
+Gateway memeriksa autentikasi.
+
+00:10:28.450 --> 00:10:29.650
+Gateway memvalidasi batas kecepatan.
+
+00:10:29.970 --> 00:10:30.830
+Gateway merotakan kelayanan.
+
+00:10:30.830 --> 00:10:32.370
+Ini mengubah data jika diperlukan.
+
+00:10:32.970 --> 00:10:33.850
+Ini menerima respons kembali.
+
+00:10:36.330 --> 00:10:42.490
+Setiap langkah terjadi secara otomatis, berurutan, tanpa layanan perlu memikirkannya.
+
+00:10:42.810 --> 00:10:44.390
+Kekuatan sebenarnya bukan pada satu fitur saja.
+
+00:10:44.790 --> 00:10:45.570
+Kelainkan pada integrasinya.
+
+00:10:46.070 --> 00:10:48.970
+Anda bisa menambah kebijakan keamanan baru tanpa mengubah perutean.
+
+00:10:49.690 --> 00:10:51.490
+Layanan backend tanpa mengubah klien.
+
+00:10:52.010 --> 00:10:54.110
+Anda bisa memperbarui batas kecepatan tanpa perlu mendapatkan ulang.
+
+00:10:54.530 --> 00:10:57.570
+Setiap bagian itu independen, tetapi semuanya bekerja dalam alur yang sama.
+
+00:10:58.110 --> 00:11:01.450
+Dan karena semuanya melewati satu tempat, Anda mendapat visibilitas penuh atas apa yang terjadi.
+
+00:11:01.890 --> 00:11:04.490
+Log, metrik, analitik semua dari satu titik.
+
+00:11:04.490 --> 00:11:09.930
+Anda bisa melihat berapa banyak permintaan yang masuk, mana yang gagal, mana yang lambat, klien, mana yang menggunakan sumber daya paling banyak.
+
+00:11:10.350 --> 00:11:13.690
+Tanpa gateway, Anda harus mengumpulkan data itu dari setiap layanan secara terpisah.
+
+00:11:14.070 --> 00:11:15.110
+Dengan gateway semuanya ada di sana.
+
+00:11:15.450 --> 00:11:16.050
+Pelawasan besarnya.
+
+00:11:16.510 --> 00:11:17.430
+Gateway bukan sekadar router.
+
+00:11:18.010 --> 00:11:19.970
+Ini adalah pusat kendali untuk seluruh platform API Anda.
+
+00:11:20.670 --> 00:11:23.690
+Setiap permintaan, setiap respon, setiap error semuanya mengalir melalui satu tempat.
+
+00:11:24.090 --> 00:11:26.310
+Anda memiliki satu jendela tampilan untuk segala hal yang terjadi.
+
+00:11:26.590 --> 00:11:27.670
+Jadi bagaimana cara menggunakannya?
+
+00:11:28.150 --> 00:11:29.510
+Mari bicara tentang apa yang bisa Anda lakukan sekarang.
+
+00:11:29.510 --> 00:11:30.690
+Poin dekat nyata.
+
+00:11:31.370 --> 00:11:31.690
+Realis.
+
+00:11:32.050 --> 00:11:35.250
+Jika Anda memiliki satu atau dua layanan, Anda mungkin belum memerlukan API Gateway.
+
+00:11:35.850 --> 00:11:38.450
+Anda bisa melangani putaran sendiri mengelola autentikasi di tiap layanan.
+
+00:11:38.830 --> 00:11:39.830
+Yang tidak elegan tapi berfungsi.
+
+00:11:40.410 --> 00:11:45.670
+Namun saat Anda mencapai tiga layanan atau mengekspos API ke klien eksternal, kompleksitas akan bertambah cepat.
+
+00:11:46.110 --> 00:11:47.170
+Gateway akan terbayar dengan cepat.
+
+00:11:47.610 --> 00:11:48.570
+Badi apa langkah pertama terbaikan?
+
+00:11:49.150 --> 00:11:50.430
+Sentralisasikan autentikasi di gateway.
+
+00:11:50.790 --> 00:11:51.630
+Lakukan itu sebelumnya lain.
+
+00:11:51.690 --> 00:11:54.130
+Pilih satu layanan, pindahkan pemeriksaan autentikasinya ke gitu.
+
+00:11:54.550 --> 00:11:56.950
+Anda akan langsung melihat kode layanan Anda menjadi lebih bersih.
+
+00:11:56.950 --> 00:12:00.070
+Tidak ada lagi logika validasi token yang tersebar di mana-mana.
+
+00:12:00.650 --> 00:12:03.370
+Tidak perlu lagi bertanya apakah Anda menerapkannya dengan cara yang sama di tiap layanan.
+
+00:12:03.730 --> 00:12:06.250
+Gateway menanganiya sekali dan setiap layanan mendapatkan manfaatnya.
+
+00:12:06.870 --> 00:12:08.190
+Langkah berikutnya, pembatasan kecepatan.
+
+00:12:08.810 --> 00:12:11.270
+Bahkan batas sederhana melindungi backend Anda dari kelebihan baru.
+
+00:12:11.650 --> 00:12:14.270
+Mulai dengan sesuatu yang dasar seperti 100 permintaan per menit per klien.
+
+00:12:14.610 --> 00:12:16.730
+Itu menghentikan klien nakal yang bisa melumpuhkan layanan Anda.
+
+00:12:16.730 --> 00:12:17.490
+Yang bisa bicara.

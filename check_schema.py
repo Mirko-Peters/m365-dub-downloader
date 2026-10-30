@@ -80,10 +80,10 @@ for p in glob.glob(str(DOCS / "**" / "*.html"), recursive=True)[:2000]:
             if m.split("#")[0].startswith("http") and m not in defs and not m.endswith("#video"):
                 refs.add(m)
 for r in sorted(refs)[:10]:
-    note("W", "@id referenziert, aber nirgends definiert: " + r.replace("https://dub.m365.fm", ""), "")
+    note("W", "@id referenziert, aber nirgends definiert: " + r.replace("https://www.m365.fm", ""), "")
 for i, d in defs.items():
     if len(d) > 1 and any(k in i for k in ("#person", "#org")):
-        note("W", f"{i.replace('https://dub.m365.fm', '')} in {len(d)} Varianten definiert", "")
+        note("W", f"{i.replace('https://www.m365.fm', '')} in {len(d)} Varianten definiert", "")
 print(f"{n} Seiten mit JSON-LD geprueft")
 for k, v in errs.most_common():
     print("FEHLER", v, "x", k, "z.B.", examples[k])

@@ -1,0 +1,1420 @@
+WEBVTT
+
+00:00:00.300 --> 00:00:07.200
+Pronti per dieci giorni di Microsoft 365, Copilot, AI, Azure e le persone che plasmano il futuro del lavoro, F.
+
+00:00:07.840 --> 00:00:11.900
+Questo gennaio, M3Tense 65 con è tornata e puntiamo ancora più in alto.
+
+00:00:12.880 --> 00:00:18.000
+Unitevi a noi per sessioni dal vivo, demo reali e conoscenze pratiche da MVP ed esperti del settore in tutto il mondo.
+
+00:00:18.740 --> 00:00:21.200
+Niente slide generiche, niente parole d'ordine infinite.
+
+00:00:22.040 --> 00:00:23.280
+Affronteremo le sfide reali.
+
+00:00:23.800 --> 00:00:28.580
+Copilot Studio, agenti AI, Fabric, sicurezza, governance e automazione.
+
+00:00:28.580 --> 00:00:34.280
+Che siate professionisti IT, sviluppatori o leader aziendali, ci sono sessioni pensate per voi.
+
+00:00:35.460 --> 00:00:40.140
+Con dieci giorni interi potrete esplorare svariate tecnologie e connettervi con una comunità globale.
+
+00:00:40.920 --> 00:00:44.280
+Seguite dal vivo e portate intuizioni pratiche nella vostra organizzazione.
+
+00:00:45.140 --> 00:00:48.600
+Gennaio 2027, dieci giorni, un'unica comunità, Microsoft.
+
+00:00:49.460 --> 00:00:50.560
+Le iscrizioni sono aperte.
+
+00:00:51.760 --> 00:00:55.720
+Andate su m365.com.net e assicuratevi il vostro posto oggi stesso.
+
+00:00:55.720 --> 00:00:58.260
+m365.com.net
+
+00:00:58.260 --> 00:01:03.730
+Iscrivetevi ora su m365.com.net
+
+00:01:03.730 --> 00:01:09.150
+Benvenuti a un altro episodio delle pillole di conoscenza Microsoft qui su m365.fm.
+
+00:01:09.530 --> 00:01:10.730
+Sono il vostro ospite Mirko Pirozzi.
+
+00:01:10.870 --> 00:01:14.090
+L'argomento di oggi è uno che quasi tutti hanno sentito nominare ma che pochi sanno spiegare chiaramente.
+
+00:01:14.630 --> 00:01:15.530
+Azure Private Link.
+
+00:01:15.530 --> 00:01:19.690
+Probabilmente avete visto l'opzione configurando un account di archiviazione a un database SQL.
+
+00:01:19.850 --> 00:01:20.610
+Ma cosa fa davvero?
+
+00:01:20.690 --> 00:01:21.590
+Ne avete davvero bisogno?
+
+00:01:22.030 --> 00:01:23.550
+Ecco cosa la maggior parte delle persone sbagliano.
+
+00:01:23.850 --> 00:01:29.210
+Presumono che poiché il servizio gira dentro Azure sia automaticamente privato, che sia isolato da internet di default.
+
+00:01:29.970 --> 00:01:31.210
+Non è vero, nemmeno per sogno.
+
+00:01:33.070 --> 00:01:38.110
+Molti servizi Azure Paa, S, Storage, SQL e Key Vault arrivano con un endpoint pubblico sin da subito.
+
+00:01:38.110 --> 00:01:42.870
+Ciò significa che chiunque su internet può raggiungerli se ha l'URL e le credenziali corrette.
+
+00:01:43.650 --> 00:01:50.270
+Alla fine di questo episodio capirete cos'è davvero Private Link, perché esiste e come mantiene il vostro traffico fuori da web pubblico.
+
+00:01:50.770 --> 00:01:52.210
+Lo analizzeremo usando semplici analogie.
+
+00:01:52.730 --> 00:01:55.930
+Niente fronzoli di marketing, niente gergo, solo spiegazioni chiare sul vecchio metodo.
+
+00:01:56.010 --> 00:01:57.710
+Endpoint, pubblici, ovunque.
+
+00:01:58.230 --> 00:01:59.070
+Iniziamo dal problema.
+
+00:01:59.890 --> 00:02:04.590
+Prima dell'esistenza di Private Link, ogni servizio Azure Pass riceveva un endpoint pubblico per impostazione predefinita.
+
+00:02:04.590 --> 00:02:10.650
+Create un account di archiviazione e Azure vi dà qualcosa come il mio account storage.gob.core.core.windows.net.
+
+00:02:10.770 --> 00:02:12.710
+Quell'URL risolve in un indirizzo IP pubblico.
+
+00:02:13.010 --> 00:02:15.070
+Chiunque abbia accesso a internet può provare a connettersi.
+
+00:02:15.530 --> 00:02:18.910
+Ora, immaginate di avere una macchina virtuale all'interno della vostra rete virtuale azzurra.
+
+00:02:19.510 --> 00:02:21.490
+Quella VM deve leggere dei file allo storage blob.
+
+00:02:22.010 --> 00:02:23.970
+Pensate che il traffico resti dentro l'Azure, giusto?
+
+00:02:24.510 --> 00:02:25.910
+Entrambe le risorse sono nello stesso cloud.
+
+00:02:26.250 --> 00:02:27.070
+Ma non è così che funziona.
+
+00:02:27.570 --> 00:02:31.370
+La macchina virtuale deve lasciare la tua rete virtuale, passare attraverso la rete internet pubblica
+
+00:02:31.370 --> 00:02:33.890
+e poi rientrare in Azure per raggiungere quell'account di archiviazione.
+
+00:02:33.890 --> 00:02:39.010
+È come se ti trovassi in una stanza di un ufficio e avessi bisogno di prendere qualcosa dallo sgabuzzino nello stesso edificio.
+
+00:02:39.910 --> 00:02:44.070
+Ma invece di percorrere il corridoio, devi uscire e fare il giro dell'isolato e rientrare da un'altra porta.
+
+00:02:44.310 --> 00:02:46.170
+Non ha alcun senso, ma è esattamente quello che stava succedendo.
+
+00:02:46.490 --> 00:02:47.410
+Questo è un problema reale.
+
+00:02:47.770 --> 00:02:52.350
+I tuoi dati viaggiano su internet pubblico, anche se entrambe le risorse si trovano all'interno dei data center di Microsoft.
+
+00:02:53.210 --> 00:02:56.550
+Il traffico è crittografato, certo, ma rimane comunque esposto alla rete internet aperta.
+
+00:02:56.910 --> 00:02:59.670
+Passa ancora attraverso router e switch che non puoi controllare.
+
+00:03:00.190 --> 00:03:03.590
+Se qualcuno riuscisse a intercettare quel traffico, potrebbe vedere cosa stai inviando.
+
+00:03:04.170 --> 00:03:05.130
+C'è un mito comune a riguardo.
+
+00:03:05.650 --> 00:03:08.310
+Molte persone pensano, beh, è nella mia sottoscrizione e quindi è privato.
+
+00:03:08.890 --> 00:03:09.650
+Non è così che funziona.
+
+00:03:10.090 --> 00:03:12.190
+La tua sottoscrizione è un confine di fatturazione e gestione.
+
+00:03:12.970 --> 00:03:15.930
+Per impostazione predefinita, i tuoi servizi azzurri sono raggiungibili da in.
+
+00:03:16.070 --> 00:03:21.930
+L'unica cosa che li protegge è il livello di autenticazione e autorizzazione, le chiavi, le password, le regole del firewall.
+
+00:03:22.370 --> 00:03:23.730
+Ma il percorso di rete in sé è pubblico.
+
+00:03:24.090 --> 00:03:26.750
+Così Microsoft ha esaminato la situazione e ha detto che deve esserci un modo migliore.
+
+00:03:26.930 --> 00:03:27.530
+E l'ha costruito.
+
+00:03:27.830 --> 00:03:28.750
+L'hanno chiamato PrivateLink.
+
+00:03:29.430 --> 00:03:32.130
+La soluzione è un endpoint privato come scheda di interfaccia di rete.
+
+00:03:33.890 --> 00:03:37.250
+In generale, ma l'elemento fondamentale da capire è l'endpoint privato.
+
+00:03:37.770 --> 00:03:43.670
+Una scheda di interfaccia di rete virtuale o NIC che si trova all'interno della tua rete virtuale e si collega a un servizio PaaS.
+
+00:03:44.610 --> 00:03:45.190
+E come funziona?
+
+00:03:45.670 --> 00:03:48.090
+Crea un endpoint privato per il tuo account di archiviazione.
+
+00:03:48.410 --> 00:03:53.090
+E Azure crea una NIC virtuale all'interno della tua rete virtuale con un IP privato proveniente dalla tua subnet.
+
+00:03:53.790 --> 00:03:57.550
+Quella NIC si collega all'account di archiviazione tramite PrivateLink nel back-end.
+
+00:03:57.970 --> 00:04:03.210
+Quindi dal punto di vista della tua VM, l'account di archiviazione ora sembra risiedere all'interno della tua rete con un IP privato,
+
+00:04:03.210 --> 00:04:05.010
+proprio come qualsiasi altra risorsa.
+
+00:04:06.130 --> 00:04:09.070
+Quando la tua VM invia traffico a quell'account di archiviazione,
+
+00:04:09.250 --> 00:04:13.390
+raggiunge l'IP privato della NIC e viaggia sulla rete dorsale di Microsoft, ma è su internet pubblico.
+
+00:04:14.450 --> 00:04:16.250
+Non lascia mai l'infrastruttura interna di Azure.
+
+00:04:16.730 --> 00:04:18.990
+Pensalo come a quel corridoio sicuro nell'edificio dell'ufficio.
+
+00:04:19.410 --> 00:04:23.390
+Invece di camminare fuori e fare il giro dell'isolato, percorri semplicemente il corridoio fino allo sgabuzzino.
+
+00:04:23.870 --> 00:04:25.170
+Connessione diretta, nessuna deviazione.
+
+00:04:26.210 --> 00:04:27.610
+Ecco una sfumatura che molti trascurano.
+
+00:04:27.610 --> 00:04:31.910
+L'attivazione di un endpoint privato non disattiva automaticamente l'endpoint pubblico.
+
+00:04:32.450 --> 00:04:33.870
+Possono coesistere entrambi contemporaneamente.
+
+00:04:34.230 --> 00:04:37.170
+Se crei un endpoint privato ma non modifichi le impostazioni dell'endpoint pubblico,
+
+00:04:37.230 --> 00:04:39.530
+il tuo account di archiviazione rimane raggiungibile da internet.
+
+00:04:40.110 --> 00:04:43.250
+Devi disabilitare esplicitamente l'accesso alla rete pubblica per bloccarlo completamente.
+
+00:04:43.870 --> 00:04:45.890
+Molti pensano che creare l'endpoint privato sia sufficiente.
+
+00:04:46.370 --> 00:04:46.470
+No.
+
+00:04:46.950 --> 00:04:48.870
+Devi dire ad Azure che vuoi solo l'accesso privato.
+
+00:04:49.350 --> 00:04:51.010
+Lascia che chiarisca un altro mito mentre ci siamo.
+
+00:04:51.430 --> 00:04:54.110
+PrivateLink non è la stessa cosa di una VPN o di ExpressRoute.
+
+00:04:54.110 --> 00:04:57.230
+Risolvono problemi diversi e approfondiremo questo confronto più avanti.
+
+00:04:57.810 --> 00:05:00.930
+Per ora sappi solo che PrivateLink serve ad accedere a uno specifico servizio,
+
+00:05:01.270 --> 00:05:02.710
+non a connettere l'intera rete ad Azure.
+
+00:05:03.370 --> 00:05:06.890
+Quindi hai il tuo endpoint privato e la tua VM può raggiungere l'account di archiviazione
+
+00:05:06.890 --> 00:05:07.690
+tramite l'IP privato.
+
+00:05:08.230 --> 00:05:10.290
+Ma come fa la tua VM a trovare effettivamente quella archiviazione?
+
+00:05:10.790 --> 00:05:13.390
+In precedenza risolveva l'URL pubblico in un IP pubblico.
+
+00:05:13.770 --> 00:05:14.670
+Ora ha bisogno di un IP privato.
+
+00:05:15.010 --> 00:05:15.570
+Come funziona?
+
+00:05:15.930 --> 00:05:18.170
+È qui che entra in gioco il DNS ed è quello che vedremo in seguito.
+
+00:05:19.330 --> 00:05:21.490
+Il DNS è l'ingrediente segreto che fa funzionare tu.
+
+00:05:22.050 --> 00:05:24.090
+Hai il tuo endpoint privato e la tua VM può raggiungere
+
+00:05:24.090 --> 00:05:26.090
+l'account di archiviazione tramite un IP privato.
+
+00:05:26.910 --> 00:05:29.370
+Ma ecco il punto, la tua VM non conosce quell'IP.
+
+00:05:30.430 --> 00:05:32.170
+Conosce l'URL dell'account di archiviazione,
+
+00:05:32.270 --> 00:05:33.490
+qualcosa come il mio account di archiviazione,
+
+00:05:33.730 --> 00:05:35.150
+blob.core.windows.net.
+
+00:05:35.590 --> 00:05:36.670
+È il nome che usa per connettersi.
+
+00:05:37.030 --> 00:05:39.150
+Quindi come trova l'IP privato invece di quello pubblico?
+
+00:05:39.510 --> 00:05:41.110
+È qui che il DNS svolge il lavoro pesante.
+
+00:05:41.870 --> 00:05:45.210
+Quando crei un endpoint privato e scegli di integrarlo con una zona DNS privata,
+
+00:05:45.310 --> 00:05:45.990
+cosa che dovresti fare?
+
+00:05:46.130 --> 00:05:48.010
+Azure ne crea uno automaticamente per te.
+
+00:05:48.230 --> 00:05:48.510
+Azure.
+
+00:05:48.970 --> 00:05:50.330
+Per un account di archiviazione blob,
+
+00:05:50.330 --> 00:05:51.550
+quella zona si chiama PrivateLink.
+
+00:05:51.930 --> 00:05:53.490
+blob.core.windows.net.
+
+00:05:53.490 --> 00:05:54.850
+All'interno di quella zona,
+
+00:05:54.970 --> 00:05:57.710
+Azure aggiunge un record A che mappa il nome del tuo account di archiviazione
+
+00:05:57.710 --> 00:05:58.610
+all'IP privato dell'empo.
+
+00:05:58.950 --> 00:05:59.910
+Ora ecco la parte intelligente.
+
+00:06:00.290 --> 00:06:02.330
+L'URL pubblico originale viene ancora risolto,
+
+00:06:02.450 --> 00:06:04.330
+ma invece di restituire direttamente un IP pubblico,
+
+00:06:04.430 --> 00:06:06.890
+restituisce un record CNAME che punta alla zona privata.
+
+00:06:07.370 --> 00:06:08.610
+Quindi la catena di risoluzione funziona.
+
+00:06:09.090 --> 00:06:11.490
+La tua VM richiede l'URL dell'account di archiviazione
+
+00:06:11.490 --> 00:06:14.130
+e DNS restituisce un CNAME che punta al mio account di archiviazione.
+
+00:06:14.830 --> 00:06:17.330
+PrivateLink.blog.core.windows.net
+
+00:06:17.330 --> 00:06:20.670
+che risiede nella zona DNS privata collegata alla tua rete virtuale.
+
+00:06:20.670 --> 00:06:22.890
+DNS lo risolve nell'IP privato,
+
+00:06:22.950 --> 00:06:24.490
+la tua VM si connette a quell'IP privato,
+
+00:06:24.550 --> 00:06:25.510
+il traffico non tocca mai,
+
+00:06:25.810 --> 00:06:26.950
+la rete è internet pubblica.
+
+00:06:27.790 --> 00:06:29.510
+Immaginano come il banco della reception in un ufficio.
+
+00:06:30.330 --> 00:06:31.830
+Qualcuno entra e chiede lo sgabuzzino
+
+00:06:31.830 --> 00:06:33.470
+e l'addetto alla reception non lo manda fuori.
+
+00:06:34.390 --> 00:06:35.950
+Indica il corridoio corretto all'interno.
+
+00:06:36.330 --> 00:06:38.310
+La zona DNS privata è come un addetto alla reception
+
+00:06:38.310 --> 00:06:40.470
+che reindirizza il traffico verso la destinazione corretta
+
+00:06:40.470 --> 00:06:41.310
+senza uscire dall'edificio.
+
+00:06:41.310 --> 00:06:43.450
+Il funzionamento dipende da dove si trova la tua VM.
+
+00:06:43.450 --> 00:06:46.130
+Se si trova nella stessa rete virtuale dell'endpoint privato,
+
+00:06:46.230 --> 00:06:47.670
+la zona DNS privata è collegata
+
+00:06:47.670 --> 00:06:49.190
+e la risoluzione avviene automaticamente.
+
+00:06:49.890 --> 00:06:51.110
+Se si trova in una rete con peering,
+
+00:06:51.230 --> 00:06:52.630
+devi collegare la zona anche a quella rete.
+
+00:06:53.370 --> 00:06:55.510
+Per le macchine on premise tramite VPN o ExpressRoute
+
+00:06:55.510 --> 00:06:56.550
+la procedura è più complessa.
+
+00:06:57.110 --> 00:06:58.790
+Di solito si configura un DNS forward
+
+00:06:58.790 --> 00:07:00.510
+a rosso usaggio DNS private resolver
+
+00:07:00.510 --> 00:07:02.210
+per assicurarsi che le query ragionano la zona privata.
+
+00:07:02.630 --> 00:07:04.310
+Tuttavia, per la maggior parte degli scenari in Azo
+
+00:07:04.310 --> 00:07:06.010
+le operazioni di base sono gestite automaticamente.
+
+00:07:07.270 --> 00:07:09.250
+DNS può diventare complesso in ambienti grandi,
+
+00:07:09.350 --> 00:07:10.790
+ma nel caso standard, con un AVM,
+
+00:07:10.790 --> 00:07:12.510
+nella stessa rete virtuale dell'endpoint privato,
+
+00:07:12.570 --> 00:07:13.930
+Azo gestisce tutto in automatico.
+
+00:07:15.010 --> 00:07:15.910
+Non devi toccare nulla.
+
+00:07:16.550 --> 00:07:18.070
+Vediamolo in azione con un esempio reale.
+
+00:07:18.590 --> 00:07:19.830
+Procedura guidata nel mondo reale.
+
+00:07:19.910 --> 00:07:21.330
+Private link con l'archiviazione Azo.
+
+00:07:21.730 --> 00:07:22.450
+Rendiamolo concreto.
+
+00:07:22.870 --> 00:07:24.190
+Immagina di avere una macchina virtuale
+
+00:07:24.190 --> 00:07:26.130
+in esecuzione all'interno della tua rete virtuale Azo.
+
+00:07:26.530 --> 00:07:28.230
+Quella VM deve recuperare dei file
+
+00:07:28.230 --> 00:07:29.630
+da un account di archiviazione blog di Azo.
+
+00:07:30.030 --> 00:07:30.950
+È una configurazione comune.
+
+00:07:31.430 --> 00:07:33.250
+Magari un'app che archivi e caricamenti degli utenti
+
+00:07:33.250 --> 00:07:35.470
+o un processo di elaborazione dati che legge da un container.
+
+00:07:36.010 --> 00:07:37.410
+Senza private link ecco cosa succede.
+
+00:07:37.770 --> 00:07:40.390
+La tua VM cerca l'url pubblico dell'account di archiviazione
+
+00:07:40.390 --> 00:07:41.590
+e ottiene un indirizzo IP pubblico.
+
+00:07:42.010 --> 00:07:43.530
+Il traffico lascia la tua rete virtuale,
+
+00:07:43.690 --> 00:07:46.050
+esce su internet pubblico e poi rientra in Azo per raggiungere
+
+00:07:46.050 --> 00:07:47.150
+l'account di archiviazione.
+
+00:07:47.710 --> 00:07:49.170
+Questo viaggio di andata ritorno non è necessario.
+
+00:07:49.470 --> 00:07:51.030
+Entrambi le risorse sono già in Azo ma
+
+00:07:51.030 --> 00:07:53.470
+i dati fanno comunque una deviazione attraverso internet.
+
+00:07:53.950 --> 00:07:55.930
+Con private link distribuisce un endpoint privato
+
+00:07:55.930 --> 00:07:58.010
+per la sottorisorsa blog dell'account di archiviazione.
+
+00:07:58.470 --> 00:08:00.130
+È la parte specifica che gestisce i dati blog.
+
+00:08:00.930 --> 00:08:02.670
+Azo crea una scheda di rete virtuale
+
+00:08:02.670 --> 00:08:04.390
+nella tua rete virtuale con un IP privato,
+
+00:08:04.490 --> 00:08:05.970
+configura la zona DNS privata
+
+00:08:05.970 --> 00:08:07.850
+e si attiva l'intera catena di risoluzione DNS
+
+00:08:07.850 --> 00:08:08.670
+di cui abbiamo parlato.
+
+00:08:08.670 --> 00:08:11.250
+Ora quando la tua VM risolve lo stesso URL
+
+00:08:11.250 --> 00:08:13.730
+misterageaccount.bob.corro.windows.net
+
+00:08:13.730 --> 00:08:15.630
+ottiene l'IP privato invece di quello pubblico.
+
+00:08:15.970 --> 00:08:18.530
+Il traffico fluisce dalla VM all'endpoint privato
+
+00:08:18.530 --> 00:08:20.550
+poi attraverso la rete backbone di Microsoft
+
+00:08:20.550 --> 00:08:22.450
+fino all'account di archiviazione
+
+00:08:22.450 --> 00:08:24.650
+non lascia mai la rete interna di Azure.
+
+00:08:25.050 --> 00:08:25.910
+Ecco il punto fondamentale.
+
+00:08:26.130 --> 00:08:27.190
+La tua applicazione non cambia.
+
+00:08:27.650 --> 00:08:29.090
+Nessuno modifica le stringhe di connessione
+
+00:08:29.090 --> 00:08:30.550
+e nessun aggiornamento dei file di configurazione.
+
+00:08:30.690 --> 00:08:31.650
+L'URL rimane lo stesso.
+
+00:08:32.110 --> 00:08:33.930
+L'unica cosa che cambia è il modo in cui quell'URL risolve.
+
+00:08:34.370 --> 00:08:35.490
+Dal punto di vista dell'app
+
+00:08:35.490 --> 00:08:37.870
+ci si sta ancora connettendo allo stesso account di archiviazione
+
+00:08:37.870 --> 00:08:40.450
+ma dietro le quinte il percorso del traffico è completamente diverso.
+
+00:08:40.890 --> 00:08:42.030
+Se vuoi fare un passo ulteriore
+
+00:08:42.030 --> 00:08:44.090
+puoi disabilitare completamente l'endpoint pubblico.
+
+00:08:44.410 --> 00:08:46.030
+Ciò significa che il tuo account di archiviazione
+
+00:08:46.030 --> 00:08:47.490
+è raggiungibile solo tramite l'end privato.
+
+00:08:48.030 --> 00:08:49.090
+Nessuna esposizione su internet.
+
+00:08:49.510 --> 00:08:51.470
+Nessuno può neanche tentare di connettersi dall'esterno.
+
+00:08:51.950 --> 00:08:52.950
+Un'altra cosa che vale la pena notare.
+
+00:08:53.210 --> 00:08:55.070
+Gli account di archiviazione hanno più sottorisorse.
+
+00:08:55.610 --> 00:08:57.590
+Blob è una ma ci sono anche file, tabelle e code.
+
+00:08:57.590 --> 00:08:59.550
+Ognuno può avere il proprio un privato.
+
+00:09:00.050 --> 00:09:01.490
+Potresti averne uno per il traffico blob
+
+00:09:01.490 --> 00:09:02.930
+e uno separato per il traffico file.
+
+00:09:03.390 --> 00:09:05.150
+Oppure usare un singolo endpoint che li copra tutti
+
+00:09:05.150 --> 00:09:06.130
+a seconda delle tue esigenze.
+
+00:09:06.390 --> 00:09:08.050
+Ora potresti chiederti in che modo differisce
+
+00:09:08.050 --> 00:09:09.450
+dalle altre opzioni di commettività a Zoom.
+
+00:09:10.170 --> 00:09:11.890
+VPN, ExpressRoute, Endpoint di servizio.
+
+00:09:12.270 --> 00:09:12.990
+Sembrano tutti simili.
+
+00:09:13.230 --> 00:09:13.790
+Facciamo chiarezza.
+
+00:09:14.510 --> 00:09:16.430
+PrivateLink contro VPN contro ExpressRoute
+
+00:09:16.430 --> 00:09:17.530
+contro Endpoint servizio.
+
+00:09:18.110 --> 00:09:19.450
+Quindi come si confronta PrivateLink
+
+00:09:19.450 --> 00:09:21.750
+con VPN, ExpressRoute ed Endpoint di servizio?
+
+00:09:22.230 --> 00:09:23.530
+Sembrano tutti fare la stessa cosa
+
+00:09:23.530 --> 00:09:25.750
+ma in realtà risolvono problemi diversi.
+
+00:09:25.750 --> 00:09:27.170
+In molti casi li useresti insieme.
+
+00:09:27.630 --> 00:09:28.330
+Partiamo dalla VPN.
+
+00:09:28.930 --> 00:09:30.330
+Una rete privata virtuale collega
+
+00:09:30.330 --> 00:09:32.690
+la tua rete locale ad Azure tramite internet pubblico.
+
+00:09:33.190 --> 00:09:35.670
+Crea un tunnel crittografato tra la tua sede e Azure.
+
+00:09:36.230 --> 00:09:37.730
+Il traffico è crittografato, certo,
+
+00:09:37.910 --> 00:09:39.470
+ma viaggia comunque su internet pubblico.
+
+00:09:40.130 --> 00:09:42.370
+Il tunnel è sicuro ma la strada su cui si trova è pubblica.
+
+00:09:42.770 --> 00:09:44.390
+PrivateLink non sostituisce la VPN.
+
+00:09:44.530 --> 00:09:45.230
+Lavora al suo fianco.
+
+00:09:45.730 --> 00:09:48.050
+Potresti usare una VPN per collegare il tuo ufficio ad Azure.
+
+00:09:48.230 --> 00:09:50.070
+Puoi usare PrivateLink per accedere al tuo account
+
+00:09:50.070 --> 00:09:51.710
+di archiviazione privatamente da quella connessione.
+
+00:09:52.170 --> 00:09:53.070
+ExpressRoute è diverso.
+
+00:09:53.070 --> 00:09:56.330
+Ti offre un circuito privato dedicato dal tuo datacenter ad Azure.
+
+00:09:57.090 --> 00:09:58.810
+Traffico non tocca mai internet pubblico.
+
+00:09:59.170 --> 00:10:01.790
+È come avere la tua strada privata direttamente nella rete di Microsoft.
+
+00:10:02.310 --> 00:10:02.830
+Michael Punt.
+
+00:10:03.550 --> 00:10:06.230
+ExpressRoute da solo non ti dà accesso privato ai servizi PaaS.
+
+00:10:06.810 --> 00:10:07.930
+Collega la tua rete ad Azure
+
+00:10:07.930 --> 00:10:10.430
+ma il tuo account di archiviazione è ancora un endpoint pubblico.
+
+00:10:10.930 --> 00:10:12.610
+Dovresti combina ExpressRoute con PrivateLink
+
+00:10:12.610 --> 00:10:14.410
+per ottenere un vero accesso privato a quei servizi.
+
+00:10:15.050 --> 00:10:16.730
+Gli endpoint di servizio sono una tecnologia più datata.
+
+00:10:17.230 --> 00:10:19.090
+Permettono di limitare l'accesso a un servizio a Azure
+
+00:10:19.090 --> 00:10:21.650
+in modo che solo il traffico dalla tua rete virtuale possa raggiungerlo.
+
+00:10:21.650 --> 00:10:22.890
+Ma ecco la questione.
+
+00:10:22.950 --> 00:10:24.370
+Il servizio è ancora un endpoint pubblico.
+
+00:10:24.830 --> 00:10:26.570
+Stai solo aggiungendo una regola Firewall che dice
+
+00:10:26.570 --> 00:10:28.330
+consenti solo il traffico da questa v-net.
+
+00:10:28.910 --> 00:10:30.870
+L'endpoint stesso è ancora esposto a internet.
+
+00:10:31.370 --> 00:10:32.670
+PrivateLink è più sicuro perché
+
+00:10:32.670 --> 00:10:34.730
+l'endpoint è veramente all'interno della tua v-net
+
+00:10:34.730 --> 00:10:35.650
+e ha un IP privato.
+
+00:10:36.050 --> 00:10:37.110
+Non c'è un end pubblico da attaccare.
+
+00:10:37.570 --> 00:10:38.950
+Lascia che ti dà un modo semplice per pensare.
+
+00:10:39.130 --> 00:10:41.130
+La VPN è un tunnel sicuro attraverso una strada pubblica.
+
+00:10:41.530 --> 00:10:43.650
+ExpressRoute è una strada privata che va dritta da giù.
+
+00:10:43.650 --> 00:10:45.990
+Gli endpoint di servizio sono una guardia a cancello pubblico
+
+00:10:45.990 --> 00:10:46.650
+che controlla i documenti.
+
+00:10:46.650 --> 00:10:49.250
+PrivateLink è un corridoio diretto all'interno dell'edificio.
+
+00:10:49.710 --> 00:10:50.630
+Non esci mai all'esterno.
+
+00:10:51.170 --> 00:10:52.090
+Quindi quale dovresti usare?
+
+00:10:52.530 --> 00:10:52.930
+Dipende.
+
+00:10:53.690 --> 00:10:54.970
+Per collegare il tuo ufficio ad Azure
+
+00:10:54.970 --> 00:10:57.230
+le tue opzioni sono VPN o ExpressRoute.
+
+00:10:57.870 --> 00:10:59.590
+Per accedere ai servizi Paese in modo privato
+
+00:10:59.590 --> 00:11:01.050
+PrivateLink è lo standard di riferimento.
+
+00:11:01.470 --> 00:11:03.090
+E per la massima sicurezza combinali.
+
+00:11:03.810 --> 00:11:05.910
+ExpressRoute per portare il tuo traffico in Azure privatamente
+
+00:11:05.910 --> 00:11:08.650
+poi PrivateLink per accedere ai tuoi servizi in modo privato da lì.
+
+00:11:08.650 --> 00:11:11.130
+Ma PrivateLink non è solo per i servizi Microsoft.
+
+00:11:11.550 --> 00:11:12.730
+Puoi usarlo anche per le tue applicazioni
+
+00:11:12.730 --> 00:11:15.550
+grazie al servizio PrivateLink che ospita i tuoi endpoint privati?
+
+00:11:16.490 --> 00:11:17.950
+Ecco qualcosa che sfugge a molti.
+
+00:11:18.490 --> 00:11:20.690
+PrivateLink non serve solo a consumare servizi Azure.
+
+00:11:21.490 --> 00:11:23.670
+Puoi usarlo anche per esporre le tue applicazioni al mondo.
+
+00:11:24.230 --> 00:11:26.270
+È esattamente per questo che è stato creato il servizio PrivateLink.
+
+00:11:26.730 --> 00:11:27.890
+Immagina di essere un fornitore sasso.
+
+00:11:28.150 --> 00:11:30.170
+Hai un'applicazione in esecuzione su macchine virtuali
+
+00:11:30.170 --> 00:11:31.410
+dietro un load balancer standard
+
+00:11:31.410 --> 00:11:32.590
+a cui accedono i tuoi clienti.
+
+00:11:33.550 --> 00:11:34.730
+Tradizionalmente avevi due opzioni.
+
+00:11:34.970 --> 00:11:36.510
+Esporre tutto a internet e configurare
+
+00:11:36.510 --> 00:11:38.170
+una VPN tra la tua rete e la loro.
+
+00:11:38.870 --> 00:11:39.870
+Presentano grandi svantaggi.
+
+00:11:39.870 --> 00:11:42.570
+L'esposizione pubblica ti espone a rischi di sicurezza
+
+00:11:42.570 --> 00:11:44.990
+e le VPN sono complesse da gestire e mantenere.
+
+00:11:45.610 --> 00:11:47.070
+Il servizio PrivateLink risolve questo problema.
+
+00:11:47.510 --> 00:11:49.830
+Crea il servizio, lo colleghi al tuo load balancer standard
+
+00:11:49.830 --> 00:11:52.070
+e i tuoi clienti possono creare un endpoint privato
+
+00:11:52.070 --> 00:11:53.350
+nella loro rete virtuale.
+
+00:11:53.710 --> 00:11:55.450
+Quell'endpoint si collega direttamente al tuo servizio.
+
+00:11:55.790 --> 00:11:57.010
+Nessun peering, nessuna VPN
+
+00:11:57.010 --> 00:11:58.730
+e assolutamente nessuna esposizione pubblica.
+
+00:11:59.070 --> 00:12:00.750
+Il traffico viaggia dal loro endpoint privato
+
+00:12:00.750 --> 00:12:03.330
+attraverso il backbone Microsoft direttamente al tuo servizio.
+
+00:12:03.890 --> 00:12:04.690
+Non tocca mai internet.
+
+00:12:05.290 --> 00:12:07.090
+Il tuo servizio ottiene un alias univoco a livello globale
+
+00:12:07.090 --> 00:12:10.450
+a qualcosa come myapp.git.region.azure.privatelinkservice.
+
+00:12:11.330 --> 00:12:13.690
+Quell'alias è ciò che i clienti usano per connettersi
+
+00:12:13.690 --> 00:12:15.530
+e tu hai il pieno controllo su chi può vederlo.
+
+00:12:16.110 --> 00:12:18.170
+Puoi limitare la visibilità tramite ruoli, airbags,
+
+00:12:18.290 --> 00:12:19.390
+autoscrizioni specifiche
+
+00:12:19.390 --> 00:12:21.910
+o permettere a chiunque abbia l'alias di richiedere una connessione.
+
+00:12:22.250 --> 00:12:24.670
+Ogni richiesta di connessione arriva a te per l'approvazione manuale
+
+00:12:24.670 --> 00:12:26.410
+così sai sempre esattamente chi si sta connettendo.
+
+00:12:26.810 --> 00:12:28.590
+Per i fornitori SaaS questo è un cambiamento enorme.
+
+00:12:28.950 --> 00:12:30.210
+Invece di aprire le regole del firewall
+
+00:12:30.210 --> 00:12:32.210
+o gestire complesse configurazioni VPN
+
+00:12:32.210 --> 00:12:34.030
+dai semplicemente l'alias al tuo cliente.
+
+00:12:34.570 --> 00:12:36.270
+Loro creano un endpoint privato, tu lo approvi
+
+00:12:36.270 --> 00:12:37.010
+e il gioco è fatto.
+
+00:12:38.920 --> 00:12:39.800
+Una limitazione però.
+
+00:12:40.060 --> 00:12:42.920
+Servizio PrivateLink funziona solo con load balancer standard, non basic.
+
+00:12:43.300 --> 00:12:44.780
+Se utilizzi ancora un load balancer basic
+
+00:12:44.780 --> 00:12:45.860
+dovrai prima eseguire la giornata.
+
+00:12:46.180 --> 00:12:47.760
+È un piccolo prezzo da pagare per la sicurezza
+
+00:12:47.760 --> 00:12:49.180
+e la semplicità che ottieni in cambio.
+
+00:12:49.900 --> 00:12:51.560
+Ora, tutta questa sicurezza sembra fantastica
+
+00:12:51.560 --> 00:12:53.440
+ma cosa significa realmente per le tue esigenze di conformità
+
+00:12:53.440 --> 00:12:54.000
+e per il tuo pagino?
+
+00:12:54.700 --> 00:12:56.500
+Considerazioni su sicurezza, conformità e cost.
+
+00:12:56.920 --> 00:12:58.720
+Parliamo di cosa significa davvero PrivateLink
+
+00:12:58.720 --> 00:12:59.960
+per i tuoi requisiti di conformità
+
+00:12:59.960 --> 00:13:00.980
+e per il tuo portafoglio.
+
+00:13:01.080 --> 00:13:02.420
+Innanzitutto, l'aspetto della sicurezza.
+
+00:13:02.620 --> 00:13:04.460
+PrivateLink riduce la tua superficie di attacco
+
+00:13:04.460 --> 00:13:06.100
+eliminando completamente gli endpoint pubblici.
+
+00:13:06.360 --> 00:13:07.320
+Questo è il vantaggio principale.
+
+00:13:07.660 --> 00:13:09.140
+Invece di un account di archiviazione
+
+00:13:09.140 --> 00:13:11.640
+o un database SQL raggiungibili ovunque su internet
+
+00:13:11.640 --> 00:13:13.360
+hai una risorsa che risponde solo al traffico
+
+00:13:13.360 --> 00:13:14.660
+proveniente dalla tua rete virtuale.
+
+00:13:14.760 --> 00:13:16.060
+Nessun IP pubblico da scansionare
+
+00:13:16.060 --> 00:13:17.040
+e nessuna porta aperta da sola.
+
+00:13:17.320 --> 00:13:18.980
+La superficie di attacco si riduce drasticamente.
+
+00:13:19.320 --> 00:13:21.120
+Ecco un altro vantaggio che non riceve abbastanza attenzione
+
+00:13:21.120 --> 00:13:22.480
+alla prevenzione della fuga di dati.
+
+00:13:22.820 --> 00:13:25.340
+Ogni endpoint privato mappa una specifica istanza di risorsa.
+
+00:13:25.880 --> 00:13:26.740
+Non ogni intero servizio,
+
+00:13:26.740 --> 00:13:28.840
+non ogni account di archiviazione nel tuo bonomento.
+
+00:13:29.140 --> 00:13:29.500
+Solo quello.
+
+00:13:29.680 --> 00:13:31.460
+Quindi se qualcuno compromette un carico di lavoro
+
+00:13:31.460 --> 00:13:32.400
+nella tua rete virtuale
+
+00:13:32.400 --> 00:13:34.140
+non puoi usare quel endpoint privato
+
+00:13:34.140 --> 00:13:35.640
+per raggiungere altri account di archiviazione.
+
+00:13:36.260 --> 00:13:37.840
+Sono limitati all'unica risorsa che hai approvato.
+
+00:13:38.340 --> 00:13:40.320
+Per i team di sicurezza questo contenimento è fondamentale.
+
+00:13:40.940 --> 00:13:43.320
+Sul fronte della conformità PrivateLink soddisfa molti requisiti.
+
+00:13:43.660 --> 00:13:45.640
+Normative come IPA, GDPR, PCI
+
+00:13:45.640 --> 00:13:47.100
+richiedono spesso che i dati sensibili
+
+00:13:47.100 --> 00:13:48.660
+non viaggino mai su reti pubbliche.
+
+00:13:49.720 --> 00:13:51.580
+PrivateLink ti offre un modo chiaro per dimostrarlo.
+
+00:13:52.080 --> 00:13:53.780
+Il tuo traffico rimane sulla dorsale Microsoft
+
+00:13:53.780 --> 00:13:55.460
+e puoi mostrare i log di controllo dicendo
+
+00:13:55.460 --> 00:13:56.540
+Ecco la prova.
+
+00:13:57.180 --> 00:13:58.200
+Per i settori regolamentati
+
+00:13:58.200 --> 00:14:00.000
+questo da solo può giustificare l'investimento.
+
+00:14:00.540 --> 00:14:01.420
+Ora parliamo dei costi
+
+00:14:01.420 --> 00:14:02.960
+perché è qui che le persone rimangono sorprese.
+
+00:14:03.220 --> 00:14:04.200
+PrivateLink non è gratuito.
+
+00:14:04.700 --> 00:14:06.660
+Paghi una tariffa oraria per ogni endpoint privato
+
+00:14:06.660 --> 00:14:08.040
+più le commissioni di elaborazione dati
+
+00:14:08.040 --> 00:14:09.360
+per il traffico che vi transita.
+
+00:14:09.940 --> 00:14:10.840
+A seconda dell'utilizzo
+
+00:14:10.840 --> 00:14:12.600
+può essere da due a tre volte più costoso
+
+00:14:12.600 --> 00:14:13.820
+dell'uso di un endpoint pubblico
+
+00:14:13.820 --> 00:14:14.720
+con regole firewall.
+
+00:14:15.440 --> 00:14:16.260
+Si accumula rapidamente
+
+00:14:16.260 --> 00:14:17.440
+specialmente se hai multi-endpoint.
+
+00:14:18.060 --> 00:14:19.060
+Quindi ecco un parere onesto.
+
+00:14:19.540 --> 00:14:20.860
+PrivateLink non è sempre la scelta giusta.
+
+00:14:21.740 --> 00:14:22.940
+Si gestisce un ambiente di sviluppo
+
+00:14:22.940 --> 00:14:24.240
+test senza dati sensibili
+
+00:14:24.240 --> 00:14:25.180
+gli endpoint pubblici
+
+00:14:25.180 --> 00:14:26.260
+con le giuste regole firewall
+
+00:14:26.260 --> 00:14:27.360
+probabilmente bastano.
+
+00:14:28.320 --> 00:14:29.620
+Se ospiti un sito web pubblico
+
+00:14:29.620 --> 00:14:30.840
+destinato all'accesso da internet
+
+00:14:30.840 --> 00:14:32.020
+PrivateLink non ti aiuta.
+
+00:14:32.720 --> 00:14:34.100
+Ma per i carichi di lavoro di produzione
+
+00:14:34.100 --> 00:14:35.160
+in settori regolamentati
+
+00:14:35.160 --> 00:14:36.360
+finanza, sanità, governo
+
+00:14:36.360 --> 00:14:37.720
+PrivateLink è spesso obbligatorio.
+
+00:14:38.300 --> 00:14:39.020
+È il prezzo da pagare
+
+00:14:39.020 --> 00:14:39.880
+per operare in modo sicuro.
+
+00:14:40.040 --> 00:14:41.040
+Ora prima di implementarlo
+
+00:14:41.040 --> 00:14:41.840
+ci sono alcuni insidi
+
+00:14:41.840 --> 00:14:42.960
+a cui prestare attenzione.
+
+00:14:43.360 --> 00:14:44.380
+Insidi nell'implementazione.
+
+00:14:44.880 --> 00:14:45.700
+Cosa sfugge ai principi anni?
+
+00:14:46.020 --> 00:14:47.080
+Lascia che ti risparmi qualche grata.
+
+00:14:47.280 --> 00:14:48.440
+Ecco gli errori più comuni
+
+00:14:48.440 --> 00:14:49.240
+che le persone commettono
+
+00:14:49.240 --> 00:14:50.260
+quando configurano PrivateLink
+
+00:14:50.260 --> 00:14:51.960
+per prima cosa
+
+00:14:51.960 --> 00:14:52.720
+devi disabilitare
+
+00:14:52.720 --> 00:14:53.520
+l'endpoint pubblico
+
+00:14:53.520 --> 00:14:54.700
+dopo aver creato quello privato.
+
+00:14:55.020 --> 00:14:55.960
+Questa è l'insidia più grande.
+
+00:14:56.400 --> 00:14:57.700
+Molti creano l'endpoint privato
+
+00:14:57.700 --> 00:14:58.600
+e pensano che basti
+
+00:14:58.600 --> 00:14:59.180
+ma non è così.
+
+00:15:00.200 --> 00:15:00.880
+Endpoint pubblico
+
+00:15:00.880 --> 00:15:01.320
+rimane attivo
+
+00:15:01.320 --> 00:15:02.460
+per impostazione predefinita
+
+00:15:02.460 --> 00:15:03.360
+che significa che il traffico
+
+00:15:03.360 --> 00:15:04.220
+può ancora passare su internet.
+
+00:15:04.640 --> 00:15:06.000
+Devi andare nelle impostazioni di rete
+
+00:15:06.000 --> 00:15:07.040
+e disattivare esplicitamente
+
+00:15:07.040 --> 00:15:08.160
+l'accesso alla rete pubblica.
+
+00:15:08.780 --> 00:15:09.720
+Se salti questo passaggio
+
+00:15:09.720 --> 00:15:10.980
+non hai effettivamente protetto nulla.
+
+00:15:11.540 --> 00:15:12.860
+Inoltre la risoluzione DNS
+
+00:15:12.860 --> 00:15:13.760
+per i client on-premises
+
+00:15:13.760 --> 00:15:14.920
+richiede una configurazione EXT.
+
+00:15:15.300 --> 00:15:16.260
+Se hai macchine in ufficio
+
+00:15:16.260 --> 00:15:17.420
+che si collegano tramite VPN
+
+00:15:17.420 --> 00:15:18.000
+e ExpressRoute
+
+00:15:18.000 --> 00:15:19.760
+non risolveranno automaticamente
+
+00:15:19.760 --> 00:15:21.060
+l'IP del tuo endpoint privato
+
+00:15:21.060 --> 00:15:22.840
+la zona DNS privata
+
+00:15:22.840 --> 00:15:24.440
+è collegata alla tua rete virtuale a Azure
+
+00:15:24.440 --> 00:15:26.440
+non hai i tuoi server DNS on-premises
+
+00:15:26.440 --> 00:15:28.420
+devi configurare un forwarder DNS
+
+00:15:28.420 --> 00:15:30.460
+o usare Azure DNS private resolver
+
+00:15:30.460 --> 00:15:31.500
+per far arrivare quelle query
+
+00:15:31.500 --> 00:15:32.220
+alla zona privata.
+
+00:15:32.520 --> 00:15:33.820
+Molte persone trascurano questo aspetto
+
+00:15:33.820 --> 00:15:34.480
+e si chiedono perché
+
+00:15:34.480 --> 00:15:35.240
+le loro app on-premises
+
+00:15:35.240 --> 00:15:36.060
+non riescono a connettere.
+
+00:15:36.280 --> 00:15:37.480
+Inoltre gli endpoint privati
+
+00:15:37.480 --> 00:15:38.440
+non funzionano magicamente
+
+00:15:38.440 --> 00:15:39.140
+tra regioni diverse.
+
+00:15:39.460 --> 00:15:40.340
+Se la tua rete virtuale
+
+00:15:40.340 --> 00:15:40.920
+in West Europe
+
+00:15:40.920 --> 00:15:42.040
+e crea un endpoint privato
+
+00:15:42.040 --> 00:15:43.240
+per un account di archiviazione
+
+00:15:43.240 --> 00:15:43.800
+in East US
+
+00:15:43.800 --> 00:15:44.640
+non funzionerà.
+
+00:15:44.980 --> 00:15:45.560
+Non funzionerà.
+
+00:15:45.560 --> 00:15:46.500
+L'endpoint privato
+
+00:15:46.500 --> 00:15:47.060
+deve trovarsi
+
+00:15:47.060 --> 00:15:47.760
+nella stessa regione
+
+00:15:47.760 --> 00:15:48.500
+della rete virtuale.
+
+00:15:48.820 --> 00:15:49.560
+Il servizio PaaS
+
+00:15:49.560 --> 00:15:50.680
+può essere una regione diversa
+
+00:15:50.680 --> 00:15:51.860
+ma l'endpoint deve corrispondere
+
+00:15:51.860 --> 00:15:52.720
+alla regione della binetta.
+
+00:15:53.100 --> 00:15:53.980
+Pianifica di conseguenza.
+
+00:15:54.680 --> 00:15:55.200
+Un'ultima cosa.
+
+00:15:55.640 --> 00:15:56.700
+I gruppi di sicurezza di rete
+
+00:15:56.700 --> 00:15:57.860
+influenzano la scheda di rete
+
+00:15:57.860 --> 00:15:58.700
+dell'endpoint privato.
+
+00:15:59.260 --> 00:15:59.860
+L'endpoint privato
+
+00:15:59.860 --> 00:16:00.840
+crea una scheda di rete virtuale
+
+00:16:00.840 --> 00:16:01.340
+nella tua subnet.
+
+00:16:01.620 --> 00:16:02.360
+Quella scheda di rete
+
+00:16:02.360 --> 00:16:03.980
+è soggetta alle stesse regole NSG
+
+00:16:03.980 --> 00:16:04.880
+di qualsiasi altra cosa
+
+00:16:04.880 --> 00:16:05.480
+in quella subnet.
+
+00:16:05.940 --> 00:16:06.760
+Se blocchi il traffico
+
+00:16:06.760 --> 00:16:07.460
+verso la subnet
+
+00:16:07.460 --> 00:16:08.140
+della scheda di rete
+
+00:16:08.140 --> 00:16:09.080
+l'endpoint non funzionerà.
+
+00:16:09.080 --> 00:16:10.480
+Assicurati che le tue regole NSG
+
+00:16:10.480 --> 00:16:11.180
+consente del traffico
+
+00:16:11.180 --> 00:16:41.160
+Grazie a tutti.
