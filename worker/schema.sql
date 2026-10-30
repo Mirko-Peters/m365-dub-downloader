@@ -443,3 +443,14 @@ CREATE TABLE IF NOT EXISTS tr_gap (            -- fehlende Uebersetzungen: seit 
   first INTEGER NOT NULL,
   PRIMARY KEY (eid, field)
 );
+
+-- Event-Team: Rollen je Event (organisator, co-organisator, programm-manager, sponsor-manager, kommunikation, helfer)
+CREATE TABLE IF NOT EXISTS event_roles (
+  event_id INTEGER NOT NULL,
+  user_id INTEGER NOT NULL,
+  role TEXT NOT NULL,
+  added_by INTEGER NOT NULL DEFAULT 0,
+  created INTEGER NOT NULL,
+  PRIMARY KEY (event_id, user_id)
+);
+CREATE INDEX IF NOT EXISTS idx_er_user ON event_roles(user_id);

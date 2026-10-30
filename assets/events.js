@@ -69,8 +69,22 @@
         h("button", { type: "button", class: "btn", text: Q.no, onclick: function () { api("/api/event/" + ev.handle + "/session/" + s.id + "/approve", { method: "POST", body: { ok: false } }).then(reload); } })])])); }); }
       live.forEach(function (s) { var dd = h("details", {}, [h("summary", { text: s.title + (s.speakers.length ? " · " + spkLabel(s.speakers) : "") })]); dd.appendChild(sessionForm(ev, s, reload)); dd.appendChild(h("button", { type: "button", class: "btn", text: Q.rm, onclick: function () { api("/api/event/" + ev.handle + "/session/" + s.id, { method: "DELETE" }).then(reload); } })); d.appendChild(dd); });
       var add = h("details", {}, [h("summary", { text: Q.sadd })]); add.appendChild(sessionForm(ev, null, reload)); d.appendChild(add);
+      d.appendChild(teamBox(ev));
     }
     return d;
+  }
+  var RL = de ? { organisator: "Organisator", "co-organisator": "Co-Organisator", "programm-manager": "Programm-Manager", "sponsor-manager": "Sponsoren-Manager", kommunikation: "Kommunikation", helfer: "Helfer" } : { organisator: "Organiser", "co-organisator": "Co-organiser", "programm-manager": "Programme manager", "sponsor-manager": "Sponsor manager", kommunikation: "Communications", helfer: "Helper" };
+  var TQ = de ? { h: "Team und Rollen", hint: "Organisator: alles. Co-Organisator: Event, Programm, Sponsoring, Rollen. Programm-Manager: Sessions. Sponsoren-Manager: Sponsoren-Anfragen. Kommunikation: Texte und Links. Helfer: nur im Team genannt.", handle: "Profil-Adresse des Mitglieds", add: "Hinzufügen", rm: "Entfernen", err: "Hat nicht geklappt (Profil öffentlich? Recht vorhanden?)" } : { h: "Team and roles", hint: "Organiser: everything. Co-organiser: event, programme, sponsoring, roles. Programme manager: sessions. Sponsor manager: sponsor requests. Communications: texts and links. Helper: listed in the team only.", handle: "Member profile address", add: "Add", rm: "Remove", err: "That did not work (public profile? permission?)" };
+  function teamBox(ev) {
+    var box = h("div", { class: "ev-team" }, [h("h4", { text: TQ.h }), h("p", { class: "cmut", text: TQ.hint })]), list = h("ul", {});
+    var hd = h("input", { type: "text", placeholder: TQ.handle }), rs = sel(Object.keys(RL).map(function (k) { return [k, RL[k]]; }), "helfer"), msg = h("span", { class: "cmut" });
+    function load() { api("/api/event/" + ev.handle + "/team").then(function (r) { list.innerHTML = ""; (r.j.team || []).forEach(function (m) {
+      var li = h("li", {}, [h("b", { text: m.name }), " · " + (RL[m.role] || m.role) + " "]);
+      if (m.handle) li.appendChild(h("button", { type: "button", class: "btn", text: TQ.rm, onclick: function () { api("/api/event/" + ev.handle + "/team", { method: "DELETE", body: { handle: m.handle, role: m.role } }).then(load); } }));
+      list.appendChild(li); }); }); }
+    box.appendChild(list);
+    box.appendChild(h("div", { class: "btns" }, [hd, rs, h("button", { type: "button", class: "btn main", text: TQ.add, onclick: function () { msg.textContent = ""; api("/api/event/" + ev.handle + "/team", { method: "POST", body: { handle: hd.value.trim().toLowerCase(), role: rs.value } }).then(function (r) { if (r.j && r.j.ok) { hd.value = ""; load(); } else msg.textContent = TQ.err; }); } }), msg]));
+    load(); return box;
   }
   function proposeBox(want) {
     var sec = h("div", { class: "ccard" }, [h("h3", { text: Q.propose })]);

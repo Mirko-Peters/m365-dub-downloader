@@ -20,12 +20,22 @@ async function topics(env, list) {
   for (const t of (Array.isArray(list) ? list : []).slice(0, 12)) { if (!known.has(t)) return null; if (!out.includes(t)) out.push(t); }
   return out;
 }
-// Darf der Nutzer das Event verwalten (Eigentuemer oder Admin/Inhaber der Veranstalter-Firma)?
-async function canManage(db, user, ev) {
+// Event-Rollen: Rechte je Rolle (Veranstalter-Firma Inhaber/Admin/Event-Manager und Eigentuemer koennen alles ausser Rollen-Details)
+export const EVENT_ROLES = {
+  organisator: ["edit", "sessions", "sponsor", "roles", "delete"],
+  "co-organisator": ["edit", "sessions", "sponsor", "roles"],
+  "programm-manager": ["sessions"],
+  "sponsor-manager": ["sponsor"],
+  kommunikation: ["edit"],
+  helfer: [],
+};
+// Darf der Nutzer am Event etwas tun? perm: edit | sessions | sponsor | roles | delete
+export async function canManage(db, user, ev, perm = "edit") {
   if (!user || !ev) return false;
   if (ev.owner_id === user.id || user.admin) return true;
-  if (!ev.org_id) return false;
-  return !!(await db.prepare("SELECT 1 x FROM org_members WHERE org_id=? AND user_id=? AND status='active' AND role IN ('owner','admin','events')").bind(ev.org_id, user.id).first());
+  if (ev.org_id) { const om = await db.prepare("SELECT role FROM org_members WHERE org_id=? AND user_id=? AND status='active' AND role IN ('owner','admin','events')").bind(ev.org_id, user.id).first(); if (om && (perm !== "delete" || om.role !== "events")) return true; }
+  const r = await db.prepare("SELECT role FROM event_roles WHERE event_id=? AND user_id=?").bind(ev.id, user.id).first();
+  return !!r && (EVENT_ROLES[r.role] || []).includes(perm);
 }
 const EID = /^[a-z0-9-]{2,48}$/;
 const rndToken = () => [...crypto.getRandomValues(new Uint8Array(18))].map((b) => b.toString(16).padStart(2, "0")).join("");
@@ -184,7 +194,7 @@ export async function handleEvents(env, request, url, path, user, J) {
   }
   if (path === "/api/events/mine" && method === "GET") {
     if (need()) return need();
-    const evs = (await db.prepare("SELECT e.* FROM events e WHERE e.owner_id=?1 OR e.org_id IN (SELECT org_id FROM org_members WHERE user_id=?1 AND status='active' AND role IN ('owner','admin','events')) ORDER BY e.start DESC").bind(user.id).all()).results || [];
+    const evs = (await db.prepare("SELECT e.* FROM events e WHERE e.owner_id=?1 OR e.id IN (SELECT event_id FROM event_roles WHERE user_id=?1) OR e.org_id IN (SELECT org_id FROM org_members WHERE user_id=?1 AND status='active' AND role IN ('owner','admin','events')) ORDER BY e.start DESC").bind(user.id).all()).results || [];
     const out = []; for (const e of evs) out.push(await evView(db, e, true));
     const orgs = (await db.prepare("SELECT o.handle,o.name FROM org_members m JOIN orgs o ON o.id=m.org_id WHERE m.user_id=? AND m.status='active' AND m.role IN ('owner','admin','events')").bind(user.id).all()).results || [];
     return J({ events: out, orgs });
@@ -216,8 +226,8 @@ export async function handleEvents(env, request, url, path, user, J) {
   if ((m = path.match(/^\/api\/event\/([a-z0-9-]{3,40})$/)) && method === "DELETE") {
     if (need()) return need();
     const ev = await db.prepare("SELECT * FROM events WHERE handle=?").bind(m[1]).first();
-    if (!(await canManage(db, user, ev))) return J({ error: "forbidden" }, 403);
-    await db.batch([db.prepare("DELETE FROM event_sessions WHERE event_id=?").bind(ev.id), db.prepare("DELETE FROM events WHERE id=?").bind(ev.id)]);
+    if (!(await canManage(db, user, ev, "delete"))) return J({ error: "forbidden" }, 403);
+    await db.batch([db.prepare("DELETE FROM event_roles WHERE event_id=?").bind(ev.id), db.prepare("DELETE FROM event_sessions WHERE event_id=?").bind(ev.id), db.prepare("DELETE FROM events WHERE id=?").bind(ev.id)]);
     return J({ ok: true });
   }
   // Session anlegen/aendern: Veranstalter -> sofort live; andere Mitglieder -> Vorschlag (pending)
@@ -225,7 +235,7 @@ export async function handleEvents(env, request, url, path, user, J) {
     if (need()) return need();
     if (!(await rateLimit(db, `sess:${user.id}`, 40, 3600))) return J({ error: "rate_limit" }, 429);
     const ev = await db.prepare("SELECT * FROM events WHERE handle=?").bind(m[1]).first(); if (!ev) return J({ error: "not_found" }, 404);
-    const mgr = await canManage(db, user, ev), b = await body();
+    const mgr = await canManage(db, user, ev, "sessions"), b = await body();
     const title = txt(b.title, 140); if (title.length < 3) return J({ error: "bad_title" }, 400);
     const st = String(b.start || ""), en = String(b.end || "");
     if ((st && !okDate(st)) || (en && !okDate(en))) return J({ error: "bad_date" }, 400);
@@ -252,7 +262,7 @@ export async function handleEvents(env, request, url, path, user, J) {
     if (need()) return need();
     const ev = await db.prepare("SELECT * FROM events WHERE handle=?").bind(m[1]).first(); if (!ev) return J({ error: "not_found" }, 404);
     const s = await db.prepare("SELECT * FROM event_sessions WHERE id=? AND event_id=?").bind(+m[2], ev.id).first(); if (!s) return J({ error: "not_found" }, 404);
-    const mgr = await canManage(db, user, ev);
+    const mgr = await canManage(db, user, ev, "sessions");
     if (m[3] && method === "POST") {
       if (!mgr) return J({ error: "forbidden" }, 403);
       const b = await body();
@@ -264,6 +274,33 @@ export async function handleEvents(env, request, url, path, user, J) {
       await db.prepare("DELETE FROM event_sessions WHERE id=?").bind(s.id).run(); return J({ ok: true });
     }
   }
+  // ---- Event-Team: Rollen vergeben (Organisator, Co-Organisator, Programm-, Sponsoren-Manager, Kommunikation, Helfer) ----
+  if ((m = path.match(/^\/api\/event\/([a-z0-9-]{3,40})\/team$/))) {
+    const ev = await db.prepare("SELECT * FROM events WHERE handle=?").bind(m[1]).first(); if (!ev) return J({ error: "not_found" }, 404);
+    if (method === "GET") {
+      const rows = (await db.prepare("SELECT r.role,r.user_id,u.name,p.handle FROM event_roles r JOIN users u ON u.id=r.user_id LEFT JOIN profiles p ON p.user_id=u.id AND p.public=1 WHERE r.event_id=? ORDER BY r.created").bind(ev.id).all()).results || [];
+      const mine = need() ? false : await canManage(db, user, ev, "roles");
+      return J({ roles: Object.keys(EVENT_ROLES), team: rows.filter((r) => mine || r.handle).map((r) => ({ role: r.role, name: r.name, handle: r.handle || "", ...(mine ? { uid: r.user_id } : {}) })), can_edit: mine });
+    }
+    if (need()) return need();
+    if (!(await canManage(db, user, ev, "roles"))) return J({ error: "forbidden" }, 403);
+    const b = await body();
+    const role = String(b.role || ""); if (!(role in EVENT_ROLES)) return J({ error: "bad_role" }, 400);
+    const isOrganiser = ev.owner_id === user.id || user.admin || (await canManage(db, user, ev, "delete"));
+    if (method === "POST") {
+      if (role === "organisator" && !isOrganiser) return J({ error: "forbidden" }, 403);
+      const pr = await db.prepare("SELECT user_id FROM profiles WHERE handle=? AND public=1").bind(String(b.handle || "").toLowerCase()).first(); if (!pr) return J({ error: "not_found" }, 404);
+      if ((await db.prepare("SELECT COUNT(*) n FROM event_roles WHERE event_id=?").bind(ev.id).first()).n >= 40) return J({ error: "limit" }, 400);
+      await db.prepare("INSERT INTO event_roles(event_id,user_id,role,added_by,created) VALUES(?,?,?,?,?) ON CONFLICT(event_id,user_id) DO UPDATE SET role=excluded.role").bind(ev.id, pr.user_id, role, user.id, now()).run();
+      return J({ ok: true });
+    }
+    if (method === "DELETE") {
+      const pr = await db.prepare("SELECT user_id FROM profiles WHERE handle=?").bind(String(b.handle || "").toLowerCase()).first(); if (!pr) return J({ error: "not_found" }, 404);
+      const cur = await db.prepare("SELECT role FROM event_roles WHERE event_id=? AND user_id=?").bind(ev.id, pr.user_id).first();
+      if (cur?.role === "organisator" && !isOrganiser) return J({ error: "forbidden" }, 403);
+      await db.prepare("DELETE FROM event_roles WHERE event_id=? AND user_id=?").bind(ev.id, pr.user_id).run(); return J({ ok: true });
+    }
+  }
   // ---- Speaker: Einladung ansehen/bestaetigen, Anfragen an bestehende Mitglieder ----
   if (path === "/api/speaker/invite-send" && method === "POST") {   // Veranstalter laden einen Speaker per E-Mail ein (Adresse wird nicht gespeichert)
     if (need()) return need();
@@ -271,7 +308,7 @@ export async function handleEvents(env, request, url, path, user, J) {
     const b = await body(), email = String(b.email || "").trim().toLowerCase();
     if (!/^[^\s@<>]{1,64}@[^\s@<>]{1,120}\.[a-z]{2,}$/i.test(email)) return J({ error: "bad_email" }, 400);
     const i = await db.prepare("SELECT i.token,i.name,s.title st,e.* FROM speaker_invites i JOIN event_sessions s ON s.id=i.session_id JOIN events e ON e.id=i.event_id WHERE i.token=?").bind(String(b.token || "")).first();
-    if (!i || !(await canManage(db, user, i))) return J({ error: "forbidden" }, 403);
+    if (!i || !(await canManage(db, user, i, "sessions"))) return J({ error: "forbidden" }, 403);
     if (!env.RESEND_API_KEY) return J({ error: "mail_off" }, 503);
     const esc = (x) => String(x).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c])), url = `${env.SITE}/community/?invite=${i.token}#c-events`;
     const r = await sendMail(env, email, `Speaker invitation: ${i.title}`, `<p>Hello ${esc(i.name)},</p><p>${esc(user.name)} invites you to speak at <b>${esc(i.title)}</b> (${esc(i.start)}) with the session <b>${esc(i.st)}</b>.</p><p><a href="${url}">Confirm your participation</a> (sign-in required, free).</p><p>M365.FM</p>`);
@@ -351,7 +388,7 @@ export async function handleEvents(env, request, url, path, user, J) {
   if (path === "/api/events/ask-sponsor" && method === "POST") {
     if (need()) return need();
     const b = await body(), ev = await db.prepare("SELECT * FROM events WHERE handle=? AND seeking_sponsor=1").bind(String(b.event || "")).first();
-    if (!ev || !(await canManage(db, user, ev))) return J({ error: "forbidden" }, 403);
+    if (!ev || !(await canManage(db, user, ev, "sponsor"))) return J({ error: "forbidden" }, 403);
     const org = await db.prepare("SELECT o.id FROM org_sponsor s JOIN orgs o ON o.id=s.org_id WHERE s.open=1 AND o.handle=?").bind(String(b.org || "")).first(); if (!org) return J({ error: "not_found" }, 404);
     const tx = txt(b.body, 1000); if (tx.length < 10) return J({ error: "too_short" }, 400);
     if (await db.prepare("SELECT 1 x FROM sponsor_asks WHERE event_id=? AND org_id=?").bind(ev.id, org.id).first()) return J({ error: "already" }, 409);
@@ -382,7 +419,7 @@ export async function handleEvents(env, request, url, path, user, J) {
 export async function deleteUserEvents(db, uid) {
   const evs = (await db.prepare("SELECT id FROM events WHERE owner_id=? AND org_id IS NULL").bind(uid).all()).results || [];
   const ops = [];
-  for (const e of evs) ops.push(db.prepare("DELETE FROM event_sessions WHERE event_id=?").bind(e.id), db.prepare("DELETE FROM events WHERE id=?").bind(e.id));
-  ops.push(db.prepare("DELETE FROM event_sessions WHERE proposer_id=? AND status='pending'").bind(uid));
+  for (const e of evs) ops.push(db.prepare("DELETE FROM event_roles WHERE event_id=?").bind(e.id), db.prepare("DELETE FROM event_sessions WHERE event_id=?").bind(e.id), db.prepare("DELETE FROM events WHERE id=?").bind(e.id));
+  ops.push(db.prepare("DELETE FROM event_sessions WHERE proposer_id=? AND status='pending'").bind(uid), db.prepare("DELETE FROM event_roles WHERE user_id=?").bind(uid));
   if (ops.length) await db.batch(ops);
 }

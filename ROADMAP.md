@@ -110,3 +110,8 @@ Podpage kostet 65 $/Monat (ca. 780 $/Jahr). Ziel: m365.fm komplett auf dub.m365.
 - Schritte: 1) alles als JSON ins Repo sichern (Podpage-MCP, read-only), 2) Seiten für Videos, Hosts, Sponsoren, Links, Blog/Seiten im Generator ergänzen, 3) Weiterleitungen aller alten Podpage-URLs, 4) Domain www.m365.fm umziehen (Suchplätze erhalten), 5) erst dann Podpage kündigen.
 - Nur mit Server nötig: Kontaktformular, Sprachnachrichten, Newsletter, Bewertungen (Worker + Resend/R2). Shop weglassen oder extern verlinken.
 - Weitere Podpage-Podcasts im Konto: "Business → IT | IT → Business" und "DataScience Show Podcast" (bei der Ablösung mitprüfen).
+
+## Event-Rollen (gebaut: Team)
+- Tabelle `event_roles`; Rollen: Organisator (alles), Co-Organisator (Event, Programm, Sponsoring, Rollen), Programm-Manager (Sessions), Sponsoren-Manager (Anfragen), Kommunikation (Texte/Links), Helfer (nur im Team genannt). Zentrale Prüfung `canManage(db,user,ev,perm)`.
+- API `/api/event/:handle/team` (GET/POST/DELETE), MCP `get_event_team`, `set_event_role`, UI-Block „Team und Rollen" im Event-Editor.
+- Offen: Teilnehmer-Anmeldung mit Warteliste, Sponsor-/Medienpartner-Bestätigung, Einladung per E-Mail (RESEND_API_KEY).
