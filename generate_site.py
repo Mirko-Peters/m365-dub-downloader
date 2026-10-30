@@ -1178,9 +1178,10 @@ def build():
     _ctx = dict(community_tags=community_tags, write=write, page=page, header=header, footer=footer, footer_en=footer_en, BASE=BASE, LANGS=LANGS, active=active, url_of=url_of, anchor_title=anchor_title, sitemap=sitemap, TODAY=TODAY, api=COMMUNITY_API, orig_alts=ORIG_ALTS)
     _people, _orgs = MEM.fetch_members(COMMUNITY_API)
 
-    def _ep_find(e):
+    def _ep_find(e, lang="de"):
         rx = [re.compile(r"(?<![\w-])" + re.escape(n) + r"(?![\w-])", re.I) for n in LRN.ent_names(e)]
-        return [it for it in by_lang.get("de", []) if any(r.search(it["e"]["title"] + " " + (it["e"].get("tags") or "")) for r in rx)][:8] if rx else []
+        return [it for it in by_lang.get(lang, []) if any(r.search(it["e"]["title"] + " " + (it["e"].get("tags") or "")) for r in rx)][:12] if rx else []
+    _ctx["ep_sum"] = lambda x: short(parse_desc(x["e"]["desc"])[0], 260)
     _cl = (LRN._fetch_json(f"{COMMUNITY_API}/api/entity/claims") or {}).get("claims", []) if hasattr(LRN, "_fetch_json") else []
     ENT.ORGPAGES.update({o["eid"]: o["handle"] for o in _orgs if o.get("eid")})
     _events = EVT.fetch_events(COMMUNITY_API)
