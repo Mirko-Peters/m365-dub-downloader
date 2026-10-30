@@ -45,3 +45,16 @@ def write_ui_js(out):
         js = ("window.M365T=" + json.dumps(tr.get(lg, {}), ensure_ascii=False, separators=(",", ":")).replace("</", "<\\/") + ";"
               "window.M365L=function(de,k,a,b){if(de)return a;var t=window.M365T[k];if(!t)return b;var o={},x;for(x in b)o[x]=b[x];for(x in t)o[x]=t[x];return o};")
         (out / "assets" / f"ui-{lg}.js").write_text(js, "utf-8")
+
+
+_PYT = None
+def T(lang, en, de):
+    """Inline text: de/en direkt, andere Sprachen aus data/py_i18n.json, sonst Englisch."""
+    global _PYT
+    if lang == "de": return de
+    if lang == "en": return en
+    if _PYT is None:
+        import json, os
+        p = os.path.join(os.path.dirname(os.path.abspath(__file__)), "data", "py_i18n.json")
+        _PYT = json.load(open(p, encoding="utf-8")) if os.path.exists(p) else {}
+    return _PYT.get(en, {}).get(lang, en)

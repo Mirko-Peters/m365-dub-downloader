@@ -1,6 +1,6 @@
 """Mitglieder- und Firmenverzeichnis: oeffentliche Experten-Profile (nur Opt-in) mit Schema.org-Verknuepfung zu den Entitaeten."""
 import json
-from site_i18n import COMM_LANGS, pfx, pfx2, overlay
+from site_i18n import COMM_LANGS, pfx, pfx2, overlay, T
 from datetime import datetime, timezone
 from site_learn import ENTS, esc, _fetch_json, LCSS
 from site_entities import TL, eurl, eid_of
@@ -175,7 +175,7 @@ def build(g, people, orgs, extra=None):
                 continue
             en = ENTS[e["e"]]; note = []
             if e.get("via"):
-                note.append(("bestätigt durch Session" if e["via"] == "session" else "bestätigt durch Zertifikat") if lang == "de" else ("confirmed by session" if e["via"] == "session" else "confirmed by certification"))
+                note.append(T(lang, "confirmed by session", "bestätigt durch Session") if e["via"] == "session" else T(lang, "confirmed by certification", "bestätigt durch Zertifikat"))
             elif e.get("verified"):
                 note.append(s["verified"])
             elif e.get("endorsed"):
@@ -215,16 +215,16 @@ def build(g, people, orgs, extra=None):
             ct = p.get("contact") or {}   # nur Felder, die das Mitglied fuer alle freigegeben hat
             loc = " ".join(x for x in [ct.get("zip", ""), ct.get("city", "")] if x)
             if loc or ct.get("street"):
-                facts.append(("Ort" if lang == "de" else "Location", esc(", ".join(x for x in [ct.get("street", ""), loc] if x))))
+                facts.append((T(lang, "Location", "Ort"), esc(", ".join(x for x in [ct.get("street", ""), loc] if x))))
             if ct.get("email"):
                 facts.append(("E-Mail", f'<a href="mailto:{esc(ct["email"])}">{esc(ct["email"])}</a>'))
             if ct.get("phone"):
-                facts.append(("Mobil" if lang == "de" else "Mobile", esc(ct["phone"])))
+                facts.append((T(lang, "Mobile", "Mobil"), esc(ct["phone"])))
             ft = '<table class="mb-facts"><tbody>' + "".join(f'<tr><th scope="row">{esc(a)}</th><td>{b}</td></tr>' for a, b in facts) + "</tbody></table>" if facts else ""
             _cs = sorted([c for c in p.get("certs", []) if c["e"] in ENTS], key=lambda c: (-c.get("endorsed", 0), -int(bool(c.get("verified"))), -(c.get("year") or 0)))
             certs = "<ul>" + "".join(f'<li><a href="{eurl(BASE, lang, c["e"])}">{esc(ENTS[c["e"]]["name"])}</a>{" (" + str(c["year"]) + ")" if c.get("year") else ""}'
-                                     + (' · <a href="' + esc(c["url"]) + '" rel="nofollow ugc noopener">✔ ' + ("geprüft" if lang == "de" else "verified") + "</a>" if c.get("verified") and c.get("url") else (" · ✔ " + ("geprüft" if lang == "de" else "verified") if c.get("verified") else ""))
-                                     + (f' <span class="mut">· {c["endorsed"]} ' + ("Bestätigungen" if lang == "de" else "confirmations") + "</span>" if c.get("endorsed") else "")
+                                     + (' · <a href="' + esc(c["url"]) + '" rel="nofollow ugc noopener">✔ ' + (T(lang, "verified", "geprüft")) + "</a>" if c.get("verified") and c.get("url") else (" · ✔ " + (T(lang, "verified", "geprüft")) if c.get("verified") else ""))
+                                     + (f' <span class="mut">· {c["endorsed"]} ' + (T(lang, "confirmations", "Bestätigungen")) + "</span>" if c.get("endorsed") else "")
                                      + f' <span class="pf-certend" data-h="{esc(p["handle"])}" data-e="{c["e"]}"></span></li>' for c in _cs) + "</ul>" if _cs else ""
             contrib = "<ul>" + "".join(f'<li><a href="{eurl(BASE, lang, c["t"])}">{esc(ENTS[c["t"]]["name"] if c["t"] in ENTS else c["t"])}</a> <span class="mut">· {esc(s["wiki"] if c["k"] == "wiki" else s["entity"])} · {datetime.fromtimestamp(c["c"], timezone.utc).strftime("%Y-%m-%d")}{" – " + esc(c["s"]) if c.get("s") else ""}</span></li>' for c in p.get("contrib", []) if c["t"] in ENTS) + "</ul>" if p.get("contrib") else ""
             b = shell(lang, f'<nav aria-label="breadcrumb"><a href="{croot}members/">{esc(s["members"])}</a></nav>{img_tag("u", p, p["name"])}<h1>{esc(p["name"])}</h1><p style="font-size:1.1em">{esc(p.get("headline", ""))}</p><p>{tags_of_p(p, li, s)}</p>{ft}'

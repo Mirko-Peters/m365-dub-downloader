@@ -1,4 +1,5 @@
 """Events und Sessions: oeffentliche Event-Seiten mit Schema.org (Event, subEvent, performer, organizer, about -> Entitaeten)."""
+from site_i18n import T
 import json
 from site_i18n import COMM_LANGS, pfx, pfx2, overlay
 from datetime import datetime
@@ -186,7 +187,7 @@ def build(g, events, people, orgs):
             ft = '<table class="mb-facts"><tbody>' + "".join(f'<tr><th scope="row">{esc(a)}</th><td>{b_}</td></tr>' for a, b_ in facts if b_) + "</tbody></table>"
             btn = (f'<a class="btn main" href="{esc(ev["tickets_url"])}" rel="nofollow noopener" target="_blank">{esc(s["tickets"])}</a> ' if ev.get("tickets_url") else "") + (f'<a class="btn" href="{esc(ev["url"])}" rel="nofollow noopener" target="_blank">{esc(s["website"])}</a>' if ev.get("url") else "")
             tp = "".join(f'<a class="ev-tag" href="{eurl(BASE, lang, e)}">{esc(ENTS[e]["name"])}</a>' for e in ev.get("topics", []) if e in ENTS)
-            pl = {"sponsor": "Sponsoren" if lang == "de" else "Sponsors", "media": "Medienpartner" if lang == "de" else "Media partners"}
+            pl = {"sponsor": T(lang, "Sponsors", "Sponsoren"), "media": T(lang, "Media partners", "Medienpartner")}
             pt = ""
             for kd in ("sponsor", "media"):
                 ps = [x for x in ev.get("partners", []) if x["kind"] == kd]
@@ -201,8 +202,8 @@ def build(g, events, people, orgs):
                           + (f'<p><a href="{esc(se["recording_url"])}" rel="nofollow noopener" target="_blank">{esc(s["recording"])}</a></p>' if se.get("recording_url") else "") + "</div>")
             b = shell(lang, f'<nav aria-label="breadcrumb"><a href="{croot}events/">{esc(s["events"])}</a></nav><h1>{esc(ev["title"])}</h1><p style="font-size:1.1em">{esc(ev.get("summary", ""))}</p>{ft}<p>{btn}</p>'
                       + (f'<h2>{esc(s["about"])}</h2><p style="white-space:pre-line">{esc(ev["about"])}</p>' if ev.get("about") else "") + (f'<h2>{esc(s["topics"])}</h2><p>{tp}</p>' if tp else "")
-                      + f'<p><a class="btn" href="{u}event.ics" download>{"Zum Kalender hinzufügen (.ics)" if lang == "de" else "Add to calendar (.ics)"}</a></p>' + f'<h2>{esc(s["sessions"])}</h2>' + ("".join(ss) or f'<p class="mut">{esc(s["nosess"])}</p>')
-                      + pt + f'<h2>{"Anmeldung" if lang == "de" else "Registration"}</h2><div id="ev-reg" data-e="{esc(ev["handle"])}"></div><script>' + REGJS.replace("%API%", api).replace("%T%", json.dumps(REGT[lang], ensure_ascii=False)).replace("%CROOT%", croot) + '</script>'
+                      + f'<p><a class="btn" href="{u}event.ics" download>{T(lang, "Add to calendar (.ics)", "Zum Kalender hinzufügen (.ics)")}</a></p>' + f'<h2>{esc(s["sessions"])}</h2>' + ("".join(ss) or f'<p class="mut">{esc(s["nosess"])}</p>')
+                      + pt + f'<h2>{T(lang, "Registration", "Anmeldung")}</h2><div id="ev-reg" data-e="{esc(ev["handle"])}"></div><script>' + REGJS.replace("%API%", api).replace("%T%", json.dumps(REGT[lang], ensure_ascii=False)).replace("%CROOT%", croot) + '</script>'
                       + f'<p><a class="btn" href="{croot}?propose={esc(ev["handle"])}#c-events">{esc(s["propose"])}</a></p>' + css)
             ld = [{"@context": "https://schema.org", **event_ld(BASE, ev, pb, ob)}]
             write(f"{pfx2(lang)}community/events/{ev['handle']}/index.html", page(lang, f'{ev["title"]} – {s["events"]} | M365.FM', (ev.get("summary") or ev.get("about") or "")[:155], u, b, None, ld, og_type="website", extra_head=LCSS, noindex=noidx))

@@ -1,4 +1,5 @@
 """Entitaetsdatenbank fuer das Microsoft-Oekosystem: Seiten, JSON-Exporte, Schema.org-Graph."""
+from site_i18n import T
 import json
 from site_i18n import COMM_LANGS, pfx, pfx2, overlay
 from pathlib import Path
@@ -148,11 +149,11 @@ def ent_ld(BASE, e, lang, glossary_set=None):
 def claim_html(eid, lang):
     oh = ORGPAGES.get(eid)
     if oh and not CLAIMS.get(eid):
-        return f'<p><a href="{BASE_}{pfx(lang)}/community/c/{oh}/">{"Firmenprofil auf M365.FM" if lang == "de" else "Company profile on M365.FM"}</a></p>'
+        return f'<p><a href="{BASE_}{pfx(lang)}/community/c/{oh}/">{T(lang, "Company profile on M365.FM", "Firmenprofil auf M365.FM")}</a></p>'
     h = CLAIMS.get(eid)
     if not h:
         return ""
-    return f'<p><a href="{BASE_}{pfx(lang)}/community/u/{h}/">{"Profil auf M365.FM (gepflegt von der Person)" if lang == "de" else "Profile on M365.FM (maintained by the person)"}</a></p>'
+    return f'<p><a href="{BASE_}{pfx(lang)}/community/u/{h}/">{T(lang, "Profile on M365.FM (maintained by the person)", "Profil auf M365.FM (gepflegt von der Person)")}</a></p>'
 
 
 OLD = {"en": ("outdated", "Also show outdated entries (e.g. past events, replaced products)", "No longer current.", "Replaced by:"),
@@ -234,18 +235,18 @@ def build(g, wiki_links, experts_by_ent, ep_find):
                 if e.get(key):
                     facts.append((s[k], f'<a href="{esc(e[key])}" rel="noopener">{esc(e[key].replace("https://", "").rstrip("/"))}</a>'))
             LIC = {"free": ("free", "kostenlos"), "included": ("included in Microsoft 365", "in Microsoft 365 enthalten"), "addon": ("add-on", "Add-on"), "paid": ("paid", "kostenpflichtig")}
-            for lab_en, lab_de, val in (("Version", "Version", e.get("version")), ("Released", "Veröffentlicht", e.get("released")), ("Licence", "Lizenz", LIC[e["license"]][li] if e.get("license") in LIC else ""),
-                                        ("Level", "Stufe", (e.get("level") or "").capitalize()), ("Exam code", "Prüfungscode", e.get("exam")), ("Valid for", "Gültig für", (f"{e['valid_months']} " + ("Monate" if lang == "de" else "months")) if e.get("valid_months") else "")):
+            for lab_en, lab_de, val in (("Version", "Version", e.get("version")), ("Released", "Veröffentlicht", e.get("released")), ("Licence", "Lizenz", (T(lang, *LIC[e["license"]]) if True else "") if e.get("license") in LIC else ""),
+                                        ("Level", "Stufe", (e.get("level") or "").capitalize()), ("Exam code", "Prüfungscode", e.get("exam")), ("Valid for", "Gültig für", (f"{e['valid_months']} " + (T(lang, "months", "Monate"))) if e.get("valid_months") else "")):
                 if val:
-                    facts.append((lab_de if lang == "de" else lab_en, esc(str(val))))
+                    facts.append((T(lang, lab_en, lab_de), esc(str(val))))
             if e.get("wikidata"):
                 facts.append((s["wikidata"], f'<a href="https://www.wikidata.org/wiki/{e["wikidata"]}" rel="noopener">{e["wikidata"]}</a>'))
             if e.get("start"):
-                facts.append(("Datum" if lang == "de" else "Date", esc(e["start"] + (" – " + e["end"] if e.get("end") else ""))))
+                facts.append((T(lang, "Date", "Datum"), esc(e["start"] + (" – " + e["end"] if e.get("end") else ""))))
             ft = '<table class="en-facts"><tbody>' + "".join(f'<tr><th scope="row">{esc(a)}</th><td>{b}</td></tr>' for a, b in facts) + "</tbody></table>"
             evl = ""
             if e["id"] in EVENTS:
-                ev_ = EVENTS[e["id"]]; evl = f'<p><a class="btn" href="{BASE}{pfx(lang)}/community/events/{ev_["handle"]}/">{"Zum Event" if lang == "de" else "Go to the event"}: {esc(ev_["title"])}</a></p>'
+                ev_ = EVENTS[e["id"]]; evl = f'<p><a class="btn" href="{BASE}{pfx(lang)}/community/events/{ev_["handle"]}/">{T(lang, "Go to the event", "Zum Event")}: {esc(ev_["title"])}</a></p>'
                 _ses = ev_.get("sessions", []); _spk = {}
                 for _se in _ses:
                     for _x in _se.get("speakers", []):
@@ -254,17 +255,17 @@ def build(g, wiki_links, experts_by_ent, ep_find):
                 def _sl(x):
                     return f'<a href="{_pre}/u/{x["h"]}/">{esc(x["n"])}</a>' if x.get("h") else esc(x["n"])
                 if _ses:
-                    evl += f'<h2>{"Sessions" if lang == "de" else "Sessions"} ({len(_ses)})</h2><ul>' + "".join(f'<li>{esc(_se["title"])}' + (f' <span class="mut">· {", ".join(_sl(x) for x in _se.get("speakers", []))}</span>' if _se.get("speakers") else "") + "</li>" for _se in _ses[:150]) + "</ul>"
+                    evl += f'<h2>{T(lang, "Sessions", "Sessions")} ({len(_ses)})</h2><ul>' + "".join(f'<li>{esc(_se["title"])}' + (f' <span class="mut">· {", ".join(_sl(x) for x in _se.get("speakers", []))}</span>' if _se.get("speakers") else "") + "</li>" for _se in _ses[:150]) + "</ul>"
                 if _spk:
-                    evl += f'<h2>{"Speaker" if lang == "de" else "Speakers"} ({len(_spk)})</h2><p>' + ", ".join(_sl(x) for x in sorted(_spk.values(), key=lambda a: a["n"].lower())[:200]) + "</p>"
+                    evl += f'<h2>{T(lang, "Speakers", "Speaker")} ({len(_spk)})</h2><p>' + ", ".join(_sl(x) for x in sorted(_spk.values(), key=lambda a: a["n"].lower())[:200]) + "</p>"
             _hit = [(_ev, _se) for _ev in EVENTS.values() for _se in _ev.get("sessions", []) if e["id"] in (_se.get("topics") or [])]
             if _hit and e["id"] not in EVENTS:   # Sessions zu diesem Thema (Gegenrichtung zu den Themen an der Session)
                 _p2 = f'{BASE}{pfx(lang)}/community'
                 _spl = lambda x: f'<a href="{_p2}/u/{x["h"]}/">{esc(x["n"])}</a>' if x.get("h") else esc(x["n"])
-                evl += f'<h2>{"Sessions zu diesem Thema" if lang == "de" else "Sessions on this topic"} ({len(_hit)})</h2><ul>' + "".join(
+                evl += f'<h2>{T(lang, "Sessions on this topic", "Sessions zu diesem Thema")} ({len(_hit)})</h2><ul>' + "".join(
                     f'<li><a href="{_p2}/events/{_ev["handle"]}/">{esc(_se["title"])}</a> <span class="mut">· {", ".join(_spl(x) for x in _se.get("speakers", []))} · {esc(_ev["title"])}</span></li>' for _ev, _se in _hit[:30]) + "</ul>"
             if not e["desc"].get(lang if lang in ("en", "de") else "en"):
-                evl += f'<p class="mut"><a href="#en-edit">{"Diese Kurzbeschreibung gibt es noch nicht in deiner Sprache – gern ergänzen." if lang == "de" else "This short description is not yet available in your language – feel free to add it."}</a></p>'
+                evl += f'<p class="mut"><a href="#en-edit">{T(lang, "This short description is not yet available in your language – feel free to add it.", "Diese Kurzbeschreibung gibt es noch nicht in deiner Sprache – gern ergänzen.")}</a></p>'
             gloss = f'<p class="mut"><a href="{BASE}/{pfx2(lang)}glossary/">{esc(s["glossary"])}</a></p>' if e["id"] in gl_ids else ""
             eps = ep_find(e) if lang == "de" else []
             eb = (f'<h2>{esc(s["eps"].format(t=e["name"]))}</h2><ul>' + "".join(f'<li><a href="{url_of(x)}">{esc(g["anchor_title"](x["e"]["title"]))}</a></li>' for x in eps) + "</ul>") if eps else ""
@@ -279,12 +280,12 @@ def build(g, wiki_links, experts_by_ent, ep_find):
                 rp = ENTS.get(e.get("replaced_by") or "")
                 oldbanner = f'<p class="en-old" role="note"><b>{esc(OLD[lang][2])}</b>' + (f' {esc(OLD[lang][3])} <a href="{root}{rp["id"]}/">{esc(rp["name"])}</a>.' if rp else "") + "</p>"
             _lt = (e.get("long") or {}).get(lang) or (e.get("long") or {}).get("en") or (e.get("long") or {}).get("de") or (EVENTS[e["id"]].get("about") if e["id"] in EVENTS else "") or ""
-            longbox = ("<h2>" + ("Beschreibung" if lang == "de" else "Description") + "</h2>" + "".join(f"<p>{esc(par).replace(chr(10), '<br>')}</p>" for par in _lt.split("\n\n") if par.strip())) if _lt.strip() else ""
+            longbox = ("<h2>" + (T(lang, "Description", "Beschreibung")) + "</h2>" + "".join(f"<p>{esc(par).replace(chr(10), '<br>')}</p>" for par in _lt.split("\n\n") if par.strip())) if _lt.strip() else ""
             w = WT.get(lang, WT["en"])
             data_attr = esc(json.dumps({k: e.get(k) for k in ("id", "name", "type", "aliases", "desc", "web", "docs", "wikipedia", "wikidata", "rel", "outdated", "replaced_by", "start", "end", "long", "logo", "version", "released", "license", "level", "exam", "valid_months")}, ensure_ascii=False))
             edit = f'<div id="en-edit" data-e="{data_attr}"></div>'
             _fq = [x for x in FAQ.get(e["id"], []) if x.get("lang", "en") == lang][:8]
-            faqbox = (f'<section class="en-faq"><h2>{"Häufige Fragen" if lang == "de" else "Frequently asked questions"}</h2>' + "".join(f'<details><summary>{esc(x["q"])}</summary><p>{esc(x["a"])}</p></details>' for x in _fq) + "</section>") if _fq else ""
+            faqbox = (f'<section class="en-faq"><h2>{T(lang, "Frequently asked questions", "Häufige Fragen")}</h2>' + "".join(f'<details><summary>{esc(x["q"])}</summary><p>{esc(x["a"])}</p></details>' for x in _fq) + "</section>") if _fq else ""
             faqbox += f'<div id="en-qa" data-eid="{e["id"]}"></div>'
             wb = wiki_block(lang, e["id"], api, BASE, stat.get(e["id"]), wiki_links(lang))
             b = shell(lang, f'<nav aria-label="breadcrumb"><a href="{root}">{esc(s["entities"])}</a></nav><h1>{esc(e["name"])}</h1><p class="mut">{esc(TL[e["type"]][li])}</p><p style="font-size:1.1em">{esc(d)}</p>{oldbanner}{claim_html(e["id"], lang)}{longbox}{ft}{evl}{gloss}'
