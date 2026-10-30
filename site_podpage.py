@@ -77,8 +77,6 @@ def make_guest_entities():
         same = [g[k] for k in ("linkedin_link", "twitter_link", "youtube_link", "instagram_link", "facebook_link", "threads_link", "bluesky_link", "mastodon_link", "tiktok_link", "twitch_link", "wikipedia_link", "imdb_link") if g.get(k)]
         out.append({"id": i, "type": "person", "name": g["name"], "aliases": [], "desc": {"en": bio, "de": bio}, "web": g.get("website") or "", "same_as": same, "job": g.get("title") or "", "rel": [],
                     "image": g.get("image_path") or "", "guest": True})
-    for x in (json.loads((D / "guest_merge.json").read_text("utf-8")).get("extra") or []) if (D / "guest_merge.json").exists() else []:
-        out.append({"id": x["id"], "type": "person", "name": x["name"], "aliases": [], "desc": {"en": x.get("desc", ""), "de": x.get("desc", "")}, "web": "", "same_as": [], "job": x.get("job", ""), "rel": [], "image": "", "guest": True})
     (D / "guest_entities.json").write_text(json.dumps(out, ensure_ascii=False, indent=1), encoding="utf-8")
     return out
 
