@@ -17,7 +17,8 @@ def call(method, path, body=None):
     try:
         return json.loads(urllib.request.urlopen(req, timeout=300).read())
     except urllib.error.HTTPError as e:
-        print("API-Fehler", e.code, e.read()[:500]); raise
+        msg = f"API-Fehler {e.code} {method} {path}: {e.read()[:600]!r}"
+        print(msg); OUT.mkdir(parents=True, exist_ok=True); (OUT / "last_error.txt").write_text(msg); raise
 
 
 def main():
@@ -66,4 +67,11 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+    except Exception as ex:
+        import traceback
+        OUT.mkdir(parents=True, exist_ok=True)
+        if not (OUT / "last_error.txt").exists() or "API-Fehler" not in (OUT / "last_error.txt").read_text():
+            (OUT / "last_error.txt").write_text(traceback.format_exc()[-1500:])
+        raise
