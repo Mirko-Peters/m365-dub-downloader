@@ -77,6 +77,8 @@ def make_guest_entities():
         same = [g[k] for k in ("linkedin_link", "twitter_link", "youtube_link", "instagram_link", "facebook_link", "threads_link", "bluesky_link", "mastodon_link", "tiktok_link", "twitch_link", "wikipedia_link", "imdb_link") if g.get(k)]
         out.append({"id": i, "type": "person", "name": g["name"], "aliases": [], "desc": {"en": bio, "de": bio}, "web": g.get("website") or "", "same_as": same, "job": g.get("title") or "", "rel": [],
                     "image": g.get("image_path") or "", "guest": True})
+    for x in (json.loads((D / "guest_merge.json").read_text("utf-8")).get("extra") or []) if (D / "guest_merge.json").exists() else []:
+        out.append({"id": x["id"], "type": "person", "name": x["name"], "aliases": [], "desc": {"en": x.get("desc", ""), "de": x.get("desc", "")}, "web": "", "same_as": [], "job": x.get("job", ""), "rel": [], "image": "", "guest": True})
     (D / "guest_entities.json").write_text(json.dumps(out, ensure_ascii=False, indent=1), encoding="utf-8")
     return out
 
@@ -92,6 +94,7 @@ def build(g):
     enx = json.loads((D / "en_episodes.json").read_text("utf-8")) if (D / "en_episodes.json").exists() else {}
     ents = {e["id"]: e for e in json.loads((D / "guest_entities.json").read_text("utf-8"))} if (D / "guest_entities.json").exists() else {}
     gmerge = (json.loads((D / "guest_merge.json").read_text("utf-8")).get("merge") or {}) if (D / "guest_merge.json").exists() else {}
+    galso = (json.loads((D / "guest_merge.json").read_text("utf-8")).get("also") or {}) if (D / "guest_merge.json").exists() else {}
     baseids = {e["id"] for e in json.loads((D / "entities.json").read_text("utf-8"))}
     gent = {gg["name"]: (gg["slug"] + ("-guest" if gg["slug"] not in {e["id"] for e in []} and gg["slug"] + "-guest" in ents else "")) for gg in guests}
     root = f"{BASE}/show/"; NAME = pod.get("name") or "M365.FM Podcast"
@@ -230,6 +233,7 @@ def build(g):
         eid = gmerge.get(gg["slug"]) or next((i for i in (gg["slug"] + "-guest", gg["slug"]) if i in ents), gg["slug"])
         known = eid in ents or eid in baseids   # Gast-Entitaet oder zusammengefuehrte Basis-Entitaet
         ent = f'<p><a href="{BASE}/entity/{eid}/">Entity page</a></p>' if known else ""
+        ent += "".join(f'<p><a href="{BASE}/entity/{x}/">Entity page: {esc(ents[x]["name"])}</a></p>' for x in galso.get(gg["slug"], []) if x in ents)
         soc = " · ".join(f'<a href="{esc(gg[k])}" rel="noopener">{n}</a>' for k, n in (("website", "Website"), ("linkedin_link", "LinkedIn"), ("twitter_link", "X"), ("youtube_link", "YouTube")) if gg.get(k))
         img = f'<img src="{esc(gg["image_path"])}" alt="{esc(gg["name"])}" width="120" height="120" style="border-radius:50%;object-fit:cover;float:right;margin:0 0 1em 1em" loading="lazy">' if (gg.get("image_path") or "").startswith("http") else ""
         body = (f'<article>{img}<h1>{esc(gg["name"])}</h1><p class="mut">{esc(gg.get("title") or "")}</p><div>{san(gg.get("bio"))}</div><p>{soc}</p>{ent}'

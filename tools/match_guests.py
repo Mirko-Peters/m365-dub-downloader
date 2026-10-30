@@ -33,11 +33,16 @@ def company(title):
     return m.group(1).strip() if m else ""
 
 
+NEVER = set()
+
+
 def compare(a, pool, label):
     res = []
     na = norm(a["name"])
     for b in pool:
         if b is a or b.get("id") == a.get("id"):
+            continue
+        if frozenset((a.get("id"), b.get("id"))) in NEVER:
             continue
         nb = norm(b.get("name"))
         names = {nb} | {norm(x) for x in b.get("aliases") or []}
@@ -57,6 +62,8 @@ def main():
     base = [e for e in jl("entities.json") if e["type"] in ("person", "org", "media", "event")]
     speakers = jl("speaker_entities.json")
     orgs = {norm(e["name"]): e for e in base if e["type"] == "org"} | {norm(a): e for e in base if e["type"] == "org" for a in e.get("aliases") or []}
+    gm = jl("guest_merge.json"); gm = gm if isinstance(gm, dict) else {}
+    NEVER.update(frozenset(p) for p in gm.get("never", []))   # bestaetigt: nicht dieselbe Person
     rep = {"guests": len(guests), "speaker_entities": len(speakers), "dupes": [], "base": [], "speakers": [], "companies": []}
     seen = set()
     for g in guests:
