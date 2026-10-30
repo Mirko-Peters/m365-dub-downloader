@@ -67,6 +67,7 @@ PER = 100
 def publish(write, BASE):
     """Dateien fuer den Worker (worker/src/legacyblog.js): SITE/blog-import/index.json und part-N.json. Nur solange data/blog_import.json "enabled": true ist."""
     import json
+import site_r2 as R2
     from pathlib import Path
     cfg = Path(__file__).parent / "data" / "blog_import.json"
     if not cfg.exists() or not json.loads(cfg.read_text("utf-8")).get("enabled"):
@@ -74,6 +75,6 @@ def publish(write, BASE):
     its = items(BASE)
     rows = [{"slug": p["slug"], "title": p["title"], "summary": p["summary"], "html": p["html"], "topics": p["topics"], "faq": p["faq"], "published": p["published"], "updated": p["updated"]} for p in its]
     for i in range(0, len(rows), PER):
-        write(f"blog-import/part-{i // PER + 1}.json", json.dumps(rows[i:i + PER], ensure_ascii=False, separators=(",", ":")))
+        write(f"blog-import/part-{i // PER + 1}.json", R2.rewrite(json.dumps(rows[i:i + PER], ensure_ascii=False, separators=(",", ":"))))
     write("blog-import/index.json", json.dumps({"total": len(rows), "per": PER}))
     return len(rows)
