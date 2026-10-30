@@ -65,7 +65,7 @@ def main():
     top, titles = {}, {}
     for lang, sid in shows.items():
         try:
-            tot = paged(f"/shows/{sid}/episodes/statistics/plays/totals?from={start}&to={end}&limit=100")
+            tot = paged(f"/shows/{sid}/episodes/statistics/plays/totals?from={start}&to={end}&limit=20")
             rows = []
             for it in tot:
                 eid = it.get("episode_id") or (it.get("episode") or {}).get("episode_id")

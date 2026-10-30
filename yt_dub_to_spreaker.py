@@ -688,7 +688,7 @@ class Spreaker:
 
     def episode_totals(self, show_id, date_from: str, date_to: str) -> list[dict]:
         """Abrufe/Downloads je Episode einer Show im Zeitraum (Statistik-API, braucht Login)."""
-        items, url = [], f"/shows/{show_id}/episodes/statistics/plays/totals?from={date_from}&to={date_to}&limit=100"
+        items, url = [], f"/shows/{show_id}/episodes/statistics/plays/totals?from={date_from}&to={date_to}&limit=20"
         while url:
             resp = self._req("GET", url)
             items += resp.get("items", [])
