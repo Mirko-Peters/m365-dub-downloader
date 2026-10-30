@@ -1,5 +1,6 @@
 // Roadmap & Wunschliste: alle angemeldeten Mitglieder sehen sie und stimmen ab; Admin uebernimmt (planned) und hakt ab (done)
-import { cleanText, rateLimit } from "./util.js";
+import { cleanText, rateLimit, esc } from "./util.js";
+import { notify } from "./mail.js";
 
 const now = () => Math.floor(Date.now() / 1000);
 const txt = (s, n) => cleanText(s, n).replace(/[<>]/g, "").replace(/https?:\/\/\S+/gi, "").trim();
@@ -40,6 +41,9 @@ export async function handleWish(env, request, url, path, user, J) {
     if (!user.admin) return J({ error: "forbidden" }, 403);
     if (!STATUS.includes(b.status)) return J({ error: "bad_status" }, 400);
     await db.prepare("UPDATE wish SET status=?,note=?,updated=?,done_at=CASE WHEN ?='done' THEN ? ELSE 0 END WHERE id=?").bind(b.status, txt(b.note, 300), now(), b.status, now(), +b.id).run();
+    const wo = await db.prepare("SELECT user_id,title FROM wish WHERE id=?").bind(+b.id).first();
+    const SL = { planned: "in die Roadmap übernommen", done: "umgesetzt", declined: "abgelehnt", open: "wieder offen" };
+    if (wo && wo.user_id !== user.id && SL[b.status]) await notify(env, wo.user_id, "wish", `Dein Wunsch „${wo.title.slice(0, 80)}“ wurde ${SL[b.status]}`, `<p>Dein Wunsch <b>${esc(wo.title)}</b> ist jetzt: <b>${SL[b.status]}</b>.</p>${txt(b.note, 300) ? `<p>${esc(txt(b.note, 300))}</p>` : ""}<p><a href="${env.SITE}/community/#c-wish">Roadmap &amp; Wunschliste</a></p>`, `wish:${+b.id}:${b.status}`);
     return J({ ok: true });
   }
   if (path === "/api/wish/delete") {
@@ -57,6 +61,7 @@ const PLAN = [
   ["Podpage-Import vervollständigen: Gäste (178) und Blogposts", "Podpage-API lieferte Bad Gateway. Gäste als Personen-Entitäten (site_podpage.make_guest_entities), Blog nach /show/blog/."],
   ["Podcast-Umzug: Bedingungen, Werbeplatz, eigener Feed je Show", "Nutzungsbedingungen juristisch formulieren (Werbeeinnahmen auf den Show-Seiten an M365.FM, eigenes Sponsoring des Podcasters bleibt bei ihm), Werbeplatz auf /shows/, M365.FM-Feed je Show mit itunes:new-feed-url."],
   ["Podcast-Umzug über die Spreaker-API (Audio-Hosting bei M365.FM)", "Beim Umzug legt ein Job (GitHub Action, nicht der Worker) per Spreaker-API eine Show im M365.FM-Konto an, lädt die Folgen aus dem alten Feed hoch und liefert einen neuen Feed (itunes:new-feed-url). Damit steuert M365.FM Verbreitung und Werbung. Zu klären: Spreaker-Tarif (Speicher/Stunden), Rechte-Einwilligung, Wiederholung für neue Folgen, Abgleich mit dem Import unter /shows/."],
+  ["Mitgliedschaft für Hörer: werbefreier Feed und keine Ads auf der Seite", "Hörer zahlen bei M365.FM (Zahlungsanbieter mit Webhook, Status in der Datenbank). Mitglieder bekommen (1) einen persönlichen Feed-Link mit geheimem Token, der nur werbefreie Audiodateien enthält (Spreaker-Folgen als werbefrei markiert oder eigener Speicher), und (2) keine AdSense-Anzeigen auf der Seite (Skript wird erst nach Login-Prüfung geladen, Einwilligung in der EU nötig). Spreaker Supporters Club hat laut API-Doku keine Endpunkte für Mitglieder; Nachfrage beim Spreaker-Support offen. Preis (von Mirko festgelegt): 6,99 USD pro Monat. Abgrenzung: Hosting-Preise 5 $ / 10 $ gelten für Podcaster, die ihre Show bei uns hosten lassen."],
   ["Podcast-Umzug: Option „Neue Show bei Spreaker anlegen“ mit Zugriff nur auf die eigene Show", "M365.FM legt die Show im eigenen Spreaker-Konto an (Daten des Podcasters), der Podcaster wird als Mitarbeiter (Collaborator) nur dieser Show eingeladen. Kostenpflichtig; Preise (von Mirko festgelegt): Gehostet 5 $ pro Monat, gehostet und werbefrei 10 $ pro Monat. Spreaker-Plan Anchorman (50 $/Monat) für unbegrenzte Collaborators nötig. Von Mirko bestätigt: Spreaker erlaubt, Shows für Dritte anzulegen und sie als Mitarbeiter einzuladen. Offen: Collaborator-Zugriff auf einzelne Shows begrenzbar? Zahlungsanbieter mit Abos und Umsatzsteuer."],
   ["Podcast-Umzug: Bezahl-Option ohne Werbung", "Bezahlte Stufe für umgezogene Shows: Solange bezahlt wird, ist die Werbung auf der Show und ihren Folgenseiten abgeschaltet; endet die Zahlung, wird sie wieder eingeblendet. Braucht Zahlungsanbieter, Abo-Status je Show und ein Werbe-Flag im Seitenbau."],
   ["Microsoft-Login (Entra-App, Anmeldung mit Microsoft-Konto)", "Benötigt Entra-App und die Secrets MS_CLIENT_ID / MS_CLIENT_SECRET."],

@@ -14,6 +14,8 @@ import { handleLibrary, deleteUserLibrary } from "./library.js";
 import { handleOrgOffers } from "./orgoffers.js";
 import { handleWish, seedRoadmap } from "./wish.js";
 import { handleShows, syncShows } from "./shows.js";
+import { handleMail, flushOutbox, notify } from "./mail.js";
+import { handleEntityInvite, remindInvites } from "./entinvite.js";
 import { handleDemo } from "./demo.js";
 import { handleGuests, deleteUserGuests } from "./guests.js";
 import { handlePodcast, deleteUserPodcast, pollPodcast } from "./podcast.js";
@@ -204,6 +206,10 @@ async function api(env, request, url, path, asUser) {
       parent = p.parent_id || p.id;   // nur eine Ebene
     }
     const r = await db.prepare("INSERT INTO comments(vid,lang,user_id,parent_id,body,created) VALUES(?,?,?,?,?,?)").bind(vid, lang, user.id, parent, body, now()).run();
+    if (parent) {   // Benachrichtigung an den Autor des Kommentars, auf den geantwortet wurde
+      const pa = await db.prepare("SELECT user_id FROM comments WHERE id=?").bind(parent).first();
+      if (pa && pa.user_id !== user.id) await notify(env, pa.user_id, "reply", `${user.name} hat auf deinen Kommentar geantwortet`, `<p><b>${esc(user.name)}</b> hat auf deinen Kommentar geantwortet:</p><blockquote style="border-left:3px solid #3E8BC0;margin:0;padding:.2em 1em">${esc(body.slice(0, 400))}</blockquote><p><a href="${env.SITE}/community/">Zur Diskussion / View discussion</a></p>`, `reply:${r.meta.last_row_id}`);
+    }
     const earned = await evalBadges(env, user.id);
     return J({ ok: true, id: r.meta.last_row_id, earned });
   }
@@ -251,6 +257,8 @@ async function api(env, request, url, path, asUser) {
   if (path.startsWith("/api/video/") || path.startsWith("/api/admin/video")) { const q = await handleVideo(env, request, url, path, user, J); if (q) { if (user && method !== "GET") await evalBadges(env, user.id).catch(() => 0); return q; } }
   if (path.startsWith("/api/podcast/") || path.startsWith("/api/admin/podcast")) { const q = await handlePodcast(env, request, url, path, user, J); if (q) { if (user && method !== "GET") await evalBadges(env, user.id).catch(() => 0); return q; } }
   if (path === "/api/updates/export" || path === "/api/admin/updates/poll") { const q = await handleUpdates(env, request, url, path, user, J); if (q) return q; }
+  if (path.startsWith("/api/entityinvite/")) { const q = await handleEntityInvite(env, request, url, path, user, J); if (q) return q; }
+  if (path.startsWith("/api/mail/") || path.startsWith("/api/admin/mail")) { const q = await handleMail(env, request, url, path, user, J); if (q) return q; }
   if (path.startsWith("/api/show/") || path.startsWith("/api/admin/show")) { const q = await handleShows(env, request, url, path, user, J); if (q) return q; }
   if (path.startsWith("/api/wish/")) { const q = await handleWish(env, request, url, path, user, J); if (q) return q; }
   if (path.startsWith("/api/orgoffer/")) { const q = await handleOrgOffers(env, request, url, path, user, J); if (q) return q; }
@@ -360,5 +368,5 @@ export default {
       return json({ error: "server" }, 500, env, request);
     }
   },
-  async scheduled(event, env, ctx) { if (event.cron === "0 6 * * *") ctx.waitUntil(runDigest(env)); ctx.waitUntil(refreshFeeds(env).catch(() => 0)); ctx.waitUntil(pollUpdates(env).catch(() => 0)); ctx.waitUntil(refreshFollowers(env).catch(() => 0)); ctx.waitUntil(ensurePastEvents(env).then(() => linkSpeakers(env)).then(() => linkSpeakerEntities(env)).catch(() => 0)); ctx.waitUntil(ensureM365Con(env).then(() => linkSpeakers(env)).then(() => linkSpeakerEntities(env)).catch(() => 0)); ctx.waitUntil(seedRoadmap(env).catch(() => 0)); ctx.waitUntil(purgeMessages(env.DB).catch(() => 0)); ctx.waitUntil(autoTranslate(env).catch(() => 0)); ctx.waitUntil(pollPodcast(env).catch(() => 0)); ctx.waitUntil(pollVideos(env).catch(() => 0)); ctx.waitUntil(syncShows(env).catch(() => 0)); },
+  async scheduled(event, env, ctx) { if (event.cron === "0 6 * * *") ctx.waitUntil(runDigest(env)); ctx.waitUntil(refreshFeeds(env).catch(() => 0)); ctx.waitUntil(pollUpdates(env).catch(() => 0)); ctx.waitUntil(refreshFollowers(env).catch(() => 0)); ctx.waitUntil(ensurePastEvents(env).then(() => linkSpeakers(env)).then(() => linkSpeakerEntities(env)).catch(() => 0)); ctx.waitUntil(ensureM365Con(env).then(() => linkSpeakers(env)).then(() => linkSpeakerEntities(env)).catch(() => 0)); ctx.waitUntil(seedRoadmap(env).catch(() => 0)); ctx.waitUntil(purgeMessages(env.DB).catch(() => 0)); ctx.waitUntil(autoTranslate(env).catch(() => 0)); ctx.waitUntil(pollPodcast(env).catch(() => 0)); ctx.waitUntil(pollVideos(env).catch(() => 0)); ctx.waitUntil(syncShows(env).catch(() => 0)); ctx.waitUntil(flushOutbox(env).catch(() => 0)); ctx.waitUntil(remindInvites(env).catch(() => 0)); },
 };

@@ -56,6 +56,6 @@ def build(g, items, api):
                 node["uploadDate"] = iso(it["published"]); node["thumbnailUrl"] = it.get("thumb") or ""; node["contentUrl"] = it["url"]
             if has_text:
                 node["text"] = own[:5000]
-            write(f"{pfx2(lang)}{path_of(it)}", page(lang, f'{it["title"]} – {it["name"]} | M365.FM', (it.get("summary") or it["title"])[:155], u, b, None, [{"@context": "https://schema.org", **node}] + _fld, og_type="article", extra_head=LCSS, noindex=not has_text))
+            write(f"{pfx2(lang)}{path_of(it)}index.html", page(lang, f'{it["title"]} – {it["name"]} | M365.FM', (it.get("summary") or it["title"])[:155], u, b, None, [{"@context": "https://schema.org", **node}] + _fld, og_type="article", extra_head=LCSS, noindex=not has_text))
             if has_text and lang == "en":
                 sitemap.append((u, iso(it["published"]), None))

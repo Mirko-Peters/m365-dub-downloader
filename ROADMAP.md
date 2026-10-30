@@ -23,6 +23,10 @@ Stand: 2026-10-29. Reihenfolge nach Absprache mit Mirko; alles mit Schema.org-Ve
 - Geplant: Umzug über die Spreaker-API (Show im M365.FM-Konto anlegen, Folgen hochladen, neuen Feed ausgeben) als GitHub-Action-Job; klären: Tarif/Speicher, neue Folgen nachziehen.
 - Offen: Nutzungsbedingungen rechtlich formulieren, Werbe-/Sponsoring-Platz auf Show-Seiten, eigener M365.FM-Feed je Show (`itunes:new-feed-url`).
 
+## Mail-System (gebaut, Versand braucht RESEND_API_KEY)
+- Bestätigte Adresse je Konto, Arten einzeln schaltbar (Antworten auf Kommentare, Wunsch-Status, Show-Freigabe, Einladungen), Warteschlange mit Wiederholung, Abmeldelink und List-Unsubscribe in jeder Mail, Cron-Versand alle 30 Minuten.
+- Offen: Absender-Domain bei Resend verifizieren (SPF/DKIM für m365.fm), weitere Auslöser (neue Microsoft-Updates je Produkt, Gäste-/Speaker-Anfragen, Digest wöchentlich).
+
 ## Backlog (später, wenn die Plattform genutzt wird)
 - **LinkedIn Events Management API** (Standard Tier, Self-Service): Events von Veranstaltern automatisch mit LinkedIn synchronisieren (anlegen/ändern, Anmeldungen, Leads). Vorher klären: Rechte/Endpunkte in der technischen Doku, ob ein Eintrag auf der Firmenseite „M365 Show“ möglich ist. Bis dahin: „Auf LinkedIn teilen“ + Anfrage „Auf M365 Show vorstellen“ mit Prüfung durch das Team.
 - **LinkedIn Member Data Portability API (Member)**: Mitglied (nur EWR/Schweiz) verknüpft sein LinkedIn und übernimmt eigene Beiträge/Artikel in den Feed (Scope `r_dma_portability_self_serve`, App mit der vorgegebenen Standard-Firmenseite). Vor dem Bauen die Nutzungsbedingungen lesen; Verknüpfung einzeln und widerrufbar.
@@ -232,3 +236,10 @@ Podpage kostet 65 $/Monat (ca. 780 $/Jahr). Ziel: m365.fm komplett auf dub.m365.
 - Umbenennung: Account-Bereich heißt „Profil“, Menü „Inhalte“ heißt „Community“.
 - Eigene Seiten für gezogene Inhalte (`/community/feed/<id>-<slug>/`), SEO-Text per Editor oder MCP (`save_feed_item_text`), Push bei neuen Inhalten. Updates-Seite (`/updates/`) mit Microsoft-Updates und Tages-Batches.
 - Offen (siehe Roadmap im Profil-Bereich): Microsoft-Login, Mail-System, Statuswechsel-Benachrichtigung, Firmen-Angebote auf Entitäten-Seiten, Update-Wichtigkeit, Bibliothek-Versionen/Forks, OG-Bilder inkrementell, YouTube-Audit.
+
+## Hörer-Mitgliedschaft (Idee, 30.10.)
+- Preis: 6,99 USD pro Monat (von Mirko festgelegt).
+- Hörer zahlen auf m365.fm (Stripe/Lemon Squeezy, Webhook → DB-Status `adfree`). Vorteile: persönlicher werbefreier Feed (Token-URL, vom Worker ausgeliefert) und keine AdSense-Anzeigen auf der Seite (Skript erst nach Login-Check; EU-Einwilligung/CMP nötig).
+- Werbefreie Audiodateien: Spreaker-Folgen als werbefrei markieren (Supporters Club) oder eigener Speicher (R2). Spreaker fügt Werbung dynamisch ein, ein Feed auf die normale Audio-URL hätte weiter Werbung.
+- Spreaker Supporters Club: Mindestpreis 2 $, keine Preisstufen; die API (developers.spreaker.com) hat keine Endpunkte für Supporter/Abos/Webhooks → Mitgliederliste nicht auslesbar; Spreaker-Support fragen.
+- Getrennt davon: Hosting-Preise 5 $ / 10 $ für Podcaster (siehe Podcast-Umzug).

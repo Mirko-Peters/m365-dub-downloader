@@ -71,7 +71,7 @@ def make_guest_entities():
         if g.get("hidden") in (True, "True"): continue
         i = g["slug"] + ("-guest" if g["slug"] in base else "")
         bio = plain(g.get("bio"))
-        same = [g[k] for k in ("linkedin_link", "twitter_link", "youtube_link", "instagram_link", "facebook_link", "threads_link") if g.get(k)]
+        same = [g[k] for k in ("linkedin_link", "twitter_link", "youtube_link", "instagram_link", "facebook_link", "threads_link", "bluesky_link", "mastodon_link", "tiktok_link", "twitch_link", "wikipedia_link", "imdb_link") if g.get(k)]
         out.append({"id": i, "type": "person", "name": g["name"], "aliases": [], "desc": {"en": bio, "de": bio}, "web": g.get("website") or "", "same_as": same, "job": g.get("title") or "", "rel": [],
                     "image": g.get("image_path") or "", "guest": True})
     (D / "guest_entities.json").write_text(json.dumps(out, ensure_ascii=False, indent=1), encoding="utf-8")

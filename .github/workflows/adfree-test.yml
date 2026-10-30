@@ -1,0 +1,26 @@
+name: Spreaker werbefrei Test
+on:
+  workflow_dispatch:
+    inputs:
+      episode: { description: "Spreaker-Episoden-ID", required: false, default: "75899715" }
+permissions:
+  contents: write
+jobs:
+  t:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.12" }
+      - run: sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg && pip install requests cryptography
+      - name: Test
+        env:
+          SPREAKER_TOKEN: ${{ secrets.SPREAKER_TOKEN }}
+          SPREAKER_CLIENT_ID: ${{ secrets.SPREAKER_CLIENT_ID }}
+          SPREAKER_CLIENT_SECRET: ${{ secrets.SPREAKER_CLIENT_SECRET }}
+        run: python adfree_test.py "${{ inputs.episode }}"
+      - name: Ergebnis committen
+        if: always()
+        run: |
+          git config user.name "github-actions"; git config user.email "actions@github.com"
+          git add data/adfree_test.json && git commit -m "Werbefrei-Test" && git pull -q --rebase && git push || true

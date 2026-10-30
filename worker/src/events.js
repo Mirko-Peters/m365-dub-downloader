@@ -97,7 +97,7 @@ async function saveInvites(db, evId, sid, sp) {
   for (const x of sp) if (x.t && x.s !== "confirmed") ops.push(db.prepare("INSERT OR IGNORE INTO speaker_invites(token,event_id,session_id,name,eid,created) VALUES(?,?,?,?,?,?)").bind(x.t, evId, sid, x.n, x.e || "", now()));
   await db.batch(ops);
 }
-async function claimEntity(db, eid, uid, via) {
+export async function claimEntity(db, eid, uid, via) {
   const c = await db.prepare("SELECT user_id FROM entity_claims WHERE eid=?").bind(eid).first();
   if (c && c.user_id !== uid) return false;
   await db.prepare("INSERT INTO entity_claims(eid,user_id,status,via,created) VALUES(?,?,?,?,?) ON CONFLICT(eid) DO UPDATE SET status=CASE WHEN excluded.status='verified' THEN 'verified' ELSE entity_claims.status END").bind(eid, uid, via === "invite" ? "verified" : "pending", via, now()).run();
