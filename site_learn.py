@@ -11,7 +11,8 @@ def _load(name, default):
 
 
 LUI = _load("learn_ui.json", {})
-GLOSS = _load("glossary.json", [])
+_GLEG = {x["id"]: x for x in _load("glossary.json", [])}   # nur noch Altbestand fuer Kategorie und Suchmuster
+GLOSS = []
 
 
 def sortkey(x):
@@ -289,7 +290,7 @@ def build_learn(ctx):
         for x in terms:
             u = f"{gb}{x['id']}/"
             d0 = definition(x, lang)[0]
-            same = [y for y in terms if y["cat"] == x["cat"] and y["id"] != x["id"]][:6]
+            same = [y for y in terms if x["cat"] and y["cat"] == x["cat"] and y["id"] != x["id"]][:6]
             eps = eps_for("de" if lang == "de" else "de", x) if lang == "de" else []
             rl = "".join(f'<li><a href="{gb}{y["id"]}/">{esc(y["name"])}</a></li>' for y in same)
             catlink = ""
@@ -406,6 +407,13 @@ def load_entities(api):
 COMMUNITY_API_DEFAULT = os.environ.get("COMMUNITY_API", "https://api-dub.m365.fm")
 ENTS = load_entities(COMMUNITY_API_DEFAULT)
 _GENERIC = {"prompt", "governance", "graph", "teams", "viva", "fabric", "automation", "productivity", "actions", "outlook", "compliance", "context", "word", "excel", "ad", "pac", "rag", "mcp", "dlp", "crm", "cdp", "kql", "apim", "hitl", "gpt 5"}
+
+
+_GLOSS_TYPES = ("product", "platform", "concept")
+_name_rx = lambda e: "|".join(re.escape(n) for n in sorted({e["name"], *(a for a in e.get("aliases", []) if len(a) >= 3)}, key=len, reverse=True))
+GLOSS[:] = sorted(({"id": e["id"], "name": e["name"], "cat": (_GLEG.get(e["id"]) or {}).get("cat", ""), "kw": (_GLEG.get(e["id"]) or {}).get("kw") or _name_rx(e),
+                    "en": e["desc"].get("en") or e["desc"].get("de", ""), "de": e["desc"].get("de") or e["desc"].get("en", "")}
+                   for e in ENTS.values() if e.get("type") in _GLOSS_TYPES and (e["id"] in _GLEG or e["name"].lower() not in _GENERIC) and len((e.get("desc") or {}).get("en", "") + (e.get("desc") or {}).get("de", "")) >= 40), key=lambda x: x["name"].lower())
 
 
 def ent_names(e, strict=True):
