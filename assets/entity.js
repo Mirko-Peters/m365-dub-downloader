@@ -54,7 +54,22 @@
       h("button", { type: "button", class: "btn", text: X.add, onclick: function () { relRow("related_to", ""); } }), field(X.sum, sum), h("div", { class: "btns" }, [save]), msg].forEach(function (x) { f.appendChild(x); });
     return f;
   }
+  function votes(host, entity) {
+    if (!entity.id) return; var de = (document.documentElement.lang || "en").slice(0, 2) === "de";
+    api("/api/edits/pending?kind=entity&key=" + encodeURIComponent(entity.id)).then(function (r) {
+      var l = (r.j.edits || []).filter(function (x) { return !x.own; }); if (r.s !== 200 || !l.length) return;
+      var sec = h("div", { class: "wk-admin" }, [h("h3", { text: de ? "Offene Änderungen – Abstimmung" : "Open edits – vote" })]);
+      l.forEach(function (x) {
+        var d = {}; try { d = JSON.parse(x.body); } catch (e) {} var st = h("span", { class: "cmut", text: x.net + " (" + x.votes + ")" });
+        function vote(v) { api("/api/edits/vote", { method: "POST", body: { kind: "entity", id: x.id, v: v } }).then(function (z) { if (z.s === 200) { st.textContent = z.j.net + " (" + z.j.votes + ")"; if (z.j.status !== "pending") location.reload(); } }); }
+        sec.appendChild(h("div", { class: "wk-pend" }, [h("p", { class: "cmut", text: x.name + (x.summary ? " – " + x.summary : "") }), h("p", { text: [d.name, d.description].filter(Boolean).join(" – ") }),
+          r.j.can_vote ? h("div", { class: "btns" }, [h("button", { type: "button", class: "btn main", text: "👍", onclick: function () { vote(1); } }), h("button", { type: "button", class: "btn", text: "👎", onclick: function () { vote(-1); } }), " ", st]) : st]));
+      });
+      host.appendChild(sec);
+    });
+  }
   function mount(host, entity, isNew) {
+    votes(host, entity);
     var det = h("details", { class: "wk-edit" }, [h("summary", { text: isNew ? X.create : X.edit })]); host.appendChild(det);
     det.addEventListener("toggle", function once() {
       if (!det.open || det._done) return; det._done = true;

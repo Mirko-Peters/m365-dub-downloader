@@ -197,6 +197,11 @@
       }
       var gotL = BADGES.filter(function (b) { return u && u.badges.indexOf(b) > -1; }), bd = h("div", { class: "cbadges" }, gotL.map(function (b) { return h("div", { class: "cbadge got" }, [h("span", { class: "cb big", text: ICON[b] }), h("div", {}, [h("b", { text: tt("b_" + b) }), h("span", { class: "cmut", text: tt("b_" + b + "_d") })])]); }));
       if (BADGES.length > gotL.length) bd.appendChild(h("div", { class: "cbadge" }, [h("span", { class: "cb big", text: "❔" }), h("div", {}, [h("b", { text: tt("hid").replace("{n}", BADGES.length - gotL.length) })])]));
+      var ibox = h("div", { class: "ccard" }); root.appendChild(ibox);
+      api("/api/edits/inbox").then(function (r) { if (r.s !== 200) return; var n = (r.j.entity || []).length + (r.j.wiki || []).length; if (!n) return;
+        ibox.appendChild(h("h2", { text: "✏️ " + n + " offene Änderungsvorschläge" }));
+        (r.j.entity || []).forEach(function (x) { ibox.appendChild(h("p", {}, [h("a", { href: "/entity/" + x.eid + "/", text: x.eid }), " – " + x.name + (x.summary ? ": " + x.summary : "")])); });
+        (r.j.wiki || []).forEach(function (x) { ibox.appendChild(h("p", { class: "cmut", text: "Wiki: " + x.term + " (" + x.lang + ") – " + x.name })); }); });
       var pbox = h("div", { class: "ccard" }, [h("h2", { text: tt("points_t") })]); root.appendChild(pbox);
       api("/api/points").then(function (pr) { if (pr.s !== 200) return; var d = pr.j, msg = h("p", { class: "cok", role: "status", "aria-live": "polite" });
         pbox.appendChild(h("p", { text: tt("points_bal").replace("{b}", d.balance).replace("{e}", d.earned) }));

@@ -19,6 +19,13 @@ export async function handleVotes(env, request, url, path, user, J) {
     }
     return J({ kind, can_vote: await trusted(db, user), edits: out });
   }
+  if (path === "/api/edits/inbox" && request.method === "GET") {   // offene Aenderungen an meinen Entitaeten (Eigentuemer) bzw. fuer Editoren alle
+    if (!user) return J({ error: "login" }, 401);
+    const all = user.admin || user.editor || user.pro;
+    const ent = (await db.prepare(`SELECT r.id,r.eid,r.summary,r.created,COALESCE(u.name,'') name FROM entity_rev r LEFT JOIN users u ON u.id=r.user_id WHERE r.status='pending' AND r.user_id<>?1 ${all ? "" : "AND r.eid IN (SELECT eid FROM entity_claims WHERE user_id=?1 AND status='verified')"} ORDER BY r.created DESC LIMIT 30`).bind(user.id).all()).results || [];
+    const wk = all ? (await db.prepare("SELECT r.id,r.term,r.lang,r.summary,r.created,COALESCE(u.name,'') name FROM wiki_rev r LEFT JOIN users u ON u.id=r.user_id WHERE r.status='pending' AND r.user_id<>? ORDER BY r.created DESC LIMIT 30").bind(user.id).all()).results || [] : [];
+    return J({ entity: ent, wiki: wk });
+  }
   if (path === "/api/edits/vote" && request.method === "POST") {
     if (!user) return J({ error: "login" }, 401);
     if (!(await trusted(db, user))) return J({ error: "not_trusted" }, 403);
@@ -27,18 +34,19 @@ export async function handleVotes(env, request, url, path, user, J) {
     if (!r || r.status !== "pending") return J({ error: "not_pending" }, 404);
     if (r.user_id === user.id) return J({ error: "own_edit" }, 403);
     await db.prepare("INSERT INTO edit_votes(kind,rev_id,user_id,v,created) VALUES(?,?,?,?,?) ON CONFLICT(kind,rev_id,user_id) DO UPDATE SET v=excluded.v").bind(kind, id, user.id, v, now()).run();
-    const t = await db.prepare("SELECT COALESCE(SUM(v),0) net FROM edit_votes WHERE kind=? AND rev_id=?").bind(kind, id).first();
+    const t = await db.prepare("SELECT COALESCE(SUM(v),0) net, COUNT(*) n FROM edit_votes WHERE kind=? AND rev_id=?").bind(kind, id).first();
+    const owner = kind === "entity" && !!(await db.prepare("SELECT 1 x FROM entity_claims WHERE eid=? AND user_id=? AND status='verified'").bind(r.eid, user.id).first());
     let status = "pending";
-    if (t.net >= NEED) {
+    if (owner ? v === 1 : (t.n >= NEED && t.net > 0)) {
       status = "live";
       if (kind === "wiki") await db.batch([db.prepare("UPDATE wiki_rev SET status='old' WHERE term=? AND lang=? AND status='live'").bind(r.term, r.lang), db.prepare("UPDATE wiki_rev SET status='live' WHERE id=?").bind(id)]);
       else await db.batch([db.prepare("UPDATE entity_rev SET status='old' WHERE eid=? AND status='live'").bind(r.eid), db.prepare("UPDATE entity_rev SET status='live' WHERE id=?").bind(id)]);
       if (r.user_id) await evalBadges(env, r.user_id);
-    } else if (t.net <= -NEED) {
+    } else if (owner ? v === -1 : (t.n >= NEED && t.net < 0)) {
       status = "rejected";
       await db.prepare(`UPDATE ${kind === "wiki" ? "wiki_rev" : "entity_rev"} SET status='rejected' WHERE id=?`).bind(id).run();
     }
-    return J({ ok: true, net: t.net, need: NEED, status });
+    return J({ ok: true, net: t.net, votes: t.n, need: NEED, status });
   }
   return null;
 }
