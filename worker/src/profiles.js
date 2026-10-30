@@ -132,6 +132,10 @@ export async function readI18n(db, uid) {
   return o;
 }
 
+// Rollen in Firmen: owner (alles) > admin (Mitglieder + Profil) > editor (Profil) / events (Events und Sponsoring) > member
+const ORG_ROLES = ["owner", "admin", "editor", "events", "member"];
+const assignable = (mine, role) => ORG_ROLES.includes(role) && (mine === "owner" || (mine === "admin" && ["editor", "events", "member"].includes(role)));
+
 async function personView(db, uid, viewer) {
   const p = await db.prepare("SELECT p.*,u.name,u.bio FROM profiles p JOIN users u ON u.id=p.user_id WHERE p.user_id=? AND u.banned=0").bind(uid).first(); if (!p) return null;
   const q = async (sql, ...b) => (await db.prepare(sql).bind(...b).all()).results || [];
@@ -189,7 +193,7 @@ export async function handleProfiles(env, request, url, path, user, J) {
   // ---- Sponsoring-Gesuch (privat) ----
   if ((m = path.match(/^\/api\/org\/sponsor\/([a-z0-9-]{2,30})$/))) {
     if (need()) return need();
-    const o = await db.prepare("SELECT o.id FROM orgs o JOIN org_members mm ON mm.org_id=o.id WHERE o.handle=? AND mm.user_id=? AND mm.status='active' AND mm.role IN ('owner','admin')").bind(m[1], user.id).first();
+    const o = await db.prepare("SELECT o.id FROM orgs o JOIN org_members mm ON mm.org_id=o.id WHERE o.handle=? AND mm.user_id=? AND mm.status='active' AND mm.role IN ('owner','admin','editor')").bind(m[1], user.id).first();
     if (!o) return J({ error: "forbidden" }, 403);
     if (method === "GET") {
       const r = await db.prepare("SELECT open,criteria FROM org_sponsor WHERE org_id=?").bind(o.id).first();
@@ -262,7 +266,7 @@ export async function handleProfiles(env, request, url, path, user, J) {
       let id;
       if (kind === "u") { const p = await db.prepare("SELECT user_id FROM profiles WHERE user_id=?").bind(user.id).first(); if (!p || (await db.prepare("SELECT handle FROM profiles WHERE user_id=?").bind(user.id).first()).handle !== handle) return J({ error: "forbidden" }, 403); id = user.id; }
       else {
-        const o = await db.prepare("SELECT o.id FROM orgs o JOIN org_members m ON m.org_id=o.id WHERE o.handle=? AND m.user_id=? AND m.status='active' AND m.role IN ('owner','admin')").bind(handle, user.id).first();
+        const o = await db.prepare("SELECT o.id FROM orgs o JOIN org_members m ON m.org_id=o.id WHERE o.handle=? AND m.user_id=? AND m.status='active' AND m.role IN ('owner','admin','editor')").bind(handle, user.id).first();
         if (!o) return J({ error: "forbidden" }, 403); id = o.id;
       }
       if (method === "DELETE") { await db.prepare("DELETE FROM images WHERE kind=? AND owner_id=?").bind(kind, id).run(); return J({ ok: true }); }
@@ -447,7 +451,7 @@ export async function handleProfiles(env, request, url, path, user, J) {
       } catch (e) { /* Entitaet ist optional, Firmenkonto bleibt gueltig */ }
     } else {
       const mem = await db.prepare("SELECT role FROM org_members WHERE org_id=? AND user_id=? AND status='active'").bind(o.id, user.id).first();
-      if (!mem || !["owner", "admin"].includes(mem.role)) return J({ error: "forbidden" }, 403);
+      if (!mem || !["owner", "admin", "editor"].includes(mem.role)) return J({ error: "forbidden" }, 403);
       await db.prepare("UPDATE orgs SET name=?,tagline=?,about=?,website=?,country=?,size=?,public=? WHERE id=?").bind(name, txt(b.tagline, 120), long(b.about, 1500), website, txt(b.country, 60), size, b.public ? 1 : 0, o.id).run();
     }
     await replaceLists(db, "o", o.id, { exp: ex.list, prog: pr.list, chan: ch.list, certs: null });
@@ -475,9 +479,17 @@ export async function handleProfiles(env, request, url, path, user, J) {
     if (!me || !["owner", "admin"].includes(me.role)) return J({ error: "forbidden" }, 403);
     const b = await body(), target = +b.user_id; if (!target) return J({ error: "bad_request" }, 400);
     const tr = await db.prepare("SELECT role FROM org_members WHERE org_id=? AND user_id=?").bind(o.id, target).first(); if (!tr) return J({ error: "not_found" }, 404);
-    if (b.action === "approve") await db.prepare("UPDATE org_members SET status='active' WHERE org_id=? AND user_id=?").bind(o.id, target).run();
-    else if (b.action === "remove" && tr.role !== "owner") await db.prepare("DELETE FROM org_members WHERE org_id=? AND user_id=?").bind(o.id, target).run();
-    else if ((b.action === "admin" || b.action === "member") && me.role === "owner" && tr.role !== "owner") await db.prepare("UPDATE org_members SET role=? WHERE org_id=? AND user_id=?").bind(b.action, o.id, target).run();
+    const role = String(b.role || "member");
+    if (b.action === "approve") {
+      if (!assignable(me.role, role)) return J({ error: "forbidden" }, 403);
+      await db.prepare("UPDATE org_members SET status='active',role=? WHERE org_id=? AND user_id=?").bind(role, o.id, target).run();
+    }
+    else if (b.action === "remove" && tr.role !== "owner" && (me.role === "owner" || !["admin"].includes(tr.role))) await db.prepare("DELETE FROM org_members WHERE org_id=? AND user_id=?").bind(o.id, target).run();
+    else if (b.action === "role") {   // Rolle aendern: Inhaber alles, Admins nur Redakteur/Events/Mitglied bei Nicht-Admins
+      if (!assignable(me.role, role) || (["owner", "admin"].includes(tr.role) && me.role !== "owner")) return J({ error: "forbidden" }, 403);
+      if (tr.role === "owner" && role !== "owner" && (await db.prepare("SELECT COUNT(*) n FROM org_members WHERE org_id=? AND role='owner' AND status='active'").bind(o.id).first()).n < 2) return J({ error: "last_owner" }, 400);
+      await db.prepare("UPDATE org_members SET role=? WHERE org_id=? AND user_id=?").bind(role, o.id, target).run();
+    }
     else return J({ error: "bad_request" }, 400);
     return J({ ok: true });
   }

@@ -25,7 +25,7 @@ async function canManage(db, user, ev) {
   if (!user || !ev) return false;
   if (ev.owner_id === user.id || user.admin) return true;
   if (!ev.org_id) return false;
-  return !!(await db.prepare("SELECT 1 x FROM org_members WHERE org_id=? AND user_id=? AND status='active' AND role IN ('owner','admin')").bind(ev.org_id, user.id).first());
+  return !!(await db.prepare("SELECT 1 x FROM org_members WHERE org_id=? AND user_id=? AND status='active' AND role IN ('owner','admin','events')").bind(ev.org_id, user.id).first());
 }
 const EID = /^[a-z0-9-]{2,48}$/;
 const rndToken = () => [...crypto.getRandomValues(new Uint8Array(18))].map((b) => b.toString(16).padStart(2, "0")).join("");
@@ -184,9 +184,9 @@ export async function handleEvents(env, request, url, path, user, J) {
   }
   if (path === "/api/events/mine" && method === "GET") {
     if (need()) return need();
-    const evs = (await db.prepare("SELECT e.* FROM events e WHERE e.owner_id=?1 OR e.org_id IN (SELECT org_id FROM org_members WHERE user_id=?1 AND status='active' AND role IN ('owner','admin')) ORDER BY e.start DESC").bind(user.id).all()).results || [];
+    const evs = (await db.prepare("SELECT e.* FROM events e WHERE e.owner_id=?1 OR e.org_id IN (SELECT org_id FROM org_members WHERE user_id=?1 AND status='active' AND role IN ('owner','admin','events')) ORDER BY e.start DESC").bind(user.id).all()).results || [];
     const out = []; for (const e of evs) out.push(await evView(db, e, true));
-    const orgs = (await db.prepare("SELECT o.handle,o.name FROM org_members m JOIN orgs o ON o.id=m.org_id WHERE m.user_id=? AND m.status='active' AND m.role IN ('owner','admin')").bind(user.id).all()).results || [];
+    const orgs = (await db.prepare("SELECT o.handle,o.name FROM org_members m JOIN orgs o ON o.id=m.org_id WHERE m.user_id=? AND m.status='active' AND m.role IN ('owner','admin','events')").bind(user.id).all()).results || [];
     return J({ events: out, orgs });
   }
   if (path === "/api/event" && method === "POST") {
@@ -202,7 +202,7 @@ export async function handleEvents(env, request, url, path, user, J) {
     const tp = await topics(env, b.topics); if (!tp) return J({ error: "bad_topic" }, 400);
     let orgId = null;
     if (b.org) {
-      const o = await db.prepare("SELECT o.id FROM orgs o JOIN org_members m ON m.org_id=o.id WHERE o.handle=? AND m.user_id=? AND m.status='active' AND m.role IN ('owner','admin')").bind(String(b.org), user.id).first();
+      const o = await db.prepare("SELECT o.id FROM orgs o JOIN org_members m ON m.org_id=o.id WHERE o.handle=? AND m.user_id=? AND m.status='active' AND m.role IN ('owner','admin','events')").bind(String(b.org), user.id).first();
       if (!o) return J({ error: "forbidden" }, 403); orgId = o.id;
     }
     const ex = await db.prepare("SELECT * FROM events WHERE handle=?").bind(handle).first();
@@ -339,7 +339,7 @@ export async function handleEvents(env, request, url, path, user, J) {
   // Sponsoren (Firmen mit aktivem Gesuch) sehen Events, die Sponsoren suchen
   if (path === "/api/events/for-sponsors" && method === "GET") {
     if (need()) return need();
-    const o = (await db.prepare("SELECT s.criteria FROM org_sponsor s JOIN org_members m ON m.org_id=s.org_id WHERE s.open=1 AND m.user_id=? AND m.status='active' AND m.role IN ('owner','admin')").bind(user.id).all()).results || [];
+    const o = (await db.prepare("SELECT s.criteria FROM org_sponsor s JOIN org_members m ON m.org_id=s.org_id WHERE s.open=1 AND m.user_id=? AND m.status='active' AND m.role IN ('owner','admin','events')").bind(user.id).all()).results || [];
     if (!o.length) return J({ error: "forbidden" }, 403);
     const crits = o.map((r) => parse(r.criteria, {}));
     const today = new Date().toISOString().slice(0, 10);
@@ -371,7 +371,7 @@ export async function handleEvents(env, request, url, path, user, J) {
   // Veranstalter sehen Firmen, die Sponsoring angeboten haben (nur wer ein Event mit "sucht Sponsoren" hat)
   if (path === "/api/events/sponsors" && method === "GET") {
     if (need()) return need();
-    const mine = await db.prepare("SELECT 1 x FROM events WHERE seeking_sponsor=1 AND (owner_id=?1 OR org_id IN (SELECT org_id FROM org_members WHERE user_id=?1 AND status='active' AND role IN ('owner','admin'))) LIMIT 1").bind(user.id).first();
+    const mine = await db.prepare("SELECT 1 x FROM events WHERE seeking_sponsor=1 AND (owner_id=?1 OR org_id IN (SELECT org_id FROM org_members WHERE user_id=?1 AND status='active' AND role IN ('owner','admin','events'))) LIMIT 1").bind(user.id).first();
     if (!mine && !user.admin) return J({ error: "forbidden" }, 403);
     const rows = (await db.prepare("SELECT o.handle,o.name,o.public,o.website,s.criteria FROM org_sponsor s JOIN orgs o ON o.id=s.org_id WHERE s.open=1 ORDER BY s.updated DESC LIMIT 100").all()).results || [];
     return J({ free_asks: FREE_ASKS, ask_cost: ASK_COST, sponsors: rows.map((r) => ({ handle: r.handle, name: r.name, website: r.website, criteria: parse(r.criteria, {}) })) });
