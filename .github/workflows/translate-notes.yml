@@ -1,0 +1,32 @@
+name: Show Notes uebersetzen (Haiku, Batch, meistgehoert)
+on:
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency: { group: translate-notes, cancel-in-progress: false }
+jobs:
+  translate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.12" }
+      - name: Batch absenden, abwarten, Ergebnis speichern
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY_SHOW }}
+          SPREAKER_TOKEN: ${{ secrets.SPREAKER_TOKEN }}
+          SPREAKER_CLIENT_ID: ${{ secrets.SPREAKER_CLIENT_ID }}
+          SPREAKER_CLIENT_SECRET: ${{ secrets.SPREAKER_CLIENT_SECRET }}
+          NOTES_TOP: "150"
+        run: |
+          pip install requests cryptography
+          python translate_notes.py
+      - name: Ergebnis committen
+        if: always()
+        run: |
+          if [ -n "$(git status --porcelain data/podpage_i18n)" ]; then
+            git config user.name "m365-site-bot"; git config user.email "actions@users.noreply.github.com"
+            git add data/podpage_i18n && git commit -m "Show-Uebersetzungen (Haiku, Batch)"
+            git pull --rebase -q && git push -q
+          fi
