@@ -130,6 +130,16 @@ Mirko Peters is a Microsoft MVP, podcaster, author and conference organizer focu
       for (let i = 0; i < ops.length; i += 40) await db.batch(ops.slice(i, i + 40));
     } catch (e) { /* naechster Cron-Lauf versucht es erneut */ }
   }
+  if (evr) {   // Themen (Entitaeten) der Programm-Sessions nachtragen, solange eine Session noch keine hat
+    try {
+      const todo = await db.prepare("SELECT COUNT(*) n FROM event_sessions WHERE event_id=? AND topics='[]'").bind(evr.id).first();
+      if (todo?.n) {
+        const pr = await (await fetch(`${env.SITE}/m365con_program.json`, { cf: { cacheTtl: 0 } })).json(), known = await baseIds(env);
+        const ops = (pr.sessions || []).filter((x) => (x.topics || []).length).map((x) => db.prepare("UPDATE event_sessions SET topics=? WHERE event_id=? AND title=? AND topics='[]'").bind(JSON.stringify(x.topics.filter((i) => known.has(i)).slice(0, 8)), evr.id, String(x.title).slice(0, 140)));
+        for (let i = 0; i < ops.length; i += 40) await db.batch(ops.slice(i, i + 40));
+      }
+    } catch (e) { /* naechster Lauf */ }
+  }
 }
 
 export async function handleEvents(env, request, url, path, user, J) {

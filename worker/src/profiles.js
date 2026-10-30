@@ -113,7 +113,10 @@ async function personView(db, uid, viewer) {
   const recs = (await q("SELECT r.id,r.relation,r.body,r.created,u.name,(SELECT handle FROM profiles WHERE user_id=r.author_id AND public=1) h FROM recommendations r JOIN users u ON u.id=r.author_id AND u.banned=0 WHERE r.subject_id=? AND r.status='live' ORDER BY r.created DESC LIMIT 30", uid)).map((r) => ({ id: r.id, relation: r.relation, body: r.body, created: r.created, by: { name: r.name, handle: r.h || "" } }));
   const im = await db.prepare("SELECT updated FROM images WHERE kind='u' AND owner_id=?").bind(uid).first();
   const pce = (await db.prepare("SELECT eid FROM profile_company WHERE user_id=?").bind(uid).first())?.eid || "";
-  return { type: "u", img: im?.updated || 0, company_eid: pce, id: uid, handle: p.handle, name: p.name, bio: p.bio, headline: p.headline, about: p.about, company: p.company, job: p.job, country: p.country, public: !!p.public, show_org: !!p.show_org,
+  const pv = await db.prepare("SELECT * FROM profile_private WHERE user_id=?").bind(uid).first(), CF = ["city", "zip", "street", "email", "phone"];
+  const contact = {}; let priv = null;
+  if (pv) { for (const k of CF) if (pv["vis_" + k] === "all" && pv[k]) contact[k] = pv[k]; if (+viewer === uid) priv = Object.fromEntries([...CF.map((k) => [k, pv[k]]), ...CF.map((k) => ["vis_" + k, pv["vis_" + k]])]); }
+  return { type: "u", contact, ...(priv ? { private: priv } : {}), img: im?.updated || 0, company_eid: pce, id: uid, handle: p.handle, name: p.name, bio: p.bio, headline: p.headline, about: p.about, company: p.company, job: p.job, country: p.country, public: !!p.public, show_org: !!p.show_org,
     expertise: exp.map((e) => ({ ...e, verified: !!e.verified, me: !!e.me })), programs: programs.map((x) => ({ ...x, verified: !!x.verified })), certs, channels, org, contrib, counts, badges, recs,
     items: await itemsOf(db, "i.owner_type='u' AND i.owner_id=?", [uid], viewer, 8) };
 }
@@ -271,6 +274,15 @@ export async function handleProfiles(env, request, url, path, user, J) {
     const ce = String(b.company_eid || "").toLowerCase();
     if (ce) { if (ID.test(ce) && ((await baseIds(env)).has(ce) || (await db.prepare("SELECT 1 x FROM entity_rev WHERE eid=? AND status IN ('live','pending')").bind(ce).first()))) await db.prepare("INSERT INTO profile_company(user_id,eid) VALUES(?,?) ON CONFLICT(user_id) DO UPDATE SET eid=excluded.eid").bind(user.id, ce).run(); }
     else await db.prepare("DELETE FROM profile_company WHERE user_id=?").bind(user.id).run();
+    if (b.private && typeof b.private === "object") {   // Kontakt- und Adressdaten (privat, Sichtbarkeit je Feld)
+      const pr = b.private, V = (x) => (["all", "contacts", "none"].includes(x) ? x : "none"), vis = pr.vis || {};
+      const city = txt(pr.city, 80), zip = String(pr.zip || "").replace(/[^A-Za-z0-9 -]/g, "").slice(0, 10).trim(), street = txt(pr.street, 120);
+      const email = String(pr.email || "").trim().slice(0, 120), phone = String(pr.phone || "").replace(/[^0-9+()\- ]/g, "").slice(0, 30).trim();
+      if (email && !/^[^\s@<>]+@[^\s@<>]+\.[^\s@<>]{2,}$/.test(email)) return J({ error: "bad_email" }, 400);
+      await db.prepare(`INSERT INTO profile_private(user_id,city,zip,street,email,phone,vis_city,vis_zip,vis_street,vis_email,vis_phone,updated) VALUES(?,?,?,?,?,?,?,?,?,?,?,?)
+        ON CONFLICT(user_id) DO UPDATE SET city=excluded.city,zip=excluded.zip,street=excluded.street,email=excluded.email,phone=excluded.phone,vis_city=excluded.vis_city,vis_zip=excluded.vis_zip,vis_street=excluded.vis_street,vis_email=excluded.vis_email,vis_phone=excluded.vis_phone,updated=excluded.updated`)
+        .bind(user.id, city, zip, street, email, phone, V(vis.city), V(vis.zip), V(vis.street), V(vis.email), V(vis.phone), now()).run();
+    }
     const oldC = Object.fromEntries(((await db.prepare("SELECT eid,url FROM certs WHERE user_id=?").bind(user.id).all()).results || []).map((x) => [x.eid, x.url]));
     await replaceLists(db, "u", user.id, { exp: ex.list, prog: pr.list, chan: ch.list, certs });
     {   // Pruefstatus: entfernte Zertifikate/geaenderte Nachweise zuruecksetzen, neue Nachweise pruefen
@@ -474,7 +486,7 @@ export async function deleteUserData(db, id) {
     db.prepare("DELETE FROM item_votes WHERE user_id=? OR item_id IN (SELECT id FROM feed_items WHERE owner_type='u' AND owner_id=?)").bind(id, id),
     db.prepare("DELETE FROM feed_items WHERE owner_type='u' AND owner_id=?").bind(id), db.prepare("DELETE FROM channels WHERE owner_type='u' AND owner_id=?").bind(id),
     db.prepare("DELETE FROM expertise WHERE owner_type='u' AND owner_id=?").bind(id), db.prepare("DELETE FROM programs WHERE owner_type='u' AND owner_id=?").bind(id),
-    db.prepare("DELETE FROM certs WHERE user_id=?").bind(id), db.prepare("DELETE FROM cert_check WHERE user_id=?").bind(id), db.prepare("DELETE FROM cert_endorse WHERE owner_id=? OR by_id=?").bind(id, id), db.prepare("DELETE FROM endorsements WHERE owner_id=? OR by_id=?").bind(id, id),
+    db.prepare("DELETE FROM profile_private WHERE user_id=?").bind(id), db.prepare("DELETE FROM certs WHERE user_id=?").bind(id), db.prepare("DELETE FROM cert_check WHERE user_id=?").bind(id), db.prepare("DELETE FROM cert_endorse WHERE owner_id=? OR by_id=?").bind(id, id), db.prepare("DELETE FROM endorsements WHERE owner_id=? OR by_id=?").bind(id, id),
     db.prepare("DELETE FROM profiles WHERE user_id=?").bind(id),
     db.prepare("DELETE FROM entity_rev WHERE user_id=? AND status IN ('pending','rejected')").bind(id), db.prepare("UPDATE entity_rev SET user_id=0 WHERE user_id=?").bind(id));
   await db.batch(ops);

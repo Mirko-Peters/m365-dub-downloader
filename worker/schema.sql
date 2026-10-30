@@ -421,3 +421,9 @@ CREATE TABLE IF NOT EXISTS entity_a_votes (
   created INTEGER NOT NULL,
   PRIMARY KEY (a_id, user_id)
 );
+CREATE TABLE IF NOT EXISTS profile_private (   -- Kontakt-/Adressdaten: standardmaessig privat, je Feld Sichtbarkeit all | contacts | none; spaeter fuer Umkreissuche
+  user_id INTEGER PRIMARY KEY,
+  city TEXT NOT NULL DEFAULT '', zip TEXT NOT NULL DEFAULT '', street TEXT NOT NULL DEFAULT '', email TEXT NOT NULL DEFAULT '', phone TEXT NOT NULL DEFAULT '',
+  vis_city TEXT NOT NULL DEFAULT 'none', vis_zip TEXT NOT NULL DEFAULT 'none', vis_street TEXT NOT NULL DEFAULT 'none', vis_email TEXT NOT NULL DEFAULT 'none', vis_phone TEXT NOT NULL DEFAULT 'none',
+  updated INTEGER NOT NULL DEFAULT 0
+);
