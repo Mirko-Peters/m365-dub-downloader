@@ -269,8 +269,9 @@ def build_learn(ctx):
     def gloss_ld(lang, url, term=None):
         setname = {"@type": "DefinedTermSet", "@id": f"{BASE}/glossary/#set", "name": "M365.FM Glossary"}
         if term is None:
-            return [{"@context": "https://schema.org", "@type": "DefinedTermSet", "name": T(lang)["glossary"], "url": url,
-                     "hasDefinedTerm": [{"@type": "DefinedTerm", "name": t["name"], "description": definition(t, lang)[0]} for t in GLOSS]}]
+            return [{"@context": "https://schema.org", "@type": "DefinedTermSet", "@id": f"{BASE}/glossary/#set", "name": T(lang)["glossary"], "url": url, "inLanguage": lang,
+                     "description": "Definitions of Microsoft 365, Copilot, Azure and Power Platform terms, each linked to its entity page." if lang == "en" else "Definitionen zu Microsoft 365, Copilot, Azure und Power Platform, jeweils mit Verweis auf die Entitätsseite.",
+                     "hasDefinedTerm": [{"@id": f"{BASE}/entity/{t['id']}/#entity"} for t in GLOSS]}]
         return [{"@context": "https://schema.org", "@type": "DefinedTerm", "name": term["name"], "description": definition(term, lang)[0], "url": url,
                  "inDefinedTermSet": setname}]
 

@@ -40,6 +40,7 @@ def ent_ld(BASE, e, lang, glossary_set=None):
     t = e["type"]; i = e["id"]; d = e["desc"].get(lang) or e["desc"].get("en") or e["desc"].get("de") or ""
     ref = lambda x: {"@id": eid_of(BASE, x)}
     rel = {}
+    _inv = inverse_index()
     for p, to in e.get("rel", []):
         if to in ENTS:
             rel.setdefault(p, []).append(to)
@@ -68,6 +69,21 @@ def ent_ld(BASE, e, lang, glossary_set=None):
             n["softwareRequirements"] = [eurl(BASE, "en", x) for x in rel["requires"]]
         if rel.get("instance_of"):
             n["additionalType"] = [eurl(BASE, "en", x) for x in rel["instance_of"]]
+        if rel.get("developed_by"):
+            n["manufacturer"] = [ref(x) for x in rel["developed_by"]]
+        if e.get("docs"):
+            n["softwareHelp"] = {"@type": "CreativeWork", "url": e["docs"]}
+        if rel.get("similar_to"):
+            n["isSimilarTo"] = [ref(x) for x in rel["similar_to"]]
+        if rel.get("related_to"):
+            n["isRelatedTo"] = [ref(x) for x in rel["related_to"]]
+        _parts = [x for q, x in _inv.get(i, []) if q == "part_of"]
+        if _parts:
+            n["hasPart"] = [ref(x) for x in _parts]
+        if rel.get("instance_of"):
+            n["category"] = [ENTS[c]["name"] for c in rel["instance_of"] if ENTS[c]["type"] == "category"]
+        if e.get("aliases"):
+            n["keywords"] = ", ".join(e["aliases"])
         if inv_map:
             n["mentions"] = [ref(x) for x in inv_map]
     elif t in ("concept", "category"):
@@ -76,12 +92,22 @@ def ent_ld(BASE, e, lang, glossary_set=None):
     elif t == "org":
         if rel.get("part_of"):
             n["parentOrganization"] = ref(rel["part_of"][0])
+        _sub = [x for q, x in _inv.get(i, []) if q == "part_of" and ENTS[x]["type"] == "org"]
+        if _sub:
+            n["subOrganization"] = [ref(x) for x in _sub]
+        _brands = [x for q, x in _inv.get(i, []) if q == "developed_by" and ENTS[x]["type"] in ("product", "platform")]
+        if _brands:
+            n["brand"] = [ref(x) for x in _brands]
+        _ev = [x for q, x in _inv.get(i, []) if q == "organized_by"]
+        if _ev:
+            n["event"] = [ref(x) for x in _ev]
     elif t == "cert":
         if rel.get("developed_by"):
             n["recognizedBy"] = ref(rel["developed_by"][0])
         n["credentialCategory"] = "certification"
         if rel.get("covers"):
             n["about"] = [ref(x) for x in rel["covers"]]
+            n["competencyRequired"] = [ENTS[x]["name"] for x in rel["covers"]]
     elif t == "event":
         n["eventAttendanceMode"] = "https://schema.org/OnlineEventAttendanceMode"; n["eventStatus"] = "https://schema.org/EventScheduled"
         n["location"] = {"@type": "VirtualLocation", "url": e.get("web") or eurl(BASE, "en", i)}
@@ -162,7 +188,10 @@ def build(g, wiki_links, experts_by_ent, ep_find):
         newbtn = f'<div id="en-new" data-lang="{lang}"></div>'
         body = shell(lang, f'<h1>{esc(s["entities"])}</h1><p class="mut">{esc(s["intro"])}</p><p>{esc(s["count"].format(n=len(recs)))} · <a href="{BASE}/entities.json">{esc(s["export"])} (JSON)</a> · <a href="{BASE}/entities.jsonld">JSON-LD</a></p>{newbtn}<p><label><input type="checkbox" id="en-old"> {esc(OLD[lang][1])}</label></p><div role="group" aria-label="{esc(s["type"])}">{filt}</div><ul class="en-list">{"".join(card(e) for e in sorted(recs, key=lambda x: x["name"].lower()))}</ul>{js}'
                       f'<script>window.M365E={{api:"{api}",lang:"{lang}",base:"{BASE}",s:{json.dumps({k: s[k] for k in ("new",)}, ensure_ascii=False)}}}</script><script defer src="{BASE}/assets/entity.js"></script>')
-        ld = [{"@context": "https://schema.org", "@type": "CollectionPage", "name": s["entities"], "url": root, "description": s["intro"], "mainEntity": {"@type": "ItemList", "numberOfItems": len(recs), "itemListElement":
+        _terms = [e for e in recs if e["type"] in ("concept", "category")]
+        ld = [{"@context": "https://schema.org", "@type": "DefinedTermSet", "@id": f"{BASE}/entity/#set", "name": "M365.FM Entities", "url": root, "inLanguage": lang, "description": s["intro"],
+               "hasDefinedTerm": [{"@id": eid_of(BASE, e["id"])} for e in _terms]},
+              {"@context": "https://schema.org", "@type": "CollectionPage", "name": s["entities"], "url": root, "description": s["intro"], "mainEntity": {"@type": "ItemList", "numberOfItems": len(recs), "itemListElement":
                [{"@type": "ListItem", "position": i + 1, "item": {"@id": eid_of(BASE, e["id"])}} for i, e in enumerate(sorted(recs, key=lambda x: x["name"].lower()))]}}]
         write(f"{rel}/index.html", page(lang, f'{s["entities"]} – M365.FM', s["intro"], root, body, None, ld, og_type="website", extra_head=LCSS + WCSS + css))
         sitemap.append((root, TODAY, None))
