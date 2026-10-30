@@ -2,7 +2,8 @@
 import { stats, evalBadges } from "./badges.js";
 const NEED = 3, TRUST = 25;
 const now = () => Math.floor(Date.now() / 1000);
-const trusted = async (db, u) => !!(u && (u.admin || u.editor || u.pro || (await stats(db, u.id)).points >= TRUST));
+const endorsedExpert = async (db, uid) => !!(await db.prepare("SELECT 1 x FROM endorsements WHERE owner_id=? AND by_id<>? GROUP BY eid HAVING COUNT(DISTINCT by_id)>=2 LIMIT 1").bind(uid, uid).first());   // Experte, den mind. 2 andere bestaetigt haben
+const trusted = async (db, u) => !!(u && (u.admin || u.editor || u.pro || (await stats(db, u.id)).points >= TRUST || (await endorsedExpert(db, u.id))));
 
 export async function handleVotes(env, request, url, path, user, J) {
   const db = env.DB;
