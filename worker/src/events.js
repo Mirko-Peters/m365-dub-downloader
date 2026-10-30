@@ -81,6 +81,20 @@ export async function ensureM365Con(env) {   // M365Con 2027 ist ein Event und g
   for (const a of subs) { const [pr, ...rest] = a.split(":"); owner = await db.prepare("SELECT id FROM users WHERE provider=? AND sub=?").bind(pr, rest.join(":")).first(); if (owner) break; }
   if (!owner) return;
   const t = Math.floor(Date.now() / 1000), ex = await db.prepare("SELECT id,owner_id FROM events WHERE handle='m365con-2027'").first();
+  // Admin-Profil einmalig vorbelegen (nur fehlende Teile, spaetere Aenderungen des Admins bleiben erhalten)
+  if (!(await db.prepare("SELECT 1 x FROM profiles WHERE user_id=?").bind(owner.id).first()) && !(await db.prepare("SELECT 1 x FROM profiles WHERE handle='mirko-peters'").first())) {
+    await db.prepare("INSERT INTO profiles(user_id,public,handle,headline,about,company,job,country,show_org,updated) VALUES(?,1,'mirko-peters',?,?,'M365.FM',?,'Germany',1,?)")
+      .bind(owner.id, "Microsoft MVP · Host of M365.FM · Organizer of M365Con", "Mirko Peters is a Microsoft MVP who explains Microsoft 365, Microsoft Copilot, Azure, Power Platform, Microsoft Fabric and AI agents for IT admins, architects, developers and decision makers. He hosts the podcast M365.FM and the M365 Show on YouTube (animated explainers and Microsoft certification courses), organizes the free online conference M365Con and publishes e-books on Microsoft topics.", "Podcast host and conference organizer", t).run();
+  }
+  const prof = await db.prepare("SELECT handle FROM profiles WHERE user_id=?").bind(owner.id).first();
+  if (prof?.handle === "mirko-peters") {
+    await db.prepare("INSERT OR IGNORE INTO programs(owner_type,owner_id,program,year,url,verified) VALUES('u',?,'mvp',0,'https://mvp.microsoft.com/de-DE/mvp/profile/9b0ca797-db5a-493a-a845-8b9158046cf5',1)").bind(owner.id).run();
+    for (const [k, u] of [["linkedin", "https://www.linkedin.com/in/m365showpodcast/"], ["youtube", "https://www.youtube.com/channel/UCIdo4tN3khKldHP3733E9JA"], ["website", "https://www.m365.fm"], ["website", "https://m365con.net"]])
+      await db.prepare("INSERT OR IGNORE INTO channels(owner_type,owner_id,kind,url) VALUES('u',?,?,?)").bind(owner.id, k, u).run();
+    for (const eid of ["microsoft-365", "copilot", "copilot-studio", "azure", "azure-ai-foundry", "power-platform", "fabric", "purview", "teams", "sharepoint", "ai-agent", "entra-id"])
+      await db.prepare("INSERT OR IGNORE INTO expertise(owner_type,owner_id,eid,level,verified) VALUES('u',?,?,3,1)").bind(owner.id, eid).run();
+  }
+  await db.prepare("UPDATE users SET name='Mirko Peters' WHERE id=? AND name LIKE 'Mirko P%' AND name<>'Mirko Peters'").bind(owner.id).run();   // voller Name fuer das oeffentliche Profil
   const adm = { id: owner.id, admin: true, name: "Mirko Peters" };
   await ownedEntity(env, adm, { eid: "m365show", type: "media", name: "M365 Show", en: "The M365 Show is a video and podcast show about Microsoft 365, Copilot, Azure and the Power Platform with animated explainers and certification courses.", de: "Die M365 Show ist eine Video- und Podcast-Show zu Microsoft 365, Copilot, Azure und Power Platform mit animierten Erklaerungen und Zertifizierungskursen.", web: "https://m365.show" });
   const ORGS = [

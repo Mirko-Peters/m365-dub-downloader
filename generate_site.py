@@ -442,6 +442,7 @@ def person_ld():
          "worksFor": {"@id": f"{BASE}/#org"}, "founder": [{"@id": f"{BASE}/#org"}]}
     if (ROOT / "assets" / "mirko-peters.jpg").exists():
         d["image"] = f"{BASE}/assets/mirko-peters.jpg"
+    d["sameAs"] = list(dict.fromkeys(list(d.get("sameAs", [])) + [f"{BASE}/entity/mirko-peters/#entity"]))   # Entitaet in der Entitaetsdatenbank
     if AUTHOR.get("handle"):   # oeffentliches Profil ist die Quelle der Wahrheit
         a = AUTHOR
         if a.get("about") or a.get("headline"):
