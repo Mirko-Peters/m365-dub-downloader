@@ -1,0 +1,47 @@
+name: MCP-Abgleich (täglich)
+on:
+  schedule:
+    - cron: "30 6 * * *"   # nach dem täglichen Worker-Deploy (05:50)
+  push:
+    branches: [main]
+    paths: ["worker/src/**", "worker/mcp_coverage.json", "tools/check_mcp_coverage.mjs", "tools/mcp_routes.mjs"]
+  pull_request:
+    paths: ["worker/src/**", "worker/mcp_coverage.json", "tools/check_mcp_coverage.mjs", "tools/mcp_routes.mjs"]
+  workflow_dispatch:
+permissions:
+  contents: read
+  issues: write
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22 }
+      - name: Seitenfunktionen mit MCP-Tools abgleichen
+        id: check
+        env:
+          REPORT_FILE: mcp-report.md
+        run: |
+          set +e
+          # Live-Abgleich nur im täglichen Lauf (nach dem Deploy) und manuell - nicht bei Push/Pull Request, dort rollt der Worker gerade erst aus
+          case "$GITHUB_EVENT_NAME" in schedule|workflow_dispatch) export MCP_URL=https://api-dub.m365.fm/mcp ;; esac
+          node tools/check_mcp_coverage.mjs
+          echo "code=$?" >> "$GITHUB_OUTPUT"
+          cat mcp-report.md >> "$GITHUB_STEP_SUMMARY"
+      - name: Issue anlegen/aktualisieren oder schließen
+        if: github.event_name != 'pull_request'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          n=$(gh issue list --label mcp-sync --state open --json number -q '.[0].number')
+          if [ "${{ steps.check.outputs.code }}" != "0" ]; then
+            gh label create mcp-sync --color 5319e7 --description "MCP-Server der Seite nachziehen" 2>/dev/null || true
+            if [ -n "$n" ]; then gh issue edit "$n" --body-file mcp-report.md
+            else gh issue create --label mcp-sync --title "MCP: Seitenfunktionen ohne Tool" --body-file mcp-report.md; fi
+          elif [ -n "$n" ]; then
+            gh issue close "$n" --comment "Abgleich ist wieder grün – MCP deckt alle Seitenfunktionen ab."
+          fi
+      - name: Bei Abweichung fehlschlagen
+        if: steps.check.outputs.code != '0'
+        run: exit 1

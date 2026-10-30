@@ -134,11 +134,12 @@ function pubComment(c, mine, liked, badges, admin) {
     hidden: c.status === "hidden", created: c.created, likes: c.likes, liked: liked.has(c.id), mine: mine === c.user_id, canDelete: mine === c.user_id || admin };
 }
 
-async function api(env, request, url, path) {
+async function api(env, request, url, path, asUser) {
   const method = request.method, J = (d, s = 200, x) => json(d, s, env, request, x);
   if (method === "OPTIONS") return new Response(null, { status: 204, headers: cors(env, request) });
-  if (method !== "GET" && request.headers.get("x-requested-with") !== "m365") return J({ error: "bad_request" }, 400);
-  const uid = await readSession(env, request), user = uid ? await me(env, uid) : null;
+  if (asUser === undefined && method !== "GET" && request.headers.get("x-requested-with") !== "m365") return J({ error: "bad_request" }, 400);
+  // asUser: vom MCP-Server (Token bereits geprueft) - dann keine Cookie-Sitzung noetig
+  const uid = asUser === undefined ? await readSession(env, request) : null, user = asUser === undefined ? (uid ? await me(env, uid) : null) : asUser;
   const need = () => (user ? null : J({ error: "login" }, 401));
   const db = env.DB;
 
@@ -343,7 +344,7 @@ export default {
     const url = new URL(request.url), path = url.pathname.replace(/\/+$/, "") || "/";
     try {
       if (path.startsWith("/auth/")) return (await auth(env, request, url, path)) || new Response("not found", { status: 404 });
-      if (path === "/mcp") return await handleMcp(env, request, (uid) => me(env, uid));
+      if (path === "/mcp") return await handleMcp(env, request, (uid) => me(env, uid), (req, user) => api(env, req, new URL(req.url), new URL(req.url).pathname, user));
       if (path.startsWith("/api/")) return await api(env, request, url, path);
       return new Response("M365.FM community API", { status: 200, headers: { "content-type": "text/plain" } });
     } catch (e) {

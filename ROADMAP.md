@@ -96,7 +96,7 @@ Stand: 2026-10-29. Reihenfolge nach Absprache mit Mirko; alles mit Schema.org-Ve
 
 
 ## Grundregel: MCP & KI-Anbindung wachsen mit
-Jede neue Funktion der Plattform (Log, Events, Firmen, Forum, Blog, Copilot-Bibliothek, Folgen …) bekommt zugleich ein MCP-Tool in `worker/src/mcp.js` (mit `de`-Beschreibung). Die Anleitungsseite `/community/mcp/` liest die Tool-Liste automatisch daraus (`tools/dump_mcp_tools.mjs`). Gilt für Claude, ChatGPT und Microsoft Copilot (Copilot Studio / M365-Agenten). Phase 2: OAuth für direkte Anmeldung; Phase 3: Tools für Events/Sessions, Firmen, Log, Folgen.
+Jede neue Funktion der Plattform (Log, Events, Firmen, Forum, Blog, Copilot-Bibliothek, Folgen …) bekommt zugleich ein MCP-Tool in `worker/src/mcp.js` (mit `de`-Beschreibung). Die Anleitungsseite `/community/mcp/` liest die Tool-Liste automatisch daraus (`tools/dump_mcp_tools.mjs`). **Täglicher Abgleich** (`.github/workflows/mcp-check.yml`, `tools/check_mcp_coverage.mjs`): jede API-Route muss in `worker/mcp_coverage.json` einem Tool zugeordnet oder begründet ausgenommen sein, sonst schlägt der Lauf fehl und ein Issue `mcp-sync` entsteht; neue Seitenfunktionen also immer als Tool in `BRIDGE`/`TOOLS` ergänzen. Die Anleitungsseite und der Skill werden täglich neu gebaut, der Worker täglich neu ausgerollt. Gilt für Claude, ChatGPT und Microsoft Copilot (Copilot Studio / M365-Agenten). Phase 2: OAuth für direkte Anmeldung; Phase 3: Tools für Events/Sessions, Firmen, Log, Folgen.
 
 Ausgemusterte Seiten: in `data/retired.json` eintragen (mit `to` = Nachfolger-Verknüpfung, ohne = „gibt es nicht mehr“). Wird beim Build zur Hinweisseite (noindex). Gilt bei jeder umbenannten/entfernten Seite.
 
