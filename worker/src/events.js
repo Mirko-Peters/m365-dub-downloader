@@ -33,8 +33,16 @@ const rndToken = () => [...crypto.getRandomValues(new Uint8Array(18))].map((b) =
 async function speakersCheck(db, list, prev, selfHandle) {
   const out = [], old = new Map((prev || []).map((x) => [x.h || x.n, x]));
   for (const s of (Array.isArray(list) ? list : []).slice(0, 8)) {
-    const n = txt(s?.n, 80), h = String(s?.h || "").toLowerCase().trim(), e = String(s?.e || "").toLowerCase().trim();
+    const n = txt(s?.n, 80); let h = String(s?.h || "").toLowerCase().trim(), e = String(s?.e || "").toLowerCase().trim();
     if (e && !EID.test(e)) return null;
+    if (!h && n.length >= 3) {   // Speaker existiert schon als oeffentliches Profil (eindeutiger Name)? Dann direkt verknuepfen, er bestaetigt in seinem Profil
+      const m = (await db.prepare("SELECT p.handle FROM profiles p JOIN users u ON u.id=p.user_id WHERE p.public=1 AND p.handle IS NOT NULL AND lower(u.name)=lower(?) LIMIT 2").bind(n).all()).results || [];
+      if (m.length === 1) h = m[0].handle;
+    }
+    if (!e && n.length >= 3) {
+      const pe = (await db.prepare("SELECT eid FROM entity_rev WHERE status='live' AND json_extract(data,'$.type')='person' AND lower(json_extract(data,'$.name'))=lower(?) LIMIT 2").bind(n).all()).results || [];
+      if (pe.length === 1) e = pe[0].eid;
+    }
     const keep = old.get(h || n);
     if (h) {
       if (!PH.test(h)) return null;
@@ -97,10 +105,11 @@ export async function ensureM365Con(env) {   // M365Con 2027 ist ein Event und g
   if (evr && !(await db.prepare("SELECT 1 x FROM event_sessions WHERE event_id=? LIMIT 1").bind(evr.id).first())) {
     try {
       const pr = await (await fetch(`${env.SITE}/m365con_program.json`, { cf: { cacheTtl: 0 } })).json(), sp = pr.speakers || {};
+      const pm = new Map(((await db.prepare("SELECT p.handle,lower(u.name) n FROM profiles p JOIN users u ON u.id=p.user_id WHERE p.public=1 AND p.handle IS NOT NULL").all()).results || []).map((r) => [r.n, r.handle]));
       const addMin = (st, m) => { const d = new Date(st + ":00Z"); d.setUTCMinutes(d.getUTCMinutes() + (m || 45)); return d.toISOString().slice(0, 16); };
       const ops = (pr.sessions || []).slice(0, 400).map((x) => db.prepare("INSERT INTO event_sessions(event_id,title,abstract,start,end,room,track,level,lang,topics,speakers,recording_url,status,proposer_id,created) VALUES(?,?,?,?,?,'',?,'','en','[]',?,'','live',?,?)")
         .bind(evr.id, String(x.title).slice(0, 140), String(x.abstract || "").slice(0, 1500), x.start, addMin(x.start, x.duration), x.category === "keynote" ? "Keynote" : x.category === "closing" ? "Closing" : "Expert Session",
-          JSON.stringify((x.speaker_ids || []).map((i) => sp[i]).filter(Boolean).map((p) => ({ n: String(p.name).slice(0, 80), s: "confirmed", o: 1 }))), owner.id, t));
+          JSON.stringify((x.speaker_ids || []).map((i) => sp[i]).filter(Boolean).map((p) => (pm.has(String(p.name).toLowerCase()) ? { h: pm.get(String(p.name).toLowerCase()), n: String(p.name).slice(0, 80), s: "invited" } : { n: String(p.name).slice(0, 80), s: "confirmed", o: 1 }))), owner.id, t));
       for (let i = 0; i < ops.length; i += 40) await db.batch(ops.slice(i, i + 40));
     } catch (e) { /* naechster Cron-Lauf versucht es erneut */ }
   }
