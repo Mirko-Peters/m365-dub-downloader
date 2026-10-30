@@ -8,6 +8,7 @@ import { handleEvents, deleteUserEvents, ensureM365Con } from "./events.js";
 import { handleVotes } from "./votes.js";
 import { handleQa, deleteUserQa } from "./qa.js";
 import { handleBlog, deleteUserBlog } from "./blog.js";
+import { handleLibrary, deleteUserLibrary } from "./library.js";
 import { handleDemo } from "./demo.js";
 import { handleGuests, deleteUserGuests } from "./guests.js";
 import { handlePodcast, deleteUserPodcast, pollPodcast } from "./podcast.js";
@@ -34,7 +35,7 @@ const PROVIDERS = {
   },
 };
 const VID = /^[A-Za-z0-9_-]{5,24}$/;
-const okCl = (vid, lang) => isLang(lang) || (lang === "en" && /^(blog|podcast|video)\d+$/.test(vid));   // Blog-Beitraege gibt es auch auf Englisch
+const okCl = (vid, lang) => isLang(lang) || (lang === "en" && /^(blog|podcast|video|lib)\d+$/.test(vid));   // Blog-Beitraege gibt es auch auf Englisch
 const now = () => Math.floor(Date.now() / 1000);
 const ip = (r) => r.headers.get("cf-connecting-ip") || "0";
 const html = (body, status = 200) => new Response(`<!doctype html><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex"><body style="font-family:system-ui;max-width:32em;margin:12vh auto;padding:0 16px;line-height:1.5">${body}`, { status, headers: { "content-type": "text/html; charset=utf-8", "cache-control": "no-store" } });
@@ -163,7 +164,7 @@ async function api(env, request, url, path) {
         db.prepare("DELETE FROM push_subs WHERE user_id=?").bind(id), db.prepare("DELETE FROM wiki_reports WHERE user_id=?").bind(id), db.prepare("DELETE FROM wiki_rev WHERE user_id=? AND status IN ('pending','rejected')").bind(id), db.prepare("UPDATE wiki_rev SET user_id=0 WHERE user_id=?").bind(id), db.prepare("DELETE FROM curators WHERE user_id=?").bind(id), db.prepare("DELETE FROM users WHERE id=?").bind(id),
       ]);
       await deleteUserEvents(db, id);
-      await deleteUserMessages(db, id); await deleteUserTokens(db, id); await deleteUserQa(db, id); await deleteUserBlog(db, id); await deleteUserPodcast(db, id); await deleteUserVideos(db, id); await deleteUserGuests(db, id);
+      await deleteUserMessages(db, id); await deleteUserTokens(db, id); await deleteUserQa(db, id); await deleteUserBlog(db, id); await deleteUserLibrary(db, id); await deleteUserPodcast(db, id); await deleteUserVideos(db, id); await deleteUserGuests(db, id);
       await deleteUserData(db, id);
       return J({ ok: true }, 200, { "set-cookie": cookie("m365s", "", 0) });
     }
@@ -240,6 +241,7 @@ async function api(env, request, url, path) {
   if (path.startsWith("/api/guests/")) { const q = await handleGuests(env, request, url, path, user, J); if (q) return q; }
   if (path.startsWith("/api/video/") || path.startsWith("/api/admin/video")) { const q = await handleVideo(env, request, url, path, user, J); if (q) { if (user && method !== "GET") await evalBadges(env, user.id).catch(() => 0); return q; } }
   if (path.startsWith("/api/podcast/") || path.startsWith("/api/admin/podcast")) { const q = await handlePodcast(env, request, url, path, user, J); if (q) { if (user && method !== "GET") await evalBadges(env, user.id).catch(() => 0); return q; } }
+  if (path.startsWith("/api/library/")) { const q = await handleLibrary(env, request, url, path, user, J); if (q) return q; }
   if (path === "/api/blog" || path.startsWith("/api/blog/") || path.startsWith("/api/admin/blog")) { const q = await handleBlog(env, request, url, path, user, J); if (q) { if (user && method !== "GET") await evalBadges(env, user.id).catch(() => 0); return q; } }
   if (path === "/api/qa" || path.startsWith("/api/qa/")) { const q = await handleQa(env, request, url, path, user, J); if (q) return q; }
   if (path.startsWith("/api/edits/")) { const v = await handleVotes(env, request, url, path, user, J); if (v) return v; }

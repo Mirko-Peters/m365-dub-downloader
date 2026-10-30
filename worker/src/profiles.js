@@ -177,7 +177,7 @@ async function replaceLists(db, t, id, { exp, prog, chan, certs }) {
   ops.push(db.prepare("DELETE FROM programs WHERE owner_type=? AND owner_id=? AND program NOT IN (SELECT value FROM json_each(?))").bind(t, id, JSON.stringify(prog.map((x) => x.p))));
   for (const x of prog) ops.push(db.prepare("INSERT INTO programs(owner_type,owner_id,program,year,url) VALUES(?,?,?,?,?) ON CONFLICT(owner_type,owner_id,program) DO UPDATE SET year=excluded.year, url=excluded.url, verified=CASE WHEN programs.url=excluded.url THEN programs.verified ELSE 0 END").bind(t, id, x.p, x.year, x.url));
   ops.push(db.prepare("DELETE FROM channels WHERE owner_type=? AND owner_id=? AND url NOT IN (SELECT value FROM json_each(?))").bind(t, id, JSON.stringify(chan.map((x) => x.url))));
-  for (const x of chan) ops.push(db.prepare("INSERT INTO channels(owner_type,owner_id,kind,url,feed) VALUES(?,?,?,?,?) ON CONFLICT(owner_type,owner_id,url) DO UPDATE SET kind=excluded.kind, feed=excluded.feed, fails=0").bind(t, id, x.kind, x.url, x.feed));
+  for (const x of chan) ops.push(db.prepare("INSERT INTO channels(owner_type,owner_id,kind,url,feed) VALUES(?,?,?,?,?) ON CONFLICT(owner_type,owner_id,url) DO UPDATE SET kind=excluded.kind, feed=CASE WHEN excluded.feed<>'' THEN excluded.feed ELSE channels.feed END, fails=0").bind(t, id, x.kind, x.url, x.feed));
   if (certs) {
     ops.push(db.prepare("DELETE FROM certs WHERE user_id=?").bind(id));
     for (const x of certs) ops.push(db.prepare("INSERT INTO certs(user_id,eid,year,url) VALUES(?,?,?,?)").bind(id, x.e, x.year, x.url));
@@ -395,6 +395,18 @@ export async function handleProfiles(env, request, url, path, user, J) {
     const has = await db.prepare("SELECT 1 x FROM item_votes WHERE item_id=? AND user_id=?").bind(id, user.id).first();
     if (has) await db.prepare("DELETE FROM item_votes WHERE item_id=? AND user_id=?").bind(id, user.id).run(); else await db.prepare("INSERT INTO item_votes(item_id,user_id,created) VALUES(?,?,?)").bind(id, user.id, now()).run();
     return J({ ok: true, voted: !has, votes: (await db.prepare("SELECT COUNT(*) n FROM item_votes WHERE item_id=?").bind(id).first()).n });
+  }
+  if (path === "/api/feed/export" && method === "GET") {   // oeffentlich fuer den Seitenbau: externe Quellen (nur Titel+Link), eigene Seiten ausgenommen
+    const rows = (await db.prepare(`SELECT i.id,i.title,i.url,i.published,c.kind,i.owner_type,i.owner_id,(SELECT COUNT(*) FROM item_votes v WHERE v.item_id=i.id) votes FROM feed_items i JOIN channels c ON c.id=i.channel_id
+      WHERE i.hidden=0 AND i.url NOT LIKE ? AND i.published>? AND ((i.owner_type='u' AND i.owner_id IN (SELECT p.user_id FROM profiles p JOIN users u ON u.id=p.user_id AND u.banned=0 WHERE p.public=1)) OR (i.owner_type='o' AND i.owner_id IN (SELECT id FROM orgs WHERE public=1)))
+      ORDER BY i.published DESC LIMIT 60`).bind(env.SITE + "%", now() - 120 * 86400).all()).results || [];
+    const names = new Map(), out = [];
+    for (const r of rows) {
+      const k = r.owner_type + r.owner_id;
+      if (!names.has(k)) names.set(k, r.owner_type === "u" ? await db.prepare("SELECT p.handle,u.name FROM profiles p JOIN users u ON u.id=p.user_id WHERE p.user_id=?").bind(r.owner_id).first() : await db.prepare("SELECT handle,name FROM orgs WHERE id=?").bind(r.owner_id).first());
+      const o = names.get(k); if (o) out.push({ title: r.title, url: r.url, published: r.published, kind: r.kind, votes: r.votes, type: r.owner_type, handle: o.handle, name: o.name });
+    }
+    return J({ items: out }, 200, { "cache-control": "public, max-age=300" });
   }
   if (path === "/api/feed" && method === "GET") {   // Neuestes der Creator (nur oeffentliche Profile/Firmen)
     const sort = url.searchParams.get("sort") === "top" ? "votes" : "published";

@@ -583,11 +583,11 @@ def header(lang, switch):
         menu.insert(1, ((TOP_L if lang in TOP_REAL else REC_L).get(lang, "Top"), f"{BASE}/{lang}/top/"))
         menu.insert(2, (_CI.get(lang, _CI.get("en", {})).get("community", "Community"), f"{BASE}/{lang}/community/"))
         menu.insert(2, (LRN.T(lang)["learn"], f"{BASE}/{lang}/learn/"))
-        for _lbl, _p in (("Guests", "guests"), ("Videos", "video"), ("Podcast", "podcast"), ("Blog", "blog")):
-            menu.insert(3, (_lbl if lang != "de" else {"Guests": "Gäste"}.get(_lbl, _lbl), f"{BASE}/{lang}/community/{_p}/"))
+        for _lbl, _p in (("Guests", "guests"), ("Library", "library"), ("Videos", "video"), ("Podcast", "podcast"), ("Blog", "blog")):
+            menu.insert(3, (_lbl if lang != "de" else {"Guests": "Gäste", "Library": "Bibliothek"}.get(_lbl, _lbl), f"{BASE}/{lang}/community/{_p}/"))
     else:
         home = f"{BASE}/"
-        menu = [("Languages", f"{BASE}/#languages"), ("Blog", f"{BASE}/community/blog/"), ("Podcast", f"{BASE}/community/podcast/"), ("Videos", f"{BASE}/community/video/"), ("Community", f"{BASE}/community/"), ("M365Con", "https://m365con.net"), ("m365.fm", "https://www.m365.fm")]
+        menu = [("Languages", f"{BASE}/#languages"), ("Blog", f"{BASE}/community/blog/"), ("Podcast", f"{BASE}/community/podcast/"), ("Videos", f"{BASE}/community/video/"), ("Library", f"{BASE}/community/library/"), ("Community", f"{BASE}/community/"), ("M365Con", "https://m365con.net"), ("m365.fm", "https://www.m365.fm")]
     if not switch:
         items = [(x, LANGS[x][0], f"{BASE}/{x}/", LANGS[x][1]) for x in LANGS if (ROOT / "episodes").exists()]
         switch = lang_dropdown(lang if lang in LANGS else "en", items, "")
@@ -1045,7 +1045,7 @@ def build():
     # Community-Seite je Sprache (noindex) + Service Worker fuer Web-Push
     for l in list(active) + ["en"]:
         ct = _CI.get(l, _CI.get("en", {})).get("community", "Community")
-        write("community/index.html" if l == "en" else f"{l}/community/index.html", page(l, f"{ct} – M365.FM" + ("" if l == "en" else f" {LANGS[l][0]}"), ct, (f"{BASE}/community/" if l == "en" else f"{BASE}/{l}/community/"), f'{header(l, "")}<main class="wrap" style="max-width:48em"><h1 id="c-h1">{esc(ct)}</h1><div id="c-page"></div><div id="c-expert"></div><div id="c-events"></div><div id="c-blog"></div><div id="c-podcast"></div><div id="c-video"></div><div id="c-guests"></div><div id="c-messages"></div></main>{footer(l)}{community_tags(l)}<script>window.M365X={{api:"{COMMUNITY_API}",base:"{BASE}",lang:"{l}"}}</script><script defer src="{BASE}/assets/profile.js"></script><script defer src="{BASE}/assets/events.js"></script><script defer src="{BASE}/assets/blog.js"></script><script defer src="{BASE}/assets/podcast.js"></script><script defer src="{BASE}/assets/video.js"></script><script defer src="{BASE}/assets/guests.js"></script><script defer src="{BASE}/assets/messages.js"></script>', og_type="website", extra_head=LRN.WCSS, noindex=True))
+        write("community/index.html" if l == "en" else f"{l}/community/index.html", page(l, f"{ct} – M365.FM" + ("" if l == "en" else f" {LANGS[l][0]}"), ct, (f"{BASE}/community/" if l == "en" else f"{BASE}/{l}/community/"), f'{header(l, "")}<main class="wrap" style="max-width:48em"><h1 id="c-h1">{esc(ct)}</h1><div id="c-page"></div><div id="c-expert"></div><div id="c-events"></div><div id="c-blog"></div><div id="c-podcast"></div><div id="c-video"></div><div id="c-library"></div><div id="c-guests"></div><div id="c-messages"></div></main>{footer(l)}{community_tags(l)}<script>window.M365X={{api:"{COMMUNITY_API}",base:"{BASE}",lang:"{l}"}}</script><script defer src="{BASE}/assets/profile.js"></script><script defer src="{BASE}/assets/events.js"></script><script defer src="{BASE}/assets/blog.js"></script><script defer src="{BASE}/assets/podcast.js"></script><script defer src="{BASE}/assets/video.js"></script><script defer src="{BASE}/assets/library.js"></script><script defer src="{BASE}/assets/guests.js"></script><script defer src="{BASE}/assets/messages.js"></script>', og_type="website", extra_head=LRN.WCSS, noindex=True))
     shutil.copy(ROOT / "assets" / "sw.js", OUT / "sw.js")
     if (ROOT / "data" / "m365con_program.json").exists():
         shutil.copy(ROOT / "data" / "m365con_program.json", OUT / "m365con_program.json")
@@ -1122,6 +1122,8 @@ def build():
     MEM.build(_ctx, _people, _orgs, extra={l: EVT.blocks(BASE, _events, l) for l in COMM_LANGS})
     EVT.build(_ctx, _events, _people, _orgs)
     BLG.build(_ctx, _posts, _people, COMMUNITY_API)
+    import site_library as LIB
+    LIB.build(_ctx, LIB.fetch_items(COMMUNITY_API), _people, COMMUNITY_API)
     import site_guests as GST
     GST.build(_ctx, GST.fetch_listings(COMMUNITY_API), _people)
     import site_podcast as PODS

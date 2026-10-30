@@ -1,15 +1,16 @@
 """Startseite als Inhalts-Hub: Blog, Community-Podcast, Events und Stick-Man-Videos gemischt, mit Filter (Stick-Man-Videos sind ein Filter-Punkt von vielen)."""
 from datetime import date
 from site_i18n import pfx, T
-from site_learn import esc
+from site_learn import esc, _fetch_json
 
 _C = {}
 
 
 def _load(api):
     if not _C:
-        import site_blog, site_podcast, site_events, site_video
+        import site_blog, site_podcast, site_events, site_video, site_library
         _C["cv"] = site_video.fetch_videos(api); _C["posts"] = site_blog.fetch_posts(api); _C["eps"] = site_podcast.fetch_eps(api); _C["events"] = site_events.fetch_events(api)
+        _C["lib"] = site_library.fetch_items(api); _C["feed"] = (_fetch_json(f"{api}/api/feed/export") or {}).get("items", [])
     return _C
 
 
@@ -38,6 +39,16 @@ def hub(g, lang, base, api, videos, vid_html, root=False):
         d = (ev.get("start") or "")[:10]
         if d and d >= today:
             cards.append((d, "event", f'<div class="hub-card" data-k="event"><a href="{croot}events/{ev["handle"]}/"><div class="kicker">{esc(T(lang, "Event", "Event"))}</div><h3>{esc(ev["title"])}</h3></a><p class="mut">{esc(d)}{(" · " + esc(ev["summary"][:110])) if ev.get("summary") else ""}</p></div>'))
+    import site_library as SL
+    for it in C["lib"]:
+        if ok(it["lang"]):
+            d = __import__("datetime").datetime.fromtimestamp(it["published"]).strftime("%Y-%m-%d")
+            cards.append((d, "library", f'<div class="hub-card" data-k="library"><a href="{base}{pfx(it["lang"])}/community/library/{it["handle"]}-{it["slug"]}/"><div class="kicker">{esc(T(lang, "Library", "Bibliothek"))} · {esc(SL.kl(lang, it["kind"]))}</div><h3>{esc(it["title"])}</h3></a><p class="mut">{esc(it.get("summary") or "")} {esc(it["name"])} · {d}</p></div>'))
+    KL = {"youtube": "YouTube", "github": "GitHub", "blog": "Blog", "podcast": "Podcast", "newsletter": "Newsletter", "mastodon": "Mastodon", "bluesky": "Bluesky", "website": "Web"}
+    for f in C["feed"]:
+        d = __import__("datetime").datetime.fromtimestamp(f["published"]).strftime("%Y-%m-%d")
+        who = f'{base}/community/{"c" if f["type"] == "o" else "u"}/{f["handle"]}/'
+        cards.append((d, "feed", f'<div class="hub-card" data-k="feed"><div class="kicker">{esc(T(lang, "From the creators", "Von den Creatorn"))} · {esc(KL.get(f["kind"], f["kind"].title()))}</div><h3><a href="{esc(f["url"])}" rel="nofollow ugc noopener" target="_blank">{esc(f["title"])}</a></h3><p class="mut"><a href="{who}">{esc(f["name"])}</a> · {d}</p></div>'))
     for e in C["cv"]:
         if ok(e["lang"]):
             d = __import__("datetime").datetime.fromtimestamp(e["published"]).strftime("%Y-%m-%d")
@@ -47,8 +58,8 @@ def hub(g, lang, base, api, videos, vid_html, root=False):
     cards.sort(key=lambda x: x[0], reverse=True)
     counts = {}
     for _, k, _h in cards: counts[k] = counts.get(k, 0) + 1
-    labels = [("all", T(lang, "All", "Alle")), ("blog", "Blog"), ("podcast", "Podcast"), ("event", T(lang, "Events", "Events")), ("creatorvideo", T(lang, "Creator videos", "Creator-Videos")), ("video", T(lang, "Stick-man videos", "Stick-Man-Videos"))]
+    labels = [("all", T(lang, "All", "Alle")), ("blog", "Blog"), ("podcast", "Podcast"), ("event", T(lang, "Events", "Events")), ("library", T(lang, "Library", "Bibliothek")), ("feed", T(lang, "From the creators", "Von den Creatorn")), ("creatorvideo", T(lang, "Creator videos", "Creator-Videos")), ("video", T(lang, "Stick-man videos", "Stick-Man-Videos"))]
     chips = "".join(f'<button type="button" class="hub-f" data-k="{k}" aria-pressed="false">{esc(l)}{"" if k == "all" else " · " + str(counts.get(k, 0))}</button>' for k, l in labels if k == "all" or counts.get(k))
     cta = (f'<p><a class="btn main" href="{croot}">{esc(T(lang, "Join the community", "Zur Community"))}</a> '
-           f'<a class="btn" href="{croot}blog/">Blog</a> <a class="btn" href="{croot}podcast/">Podcast</a> <a class="btn" href="{croot}events/">Events</a> <a class="btn" href="{croot}guests/">{esc(T(lang, "Guest exchange", "Gäste-Börse"))}</a></p>')
+           f'<a class="btn" href="{croot}blog/">Blog</a> <a class="btn" href="{croot}podcast/">Podcast</a> <a class="btn" href="{croot}events/">Events</a> <a class="btn" href="{croot}library/">{esc(T(lang, "Library", "Bibliothek"))}</a> <a class="btn" href="{croot}guests/">{esc(T(lang, "Guest exchange", "Gäste-Börse"))}</a></p>')
     return (CSS + f'<div role="group" aria-label="{esc(T(lang, "Filter", "Filter"))}">{chips}</div><div id="hub" class="thumbs">' + "".join(h for _, _k, h in cards) + "</div>" + cta + JS.replace("%N%", "18"))

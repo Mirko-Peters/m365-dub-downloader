@@ -17,6 +17,9 @@ export async function handleDemo(env, request, url, path, user, J) {
     for (const e of eps) { await db.prepare("DELETE FROM pod_votes WHERE ep_id=?").bind(e.id).run(); await db.prepare("DELETE FROM comments WHERE vid=?").bind("podcast" + e.id).run(); }
     const vids = (await db.prepare("SELECT id FROM yt_videos WHERE user_id=? AND title LIKE ?").bind(uid, TAG + "%").all()).results || [];
     for (const v of vids) { await db.prepare("DELETE FROM yt_votes WHERE vid_id=?").bind(v.id).run(); await db.prepare("DELETE FROM comments WHERE vid=?").bind("video" + v.id).run(); }
+    const libs = (await db.prepare("SELECT id FROM lib_items WHERE user_id=? AND title LIKE ?").bind(uid, TAG + "%").all()).results || [];
+    for (const l of libs) { await db.prepare("DELETE FROM lib_votes WHERE item_id=?").bind(l.id).run(); await db.prepare("DELETE FROM comments WHERE vid=?").bind("lib" + l.id).run(); }
+    await db.prepare("DELETE FROM lib_items WHERE user_id=? AND title LIKE ?").bind(uid, TAG + "%").run();
     await db.batch([db.prepare("DELETE FROM blog_posts WHERE user_id=? AND title LIKE ?").bind(uid, TAG + "%"), db.prepare("DELETE FROM pod_episodes WHERE user_id=? AND title LIKE ?").bind(uid, TAG + "%"),
       db.prepare("DELETE FROM yt_videos WHERE user_id=? AND title LIKE ?").bind(uid, TAG + "%"), db.prepare("DELETE FROM guest_listings WHERE user_id=? AND note LIKE ?").bind(uid, TAG + "%")]);
   };
@@ -39,6 +42,8 @@ export async function handleDemo(env, request, url, path, user, J) {
     .bind(uid, `${TAG} Erstes Creator-Video`, "Ein Testvideo (ein vorhandenes Video des Kanals), damit du die Video-Karten und -Seiten siehst. Es kann gelöscht werden.", "de", topics, vid, t, t, t).run();
   const g = (kind, title) => db.prepare("INSERT INTO guest_listings(user_id,kind,title,formats,langs,topics,note,link,active,created,updated) VALUES(?,?,?,?,?,?,?,?,1,?,?)")
     .bind(uid, kind, title, '["podcast","youtube"]', '["de","en"]', topics, `${TAG} Testeintrag, kann gelöscht werden.`, "", t, t).run();
+  await db.prepare("INSERT INTO lib_items(user_id,slug,kind,title,summary,body,lang,topics,version,status,created,updated,published) VALUES(?,?,?,?,?,?,?,?,1,'live',?,?,?)")
+    .bind(uid, "test-prompt", "prompt", `${TAG} Meeting-Zusammenfassung mit Copilot`, "Ein Test-Prompt – kann gelöscht werden.", "Fasse das Meeting in fünf Stichpunkten zusammen.\nNenne danach alle Aufgaben mit Verantwortlichen und Terminen.\nSchreibe zuletzt offene Fragen auf.", "de", topics, t, t, t).run();
   await g("speaker", "Copilot und Microsoft 365"); await g("host", "Testshow");
-  return J({ ok: true, created: ["blog (de, en)", "podcast", "video", "guests (speaker, host)"], note: "Sichtbar nach dem nächsten Seitenbau (stündlich)." });
+  return J({ ok: true, created: ["blog (de, en)", "podcast", "video", "library (prompt)", "guests (speaker, host)"], note: "Sichtbar nach dem nächsten Seitenbau (stündlich)." });
 }

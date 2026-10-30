@@ -600,3 +600,27 @@ CREATE TABLE IF NOT EXISTS yt_votes (
   created INTEGER NOT NULL,
   PRIMARY KEY (vid_id, user_id)
 );
+
+CREATE TABLE IF NOT EXISTS lib_items (           -- Copilot-Bibliothek: Prompts, Agenten-Anweisungen, KQL, DAX, Flows ...; sofort sichtbar, Google-Index ab 10 Upvotes
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  user_id INTEGER NOT NULL,
+  slug TEXT NOT NULL,
+  kind TEXT NOT NULL,
+  title TEXT NOT NULL,
+  summary TEXT NOT NULL DEFAULT '',
+  body TEXT NOT NULL DEFAULT '',                 -- der eigentliche Inhalt (Text/Code), wird nur escaped angezeigt
+  lang TEXT NOT NULL DEFAULT 'en',
+  topics TEXT NOT NULL DEFAULT '[]',
+  version INTEGER NOT NULL DEFAULT 1,
+  status TEXT NOT NULL DEFAULT 'live',
+  created INTEGER NOT NULL,
+  updated INTEGER NOT NULL,
+  published INTEGER NOT NULL DEFAULT 0,
+  UNIQUE (user_id, slug)
+);
+CREATE TABLE IF NOT EXISTS lib_votes (
+  item_id INTEGER NOT NULL,
+  user_id INTEGER NOT NULL,
+  created INTEGER NOT NULL,
+  PRIMARY KEY (item_id, user_id)
+);
