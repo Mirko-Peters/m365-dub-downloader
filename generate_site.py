@@ -1371,7 +1371,7 @@ def build():
         idx.append(f"<sitemap><loc>{BASE}/{f}</loc><lastmod>{lm}</lastmod></sitemap>")
     idx.append("</sitemapindex>")
     write("sitemap.xml", "\n".join(idx))
-    write("robots.txt", f"User-agent: *\nAllow: /\n\n# KI-Suchen und Assistenten ausdrücklich erlaubt\n" + "".join(f"User-agent: {b}\nAllow: /\n\n" for b in ("GPTBot", "OAI-SearchBot", "ChatGPT-User", "ClaudeBot", "Claude-User", "Claude-SearchBot", "PerplexityBot", "Google-Extended", "Applebot-Extended", "Bingbot")) + f"Sitemap: {BASE}/sitemap.xml\n")
+    write("robots.txt", f"User-agent: *\nContent-Signal: search=yes, ai-input=yes, ai-train=yes\nAllow: /\n\n# KI-Suchen und Assistenten ausdrücklich erlaubt\n" + "".join(f"User-agent: {b}\nAllow: /\n\n" for b in ("GPTBot", "OAI-SearchBot", "ChatGPT-User", "ClaudeBot", "Claude-User", "Claude-SearchBot", "PerplexityBot", "Google-Extended", "Applebot-Extended", "Bingbot")) + f"Sitemap: {BASE}/sitemap.xml\n")
     # llms.txt (Überblick), llms-full.txt (alle Folgen), agent.json (Maschinen-Beschreibung), episodes.json (Datenfeed)
     summ = (f"AI-dubbed podcast episodes about Microsoft 365, Copilot, Azure, Power Platform and AI governance by Microsoft MVP Mirko Peters, "
             f"in {len(active)} languages. Each episode has its own page with player, YouTube video, key points, transcript link and links to Spotify, Amazon Music, Deezer and more.")
@@ -1445,6 +1445,56 @@ def build():
         write(f".well-known/agent-skills/{_n}/SKILL.md", _md)
         _idx.append({"name": _n, "type": "skill-md", "description": _d, "url": f"{BASE}/.well-known/agent-skills/{_n}/SKILL.md", "digest": "sha256:" + hashlib.sha256(_b).hexdigest()})
     write(".well-known/agent-skills/index.json", json.dumps({"$schema": "https://schemas.agentskills.io/discovery/0.2.0/schema.json", "skills": _idx}, ensure_ascii=False, indent=1))
+    write("auth.md", f"""# M365.FM auth.md
+
+How AI agents get access to M365.FM. This file is self-contained: the service publishes no OAuth metadata and has no self-service agent registration.
+
+## Audience
+
+AI agents and MCP clients that read M365.FM content or act on behalf of a signed-in member.
+
+## Public access (no credentials)
+
+- Website, `llms.txt`, `episodes.json`, sitemap and RSS: {BASE}/ - no authentication.
+- MCP server `https://api-dub.m365.fm/mcp` (Streamable HTTP, JSON-RPC): all read tools work without credentials.
+- Public REST endpoints are listed in {BASE}/openapi.json and {BASE}/.well-known/api-catalog.
+
+## Authenticated access (writes and personal data)
+
+Write tools and personal tools (for example `save_blog_post`, `get_my_profile`) need a personal AI access token.
+
+- **Method:** `personal_access_token`. A human member signs in at {BASE}/community/ and creates the token under their profile (label, up to 5 tokens, shown once, revocable at any time).
+- **Registration endpoint for agents:** none. Agents cannot register themselves or create accounts. A person must issue the token.
+- **Anonymous and verified-email registration:** not supported.
+- **Credential use:** send `Authorization: Bearer m365_...` to `https://api-dub.m365.fm/mcp`. The token acts with the rights of the member who created it, is rate limited, and never grants admin rights beyond that member's own role.
+- **Revocation:** the member deletes the token in their profile; deleting the account removes all tokens.
+
+## Contact
+
+Mirko Peters, {BASE}/about/
+""")
+    _api = "https://api-dub.m365.fm"   # RFC 9727: API-Katalog + OpenAPI-Beschreibung der oeffentlichen Schnittstellen
+    _j = {"application/json": {"schema": {"type": "object"}}}
+    write("openapi.json", json.dumps({
+        "openapi": "3.1.0",
+        "info": {"title": "M365.FM Community API", "version": "1.0.0", "description": "Public, read-only endpoints of the M365.FM community platform (experts, entities, blog) and the MCP server at /mcp. Everything else requires sign-in.", "contact": {"name": "Mirko Peters", "url": f"{BASE}/about/"}},
+        "servers": [{"url": _api}],
+        "paths": {
+            "/api/health": {"get": {"summary": "Health check", "responses": {"200": {"description": "Service is up", "content": _j}}}},
+            "/api/experts": {"get": {"summary": "Experts for a topic, including related topics", "parameters": [
+                {"name": "e", "in": "query", "required": True, "schema": {"type": "string"}, "description": "Entity id"},
+                {"name": "hops", "in": "query", "schema": {"type": "integer", "default": 2}},
+                {"name": "limit", "in": "query", "schema": {"type": "integer", "default": 12, "maximum": 30}}],
+                "responses": {"200": {"description": "Experts", "content": _j}, "404": {"description": "Unknown entity"}}}},
+            "/api/entity/export": {"get": {"summary": "Community revisions of entities", "responses": {"200": {"description": "Entities", "content": _j}}}},
+            "/api/blog/export": {"get": {"summary": "Published community blog posts of public profiles", "responses": {"200": {"description": "Posts", "content": _j}}}},
+            "/mcp": {"post": {"summary": "Model Context Protocol server (JSON-RPC over HTTP)", "requestBody": {"content": _j}, "responses": {"200": {"description": "JSON-RPC response", "content": _j}}}}}},
+        ensure_ascii=False, indent=1))
+    write(".well-known/api-catalog", json.dumps({"linkset": [{
+        "anchor": f"{_api}/api",
+        "service-desc": [{"href": f"{BASE}/openapi.json", "type": "application/vnd.oai.openapi+json"}],
+        "service-doc": [{"href": f"{BASE}/llms.txt", "type": "text/plain"}],
+        "status": [{"href": f"{_api}/api/health", "type": "application/json"}]}]}, indent=1))
     write(f"{INDEXNOW_KEY}.txt", INDEXNOW_KEY)
     if _dom:
         write("CNAME", _dom)
