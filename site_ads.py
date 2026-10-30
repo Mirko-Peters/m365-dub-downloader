@@ -10,7 +10,9 @@ from pathlib import Path
 
 CFG_FILE = Path(__file__).parent / "data" / "adsense.json"
 LABEL = {"de": "Anzeige", "en": "Advertisement", "es": "Publicidad", "fr": "Publicité", "it": "Pubblicità", "pt": "Publicidade", "nl": "Advertentie", "pl": "Reklama"}
-CSS = ".ad{margin:28px 0;text-align:center;min-height:280px;clear:both}.ad small{display:block;font-size:.72rem;opacity:.65;margin-bottom:4px;letter-spacing:.04em;text-transform:uppercase}.ad ins{display:block}"
+CSS = (".ad{margin:2rem auto;max-width:50rem;padding:.8rem 1rem 1rem;border:1px solid var(--bd,#1412101f);border-radius:14px;background:var(--card,transparent);text-align:center;min-height:280px;clear:both}"
+       ".ad small{display:block;font:600 .7rem system-ui,sans-serif;letter-spacing:.08em;text-transform:uppercase;color:var(--mut,#6b645c);margin-bottom:.5rem}"
+       ".ad ins{display:block;min-height:250px}.ad:has(ins[data-ad-status=unfilled]){display:none}")
 
 
 def cfg():
@@ -52,12 +54,14 @@ def eligible(base, body, canonical, noindex=False):
 
 
 def head(base, body="", canonical="", noindex=False):
-    """Meta-Tag (immer, fuer die AdSense-Pruefung) und Skript (nur auf Seiten, die Werbung zeigen duerfen; wichtig fuer Auto-Anzeigen)."""
+    """Meta-Tag (immer, fuer die AdSense-Pruefung). Das Skript laedt standardmaessig nur auf Seiten, auf denen wir selbst einen Anzeigenblock gesetzt haben (feste Bloecke:
+    keine Auto-Anzeigen wie das Popup 'Discover more' ueber dem Header). Mit "auto_ads": true in data/adsense.json laedt es wie frueher auf allen geeigneten Seiten."""
     if not active(base):
         return ""
     pub = cfg()["publisher"]
     out = f'<meta name="google-adsense-account" content="ca-{pub}">'
-    if eligible(base, body, canonical, noindex):
+    load = eligible(base, body, canonical, noindex) if cfg().get("auto_ads") else 'class="adsbygoogle"' in body
+    if load:
         out += f'<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-{pub}" crossorigin="anonymous"></script>'
     return out
 
@@ -78,10 +82,15 @@ def inject(base, body, lang, canonical, noindex=False):
         return body
     pub, slots = c["publisher"], c.get("slots", {})
     if slots.get("mid"):
-        parts = re.split(r"(?=<h2\b)", body)
-        if len(parts) > 3:   # Einleitung + mindestens zwei Abschnitte davor
-            parts.insert(3, _block(lang, slots["mid"], pub))
-            body = "".join(parts)
+        # nur im Textbereich: bei Seiten mit Sidebar bis zum Beginn der Sidebar, sonst im <main>; so landet der Block nie in der Sidebar oder im Header
+        a = body.find('class="shmain"'); a = body.find("<main") if a < 0 else a
+        z = body.find('<aside class="sbar"', a) if a >= 0 else -1
+        z = body.find("</main>", a) if z < 0 and a >= 0 else z
+        if a >= 0 and z > a:
+            region = body[a:z]; parts = re.split(r"(?=<h2\b)", region)
+            if len(parts) > 3:   # Einleitung + mindestens zwei Abschnitte davor
+                parts.insert(3, _block(lang, slots["mid"], pub))
+                body = body[:a] + "".join(parts) + body[z:]
     if slots.get("end") and "<footer>" in body:
         body = body.replace("<footer>", _block(lang, slots["end"], pub) + "<footer>", 1)
     return body

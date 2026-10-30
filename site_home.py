@@ -83,12 +83,13 @@ def hub(g, lang, base, api, videos, vid_html, root=False):
         tag(f["name"], f.get("topics"), f["title"])
     import site_updates as SU
     seen_u = set()
-    for u in SU.ALL:
+    for u in sorted(SU.ALL, key=lambda x: (x["modified"], x["created"]), reverse=True):
         if len(seen_u) >= 40: break
-        if u["url"] in seen_u: continue
-        seen_u.add(u["url"])
-        cards.append((SU.day(u["published"]), "update", f'<div class="hub-card" data-k="update"><div class="kicker">{esc(T(lang, "Update", "Update"))} · {esc(u["source"])}</div><h3><a href="{esc(u["url"])}" rel="nofollow noopener" target="_blank">{esc(u["title"])}</a></h3><p class="mut">{SU.day(u["published"])}</p></div>'))
-        tag("Microsoft", [x["eid"] for x in SU.ALL if x["url"] == u["url"]], u["title"])
+        if u["id"] in seen_u: continue
+        seen_u.add(u["id"])
+        eurl = f'{base}{"/de" if lang == "de" else ""}/entity/{u["eids"][0]}/'
+        cards.append((u["modified"], "update", f'<div class="hub-card" data-k="update"><div class="kicker">{esc(T(lang, "Update", "Update"))} · {esc(u["src"])}</div><h3><a href="{esc(eurl)}">{esc(u["title"])}</a></h3><p class="mut">{SU.day(u["modified"], lang)}</p></div>'))
+        tag("Microsoft", u["eids"], u["title"])
     for e in C["cv"]:
         if ok(e["lang"]):
             d = __import__("datetime").datetime.fromtimestamp(e["published"]).strftime("%Y-%m-%d")

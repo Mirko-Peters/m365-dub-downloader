@@ -94,7 +94,7 @@ footer{margin-top:80px}
 .mm{display:none;position:relative}.mm summary{list-style:none;cursor:pointer;padding:6px 12px;border:1px solid var(--bd);font:600 1.1rem "Barlow Condensed",sans-serif}.mm summary::-webkit-details-marker{display:none}
 .mm .pn{position:absolute;inset-inline-end:0;top:calc(100% + 6px);z-index:70;background:var(--bg);border:1px solid var(--fg);min-width:220px;display:grid;box-shadow:0 12px 34px #0003}
 .mm .pn a{padding:12px 16px;text-decoration:none;color:var(--fg);font:500 1rem "Barlow Condensed",sans-serif;letter-spacing:.1em;text-transform:uppercase;border-bottom:1px solid var(--bd)}.mm .pn a:last-child{border:0}
-@media(max-width:860px){.menu{display:none}.mm{display:block;margin-inline-start:auto}.top .wrap{gap:10px}.lsw .pn{grid-template-columns:1fr;position:fixed;inset-inline:12px;top:auto;width:auto}.lsw .pn{top:96px}}
+@media(max-width:860px){.menu{display:none}.mm{display:block;margin-inline-start:auto}.top .wrap{gap:10px}.lsw .pn{grid-template-columns:1fr;position:fixed;inset-inline:12px;top:auto;width:auto}.lsw .pn{top:96px}.lsw .pn,.mm .pn{max-height:calc(100vh - 112px);max-height:calc(100dvh - 112px);overflow-y:auto;overscroll-behavior:contain}}
 .share{display:none}
 .fshare{border-radius:0}
 .ichecks{list-style:none;margin:0;padding:0;display:grid;gap:8px}.ichecks li{padding-inline-start:30px;position:relative}.ichecks li:before{content:"✓";position:absolute;inset-inline-start:0;top:-1px;width:22px;height:22px;background:var(--ac);color:var(--onac);text-align:center;font-weight:700;line-height:22px}
