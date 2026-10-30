@@ -57,12 +57,17 @@ jobs:
             git add data/covers && git commit -m "Cover-Texte ergänzt"
             git pull --rebase -q && git push -q
           fi
-      - name: Spotify-Folgenlinks einsammeln (ohne API)
+      - name: Spotify-Folgenlinks einsammeln (ohne API) – nur täglich/manuell, bei Pushes gilt der gespeicherte Stand
+        if: github.event_name != 'push'
         continue-on-error: true
         run: |
           pip install playwright
           playwright install --with-deps chromium
           python scrape_spotify.py
+          if [ -n "$(git status --porcelain data/spotify_links.json)" ]; then
+            git config user.name "m365-site-bot"; git config user.email "actions@users.noreply.github.com"
+            git add data/spotify_links.json && git commit -m "Spotify-Folgenlinks aktualisiert" && git pull --rebase -q && git push -q || true
+          fi
       - name: Apple-/Spotify-Folgenlinks holen
         continue-on-error: true
         env:
