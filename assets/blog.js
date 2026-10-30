@@ -9,27 +9,41 @@
   var box = h("div", { class: "bl-box" }), msg = h("p", { role: "status", class: "mut" });
   function say(t) { msg.textContent = t || ""; }
   function pfx() { return X.lang && X.lang !== "en" ? "/" + X.lang : ""; }
+  var CO = de ? { lab: "Co-Autoren (Profil-Adressen, kommagetrennt, max. 3)", hint: "Wie Gäste bei Podcast und Video: Eingeladene bestätigen selbst, erst dann erscheinen sie als Autoren auf der Seite und die Themen zählen für ihre Expertise.", st_invited: "eingeladen", st_confirmed: "bestätigt", st_declined: "abgelehnt", inv: "Einladungen als Co-Autor", invtxt: "{a} lädt dich als Co-Autor ein:", yes: "Annehmen", no: "Ablehnen", done: "Erledigt.", e_bad_coauthor: "Co-Autor nicht gefunden (öffentliches Profil nötig, nicht du selbst): ", e_need_profile: "Mache zuerst dein Profil öffentlich." }
+    : { lab: "Co-authors (profile handles, comma separated, max. 3)", hint: "Like guests on a podcast or video: invited members confirm themselves; only then do they appear as authors on the page and the topics count towards their expertise.", st_invited: "invited", st_confirmed: "confirmed", st_declined: "declined", inv: "Invitations to co-author", invtxt: "{a} invites you as co-author:", yes: "Accept", no: "Decline", done: "Done.", e_bad_coauthor: "Co-author not found (public profile required, not yourself): ", e_need_profile: "Make your profile public first." };
+  function csv(s) { return String(s || "").split(",").map(function (x) { return x.trim().toLowerCase(); }).filter(Boolean); }
   function form(p, state) {
     p = p || {}; var f = h("form", { class: "ed-form" });
     var ti = U.inp(p.title, 140), su = h("textarea", { maxlength: 300, rows: 2 }), bo = h("textarea", { maxlength: 12000, rows: 22 }), lg = U.sel(LANGS, p.lang || (X.lang || "en")), tp = U.topicsUI(p.topics || [], 10);
     su.value = p.summary || ""; bo.value = p.body || "";
     f.appendChild(U.lab(Q.title, ti)); f.appendChild(U.lab(Q.summary, su)); f.appendChild(U.lab(Q.lang, lg));
+    var co = U.inp((p.coauthors || []).map(function (c) { return c.handle; }).join(", "), 120);
+    f.appendChild(U.lab(CO.lab, co)); f.appendChild(h("p", { class: "mut", text: CO.hint + ((p.coauthors || []).length ? " " + p.coauthors.map(function (c) { return c.name + ": " + (CO["st_" + c.status] || c.status); }).join(" · ") : "") }));
     f.appendChild(h("div", {}, [h("b", { text: Q.topics }), tp])); f.appendChild(h("div", {}, [h("label", { text: Q.body }), U.editor ? U.editor(bo, 12000) : bo])); f.appendChild(h("p", { class: "mut", text: Q.hint }));
+    if (U.seo) f.appendChild(U.seo.box({ kind: "blog", draft: function () { return { title: ti.value, summary: su.value, body: bo.value, lang: lg.value, topics: tp.get() }; }, onAddTopic: tp.addId }));
     function save(submit) {
-      say(""); api("/api/blog/save", { method: "POST", body: { id: p.id, title: ti.value, summary: su.value, body: bo.value, lang: lg.value, topics: tp.get(), submit: submit } }).then(function (r) {
-        var j = r.j || {}; if (j.ok) { say(submit ? (j.status === "live" ? Q.pubnow : Q.review) : Q.saved); load(); } else say(Q["e_" + j.error] || Q.e_generic);
+      say(""); api("/api/blog/save", { method: "POST", body: { id: p.id, title: ti.value, summary: su.value, body: bo.value, lang: lg.value, topics: tp.get(), coauthors: csv(co.value), submit: submit } }).then(function (r) {
+        var j = r.j || {}; if (j.error === "bad_coauthor") { say(CO.e_bad_coauthor + (j.handle || "")); return; } if (j.ok) { say(submit ? (j.status === "live" ? Q.pubnow : Q.review) : Q.saved); load(); } else say(Q["e_" + j.error] || Q.e_generic);
       });
     }
     var row = h("p", {}, [h("button", { type: "button", class: "btn", text: Q.draft, onclick: function () { save(false); } }), " ", h("button", { type: "button", class: "btn main", text: Q.submit, onclick: function () { save(true); } }), " ", h("button", { type: "button", class: "btn", text: Q.cancel, onclick: function () { load(); } })]);
     f.appendChild(row); f.addEventListener("submit", function (e) { e.preventDefault(); }); return f;
   }
+  var seoMap = {};
   function list(d) {
     box.textContent = ""; box.appendChild(h("p", {}, [h("button", { type: "button", class: "btn main", text: Q.newp, onclick: function () { box.textContent = ""; box.appendChild(form(null)); } })]));
+    if ((d.invites || []).length) {
+      box.appendChild(h("h3", { text: CO.inv }));
+      d.invites.forEach(function (iv) {
+        function reply(ok) { api("/api/blog/coauthor", { method: "POST", body: { id: iv.post_id, accept: ok } }).then(function (r) { var j = r.j || {}; say(j.ok ? CO.done : (CO["e_" + j.error] || Q.e_generic)); load(); }); }
+        box.appendChild(h("p", {}, [CO.invtxt.replace("{a}", iv.author) + " ", h("b", { text: iv.title }), " ", h("button", { type: "button", class: "btn main", text: CO.yes, onclick: function () { reply(true); } }), " ", h("button", { type: "button", class: "btn", text: CO.no, onclick: function () { reply(false); } })]));
+      });
+    }
     if (!d.items.length) box.appendChild(h("p", { class: "mut", text: Q.none }));
     var ul = h("ul", { style: "padding:0;list-style:none" });
     d.items.forEach(function (p) {
       var li = h("li", { style: "padding:.6em 0;border-bottom:1px solid var(--bd)" });
-      li.appendChild(h("b", { text: p.title })); li.appendChild(h("span", { class: "mut", text: " · " + (Q["st_" + p.status] || p.status) + (p.status === "live" ? " · " + p.votes + " " + Q.votes : "") }));
+      li.appendChild(h("b", { text: p.title })); li.appendChild(h("span", { class: "mut", text: " · " + (Q["st_" + p.status] || p.status) + (p.status === "live" ? " · " + p.votes + " " + Q.votes : "") })); if (U.seo) li.appendChild(U.seo.badge(seoMap["blog:" + p.id]));
       if (p.note) li.appendChild(h("div", { class: "mut", text: Q.note + ": " + p.note }));
       var acts = h("div", {}, [h("button", { type: "button", class: "btn", text: Q.edit, onclick: function () { box.textContent = ""; box.appendChild(form(p)); } }), " "]);
       if (p.status === "live" && d.handle) acts.appendChild(h("a", { class: "btn", href: X.base + pfx() + "/community/u/" + d.handle + "/blog/" + p.slug + "/", text: Q.viewp }));
@@ -38,7 +52,7 @@
     });
     box.appendChild(ul);
   }
-  function load() { api("/api/blog/mine").then(function (r) { if (r.j && r.j.items) list(r.j); }); }
+  function load() { api("/api/blog/mine").then(function (r) { if (r.j && r.j.items) { if (U.seo) U.seo.scores(function (m) { seoMap = m; list(r.j); }); else list(r.j); } }); }
   root.appendChild(h("h2", { text: Q.h })); root.appendChild(h("p", { class: "mut", text: Q.intro })); root.appendChild(msg); root.appendChild(box);
   function demo() {
     var d = h("p", {}); root.appendChild(d);

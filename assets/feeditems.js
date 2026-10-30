@@ -10,17 +10,19 @@
     var su = h("textarea", { rows: 2, maxlength: 300 }), bo = h("textarea", { maxlength: 12000, rows: 18 }), tp = U.topicsUI(w.topics || [], 10), f = h("div", { class: "ed-form" });
     su.value = w.summary || ""; bo.value = w.body || Q.tpl;
     f.appendChild(U.lab(Q.summary, su)); f.appendChild(h("div", {}, [h("b", { text: Q.topics }), tp])); f.appendChild(h("div", {}, [h("label", { text: Q.body }), U.editor ? U.editor(bo, 12000) : bo]));
+    if (U.seo) f.appendChild(U.seo.box({ kind: "feed", draft: function () { return { title: w.title, summary: su.value, body: bo.value.trim() === Q.tpl.trim() ? "" : bo.value, topics: tp.get() }; }, onAddTopic: tp.addId }));
     f.appendChild(h("p", {}, [h("button", { type: "button", class: "btn main", text: Q.save, onclick: function () {
       api("/api/feed/text", { method: "POST", body: { id: w.id, body: bo.value.trim() === Q.tpl.trim() ? "" : bo.value, summary: su.value, topics: tp.get() } }).then(function (r) { var j = r.j || {}; if (j.ok) { msg.textContent = Q.saved; load(); } else msg.textContent = Q["e_" + j.error] || Q.e_generic; });
     } }), " ", h("button", { type: "button", class: "btn", text: Q.cancel, onclick: function () { f.remove(); } })]));
     li.appendChild(f);
   }
+  var seoMap = {};
   function draw(items) {
     box.textContent = ""; if (!items.length) { box.appendChild(h("p", { class: "mut", text: Q.none })); return; }
     var ul = h("ul", { style: "padding:0;list-style:none" });
     items.forEach(function (w) {
       var li = h("li", { style: "padding:.7em 0;border-bottom:1px solid var(--bd)" });
-      li.appendChild(h("b", { text: w.title })); li.appendChild(h("span", { class: "mut", text: " · " + (w.has_text ? Q.has : Q.no) }));
+      li.appendChild(h("b", { text: w.title })); li.appendChild(h("span", { class: "mut", text: " · " + (w.has_text ? Q.has : Q.no) })); if (U.seo && w.has_text) li.appendChild(U.seo.badge(seoMap["feed:" + w.id]));
       if (w.summary) li.appendChild(h("div", { class: "mut", text: w.summary.slice(0, 200) }));
       var acts = h("div", { style: "margin-top:.4em" }, [h("button", { type: "button", class: "btn" + (w.has_text ? "" : " main"), text: Q.edit, onclick: function () { if (!li.querySelector(".ed-form")) { api("/api/feed/mine").then(function () { editor(w, li); }); } } }), " "]);
       var det = h("details", { style: "display:inline-block;vertical-align:top" }, [h("summary", { text: Q.mcp, class: "btn" })]);
@@ -30,6 +32,6 @@
     });
     box.appendChild(ul);
   }
-  function load() { api("/api/feed/mine").then(function (r) { box.textContent = ""; if (r.j && r.j.items) draw(r.j.items); else box.appendChild(h("p", { text: Q.login })); }); }
+  function load() { api("/api/feed/mine").then(function (r) { box.textContent = ""; if (r.j && r.j.items) { if (U.seo) U.seo.scores(function (m) { seoMap = m; draw(r.j.items); }); else draw(r.j.items); } else box.appendChild(h("p", { text: Q.login })); }); }
   root.appendChild(h("h2", { text: Q.h })); root.appendChild(h("p", { class: "mut", text: Q.intro })); root.appendChild(msg); root.appendChild(box); load();
 })();

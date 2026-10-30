@@ -505,6 +505,14 @@ CREATE TABLE IF NOT EXISTS ui_i18n (
   PRIMARY KEY (lang, k)
 );
 
+CREATE TABLE IF NOT EXISTS blog_coauthors (       -- Co-Autoren eines Blog-Beitrags (wie Gaeste bei Podcast/Video): invited -> confirmed | declined; nur bestaetigte erscheinen auf der Seite
+  post_id INTEGER NOT NULL,
+  user_id INTEGER NOT NULL,
+  status TEXT NOT NULL DEFAULT 'invited',
+  created INTEGER NOT NULL,
+  PRIMARY KEY (post_id, user_id)
+);
+CREATE INDEX IF NOT EXISTS idx_blog_co_user ON blog_coauthors(user_id, status);
 CREATE TABLE IF NOT EXISTS blog_posts (          -- Blog je Mitglied; status: draft | pending | live | rejected
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   user_id INTEGER NOT NULL,

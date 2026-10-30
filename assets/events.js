@@ -22,7 +22,7 @@
     entList().then(function (list) { list.forEach(function (e) { var l = e.name + " · " + (TYPEL[e.type] || e.type); byLabel[l.toLowerCase()] = e.id; byLabel[e.name.toLowerCase()] = e.id; dl.appendChild(h("option", { value: l })); }); draw(); });
     function add() { var id = byLabel[box.value.trim().toLowerCase()]; if (id && ids.indexOf(id) < 0 && ids.length < (max || 12)) { ids.push(id); draw(); } if (id) box.value = ""; }
     box.addEventListener("change", add); box.addEventListener("input", function () { if (byLabel[box.value.trim().toLowerCase()]) add(); });
-    draw(); wrap.get = function () { add(); return ids.slice(); }; return wrap;
+    draw(); wrap.get = function () { add(); return ids.slice(); }; wrap.addId = function (id) { if (id && ids.indexOf(id) < 0 && ids.length < (max || 12)) { ids.push(id); draw(); } }; return wrap;
   }
   window.M365U = { h: h, api: api, lab: lab, inp: inp, sel: sel, topicsUI: topicsUI };
   function csv(s) { return String(s || "").split(",").map(function (x) { return x.trim(); }).filter(Boolean); }

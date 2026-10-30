@@ -56,8 +56,11 @@ def build(g, posts, people, api):
             topics = [t for t in p.get("topics", []) if t in ENTS]
             tl = "".join(f'<a class="mb-tag" href="{links_l[t][1]}">{esc(ENTS[t]["name"])}</a> ' for t in topics)
             vote = f'<p><button type="button" class="bl-vote" data-s="{esc(p["slug"])}" aria-pressed="false" aria-label="Upvote">▲ <span class="n">{p.get("votes", 0)}</span></button></p>'
+            cos = [c for c in (p.get("coauthors") or []) if c.get("handle") in pb and c["handle"] != p["handle"]]
+            co_html = "".join(f' {esc(T(lang, "and", "und"))} <a href="{croot}u/{c["handle"]}/" rel="author">{esc(pb[c["handle"]]["name"])}</a>' for c in cos) if len(cos) == 1 else "".join(f', <a href="{croot}u/{c["handle"]}/" rel="author">{esc(pb[c["handle"]]["name"])}</a>' for c in cos)
+            upd_html = f' · {esc(T(lang, "Updated", "Aktualisiert"))} <time datetime="{iso(p["updated"])}">{iso(p["updated"])}</time>' if p.get("updated") and iso(p["updated"]) != iso(p["published"]) else ""
             b = shell(lang, f'{WCSS}{CSS}<p class="mut"><a href="{croot}blog/">{esc(title_blog)}</a> · <a href="{croot}u/{p["handle"]}/blog/">{esc(a["name"])}</a></p><article class="wk-body"><h1>{esc(p["title"])}</h1>'
-                            f'<p class="mut">{esc(T(lang, "By", "Von"))} <a href="{croot}u/{p["handle"]}/">{esc(a["name"])}</a> · {iso(p["published"])}</p>'
+                            f'<p class="mut">{esc(T(lang, "By", "Von"))} <a href="{croot}u/{p["handle"]}/" rel="author">{esc(a["name"])}</a>{co_html}{esc(" · ")}<time datetime="{iso(p["published"])}">{iso(p["published"])}</time>{upd_html}</p>'
                             f'{("<p>" + esc(p["summary"]) + "</p>") if p.get("summary") else ""}{body_html}</article><p>{tl}</p>{vote}'
                             f'<p><button type="button" class="bl-vote bl-follow" data-h="{esc(p["handle"])}" aria-pressed="false"><span class="t">{esc(T(lang, "Follow this blog", "Blog abonnieren"))}</span></button> <a href="{croot}u/{p["handle"]}/blog/feed.xml">RSS</a></p>'
                             f'<section id="c-comments"></section>'
@@ -65,7 +68,7 @@ def build(g, posts, people, api):
                             + (ctags(lang, "blog%d" % p["id"]) if ctags else ""))
             ld = [{"@context": "https://schema.org", "@type": "BlogPosting", "@id": u + "#post", "mainEntityOfPage": u, "headline": p["title"], "description": p.get("summary") or "",
                    "inLanguage": lang, "datePublished": iso(p["published"]), "dateModified": iso(p.get("updated") or p["published"]),
-                   "author": {"@type": "Person", "@id": au + "#person", "name": a["name"], "url": au},
+                   "author": [{"@type": "Person", "@id": au + "#person", "name": a["name"], "url": au}] + [{"@type": "Person", "@id": f"{BASE}/community/u/{c['handle']}/#person", "name": pb[c["handle"]]["name"], "url": f"{BASE}/community/u/{c['handle']}/"} for c in cos],
                    "about": [{"@id": f"{BASE}/entity/{t}/#thing"} for t in topics], "citation": [{"@type": "CreativeWork", "name": r["title"], "url": r["url"]} for r in refs]}]
             noidx = p.get("votes", 0) < INDEX_VOTES
             write(f"{pfx2(lang)}community/u/{p['handle']}/blog/{p['slug']}/index.html", page(lang, f'{p["title"]} – {a["name"]} | M365.FM', (p.get("summary") or "")[:155], u, b, None, ld, og_type="article", extra_head=LCSS, noindex=noidx))
@@ -75,9 +78,10 @@ def build(g, posts, people, api):
         def lst(items):
             return '<ul class="bl-list">' + "".join(f'<li><a href="{croot}u/{p["handle"]}/blog/{p["slug"]}/"><b>{esc(p["title"])}</b></a> <span class="mut">· {esc(pb[p["handle"]]["name"])} · {iso(p["published"])}</span>'
                                                    f'{("<br>" + esc(p["summary"])) if p.get("summary") else ""}</li>' for p in items) + "</ul>"
-        for h in sorted({p["handle"] for p in mine}):
-            noidx = not any(p["handle"] == h and p.get("votes", 0) >= INDEX_VOTES for p in mine)
-            it = sorted([p for p in mine if p["handle"] == h], key=lambda x: -x["published"]); ru = f"{croot}u/{h}/blog/"
+        is_by = lambda p, h: p["handle"] == h or any(c.get("handle") == h for c in (p.get("coauthors") or []))   # Co-Autoren: der Beitrag steht auch in ihrer Blogliste
+        for h in sorted({p["handle"] for p in mine} | {c["handle"] for p in mine for c in (p.get("coauthors") or []) if c.get("handle") in pb}):
+            noidx = not any(is_by(p, h) and p.get("votes", 0) >= INDEX_VOTES for p in mine)
+            it = sorted([p for p in mine if is_by(p, h)], key=lambda x: -x["published"]); ru = f"{croot}u/{h}/blog/"
             nm = pb[h]["name"]
             b = shell(lang, f'{CSS}<h1>{esc(title_blog)} – {esc(nm)}</h1><p><a href="{croot}u/{h}/">{esc(nm)}</a></p>{lst(it)}')
             write(f"{pfx2(lang)}community/u/{h}/blog/index.html", page(lang, f'{title_blog} – {nm} | M365.FM', nm, ru, b, None, None, og_type="website", extra_head=LCSS, noindex=noidx))

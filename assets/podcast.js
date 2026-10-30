@@ -37,7 +37,7 @@
         if (p.note) li.appendChild(h("span", { class: "mut", text: " · " + p.note }));
         if (p.status === "published") li.appendChild(h("a", { class: "btn", href: X.base + pfx(p.lang) + "/community/podcast/" + p.slug + "/", text: Q.published, style: "margin-inline-start:.5em" }));
         else li.appendChild(h("button", { type: "button", class: "btn", text: Q.del_, style: "margin-inline-start:.5em", onclick: function () { if (confirm(Q.confirmdel)) api("/api/podcast/delete", { method: "POST", body: { id: p.id } }).then(load); } }));
-        mineBox.appendChild(li);
+        mineBox.appendChild(li); if (U.seo) mineBox.appendChild(h("details", {}, [h("summary", { class: "mut", text: "SEO-Check / SEO check" }), U.seo.box({ kind: "podcast", id: p.id })]));
       });
     });
     api("/api/podcast/list").then(function (r) {
