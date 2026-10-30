@@ -86,3 +86,10 @@ Stand: 2026-10-29. Reihenfolge nach Absprache mit Mirko; alles mit Schema.org-Ve
 
 ## Offen (neu, 30.10. nachts)
 - Schema.org-Autor in Artikeln aus dem Profil, Hover-Fenster für Personen, Abstimmungs-Anzeige/Folgen von Themen, Sofort-Anzeige neuer Profile/Events im Verzeichnis (statt stündlich), Datenschutz-Text zu flüchtigen Nachrichten, Übersetzungs-Angebote für Kurzbeschreibungen, Event-Entität mit Link zur Eventseite
+
+## Backlog: Englisch als eigene Sprache (30.10., vom Nutzer)
+- Englisch soll als gleichwertige Sprache neben den 19 Dub-Sprachen stehen (`/en/` mit Episodenseiten, Sprachwahl, Hreflang, Sitemap). Bisher ist Englisch nur die Startseite `/`, es gibt keine englischen Episodenseiten.
+- Quelle: Hauptshow auf Spreaker, Show-ID `6704921` (in `config.json` als `show_map.en`, in `never_auto_map_show_ids`, also nicht automatisch anfassen).
+- Plan: Sync-Schritt im Seitenbau (braucht `SPREAKER_TOKEN`) holt die Hauptshow-Episoden, ordnet sie über den Video-Link im Folgentext den YouTube-IDs zu und legt je Folge einen `en`-Eintrag in `episodes/<id>.json` an (Titel, Beschreibung, Show-ID). Danach `en` in `LANGS` (inkl. Texte TOP_L/REC_L/UI) und einen Testlauf im echten Bau, weil das Token lokal nicht ausführbar ist.
+- Risiko: betrifft den gesamten Seitenbau (500+ Seiten); bestehende Sprachen dürfen sich nicht ändern.
+- Community-Plattform bleibt mit Englisch als Basissprache (Kurzbeschreibung in einer Sprache Pflicht, weitere freiwillig).
