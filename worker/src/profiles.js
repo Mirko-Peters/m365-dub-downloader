@@ -17,6 +17,21 @@ export function cleanUrl(s, hostRe) {
   s = String(s || "").trim(); if (!s) return ""; if (s.length > 300) return null;
   try { const u = new URL(s); if (u.protocol !== "https:" || u.username || u.password || !goodHost(u.hostname) || (hostRe && !hostRe.test(u.hostname))) return null; u.hash = ""; return u.href; } catch { return null; }
 }
+// Selbst verwaltete Entitaet (Profil, Firma, Event): gleiche Struktur wie jede Entitaet, aber der Eigentuemer pflegt sie ueber seinen eigenen Bereich
+export async function ownedEntity(env, user, o) {
+  const db = env.DB; try {
+    if (!ID.test(o.eid)) return "";
+    const known = (await baseIds(env)).has(o.eid), ex = await db.prepare("SELECT 1 x FROM entity_rev WHERE eid=? AND status IN ('live','pending')").bind(o.eid).first();
+    let created = false;
+    if (!known && !ex) {
+      const v = await validate(env, o.eid, { name: o.name, type: o.type, desc: { en: o.en, de: o.de }, web: o.web || "", rel: [] });
+      if (v.err) return "";
+      await db.prepare("INSERT INTO entity_rev(eid,data,summary,user_id,status,created) VALUES(?,?,?,?,'live',?)").bind(o.eid, JSON.stringify(v.data), "Selbst verwaltet", user.id, now()).run(); created = true;
+    }
+    if (created || user.admin) await db.prepare("INSERT INTO entity_claims(eid,user_id,status,via,created) VALUES(?,?,'verified','owner',?) ON CONFLICT(eid) DO NOTHING").bind(o.eid, user.id, now()).run();
+    return o.eid;
+  } catch (e) { return ""; }
+}
 const slug = (s) => String(s || "").toLowerCase().normalize("NFKD").replace(/[̀-ͯ]/g, "").replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "").slice(0, 24);
 
 function channelFeed(kind, url, feed) {
@@ -243,6 +258,7 @@ export async function handleProfiles(env, request, url, path, user, J) {
     if (ce) { if (ID.test(ce) && ((await baseIds(env)).has(ce) || (await db.prepare("SELECT 1 x FROM entity_rev WHERE eid=? AND status IN ('live','pending')").bind(ce).first()))) await db.prepare("INSERT INTO profile_company(user_id,eid) VALUES(?,?) ON CONFLICT(user_id) DO UPDATE SET eid=excluded.eid").bind(user.id, ce).run(); }
     else await db.prepare("DELETE FROM profile_company WHERE user_id=?").bind(user.id).run();
     await replaceLists(db, "u", user.id, { exp: ex.list, prog: pr.list, chan: ch.list, certs });
+    if (isPublic && handle) { const nm = user.name || handle, hl = txt(b.headline, 100); await ownedEntity(env, user, { eid: handle, type: "person", name: nm, en: `${nm} is a member of the Microsoft community${hl ? ": " + hl : ""}.`, de: `${nm} ist Mitglied der Microsoft-Community${hl ? ": " + hl : ""}.` }); }
     return J({ ok: true });
   }
   if ((m = /^\/api\/profile\/([a-z0-9-]{3,30})$/.exec(path)) && method === "GET") {
@@ -331,6 +347,7 @@ export async function handleProfiles(env, request, url, path, user, J) {
           if (!v.err) await db.prepare("INSERT INTO entity_rev(eid,data,summary,user_id,status,created) VALUES(?,?,?,?,?,?)").bind(eid, JSON.stringify(v.data), "Firma angelegt", user.id, (await trustedUser(db, user)) ? "live" : "pending", now()).run();
         }
         await db.prepare("INSERT OR REPLACE INTO org_entity(org_id,eid) VALUES(?,?)").bind(o.id, eid).run();
+        if (!known.has(eid) && !ex) await db.prepare("INSERT INTO entity_claims(eid,user_id,status,via,created) VALUES(?,?,'verified','owner',?) ON CONFLICT(eid) DO NOTHING").bind(eid, user.id, now()).run();
       } catch (e) { /* Entitaet ist optional, Firmenkonto bleibt gueltig */ }
     } else {
       const mem = await db.prepare("SELECT role FROM org_members WHERE org_id=? AND user_id=? AND status='active'").bind(o.id, user.id).first();
