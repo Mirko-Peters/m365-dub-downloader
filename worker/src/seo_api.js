@@ -3,6 +3,7 @@
 import { seoCheck, aiPrompt, suggestEntities } from "./seo.js";
 import { entityMap } from "./entities.js";
 import { rateLimit } from "./util.js";
+import { ensureSectionCols, parseKeypointsText, parseFaqText } from "./sections.js";
 
 const jp = (s) => { try { const v = JSON.parse(s || "[]"); return Array.isArray(v) ? v : []; } catch { return []; } };
 const KINDS = ["blog", "feed", "podcast", "video"];
@@ -22,12 +23,12 @@ async function authorInfo(db, uid, postId) {
 // Datensatz -> Eingabe fuer seoCheck. Titelbild ist immer da (die Seite erzeugt es automatisch); Bilder im Text zaehlt der Check aus dem Markup ({{img|...}}).
 function input(kind, r, author) {
   const base = { kind, lang: r.lang || "en", title: r.title, topics: jp(r.topics), header: true, author, transcript: null };
-  if (kind === "blog" || kind === "feed") return { ...base, description: r.summary || "", body: r.body || "" };
+  if (kind === "blog" || kind === "feed") return { ...base, description: r.summary || "", body: r.body || "", keypoints: jp(r.keypoints), faq: jp(r.faq) };
   return { ...base, description: String(r.description || "").slice(0, 300), body: r.description || "" };
 }
 const ROWS = {
-  blog: "SELECT id,title,summary,body,lang,topics,status FROM blog_posts WHERE user_id=?1",
-  feed: "SELECT id,title,summary,body,'' lang,topics,'' status FROM feed_items WHERE owner_type='u' AND owner_id=?1 AND body<>''",
+  blog: "SELECT id,title,summary,body,lang,topics,keypoints,faq,status FROM blog_posts WHERE user_id=?1",
+  feed: "SELECT id,title,summary,body,'' lang,topics,keypoints,faq,'' status FROM feed_items WHERE owner_type='u' AND owner_id=?1 AND body<>''",
   podcast: "SELECT id,title,description,lang,topics,status FROM pod_episodes WHERE user_id=?1",
   video: "SELECT id,title,description,lang,topics,status FROM yt_videos WHERE user_id=?1",
 };
@@ -39,6 +40,7 @@ export async function handleSeo(env, request, url, path, user, J) {
   const db = env.DB, method = request.method;
   if (!(await rateLimit(db, `seo:${user.id}`, 120, 3600))) return J({ error: "rate_limit" }, 429);
   const ents = await entityMap(env);
+  await ensureSectionCols(db);
   if (path === "/api/seo/mine" && method === "GET") {
     const author = await authorInfo(db, user.id), items = [];
     const co = Object.fromEntries(((await db.prepare("SELECT c.post_id,COUNT(*) n FROM blog_coauthors c JOIN blog_posts b ON b.id=c.post_id WHERE b.user_id=? AND c.status='confirmed' GROUP BY c.post_id").bind(user.id).all()).results || []).map((x) => [x.post_id, x.n]));
@@ -61,7 +63,7 @@ export async function handleSeo(env, request, url, path, user, J) {
   }
   if ((path === "/api/seo/preview" || path === "/api/seo/suggest") && method === "POST") {
     const b = await request.json().catch(() => ({})), kind = KINDS.includes(b.kind) ? b.kind : "blog";
-    const inp = { ...input(kind, { title: String(b.title || "").slice(0, 200), summary: String(b.summary || b.description || "").slice(0, 400), body: String(b.body || b.text || "").slice(0, 40000), description: b.body || b.text || "", lang: b.lang, topics: JSON.stringify(Array.isArray(b.topics) ? b.topics.slice(0, 10) : []) }, await authorInfo(db, user.id)) };
+    const inp = { ...input(kind, { title: String(b.title || "").slice(0, 200), summary: String(b.summary || b.description || "").slice(0, 400), body: String(b.body || b.text || "").slice(0, 40000), description: b.body || b.text || "", lang: b.lang, topics: JSON.stringify(Array.isArray(b.topics) ? b.topics.slice(0, 10) : []), keypoints: JSON.stringify(Array.isArray(b.keypoints) ? b.keypoints : parseKeypointsText(b.keypoints)), faq: JSON.stringify(Array.isArray(b.faq) ? b.faq : parseFaqText(b.faq)) }, await authorInfo(db, user.id)) };
     if (path === "/api/seo/suggest") return J(suggestEntities(inp, ents));
     const rep = seoCheck(inp, { entities: ents });
     return J({ ...rep, ai_prompt: { de: aiPrompt(rep, "diesen Entwurf", "de"), en: aiPrompt(rep, "this draft", "en") } });

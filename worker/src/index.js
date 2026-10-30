@@ -21,6 +21,7 @@ import { handleVideo, deleteUserVideos, pollVideos } from "./youtube.js";
 import { handleMcp, handleTokens, deleteUserTokens } from "./mcp.js";
 import { handleSeo } from "./seo_api.js";
 import { handleCredits, deleteUserGuestCredits } from "./credits.js";
+import { handleNotes } from "./notes.js";
 import { handlePoints } from "./points.js";
 import { handleMessages, purgeMessages, deleteUserMessages } from "./messages.js";
 import { refreshFeeds, refreshFollowers } from "./feeds.js";
@@ -256,6 +257,7 @@ async function api(env, request, url, path, asUser) {
   if (path.startsWith("/api/library/")) { const q = await handleLibrary(env, request, url, path, user, J); if (q) return q; }
   if (path === "/api/blog" || path.startsWith("/api/blog/") || path.startsWith("/api/admin/blog")) { const q = await handleBlog(env, request, url, path, user, J); if (q) { if (user && method !== "GET") await evalBadges(env, user.id).catch(() => 0); return q; } }
   if (path === "/api/qa" || path.startsWith("/api/qa/")) { const q = await handleQa(env, request, url, path, user, J); if (q) return q; }
+  if (path.startsWith("/api/notes/")) { const q = await handleNotes(env, request, url, path, user, J); if (q) return q; }
   if (path.startsWith("/api/credit/")) { const q = await handleCredits(env, request, url, path, user, J); if (q) return q; }
   if (path.startsWith("/api/seo/")) { const q = await handleSeo(env, request, url, path, user, J); if (q) return q; }
   if (path.startsWith("/api/edits/")) { const v = await handleVotes(env, request, url, path, user, J); if (v) return v; }

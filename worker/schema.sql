@@ -505,6 +505,16 @@ CREATE TABLE IF NOT EXISTS ui_i18n (
   PRIMARY KEY (lang, k)
 );
 
+CREATE TABLE IF NOT EXISTS episode_notes (        -- Bearbeitete Show Notes der Spreaker-Folgen (Override ueber dem Spreaker-Text); lang = Show-Sprache, ep_id = Spreaker-Folgen-ID
+  lang TEXT NOT NULL,
+  ep_id TEXT NOT NULL,
+  body TEXT NOT NULL DEFAULT '',
+  keypoints TEXT NOT NULL DEFAULT '[]',
+  faq TEXT NOT NULL DEFAULT '[]',
+  user_id INTEGER NOT NULL DEFAULT 0,
+  updated INTEGER NOT NULL DEFAULT 0,
+  PRIMARY KEY (lang, ep_id)
+);
 CREATE TABLE IF NOT EXISTS item_guests (          -- Gaeste bei Community-Podcast und Video: invited -> confirmed | declined; nur bestaetigte erscheinen auf der Seite
   kind TEXT NOT NULL,                              -- podcast | video
   item_id INTEGER NOT NULL,

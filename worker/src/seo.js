@@ -171,12 +171,18 @@ export function seoCheck(inp, ctx = {}) {
   add("sources", "content", 6, kind === "episode" ? clamp((P.refs || 0) / 1) : clamp(P.refs / 1) - (P.plainLinks ? 0.3 : 0), DE("Quellen / externe Belege", "Sources / external references"),
     DE(`${P.refs} Quelle(n)${P.plainLinks ? `, ${P.plainLinks} einfache Links (werden entfernt)` : ""}`, `${P.refs} source(s)${P.plainLinks ? `, ${P.plainLinks} plain links (are removed)` : ""}`),
     DE("Mindestens eine Quelle als {{ref|Titel|https://url|Herausgeber|Datum}} angeben.", "Add at least one source as {{ref|Title|https://url|Publisher|Date}}."), kind === "blog" ? "save_blog_post" : "save_feed_item_text");
+  // 9b Kernpunkte (eigenes Feld, 3-6 Punkte)
+  const kpN = Array.isArray(inp.keypoints) ? inp.keypoints.length : inp.keypoints;
+  add("keypoints", "content", 5, kpN === undefined || kpN === null ? null : kpN >= 3 && kpN <= 6 ? 1 : kpN >= 1 ? 0.5 : 0, DE("Kernpunkte (eigenes Feld)", "Key points (own field)"),
+    kpN === undefined || kpN === null ? DE("nicht prüfbar", "not checkable") : DE(`${kpN} Kernpunkt(e) (ideal 3–6)`, `${kpN} key point(s) (ideal 3–6)`),
+    DE("3–6 Kernpunkte als kurze, konkrete Aussagen (10–200 Zeichen) im Feld „Kernpunkte“ ergänzen – sie erscheinen als Zusammenfassung über dem Text.", "Add 3–6 key points as short, concrete statements (10–200 characters) in the “Key points” field – they appear as a summary above the text."), "save_blog_post");
   // 10 FAQ / Transkript
-  const faq = inp.faq != null ? inp.faq : P.h2.filter((h) => /\?\s*$/.test(h)).length, tr = inp.transcript;
+  const faqList = Array.isArray(inp.faq) ? inp.faq : null;
+  const faq = faqList ? faqList.length : inp.faq != null ? inp.faq : P.h2.filter((h) => /\?\s*$/.test(h)).length, tr = inp.transcript;
   const audio = kind === "podcast" || kind === "video" || kind === "episode";
   add("faq", "intent", 5, clamp(faq ? 1 : 0) * (audio && tr === false ? 0.6 : 1) + (audio && tr ? 0 : 0), DE(audio ? "FAQ und Transkript" : "FAQ / Fragen & Antworten", audio ? "FAQ and transcript" : "FAQ / questions & answers"),
     DE(`${faq} FAQ-Eintrag/Einträge${audio ? `, Transkript: ${tr ? "✓" : tr === false ? "✗" : "?"}` : ""}`, `${faq} FAQ entr${faq === 1 ? "y" : "ies"}${audio ? `, transcript: ${tr ? "✓" : tr === false ? "✗" : "?"}` : ""}`),
-    DE("Drei bis fünf echte Fragen als Überschrift (## Was ist …?) mit kurzer Antwort darunter ergänzen – das bedient Suchfragen direkt.", "Add three to five real questions as headings (## What is …?) with a short answer below – it serves search questions directly."), "ask_question");
+    DE("Drei bis fünf echte Fragen mit kurzer Antwort im Feld „FAQ“ ergänzen – das bedient Suchfragen direkt und erzeugt FAQPage-Schema.", "Add three to five real questions with short answers in the “FAQ” field – it serves search questions directly and creates FAQPage schema."), "ask_question");
 
   // 11 Autor (Author-Box: Profil, Foto, Bio, Expertise, Kanaele, geprueftes Programm) - GEO/E-E-A-T
   const A = inp.author;

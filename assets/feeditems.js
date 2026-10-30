@@ -7,13 +7,23 @@
 Object.assign(Q, de ? { e_bad_image: "Ein Bild braucht eine https-Adresse auf .jpg, .png, .webp, .gif oder .avif (keine Kurzlinks).", e_bad_alt: "Jedes Bild braucht einen Alt-Text mit mindestens 5 Zeichen.", e_too_many_images: "Maximal 6 Bilder pro Text." } : { e_bad_image: "An image needs an https address ending in .jpg, .png, .webp, .gif or .avif (no short links).", e_bad_alt: "Every image needs alt text of at least 5 characters.", e_too_many_images: "At most 6 images per text." });
   var box = h("div"), msg = h("p", { role: "status", class: "mut" });
   function slug(t) { return (t || "").toLowerCase().replace(/ä/g, "ae").replace(/ö/g, "oe").replace(/ü/g, "ue").replace(/ß/g, "ss").replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "").slice(0, 60).replace(/-+$/, "") || "inhalt"; }
+  var SEC = de ? { kp: "Kernpunkte (ein Punkt pro Zeile, 3–6, je 10–200 Zeichen)", kph: "Erscheinen als Zusammenfassung über dem Text.", faq: "FAQ (Frage in einer Zeile, Antwort darunter; Einträge durch eine Leerzeile trennen, bis zu 10)", faqh: "Erscheinen als FAQ-Bereich mit FAQPage-Schema (Antwort 20–600 Zeichen, ohne Links).", e_bad_keypoints: "Jeder Kernpunkt braucht mindestens 10 Zeichen.", e_too_many_keypoints: "Höchstens 8 Kernpunkte.", e_bad_faq: "Jede FAQ braucht eine Frage (ab 10 Zeichen) und eine Antwort (ab 20 Zeichen).", e_too_many_faq: "Höchstens 10 FAQ-Einträge." }
+    : { kp: "Key points (one per line, 3–6, 10–200 characters each)", kph: "Shown as a summary above the text.", faq: "FAQ (question on one line, answer below; separate entries with a blank line, up to 10)", faqh: "Shown as an FAQ section with FAQPage schema (answer 20–600 characters, no links).", e_bad_keypoints: "Every key point needs at least 10 characters.", e_too_many_keypoints: "At most 8 key points.", e_bad_faq: "Every FAQ needs a question (10+ characters) and an answer (20+ characters).", e_too_many_faq: "At most 10 FAQ entries." };
+  Object.assign(Q, { e_bad_keypoints: SEC.e_bad_keypoints, e_too_many_keypoints: SEC.e_too_many_keypoints, e_bad_faq: SEC.e_bad_faq, e_too_many_faq: SEC.e_too_many_faq });
+  function faqText(l) { return (l || []).map(function (x) { return x.q + "\n" + x.a; }).join("\n\n"); }
+  function secBoxes(p) {
+    var kp = h("textarea", { rows: 5, maxlength: 1800, "aria-label": SEC.kp }), fq = h("textarea", { rows: 8, maxlength: 8000, "aria-label": SEC.faq });
+    kp.value = (p.keypoints || []).join("\n"); fq.value = faqText(p.faq);
+    return { kp: kp, fq: fq, node: h("div", {}, [U.lab(SEC.kp, kp), h("p", { class: "mut", text: SEC.kph }), U.lab(SEC.faq, fq), h("p", { class: "mut", text: SEC.faqh })]) };
+  }
   function editor(w, li) {
     var su = h("textarea", { rows: 2, maxlength: 300 }), bo = h("textarea", { maxlength: 12000, rows: 18 }), tp = U.topicsUI(w.topics || [], 10), f = h("div", { class: "ed-form" });
     su.value = w.summary || ""; bo.value = w.body || Q.tpl;
     f.appendChild(U.lab(Q.summary, su)); f.appendChild(h("div", {}, [h("b", { text: Q.topics }), tp])); f.appendChild(h("div", {}, [h("label", { text: Q.body }), U.editor ? U.editor(bo, 12000) : bo]));
-    if (U.seo) f.appendChild(U.seo.box({ kind: "feed", draft: function () { return { title: w.title, summary: su.value, body: bo.value.trim() === Q.tpl.trim() ? "" : bo.value, topics: tp.get() }; }, onAddTopic: tp.addId }));
+    var sec = secBoxes(w); f.appendChild(sec.node);
+    if (U.seo) f.appendChild(U.seo.box({ kind: "feed", draft: function () { return { title: w.title, summary: su.value, body: bo.value.trim() === Q.tpl.trim() ? "" : bo.value, keypoints: sec.kp.value, faq: sec.fq.value, topics: tp.get() }; }, onAddTopic: tp.addId }));
     f.appendChild(h("p", {}, [h("button", { type: "button", class: "btn main", text: Q.save, onclick: function () {
-      api("/api/feed/text", { method: "POST", body: { id: w.id, body: bo.value.trim() === Q.tpl.trim() ? "" : bo.value, summary: su.value, topics: tp.get() } }).then(function (r) { var j = r.j || {}; if (j.ok) { msg.textContent = Q.saved; load(); } else msg.textContent = Q["e_" + j.error] || Q.e_generic; });
+      api("/api/feed/text", { method: "POST", body: { id: w.id, body: bo.value.trim() === Q.tpl.trim() ? "" : bo.value, keypoints: sec.kp.value, faq: sec.fq.value, summary: su.value, topics: tp.get() } }).then(function (r) { var j = r.j || {}; if (j.ok) { msg.textContent = Q.saved; load(); } else msg.textContent = Q["e_" + j.error] || Q.e_generic; });
     } }), " ", h("button", { type: "button", class: "btn", text: Q.cancel, onclick: function () { f.remove(); } })]));
     li.appendChild(f);
   }

@@ -3,6 +3,7 @@ import { cleanText, rateLimit, isLang } from "./util.js";
 import { stats } from "./badges.js";
 import { baseIds } from "./entities.js";
 import { sanitize } from "./wiki.js";
+import { cleanKeypoints, cleanFaq, jsonList, ensureSectionCols } from "./sections.js";
 
 const TRUST_POINTS = 25, MAX_POSTS_DAY = 5;
 const now = () => Math.floor(Date.now() / 1000);
@@ -10,9 +11,9 @@ const txt = (s, n) => cleanText(s, n).replace(/[<>]/g, "").replace(/https?:\/\/\
 const okLang = (l) => l === "en" || isLang(l);
 const slugify = (t) => t.toLowerCase().normalize("NFKD").replace(/[̀-ͯ]/g, "").replace(/ß/g, "ss").replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "").slice(0, 60);
 const parse = (s, d) => { try { return JSON.parse(s); } catch { return d; } };
-const FIELDS = "id,slug,title,summary,body,lang,status,topics,note,created,updated,published";
+const FIELDS = "id,slug,title,summary,body,lang,status,topics,keypoints,faq,note,created,updated,published";
 
-const view = (r) => ({ ...r, topics: parse(r.topics, []) });
+const view = (r) => ({ ...r, topics: parse(r.topics, []), keypoints: jsonList(r.keypoints), faq: jsonList(r.faq) });
 
 async function trusted(db, user) { return !!(user.admin || user.editor || user.pro || (await stats(db, user.id)).points >= TRUST_POINTS); }
 
@@ -51,15 +52,16 @@ const invites = async (db, uid) => (await db.prepare("SELECT b.id post_id,b.titl
 
 export async function handleBlog(env, request, url, path, user, J) {
   const db = env.DB, method = request.method;
+  if (path.startsWith("/api/blog") || path.startsWith("/api/admin/blog")) await ensureSectionCols(db);
 
   if (path === "/api/blog/export" && method === "GET") {   // oeffentlich: freigegebene Beitraege oeffentlicher Profile
     const rows = (await db.prepare(
-      `SELECT b.id,b.slug,b.title,b.summary,b.body,b.lang,b.topics,b.created,b.published,b.updated,p.handle,u.name,(SELECT COUNT(*) FROM blog_votes v WHERE v.post_id=b.id) votes
+      `SELECT b.id,b.slug,b.title,b.summary,b.body,b.lang,b.topics,b.keypoints,b.faq,b.created,b.published,b.updated,p.handle,u.name,(SELECT COUNT(*) FROM blog_votes v WHERE v.post_id=b.id) votes
        FROM blog_posts b JOIN profiles p ON p.user_id=b.user_id AND p.public=1 AND p.handle IS NOT NULL JOIN users u ON u.id=b.user_id AND u.banned=0
        WHERE b.status='live' ORDER BY b.published DESC LIMIT 1000`).all()).results || [];
     const co = (await db.prepare("SELECT c.post_id,p.handle,u.name FROM blog_coauthors c JOIN profiles p ON p.user_id=c.user_id AND p.public=1 AND p.handle IS NOT NULL JOIN users u ON u.id=c.user_id AND u.banned=0 WHERE c.status='confirmed' ORDER BY c.created").all()).results || [], by = {};
     for (const c of co) (by[c.post_id] ||= []).push({ handle: c.handle, name: c.name });
-    return J({ items: rows.map((r) => ({ ...r, topics: parse(r.topics, []), coauthors: by[r.id] || [] })) }, 200, { "cache-control": "public, max-age=300" });
+    return J({ items: rows.map((r) => ({ ...r, topics: parse(r.topics, []), keypoints: jsonList(r.keypoints), faq: jsonList(r.faq), coauthors: by[r.id] || [] })) }, 200, { "cache-control": "public, max-age=300" });
   }
   if (path === "/api/blog/followers" && method === "GET") {   // Anzahl Abonnenten eines Blogs (oeffentlich)
     const n = (await db.prepare("SELECT COUNT(*) n FROM blog_follows WHERE handle=?").bind(url.searchParams.get("handle") || "").first()).n;
@@ -112,13 +114,15 @@ export async function handleBlog(env, request, url, path, user, J) {
     const pr = await db.prepare("SELECT handle,public FROM profiles WHERE user_id=?").bind(user.id).first();
     if (b.submit && !(pr?.public && pr.handle)) return J({ error: "need_profile" }, 400);
     const cos = await resolveCoauthors(db, user, b.coauthors); if (cos.err) return J({ error: cos.err, handle: cos.handle }, 400);
+    const kp = b.keypoints === undefined ? null : cleanKeypoints(b.keypoints), fq = b.faq === undefined ? null : cleanFaq(b.faq);
+    if (kp?.err) return J({ error: kp.err }, 400); if (fq?.err) return J({ error: fq.err }, 400);
     const t = now();
     let cur = b.id ? await db.prepare(`SELECT ${FIELDS} FROM blog_posts WHERE id=? AND user_id=?`).bind(+b.id, user.id).first() : null;
     if (b.id && !cur) return J({ error: "not_found" }, 404);
     const status = !b.submit ? (cur && cur.status === "live" ? "live" : "draft") : "live";
     if (cur) {
-      await db.prepare("UPDATE blog_posts SET title=?,summary=?,body=?,lang=?,topics=?,status=?,updated=?,published=CASE WHEN ?='live' AND published=0 THEN ? ELSE published END,note='' WHERE id=?")
-        .bind(title, summary, sb.body, lang, JSON.stringify(topics), status, t, status, t, cur.id).run();
+      await db.prepare("UPDATE blog_posts SET title=?,summary=?,body=?,lang=?,topics=?,keypoints=COALESCE(?,keypoints),faq=COALESCE(?,faq),status=?,updated=?,published=CASE WHEN ?='live' AND published=0 THEN ? ELSE published END,note='' WHERE id=?")
+        .bind(title, summary, sb.body, lang, JSON.stringify(topics), kp ? JSON.stringify(kp.list) : null, fq ? JSON.stringify(fq.list) : null, status, t, status, t, cur.id).run();
       await syncFeed(env, db, user.id, { lang, slug: cur.slug, title, published: cur.published || t }, pr?.handle, status === "live" && !!pr?.handle);
       if (cos.list) await saveCoauthors(db, cur.id, cos.list);
       return J({ ok: true, id: cur.id, slug: cur.slug, status });
@@ -127,8 +131,8 @@ export async function handleBlog(env, request, url, path, user, J) {
     if (day >= MAX_POSTS_DAY) return J({ error: "rate_limit" }, 429);
     let slug = slugify(title) || "post", n = 1;
     while (await db.prepare("SELECT 1 x FROM blog_posts WHERE user_id=? AND slug=?").bind(user.id, slug).first()) slug = `${slugify(title).slice(0, 52) || "post"}-${++n}`;
-    const r = await db.prepare("INSERT INTO blog_posts(user_id,slug,title,summary,body,lang,topics,status,note,created,updated,published) VALUES(?,?,?,?,?,?,?,?,?,?,?,?)")
-      .bind(user.id, slug, title, summary, sb.body, lang, JSON.stringify(topics), status, "", t, t, status === "live" ? t : 0).run();
+    const r = await db.prepare("INSERT INTO blog_posts(user_id,slug,title,summary,body,lang,topics,keypoints,faq,status,note,created,updated,published) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?)")
+      .bind(user.id, slug, title, summary, sb.body, lang, JSON.stringify(topics), JSON.stringify(kp?.list || []), JSON.stringify(fq?.list || []), status, "", t, t, status === "live" ? t : 0).run();
     await syncFeed(env, db, user.id, { lang, slug, title, published: t }, pr?.handle, status === "live" && !!pr?.handle);
     if (cos.list) await saveCoauthors(db, r.meta.last_row_id, cos.list);
     return J({ ok: true, id: r.meta.last_row_id, slug, status });

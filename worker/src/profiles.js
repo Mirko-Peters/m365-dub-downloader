@@ -1,4 +1,5 @@
 // Experten- und Firmenprofile, Programme (MVP/MCT/...), Kanaele mit Feeds, Upvotes, Bestaetigungen
+import { cleanKeypoints, cleanFaq, jsonList, ensureSectionCols } from "./sections.js";
 import { sanitize } from "./wiki.js";
 import { cleanText, rateLimit } from "./util.js";
 import { baseIds, knownIds, validate, trustedUser, entityMap } from "./entities.js";
@@ -418,8 +419,9 @@ export async function handleProfiles(env, request, url, path, user, J) {
   }
   if (path === "/api/feed/mine" && method === "GET") {   // eigene gezogene Inhalte (fuer SEO-Texte, auch per MCP)
     if (need()) return need();
-    const rows = (await db.prepare("SELECT id,title,url,summary,thumb,body,published,topics,CASE WHEN length(body)>0 THEN 1 ELSE 0 END has_text FROM feed_items WHERE owner_type='u' AND owner_id=? ORDER BY published DESC LIMIT 100").bind(user.id).all()).results || [];
-    return J({ items: rows.map((r) => ({ ...r, has_text: !!r.has_text, topics: (() => { try { return JSON.parse(r.topics || "[]"); } catch { return []; } })() })) });
+    await ensureSectionCols(db);
+    const rows = (await db.prepare("SELECT id,title,url,summary,thumb,body,published,topics,keypoints,faq,CASE WHEN length(body)>0 THEN 1 ELSE 0 END has_text FROM feed_items WHERE owner_type='u' AND owner_id=? ORDER BY published DESC LIMIT 100").bind(user.id).all()).results || [];
+    return J({ items: rows.map((r) => ({ ...r, has_text: !!r.has_text, keypoints: jsonList(r.keypoints), faq: jsonList(r.faq), topics: (() => { try { return JSON.parse(r.topics || "[]"); } catch { return []; } })() })) });
   }
   if (path === "/api/feed/text" && method === "POST") {   // Creator ergaenzt den gezogenen Inhalt um eigenen Text (Wiki-Markup, Quellen nur als {{ref}})
     if (need()) return need();
@@ -430,18 +432,22 @@ export async function handleProfiles(env, request, url, path, user, J) {
     const known = await baseIds(env), topics = [];
     for (const t of (Array.isArray(b.topics) ? b.topics : []).slice(0, 10)) { if (!known.has(t)) return J({ error: "bad_topic", topic: t }, 400); if (!topics.includes(t)) topics.push(t); }
     const sum = b.summary ? txt(b.summary, 300) : null;
-    await db.prepare("UPDATE feed_items SET body=?, topics=?, summary=CASE WHEN ? IS NULL THEN summary ELSE ? END, seo_at=? WHERE id=?").bind(sb.body, JSON.stringify(topics), sum, sum, now(), it.id).run();
+    await ensureSectionCols(db);
+    const kp = b.keypoints === undefined ? null : cleanKeypoints(b.keypoints), fq = b.faq === undefined ? null : cleanFaq(b.faq);
+    if (kp?.err) return J({ error: kp.err }, 400); if (fq?.err) return J({ error: fq.err }, 400);
+    await db.prepare("UPDATE feed_items SET body=?, topics=?, keypoints=COALESCE(?,keypoints), faq=COALESCE(?,faq), summary=CASE WHEN ? IS NULL THEN summary ELSE ? END, seo_at=? WHERE id=?").bind(sb.body, JSON.stringify(topics), kp ? JSON.stringify(kp.list) : null, fq ? JSON.stringify(fq.list) : null, sum, sum, now(), it.id).run();
     return J({ ok: true });
   }
   if (path === "/api/feed/export" && method === "GET") {   // oeffentlich fuer den Seitenbau: externe Quellen (nur Titel+Link), eigene Seiten ausgenommen
-    const rows = (await db.prepare(`SELECT i.id,i.title,i.url,i.summary,i.thumb,i.body,i.topics,i.published,c.kind,i.owner_type,i.owner_id,(SELECT COUNT(*) FROM item_votes v WHERE v.item_id=i.id) votes FROM feed_items i JOIN channels c ON c.id=i.channel_id
+    await ensureSectionCols(db);
+    const rows = (await db.prepare(`SELECT i.id,i.title,i.url,i.summary,i.thumb,i.body,i.topics,i.keypoints,i.faq,i.published,c.kind,i.owner_type,i.owner_id,(SELECT COUNT(*) FROM item_votes v WHERE v.item_id=i.id) votes FROM feed_items i JOIN channels c ON c.id=i.channel_id
       WHERE i.hidden=0 AND i.url NOT LIKE ? AND i.published>? AND ((i.owner_type='u' AND i.owner_id IN (SELECT p.user_id FROM profiles p JOIN users u ON u.id=p.user_id AND u.banned=0 WHERE p.public=1)) OR (i.owner_type='o' AND i.owner_id IN (SELECT id FROM orgs WHERE public=1)))
       ORDER BY i.published DESC LIMIT 300`).bind(env.SITE + "%", now() - 120 * 86400).all()).results || [];
     const names = new Map(), out = [];
     for (const r of rows) {
       const k = r.owner_type + r.owner_id;
       if (!names.has(k)) names.set(k, r.owner_type === "u" ? await db.prepare("SELECT p.handle,u.name FROM profiles p JOIN users u ON u.id=p.user_id WHERE p.user_id=?").bind(r.owner_id).first() : await db.prepare("SELECT handle,name FROM orgs WHERE id=?").bind(r.owner_id).first());
-      const o = names.get(k); if (o) out.push({ id: r.id, summary: r.summary || "", thumb: r.thumb || "", body: r.body || "", topics: (() => { try { return JSON.parse(r.topics || "[]"); } catch { return []; } })(), title: r.title, url: r.url, published: r.published, kind: r.kind, votes: r.votes, type: r.owner_type, handle: o.handle, name: o.name });
+      const o = names.get(k); if (o) out.push({ id: r.id, summary: r.summary || "", thumb: r.thumb || "", body: r.body || "", keypoints: jsonList(r.keypoints), faq: jsonList(r.faq), topics: (() => { try { return JSON.parse(r.topics || "[]"); } catch { return []; } })(), title: r.title, url: r.url, published: r.published, kind: r.kind, votes: r.votes, type: r.owner_type, handle: o.handle, name: o.name });
     }
     return J({ items: out }, 200, { "cache-control": "public, max-age=300" });
   }
