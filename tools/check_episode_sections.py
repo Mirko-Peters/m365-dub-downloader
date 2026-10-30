@@ -32,7 +32,7 @@ def check(n):
         for f in faq:
             q, a = (f.get("q") or "").strip(), (f.get("a") or "").strip()
             if not 15 <= len(q) <= 200 or not q.endswith("?"): probs.append(f"{s}: Frage ungueltig: {q[:50]}")
-            if not 60 <= len(a) <= 600: probs.append(f"{s}: Antwort Laenge {len(a)} (60-600): {q[:40]}")
+            if not 100 <= len(a) <= 600: probs.append(f"{s}: Antwort Laenge {len(a)} (100-600): {q[:40]}")
             if re.search(r"https?://|www\.|\*\*", a): probs.append(f"{s}: Antwort mit Link/Markdown")
             if q.lower() in qs: probs.append(f"{s}: doppelte Frage")
             qs.add(q.lower())
