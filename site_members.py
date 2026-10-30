@@ -31,7 +31,7 @@ def experts_index(people, orgs):
     for kind, lst in (("u", people), ("o", orgs)):
         for x in lst:
             for ex in x.get("expertise", []):
-                ix.setdefault(ex["e"], []).append({"kind": kind, "handle": x["handle"], "name": x["name"], "headline": x.get("headline") or x.get("tagline") or "", "verified": ex.get("verified") or bool(ex.get("via")), "via": ex.get("via", ""), "level": ex.get("level", 2), "endorsed": ex.get("endorsed", 0)})
+                ix.setdefault(ex["e"], []).append({"kind": kind, "handle": x["handle"], "name": x["name"], "headline": x.get("headline") or x.get("tagline") or "", "verified": ex.get("verified") or ex.get("via") in ("session", "cert"), "via": ex.get("via", ""), "level": ex.get("level", 2), "endorsed": ex.get("endorsed", 0)})
     for k in ix:
         ix[k].sort(key=lambda a: (-int(bool(a["verified"])), -a["endorsed"], -a["level"], a["name"].lower()))
     return ix
@@ -177,7 +177,7 @@ def build(g, people, orgs, extra=None):
                 continue
             en = ENTS[e["e"]]; note = []
             if e.get("via"):
-                note.append(T(lang, "confirmed by session", "bestätigt durch Session") if e["via"] == "session" else T(lang, "confirmed by certification", "bestätigt durch Zertifikat"))
+                note.append(T(lang, "confirmed by session", "bestätigt durch Session") if e["via"] == "session" else T(lang, "shown by own posts", "belegt durch eigene Beiträge") if e["via"] == "post" else T(lang, "confirmed by certification", "bestätigt durch Zertifikat"))
             elif e.get("verified"):
                 note.append(s["verified"])
             elif e.get("endorsed"):

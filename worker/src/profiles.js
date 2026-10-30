@@ -102,6 +102,7 @@ export async function autoVerifyCert(url, ent, name) {
 
 // Bestaetigte (abgeleitete) Expertise: Themen aus bestaetigten Speaker-Sessions und aus geprueften Zertifikaten - nicht selbst gewaehlt
 const TOPIC_T = ["product", "platform", "concept", "category"];
+// via: session (bestaetigte Session), cert (geprueftes Zertifikat), post (eigene veroeffentlichte Beitraege zum Thema)
 export async function derivedExpertise(db, uid, handle, map) {
   const out = new Map();
   const nm = ((await db.prepare("SELECT lower(name) n FROM users WHERE id=?").bind(uid).first())?.n) || "";
@@ -112,6 +113,9 @@ export async function derivedExpertise(db, uid, handle, map) {
     if (!sp.some((x) => ((handle && x.h === handle) || (!x.h && nm && String(x.n || "").toLowerCase() === nm)) && (x.s === "confirmed" || r.oid === uid))) continue;
     for (const t of tp) { const o = out.get(t) || { via: "session", n: 0 }; o.n++; out.set(t, o); }
   }
+  // Themen (Entitaeten) der eigenen veroeffentlichten Community-Beitraege: Blog, Bibliothek, Podcast, Video, Gaeste-Boerse
+  const posts = (await db.prepare("SELECT topics FROM blog_posts WHERE user_id=?1 AND status='live' UNION ALL SELECT topics FROM lib_items WHERE user_id=?1 AND status='live' UNION ALL SELECT topics FROM pod_episodes WHERE user_id=?1 AND status='published' UNION ALL SELECT topics FROM yt_videos WHERE user_id=?1 AND status='published' UNION ALL SELECT topics FROM guest_listings WHERE user_id=?1 AND active=1").bind(uid).all()).results || [];
+  for (const r of posts) { let tp = []; try { tp = JSON.parse(r.topics || "[]"); } catch { continue; } for (const t of tp) if (map.has(t) && !out.has(t)) out.set(t, { via: "post", n: 1 }); else if (out.has(t) && out.get(t).via === "post") out.get(t).n++; }
   const certs = ((await db.prepare("SELECT c.eid FROM certs c JOIN cert_check k ON k.user_id=c.user_id AND k.eid=c.eid WHERE c.user_id=? AND k.status='verified'").bind(uid).all()).results || []).map((r) => r.eid);
   for (const c of certs) for (const [, to] of (map.get(c)?.rel || [])) if (TOPIC_T.includes(map.get(to)?.type) && !out.has(to)) out.set(to, { via: "cert", n: 1 });
   return out;
