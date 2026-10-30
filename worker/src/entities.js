@@ -27,7 +27,8 @@ export async function validate(env, id, raw) {
   if (!TYPES.includes(raw.type)) return bad("bad_type"); d.type = raw.type;
   d.aliases = [...new Set((Array.isArray(raw.aliases) ? raw.aliases : []).map((a) => txt(a, 60)).filter((a) => a.length >= 2))].slice(0, 10);
   d.desc = { en: txt(raw.desc?.en, 600), de: txt(raw.desc?.de, 600) };
-  if (d.desc.en.length + d.desc.de.length < 20) return bad("too_short");
+  if (d.desc.en.length < 20) return bad("too_short");   // Kurzbeschreibung ist Pflicht (Hover-Text in Artikeln)
+  if (d.desc.en.length > 300) return bad("too_long");
   d.web = httpsUrl(raw.web, () => true); d.docs = httpsUrl(raw.docs, (h) => /(^|\.)(microsoft\.com|azure\.com|github\.com)$/i.test(h));
   d.wikipedia = httpsUrl(raw.wikipedia, (h) => /^[a-z]{2,3}\.wikipedia\.org$/i.test(h));
   if (d.web === null || d.docs === null || d.wikipedia === null) return bad("bad_url");
