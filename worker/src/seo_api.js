@@ -19,9 +19,9 @@ async function authorInfo(db, uid, postId) {
     verified: !!(await n("SELECT COUNT(*) n FROM programs WHERE owner_type='u' AND owner_id=? AND verified=1")) || !!(await n("SELECT COUNT(*) n FROM cert_check WHERE user_id=? AND status='verified'")),
   };
 }
-// Datensatz -> Eingabe fuer seoCheck. Titelbild ist immer da (die Seite erzeugt es automatisch); Bilder im Text kann der Editor noch nicht.
+// Datensatz -> Eingabe fuer seoCheck. Titelbild ist immer da (die Seite erzeugt es automatisch); Bilder im Text zaehlt der Check aus dem Markup ({{img|...}}).
 function input(kind, r, author) {
-  const base = { kind, lang: r.lang || "en", title: r.title, topics: jp(r.topics), header: true, images: null, author, transcript: null };
+  const base = { kind, lang: r.lang || "en", title: r.title, topics: jp(r.topics), header: true, author, transcript: null };
   if (kind === "blog" || kind === "feed") return { ...base, description: r.summary || "", body: r.body || "" };
   return { ...base, description: String(r.description || "").slice(0, 300), body: r.description || "" };
 }

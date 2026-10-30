@@ -9,14 +9,23 @@ const now = () => Math.floor(Date.now() / 1000);
 const TRUST_POINTS = 25;   // ab so vielen Punkten duerfen Beitraege sofort live gehen
 const AUTO_REVERT = 3;     // so viele Meldungen blenden eine Revision aus
 
-const MAX_BODY = 12000, MAX_REFS = 25;
+const MAX_BODY = 12000, MAX_REFS = 25, MAX_IMGS = 6;
 const BAD_HOST = /(^|\.)(bit\.ly|t\.co|tinyurl\.com|goo\.gl|is\.gd|ow\.ly|buff\.ly|cutt\.ly|rebrand\.ly|shorturl\.at)$/i;
 // Markup: ## / ### Ueberschriften, **fett**, *kursiv*, - Listen, 1. Listen, > Zitat, [[id|Text]] interne Links,
 // {{ref|Titel|https://url|Herausgeber|Datum}} Quelle als Fussnote, {{cn}} = Beleg fehlt. Links sonst nur ueber Quellen.
+// {{img|https://bild.jpg|Alt-Text}} Bild (https, .jpg/.png/.webp/.gif/.avif, Alt-Text 5-140 Zeichen Pflicht, max. 6).
 export function sanitize(raw) {
-  let s = cleanText(raw, MAX_BODY).replace(/[<>]/g, ""), err = null, n = 0;
-  s = s.split(/(\{\{ref\|[^{}]*\}\})/).map((part, i) => {
+  let s = cleanText(raw, MAX_BODY).replace(/[<>]/g, ""), err = null, n = 0, imgs = 0;
+  s = s.split(/(\{\{(?:ref|img)\|[^{}]*\}\})/).map((part, i) => {
     if (i % 2 === 0) return part.replace(/https?:\/\/\S+/gi, "").replace(/www\.\S+/gi, "");
+    if (part.startsWith("{{img|")) {
+      const [u, ...rest] = part.slice(6, -2).split("|"), alt = rest.join(" ").trim().replace(/[\[\]{}|]/g, "");
+      let url; try { url = new URL((u || "").trim()); } catch { err = "bad_image"; return ""; }
+      if (url.protocol !== "https:" || (u || "").length > 300 || BAD_HOST.test(url.hostname) || url.username || url.password || !/\.(jpe?g|png|webp|gif|avif)$/i.test(url.pathname)) { err = "bad_image"; return ""; }
+      if (alt.length < 5) { err = "bad_alt"; return ""; }
+      if (++imgs > MAX_IMGS) { err = "too_many_images"; return ""; }
+      return `{{img|${url.href}|${alt.slice(0, 140)}}}`;
+    }
     const p = part.slice(6, -2).split("|").map((x) => x.trim().replace(/[\[\]]/g, ""));
     const [title, u, pub, date] = p;
     let url; try { url = new URL(u || ""); } catch { err = "bad_ref"; return ""; }

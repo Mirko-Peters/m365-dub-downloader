@@ -2,7 +2,7 @@
 import json
 from datetime import datetime, timezone
 from site_i18n import COMM_LANGS, pfx, pfx2, T
-from site_learn import ENTS, esc, _fetch_json, LCSS, WT, wiki_render, WCSS
+from site_learn import ENTS, esc, _fetch_json, LCSS, WT, wiki_render, wiki_images, WCSS
 
 
 def fetch_posts(api):
@@ -67,7 +67,7 @@ def build(g, posts, people, api):
                             f'<script>{VOTEJS.replace("%API%", api).replace("%H%", p["handle"])}</script><script>{FOLLOWJS.replace("%API%", api).replace("%FOLLOW%", esc(T(lang, "Follow this blog", "Blog abonnieren"))).replace("%FOLLOWING%", esc(T(lang, "Following", "Abonniert")))}</script>'
                             + (ctags(lang, "blog%d" % p["id"]) if ctags else ""))
             ld = [{"@context": "https://schema.org", "@type": "BlogPosting", "@id": u + "#post", "mainEntityOfPage": u, "headline": p["title"], "description": p.get("summary") or "",
-                   "inLanguage": lang, "datePublished": iso(p["published"]), "dateModified": iso(p.get("updated") or p["published"]),
+                   "inLanguage": lang, **({"image": [i["url"] for i in wiki_images(p["body"])]} if wiki_images(p["body"]) else {}), "datePublished": iso(p["published"]), "dateModified": iso(p.get("updated") or p["published"]),
                    "author": [{"@type": "Person", "@id": au + "#person", "name": a["name"], "url": au}] + [{"@type": "Person", "@id": f"{BASE}/community/u/{c['handle']}/#person", "name": pb[c["handle"]]["name"], "url": f"{BASE}/community/u/{c['handle']}/"} for c in cos],
                    "about": [{"@id": f"{BASE}/entity/{t}/#thing"} for t in topics], "citation": [{"@type": "CreativeWork", "name": r["title"], "url": r["url"]} for r in refs]}]
             noidx = p.get("votes", 0) < INDEX_VOTES

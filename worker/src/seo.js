@@ -132,7 +132,7 @@ export function seoCheck(inp, ctx = {}) {
   const imgScore = imgN === null ? null : clamp(imgN / 3) * (P.imagesNoAlt ? 0.8 : 1);
   add("images", "media", 10, imgScore, DE("Mindestens 3 Bilder mit Alt-Text", "At least 3 images with alt text"),
     imgN === null ? DE("Der Editor unterstützt für diesen Inhaltstyp noch keine Bilder im Text – wird nicht gewertet.", "The editor does not support images in the text for this content type yet – not scored.") : DE(`${imgN} Bild(er)${P.imagesNoAlt ? `, ${P.imagesNoAlt} ohne Alt-Text` : ""}`, `${imgN} image(s)${P.imagesNoAlt ? `, ${P.imagesNoAlt} without alt text` : ""}`),
-    DE("Mindestens 3 aussagekräftige Bilder oder Grafiken einbauen, jedes mit Alt-Text.", "Add at least 3 meaningful images or graphics, each with alt text."));
+    DE("Mindestens 3 aussagekräftige Bilder oder Grafiken einbauen, jedes mit Alt-Text: im Editor mit dem Bild-Button (🖼) oder als {{img|https://…/bild.jpg|Alt-Text}}.", "Add at least 3 meaningful images or graphics, each with alt text: with the image button (🖼) in the editor or as {{img|https://…/image.jpg|alt text}}."));
   // 5 Textlaenge
   const min = { blog: 600, feed: 300, podcast: 300, video: 300, episode: 800 }[kind] || 300;
   add("length", "content", 12, clamp(words / min), DE("Textlänge", "Text length"), DE(`${words} Wörter (Ziel ab ${min})`, `${words} words (goal ${min}+)`),

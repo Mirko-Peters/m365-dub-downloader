@@ -27,7 +27,7 @@ for (const f of readdirSync(join(root, "episodes")).filter((x) => x.endsWith(".j
   }
 }
 for (const x of extras.items || []) {
-  const rep = seoCheck({ kind: x.kind, lang: x.lang, title: x.title, description: x.summary || x.description || "", body: x.body || x.description || "", topics: x.topics || [], header: true, images: null, author: x.author || null }, { entities: ents });
+  const rep = seoCheck({ kind: x.kind, lang: x.lang, title: x.title, description: x.summary || x.description || "", body: x.body || x.description || "", topics: x.topics || [], header: true, author: x.author || null }, { entities: ents });
   items.push({ kind: x.kind, id: x.id, lang: x.lang, title: x.title, url: x.url || "", handle: x.handle || "", article: true, ...pick(rep) });
 }
 function pick(r) {
