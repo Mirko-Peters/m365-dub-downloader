@@ -237,8 +237,15 @@ def build(g):
     pub("hosts/", "Hosts", f"Hosts of the {NAME}.", f"<h1>Hosts</h1>{hb}")
     sb = "".join(f'<section><h2><a href="{esc(s["website"])}" rel="noopener sponsored">{esc(s["name"])}</a></h2>{san(s.get("description"))}</section>' for s in spons if s.get("hidden") not in (True, "True"))
     pub("sponsors/", "Sponsors", f"Sponsors of the {NAME}.", f"<h1>Sponsors</h1>{sb}")
-    rv = "".join(f'<blockquote><strong>{"★" * int(r.get("rating") or 0)} {esc(r.get("title") or "")}</strong><br>{esc(r.get("review") or "")}<br><span class="mut">– {esc(r.get("author_name") or "")}</span></blockquote>' for r in revs if r.get("hidden") not in (True, "True"))
-    pub("reviews/", "Listener reviews", f"What listeners say about the {NAME}.", f"<h1>Listener reviews</h1>{rv}")
+    xr = json.loads((D / "reviews_ext.json").read_text("utf-8")) if (D / "reviews_ext.json").exists() else [
+        {"source": "Apple Podcasts" if r.get("source") == "A" else "Website", "country": r.get("country") or "", "author": r.get("author_name") or "Listener", "rating": int(r.get("rating") or 0), "title": r.get("title") or "", "body": r.get("review") or "", "date": (r.get("published") or "")[:10]}
+        for r in revs if r.get("hidden") not in (True, "True")]
+    xr = [r for r in xr if r["rating"]]
+    dist = [sum(1 for r in xr if r["rating"] == k) for k in (1, 2, 3, 4, 5)]
+    rv = "".join(f'<blockquote class="rv-ext"><strong>{"★" * r["rating"]}{"☆" * (5 - r["rating"])} {esc(r["title"])}</strong><br>{esc(r["body"])}<br><span class="mut">– {esc(r["author"])} · {esc(r["source"])}{" · " + esc(r["country"].upper()) if r.get("country") else ""} · {r["date"]}</span></blockquote>' for r in xr[:60])
+    mount = (f'<div id="sh-reviews" data-show="en" data-ext-n="{len(xr)}" data-ext-sum="{sum(r["rating"] for r in xr)}" data-ext-dist="{",".join(map(str, dist))}" data-login="{BASE}/community/"><noscript><p>Enable JavaScript to rate and review.</p></noscript></div>'
+             f'<link rel="stylesheet" href="{BASE}/assets/reviews.css"><script defer src="{BASE}/assets/reviews.js"></script>')
+    pub("reviews/", "Listener reviews", f"What listeners say about the {NAME}: ratings and reviews from Apple Podcasts and the M365.FM community.", f'<h1>Listener reviews</h1>{mount}<h2>From Apple Podcasts and the web</h2>{rv}')
     lk = "".join(f'<li><a href="{esc(l["url"])}" rel="noopener">{esc(l["name"])}</a></li>' for l in links if l.get("hidden") not in (True, "True") and str(l.get("url") or "").startswith("http"))
     if lk: pub("listen/", "Listen on every platform", f"Where to listen to the {NAME}.", f"<h1>Listen</h1><ul>{lk}</ul>")
 
