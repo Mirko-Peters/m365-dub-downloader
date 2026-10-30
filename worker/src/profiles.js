@@ -98,6 +98,23 @@ export async function autoVerifyCert(url, ent, name) {
   } catch { return false; }
 }
 
+// Bestaetigte (abgeleitete) Expertise: Themen aus bestaetigten Speaker-Sessions und aus geprueften Zertifikaten - nicht selbst gewaehlt
+const TOPIC_T = ["product", "platform", "concept", "category"];
+export async function derivedExpertise(db, uid, handle, map) {
+  const out = new Map();
+  if (handle) {
+    const rows = (await db.prepare("SELECT topics,speakers FROM event_sessions WHERE status='live' AND speakers LIKE ?").bind(`%"h":"${handle}"%`).all()).results || [];
+    for (const r of rows) {
+      let sp = [], tp = []; try { sp = JSON.parse(r.speakers || "[]"); tp = JSON.parse(r.topics || "[]"); } catch { continue; }
+      if (!sp.some((x) => x.h === handle && x.s === "confirmed")) continue;
+      for (const t of tp) { const o = out.get(t) || { via: "session", n: 0 }; o.n++; out.set(t, o); }
+    }
+  }
+  const certs = ((await db.prepare("SELECT c.eid FROM certs c JOIN cert_check k ON k.user_id=c.user_id AND k.eid=c.eid WHERE c.user_id=? AND k.status='verified'").bind(uid).all()).results || []).map((r) => r.eid);
+  for (const c of certs) for (const [, to] of (map.get(c)?.rel || [])) if (TOPIC_T.includes(map.get(to)?.type) && !out.has(to)) out.set(to, { via: "cert", n: 1 });
+  return out;
+}
+
 async function personView(db, uid, viewer) {
   const p = await db.prepare("SELECT p.*,u.name,u.bio FROM profiles p JOIN users u ON u.id=p.user_id WHERE p.user_id=? AND u.banned=0").bind(uid).first(); if (!p) return null;
   const q = async (sql, ...b) => (await db.prepare(sql).bind(...b).all()).results || [];
@@ -310,7 +327,13 @@ export async function handleProfiles(env, request, url, path, user, J) {
     const us = (await db.prepare("SELECT user_id FROM profiles WHERE public=1 AND handle IS NOT NULL ORDER BY updated DESC LIMIT 300").all()).results || [];
     const os = (await db.prepare("SELECT id FROM orgs WHERE public=1 ORDER BY created DESC LIMIT 200").all()).results || [];
     const people = [], orgs = [];
-    for (const u of us) { const v = await personView(db, u.user_id, 0); if (v) { delete v.id; people.push(v); } }
+    const emap = await entityMap(env);
+    for (const u of us) {
+      const v = await personView(db, u.user_id, 0); if (!v) continue;
+      const have = new Set(v.expertise.map((e) => e.e));   // bestaetigte Expertise aus Sessions/Zertifikaten ergaenzen
+      for (const [eid, d] of await derivedExpertise(db, u.user_id, v.handle, emap)) if (emap.has(eid)) { const ex = v.expertise.find((e) => e.e === eid); if (ex) ex.via = d.via; else v.expertise.push({ e: eid, level: 2, verified: false, endorsed: 0, me: false, via: d.via, confirmed: true }); }
+      delete v.id; people.push(v);
+    }
     for (const o of os) { const v = await orgView(db, o.id, 0); if (v) { delete v.id; orgs.push(v); } }
     return J({ people, orgs }, 200, { "cache-control": "public, max-age=300" });
   }

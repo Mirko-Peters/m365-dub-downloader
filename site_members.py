@@ -27,7 +27,7 @@ def experts_index(people, orgs):
     for kind, lst in (("u", people), ("o", orgs)):
         for x in lst:
             for ex in x.get("expertise", []):
-                ix.setdefault(ex["e"], []).append({"kind": kind, "handle": x["handle"], "name": x["name"], "headline": x.get("headline") or x.get("tagline") or "", "verified": ex.get("verified"), "level": ex.get("level", 2), "endorsed": ex.get("endorsed", 0)})
+                ix.setdefault(ex["e"], []).append({"kind": kind, "handle": x["handle"], "name": x["name"], "headline": x.get("headline") or x.get("tagline") or "", "verified": ex.get("verified") or bool(ex.get("via")), "via": ex.get("via", ""), "level": ex.get("level", 2), "endorsed": ex.get("endorsed", 0)})
     for k in ix:
         ix[k].sort(key=lambda a: (-int(bool(a["verified"])), -a["endorsed"], -a["level"], a["name"].lower()))
     return ix
@@ -162,7 +162,9 @@ def build(g, people, orgs, extra=None):
             if e["e"] not in ENTS:
                 continue
             en = ENTS[e["e"]]; note = []
-            if e.get("verified"):
+            if e.get("via"):
+                note.append(("bestätigt durch Session" if e["via"] == "session" else "bestätigt durch Zertifikat") if lang == "de" else ("confirmed by session" if e["via"] == "session" else "confirmed by certification"))
+            elif e.get("verified"):
                 note.append(s["verified"])
             elif e.get("endorsed"):
                 note.append(s["endorsed"].format(n=e["endorsed"]))
