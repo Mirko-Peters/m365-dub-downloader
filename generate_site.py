@@ -581,6 +581,7 @@ def header(lang, switch):
         home = f"{BASE}/{lang}/"
         menu = []
         menu.insert(0, (LRN.T(lang)["learn"], f"{BASE}/{lang}/learn/"))
+        menu.append(("Show (EN)", f"{BASE}/show/"))
         menu.insert(0, (_CI.get(lang, _CI.get("en", {})).get("profile", "Profile"), f"{BASE}/{lang}/community/"))
         _cl = {"de": ("Community", "Podcast", "Blog", "Videos", "Bibliothek", "Gäste")}.get(lang, ("Community", "Podcast", "Blog", "Videos", "Library", "Guests"))
         menu.insert(0, (_CI.get(lang, _CI.get("en", {})).get("community", _cl[0]), [(ui[3], home)] + [(_cl[i + 1], f"{BASE}/{lang}/community/{p}/") for i, p in enumerate(("podcast", "blog", "video", "library", "guests"))]))
