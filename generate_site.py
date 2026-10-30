@@ -1116,6 +1116,8 @@ def build():
     for _x in (LRN._fetch_json(f"{COMMUNITY_API}/api/qa/export") or {}).get("items", []):
         ENT.FAQ.setdefault(_x["eid"], []).append(_x)
     ENT.CLAIMS.update({c["eid"]: c["handle"] for c in _cl}); MEM.CLAIMED.update({c["handle"]: c["eid"] for c in _cl})
+    import site_updates as _SU
+    _SU.load(COMMUNITY_API)
     ENT.build(_ctx, lambda lang: LRN.gloss_links(lang, BASE), MEM.experts_index(_people, _orgs), _ep_find)
     import site_blog as BLG
     _posts = BLG.fetch_posts(COMMUNITY_API); MEM.BLOGLANGS = {p["lang"] for p in _posts}

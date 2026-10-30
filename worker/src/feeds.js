@@ -6,9 +6,9 @@ const dec = (s) => s.replace(/<!\[CDATA\[([\s\S]*?)\]\]>/g, "$1").replace(/&#(\d
   .replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/&quot;/g, '"').replace(/&apos;/g, "'").replace(/&amp;/g, "&");
 const tag = (blk, name) => { const m = new RegExp(`<${name}(?:\\s[^>]*)?>([\\s\\S]*?)</${name}>`, "i").exec(blk); return m ? dec(m[1]).trim() : ""; };
 
-export function parseFeed(xml) {
+export function parseFeed(xml, max = 12) {
   const blocks = xml.match(/<(item|entry)[\s>][\s\S]*?<\/\1>/gi) || [], out = [];
-  for (const b of blocks.slice(0, 12)) {
+  for (const b of blocks.slice(0, max)) {
     let link = "";
     const alt = /<link[^>]*rel=["']alternate["'][^>]*href=["']([^"']+)["']/i.exec(b) || /<link[^>]*href=["']([^"']+)["'][^>]*rel=["']alternate["']/i.exec(b) || /<link[^>]*href=["']([^"']+)["'][^>]*\/?>/i.exec(b);
     link = alt ? dec(alt[1]) : tag(b, "link");

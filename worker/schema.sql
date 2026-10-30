@@ -624,3 +624,19 @@ CREATE TABLE IF NOT EXISTS lib_votes (
   created INTEGER NOT NULL,
   PRIMARY KEY (item_id, user_id)
 );
+
+CREATE TABLE IF NOT EXISTS product_updates (     -- Microsoft-Produktupdates je Entitaet (nur Titel, Link, Datum; Quelle offiziell)
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  eid TEXT NOT NULL,
+  title TEXT NOT NULL,
+  url TEXT NOT NULL,
+  published INTEGER NOT NULL,
+  source TEXT NOT NULL DEFAULT '',
+  UNIQUE (eid, url)
+);
+CREATE INDEX IF NOT EXISTS idx_pu_eid ON product_updates(eid, published);
+CREATE TABLE IF NOT EXISTS update_src (          -- Abrufstand je Quelle
+  url TEXT PRIMARY KEY,
+  fetched INTEGER NOT NULL DEFAULT 0,
+  fails INTEGER NOT NULL DEFAULT 0
+);

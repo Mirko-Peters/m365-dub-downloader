@@ -8,7 +8,8 @@ _C = {}
 
 def _load(api):
     if not _C:
-        import site_blog, site_podcast, site_events, site_video, site_library
+        import site_blog, site_podcast, site_events, site_video, site_library, site_updates
+        site_updates.load(api)
         _C["cv"] = site_video.fetch_videos(api); _C["posts"] = site_blog.fetch_posts(api); _C["eps"] = site_podcast.fetch_eps(api); _C["events"] = site_events.fetch_events(api)
         _C["lib"] = site_library.fetch_items(api); _C["feed"] = (_fetch_json(f"{api}/api/feed/export") or {}).get("items", [])
     return _C
@@ -65,6 +66,14 @@ def hub(g, lang, base, api, videos, vid_html, root=False):
         who = f'{base}/community/{"c" if f["type"] == "o" else "u"}/{f["handle"]}/'
         cards.append((d, "feed", f'<div class="hub-card" data-k="feed"><div class="kicker">{esc(T(lang, "From the creators", "Von den Creatorn"))} · {esc(KL.get(f["kind"], f["kind"].title()))}</div><h3><a href="{esc(f["url"])}" rel="nofollow ugc noopener" target="_blank">{esc(f["title"])}</a></h3><p class="mut"><a href="{who}">{esc(f["name"])}</a> · {d}</p></div>'))
         tag(f["name"], [], f["title"])
+    import site_updates as SU
+    seen_u = set()
+    for u in SU.ALL:
+        if len(seen_u) >= 40: break
+        if u["url"] in seen_u: continue
+        seen_u.add(u["url"])
+        cards.append((SU.day(u["published"]), "update", f'<div class="hub-card" data-k="update"><div class="kicker">{esc(T(lang, "Update", "Update"))} · {esc(u["source"])}</div><h3><a href="{esc(u["url"])}" rel="nofollow noopener" target="_blank">{esc(u["title"])}</a></h3><p class="mut">{SU.day(u["published"])}</p></div>'))
+        tag("Microsoft", [x["eid"] for x in SU.ALL if x["url"] == u["url"]], u["title"])
     for e in C["cv"]:
         if ok(e["lang"]):
             d = __import__("datetime").datetime.fromtimestamp(e["published"]).strftime("%Y-%m-%d")
@@ -76,7 +85,7 @@ def hub(g, lang, base, api, videos, vid_html, root=False):
     cards.sort(key=lambda x: x[0], reverse=True)
     counts = {}
     for _, k, _h in cards: counts[k] = counts.get(k, 0) + 1
-    labels = [("all", T(lang, "All", "Alle")), ("blog", "Blog"), ("podcast", "Podcast"), ("event", T(lang, "Events", "Events")), ("library", T(lang, "Library", "Bibliothek")), ("feed", T(lang, "From the creators", "Von den Creatorn")), ("creatorvideo", T(lang, "Creator videos", "Creator-Videos")), ("video", T(lang, "Stick-man videos", "Stick-Man-Videos"))]
+    labels = [("all", T(lang, "All", "Alle")), ("blog", "Blog"), ("podcast", "Podcast"), ("event", T(lang, "Events", "Events")), ("library", T(lang, "Library", "Bibliothek")), ("feed", T(lang, "From the creators", "Von den Creatorn")), ("update", T(lang, "Microsoft updates", "Microsoft-Updates")), ("creatorvideo", T(lang, "Creator videos", "Creator-Videos")), ("video", T(lang, "Stick-man videos", "Stick-Man-Videos"))]
     chips = "".join(f'<button type="button" class="hub-f" data-k="{k}" aria-pressed="false">{esc(l)}{"" if k == "all" else " · " + str(counts.get(k, 0))}</button>' for k, l in labels if k == "all" or counts.get(k))
     cta = (f'<p><a class="btn main" href="{croot}">{esc(T(lang, "Join the community", "Zur Community"))}</a> '
            f'<a class="btn" href="{croot}blog/">Blog</a> <a class="btn" href="{croot}podcast/">Podcast</a> <a class="btn" href="{croot}events/">Events</a> <a class="btn" href="{croot}library/">{esc(T(lang, "Library", "Bibliothek"))}</a> <a class="btn" href="{croot}guests/">{esc(T(lang, "Guest exchange", "Gäste-Börse"))}</a></p>')

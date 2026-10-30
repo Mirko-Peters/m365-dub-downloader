@@ -1,5 +1,6 @@
 """Entitaetsdatenbank fuer das Microsoft-Oekosystem: Seiten, JSON-Exporte, Schema.org-Graph."""
 from site_i18n import T
+import site_updates as SU
 import json
 from site_i18n import COMM_LANGS, pfx, pfx2, overlay
 from pathlib import Path
@@ -289,7 +290,7 @@ def build(g, wiki_links, experts_by_ent, ep_find):
             faqbox += f'<div id="en-qa" data-eid="{e["id"]}"></div>'
             wb = wiki_block(lang, e["id"], api, BASE, stat.get(e["id"]), wiki_links(lang))
             b = shell(lang, f'<nav aria-label="breadcrumb"><a href="{root}">{esc(s["entities"])}</a></nav><h1>{esc(e["name"])}</h1><p class="mut">{esc(TL[e["type"]][li])}</p><p style="font-size:1.1em">{esc(d)}</p>{oldbanner}{claim_html(e["id"], lang)}{longbox}{ft}{evl}{gloss}'
-                          f'{faqbox}<div class="en-rel">{rb}</div>{eb}{wb}{("<h2>" + esc(s["experts"]) + "</h2>" + ehtml) if ehtml else ""}{edit}'
+                          f'{faqbox}<div class="en-rel">{rb}</div>{eb}{SU.block(lang, e["id"])}{wb}{("<h2>" + esc(s["experts"]) + "</h2>" + ehtml) if ehtml else ""}{edit}'
                           f'<script>window.M365E={{api:"{api}",lang:"{lang}",base:"{BASE}",s:{json.dumps({k: s[k] for k in ("edit_e",)}, ensure_ascii=False)}}}</script><script defer src="{BASE}/assets/entity.js"></script>')
             node = ent_ld(BASE, e, lang, gl_ids)
             ld = [{"@context": "https://schema.org", "@type": "WebPage", "@id": u + "#page", "url": u, "name": e["name"], "inLanguage": lang, "mainEntity": node, "dateModified": TODAY,
