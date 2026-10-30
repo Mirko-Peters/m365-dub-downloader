@@ -667,3 +667,8 @@ CREATE TABLE IF NOT EXISTS update_src (          -- Abrufstand je Quelle
   fetched INTEGER NOT NULL DEFAULT 0,
   fails INTEGER NOT NULL DEFAULT 0
 );
+CREATE TABLE IF NOT EXISTS export_cache (          -- zwischengespeicherte Exporte fuer den Seitenbau (Profile), per Cron erneuert
+  k TEXT PRIMARY KEY,
+  v TEXT NOT NULL,
+  updated INTEGER NOT NULL
+);

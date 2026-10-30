@@ -206,6 +206,27 @@ async function replaceLists(db, t, id, { exp, prog, chan, certs }) {
   await db.batch(ops);
 }
 
+// Profil-Export fuer den Seitenbau: alle Profile lesen und in D1 zwischenspeichern (Cron alle 30 Minuten), damit der Abruf eine einzige Zeile liest
+export async function refreshProfilesExport(env) {
+  const db = env.DB;
+  await db.prepare("CREATE TABLE IF NOT EXISTS export_cache (k TEXT PRIMARY KEY, v TEXT NOT NULL, updated INTEGER NOT NULL)").run();
+    const us = (await db.prepare("SELECT user_id FROM profiles WHERE public=1 AND handle IS NOT NULL ORDER BY updated DESC LIMIT 300").all()).results || [];
+    const os = (await db.prepare("SELECT id FROM orgs WHERE public=1 ORDER BY created DESC LIMIT 200").all()).results || [];
+    const people = [], orgs = [];
+    const emap = await entityMap(env);
+    const sess = (await db.prepare("SELECT s.topics,s.speakers,e.owner_id oid FROM event_sessions s JOIN events e ON e.id=s.event_id WHERE s.status='live' AND s.topics<>'[]'").all()).results || [];   // einmal fuer alle Profile
+    const one = async (u) => {
+      const v = await personView(db, u.user_id, 0); if (!v) return null;
+      for (const [eid, d] of await derivedExpertise(db, u.user_id, v.handle, emap, sess)) if (emap.has(eid)) { const ex = v.expertise.find((e) => e.e === eid); if (ex) ex.via = d.via; else v.expertise.push({ e: eid, level: 2, verified: false, endorsed: 0, me: false, via: d.via, confirmed: true }); }   // bestaetigte Expertise aus Sessions/Zertifikaten ergaenzen
+      delete v.id; return v;
+    };
+    for (let k = 0; k < us.length; k += 6) for (const v of await Promise.all(us.slice(k, k + 6).map((u) => one(u).catch(() => null)))) if (v) people.push(v);   // in Gruppen parallel, Reihenfolge bleibt; ein defektes Profil stoppt den Export nicht
+    for (const o of os) { const v = await orgView(db, o.id, 0); if (v) { delete v.id; orgs.push(v); } }
+  const out = { people, orgs };
+  await db.prepare("INSERT INTO export_cache(k,v,updated) VALUES('profiles',?,?) ON CONFLICT(k) DO UPDATE SET v=excluded.v,updated=excluded.updated").bind(JSON.stringify(out), now()).run();
+  return out;
+}
+
 export async function handleProfiles(env, request, url, path, user, J) {
   const db = env.DB, method = request.method; let m; await ensureCols(db);
   const need = () => (user ? null : J({ error: "login" }, 401));
@@ -366,20 +387,11 @@ export async function handleProfiles(env, request, url, path, user, J) {
     const v = await personView(db, r.user_id, user?.id); if (!v) return J({ error: "not_found" }, 404);
     v.mine = r.user_id === user?.id; delete v.id; return J({ profile: v }, 200, { "cache-control": "no-store" });
   }
-  if (path === "/api/profiles/export" && method === "GET") {   // oeffentlich: fuer den statischen Seitenbau
-    const us = (await db.prepare("SELECT user_id FROM profiles WHERE public=1 AND handle IS NOT NULL ORDER BY updated DESC LIMIT 300").all()).results || [];
-    const os = (await db.prepare("SELECT id FROM orgs WHERE public=1 ORDER BY created DESC LIMIT 200").all()).results || [];
-    const people = [], orgs = [];
-    const emap = await entityMap(env);
-    const sess = (await db.prepare("SELECT s.topics,s.speakers,e.owner_id oid FROM event_sessions s JOIN events e ON e.id=s.event_id WHERE s.status='live' AND s.topics<>'[]'").all()).results || [];   // einmal fuer alle Profile
-    const one = async (u) => {
-      const v = await personView(db, u.user_id, 0); if (!v) return null;
-      for (const [eid, d] of await derivedExpertise(db, u.user_id, v.handle, emap, sess)) if (emap.has(eid)) { const ex = v.expertise.find((e) => e.e === eid); if (ex) ex.via = d.via; else v.expertise.push({ e: eid, level: 2, verified: false, endorsed: 0, me: false, via: d.via, confirmed: true }); }   // bestaetigte Expertise aus Sessions/Zertifikaten ergaenzen
-      delete v.id; return v;
-    };
-    for (let k = 0; k < us.length; k += 6) for (const v of await Promise.all(us.slice(k, k + 6).map((u) => one(u).catch(() => null)))) if (v) people.push(v);   // in Gruppen parallel, Reihenfolge bleibt; ein defektes Profil stoppt den Export nicht
-    for (const o of os) { const v = await orgView(db, o.id, 0); if (v) { delete v.id; orgs.push(v); } }
-    return J({ people, orgs }, 200, { "cache-control": "public, max-age=300" });
+  if (path === "/api/profiles/export" && method === "GET") {   // oeffentlich: fuer den statischen Seitenbau; aus dem Zwischenspeicher, der per Cron erneuert wird
+    const hit = url.searchParams.get("fresh") === "1" && user?.admin ? null : await db.prepare("SELECT v,updated FROM export_cache WHERE k='profiles'").first().catch(() => null);
+    if (hit && now() - hit.updated < 7200) return J(JSON.parse(hit.v), 200, { "cache-control": "public, max-age=300", "x-export-age": String(now() - hit.updated) });
+    try { return J(await refreshProfilesExport(env), 200, { "cache-control": "public, max-age=300", "x-export-age": "0" }); }
+    catch (e) { if (hit) return J(JSON.parse(hit.v), 200, { "cache-control": "public, max-age=60", "x-export-age": String(now() - hit.updated), "x-export-stale": "1" }); throw e; }   // lieber eine aeltere Fassung als ein Fehler
   }
 
   // ---- Bestaetigung durch andere (Endorsements), Upvotes ----
