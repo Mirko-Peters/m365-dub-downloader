@@ -48,10 +48,8 @@ LANGS = {
     "pl": ("Polski", "pl", "ltr", 7393242, "pl_PL"), "id": ("Bahasa Indonesia", "id", "ltr", 7393230, "id_ID"),
     "ru": ("Русский", "ru", "ltr", 7393247, "ru_RU"), "uk": ("Українська", "uk", "ltr", 7393254, "uk_UA"),
     "ar": ("العربية", "ar", "rtl", 7393221, "ar_AR"), "he": ("עברית", "he", "rtl", 7393227, "he_IL"),
-    "hi": ("हिन्दी", "hi", "ltr", 7393228, "hi_IN"), "ja": ("日本語", "ja", "ltr", 7393232, "ja_JP"),
-    "ko": ("한국어", "ko", "ltr", 7393236, "ko_KR"), "ml": ("മലയാളം", "ml", "ltr", 7393238, "ml_IN"),
-    "ta": ("தமிழ்", "ta", "ltr", 7393250, "ta_IN"),
-    "te": ("తెలుగు", "te", "ltr", 7393253, "te_IN"),
+    "ja": ("日本語", "ja", "ltr", 7393232, "ja_JP"),
+    "ko": ("한국어", "ko", "ltr", 7393236, "ko_KR"),
 }
 
 # UI-Texte je Sprache: listen, watch, transcript, all, more, about, bio, home

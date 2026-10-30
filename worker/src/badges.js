@@ -141,7 +141,7 @@ export async function closeMonth(env) {
   const done = await db.prepare("SELECT v FROM meta WHERE k='curator_closed'").first();
   if (done?.v === key) return 0;
   let n = 0;
-  for (const lang of ["de", "es", "fr", "it", "pt", "nl", "pl", "id", "ru", "uk", "ar", "he", "hi", "ja", "ko", "ml", "ta", "te"]) {
+  for (const lang of ["de", "es", "fr", "it", "pt", "nl", "pl", "id", "ru", "uk", "ar", "he", "ja", "ko"]) {
     const rows = await db.prepare(
       `SELECT u.id, (SELECT COUNT(*) FROM comments c WHERE c.user_id=u.id AND c.lang=?1 AND c.status='ok' AND c.created>=?2 AND c.created<?3) cm,
         (SELECT COUNT(*) FROM likes l JOIN comments c ON c.id=l.comment_id WHERE c.user_id=u.id AND c.lang=?1 AND c.status='ok' AND l.created>=?2 AND l.created<?3 AND l.user_id<>u.id) lk

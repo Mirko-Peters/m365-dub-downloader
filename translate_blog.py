@@ -20,7 +20,7 @@ ROOT = Path(__file__).parent
 OUT = ROOT / "data" / "blog_i18n"
 TEAM = ROOT / "agents" / "blog-team"
 SRC = ROOT / "data" / "podpage" / "blog_posts.json.gz"
-LANGS = ("de", "fr", "es", "it", "nl", "pt", "pl", "id", "ru", "uk", "ar", "he", "hi", "ja", "ko", "ml", "ta", "te")
+LANGS = ("de", "fr", "es", "it", "nl", "pt", "pl", "id", "ru", "uk", "ar", "he", "ja", "ko")
 NAMES = {"de": "German", "es": "Spanish", "fr": "French", "it": "Italian", "pt": "Brazilian Portuguese", "nl": "Dutch", "pl": "Polish", "id": "Indonesian", "ru": "Russian",
          "uk": "Ukrainian", "ar": "Arabic", "he": "Hebrew", "hi": "Hindi", "ja": "Japanese", "ko": "Korean", "ml": "Malayalam", "pa": "Punjabi (Gurmukhi)", "ta": "Tamil", "te": "Telugu"}
 WORK = ROOT / "work" / "blog-i18n"
