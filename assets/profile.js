@@ -92,18 +92,19 @@
       name.addEventListener("input", sync);
       mkBtn.onclick = function () {
         mkBox.hidden = false; mkBox.textContent = "";
-        var ta = h("textarea", { rows: 2, maxlength: 300, placeholder: NQ.d, "aria-label": NQ.d, style: "width:100%" }), go = h("button", { type: "button", class: "btn main", text: NQ.go }), ms = h("span", { class: "cmut" });
+        var ta = h("textarea", { rows: 2, maxlength: 300, placeholder: NQ.d, "aria-label": NQ.d, style: "width:100%" }), go = h("button", { type: "button", class: "btn main", text: NQ.go }), ms = h("span", { class: "cmut" }), ty = h("select", { "aria-label": "Typ" });
+        if (!newType) [["product", de ? "Produkt" : "Product"], ["platform", de ? "Plattform" : "Platform"], ["concept", de ? "Konzept / Thema" : "Concept / topic"], ["category", de ? "Kategorie" : "Category"]].forEach(function (o) { ty.appendChild(h("option", { value: o[0], text: o[1] })); });
         go.onclick = function () {
           var nm = name.value.trim(), dsc = ta.value.trim(); if (dsc.length < 20) { ms.textContent = NQ.short; return; }
           go.disabled = true;
-          api("/api/entity", { method: "POST", body: { id: slug(nm), data: { name: nm, type: newType || "product", aliases: [], desc: de ? { en: "", de: dsc } : { en: dsc, de: "" }, rel: [] }, summary: "" } }).then(function (r) {
+          api("/api/entity", { method: "POST", body: { id: slug(nm), data: { name: nm, type: newType || ty.value, aliases: [], desc: de ? { en: "", de: dsc } : { en: dsc, de: "" }, rel: [] }, summary: "" } }).then(function (r) {
             go.disabled = false;
-            if (r.s === 200 && r.j.status === "live") { var ne = { id: slug(nm), name: nm, type: newType || "product" }; all.push(ne); dl.appendChild(h("option", { value: nm })); ms.textContent = NQ.live; mkBox.hidden = true; sync(); }
+            if (r.s === 200 && r.j.status === "live") { var ne = { id: slug(nm), name: nm, type: newType || ty.value }; all.push(ne); dl.appendChild(h("option", { value: nm })); ms.textContent = NQ.live; mkBox.hidden = true; sync(); }
             else if (r.s === 200) { ms.textContent = NQ.pend; name.value = ""; sync(); }
             else ms.textContent = NQ.err + (r.j && r.j.error || "");
           }).catch(function () { go.disabled = false; ms.textContent = NQ.err; });
         };
-        [ta, go, ms].forEach(function (x) { mkBox.appendChild(x); });
+        (newType ? [ta, go, ms] : [ty, ta, go, ms]).forEach(function (x) { mkBox.appendChild(x); });
       };
       var row = h("div", { style: "display:flex;gap:.4em;flex-wrap:wrap;margin:.3em 0" }, [name].concat(withYear ? [yr, pr] : [lv], [h("button", { type: "button", class: "btn", text: Q.rm, onclick: function () { row.remove(); } }), mkBtn, mkBox]));
       row._get = function () { var v = name.value.trim().toLowerCase(), hit = all.filter(function (x) { return x.name.toLowerCase() === v; })[0]; if (!hit) return v ? null : false; return withYear ? { e: hit.id, year: +yr.value || 0, url: pr.value.trim() } : { e: hit.id, level: +lv.value }; };
