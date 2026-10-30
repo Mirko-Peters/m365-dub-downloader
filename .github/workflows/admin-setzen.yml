@@ -1,0 +1,39 @@
+name: Admin-Konto setzen (einmalig, manuell)
+on:
+  workflow_dispatch:
+    inputs:
+      user_id:
+        description: "Nutzer-ID aus der Liste (leer = nur Liste anzeigen, bei genau einem Nutzer wird er gesetzt)"
+        required: false
+        default: ""
+concurrency: { group: admin-setzen, cancel-in-progress: false }
+jobs:
+  admin:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Nutzer auflisten und Admin setzen
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          WANT: ${{ github.event.inputs.user_id }}
+        run: |
+          python3 - <<'PY'
+          import os, json, urllib.request
+          H = {"Authorization": "Bearer " + os.environ["CLOUDFLARE_API_TOKEN"], "Content-Type": "application/json"}
+          A = os.environ["CLOUDFLARE_ACCOUNT_ID"]; B = "https://api.cloudflare.com/client/v4/accounts/" + A
+          def call(m, p, d=None):
+              r = urllib.request.Request(B + p, method=m, headers=H, data=json.dumps(d).encode() if d is not None else None)
+              return json.load(urllib.request.urlopen(r))
+          db = [x for x in call("GET", "/d1/database?name=m365-dub")["result"] if x["name"] == "m365-dub"][0]["uuid"]
+          q = lambda sql, p=[]: call("POST", f"/d1/database/{db}/query", {"sql": sql, "params": p})["result"][0]["results"]
+          users = q("SELECT id,provider,name FROM users WHERE banned=0 ORDER BY id LIMIT 50")
+          for u in users: print("Nutzer", u["id"], u["provider"], u["name"])
+          want = os.environ.get("WANT", "").strip()
+          pick = [u for u in users if str(u["id"]) == want] if want else (users if len(users) == 1 else [])
+          if len(pick) != 1:
+              print("::warning::Bitte den Workflow erneut starten und die Nutzer-ID aus der Liste eintragen."); raise SystemExit(0)
+          sub = q("SELECT provider,sub FROM users WHERE id=?", [pick[0]["id"]])[0]
+          val = f'{sub["provider"]}:{sub["sub"]}'
+          call("PUT", "/workers/scripts/m365-dub-community/secrets", {"name": "ADMIN_SUBS", "text": val, "type": "secret_text"})
+          print("::notice::ADMIN_SUBS gesetzt fuer Nutzer", pick[0]["id"], pick[0]["name"])
+          PY
