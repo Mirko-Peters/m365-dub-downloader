@@ -433,7 +433,7 @@ def gloss_link(html_, lang, base, max_links=8):
     """Erste Nennung bekannter Begriffe im Artikel auf die Glossar-Seite verlinken (nur Absätze/Listen, nie in Links)."""
     if not GLOSS or not html_:
         return html_
-    tgt = (lambda x: f"{base}/de/glossary/{x['id']}/") if lang == "de" else (lambda x: f"{base}/{lang}/glossary/#{x['id']}")
+    tgt = (lambda x: f"{base}/de/entity/{x['id']}/") if lang == "de" else (lambda x: f"{base}/entity/{x['id']}/")
     gids = {x["id"] for x in GLOSS}
     cands = [(nm, x) for x in GLOSS for nm in _names(x)]
     ents = [e for e in ENTS.values() if e["id"] not in gids and e["type"] not in ("media",)]
