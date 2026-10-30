@@ -117,9 +117,9 @@ export async function badgesFor(db, ids) {
   try {
     const hs = (await db.prepare(`SELECT user_id id, handle FROM profiles WHERE handle IS NOT NULL AND user_id IN (${ids.map(() => "?").join(",")})`).bind(...ids).all()).results || [];
     if (hs.length) {
-      const conf = new Set();
-      for (const r of (await db.prepare(`SELECT speakers FROM event_sessions WHERE status='live' AND speakers LIKE '%"confirmed"%'`).all()).results || []) { try { for (const x of JSON.parse(r.speakers || "[]")) if (x.h && x.s === "confirmed") conf.add(x.h); } catch { /* ignore */ } }
-      for (const r of hs) if (conf.has(r.handle)) m.set(r.id, [...(m.get(r.id) || []), "prog_speaker"]);
+      const conf = new Map();
+      for (const r of (await db.prepare(`SELECT speakers FROM event_sessions WHERE status='live' AND speakers LIKE '%"confirmed"%'`).all()).results || []) { try { for (const x of JSON.parse(r.speakers || "[]")) if (x.h && x.s === "confirmed") conf.set(x.h, (conf.get(x.h) || 0) + 1); } catch { /* ignore */ } }
+      for (const r of hs) { const n = conf.get(r.handle) || 0; if (n) m.set(r.id, [...(m.get(r.id) || []), "prog_speaker_" + (n >= 15 ? "platinum" : n >= 7 ? "gold" : n >= 3 ? "silver" : "bronze")]); }   // Stufen nach bestaetigten Sessions: 1 / 3 / 7 / 15
     }
   } catch { /* Events-Tabellen fehlen: kein Badge */ }
   return m;

@@ -20,7 +20,8 @@
   function hideAll(sel) { document.querySelectorAll(sel).forEach(function (e) { e.hidden = true; }); }
   function date(ts) { try { return new Date(ts * 1000).toLocaleDateString(LANG); } catch (e) { return ""; } }
 
-  var PGI = { speaker: "🎤", mvp: "🏆", mct: "🎓", rd: "🧭", msa: "🌟", ms_employee: "🪟", partner: "🤝" }, PGN = { speaker: (document.documentElement.lang || "en").slice(0, 2) === "de" ? "Speaker bei Community-Events" : "Event speaker", mvp: "Microsoft MVP", mct: "Microsoft Certified Trainer", rd: "Microsoft Regional Director", msa: "Microsoft Student Ambassador", ms_employee: "Microsoft", partner: "Microsoft Partner" };
+  function SPN(d, n, e) { return (document.documentElement.lang || "en").slice(0, 2) === "de" ? "Speaker " + d + " (" + n + " bestätigte Sessions)" : "Speaker " + (e || d) + " (" + n + " confirmed sessions)"; }
+  var PGI = { speaker_bronze: "🥉", speaker_silver: "🥈", speaker_gold: "🥇", speaker_platinum: "💎", mvp: "🏆", mct: "🎓", rd: "🧭", msa: "🌟", ms_employee: "🪟", partner: "🤝" }, PGN = { speaker_bronze: SPN("Bronze", "1+"), speaker_silver: SPN("Silber", "3+", "Silver"), speaker_gold: SPN("Gold", "7+"), speaker_platinum: SPN("Platin", "15+", "Platinum"), mvp: "Microsoft MVP", mct: "Microsoft Certified Trainer", rd: "Microsoft Regional Director", msa: "Microsoft Student Ambassador", ms_employee: "Microsoft", partner: "Microsoft Partner" };
   function badgeEls(list, big) {
     return h("span", { class: "cbs" }, (list || []).map(function (b) { return h("span", { class: "cb" + (big ? " big" : ""), title: /^prog_/.test(b) ? PGN[b.slice(5)] : tt("b_" + b) + " – " + tt("b_" + b + "_d"), text: PGI[b.slice(5)] && /^prog_/.test(b) ? PGI[b.slice(5)] : (ICON[b] || "★") }); }));
   }
