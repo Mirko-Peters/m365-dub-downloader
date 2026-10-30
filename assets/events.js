@@ -24,6 +24,7 @@
     box.addEventListener("change", add); box.addEventListener("input", function () { if (byLabel[box.value.trim().toLowerCase()]) add(); });
     draw(); wrap.get = function () { add(); return ids.slice(); }; return wrap;
   }
+  window.M365U = { h: h, api: api, lab: lab, inp: inp, sel: sel, topicsUI: topicsUI };
   function csv(s) { return String(s || "").split(",").map(function (x) { return x.trim(); }).filter(Boolean); }
   function spk(list) { return csv(list).map(function (x) { var p = x.split("|"), e = (p[1] || "").trim().toLowerCase(); if (/^[a-z0-9][a-z0-9-]{2,29}$/.test(p[0].trim()) && !e) return { h: p[0].trim() }; return e ? { n: p[0].trim(), e: e } : { n: p[0].trim() }; }); }
   function spkStr(l) { return (l || []).map(function (x) { return x.h || (x.n + (x.e ? "|" + x.e : "")); }).join(", "); }

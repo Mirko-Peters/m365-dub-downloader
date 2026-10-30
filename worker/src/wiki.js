@@ -13,7 +13,7 @@ const MAX_BODY = 12000, MAX_REFS = 25;
 const BAD_HOST = /(^|\.)(bit\.ly|t\.co|tinyurl\.com|goo\.gl|is\.gd|ow\.ly|buff\.ly|cutt\.ly|rebrand\.ly|shorturl\.at)$/i;
 // Markup: ## / ### Ueberschriften, **fett**, *kursiv*, - Listen, 1. Listen, > Zitat, [[id|Text]] interne Links,
 // {{ref|Titel|https://url|Herausgeber|Datum}} Quelle als Fussnote, {{cn}} = Beleg fehlt. Links sonst nur ueber Quellen.
-function sanitize(raw) {
+export function sanitize(raw) {
   let s = cleanText(raw, MAX_BODY).replace(/[<>]/g, ""), err = null, n = 0;
   s = s.split(/(\{\{ref\|[^{}]*\}\})/).map((part, i) => {
     if (i % 2 === 0) return part.replace(/https?:\/\/\S+/gi, "").replace(/www\.\S+/gi, "");

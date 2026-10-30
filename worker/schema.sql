@@ -504,3 +504,27 @@ CREATE TABLE IF NOT EXISTS ui_i18n (
   created INTEGER NOT NULL,
   PRIMARY KEY (lang, k)
 );
+
+CREATE TABLE IF NOT EXISTS blog_posts (          -- Blog je Mitglied; status: draft | pending | live | rejected
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  user_id INTEGER NOT NULL,
+  slug TEXT NOT NULL,
+  title TEXT NOT NULL,
+  summary TEXT NOT NULL DEFAULT '',
+  body TEXT NOT NULL DEFAULT '',                 -- Wiki-Markup (wie Glossar), Links nur ueber {{ref|...}}
+  lang TEXT NOT NULL DEFAULT 'en',
+  topics TEXT NOT NULL DEFAULT '[]',             -- Entitaets-IDs
+  status TEXT NOT NULL DEFAULT 'draft',
+  note TEXT NOT NULL DEFAULT '',
+  created INTEGER NOT NULL,
+  updated INTEGER NOT NULL,
+  published INTEGER NOT NULL DEFAULT 0,
+  UNIQUE (user_id, slug)
+);
+CREATE INDEX IF NOT EXISTS idx_blog_status ON blog_posts(status, published);
+CREATE TABLE IF NOT EXISTS blog_votes (
+  post_id INTEGER NOT NULL,
+  user_id INTEGER NOT NULL,
+  created INTEGER NOT NULL,
+  PRIMARY KEY (post_id, user_id)
+);

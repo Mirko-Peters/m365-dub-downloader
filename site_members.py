@@ -1,5 +1,6 @@
 """Mitglieder- und Firmenverzeichnis: oeffentliche Experten-Profile (nur Opt-in) mit Schema.org-Verknuepfung zu den Entitaeten."""
 import json
+BLOGLANGS = set()
 from site_i18n import COMM_LANGS, pfx, pfx2, overlay, T
 from datetime import datetime, timezone
 from site_learn import ENTS, esc, _fetch_json, LCSS
@@ -265,7 +266,7 @@ def build(g, people, orgs, extra=None):
             fjs = '<script>(function(){var b=[].slice.call(document.querySelectorAll(".mb-f")),l=[].slice.call(document.querySelectorAll(".mb-card[data-p]"));b.forEach(function(x){x.addEventListener("click",function(){b.forEach(function(y){y.setAttribute("aria-pressed",y===x?"true":"false")});l.forEach(function(i){i.hidden=!!x.dataset.f&&(" "+i.dataset.p+" ").indexOf(" "+x.dataset.f+" ")<0})})})})()</script>'
             lm = '<script>' + LIVEMERGE.replace("%KEY%", "people" if kind == "members" else "orgs").replace("%BASE%", purl(BASE, lang, pk, "")) + '</script>'
             feed = f'<h2>{esc(s["feed"])}</h2><div id="pf-feed" data-top="{esc(s["feedtop"])}" data-new="{esc(s["feed"])}"></div>' if kind == "members" else ""
-            b = shell(lang, f'<h1>{esc(title)}</h1><p class="mut">{esc(intro)}</p><p><a class="btn main" href="{croot}">{esc(s["join"])}</a></p><div role="group" aria-label="{esc(s["filter"])}">{fb}</div><ul class="mb-list">{cards}</ul>{feed}{fjs}{lm}{live_js}{css}')
+            b = shell(lang, f'<h1>{esc(title)}</h1><p class="mut">{esc(intro)}</p><p><a class="btn main" href="{croot}">{esc(s["join"])}</a>{(" <a class=\"btn\" href=\"" + croot + "blog/\">Blog</a>") if lang in BLOGLANGS else ""}</p><div role="group" aria-label="{esc(s["filter"])}">{fb}</div><ul class="mb-list">{cards}</ul>{feed}{fjs}{lm}{live_js}{css}')
             ld = [{"@context": "https://schema.org", "@type": "CollectionPage", "name": title, "url": ru, "description": intro, "mainEntity": {"@type": "ItemList", "numberOfItems": len(lst), "itemListElement":
                    [{"@type": "ListItem", "position": i + 1, "item": {"@id": f"{purl(BASE, 'en', pk, it['handle'])}#{'person' if pk == 'u' else 'org'}"}} for i, it in enumerate(lst)]}}]
             write(f"{pfx2(lang)}community/{kind}/index.html", page(lang, f'{title} – M365.FM', intro, ru, b, None, ld, og_type="website", extra_head=LCSS, noindex=noidx))
