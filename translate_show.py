@@ -81,7 +81,7 @@ def main():
     if not reqs:
         print("Nichts zu uebersetzen"); return
     idmap = {r["custom_id"]: r["custom_id"] for r in reqs}
-    slug_by_id = {e["id"]: e["slug"] for e in eps}
+    slug_by_id = {str(e["id"]): e["slug"] for e in eps}
     print(len(reqs), "Anfragen, Modell", MODEL)
     guard(len(reqs), 500, 1500, "Titel/Zusammenfassungen")
     b = call("POST", "/v1/messages/batches", {"requests": reqs})
