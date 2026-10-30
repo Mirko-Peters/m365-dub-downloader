@@ -4,8 +4,8 @@ import { baseIds, knownIds, validate, trustedUser, entityMap } from "./entities.
 
 export const PROGRAMS = ["mvp", "mct", "rd", "msa", "ms_employee", "partner"];
 export const RELATIONS = ["colleague", "manager", "report", "client", "trainer", "student", "cospeaker", "podcast", "community", "mentor", "other"];
-export const KINDS = ["linkedin", "github", "youtube", "x", "mastodon", "bluesky", "twitch", "blog", "podcast", "newsletter", "website", "other"];
-const KIND_HOST = { linkedin: /(^|\.)linkedin\.com$/, github: /(^|\.)github\.com$/, youtube: /(^|\.)(youtube\.com|youtu\.be)$/, x: /(^|\.)(x\.com|twitter\.com)$/, twitch: /(^|\.)twitch\.tv$/, bluesky: /(^|\.)bsky\.app$/ };
+export const KINDS = ["linkedin", "github", "youtube", "x", "mastodon", "bluesky", "twitch", "spotify", "apple", "amazon", "deezer", "instagram", "tiktok", "facebook", "blog", "podcast", "newsletter", "website", "other"];
+const KIND_HOST = { linkedin: /(^|\.)linkedin\.com$/, github: /(^|\.)github\.com$/, youtube: /(^|\.)(youtube\.com|youtu\.be)$/, x: /(^|\.)(x\.com|twitter\.com)$/, twitch: /(^|\.)twitch\.tv$/, bluesky: /(^|\.)bsky\.app$/, spotify: /(^|\.)spotify\.com$/, apple: /(^|\.)(podcasts|music)\.apple\.com$/, amazon: /(^|\.)(music\.amazon\.[a-z.]+|audible\.[a-z.]+)$/, deezer: /(^|\.)deezer\.com$/, instagram: /(^|\.)instagram\.com$/, tiktok: /(^|\.)tiktok\.com$/, facebook: /(^|\.)(facebook\.com|fb\.com)$/ };
 const HANDLE = /^[a-z0-9][a-z0-9-]{2,29}$/, ID = /^[a-z0-9-]{2,48}$/;
 const SIZES = ["1", "2-10", "11-50", "51-200", "201-1000", "1000+"];
 const now = () => Math.floor(Date.now() / 1000);
@@ -45,7 +45,8 @@ async function checkChannels(list, max = 12) {
     if (!KINDS.includes(c?.kind)) return { err: "bad_channel" };
     const url = cleanUrl(c.url, KIND_HOST[c.kind]); if (!url) return { err: "bad_channel" };
     const feed = channelFeed(c.kind, url, c.feed); if (feed === null) return { err: "bad_feed" };
-    if (!seen.has(url)) { seen.add(url); out.push({ kind: c.kind, url, feed }); }
+    const fo = Math.max(0, Math.min(2e9, parseInt(c.followers, 10) || 0));
+    if (!seen.has(url)) { seen.add(url); out.push({ kind: c.kind, url, feed, followers: fo }); }
   }
   return { list: out };
 }
@@ -142,7 +143,7 @@ async function personView(db, uid, viewer) {
   const exp = await q("SELECT e.eid e,e.level,e.verified,(SELECT COUNT(*) FROM endorsements n WHERE n.owner_id=e.owner_id AND n.eid=e.eid) endorsed, (SELECT COUNT(*) FROM endorsements n2 WHERE n2.owner_id=e.owner_id AND n2.eid=e.eid AND n2.by_id=?) me FROM expertise e WHERE e.owner_type='u' AND e.owner_id=? ORDER BY e.verified DESC,e.level DESC", +viewer || 0, uid);
   const programs = await q("SELECT program p,year,url,verified FROM programs WHERE owner_type='u' AND owner_id=?", uid);
   const certs = (await q("SELECT c.eid e,c.year,c.url,COALESCE(k.status,'') st,(SELECT COUNT(*) FROM cert_endorse n WHERE n.owner_id=c.user_id AND n.eid=c.eid) endorsed,(SELECT COUNT(*) FROM cert_endorse n2 WHERE n2.owner_id=c.user_id AND n2.eid=c.eid AND n2.by_id=?) me FROM certs c LEFT JOIN cert_check k ON k.user_id=c.user_id AND k.eid=c.eid WHERE c.user_id=? ORDER BY endorsed DESC, (k.status='verified') DESC, c.year DESC", +viewer || 0, uid)).map((x) => ({ e: x.e, year: x.year, url: x.url, verified: x.st === "verified", pending: x.st === "pending", rejected: x.st === "rejected", endorsed: x.endorsed, me: !!x.me }));
-  const channels = await q("SELECT kind,url,feed FROM channels WHERE owner_type='u' AND owner_id=?", uid);
+  const channels = await q("SELECT kind,url,feed,followers FROM channels WHERE owner_type='u' AND owner_id=?", uid);
   const org = p.show_org ? await db.prepare("SELECT o.handle,o.name FROM org_members m JOIN orgs o ON o.id=m.org_id WHERE m.user_id=? AND m.status='active' AND o.public=1 ORDER BY m.created LIMIT 1").bind(uid).first() : null;
   const contrib = [...(await q("SELECT 'wiki' k,term t,lang l,summary s,created c FROM wiki_rev WHERE user_id=? AND status IN ('live','old') ORDER BY created DESC LIMIT 15", uid)),
     ...(await q("SELECT 'entity' k,eid t,'' l,summary s,created c FROM entity_rev WHERE user_id=? AND status IN ('live','old') ORDER BY created DESC LIMIT 15", uid))].sort((a, b) => b.c - a.c).slice(0, 15);
@@ -158,6 +159,13 @@ async function personView(db, uid, viewer) {
     expertise: exp.map((e) => ({ ...e, verified: !!e.verified, me: !!e.me })), programs: programs.map((x) => ({ ...x, verified: !!x.verified })), certs, channels, org, contrib, counts, badges, recs,
     items: await itemsOf(db, "i.owner_type='u' AND i.owner_id=?", [uid], viewer, 8) };
 }
+let colsOk = false;
+async function ensureCols(db) {
+  if (colsOk) return;
+  try { await db.prepare("SELECT followers FROM channels LIMIT 1").first(); } catch { for (const c of ["followers INTEGER NOT NULL DEFAULT 0", "followers_at INTEGER NOT NULL DEFAULT 0"]) { try { await db.prepare("ALTER TABLE channels ADD COLUMN " + c).run(); } catch {} } }
+  try { await db.prepare("CREATE TABLE IF NOT EXISTS org_ms (org_id INTEGER NOT NULL, area TEXT NOT NULL, level TEXT NOT NULL, since TEXT NOT NULL DEFAULT '', PRIMARY KEY (org_id, area))").run(); } catch {}
+  colsOk = true;
+}
 async function orgView(db, oid, viewer) {
   const o = await db.prepare("SELECT * FROM orgs WHERE id=?").bind(oid).first(); if (!o) return null;
   const q = async (sql, ...b) => (await db.prepare(sql).bind(...b).all()).results || [];
@@ -166,7 +174,8 @@ async function orgView(db, oid, viewer) {
   return { type: "o", eid: oe, img: im?.updated || 0, id: o.id, handle: o.handle, name: o.name, tagline: o.tagline, about: o.about, website: o.website, country: o.country, size: o.size, public: !!o.public,
     expertise: (await q("SELECT eid e,level,verified FROM expertise WHERE owner_type='o' AND owner_id=?", oid)).map((e) => ({ ...e, verified: !!e.verified })),
     programs: (await q("SELECT program p,year,url,verified FROM programs WHERE owner_type='o' AND owner_id=?", oid)).map((x) => ({ ...x, verified: !!x.verified })),
-    channels: await q("SELECT kind,url,feed FROM channels WHERE owner_type='o' AND owner_id=?", oid),
+    channels: await q("SELECT kind,url,feed,followers FROM channels WHERE owner_type='o' AND owner_id=?", oid),
+    ms: await q("SELECT area,level,since FROM org_ms WHERE org_id=? ORDER BY area", oid),
     members: await q("SELECT p.handle,u.name,m.role,p.headline FROM org_members m JOIN users u ON u.id=m.user_id AND u.banned=0 JOIN profiles p ON p.user_id=m.user_id AND p.public=1 AND p.show_org=1 WHERE m.org_id=? AND m.status='active' ORDER BY m.role='owner' DESC, u.name", oid),
     items: await itemsOf(db, "i.owner_type='o' AND i.owner_id=?", [oid], viewer, 8) };
 }
@@ -177,7 +186,7 @@ async function replaceLists(db, t, id, { exp, prog, chan, certs }) {
   ops.push(db.prepare("DELETE FROM programs WHERE owner_type=? AND owner_id=? AND program NOT IN (SELECT value FROM json_each(?))").bind(t, id, JSON.stringify(prog.map((x) => x.p))));
   for (const x of prog) ops.push(db.prepare("INSERT INTO programs(owner_type,owner_id,program,year,url) VALUES(?,?,?,?,?) ON CONFLICT(owner_type,owner_id,program) DO UPDATE SET year=excluded.year, url=excluded.url, verified=CASE WHEN programs.url=excluded.url THEN programs.verified ELSE 0 END").bind(t, id, x.p, x.year, x.url));
   ops.push(db.prepare("DELETE FROM channels WHERE owner_type=? AND owner_id=? AND url NOT IN (SELECT value FROM json_each(?))").bind(t, id, JSON.stringify(chan.map((x) => x.url))));
-  for (const x of chan) ops.push(db.prepare("INSERT INTO channels(owner_type,owner_id,kind,url,feed) VALUES(?,?,?,?,?) ON CONFLICT(owner_type,owner_id,url) DO UPDATE SET kind=excluded.kind, feed=CASE WHEN excluded.feed<>'' THEN excluded.feed ELSE channels.feed END, fails=0").bind(t, id, x.kind, x.url, x.feed));
+  for (const x of chan) ops.push(db.prepare("INSERT INTO channels(owner_type,owner_id,kind,url,feed,followers,followers_at) VALUES(?,?,?,?,?,?,?) ON CONFLICT(owner_type,owner_id,url) DO UPDATE SET followers=excluded.followers, followers_at=CASE WHEN excluded.followers<>channels.followers THEN excluded.followers_at ELSE channels.followers_at END, kind=excluded.kind, feed=CASE WHEN excluded.feed<>'' THEN excluded.feed ELSE channels.feed END, fails=0").bind(t, id, x.kind, x.url, x.feed, x.followers || 0, now()));
   if (certs) {
     ops.push(db.prepare("DELETE FROM certs WHERE user_id=?").bind(id));
     for (const x of certs) ops.push(db.prepare("INSERT INTO certs(user_id,eid,year,url) VALUES(?,?,?,?)").bind(id, x.e, x.year, x.url));
@@ -186,7 +195,7 @@ async function replaceLists(db, t, id, { exp, prog, chan, certs }) {
 }
 
 export async function handleProfiles(env, request, url, path, user, J) {
-  const db = env.DB, method = request.method; let m;
+  const db = env.DB, method = request.method; let m; await ensureCols(db);
   const need = () => (user ? null : J({ error: "login" }, 401));
   const body = async () => await request.json().catch(() => ({}));
 

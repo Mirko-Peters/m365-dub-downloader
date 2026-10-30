@@ -66,3 +66,24 @@ export async function refreshFeeds(env, max = 8) {
   await db.prepare("DELETE FROM feed_items WHERE published<?").bind(now - 400 * 86400).run();
   return n;
 }
+
+// Woechentlich: Abonnentenzahl von YouTube-Kanaelen holen (nur wenn Verbindung zu YouTube besteht; sonst bleibt die manuelle Angabe)
+export async function refreshFollowers(env, max = 5) {
+  const db = env.DB, now = Math.floor(Date.now() / 1000);
+  let rows; try { rows = (await db.prepare("SELECT id,url FROM channels WHERE kind='youtube' AND followers_at<? ORDER BY followers_at ASC LIMIT ?").bind(now - 7 * 86400, max).all()).results || []; } catch { return 0; }
+  if (!rows.length) return 0;
+  const { token } = await import("./youtube.js"); const t = await token(env); if (!t) return 0;
+  let n = 0;
+  for (const c of rows) {
+    let q = ""; const m = /\/channel\/(UC[\w-]{22})/.exec(c.url), h = /youtube\.com\/@([\w.-]{3,40})/.exec(c.url);
+    if (m) q = "id=" + m[1]; else if (h) q = "forHandle=%40" + encodeURIComponent(h[1]);
+    let ok = false;
+    if (q) try {
+      const r = await fetch(`${env.YT_API || "https://www.googleapis.com"}/youtube/v3/channels?part=statistics&${q}`, { headers: { authorization: `Bearer ${t}` } });
+      const s = r.ok ? ((await r.json()).items || [])[0]?.statistics : null;
+      if (s && !s.hiddenSubscriberCount && s.subscriberCount != null) { await db.prepare("UPDATE channels SET followers=?, followers_at=? WHERE id=?").bind(parseInt(s.subscriberCount, 10) || 0, now, c.id).run(); ok = true; n++; }
+    } catch {}
+    if (!ok) await db.prepare("UPDATE channels SET followers_at=? WHERE id=?").bind(now - 6 * 86400, c.id).run();   // morgen erneut versuchen
+  }
+  return n;
+}

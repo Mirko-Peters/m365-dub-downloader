@@ -5,6 +5,8 @@ import { cleanText, rateLimit } from "./util.js";
 const now = () => Math.floor(Date.now() / 1000);
 const slug = (s) => String(s || "").toLowerCase().normalize("NFKD").replace(/[̀-ͯ]/g, "").replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
 const txt = (s, n) => cleanText(s, n).replace(/[<>]/g, "").replace(/https?:\/\/\S+/gi, "").replace(/\s+/g, " ").trim();
+export const MS_AREAS = ["modern_work", "business_apps", "data_ai", "infrastructure", "digital_app", "security", "csp", "msp", "isv", "inner_circle", "other"];
+export const MS_LEVELS = ["solutions_partner", "specialization", "advanced_specialization", "inner_circle", "poty_finalist", "poty_winner", "registered", "other"];
 let ready = false;
 async function ensure(db) {
   if (ready) return;
@@ -47,6 +49,21 @@ export async function handleOrgOffers(env, request, url, path, user, J) {
     await db.prepare("INSERT INTO entity_rev(eid,data,summary,user_id,status,created) VALUES(?,?,?,?,?,?)").bind(eid, JSON.stringify(v.data), `${kind === "service" ? "Service" : "Produkt"} von ${o.name}`, user.id, st, now()).run();
     await db.prepare("INSERT INTO org_offers(org_id,eid,kind,created) VALUES(?,?,?,?)").bind(o.id, eid, kind, now()).run();
     return J({ ok: true, eid, status: st });
+  }
+  if (path === "/api/orgoffer/ms" && method === "POST") {   // Microsoft-Status der Firma: Bereich + Stufe (selbst angegeben, nicht geprueft)
+    if (!user) return J({ error: "login" }, 401);
+    const b = await request.json().catch(() => ({}));
+    const o = await orgOf(b.handle); if (!o) return J({ error: "not_found" }, 404);
+    const mem = await db.prepare("SELECT role FROM org_members WHERE org_id=? AND user_id=? AND status='active'").bind(o.id, user.id).first();
+    if (!mem || !["owner", "admin"].includes(mem.role)) return J({ error: "forbidden" }, 403);
+    await db.prepare("CREATE TABLE IF NOT EXISTS org_ms (org_id INTEGER NOT NULL, area TEXT NOT NULL, level TEXT NOT NULL, since TEXT NOT NULL DEFAULT '', PRIMARY KEY (org_id, area))").run();
+    const list = [], seen = new Set();
+    for (const x of (Array.isArray(b.items) ? b.items : []).slice(0, 20)) {
+      if (!MS_AREAS.includes(x?.area) || !MS_LEVELS.includes(x?.level) || seen.has(x.area)) return J({ error: "bad_status" }, 400);
+      seen.add(x.area); const since = /^\d{4}$/.test(String(x.since || "")) ? String(x.since) : ""; list.push([x.area, x.level, since]);
+    }
+    await db.batch([db.prepare("DELETE FROM org_ms WHERE org_id=?").bind(o.id), ...list.map((r) => db.prepare("INSERT INTO org_ms(org_id,area,level,since) VALUES(?,?,?,?)").bind(o.id, ...r))]);
+    return J({ ok: true });
   }
   return J({ error: "not_found" }, 404);
 }

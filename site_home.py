@@ -30,6 +30,20 @@ JS = ('<script>(function(){var b=[].slice.call(document.querySelectorAll(".hub-f
       'if(st)st.addEventListener("change",function(){if(st.value&&S.ts.indexOf(st.value)<0)S.ts.push(st.value);st.value="";ap()});ap()})();</script>')
 
 
+_LAST = {}
+
+
+def news(lang, base, days=30):
+    """Tages-Batches: nur abgeschlossene Tage (bis gestern), daher ändert sich die Seite höchstens einmal pro Tag."""
+    cards = _LAST.get(lang) or []; today = date.today().isoformat(); by = {}
+    for d, k, h in cards:
+        if d < today: by.setdefault(d, []).append((k, h))
+    out = []
+    for d in sorted(by, reverse=True)[:days]:
+        n = len(by[d]); out.append(f'<section class="news-day"><h2 id="d{d}">{d} <span class="mut" style="font-size:.6em">· {n} {esc(T(lang, "new items", "neue Inhalte"))}</span></h2><div class="thumbs">' + "".join(h for _, h in by[d]) + "</div></section>")
+    return CSS + ("".join(out) or f'<p class="mut">{esc(T(lang, "Nothing yet.", "Noch nichts."))}</p>')
+
+
 def hub(g, lang, base, api, videos, vid_html, root=False):
     """videos: Liste von Episoden-Items (mit "date"), vid_html(item) -> HTML-Karte. Rückgabe: HTML-Block."""
     C = _load(api); today = date.today().isoformat(); cards = []
@@ -83,6 +97,7 @@ def hub(g, lang, base, api, videos, vid_html, root=False):
         cards.append((str(v["date"])[:10], "video", vid_html(v).replace('<div class="thumb">', '<div class="thumb" data-k="video">', 1)))
         tag("Mirko Peters", [], str(v["e"]["title"]))
     cards.sort(key=lambda x: x[0], reverse=True)
+    _LAST[lang] = list(cards)
     counts = {}
     for _, k, _h in cards: counts[k] = counts.get(k, 0) + 1
     labels = [("all", T(lang, "All", "Alle")), ("blog", "Blog"), ("podcast", "Podcast"), ("event", T(lang, "Events", "Events")), ("library", T(lang, "Library", "Bibliothek")), ("feed", T(lang, "From the creators", "Von den Creatorn")), ("update", T(lang, "Microsoft updates", "Microsoft-Updates")), ("creatorvideo", T(lang, "Creator videos", "Creator-Videos")), ("video", T(lang, "Stick-man videos", "Stick-Man-Videos"))]

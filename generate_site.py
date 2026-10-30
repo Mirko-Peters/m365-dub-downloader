@@ -625,7 +625,8 @@ def footer(lang):
     about = ui[5] if ui else "About Mirko Peters"
     _tl = lang if lang in LANGS else "en"
     _top = f'<a href="{BASE}/{_tl}/top/">{esc((TOP_L if _tl in TOP_REAL else REC_L).get(_tl, "Top"))}</a>'
-    return (f'<footer><div class="wrap">{_top}<a href="https://www.m365.fm">m365.fm</a>'
+    _nw = f'<a href="{BASE}/{"de/" if lang == "de" else ""}updates/">{"Updates & Roadmap" if lang == "de" else "Updates & roadmap"}</a>'
+    return (f'<footer><div class="wrap">{_top}{_nw}<a href="https://www.m365.fm">m365.fm</a>'
             f'<a href="https://m365con.net">M365Con</a><a class="soc" href="{LINKEDIN}" rel="me" style="--bc:#0A66C2">{brand_icon("LinkedIn")}<span>LinkedIn</span></a><a class="soc" href="{YT_CHANNEL}" style="--bc:#FF0000">{brand_icon("YouTube")}<span>YouTube</span></a>'
             f'<a href="{ast_url(lang)}">{esc(ast_label(lang))}</a><a href="{BASE}/{"de/" if lang == "de" else ""}press/">{"Pressekit" if lang == "de" else "Press kit"}</a><a href="{BASE}/impressum/" rel="nofollow">Impressum</a><a href="{BASE}/legal/" rel="nofollow">Legal notice</a>'
             f'<a href="{BASE}/datenschutz/" rel="nofollow">Datenschutz</a><a href="{BASE}/privacy/" rel="nofollow">Privacy</a>'
@@ -1026,6 +1027,14 @@ def build():
           "Blog posts, podcasts and events from the Microsoft community plus animated explainers on Microsoft 365, Copilot, Azure and Power Platform by Microsoft MVP Mirko Peters – in 19 languages.",
           f"{BASE}/", root_body, alts_home, [person_ld(), org_ld(), event_ld(), faq_ld("en"), {"@context": "https://schema.org", "@type": "WebSite", "@id": f"{BASE}/#website", "name": "M365.FM international", "url": f"{BASE}/", "inLanguage": [LANGS[x][1] for x in active], "publisher": {"@id": f"{BASE}/#org"}, "author": {"@id": f"{BASE}/entity/mirko-peters/#entity"}}], og_type="website"))
     sitemap.append((f"{BASE}/", TODAY, None))
+    import site_updates as _SU2; _SU2.load(COMMUNITY_API)
+    from site_learn import ENTS as _E2
+    for _nl in ("en", "de"):
+        _nu = f"{BASE}/{'de/' if _nl == 'de' else ''}updates/"
+        _nt = "Updates – neu seit gestern" if _nl == "de" else "Updates – new since yesterday"
+        _nb = f'{header(_nl, "")}<main class="wrap"><h1>{esc(_nt)}</h1><p class="mut">{esc("Was seit dem letzten Tag neu dazugekommen ist. Die Seite wird höchstens einmal täglich erweitert (abgeschlossene Tage)." if _nl == "de" else "What was added since the last day. The page grows at most once a day (completed days only).")}</p><p><a class="btn main" href="{BASE}/{"de/" if _nl == "de" else ""}community/#c-wish">{"Roadmap &amp; Wunschliste" if _nl == "de" else "Roadmap &amp; wishlist"}</a></p>{_SU2.page_block(_nl, lambda i, _l=_nl: f"{BASE}{'/' + _l if _l != 'en' else ''}/entity/{i}/", {k: v["name"] for k, v in _E2.items()})}{HUB.news(_nl, BASE)}</main>{footer(_nl)}'
+        write(f"{'de/' if _nl == 'de' else ''}updates/index.html", page(_nl, f"{_nt} – M365.FM", "Neue Beiträge, Folgen, Videos, Bibliothekseinträge und Updates pro Tag." if _nl == "de" else "New posts, episodes, videos, library items and updates per day.", _nu, _nb))
+        sitemap.append((_nu, TODAY, None))
 
     # Rechtliche Seiten (noindex)
     import site_legal as SL
@@ -1046,7 +1055,7 @@ def build():
     # Community-Seite je Sprache (noindex) + Service Worker fuer Web-Push
     for l in list(active) + ["en"]:
         ct = _CI.get(l, _CI.get("en", {})).get("community", "Community")
-        write("community/index.html" if l == "en" else f"{l}/community/index.html", page(l, f"{ct} – M365.FM" + ("" if l == "en" else f" {LANGS[l][0]}"), ct, (f"{BASE}/community/" if l == "en" else f"{BASE}/{l}/community/"), f'{header(l, "")}<main class="wrap" style="max-width:48em"><h1 id="c-h1">{esc(ct)}</h1><div id="c-page"></div><div id="c-expert"></div><div id="c-events"></div><div id="c-blog"></div><div id="c-podcast"></div><div id="c-video"></div><div id="c-library"></div><div id="c-guests"></div><div id="c-messages"></div></main>{footer(l)}{community_tags(l)}<script>window.M365X={{api:"{COMMUNITY_API}",base:"{BASE}",lang:"{l}"}}</script><script defer src="{BASE}/assets/profile.js"></script><script defer src="{BASE}/assets/events.js"></script><script defer src="{BASE}/assets/editor.js"></script><script defer src="{BASE}/assets/blog.js"></script><script defer src="{BASE}/assets/podcast.js"></script><script defer src="{BASE}/assets/video.js"></script><script defer src="{BASE}/assets/library.js"></script><script defer src="{BASE}/assets/guests.js"></script><script defer src="{BASE}/assets/messages.js"></script>', og_type="website", extra_head=LRN.WCSS, noindex=True))
+        write("community/index.html" if l == "en" else f"{l}/community/index.html", page(l, f"{ct} – M365.FM" + ("" if l == "en" else f" {LANGS[l][0]}"), ct, (f"{BASE}/community/" if l == "en" else f"{BASE}/{l}/community/"), f'{header(l, "")}<main class="wrap" style="max-width:48em"><h1 id="c-h1">{esc(ct)}</h1><div id="c-page"></div><div id="c-expert"></div><div id="c-events"></div><div id="c-blog"></div><div id="c-podcast"></div><div id="c-video"></div><div id="c-library"></div><div id="c-guests"></div><div id="c-wish"></div><div id="c-messages"></div></main>{footer(l)}{community_tags(l)}<script>window.M365X={{api:"{COMMUNITY_API}",base:"{BASE}",lang:"{l}"}}</script><script defer src="{BASE}/assets/profile.js"></script><script defer src="{BASE}/assets/events.js"></script><script defer src="{BASE}/assets/editor.js"></script><script defer src="{BASE}/assets/blog.js"></script><script defer src="{BASE}/assets/podcast.js"></script><script defer src="{BASE}/assets/video.js"></script><script defer src="{BASE}/assets/library.js"></script><script defer src="{BASE}/assets/guests.js"></script><script defer src="{BASE}/assets/wish.js"></script><script defer src="{BASE}/assets/messages.js"></script>', og_type="website", extra_head=LRN.WCSS, noindex=True))
     shutil.copy(ROOT / "assets" / "sw.js", OUT / "sw.js")
     if (ROOT / "data" / "m365con_program.json").exists():
         shutil.copy(ROOT / "data" / "m365con_program.json", OUT / "m365con_program.json")

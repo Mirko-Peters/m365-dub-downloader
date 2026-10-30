@@ -12,6 +12,7 @@ import { handleUpdates, pollUpdates } from "./updates.js";
 import { ensurePastEvents } from "./pastevents.js";
 import { handleLibrary, deleteUserLibrary } from "./library.js";
 import { handleOrgOffers } from "./orgoffers.js";
+import { handleWish } from "./wish.js";
 import { handleDemo } from "./demo.js";
 import { handleGuests, deleteUserGuests } from "./guests.js";
 import { handlePodcast, deleteUserPodcast, pollPodcast } from "./podcast.js";
@@ -19,7 +20,7 @@ import { handleVideo, deleteUserVideos, pollVideos } from "./youtube.js";
 import { handleMcp, handleTokens, deleteUserTokens } from "./mcp.js";
 import { handlePoints } from "./points.js";
 import { handleMessages, purgeMessages, deleteUserMessages } from "./messages.js";
-import { refreshFeeds } from "./feeds.js";
+import { refreshFeeds, refreshFollowers } from "./feeds.js";
 import { autoTranslate, translateStatus, uiI18nExport } from "./translate.js";
 import { handleWiki } from "./wiki.js";
 
@@ -245,6 +246,7 @@ async function api(env, request, url, path) {
   if (path.startsWith("/api/video/") || path.startsWith("/api/admin/video")) { const q = await handleVideo(env, request, url, path, user, J); if (q) { if (user && method !== "GET") await evalBadges(env, user.id).catch(() => 0); return q; } }
   if (path.startsWith("/api/podcast/") || path.startsWith("/api/admin/podcast")) { const q = await handlePodcast(env, request, url, path, user, J); if (q) { if (user && method !== "GET") await evalBadges(env, user.id).catch(() => 0); return q; } }
   if (path === "/api/updates/export" || path === "/api/admin/updates/poll") { const q = await handleUpdates(env, request, url, path, user, J); if (q) return q; }
+  if (path.startsWith("/api/wish/")) { const q = await handleWish(env, request, url, path, user, J); if (q) return q; }
   if (path.startsWith("/api/orgoffer/")) { const q = await handleOrgOffers(env, request, url, path, user, J); if (q) return q; }
   if (path.startsWith("/api/library/")) { const q = await handleLibrary(env, request, url, path, user, J); if (q) return q; }
   if (path === "/api/blog" || path.startsWith("/api/blog/") || path.startsWith("/api/admin/blog")) { const q = await handleBlog(env, request, url, path, user, J); if (q) { if (user && method !== "GET") await evalBadges(env, user.id).catch(() => 0); return q; } }
@@ -349,5 +351,5 @@ export default {
       return json({ error: "server" }, 500, env, request);
     }
   },
-  async scheduled(event, env, ctx) { if (event.cron === "0 6 * * *") ctx.waitUntil(runDigest(env)); ctx.waitUntil(refreshFeeds(env).catch(() => 0)); ctx.waitUntil(pollUpdates(env).catch(() => 0)); ctx.waitUntil(ensurePastEvents(env).catch(() => 0)); ctx.waitUntil(ensureM365Con(env).catch(() => 0)); ctx.waitUntil(purgeMessages(env.DB).catch(() => 0)); ctx.waitUntil(autoTranslate(env).catch(() => 0)); ctx.waitUntil(pollPodcast(env).catch(() => 0)); ctx.waitUntil(pollVideos(env).catch(() => 0)); },
+  async scheduled(event, env, ctx) { if (event.cron === "0 6 * * *") ctx.waitUntil(runDigest(env)); ctx.waitUntil(refreshFeeds(env).catch(() => 0)); ctx.waitUntil(pollUpdates(env).catch(() => 0)); ctx.waitUntil(refreshFollowers(env).catch(() => 0)); ctx.waitUntil(ensurePastEvents(env).catch(() => 0)); ctx.waitUntil(ensureM365Con(env).catch(() => 0)); ctx.waitUntil(purgeMessages(env.DB).catch(() => 0)); ctx.waitUntil(autoTranslate(env).catch(() => 0)); ctx.waitUntil(pollPodcast(env).catch(() => 0)); ctx.waitUntil(pollVideos(env).catch(() => 0)); },
 };

@@ -10,7 +10,7 @@ from site_entities import TL, eurl, eid_of
 PROG_FULL = {"mvp": "Microsoft Most Valuable Professional (MVP)", "mct": "Microsoft Certified Trainer (MCT)", "rd": "Microsoft Regional Director (RD)", "msa": "Microsoft Student Ambassador (MSA)", "ms_employee": "Microsoft employee", "partner": "Microsoft Partner"}
 PROG = {"mvp": ("Microsoft MVP", "Microsoft MVP"), "mct": ("Microsoft Certified Trainer (MCT)", "Microsoft Certified Trainer (MCT)"), "rd": ("Microsoft Regional Director", "Microsoft Regional Director"),
         "msa": ("Microsoft Student Ambassador", "Microsoft Student Ambassador"), "ms_employee": ("Microsoft employee", "Microsoft-Mitarbeiter:in"), "partner": ("Microsoft Partner", "Microsoft Partner")}
-KIND = {"linkedin": "LinkedIn", "github": "GitHub", "youtube": "YouTube", "x": "X", "mastodon": "Mastodon", "bluesky": "Bluesky", "twitch": "Twitch", "blog": "Blog", "podcast": "Podcast", "newsletter": "Newsletter", "website": "Website", "other": "Link"}
+KIND = {"linkedin": "LinkedIn", "github": "GitHub", "youtube": "YouTube", "x": "X", "mastodon": "Mastodon", "bluesky": "Bluesky", "twitch": "Twitch", "spotify": "Spotify", "apple": "Apple Podcasts", "amazon": "Amazon Music / Audible", "deezer": "Deezer", "instagram": "Instagram", "tiktok": "TikTok", "facebook": "Facebook", "blog": "Blog", "podcast": "Podcast", "newsletter": "Newsletter", "website": "Website", "other": "Link"}
 LV = {1: ("learning", "lernt"), 2: ("practitioner", "Praxis"), 3: ("expert", "Experte")}
 S = {"en": dict(members="Members", companies="Companies", mintro="Experts of the Microsoft community – with programs such as MVP and MCT, certifications, topics and channels. Profiles are opt-in.", cintro="Companies in the Microsoft ecosystem and their teams.",
                 about="About", expertise="Topics and expertise", certs="Certifications", channels="Channels and links", contrib="Contributions", latest="Latest from this creator", team="Team", verified="confirmed by the editorial team", selfdecl="self-declared", endorsed="confirmed by {n} members",
@@ -195,8 +195,16 @@ def build(g, people, orgs, extra=None):
         return '<ul class="pf-list">' + "".join(f'<li class="pf-item" data-id="{i["id"]}"><button type="button" class="vt" aria-pressed="false" aria-label="Upvote"><span aria-hidden="true">▲</span> <span class="n">{i["votes"]}</span></button>'
                                                 f'<div><a href="{esc(i["url"])}" rel="nofollow ugc noopener" target="_blank">{esc(i["title"])}</a><br><span class="mut">{esc(KIND.get(i["kind"], i["kind"]))} · {datetime.fromtimestamp(i["published"], timezone.utc).strftime("%Y-%m-%d")}</span></div></li>' for i in its) + "</ul>"
 
-    def chan_ul(x):
-        return '<ul>' + "".join(f'<li><a href="{esc(c["url"])}" rel="me nofollow ugc noopener" target="_blank">{esc(KIND.get(c["kind"], c["kind"]))}</a> <span class="mut">{esc(c["url"].replace("https://", "").rstrip("/")[:60])}</span></li>' for c in x.get("channels", [])) + "</ul>" if x.get("channels") else ""
+    def fol(n, lang):
+        n = int(n or 0)
+        if n <= 0: return ""
+        t = f"{n/1e6:.1f}M" if n >= 1e6 else (f"{n/1e3:.1f}K" if n >= 1e4 else f"{n:,}".replace(",", "." if lang == "de" else ","))
+        return f' · {t.replace(".0K", "K").replace(".0M", "M")} {"Follower" if lang == "de" else "followers"}'
+
+    MS_A = {"modern_work": ("Modern Work", "Modern Work"), "business_apps": ("Business Applications", "Business Applications"), "data_ai": ("Data & AI", "Data & AI"), "infrastructure": ("Infrastructure", "Infrastructure"), "digital_app": ("Digital & App Innovation", "Digital & App Innovation"), "security": ("Security", "Security"), "csp": ("Cloud Solution Provider (CSP)", "Cloud Solution Provider (CSP)"), "msp": ("Managed Service Provider", "Managed Service Provider"), "isv": ("Software Vendor (ISV)", "Softwarehersteller (ISV)"), "inner_circle": ("Inner Circle", "Inner Circle"), "other": ("Other", "Sonstiges")}
+    MS_L = {"solutions_partner": ("Solutions Partner", "Solutions Partner"), "specialization": ("Specialization", "Spezialisierung"), "advanced_specialization": ("Advanced specialization", "Advanced Specialization"), "inner_circle": ("Inner Circle member", "Inner-Circle-Mitglied"), "poty_finalist": ("Partner of the Year finalist", "Partner-of-the-Year-Finalist"), "poty_winner": ("Partner of the Year winner", "Partner-of-the-Year-Gewinner"), "registered": ("Registered partner", "Registrierter Partner"), "other": ("Other", "Sonstiges")}
+    def chan_ul(x, lang="en"):
+        return '<ul>' + "".join(f'<li><a href="{esc(c["url"])}" rel="me nofollow ugc noopener" target="_blank">{esc(KIND.get(c["kind"], c["kind"]))}</a> <span class="mut">{esc(c["url"].replace("https://", "").rstrip("/")[:60])}{fol(c.get("followers"), lang)}</span></li>' for c in x.get("channels", [])) + "</ul>" if x.get("channels") else ""
 
     for lang in COMM_LANGS:
         s = S[lang]; li = 1 if lang == "de" else 0; noidx = lang != "en"
@@ -226,6 +234,8 @@ def build(g, people, orgs, extra=None):
                 facts.append(("E-Mail", f'<a href="mailto:{esc(ct["email"])}">{esc(ct["email"])}</a>'))
             if ct.get("phone"):
                 facts.append((T(lang, "Mobile", "Mobil"), esc(ct["phone"])))
+            if o.get("ms"):
+                facts.append(("Microsoft", "<br>".join(f'{esc(MS_A.get(m["area"], (m["area"],)*2)[li])}: {esc(MS_L.get(m["level"], (m["level"],)*2)[li])}{(" (" + esc(m["since"]) + ")") if m.get("since") else ""}' for m in o["ms"])))
             ft = '<table class="mb-facts"><tbody>' + "".join(f'<tr><th scope="row">{esc(a)}</th><td>{b}</td></tr>' for a, b in facts) + "</tbody></table>" if facts else ""
             _cs = sorted([c for c in p.get("certs", []) if c["e"] in ENTS], key=lambda c: (-c.get("endorsed", 0), -int(bool(c.get("verified"))), -(c.get("year") or 0)))
             certs = "<ul>" + "".join(f'<li><a href="{eurl(BASE, lang, c["e"])}">{esc(ENTS[c["e"]]["name"])}</a>{" (" + str(c["year"]) + ")" if c.get("year") else ""}'
@@ -236,7 +246,7 @@ def build(g, people, orgs, extra=None):
             b = shell(lang, f'<nav aria-label="breadcrumb"><a href="{croot}members/">{esc(s["members"])}</a></nav>{img_tag("u", p, p["name"])}<h1>{esc(p["name"])}</h1><p style="font-size:1.1em">{esc(p.get("headline", ""))}</p><p>{tags_of_p(p, li, s)}</p>{ft}'
                           + (f'<h2>{esc(s["about"])}</h2><p style="white-space:pre-line">{esc(p["about"])}</p>' if p.get("about") else "")
                           + (f'<h2>{esc(s["expertise"])}</h2>{exp_ul(p, lang, li, s)}' if p.get("expertise") else "") + (f'<h2>{esc(s["certs"])}</h2>{certs}' if certs else "")
-                          + (f'<h2>{esc(s["latest"])}</h2>{items_ul(p)}' if p.get("items") else "") + (f'<h2>{esc(s["channels"])}</h2>{chan_ul(p)}' if p.get("channels") else "")
+                          + (f'<h2>{esc(s["latest"])}</h2>{items_ul(p)}' if p.get("items") else "") + (f'<h2>{esc(s["channels"])}</h2>{chan_ul(p, lang)}' if p.get("channels") else "")
                           + rec_html(p, lang, li, pb) + (f'<h2>{esc(s["contrib"])}</h2>{contrib}' if contrib else "") + ((extra or {}).get(lang, {}).get("u", {}).get(p["handle"], "")) + live_js + css)
             node = person_ld(BASE, p, ob)
             ld = [{"@context": "https://schema.org", "@type": "ProfilePage", "@id": purl(BASE, "en", "u", p["handle"]) + "#profile", "url": u, "name": p["name"], "inLanguage": lang, "dateModified": TODAY, "mainEntity": node}]
@@ -256,7 +266,7 @@ def build(g, people, orgs, extra=None):
             b = shell(lang, f'<nav aria-label="breadcrumb"><a href="{croot}companies/">{esc(s["companies"])}</a></nav>{img_tag("o", o, o["name"])}<h1>{esc(o["name"])}</h1><p style="font-size:1.1em">{esc(o.get("tagline", ""))}</p><p>{tags_of_p(o, li, s)}</p>{ft}'
                           + (f'<h2>{esc(s["about"])}</h2><p style="white-space:pre-line">{esc(o["about"])}</p>' if o.get("about") else "")
                           + (f'<h2>{esc(s["expertise"])}</h2>{exp_ul(o, lang, li, s)}' if o.get("expertise") else "") + (f'<h2>{esc(s["team"])}</h2>{mem}' if mem else "")
-                          + (f'<h2>{esc(s["latest"])}</h2>{items_ul(o)}' if o.get("items") else "") + (f'<h2>{esc(s["channels"])}</h2>{chan_ul(o)}' if o.get("channels") else "") + ((extra or {}).get(lang, {}).get("c", {}).get(o["handle"], "")) + live_js + css)
+                          + (f'<h2>{esc(s["latest"])}</h2>{items_ul(o)}' if o.get("items") else "") + (f'<h2>{esc(s["channels"])}</h2>{chan_ul(o, lang)}' if o.get("channels") else "") + ((extra or {}).get(lang, {}).get("c", {}).get(o["handle"], "")) + live_js + css)
             ld = [{"@context": "https://schema.org", "@type": "ProfilePage", "@id": purl(BASE, "en", "c", o["handle"]) + "#profile", "url": u, "name": o["name"], "inLanguage": lang, "dateModified": TODAY, "mainEntity": org_ld(BASE, o, pb)}]
             write(f"{pfx2(lang)}community/c/{o['handle']}/index.html", page(lang, f'{o["name"]} – {o.get("tagline") or s["companies"]} | M365.FM', (o.get("tagline") or o.get("about") or "")[:155], u, b, None, ld, og_type="profile", extra_head=LCSS, noindex=noidx))
             if not noidx:

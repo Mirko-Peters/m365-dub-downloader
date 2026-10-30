@@ -16,7 +16,7 @@ const api = (env) => env.YT_API || "https://www.googleapis.com";
 const YTID = /^[A-Za-z0-9_-]{11}$/;
 const PUB = "id,title,description,lang,topics,status,created,published,video_id,note,ai";
 
-async function token(env) {
+export async function token(env) {
   if (!env.YT_CLIENT_ID || !env.YT_CLIENT_SECRET || !env.YT_REFRESH_TOKEN) return null;
   const r = await fetch(env.YT_TOKEN_URL || "https://oauth2.googleapis.com/token", { method: "POST", headers: { "content-type": "application/x-www-form-urlencoded" },
     body: new URLSearchParams({ client_id: env.YT_CLIENT_ID, client_secret: env.YT_CLIENT_SECRET, refresh_token: env.YT_REFRESH_TOKEN, grant_type: "refresh_token" }) });
