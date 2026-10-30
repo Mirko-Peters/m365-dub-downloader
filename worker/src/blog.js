@@ -77,7 +77,7 @@ export async function handleBlog(env, request, url, path, user, J) {
     const t = now();
     let cur = b.id ? await db.prepare(`SELECT ${FIELDS} FROM blog_posts WHERE id=? AND user_id=?`).bind(+b.id, user.id).first() : null;
     if (b.id && !cur) return J({ error: "not_found" }, 404);
-    const status = !b.submit ? (cur && cur.status === "live" ? "live" : "draft") : (await trusted(db, user)) ? "live" : "pending";
+    const status = !b.submit ? (cur && cur.status === "live" ? "live" : "draft") : "live";
     if (cur) {
       await db.prepare("UPDATE blog_posts SET title=?,summary=?,body=?,lang=?,topics=?,status=?,updated=?,published=CASE WHEN ?='live' AND published=0 THEN ? ELSE published END,note='' WHERE id=?")
         .bind(title, summary, sb.body, lang, JSON.stringify(topics), status, t, status, t, cur.id).run();

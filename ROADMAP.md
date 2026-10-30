@@ -163,3 +163,5 @@ Podpage kostet 65 $/Monat (ca. 780 $/Jahr). Ziel: m365.fm komplett auf dub.m365.
 - Seiten: `/community/u/<handle>/blog/<slug>/` (BlogPosting, author → Personen-Entität, about → Themen, citation → Quellen), Autoren-Blog, Gesamt-Blog `/community/blog/`; nur in der Sprache des Beitrags; en/de indexierbar, übrige noindex.
 - Oberfläche: Reiter „Blog“ in der Community (`assets/blog.js`). MCP: `list_my_blog_posts`, `save_blog_post`, `delete_blog_post` (+ HOWTO „blog“).
 - Prüf-Warteschlange: im Reiter Blog für Admin/Redaktion (gebaut). Offen: Badge „Autor“, Punkte für veröffentlichte Beiträge, Blog-Link auf der Profilseite, Feed-Aufnahme (Creator-Feed), Hover/Teilen, Kommentare, Stick-Man-Video aus Beitrag (Punkte-Katalog „video“).
+
+- Blog-Regel (30.10.): Jeder kann bloggen, Beiträge sind sofort live (öffentliches Profil nötig). In den Google-Index und die Sitemap kommt ein Beitrag erst ab 10 Upvotes (`INDEX_VOTES` in `site_blog.py`); Verzeichnisse sind nur indexierbar, wenn sie mindestens einen solchen Beitrag enthalten. Die Prüf-Warteschlange bleibt für Meldungen/Sonderfälle; Redaktion kann Beiträge löschen.

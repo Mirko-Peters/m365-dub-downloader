@@ -36,7 +36,7 @@ def build(g, posts, people, api):
         mine = [p for p in posts if p["lang"] == lang]
         if not mine:
             continue
-        noidx = lang != "en" and lang != "de"
+        INDEX_VOTES = 10   # erst ab so vielen Upvotes bei Google (Index + Sitemap)
         w = WT.get(lang, WT["en"]); croot = f"{BASE}{pfx(lang)}/community/"
         links_l = {i: [e["name"], f"{BASE}{pfx(lang) if lang == 'de' else ''}/entity/{i}/"] for i, e in ENTS.items()}
         title_blog = T(lang, "Blog", "Blog")
@@ -55,6 +55,7 @@ def build(g, posts, people, api):
                    "inLanguage": lang, "datePublished": iso(p["published"]), "dateModified": iso(p.get("updated") or p["published"]),
                    "author": {"@type": "Person", "@id": au + "#person", "name": a["name"], "url": au},
                    "about": [{"@id": f"{BASE}/entity/{t}/#thing"} for t in topics], "citation": [{"@type": "CreativeWork", "name": r["title"], "url": r["url"]} for r in refs]}]
+            noidx = p.get("votes", 0) < INDEX_VOTES
             write(f"{pfx2(lang)}community/u/{p['handle']}/blog/{p['slug']}/index.html", page(lang, f'{p["title"]} – {a["name"]} | M365.FM', (p.get("summary") or "")[:155], u, b, None, ld, og_type="article", extra_head=LCSS, noindex=noidx))
             if not noidx:
                 sitemap.append((u, iso(p.get("updated") or p["published"]), None))
@@ -63,12 +64,14 @@ def build(g, posts, people, api):
             return '<ul class="bl-list">' + "".join(f'<li><a href="{croot}u/{p["handle"]}/blog/{p["slug"]}/"><b>{esc(p["title"])}</b></a> <span class="mut">· {esc(pb[p["handle"]]["name"])} · {iso(p["published"])}</span>'
                                                    f'{("<br>" + esc(p["summary"])) if p.get("summary") else ""}</li>' for p in items) + "</ul>"
         for h in sorted({p["handle"] for p in mine}):
+            noidx = not any(p["handle"] == h and p.get("votes", 0) >= INDEX_VOTES for p in mine)
             it = sorted([p for p in mine if p["handle"] == h], key=lambda x: -x["published"]); ru = f"{croot}u/{h}/blog/"
             nm = pb[h]["name"]
             b = shell(lang, f'{CSS}<h1>{esc(title_blog)} – {esc(nm)}</h1><p><a href="{croot}u/{h}/">{esc(nm)}</a></p>{lst(it)}')
             write(f"{pfx2(lang)}community/u/{h}/blog/index.html", page(lang, f'{title_blog} – {nm} | M365.FM', nm, ru, b, None, None, og_type="website", extra_head=LCSS, noindex=noidx))
             if not noidx:
                 sitemap.append((ru, TODAY, None))
+        noidx = not any(p.get("votes", 0) >= INDEX_VOTES for p in mine)
         it = sorted(mine, key=lambda x: -x["published"]); ru = f"{croot}blog/"
         intro = T(lang, "Blog posts from members of the Microsoft community.", "Blogbeiträge von Mitgliedern der Microsoft-Community.")
         b = shell(lang, f'{CSS}<h1>{esc(title_blog)}</h1><p class="mut">{esc(intro)}</p>{lst(it)}')
