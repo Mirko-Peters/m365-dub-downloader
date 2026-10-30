@@ -20,12 +20,13 @@ jobs:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
         run: python tools/translate_ui.py
       - name: Speichern und Website neu bauen lassen
+        if: always()
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          if [ -n "$(git status --porcelain data/ui_js_i18n.json)" ]; then
+          if [ -n "$(git status --porcelain data/ui_js_i18n.json data/ui_js_error.txt)" ]; then
             git config user.name "m365-site-bot"; git config user.email "actions@users.noreply.github.com"
-            git add data/ui_js_i18n.json && git commit -m "Oberflächen-Texte übersetzt (fr, es, it, nl, pt, pl)"
+            git add -A data/ui_js_i18n.json data/ui_js_error.txt && git commit -m "Oberflächen-Texte übersetzt (fr, es, it, nl, pt, pl)"
             git pull --rebase -q && git push -q
             gh workflow run site.yml --ref main
           else

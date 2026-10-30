@@ -29,6 +29,9 @@ def call(key, model, lang, items):
     return json.loads(txt)
 
 
+ERR = "data/ui_js_error.txt"
+
+
 def main():
     ap = argparse.ArgumentParser(); ap.add_argument("--dry-run", action="store_true"); ap.add_argument("--model", default="claude-haiku-5-5"); ap.add_argument("--lang")
     a = ap.parse_args()
@@ -39,18 +42,32 @@ def main():
     print({lg: len(todo[lg]) for lg in langs}, f"{chars} Zeichen Quelltext (ca. {chars // 3} Token ein, {chars // 3} aus; Haiku: wenige Cent)")
     if a.dry_run:
         return
-    key = os.environ.get("ANTHROPIC_API_KEY") or sys.exit("ANTHROPIC_API_KEY fehlt")
+    key = os.environ.get("ANTHROPIC_API_KEY")
+    if not key:
+        open(ERR, "w").write("ANTHROPIC_API_KEY fehlt (GitHub-Secret nicht gesetzt)\n"); sys.exit("ANTHROPIC_API_KEY fehlt")
+    errs = []
     for lg in langs:
         items = todo[lg]
         for i in range(0, len(items), 40):
             chunk = items[i:i + 40]
-            res = call(key, a.model, LANGS[lg], {f"{k}|{kk}": v for k, kk, v in chunk})
+            try:
+                res = call(key, a.model, LANGS[lg], {f"{k}|{kk}": v for k, kk, v in chunk})
+            except Exception as e:
+                msg = f"{lg} {i}: {type(e).__name__}: {e}"
+                if hasattr(e, "read"):
+                    try: msg += " | " + e.read().decode()[:300]
+                    except Exception: pass
+                errs.append(msg); print(msg); continue
             for k, kk, v in chunk:
                 t = str(res.get(f"{k}|{kk}", "")).strip()
                 if t and all(p in t for p in [x for x in ("{n}", "{s}", "{e}", "{f}", "{c}", "{u}", "{t}") if x in v]):
                     out.setdefault(lg, {}).setdefault(k, {})[kk] = t
             json.dump(out, open(DST, "w"), ensure_ascii=False, indent=1)
             print(f"  {lg}: {min(i + 40, len(items))}/{len(items)}")
+    if errs:
+        open(ERR, "w").write("\n".join(errs) + "\n")
+    elif os.path.exists(ERR):
+        os.remove(ERR)
 
 
 if __name__ == "__main__":
