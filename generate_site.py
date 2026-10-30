@@ -445,6 +445,7 @@ def page(lang, title, desc, canonical, body, alternates=None, jsonld=None, xdefa
 {consent_html(lang)}
 {a11y_tags(lang)}
 <script defer src="{BASE}/assets/attend.js"></script>
+<script defer src="{BASE}/assets/smooth.js"></script>
 </body></html>
 """
 
