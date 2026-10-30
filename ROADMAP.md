@@ -125,3 +125,9 @@ Podpage kostet 65 $/Monat (ca. 780 $/Jahr). Ziel: m365.fm komplett auf dub.m365.
 - Idee: Eine eigene App für Event-Veranstalter (iOS/Android) als bezahltes Zusatzprodukt, das Veranstalter für einen kleinen Betrag bekommen. Veranstalter bekommen ihre Event-App mit Programm, Merkliste, Anmeldung, Teilnehmerliste (nur wer sichtbar sein will) und Push-Nachrichten.
 - Technik-Weg: Zuerst PWA (Manifest, Icons, Installationshinweis, Push über den vorhandenen Service Worker), danach bei Bedarf eine Hülle mit Capacitor für App Store und Play Store. Gleiche API wie die Webseite.
 - Offene Punkte: Preismodell (einmalig je Event oder Abo), Branding je Event (Logo, Farben), Zahlungsanbieter, Store-Gebühren (Apple 99 $/Jahr, Google 25 $ einmalig). Erst nach der M365Con entscheiden.
+
+## Partner, iCal, Weitergabe an m365con.net (gebaut)
+- Sponsoren/Medienpartner: `event_partners`, eine Seite schlägt vor, die andere bestätigt (Event-Team ↔ Firma), API `/api/event/:h/partners`, Eingang `/api/events/partners-mine`, MCP `manage_event_partner`; bestätigte Partner erscheinen auf der Event-Seite und als `sponsor` im Schema.org-Event.
+- iCal: `event.ics` je Event (inkl. Sessions) mit Button auf der Event-Seite.
+- m365con.net: Wer sich hier für M365Con anmeldet, kann per Haken einwilligen, dass Name und E-Mail einmalig an HeySummit (Event 229506) gehen. Tabelle `event_transfers`; MCP-Admin-Tools `list_event_transfers` und `mark_event_transfers_done` (Adresse wird danach gelöscht). Übertragen wird mit der HeySummit-Anbindung (`create_attendee`) in einer Claude-Sitzung, die auch den dub-MCP verbunden hat – später als geplante Aufgabe automatisierbar.
+- Offen: direkter HeySummit-API-Schlüssel im Worker (dann ohne Claude-Sitzung), Mail-System (Einladungen, Bestätigungen).

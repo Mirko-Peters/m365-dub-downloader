@@ -61,6 +61,9 @@ def event_ld(BASE, ev, pb, ob):
         n["organizer"] = {"@type": "Organization" if org.get("kind") == "o" else "Person", "name": org["name"]}
     if ev.get("tickets_url"):
         n["offers"] = {"@type": "Offer", "url": ev["tickets_url"], "availability": "https://schema.org/InStock", **({"price": 0, "priceCurrency": "EUR"} if ev.get("free") else {})}
+    sp = [{"@id": f"{BASE}/community/c/{x['handle']}/#org"} if x.get("handle") in ob else {"@type": "Organization", "name": x["name"]} for x in ev.get("partners", [])]
+    if sp:
+        n["sponsor"] = sp
     t = [{"@id": eid_of(BASE, e)} for e in ev.get("topics", []) if e in ENTS]
     if t:
         n["about"] = t
@@ -112,16 +115,49 @@ def blocks(BASE, events, lang):
     return res
 
 
+def ics_for(ev, BASE):
+    """iCalendar (.ics) mit dem Event und seinen Sessions."""
+    def dt(x):
+        x = x.replace("-", "").replace(":", "")
+        return x + "00" if "T" in x and len(x) == 13 else x
+    def esc_(t):
+        return str(t).replace("\\", "\\\\").replace(";", "\\;").replace(",", "\\,").replace("\n", "\\n")
+    u = eurl_(BASE, "en", ev["handle"]); now = datetime.utcnow().strftime("%Y%m%dT%H%M%SZ")
+    def vevent(uid, title, start, end, desc, url):
+        allday = "T" not in start
+        e = ["BEGIN:VEVENT", f"UID:{uid}@dub.m365.fm", f"DTSTAMP:{now}", f"SUMMARY:{esc_(title)}"]
+        if allday:
+            from datetime import timedelta
+            e.append("DTSTART;VALUE=DATE:" + start.replace("-", ""))
+            last = datetime.strptime((end or start)[:10], "%Y-%m-%d") + timedelta(days=1)
+            e.append("DTEND;VALUE=DATE:" + last.strftime("%Y%m%d"))
+        else:
+            e.append("DTSTART:" + dt(start))
+            if end:
+                e.append("DTEND:" + dt(end))
+        if desc:
+            e.append("DESCRIPTION:" + esc_(desc[:400]))
+        e += [f"URL:{url}", "END:VEVENT"]
+        return e
+    out = ["BEGIN:VCALENDAR", "VERSION:2.0", "PRODID:-//M365.FM//Events//EN", "CALSCALE:GREGORIAN", "X-WR-CALNAME:" + esc_(ev["title"])]
+    out += vevent(ev["handle"], ev["title"], ev["start"], ev.get("end", ""), ev.get("summary", ""), u)
+    for se in ev.get("sessions", []):
+        if se.get("start"):
+            out += vevent(f'{ev["handle"]}-s{se["id"]}', se["title"], se["start"], se.get("end", ""), se.get("abstract", ""), u)
+    out.append("END:VCALENDAR")
+    return "\r\n".join(out) + "\r\n"
+
+
 REGJS = r'''(function(){var d=document.getElementById("ev-reg");if(!d)return;var A="%API%",E=d.getAttribute("data-e"),T=%T%,C="%CROOT%";function f(p,o){o=o||{};o.credentials="include";o.headers={"x-requested-with":"m365","content-type":"application/json"};return fetch(A+p,o).then(function(r){return r.json().then(function(j){return{s:r.status,j:j}})})}
 function el(t,x,c){var e=document.createElement(t);if(x)e.textContent=x;if(c)e.className=c;return e}
 function draw(j){d.textContent="";var line=j.going+" "+T.going+(j.waitlist?" · "+j.waitlist+" "+T.wait:"")+(j.capacity?" · "+T.cap.replace("{n}",j.capacity):"");d.appendChild(el("p",line,"mut"));
-var me=j.me;if(!me){var cb=document.createElement("input");cb.type="checkbox";var lb=el("label");lb.appendChild(cb);lb.appendChild(document.createTextNode(" "+T.vis));var b=el("button",j.full?T.joinwl:T.join,"btn main");b.type="button";b.onclick=function(){f("/api/event/"+E+"/register",{method:"POST",body:JSON.stringify({visible:cb.checked})}).then(function(r){if(r.s===401){location.href=C+"?register="+E+"#c-events";return}if(r.j.error==="need_profile"){alert(T.prof);return}load()})};d.appendChild(b);d.appendChild(el("br"));d.appendChild(lb)}
+var me=j.me;if(!me){var cb=document.createElement("input");cb.type="checkbox";var lb=el("label");lb.appendChild(cb);lb.appendChild(document.createTextNode(" "+T.vis));var tc=null,em=null;if(j.transfer){tc=document.createElement("input");tc.type="checkbox";var tl=el("label");tl.appendChild(tc);tl.appendChild(document.createTextNode(" "+T.tr));em=document.createElement("input");em.type="email";em.placeholder=T.em;em.style.display="none";tc.onchange=function(){em.style.display=tc.checked?"":"none"};d.appendChild(tl);d.appendChild(em);d.appendChild(el("br"))}var b=el("button",j.full?T.joinwl:T.join,"btn main");b.type="button";b.onclick=function(){var pl={visible:cb.checked};if(tc&&tc.checked){pl.transfer=true;pl.email=em.value}f("/api/event/"+E+"/register",{method:"POST",body:JSON.stringify(pl)}).then(function(r){if(r.s===401){location.href=C+"?register="+E+"#c-events";return}if(r.j.error==="need_profile"){alert(T.prof);return}if(r.j.error==="bad_email"){alert(T.bad);return}load()})};d.appendChild(b);d.appendChild(el("br"));d.appendChild(lb)}
 else{d.appendChild(el("p",me.status==="going"?T.in:T.inwl));var cb2=document.createElement("input");cb2.type="checkbox";cb2.checked=me.visible;cb2.onchange=function(){f("/api/event/"+E+"/register",{method:"POST",body:JSON.stringify({visible:cb2.checked})}).then(function(r){if(r.j.error==="need_profile"){cb2.checked=false;alert(T.prof)}load()})};var l2=el("label");l2.appendChild(cb2);l2.appendChild(document.createTextNode(" "+T.vis));d.appendChild(l2);var o=el("button",T.out,"btn");o.type="button";o.onclick=function(){f("/api/event/"+E+"/register",{method:"DELETE"}).then(load)};d.appendChild(el("br"));d.appendChild(o)}
 if(j.visible&&j.visible.length){d.appendChild(el("h3",T.who));var u=el("p");j.visible.forEach(function(x,i){if(i)u.appendChild(document.createTextNode(", "));var a=el("a",x.name);a.href=C.replace(/community\/$/,"community/")+"u/"+x.handle+"/";u.appendChild(a)});d.appendChild(u)}}
 function load(){f("/api/event/"+E+"/attendees").then(function(r){if(r.s===200)draw(r.j)}).catch(function(){})}load()})()'''
 REGT = {
-    "en": {"going": "registered", "wait": "on the waiting list", "cap": "{n} places", "vis": "Show my profile in the public participant list (off by default)", "join": "Register (free)", "joinwl": "Join the waiting list", "in": "✓ You are registered.", "inwl": "You are on the waiting list and move up automatically.", "out": "Cancel registration", "prof": "Create a public profile first to be shown in the list.", "who": "Participants who chose to be listed"},
-    "de": {"going": "angemeldet", "wait": "auf der Warteliste", "cap": "{n} Plätze", "vis": "Mein Profil in der öffentlichen Teilnehmerliste zeigen (standardmäßig aus)", "join": "Anmelden (kostenlos)", "joinwl": "Auf die Warteliste", "in": "✓ Du bist angemeldet.", "inwl": "Du stehst auf der Warteliste und rückst automatisch nach.", "out": "Anmeldung zurückziehen", "prof": "Lege zuerst ein öffentliches Profil an, um in der Liste zu erscheinen.", "who": "Teilnehmende, die sich zeigen wollen"},
+    "en": {"going": "registered", "wait": "on the waiting list", "cap": "{n} places", "vis": "Show my profile in the public participant list (off by default)", "join": "Register (free)", "joinwl": "Join the waiting list", "in": "✓ You are registered.", "inwl": "You are on the waiting list and move up automatically.", "out": "Cancel registration", "prof": "Create a public profile first to be shown in the list.", "who": "Participants who chose to be listed", "tr": "Also register me at m365con.net: pass my name and email address on once (the address is deleted here afterwards)", "em": "Email address", "bad": "Please enter a valid email address."},
+    "de": {"going": "angemeldet", "wait": "auf der Warteliste", "cap": "{n} Plätze", "vis": "Mein Profil in der öffentlichen Teilnehmerliste zeigen (standardmäßig aus)", "join": "Anmelden (kostenlos)", "joinwl": "Auf die Warteliste", "in": "✓ Du bist angemeldet.", "inwl": "Du stehst auf der Warteliste und rückst automatisch nach.", "out": "Anmeldung zurückziehen", "prof": "Lege zuerst ein öffentliches Profil an, um in der Liste zu erscheinen.", "who": "Teilnehmende, die sich zeigen wollen", "tr": "Mich auch bei m365con.net anmelden: Name und E-Mail-Adresse werden einmalig weitergegeben (die Adresse wird hier danach gelöscht)", "em": "E-Mail-Adresse", "bad": "Bitte eine gültige E-Mail-Adresse eingeben."},
 }
 EVLIVE = r'''(function(){fetch("%API%/api/events/export").then(function(r){return r.json()}).then(function(j){var have={};[].forEach.call(document.querySelectorAll(".ev-list a[href]"),function(a){have[a.getAttribute("href")]=1});var T=new Date().toISOString().slice(0,10),ups=document.querySelector(".ev-list");(j.events||[]).forEach(function(e){var u="%BASE%"+e.handle+"/";if(have[u])return;if((e.end||e.start).slice(0,10)<T)return;var ul=document.querySelector(".ev-list");if(!ul){ul=document.createElement("ul");ul.className="ev-list";document.querySelector("h1").parentNode.appendChild(ul)}var li=document.createElement("li");li.className="ev-card";var a=document.createElement("a");a.href=u;var b=document.createElement("b");b.textContent=e.title;a.appendChild(b);li.appendChild(a);var sp=document.createElement("span");sp.className="mut";sp.textContent=" · "+e.start.slice(0,10);li.appendChild(sp);ul.insertBefore(li,ul.firstChild)})}).catch(function(){})})()'''
 
@@ -149,6 +185,12 @@ def build(g, events, people, orgs):
             ft = '<table class="mb-facts"><tbody>' + "".join(f'<tr><th scope="row">{esc(a)}</th><td>{b_}</td></tr>' for a, b_ in facts if b_) + "</tbody></table>"
             btn = (f'<a class="btn main" href="{esc(ev["tickets_url"])}" rel="nofollow noopener" target="_blank">{esc(s["tickets"])}</a> ' if ev.get("tickets_url") else "") + (f'<a class="btn" href="{esc(ev["url"])}" rel="nofollow noopener" target="_blank">{esc(s["website"])}</a>' if ev.get("url") else "")
             tp = "".join(f'<a class="ev-tag" href="{eurl(BASE, lang, e)}">{esc(ENTS[e]["name"])}</a>' for e in ev.get("topics", []) if e in ENTS)
+            pl = {"sponsor": "Sponsoren" if lang == "de" else "Sponsors", "media": "Medienpartner" if lang == "de" else "Media partners"}
+            pt = ""
+            for kd in ("sponsor", "media"):
+                ps = [x for x in ev.get("partners", []) if x["kind"] == kd]
+                if ps:
+                    pt += f'<h2>{pl[kd]}</h2><ul>' + "".join(f'<li>' + (f'<a href="{BASE}{"/de" if lang == "de" else ""}/community/c/{x["handle"]}/">{esc(x["name"])}</a>' if x.get("handle") in ob else esc(x["name"])) + (f' <span class="mut">· {esc(x["level"])}</span>' if x.get("level") else "") + '</li>' for x in ps) + "</ul>"
             ss = []
             for se in ev.get("sessions", []):
                 spk = ", ".join((f'<a href="{BASE}{"/de" if lang == "de" else ""}/community/u/{x["h"]}/">{esc(x["n"])}</a>' if x.get("h") in pb else f'<a href="{eurl(BASE, lang, x["e"])}">{esc(x["n"])}</a>' if x.get("e") in ENTS else esc(x["n"])) for x in se.get("speakers", []))
@@ -158,11 +200,15 @@ def build(g, events, people, orgs):
                           + (f'<p><a href="{esc(se["recording_url"])}" rel="nofollow noopener" target="_blank">{esc(s["recording"])}</a></p>' if se.get("recording_url") else "") + "</div>")
             b = shell(lang, f'<nav aria-label="breadcrumb"><a href="{croot}events/">{esc(s["events"])}</a></nav><h1>{esc(ev["title"])}</h1><p style="font-size:1.1em">{esc(ev.get("summary", ""))}</p>{ft}<p>{btn}</p>'
                       + (f'<h2>{esc(s["about"])}</h2><p style="white-space:pre-line">{esc(ev["about"])}</p>' if ev.get("about") else "") + (f'<h2>{esc(s["topics"])}</h2><p>{tp}</p>' if tp else "")
-                      + f'<h2>{esc(s["sessions"])}</h2>' + ("".join(ss) or f'<p class="mut">{esc(s["nosess"])}</p>')
-                      + f'<h2>{"Anmeldung" if lang == "de" else "Registration"}</h2><div id="ev-reg" data-e="{esc(ev["handle"])}"></div><script>' + REGJS.replace("%API%", api).replace("%T%", json.dumps(REGT[lang], ensure_ascii=False)).replace("%CROOT%", croot) + '</script>'
+                      + f'<p><a class="btn" href="{u}event.ics" download>{"Zum Kalender hinzufügen (.ics)" if lang == "de" else "Add to calendar (.ics)"}</a></p>' + f'<h2>{esc(s["sessions"])}</h2>' + ("".join(ss) or f'<p class="mut">{esc(s["nosess"])}</p>')
+                      + pt + f'<h2>{"Anmeldung" if lang == "de" else "Registration"}</h2><div id="ev-reg" data-e="{esc(ev["handle"])}"></div><script>' + REGJS.replace("%API%", api).replace("%T%", json.dumps(REGT[lang], ensure_ascii=False)).replace("%CROOT%", croot) + '</script>'
                       + f'<p><a class="btn" href="{croot}?propose={esc(ev["handle"])}#c-events">{esc(s["propose"])}</a></p>' + css)
             ld = [{"@context": "https://schema.org", **event_ld(BASE, ev, pb, ob)}]
             write(f"{'de/' if lang == 'de' else ''}community/events/{ev['handle']}/index.html", page(lang, f'{ev["title"]} – {s["events"]} | M365.FM', (ev.get("summary") or ev.get("about") or "")[:155], u, b, None, ld, og_type="website", extra_head=LCSS, noindex=noidx))
+            if lang == "en":
+                write(f"community/events/{ev['handle']}/event.ics", ics_for(ev, BASE))
+            else:
+                write(f"de/community/events/{ev['handle']}/event.ics", ics_for(ev, BASE))
             if not noidx:
                 sitemap.append((u, TODAY, None))
         # Verzeichnis

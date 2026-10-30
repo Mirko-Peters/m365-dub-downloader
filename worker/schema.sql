@@ -469,3 +469,29 @@ CREATE TABLE IF NOT EXISTS event_settings (
   event_id INTEGER PRIMARY KEY,
   capacity INTEGER NOT NULL DEFAULT 0      -- 0 = unbegrenzt
 );
+
+-- Partner eines Events (Sponsor, Medienpartner): eine Seite schlaegt vor (by e=Event-Team, o=Firma), die andere bestaetigt
+CREATE TABLE IF NOT EXISTS event_partners (
+  event_id INTEGER NOT NULL,
+  org_id INTEGER NOT NULL,
+  kind TEXT NOT NULL,                      -- sponsor | media
+  level TEXT NOT NULL DEFAULT '',          -- z. B. Gold, Silber, Community
+  status TEXT NOT NULL DEFAULT 'pending',  -- pending | confirmed
+  by TEXT NOT NULL DEFAULT 'e',
+  created INTEGER NOT NULL,
+  PRIMARY KEY (event_id, org_id)
+);
+CREATE INDEX IF NOT EXISTS idx_ep_org ON event_partners(org_id);
+
+-- Weitergabe von Anmeldungen an externe Event-Systeme (z. B. HeySummit/m365con.net); nur mit Einwilligung, E-Mail wird nach der Uebertragung geloescht
+CREATE TABLE IF NOT EXISTS event_transfers (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  event_id INTEGER NOT NULL,
+  user_id INTEGER NOT NULL,
+  target TEXT NOT NULL,
+  name TEXT NOT NULL,
+  email TEXT NOT NULL DEFAULT '',
+  status TEXT NOT NULL DEFAULT 'pending',   -- pending | done
+  created INTEGER NOT NULL,
+  UNIQUE (event_id, user_id)
+);
