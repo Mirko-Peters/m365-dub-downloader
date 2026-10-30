@@ -4,7 +4,7 @@ import { evalBadges, stats, topUsers, badgesFor, award } from "./badges.js";
 import { runDigest, sendMail } from "./digest.js";
 import { handleEntity } from "./entities.js";
 import { handleProfiles, deleteUserData } from "./profiles.js";
-import { handleEvents, deleteUserEvents } from "./events.js";
+import { handleEvents, deleteUserEvents, ensureM365Con } from "./events.js";
 import { handleVotes } from "./votes.js";
 import { handlePoints } from "./points.js";
 import { handleMessages, purgeMessages, deleteUserMessages } from "./messages.js";
@@ -320,5 +320,5 @@ export default {
       return json({ error: "server" }, 500, env, request);
     }
   },
-  async scheduled(event, env, ctx) { if (event.cron === "0 6 * * *") ctx.waitUntil(runDigest(env)); ctx.waitUntil(refreshFeeds(env).catch(() => 0)); ctx.waitUntil(purgeMessages(env.DB).catch(() => 0)); },
+  async scheduled(event, env, ctx) { if (event.cron === "0 6 * * *") ctx.waitUntil(runDigest(env)); ctx.waitUntil(refreshFeeds(env).catch(() => 0)); ctx.waitUntil(ensureM365Con(env).catch(() => 0)); ctx.waitUntil(purgeMessages(env.DB).catch(() => 0)); },
 };

@@ -603,8 +603,8 @@ def ast_body(lang):
 def footer(lang):
     ui = UI.get(lang)
     about = ui[5] if ui else "About Mirko Peters"
-    return (f'<footer><div class="wrap"><a href="{about_url(lang)}">{esc(about)}</a><a href="https://www.m365.fm">m365.fm</a>'
-            f'<a href="https://m365con.net">M365Con</a><a class="soc" href="{LINKEDIN}" rel="me" style="--bc:#0A66C2">{brand_icon("LinkedIn")}<span>LinkedIn</span></a><a class="soc" href="{YT_CHANNEL}" style="--bc:#FF0000">{brand_icon("YouTube")}<span>YouTube</span></a><a href="{MVP}" rel="me">Microsoft MVP</a>'
+    return (f'<footer><div class="wrap"><a href="https://www.m365.fm">m365.fm</a>'
+            f'<a href="https://m365con.net">M365Con</a><a class="soc" href="{LINKEDIN}" rel="me" style="--bc:#0A66C2">{brand_icon("LinkedIn")}<span>LinkedIn</span></a><a class="soc" href="{YT_CHANNEL}" style="--bc:#FF0000">{brand_icon("YouTube")}<span>YouTube</span></a>'
             f'<a href="{ast_url(lang)}">{esc(ast_label(lang))}</a><a href="{BASE}/{"de/" if lang == "de" else ""}press/">{"Pressekit" if lang == "de" else "Press kit"}</a><a href="{BASE}/impressum/" rel="nofollow">Impressum</a><a href="{BASE}/legal/" rel="nofollow">Legal notice</a>'
             f'<a href="{BASE}/datenschutz/" rel="nofollow">Datenschutz</a><a href="{BASE}/privacy/" rel="nofollow">Privacy</a>'
             f'<div style="margin-top:10px">© {date.today().year} Mirko Peters · M365.FM</div></div></footer>')

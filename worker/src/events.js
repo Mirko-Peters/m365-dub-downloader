@@ -65,6 +65,17 @@ async function evView(db, ev, withPending) {
     organizer: org ? { kind: "o", handle: org.public ? org.handle : "", name: org.name } : { kind: "u", handle: ow?.handle || "", name: ow?.name || "" }, sessions: rows.map((r) => sessView(r, withPending)) };
 }
 
+export async function ensureM365Con(env) {   // M365Con 2027 ist ein Event und gehoert dem Admin als Veranstalter
+  const db = env.DB, subs = (env.ADMIN_SUBS || "").split(",").map((x) => x.trim()).filter(Boolean);
+  let owner = null;
+  for (const a of subs) { const [pr, ...rest] = a.split(":"); owner = await db.prepare("SELECT id FROM users WHERE provider=? AND sub=?").bind(pr, rest.join(":")).first(); if (owner) break; }
+  if (!owner) return;
+  const t = Math.floor(Date.now() / 1000), ex = await db.prepare("SELECT id,owner_id FROM events WHERE handle='m365con-2027'").first();
+  if (!ex) await db.prepare("INSERT INTO events(handle,owner_id,title,summary,about,start,end,mode,location,country,url,tickets_url,free,lang,topics,seeking_sponsor,public,created,updated) VALUES('m365con-2027',?,?,?,?,?,?,'online','Online','','https://m365con.net','https://m365con.net',1,'en','[\"m365con\"]',1,1,?,?)")
+    .bind(owner.id, "M365Con 2027", "Free online convention: 10 days, 120+ sessions, 120+ speakers, a daily focus topic.", "M365Con 2027 is a free online convention about Microsoft 365, Copilot and AI with 10 days of sessions, a daily focus topic and 120+ speakers.", "2027-01-11T08:00", "2027-01-22", t, t).run();
+  else if (ex.owner_id !== owner.id) await db.prepare("UPDATE events SET owner_id=? WHERE id=?").bind(owner.id, ex.id).run();
+}
+
 export async function handleEvents(env, request, url, path, user, J) {
   const db = env.DB, method = request.method; let m;
   const need = () => (user ? null : J({ error: "login" }, 401));
@@ -73,10 +84,10 @@ export async function handleEvents(env, request, url, path, user, J) {
   if (path === "/api/events/seed-m365con" && method === "POST") {   // Admin: M365Con 2027 als Event anlegen (zunaechst nicht oeffentlich, Daten spaeter im Organizer-Bereich pflegen)
     if (!user?.admin) return J({ error: "forbidden" }, 403);
     const ex = await db.prepare("SELECT id FROM events WHERE handle='m365con-2027'").first();
-    if (ex) return J({ ok: true, existed: true, handle: "m365con-2027" });
+    if (ex) { await db.prepare("UPDATE events SET owner_id=?, public=1 WHERE id=?").bind(user.id, ex.id).run(); return J({ ok: true, existed: true, handle: "m365con-2027" }); }
     const b = await body(), t = Math.floor(Date.now() / 1000);
-    await db.prepare("INSERT INTO events(handle,owner_id,title,summary,about,start,end,mode,location,country,url,tickets_url,free,lang,topics,seeking_sponsor,public,created,updated) VALUES('m365con-2027',?,?,?,?,?,?,'online','Online','',?,?,1,'en','[]',1,0,?,?)")
-      .bind(user.id, "M365Con 2027", "Free online convention: 10 days, 120+ sessions, 120+ speakers, a daily focus topic.", "M365Con 2027 is a free online convention about Microsoft 365, Copilot and AI with 10 days of sessions, a daily focus topic and 120+ speakers.", String(b.start || "2027-01-01T08:00").slice(0, 16), String(b.end || "").slice(0, 16), "https://m365con.net", "https://m365con.net", t, t).run();
+    await db.prepare("INSERT INTO events(handle,owner_id,title,summary,about,start,end,mode,location,country,url,tickets_url,free,lang,topics,seeking_sponsor,public,created,updated) VALUES('m365con-2027',?,?,?,?,?,?,'online','Online','',?,?,1,'en','[\"m365con\"]',1,1,?,?)")
+      .bind(user.id, "M365Con 2027", "Free online convention: 10 days, 120+ sessions, 120+ speakers, a daily focus topic.", "M365Con 2027 is a free online convention about Microsoft 365, Copilot and AI with 10 days of sessions, a daily focus topic and 120+ speakers.", String(b.start || "2027-01-11T08:00").slice(0, 16), String(b.end || "2027-01-22").slice(0, 16), "https://m365con.net", "https://m365con.net", t, t).run();
     return J({ ok: true, handle: "m365con-2027", public: false });
   }
   if (path === "/api/events/export" && method === "GET") {
