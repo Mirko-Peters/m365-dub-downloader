@@ -4,6 +4,7 @@ from datetime import datetime, timezone
 from site_i18n import COMM_LANGS, pfx, pfx2, T
 from site_learn import ENTS, esc, _fetch_json, LCSS, WT, wiki_render, wiki_images, WCSS
 import site_notes as SNT
+import site_story as ST
 
 
 def fetch_posts(api):
@@ -80,7 +81,7 @@ def build(g, posts, people, api):
             cos = [c for c in (p.get("coauthors") or []) if c.get("handle") in pb and c["handle"] != p["handle"]]
             co_html = "".join(f' {esc(T(lang, "and", "und"))} <a href="{croot}u/{c["handle"]}/" rel="author">{esc(pb[c["handle"]]["name"])}</a>' for c in cos) if len(cos) == 1 else "".join(f', <a href="{croot}u/{c["handle"]}/" rel="author">{esc(pb[c["handle"]]["name"])}</a>' for c in cos)
             upd_html = f' · {esc(T(lang, "Updated", "Aktualisiert"))} <time datetime="{iso(p["updated"])}">{iso(p["updated"])}</time>' if p.get("updated") and iso(p["updated"]) != iso(p["published"]) else ""
-            b = shell(lang, f'{WCSS}{CSS}<p class="mut"><a href="{croot}blog/">{esc(title_blog)}</a> · <a href="{croot}u/{p["handle"]}/blog/">{esc(a["name"])}</a></p><article class="wk-body"><h1>{esc(p["title"])}</h1>'
+            b = shell(lang, f'{WCSS}{CSS}<p class="mut"><a href="{croot}blog/">{esc(title_blog)}</a> · <a href="{croot}u/{p["handle"]}/blog/">{esc(a["name"])}</a></p><article class="wk-body" data-recipe="{ST.recipe_for(p["slug"], body_html)}"><h1>{esc(p["title"])}</h1>'
                             f'<p class="mut">{esc(T(lang, "By", "Von"))} <a href="{croot}u/{p["handle"]}/" rel="author">{esc(a["name"])}</a>{co_html}{esc(" · ")}<time datetime="{iso(p["published"])}">{iso(p["published"])}</time>{upd_html}</p>'
                             f'{("<p>" + esc(p["summary"]) + "</p>") if p.get("summary") else ""}{_aitr(p, lang)}{_kp}{body_html}{_fq}{SNT.CSS if (_kp or _fq) else ""}</article><p>{tl}</p>{vote}'
                             f'<p>{("" if p.get("legacy") else "<button type=" + chr(34) + "button" + chr(34) + " class=" + chr(34) + "bl-vote bl-follow" + chr(34) + " data-h=" + chr(34) + esc(p["handle"]) + chr(34) + " aria-pressed=" + chr(34) + "false" + chr(34) + "><span class=" + chr(34) + "t" + chr(34) + ">" + esc(T(lang, "Follow this blog", "Blog abonnieren")) + "</span></button> ")}<a href="{croot}u/{p["handle"]}/blog/feed.xml">RSS</a></p>'

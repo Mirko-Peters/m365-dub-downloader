@@ -396,6 +396,17 @@ def single_main(html_):
     return "".join(parts)
 
 
+def story_kind(canonical):
+    """Seitentyp fuer die Scroll-Geschichte (assets/story.js): home | episode | entity | blog | page"""
+    p = re.sub(r"^https?://[^/]+", "", canonical or "").strip("/").split("/")
+    if p == [""] or (len(p) == 1 and len(p[0]) <= 3): return "home"
+    if "entity" in p[:2] and len(p) >= 2: return "entity"
+    if "blog" in p and "u" in p and p[-1] != "blog": return "blog"
+    if p[:2] == ["show", "episodes"] and len(p) >= 3: return "episode"
+    if len(p) == 2 and len(p[0]) <= 3 and p[1] not in ("podcast", "live", "blog", "community"): return "episode"
+    return "page"
+
+
 def page(lang, title, desc, canonical, body, alternates=None, jsonld=None, xdefault=None, og_type="article", extra_head="", noindex=False, side="", og_of=None):
     if lang in COMM_LANGS[2:] and any(k in canonical for k in ("/community/", "/entity/", "/glossary/")):
         extra_head += f'<script src="{BASE}/assets/ui-{lang}.js"></script>'
@@ -440,7 +451,7 @@ def page(lang, title, desc, canonical, body, alternates=None, jsonld=None, xdefa
 <meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="{esc(title)}"><meta name="twitter:description" content="{esc(desc)}"><meta name="twitter:image" content="{ogimg}">
 {extra_head}{ADS.head(BASE, body, canonical, noindex)}{css_link()}<link rel="stylesheet" href="{BASE}/assets/fx.css">{A11Y_EARLY}
 {ld}</head>
-<body>
+<body data-story="{story_kind(canonical)}">
 {ext_links(body)}
 {consent_html(lang)}
 {a11y_tags(lang)}
@@ -448,6 +459,7 @@ def page(lang, title, desc, canonical, body, alternates=None, jsonld=None, xdefa
 <script defer src="{BASE}/assets/smooth.js"></script>
 <script defer src="{BASE}/assets/fx.js"></script>
 {('<script defer src="' + BASE + '/assets/viz.js"></script>') if 'class="viz"' in body else ""}
+<script defer src="{BASE}/assets/story.js"></script>
 </body></html>
 """
 
