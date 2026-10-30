@@ -195,6 +195,14 @@ def build(g, people, orgs, extra=None):
                 facts.append((s["company"], esc(p.get("job", "")) + (" · " if p.get("job") and comp else "") + comp))
             if p.get("country"):
                 facts.append((s["country"], esc(p["country"])))
+            ct = p.get("contact") or {}   # nur Felder, die das Mitglied fuer alle freigegeben hat
+            loc = " ".join(x for x in [ct.get("zip", ""), ct.get("city", "")] if x)
+            if loc or ct.get("street"):
+                facts.append(("Ort" if lang == "de" else "Location", esc(", ".join(x for x in [ct.get("street", ""), loc] if x))))
+            if ct.get("email"):
+                facts.append(("E-Mail", f'<a href="mailto:{esc(ct["email"])}">{esc(ct["email"])}</a>'))
+            if ct.get("phone"):
+                facts.append(("Mobil" if lang == "de" else "Mobile", esc(ct["phone"])))
             ft = '<table class="mb-facts"><tbody>' + "".join(f'<tr><th scope="row">{esc(a)}</th><td>{b}</td></tr>' for a, b in facts) + "</tbody></table>" if facts else ""
             _cs = sorted([c for c in p.get("certs", []) if c["e"] in ENTS], key=lambda c: (-c.get("endorsed", 0), -int(bool(c.get("verified"))), -(c.get("year") or 0)))
             certs = "<ul>" + "".join(f'<li><a href="{eurl(BASE, lang, c["e"])}">{esc(ENTS[c["e"]]["name"])}</a>{" (" + str(c["year"]) + ")" if c.get("year") else ""}'
