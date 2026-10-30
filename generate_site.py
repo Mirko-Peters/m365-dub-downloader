@@ -14,6 +14,7 @@ import site_mcp as MCPS
 import site_seo as SEOR
 import site_live as LIVE
 import site_notes as SNT
+import site_media as MED
 import glob, html, json, os, re, shutil, sys, unicodedata
 from datetime import date
 from pathlib import Path
@@ -1188,9 +1189,10 @@ def build():
     _ctx = dict(community_tags=community_tags, write=write, page=page, header=header, footer=footer, footer_en=footer_en, BASE=BASE, LANGS=LANGS, active=active, url_of=url_of, anchor_title=anchor_title, sitemap=sitemap, TODAY=TODAY, api=COMMUNITY_API, orig_alts=ORIG_ALTS)
     _people, _orgs = MEM.fetch_members(COMMUNITY_API)
 
-    def _ep_find(e):
+    def _ep_find(e, lang="de"):
         rx = [re.compile(r"(?<![\w-])" + re.escape(n) + r"(?![\w-])", re.I) for n in LRN.ent_names(e)]
-        return [it for it in by_lang.get("de", []) if any(r.search(it["e"]["title"] + " " + (it["e"].get("tags") or "")) for r in rx)][:8] if rx else []
+        return [it for it in by_lang.get(lang, []) if any(r.search(it["e"]["title"] + " " + (it["e"].get("tags") or "")) for r in rx)][:12] if rx else []
+    _ctx["ep_sum"] = lambda x: short(parse_desc(x["e"]["desc"])[0], 260)
     _cl = (LRN._fetch_json(f"{COMMUNITY_API}/api/entity/claims") or {}).get("claims", []) if hasattr(LRN, "_fetch_json") else []
     ENT.ORGPAGES.update({o["eid"]: o["handle"] for o in _orgs if o.get("eid")})
     _events = EVT.fetch_events(COMMUNITY_API)
@@ -1251,9 +1253,10 @@ def build():
             {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [
                 {"@type": "ListItem", "position": 1, "name": "M365.FM", "item": f"{BASE}/"}, {"@type": "ListItem", "position": 2, "name": LANGS[l][0], "item": f"{BASE}/{l}/"},
                 {"@type": "ListItem", "position": 3, "name": label, "item": canonical}]}]
+        hero = MED.hero_svg({"id": "cat-" + re.sub(r"\W+", "-", label.lower()), "name": label, "type": "category"}, kind, label)
         body = f"""{header(l, lang_switch(l, alts or {}, active))}
 <main class="wrap"><div class="crumbs"><a href="{BASE}/{l}/">{esc(ui[7])}</a> / {esc(LANGS[l][0])}</div>
-<div class="kicker">{esc(kind)} · {esc(LANGS[l][0])}</div><h1>{esc(label)}</h1>
+<div class="kicker">{esc(kind)} · {esc(LANGS[l][0])}</div><h1>{esc(label)}</h1>{hero}
 <p class="mut">{len(lst)} × {esc(ui[3])}</p>
 <h2>{esc(ui[3])}</h2><div class="list">{rows_html(lst)}</div>
 <h2>{esc(TOPICS.get(l, "Topics"))}</h2><div class="chips">{others}</div>
