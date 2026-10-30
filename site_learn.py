@@ -397,11 +397,12 @@ def load_entities(api):
 
 COMMUNITY_API_DEFAULT = os.environ.get("COMMUNITY_API", "https://api-dub.m365.fm")
 ENTS = load_entities(COMMUNITY_API_DEFAULT)
-_GENERIC = {"prompt", "governance", "graph", "teams", "viva", "fabric", "automation", "productivity", "actions", "outlook", "compliance", "context", "word", "excel", "ad", "pac", "rag", "mcp", "dlp", "crm", "cdp", "kql", "apim", "hitl", "gpt 5"}
+_GENERIC = {"connector", "prompt", "governance", "graph", "teams", "viva", "fabric", "automation", "productivity", "actions", "outlook", "compliance", "context", "word", "excel", "ad", "pac", "rag", "mcp", "dlp", "crm", "cdp", "kql", "apim", "hitl", "gpt 5"}
 
 
 _GLOSS_TYPES = ("product", "platform", "concept", "cert")   # nur Sachthemen, keine Personen, Firmen, Events oder Medien
-_name_rx = lambda e: "|".join(re.escape(n) for n in sorted({e["name"], *(a for a in e.get("aliases", []) if len(a) >= 3)}, key=len, reverse=True))
+_AMBIG = {"word", "project", "access", "forms", "lists", "stream", "loop", "bookings", "publisher", "flow", "excel online", "to do", "planner", "whiteboard", "tasks", "mtr", "pad", "pva", "ppac", "pbi", "spe"}   # zu allgemeine Aliase: nicht automatisch verlinken
+_name_rx = lambda e: "|".join(re.escape(n) for n in sorted({e["name"], *(a for a in e.get("aliases", []) if len(a) >= 3 and a.lower() not in _AMBIG)}, key=len, reverse=True))
 GLOSS[:] = sorted(({"id": e["id"], "name": e["name"], "cat": (_GLEG.get(e["id"]) or {}).get("cat", ""), "kw": (_GLEG.get(e["id"]) or {}).get("kw") or _name_rx(e),
                     "en": e["desc"].get("en") or e["desc"].get("de", ""), "de": e["desc"].get("de") or e["desc"].get("en", "")}
                    for e in ENTS.values() if e.get("type") in _GLOSS_TYPES and not e.get("outdated") and not e.get("replaced_by") and (e["id"] in _GLEG or e["name"].lower() not in _GENERIC) and len((e.get("desc") or {}).get("en", "") + (e.get("desc") or {}).get("de", "")) >= 40), key=lambda x: x["name"].lower())
