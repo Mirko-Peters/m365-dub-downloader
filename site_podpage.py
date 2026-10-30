@@ -129,14 +129,15 @@ def build(g):
         prev_, next_ = (eps[k + 1] if k + 1 < len(eps) else None), (eps[k - 1] if k else None)
         aud = f'<audio controls preload="none" style="width:100%" src="{esc(r["audio"])}"></audio>' if r and r.get("audio") else ""
         ext = " · ".join(f'<a href="{esc(e[x])}" rel="noopener">{n}</a>' for x, n in (("episode_apple_url_path", "Apple Podcasts"), ("episode_spotify_url_path", "Spotify"), ("episode_youtube_music_url_path", "YouTube Music")) if (e.get(x) or "").startswith("http"))
+        hl = "".join(f'<a href="{BASE}/community/u/{h["slug"]}/">{esc(h["name"])}</a> ' for h in hosts if h.get("slug") == "mirko-peters")
         gl = "".join(f'<li><a href="{root}guests/{gg["slug"]}/">{esc(gg["name"])}</a></li>' for gg in eg[e["slug"]])
         tx = f'<h2>Transcript</h2><details open><summary>Read the full transcript</summary><p style="white-space:pre-wrap;line-height:1.6">{esc(tr)}</p></details>' if len(tr) > 200 else ""
         body = (f'<article><p class="mut">{day(e["create_time"])}{" · Season " + str(e["season"]) if e.get("season") else ""}</p><h1>{esc(e["name"])}</h1>{aud}'
                 f'<div style="margin:1em 0"><strong>{esc(plain(e.get("summary")))}</strong></div><div class="pp-notes">{san(e.get("show_notes"))}</div>'
-                + (f"<p>{ext}</p>" if ext else "") + (f"<h2>Guests</h2><ul>{gl}</ul>" if gl else "") + tx + "</article>"
+                + (f"<p>{ext}</p>" if ext else "") + (f'<p class="mut">Host: {hl}</p>' if hl else "") + (f"<h2>Guests</h2><ul>{gl}</ul>" if gl else "") + tx + "</article>"
                 + '<p style="display:flex;justify-content:space-between;gap:1em;margin-top:2em">' + (f'<a href="{ep_url(prev_)}">← {esc(prev_["name"][:60])}</a>' if prev_ else "<span></span>") + (f'<a href="{ep_url(next_)}">{esc(next_["name"][:60])} →</a>' if next_ else "") + "</p>")
         ld = {"@context": "https://schema.org", "@type": "PodcastEpisode", "name": e["name"], "url": ep_url(e), "datePublished": day(e["create_time"]),
-              "description": plain(e.get("summary"))[:500], "partOfSeries": {"@type": "PodcastSeries", "name": NAME, "url": root}, "inLanguage": "en"}
+              "description": plain(e.get("summary"))[:500], "partOfSeries": {"@type": "PodcastSeries", "name": NAME, "url": root}, "inLanguage": "en", "author": {"@id": f"{BASE}/entity/mirko-peters/#entity"}}
         if e.get("season"): ld["partOfSeason"] = {"@type": "PodcastSeason", "seasonNumber": e["season"]}
         if r and r.get("audio"): ld["associatedMedia"] = {"@type": "AudioObject", "contentUrl": r["audio"]}
         if len(tr) > 200: ld["transcript"] = tr[:5000]
