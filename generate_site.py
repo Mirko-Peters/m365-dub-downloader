@@ -266,7 +266,7 @@ def share_html(lang, url, title):
             "if(navigator.share){navigator.share({title:t,url:u}).catch(function(){})}else if(navigator.clipboard){navigator.clipboard.writeText(u).then(function(){var o=b.textContent;b.textContent='✓';setTimeout(function(){b.textContent=o},1500)})}})});</script>")
 
 
-CLARITY_ID = "z5dkd64e41"
+CLARITY_ID = "v5hs0d3310"
 CONSENT = {
     "de": ("Wir nutzen Microsoft Clarity zur Nutzungsanalyse.", "Akzeptieren", "Ablehnen"), "es": ("Usamos Microsoft Clarity para analizar el uso.", "Aceptar", "Rechazar"),
     "fr": ("Nous utilisons Microsoft Clarity pour analyser l'usage.", "Accepter", "Refuser"), "it": ("Usiamo Microsoft Clarity per analizzare l'utilizzo.", "Accetta", "Rifiuta"),
