@@ -30,6 +30,7 @@ const PROVIDERS = {
   },
 };
 const VID = /^[A-Za-z0-9_-]{5,24}$/;
+const okCl = (vid, lang) => isLang(lang) || (lang === "en" && /^blog\d+$/.test(vid));   // Blog-Beitraege gibt es auch auf Englisch
 const now = () => Math.floor(Date.now() / 1000);
 const ip = (r) => r.headers.get("cf-connecting-ip") || "0";
 const html = (body, status = 200) => new Response(`<!doctype html><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex"><body style="font-family:system-ui;max-width:32em;margin:12vh auto;padding:0 16px;line-height:1.5">${body}`, { status, headers: { "content-type": "text/html; charset=utf-8", "cache-control": "no-store" } });
@@ -167,7 +168,7 @@ async function api(env, request, url, path) {
 
   if (path === "/api/comments" && method === "GET") {
     const vid = url.searchParams.get("vid"), lang = url.searchParams.get("lang");
-    if (!VID.test(vid || "") || !isLang(lang)) return J({ error: "bad_request" }, 400);
+    if (!VID.test(vid || "") || !okCl(vid, lang)) return J({ error: "bad_request" }, 400);
     const rows = (await db.prepare(
       `SELECT c.id,c.user_id,c.parent_id,c.body,c.status,c.created,u.name,(SELECT COUNT(*) FROM likes l WHERE l.comment_id=c.id) likes
        FROM comments c JOIN users u ON u.id=c.user_id WHERE c.vid=? AND c.lang=? AND u.banned=0 ORDER BY c.created ASC LIMIT 300`).bind(vid, lang).all()).results || [];
@@ -179,7 +180,7 @@ async function api(env, request, url, path) {
     if (need()) return need();
     const b = await request.json().catch(() => ({}));
     const body = cleanText(b.body, 1500), vid = b.vid, lang = b.lang;
-    if (!VID.test(vid || "") || !isLang(lang) || body.length < 2) return J({ error: "bad_request" }, 400);
+    if (!VID.test(vid || "") || !okCl(vid, lang) || body.length < 2) return J({ error: "bad_request" }, 400);
     if ((body.match(/https?:\/\//gi) || []).length > 2) return J({ error: "links" }, 400);
     if (!(await rateLimit(db, `c20:${user.id}`, 1, 20)) || !(await rateLimit(db, `c24:${user.id}`, 30, 86400))) return J({ error: "rate" }, 429);
     let parent = null;
@@ -231,7 +232,7 @@ async function api(env, request, url, path) {
     return J(await translateStatus(env));
   }
   if (path.startsWith("/api/ai-token")) { const k = await handleTokens(env, request, url, path, user, J); if (k) return k; }
-  if (path === "/api/blog" || path.startsWith("/api/blog/") || path.startsWith("/api/admin/blog")) { const q = await handleBlog(env, request, url, path, user, J); if (q) return q; }
+  if (path === "/api/blog" || path.startsWith("/api/blog/") || path.startsWith("/api/admin/blog")) { const q = await handleBlog(env, request, url, path, user, J); if (q) { if (user && method !== "GET") await evalBadges(env, user.id).catch(() => 0); return q; } }
   if (path === "/api/qa" || path.startsWith("/api/qa/")) { const q = await handleQa(env, request, url, path, user, J); if (q) return q; }
   if (path.startsWith("/api/edits/")) { const v = await handleVotes(env, request, url, path, user, J); if (v) return v; }
   if (path.startsWith("/api/entity") || path.startsWith("/api/admin/entity")) { const e = await handleEntity(env, request, url, path, user, J); if (e) return e; }

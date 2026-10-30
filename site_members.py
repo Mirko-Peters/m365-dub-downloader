@@ -1,6 +1,7 @@
 """Mitglieder- und Firmenverzeichnis: oeffentliche Experten-Profile (nur Opt-in) mit Schema.org-Verknuepfung zu den Entitaeten."""
 import json
 BLOGLANGS = set()
+BLOGS = {}   # handle -> Sprachen mit Beiträgen
 from site_i18n import COMM_LANGS, pfx, pfx2, overlay, T
 from datetime import datetime, timezone
 from site_learn import ENTS, esc, _fetch_json, LCSS
@@ -213,6 +214,10 @@ def build(g, people, orgs, extra=None):
                 facts.append((s["company"], esc(p.get("job", "")) + (" · " if p.get("job") and comp else "") + comp))
             if p.get("country"):
                 facts.append((s["country"], esc(p["country"])))
+            _bl = BLOGS.get(p["handle"])
+            if _bl:
+                _bll = lang if lang in _bl else ("en" if "en" in _bl else sorted(_bl)[0])
+                facts.append(("Blog", f'<a href="{BASE}{pfx(_bll)}/community/u/{p["handle"]}/blog/">Blog</a>'))
             ct = p.get("contact") or {}   # nur Felder, die das Mitglied fuer alle freigegeben hat
             loc = " ".join(x for x in [ct.get("zip", ""), ct.get("city", "")] if x)
             if loc or ct.get("street"):

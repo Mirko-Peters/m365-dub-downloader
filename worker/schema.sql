@@ -528,3 +528,11 @@ CREATE TABLE IF NOT EXISTS blog_votes (
   created INTEGER NOT NULL,
   PRIMARY KEY (post_id, user_id)
 );
+
+CREATE TABLE IF NOT EXISTS blog_follows (        -- Mitglieder abonnieren das Blog eines Creators
+  user_id INTEGER NOT NULL,
+  handle TEXT NOT NULL,
+  created INTEGER NOT NULL,
+  PRIMARY KEY (user_id, handle)
+);
+CREATE INDEX IF NOT EXISTS idx_bf_handle ON blog_follows(handle);

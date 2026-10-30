@@ -165,3 +165,20 @@ Podpage kostet 65 $/Monat (ca. 780 $/Jahr). Ziel: m365.fm komplett auf dub.m365.
 - Prüf-Warteschlange: im Reiter Blog für Admin/Redaktion (gebaut). Offen: Badge „Autor“, Punkte für veröffentlichte Beiträge, Blog-Link auf der Profilseite, Feed-Aufnahme (Creator-Feed), Hover/Teilen, Kommentare, Stick-Man-Video aus Beitrag (Punkte-Katalog „video“).
 
 - Blog-Regel (30.10.): Jeder kann bloggen, Beiträge sind sofort live (öffentliches Profil nötig). In den Google-Index und die Sitemap kommt ein Beitrag erst ab 10 Upvotes (`INDEX_VOTES` in `site_blog.py`); Verzeichnisse sind nur indexierbar, wenn sie mindestens einen solchen Beitrag enthalten. Die Prüf-Warteschlange bleibt für Meldungen/Sonderfälle; Redaktion kann Beiträge löschen.
+
+## Idee (30.10., vom Nutzer): Produkt-Updates und News von Microsoft einziehen
+- Updates und News von Microsoft automatisch einlesen (Microsoft-365-Roadmap, Message Center/„What's new“, Release-Notes und Blogs der Produkte, RSS/Atom wo vorhanden) und den **Entitäten** (Produkte/Plattformen) zuordnen.
+- Je Entität eine Zeitleiste „Updates & News“; Nutzer können Themen folgen (siehe „Thema folgen“); Wichtigkeit bewerten (Community-Upvotes, später KI-Einstufung), Übersetzung über den Worker.
+- Nur Titel, Link, Datum und eigene Kurzfassung speichern (kein Volltext der Quellen, Quellenangabe Pflicht). Technisch ähnlich zu `feed_items`/Feeds im Worker; Abgrenzung zur Idee „Microsoft-Updates-Seite“ (Update-Tracker nach Themen und Wichtigkeit).
+
+## Idee (30.10., vom Nutzer): Freiwillige Unterstützung im Medium-Stil
+- Leser unterstützen freiwillig (Mitgliedschaft oder Einzelbetrag); die Einnahmen werden nach einem festen Schlüssel an die Autoren verteilt (z. B. nach Lesezeit/Upvotes/Abonnenten der unterstützten Autoren). **Komplett freiwillig**, keine Bezahlschranke; **kein PayPal** (Anbieter noch offen, z. B. Stripe/Mollie – Auszahlung an Creator, Steuer/Rechnungen und DSGVO vorher klären).
+- Vorher klären: Auszahlungsschwelle, Gebühren, Rechtsform (Plattform als Vermittler), Transparenz-Seite, was mit Beiträgen von Nutzern ohne Auszahlungsdaten passiert.
+- Passt zu Blog, später Podcast; Voraussetzung ist ein stabiler Blog mit Abonnenten (Follow).
+
+## Blog Ergänzungen (gebaut, 30.10.)
+- Blog-Link auf der Profilseite, Badge „Blog-Autor“ (`author`), Punkte (5 je veröffentlichtem Beitrag bis 20, 1 je Upvote bis 200), Beiträge erscheinen im Creator-Feed (Kanal „blog“), Kommentare unter Beiträgen (vorhandenes Kommentar-System, `vid=blog<id>`, auch Englisch), Blog abonnieren (Follow, `blog_follows`) und RSS je Autor und gesamt (`feed.xml`).
+- Offen: E-Mail-Benachrichtigung an Abonnenten (mit dem Mailsystem/Resend), Newsletter-Kanal des Creators beim Abonnieren zeigen, Übersetzung der Badge-Texte (bisher Englisch/Deutsch).
+
+## Podcast-Kanäle der Community (als Nächstes, wie der Blog)
+- Gleiche Mechanik wie Blog: Creator, Folgen, Upvotes, Follow/RSS, Kommentare, Badge „Podcaster“, Creator-Feed. Unterschied: **Prüfung durch Mirko in Spreaker** (Folge wird dort als Entwurf geprüft und freigegeben, danach Anzeige/Index); Index-Schwelle wie im Blog (Upvotes), Details (Upload direkt zu Spreaker, Show je Creator) siehe „Podcast-Upload direkt zu Spreaker“.

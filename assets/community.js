@@ -1,8 +1,8 @@
 /* M365.FM Community: Kommentare, Abos, Kurator, Profil. Nutzt window.M365C = {api, lang, vid, t}. Texte nur per textContent. */
 (function () {
   var C = window.M365C; if (!C || !C.api) return;
-  var T = C.t || {}, API = C.api, LANG = C.lang, ICON = { editor: "✏️", wiki_author: "📖", newcomer: "🌱", first_comment: "💬", commentator: "🗣️", voice: "📣", helpful: "🤝", early_bird: "🐦", polyglot: "🌍", streak: "🔥", curator: "🏆", notified: "🔔", guardian: "🛡️", li_follower: "🔗", founder: "🏢", team_member: "👥", organizer: "📅", speaker: "🎤", recommender: "💌", recommended: "⭐", endorsed: "✅", endorser: "👍", connector: "💬", profile_pro: "🪪", entity_owner: "🧬", sponsor_open: "💼" };
-  var BADGES = ["editor", "wiki_author", "newcomer", "first_comment", "commentator", "voice", "helpful", "early_bird", "polyglot", "streak", "curator", "notified", "guardian", "li_follower", "founder", "team_member", "organizer", "speaker", "recommender", "recommended", "endorsed", "endorser", "connector", "profile_pro", "entity_owner", "sponsor_open"];
+  var T = C.t || {}, API = C.api, LANG = C.lang, ICON = { editor: "✏️", wiki_author: "📖", author: "✍️", newcomer: "🌱", first_comment: "💬", commentator: "🗣️", voice: "📣", helpful: "🤝", early_bird: "🐦", polyglot: "🌍", streak: "🔥", curator: "🏆", notified: "🔔", guardian: "🛡️", li_follower: "🔗", founder: "🏢", team_member: "👥", organizer: "📅", speaker: "🎤", recommender: "💌", recommended: "⭐", endorsed: "✅", endorser: "👍", connector: "💬", profile_pro: "🪪", entity_owner: "🧬", sponsor_open: "💼" };
+  var BADGES = ["editor", "wiki_author", "author", "newcomer", "first_comment", "commentator", "voice", "helpful", "early_bird", "polyglot", "streak", "curator", "notified", "guardian", "li_follower", "founder", "team_member", "organizer", "speaker", "recommender", "recommended", "endorsed", "endorser", "connector", "profile_pro", "entity_owner", "sponsor_open"];
   var tt = function (k) { return T[k] || k; };
   function h(tag, a, kids) {
     var e = document.createElement(tag);

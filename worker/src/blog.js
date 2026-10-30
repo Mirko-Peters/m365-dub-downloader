@@ -16,8 +16,19 @@ const view = (r) => ({ ...r, topics: parse(r.topics, []) });
 
 async function trusted(db, user) { return !!(user.admin || user.editor || user.pro || (await stats(db, user.id)).points >= TRUST_POINTS); }
 
+const postUrl = (env, lang, handle, slug) => `${env.SITE}${lang === "en" ? "" : "/" + lang}/community/u/${handle}/blog/${slug}/`;
+// Creator-Feed: veroeffentlichte Beitraege erscheinen im Feed des Profils (Kanal-Art "blog", ohne eigenen RSS-Abruf)
+async function syncFeed(env, db, uid, post, handle, live) {
+  const url = postUrl(env, post.lang, handle, post.slug);
+  if (!live) { await db.prepare("DELETE FROM feed_items WHERE url=? AND owner_type='u' AND owner_id=?").bind(url, uid).run(); return; }
+  const curl = `${env.SITE}/community/u/${handle}/blog/`;
+  await db.prepare("INSERT OR IGNORE INTO channels(owner_type,owner_id,kind,url,feed) VALUES('u',?,'blog',?,'')").bind(uid, curl).run();
+  const ch = await db.prepare("SELECT id FROM channels WHERE owner_type='u' AND owner_id=? AND url=?").bind(uid, curl).first(); if (!ch) return;
+  await db.prepare("INSERT INTO feed_items(channel_id,owner_type,owner_id,url,title,published) VALUES(?,?,?,?,?,?) ON CONFLICT(url) DO UPDATE SET title=excluded.title,hidden=0").bind(ch.id, "u", uid, url, post.title, post.published || now()).run();
+}
+
 export async function deleteUserBlog(db, uid) {
-  await db.batch([db.prepare("DELETE FROM blog_votes WHERE post_id IN (SELECT id FROM blog_posts WHERE user_id=?) OR user_id=?").bind(uid, uid), db.prepare("DELETE FROM blog_posts WHERE user_id=?").bind(uid)]);
+  await db.batch([db.prepare("DELETE FROM blog_follows WHERE user_id=?").bind(uid), db.prepare("DELETE FROM blog_votes WHERE post_id IN (SELECT id FROM blog_posts WHERE user_id=?) OR user_id=?").bind(uid, uid), db.prepare("DELETE FROM blog_posts WHERE user_id=?").bind(uid)]);
 }
 
 export async function handleBlog(env, request, url, path, user, J) {
@@ -29,6 +40,10 @@ export async function handleBlog(env, request, url, path, user, J) {
        FROM blog_posts b JOIN profiles p ON p.user_id=b.user_id AND p.public=1 AND p.handle IS NOT NULL JOIN users u ON u.id=b.user_id AND u.banned=0
        WHERE b.status='live' ORDER BY b.published DESC LIMIT 1000`).all()).results || [];
     return J({ items: rows.map((r) => ({ ...r, topics: parse(r.topics, []) })) }, 200, { "cache-control": "public, max-age=300" });
+  }
+  if (path === "/api/blog/followers" && method === "GET") {   // Anzahl Abonnenten eines Blogs (oeffentlich)
+    const n = (await db.prepare("SELECT COUNT(*) n FROM blog_follows WHERE handle=?").bind(url.searchParams.get("handle") || "").first()).n;
+    return J({ followers: n }, 200, { "cache-control": "public, max-age=120" });
   }
   if (path === "/api/blog/votes" && method === "GET") {   // Upvote-Zahlen live (fuer die statischen Seiten)
     const h = url.searchParams.get("handle") || "";
@@ -81,6 +96,7 @@ export async function handleBlog(env, request, url, path, user, J) {
     if (cur) {
       await db.prepare("UPDATE blog_posts SET title=?,summary=?,body=?,lang=?,topics=?,status=?,updated=?,published=CASE WHEN ?='live' AND published=0 THEN ? ELSE published END,note='' WHERE id=?")
         .bind(title, summary, sb.body, lang, JSON.stringify(topics), status, t, status, t, cur.id).run();
+      await syncFeed(env, db, user.id, { lang, slug: cur.slug, title, published: cur.published || t }, pr?.handle, status === "live" && !!pr?.handle);
       return J({ ok: true, id: cur.id, slug: cur.slug, status });
     }
     const day = (await db.prepare("SELECT COUNT(*) n FROM blog_posts WHERE user_id=? AND created>?").bind(user.id, t - 86400).first())?.n || 0;
@@ -89,14 +105,30 @@ export async function handleBlog(env, request, url, path, user, J) {
     while (await db.prepare("SELECT 1 x FROM blog_posts WHERE user_id=? AND slug=?").bind(user.id, slug).first()) slug = `${slugify(title).slice(0, 52) || "post"}-${++n}`;
     const r = await db.prepare("INSERT INTO blog_posts(user_id,slug,title,summary,body,lang,topics,status,note,created,updated,published) VALUES(?,?,?,?,?,?,?,?,?,?,?,?)")
       .bind(user.id, slug, title, summary, sb.body, lang, JSON.stringify(topics), status, "", t, t, status === "live" ? t : 0).run();
+    await syncFeed(env, db, user.id, { lang, slug, title, published: t }, pr?.handle, status === "live" && !!pr?.handle);
     return J({ ok: true, id: r.meta.last_row_id, slug, status });
   }
 
   if (path === "/api/blog/delete" && method === "POST") {
-    const b = await request.json().catch(() => ({})), p = await db.prepare("SELECT id FROM blog_posts WHERE id=? AND (user_id=? OR ?=1)").bind(+b.id, user.id, user.admin ? 1 : 0).first();
+    const b = await request.json().catch(() => ({})), p = await db.prepare("SELECT b.id,b.user_id,b.lang,b.slug,b.title,p.handle FROM blog_posts b LEFT JOIN profiles p ON p.user_id=b.user_id WHERE b.id=? AND (b.user_id=? OR ?=1)").bind(+b.id, user.id, user.admin ? 1 : 0).first();
     if (!p) return J({ error: "not_found" }, 404);
+    if (p.handle) await syncFeed(env, db, p.user_id, p, p.handle, false);
+    await db.prepare("DELETE FROM comments WHERE vid=?").bind("blog" + p.id).run();
     await db.batch([db.prepare("DELETE FROM blog_votes WHERE post_id=?").bind(p.id), db.prepare("DELETE FROM blog_posts WHERE id=?").bind(p.id)]);
     return J({ ok: true });
+  }
+
+  if (path === "/api/blog/following" && method === "GET") {
+    return J({ following: ((await db.prepare("SELECT handle FROM blog_follows WHERE user_id=?").bind(user.id).all()).results || []).map((x) => x.handle) });
+  }
+  if (path === "/api/blog/follow" && method === "POST") {
+    if (!(await rateLimit(db, `blogf:${user.id}`, 60, 3600))) return J({ error: "rate_limit" }, 429);
+    const b = await request.json().catch(() => ({})), h = String(b.handle || "");
+    const pr = await db.prepare("SELECT user_id FROM profiles WHERE handle=? AND public=1").bind(h).first(); if (!pr) return J({ error: "not_found" }, 404);
+    if (pr.user_id === user.id) return J({ error: "own" }, 400);
+    if (b.on) await db.prepare("INSERT OR IGNORE INTO blog_follows(user_id,handle,created) VALUES(?,?,?)").bind(user.id, h, now()).run();
+    else await db.prepare("DELETE FROM blog_follows WHERE user_id=? AND handle=?").bind(user.id, h).run();
+    return J({ ok: true, following: !!b.on });
   }
 
   if (path === "/api/blog/vote" && method === "POST") {

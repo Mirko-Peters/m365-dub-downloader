@@ -19,12 +19,19 @@ VOTEJS = ('(function(){var A="%API%",H="%H%",bs=[].slice.call(document.querySele
           'bs.forEach(function(b){b.addEventListener("click",function(){f("/api/blog/vote",{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({handle:H,slug:b.dataset.s})}).then(function(d){if(d.error==="login"){location.href=A.replace("api-","")+"/community/";return}'
           'if(d.ok){b.querySelector(".n").textContent=d.votes;b.setAttribute("aria-pressed",d.voted?"true":"false")}}).catch(function(){})})})})();')
 
+FOLLOWJS = ('(function(){var A="%API%",b=document.querySelector(".bl-follow");if(!b)return;var H=b.dataset.h,t=b.querySelector(".t");'
+            'function f(p,o){o=o||{};o.credentials="include";o.headers=Object.assign({"x-requested-with":"m365"},o.headers||{});return fetch(A+p,o).then(function(r){return r.json()})}'
+            'function set(on){b.setAttribute("aria-pressed",on?"true":"false");t.textContent=on?"%FOLLOWING%":"%FOLLOW%"}'
+            'f("/api/blog/following").then(function(d){if(d.following)set(d.following.indexOf(H)>-1)}).catch(function(){});'
+            'b.addEventListener("click",function(){var on=b.getAttribute("aria-pressed")!=="true";f("/api/blog/follow",{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({handle:H,on:on})}).then(function(d){if(d.error==="login"){location.href=A.replace("api-","")+"/community/";return}if(d.ok)set(on)}).catch(function(){})})})();')
+
 CSS = ('<style>.bl-list{padding:0}.bl-list li{list-style:none;padding:.8em 0;border-bottom:1px solid var(--bd)}.bl-vote{font:inherit;cursor:pointer;border:1px solid var(--bd);border-radius:2em;padding:.25em .8em;background:var(--card);color:inherit}'
        '.bl-vote[aria-pressed=true]{border-color:var(--ac)}</style>')
 
 
 def build(g, posts, people, api):
     BASE, write, page, header, footer, footer_en, LANGS = g["BASE"], g["write"], g["page"], g["header"], g["footer"], g["footer_en"], g["LANGS"]
+    ctags = g.get("community_tags")
     sitemap, TODAY = g["sitemap"], g["TODAY"]
     shell = lambda lang, b: f'{header(lang, "")}<main class="wrap" style="max-width:48em">{b}</main>{footer(lang) if lang in LANGS else footer_en()}'
     pb = {p["handle"]: p for p in people}
@@ -50,7 +57,10 @@ def build(g, posts, people, api):
             b = shell(lang, f'{WCSS}{CSS}<p class="mut"><a href="{croot}blog/">{esc(title_blog)}</a> · <a href="{croot}u/{p["handle"]}/blog/">{esc(a["name"])}</a></p><article class="wk-body"><h1>{esc(p["title"])}</h1>'
                             f'<p class="mut">{esc(T(lang, "By", "Von"))} <a href="{croot}u/{p["handle"]}/">{esc(a["name"])}</a> · {iso(p["published"])}</p>'
                             f'{("<p>" + esc(p["summary"]) + "</p>") if p.get("summary") else ""}{body_html}</article><p>{tl}</p>{vote}'
-                            f'<script>{VOTEJS.replace("%API%", api).replace("%H%", p["handle"])}</script>')
+                            f'<p><button type="button" class="bl-vote bl-follow" data-h="{esc(p["handle"])}" aria-pressed="false"><span class="t">{esc(T(lang, "Follow this blog", "Blog abonnieren"))}</span></button> <a href="{croot}u/{p["handle"]}/blog/feed.xml">RSS</a></p>'
+                            f'<section id="c-comments"></section>'
+                            f'<script>{VOTEJS.replace("%API%", api).replace("%H%", p["handle"])}</script><script>{FOLLOWJS.replace("%API%", api).replace("%FOLLOW%", esc(T(lang, "Follow this blog", "Blog abonnieren"))).replace("%FOLLOWING%", esc(T(lang, "Following", "Abonniert")))}</script>'
+                            + (ctags(lang, "blog%d" % p["id"]) if ctags else ""))
             ld = [{"@context": "https://schema.org", "@type": "BlogPosting", "@id": u + "#post", "mainEntityOfPage": u, "headline": p["title"], "description": p.get("summary") or "",
                    "inLanguage": lang, "datePublished": iso(p["published"]), "dateModified": iso(p.get("updated") or p["published"]),
                    "author": {"@type": "Person", "@id": au + "#person", "name": a["name"], "url": au},
@@ -71,12 +81,22 @@ def build(g, posts, people, api):
             write(f"{pfx2(lang)}community/u/{h}/blog/index.html", page(lang, f'{title_blog} – {nm} | M365.FM', nm, ru, b, None, None, og_type="website", extra_head=LCSS, noindex=noidx))
             if not noidx:
                 sitemap.append((ru, TODAY, None))
+            write(f"{pfx2(lang)}community/u/{h}/blog/feed.xml", rss(f"{title_blog} – {nm}", ru, it, croot, pb, lang))
         noidx = not any(p.get("votes", 0) >= INDEX_VOTES for p in mine)
         it = sorted(mine, key=lambda x: -x["published"]); ru = f"{croot}blog/"
         intro = T(lang, "Blog posts from members of the Microsoft community.", "Blogbeiträge von Mitgliedern der Microsoft-Community.")
         b = shell(lang, f'{CSS}<h1>{esc(title_blog)}</h1><p class="mut">{esc(intro)}</p>{lst(it)}')
         ld = [{"@context": "https://schema.org", "@type": "Blog", "name": "M365.FM " + title_blog, "url": ru, "inLanguage": lang,
                "blogPost": [{"@id": f"{croot}u/{p['handle']}/blog/{p['slug']}/#post"} for p in it[:50]]}]
+        write(f"{pfx2(lang)}community/blog/feed.xml", rss("M365.FM " + title_blog, ru, it, croot, pb, lang))
         write(f"{pfx2(lang)}community/blog/index.html", page(lang, f'{title_blog} – M365.FM', intro, ru, b, None, ld, og_type="website", extra_head=LCSS, noindex=noidx))
         if not noidx:
             sitemap.append((ru, TODAY, None))
+
+
+def rss(title, link, items, croot, pb, lang):
+    from xml.sax.saxutils import escape as x
+    from email.utils import formatdate
+    it = "".join(f"<item><title>{x(p['title'])}</title><link>{croot}u/{p['handle']}/blog/{p['slug']}/</link><guid>{croot}u/{p['handle']}/blog/{p['slug']}/</guid>"
+                 f"<pubDate>{formatdate(p['published'])}</pubDate><author>{x(pb[p['handle']]['name'])}</author><description>{x(p.get('summary') or '')}</description></item>" for p in items[:50])
+    return f'<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"><channel><title>{x(title)}</title><link>{link}</link><description>{x(title)}</description><language>{lang}</language>{it}</channel></rss>'
