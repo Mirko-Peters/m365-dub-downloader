@@ -395,7 +395,7 @@ def single_main(html_):
     return "".join(parts)
 
 
-def page(lang, title, desc, canonical, body, alternates=None, jsonld=None, xdefault=None, og_type="article", extra_head="", noindex=False, side=""):
+def page(lang, title, desc, canonical, body, alternates=None, jsonld=None, xdefault=None, og_type="article", extra_head="", noindex=False, side="", og_of=None):
     if lang in COMM_LANGS[2:] and any(k in canonical for k in ("/community/", "/entity/", "/glossary/")):
         extra_head += f'<script src="{BASE}/assets/ui-{lang}.js"></script>'
     hl = LANGS[lang][1] if lang in LANGS else "en"
@@ -404,11 +404,14 @@ def page(lang, title, desc, canonical, body, alternates=None, jsonld=None, xdefa
     alt = ""
     if alternates:
         for l, u in alternates.items():
-            alt += f'<link rel="alternate" hreflang="{LANGS[l][1]}" href="{u}">\n'
+            alt += f'<link rel="alternate" hreflang="{LANGS[l][1] if l in LANGS else l}" href="{u}">\n'
         alt += f'<link rel="alternate" hreflang="x-default" href="{xdefault or BASE + "/"}">\n'
     ld = "".join(f'<script type="application/ld+json">{json.dumps(j, ensure_ascii=False)}</script>\n' for j in (jsonld or []))
     if canonical.endswith("404.html") or noindex:
         ogimg = f"{BASE}/assets/og-default.png"
+    elif og_of:   # lokalisierte Show-Seiten teilen das Teilen-Bild der englischen Seite (spart Zehntausende Bilder)
+        ogimg = f"{BASE}/og/{og_of.replace(BASE, '').strip('/') or 'index'}.png"
+        body = body.replace("<footer>", share_html(lang, canonical, title) + "<footer>", 1)
     else:
         rel = canonical.replace(BASE, "").strip("/") or "index"
         OGLIST.append({"path": f"og/{rel}.png", "title": strip_tags(title), "lang": lang, "seed": canonical, "cover": OG_COVER.get(canonical)})

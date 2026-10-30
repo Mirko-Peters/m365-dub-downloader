@@ -98,10 +98,10 @@ def build(g):
 
     SBX = SBR.Index(); SHP = json.loads((D / "platforms.json").read_text("utf-8")).get("en", {}) if (D / "platforms.json").exists() else {}
 
-    def pub(rel, title, desc, body, ld=None, og="website", noindex=False, last=TODAY):
+    def pub(rel, title, desc, body, ld=None, og="website", noindex=False, last=TODAY, alts=None):
         u = f"{root}{rel}"
         side = SBR.render(SBX, BASE, root, title + " " + plain(body)[:8000], eps, SHP, nav=nav) if not noindex else SBR.render(SBX, BASE, root, "", [], {}, nav=nav)
-        write(f"show/{rel}index.html", page("en", (title if title == NAME else f"{title} – {NAME}"), desc[:300], u, shell(body, side), None, ld, og_type=og, noindex=noindex))
+        write(f"show/{rel}index.html", page("en", (title if title == NAME else f"{title} – {NAME}"), desc[:300], u, shell(body, side), alts, ld, xdefault=u, og_type=og, noindex=noindex))
         if not noindex: sitemap.append((u, last, None))
 
     # Gaeste je Folge: Namensnennung in Titel/Show Notes
@@ -183,6 +183,11 @@ def build(g):
     def bday(p): return (p.get("iso") or "")[:10]
 
     # Folgenseiten
+    # Lokalisierte Show-Seiten: Titel/Zusammenfassung (translate_show.py) und Show Notes der meistgehoerten Folgen (translate_notes.py)
+    I18 = D / "podpage_i18n"; LG = g["LANGS"]
+    TRL = {l: json.loads((I18 / f"{l}.json").read_text("utf-8")) for l in LG if (I18 / f"{l}.json").exists()}
+    NTL = {l: json.loads((I18 / f"notes_{l}.json").read_text("utf-8")) for l in LG if (I18 / f"notes_{l}.json").exists()}
+    loc_url = lambda l, rel: f"{BASE}/{l}/show/{rel}"
     elinks = json.loads((D / "episode_links.json").read_text("utf-8")) if (D / "episode_links.json").exists() else {}   # Plattform-Abgleich (sync_platforms.py)
     for k, e in enumerate(eps):
         r, tr = tr_for(e)
@@ -210,7 +215,24 @@ def build(g):
         if r and r.get("audio"): ld["associatedMedia"] = {"@type": "AudioObject", "contentUrl": r["audio"]}
         if plat_links: ld["sameAs"] = [u for _, u in plat_links]
         if len(tr) > 200: ld["transcript"] = tr[:5000]
-        pub(f"episodes/{e['slug']}/", e.get("meta_title") or e["name"], e.get("meta_description") or short_desc(e, nrec, 155), body, ([ld] + nld) if nld else ld, "article", last=day(e.get("update_time")) or TODAY)
+        alts = {"en": ep_url(e), **{l: loc_url(l, f"episodes/{e['slug']}/") for l in TRL if e["slug"] in TRL[l] and TRL[l][e["slug"]][0]}}
+        pub(f"episodes/{e['slug']}/", e.get("meta_title") or e["name"], e.get("meta_description") or short_desc(e, nrec, 155), body, ([ld] + nld) if nld else ld, "article", last=day(e.get("update_time")) or TODAY, alts=alts if len(alts) > 1 else None)
+        # lokalisierte Fassungen dieser Folge
+        for l in TRL:
+            tt = TRL[l].get(e["slug"])
+            if not tt or not tt[0]: continue
+            lt, ls = tt[0], tt[1] or short_desc(e, nrec, 300)
+            ln = NTL.get(l, {}).get(e["slug"])
+            lu = loc_url(l, f"episodes/{e['slug']}/")
+            lbody = (f'<article><p class="mut">{day(e["create_time"])}</p><h1>{esc(lt)}</h1>{aud}'
+                     f'<div style="display:flex;gap:1rem;align-items:flex-start;margin:1em 0">{img_tag(thumb_of(e, nrec), lt, 160)}<div><strong>{esc(ls)}</strong></div></div>'
+                     + (f'<div class="pp-notes">{san(ln)}</div>' if ln else "") + (f"<p>{ext}</p>" if ext else "")
+                     + f'<p class="mut"><a href="{ep_url(e)}" hreflang="en" lang="en">{esc(e["name"])}</a> (English)</p></article>')
+            lald = {"@context": "https://schema.org", "@type": "PodcastEpisode", "name": lt, "url": lu, "datePublished": day(e["create_time"]), "description": ls[:500],
+                    "inLanguage": LG[l][1], "partOfSeries": {"@type": "PodcastSeries", "name": NAME, "url": root}, "author": {"@id": f"{BASE}/entity/mirko-peters/#entity"}}
+            if r and r.get("audio"): lald["associatedMedia"] = {"@type": "AudioObject", "contentUrl": r["audio"]}
+            write(f"{l}/show/episodes/{e['slug']}/index.html", g["page"](l, f"{lt} – {NAME}", ls[:300], lu, f'{g["header"](l, "")}<main class="wrap">{lbody}</main>{g["footer"](l)}', alts, [lald], xdefault=ep_url(e), og_type="article", og_of=ep_url(e)))
+            sitemap.append((lu, day(e.get("update_time")) or TODAY, None))
 
     # Listen (paginiert)
     pages_n = (len(eps) + PER - 1) // PER
@@ -218,6 +240,23 @@ def build(g):
         part = eps[p * PER:(p + 1) * PER]
         pg = "".join(f'<a href="{root}episodes/{"" if q == 0 else f"page/{q + 1}/"}"{" style=font-weight:700" if q == p else ""}>{q + 1}</a> ' for q in range(pages_n))
         pub("episodes/" if p == 0 else f"episodes/page/{p + 1}/", "All episodes" + (f" – page {p + 1}" if p else ""), f"All {len(eps)} episodes of the {NAME}.", f'<h1>All episodes</h1><ul style="list-style:none;padding:0">{"".join(card(e) for e in part)}</ul><p>{pg}</p>', noindex=bool(p))
+
+    # Lokalisierte Folgenlisten (paginiert) je Sprache mit uebersetzten Titeln/Zusammenfassungen
+    for l in TRL:
+        les = [e for e in eps if TRL[l].get(e["slug"]) and TRL[l][e["slug"]][0]]
+        if not les: continue
+        npg = (len(les) + PER - 1) // PER
+        for p in range(npg):
+            part = les[p * PER:(p + 1) * PER]
+            lis = "".join(f'<li style="margin:.9em 0"><a href="{loc_url(l, "episodes/" + e["slug"] + "/")}"><strong>{esc(TRL[l][e["slug"]][0])}</strong></a><br><span class="mut">{day(e["create_time"])}</span><br>{esc((TRL[l][e["slug"]][1] or "")[:200])}</li>' for e in part)
+            pg = "".join(f'<a href="{loc_url(l, "episodes/" + ("" if q == 0 else f"page/{q + 1}/"))}"{" style=font-weight:700" if q == p else ""}>{q + 1}</a> ' for q in range(npg))
+            lrel = "episodes/" if p == 0 else f"episodes/page/{p + 1}/"
+            lu = loc_url(l, lrel)
+            ttl = f"{NAME} – {LG[l][0]}" + (f" ({p + 1})" if p else "")
+            lal = {"en": f"{root}episodes/" if p == 0 else f"{root}episodes/page/{p + 1}/"}
+            write(f"{l}/show/{lrel}index.html", g["page"](l, ttl, f"{NAME}: {len(les)} · {LG[l][0]}", lu, f'{g["header"](l, "")}<main class="wrap"><h1>{esc(ttl)}</h1><ul style="list-style:none;padding:0">{lis}</ul><p>{pg}</p></main>{g["footer"](l)}',
+                                                         None, None, xdefault=lu if p else f"{root}episodes/", og_type="website", noindex=bool(p)))
+            if not p: sitemap.append((lu, TODAY, None))
 
     # Gaeste
     gl = ""
