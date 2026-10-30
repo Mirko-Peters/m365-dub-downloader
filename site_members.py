@@ -25,11 +25,24 @@ SIZE_N = {"1": (1, 1), "2-10": (2, 10), "11-50": (11, 50), "51-200": (51, 200), 
 CACHE = Path(__file__).parent / "data" / "members_export.json"   # letzte erfolgreiche Fassung: faellt der Abruf aus, bleiben die Profilseiten erhalten
 
 
+def _fetch_export(url):
+    """Wie _fetch_json, nennt aber den Grund des Fehlers im Build-Log (HTTP-Status, Zeitueberschreitung, Alter des Zwischenspeichers)."""
+    import sys, urllib.request
+    try:
+        with urllib.request.urlopen(urllib.request.Request(url, headers={"user-agent": "m365-dub-build"}), timeout=120) as r:
+            age = r.headers.get("x-export-age"); stale = r.headers.get("x-export-stale")
+            print(f"Profil-Export: HTTP {r.status}, Alter {age}s{', veraltet' if stale else ''}", file=sys.stderr)
+            return json.loads(r.read().decode("utf-8"))
+    except Exception as e:
+        print(f"Profil-Export Fehler: {type(e).__name__}: {str(e)[:160]}", file=sys.stderr)
+        return None
+
+
 def fetch_members(api):
     import sys, time
     j = None
     for n in range(3):   # der Export liest alle Profile nacheinander aus D1: kann dauern
-        j = _fetch_json(f"{api}/api/profiles/export", timeout=90)
+        j = _fetch_export(f"{api}/api/profiles/export")
         if j and j.get("people") is not None:
             break
         print(f"WARNUNG: Profil-Export Versuch {n + 1}/3 fehlgeschlagen", file=sys.stderr); time.sleep(5 * (n + 1))

@@ -218,7 +218,8 @@ export async function refreshProfilesExport(env) {
     const sess = (await db.prepare("SELECT s.topics,s.speakers,e.owner_id oid FROM event_sessions s JOIN events e ON e.id=s.event_id WHERE s.status='live' AND s.topics<>'[]'").all()).results || [];   // einmal fuer alle Profile
     const one = async (u) => {
       const v = await personView(db, u.user_id, 0); if (!v) return null;
-      for (const [eid, d] of await derivedExpertise(db, u.user_id, v.handle, emap, sess)) if (emap.has(eid)) { const ex = v.expertise.find((e) => e.e === eid); if (ex) ex.via = d.via; else v.expertise.push({ e: eid, level: 2, verified: false, endorsed: 0, me: false, via: d.via, confirmed: true }); }   // bestaetigte Expertise aus Sessions/Zertifikaten ergaenzen
+      let der = new Map(); try { der = await derivedExpertise(db, u.user_id, v.handle, emap, sess); } catch { /* Profil bleibt auch ohne abgeleitete Themen im Export */ }
+      for (const [eid, d] of der) if (emap.has(eid)) { const ex = v.expertise.find((e) => e.e === eid); if (ex) ex.via = d.via; else v.expertise.push({ e: eid, level: 2, verified: false, endorsed: 0, me: false, via: d.via, confirmed: true }); }   // bestaetigte Expertise aus Sessions/Zertifikaten ergaenzen
       delete v.id; return v;
     };
     for (let k = 0; k < us.length; k += 6) for (const v of await Promise.all(us.slice(k, k + 6).map((u) => one(u).catch(() => null)))) if (v) people.push(v);   // in Gruppen parallel, Reihenfolge bleibt; ein defektes Profil stoppt den Export nicht

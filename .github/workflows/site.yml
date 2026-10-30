@@ -150,6 +150,11 @@ jobs:
             git pull --rebase -q && git push -q
           fi
       - run: python generate_site.py
+      - name: Pruefung - Profilseiten vorhanden?
+        run: |
+          n=$(ls -d docs/community/u/*/ 2>/dev/null | wc -l)
+          echo "Profilseiten: $n"
+          if [ ! -f docs/community/u/mirko-peters/index.html ]; then echo "::warning::Profilseite mirko-peters fehlt (Profil-Export fehlgeschlagen oder Profil nicht oeffentlich), siehe Zeile 'Profil-Export' im Log oben"; fi
       - name: Money-Keywords und Profil-Export sichern
         continue-on-error: true
         run: |
