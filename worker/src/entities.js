@@ -9,6 +9,7 @@ const TRUST_POINTS = 25;
 const now = () => Math.floor(Date.now() / 1000);
 const txt = (s, n) => cleanText(s, n).replace(/[<>]/g, "").replace(/https?:\/\/\S+/gi, "").replace(/\s+/g, " ").trim();
 const httpsUrl = (s, ok) => { s = String(s || "").trim(); if (!s) return ""; try { const u = new URL(s); if (u.protocol !== "https:" || s.length > 250 || u.username || !ok(u.hostname)) return null; return u.href; } catch { return null; } };
+const longTxt = (s, n) => String(s || "").replace(/[<>]/g, "").replace(/https?:\/\/\S+/gi, "").replace(/\r/g, "").replace(/[ \t]+/g, " ").replace(/\n{3,}/g, "\n\n").trim().slice(0, n);
 const isMs = (h) => /(^|\.)(microsoft\.com|azure\.com|office\.com|visualstudio\.com|github\.com|github\.io|microsoft365\.com|linkedin\.com)$/i.test(h);
 
 // Basisliste (statisch veroeffentlicht) fuer Verweisziele; 10 Minuten im Edge-Cache
@@ -56,6 +57,8 @@ export async function validate(env, id, raw) {
   d.desc = { en: txt(raw.desc?.en, 600), de: txt(raw.desc?.de, 600) };
   if (d.desc.en.length < 20 && d.desc.de.length < 20) return bad("too_short");   // Kurzbeschreibung ist Pflicht, in mindestens einer Sprache (Hover-Text in Artikeln)
   if (d.desc.en.length > 300 || d.desc.de.length > 300) return bad("too_long");
+  const lg = { en: longTxt(raw.long?.en, 3000), de: longTxt(raw.long?.de, 3000) };   // Lange Beschreibung (wichtiges Feld, optional)
+  if (lg.en || lg.de) d.long = lg;
   d.web = httpsUrl(raw.web, () => true); d.docs = httpsUrl(raw.docs, (h) => /(^|\.)(microsoft\.com|azure\.com|github\.com)$/i.test(h));
   d.wikipedia = httpsUrl(raw.wikipedia, (h) => /^[a-z]{2,3}\.wikipedia\.org$/i.test(h));
   if (d.web === null || d.docs === null || d.wikipedia === null) return bad("bad_url");
@@ -102,6 +105,11 @@ export async function handleEntity(env, request, url, path, user, J) {
     const cur = await liveOf(db, id); if (cur && cur.data === data) return J({ error: "unchanged" }, 400);
     const t = now();
     const claimed = await db.prepare("SELECT 1 x FROM entity_claims WHERE eid=? AND user_id=? AND status='verified'").bind(id, user.id).first();
+    if (!claimed && !(user.admin || user.editor)) {   // Selbst verwaltete Entitaeten (Event, Profil, Firma): lange Beschreibung nur durch den Eigentuemer
+      const hasOwner = await db.prepare("SELECT 1 x FROM entity_claims WHERE eid=? AND status='verified'").bind(id).first();
+      const oldLong = JSON.stringify((cur ? JSON.parse(cur.data) : (await entityMap(env)).get(id) || {}).long || {}), newLong = JSON.stringify(v.data.long || {});
+      if (hasOwner && oldLong !== newLong) return J({ error: "owner_only" }, 403);
+    }
     if (claimed || (await trustedUser(db, user)) || (await certScoped(env, user, id))) {
       await db.batch([db.prepare("UPDATE entity_rev SET status='old' WHERE eid=? AND status='live'").bind(id), db.prepare("INSERT INTO entity_rev(eid,data,summary,user_id,status,created) VALUES(?,?,?,?,'live',?)").bind(id, data, summary, user.id, t)]);
       await evalBadges(env, user.id); return J({ ok: true, status: "live" });
