@@ -72,7 +72,13 @@ export async function ensureM365Con(env) {   // M365Con 2027 ist ein Event und g
   for (const a of subs) { const [pr, ...rest] = a.split(":"); owner = await db.prepare("SELECT id FROM users WHERE provider=? AND sub=?").bind(pr, rest.join(":")).first(); if (owner) break; }
   if (!owner) return;
   const t = Math.floor(Date.now() / 1000), ex = await db.prepare("SELECT id,owner_id FROM events WHERE handle='m365con-2027'").first();
-  for (const eid of ["m365con", "mirko-peters"]) await db.prepare("INSERT INTO entity_claims(eid,user_id,status,via,created) VALUES(?,?,'verified','admin',?) ON CONFLICT(eid) DO NOTHING").bind(eid, owner.id, t).run();
+  for (const [h, nm, tg, web, eid] of [["m365fm", "M365.FM", "Podcast and community about Microsoft 365, Copilot and AI", "https://www.m365.fm", "m365fm"], ["m365con", "M365Con", "Free online convention for the Microsoft 365 community", "https://m365con.net", "m365con"]]) {
+    let o = await db.prepare("SELECT id FROM orgs WHERE handle=?").bind(h).first();
+    if (!o) { const r = await db.prepare("INSERT INTO orgs(handle,name,tagline,about,website,country,size,public,created) VALUES(?,?,?,?,?,'Germany','2-10',1,?)").bind(h, nm, tg, "", web, t).run(); o = { id: r.meta.last_row_id }; }
+    await db.prepare("INSERT OR IGNORE INTO org_members(org_id,user_id,role,status,created) VALUES(?,?,'owner','active',?)").bind(o.id, owner.id, t).run();
+    await db.prepare("INSERT OR IGNORE INTO org_entity(org_id,eid) VALUES(?,?)").bind(o.id, eid).run();
+  }
+  for (const eid of ["m365con", "m365fm", "mirko-peters"]) await db.prepare("INSERT INTO entity_claims(eid,user_id,status,via,created) VALUES(?,?,'verified','admin',?) ON CONFLICT(eid) DO NOTHING").bind(eid, owner.id, t).run();
   if (!ex) await db.prepare("INSERT INTO events(handle,owner_id,title,summary,about,start,end,mode,location,country,url,tickets_url,free,lang,topics,seeking_sponsor,public,created,updated) VALUES('m365con-2027',?,?,?,?,?,?,'online','Online','','https://m365con.net','https://m365con.net',1,'en','[\"m365con\"]',1,1,?,?)")
     .bind(owner.id, "M365Con 2027", "Free online convention: 10 days, 120+ sessions, 120+ speakers, a daily focus topic.", "M365Con 2027 is a free online convention about Microsoft 365, Copilot and AI with 10 days of sessions, a daily focus topic and 120+ speakers.", "2027-01-11T08:00", "2027-01-22", t, t).run();
   else if (ex.owner_id !== owner.id) await db.prepare("UPDATE events SET owner_id=? WHERE id=?").bind(owner.id, ex.id).run();
