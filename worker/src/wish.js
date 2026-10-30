@@ -50,3 +50,32 @@ export async function handleWish(env, request, url, path, user, J) {
   }
   return J({ error: "not_found" }, 404);
 }
+
+// Offene Punkte der Plattform als "planned" in die Roadmap eintragen (einmalig je Titel, Eigentuemer = Admin)
+const PLAN = [
+  ["Microsoft-Login (Entra-App, Anmeldung mit Microsoft-Konto)", "Benötigt Entra-App und die Secrets MS_CLIENT_ID / MS_CLIENT_SECRET."],
+  ["Mail-System (Benachrichtigungen per E-Mail)", "Resend-Anbindung; E-Mail bei Antworten, Roadmap-Statuswechseln und neuen Updates."],
+  ["Roadmap & Wunschliste: Benachrichtigung bei Statuswechsel", "E-Mail und Push, wenn ein Wunsch übernommen oder umgesetzt wird."],
+  ["Entitäten-Seiten: Produkte und Services der Firmen anzeigen", "Firmen-Angebote und Follower-Zahlen direkt auf den Entitäten-Seiten."],
+  ["Update-Wächter: Wichtigkeitsbewertung und mehr Quellen", "Tech-Community-Blogs, Learn „What’s new“, Bewertung nach Wichtigkeit, E-Mail/Push je Produkt."],
+  ["Bibliothek: Versionsverlauf, Forks und Badges", "Frühere Versionen ansehen, Einträge forken, Auszeichnungen für beliebte Einträge."],
+  ["Seitenbau beschleunigen: Teilen-Bilder nur für neue Seiten", "Open-Graph-Bilder inkrementell erzeugen, Browser-Cache zwischen Läufen."],
+  ["YouTube: API-Audit und Kontingent beantragen", "Damit Creator-Uploads dauerhaft und ohne 7-Tage-Token-Ablauf laufen."],
+  ["Creator-Videos live testen (YouTube-Upload)", "Upload, Freigabe-Schwelle und Seiten mit echtem YouTube-Konto prüfen."],
+  ["HeySummit: Registrierungen übertragen (Test)", "Übertragung von Anmeldungen mit einer Test-Registrierung verifizieren."],
+];
+export async function seedRoadmap(env) {
+  const db = env.DB; await ensure(db);
+  const subs = (env.ADMIN_SUBS || "").split(",").map((x) => x.trim()).filter(Boolean);
+  let owner = null;
+  for (const a of subs) { const [pr, ...rest] = a.split(":"); owner = await db.prepare("SELECT id FROM users WHERE provider=? AND sub=?").bind(pr, rest.join(":")).first(); if (owner) break; }
+  if (!owner) return 0;
+  let n = 0;
+  for (const [title, body] of PLAN) {
+    if (await db.prepare("SELECT 1 x FROM wish WHERE title=?").bind(title).first()) continue;
+    const t = now();
+    const r = await db.prepare("INSERT INTO wish(user_id,title,body,status,created,updated) VALUES(?,?,?,'planned',?,?)").bind(owner.id, title, body, t, t).run();
+    await db.prepare("INSERT OR IGNORE INTO wish_votes(wish_id,user_id) VALUES(?,?)").bind(r.meta.last_row_id, owner.id).run(); n++;
+  }
+  return n;
+}

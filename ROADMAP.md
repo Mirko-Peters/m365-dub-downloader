@@ -220,3 +220,9 @@ Podpage kostet 65 $/Monat (ca. 780 $/Jahr). Ziel: m365.fm komplett auf dub.m365.
 ## Update-Wächter (umgesetzt)
 - Worker-Job `updates.js` (alle 30 Min., je Quelle höchstens alle 6 h): liest offizielle Feeds (M365-Roadmap, Azure Updates, Power-BI-, Fabric-, Power-Platform-, M365-, Dynamics-, Security-Blog), ordnet Meldungen den Produkt-/Plattform-Entitäten über Namen/Aliase zu (max. 3) und speichert nur Titel, Link, Datum, Quelle. Entitätsseiten zeigen „Neueste Updates“, Startseite hat den Filter „Microsoft-Updates“. Admin-Knopf „Update-Check jetzt“. Quellenliste: `SOURCES` in `updates.js` (Feeds ohne Antwort werden nach 8 Fehlversuchen pausiert).
 - Offen: weitere Quellen je Produkt (Tech-Community-Blogs, Learn „What’s new“), Wichtigkeits-Bewertung, Updates-Übersichtsseite, E-Mail/Push bei Updates zu gefolgten Produkten (Mailsystem).
+
+## Roadmap & Wunschliste, Profil/Community (umgesetzt, 30.10.)
+- Reiter „Roadmap & Wünsche“ im Profil-Bereich (nur mit Konto sichtbar): Wünsche einreichen, abstimmen; Admin übernimmt (planned), hakt ab (done → Archiv) oder lehnt ab. Offene Plattform-Punkte werden vom Worker automatisch als „planned“ eingetragen (`seedRoadmap`).
+- Umbenennung: Account-Bereich heißt „Profil“, Menü „Inhalte“ heißt „Community“.
+- Eigene Seiten für gezogene Inhalte (`/community/feed/<id>-<slug>/`), SEO-Text per Editor oder MCP (`save_feed_item_text`), Push bei neuen Inhalten. Updates-Seite (`/updates/`) mit Microsoft-Updates und Tages-Batches.
+- Offen (siehe Roadmap im Profil-Bereich): Microsoft-Login, Mail-System, Statuswechsel-Benachrichtigung, Firmen-Angebote auf Entitäten-Seiten, Update-Wichtigkeit, Bibliothek-Versionen/Forks, OG-Bilder inkrementell, YouTube-Audit.
