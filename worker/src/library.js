@@ -8,7 +8,16 @@ const txt = (s, n) => cleanText(s, n).replace(/[<>]/g, "").replace(/https?:\/\/\
 const okLang = (l) => l === "en" || isLang(l);
 const slugify = (t) => t.toLowerCase().normalize("NFKD").replace(/[̀-ͯ]/g, "").replace(/ß/g, "ss").replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "").slice(0, 60);
 const parse = (s, d) => { try { return JSON.parse(s); } catch { return d; } };
-const FIELDS = "id,slug,kind,title,summary,body,lang,topics,version,status,created,updated,published";
+const FIELDS = "id,slug,kind,title,summary,body,link,lang,topics,version,status,created,updated,published";
+export const LINK_REQUIRED = ["plugin"];                 // Plugins brauchen einen https-Link (Repo, Store, Doku)
+let linkOk = false;
+async function ensureLink(db) {
+  if (linkOk) return;
+  try { await db.prepare("SELECT link FROM lib_items LIMIT 1").first(); } catch { try { await db.prepare("ALTER TABLE lib_items ADD COLUMN link TEXT NOT NULL DEFAULT ''").run(); } catch {} }
+  linkOk = true;
+}
+const BAD_HOST = /(^|\.)(bit\.ly|t\.co|tinyurl\.com|goo\.gl|is\.gd|ow\.ly|buff\.ly|cutt\.ly|rebrand\.ly|shorturl\.at)$/i;
+function cleanLink(v) { v = String(v || "").trim(); if (!v) return ""; try { const u = new URL(v); if (u.protocol !== "https:" || v.length > 300 || u.username || u.password || BAD_HOST.test(u.hostname)) return null; return u.href; } catch { return null; } }
 const view = (r) => ({ ...r, topics: parse(r.topics, []) });
 
 export async function deleteUserLibrary(db, uid) {
@@ -16,11 +25,11 @@ export async function deleteUserLibrary(db, uid) {
 }
 
 export async function handleLibrary(env, request, url, path, user, J) {
-  const db = env.DB, method = request.method;
+  const db = env.DB, method = request.method; await ensureLink(db);
 
   if (path === "/api/library/export" && method === "GET") {
     const rows = (await db.prepare(
-      `SELECT b.id,b.slug,b.kind,b.title,b.summary,b.body,b.lang,b.topics,b.version,b.created,b.published,b.updated,p.handle,u.name,(SELECT COUNT(*) FROM lib_votes v WHERE v.item_id=b.id) votes
+      `SELECT b.id,b.slug,b.kind,b.title,b.summary,b.body,b.link,b.lang,b.topics,b.version,b.created,b.published,b.updated,p.handle,u.name,(SELECT COUNT(*) FROM lib_votes v WHERE v.item_id=b.id) votes
        FROM lib_items b JOIN profiles p ON p.user_id=b.user_id AND p.public=1 AND p.handle IS NOT NULL JOIN users u ON u.id=b.user_id AND u.banned=0
        WHERE b.status='live' ORDER BY b.published DESC LIMIT 1000`).all()).results || [];
     return J({ items: rows.map((r) => ({ ...r, topics: parse(r.topics, []) })) }, 200, { "cache-control": "public, max-age=300" });
@@ -46,6 +55,8 @@ export async function handleLibrary(env, request, url, path, user, J) {
     if (title.length < 5) return J({ error: "title" }, 400);
     if (!LIB_KINDS.includes(kind)) return J({ error: "bad_kind" }, 400);
     if (!okLang(lang)) return J({ error: "bad_lang" }, 400);
+    const link = cleanLink(b.link); if (link === null) return J({ error: "bad_link" }, 400);
+    if (LINK_REQUIRED.includes(kind) && !link) return J({ error: "need_link" }, 400);
     const body = String(b.body || "").replace(/\r\n/g, "\n").replace(/[\u0000-\u0008\u000b\u000c\u000e-\u001f]/g, "").trim().slice(0, 20000);
     if (body.length < 20) return J({ error: "too_short" }, 400);
     const known = await baseIds(env), topics = [];
@@ -56,16 +67,16 @@ export async function handleLibrary(env, request, url, path, user, J) {
     const cur = b.id ? await db.prepare(`SELECT ${FIELDS} FROM lib_items WHERE id=? AND user_id=?`).bind(+b.id, user.id).first() : null;
     if (b.id && !cur) return J({ error: "not_found" }, 404);
     if (cur) {
-      await db.prepare("UPDATE lib_items SET kind=?,title=?,summary=?,body=?,lang=?,topics=?,version=version+?,updated=? WHERE id=?")
-        .bind(kind, title, summary, body, lang, JSON.stringify(topics), cur.body !== body ? 1 : 0, t, cur.id).run();
+      await db.prepare("UPDATE lib_items SET kind=?,title=?,summary=?,body=?,link=?,lang=?,topics=?,version=version+?,updated=? WHERE id=?")
+        .bind(kind, title, summary, body, link, lang, JSON.stringify(topics), cur.body !== body ? 1 : 0, t, cur.id).run();
       return J({ ok: true, id: cur.id, slug: cur.slug });
     }
     const day = (await db.prepare("SELECT COUNT(*) n FROM lib_items WHERE user_id=? AND created>?").bind(user.id, t - 86400).first())?.n || 0;
     if (day >= 20) return J({ error: "rate_limit" }, 429);
     let slug = slugify(title) || "item", n = 1;
     while (await db.prepare("SELECT 1 x FROM lib_items WHERE user_id=? AND slug=?").bind(user.id, slug).first()) slug = `${slugify(title).slice(0, 52) || "item"}-${++n}`;
-    const r = await db.prepare("INSERT INTO lib_items(user_id,slug,kind,title,summary,body,lang,topics,version,status,created,updated,published) VALUES(?,?,?,?,?,?,?,?,1,'live',?,?,?)")
-      .bind(user.id, slug, kind, title, summary, body, lang, JSON.stringify(topics), t, t, t).run();
+    const r = await db.prepare("INSERT INTO lib_items(user_id,slug,kind,title,summary,body,link,lang,topics,version,status,created,updated,published) VALUES(?,?,?,?,?,?,?,?,?,1,'live',?,?,?)")
+      .bind(user.id, slug, kind, title, summary, body, link, lang, JSON.stringify(topics), t, t, t).run();
     return J({ ok: true, id: r.meta.last_row_id, slug });
   }
 

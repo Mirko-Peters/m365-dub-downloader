@@ -20,11 +20,14 @@
     var ti = U.inp(p.title, 140), su = h("textarea", { maxlength: 300, rows: 2 }), bo = h("textarea", { maxlength: 20000, rows: 22 }), lg = U.sel(LANGS, p.lang || (X.lang || "en")), tp = U.topicsUI(p.topics || [], 10);
     var kd = U.sel(KINDS.map(function (k) { return [k, Q["k_" + k]]; }), p.kind || "prompt");
     su.value = p.summary || ""; bo.value = p.body || "";
-    f.appendChild(U.lab(Q.title, ti)); f.appendChild(U.lab(Q.kind, kd)); f.appendChild(U.lab(Q.summary, su)); f.appendChild(U.lab(Q.lang, lg));
+    var lk = U.inp(p.link || "", 300), lkw = U.lab(de ? "Link (https) – bei Plugins Pflicht: Repository, Store oder Doku" : "Link (https) – required for plugins: repository, store or docs", lk);
+    lk.placeholder = "https://"; function syncLk() { lk.required = kd.value === "plugin"; lkw.firstChild.textContent = (de ? "Link (https)" : "Link (https)") + (kd.value === "plugin" ? (de ? " – Pflicht bei Plugins" : " – required for plugins") : (de ? " – optional" : " – optional")); }
+    kd.addEventListener("change", syncLk); syncLk();
+    f.appendChild(U.lab(Q.title, ti)); f.appendChild(U.lab(Q.kind, kd)); f.appendChild(lkw); f.appendChild(U.lab(Q.summary, su)); f.appendChild(U.lab(Q.lang, lg));
     f.appendChild(h("div", {}, [h("b", { text: Q.topics }), tp])); f.appendChild(h("div", {}, [h("label", { text: Q.body }), U.editor ? U.editor(bo, 20000) : bo]));
     f.appendChild(h("p", {}, [h("button", { type: "button", class: "btn main", text: Q.save, onclick: function () {
-      say(""); api("/api/library/save", { method: "POST", body: { id: p.id, title: ti.value, summary: su.value, body: bo.value, kind: kd.value, lang: lg.value, topics: tp.get() } }).then(function (r) {
-        var j = r.j || {}; if (j.ok) { say(Q.saved); load(); } else say(Q["e_" + j.error] || Q.e_generic);
+      say(""); api("/api/library/save", { method: "POST", body: { id: p.id, title: ti.value, summary: su.value, body: bo.value, link: lk.value, kind: kd.value, lang: lg.value, topics: tp.get() } }).then(function (r) {
+        var j = r.j || {}; if (j.ok) { say(Q.saved); load(); } else say(j.error === "need_link" ? (de ? "Bei Plugins ist ein https-Link Pflicht." : "Plugins need an https link.") : j.error === "bad_link" ? (de ? "Der Link muss mit https:// beginnen (keine Kurzlinks)." : "The link must start with https:// (no shorteners).") : (Q["e_" + j.error] || Q.e_generic));
       });
     } })]));
     f.addEventListener("submit", function (e) { e.preventDefault(); }); return f;

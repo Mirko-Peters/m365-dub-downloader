@@ -19,7 +19,7 @@
     });
   }
   function form() {
-    var f = h("form"), ti = U.inp("", 100), de_ = h("textarea", { maxlength: 4000, rows: 5 }), lg = U.sel(LANGS, X.lang || "en"), tp = U.topicsUI([], 10), fi = h("input", { type: "file", accept: "video/*" });
+    var f = h("form", { class: "ed-form" }), ti = U.inp("", 100), de_ = h("textarea", { maxlength: 4000, rows: 5 }), lg = U.sel(LANGS, X.lang || "en"), tp = U.topicsUI([], 10), fi = h("input", { type: "file", accept: "video/*" });
     var rt = h("input", { type: "checkbox" }), ai = h("input", { type: "checkbox" });
     f.appendChild(U.lab(Q.title, ti)); f.appendChild(U.lab(Q.desc, de_)); f.appendChild(U.lab(Q.lang, lg)); f.appendChild(h("div", {}, [h("b", { text: Q.topics }), tp])); f.appendChild(U.lab(Q.file, fi));
     f.appendChild(h("p", {}, [h("label", {}, [rt, " " + Q.rights])])); f.appendChild(h("p", {}, [h("label", {}, [ai, " " + Q.ai])]));

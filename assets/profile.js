@@ -143,6 +143,21 @@
   }
   function saveBtn(label, fn, msg) { var b = h("button", { type: "button", class: "btn main", text: label, onclick: function () { b.disabled = true; msg.textContent = ""; fn().then(function (r) { b.disabled = false; if (r) msg.textContent = r.s === 200 ? "✓ " + Q.saved : (Q[r.j.error] || Q.err); }).catch(function (e) { try { console.error(e); } catch (x) {} b.disabled = false; msg.textContent = Q.err; }); } }); return b; }
 
+  function offersUI(o) {
+    var w = h("div", { class: "wk-form" }), list = h("ul"), msg = h("p", { class: "wk-msg", role: "status", "aria-live": "polite" });
+    var kind = h("select", { "aria-label": "Typ" }, [h("option", { value: "product", text: de ? "Produkt" : "Product" }), h("option", { value: "service", text: de ? "Service / Dienstleistung" : "Service" })]);
+    var nm = inp(80), ds = h("textarea", { rows: 3, maxlength: 300, "aria-label": "desc" }), wb = inp(300); wb.placeholder = "https://";
+    function reload() { list.textContent = ""; api("/api/orgoffer/list?handle=" + o.handle).then(function (r) { ((r.j || {}).items || []).forEach(function (it) { list.appendChild(h("li", {}, [h("a", { href: X.base + (de ? "/de" : "") + "/entity/" + it.eid + "/", text: it.eid }), " · " + (it.kind === "service" ? "Service" : (de ? "Produkt" : "Product"))])); }); }); }
+    reload();
+    var E = { need_link: de ? "Ein https-Link zur Produkt- bzw. Service-Seite ist Pflicht." : "An https link to the product or service page is required.", too_short: de ? "Beschreibung mindestens 20 Zeichen." : "Description needs at least 20 characters.", bad_name: de ? "Name fehlt." : "Name missing." };
+    w.appendChild(h("h4", { text: de ? "Produkte & Services (werden als Entitäten angelegt)" : "Products & services (created as entities)" })); w.appendChild(list);
+    [[de ? "Typ" : "Type", kind], [de ? "Name" : "Name", nm], [de ? "Kurzbeschreibung (20–300 Zeichen, ohne Links)" : "Short description (20–300 characters, no links)", ds], [de ? "Link zur Produkt-/Service-Seite (Pflicht)" : "Link to the product/service page (required)", wb]].forEach(function (x) { w.appendChild(lab(x[0], x[1])); });
+    w.appendChild(h("button", { type: "button", class: "btn main", text: de ? "Anlegen" : "Add", onclick: function () {
+      api("/api/orgoffer/save", { method: "POST", body: { handle: o.handle, kind: kind.value, name: nm.value, desc: ds.value, web: wb.value, lang: de ? "de" : "en" } }).then(function (r) {
+        var j = r.j || {}; if (j.ok) { msg.textContent = de ? "Angelegt." : "Added."; nm.value = ds.value = wb.value = ""; reload(); } else msg.textContent = E[j.error] || (de ? "Konnte nicht gespeichert werden." : "Could not save.");
+      });
+    } })); w.appendChild(msg); return w;
+  }
   function orgForm(all, org, onDone) {
     var o = org || {}, f = h("div", { class: "wk-form" }), msg = h("p", { class: "wk-msg", role: "status", "aria-live": "polite" });
     var handle = inp(30, o.handle), name = inp(80, o.name), tag = inp(120, o.tagline), about = h("textarea", { rows: 4, maxlength: 1500 }), site = inp(250, o.website), country = inp(60, o.country), size = h("select");
@@ -187,6 +202,7 @@
           d.appendChild(h("h4", { text: Q.team })); (o.team || []).forEach(function (m) { d.appendChild(h("p", {}, [m.name + " · ", (m.role === "owner" || m.role === "admin") && o.role !== "owner" ? RL[m.role] : roleSel(m.role, o.role, function (v) { api("/api/org/" + o.handle + "/member", { method: "POST", body: { user_id: m.user_id, action: "role", role: v } }).then(function (r) { if (r.s !== 200) location.reload(); }); }), " ", m.role === "owner" ? null : h("button", { type: "button", class: "btn", text: Q.remove, onclick: function () { api("/api/org/" + o.handle + "/member", { method: "POST", body: { user_id: m.user_id, action: "remove" } }).then(function () { location.reload(); }); } })])); });
           d.appendChild(orgForm(all, o.org, null));
         }
+        if (o.org && ["owner", "admin", "editor"].indexOf(o.role) > -1) d.appendChild(offersUI(o));
       }
       d.appendChild(h("button", { type: "button", class: "btn", text: Q.leave, onclick: function () { api("/api/org/" + o.handle + "/leave", { method: "POST" }).then(function () { location.reload(); }); } }));
       os.appendChild(d);

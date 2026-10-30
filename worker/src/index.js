@@ -11,6 +11,7 @@ import { handleBlog, deleteUserBlog } from "./blog.js";
 import { handleUpdates, pollUpdates } from "./updates.js";
 import { ensurePastEvents } from "./pastevents.js";
 import { handleLibrary, deleteUserLibrary } from "./library.js";
+import { handleOrgOffers } from "./orgoffers.js";
 import { handleDemo } from "./demo.js";
 import { handleGuests, deleteUserGuests } from "./guests.js";
 import { handlePodcast, deleteUserPodcast, pollPodcast } from "./podcast.js";
@@ -244,6 +245,7 @@ async function api(env, request, url, path) {
   if (path.startsWith("/api/video/") || path.startsWith("/api/admin/video")) { const q = await handleVideo(env, request, url, path, user, J); if (q) { if (user && method !== "GET") await evalBadges(env, user.id).catch(() => 0); return q; } }
   if (path.startsWith("/api/podcast/") || path.startsWith("/api/admin/podcast")) { const q = await handlePodcast(env, request, url, path, user, J); if (q) { if (user && method !== "GET") await evalBadges(env, user.id).catch(() => 0); return q; } }
   if (path === "/api/updates/export" || path === "/api/admin/updates/poll") { const q = await handleUpdates(env, request, url, path, user, J); if (q) return q; }
+  if (path.startsWith("/api/orgoffer/")) { const q = await handleOrgOffers(env, request, url, path, user, J); if (q) return q; }
   if (path.startsWith("/api/library/")) { const q = await handleLibrary(env, request, url, path, user, J); if (q) return q; }
   if (path === "/api/blog" || path.startsWith("/api/blog/") || path.startsWith("/api/admin/blog")) { const q = await handleBlog(env, request, url, path, user, J); if (q) { if (user && method !== "GET") await evalBadges(env, user.id).catch(() => 0); return q; } }
   if (path === "/api/qa" || path.startsWith("/api/qa/")) { const q = await handleQa(env, request, url, path, user, J); if (q) return q; }

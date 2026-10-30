@@ -15,7 +15,7 @@
     wrap.get = function () { return boxes.filter(function (c) { return c.checked; }).map(function (c) { return c.value; }); }; return wrap;
   }
   function form(kind, p) {
-    p = p || {}; var f = h("form"), ti = U.inp(p.title, 120), no = h("textarea", { maxlength: 500, rows: 3 }), li = U.inp(p.link, 300), ac = h("input", { type: "checkbox" });
+    p = p || {}; var f = h("form", { class: "ed-form" }), ti = U.inp(p.title, 120), no = h("textarea", { maxlength: 500, rows: 3 }), li = U.inp(p.link, 300), ac = h("input", { type: "checkbox" });
     no.value = p.note || ""; ac.checked = p.active !== 0 && p.active !== false;
     var fm = checks(FM.map(function (x) { return [x]; }), p.formats || [], function (o) { return Q["f_" + o[0]]; }), lg = checks(LG, p.langs || [X.lang || "en"]), tp = U.topicsUI(p.topics || [], 10);
     f.appendChild(h("h3", { text: kind === "host" ? Q.host : Q.speaker })); f.appendChild(U.lab(kind === "host" ? Q.title_h : Q.title_s, ti));
