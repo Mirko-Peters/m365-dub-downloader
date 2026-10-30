@@ -238,6 +238,7 @@ Podpage kostet 65 $/Monat (ca. 780 $/Jahr). Ziel: m365.fm komplett auf dub.m365.
 - Offen (siehe Roadmap im Profil-Bereich): Microsoft-Login, Mail-System, Statuswechsel-Benachrichtigung, Firmen-Angebote auf Entitäten-Seiten, Update-Wichtigkeit, Bibliothek-Versionen/Forks, OG-Bilder inkrementell, YouTube-Audit.
 
 ## Hörer-Mitgliedschaft (Idee, 30.10.)
+- Preis: 6,99 USD pro Monat (von Mirko festgelegt).
 - Hörer zahlen auf m365.fm (Stripe/Lemon Squeezy, Webhook → DB-Status `adfree`). Vorteile: persönlicher werbefreier Feed (Token-URL, vom Worker ausgeliefert) und keine AdSense-Anzeigen auf der Seite (Skript erst nach Login-Check; EU-Einwilligung/CMP nötig).
 - Werbefreie Audiodateien: Spreaker-Folgen als werbefrei markieren (Supporters Club) oder eigener Speicher (R2). Spreaker fügt Werbung dynamisch ein, ein Feed auf die normale Audio-URL hätte weiter Werbung.
 - Spreaker Supporters Club: Mindestpreis 2 $, keine Preisstufen; die API (developers.spreaker.com) hat keine Endpunkte für Supporter/Abos/Webhooks → Mitgliederliste nicht auslesbar; Spreaker-Support fragen.
