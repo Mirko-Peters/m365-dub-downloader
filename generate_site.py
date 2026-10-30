@@ -396,6 +396,9 @@ def single_main(html_):
     return "".join(parts)
 
 
+FXCSS = re.sub(r"/\*.*?\*/|\s*([{};:,])\s*", lambda m: m.group(1) or "", (ROOT / "assets" / "fx.css").read_text(encoding="utf-8"), flags=re.S).strip()   # kleines CSS inline statt eigener Anfrage (Ladezeit)
+
+
 def page(lang, title, desc, canonical, body, alternates=None, jsonld=None, xdefault=None, og_type="article", extra_head="", noindex=False, side="", og_of=None):
     if lang in COMM_LANGS[2:] and any(k in canonical for k in ("/community/", "/entity/", "/glossary/")):
         extra_head += f'<script src="{BASE}/assets/ui-{lang}.js"></script>'
@@ -438,7 +441,7 @@ def page(lang, title, desc, canonical, body, alternates=None, jsonld=None, xdefa
 <meta property="og:url" content="{canonical}"><meta property="og:locale" content="{loc}"><meta property="og:site_name" content="M365.FM">
 <meta property="og:image" content="{ogimg}"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta property="og:image:alt" content="{esc(title)}">
 <meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="{esc(title)}"><meta name="twitter:description" content="{esc(desc)}"><meta name="twitter:image" content="{ogimg}">
-{extra_head}{ADS.head(BASE, body, canonical, noindex)}{css_link()}<link rel="stylesheet" href="{BASE}/assets/fx.css">{A11Y_EARLY}
+{extra_head}{ADS.head(BASE, body, canonical, noindex)}{css_link()}<style>{FXCSS}</style>{A11Y_EARLY}
 {ld}</head>
 <body>
 {ext_links(body)}
