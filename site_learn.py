@@ -387,6 +387,10 @@ def load_entities(api):
     if f.exists():
         for e in json.loads(f.read_text("utf-8")):
             base[e["id"]] = e
+    gf = Path(__file__).parent / "data" / "guest_entities.json"
+    if gf.exists():
+        for e in json.loads(gf.read_text("utf-8")):
+            base.setdefault(e["id"], e)
     over = (_fetch_json(f"{api}/api/entity/export") or {}).get("items", [])
     for it in over:
         d = it.get("data") or {}

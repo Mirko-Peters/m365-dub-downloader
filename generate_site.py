@@ -586,7 +586,7 @@ def header(lang, switch):
         menu.insert(0, (_CI.get(lang, _CI.get("en", {})).get("community", _cl[0]), [(ui[3], home)] + [(_cl[i + 1], f"{BASE}/{lang}/community/{p}/") for i, p in enumerate(("podcast", "blog", "video", "library", "guests"))]))
     else:
         home = f"{BASE}/"
-        menu = [("Languages", f"{BASE}/#languages"), ("Community", [("Podcast", f"{BASE}/community/podcast/"), ("Blog", f"{BASE}/community/blog/"), ("Videos", f"{BASE}/community/video/"), ("Library", f"{BASE}/community/library/"), ("Guests", f"{BASE}/community/guests/")]), ("Profile", f"{BASE}/community/")]
+        menu = [("Languages", f"{BASE}/#languages"), ("Community", [("Podcast", f"{BASE}/community/podcast/"), ("Blog", f"{BASE}/community/blog/"), ("Videos", f"{BASE}/community/video/"), ("Library", f"{BASE}/community/library/"), ("Guests", f"{BASE}/community/guests/")]), ("Show", f"{BASE}/show/"), ("Profile", f"{BASE}/community/")]
     if not switch:
         items = [(x, LANGS[x][0], f"{BASE}/{x}/", LANGS[x][1]) for x in LANGS if (ROOT / "episodes").exists()]
         switch = lang_dropdown(lang if lang in LANGS else "en", items, "")
@@ -1147,6 +1147,8 @@ def build():
     VIDS.build(_ctx, VIDS.fetch_videos(COMMUNITY_API), _people, COMMUNITY_API)
     import site_feed as FEED
     FEED.build(_ctx, (LRN._fetch_json(f"{COMMUNITY_API}/api/feed/export") or {}).get("items", []), COMMUNITY_API)
+    import site_podpage as PP
+    PP.build(_ctx)
     MCPS.build(_ctx)
 
     PRS.build_press(dict(write=write, page=page, header=header, footer=footer, footer_en=footer_en, BASE=BASE, LANGS=LANGS, sitemap=sitemap, TODAY=TODAY, n_eps=len(items), n_langs=len(active),
