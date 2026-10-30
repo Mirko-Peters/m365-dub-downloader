@@ -1235,7 +1235,8 @@ def build():
     ENT.build(_ctx, lambda lang: LRN.gloss_links(lang, BASE), MEM.experts_index(_people, _orgs), _ep_find)
     import site_blog as BLG
     import site_legacy_blog as LBL
-    _posts = BLG.fetch_posts(COMMUNITY_API) + LBL.items(BASE); MEM.BLOGLANGS = {p["lang"] for p in _posts}   # plus die frueheren Podpage-Blogbeitraege als Community-Beitraege von mirko-peters
+    _posts = BLG.fetch_posts(COMMUNITY_API); _have = {p["slug"] for p in _posts if p["handle"] == "mirko-peters"}
+    _posts += [p for p in LBL.items(BASE) if p["slug"] not in _have]; LBL.publish(write, BASE); MEM.BLOGLANGS = {p["lang"] for p in _posts}   # plus die frueheren Podpage-Blogbeitraege als Community-Beitraege von mirko-peters
     for _p in _posts: MEM.BLOGS.setdefault(_p["handle"], set()).add(_p["lang"])
     MEM.build(_ctx, _people, _orgs, extra={l: EVT.blocks(BASE, _events, l) for l in COMM_LANGS})
     EVT.build(_ctx, _events, _people, _orgs)
@@ -1258,7 +1259,7 @@ def build():
     LIVE.build(_ctx)   # M365 Show: Livestream-Seite + Seite je Stream (data/live.json, sync_live.py)
     try:   # SEO-Check-Seite (noindex): Episoden + Community-Inhalte
         _urls = {f'{i["vid"]}:{l}': url_of(i) for l in active for i in by_lang[l] if i.get("vid")}
-        SEOR.build(_ctx, _people, [p for p in _posts if not p.get("legacy")], PODS.fetch_eps(COMMUNITY_API), VIDS.fetch_videos(COMMUNITY_API), (LRN._fetch_json(f"{COMMUNITY_API}/api/feed/export") or {}).get("items", []), SEOR.author_info(AUTHOR), _urls)
+        SEOR.build(_ctx, _people, [p for p in _posts if not p.get("legacy") and not p.get("html")], PODS.fetch_eps(COMMUNITY_API), VIDS.fetch_videos(COMMUNITY_API), (LRN._fetch_json(f"{COMMUNITY_API}/api/feed/export") or {}).get("items", []), SEOR.author_info(AUTHOR), _urls)
     except Exception as _e:
         import traceback; traceback.print_exc(); print("SEO page failed:", _e)
 

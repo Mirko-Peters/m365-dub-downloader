@@ -56,12 +56,17 @@ export async function handleBlog(env, request, url, path, user, J) {
 
   if (path === "/api/blog/export" && method === "GET") {   // oeffentlich: freigegebene Beitraege oeffentlicher Profile
     const rows = (await db.prepare(
-      `SELECT b.id,b.slug,b.title,b.summary,b.body,b.lang,b.topics,b.keypoints,b.faq,b.created,b.published,b.updated,p.handle,u.name,(SELECT COUNT(*) FROM blog_votes v WHERE v.post_id=b.id) votes
+      `SELECT b.id,b.slug,b.title,b.summary,b.body,b.lang,b.topics,b.keypoints,b.faq,b.created,b.published,b.updated,(b.html<>'') has_html,p.handle,u.name,(SELECT COUNT(*) FROM blog_votes v WHERE v.post_id=b.id) votes
        FROM blog_posts b JOIN profiles p ON p.user_id=b.user_id AND p.public=1 AND p.handle IS NOT NULL JOIN users u ON u.id=b.user_id AND u.banned=0
-       WHERE b.status='live' ORDER BY b.published DESC LIMIT 1000`).all()).results || [];
+       WHERE b.status='live' ORDER BY b.published DESC LIMIT 6000`).all()).results || [];   // ohne html (zu gross); das holt /api/blog/html seitenweise
     const co = (await db.prepare("SELECT c.post_id,p.handle,u.name FROM blog_coauthors c JOIN profiles p ON p.user_id=c.user_id AND p.public=1 AND p.handle IS NOT NULL JOIN users u ON u.id=c.user_id AND u.banned=0 WHERE c.status='confirmed' ORDER BY c.created").all()).results || [], by = {};
     for (const c of co) (by[c.post_id] ||= []).push({ handle: c.handle, name: c.name });
     return J({ items: rows.map((r) => ({ ...r, topics: parse(r.topics, []), keypoints: jsonList(r.keypoints), faq: jsonList(r.faq), coauthors: by[r.id] || [] })) }, 200, { "cache-control": "public, max-age=300" });
+  }
+  if (path === "/api/blog/html" && method === "GET") {   // oeffentlich, nur fuer den Seitenbau: HTML uebernommener Beitraege seitenweise
+    const off = Math.max(0, +url.searchParams.get("offset") || 0), lim = Math.min(Math.max(+url.searchParams.get("limit") || 40, 1), 60);
+    const rows = (await db.prepare("SELECT b.id,b.html FROM blog_posts b JOIN profiles p ON p.user_id=b.user_id AND p.public=1 AND p.handle IS NOT NULL JOIN users u ON u.id=b.user_id AND u.banned=0 WHERE b.status='live' AND b.html<>'' ORDER BY b.id LIMIT ? OFFSET ?").bind(lim, off).all()).results || [];
+    return J({ items: rows }, 200, { "cache-control": "public, max-age=300" });
   }
   if (path === "/api/blog/followers" && method === "GET") {   // Anzahl Abonnenten eines Blogs (oeffentlich)
     const n = (await db.prepare("SELECT COUNT(*) n FROM blog_follows WHERE handle=?").bind(url.searchParams.get("handle") || "").first()).n;
@@ -121,8 +126,8 @@ export async function handleBlog(env, request, url, path, user, J) {
     if (b.id && !cur) return J({ error: "not_found" }, 404);
     const status = !b.submit ? (cur && cur.status === "live" ? "live" : "draft") : "live";
     if (cur) {
-      await db.prepare("UPDATE blog_posts SET title=?,summary=?,body=?,lang=?,topics=?,keypoints=COALESCE(?,keypoints),faq=COALESCE(?,faq),status=?,updated=?,published=CASE WHEN ?='live' AND published=0 THEN ? ELSE published END,note='' WHERE id=?")
-        .bind(title, summary, sb.body, lang, JSON.stringify(topics), kp ? JSON.stringify(kp.list) : null, fq ? JSON.stringify(fq.list) : null, status, t, status, t, cur.id).run();
+      await db.prepare("UPDATE blog_posts SET title=?,summary=?,body=?,html=CASE WHEN length(?)>0 THEN '' ELSE html END,lang=?,topics=?,keypoints=COALESCE(?,keypoints),faq=COALESCE(?,faq),status=?,updated=?,published=CASE WHEN ?='live' AND published=0 THEN ? ELSE published END,note='' WHERE id=?")   // neuer Wiki-Text ersetzt den uebernommenen HTML-Inhalt
+        .bind(title, summary, sb.body, sb.body, lang, JSON.stringify(topics), kp ? JSON.stringify(kp.list) : null, fq ? JSON.stringify(fq.list) : null, status, t, status, t, cur.id).run();
       await syncFeed(env, db, user.id, { lang, slug: cur.slug, title, published: cur.published || t }, pr?.handle, status === "live" && !!pr?.handle);
       if (cos.list) await saveCoauthors(db, cur.id, cos.list);
       return J({ ok: true, id: cur.id, slug: cur.slug, status });

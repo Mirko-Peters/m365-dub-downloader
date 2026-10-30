@@ -59,3 +59,21 @@ def items(BASE):
                     "body": "", "html": html, "lang": "en", "topics": topics, "keypoints": [], "faq": _faq(p.get("faq")), "published": pub, "created": pub, "updated": upd, "votes": 0,
                     "coauthors": [], "legacy": True, "images": re.findall(r'<img[^>]+src="(https://[^"]+)"', html)})
     return out
+
+
+PER = 100
+
+
+def publish(write, BASE):
+    """Dateien fuer den Worker (worker/src/legacyblog.js): SITE/blog-import/index.json und part-N.json. Nur solange data/blog_import.json "enabled": true ist."""
+    import json
+    from pathlib import Path
+    cfg = Path(__file__).parent / "data" / "blog_import.json"
+    if not cfg.exists() or not json.loads(cfg.read_text("utf-8")).get("enabled"):
+        return 0
+    its = items(BASE)
+    rows = [{"slug": p["slug"], "title": p["title"], "summary": p["summary"], "html": p["html"], "topics": p["topics"], "faq": p["faq"], "published": p["published"], "updated": p["updated"]} for p in its]
+    for i in range(0, len(rows), PER):
+        write(f"blog-import/part-{i // PER + 1}.json", json.dumps(rows[i:i + PER], ensure_ascii=False, separators=(",", ":")))
+    write("blog-import/index.json", json.dumps({"total": len(rows), "per": PER}))
+    return len(rows)

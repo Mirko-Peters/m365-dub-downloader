@@ -546,7 +546,12 @@ CREATE TABLE IF NOT EXISTS blog_posts (          -- Blog je Mitglied; status: dr
   created INTEGER NOT NULL,
   updated INTEGER NOT NULL,
   published INTEGER NOT NULL DEFAULT 0,
+  html TEXT NOT NULL DEFAULT '',                 -- vollstaendiger HTML-Inhalt uebernommener Beitraege (leer bei Wiki-Beitraegen)
   UNIQUE (user_id, slug)
+);
+CREATE TABLE IF NOT EXISTS blog_import (          -- Fortschritt der Uebernahme der frueheren Podpage-Beitraege (legacyblog.js)
+  k TEXT PRIMARY KEY,
+  v INTEGER NOT NULL
 );
 CREATE INDEX IF NOT EXISTS idx_blog_status ON blog_posts(status, published);
 CREATE TABLE IF NOT EXISTS blog_votes (

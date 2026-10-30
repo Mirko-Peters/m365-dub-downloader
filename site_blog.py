@@ -1,5 +1,5 @@
 """Blog je Mitglied: oeffentliche Beitragsseiten (BlogPosting) und Verzeichnisse je Sprache. Beitraege kommen freigegeben aus /api/blog/export."""
-import json
+import json, re
 from datetime import datetime, timezone
 from site_i18n import COMM_LANGS, pfx, pfx2, T
 from site_learn import ENTS, esc, _fetch_json, LCSS, WT, wiki_render, wiki_images, WCSS
@@ -7,7 +7,17 @@ import site_notes as SNT
 
 
 def fetch_posts(api):
-    return (_fetch_json(f"{api}/api/blog/export") or {}).get("items", [])
+    items = (_fetch_json(f"{api}/api/blog/export", timeout=120) or {}).get("items", [])
+    if any(p.get("has_html") for p in items):   # uebernommene Beitraege: HTML seitenweise nachladen
+        html, off = {}, 0
+        while True:
+            part = (_fetch_json(f"{api}/api/blog/html?offset={off}&limit=40", timeout=120) or {}).get("items", [])
+            for x in part: html[x["id"]] = x["html"]
+            if len(part) < 40: break
+            off += 40
+        for p in items:
+            if p.get("has_html"): p["html"] = html.get(p["id"], "")
+    return items
 
 
 def iso(ts):
@@ -55,12 +65,13 @@ def build(g, posts, people, api):
         for p in mine:
             a = pb[p["handle"]]; au = f"{BASE}/community/u/{a['handle']}/"
             u = f"{croot}u/{p['handle']}/blog/{p['slug']}/"
-            body_html, refs = (p["html"], []) if p.get("legacy") else wiki_render(p["body"], links_l, w)   # fruehere Blogbeitraege: HTML bleibt vollstaendig erhalten
+            body_html, refs = (p["html"], []) if p.get("html") else wiki_render(p["body"], links_l, w)   # uebernommene fruehere Blogbeitraege: HTML bleibt vollstaendig erhalten
+            if p.get("html") and not p.get("images"): p["images"] = re.findall(r'<img[^>]+src="(https://[^"]+)"', p["html"])
             topics = [t for t in p.get("topics", []) if t in ENTS]
             tl = "".join(f'<a class="mb-tag" href="{links_l[t][1]}">{esc(ENTS[t]["name"])}</a> ' for t in topics)
             vote = "" if p.get("legacy") else f'<p><button type="button" class="bl-vote" data-s="{esc(p["slug"])}" aria-pressed="false" aria-label="Upvote">▲ <span class="n">{p.get("votes", 0)}</span></button></p>'
             _kp, _fq, _fld = SNT.sections(p.get("keypoints"), p.get("faq"), lang)   # Kernpunkte und FAQ aus eigenen Feldern
-            if p.get("legacy"): _fq = ""   # FAQ steht schon im Text des Beitrags; nur das Schema (FAQPage) bleibt
+            if p.get("html"): _fq = ""   # FAQ steht schon im Text des Beitrags; nur das Schema (FAQPage) bleibt
             cos = [c for c in (p.get("coauthors") or []) if c.get("handle") in pb and c["handle"] != p["handle"]]
             co_html = "".join(f' {esc(T(lang, "and", "und"))} <a href="{croot}u/{c["handle"]}/" rel="author">{esc(pb[c["handle"]]["name"])}</a>' for c in cos) if len(cos) == 1 else "".join(f', <a href="{croot}u/{c["handle"]}/" rel="author">{esc(pb[c["handle"]]["name"])}</a>' for c in cos)
             upd_html = f' · {esc(T(lang, "Updated", "Aktualisiert"))} <time datetime="{iso(p["updated"])}">{iso(p["updated"])}</time>' if p.get("updated") and iso(p["updated"]) != iso(p["published"]) else ""
@@ -72,10 +83,10 @@ def build(g, posts, people, api):
                             f'<script>{VOTEJS.replace("%API%", api).replace("%H%", p["handle"])}</script><script>{FOLLOWJS.replace("%API%", api).replace("%FOLLOW%", esc(T(lang, "Follow this blog", "Blog abonnieren"))).replace("%FOLLOWING%", esc(T(lang, "Following", "Abonniert")))}</script>'
                             + (ctags(lang, "blog%d" % p["id"]) if ctags else ""))))   # fruehere Blogbeitraege: keine Verbindung zur Community-Datenbank (kein Upvote, Abo, Kommentar)
             ld = [{"@context": "https://schema.org", "@type": "BlogPosting", "@id": u + "#post", "mainEntityOfPage": u, "headline": p["title"], "description": p.get("summary") or "",
-                   "inLanguage": lang, **({"image": p["images"][:6]} if p.get("legacy") and p.get("images") else ({"image": [i["url"] for i in wiki_images(p["body"])]} if wiki_images(p["body"]) else {})), "datePublished": iso(p["published"]), "dateModified": iso(p.get("updated") or p["published"]),
+                   "inLanguage": lang, **({"image": p["images"][:6]} if p.get("html") and p.get("images") else ({"image": [i["url"] for i in wiki_images(p["body"])]} if wiki_images(p["body"]) else {})), "datePublished": iso(p["published"]), "dateModified": iso(p.get("updated") or p["published"]),
                    "author": [{"@type": "Person", "@id": au + "#person", "name": a["name"], "url": au}] + [{"@type": "Person", "@id": f"{BASE}/community/u/{c['handle']}/#person", "name": pb[c["handle"]]["name"], "url": f"{BASE}/community/u/{c['handle']}/"} for c in cos],
                    "about": [{"@id": f"{BASE}/entity/{t}/#thing"} for t in topics], "citation": [{"@type": "CreativeWork", "name": r["title"], "url": r["url"]} for r in refs]}] + _fld
-            noidx = False if p.get("legacy") else p.get("votes", 0) < INDEX_VOTES   # fruehere Blogbeitraege bleiben fuer Google sichtbar
+            noidx = False if p.get("html") else p.get("votes", 0) < INDEX_VOTES   # fruehere Blogbeitraege bleiben fuer Google sichtbar
             write(f"{pfx2(lang)}community/u/{p['handle']}/blog/{p['slug']}/index.html", page(lang, f'{p["title"]} – {a["name"]} | M365.FM', (p.get("summary") or "")[:155], u, b, None, ld, og_type="article", extra_head=LCSS, noindex=noidx))
             if not noidx:
                 sitemap.append((u, iso(p.get("updated") or p["published"]), None))
@@ -85,7 +96,7 @@ def build(g, posts, people, api):
                                                    f'{("<br>" + esc(p["summary"])) if p.get("summary") else ""}</li>' for p in items) + "</ul>"
         is_by = lambda p, h: p["handle"] == h or any(c.get("handle") == h for c in (p.get("coauthors") or []))   # Co-Autoren: der Beitrag steht auch in ihrer Blogliste
         for h in sorted({p["handle"] for p in mine} | {c["handle"] for p in mine for c in (p.get("coauthors") or []) if c.get("handle") in pb}):
-            noidx = not any(is_by(p, h) and (p.get("legacy") or p.get("votes", 0) >= INDEX_VOTES) for p in mine)
+            noidx = not any(is_by(p, h) and (p.get("html") or p.get("votes", 0) >= INDEX_VOTES) for p in mine)
             it = sorted([p for p in mine if is_by(p, h)], key=lambda x: -x["published"]); ru = f"{croot}u/{h}/blog/"
             nm = pb[h]["name"]
             b = shell(lang, f'{CSS}<h1>{esc(title_blog)} – {esc(nm)}</h1><p><a href="{croot}u/{h}/">{esc(nm)}</a></p>{lst(it)}')
@@ -93,7 +104,7 @@ def build(g, posts, people, api):
             if not noidx:
                 sitemap.append((ru, TODAY, None))
             write(f"{pfx2(lang)}community/u/{h}/blog/feed.xml", rss(f"{title_blog} – {nm}", ru, it, croot, pb, lang))
-        noidx = not any(p.get("legacy") or p.get("votes", 0) >= INDEX_VOTES for p in mine)
+        noidx = not any(p.get("html") or p.get("votes", 0) >= INDEX_VOTES for p in mine)
         it = sorted(mine, key=lambda x: -x["published"]); ru = f"{croot}blog/"
         intro = T(lang, "Blog posts from members of the Microsoft community.", "Blogbeiträge von Mitgliedern der Microsoft-Community.")
         b = shell(lang, f'{CSS}<h1>{esc(title_blog)}</h1><p class="mut">{esc(intro)}</p>{lst(it)}')
