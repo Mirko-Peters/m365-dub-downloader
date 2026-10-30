@@ -1,6 +1,7 @@
 // Feeds der Creator-Kanaele einsammeln: nur Titel, Link und Datum (kein Volltext), https, begrenzte Groesse
 import { cleanText } from "./util.js";
-import { goodHost } from "./profiles.js";
+import { sendPush } from "./push.js";
+import { goodHost, ensureFeedCols } from "./profiles.js";
 
 const dec = (s) => s.replace(/<!\[CDATA\[([\s\S]*?)\]\]>/g, "$1").replace(/&#(\d+);/g, (_, n) => String.fromCodePoint(Math.min(+n, 0x10ffff))).replace(/&#x([0-9a-f]+);/gi, (_, n) => String.fromCodePoint(Math.min(parseInt(n, 16), 0x10ffff)))
   .replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/&quot;/g, '"').replace(/&apos;/g, "'").replace(/&amp;/g, "&");
@@ -16,7 +17,11 @@ export function parseFeed(xml, max = 12) {
     const ds = tag(b, "pubDate") || tag(b, "published") || tag(b, "updated") || tag(b, "dc:date");
     let t = Date.parse(ds); t = Number.isFinite(t) ? Math.floor(t / 1000) : Math.floor(Date.now() / 1000);
     try { const u = new URL(link.trim()); if (u.protocol !== "https:" || !goodHost(u.hostname) || u.username) continue; link = u.href; } catch { continue; }
-    if (title.length >= 3 && link.length <= 400) out.push({ title, url: link, t: Math.min(t, Math.floor(Date.now() / 1000)) });
+    const raw = tag(b, "media:description") || tag(b, "summary") || tag(b, "description") || tag(b, "content:encoded") || tag(b, "content");
+    const desc = cleanText(dec(raw).replace(/<[^>]+>/g, " ").replace(/https?:\/\/\S+/gi, "").replace(/\s+/g, " ").trim(), 600);
+    let thumb = ""; const tm = /<media:thumbnail[^>]*url=["']([^"']+)["']/i.exec(b) || /<enclosure[^>]*type=["']image[^"']*["'][^>]*url=["']([^"']+)["']/i.exec(b) || /<img[^>]*src=["']([^"']+)["']/i.exec(dec(raw));
+    if (tm) { try { const tu = new URL(dec(tm[1])); if (tu.protocol === "https:" && goodHost(tu.hostname) && tu.href.length < 400) thumb = tu.href; } catch {} }
+    if (title.length >= 3 && link.length <= 400) out.push({ desc, thumb, title, url: link, t: Math.min(t, Math.floor(Date.now() / 1000)) });
   }
   return out;
 }
@@ -58,9 +63,16 @@ export async function refreshFeeds(env, max = 8) {
       if (!r.ok) throw new Error("http " + r.status);
       const xml = (await r.text()).slice(0, 600000);
       const items = parseFeed(xml); if (!items.length) throw new Error("empty");
-      await db.batch([...items.map((i) => db.prepare("INSERT OR IGNORE INTO feed_items(channel_id,owner_type,owner_id,url,title,published) VALUES(?,?,?,?,?,?)").bind(c.id, c.owner_type, c.owner_id, i.url, i.title, i.t)),
+      await ensureFeedCols(db);
+      let fresh = [];
+      if (c.owner_type === "u") { const ex = new Set(((await db.prepare("SELECT url FROM feed_items WHERE channel_id=?").bind(c.id).all()).results || []).map((r) => r.url)); fresh = items.filter((i) => !ex.has(i.url)); if (ex.size === 0) fresh = []; }
+      await db.batch([...items.map((i) => db.prepare("INSERT INTO feed_items(channel_id,owner_type,owner_id,url,title,published,summary,thumb) VALUES(?,?,?,?,?,?,?,?) ON CONFLICT(url) DO UPDATE SET summary=CASE WHEN feed_items.summary='' THEN excluded.summary ELSE feed_items.summary END, thumb=CASE WHEN feed_items.thumb='' THEN excluded.thumb ELSE feed_items.thumb END").bind(c.id, c.owner_type, c.owner_id, i.url, i.title, i.t, i.desc || "", i.thumb || "")),
         db.prepare("UPDATE channels SET fetched=?, fails=0 WHERE id=?").bind(now, c.id)]);
       n += items.length;
+      if (fresh.length && env.VAPID_PRIVATE_JWK) {   // Creator fragen: hier optimieren oder per MCP?
+        const subs = (await db.prepare("SELECT endpoint,p256dh,auth FROM push_subs WHERE user_id=?").bind(c.owner_id).all()).results || [];
+        for (const sb of subs) { try { await sendPush(env, sb, { title: fresh.length > 1 ? `${fresh.length} neue Inhalte gezogen` : "Neuer Inhalt gezogen", body: `${fresh[0].title.slice(0, 80)} – jetzt hier optimieren oder per MCP.`, url: `${env.SITE}/community/#c-feed` }); } catch {} }
+      }
     } catch { await db.prepare("UPDATE channels SET fetched=?, fails=fails+1 WHERE id=?").bind(now, c.id).run(); }
   }
   await db.prepare("DELETE FROM feed_items WHERE published<?").bind(now - 400 * 86400).run();

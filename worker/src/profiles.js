@@ -1,4 +1,5 @@
 // Experten- und Firmenprofile, Programme (MVP/MCT/...), Kanaele mit Feeds, Upvotes, Bestaetigungen
+import { sanitize } from "./wiki.js";
 import { cleanText, rateLimit } from "./util.js";
 import { baseIds, knownIds, validate, trustedUser, entityMap } from "./entities.js";
 
@@ -159,11 +160,17 @@ async function personView(db, uid, viewer) {
     expertise: exp.map((e) => ({ ...e, verified: !!e.verified, me: !!e.me })), programs: programs.map((x) => ({ ...x, verified: !!x.verified })), certs, channels, org, contrib, counts, badges, recs,
     items: await itemsOf(db, "i.owner_type='u' AND i.owner_id=?", [uid], viewer, 8) };
 }
+export async function ensureFeedCols(db) {
+  try { await db.prepare("SELECT summary,thumb,body,topics FROM feed_items LIMIT 1").first(); } catch {
+    for (const c of ["summary TEXT NOT NULL DEFAULT ''", "thumb TEXT NOT NULL DEFAULT ''", "body TEXT NOT NULL DEFAULT ''", "topics TEXT NOT NULL DEFAULT '[]'", "seo_at INTEGER NOT NULL DEFAULT 0"]) { try { await db.prepare("ALTER TABLE feed_items ADD COLUMN " + c).run(); } catch {} }
+  }
+}
 let colsOk = false;
 async function ensureCols(db) {
   if (colsOk) return;
   try { await db.prepare("SELECT followers FROM channels LIMIT 1").first(); } catch { for (const c of ["followers INTEGER NOT NULL DEFAULT 0", "followers_at INTEGER NOT NULL DEFAULT 0"]) { try { await db.prepare("ALTER TABLE channels ADD COLUMN " + c).run(); } catch {} } }
   try { await db.prepare("CREATE TABLE IF NOT EXISTS org_ms (org_id INTEGER NOT NULL, area TEXT NOT NULL, level TEXT NOT NULL, since TEXT NOT NULL DEFAULT '', PRIMARY KEY (org_id, area))").run(); } catch {}
+  await ensureFeedCols(db);
   colsOk = true;
 }
 async function orgView(db, oid, viewer) {
@@ -405,15 +412,32 @@ export async function handleProfiles(env, request, url, path, user, J) {
     if (has) await db.prepare("DELETE FROM item_votes WHERE item_id=? AND user_id=?").bind(id, user.id).run(); else await db.prepare("INSERT INTO item_votes(item_id,user_id,created) VALUES(?,?,?)").bind(id, user.id, now()).run();
     return J({ ok: true, voted: !has, votes: (await db.prepare("SELECT COUNT(*) n FROM item_votes WHERE item_id=?").bind(id).first()).n });
   }
+  if (path === "/api/feed/mine" && method === "GET") {   // eigene gezogene Inhalte (fuer SEO-Texte, auch per MCP)
+    if (need()) return need();
+    const rows = (await db.prepare("SELECT id,title,url,summary,thumb,body,published,topics,CASE WHEN length(body)>0 THEN 1 ELSE 0 END has_text FROM feed_items WHERE owner_type='u' AND owner_id=? ORDER BY published DESC LIMIT 100").bind(user.id).all()).results || [];
+    return J({ items: rows.map((r) => ({ ...r, has_text: !!r.has_text, topics: (() => { try { return JSON.parse(r.topics || "[]"); } catch { return []; } })() })) });
+  }
+  if (path === "/api/feed/text" && method === "POST") {   // Creator ergaenzt den gezogenen Inhalt um eigenen Text (Wiki-Markup, Quellen nur als {{ref}})
+    if (need()) return need();
+    if (!(await rateLimit(db, `ftext:${user.id}`, 60, 3600))) return J({ error: "rate_limit" }, 429);
+    const b = await body(), it = await db.prepare("SELECT id FROM feed_items WHERE id=? AND owner_type='u' AND owner_id=?").bind(+b.id, user.id).first(); if (!it) return J({ error: "not_found" }, 404);
+    const sb = sanitize(String(b.body || "")); if (sb.err) return J({ error: sb.err }, 400);
+    if (sb.body && sb.body.length < 300) return J({ error: "too_short" }, 400);
+    const known = await baseIds(env), topics = [];
+    for (const t of (Array.isArray(b.topics) ? b.topics : []).slice(0, 10)) { if (!known.has(t)) return J({ error: "bad_topic", topic: t }, 400); if (!topics.includes(t)) topics.push(t); }
+    const sum = b.summary ? txt(b.summary, 300) : null;
+    await db.prepare("UPDATE feed_items SET body=?, topics=?, summary=CASE WHEN ? IS NULL THEN summary ELSE ? END, seo_at=? WHERE id=?").bind(sb.body, JSON.stringify(topics), sum, sum, now(), it.id).run();
+    return J({ ok: true });
+  }
   if (path === "/api/feed/export" && method === "GET") {   // oeffentlich fuer den Seitenbau: externe Quellen (nur Titel+Link), eigene Seiten ausgenommen
-    const rows = (await db.prepare(`SELECT i.id,i.title,i.url,i.published,c.kind,i.owner_type,i.owner_id,(SELECT COUNT(*) FROM item_votes v WHERE v.item_id=i.id) votes FROM feed_items i JOIN channels c ON c.id=i.channel_id
+    const rows = (await db.prepare(`SELECT i.id,i.title,i.url,i.summary,i.thumb,i.body,i.topics,i.published,c.kind,i.owner_type,i.owner_id,(SELECT COUNT(*) FROM item_votes v WHERE v.item_id=i.id) votes FROM feed_items i JOIN channels c ON c.id=i.channel_id
       WHERE i.hidden=0 AND i.url NOT LIKE ? AND i.published>? AND ((i.owner_type='u' AND i.owner_id IN (SELECT p.user_id FROM profiles p JOIN users u ON u.id=p.user_id AND u.banned=0 WHERE p.public=1)) OR (i.owner_type='o' AND i.owner_id IN (SELECT id FROM orgs WHERE public=1)))
-      ORDER BY i.published DESC LIMIT 60`).bind(env.SITE + "%", now() - 120 * 86400).all()).results || [];
+      ORDER BY i.published DESC LIMIT 300`).bind(env.SITE + "%", now() - 120 * 86400).all()).results || [];
     const names = new Map(), out = [];
     for (const r of rows) {
       const k = r.owner_type + r.owner_id;
       if (!names.has(k)) names.set(k, r.owner_type === "u" ? await db.prepare("SELECT p.handle,u.name FROM profiles p JOIN users u ON u.id=p.user_id WHERE p.user_id=?").bind(r.owner_id).first() : await db.prepare("SELECT handle,name FROM orgs WHERE id=?").bind(r.owner_id).first());
-      const o = names.get(k); if (o) out.push({ title: r.title, url: r.url, published: r.published, kind: r.kind, votes: r.votes, type: r.owner_type, handle: o.handle, name: o.name });
+      const o = names.get(k); if (o) out.push({ id: r.id, summary: r.summary || "", thumb: r.thumb || "", body: r.body || "", topics: (() => { try { return JSON.parse(r.topics || "[]"); } catch { return []; } })(), title: r.title, url: r.url, published: r.published, kind: r.kind, votes: r.votes, type: r.owner_type, handle: o.handle, name: o.name });
     }
     return J({ items: out }, 200, { "cache-control": "public, max-age=300" });
   }
