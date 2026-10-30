@@ -32,7 +32,7 @@ Team-Regeln (stehen auch im Systemprompt, `translate_blog.py`): Inhalt nicht kü
 ## Werkzeuge
 - Status lesen: `data/blog_i18n/status.json` (fertig/offen je Sprache, ausgegeben, Budget, geschätzte Restkosten, gemessener Ausgabefaktor), `usage.json`, `batches.json` (laufende Batches), `qa/<lang>.json` (Prüffehler und Namens-Warnungen).
   Lokal ohne Schlüssel: `python translate_blog.py plan`.
-- Aufträge erteilen (Workflow „Blog uebersetzen“): `gh workflow run translate-blog.yml -R Mirko-Peters/m365-dub-downloader -f mode=<plan|pilot|run|collect|sample> [-f langs=de,fr] [-f limit=50] [-f order=newest] [-f slugs=a,b] [-f redo=true] [-f budget=40]`.
+- Aufträge erteilen (Workflow „Blog uebersetzen“): `gh workflow run translate-blog.yml -R Mirko-Peters/m365-dub-downloader --ref main -f mode=<plan|pilot|run|collect|sample> [-f langs=de,fr] [-f limit=50] [-f order=newest] [-f slugs=a,b] [-f redo=true] [-f budget=40]`.
   Klappt `gh` nicht, in Chrome (Claude in Chrome, nie der eingebaute Browser) `https://github.com/Mirko-Peters/m365-dub-downloader/actions/workflows/translate-blog.yml` → „Run workflow“.
 - Ablauf eines Laufs: fertige Batches abholen → neue Anfragen absenden (bis Budget) → bis ~5 h warten → abholen, prüfen (QA), committen → Website-Bau anstoßen. Was länger dauert, holt der Zeitplan alle 3 h ab.
 - Automatik für neue Artikel: Repo-Variable `BLOG_AUTO=true` (Mirko setzt sie unter Settings → Secrets and variables → Actions → Variables). Dann übersetzt der 3-h-Lauf neue Artikel der letzten 14 Tage in alle 19 Sprachen.
