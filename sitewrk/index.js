@@ -35,6 +35,7 @@ export default {
     for (const [k, v] of Object.entries(SEC)) h.set(k, v);
     h.set("cache-control", isImg || isStatic ? "public, max-age=3600, s-maxage=86400" : "public, max-age=0, s-maxage=600, stale-while-revalidate=86400");
     if (isImg) h.set("vary", "accept");
+    if (p === "/.well-known/api-catalog") { h.set("content-type", 'application/linkset+json; profile="https://www.rfc-editor.org/info/rfc9727"'); h.set("access-control-allow-origin", "*"); }
     return new Response(res.body, { status: res.status, statusText: res.statusText, headers: h });
   },
 };
