@@ -29,6 +29,10 @@ def build(g, eps, people, api):
     for lang in COMM_LANGS:
         mine = [e for e in eps if e["lang"] == lang]
         if not mine:
+            croot = f"{BASE}{pfx(lang)}/community/"; t0 = T(lang, "Community podcast", "Community-Podcast"); ru = f"{croot}podcast/"
+            intro = T(lang, "Podcast episodes from members of the Microsoft community, reviewed by the editors. Nothing published in this language yet.", "Podcastfolgen von Mitgliedern der Microsoft-Community, von der Redaktion geprüft. In dieser Sprache gibt es noch nichts.")
+            b = shell(lang, f'<h1>{esc(t0)}</h1><p class="mut">{esc(intro)}</p><p><a class="btn main" href="{croot}#c-podcast">{esc(T(lang, "Submit an episode", "Folge einreichen"))}</a></p>')
+            write(f"{pfx2(lang)}community/podcast/index.html", page(lang, f"{t0} – M365.FM", intro, ru, b, None, None, og_type="website", extra_head=LCSS, noindex=True))
             continue
         croot = f"{BASE}{pfx(lang)}/community/"; ttl = T(lang, "Community podcast", "Community-Podcast")
         for e in mine:

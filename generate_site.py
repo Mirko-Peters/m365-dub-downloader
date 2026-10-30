@@ -583,9 +583,11 @@ def header(lang, switch):
         menu.insert(1, ((TOP_L if lang in TOP_REAL else REC_L).get(lang, "Top"), f"{BASE}/{lang}/top/"))
         menu.insert(2, (_CI.get(lang, _CI.get("en", {})).get("community", "Community"), f"{BASE}/{lang}/community/"))
         menu.insert(2, (LRN.T(lang)["learn"], f"{BASE}/{lang}/learn/"))
+        for _lbl, _p in (("Guests", "guests"), ("Videos", "video"), ("Podcast", "podcast"), ("Blog", "blog")):
+            menu.insert(3, (_lbl if lang != "de" else {"Guests": "Gäste"}.get(_lbl, _lbl), f"{BASE}/{lang}/community/{_p}/"))
     else:
         home = f"{BASE}/"
-        menu = [("Languages", f"{BASE}/#languages"), ("M365Con", "https://m365con.net"), ("m365.fm", "https://www.m365.fm")]
+        menu = [("Languages", f"{BASE}/#languages"), ("Blog", f"{BASE}/community/blog/"), ("Podcast", f"{BASE}/community/podcast/"), ("Videos", f"{BASE}/community/video/"), ("Community", f"{BASE}/community/"), ("M365Con", "https://m365con.net"), ("m365.fm", "https://www.m365.fm")]
     if not switch:
         items = [(x, LANGS[x][0], f"{BASE}/{x}/", LANGS[x][1]) for x in LANGS if (ROOT / "episodes").exists()]
         switch = lang_dropdown(lang if lang in LANGS else "en", items, "")
