@@ -579,15 +579,14 @@ def header(lang, switch):
     ui = UI.get(lang)
     if lang in LANGS:
         home = f"{BASE}/{lang}/"
-        menu = [(ui[3], home), ("M365Con", "https://m365con.net"), ("m365.fm", "https://www.m365.fm")]
-        menu.insert(1, ((TOP_L if lang in TOP_REAL else REC_L).get(lang, "Top"), f"{BASE}/{lang}/top/"))
-        menu.insert(2, (_CI.get(lang, _CI.get("en", {})).get("community", "Community"), f"{BASE}/{lang}/community/"))
-        menu.insert(2, (LRN.T(lang)["learn"], f"{BASE}/{lang}/learn/"))
-        for _lbl, _p in (("Guests", "guests"), ("Library", "library"), ("Videos", "video"), ("Podcast", "podcast"), ("Blog", "blog")):
-            menu.insert(3, (_lbl if lang != "de" else {"Guests": "Gäste", "Library": "Bibliothek"}.get(_lbl, _lbl), f"{BASE}/{lang}/community/{_p}/"))
+        menu = [("M365Con", "https://m365con.net"), ("m365.fm", "https://www.m365.fm")]
+        menu.insert(0, (LRN.T(lang)["learn"], f"{BASE}/{lang}/learn/"))
+        menu.insert(0, (_CI.get(lang, _CI.get("en", {})).get("community", "Community"), f"{BASE}/{lang}/community/"))
+        _cl = {"de": ("Inhalte", "Podcast", "Blog", "Videos", "Bibliothek", "Gäste")}.get(lang, ("Content", "Podcast", "Blog", "Videos", "Library", "Guests"))
+        menu.insert(0, (_cl[0], [(ui[3], home)] + [(_cl[i + 1], f"{BASE}/{lang}/community/{p}/") for i, p in enumerate(("podcast", "blog", "video", "library", "guests"))]))
     else:
         home = f"{BASE}/"
-        menu = [("Languages", f"{BASE}/#languages"), ("Blog", f"{BASE}/community/blog/"), ("Podcast", f"{BASE}/community/podcast/"), ("Videos", f"{BASE}/community/video/"), ("Library", f"{BASE}/community/library/"), ("Community", f"{BASE}/community/"), ("M365Con", "https://m365con.net"), ("m365.fm", "https://www.m365.fm")]
+        menu = [("Languages", f"{BASE}/#languages"), ("Content", [("Podcast", f"{BASE}/community/podcast/"), ("Blog", f"{BASE}/community/blog/"), ("Videos", f"{BASE}/community/video/"), ("Library", f"{BASE}/community/library/"), ("Guests", f"{BASE}/community/guests/")]), ("Community", f"{BASE}/community/"), ("M365Con", "https://m365con.net"), ("m365.fm", "https://www.m365.fm")]
     if not switch:
         items = [(x, LANGS[x][0], f"{BASE}/{x}/", LANGS[x][1]) for x in LANGS if (ROOT / "episodes").exists()]
         switch = lang_dropdown(lang if lang in LANGS else "en", items, "")
@@ -624,7 +623,9 @@ def ast_body(lang):
 def footer(lang):
     ui = UI.get(lang)
     about = ui[5] if ui else "About Mirko Peters"
-    return (f'<footer><div class="wrap"><a href="https://www.m365.fm">m365.fm</a>'
+    _tl = lang if lang in LANGS else "en"
+    _top = f'<a href="{BASE}/{_tl}/top/">{esc((TOP_L if _tl in TOP_REAL else REC_L).get(_tl, "Top"))}</a>'
+    return (f'<footer><div class="wrap">{_top}<a href="https://www.m365.fm">m365.fm</a>'
             f'<a href="https://m365con.net">M365Con</a><a class="soc" href="{LINKEDIN}" rel="me" style="--bc:#0A66C2">{brand_icon("LinkedIn")}<span>LinkedIn</span></a><a class="soc" href="{YT_CHANNEL}" style="--bc:#FF0000">{brand_icon("YouTube")}<span>YouTube</span></a>'
             f'<a href="{ast_url(lang)}">{esc(ast_label(lang))}</a><a href="{BASE}/{"de/" if lang == "de" else ""}press/">{"Pressekit" if lang == "de" else "Press kit"}</a><a href="{BASE}/impressum/" rel="nofollow">Impressum</a><a href="{BASE}/legal/" rel="nofollow">Legal notice</a>'
             f'<a href="{BASE}/datenschutz/" rel="nofollow">Datenschutz</a><a href="{BASE}/privacy/" rel="nofollow">Privacy</a>'

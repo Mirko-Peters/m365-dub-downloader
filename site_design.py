@@ -80,6 +80,11 @@ footer{margin-top:80px}
 .menu{display:flex;gap:22px;margin-inline-start:auto;align-items:center}
 .menu a{font:500 .88rem "Barlow Condensed",sans-serif;letter-spacing:.12em;text-transform:uppercase;text-decoration:none;color:var(--fg);padding:4px 0;border-bottom:2px solid transparent}
 .menu a:hover{border-color:var(--ac);color:var(--ac)}
+.mg{position:relative}.mg summary{list-style:none;cursor:pointer;font:500 .88rem "Barlow Condensed",sans-serif;letter-spacing:.12em;text-transform:uppercase;padding:4px 0;border-bottom:2px solid transparent;user-select:none}
+.mg summary::-webkit-details-marker{display:none}.mg summary:after{content:" ▾";color:var(--mut)}.mg[open] summary,.mg summary:hover{border-color:var(--ac);color:var(--ac)}
+.mg .pn{position:absolute;inset-inline-start:0;top:calc(100% + 8px);z-index:70;background:var(--bg);border:1px solid var(--fg);padding:6px;display:grid;min-width:200px;box-shadow:0 12px 34px #0003}
+.mg .pn a{display:block;padding:8px 10px;border:0;font:500 1rem "Barlow Condensed",sans-serif;letter-spacing:.03em;text-transform:none}.mg .pn a:hover{background:var(--ac);color:var(--onac)}
+.mgl{display:block;padding:8px 10px 2px;font:600 .75rem "Barlow Condensed",sans-serif;letter-spacing:.14em;text-transform:uppercase;color:var(--mut)}
 .lsw{position:relative}.lsw summary{list-style:none;cursor:pointer;display:flex;align-items:center;gap:8px;padding:6px 10px;border:1px solid var(--bd);font:600 .85rem "Barlow Condensed",sans-serif;letter-spacing:.1em;text-transform:uppercase;user-select:none}
 .lsw summary::-webkit-details-marker{display:none}.lsw summary:after{content:"▾";font-size:.8em;color:var(--mut)}.lsw[open] summary,.lsw summary:hover{border-color:var(--ac)}
 .fl{width:22px;height:16px;object-fit:cover;border:1px solid var(--bd);flex:none;display:inline-block;vertical-align:middle}
@@ -190,8 +195,13 @@ def lang_dropdown(cur, items, base):
 
 def site_header(home, brand_href, menu, lang_html, bar_html=""):
     """menu: (label, href)"""
-    m = "".join(f'<a href="{_e(h)}">{_e(t)}</a>' for t, h in menu)
+    def one(t, h, grp):
+        if isinstance(h, (list, tuple)):
+            sub = "".join(f'<a href="{_e(u)}">{_e(x)}</a>' for x, u in h)
+            return f'<span class="mgl">{_e(t)}</span>{sub}' if grp else f'<details class="mg"><summary>{_e(t)}</summary><div class="pn">{sub}</div></details>'
+        return f'<a href="{_e(h)}">{_e(t)}</a>'
+    m = "".join(one(t, h, False) for t, h in menu); mm = "".join(one(t, h, True) for t, h in menu)
     return (f'<header class="sh">{bar_html}<div class="top"><div class="wrap"><a class="brand" href="{_e(brand_href)}">M365<i>.</i>FM <span class="dub">DUB</span></a>'
-            f'<nav class="menu" aria-label="Menu">{m}</nav>{lang_html}<details class="mm"><summary aria-label="Menu">☰</summary><div class="pn">{m}</div></details></div></div></header>')
+            f'<nav class="menu" aria-label="Menu">{m}</nav>{lang_html}<details class="mm"><summary aria-label="Menu">☰</summary><div class="pn">{mm}</div></details></div></div></header>')
 
 
