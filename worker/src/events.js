@@ -2,7 +2,7 @@
 import { sendMail } from "./digest.js";
 import { ownedEntity } from "./profiles.js";
 import { cleanText, rateLimit } from "./util.js";
-import { baseIds } from "./entities.js";
+import { baseIds, entityMap } from "./entities.js";
 import { cleanUrl } from "./profiles.js";
 import { stats } from "./badges.js";
 
@@ -502,6 +502,22 @@ export async function handleEvents(env, request, url, path, user, J) {
     return J({ ok: true });
   }
   // ---- Entitaet uebernehmen ----
+  if (path === "/api/entity/suggest" && method === "GET") {   // "Gehoert diese Seite zu dir?": Personen- und Firmen-Entitaeten mit aehnlichem Namen, noch ohne Besitzer
+    if (need()) return need();
+    const me = await db.prepare("SELECT p.handle,u.name FROM profiles p JOIN users u ON u.id=p.user_id WHERE p.user_id=? AND p.public=1").bind(user.id).first();
+    const orgs = (await db.prepare("SELECT o.handle,o.name,(SELECT eid FROM org_entity WHERE org_id=o.id) eid FROM org_members m JOIN orgs o ON o.id=m.org_id WHERE m.user_id=? AND m.status='active' AND m.role IN ('owner','admin')").bind(user.id).all()).results || [];
+    if (!me && !orgs.length) return J({ suggestions: [] });
+    const claimed = new Set(((await db.prepare("SELECT eid FROM entity_claims").all()).results || []).map((r) => r.eid));
+    const out = [], seen = new Set(), map = await entityMap(env);
+    const sameOrg = (a, b) => { const x = norm(a).join(""), y = norm(b).join(""); return x.length >= 4 && y.length >= 4 && (x === y || lev(x, y) <= (x.length >= 8 ? 2 : 1) || x.startsWith(y) || y.startsWith(x)); };
+    for (const [eid, e] of map) {
+      if (claimed.has(eid) || seen.has(eid)) continue;
+      const names = [e.name, ...(e.aliases || [])];
+      if (me && e.type === "person" && names.some((n) => similarName(me.name, n))) { seen.add(eid); out.push({ eid, name: e.name, type: "person" }); continue; }
+      if (e.type === "org") for (const o of orgs) if (o.eid !== eid && names.some((n) => sameOrg(o.name, n))) { seen.add(eid); out.push({ eid, name: e.name, type: "org", org: o.name }); break; }
+    }
+    return J({ suggestions: out.slice(0, 8) });
+  }
   if (path === "/api/entity/claim" && method === "POST") {
     if (need()) return need();
     const b = await body(), eid = String(b.eid || "").toLowerCase();

@@ -55,9 +55,19 @@
   var RIQ = M365L(de, "profile.RIQ", { t: "Empfehlungen für dich", none: "Noch keine Empfehlungen.", ok: "Freigeben", no: "Ablehnen", rm: "Entfernen", pend: "wartet auf Freigabe", live: "veröffentlicht" }, { t: "Recommendations for you", none: "No recommendations yet.", ok: "Approve", no: "Reject", rm: "Remove", pend: "awaiting approval", live: "published" });
   function suggestUI() {   // "Bist du das?": ähnliche Speaker-Einträge bei Events dem eigenen Profil zuordnen
     var box = h("section", { class: "ccard", hidden: "" }), dis = {}; try { dis = JSON.parse(localStorage.getItem("m365-nosug") || "{}"); } catch (e) {}
+    api("/api/entity/suggest").then(function (r) {
+      var es = ((r.j || {}).suggestions || []).filter(function (x) { return !dis["e:" + x.eid]; }); if (!es.length) return;
+      box.hidden = false; if (!box.firstChild) box.appendChild(h("h2", { text: de ? "Bist du das?" : "Is this you?" }));
+      es.forEach(function (x) {
+        var row = h("p", {}, [h("a", { href: X.base + (de ? "/de" : "") + "/entity/" + x.eid + "/", target: "_blank", text: x.name }), " · " + (x.type === "org" ? (de ? "Firma – passt zu " : "company – matches ") + x.org : (de ? "Person" : "person")) + " "]);
+        row.appendChild(h("button", { type: "button", class: "btn main", text: de ? "Ja, gehört mir" : "Yes, it is mine", onclick: function () { api("/api/entity/claim", { method: "POST", body: { eid: x.eid } }).then(function (q) { row.textContent = (q.j || {}).ok ? (de ? "Anfrage gesendet – die Redaktion prüft sie." : "Request sent – the editors will review it.") : (de ? "Nicht möglich (bereits vergeben oder Limit erreicht)." : "Not possible (already claimed or limit reached)."); }); } }));
+        row.appendChild(document.createTextNode(" ")); row.appendChild(h("button", { type: "button", class: "btn", text: de ? "Nein" : "No", onclick: function () { dis["e:" + x.eid] = 1; try { localStorage.setItem("m365-nosug", JSON.stringify(dis)); } catch (e) {} row.remove(); } }));
+        box.appendChild(row);
+      });
+    });
     api("/api/speaker/suggest").then(function (r) {
       var list = ((r.j || {}).suggestions || []).filter(function (x) { return !dis[x.name]; }); if (!list.length) return;
-      box.hidden = false; box.appendChild(h("h2", { text: de ? "Bist du das?" : "Is this you?" }));
+      box.hidden = false; if (!box.querySelector("h2")) box.appendChild(h("h2", { text: de ? "Bist du das?" : "Is this you?" }));
       box.appendChild(h("p", { class: "mut", text: de ? "Wir haben Speaker bei Events gefunden, deren Name zu deinem Profil passt. Wenn du das bist, verknüpfen wir sie mit deinem Profil." : "We found speakers at events whose name matches your profile. If that is you, we link them to your profile." }));
       list.forEach(function (x) {
         var row = h("p", {}, [h("b", { text: x.name }), " · " + x.sessions + (de ? " Session(s) bei " : " session(s) at ") + x.events.join(", ") + " "]);
