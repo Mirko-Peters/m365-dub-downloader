@@ -52,12 +52,24 @@ def ent_ld(BASE, e, lang, glossary_set=None):
                    "event": "Event", "media": "PodcastSeries"}[t], "@id": eid_of(BASE, i), "name": e["name"], "url": eurl(BASE, "en", i), "description": d}
     if e.get("aliases"):
         n["alternateName"] = e["aliases"]
+    if e.get("logo"):
+        n["logo" if t == "org" else "image"] = e["logo"]
+    if e.get("web") and t in ("org", "product", "platform", "media", "event"):
+        pass
     if same:
         n["sameAs"] = same
     inv_map = [x for x in rel.get("related_to", [])] + [x for x in rel.get("similar_to", [])]
     if t in ("product", "platform"):
         n["applicationCategory"] = ", ".join(ENTS[c]["name"] for c in rel.get("instance_of", []) if ENTS[c]["type"] == "category") or "BusinessApplication"
         n["operatingSystem"] = "Web"
+        if e.get("version"):
+            n["softwareVersion"] = e["version"]
+        if e.get("released"):
+            n["datePublished"] = e["released"]
+        if e.get("license"):
+            n["isAccessibleForFree"] = e["license"] == "free"
+            if e["license"] in ("free", "included"):
+                n["offers"] = {"@type": "Offer", "price": "0", "priceCurrency": "USD", "availability": "https://schema.org/InStock", "description": "Free" if e["license"] == "free" else "Included in a Microsoft 365 licence"}
         n["@type"] = ["SoftwareApplication", "Product"]   # Software und Produkt zugleich
         if rel.get("developed_by"):
             n["brand"] = ref(rel["developed_by"][0])
@@ -105,6 +117,12 @@ def ent_ld(BASE, e, lang, glossary_set=None):
         if rel.get("developed_by"):
             n["recognizedBy"] = ref(rel["developed_by"][0])
         n["credentialCategory"] = "certification"
+        if e.get("level"):
+            n["educationalLevel"] = {"fundamentals": "Fundamentals", "associate": "Associate", "expert": "Expert", "specialty": "Specialty"}[e["level"]]
+        if e.get("valid_months"):
+            n["validFor"] = f"P{e['valid_months']}M"
+        if e.get("exam"):
+            n["identifier"] = e["exam"]
         if rel.get("covers"):
             n["about"] = [ref(x) for x in rel["covers"]]
             n["competencyRequired"] = [ENTS[x]["name"] for x in rel["covers"]]
@@ -214,6 +232,11 @@ def build(g, wiki_links, experts_by_ent, ep_find):
             for k, key in (("website", "web"), ("docs", "docs"), ("wikipedia", "wikipedia")):
                 if e.get(key):
                     facts.append((s[k], f'<a href="{esc(e[key])}" rel="noopener">{esc(e[key].replace("https://", "").rstrip("/"))}</a>'))
+            LIC = {"free": ("free", "kostenlos"), "included": ("included in Microsoft 365", "in Microsoft 365 enthalten"), "addon": ("add-on", "Add-on"), "paid": ("paid", "kostenpflichtig")}
+            for lab_en, lab_de, val in (("Version", "Version", e.get("version")), ("Released", "Veröffentlicht", e.get("released")), ("Licence", "Lizenz", LIC[e["license"]][li] if e.get("license") in LIC else ""),
+                                        ("Level", "Stufe", (e.get("level") or "").capitalize()), ("Exam code", "Prüfungscode", e.get("exam")), ("Valid for", "Gültig für", (f"{e['valid_months']} " + ("Monate" if lang == "de" else "months")) if e.get("valid_months") else "")):
+                if val:
+                    facts.append((lab_de if lang == "de" else lab_en, esc(str(val))))
             if e.get("wikidata"):
                 facts.append((s["wikidata"], f'<a href="https://www.wikidata.org/wiki/{e["wikidata"]}" rel="noopener">{e["wikidata"]}</a>'))
             if e.get("start"):
@@ -251,7 +274,7 @@ def build(g, wiki_links, experts_by_ent, ep_find):
             _lt = (e.get("long") or {}).get(lang) or (e.get("long") or {}).get("en") or (e.get("long") or {}).get("de") or (EVENTS[e["id"]].get("about") if e["id"] in EVENTS else "") or ""
             longbox = ("<h2>" + ("Beschreibung" if lang == "de" else "Description") + "</h2>" + "".join(f"<p>{esc(par).replace(chr(10), '<br>')}</p>" for par in _lt.split("\n\n") if par.strip())) if _lt.strip() else ""
             w = WT.get(lang, WT["en"])
-            data_attr = esc(json.dumps({k: e.get(k) for k in ("id", "name", "type", "aliases", "desc", "web", "docs", "wikipedia", "wikidata", "rel", "outdated", "replaced_by", "start", "end", "long")}, ensure_ascii=False))
+            data_attr = esc(json.dumps({k: e.get(k) for k in ("id", "name", "type", "aliases", "desc", "web", "docs", "wikipedia", "wikidata", "rel", "outdated", "replaced_by", "start", "end", "long", "logo", "version", "released", "license", "level", "exam", "valid_months")}, ensure_ascii=False))
             edit = f'<div id="en-edit" data-e="{data_attr}"></div>'
             _fq = [x for x in FAQ.get(e["id"], []) if x.get("lang", "en") == lang][:8]
             faqbox = (f'<section class="en-faq"><h2>{"Häufige Fragen" if lang == "de" else "Frequently asked questions"}</h2>' + "".join(f'<details><summary>{esc(x["q"])}</summary><p>{esc(x["a"])}</p></details>' for x in _fq) + "</section>") if _fq else ""

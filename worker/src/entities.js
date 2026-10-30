@@ -71,6 +71,14 @@ export async function validate(env, id, raw) {
     if (!PRED.includes(p) || !ID.test(to || "") || to === id || !(known.has(to) || dbIds.has(to))) return bad("bad_relation");
     const k = p + ">" + to; if (!seen.has(k)) { seen.add(k); d.rel.push([p, to]); }
   }
+  // Weitere schema.org-Felder (alle optional): Logo, Version, Veroeffentlichung, Lizenz, Zertifikatsstufe/-gueltigkeit, Pruefungscode
+  d.logo = httpsUrl(raw.logo, () => true); if (d.logo === null) return bad("bad_url");
+  d.version = txt(raw.version, 30);
+  d.released = String(raw.released || "").trim(); if (d.released && !/^\d{4}(-\d{2}(-\d{2})?)?$/.test(d.released)) return bad("bad_date");
+  d.license = String(raw.license || "").trim(); if (d.license && !["free", "included", "addon", "paid"].includes(d.license)) return bad("bad_license");
+  d.level = String(raw.level || "").trim(); if (d.level && !["fundamentals", "associate", "expert", "specialty"].includes(d.level)) return bad("bad_level");
+  d.valid_months = Math.max(0, Math.min(120, parseInt(raw.valid_months, 10) || 0));
+  d.exam = txt(raw.exam, 20);
   d.outdated = !!raw.outdated;   // nicht mehr aktuell: Seite bleibt, wird aber standardmaessig ausgeblendet
   d.replaced_by = String(raw.replaced_by || "").trim();
   if (d.replaced_by) { if (!ID.test(d.replaced_by) || d.replaced_by === id || !(known.has(d.replaced_by) || dbIds.has(d.replaced_by))) return bad("bad_relation"); d.outdated = true; }
