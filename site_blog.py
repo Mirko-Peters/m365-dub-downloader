@@ -54,8 +54,8 @@ def build(g, posts, people, api):
         mine = [p for p in posts if p["lang"] == lang]
         if not mine:
             croot = f"{BASE}{pfx(lang)}/community/"; t0 = T(lang, "Blog", "Blog"); ru = f"{croot}blog/"
-            intro = T(lang, "Blog posts from members of the Microsoft community. Nothing published in this language yet – be the first.", "Blogbeiträge von Mitgliedern der Microsoft-Community. In dieser Sprache gibt es noch nichts – sei die oder der Erste.")
-            b = shell(lang, f'<h1>{esc(t0)}</h1><p class="mut">{esc(intro)}</p><p><a class="btn main" href="{croot}#c-blog">{esc(T(lang, "Write a post", "Beitrag schreiben"))}</a></p>')
+            intro = T(lang, "Blog posts from members of the Microsoft community. Nothing published in this language yet.", "Blogbeiträge von Mitgliedern der Microsoft-Community. In dieser Sprache gibt es noch nichts.")
+            b = shell(lang, f'<h1>{esc(t0)}</h1><p class="mut">{esc(intro)}</p>')
             write(f"{pfx2(lang)}community/blog/index.html", page(lang, f"{t0} – M365.FM", intro, ru, b, None, None, og_type="website", extra_head=LCSS, noindex=True))
             continue
         INDEX_VOTES = 10   # erst ab so vielen Upvotes bei Google (Index + Sitemap)

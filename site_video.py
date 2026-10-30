@@ -31,7 +31,7 @@ def build(g, vids, people, api):
         if not mine:
             croot = f"{BASE}{pfx(lang)}/community/"; t0 = T(lang, "Creator videos", "Creator-Videos"); ru = f"{croot}video/"
             intro = T(lang, "Videos from community creators on the m365 Show YouTube channel. Nothing published in this language yet.", "Videos von Community-Creators auf dem YouTube-Kanal m365 Show. In dieser Sprache gibt es noch nichts.")
-            b = shell(lang, f'<h1>{esc(t0)}</h1><p class="mut">{esc(intro)}</p><p><a class="btn main" href="{croot}#c-video">{esc(T(lang, "Submit a video", "Video einreichen"))}</a></p>')
+            b = shell(lang, f'<h1>{esc(t0)}</h1><p class="mut">{esc(intro)}</p>')
             write(f"{pfx2(lang)}community/video/index.html", page(lang, f"{t0} – M365.FM", intro, ru, b, None, None, og_type="website", extra_head=LCSS, noindex=True))
             continue
         croot = f"{BASE}{pfx(lang)}/community/"; ttl = T(lang, "Creator videos", "Creator-Videos")
