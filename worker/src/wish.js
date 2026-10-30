@@ -1,5 +1,6 @@
 // Roadmap & Wunschliste: alle angemeldeten Mitglieder sehen sie und stimmen ab; Admin uebernimmt (planned) und hakt ab (done)
-import { cleanText, rateLimit } from "./util.js";
+import { cleanText, rateLimit, esc } from "./util.js";
+import { notify } from "./mail.js";
 
 const now = () => Math.floor(Date.now() / 1000);
 const txt = (s, n) => cleanText(s, n).replace(/[<>]/g, "").replace(/https?:\/\/\S+/gi, "").trim();
@@ -40,6 +41,9 @@ export async function handleWish(env, request, url, path, user, J) {
     if (!user.admin) return J({ error: "forbidden" }, 403);
     if (!STATUS.includes(b.status)) return J({ error: "bad_status" }, 400);
     await db.prepare("UPDATE wish SET status=?,note=?,updated=?,done_at=CASE WHEN ?='done' THEN ? ELSE 0 END WHERE id=?").bind(b.status, txt(b.note, 300), now(), b.status, now(), +b.id).run();
+    const wo = await db.prepare("SELECT user_id,title FROM wish WHERE id=?").bind(+b.id).first();
+    const SL = { planned: "in die Roadmap übernommen", done: "umgesetzt", declined: "abgelehnt", open: "wieder offen" };
+    if (wo && wo.user_id !== user.id && SL[b.status]) await notify(env, wo.user_id, "wish", `Dein Wunsch „${wo.title.slice(0, 80)}“ wurde ${SL[b.status]}`, `<p>Dein Wunsch <b>${esc(wo.title)}</b> ist jetzt: <b>${SL[b.status]}</b>.</p>${txt(b.note, 300) ? `<p>${esc(txt(b.note, 300))}</p>` : ""}<p><a href="${env.SITE}/community/#c-wish">Roadmap &amp; Wunschliste</a></p>`, `wish:${+b.id}:${b.status}`);
     return J({ ok: true });
   }
   if (path === "/api/wish/delete") {

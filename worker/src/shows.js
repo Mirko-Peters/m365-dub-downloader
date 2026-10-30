@@ -1,6 +1,7 @@
 // Podcast-Umzug: Mitglied traegt seine RSS-URL ein, alle Folgen (Text, Audio, Dauer, Transkript) werden importiert und taeglich abgeglichen.
 // Die Show erscheint nach Freigabe (Admin/Editor) auf /shows/<slug>/ der Plattform.
-import { cleanText, rateLimit } from "./util.js";
+import { cleanText, rateLimit, esc } from "./util.js";
+import { notify } from "./mail.js";
 
 const now = () => Math.floor(Date.now() / 1000);
 export const LANGS = ["en","de","es","fr","it","pt","nl","pl","id","ru","uk","ar","he","hi","ja","ko","ml","pa","ta","te"];
@@ -130,7 +131,11 @@ export async function handleShows(env, request, url, path, user, J) {
   if (path === "/api/admin/show/status") {
     if (!user.admin && !user.editor) return J({ error: "forbidden" }, 403);
     if (!["live", "pending", "rejected"].includes(b.status)) return J({ error: "bad_status" }, 400);
-    await db.prepare("UPDATE shows SET status=? WHERE id=?").bind(b.status, +b.id).run(); return J({ ok: true });
+    await db.prepare("UPDATE shows SET status=? WHERE id=?").bind(b.status, +b.id).run();
+    const sh = await db.prepare("SELECT user_id,title,slug FROM shows WHERE id=?").bind(+b.id).first();
+    if (sh && b.status === "live") await notify(env, sh.user_id, "show", `Deine Show „${sh.title.slice(0, 80)}“ ist veröffentlicht`, `<p>Deine Show <b>${esc(sh.title)}</b> ist jetzt auf M365.FM veröffentlicht:</p><p><a href="${env.SITE}/shows/${sh.slug}/">${env.SITE}/shows/${sh.slug}/</a></p>`, `show:${+b.id}:live`);
+    if (sh && b.status === "rejected") await notify(env, sh.user_id, "show", `Deine Show „${sh.title.slice(0, 80)}“ wurde abgelehnt`, `<p>Deine Show <b>${esc(sh.title)}</b> wurde nicht freigegeben. Bei Fragen antworte über die Nachrichten auf der Plattform.</p>`, `show:${+b.id}:rejected`);
+    return J({ ok: true });
   }
   return J({ error: "not_found" }, 404);
 }
