@@ -1,0 +1,1282 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:03.140
+Sie lassen gerade Daten über Co-Pilot Studio durchsickern, ohne es überhaupt zu wissen.
+
+00:00:03.600 --> 00:00:08.580
+Während alle begeistert davon sind, wie ihr neuer KI-Assistent Dinge abrufen, zusammenfassen und automatisieren kann,
+
+00:00:08.920 --> 00:00:12.940
+indexiert derselbe freundliche Chatbot womöglich fröhlich ihre Vorstandsprotokolle und Finanztabellen.
+
+00:00:14.000 --> 00:00:16.500
+Das ist keine böse Absicht, sondern Gehorsam schmerzt sich präziser Gehorsam.
+
+00:00:17.420 --> 00:00:19.740
+Co-Pilot Studio-Agenten erben ihre Berechtigungen.
+
+00:00:19.980 --> 00:00:23.320
+Wenn sie also die Gehaltsdatei des CEO sehen können, kann das ihr Chatbot auch.
+
+00:00:23.840 --> 00:00:27.080
+Herzlichen Glückwunsch, wir haben einen allwissenden Praktikanten gebaut, der mit Aschegeschwindigkeit arbeitet.
+
+00:00:27.080 --> 00:00:30.880
+Und dennoch sprechen die Leute über Co-Pilot Sicherheit, als wäre es ein gelöstes Rätsel.
+
+00:00:31.200 --> 00:00:31.980
+Boiler, das ist es nicht.
+
+00:00:32.520 --> 00:00:36.660
+Ihre KI-Agenten sind Erweiterung ihrer Benutzeridentität, keine eigenständigen Wesen mit Sicherheitsvorkehrung.
+
+00:00:37.240 --> 00:00:41.520
+Sie leihen sie ihr Zugriffstoken und durchforsten ihre Datenlandschaft genauso, wie sie es ihnen nicht erlaubt haben.
+
+00:00:41.940 --> 00:00:47.540
+Nur haben sie es ihnen nie verboten, weil sie die Regeln zur Verhinderung von Datenverlust, die als Leine, die nie konfiguriert haben.
+
+00:00:48.040 --> 00:00:49.080
+Hier ist also die Lage.
+
+00:00:49.700 --> 00:00:54.860
+In den nächsten Minuten lernen sie, wie sie dieses Leck schließen und Power-Plattform-DLP-Richtlinien anwenden,
+
+00:00:54.860 --> 00:01:01.280
+damit ihre Co-Pilot-Agenten keine sensiblen Daten preisgeben, wie ein geschwätziger Praktikant, der die Firmenkreditkarte verliert.
+
+00:01:02.860 --> 00:01:07.100
+Wir untersuchen, warum Co-Pilot-Agenten ihre Kompetenzen überschreiten, wie man Datenflüsse über Konnektoren steuert
+
+00:01:07.100 --> 00:01:09.680
+und was Microsoft-Zustimmungsmodell hinter den Kulissen wirklich erlaubt.
+
+00:01:10.460 --> 00:01:14.360
+Und es gibt eine bestimmte DLP-Regel, die von etwa neun von zehn Administratoren ignoriert wird
+
+00:01:14.360 --> 00:01:17.600
+und die den Unterschied zwischen sicheren Unternehmen und solchen macht, die in den Schlagzeilen landen.
+
+00:01:18.200 --> 00:01:20.580
+Am Ende kennen sie die Lösung und haben keine Ausreden mehr.
+
+00:01:21.060 --> 00:01:23.080
+Lassen Sie uns aufdecken, dass ihr Co-Pilot weiß, was er eigentlich ließ.
+
+00:01:23.080 --> 00:01:26.440
+Das verborgene Problem, Agenten, die zu viel wissen.
+
+00:01:27.080 --> 00:01:28.160
+Hier ist die unbequeme Wahrheit.
+
+00:01:28.960 --> 00:01:32.760
+Ihr Co-Pilot-Studio-Agent ist kein Kollege, sondern eine Kopie von Ihnen in Silizio.
+
+00:01:33.600 --> 00:01:37.460
+Er fragt nicht, ob er diese SharePoint-Datei abrufen oder in jene Dataverse-Tabelle schauen darf.
+
+00:01:37.560 --> 00:01:39.420
+Er tut es einfach, weil es ihre Berechtigungen sind.
+
+00:01:40.780 --> 00:01:46.120
+Die meisten Administratoren vergessen, dass Identitätsreplikation im Microsoft-Ökosystem gleichbedeutend mit Privilegienreplikation ist.
+
+00:01:46.500 --> 00:01:52.120
+Der Agent ist im Grunde ein gehorsamer Klon mit Zugriff über ihren Sicherheitskontext, besitzt aber keinerlei Diskretion.
+
+00:01:52.120 --> 00:01:55.360
+Co-Pilot-Studio bündelt diese Funktion über Konnektoren.
+
+00:01:55.580 --> 00:02:00.000
+Outlook, Dataverse, SharePoint, Teams und jede andere Integration, die ihr Power-Plattform-Tenant erlaubt.
+
+00:02:00.960 --> 00:02:05.100
+Jeder Konnektor wirkt wie ein Tunnel zwischen ihren Datenquellen und diesem KI-Assistenten.
+
+00:02:05.800 --> 00:02:08.260
+Je mehr Tunnel Sie öffnen, desto weiter kann Ihr Agent umherstreifen.
+
+00:02:08.820 --> 00:02:12.920
+Es ist bequem, ja fast berauschend, bis dieser Agent fröhlich vertrauliche Dokumente zusammenfasst,
+
+00:02:12.980 --> 00:02:15.420
+weil jemand fragte, wie waren die Einstellungsmuster im letzten Quartal.
+
+00:02:15.420 --> 00:02:20.900
+Das digitale Äquivalent zu einem koffeinhaltigen Praktikanten, der im Schnelldurchlauf die Personalakte liest.
+
+00:02:21.740 --> 00:02:22.580
+Eigentliche Paradoxon.
+
+00:02:22.960 --> 00:02:26.180
+Microsoft stellt tatsächlich Sicherheitsvorkehrungen bereit, Richtlinien zur Verhinderung von Daten.
+
+00:02:26.820 --> 00:02:31.240
+DLP sollte eigentlich der Türsteher sein, der unternehmenskritische Daten vom restlichen Chaos trennt.
+
+00:02:32.440 --> 00:02:36.580
+Doch in den meisten Bereitstellungen enden diese Schutzmaßnahmen zwei Etagen unter dem Arbeitsbereich von Co-Pilot.
+
+00:02:37.140 --> 00:02:40.080
+Anwender gehen davon aus, dass ihre Mandantenrichtlinien automatisch gelten.
+
+00:02:40.080 --> 00:02:44.200
+Doch Co-Pilot-Agenten liegen irgendwo zwischen einer Power-Plattform-Umgebung und ihren Mandanten-Grenzen.
+
+00:02:45.120 --> 00:02:48.900
+Eine Schattenzone der Governance, in der technisch gesehen nichts ausfällt, aber alles im Stillen schiefläuft.
+
+00:02:50.120 --> 00:02:51.040
+Denken Sie einmal darüber nach.
+
+00:02:51.300 --> 00:02:56.020
+Sie konfigurieren Outlook und SharePoint-Connectoren als geschäftlich und eine externe API als nicht geschäftlich.
+
+00:02:57.020 --> 00:03:00.560
+Diese Trennung verhindert bei korrekter Durchsetzung, dass Daten zwischen den Kategorien fließen.
+
+00:03:01.260 --> 00:03:05.600
+Doch Ihr Co-Pilot-Agent, der in einer zu schwach abgesicherten Umgebung sitzt, agiert am Ende über beide Bereiche,
+
+00:03:05.680 --> 00:03:08.060
+weil niemand seine Umgebung mit dem richtigen DLP-Set verknüpft hat.
+
+00:03:08.060 --> 00:03:11.880
+Plötzlich werden Ihre geschäftlichen Daten über eine nicht geschäftliche Verbindung geleitet.
+
+00:03:12.420 --> 00:03:16.720
+Es ist, als hätten Sie einen sicheren Tresor mit offener Tür, weil Ihre Sicherheitsrichtlinie nur das Foyer bewacht hat.
+
+00:03:17.360 --> 00:03:19.860
+Häufige Fehlerpfade lassen sich alle auf dasselbe Versäumnis zurückführen.
+
+00:03:20.920 --> 00:03:24.180
+Erstens, Agenten fassen Informationen aus vertraulichen Listen zusammen oder umschreiben sie.
+
+00:03:24.900 --> 00:03:28.520
+Zweitens, sie führen verschiedene Quellen in einer einzigen Unterhaltung zusammen
+
+00:03:28.520 --> 00:03:30.820
+und verletzen so unbeabsichtigt Datenklassifizierungen.
+
+00:03:31.640 --> 00:03:34.320
+Drittens, Administratoren setzen eine Vererbung der Richtlinie voraus.
+
+00:03:34.320 --> 00:03:38.840
+Da Co-Pilot-Agenten jedoch innerhalb von Umgebungen mit eigenen DLP-Grenzen bereitgestellt werden,
+
+00:03:38.940 --> 00:03:40.140
+findet diese Vererbung nie statt.
+
+00:03:40.940 --> 00:03:44.420
+Die wundersame Annahme, dass Microsoft die Governance-Arbeit für Sie erledigt, das tut es nicht.
+
+00:03:45.120 --> 00:03:47.580
+Wenn Ihr Co-Pilot-Finanzdaten sehen kann, herzlichen Glückwunsch.
+
+00:03:48.480 --> 00:03:52.900
+Das kann dann auch jeder gutmeine Mitarbeiter, der eine Chatsitzung öffnet und anfängt, Budgetdetails abzufragen.
+
+00:03:53.500 --> 00:03:55.320
+Äh, das ist der stille Angriffsvektor.
+
+00:03:56.280 --> 00:03:58.300
+Interne Preisgabe ohne böswillige Absichten.
+
+00:03:58.300 --> 00:04:03.300
+Kein Hacker erforderlich, nur übermäßig großzügige Berechtigungen und eine fehlende Kontextisolierung.
+
+00:04:03.720 --> 00:04:07.440
+Es ist die Art von Sicherheitslücke, die erst Schlagzeilen macht, wenn jemand ein Chatprotokoll exportiert.
+
+00:04:08.180 --> 00:04:11.420
+Also, bevor Sie in Panik geraten oder Microsoft beschuldigen, schauen Sie sich Ihre Architektur an.
+
+00:04:11.980 --> 00:04:14.300
+Ihr Agent bricht keine Regeln, er befolgt sie ganz präzise.
+
+00:04:14.720 --> 00:04:15.900
+Sie haben nur nie die richtigen definiert.
+
+00:04:16.320 --> 00:04:18.500
+DLP gilt nicht automatisch über jede Ebene hinweg.
+
+00:04:18.920 --> 00:04:21.380
+Es muss pro Umgebung definiert, durchgesetzt und getestet werden.
+
+00:04:21.760 --> 00:04:22.240
+Wissen Sie was?
+
+00:04:22.300 --> 00:04:28.240
+Co-Pilot-Studio-Agenten leben standardmäßig in Entwicklungsumgebungen jenen, die Sie wahrscheinlich nie gehärtet haben, weil es ja nur zum Testen ist.
+
+00:04:29.140 --> 00:04:31.380
+Wir haben das Symptom identifiziert, Agenten, die zu viel wissen.
+
+00:04:31.860 --> 00:04:36.140
+Um das Lecken zu stopfen, müssen wir nachverfolgen, wohin Daten in Co-Pilot-Studio tatsächlich fließen,
+
+00:04:36.220 --> 00:04:38.560
+vom Benutzer über den Connector bis zum Konversationsprotokoll.
+
+00:04:39.420 --> 00:04:41.720
+Man kann einen Fluss nicht aufhalten, ohne seine Strömung zu verstehen.
+
+00:04:42.520 --> 00:04:48.300
+Lassen Sie uns diesen Fluss als nächstes analysieren, bevor Ihr höflicher kleiner Chatbot versehentlich Ihre Jahresprognose in einen Team-Chat schreibt,
+
+00:04:48.380 --> 00:04:49.500
+den man nie hätte beiträgen dürfen.
+
+00:04:50.300 --> 00:04:51.920
+Wie Daten durch Co-Pilot-Studio fließen?
+
+00:04:52.560 --> 00:04:55.780
+Verfolgen wir die Spur Ihrer Daten, denn im Gegensatz zu Ihnen macht sie keine Kaffeepause.
+
+00:04:55.780 --> 00:04:59.820
+In dem Moment, in dem ein Benutzer ein Gespräch mit einem Co-Pilot-Studio-Agenten beginnt,
+
+00:04:59.880 --> 00:05:01.920
+setzen sich im Hintergrund verschiedene Prozesse in Gang.
+
+00:05:02.700 --> 00:05:04.860
+Authentifizierung, authentifiziert über EntraID.
+
+00:05:05.660 --> 00:05:08.780
+Diese Identität bringt delegierte Berechtigungen mit sich, die im Grunde sagen,
+
+00:05:09.040 --> 00:05:10.460
+alles, was ich sehen kann, kannst du auch sehen.
+
+00:05:11.700 --> 00:05:16.280
+Der Agent nutzt diese Anmeldeinformationen dann über einen Connector, die logische Brücke zu Ihrer Datenquelle,
+
+00:05:16.580 --> 00:05:20.760
+sei es SharePoint, Outlook, Dataverse oder ein anderer Dienst in dieser Umgebung.
+
+00:05:20.760 --> 00:05:23.460
+Sobald die Daten abgerufen wurden, verschwindet die Ausgabe nicht einfach.
+
+00:05:23.760 --> 00:05:24.980
+Sie durchläuft verschiedene Ebenen.
+
+00:05:25.520 --> 00:05:30.720
+Gesprächskontext, generierte Antwort und schließlich den Analyse-Speicher für Protokollierung und Einblicke.
+
+00:05:31.800 --> 00:05:35.300
+Ein netter, kleiner Datenstaffellauf, nur dass der Staffelstab Ihre vertraulichen Informationen sind.
+
+00:05:35.600 --> 00:05:37.500
+An jedem Punkt dieses Staffellaufs gibt es Schwachstellen.
+
+00:05:38.020 --> 00:05:39.320
+Der Connector ist die erste Gefahrenzone.
+
+00:05:40.120 --> 00:05:42.360
+Connectors in der Power-Plattform gibt es in drei Arten.
+
+00:05:42.600 --> 00:05:47.120
+Standard, typische Microsoft-Dienste, Premium, Drittanbieter oder erweiterte Funktionen
+
+00:05:47.120 --> 00:05:48.940
+und benutzerdefinierte APIs.
+
+00:05:49.680 --> 00:05:50.900
+Jede Art wird unterschiedlich verweilt.
+
+00:05:51.360 --> 00:05:53.900
+Standard-Connectors fallen sauber in die integrierten DLP-Kategorien.
+
+00:05:54.600 --> 00:05:58.120
+Premium- und benutzerdefinierte Connectors schweben jedoch oft in einem regulatorischen Niemandsland,
+
+00:05:58.200 --> 00:05:59.420
+bis sie in eine Klassifizierung zuweisen.
+
+00:05:59.580 --> 00:06:02.600
+Wenn Administratoren dies vernachlässigen, betrachtet der Co-Pilot-Agency alles, weil es spielt.
+
+00:06:02.840 --> 00:06:05.720
+Stellen Sie sich vor, Sie kennzeichnen die Hälfte Ihrer Aktenschränke als Stränke als Stränke,
+
+00:06:05.720 --> 00:06:06.920
+geheim, während der Rest unbeschrifte bleiben.
+
+00:06:07.140 --> 00:06:10.140
+Damit haben Sie dem Praktikanten gerade die Erlaubnis gegeben, alles zu öffnen, was interessant ist.
+
+00:06:10.660 --> 00:06:12.420
+Der zweite Schwachpunkt liegt bei den System-Connectors.
+
+00:06:12.420 --> 00:06:16.520
+Diese sind im Maker Canvas nicht sichtbar, ermöglichen aber im Hintergrund Funktionen wie Teams-Nachrichten
+
+00:06:16.520 --> 00:06:18.060
+oder die Darstellung von Adaptive Cards.
+
+00:06:18.700 --> 00:06:22.840
+Da Sie technisch gesehen dem System und nicht dem Benutzer gehören, umgehen Sie oft Ihre DLP-Filter.
+
+00:06:23.540 --> 00:06:26.020
+Betrachten Sie sie als Wartungstunnel unter Ihrer Burg.
+
+00:06:26.980 --> 00:06:28.260
+Selten patrouilliert, immer offen.
+
+00:06:29.120 --> 00:06:31.480
+Wenn Daten durch Sie fließen, bemerken die meisten Organisationen dies nicht.
+
+00:06:32.240 --> 00:06:35.420
+Standardmäßig schließt Microsoft einige Connectors von der Richtliniendurchsetzung aus,
+
+00:06:35.440 --> 00:06:37.060
+um die grundlegende Funktionalität zu gewährleisten.
+
+00:06:37.360 --> 00:06:39.160
+Wunderbar für die Verfügbarkeit, fatal für die Isolierung.
+
+00:06:39.160 --> 00:06:42.280
+Dann gibt es noch das Gesprächsprotokoll, den Chatverlauf des Co-Piloten,
+
+00:06:42.360 --> 00:06:45.120
+der für Analysen, Fehlerbehebung und kontinuierliche Verbesserung gespeichert wird.
+
+00:06:45.860 --> 00:06:48.400
+Viele gehen davon aus, dass dies durch das deaktivierende Timmetrie abgeschaltet wird.
+
+00:06:48.700 --> 00:06:49.180
+Das tut es nicht.
+
+00:06:49.720 --> 00:06:52.020
+Gesprächsdaten können im Analysespeicher der Umgebung verbleiben,
+
+00:06:52.120 --> 00:06:54.480
+was bedeutet, dass eine Abfrage mit sensiblen Finanzkennzahlen
+
+00:06:54.480 --> 00:06:56.680
+möglicherweise auf unbestimmte Zeit in Ihren Protokollen bleibt,
+
+00:06:56.760 --> 00:06:58.580
+sofern keine Aufbewahrungsrichtlinie konfiguriert ist.
+
+00:06:59.160 --> 00:07:01.420
+Man kann förmlich spüren, wie die Compliance-Abteilung erschaudert.
+
+00:07:01.940 --> 00:07:03.080
+Hier wird der Datenfluss täuschen.
+
+00:07:03.160 --> 00:07:03.580
+Komplex.
+
+00:07:03.580 --> 00:07:08.020
+Ein einzelner Co-Pilot-Aufruf kann nacheinander mehrere Connectors berühren.
+
+00:07:08.720 --> 00:07:11.680
+Zum Beispiel könnte ein Agent-Outlook verwenden, um aktuelle E-Mails abzurufen,
+
+00:07:12.040 --> 00:07:13.900
+diesen Inhalt durch einen Textanalyse-Connector leiten
+
+00:07:13.900 --> 00:07:15.460
+und Zusammenfassungen in Teams zurückgeben.
+
+00:07:16.100 --> 00:07:17.740
+Jeder dieser Schritte überschreitet eine DLP-Grenze.
+
+00:07:18.080 --> 00:07:20.380
+Wenn nur einer dieser Connectors zu einer anderen Klassifizierung gehört,
+
+00:07:20.460 --> 00:07:22.960
+etwa Outlook als geschäftlich und Cognitive Services als nicht geschäftlich,
+
+00:07:23.000 --> 00:07:25.600
+verstößt der gesamte Ablauf gegen die Richtlinie Wichtlinie.
+
+00:07:25.600 --> 00:07:27.900
+Das System schreit nicht, es macht einfach weiter.
+
+00:07:28.540 --> 00:07:30.240
+Querverbindungen sind lautlos, aber katastrophal.
+
+00:07:30.700 --> 00:07:33.480
+Schlimmer noch, DLP-Richtlinien sind umgebungsbasiert, nicht hin und weit.
+
+00:07:33.560 --> 00:07:36.460
+Was bedeutet, dass jede Power-Plattform-Umgebung ihre eigenen Grenzen hat?
+
+00:07:37.240 --> 00:07:39.060
+Wenn Sie Richtlinien nicht explizit replizieren,
+
+00:07:39.180 --> 00:07:40.940
+wird jede neue Umgebung zu einem potenziellen Leck.
+
+00:07:41.480 --> 00:07:43.460
+Sie können eine makellose Governance in der Produktion
+
+00:07:43.460 --> 00:07:45.360
+und absolutes Chaos in der Entwicklung haben.
+
+00:07:46.500 --> 00:07:48.140
+Und Microsoft wird Sie höflich daran erinnern,
+
+00:07:48.140 --> 00:07:50.800
+falls Sie fragen, dass die Isolierung von Umgebungen so beabsichtigt ist.
+
+00:07:51.460 --> 00:07:52.300
+Übersetzung Ihr Problem.
+
+00:07:52.860 --> 00:07:54.200
+Lassen Sie mich eine wahrende Geschichte erzählen.
+
+00:07:54.200 --> 00:07:57.140
+Ein Kunde implementierte einen finanziellen Co-Pilot-Agenten
+
+00:07:57.140 --> 00:07:58.380
+in einer Testumgebung und nahm an,
+
+00:07:58.420 --> 00:08:00.420
+seine globale DLP-Richtlinie würde automatisch greifen.
+
+00:08:01.160 --> 00:08:03.440
+Der Agent, der sich der Hierarchie fröhlich nicht bewusst war,
+
+00:08:03.580 --> 00:08:05.460
+hatte Zugriff auf interne SharePoint-Bibliotheken
+
+00:08:05.460 --> 00:08:07.500
+und eine experimentelle Drittanbieter-IP-AP.
+
+00:08:08.300 --> 00:08:10.420
+Als die Rechtsabteilung ein Beispiel-Chat-Protokoll prüfte,
+
+00:08:10.580 --> 00:08:12.080
+entdeckten Sie vertrauliche Quartalszahlen,
+
+00:08:12.160 --> 00:08:13.820
+die in ein API-Gespräch eingeflossen waren.
+
+00:08:14.400 --> 00:08:16.360
+Kein Eindringen, kein Hack, nur das Fehlen einer Richtlinie.
+
+00:08:16.440 --> 00:08:18.820
+Das System verhielt sich genau so, wie es konfiguriert war,
+
+00:08:18.860 --> 00:08:19.700
+um alles falsch zu machen.
+
+00:08:20.120 --> 00:08:22.280
+Mittlerweile können Sie sich die Anatomie eines Lecks vorstellen.
+
+00:08:22.280 --> 00:08:24.320
+Identitäten delegieren Befugnisse,
+
+00:08:24.460 --> 00:08:26.400
+Konnektoren überbrücken Daten, Chat-Protokolle,
+
+00:08:26.440 --> 00:08:28.320
+sichern Spuren, Analysen halten das Ereignis fest.
+
+00:08:29.140 --> 00:08:30.740
+Verpassen Sie eine Grenze und Informationen Siegern.
+
+00:08:30.980 --> 00:08:32.520
+Bevor wir also Abwehrkräfte aufbauen,
+
+00:08:32.600 --> 00:08:33.400
+merken Sie sich diesen Fluss.
+
+00:08:33.580 --> 00:08:35.420
+Benutzer-Connector, Agent-Protokoll, Analytik.
+
+00:08:36.460 --> 00:08:38.040
+Jeder Pfeil ist ein potenzieller Fluchtweg.
+
+00:08:38.700 --> 00:08:39.600
+Als nächstes bauen wir Mauer.
+
+00:08:40.100 --> 00:08:41.540
+DLP-Richtlinien, die stark genug sind,
+
+00:08:41.620 --> 00:08:43.480
+um selbst den übereifrigsten Co-Pilot einzudämmen.
+
+00:08:44.360 --> 00:08:46.320
+Die DLP-Festungen errichten die richtige Einrichtung.
+
+00:08:46.320 --> 00:08:48.280
+Die meisten Administratoren bekommen hier leichte Panik.
+
+00:08:48.560 --> 00:08:50.720
+Gut. Panik bedeutet, dass sie endlich begreifen,
+
+00:08:50.720 --> 00:08:51.960
+dass ihre Agenten nicht unschuldig sind.
+
+00:08:52.280 --> 00:08:54.740
+Es sind unbeaufsichtige Kleinkinder mit Zugang zum Unternehmenstresor.
+
+00:08:55.200 --> 00:08:58.040
+Also fangen wir an, diese Festung von Grund auf richtig aufzubauen.
+
+00:08:58.500 --> 00:09:00.380
+Denn eine DLP-Richtlinie in der Power-Plattform zu erstellen,
+
+00:09:00.440 --> 00:09:00.800
+ist nicht schwer.
+
+00:09:01.520 --> 00:09:03.020
+Zu verstehen, was sie tatsächlich kontrolliert,
+
+00:09:03.140 --> 00:09:05.480
+erfordert mehr Finesse als die meisten Dokumentationen zu geben.
+
+00:09:06.440 --> 00:09:07.740
+Identifizieren Sie zuerst Ihr Schlachtfeld,
+
+00:09:07.800 --> 00:09:09.900
+die Umgebungen, in denen Co-Pilot-Studio-Projekte gehostet werden.
+
+00:09:10.480 --> 00:09:12.720
+Viele Organisationen starten mehrere Power-Plattformen,
+
+00:09:12.720 --> 00:09:14.440
+Umgebungen, Entwicklung, Test, Produktion,
+
+00:09:14.580 --> 00:09:16.160
+oft durch enthusiastische Citizen-Developer,
+
+00:09:16.160 --> 00:09:19.460
+die denken, Umgebung klinge nach einer Spielwiese für Kreativität.
+
+00:09:19.980 --> 00:09:20.280
+Das ist nicht.
+
+00:09:20.620 --> 00:09:22.340
+Jede Umgebung ist Ihre eigene Sicherheitsinsel.
+
+00:09:22.820 --> 00:09:24.580
+Richtlinien, die Sie auf Tenentebene festlegen,
+
+00:09:24.680 --> 00:09:26.160
+schützen diese Insel nicht automatisch.
+
+00:09:26.240 --> 00:09:29.040
+Das bedeutet, Ihre Produktionsumgebung könnte wie Fort Knox gesichert sein,
+
+00:09:29.120 --> 00:09:30.940
+während die Entwicklung wie ein Fluss im Pazifik treibt.
+
+00:09:31.600 --> 00:09:33.120
+Der erste Schritt ist daher Aufklärung.
+
+00:09:33.720 --> 00:09:36.180
+Finden Sie jede Umgebung, in der jemand auf Co-Pilot erstellen geklickt hat.
+
+00:09:36.840 --> 00:09:38.000
+Gehen Sie davon aus, dass nichts harmlos ist.
+
+00:09:38.000 --> 00:09:39.040
+Bauen wir die erste Mauer.
+
+00:09:39.540 --> 00:09:42.480
+Öffnen Sie im Power-Plattform-Admin-Center den Bereich für Datenrichtlinien
+
+00:09:42.480 --> 00:09:44.960
+und erstellen Sie eine neue Richtlinie zur Verhinderung von Datenverlust.
+
+00:09:45.360 --> 00:09:47.280
+Sie werden aufgefordert, die betroffenen Umgebungen zu definieren.
+
+00:09:47.640 --> 00:09:48.400
+Wählen Sie diese bewusst aus.
+
+00:09:49.040 --> 00:09:52.360
+Das Verteilen von Richtlinien auf ungenutzte Bereiche erzeugt nur Inkonsistenz.
+
+00:09:52.840 --> 00:09:55.940
+Jede Richtlinie greift zum Zeitpunkt der Bereitstellung, nicht rückwirkend.
+
+00:09:56.720 --> 00:10:00.280
+Jeder neue oder bestehende Connector in dieser Umgebung hält sich also erst an die Richtlinien,
+
+00:10:00.360 --> 00:10:01.440
+nachdem sie veröffentlicht wurden.
+
+00:10:02.460 --> 00:10:05.220
+Als nächstes folgt der Eckpfeiler der DLP-Connector-Kategorisierung.
+
+00:10:05.480 --> 00:10:08.520
+Stellen Sie sich Kategorien vor, die als geschäftlich, nicht geschäftlich und locket bezeichnen.
+
+00:10:08.820 --> 00:10:10.160
+Innerhalb dieser Gruppen können Sie frei kommunizieren.
+
+00:10:10.160 --> 00:10:13.080
+Nicht-geschäftliche Connectoren dürfen sich nur innerhalb Ihrer eigenen Gruppe austauschen.
+
+00:10:13.420 --> 00:10:14.920
+Blockierte Connectoren werden vollständig gestellt.
+
+00:10:15.800 --> 00:10:17.500
+Das ist die Hierarchie, die Ihre KI einhalten muss.
+
+00:10:18.280 --> 00:10:22.740
+Und, ja, ein falsch zugeordneter Connector kann aus einem sicheren Chatbot einen Klatschreporter machen.
+
+00:10:23.580 --> 00:10:24.820
+Isolieren Sie nun die Risikogruppe.
+
+00:10:25.700 --> 00:10:26.980
+KI und externe Connectoren.
+
+00:10:27.660 --> 00:10:31.140
+Alles, was als Cognitive Services, OpenAI oder generisches HTTP gekennzeichnet ist,
+
+00:10:31.220 --> 00:10:32.960
+sollte standardmäßig nicht geschäftlich oder blockiert sein.
+
+00:10:33.300 --> 00:10:35.820
+Diese Connectoren fungieren als ausgehende Gateways über die Daten
+
+00:10:35.820 --> 00:10:38.600
+Microsofts geschützten Bereich verlassen und in die Verarbeitung durch Dritte gelangen.
+
+00:10:38.600 --> 00:10:41.700
+Sie zu blockieren lämmt Ihren Co-Piloten nicht, es diszipliniert ihn.
+
+00:10:42.160 --> 00:10:44.460
+Sie können weiterhin intelligente Abläufe erstellen,
+
+00:10:44.580 --> 00:10:47.620
+ohne jedoch rohe Kundendaten an den erstbesten Endpunkt zu senden.
+
+00:10:47.880 --> 00:10:50.580
+Ah, dann kommen wir zum stillen Killer, der Cross-Connection.
+
+00:10:51.080 --> 00:10:53.160
+Dies geschieht, wenn eine einzelne Konversation oder ein Flow
+
+00:10:53.160 --> 00:10:55.440
+sowohl einen geschäftlichen als auch einen nicht geschäftlichen Connector berührt.
+
+00:10:56.040 --> 00:10:58.840
+Beispiel, ein Agent ruft eine SharePoint-Liste ab, geschäftlich,
+
+00:10:59.340 --> 00:11:02.440
+und sendet die Zusammenfassung an eine externe Sprach-API, nicht geschäftlich.
+
+00:11:02.440 --> 00:11:07.000
+Auch wenn jeder Connector einzeln erlaubt ist, entsteht an diesem Punkt eine Datenbrücke,
+
+00:11:07.140 --> 00:11:08.360
+die Ihre Richtlinie verbietet.
+
+00:11:09.080 --> 00:11:12.100
+Die DLP-Durchsetzung der Power-Plattform blockiert solche Abläufe automatisch,
+
+00:11:12.340 --> 00:11:14.100
+wenn Sie die Konnektoren korrekt kategorisiert haben.
+
+00:11:14.460 --> 00:11:15.860
+Andernfalls ignoriert sie es um Nachtweide.
+
+00:11:16.480 --> 00:11:17.440
+Überprüfen Sie Ihre Kopierung.
+
+00:11:18.040 --> 00:11:19.480
+Eine einzige falsche Klassifizierung.
+
+00:11:19.900 --> 00:11:21.720
+Und die Wächter lassen den Dieb höflich hinaus spazieren.
+
+00:11:22.320 --> 00:11:24.980
+Die DLP-Hierarchie selbst funktioniert wie ein Stapel ineinandergreifender Schutzschutz.
+
+00:11:25.380 --> 00:11:28.180
+Ganz oben setzen Mandantenrichtlinien alles darunter außer Kraft.
+
+00:11:28.580 --> 00:11:31.000
+Darunter regeln Umgebungsrichtlinien spezifische Bereiche.
+
+00:11:31.000 --> 00:11:36.040
+Schließlich gelten Einschränkungen für einzelne Apps oder Agenten nur innerhalb Ihres Umgebungsumfangs.
+
+00:11:36.620 --> 00:11:38.100
+Betrachten Sie es als Management-Hierarchie.
+
+00:11:38.420 --> 00:11:41.720
+Mandanten-Regeln sind Unternehmensrecht, Umgebungsregeln sind Abteilungsrichtlinien
+
+00:11:41.720 --> 00:11:44.000
+und App-Einstellungen sind Notizzettel an den Schreibtischen.
+
+00:11:44.880 --> 00:11:46.500
+Bei Widersprüchen gewinnt das Unternehmensrecht.
+
+00:11:47.360 --> 00:11:50.040
+Wenn Sie also unsicher sind, setzen Sie an der Mandanten-Grenze strenge Standards durch
+
+00:11:50.040 --> 00:11:51.520
+und verengen Sie die Ausnahmen nach unten hin.
+
+00:11:52.240 --> 00:11:54.300
+Vertrauen Sie nicht darauf, dass sich App-Entwickler selbst kontrollieren.
+
+00:11:54.300 --> 00:11:58.780
+Das sind dieselben Leute, die dachten, Power Automate ohne Versionskontrolle in die Produktion zu bringen sei akzeptabel.
+
+00:11:58.780 --> 00:12:02.320
+Bevor Sie feiern, testen Sie immer alles in einer Sandbox-Umgebung.
+
+00:12:03.020 --> 00:12:05.760
+Co-Pilot-Studio-Agenten basieren auf mehreren impliziten Verbindungen
+
+00:12:05.760 --> 00:12:09.200
+und Ihre neue Richtlinie könnte diese unbemerkt blockieren und Kernfunktionen zerstören.
+
+00:12:09.960 --> 00:12:13.380
+Implementieren Sie Ihre DLP-Anpassungen in einer Testumgebung, importieren Sie einen Testagenten
+
+00:12:13.380 --> 00:12:15.520
+und bestätigen Sie, dass Ihr Routineanfragen noch beantwortet.
+
+00:12:15.960 --> 00:12:19.720
+Falls nicht, passen Sie die Gruppierung an, bis die Funktionalität zurückkehrt, ohne das Risiko zu erhöhen.
+
+00:12:19.820 --> 00:12:23.660
+Sie wägen Benutzerfreundlichkeit gegen Paranoia ab, wobei Sie leicht zur Paranoia tendieren.
+
+00:12:24.140 --> 00:12:25.320
+Das ist billiger als ein Rechtsstreit.
+
+00:12:25.320 --> 00:12:27.700
+Merken Sie, was wir gerade getan haben.
+
+00:12:27.860 --> 00:12:31.240
+Wir haben die Daten getrennt, Grenzen definiert und die Ausgänge versiegelt und die aussiegelt.
+
+00:12:32.020 --> 00:12:37.640
+Das ist Ihre Festung, starre Kategorien, abgegrenzte Umgebungen, geschichtete Hierarchien, geprüfte Mauern, Äh.
+
+00:12:38.140 --> 00:12:40.920
+Doch selbst die beste Festung braucht Wächter, die Berechtigungen verstehen,
+
+00:12:41.120 --> 00:12:44.140
+denn Befestigungen versagen in dem Moment, in dem jemand einen Hauptschlüssel weitergibt.
+
+00:12:44.480 --> 00:12:47.420
+Und im Reich von Microsoft werden diese Schlüssel über N3-ID ausgestellt.
+
+00:12:47.920 --> 00:12:51.360
+Nachdem also Ihre Mauern hoch und Ihr Wassergraben gefüllt sind, sprechen wir über die Torwächter,
+
+00:12:51.360 --> 00:12:54.700
+diese charmanten, delegierten Berechtigungen, die jeden Admin in falscher Sicherheit wiegen,
+
+00:12:54.820 --> 00:12:56.160
+jeden Admin in falscher Sicherheit wiegen.
+
+00:12:56.240 --> 00:12:58.820
+Bühne frei für Entra. Und das nicht ganz so magische Berechtigungsmodell.
+
+00:12:59.520 --> 00:13:01.200
+Berechtigungen Entra und der Mythos der Sicherheit.
+
+00:13:01.860 --> 00:13:05.020
+Wenn nicht für jedes Mal, wenn jemand sagt, es ist Entra, also ist es sicher, einen Dollar bekäme.
+
+00:13:05.680 --> 00:13:08.420
+Hätte ich genug, um Microsoft Aktien zu kaufen und das Problem selbst zu lösen.
+
+00:13:08.980 --> 00:13:10.340
+Lassen Sie uns diesen Mythos richtig demontieren.
+
+00:13:10.920 --> 00:13:15.100
+Entra, früher bekannt als Azure Active Directory, verteilt keinen Fehlstaub auf Ihre Identität,
+
+00:13:15.100 --> 00:13:17.060
+nur weil es die Authentifizierung übernimmt.
+
+00:13:18.080 --> 00:13:19.340
+Es ist ein Vermittler, kein Wächter.
+
+00:13:19.640 --> 00:13:22.260
+Und Ihr Co-Pilot Agent besitzt, so niedlich er auch erscheinen mag.
+
+00:13:22.440 --> 00:13:25.080
+Kein eigenes Konto, kein Passwort und kein Gewissen.
+
+00:13:25.960 --> 00:13:26.580
+Erleiht sich Ihres.
+
+00:13:26.960 --> 00:13:28.320
+Dies nennt man Delegierte Berechtigung.
+
+00:13:28.980 --> 00:13:31.400
+Wenn Sie sich anmelden und mit einem Co-Pilot Agenten interagieren,
+
+00:13:31.520 --> 00:13:33.560
+fordert dieser Agent in Ihrem Namen ein Zugriffstoken an.
+
+00:13:33.980 --> 00:13:37.800
+Dieses Token umfasst jede Berechtigung, die Ihnen in Ihrer Microsoft 365 Umgebung gewährt wurde.
+
+00:13:38.400 --> 00:13:39.600
+SharePoint Bibliothek abgehakt.
+
+00:13:40.000 --> 00:13:40.960
+Dataverse Tabelle abgehakt.
+
+00:13:41.460 --> 00:13:43.620
+Privater Teams-Chat mit Ihrem Chef ebenfalls abgehakt,
+
+00:13:43.620 --> 00:13:44.720
+falls Sie diesen Zugriff haben.
+
+00:13:45.460 --> 00:13:47.740
+Der Agent unterscheidet nicht zwischen wichtig und katastrophal.
+
+00:13:48.720 --> 00:13:50.960
+Er führt es einfach in Ihrem Bereich und Ihrer Identität aus.
+
+00:13:51.680 --> 00:13:54.560
+Wenn Sie Finanzprivilegien haben, hat Sie auch Ihr algorithmischer Assistent.
+
+00:13:54.680 --> 00:13:56.440
+Und nein, er wird nicht zögern, Sie zu nutzen.
+
+00:13:57.160 --> 00:13:59.600
+Dieses Design funktioniert innerhalb kontrollierter Bereiche wunderbar,
+
+00:13:59.700 --> 00:14:01.040
+da es die Benutzererfahrung nahtlos hält.
+
+00:14:01.120 --> 00:14:03.380
+Aber die Gefahr geht von impliziten Zustimmung aus.
+
+00:14:03.940 --> 00:14:06.520
+Wenn Sie einen Connector genehmigen, etwa für Outlook oder Dataverse,
+
+00:14:06.960 --> 00:14:08.880
+wird diese Zustimmung in der Umgebung gespeichert.
+
+00:14:09.340 --> 00:14:11.400
+Jeder dort gehostete Co-Pilot Agent erbt dieses Vertrauen.
+
+00:14:11.400 --> 00:14:15.540
+Einmal genehmigt, haben Sie effektiv jeden zukünftigen Agenten mit derselben Reichweite gesegnet.
+
+00:14:16.200 --> 00:14:16.940
+Herzlichen Glückwunsch!
+
+00:14:17.000 --> 00:14:20.360
+Sie haben eine Familie allmächtiger Chatbots ohne individuelle Überwachung bereitgestellt.
+
+00:14:20.820 --> 00:14:22.400
+Wenn das leichtsinnig klingt, dann deshalb, weil es ist...
+
+00:14:22.400 --> 00:14:26.140
+Das Gegenmittel liegt in der Implementierung des Zugriffs mit den geringsten Rechten für Ihre Agenten,
+
+00:14:26.180 --> 00:14:28.500
+genau wie Sie es hoffentlich für Menschen tun, genau wie Sie es hoffen tun.
+
+00:14:29.000 --> 00:14:32.260
+Erstellen Sie in Entra-ID benutzerdefinierte Sicherheitsgruppen und Rollenzuweisungen,
+
+00:14:32.340 --> 00:14:34.340
+die begrenzen, dass Co-Pilot bezogene Komponenten abfragen.
+
+00:14:35.060 --> 00:14:37.940
+Beschränken Sie den Zugriff beispielsweise nur auf die Teilmenge der Daten-Connectors,
+
+00:14:37.940 --> 00:14:39.760
+die für die Funktion des jeweiligen Agenten erforderlich sind.
+
+00:14:40.200 --> 00:14:42.820
+Ein Marketing-Assistent hat keinen Grund, HR-Unterlagen abzufragen,
+
+00:14:43.240 --> 00:14:45.960
+dennoch fassen viele Administratoren sie aus Bequemlichkeit in den selben Bereichen zusammen.
+
+00:14:46.600 --> 00:14:47.800
+Bequemlichkeit schafft Angriffsflächen.
+
+00:14:48.280 --> 00:14:51.280
+Wenn Sie nicht gerade gerne Prüfern die Datenherkunft erklären, hören Sie damit auf.
+
+00:14:51.680 --> 00:14:52.820
+Was sind mit verwalteten Identitäten?
+
+00:14:53.180 --> 00:14:54.740
+Ja, sie existieren und ja, sie sind nützlich.
+
+00:14:55.180 --> 00:14:57.000
+Eine verwaltete Identität erlaubt einer Anwendung,
+
+00:14:57.060 --> 00:14:59.820
+sich bei Azure-Ressourcen mit ihrem eigenen Dienstprinzipal zu authentifizieren,
+
+00:14:59.940 --> 00:15:01.480
+statt ihre zu nutzen, statt ihre zu nutzen.
+
+00:15:01.640 --> 00:15:03.060
+Doch hier liegt das Detail, das die meisten übersehen.
+
+00:15:03.060 --> 00:15:06.120
+Co-Pilot Studio Agents laufen primär über Benutzerdelegierungen,
+
+00:15:06.220 --> 00:15:07.500
+nicht über verwaltete Identitäten.
+
+00:15:08.400 --> 00:15:11.880
+Voreiliges Zuweisen verwalteter Identitäten kann zu Überprivilegierungen führen,
+
+00:15:12.120 --> 00:15:15.700
+da diese Dienstprinzipale oft mit weiterreichenden Azure-Rechten starten als beabsichtigt.
+
+00:15:16.680 --> 00:15:19.440
+Betrachten Sie verwaltete Identitäten als chirurgische Instrumente nicht als Standardscheid.
+
+00:15:19.780 --> 00:15:21.380
+Automatisierung ist nicht gleichbedeutend mit Automatisierung.
+
+00:15:21.620 --> 00:15:24.100
+Vielleicht denken Sie, oh gut, ich verlasse mich einfach auf die Prüfung.
+
+00:15:24.440 --> 00:15:26.320
+Eine exzellente Einstellung, solange Sie es auch tatsächlich tun.
+
+00:15:26.960 --> 00:15:29.300
+Intra bietet Anmeldeprotokolle und App-Zustimmungsberichte,
+
+00:15:29.300 --> 00:15:31.700
+die zeigen, welche Dienstprinzipale auf welche Ressourcen zugriffen,
+
+00:15:31.700 --> 00:15:32.800
+unter welcher Identität und wann.
+
+00:15:33.540 --> 00:15:36.060
+Kombinieren Sie das mit der Analyse des Power-Plattform-Admin-Centers
+
+00:15:36.060 --> 00:15:38.380
+und Sie können die Connector-Aktivität pro Agent nachverfolgen.
+
+00:15:39.000 --> 00:15:42.380
+Wenn Sie jemals sehen, dass ein Connector-Daten außerhalb seiner zugewiesenen Umgebung abruft,
+
+00:15:42.480 --> 00:15:43.400
+ist das keine Neugier?
+
+00:15:44.120 --> 00:15:45.880
+Es ist sichtbar gewordene Konfigurationsfaulheit.
+
+00:15:46.280 --> 00:15:49.200
+Erfassen Sie diese Ereignisse, exportieren Sie sie auf Ihre Wachungsplattform und reagieren Sie darauf.
+
+00:15:49.580 --> 00:15:50.980
+Vertrauen aber überprüfen ist veraltet.
+
+00:15:51.420 --> 00:15:53.440
+Im Co-Pilot-Zeitalter heißt es einschränken und bestätigen.
+
+00:15:53.980 --> 00:15:55.880
+Also nein, Intra allein sichert Ihre Agents nicht ab.
+
+00:15:56.480 --> 00:15:58.980
+Es authentifiziert Sie höflich, effizient und völlig gleichgültig.
+
+00:15:58.980 --> 00:16:03.200
+Sicherheit ist die Architektur, die um die Identität herum aufgebaut ist, nicht Ihre bloße Existenz.
+
+00:16:03.980 --> 00:16:09.860
+Ihre Mauern, die LP, Ihre Schlüssel, Berechtigungen und Ihre Wächter, Auditing, bilden ein Dreigestirn.
+
+00:16:10.160 --> 00:16:11.840
+Bricht ein Bein weg, riecht die gesamte Struktur in Zwang.
+
+00:16:12.400 --> 00:16:14.460
+Der Mythos der Sicherheit stirbt in dem Moment, in dem Sie erkennen,
+
+00:16:14.580 --> 00:16:16.800
+dass Microsoft die Verantwortung direkt an Sie zurückdelegiert hat.
+
+00:16:17.180 --> 00:16:18.240
+Sie haben nach Self-Service gehen gefragt.
+
+00:16:18.700 --> 00:16:20.860
+Sie haben genau das geliefert, Self-Service für alles.
+
+00:16:21.540 --> 00:16:23.000
+Und das schließt selbstverschuldete Daten nichts mit ein.
+
+00:16:23.000 --> 00:16:25.800
+Nachdem wir nun die Identität gestraft und den Bereich eingeschränkt haben,
+
+00:16:25.880 --> 00:16:27.020
+sollten Sie sich noch nicht selbst gratulieren.
+
+00:16:27.460 --> 00:16:30.720
+Eine Richtlinie, die geschrieben, aber nie getestet wurde, ist die bürokratische Version eines Placebos.
+
+00:16:31.300 --> 00:16:33.880
+Sie brauchen Beweise, einen Beleg dafür, dass Ihre Festung unter Druck tatsächlich standhält.
+
+00:16:34.320 --> 00:16:37.600
+Das bedeutet, stochern, provozieren und gelegentlich versuchen, Ihr eigenes System zu knacken.
+
+00:16:38.340 --> 00:16:41.220
+Denn wenn Sie es nicht tun, wird es irgendwann jemand anderes tun, ob versehentlich oder absichtlich.
+
+00:16:41.220 --> 00:16:43.620
+Testen und überwachen
+
+00:16:43.620 --> 00:16:45.060
+Weisen Sie, dass es dicht ist.
+
+00:16:45.460 --> 00:16:48.880
+Einen Co-Pilot Agenten zu testen, bedeutet nicht, ihm dabei zuzusehen, wie Herr Goethello sagt.
+
+00:16:49.480 --> 00:16:52.040
+Es geht darum zu sehen, was passiert, wenn Sie ihn mit Fragen herausfordern,
+
+00:16:52.100 --> 00:16:53.380
+die auf Sicherheitsbarrieren stoßen sollten.
+
+00:16:54.180 --> 00:16:56.360
+Sie beginnen damit, Ihren Co-Pilot einem Red-Teaming zu unterziehen.
+
+00:16:56.480 --> 00:16:59.240
+Nicht mit dramatischen Lakerspielchen, sondern mit gezielten, kontrollierten Prompts.
+
+00:17:00.380 --> 00:17:02.800
+Fragen Sie nach vertraulichen Daten, auf die er nicht zugreifen sollte.
+
+00:17:02.960 --> 00:17:05.620
+Lassen Sie Gehälter zusammenfassen, alle Kundendatensätze exportieren
+
+00:17:05.620 --> 00:17:07.220
+oder Verträge aus der Finanzabteilung zeigen.
+
+00:17:08.220 --> 00:17:10.900
+Wenn der Agent höflich ablehnt oder eine Zugriffssperre meldet,
+
+00:17:11.220 --> 00:17:11.940
+feiern Sie kurz.
+
+00:17:12.900 --> 00:17:15.860
+Wenn er nachgibt, haben Sie genau die Lücke aufgedeckt von der Angreiferträumung.
+
+00:17:16.920 --> 00:17:19.660
+Diese Methode ist kein hypothetischer Test, sondern angewandte Governance.
+
+00:17:20.180 --> 00:17:23.980
+Erstellen Sie einen Katalog verbotener Prompts und führen Sie diese in jeder Co-Pilot-Umgebung aus.
+
+00:17:24.500 --> 00:17:25.180
+Verfolgen Sie die Antwort.
+
+00:17:25.740 --> 00:17:28.480
+Eine Verweigerung zeigt, dass DLP und Berechtigungsebenen funktionieren.
+
+00:17:29.020 --> 00:17:31.360
+Ein Datenleck deutet auf Fehlklassifizierung oder Connectorüberschneidung.
+
+00:17:31.840 --> 00:17:33.660
+Das Schöne an Co-Pilot ist seine Transparenz.
+
+00:17:34.160 --> 00:17:35.120
+Protokolle erfassen alles.
+
+00:17:35.120 --> 00:17:37.840
+Das Erschweckende ist, dass diese Protokolle auch Ihre Fehler festhalten.
+
+00:17:38.600 --> 00:17:40.680
+Überwachen Sie da als nächstes die Analysen zur Connector-Nutzung.
+
+00:17:41.220 --> 00:17:44.360
+Öffnen Sie im Power-Plattform-Admin-Center den Bereich für Umgebungsanalysen.
+
+00:17:45.040 --> 00:17:47.960
+Dort finden Sie Metriken zu Connector-Volumen, Häufigkeit und Benutzerherkunft.
+
+00:17:48.620 --> 00:17:49.360
+Suchen Sie nach Anomalie.
+
+00:17:49.940 --> 00:17:54.160
+Spitzen bei HTTP-Connector-Aufrufen von Agenten, die keine externen APIs nutzen sollten
+
+00:17:54.160 --> 00:17:57.360
+oder plötzliche Anstiege bei SharePoint-Abfragen durch neue Chatbot-Bereitstellungen.
+
+00:17:58.540 --> 00:18:01.140
+Das sind keine Zufälle, sondern Hinweise auf eine fehlerhafte Konfiguration.
+
+00:18:01.140 --> 00:18:02.940
+Behandeln Sie diese wie forensische Spuren.
+
+00:18:03.420 --> 00:18:05.840
+Jede Anomalie weist auf eine fehlende Kontrolle von einer Stelle weiter oben.
+
+00:18:06.500 --> 00:18:08.300
+Dann folgt die Audit-Protokollierung, Ihre Nachwärtsspuren.
+
+00:18:08.740 --> 00:18:13.040
+Aktivieren Sie Audit-Ereignisse in der Power-Plattform und synchronisieren Sie diese mit Microsoft Purview oder Microsoft Sentinel.
+
+00:18:13.460 --> 00:18:18.200
+Dies stellt sicher, dass jede Aktion, jeder Prompt und jeder Connector-Aufruf in Ihr umfassenderes Compliance-Gefüge indexiert wird.
+
+00:18:18.600 --> 00:18:19.780
+Mit Purview erhalten Sie Kontext.
+
+00:18:20.540 --> 00:18:21.760
+Welche Datensätze wurden berührt?
+
+00:18:21.880 --> 00:18:24.760
+Welche Benutzer hat den Prompt initiiert und haben Daten ihre geografische Ganze verlassen?
+
+00:18:24.760 --> 00:18:32.780
+Sentinel hingegen fügt Korrelation hinzu und verknüpft diese Aktivitäten mit umfassenderen Sicherheitsereignissen wie ungewöhnlichen Anmeldungen oder Privilegieneskalationen.
+
+00:18:32.980 --> 00:18:36.120
+Zusammen verwandeln Sie unsichtbares KI-Verhalten in messbare Telemetrie.
+
+00:18:37.080 --> 00:18:39.320
+Eine oft übersehene Regel die Abstimmung der Aufbewahrungsfrist.
+
+00:18:39.640 --> 00:18:41.580
+Audit-Daten überdauern oft Konversationsdaten.
+
+00:18:42.240 --> 00:18:45.860
+Wenn Sie Chat-Protokolle nach 30 Tagen löschen, aber Audit-Ereignisse ein Jahr lang aufbewahren,
+
+00:18:45.860 --> 00:18:48.720
+verlieren Sie den Kontext, der erklärt, warum ein Ereignis auftrat.
+
+00:18:49.700 --> 00:18:51.860
+Die Durchsetzung von Richtlinien ohne Kontext ist nutzlos.
+
+00:18:52.860 --> 00:18:57.860
+Stellen Sie sicher, dass Aufbewahrungsrichtlinien für Co-Pilot-Protokolle, Analysen und Audit-Spuren synchron bleiben,
+
+00:18:57.940 --> 00:19:00.800
+damit Ihre Nachweise eine schlüssige Geschichte erzählen.
+
+00:19:01.420 --> 00:19:04.180
+Die regelmäßige Neuklassifizierung gehört zu den am meisten ignorierten Aufgaben.
+
+00:19:04.940 --> 00:19:07.200
+Microsoft aktualisiert ständig die Connector-Definitionen.
+
+00:19:08.040 --> 00:19:12.400
+Ein ehemals sicherer Standard-Connector kann über Nacht zu Premium oder extern werden und sein Datenverhalten ändern.
+
+00:19:13.240 --> 00:19:17.720
+Überprüfen Sie der Connector-Inventar vierteljährlich und klassifizieren Sie es gemäß der aktuellen Microsoft-Dokumentation neu,
+
+00:19:17.800 --> 00:19:19.160
+nicht basierend auf Annahmen aus dem Vorjahr.
+
+00:19:19.160 --> 00:19:23.340
+Dies zu vernachlässigen ist so, als würde man die Türen abschließen, während jemand heimlich die Scharniere bewegt.
+
+00:19:23.980 --> 00:19:25.860
+Implementieren Sie schließlich eine kontinuierliche Governance.
+
+00:19:26.400 --> 00:19:30.240
+Jeder neue Connector, jedes Plug-in oder jede Erweiterung von Drittanbietern vergrößert die Angriffsfläche.
+
+00:19:30.640 --> 00:19:34.100
+Betrachten Sie DLP nicht als statisches Compliance-Kontrollkästchen, sondern als sich entwickelnden Perimeter.
+
+00:19:34.800 --> 00:19:40.900
+Planen Sie vierteljährliche Audits, automatisieren Sie den Export von Analysedaten und speisen Sie Warnungen in Ihre CM-Pipeline ein.
+
+00:19:41.500 --> 00:19:42.940
+Governance stirbt in dem Moment, in dem Sie mal läuft.
+
+00:19:43.160 --> 00:19:45.920
+Wenn Sie die Tests abschließen, werden Sie etwas Erfreuliches feststellen.
+
+00:19:45.920 --> 00:19:48.940
+Das Ziel ist nicht Compliance und war es auch nie. Es ist Kontrolle.
+
+00:19:49.460 --> 00:19:55.160
+Ein Co-Pilot-Agent, der nur innerhalb bewachter Grenzen antwortet, wird vorhersehbar, verwaltbar und für den geschäftlichen Gebrauch wirklich sicher.
+
+00:19:55.760 --> 00:19:58.040
+Dann wandelt sich KI von einer Haftung zum Gewinn. Aber nur?
+
+00:19:58.600 --> 00:20:00.820
+Weil Sie paranoiasystemisch und nicht optional gemacht haben.
+
+00:20:01.600 --> 00:20:04.620
+Sobald Ihre Daten nicht mehr abfließen, werden Sie Co-Pilot Studio anders sehen.
+
+00:20:05.020 --> 00:20:08.240
+Nicht als Spielzeug für Produktivität, sondern als Instrument für Trust Engineering.
+
+00:20:08.740 --> 00:20:11.320
+Ihre Agenten verhalten sich so, weil Sie die Regeln genauso festgelegt haben.
+
+00:20:11.320 --> 00:20:18.600
+Und so können Sie endlich ohne Ironie behaupten, dass Ihre Umgebung versiegelt ist, denn Co-Pilot Studio-Agenten sind keine Schurken, sie sind Spiegelbilder.
+
+00:20:19.240 --> 00:20:23.560
+Sie verhalten sich genau nach Ihrer Konfiguration, was meist ein höfliches Überteilen von Informationen bedeutet.
+
+00:20:24.380 --> 00:20:29.180
+Jede Berechtigung, die Sie nutzen, jeder Connector, den Sie überqueren und jeder Datensatz, den Sie offenlegen, ist letztlich ein Spiegel Ihrer Governance.
+
+00:20:29.920 --> 00:20:31.840
+Sie haben die Brücke gebaut, Sie sind nur darüber gelaufen.
+
+00:20:32.480 --> 00:20:37.340
+Denken Sie also daran, ein Co-Pilot-Agent ist nur so vertrauenswürdig wie seine DLP-Konfiguration, nicht mehr.
+
+00:20:37.340 --> 00:20:42.080
+Sicherheit durch Optimismus ist keine Strategie. Sicherheit durch erzwungene Grenzen hingegen schon.
+
+00:20:43.000 --> 00:20:48.780
+Governance ist daher keine Option, wenn Ihre KI-Sharepoint, Dataverse und Outlook mit exekutiver Autorität abfragen kann.
+
+00:20:49.500 --> 00:20:52.480
+Das Verführerische am Co-Pilot ist die Bequemlichkeit. Fragen Sie an der Gehorchen.
+
+00:20:52.980 --> 00:20:57.560
+Das Gefährliche ist, dass dieser Gehorsam auch vertrauliche Tabellen und Personaldaten umfasst, wenn man es ihm nicht anders beibringt.
+
+00:20:57.980 --> 00:20:59.380
+Die einzige wirkliche Lösung ist Disziplin.
+
+00:20:59.380 --> 00:21:04.260
+Klassifizieren Sie Konnektoren, schränken Sie Berechtigungen ein und testen Sie diese Einschränkungen, bis ein Fehler unmöglich wird.
+
+00:21:04.720 --> 00:21:08.420
+Tun Sie dies, bevor ein harmloses Pilotprojekt zu einer Compliance-Untersuchung wird.
+
+00:21:09.240 --> 00:21:11.060
+Sperren Sie Ihre Daten, bevor Ihr Co-Pilot zu viel hält.
+
+00:21:11.740 --> 00:21:14.600
+Betrachten Sie DLP als intellektuelle Eindämmung, nicht als Bürokratie.
+
+00:21:14.940 --> 00:21:18.080
+Eine Reihe digitaler Mauern, die verhindern, dass Intelligenz zu einer Schwachstelle mutiert.
+
+00:21:18.080 --> 00:21:24.060
+Sobald Sie diese Regeln durchsetzen, ist Ihr Co-Pilot keine Haftung mehr, sondern das, als was er beworben wurde, ein vertrauenswürdiger Assistent.
+
+00:21:24.660 --> 00:21:27.160
+Wenn dies Ihrem Compliance-Team eine Panikattacke erspart hat, abonnieren Sie Dinger.
+
+00:21:27.600 --> 00:21:32.940
+Es ist günstiger als ein Audit und unendlich viel weniger unangenehm, als der Rechtsabteilung zu erklären, warum ein Chatbot Gehaltsdaten in Teams gepostet hat.
+
+00:21:33.420 --> 00:21:38.020
+Folgen Sie uns für die nächste Episode zu fortgeschrittener Co-Pilot Agent Governance mit Microsoft Purview
+
+00:21:38.020 --> 00:21:41.380
+und halten Sie Ihre Automatisierung clever eingedämmt und absolut unter Kontrolle.

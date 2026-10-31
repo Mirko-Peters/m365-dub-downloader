@@ -1,0 +1,2644 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:03.100
+Vous divulguez actuellement des données via Copelos Studio sans même vous en rendre compte.
+
+00:00:03.600 --> 00:00:06.400
+Oui, pendant que tout le monde se réjouit de voir son nouvel assistant IA récupéré,
+
+00:00:06.580 --> 00:00:08.680
+résumé et automatisé, ce même chatbot Amical Index,
+
+00:00:08.840 --> 00:00:12.440
+peut-être joyeusement vos notes de conseil d'administration et vos feuilles de calcul financière.
+
+00:00:13.780 --> 00:00:16.480
+Ce n'est pas malveillant, c'est obéissant, douloureusement obéissant.
+
+00:00:17.400 --> 00:00:19.660
+Les agents Copilot Studio héritent des mêmes autorisations que vous.
+
+00:00:19.840 --> 00:00:22.180
+Cela signifie que si vous pouvez voir le fichier de rémunération du PDG,
+
+00:00:22.420 --> 00:00:23.420
+votre chatbot le peut aussi.
+
+00:00:24.180 --> 00:00:26.860
+Félicitations, vous avez construit un stagiaire omniscient tournant à la vitesse d'Azure.
+
+00:00:26.860 --> 00:00:30.640
+Et pourtant, les gens parlent de la sécurité de Copilot comme si c'était un problème résolu.
+
+00:00:31.180 --> 00:00:32.100
+Attention, spoiler, ça ne l'est pas.
+
+00:00:32.620 --> 00:00:36.520
+Vos agents IA sont des extensions d'identité utilisateur par des entités distinctes avec des garde-fous.
+
+00:00:37.200 --> 00:00:39.700
+Ils empruntent votre jeton d'accès et parcourent votre patrimoine de données
+
+00:00:39.700 --> 00:00:41.860
+pour faire précisément ce que vous leur avez dit de ne pas faire.
+
+00:00:42.000 --> 00:00:43.180
+Sauf que vous ne leur avez rien dit du tout,
+
+00:00:43.260 --> 00:00:47.360
+car vous n'avez jamais configuré les règles de prévention des pertes de données qui leur servent de laisse.
+
+00:00:47.720 --> 00:00:47.920
+Thème.
+
+00:00:48.420 --> 00:00:49.100
+Voici donc le topo.
+
+00:00:49.680 --> 00:00:52.260
+Dans les prochaines minutes, vous apprendrez comment stopper cette fuite,
+
+00:00:52.600 --> 00:00:54.600
+comment appliquer les stratégies DLP de Power Platform,
+
+00:00:54.600 --> 00:00:58.220
+afin que vos agents Copilot ne transmettent pas accidentellement des données sensibles,
+
+00:00:58.660 --> 00:01:01.180
+comme un stagiaire bavard qui égarerait la carte de crédit de l'entreprise.
+
+00:01:02.900 --> 00:01:05.060
+Nous analyserons pourquoi les agents Copilot vont trop loin,
+
+00:01:05.220 --> 00:01:07.040
+comment contrôler les flux de données via les connecteurs
+
+00:01:07.040 --> 00:01:09.660
+et ce que le modèle de consentement de Microsoft permet réellement en coulisses.
+
+00:01:10.460 --> 00:01:12.560
+Il existe d'ailleurs une règle DLP particulière,
+
+00:01:12.680 --> 00:01:14.480
+ignorée par environ 9 administrateurs sur 10,
+
+00:01:14.840 --> 00:01:17.660
+qui distinguent discrètement les organisations sécurisées de celles qui font les gros titres.
+
+00:01:17.660 --> 00:01:20.580
+A la fin, vous connaîtrez la solution et vous n'aurez plus aucune excuse.
+
+00:01:21.140 --> 00:01:23.160
+Découvrons ce que votre Copilot sait et qu'il ne devrait pas savoir.
+
+00:01:24.460 --> 00:01:26.440
+Le problème caché, des agents qui en savent trop.
+
+00:01:27.180 --> 00:01:28.240
+Voici la vérité qui dérange.
+
+00:01:29.020 --> 00:01:30.720
+Votre agent Copilot Studio n'est pas un collègue,
+
+00:01:30.900 --> 00:01:32.600
+c'est vous dupliquer dans du silicium.
+
+00:01:33.620 --> 00:01:35.700
+Il ne se demande pas s'il est censé récupérer ce fichier SharePoint
+
+00:01:35.700 --> 00:01:37.300
+ou jeter un oeil dans cette table Dataverse,
+
+00:01:37.440 --> 00:01:39.300
+il le fait simplement parce que ce sont vos autorisations.
+
+00:01:40.660 --> 00:01:43.260
+Et la plupart des administrateurs oublient que dans l'écosystème Microsoft,
+
+00:01:43.680 --> 00:01:46.120
+la réplication d'identité équivaut à la réplication de privilèges.
+
+00:01:46.120 --> 00:01:50.320
+L'agent est essentiellement un clone obéissant ayant accès via votre contexte de sécurité
+
+00:01:50.320 --> 00:01:52.260
+mais il ne possède aucun de vos discernements.
+
+00:01:52.980 --> 00:01:55.140
+Copilot Studio lit ses capacités via des connecteurs
+
+00:01:55.140 --> 00:01:58.000
+Outlook, Dataverse, SharePoint, Teams et toute autre intégration
+
+00:01:58.000 --> 00:01:59.920
+autorisée par votre tenant Power Platform.
+
+00:02:00.920 --> 00:02:04.040
+Chaque connecteur agit comme un tunnel creusé entre vos sources de données
+
+00:02:04.040 --> 00:02:05.300
+et cet assistant IA.
+
+00:02:06.280 --> 00:02:08.300
+Plus vous ouvrez de tunnels, plus votre agent peut se déplacer librement.
+
+00:02:08.780 --> 00:02:09.800
+C'est pratique, voire enivrant,
+
+00:02:10.100 --> 00:02:12.820
+jusqu'à ce que ce même agent résume joyeusement des documents RH confidentiels
+
+00:02:12.820 --> 00:02:13.680
+parce que quelqu'un a tapé
+
+00:02:13.680 --> 00:02:15.560
+quels étaient les modèles d'embauche du dernier trimestre.
+
+00:02:16.120 --> 00:02:18.420
+L'équivalent numérique d'un stagiaire sous caféine
+
+00:02:18.420 --> 00:02:20.480
+lisant à toute vitesse le dossier des employés.
+
+00:02:21.700 --> 00:02:23.000
+Un vrai paradoxe ?
+
+00:02:23.000 --> 00:02:24.660
+Microsoft fournit en réalité des garde-fous,
+
+00:02:24.800 --> 00:02:26.080
+les stratégies de prévention des paires de deux.
+
+00:02:26.780 --> 00:02:28.520
+La DLP était censée être le videur à l'entrée,
+
+00:02:28.800 --> 00:02:31.480
+séparant les données critiques de l'entreprise du chaos non professionnel.
+
+00:02:32.620 --> 00:02:33.780
+Pourtant, dans la plupart des déploiements,
+
+00:02:33.900 --> 00:02:36.480
+ces garde-fous s'arrêtent deux étages en dessous de l'espace opérationnel de copilote.
+
+00:02:37.180 --> 00:02:39.060
+Les utilisateurs supposent que leur politique au niveau du tenant
+
+00:02:39.060 --> 00:02:39.940
+s'applique automatiquement
+
+00:02:39.940 --> 00:02:42.900
+et les agents copilote vivent quelque part entre un environnement power platform
+
+00:02:42.900 --> 00:02:44.380
+et la limite de votre tenant.
+
+00:02:45.180 --> 00:02:47.260
+Une zone d'onde de gouvernance où rien ne casse techniquement,
+
+00:02:47.780 --> 00:02:48.940
+mais où tout dérape silencieusement.
+
+00:02:50.240 --> 00:02:50.840
+Considérez ceci.
+
+00:02:51.320 --> 00:02:53.900
+Vous configurez les connecteurs Outlook et SharePoint comme professionnels
+
+00:02:53.900 --> 00:02:55.960
+et une API externe comme non professionnelle.
+
+00:02:57.080 --> 00:02:58.700
+Cette séparation, si elle est correctement appliquée,
+
+00:02:58.820 --> 00:03:00.800
+empêche les données de circuler entre les catégories.
+
+00:03:00.800 --> 00:03:03.720
+Mais votre agent copilote, situé dans un environnement mal défini,
+
+00:03:03.840 --> 00:03:05.400
+finit par s'exécuter sur les deux,
+
+00:03:05.600 --> 00:03:07.840
+car personne n'a lié son environnement au bon ensemble de DLP.
+
+00:03:09.000 --> 00:03:10.580
+Soudain, vos données professionnelles sont transmises
+
+00:03:10.580 --> 00:03:11.880
+via une connexion non professionnelle.
+
+00:03:12.520 --> 00:03:14.360
+C'est comme avoir un coffre-fort sécurisé avec la porte ouverte
+
+00:03:14.360 --> 00:03:16.680
+parce que votre politique de sécurité ne protégeait que le hall d'entrée.
+
+00:03:17.440 --> 00:03:19.720
+Les causes d'échec courante remontent toutes à la même négligence.
+
+00:03:20.940 --> 00:03:24.200
+1. Les agents résument ou paraphrasent des informations extraites de listes confidentielles.
+
+00:03:24.920 --> 00:03:28.300
+2. Ils fusionnent des sources disparates dans une seule conversation,
+
+00:03:28.700 --> 00:03:30.460
+violant involontairement les classifications de données.
+
+00:03:31.780 --> 00:03:34.080
+3. Les administrateurs présument de l'héritage des politiques.
+
+00:03:35.220 --> 00:03:37.400
+Mais comme les agents copilotes sont déployés dans des environnements
+
+00:03:37.400 --> 00:03:40.060
+avec des limites DLP uniques, cet héritage ne se produit jamais.
+
+00:03:40.980 --> 00:03:44.360
+L'hypothèse miracle selon laquelle Microsoft fait le travail de gouvernance pour vous est fausse.
+
+00:03:45.160 --> 00:03:47.700
+Si votre copilot peut voir des données financières, félicitations,
+
+00:03:48.460 --> 00:03:50.780
+tout employé bien intentionné qui ouvre une session de chatbot
+
+00:03:50.780 --> 00:03:52.840
+et commence à chercher des détails budgétaires peut aussi le faire.
+
+00:03:53.320 --> 00:03:53.880
+Peut aussi le faire.
+
+00:03:54.500 --> 00:03:55.720
+C'est le vecteur de brèche silencieux,
+
+00:03:56.340 --> 00:03:58.300
+une exposition interne sans intention malveillante.
+
+00:03:58.300 --> 00:04:01.480
+Pas besoin de pirates, juste des permissions trop généreuses
+
+00:04:01.480 --> 00:04:02.580
+et un manque d'isolation du contexte.
+
+00:04:02.580 --> 00:04:05.960
+C'est le genre de brèche qui ne fait pas les gros teas jusqu'à ce que quelqu'un
+
+00:04:05.960 --> 00:04:07.480
+exporte une transcription de chat.
+
+00:04:08.260 --> 00:04:11.220
+Alors, avant de paniquer ou de blâmer Microsoft, examinez votre architecture.
+
+00:04:12.100 --> 00:04:14.240
+Votre agent ne viole pas les règles, il les suit à la lettre.
+
+00:04:14.240 --> 00:04:16.000
+Vous n'avez simplement jamais défini les bonnes.
+
+00:04:16.360 --> 00:04:18.400
+La DLP ne s'applique pas automatiquement à toutes les couches.
+
+00:04:19.020 --> 00:04:21.220
+Elle doit être définie, appliquée et testée par environnement.
+
+00:04:21.660 --> 00:04:22.460
+Et devinez quoi ?
+
+00:04:22.460 --> 00:04:25.000
+Les agents Copilot Studio vivent par défaut dans des environnements de développement,
+
+00:04:25.180 --> 00:04:27.620
+ceux que vous n'avez probablement jamais sécurisés parce que ce n'est que du test.
+
+00:04:28.060 --> 00:04:28.820
+Parce que ce n'est que du test.
+
+00:04:29.180 --> 00:04:31.380
+Nous avons établi le symptôme des agents qui en savent trop.
+
+00:04:31.920 --> 00:04:34.580
+Maintenant, pour colmater la brèche, nous devons cartographier ou les données,
+
+00:04:34.880 --> 00:04:37.460
+voyage réellement dans Copilot Studio, de l'utilisateur au connecteur,
+
+00:04:37.540 --> 00:04:40.540
+puis au journal de conversation car vous ne pouvez pas bloquer une rivière
+
+00:04:40.540 --> 00:04:41.920
+avant de comprendre son courant ?
+
+00:04:41.920 --> 00:04:43.720
+Alors, décortiquons ce flux.
+
+00:04:44.600 --> 00:04:47.480
+Avant que votre petit chatbot poli n'écrive accidentellement vos prévisions annuelles
+
+00:04:47.480 --> 00:04:49.720
+dans un chat d'équipe auquel il n'aurait jamais dû participer,
+
+00:04:50.640 --> 00:04:52.700
+comment les données circulent dans Copilot Studio ?
+
+00:04:52.700 --> 00:04:54.580
+Suivons la trace de vos données car, contrairement à vous,
+
+00:04:54.640 --> 00:04:55.700
+elles ne prennent pas de pause café.
+
+00:04:56.400 --> 00:04:59.400
+Dès qu'un utilisateur entame une conversation avec un agent Copilot Studio,
+
+00:04:59.520 --> 00:05:01.920
+plusieurs rouages se mettent en marche en arrière-plan.
+
+00:05:02.580 --> 00:05:05.120
+On commence par l'identité de l'utilisateur, authentifié via EntraID.
+
+00:05:05.960 --> 00:05:08.640
+Cette identité porte des autorisations déléguées qui disent essentiellement
+
+00:05:08.640 --> 00:05:10.320
+tout ce que je peux voir, tu peux le voir aussi.
+
+00:05:10.980 --> 00:05:13.400
+L'agent utilise ensuite ses identifiants, via un connecteur,
+
+00:05:13.560 --> 00:05:15.300
+véritable pont logique vers votre source de données.
+
+00:05:15.740 --> 00:05:19.600
+SharePoint, Outlook, Dataverse ou tout autre service disponible dans cet environnement.
+
+00:05:21.300 --> 00:05:23.300
+Une fois les données récupérées, le résultat ne disparaît pas.
+
+00:05:23.680 --> 00:05:24.920
+Il transite à travers plusieurs couches.
+
+00:05:25.120 --> 00:05:27.660
+Le contexte de la conversation, la réponse générée et enfin,
+
+00:05:28.340 --> 00:05:30.620
+le stockage analytique pour le journal et les statistiques.
+
+00:05:31.620 --> 00:05:33.020
+Une charmante course de relais de données,
+
+00:05:33.120 --> 00:05:35.160
+si ce n'est que le témoin est ici votre information confidentielle.
+
+00:05:35.620 --> 00:05:37.460
+A chaque étape de ce relais, il existe des maillons faibles.
+
+00:05:37.940 --> 00:05:39.500
+Le connecteur constitue la première zone de risque.
+
+00:05:39.500 --> 00:05:42.160
+Les connecteurs de Power Platform sont de trois types.
+
+00:05:42.360 --> 00:05:44.880
+Standard pour les services, Microsoft classique, premium pour les tiers,
+
+00:05:44.960 --> 00:05:48.820
+où fonctionnalités avancées et personnalisées pour les API, définies par l'utilisateur.
+
+00:05:49.860 --> 00:05:50.900
+Chaque type est régi différemment.
+
+00:05:51.300 --> 00:05:53.880
+Les connecteurs standards s'intègrent parfaitement aux catégories DLP intégrées.
+
+00:05:54.760 --> 00:05:57.640
+Connecteurs premium et personnalisés, eux, flottent souvent dans un flou réglementaire
+
+00:05:57.640 --> 00:05:59.020
+tant que vous ne leur assigniez pas de classification.
+
+00:05:59.560 --> 00:06:02.500
+Lorsque les administrateurs négligent cela, les agents copilotes les considèrent tous comme accessibles.
+
+00:06:02.500 --> 00:06:05.160
+Imaginez étiqueter la moitié de vos classeurs comme secret défense query,
+
+00:06:05.480 --> 00:06:06.600
+tout en laissant le reste sans étiquette.
+
+00:06:07.280 --> 00:06:09.920
+Venez donner aux stagiaires l'autorisation d'ouvrir tout ce qui a l'air intéressant.
+
+00:06:10.620 --> 00:06:12.300
+Le second point faible réside dans les connecteurs système.
+
+00:06:12.820 --> 00:06:14.320
+Bien qu'invisibles dans l'interface de création,
+
+00:06:14.460 --> 00:06:16.360
+ils assurent discrètement des fonctions comme la messagerie Teams,
+
+00:06:16.480 --> 00:06:18.720
+ou le rendu des cartes adaptées Teams, ou le rendu des cartes adaptées Teams.
+
+00:06:18.840 --> 00:06:21.040
+Comme ils appartiennent techniquement au système et non à l'utilisateur,
+
+00:06:21.040 --> 00:06:22.700
+ils échappent souvent à vos filtres DLP.
+
+00:06:23.480 --> 00:06:25.980
+Voyez-les comme des tunnels de maintenance courants sous votre château,
+
+00:06:27.020 --> 00:06:28.460
+rarement surveillés, toujours ouverts.
+
+00:06:28.460 --> 00:06:31.560
+Lorsque les données y circulent, la plupart des organisations ne s'en aperçoivent jamais.
+
+00:06:32.240 --> 00:06:35.180
+Par défaut, Microsoft exclut plusieurs connecteurs de l'application des politiques
+
+00:06:35.180 --> 00:06:36.720
+pour préserver les fonctionnalités de base.
+
+00:06:37.340 --> 00:06:39.020
+Excellent pour la disponibilité, désastreux pour l'isolation.
+
+00:06:39.840 --> 00:06:41.080
+Viennent ensuite les journaux de conversation,
+
+00:06:41.320 --> 00:06:43.320
+l'historique de chats de copilotes stockés pour l'analyse,
+
+00:06:43.640 --> 00:06:45.200
+le débogage et l'amélioration continuent.
+
+00:06:45.960 --> 00:06:48.240
+Beaucoup pensent que désactiver la télémétrie suffit à couper cela.
+
+00:06:48.420 --> 00:06:49.140
+Ce n'est pas le cas.
+
+00:06:49.560 --> 00:06:52.500
+Les données de conversation peuvent persister dans le stockage analytique de l'environnement,
+
+00:06:52.600 --> 00:06:55.120
+ce qui signifie qu'une requête citant des indicateurs financiers sensibles
+
+00:06:55.120 --> 00:06:57.720
+peut rester indéfiniment dans Bologues si aucune rétention n'est configurée.
+
+00:06:57.720 --> 00:06:59.140
+Si aucune rétention n'est configurée.
+
+00:06:59.260 --> 00:07:01.340
+Vous pouvez déjà sentir le département conformité frissonner.
+
+00:07:01.940 --> 00:07:03.720
+C'est ici que le flux de données devient trompeusement complexe.
+
+00:07:04.660 --> 00:07:07.560
+Un seul appel copilote peut solliciter plusieurs connecteurs en séquence.
+
+00:07:08.700 --> 00:07:11.620
+Par exemple, un agent pourrait utiliser Outlook pour extraire des emails récents,
+
+00:07:12.100 --> 00:07:14.060
+passer ce contenu dans un connecteur d'analyse de texte,
+
+00:07:14.160 --> 00:07:15.420
+puis renvoyer des résumés dans Teams.
+
+00:07:16.320 --> 00:07:17.660
+Chaque étape franchit une frontière DLP.
+
+00:07:18.040 --> 00:07:20.460
+Si ne serait-ce qu'un seul de ces connecteurs appartient à une classification différente,
+
+00:07:20.580 --> 00:07:21.960
+par exemple Outlook en professionnel et gueux,
+
+00:07:22.080 --> 00:07:23.500
+et les services cognitifs en non professionnel et gueux,
+
+00:07:23.500 --> 00:07:25.220
+non professionnel et gueux, tout le flux enfreint la politique.
+
+00:07:25.220 --> 00:07:27.980
+Le système ne crie pas, il se contente d'avancer.
+
+00:07:28.380 --> 00:07:30.220
+La connexion croisée est silencieuse mais catastrophique.
+
+00:07:30.680 --> 00:07:33.380
+Pire encore, les stratégies DLP sont limitées à l'environnement et non étonnant,
+
+00:07:33.560 --> 00:07:36.380
+ce qui signifie que chaque environnement Power Platform a ses propres frontières.
+
+00:07:37.300 --> 00:07:38.980
+A moins de répliquer explicitement vos stratégies,
+
+00:07:39.160 --> 00:07:40.880
+chaque nouvel environnement devient une fuite potentielle.
+
+00:07:41.500 --> 00:07:43.280
+Vous pouvez avoir une gouvernance impeccable en production
+
+00:07:43.280 --> 00:07:45.020
+et un chaos absolu en développement.
+
+00:07:45.020 --> 00:07:48.560
+Et Microsoft vous rappellera poliment si vous posez la question
+
+00:07:48.560 --> 00:07:50.760
+que l'isolation des environnements est une conception voulue.
+
+00:07:51.480 --> 00:07:52.360
+En clair, c'est votre problème.
+
+00:07:52.840 --> 00:07:54.220
+Laissez-moi vous raconter une mésaventurée différente.
+
+00:07:55.080 --> 00:07:57.820
+Un client a déployé un agent copilot financier dans un environnement de test,
+
+00:07:57.920 --> 00:08:00.160
+pensant que sa stratégie DLP globale s'appliquait automatiquement.
+
+00:08:01.600 --> 00:08:03.380
+L'agent, joyeusement ignorant de la hiérarchie,
+
+00:08:03.480 --> 00:08:05.680
+avait accès à la fois aux bibliothèques SharePoint internes
+
+00:08:05.680 --> 00:08:07.220
+et à une API tierce expérimentale.
+
+00:08:08.340 --> 00:08:10.500
+Lorsque le service juridique a examiné un échantillon de journal de chat,
+
+00:08:10.500 --> 00:08:12.340
+ils ont découvert des chiffres trimestriels confidentiels
+
+00:08:12.340 --> 00:08:13.860
+intégrés dans une conversation API.
+
+00:08:14.440 --> 00:08:16.380
+Aucune intrusion, aucun piratage, juste une absence de stratégie.
+
+00:08:16.880 --> 00:08:18.880
+Le système s'est comporté exactement comme il était configuré.
+
+00:08:19.080 --> 00:08:19.720
+Pour moi, il fonctionnait.
+
+00:08:20.180 --> 00:08:22.220
+A présent, vous pouvez visualiser l'anatomie d'une suite.
+
+00:08:22.920 --> 00:08:24.140
+L'identité délègue les pouvoirs,
+
+00:08:24.280 --> 00:08:25.320
+les connecteurs relient les données,
+
+00:08:25.500 --> 00:08:26.940
+les journaux de conversation conservent les traces,
+
+00:08:27.020 --> 00:08:28.180
+l'analytique capture l'événement.
+
+00:08:29.100 --> 00:08:30.860
+Manquez une seule frontière, les informations s'infiltrera.
+
+00:08:31.040 --> 00:08:32.220
+Donc, avant d'ériger des défenses,
+
+00:08:32.320 --> 00:08:32.960
+souvenez-vous de ce flux.
+
+00:08:33.280 --> 00:08:35.400
+Utilisateur, connecteur, agent, journal, analytique.
+
+00:08:36.460 --> 00:08:38.160
+Chaque flèche est une voie d'évacuation potentielle.
+
+00:08:38.700 --> 00:08:39.580
+Ensuite, nous construirons des murs.
+
+00:08:40.060 --> 00:08:41.420
+Des stratégies DLP assez solides
+
+00:08:41.420 --> 00:08:43.100
+pour contenir même le copilote le plus ailé.
+
+00:08:43.580 --> 00:08:44.380
+Mais...
+
+00:08:44.380 --> 00:08:46.360
+Construire la forteresse DLP, la bonne configuration.
+
+00:08:46.680 --> 00:08:48.420
+La plupart des administrateurs paniquent légèrement à ce sujet.
+
+00:08:48.680 --> 00:08:48.840
+Bien.
+
+00:08:49.260 --> 00:08:50.500
+Paniquer signifie que vous réalisez enfin
+
+00:08:50.500 --> 00:08:51.660
+que vos agents ne sont pas innocents.
+
+00:08:52.260 --> 00:08:53.280
+Ce sont des tout petits sans surveillance
+
+00:08:53.280 --> 00:08:54.760
+ayant accès au coffre-fort de l'entreprise.
+
+00:08:55.240 --> 00:08:57.240
+Commençons donc à reconstruire cette forteresse correctement
+
+00:08:57.240 --> 00:08:57.780
+depuis la base.
+
+00:08:58.340 --> 00:09:00.080
+Car créer une stratégie DLP dans Power Platform
+
+00:09:00.080 --> 00:09:00.660
+n'est pas difficile.
+
+00:09:01.600 --> 00:09:02.760
+Comprendre ce qu'elle contrôle réellement
+
+00:09:02.760 --> 00:09:03.760
+demande plus de finesse
+
+00:09:03.760 --> 00:09:05.560
+que la plupart des documentations ne l'admettent.
+
+00:09:06.380 --> 00:09:07.860
+D'abord, identifiez votre champ de la taille.
+
+00:09:07.860 --> 00:09:09.700
+Les environnements hébergeant des projets Copilot Studio.
+
+00:09:10.860 --> 00:09:12.760
+De nombreuses organisations créent plusieurs environnements
+
+00:09:12.760 --> 00:09:14.820
+Power Platform, développement, test, production.
+
+00:09:15.180 --> 00:09:16.580
+Souvent par des développeurs citoyens enthousiastes
+
+00:09:16.580 --> 00:09:18.420
+qui pensent qu'un environnement est un bac à sable
+
+00:09:18.420 --> 00:09:19.260
+pour la créativité.
+
+00:09:20.620 --> 00:09:22.140
+Chaque environnement a son propre îlot de sécurité.
+
+00:09:22.760 --> 00:09:24.040
+Les stratégies définies au niveau du tenant
+
+00:09:24.040 --> 00:09:25.680
+ne clôturent pas automatiquement ces îlots.
+
+00:09:25.800 --> 00:09:27.220
+Ce qui signifie que votre environnement de production
+
+00:09:27.220 --> 00:09:28.520
+peut être protégé comme Fort Knox,
+
+00:09:28.760 --> 00:09:29.860
+tandis que celui de développement flotte
+
+00:09:29.860 --> 00:09:30.940
+comme un radeau dans le Pacifique.
+
+00:09:31.660 --> 00:09:33.200
+La première étape est donc la reconnaissance.
+
+00:09:33.720 --> 00:09:34.500
+Trouvez chaque environnement
+
+00:09:34.500 --> 00:09:36.080
+où quelqu'un a cliqué sur Cré un Copilot que...
+
+00:09:36.080 --> 00:09:37.980
+Mais supposez jamais que rien n'est inoffensif.
+
+00:09:38.240 --> 00:09:39.360
+Maintenant, nous construisons le 1er mai.
+
+00:09:39.760 --> 00:09:41.220
+Dans le centre d'administration Power Platform,
+
+00:09:41.340 --> 00:09:42.540
+ouvrez la section des stratégies de données
+
+00:09:42.540 --> 00:09:43.900
+et créez une nouvelle stratégie de prévention
+
+00:09:43.900 --> 00:09:44.860
+contre la perte de données.
+
+00:09:45.420 --> 00:09:47.120
+Vous devrez définir les environnements concernés.
+
+00:09:47.740 --> 00:09:48.640
+Sélectionnez-les avec discernement.
+
+00:09:49.180 --> 00:09:50.920
+Disperser des stratégies dans des espaces inutilisés
+
+00:09:50.920 --> 00:09:52.280
+ne fait qu'engendrer de l'incohérence.
+
+00:09:52.820 --> 00:09:54.620
+Chaque stratégie s'applique au moment du déploiement
+
+00:09:54.620 --> 00:09:56.260
+et non rétroactivement.
+
+00:09:56.740 --> 00:09:58.480
+Ainsi, chaque connecteur, nouveau ou existant,
+
+00:09:58.560 --> 00:09:59.320
+au sein de cet environnement
+
+00:09:59.320 --> 00:10:01.400
+ne sera conforme qu'après la publication de la politique.
+
+00:10:01.400 --> 00:10:03.580
+Vient ensuite la pierre angulaire
+
+00:10:03.580 --> 00:10:05.260
+de la catégorisation des connecteurs DLP.
+
+00:10:05.700 --> 00:10:06.760
+Imaginez des compartiments étiquetés
+
+00:10:06.760 --> 00:10:07.520
+qu'un professionnel le cas
+
+00:10:07.520 --> 00:10:08.440
+que non professionnel le câble.
+
+00:10:08.820 --> 00:10:09.780
+Ils communiquent librement entre eux
+
+00:10:09.780 --> 00:10:10.200
+au sein de leur groupe.
+
+00:10:10.480 --> 00:10:11.580
+Les connecteurs non professionnels
+
+00:10:11.580 --> 00:10:12.380
+ne peuvent partager des données
+
+00:10:12.380 --> 00:10:13.120
+qu'au sein de leur propre groupe.
+
+00:10:13.420 --> 00:10:15.120
+Les connecteurs bloqués sont entièrement mis en quarantaine.
+
+00:10:15.800 --> 00:10:16.640
+C'est la hiérarchie à laquelle
+
+00:10:16.640 --> 00:10:17.660
+votre IA doit se conformer.
+
+00:10:18.280 --> 00:10:20.180
+Et oui, placer un connecteur dans le mauvais groupe
+
+00:10:20.180 --> 00:10:21.680
+peut transformer un chatbot sécurisé
+
+00:10:21.680 --> 00:10:22.900
+en une source de potin.
+
+00:10:23.560 --> 00:10:24.740
+Isolons maintenant le groupe à haut risque.
+
+00:10:24.740 --> 00:10:26.980
+Les connecteurs d'IA est externe.
+
+00:10:27.760 --> 00:10:29.000
+Tout ce qui est étiqueté service cognitif
+
+00:10:29.000 --> 00:10:30.340
+OpenAI ou HTTP générique
+
+00:10:30.340 --> 00:10:31.620
+doit être par défaut non professionnel.
+
+00:10:33.080 --> 00:10:35.020
+Ces connecteurs agissent comme des passerelles sortantes
+
+00:10:35.020 --> 00:10:36.600
+où les données quittent le jardin fermé de Microsoft
+
+00:10:36.600 --> 00:10:38.300
+pour entrer dans un domaine de traitement tiers.
+
+00:10:39.380 --> 00:10:40.920
+Les bloqués ne paralysent pas votre copilote,
+
+00:10:41.040 --> 00:10:41.600
+cela le discipline.
+
+00:10:42.600 --> 00:10:44.140
+Vous pouvez toujours créer des flux intelligents
+
+00:10:44.140 --> 00:10:46.180
+sans pour autant transmettre des données clés en brut
+
+00:10:46.180 --> 00:10:47.640
+au premier point de terminaison venu.
+
+00:10:48.560 --> 00:10:49.840
+Abordons ensuite le tueur silencieux,
+
+00:10:49.960 --> 00:10:50.680
+la connexion croisée.
+
+00:10:51.120 --> 00:10:52.520
+Cela se produit lorsqu'une seule conversation
+
+00:10:52.520 --> 00:10:54.720
+ou un seul flux utilise à la fois un connecteur professionnel
+
+00:10:54.720 --> 00:10:55.400
+et non professionnel.
+
+00:10:56.180 --> 00:10:58.040
+Exemple, un agent récupère une liste SharePoint,
+
+00:10:58.220 --> 00:10:58.720
+professionnelle,
+
+00:10:59.360 --> 00:11:01.480
+puis envoie ce résumé à une API linguistique externe,
+
+00:11:01.680 --> 00:11:02.380
+non professionnelle.
+
+00:11:03.520 --> 00:11:05.580
+Même si chaque connecteur est individuellement autorisé,
+
+00:11:05.840 --> 00:11:07.260
+cette jonction crée une passerelle de données
+
+00:11:07.260 --> 00:11:08.460
+que votre politique interdit.
+
+00:11:09.240 --> 00:11:10.860
+L'application de la DLP par Power Platform
+
+00:11:10.860 --> 00:11:11.980
+bloque automatiquement ces flux
+
+00:11:11.980 --> 00:11:13.960
+si vous avez correctement catégorisé les connecteurs.
+
+00:11:14.420 --> 00:11:15.960
+Sinon, le système ignore le problème et continue.
+
+00:11:16.540 --> 00:11:17.360
+Vérifiez vos regroupements.
+
+00:11:18.080 --> 00:11:19.180
+Une seule mauvaise classification
+
+00:11:19.180 --> 00:11:21.560
+et les gardiens laisseront le voleur sortir poliment.
+
+00:11:22.520 --> 00:11:24.840
+La hiérarchie DLP fonctionne comme une pile de boucliers imbriqués.
+
+00:11:25.500 --> 00:11:25.860
+Au sommet,
+
+00:11:26.160 --> 00:11:28.180
+les politiques au niveau du locataire prévalent sur tout le reste.
+
+00:11:28.760 --> 00:11:29.040
+En dessous,
+
+00:11:29.100 --> 00:11:30.100
+les politiques au niveau de l'environnement
+
+00:11:30.100 --> 00:11:31.200
+régissent des espaces spécifiques.
+
+00:11:32.100 --> 00:11:32.300
+Enfin,
+
+00:11:32.360 --> 00:11:34.020
+les restrictions au niveau des applications ou des agents
+
+00:11:34.020 --> 00:11:35.620
+s'appliquent uniquement dans leur périmètre.
+
+00:11:36.760 --> 00:11:37.900
+Voyez cela comme une hiérarchie de gestion.
+
+00:11:38.380 --> 00:11:40.020
+Les règles du locataire sont le droit d'entreprise,
+
+00:11:40.180 --> 00:11:42.020
+les règles d'environnement sont la politique départementale
+
+00:11:42.020 --> 00:11:44.120
+et les paramètres d'application sont des notes adhésives sur des bureaux.
+
+00:11:44.900 --> 00:11:45.520
+En cas de contradiction,
+
+00:11:45.700 --> 00:11:46.640
+c'est le droit d'entreprise qui l'emport.
+
+00:11:47.580 --> 00:11:48.300
+Donc, en cas de doute,
+
+00:11:48.300 --> 00:11:50.240
+imposez des valeurs par défaut strictes au niveau du locataire
+
+00:11:50.240 --> 00:11:51.640
+puis réduisez les exceptions vers le bas.
+
+00:11:52.220 --> 00:11:54.200
+Ne faites pas confiance aux créateurs d'applications pour se réguler eux-mêmes.
+
+00:11:54.480 --> 00:11:55.460
+Ce sont les mêmes personnes qui pensaient
+
+00:11:55.460 --> 00:11:57.400
+qu'il était acceptable de mettre Power Automate en production
+
+00:11:57.400 --> 00:11:59.380
+sans contrôle de version ou sans contrôle de version.
+
+00:11:59.500 --> 00:12:00.020
+Avant de célébrer,
+
+00:12:00.120 --> 00:12:02.160
+testez tout dans un environnement sandbox systématiquement.
+
+00:12:03.020 --> 00:12:04.020
+Les agents de Copilot Studio
+
+00:12:04.020 --> 00:12:05.740
+s'appuient sur de multiples connexions implicites
+
+00:12:05.740 --> 00:12:07.980
+et votre nouvelle politique pourrait les bloquer silencieusement,
+
+00:12:08.100 --> 00:12:09.260
+cassant des fonctionnalités essentielles.
+
+00:12:10.160 --> 00:12:12.200
+Déployez vos ajustements DLP dans un environnement de test,
+
+00:12:12.300 --> 00:12:13.180
+importez un agent échantillon
+
+00:12:13.180 --> 00:12:15.260
+et confirmez qu'il répond toujours aux requêtes courantes.
+
+00:12:15.260 --> 00:12:17.360
+Sinon, ajustez les groupements de connecteurs
+
+00:12:17.360 --> 00:12:19.660
+jusqu'à ce que la fonctionnalité revienne sans élargir l'exposition.
+
+00:12:20.200 --> 00:12:21.960
+Vous équilibrez facilité d'utilisation et paranoïa,
+
+00:12:22.080 --> 00:12:23.620
+disons légèrement du côté de la paranoïa.
+
+00:12:24.160 --> 00:12:25.080
+C'est moins coûteux qu'un litige.
+
+00:12:26.240 --> 00:12:27.140
+Remarquez ce que nous venons de faire.
+
+00:12:27.860 --> 00:12:28.860
+Nous avons séparé les données,
+
+00:12:29.220 --> 00:12:29.980
+défini les frontières
+
+00:12:29.980 --> 00:12:31.200
+et condamné les sorties.
+
+00:12:31.980 --> 00:12:32.880
+Voici votre forteresse,
+
+00:12:32.980 --> 00:12:33.840
+des catégories rigides,
+
+00:12:34.240 --> 00:12:35.140
+des environnements cloisonnés,
+
+00:12:35.440 --> 00:12:36.140
+une hiérarchie par niveau,
+
+00:12:36.360 --> 00:12:36.940
+des remparts,
+
+00:12:37.000 --> 00:12:37.380
+éprouvés,
+
+00:12:37.560 --> 00:12:38.340
+des remparts.
+
+00:12:38.340 --> 00:12:39.480
+Mais même la meilleure des forteresses
+
+00:12:39.480 --> 00:12:41.040
+a besoin de gardes qui comprennent les permissions
+
+00:12:41.040 --> 00:12:42.200
+car les défenses s'effondrent
+
+00:12:42.200 --> 00:12:43.840
+dès que quelqu'un distribue un passe-partout.
+
+00:12:45.000 --> 00:12:45.820
+Et dans le royaume de Microsoft,
+
+00:12:45.920 --> 00:12:47.240
+ces clés sont délivrées via AntraID.
+
+00:12:48.180 --> 00:12:49.340
+Maintenant que vos murs sont hauts
+
+00:12:49.340 --> 00:12:50.080
+et vos douves remplis,
+
+00:12:50.200 --> 00:12:50.860
+parlons des gardiens,
+
+00:12:51.000 --> 00:12:52.360
+ces charmantes autorisations déléguées
+
+00:12:52.360 --> 00:12:53.500
+qui procurent aux administrateurs
+
+00:12:53.500 --> 00:12:54.720
+un faux sentiment de sécurité.
+
+00:12:56.080 --> 00:12:56.780
+Place à Antra
+
+00:12:56.780 --> 00:12:57.860
+et à son modèle de permission
+
+00:12:57.860 --> 00:12:58.580
+qui n'a rien de magie.
+
+00:12:59.420 --> 00:13:00.160
+Permission, Antra,
+
+00:13:00.240 --> 00:13:01.840
+est le mythe de la sécurité ?
+
+00:13:01.840 --> 00:13:02.440
+Si j'avais un euro,
+
+00:13:02.500 --> 00:13:03.120
+à chaque fois quelqu'un dit
+
+00:13:03.120 --> 00:13:03.620
+Axe Antra,
+
+00:13:03.700 --> 00:13:04.320
+donc c'est sécurisé,
+
+00:13:04.440 --> 00:13:05.160
+or sécurisé,
+
+00:13:05.700 --> 00:13:07.220
+j'aurais assez pour acheter des actions Microsoft
+
+00:13:07.220 --> 00:13:08.180
+et régler le problème moi-même.
+
+00:13:09.100 --> 00:13:10.220
+Démontons ce mythe comme il se doit.
+
+00:13:11.000 --> 00:13:11.300
+Antra,
+
+00:13:11.300 --> 00:13:12.600
+autrefois connu sous le nom
+
+00:13:12.600 --> 00:13:13.600
+d'Azure Active Directory,
+
+00:13:13.820 --> 00:13:15.080
+ne saupoudre pas de poudre de fée
+
+00:13:15.080 --> 00:13:15.760
+sur votre identité
+
+00:13:15.760 --> 00:13:17.380
+sous prétexte qu'il gère l'authentification.
+
+00:13:18.080 --> 00:13:18.660
+C'est un courtier,
+
+00:13:18.940 --> 00:13:19.460
+pas un gardien,
+
+00:13:19.720 --> 00:13:20.680
+et votre agent copilote,
+
+00:13:21.120 --> 00:13:22.040
+aussi mignon soit-il,
+
+00:13:22.440 --> 00:13:23.320
+ne possède ni compte,
+
+00:13:23.520 --> 00:13:24.100
+ni mot de passe,
+
+00:13:24.520 --> 00:13:25.120
+ni conscience.
+
+00:13:25.940 --> 00:13:26.640
+Il emprunte les vôtres.
+
+00:13:26.980 --> 00:13:27.360
+C'est ce qu'on appelle
+
+00:13:27.360 --> 00:13:28.420
+les autorisations déléguées.
+
+00:13:29.160 --> 00:13:29.920
+Lorsque vous vous connectez
+
+00:13:29.920 --> 00:13:31.500
+et interagissez avec un agent copilote,
+
+00:13:31.500 --> 00:13:32.740
+celui-ci demande un jeton d'accès
+
+00:13:32.740 --> 00:13:33.340
+en votre nom.
+
+00:13:34.000 --> 00:13:34.560
+Ce jeton inclut
+
+00:13:34.560 --> 00:13:35.140
+toutes les permissions
+
+00:13:35.140 --> 00:13:35.980
+qui vous ont été accordées
+
+00:13:35.980 --> 00:13:37.960
+dans votre environnement Microsoft 365.
+
+00:13:37.960 --> 00:13:39.140
+Bibliothèque SharePoint,
+
+00:13:39.400 --> 00:13:39.740
+validé.
+
+00:13:40.000 --> 00:13:40.660
+Table Dataverse,
+
+00:13:40.760 --> 00:13:41.040
+validé.
+
+00:13:41.460 --> 00:13:42.160
+Chat Teams privé
+
+00:13:42.160 --> 00:13:42.860
+avec votre patron,
+
+00:13:43.140 --> 00:13:43.860
+également validé,
+
+00:13:44.000 --> 00:13:44.760
+si vous y avez accès.
+
+00:13:45.360 --> 00:13:46.340
+L'agent ne fait pas la distinction
+
+00:13:46.340 --> 00:13:47.040
+entre l'important
+
+00:13:47.040 --> 00:13:47.840
+et le catastrophique.
+
+00:13:48.660 --> 00:13:49.400
+Il exécute simplement
+
+00:13:49.400 --> 00:13:49.820
+vos requêtes
+
+00:13:49.820 --> 00:13:50.600
+avec votre périmètre
+
+00:13:50.600 --> 00:13:51.240
+et sous votre identité.
+
+00:13:51.660 --> 00:13:52.840
+Si vous avez des privilèges financiers,
+
+00:13:52.920 --> 00:13:53.900
+votre assistant algorithmique
+
+00:13:53.900 --> 00:13:54.580
+les a aussi,
+
+00:13:54.820 --> 00:13:55.060
+et non,
+
+00:13:55.200 --> 00:13:55.920
+il n'hésitera pas
+
+00:13:55.920 --> 00:13:56.660
+à les utiliser.
+
+00:13:57.180 --> 00:13:58.060
+Cette conception fonctionne
+
+00:13:58.060 --> 00:13:58.440
+à merveille
+
+00:13:58.440 --> 00:13:59.380
+dans des périmètres contrôlés
+
+00:13:59.380 --> 00:13:59.920
+pour fluidifier
+
+00:13:59.920 --> 00:14:00.900
+l'expérience utilisateur,
+
+00:14:01.000 --> 00:14:01.480
+mais le danger
+
+00:14:01.480 --> 00:14:03.240
+vient du consentement implicite.
+
+00:14:03.980 --> 00:14:04.560
+Lorsque vous approuvez
+
+00:14:04.560 --> 00:14:05.100
+un connecteur,
+
+00:14:05.100 --> 00:14:05.640
+pour Outlook
+
+00:14:05.640 --> 00:14:06.620
+ou Dataverse par exemple,
+
+00:14:07.060 --> 00:14:08.040
+ce consentement est stocké
+
+00:14:08.040 --> 00:14:08.820
+dans l'environnement.
+
+00:14:09.380 --> 00:14:10.000
+Tout agent copilot
+
+00:14:10.000 --> 00:14:10.720
+hébergé à cet endroit
+
+00:14:10.720 --> 00:14:11.480
+hérite de cette confiance.
+
+00:14:11.840 --> 00:14:12.580
+Approuvez-le une fois
+
+00:14:12.580 --> 00:14:13.600
+et vous accordez,
+
+00:14:13.700 --> 00:14:14.020
+de fait,
+
+00:14:14.160 --> 00:14:14.640
+la même portée
+
+00:14:14.640 --> 00:14:15.360
+à chaque futur agent.
+
+00:14:16.340 --> 00:14:16.660
+Félicitations,
+
+00:14:16.880 --> 00:14:17.400
+vous avez déployé
+
+00:14:17.400 --> 00:14:18.140
+une famille de chatbots
+
+00:14:18.140 --> 00:14:18.660
+omnipotents
+
+00:14:18.660 --> 00:14:19.700
+sans surveillance individuelle,
+
+00:14:19.900 --> 00:14:20.440
+sans individuelle.
+
+00:14:20.920 --> 00:14:21.840
+Si cela vous semble imprudent,
+
+00:14:21.920 --> 00:14:22.380
+c'est parce que ça l'est.
+
+00:14:22.780 --> 00:14:23.500
+L'antidote consiste
+
+00:14:23.500 --> 00:14:24.020
+à mettre en œuvre
+
+00:14:24.020 --> 00:14:25.080
+un accès au moindre privilège
+
+00:14:25.080 --> 00:14:25.580
+pour vos agents,
+
+00:14:25.860 --> 00:14:26.440
+tout comme vous le faites,
+
+00:14:26.580 --> 00:14:26.980
+espérons-le,
+
+00:14:27.320 --> 00:14:27.800
+pour les humains,
+
+00:14:28.060 --> 00:14:28.480
+pour les humains.
+
+00:14:29.060 --> 00:14:29.600
+Dans EntrID,
+
+00:14:29.600 --> 00:14:30.640
+créer des groupes de sécurité
+
+00:14:30.640 --> 00:14:31.420
+et des attributions
+
+00:14:31.420 --> 00:14:32.180
+de rôles personnalisés
+
+00:14:32.180 --> 00:14:32.600
+qui limitent
+
+00:14:32.600 --> 00:14:33.260
+ce que les composants
+
+00:14:33.260 --> 00:14:33.840
+liés à copilote
+
+00:14:33.840 --> 00:14:34.420
+peuvent interroger.
+
+00:14:35.140 --> 00:14:35.540
+Par exemple,
+
+00:14:35.640 --> 00:14:36.240
+restreigner l'accès
+
+00:14:36.240 --> 00:14:37.040
+au seul sous-ensemble
+
+00:14:37.040 --> 00:14:37.900
+de connecteurs de données
+
+00:14:37.900 --> 00:14:38.680
+nécessaires à la fonction
+
+00:14:38.680 --> 00:14:39.280
+de chaque agent.
+
+00:14:40.360 --> 00:14:41.220
+Un assistant marketing
+
+00:14:41.220 --> 00:14:41.840
+n'a aucune raison
+
+00:14:41.840 --> 00:14:43.060
+d'interroger les dossiers RH,
+
+00:14:43.380 --> 00:14:44.660
+pourtant de nombreux administrateurs
+
+00:14:44.660 --> 00:14:45.180
+les regroupent
+
+00:14:45.180 --> 00:14:45.880
+par facilité.
+
+00:14:46.440 --> 00:14:47.800
+La facilité engendre l'exposition.
+
+00:14:48.300 --> 00:14:48.820
+À moins que vous n'ayez
+
+00:14:48.820 --> 00:14:49.480
+expliquer la lignée
+
+00:14:49.480 --> 00:14:50.280
+des données aux auditeurs,
+
+00:14:50.460 --> 00:14:51.140
+arrêtez de faire cela.
+
+00:14:51.720 --> 00:14:52.120
+Qu'en est-il
+
+00:14:52.120 --> 00:14:53.200
+des identités gérées ?
+
+00:14:53.200 --> 00:14:53.920
+Oui, ils existent
+
+00:14:53.920 --> 00:14:54.780
+et oui, ils sont utiles.
+
+00:14:54.780 --> 00:14:56.020
+Une identité gérée
+
+00:14:56.020 --> 00:14:56.780
+permet à une application
+
+00:14:56.780 --> 00:14:57.500
+de s'authentifier
+
+00:14:57.500 --> 00:14:58.460
+auprès des ressources Azure
+
+00:14:58.460 --> 00:14:59.500
+avec son propre principal
+
+00:14:59.500 --> 00:14:59.940
+de service
+
+00:14:59.940 --> 00:15:01.020
+au lieu d'utiliser le vôtre.
+
+00:15:01.660 --> 00:15:02.480
+Mais voici la subtilité
+
+00:15:02.480 --> 00:15:03.100
+qui échappe à la plupart.
+
+00:15:03.540 --> 00:15:04.360
+Les agents Copilot Studio
+
+00:15:04.360 --> 00:15:05.160
+fonctionnent principalement
+
+00:15:05.160 --> 00:15:06.260
+par délégation d'utilisateurs
+
+00:15:06.260 --> 00:15:07.280
+et non par identité gérée.
+
+00:15:08.380 --> 00:15:09.600
+Attribuer des identités gérées
+
+00:15:09.600 --> 00:15:10.900
+à la hâte peut mener
+
+00:15:10.900 --> 00:15:11.880
+à des privilèges excessifs
+
+00:15:11.880 --> 00:15:13.080
+car ces principaux de service
+
+00:15:13.080 --> 00:15:14.380
+ont souvent des permissions Azure
+
+00:15:14.380 --> 00:15:15.280
+plus larges que prévues.
+
+00:15:16.700 --> 00:15:17.720
+Considérez les identités gérées
+
+00:15:17.720 --> 00:15:18.620
+comme des instruments chirurgicaux
+
+00:15:18.620 --> 00:15:19.540
+pas comme des options par défaut.
+
+00:15:19.920 --> 00:15:20.580
+Automatisation n'est pas
+
+00:15:20.580 --> 00:15:21.220
+synonyme d'autonomie.
+
+00:15:21.580 --> 00:15:22.080
+Vous dites peut-être
+
+00:15:22.080 --> 00:15:22.980
+« Oh très bien ! »
+
+00:15:22.980 --> 00:15:23.920
+Simplement comptez sur l'audit.
+
+00:15:24.260 --> 00:15:24.960
+Excellente attitude
+
+00:15:24.960 --> 00:15:26.060
+tant que vous le faites réellement.
+
+00:15:26.980 --> 00:15:27.800
+Entra fournit des journaux
+
+00:15:27.800 --> 00:15:28.260
+de connexion
+
+00:15:28.260 --> 00:15:29.200
+et des rapports de consentement
+
+00:15:29.200 --> 00:15:29.600
+qui révèlent
+
+00:15:29.600 --> 00:15:30.500
+quel principal de service
+
+00:15:30.500 --> 00:15:31.480
+a accédé à quelle ressource
+
+00:15:31.480 --> 00:15:32.660
+ou quelle identité et quand.
+
+00:15:33.600 --> 00:15:34.660
+Combinez cela avec les analyses
+
+00:15:34.660 --> 00:15:35.560
+du centre d'administration
+
+00:15:35.560 --> 00:15:36.180
+Power Platform
+
+00:15:36.180 --> 00:15:36.760
+et vous pouvez suivre
+
+00:15:36.760 --> 00:15:37.680
+l'activité des connecteurs
+
+00:15:37.680 --> 00:15:38.240
+par agent.
+
+00:15:39.200 --> 00:15:40.300
+Si vous voyez un connecteur
+
+00:15:40.300 --> 00:15:41.000
+extraire des données
+
+00:15:41.000 --> 00:15:42.260
+hors de son environnement désigné,
+
+00:15:42.300 --> 00:15:43.180
+ce n'est pas de la curiosité.
+
+00:15:44.280 --> 00:15:44.700
+C'est la preuve
+
+00:15:44.700 --> 00:15:45.800
+d'une configuration négligente.
+
+00:15:46.340 --> 00:15:47.040
+Capturez ces événements,
+
+00:15:47.200 --> 00:15:48.140
+exportez-les vers votre plateforme
+
+00:15:48.140 --> 00:15:48.980
+de surveillance et agissez.
+
+00:15:49.720 --> 00:15:50.160
+Faire confiance
+
+00:15:50.160 --> 00:15:51.040
+mais vérifiez et dépasser.
+
+00:15:51.480 --> 00:15:52.080
+A l'air de copylose
+
+00:15:52.080 --> 00:15:52.660
+c'est qu'à castreindre
+
+00:15:52.660 --> 00:15:53.240
+et confirmez-vous.
+
+00:15:54.060 --> 00:15:54.380
+Donc non,
+
+00:15:54.440 --> 00:15:55.340
+Entra seul ne sécurise pas
+
+00:15:55.340 --> 00:15:55.760
+vos agents.
+
+00:15:56.580 --> 00:15:57.540
+Il les authentifie poliment,
+
+00:15:57.780 --> 00:15:58.960
+efficacement et indifféremment.
+
+00:15:59.700 --> 00:16:00.700
+La sécurité et l'architecture
+
+00:16:00.700 --> 00:16:01.720
+construites autour de l'identité,
+
+00:16:01.860 --> 00:16:02.720
+pas l'identité elle-même.
+
+00:16:04.200 --> 00:16:05.440
+Vos murs, DLP,
+
+00:16:05.740 --> 00:16:06.500
+vos clés, permissions
+
+00:16:06.500 --> 00:16:07.600
+et vos gardes,
+
+00:16:07.700 --> 00:16:08.040
+audits,
+
+00:16:08.480 --> 00:16:09.520
+forment une triade.
+
+00:16:10.240 --> 00:16:10.940
+Si un pilier cède,
+
+00:16:11.040 --> 00:16:11.880
+toute la structure vacille.
+
+00:16:12.720 --> 00:16:13.560
+Le mythe de la sécurité
+
+00:16:13.560 --> 00:16:14.480
+s'effondre quand on réalise
+
+00:16:14.480 --> 00:16:15.580
+que Microsoft vous a renvoyé
+
+00:16:15.580 --> 00:16:16.500
+la responsabilité.
+
+00:16:17.180 --> 00:16:17.700
+Vous avez réclamé
+
+00:16:17.700 --> 00:16:18.220
+une air lip service.
+
+00:16:18.220 --> 00:16:19.140
+Ils vous ont livré
+
+00:16:19.140 --> 00:16:19.780
+exactement cela,
+
+00:16:19.960 --> 00:16:20.800
+du libre-service total.
+
+00:16:21.640 --> 00:16:22.200
+Et cela inclut
+
+00:16:22.200 --> 00:16:22.980
+les fuites auto-infligées.
+
+00:16:23.580 --> 00:16:24.100
+Maintenant que nous avons
+
+00:16:24.100 --> 00:16:24.860
+renforcé l'identité
+
+00:16:24.860 --> 00:16:25.640
+et restreint le périmètre,
+
+00:16:25.720 --> 00:16:26.720
+ne vous félicitez pas trop vite.
+
+00:16:27.560 --> 00:16:28.280
+Une politique écrite
+
+00:16:28.280 --> 00:16:28.940
+mais jamais testée
+
+00:16:28.940 --> 00:16:30.020
+et la version bureaucratique
+
+00:16:30.020 --> 00:16:30.460
+d'un placebo.
+
+00:16:31.460 --> 00:16:32.060
+Il vous faut des preuves
+
+00:16:32.060 --> 00:16:32.620
+que votre forteresse
+
+00:16:32.620 --> 00:16:33.700
+résiste vraiment sous la pression.
+
+00:16:34.380 --> 00:16:35.060
+Cela signifie sonder,
+
+00:16:35.200 --> 00:16:35.760
+provoquer et essayer
+
+00:16:35.760 --> 00:16:36.240
+occasionnellement
+
+00:16:36.240 --> 00:16:37.360
+de briser votre propre système.
+
+00:16:38.400 --> 00:16:39.280
+Car si vous ne le faites pas,
+
+00:16:39.380 --> 00:16:39.820
+quelqu'un d'autre
+
+00:16:39.820 --> 00:16:40.800
+le fera accidentellement
+
+00:16:40.800 --> 00:16:41.160
+ou non.
+
+00:16:42.840 --> 00:16:43.580
+Test et surveillance.
+
+00:16:44.220 --> 00:16:45.000
+Vous pouvez que tout est verrouillé.
+
+00:16:45.480 --> 00:16:46.420
+Tester un agent copilote
+
+00:16:46.420 --> 00:16:47.000
+ne consiste pas
+
+00:16:48.220 --> 00:16:48.800
+à bon vous récute.
+
+00:16:49.520 --> 00:16:50.000
+Il s'agit de voir
+
+00:16:50.000 --> 00:16:50.340
+ce qui se passe
+
+00:16:50.340 --> 00:16:51.120
+quand vous mettez au défi
+
+00:16:51.120 --> 00:16:51.640
+avec des questions
+
+00:16:51.640 --> 00:16:52.300
+qui devraient se heurter
+
+00:16:52.300 --> 00:16:53.160
+aux barrières de sécurité.
+
+00:16:54.120 --> 00:16:54.800
+Commencez par tester
+
+00:16:54.800 --> 00:16:55.360
+votre copilote,
+
+00:16:55.440 --> 00:16:56.340
+non pas avec des théâtres
+
+00:16:56.340 --> 00:16:56.700
+de hackers,
+
+00:16:56.900 --> 00:16:57.960
+mais avec des requêtes délibérées
+
+00:16:57.960 --> 00:16:59.500
+et contrôlez et contrôlez.
+
+00:17:00.860 --> 00:17:02.080
+Demandez des données confidentielles,
+
+00:17:02.440 --> 00:17:04.000
+résumez les salaires des dirigeants,
+
+00:17:04.380 --> 00:17:05.840
+exportez les dossiers clients
+
+00:17:05.840 --> 00:17:07.160
+ou montrez les contrats financiers.
+
+00:17:08.600 --> 00:17:09.620
+Si l'agent refuse poliment
+
+00:17:09.620 --> 00:17:10.780
+ou affiche une restriction d'accès,
+
+00:17:11.040 --> 00:17:12.000
+réjouissez-vous brièvement.
+
+00:17:12.880 --> 00:17:13.580
+S'il s'exécute,
+
+00:17:13.660 --> 00:17:14.280
+vous venez de découvrir
+
+00:17:14.280 --> 00:17:15.940
+la faille dont rêvent les attaquants.
+
+00:17:16.860 --> 00:17:17.320
+Cette méthode
+
+00:17:17.320 --> 00:17:18.240
+n'est pas un test hypothétique,
+
+00:17:18.340 --> 00:17:19.720
+c'est de la gouvernance appliquée.
+
+00:17:20.320 --> 00:17:21.880
+Créez un catalogue de promptes interdits
+
+00:17:21.880 --> 00:17:23.260
+et testez-les dans chaque environnement
+
+00:17:23.260 --> 00:17:23.840
+copilote.
+
+00:17:24.680 --> 00:17:25.400
+Suivez les réponses.
+
+00:17:25.740 --> 00:17:26.320
+Un refus indique
+
+00:17:26.320 --> 00:17:27.120
+que les couches de DLP
+
+00:17:27.120 --> 00:17:28.380
+et d'autorisation fonctionnent.
+
+00:17:29.140 --> 00:17:29.680
+Une fuite de données
+
+00:17:29.680 --> 00:17:30.620
+signale une mauvaise classification
+
+00:17:30.620 --> 00:17:31.520
+ou un chevauchement de connecteurs.
+
+00:17:31.840 --> 00:17:32.660
+La beauté de copilote
+
+00:17:32.660 --> 00:17:33.740
+réside dans sa transparence.
+
+00:17:34.180 --> 00:17:35.000
+Les journaux capturent tout.
+
+00:17:35.500 --> 00:17:36.380
+L'horreur est que ces journaux
+
+00:17:36.380 --> 00:17:37.620
+conservent aussi vos erreurs.
+
+00:17:38.660 --> 00:17:39.260
+Ensuite, surveillez
+
+00:17:39.260 --> 00:17:40.020
+les analyses d'utilisation
+
+00:17:40.020 --> 00:17:40.520
+des connecteurs.
+
+00:17:41.240 --> 00:17:42.080
+Dans le centre d'administration
+
+00:17:42.080 --> 00:17:42.740
+Power Platform,
+
+00:17:42.940 --> 00:17:43.800
+ouvrez le volet d'analyse
+
+00:17:43.800 --> 00:17:44.380
+de l'environnement.
+
+00:17:45.040 --> 00:17:45.920
+Vous y trouverez des métriques
+
+00:17:45.920 --> 00:17:46.380
+sur le volume,
+
+00:17:46.500 --> 00:17:46.900
+la fréquence
+
+00:17:46.900 --> 00:17:47.660
+et l'origine utilisateur
+
+00:17:47.660 --> 00:17:48.080
+des connecteurs.
+
+00:17:48.700 --> 00:17:49.360
+Recherchez les anomalies.
+
+00:17:50.360 --> 00:17:51.780
+Pic d'appel de connecteurs HTTP
+
+00:17:51.780 --> 00:17:52.600
+depuis des agents
+
+00:17:52.600 --> 00:17:53.480
+qui ne devaient pas utiliser
+
+00:17:53.480 --> 00:17:54.320
+d'API externe
+
+00:17:54.320 --> 00:17:54.920
+ou au soudain
+
+00:17:54.920 --> 00:17:55.900
+des requêtes SharePoint
+
+00:17:55.900 --> 00:17:56.840
+liées au nouveau déploiement
+
+00:17:56.840 --> 00:17:57.360
+de chatbot.
+
+00:17:58.660 --> 00:17:59.560
+Ce ne sont pas des coïncidents,
+
+00:17:59.680 --> 00:18:00.160
+ce sont les traces
+
+00:18:00.160 --> 00:18:01.080
+d'une mauvaise configuration.
+
+00:18:01.800 --> 00:18:02.580
+Traitez-les comme des indices
+
+00:18:02.580 --> 00:18:03.040
+médicaux légaux.
+
+00:18:03.480 --> 00:18:04.180
+Chaque anomalie reflète
+
+00:18:04.180 --> 00:18:04.860
+un contrôle manquant
+
+00:18:04.860 --> 00:18:05.680
+quelque part en amont.
+
+00:18:06.620 --> 00:18:06.960
+Vient ensuite
+
+00:18:06.960 --> 00:18:07.780
+la journalisation d'audit,
+
+00:18:07.860 --> 00:18:08.420
+votre piste de preuve.
+
+00:18:08.420 --> 00:18:09.440
+Activez les événements
+
+00:18:09.440 --> 00:18:10.380
+d'audit dans Power Platform
+
+00:18:10.380 --> 00:18:11.120
+et synchronisez-les
+
+00:18:11.120 --> 00:18:12.100
+avec Microsoft Purview
+
+00:18:12.100 --> 00:18:12.900
+ou Microsoft Sentinel.
+
+00:18:13.620 --> 00:18:14.140
+Cela garantit
+
+00:18:14.140 --> 00:18:14.740
+que chaque action,
+
+00:18:15.000 --> 00:18:16.020
+prompt et appel de connecteurs
+
+00:18:16.020 --> 00:18:16.500
+est indexée
+
+00:18:16.500 --> 00:18:17.160
+dans votre structure
+
+00:18:17.160 --> 00:18:18.180
+de conformité globale.
+
+00:18:18.620 --> 00:18:19.040
+Avec Purview,
+
+00:18:19.120 --> 00:18:19.840
+vous gagnez en contexte.
+
+00:18:20.660 --> 00:18:21.120
+Quels jeux de données
+
+00:18:21.120 --> 00:18:21.700
+ont été touchés ?
+
+00:18:21.700 --> 00:18:22.200
+Quel utilisateur
+
+00:18:22.200 --> 00:18:22.960
+a initié le prompt ?
+
+00:18:22.960 --> 00:18:23.660
+Ici, des données ont quitté
+
+00:18:23.660 --> 00:18:24.620
+votre frontière géographique.
+
+00:18:25.840 --> 00:18:26.580
+Sentinel, quant à lui,
+
+00:18:26.720 --> 00:18:27.540
+ajoute une corrélation
+
+00:18:27.540 --> 00:18:28.720
+reliant ses activités
+
+00:18:28.720 --> 00:18:29.160
+à des événements
+
+00:18:29.160 --> 00:18:30.080
+de sécurité plus larges
+
+00:18:30.080 --> 00:18:31.280
+comme des connexions inhabituelles
+
+00:18:31.280 --> 00:18:32.360
+ou des élévations de privilèges.
+
+00:18:32.960 --> 00:18:33.280
+Ensemble,
+
+00:18:33.340 --> 00:18:34.400
+ils transforment un comportement
+
+00:18:34.400 --> 00:18:35.040
+IA invisible
+
+00:18:35.040 --> 00:18:36.100
+en télémétrie mesurable.
+
+00:18:37.060 --> 00:18:38.100
+Une règle négligée ici,
+
+00:18:38.240 --> 00:18:39.140
+l'alignement de la rétention.
+
+00:18:39.600 --> 00:18:40.160
+Les données d'audit
+
+00:18:40.160 --> 00:18:40.720
+survivent souvent
+
+00:18:40.720 --> 00:18:41.480
+aux données de conversation.
+
+00:18:42.480 --> 00:18:43.000
+Si vous purgez
+
+00:18:43.000 --> 00:18:43.520
+les journaux de chat
+
+00:18:43.520 --> 00:18:44.120
+après 30 jours
+
+00:18:44.120 --> 00:18:44.940
+mais gardez les événements
+
+00:18:44.940 --> 00:18:45.500
+d'audit un an,
+
+00:18:45.560 --> 00:18:46.660
+vous perdez le fil contextuel
+
+00:18:46.660 --> 00:18:47.640
+expliquant pourquoi
+
+00:18:47.640 --> 00:18:48.900
+un événement est survenu.
+
+00:18:49.740 --> 00:18:50.680
+L'application d'une politique
+
+00:18:50.680 --> 00:18:51.780
+sans contexte est inutile.
+
+00:18:52.920 --> 00:18:53.380
+Assurez-vous
+
+00:18:53.380 --> 00:18:54.620
+que les politiques de rétention
+
+00:18:54.620 --> 00:18:55.180
+des journaux,
+
+00:18:55.540 --> 00:18:56.760
+analyses et traces d'audit
+
+00:18:56.760 --> 00:18:57.300
+de copilote
+
+00:18:57.300 --> 00:18:58.280
+restent synchronisées
+
+00:18:58.280 --> 00:18:59.220
+pour que vos preuves
+
+00:18:59.220 --> 00:19:00.020
+racontent une histoire
+
+00:19:00.020 --> 00:19:00.860
+cohérente.
+
+00:19:01.540 --> 00:19:02.560
+La reclassification périodique
+
+00:19:02.560 --> 00:19:03.300
+figure parmi les tâches
+
+00:19:03.300 --> 00:19:04.020
+les plus ignorées.
+
+00:19:04.920 --> 00:19:05.860
+Microsoft met constamment
+
+00:19:05.860 --> 00:19:06.680
+à jour les définitions
+
+00:19:06.680 --> 00:19:07.200
+des connecteurs.
+
+00:19:07.980 --> 00:19:08.740
+Un connecteur standard
+
+00:19:08.740 --> 00:19:09.280
+autrefois sûr
+
+00:19:09.280 --> 00:19:10.060
+peut devenir premium
+
+00:19:10.060 --> 00:19:11.040
+ou externe du jour au lendemain
+
+00:19:11.040 --> 00:19:11.940
+changeant son comportement
+
+00:19:11.940 --> 00:19:12.600
+vis-à-vis des données.
+
+00:19:13.520 --> 00:19:14.020
+Passez en revue
+
+00:19:14.020 --> 00:19:14.840
+l'inventaire des connecteurs
+
+00:19:14.840 --> 00:19:15.420
+chaque trimestre,
+
+00:19:15.640 --> 00:19:16.760
+reclassifiez selon la documentation
+
+00:19:16.760 --> 00:19:17.580
+Microsoft actuelle,
+
+00:19:17.720 --> 00:19:18.420
+pas les hypothèses
+
+00:19:18.420 --> 00:19:18.960
+de l'an dernier.
+
+00:19:19.940 --> 00:19:20.760
+Négligez cela équivaut
+
+00:19:20.760 --> 00:19:21.520
+à verrouiller vos portes
+
+00:19:21.520 --> 00:19:22.140
+au pendant que quelqu'un
+
+00:19:22.140 --> 00:19:23.200
+déplace discrètement les gonds.
+
+00:19:24.160 --> 00:19:25.160
+Fin, adoptez une gouvernance.
+
+00:19:25.280 --> 00:19:25.560
+Continue.
+
+00:19:26.640 --> 00:19:27.480
+Chaque nouveau connecteur,
+
+00:19:27.580 --> 00:19:28.740
+plugin ou extension tierce
+
+00:19:28.740 --> 00:19:30.020
+rouvre à la surface de risque.
+
+00:19:30.640 --> 00:19:31.240
+Traitez le DLP
+
+00:19:31.240 --> 00:19:31.980
+non pas comme une case
+
+00:19:31.980 --> 00:19:32.880
+de conformité statique
+
+00:19:32.880 --> 00:19:34.040
+mais comme un périmètre évolutif.
+
+00:19:34.980 --> 00:19:36.400
+Planifiez des audits trimestriels,
+
+00:19:36.600 --> 00:19:37.780
+automatisez les exportations
+
+00:19:37.780 --> 00:19:38.220
+d'analyse
+
+00:19:38.220 --> 00:19:39.220
+et alimentez les alertes
+
+00:19:39.220 --> 00:19:40.720
+de votre pipeline S-I-M.
+
+00:19:41.380 --> 00:19:42.240
+La gouvernance meurt
+
+00:19:42.240 --> 00:19:42.960
+dès qu'elle devient manuelle.
+
+00:19:43.400 --> 00:19:44.380
+Une fois les tests terminés,
+
+00:19:44.560 --> 00:19:44.960
+vous remarquerez
+
+00:19:44.960 --> 00:19:45.880
+quelque chose de satisfaisant.
+
+00:19:46.380 --> 00:19:46.920
+L'objectif n'est pas
+
+00:19:46.920 --> 00:19:47.420
+la conformité
+
+00:19:47.420 --> 00:19:47.920
+et il n'a jamais été.
+
+00:19:48.380 --> 00:19:48.880
+C'est le contrôle.
+
+00:19:49.460 --> 00:19:50.220
+Un agent copilote
+
+00:19:50.220 --> 00:19:50.800
+qui ne répond que
+
+00:19:50.800 --> 00:19:51.620
+dans des limites surveillées
+
+00:19:51.620 --> 00:19:52.380
+devient prévisible,
+
+00:19:52.680 --> 00:19:53.760
+gérable et réellement sûr
+
+00:19:53.760 --> 00:19:55.000
+pour un usage professionnel.
+
+00:19:55.700 --> 00:19:56.180
+C'est là qu'il y a
+
+00:19:56.180 --> 00:19:57.380
+passe de responsabilité à Atou
+
+00:19:57.380 --> 00:19:58.200
+mais seulement parce que
+
+00:19:58.200 --> 00:19:59.080
+vous avez rendu
+
+00:19:59.080 --> 00:19:59.960
+la paranoïa systémique
+
+00:19:59.960 --> 00:20:00.660
+pas optionnelle,
+
+00:20:00.800 --> 00:20:01.220
+pas optionnelle.
+
+00:20:01.600 --> 00:20:02.120
+Une fois que vos fuites
+
+00:20:02.120 --> 00:20:02.600
+de données cessent,
+
+00:20:02.680 --> 00:20:03.480
+vous verrez copilote studio
+
+00:20:03.480 --> 00:20:04.340
+différemment non comme
+
+00:20:04.340 --> 00:20:06.020
+un gadget de productivité
+
+00:20:06.020 --> 00:20:06.920
+mais comme un instrument
+
+00:20:06.920 --> 00:20:08.260
+d'ingénierie de confiance.
+
+00:20:09.060 --> 00:20:09.720
+Vos agents se comportent bien
+
+00:20:09.720 --> 00:20:10.400
+parce que vous avez établi
+
+00:20:10.400 --> 00:20:11.060
+les règles en ce sens.
+
+00:20:11.620 --> 00:20:12.320
+Et c'est ainsi
+
+00:20:12.320 --> 00:20:13.300
+que vous pourrez enfin dire
+
+00:20:13.300 --> 00:20:13.920
+sans ironie
+
+00:20:13.920 --> 00:20:14.680
+que votre environnement
+
+00:20:14.680 --> 00:20:15.400
+est thermétique.
+
+00:20:16.260 --> 00:20:17.200
+Les agents de copilote studio
+
+00:20:17.200 --> 00:20:17.940
+ne sont pas des méchants,
+
+00:20:18.020 --> 00:20:18.520
+ce sont des reflets.
+
+00:20:19.240 --> 00:20:20.040
+Ils agissent exactement
+
+00:20:20.040 --> 00:20:21.000
+selon votre configuration
+
+00:20:21.000 --> 00:20:22.360
+qui consiste généralement
+
+00:20:22.360 --> 00:20:22.900
+à trop partager
+
+00:20:22.900 --> 00:20:23.600
+avec courtoisie.
+
+00:20:24.500 --> 00:20:25.540
+Chaque autorisation exploitée,
+
+00:20:25.640 --> 00:20:26.560
+chaque connecteur traversé
+
+00:20:27.380 --> 00:20:28.320
+est le miroir
+
+00:20:28.320 --> 00:20:29.220
+de votre gouvernance.
+
+00:20:29.980 --> 00:20:30.720
+Vous avez construit le pont,
+
+00:20:30.860 --> 00:20:31.860
+ils l'ont simplement emprunté.
+
+00:20:32.540 --> 00:20:33.180
+Souvenez-vous donc,
+
+00:20:33.320 --> 00:20:34.040
+un agent copilote
+
+00:20:34.040 --> 00:20:34.840
+n'est digne de confiance
+
+00:20:34.840 --> 00:20:35.420
+que dans la limite
+
+00:20:35.420 --> 00:20:36.540
+de sa configuration DLP,
+
+00:20:36.780 --> 00:20:37.280
+rien de plus.
+
+00:20:38.060 --> 00:20:39.140
+La sécurité par l'optimisme
+
+00:20:39.140 --> 00:20:39.940
+n'est pas une stratégie.
+
+00:20:40.640 --> 00:20:41.600
+La sécurité par des limites
+
+00:20:41.600 --> 00:20:42.120
+imposées, si.
+
+00:20:42.860 --> 00:20:43.380
+La gouvernance
+
+00:20:43.380 --> 00:20:44.100
+n'est donc pas optionnelle
+
+00:20:44.100 --> 00:20:45.580
+quand votre IA peut interroger
+
+00:20:45.580 --> 00:20:46.780
+SharePoint, Dataverse
+
+00:20:46.780 --> 00:20:47.180
+et Outlook
+
+00:20:47.180 --> 00:20:49.040
+avec une autorité exécutive.
+
+00:20:49.580 --> 00:20:50.220
+L'aspect séduisant
+
+00:20:50.220 --> 00:20:50.600
+de copilote
+
+00:20:50.600 --> 00:20:51.180
+est sa commodité.
+
+00:20:51.580 --> 00:20:52.420
+Demandez et il obéit.
+
+00:20:53.040 --> 00:20:53.640
+Le danger est que
+
+00:20:53.640 --> 00:20:54.200
+cette obéissance
+
+00:20:54.200 --> 00:20:54.800
+s'étende aux feuilles
+
+00:20:54.800 --> 00:20:55.740
+de calcul confidentiel
+
+00:20:55.740 --> 00:20:56.380
+et aux données RH
+
+00:20:56.380 --> 00:20:57.580
+si personne ne lui dit le contraire.
+
+00:20:58.120 --> 00:20:58.840
+La seule vraie solution
+
+00:20:58.840 --> 00:20:59.340
+est la discipline.
+
+00:20:59.720 --> 00:21:00.480
+Classer les connecteurs,
+
+00:21:00.600 --> 00:21:01.420
+restreigner les autorisations
+
+00:21:01.420 --> 00:21:02.260
+et tester ses restrictions
+
+00:21:02.260 --> 00:21:03.240
+jusqu'à ce que toute défaillance
+
+00:21:03.240 --> 00:21:03.900
+soit impossible.
+
+00:21:04.720 --> 00:21:05.140
+Faites-le avant
+
+00:21:05.140 --> 00:21:06.360
+qu'un projet pilote inoffensif
+
+00:21:06.360 --> 00:21:07.060
+ne se transforme
+
+00:21:07.060 --> 00:21:08.340
+en enquête de conformité.
+
+00:21:09.280 --> 00:21:09.940
+Verrouillez vos données
+
+00:21:09.940 --> 00:21:10.700
+avant que votre copilote
+
+00:21:10.700 --> 00:21:11.220
+n'en apprenne trop.
+
+00:21:11.840 --> 00:21:12.340
+Voyez la DLP
+
+00:21:12.340 --> 00:21:13.380
+comme un confinement intellectuel
+
+00:21:13.380 --> 00:21:14.400
+pas comme de la bureaucratie.
+
+00:21:14.980 --> 00:21:16.060
+Un ensemble de murs numériques
+
+00:21:16.060 --> 00:21:16.800
+empêchant l'intelligence
+
+00:21:16.800 --> 00:21:17.260
+de se transformer
+
+00:21:17.260 --> 00:21:18.060
+en fluide d'informations.
+
+00:21:18.960 --> 00:21:19.840
+Une fois ces règles appliquées,
+
+00:21:19.940 --> 00:21:20.460
+votre copilote
+
+00:21:20.460 --> 00:21:21.600
+cesse d'être une responsabilité
+
+00:21:21.600 --> 00:21:22.260
+et devient ce pourquoi
+
+00:21:22.260 --> 00:21:22.860
+il a été vendu
+
+00:21:22.860 --> 00:21:23.900
+à l'assistant de confiance.
+
+00:21:24.800 --> 00:21:25.440
+Si cela a évité
+
+00:21:25.440 --> 00:21:26.080
+une crise de panique
+
+00:21:26.080 --> 00:21:26.940
+à votre équipe de conformité,
+
+00:21:27.000 --> 00:21:27.240
+abonnez-vous.
+
+00:21:27.760 --> 00:21:28.240
+C'est moins coûteux
+
+00:21:28.240 --> 00:21:28.620
+qu'un audit
+
+00:21:28.620 --> 00:21:29.460
+et infiniment moins gênant
+
+00:21:29.460 --> 00:21:30.560
+que d'expliquer aux services juridiques
+
+00:21:30.560 --> 00:21:31.140
+pourquoi un chatbot
+
+00:21:31.140 --> 00:21:32.140
+a publié des données de paye
+
+00:21:32.140 --> 00:21:32.640
+dans Teams.
+
+00:21:33.660 --> 00:21:34.560
+Suivez le prochain épisode
+
+00:21:34.560 --> 00:21:35.820
+sur la gouvernance avancée
+
+00:21:35.820 --> 00:21:36.600
+des agents copilotes
+
+00:21:36.600 --> 00:21:37.540
+avec Microsoft Purview
+
+00:21:37.540 --> 00:21:38.220
+pour garder vos
+
+00:21:38.220 --> 00:21:39.600
+automatisations intelligentes,
+
+00:21:39.700 --> 00:21:40.000
+contenues
+
+00:21:40.000 --> 00:21:41.220
+et sous contrôle total.

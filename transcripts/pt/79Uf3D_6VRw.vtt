@@ -1,0 +1,2824 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:01.900
+Você passa metade do dia esperando por aprovações.
+
+00:00:02.560 --> 00:00:04.680
+Alguém está de férias, o outro não viu o e-mail,
+
+00:00:04.800 --> 00:00:09.020
+e quando a decisão finalmente chega, o contexto que justificava o pedido já esperou.
+
+00:00:09.600 --> 00:00:12.540
+Purgatório corporativo, progresso pausado por pessoas que juram estar ocupado.
+
+00:00:13.060 --> 00:00:14.740
+Agora, imagina um sistema que simplesmente não espera.
+
+00:00:15.280 --> 00:00:17.720
+Um fluxo de trabalho que avança assim que as condições são atendidas.
+
+00:00:18.740 --> 00:00:22.200
+Apresentamos o Agent Flows do Microsoft Copilot Studio disfarçado de automação.
+
+00:00:22.880 --> 00:00:24.320
+Aqui a IA se torna sua primeira aprovadora.
+
+00:00:24.820 --> 00:00:28.680
+Ela lê os dados, avalia conforme a política e decide aprovar ou rejeitar,
+
+00:00:28.680 --> 00:00:30.580
+antes que qualquer humano pisque.
+
+00:00:31.420 --> 00:00:33.820
+Apenas casos complexos chegam à caixa de entrada de um gerente,
+
+00:00:33.880 --> 00:00:35.920
+o que significa velocidade sem sacrificar o controle.
+
+00:00:36.740 --> 00:00:40.760
+E, ao contrário dos fluxos de aprovação legados que colapsam sob complexidade condicional,
+
+00:00:41.020 --> 00:00:44.300
+estes orientados por IA escalam, ramificam, validam e se auditam.
+
+00:00:45.580 --> 00:00:48.700
+Neste passo a passo, mostrei como construir um sistema de aprovação condicional
+
+00:00:48.700 --> 00:00:51.960
+que decide mais rápido do que seus colegas encontram o botão Responder a Todos.
+
+00:00:53.080 --> 00:00:57.300
+Você aprenderá a configurar uma etapa de IA com lógica personalizada,
+
+00:00:57.300 --> 00:01:01.580
+adicionar revisões humanas direcionadas e criar condições dinâmicas
+
+00:01:01.580 --> 00:01:03.880
+que redirecionam de forma inteligente.
+
+00:01:05.140 --> 00:01:08.380
+Ao final, você terá um processo automatizado que sabe quando pensar como uma máquina
+
+00:01:08.380 --> 00:01:09.560
+e quando recorrer ao julgamento humano.
+
+00:01:09.940 --> 00:01:10.740
+Pare de seguir uma fila.
+
+00:01:11.240 --> 00:01:12.320
+Comece a deixar a lógica liderar.
+
+00:01:13.120 --> 00:01:14.560
+Problema das aprovações tradicionais.
+
+00:01:15.360 --> 00:01:18.500
+Cadeias de aprovação tradicionais são um remix trágico da mesma ineficiência.
+
+00:01:19.160 --> 00:01:20.160
+Alguém envia um formulário.
+
+00:01:20.160 --> 00:01:24.260
+E-mails voam, planilhas se desencontram e, entre loops de encaminhamento,
+
+00:01:24.260 --> 00:01:25.720
+ninguém lembra qual era a versão final.
+
+00:01:26.380 --> 00:01:28.000
+Cada participante adiciona atraso no valor.
+
+00:01:28.740 --> 00:01:31.080
+O processo não gerencia o trabalho e ele fabrica latência.
+
+00:01:32.100 --> 00:01:34.800
+Fluxos de aprovação típicos do Power Automate tentam resolver isso,
+
+00:01:34.900 --> 00:01:36.920
+mas travam ao introduzir nuances.
+
+00:01:37.780 --> 00:01:40.760
+Um caminho de aprovação único funciona bem se você só precisa de um sim ou não.
+
+00:01:41.460 --> 00:01:43.360
+No momento em que você adiciona níveis gerenciais,
+
+00:01:43.460 --> 00:01:46.340
+limites de gastos ou regras especializadas, o design começa a fragmentar.
+
+00:01:46.440 --> 00:01:48.700
+Você acaba aninhando condições como bonecas russas,
+
+00:01:48.780 --> 00:01:51.180
+deselegante, frágil e impossível de depurar seis meses depois.
+
+00:01:51.180 --> 00:01:54.460
+Um conector quebrado e todo o sistema falha silenciosamente.
+
+00:01:55.320 --> 00:01:58.740
+Humanos tornam-se gargalos, ou, sendo brutalmente preciso, nós de latência.
+
+00:01:59.280 --> 00:02:02.180
+Cada mensagem que recebem torna-se mais uma rodada assíncrona.
+
+00:02:02.860 --> 00:02:06.240
+E-mail como mecanismo de aprovação é como usar pombos correio em um mundo de fibra óptica.
+
+00:02:06.800 --> 00:02:08.260
+Tecnicamente funciona, mas não deveria.
+
+00:02:08.660 --> 00:02:10.020
+Conheça o Microsoft Copilot Studio.
+
+00:02:10.660 --> 00:02:12.960
+Não é apenas uma versão incremental do Power Automate.
+
+00:02:13.740 --> 00:02:17.100
+Ele introduz fluxos de agentes, sistemas de aprovação impulsionados por IA,
+
+00:02:17.100 --> 00:02:21.340
+totalmente integrados às fontes de dados, papéis e estruturas lógicas da sua organização.
+
+00:02:22.440 --> 00:02:25.420
+Ele une a aplicação de políticas determinísticas com a tomada de decisão adaptativa.
+
+00:02:26.180 --> 00:02:28.440
+O brilhantismo reside em como ele separa as etapas.
+
+00:02:29.180 --> 00:02:30.460
+Automatizado onde você quer velocidade.
+
+00:02:30.900 --> 00:02:32.560
+Humano onde você ainda precisa de validação.
+
+00:02:33.100 --> 00:02:34.440
+Pense nisso como uma hierarquia modelada.
+
+00:02:35.020 --> 00:02:36.880
+O estágio de IA avalia regras fixas,
+
+00:02:37.200 --> 00:02:38.920
+limites de valor, tipos de categoria,
+
+00:02:39.200 --> 00:02:40.820
+intervalos de dados com eficiência clínica.
+
+00:02:40.820 --> 00:02:43.300
+Então, se uma decisão oscila na ambividade,
+
+00:02:43.380 --> 00:02:45.060
+o processo escala para a supervisão humana
+
+00:02:45.060 --> 00:02:47.220
+sem forçar que cada caso trivial entre em uma fila.
+
+00:02:47.660 --> 00:02:49.420
+Isso por si só elimina atrasos exponenciais.
+
+00:02:49.940 --> 00:02:51.960
+Em vez de 10 pessoas realizando revisões em série,
+
+00:02:52.080 --> 00:02:53.660
+a IA lida com 80% instantaneamente,
+
+00:02:53.760 --> 00:02:55.140
+caminhando apenas os casos fora da curva.
+
+00:02:56.060 --> 00:02:59.560
+E sim, o Copilot Studio rastreia tudo através de sua estrutura Dataverse,
+
+00:02:59.680 --> 00:03:02.880
+gerando registros verificáveis sem que sua equipe precise vasculhar arquivos de e-mail.
+
+00:03:03.840 --> 00:03:05.640
+Fluxos de trabalho anteriores foram construídos para o mundo.
+
+00:03:06.100 --> 00:03:07.880
+Fluxos de agentes são construídos em torno deles,
+
+00:03:07.880 --> 00:03:10.940
+mantendo as pessoas no circuito apenas quando interpretação e não repetição é necessária.
+
+00:03:11.420 --> 00:03:13.140
+Assim que você vê como essa arquitetura funciona,
+
+00:03:13.260 --> 00:03:14.880
+provações tradicionais parecerão primitivas,
+
+00:03:14.980 --> 00:03:16.580
+como conferir talões de cheque à luz de velas.
+
+00:03:17.140 --> 00:03:19.600
+O que está em jogo é simples, conformidade, consistência e escala.
+
+00:03:20.420 --> 00:03:22.920
+Operações modernas se afogam sem validação automatizada,
+
+00:03:23.080 --> 00:03:25.620
+e a lógica assistida por IA é agora a base para a confiabilidade.
+
+00:03:26.160 --> 00:03:29.420
+Quando você migra de fluxos estáticos para fluxos de agentes condicionais e auditáveis,
+
+00:03:29.840 --> 00:03:31.600
+você para de gerenciar provações reativamente
+
+00:03:31.600 --> 00:03:33.440
+e começa a tratá-las como sistemas vivos.
+
+00:03:34.260 --> 00:03:36.600
+A diferença não é apenas velocidade, a sanidade estrutural.
+
+00:03:36.600 --> 00:03:40.040
+Construindo o estágio de IA, ensinando o primeiro aprovador.
+
+00:03:40.860 --> 00:03:43.600
+Agora vem a parte interessante, treinar seu primeiro burocrata digital.
+
+00:03:44.620 --> 00:03:47.480
+O estágio de IA é o guardião lógico do seu processo de aprovação.
+
+00:03:47.980 --> 00:03:49.480
+Seu trabalho não é pensar como um humano,
+
+00:03:49.600 --> 00:03:52.280
+mas realizar raciocínio estruturado com consistência sobre a humana.
+
+00:03:53.100 --> 00:03:55.320
+Ele lê instruções, as verifica em relação às entradas
+
+00:03:55.320 --> 00:03:57.620
+e produz um de dois vereditos, aprovado ou rejeitado.
+
+00:03:58.160 --> 00:03:59.320
+Sem política, sem pausas para o café.
+
+00:04:00.060 --> 00:04:01.460
+Você começa definindo um novo fluxo de agente.
+
+00:04:01.460 --> 00:04:05.080
+Na criação, o estágio de IA fica em destaque como uma prova em branco,
+
+00:04:05.180 --> 00:04:06.440
+esperando pelo seu gabarito.
+
+00:04:07.120 --> 00:04:08.540
+O gatilho geralmente vem do Dataverse,
+
+00:04:08.700 --> 00:04:11.380
+um registro adicionado ou modificado em sua tabela de solicitações ou despesas.
+
+00:04:11.720 --> 00:04:14.080
+Assim que uma solicitação é criada, este estágio é ativado,
+
+00:04:14.300 --> 00:04:15.640
+avalia os dados e decide de acordo.
+
+00:04:16.600 --> 00:04:19.120
+Dentro do estágio, o campo mais importante é o prompt de instrução,
+
+00:04:19.220 --> 00:04:20.060
+o cérebro da operação.
+
+00:04:20.800 --> 00:04:22.400
+É aqui que você descreve a lógica de aprovação,
+
+00:04:22.460 --> 00:04:24.040
+em linguagem simples, porém rigorosa.
+
+00:04:24.500 --> 00:04:26.880
+Creva como se estivesse instruindo um advogado que nunca improvisa.
+
+00:04:26.880 --> 00:04:30.880
+Por exemplo, aprove a solicitação se o valor for inferior a 500,
+
+00:04:31.020 --> 00:04:32.860
+a descrição apoiar saúde física ou mental
+
+00:04:32.860 --> 00:04:35.400
+e a data da compra estiver dentro de 30 dias do envio.
+
+00:04:36.580 --> 00:04:37.700
+Rejeite-se qualquer regra falhar.
+
+00:04:38.260 --> 00:04:39.200
+É isso, clareza binária.
+
+00:04:40.120 --> 00:04:41.780
+Em seguida, defina suas entradas dinâmicas.
+
+00:04:42.300 --> 00:04:44.760
+Pense nelas como variáveis alimentando dados reais em sua lógica.
+
+00:04:45.240 --> 00:04:46.780
+Muito provavelmente você incluirá um valor,
+
+00:04:46.880 --> 00:04:48.160
+uma descrição e uma data de compra.
+
+00:04:48.700 --> 00:04:50.260
+Cada um é adicionado como conteúdo,
+
+00:04:50.760 --> 00:04:52.120
+texto ou entradas numéricas
+
+00:04:52.120 --> 00:04:54.260
+que a IA passará ao tomar uma decisão.
+
+00:04:54.260 --> 00:04:57.500
+O Copilot Studio classifica essas entradas por tipo texto,
+
+00:04:57.600 --> 00:04:59.100
+número ou documento de imagem.
+
+00:04:59.920 --> 00:05:01.780
+Escolha corretamente, pois misturar tipos,
+
+00:05:02.000 --> 00:05:03.840
+digamos um número armazenado como texto,
+
+00:05:04.020 --> 00:05:05.280
+confunde humanos e máquinas,
+
+00:05:05.940 --> 00:05:08.220
+abaixo de cada entrada forneça dados de amostra para teste.
+
+00:05:08.700 --> 00:05:10.660
+Isso funciona como um suporte enquanto você calibra a lógica.
+
+00:05:11.080 --> 00:05:12.680
+Por exemplo, insira uma solicitação de exemplo
+
+00:05:12.680 --> 00:05:14.460
+com um tapete de OGA valor 300,
+
+00:05:14.880 --> 00:05:16.580
+data de compra 22 de agosto.
+
+00:05:17.580 --> 00:05:18.480
+Ao clicar em testar,
+
+00:05:18.840 --> 00:05:20.900
+o Copilot Studio executa o modelo de raciocínio,
+
+00:05:21.140 --> 00:05:22.360
+baseado em GPT internamente,
+
+00:05:22.360 --> 00:05:24.180
+e gera uma decisão com uma explicação
+
+00:05:24.180 --> 00:05:26.840
+se o resultado corresponder à sua expectativa.
+
+00:05:26.980 --> 00:05:27.200
+Ótimo.
+
+00:05:27.940 --> 00:05:30.220
+Se não, suas instruções carecem de determinismo.
+
+00:05:30.980 --> 00:05:32.160
+E é aí que a maioria dos iniciantes é.
+
+00:05:32.880 --> 00:05:34.300
+Frases amplas ou ambíguas,
+
+00:05:34.420 --> 00:05:36.160
+como despesa razoável ou compra recente,
+
+00:05:36.260 --> 00:05:36.700
+são um veneno.
+
+00:05:37.100 --> 00:05:37.500
+Para IA.
+
+00:05:38.260 --> 00:05:39.900
+O sistema não consegue ler humor corporativo,
+
+00:05:39.980 --> 00:05:41.180
+ele precisa de definições matemáticas.
+
+00:05:41.760 --> 00:05:43.520
+Portanto, refine suas instruções incansavelmente
+
+00:05:43.520 --> 00:05:45.160
+até que os resultados dos testes sejam consistentes.
+
+00:05:45.580 --> 00:05:46.620
+Cada vez que você reescreve,
+
+00:05:46.700 --> 00:05:48.700
+está ajustando o motor de julgamento para a reprodutibilidade.
+
+00:05:49.320 --> 00:05:50.300
+O padrão que você deseja
+
+00:05:50.300 --> 00:05:51.040
+é uma entrada idêntica,
+
+00:05:51.120 --> 00:05:52.500
+produzindo uma saída idêntica sempre.
+
+00:05:53.120 --> 00:05:54.680
+Lógica de máquina, não fofoca de escritório.
+
+00:05:55.620 --> 00:05:57.620
+Uma vez que seu prompt gera decisões confiáveis
+
+00:05:57.620 --> 00:05:58.620
+em vários casos de teste,
+
+00:05:58.700 --> 00:06:00.160
+você treinou seu aprovador de IA.
+
+00:06:01.000 --> 00:06:02.640
+Agora, injete os dados dinâmicos reais
+
+00:06:02.640 --> 00:06:03.980
+usando tokens do Dataverse,
+
+00:06:04.100 --> 00:06:05.340
+detalhes do valor da solicitação,
+
+00:06:05.440 --> 00:06:06.220
+data de compra ou envio.
+
+00:06:07.040 --> 00:06:08.480
+Eles substituirão seus valores de teste
+
+00:06:08.480 --> 00:06:09.320
+durante as execuções ré.
+
+00:06:09.860 --> 00:06:10.820
+A partir desse ponto,
+
+00:06:10.900 --> 00:06:12.680
+a IA avalia cada solicitação no contexto,
+
+00:06:12.840 --> 00:06:13.200
+retornando.
+
+00:06:13.320 --> 00:06:14.240
+Um veredito de aprovação
+
+00:06:14.240 --> 00:06:15.740
+no momento em que novos dados aparecem.
+
+00:06:15.740 --> 00:06:17.020
+Antes de declarar a vitória,
+
+00:06:17.140 --> 00:06:18.220
+execute testes interativos.
+
+00:06:18.860 --> 00:06:19.820
+Altere o valor para 600,
+
+00:06:19.940 --> 00:06:20.420
+ele rejeita.
+
+00:06:20.860 --> 00:06:22.280
+Altere a data para 3 meses atrás,
+
+00:06:22.360 --> 00:06:23.220
+ele sinaliza como invale.
+
+00:06:23.560 --> 00:06:24.820
+Adicione uma solicitação sem sentido
+
+00:06:24.820 --> 00:06:25.440
+com compra de iPad.
+
+00:06:25.860 --> 00:06:26.820
+Ele detecta incompatibilidade.
+
+00:06:27.180 --> 00:06:28.400
+Cada passagem deve demonstrar
+
+00:06:28.400 --> 00:06:29.620
+causa e efeito consistentes.
+
+00:06:30.100 --> 00:06:31.140
+Se as respostas flutuarem,
+
+00:06:31.220 --> 00:06:32.580
+o problema é a clareza do seu prompt
+
+00:06:32.580 --> 00:06:33.380
+no modelo de A.
+
+00:06:33.980 --> 00:06:35.520
+Quando padrões consistentes surgirem,
+
+00:06:35.680 --> 00:06:37.260
+estabeleça uma convenção de nomenclatura
+
+00:06:37.260 --> 00:06:38.340
+para suas variáveis de conteúdo.
+
+00:06:38.840 --> 00:06:40.860
+Prefixos como STR para valor da solicitação
+
+00:06:40.860 --> 00:06:41.820
+ou NUM para data de compra
+
+00:06:41.820 --> 00:06:42.520
+e valores numéricos.
+
+00:06:42.520 --> 00:06:44.800
+Essa pequena disciplina evita o caos
+
+00:06:44.800 --> 00:06:45.540
+quando você expandir
+
+00:06:45.540 --> 00:06:47.320
+para uma lógica de múltiplas ramificações.
+
+00:06:48.480 --> 00:06:49.140
+Nesta fase,
+
+00:06:49.220 --> 00:06:50.360
+seu aprovador automatizado
+
+00:06:50.360 --> 00:06:51.680
+pode tomar decisões independentes
+
+00:06:51.680 --> 00:06:53.200
+com base na política sem supervisão.
+
+00:06:53.920 --> 00:06:55.120
+Mas automação não é ditadura,
+
+00:06:55.200 --> 00:06:55.780
+é delegação.
+
+00:06:56.520 --> 00:06:57.980
+A máquina lida com velocidade e precisão
+
+00:06:57.980 --> 00:06:58.600
+num julgamento.
+
+00:06:58.980 --> 00:07:00.100
+Para cenários limítrofes,
+
+00:07:00.160 --> 00:07:01.280
+você precisará de escalonamento.
+
+00:07:01.500 --> 00:07:02.480
+Um humano no circuito
+
+00:07:02.480 --> 00:07:03.900
+para revisar o que a EA recusa
+
+00:07:03.900 --> 00:07:04.720
+ou considera incerto.
+
+00:07:05.420 --> 00:07:06.880
+É aí que a próxima fase entra em cena
+
+00:07:06.880 --> 00:07:07.780
+e é assim que a autoridade
+
+00:07:07.780 --> 00:07:09.380
+é compartilhada entre o silício e a equipe.
+
+00:07:10.620 --> 00:07:11.740
+Adicionando supervisão humana.
+
+00:07:11.740 --> 00:07:13.360
+Lógica de vários estágios e condicionado.
+
+00:07:13.840 --> 00:07:15.260
+Uma vez que sua EA julgue solicitações
+
+00:07:15.260 --> 00:07:15.860
+com confiança,
+
+00:07:15.940 --> 00:07:17.440
+você pode adicionar o que a burocracia
+
+00:07:17.440 --> 00:07:19.000
+ironicamente chama de toque humano.
+
+00:07:19.600 --> 00:07:20.460
+No Copilot Studio,
+
+00:07:20.560 --> 00:07:21.880
+isso significa um estágio manual,
+
+00:07:22.100 --> 00:07:23.020
+um ponto de verificação
+
+00:07:23.020 --> 00:07:23.760
+onde uma pessoa real
+
+00:07:23.760 --> 00:07:24.960
+pode exercer seu discernimento.
+
+00:07:25.440 --> 00:07:26.680
+Pense nisso como sua válvula de segurança.
+
+00:07:27.380 --> 00:07:28.060
+Tudo que é previsível
+
+00:07:28.060 --> 00:07:29.180
+flui automaticamente.
+
+00:07:30.180 --> 00:07:31.040
+Qualquer coisa com nuances
+
+00:07:31.040 --> 00:07:32.220
+vai para a mesa de um gerente.
+
+00:07:32.660 --> 00:07:34.020
+Você começa no design de aprovação
+
+00:07:34.020 --> 00:07:35.000
+adicionando um estágio manual
+
+00:07:35.000 --> 00:07:36.020
+logo após o estágio da EA.
+
+00:07:36.480 --> 00:07:37.820
+Isso cria uma segunda barreira
+
+00:07:37.820 --> 00:07:38.600
+no fluxo do seu agente.
+
+00:07:39.120 --> 00:07:39.920
+A transferência condicional.
+
+00:07:39.920 --> 00:07:42.300
+Somente se o veredito da EA for aprovado,
+
+00:07:42.440 --> 00:07:43.700
+seguimos para o estágio humano.
+
+00:07:44.440 --> 00:07:45.420
+Se a EA de ser rejeitada,
+
+00:07:45.480 --> 00:07:46.600
+o processo termina ali mesmo.
+
+00:07:47.140 --> 00:07:48.380
+Por que perder tempo pedindo aos gerentes
+
+00:07:48.380 --> 00:07:49.420
+para confirmar o que a política
+
+00:07:49.420 --> 00:07:50.240
+já desqualificou?
+
+00:07:51.200 --> 00:07:52.400
+Eficiência e atenção seletiva
+
+00:07:52.400 --> 00:07:53.420
+disfarçada de automação.
+
+00:07:54.020 --> 00:07:55.000
+Vou montar um cenário de exemplo.
+
+00:07:55.640 --> 00:07:56.740
+Suponha que um funcionário envia
+
+00:07:56.740 --> 00:07:57.720
+uma solicitação de reembolso
+
+00:07:57.720 --> 00:07:58.120
+para a academia.
+
+00:07:58.840 --> 00:08:00.180
+A EA aprova o que todos os critérios
+
+00:08:00.180 --> 00:08:01.180
+estão de acordo com a política.
+
+00:08:01.900 --> 00:08:03.060
+Agora, essa decisão aciona
+
+00:08:03.060 --> 00:08:04.560
+um estágio manual de nível gerencial
+
+00:08:04.560 --> 00:08:05.680
+chamado aprovação de gerente.
+
+00:08:05.680 --> 00:08:07.340
+Por baixo dos panos,
+
+00:08:07.420 --> 00:08:08.460
+você configura esse estágio
+
+00:08:08.460 --> 00:08:09.100
+com o título como
+
+00:08:09.100 --> 00:08:10.140
+Solicitação de aprovação
+
+00:08:10.140 --> 00:08:11.180
+de despesa de quem enviou.
+
+00:08:12.140 --> 00:08:12.940
+Essas variáveis
+
+00:08:12.940 --> 00:08:13.960
+extraem dados dinamicamente
+
+00:08:13.960 --> 00:08:14.500
+do Dataverse.
+
+00:08:15.140 --> 00:08:16.200
+O campo atribuído
+
+00:08:16.200 --> 00:08:17.200
+é onde você define
+
+00:08:17.200 --> 00:08:18.060
+quem recebe a tarefa,
+
+00:08:18.260 --> 00:08:18.920
+geralmente o gerente
+
+00:08:18.920 --> 00:08:19.600
+do solicitante.
+
+00:08:20.620 --> 00:08:21.860
+Para automatizar esse roteamento,
+
+00:08:21.960 --> 00:08:22.860
+o Copilot Studio permite
+
+00:08:22.860 --> 00:08:24.160
+integrar o conector de usuários
+
+00:08:24.160 --> 00:08:24.960
+do Office 365.
+
+00:08:25.960 --> 00:08:26.340
+Primeiro,
+
+00:08:26.460 --> 00:08:27.500
+obtenha um registro do usuário
+
+00:08:27.500 --> 00:08:28.500
+de quem criou a solicitação,
+
+00:08:28.860 --> 00:08:29.300
+usando a ação
+
+00:08:29.300 --> 00:08:30.060
+obter linha por ID
+
+00:08:30.060 --> 00:08:30.820
+na tabela de usuários
+
+00:08:30.820 --> 00:08:31.440
+no Dataverse.
+
+00:08:32.120 --> 00:08:33.140
+Isso recupera as informações
+
+00:08:33.140 --> 00:08:33.640
+de quem enviou.
+
+00:08:34.240 --> 00:08:34.720
+Em seguida,
+
+00:08:34.780 --> 00:08:35.640
+a ação obter gerente,
+
+00:08:35.760 --> 00:08:36.820
+busque o gerente daquele usuário
+
+00:08:36.820 --> 00:08:37.720
+através do e-mail principal.
+
+00:08:38.440 --> 00:08:39.080
+Passe esse resultado
+
+00:08:39.080 --> 00:08:40.160
+de volta para seu estágio manual
+
+00:08:40.160 --> 00:08:40.820
+com uma variável
+
+00:08:40.820 --> 00:08:41.900
+com o e-mail do gerente STR.
+
+00:08:42.620 --> 00:08:43.880
+Resultados sem codificação fixa,
+
+00:08:43.940 --> 00:08:44.740
+sem hierarquias obsoletas.
+
+00:08:45.220 --> 00:08:45.960
+Gerentes mudam,
+
+00:08:46.300 --> 00:08:47.500
+a hierarquia se atualiza sozinha.
+
+00:08:48.300 --> 00:08:49.560
+Agora vem a ramificação condicional,
+
+00:08:49.820 --> 00:08:50.360
+verdadeiro motivo
+
+00:08:50.360 --> 00:08:51.220
+da existência de aprovações
+
+00:08:51.220 --> 00:08:51.700
+e várias etapas.
+
+00:08:52.140 --> 00:08:53.060
+Você pode introduzir lógica
+
+00:08:53.060 --> 00:08:54.300
+diretamente dentro do fluxo do agente.
+
+00:08:55.060 --> 00:08:56.000
+Se o valor da solicitação
+
+00:08:56.000 --> 00:08:57.000
+for maior ou igual a 150,
+
+00:08:57.200 --> 00:08:58.060
+adicione um estágio adicional
+
+00:08:58.060 --> 00:08:59.280
+para aprovação administrativa.
+
+00:09:00.060 --> 00:09:00.500
+Caso contrário,
+
+00:09:00.500 --> 00:09:02.120
+isso transforma
+
+00:09:02.120 --> 00:09:03.080
+uma rotina simples
+
+00:09:03.080 --> 00:09:03.940
+de duas etapas
+
+00:09:03.940 --> 00:09:05.020
+em uma árvore de decisão
+
+00:09:05.020 --> 00:09:05.620
+de vários níveis
+
+00:09:05.620 --> 00:09:06.540
+que se adapta ao contexto.
+
+00:09:07.100 --> 00:09:08.000
+Solicitações de baixo valor
+
+00:09:08.000 --> 00:09:08.540
+passam a pessoa.
+
+00:09:09.180 --> 00:09:10.080
+Solicitações de maior valor
+
+00:09:10.080 --> 00:09:10.480
+ou risco
+
+00:09:10.480 --> 00:09:11.620
+são escaladas para um olhar extra.
+
+00:09:12.160 --> 00:09:12.620
+No designer,
+
+00:09:12.760 --> 00:09:13.720
+insira uma ação de condição
+
+00:09:13.720 --> 00:09:14.760
+antes de fechar o fluxo.
+
+00:09:15.240 --> 00:09:16.360
+Referencia sua variável numérica,
+
+00:09:16.460 --> 00:09:17.180
+talvez o valor numérico
+
+00:09:17.180 --> 00:09:17.780
+da solicitação.
+
+00:09:18.740 --> 00:09:19.980
+Escolha o operador maior
+
+00:09:19.980 --> 00:09:20.600
+ou igual a
+
+00:09:20.600 --> 00:09:22.080
+e defina o limite
+
+00:09:22.080 --> 00:09:22.820
+como 150.
+
+00:09:24.020 --> 00:09:25.180
+No ramo se verdadeiro,
+
+00:09:25.240 --> 00:09:26.140
+adicione outro estágio manual
+
+00:09:26.140 --> 00:09:27.360
+chamado aprovação administrativa.
+
+00:09:27.960 --> 00:09:29.200
+Atribua um aprovador fixo
+
+00:09:29.200 --> 00:09:30.340
+como administrador de conformidade.
+
+00:09:30.500 --> 00:09:31.540
+Num ramo se falso,
+
+00:09:31.640 --> 00:09:32.540
+finalize como aprovado.
+
+00:09:33.080 --> 00:09:33.560
+O efeito,
+
+00:09:33.720 --> 00:09:34.440
+o fluxo de trabalho
+
+00:09:34.440 --> 00:09:35.220
+se comporta como
+
+00:09:35.220 --> 00:09:36.120
+uma organização racional
+
+00:09:36.120 --> 00:09:37.580
+em vez de um gargalo universal.
+
+00:09:38.440 --> 00:09:39.220
+Pouco de humor prático
+
+00:09:39.220 --> 00:09:39.760
+se aplica aqui.
+
+00:09:40.280 --> 00:09:40.460
+Sim,
+
+00:09:40.600 --> 00:09:41.960
+a delegação ainda exige confiança,
+
+00:09:42.060 --> 00:09:42.920
+não apenas otimismo.
+
+00:09:43.500 --> 00:09:44.240
+Não atribua funções
+
+00:09:44.240 --> 00:09:45.120
+de segurança amplas
+
+00:09:45.120 --> 00:09:46.000
+que permitam aprovar tudo.
+
+00:09:46.420 --> 00:09:47.300
+Restringe as permissões
+
+00:09:47.300 --> 00:09:47.840
+aos usuários
+
+00:09:47.840 --> 00:09:48.640
+ou grupos relevantes
+
+00:09:48.640 --> 00:09:49.700
+por meio do controle de acesso
+
+00:09:49.700 --> 00:09:50.760
+baseado em funções do Dataverse.
+
+00:09:50.980 --> 00:09:51.480
+Caso contrário,
+
+00:09:51.540 --> 00:09:52.420
+você automatizou a anarquia.
+
+00:09:52.800 --> 00:09:53.520
+Testar a estrutura
+
+00:09:53.520 --> 00:09:54.440
+revela com suavemente
+
+00:09:54.440 --> 00:09:55.360
+cada peça e se encaixa.
+
+00:09:56.040 --> 00:09:56.700
+Quando uma solicitação
+
+00:09:56.700 --> 00:09:57.800
+abaixo de US$ 150
+
+00:09:57.800 --> 00:09:59.040
+passa pela revisão da IA,
+
+00:09:59.140 --> 00:09:59.740
+o fluxo termina
+
+00:09:59.740 --> 00:10:00.580
+após a aprovação do gerente.
+
+00:10:01.220 --> 00:10:01.780
+Quando ultrapassa
+
+00:10:01.780 --> 00:10:02.400
+o US$ 150,
+
+00:10:02.520 --> 00:10:03.480
+o sistema gentilmente
+
+00:10:03.480 --> 00:10:04.140
+a coloca na fila
+
+00:10:04.140 --> 00:10:05.040
+para a revisão do administrador
+
+00:10:05.040 --> 00:10:05.640
+antes de finalizar.
+
+00:10:06.300 --> 00:10:06.800
+Cada caminho
+
+00:10:06.800 --> 00:10:07.880
+deixa uma trilha de auditoria,
+
+00:10:07.940 --> 00:10:09.020
+o registro de raciocínio da IA,
+
+00:10:09.200 --> 00:10:09.920
+aprovações com carimbo
+
+00:10:09.920 --> 00:10:10.600
+de data barra hora
+
+00:10:10.600 --> 00:10:11.440
+e resultados registrados
+
+00:10:11.440 --> 00:10:11.880
+no Dataverse.
+
+00:10:12.220 --> 00:10:13.260
+Ninguém poderá alegar depois,
+
+00:10:13.300 --> 00:10:13.800
+eu nunca vi isso.
+
+00:10:14.480 --> 00:10:15.100
+O banco de dados
+
+00:10:15.100 --> 00:10:15.540
+é o contrário.
+
+00:10:15.540 --> 00:10:16.660
+A medida que refina
+
+00:10:16.660 --> 00:10:17.340
+mantém as convenções
+
+00:10:17.340 --> 00:10:18.340
+de nomenclatura disciplinada.
+
+00:10:18.340 --> 00:10:20.020
+Prefixe as etapas humanas
+
+00:10:20.020 --> 00:10:20.440
+claramente,
+
+00:10:20.520 --> 00:10:21.560
+como aprovado pelo gerente
+
+00:10:21.560 --> 00:10:22.620
+ou aprovado pelo administrador
+
+00:10:22.620 --> 00:10:23.180
+para que você possa
+
+00:10:23.180 --> 00:10:24.340
+rastrear as ramificações de zonho.
+
+00:10:24.940 --> 00:10:25.480
+O fluxograma
+
+00:10:25.480 --> 00:10:26.440
+deve ser lido como lógica,
+
+00:10:26.480 --> 00:10:27.300
+não como arte misteriosa.
+
+00:10:28.080 --> 00:10:28.740
+Uma vez satisfeito,
+
+00:10:28.840 --> 00:10:29.460
+publique teste
+
+00:10:29.460 --> 00:10:30.340
+com cenários reais.
+
+00:10:31.020 --> 00:10:31.560
+Observe a cadeia
+
+00:10:31.560 --> 00:10:31.940
+se desenrolar.
+
+00:10:32.420 --> 00:10:33.540
+A IA avalia instantaneamente.
+
+00:10:34.180 --> 00:10:34.780
+O gerente recebe
+
+00:10:34.780 --> 00:10:35.600
+uma tarefa de aprovação
+
+00:10:35.600 --> 00:10:36.080
+direcionada.
+
+00:10:36.400 --> 00:10:37.160
+O administrador entra
+
+00:10:37.160 --> 00:10:38.460
+apenas quando as condições exigem.
+
+00:10:39.080 --> 00:10:39.580
+O resultado
+
+00:10:39.580 --> 00:10:40.220
+parece menos
+
+00:10:40.220 --> 00:10:40.960
+com uma automação
+
+00:10:40.960 --> 00:10:41.840
+fazendo tudo e mais
+
+00:10:41.840 --> 00:10:42.580
+com uma hierarquia
+
+00:10:42.580 --> 00:10:43.500
+transparente
+
+00:10:43.500 --> 00:10:44.360
+que se auto-gestiona.
+
+00:10:45.280 --> 00:10:45.980
+Essa orquestração
+
+00:10:45.980 --> 00:10:46.780
+em camadas também
+
+00:10:46.780 --> 00:10:47.800
+expõe uma nova fronteira,
+
+00:10:47.880 --> 00:10:48.900
+a validação de documentos.
+
+00:10:49.600 --> 00:10:50.020
+Porque é às vezes
+
+00:10:50.020 --> 00:10:50.840
+um campo de formulário
+
+00:10:50.840 --> 00:10:51.780
+mente, mas o recibo não.
+
+00:10:52.660 --> 00:10:53.300
+O próximo passo
+
+00:10:53.300 --> 00:10:54.020
+é fazer com que a IA
+
+00:10:54.020 --> 00:10:55.060
+examine a evidência física
+
+00:10:55.060 --> 00:10:55.820
+antes mesmo de chegar
+
+00:10:55.820 --> 00:10:56.640
+à sua caixa de entrada.
+
+00:10:57.240 --> 00:10:57.840
+É aí que entra
+
+00:10:57.840 --> 00:10:58.900
+a validação de recibos,
+
+00:10:58.980 --> 00:10:59.860
+transformando a burocracia
+
+00:10:59.860 --> 00:11:00.720
+em ciência verificada.
+
+00:11:01.820 --> 00:11:02.520
+Entradas dinâmicas,
+
+00:11:02.600 --> 00:11:03.420
+validação de documentos.
+
+00:11:03.820 --> 00:11:04.860
+Vamos falar sobre recibos,
+
+00:11:04.940 --> 00:11:05.840
+aqueles pequenos pedaços
+
+00:11:05.840 --> 00:11:06.600
+de papel amassados
+
+00:11:06.600 --> 00:11:07.320
+que misteriosamente
+
+00:11:07.320 --> 00:11:08.500
+se tornam evidências cruciais
+
+00:11:08.500 --> 00:11:09.520
+quando alguém quer reembolso?
+
+00:11:10.380 --> 00:11:10.920
+Em um processo
+
+00:11:10.920 --> 00:11:11.740
+de aprovação manual,
+
+00:11:12.080 --> 00:11:13.540
+humanos os verificam visualmente.
+
+00:11:14.180 --> 00:11:14.660
+Sim, isso parece
+
+00:11:14.660 --> 00:11:15.320
+um tapete de yoga,
+
+00:11:15.320 --> 00:11:17.160
+um IA. Em um processo
+
+00:11:17.160 --> 00:11:18.280
+automatizado, fazemos a IA
+
+00:11:18.280 --> 00:11:19.400
+realizar a mesma verificação
+
+00:11:19.400 --> 00:11:20.380
+sem fadiga de julgamento.
+
+00:11:21.020 --> 00:11:21.840
+Nos fluxos de agentes
+
+00:11:21.840 --> 00:11:22.640
+do Copilot Studio,
+
+00:11:22.760 --> 00:11:23.660
+a validação de documentos
+
+00:11:23.660 --> 00:11:24.420
+ganha vida por meio
+
+00:11:24.420 --> 00:11:25.700
+de entradas de conteúdo dinâmico,
+
+00:11:26.160 --> 00:11:27.200
+especificamente a capacidade
+
+00:11:27.200 --> 00:11:27.980
+de passar uma imagem
+
+00:11:27.980 --> 00:11:28.980
+ou arquivo para sua lógica
+
+00:11:28.980 --> 00:11:29.500
+de aprovação.
+
+00:11:30.040 --> 00:11:31.140
+Isso adiciona um terceiro sentido
+
+00:11:31.140 --> 00:11:32.120
+ao seu aprovador de IA Visão.
+
+00:11:32.800 --> 00:11:33.480
+Em vez de confiar
+
+00:11:33.480 --> 00:11:34.640
+apenas em campos de texto,
+
+00:11:34.760 --> 00:11:35.800
+o modelo lê o documento
+
+00:11:35.800 --> 00:11:36.760
+e compara o que está escrito
+
+00:11:36.760 --> 00:11:37.660
+com o que foi enviado.
+
+00:11:38.260 --> 00:11:38.980
+Aqui está estrutura.
+
+00:11:39.600 --> 00:11:40.760
+Dentro do seu estágio de IA,
+
+00:11:40.940 --> 00:11:41.980
+você adiciona um novo tipo
+
+00:11:41.980 --> 00:11:42.660
+de entrada chamado
+
+00:11:42.660 --> 00:11:43.580
+imagem ou documento.
+
+00:11:43.580 --> 00:11:44.760
+Dê um rótulo claro
+
+00:11:44.760 --> 00:11:45.120
+ou algo como
+
+00:11:45.120 --> 00:11:46.000
+arquivo de recibo doc.
+
+00:11:46.600 --> 00:11:47.460
+Envie um recibo de exemplo
+
+00:11:47.460 --> 00:11:47.940
+para teste.
+
+00:11:48.560 --> 00:11:49.320
+Isso não entra em produção,
+
+00:11:49.500 --> 00:11:50.840
+apenas treine o layout da lógica.
+
+00:11:51.320 --> 00:11:52.460
+Agora, ajuste seu prompt
+
+00:11:52.460 --> 00:11:53.300
+de instrução para incluir
+
+00:11:53.300 --> 00:11:54.520
+a validação cruzada do documento.
+
+00:11:55.000 --> 00:11:56.040
+Você amplia sua lógica anterior.
+
+00:11:56.620 --> 00:11:57.480
+Aprove a solicitação
+
+00:11:57.480 --> 00:11:58.440
+se tudo o seguinte for verdade,
+
+00:11:58.540 --> 00:11:59.020
+valor de 500.
+
+00:11:59.180 --> 00:12:00.080
+Detalhes da solicitação
+
+00:12:00.080 --> 00:12:01.320
+suportam saúde física ou mental,
+
+00:12:01.460 --> 00:12:02.680
+data da compra dentro de 30 dias,
+
+00:12:02.740 --> 00:12:03.640
+e o documento de 30 dias
+
+00:12:03.640 --> 00:12:04.260
+e o documento de recibo
+
+00:12:04.260 --> 00:12:04.940
+corresponde ao item,
+
+00:12:05.040 --> 00:12:05.840
+valor e data declarados.
+
+00:12:06.260 --> 00:12:07.260
+Essa quarta condição
+
+00:12:07.260 --> 00:12:08.560
+transforma-se ao aprovador de IA
+
+00:12:08.560 --> 00:12:09.580
+de um executor de políticas
+
+00:12:09.580 --> 00:12:10.640
+em um contador forense.
+
+00:12:10.640 --> 00:12:12.800
+Quando o teste é executado,
+
+00:12:12.940 --> 00:12:13.940
+o modelo extrai texto
+
+00:12:13.940 --> 00:12:14.920
+legível do documento
+
+00:12:14.920 --> 00:12:16.060
+e verifica a consistência
+
+00:12:16.060 --> 00:12:17.460
+com suas entradas estruturadas.
+
+00:12:18.180 --> 00:12:18.920
+Se o recibo listar
+
+00:12:18.920 --> 00:12:19.620
+um tapete de yoga
+
+00:12:19.620 --> 00:12:21.620
+por US$ 300 em 22 de agosto
+
+00:12:21.620 --> 00:12:22.480
+e sua solicitação
+
+00:12:22.480 --> 00:12:23.440
+disser qualquer outra coisa,
+
+00:12:23.580 --> 00:12:24.760
+o veredito muda para rejeitado.
+
+00:12:25.140 --> 00:12:26.060
+Agora, para a implementação.
+
+00:12:26.200 --> 00:12:27.080
+Antes que a aprovação ocorra,
+
+00:12:27.140 --> 00:12:28.300
+você precisará buscar esse documento.
+
+00:12:29.120 --> 00:12:29.900
+Use a ação de baixar
+
+00:12:29.900 --> 00:12:30.640
+um arquivo ou a imagem
+
+00:12:30.640 --> 00:12:31.320
+do Dataverse.
+
+00:12:32.040 --> 00:12:32.880
+Ponte para a mesma tabela
+
+00:12:32.880 --> 00:12:33.380
+em que o registro
+
+00:12:33.380 --> 00:12:34.160
+da solicitação reside,
+
+00:12:34.260 --> 00:12:34.900
+provavelmente sua ação está.
+
+00:12:35.400 --> 00:12:36.260
+Na coluna de arquivo,
+
+00:12:36.420 --> 00:12:37.380
+escolha o campo de anexo,
+
+00:12:37.440 --> 00:12:38.280
+frequentemente nomeado
+
+00:12:38.280 --> 00:12:39.020
+como recibo.
+
+00:12:39.020 --> 00:12:40.340
+Em seguida,
+
+00:12:40.440 --> 00:12:41.520
+especifique o ID da linha
+
+00:12:41.520 --> 00:12:42.900
+dinamicamente a partir do gatilho,
+
+00:12:42.960 --> 00:12:43.660
+o identificador único
+
+00:12:43.660 --> 00:12:44.400
+da solicitação.
+
+00:12:45.100 --> 00:12:46.240
+Essa ação retorna metadados
+
+00:12:46.240 --> 00:12:46.980
+e conteúdo do arquivo,
+
+00:12:47.060 --> 00:12:48.120
+mas aqui está a armadilha sutil.
+
+00:12:49.200 --> 00:12:49.980
+A saída do conteúdo
+
+00:12:49.980 --> 00:12:51.180
+precisa de um pequeno ajuste
+
+00:12:51.180 --> 00:12:51.620
+para que a IA
+
+00:12:51.620 --> 00:12:52.700
+interprete corretamente.
+
+00:12:53.420 --> 00:12:54.240
+Ao mapear o conteúdo
+
+00:12:54.240 --> 00:12:55.120
+do arquivo na entrada
+
+00:12:55.120 --> 00:12:55.840
+do seu recibo,
+
+00:12:56.340 --> 00:12:57.320
+abra o editor de expressões
+
+00:12:57.320 --> 00:12:58.280
+e adicione content
+
+00:12:58.280 --> 00:12:59.420
+à referência do corpo.
+
+00:13:00.520 --> 00:13:01.280
+Esse último ajuste
+
+00:13:01.280 --> 00:13:02.120
+entrega os bytes reais
+
+00:13:02.120 --> 00:13:02.540
+do arquivo
+
+00:13:02.540 --> 00:13:03.140
+em vez do invólucro
+
+00:13:03.140 --> 00:13:03.860
+de metadados.
+
+00:13:04.600 --> 00:13:05.380
+Se ignorar isso,
+
+00:13:05.460 --> 00:13:06.060
+sua IA aprovará
+
+00:13:06.060 --> 00:13:06.720
+entusiasticamente
+
+00:13:06.720 --> 00:13:07.360
+recibos em branco.
+
+00:13:07.360 --> 00:13:08.560
+Vamos abordar
+
+00:13:08.560 --> 00:13:09.180
+a sincronização
+
+00:13:09.180 --> 00:13:10.060
+ou calcanhar de Aquiles
+
+00:13:10.060 --> 00:13:10.760
+dos fluxos de trabalho
+
+00:13:10.760 --> 00:13:11.240
+e documentos.
+
+00:13:11.880 --> 00:13:12.740
+A maioria das tabelas
+
+00:13:12.740 --> 00:13:13.320
+do Dataverse
+
+00:13:13.320 --> 00:13:14.260
+não armazena anexos
+
+00:13:14.260 --> 00:13:14.980
+até que o registro
+
+00:13:14.980 --> 00:13:15.640
+seja salvo,
+
+00:13:15.740 --> 00:13:16.180
+o que significa
+
+00:13:16.180 --> 00:13:16.980
+que se seu fluxo
+
+00:13:16.980 --> 00:13:17.440
+for acionado
+
+00:13:17.440 --> 00:13:18.260
+na criação do registro
+
+00:13:18.260 --> 00:13:18.840
+ele pode disparar
+
+00:13:18.840 --> 00:13:19.840
+antes que o arquivo exista.
+
+00:13:21.120 --> 00:13:21.460
+Sintoma
+
+00:13:21.460 --> 00:13:22.200
+O fluxo falha
+
+00:13:22.200 --> 00:13:23.140
+ou o conteúdo do recibo
+
+00:13:23.140 --> 00:13:23.600
+fica nulo.
+
+00:13:24.040 --> 00:13:24.780
+O remédio elegante
+
+00:13:24.780 --> 00:13:26.600
+altere a condição de gatilho
+
+00:13:26.600 --> 00:13:27.360
+para a não modificação
+
+00:13:27.360 --> 00:13:27.800
+do item,
+
+00:13:28.240 --> 00:13:28.860
+mas restringe-a
+
+00:13:28.860 --> 00:13:29.660
+para disparar apenas
+
+00:13:29.660 --> 00:13:30.460
+quando a coluna de recibo
+
+00:13:30.460 --> 00:13:30.960
+for alterada.
+
+00:13:31.340 --> 00:13:31.920
+Dessa forma,
+
+00:13:31.980 --> 00:13:33.040
+no momento em que alguém envia
+
+00:13:33.040 --> 00:13:34.160
+ou substitui um arquivo,
+
+00:13:34.160 --> 00:13:34.760
+a validação
+
+00:13:34.760 --> 00:13:35.320
+entra em ação.
+
+00:13:36.400 --> 00:13:37.280
+Para configurar isso,
+
+00:13:37.400 --> 00:13:38.200
+abra as configurações
+
+00:13:38.200 --> 00:13:38.740
+do gatilho,
+
+00:13:38.840 --> 00:13:40.180
+escolha as colunas modificadas
+
+00:13:40.180 --> 00:13:41.140
+e cole o nome lógico
+
+00:13:41.140 --> 00:13:42.180
+da sua coluna de recibo,
+
+00:13:42.280 --> 00:13:43.000
+obtido nos detalhes
+
+00:13:43.000 --> 00:13:43.920
+da coluna do Dataverse
+
+00:13:43.920 --> 00:13:45.160
+em ferramentas avançadas.
+
+00:13:46.300 --> 00:13:47.260
+Uma vez definido o public,
+
+00:13:47.960 --> 00:13:48.720
+agora sua automação
+
+00:13:48.720 --> 00:13:49.800
+se comporta de maneira educada.
+
+00:13:50.140 --> 00:13:50.820
+Ela espera até que
+
+00:13:50.820 --> 00:13:51.620
+haja algo de fato
+
+00:13:51.620 --> 00:13:52.240
+para validar.
+
+00:13:52.760 --> 00:13:53.520
+Quando a solicitação
+
+00:13:53.520 --> 00:13:54.040
+é atualizada
+
+00:13:54.040 --> 00:13:54.780
+com o novo recibo,
+
+00:13:54.860 --> 00:13:55.400
+o fluxo reinicia.
+
+00:13:56.200 --> 00:13:57.100
+Ele baixa o arquivo,
+
+00:13:57.240 --> 00:13:57.820
+processa através
+
+00:13:57.820 --> 00:13:58.500
+da etapa de IA
+
+00:13:58.500 --> 00:13:59.660
+e verifica todas as entradas.
+
+00:14:01.040 --> 00:14:02.180
+Se houver discrepâncias,
+
+00:14:02.480 --> 00:14:03.620
+incompatibilidade de valores,
+
+00:14:03.620 --> 00:14:04.680
+data desatualizada
+
+00:14:04.680 --> 00:14:05.920
+ou descrições inconsistentes,
+
+00:14:06.020 --> 00:14:06.740
+a IA rejeita
+
+00:14:06.740 --> 00:14:07.840
+e inclui uma explicação.
+
+00:14:08.440 --> 00:14:09.220
+O registro de raciocínio
+
+00:14:09.220 --> 00:14:09.600
+pode dizer
+
+00:14:09.600 --> 00:14:10.520
+o valor solicitado
+
+00:14:10.520 --> 00:14:11.220
+de US$ 305
+
+00:14:11.220 --> 00:14:12.000
+difere do total
+
+00:14:12.000 --> 00:14:12.940
+do documento de US$ 300.
+
+00:14:13.400 --> 00:14:13.940
+Isso é conformidade
+
+00:14:13.940 --> 00:14:14.560
+sem reclamações.
+
+00:14:14.980 --> 00:14:15.720
+Um impacto prático.
+
+00:14:16.260 --> 00:14:16.660
+Cada envio
+
+00:14:16.660 --> 00:14:17.680
+torna-se autoaditável.
+
+00:14:18.220 --> 00:14:18.820
+Os funcionários
+
+00:14:18.820 --> 00:14:19.460
+não conseguem mais
+
+00:14:19.460 --> 00:14:20.520
+passar recibos questionáveis
+
+00:14:20.520 --> 00:14:21.420
+ou descrição em vagas.
+
+00:14:22.440 --> 00:14:23.600
+A IA fornece o julgamento,
+
+00:14:23.720 --> 00:14:24.460
+o Dataverse fornece
+
+00:14:24.460 --> 00:14:25.040
+as evidências
+
+00:14:25.040 --> 00:14:25.540
+e nenhum deles
+
+00:14:25.540 --> 00:14:26.500
+faz pausas para o café.
+
+00:14:27.500 --> 00:14:27.900
+Tanto não,
+
+00:14:28.200 --> 00:14:29.220
+a validação de documentos
+
+00:14:29.220 --> 00:14:29.880
+não é um exagero.
+
+00:14:30.280 --> 00:14:30.980
+É uma memória imune
+
+00:14:30.980 --> 00:14:31.960
+para seus fluxos de trabalho.
+
+00:14:32.960 --> 00:14:33.560
+As anomalias
+
+00:14:33.560 --> 00:14:34.160
+são detectadas
+
+00:14:34.160 --> 00:14:34.840
+no nível molecular,
+
+00:14:35.060 --> 00:14:35.560
+nos caracteres
+
+00:14:35.560 --> 00:14:36.500
+impressos nos recibos
+
+00:14:36.500 --> 00:14:37.740
+e o revisor humano
+
+00:14:37.740 --> 00:14:38.160
+é promovido
+
+00:14:38.160 --> 00:14:38.880
+de verificador manual
+
+00:14:38.880 --> 00:14:39.900
+a gestor de sessões.
+
+00:14:40.560 --> 00:14:41.000
+Parabéns,
+
+00:14:41.040 --> 00:14:41.720
+você automatizou
+
+00:14:41.720 --> 00:14:42.760
+a própria honestidade
+
+00:14:42.760 --> 00:14:45.120
+construindo confiabilidade,
+
+00:14:45.280 --> 00:14:45.680
+testando,
+
+00:14:45.900 --> 00:14:46.400
+versionando
+
+00:14:46.400 --> 00:14:47.060
+e publicando.
+
+00:14:47.860 --> 00:14:48.540
+Qualquer automação
+
+00:14:48.540 --> 00:14:49.320
+pode parecer perfeita
+
+00:14:49.320 --> 00:14:50.080
+até começar a rodar.
+
+00:14:50.700 --> 00:14:51.640
+É por isso que a confiabilidade
+
+00:14:51.640 --> 00:14:52.200
+não é uma fase,
+
+00:14:52.280 --> 00:14:52.800
+é uma disciplina.
+
+00:14:53.340 --> 00:14:54.000
+Copilot Studio
+
+00:14:54.000 --> 00:14:54.900
+torna essa disciplina
+
+00:14:54.900 --> 00:14:55.540
+surpreendente
+
+00:14:55.540 --> 00:14:56.520
+com controles de versão,
+
+00:14:56.680 --> 00:14:57.500
+teste e publicação
+
+00:14:57.500 --> 00:14:58.720
+incorporados diretamente
+
+00:14:58.720 --> 00:14:59.580
+nos fluxos do agente.
+
+00:14:59.960 --> 00:15:01.180
+Comece com testes iterativos.
+
+00:15:01.840 --> 00:15:02.760
+Todo fluxo de aprovação
+
+00:15:02.760 --> 00:15:03.740
+é um ecossistema miniatura.
+
+00:15:04.260 --> 00:15:05.080
+Até um nome de variável
+
+00:15:05.080 --> 00:15:05.580
+fora de lugar
+
+00:15:05.580 --> 00:15:06.400
+pode criar o caos.
+
+00:15:07.100 --> 00:15:07.960
+Tanto trate os testes
+
+00:15:07.960 --> 00:15:09.220
+como um processo científico,
+
+00:15:10.040 --> 00:15:10.800
+isole as mudanças,
+
+00:15:10.920 --> 00:15:11.440
+aplique os dados,
+
+00:15:11.560 --> 00:15:12.260
+observe o resultado.
+
+00:15:13.260 --> 00:15:14.140
+No editor de fluxo,
+
+00:15:14.180 --> 00:15:14.940
+o Copilot Studio
+
+00:15:14.940 --> 00:15:15.940
+permite simular dados
+
+00:15:15.940 --> 00:15:16.460
+de amostra
+
+00:15:16.460 --> 00:15:17.400
+sem implantar gatilhos
+
+00:15:17.400 --> 00:15:17.840
+de produção.
+
+00:15:18.420 --> 00:15:19.660
+Alimente cenários variantes,
+
+00:15:20.200 --> 00:15:20.920
+valores muito altos,
+
+00:15:21.000 --> 00:15:21.780
+datas obsoletas,
+
+00:15:22.100 --> 00:15:23.180
+nomes de itens irrelevantes
+
+00:15:23.180 --> 00:15:23.960
+e garanta que cada um
+
+00:15:23.960 --> 00:15:25.380
+produza o veredito correto.
+
+00:15:25.880 --> 00:15:26.100
+Depois,
+
+00:15:26.180 --> 00:15:27.140
+parte convenções de nome em cartão.
+
+00:15:27.460 --> 00:15:27.780
+Chato?
+
+00:15:28.140 --> 00:15:28.260
+Não.
+
+00:15:28.860 --> 00:15:29.140
+Existe?
+
+00:15:29.540 --> 00:15:30.020
+Mais um.
+
+00:15:30.420 --> 00:15:31.020
+Coloque prefixes
+
+00:15:31.020 --> 00:15:31.740
+em todas as variáveis
+
+00:15:31.740 --> 00:15:32.100
+de formos.
+
+00:15:32.500 --> 00:15:33.380
+STR para strings,
+
+00:15:33.520 --> 00:15:34.260
+NUM para numéricos,
+
+00:15:34.320 --> 00:15:34.980
+DOC para arquivos.
+
+00:15:35.360 --> 00:15:35.920
+Da mesma forma,
+
+00:15:36.000 --> 00:15:37.060
+rotule as ações explicitamente.
+
+00:15:37.500 --> 00:15:38.400
+Baixe arquivo de recibo,
+
+00:15:38.480 --> 00:15:39.380
+verifique a aprovação do gerente,
+
+00:15:39.460 --> 00:15:40.460
+atualize a aprovação de reivindicação.
+
+00:15:40.880 --> 00:15:41.680
+Porque daqui a três meses,
+
+00:15:41.760 --> 00:15:42.280
+quando alguém perguntar
+
+00:15:42.280 --> 00:15:43.440
+por que a ação 7 quebrou,
+
+00:15:43.560 --> 00:15:44.580
+você agradecerá por trilhas
+
+00:15:44.580 --> 00:15:45.660
+serem melhores que a arqueologia.
+
+00:15:46.940 --> 00:15:48.100
+Uma vez que os testes individuais
+
+00:15:48.100 --> 00:15:48.660
+tenham sucesso,
+
+00:15:48.760 --> 00:15:49.420
+expanda para a validação
+
+00:15:49.420 --> 00:15:50.060
+de cenários críticos.
+
+00:15:50.600 --> 00:15:51.920
+Finja ser usuário incompetente.
+
+00:15:52.660 --> 00:15:53.480
+Não envie recibo,
+
+00:15:53.720 --> 00:15:54.800
+mude uma data para o ano que vem.
+
+00:15:57.140 --> 00:15:58.660
+Confirme se a IA explica
+
+00:15:58.660 --> 00:15:59.680
+e rejeita sem travar.
+
+00:16:00.660 --> 00:16:01.880
+Esses não são erros hipotéticos,
+
+00:16:01.980 --> 00:16:02.920
+são ensaios da realidade.
+
+00:16:03.860 --> 00:16:04.860
+Quanto mais casos de falha
+
+00:16:04.860 --> 00:16:05.940
+você neutralizar de antemão,
+
+00:16:06.060 --> 00:16:06.880
+menos mensagem no Teams
+
+00:16:06.880 --> 00:16:07.380
+às 2 da manhã,
+
+00:16:07.460 --> 00:16:08.120
+você receberá dizendo
+
+00:16:08.120 --> 00:16:09.100
+que o fluxo parou de novo.
+
+00:16:10.160 --> 00:16:11.660
+A publicação introduz a governança.
+
+00:16:12.440 --> 00:16:13.260
+Toda vez que você salva
+
+00:16:13.260 --> 00:16:14.100
+uma mudança importante,
+
+00:16:14.180 --> 00:16:14.840
+o Copilot Studio
+
+00:16:14.840 --> 00:16:15.800
+cria silenciosamente
+
+00:16:15.800 --> 00:16:16.380
+uma nova versão.
+
+00:16:16.880 --> 00:16:17.720
+Você pode reverter qualquer um,
+
+00:16:18.120 --> 00:16:19.120
+sem ansiedade de substituição.
+
+00:16:19.700 --> 00:16:20.520
+Use isso para manter
+
+00:16:20.520 --> 00:16:21.740
+ambientes de lógica experimental,
+
+00:16:21.900 --> 00:16:22.620
+separados da produção.
+
+00:16:23.500 --> 00:16:24.180
+Um fluxo chamado
+
+00:16:24.180 --> 00:16:25.380
+aprovação de reivindicação DEV,
+
+00:16:25.460 --> 00:16:26.520
+outra aprovação de reivindicação PRO.
+
+00:16:26.980 --> 00:16:27.500
+Teste em DEV,
+
+00:16:27.600 --> 00:16:28.860
+publique apenas quando estiver estável.
+
+00:16:29.580 --> 00:16:29.920
+Lembre-se,
+
+00:16:30.000 --> 00:16:31.100
+confiabilidade não é apenas
+
+00:16:31.100 --> 00:16:31.740
+sobre correção,
+
+00:16:31.840 --> 00:16:33.360
+é sobre controle durante mudanças.
+
+00:16:34.880 --> 00:16:35.600
+Após a aplicação,
+
+00:16:36.040 --> 00:16:36.940
+aproveite os logs de atividade.
+
+00:16:37.560 --> 00:16:38.620
+Eles não são decorativos,
+
+00:16:38.720 --> 00:16:39.840
+são registros com valor legal
+
+00:16:39.840 --> 00:16:41.220
+das interações entre IA e humanos.
+
+00:16:41.840 --> 00:16:42.700
+Carimbo de data barra hora,
+
+00:16:42.780 --> 00:16:43.600
+identidade dos aprovadores,
+
+00:16:43.720 --> 00:16:44.400
+resumo de raciocínio.
+
+00:16:44.800 --> 00:16:45.800
+Revise esses logs periódicamente.
+
+00:16:46.300 --> 00:16:47.420
+Os padrões se revelarão.
+
+00:16:48.080 --> 00:16:49.480
+Quais regras geram mais rejeições?
+
+00:16:49.660 --> 00:16:50.900
+Quais gerentes substituíram a IA
+
+00:16:50.900 --> 00:16:51.500
+com que frequências
+
+00:16:51.500 --> 00:16:52.300
+as etapas de conformidade
+
+00:16:52.300 --> 00:16:53.040
+são acionadas?
+
+00:16:53.840 --> 00:16:54.760
+Esses insights refinam
+
+00:16:54.760 --> 00:16:55.960
+tanto a política quanto o design.
+
+00:16:56.520 --> 00:16:57.920
+Outra prática recomendada e sutil,
+
+00:16:58.300 --> 00:16:59.180
+automatize atualizações
+
+00:16:59.180 --> 00:16:59.860
+de status de volta
+
+00:16:59.860 --> 00:17:00.820
+nos registros do Dataverse
+
+00:17:00.820 --> 00:17:01.780
+ao final de cada ramificação.
+
+00:17:02.280 --> 00:17:03.320
+A ação de atualizar uma linha
+
+00:17:03.320 --> 00:17:04.260
+define um campo claro
+
+00:17:04.260 --> 00:17:05.440
+como status da reivindicação
+
+00:17:05.440 --> 00:17:06.760
+igual, aprovado, rejeitado.
+
+00:17:07.400 --> 00:17:08.560
+Esse ponto de extremidade visível
+
+00:17:08.560 --> 00:17:09.280
+reforça a confiança.
+
+00:17:09.600 --> 00:17:10.700
+Os usuários veem as decisões
+
+00:17:10.700 --> 00:17:11.420
+dentro de suas próprias
+
+00:17:11.420 --> 00:17:12.120
+visuações de tabela.
+
+00:17:12.300 --> 00:17:13.280
+Sem planilhas de rastreamento
+
+00:17:13.280 --> 00:17:13.740
+separadas,
+
+00:17:13.820 --> 00:17:14.720
+sem aprovações de fantasmas.
+
+00:17:15.100 --> 00:17:15.960
+Quando seu sistema passar
+
+00:17:15.960 --> 00:17:16.680
+em todos os testes,
+
+00:17:16.740 --> 00:17:17.240
+clique em publicar
+
+00:17:17.240 --> 00:17:17.920
+com total confiança.
+
+00:17:18.460 --> 00:17:19.820
+Diferente das gerações anteriores
+
+00:17:19.820 --> 00:17:20.980
+de fluxos do Power Automate,
+
+00:17:21.040 --> 00:17:21.700
+os fluxos de agente
+
+00:17:21.700 --> 00:17:22.920
+retém metadados contextuais,
+
+00:17:23.280 --> 00:17:24.280
+esquema de decisão da IA,
+
+00:17:24.460 --> 00:17:25.740
+associações de conteúdo dinâmico
+
+00:17:25.740 --> 00:17:26.580
+e tags de versão.
+
+00:17:27.580 --> 00:17:28.480
+O resultado não é apenas
+
+00:17:28.480 --> 00:17:29.420
+um processo em execução,
+
+00:17:29.500 --> 00:17:30.680
+mas um artefato reproduzível,
+
+00:17:30.740 --> 00:17:31.740
+uma automação editável.
+
+00:17:32.840 --> 00:17:33.580
+A verificação final
+
+00:17:33.580 --> 00:17:34.460
+de confiabilidade mental.
+
+00:17:34.920 --> 00:17:35.820
+Resista à superengenharia.
+
+00:17:36.220 --> 00:17:37.240
+Às vezes, um fluxo com falha
+
+00:17:37.240 --> 00:17:38.520
+revela regras complexas demais
+
+00:17:38.520 --> 00:17:39.280
+no bugs técnicos.
+
+00:17:40.100 --> 00:17:40.740
+Simplifique a lógica
+
+00:17:40.740 --> 00:17:41.320
+sempre que possível.
+
+00:17:41.880 --> 00:17:42.620
+Menos etapas,
+
+00:17:42.680 --> 00:17:43.580
+instruções mais claras,
+
+00:17:43.640 --> 00:17:44.400
+ambiguidade mínima.
+
+00:17:44.400 --> 00:17:46.280
+O inimigo da automação
+
+00:17:46.280 --> 00:17:47.160
+não é a aleatoriedade
+
+00:17:47.160 --> 00:17:48.520
+e a esperteza desnecessária.
+
+00:17:49.820 --> 00:17:50.880
+Ao concluir esta etapa,
+
+00:17:50.980 --> 00:17:51.920
+seu sistema de aprovação
+
+00:17:51.920 --> 00:17:53.180
+alcança a maturidade operacional.
+
+00:17:53.320 --> 00:17:54.180
+Testado, versionado,
+
+00:17:54.300 --> 00:17:54.920
+fácil de reverter,
+
+00:17:54.980 --> 00:17:55.560
+verificável.
+
+00:17:56.160 --> 00:17:56.800
+Cada resultado,
+
+00:17:57.160 --> 00:17:57.980
+desde o julgamento da IA
+
+00:17:57.980 --> 00:17:59.120
+até a assinatura do administrador,
+
+00:17:59.300 --> 00:17:59.820
+deixa um registral
+
+00:17:59.820 --> 00:18:00.720
+resistente a escrutínios.
+
+00:18:01.180 --> 00:18:02.540
+Isso é confiabilidade quantificada,
+
+00:18:02.620 --> 00:18:03.260
+não é um sentimento,
+
+00:18:03.360 --> 00:18:03.780
+não é sorte,
+
+00:18:03.860 --> 00:18:05.120
+é apenas raciocínio estruturado,
+
+00:18:05.200 --> 00:18:05.980
+registrado fielmente
+
+00:18:05.980 --> 00:18:07.040
+pelas ferramentas que você criou
+
+00:18:07.040 --> 00:18:08.140
+para pensar em quanto você dorme.
+
+00:18:09.440 --> 00:18:10.180
+Resultados e retorno
+
+00:18:10.180 --> 00:18:10.580
+no mundo real.
+
+00:18:11.000 --> 00:18:11.420
+O que acontece
+
+00:18:11.420 --> 00:18:11.940
+quando você entrega
+
+00:18:11.940 --> 00:18:12.800
+a burocracia matemática?
+
+00:18:13.440 --> 00:18:14.280
+As aprovações esperaram.
+
+00:18:14.940 --> 00:18:15.760
+Um fluxo de agente
+
+00:18:15.760 --> 00:18:16.440
+de vários estágios
+
+00:18:16.440 --> 00:18:17.160
+orientado por IA
+
+00:18:17.160 --> 00:18:18.120
+reduz o tempo de resposta
+
+00:18:18.120 --> 00:18:18.860
+de dias para minutos
+
+00:18:18.860 --> 00:18:19.540
+porque as decisões
+
+00:18:19.540 --> 00:18:20.200
+não dependem mais
+
+00:18:20.200 --> 00:18:21.240
+da disponibilidade na agenda.
+
+00:18:22.080 --> 00:18:22.860
+Cada solicitação
+
+00:18:22.860 --> 00:18:23.920
+que atende a política objetiva
+
+00:18:23.920 --> 00:18:24.980
+é aprovada instantaneamente.
+
+00:18:25.680 --> 00:18:26.600
+Cada caso excepcional
+
+00:18:26.600 --> 00:18:27.320
+cai perfeitamente
+
+00:18:27.320 --> 00:18:28.080
+na fila do gerente,
+
+00:18:28.180 --> 00:18:29.340
+já com o contexto anexado.
+
+00:18:30.060 --> 00:18:31.000
+Os humanos fazem julgamentos
+
+00:18:31.000 --> 00:18:31.340
+de valor,
+
+00:18:31.440 --> 00:18:32.460
+não confirmações burocráticas.
+
+00:18:33.220 --> 00:18:34.140
+O impacto aparece primeiro
+
+00:18:34.140 --> 00:18:34.940
+como compressão de tempo.
+
+00:18:35.540 --> 00:18:36.080
+Um reembolso
+
+00:18:36.080 --> 00:18:37.300
+que antes exigia 4 e-mails
+
+00:18:37.300 --> 00:18:38.240
+e 2 lembretes agora
+
+00:18:38.240 --> 00:18:39.320
+é resolvido antes do almoço.
+
+00:18:40.140 --> 00:18:40.720
+Os departamentos
+
+00:18:40.720 --> 00:18:41.540
+experimentam ciclos
+
+00:18:41.940 --> 00:18:42.660
+um pensamento mais curtos,
+
+00:18:42.740 --> 00:18:43.480
+menos tempo ocioso
+
+00:18:43.480 --> 00:18:44.360
+e trilhas de raciocínio
+
+00:18:44.360 --> 00:18:45.340
+perfeitamente registradas.
+
+00:18:45.920 --> 00:18:47.160
+O mecanismo de aprovação
+
+00:18:47.160 --> 00:18:48.300
+deixa de ser uma interrupção
+
+00:18:48.300 --> 00:18:50.100
+e se torna infraestrutura.
+
+00:18:51.120 --> 00:18:52.100
+Depois vem a redução de erros.
+
+00:18:52.760 --> 00:18:53.880
+Ao impor regras determinísticas
+
+00:18:53.880 --> 00:18:54.460
+por meio da IA,
+
+00:18:54.540 --> 00:18:55.760
+você elimina o desvio subjetivo,
+
+00:18:55.840 --> 00:18:56.400
+o grande problema,
+
+00:18:56.580 --> 00:18:57.380
+das aprovações manuais.
+
+00:18:58.120 --> 00:18:58.660
+Chega de eu achei
+
+00:18:58.660 --> 00:18:59.140
+que isso contava
+
+00:18:59.140 --> 00:19:00.200
+como saúde e bem-estar.
+
+00:19:01.300 --> 00:19:02.320
+A IA interpreta os critérios
+
+00:19:02.320 --> 00:19:03.340
+da mesma forma todas as vezes.
+
+00:19:03.920 --> 00:19:05.080
+A consistência escala melhor
+
+00:19:05.080 --> 00:19:05.860
+do que a compaixão
+
+00:19:05.860 --> 00:19:06.840
+na lógica administrativa.
+
+00:19:07.400 --> 00:19:08.340
+Os gerentes lidam apenas
+
+00:19:08.340 --> 00:19:08.920
+com anomalias
+
+00:19:08.920 --> 00:19:09.600
+e até mesmo elas vêm
+
+00:19:09.600 --> 00:19:10.060
+com uma trilha
+
+00:19:10.060 --> 00:19:10.840
+de auditoria completa.
+
+00:19:11.260 --> 00:19:11.980
+Entradas de dados,
+
+00:19:12.160 --> 00:19:13.000
+histórico de decisões,
+
+00:19:13.100 --> 00:19:13.680
+explicação do lugar.
+
+00:19:14.080 --> 00:19:15.180
+As auditorias se transformam
+
+00:19:15.180 --> 00:19:16.100
+de exercícios de pânico
+
+00:19:16.100 --> 00:19:17.140
+em verificações cordiais.
+
+00:19:17.600 --> 00:19:18.560
+Em nível organizacional
+
+00:19:18.560 --> 00:19:19.540
+isso não é apenas mais rápido,
+
+00:19:19.600 --> 00:19:20.180
+é mais seguro,
+
+00:19:20.300 --> 00:19:20.740
+é mais seguro.
+
+00:19:21.440 --> 00:19:22.540
+A conformidade não depende
+
+00:19:22.540 --> 00:19:23.200
+de memória ou humor.
+
+00:19:23.720 --> 00:19:24.300
+Ela é integrada.
+
+00:19:24.780 --> 00:19:25.640
+Os logs do Dataverse
+
+00:19:25.640 --> 00:19:26.600
+mostram quem aprovou,
+
+00:19:26.780 --> 00:19:27.220
+quando e porquê.
+
+00:19:28.000 --> 00:19:28.740
+Essa transparência
+
+00:19:28.740 --> 00:19:30.000
+desencoraja a cultura de atalhos
+
+00:19:30.000 --> 00:19:30.920
+porque toda decisão agora
+
+00:19:30.920 --> 00:19:32.220
+vive em permanência pesquisável.
+
+00:19:33.360 --> 00:19:34.260
+E, filosoficamente,
+
+00:19:34.340 --> 00:19:35.020
+o fluxo de trabalho
+
+00:19:35.020 --> 00:19:35.960
+muda de humano primeiro
+
+00:19:35.960 --> 00:19:37.080
+com assistência de IA para IA,
+
+00:19:37.160 --> 00:19:38.280
+primeiro com correção humana.
+
+00:19:38.920 --> 00:19:39.500
+Governança prática,
+
+00:19:39.500 --> 00:19:40.320
+não ficção científica.
+
+00:19:40.960 --> 00:19:42.360
+IA cuida da aplicação das regras
+
+00:19:42.360 --> 00:19:43.300
+que os humanos cuidam do julgamento.
+
+00:19:43.720 --> 00:19:44.680
+O híbrido produz sistemas
+
+00:19:44.680 --> 00:19:45.680
+mais justos, rápidos
+
+00:19:45.680 --> 00:19:46.760
+e, por fim, mais confiáveis.
+
+00:19:47.620 --> 00:19:48.360
+Imagine explicar isso
+
+00:19:48.360 --> 00:19:48.720
+a um auditor.
+
+00:19:49.280 --> 00:19:50.400
+O sorriso que vem depois disso
+
+00:19:50.400 --> 00:19:51.080
+já faz automação
+
+00:19:51.080 --> 00:19:51.820
+valer a pena por si só.
+
+00:19:52.540 --> 00:19:53.060
+É isso.
+
+00:19:53.540 --> 00:19:54.700
+O Microsoft Copilot Studio
+
+00:19:54.700 --> 00:19:55.320
+não é apenas mais
+
+00:19:55.320 --> 00:19:56.100
+uma ferramenta de automação.
+
+00:19:56.400 --> 00:19:57.440
+É o lugar onde a indecisão
+
+00:19:57.440 --> 00:19:58.200
+da sua organização
+
+00:19:58.200 --> 00:19:59.180
+finalmente se aposenta.
+
+00:19:59.980 --> 00:20:00.820
+Você cria um mecanismo
+
+00:20:00.820 --> 00:20:01.640
+de aprovação capaz
+
+00:20:01.640 --> 00:20:02.440
+de pensar em condições,
+
+00:20:02.580 --> 00:20:03.680
+escalar com responsabilidade,
+
+00:20:03.780 --> 00:20:04.800
+validar recibos com a realidade
+
+00:20:04.800 --> 00:20:05.360
+e documentar
+
+00:20:05.360 --> 00:20:06.520
+cada movimento realizado.
+
+00:20:07.260 --> 00:20:07.860
+Isso não é um fluxo,
+
+00:20:07.860 --> 00:20:08.640
+é um modelo de governança.
+
+00:20:09.220 --> 00:20:10.200
+Se não se lembrar de mais nada,
+
+00:20:10.320 --> 00:20:10.840
+lembre-se disso.
+
+00:20:11.740 --> 00:20:12.440
+A IA deve tornar
+
+00:20:12.440 --> 00:20:13.500
+as decisões previsíveis
+
+00:20:13.500 --> 00:20:14.840
+e os humanos excepcionais.
+
+00:20:15.540 --> 00:20:16.260
+Pare de encaminhar tudo
+
+00:20:16.260 --> 00:20:16.680
+para as pessoas
+
+00:20:16.680 --> 00:20:17.240
+por por hábito.
+
+00:20:17.900 --> 00:20:19.220
+Deixe a lógica cuidar da rotina
+
+00:20:19.220 --> 00:20:19.780
+para que os gestores
+
+00:20:19.780 --> 00:20:20.600
+cuidem das exceções.
+
+00:20:21.280 --> 00:20:22.500
+Agora, se este passo a passo
+
+00:20:22.500 --> 00:20:23.700
+te salvou de mais uma semana,
+
+00:20:23.840 --> 00:20:24.600
+aguardando a revisão
+
+00:20:24.600 --> 00:20:25.140
+de um gestor,
+
+00:20:25.280 --> 00:20:26.060
+considere se inscrever.
+
+00:20:26.600 --> 00:20:27.300
+O próximo tutorial
+
+00:20:27.300 --> 00:20:28.160
+mergulha mais fundo
+
+00:20:28.160 --> 00:20:29.160
+em automações avançadas
+
+00:20:29.160 --> 00:20:29.960
+do Copilot Studio,
+
+00:20:30.320 --> 00:20:31.280
+onde esses fluxos de agentes
+
+00:20:31.280 --> 00:20:32.160
+se conectam com as análises
+
+00:20:32.160 --> 00:20:32.760
+da Power Platform
+
+00:20:32.760 --> 00:20:33.720
+e políticas adaptáveis.
+
+00:20:33.720 --> 00:20:35.400
+Garanta seu caminho
+
+00:20:35.400 --> 00:20:35.880
+de atualização,
+
+00:20:36.080 --> 00:20:36.500
+inscreva-se,
+
+00:20:36.560 --> 00:20:37.160
+ative os alertas
+
+00:20:37.160 --> 00:20:38.020
+e deixe que novos episódios
+
+00:20:38.020 --> 00:20:39.120
+sejam implantados automaticamente.
+
+00:20:39.380 --> 00:20:40.340
+Sem verificações manuais,
+
+00:20:40.460 --> 00:20:41.360
+sem perder lançamentos,
+
+00:20:41.500 --> 00:20:42.400
+apenas entrega contínua
+
+00:20:42.400 --> 00:20:43.180
+de conhecimento útil.
+
+00:20:43.180 --> 00:20:43.640
+Tchau, tchau.

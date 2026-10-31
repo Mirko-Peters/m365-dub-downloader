@@ -1,0 +1,1069 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:02.520
+Je bent de halve dag kwijt aan het wachten op goedkeuringen.
+
+00:00:02.640 --> 00:00:05.040
+Iemand is op vakantie, een ander heeft de mail gemist...
+
+00:00:05.040 --> 00:00:07.180
+...en tegen de tijd dat er eindelijk een besluit valt...
+
+00:00:07.180 --> 00:00:09.100
+...is de aanleiding voor het verzoek allang verlopen.
+
+00:00:09.800 --> 00:00:12.760
+Bedrijfsvagevuur, waarbij vooruitgang stagneert door mensen die beweren het druk te hebben.
+
+00:00:12.980 --> 00:00:15.120
+Stel je nu eens een systeem voor dat simpelweg niet wacht.
+
+00:00:15.280 --> 00:00:18.200
+Een workflow die direct verder gaat zodra aan de voorwaarden is voldaan.
+
+00:00:18.400 --> 00:00:20.900
+Maak kennis met de agentflows van Microsoft Copilot Studio...
+
+00:00:20.900 --> 00:00:22.840
+...de bureaucratie doder in de vorm van automatisering.
+
+00:00:23.040 --> 00:00:24.820
+Hierbij wordt AI je eerste goedkeurder.
+
+00:00:25.020 --> 00:00:29.440
+Het leest de data, toet deze aan het beleid en geeft een gefundeerde goedkeuring of afwijzing...
+
+00:00:29.440 --> 00:00:31.160
+...doog voordat een mens met zijn ogen knippert.
+
+00:00:31.380 --> 00:00:33.940
+Alleen twijfelgevallen bereiken de inbox van een manager...
+
+00:00:33.940 --> 00:00:36.180
+...wat snelheid betekent zonder verlies van toezicht.
+
+00:00:36.340 --> 00:00:40.380
+En in tegenstelling tot verouderde goedkeuringstromen die bezwijken onder complexe voorwaarden...
+
+00:00:40.380 --> 00:00:42.320
+...schalen deze AI-gestuurde systemen mee...
+
+00:00:42.320 --> 00:00:45.300
+...terwijl ze zichzelf onderweg vertakken, valideren en controleren.
+
+00:00:45.440 --> 00:00:49.440
+In deze walkthrough laat ik je zien hoe je een meervasig, voorwaardelijk goedkeuringssysteem bouwt...
+
+00:00:49.440 --> 00:00:51.300
+...wat sneller beslist dan je collega's de knop...
+
+00:00:51.300 --> 00:00:52.760
+...allen beantwoorden kunnen vinden.
+
+00:00:52.760 --> 00:00:56.960
+Je leert hoe je een AI-fase instelt met aangepaste goedkeuringslogica...
+
+00:00:56.960 --> 00:00:59.120
+...gerichte menselijke beoordelingen toevoegt...
+
+00:00:59.440 --> 00:01:01.980
+...komische voorwaarden ontwerpt die intelligent doorverwijzen...
+
+00:01:01.980 --> 00:01:04.360
+...en documentvalidatie voor compliance integreert.
+
+00:01:04.520 --> 00:01:07.880
+Aan het einde heb je een geautomatiseerd proces dat weet wanneer het als een machine moet denken...
+
+00:01:07.880 --> 00:01:09.620
+...en wanneer het moet vertrouwen op menselijk oordeel.
+
+00:01:09.800 --> 00:01:11.240
+Stop met het volgen van een wachtrij.
+
+00:01:11.460 --> 00:01:12.840
+Laat logica de leiding nemen.
+
+00:01:13.020 --> 00:01:15.080
+Het probleem met traditionele goedkeuringen.
+
+00:01:15.420 --> 00:01:19.140
+Traditionele goedkeuringsketens zijn een tragische remix van dezelfde inefficiëntie.
+
+00:01:19.140 --> 00:01:22.780
+Iemand dient een formulier in, mails vliegen rond, spreadsheets raken uit zink...
+
+00:01:22.780 --> 00:01:26.020
+...en door het voortdurend doorsturen weet niemand meer wat de definitieve versie was.
+
+00:01:26.180 --> 00:01:28.540
+Elke deelnemer voegt vertraging toe, geen waarde.
+
+00:01:28.540 --> 00:01:31.740
+Het proces beheert het werk niet, het fabriceert vertraging.
+
+00:01:31.920 --> 00:01:35.200
+Typische Power Automate goedkeuringstromen proberen dit op te lossen...
+
+00:01:35.200 --> 00:01:37.320
+...maar ze lopen vast zodra je nuance introduceert.
+
+00:01:37.500 --> 00:01:41.260
+Een enkelvoudig goedkeuringspad werkt prima als je slechts één ja of nee nodig hebt.
+
+00:01:41.500 --> 00:01:45.220
+Zodra je managementlagen, uitgavelimieten of gespecialiseerde regels toevoegt...
+
+00:01:45.220 --> 00:01:46.560
+...begint het ontwerp te versplinteren.
+
+00:01:46.560 --> 00:01:49.200
+Je eindigt met het nesten van voorwaarden als Russische poppetjes...
+
+00:01:49.200 --> 00:01:51.880
+...in elegant, fragiel en na zes maanden onmogelijk te debuggen.
+
+00:01:52.020 --> 00:01:55.020
+Eén kapotte connector en het hele systeem faalt in stilte.
+
+00:01:55.020 --> 00:01:59.120
+Mensen worden de knelpunten, of om het bot te zeggen, vertragingsknooppunten.
+
+00:01:59.300 --> 00:02:02.120
+Elk bericht dat ze ontvangen wordt een nieuwe asynchrone ronde.
+
+00:02:02.340 --> 00:02:06.260
+E-mail als goedkeuringsmechanisme is als het gebruik van postduiven in een wereld van glasvezel.
+
+00:02:06.420 --> 00:02:08.560
+Het werkt technisch gezien, maar dat zou het niet moeten doen.
+
+00:02:08.800 --> 00:02:10.580
+Maak kennis met Microsoft Copilot Studio.
+
+00:02:10.940 --> 00:02:13.740
+Dit is niet zomaar een incrementele versie van Power Automate.
+
+00:02:13.900 --> 00:02:17.740
+Het introduceert agent flows, goedkeuringssystemen aangedreven door AI...
+
+00:02:17.740 --> 00:02:21.860
+...maar volledig geïntegreerd in de databronnen, rollen en logische structuren van je organisatie.
+
+00:02:21.860 --> 00:02:26.040
+Het slaat een brug tussen deterministische beleidshandhaving en adaptieve besluitvorming.
+
+00:02:26.160 --> 00:02:28.940
+De genialiteit zit in de manier waarop het fase scheidt.
+
+00:02:29.480 --> 00:02:32.820
+Geautomatiseerd waar je snelheid wilt, menselijk waar validatie vereist is.
+
+00:02:33.020 --> 00:02:35.160
+Beschouw het als een geherstructureerde hiërarchie.
+
+00:02:35.340 --> 00:02:41.140
+De AI-fase beoordeelt vaste regels, limieten, categorieën en datum bereiken met klinische efficiëntie.
+
+00:02:41.320 --> 00:02:45.060
+Als een besluit daarna onduidelijk is, escaleert het proces naar menselijk toezicht...
+
+00:02:45.060 --> 00:02:47.280
+...zonder elk triviaal geval in de wachtrij te plaatsen.
+
+00:02:47.480 --> 00:02:49.800
+Dit alleen al elimineert exponentiële vertraging.
+
+00:02:49.800 --> 00:02:55.760
+In plaats van 10 mensen die seriële beoordelingen uitvoeren, handelt AI 80% direct af en stuurt alleen uitzonderingen door.
+
+00:02:55.920 --> 00:03:01.440
+En ja, Copilot Studio volgt alles via de dataverse backbone en produceert verifiëerbare logboeken...
+
+00:03:01.440 --> 00:03:03.540
+...zonder dat je team door e-mailarchieven hoeft te spitten.
+
+00:03:03.760 --> 00:03:05.780
+Vorige workflows waren gebouwd voor mensen.
+
+00:03:06.000 --> 00:03:11.260
+Agentflows zijn daaromheen gebouwd, waardoor mensen alleen betrokken zijn wanneer interpretatie, geen herhaling, vereist is.
+
+00:03:11.480 --> 00:03:16.700
+Zodra je ziet hoe deze architectuur werkt, zullen traditionele goedkeuringen primitief aanvoelen als boekhouder bij kaarslicht.
+
+00:03:16.700 --> 00:03:20.140
+De belangen zijn simpel, compliance, consistentie en schaalbaarheid.
+
+00:03:20.280 --> 00:03:26.200
+Moderne operaties verdrinken zonder geautomatiseerde validatie en AI-ondersteunde logica is nu de norm voor betrouwbaarheid.
+
+00:03:26.400 --> 00:03:33.900
+Wanneer je migreert van statische flows naar voorwaardelijke, auditeerbare agentflows, stop je met reactief beheer en ga je ze als levende systemen behandelen.
+
+00:03:34.080 --> 00:03:37.260
+Het verschil is niet alleen snelheid, het is structurele logica.
+
+00:03:37.460 --> 00:03:40.400
+De AI-fase bouwen, de eerste goedkeurder onderwijzen.
+
+00:03:40.620 --> 00:03:44.320
+Nu komt het interessante gedeelte, het trainen van je eerste digitale bureaucraat.
+
+00:03:44.320 --> 00:03:47.740
+De AI-fase is de logische poortwachter van je goedkeuringsproces.
+
+00:03:47.920 --> 00:03:52.740
+Het is niet de bedoeling dat hij als een mens denkt, maar dat hij gestructureerd redeneert met bovenmenselijke consistentie.
+
+00:03:52.900 --> 00:03:57.760
+Hij leest instructies, toetst deze aan invoer en geeft hem van de twee oordelen, goedgekeurd of afgewezen.
+
+00:03:57.960 --> 00:03:59.680
+Geen politiek, geen koffiepauzes.
+
+00:03:59.900 --> 00:04:02.080
+Je begint met het definiëren van een nieuwe agentflow.
+
+00:04:02.340 --> 00:04:06.720
+Bij creatie staat de AI-fase centraal als een leeg examenblad dat wacht op de antwoordsleutel.
+
+00:04:06.900 --> 00:04:11.440
+De trigger komt meestal vanuit dataverse, een record dat is toegevoegd of gewijzigd in je claims- of onkosten-tabel.
+
+00:04:11.440 --> 00:04:16.440
+Zodra een claim is aangemaakt, wordt deze fase geactiveerd, evalueert de data en beslist niet overeenkomstig.
+
+00:04:16.620 --> 00:04:20.540
+Binnen de fase is het belangrijkste veld de instructieprompt, het brein van de operatie.
+
+00:04:20.740 --> 00:04:24.300
+Hier beschrijf je de goedkeuringslogica in eenvoudige maar rigoureuse taal.
+
+00:04:24.480 --> 00:04:27.500
+Schrijf het alsof je een advocaat instrueert die nooit improviseert.
+
+00:04:27.640 --> 00:04:30.400
+Keur bijvoorbeeld de claim goed als het bedrag lager is dan 500,
+
+00:04:30.580 --> 00:04:35.900
+de omschrijving fysieke of mentale gezondheid ondersteunt en de aankoopdatum binnen 30 dagen na indiening ligt.
+
+00:04:35.900 --> 00:04:39.900
+Wijs af als een regel niet wordt nageleefd. Dat is alles binaire duidelijkheid.
+
+00:04:40.120 --> 00:04:42.200
+Defineer vervolgens je dynamische invoerwaarden.
+
+00:04:42.420 --> 00:04:45.140
+Beschouw ze als variabelen die echte data in je logica voeden.
+
+00:04:45.320 --> 00:04:48.740
+Je zult waarschijnlijk een bedrag, een omschrijving en een aankoopdatum opnemen.
+
+00:04:49.000 --> 00:04:54.540
+Elk element wordt toegevoegd als content, tekst of getal invoer die de AI gebruikt bij het nemen van een beslissing.
+
+00:04:54.740 --> 00:04:59.600
+Copilot Studio klassificeert deze invoer op type, tekst, getal, afbeelding of document.
+
+00:04:59.600 --> 00:05:05.500
+Kies zorgvuldig, want het mengen van types, zoals een getal opgeslagen als tekst, verwart zowel mensen als machines.
+
+00:05:05.820 --> 00:05:08.560
+Geef onder elke invoer voorbeeldgegevens op voor het testen.
+
+00:05:08.760 --> 00:05:10.600
+Dit dient als basis terwijl je de logica calibreert.
+
+00:05:11.380 --> 00:05:16.600
+Voer bijvoorbeeld een declaratie in zoals fitness yoga mat, bedrag 300, aankoopdatum 22 augustus.
+
+00:05:17.480 --> 00:05:24.620
+Wanneer je op test klikt, voert Copilot Studio het redeneermodel uit met GPT onder de motorkap en genereert een besluitplus uitleg.
+
+00:05:24.780 --> 00:05:27.620
+Als de uitkomst overeenkomt met je verwachting, is het goed.
+
+00:05:27.620 --> 00:05:30.480
+Zo niet, dan ontbreekt het je instructies aan determinisme.
+
+00:05:30.620 --> 00:05:32.780
+En dat is waar de meeste beginners de fout in gaan.
+
+00:05:33.020 --> 00:05:37.880
+Brede of dubbelzinnige bewoordingen, zoals redelijke kosten of recente aankoop, zijn gif voor AI.
+
+00:05:38.080 --> 00:05:41.660
+Het systeem kan de bedrijfsfeer niet aanvoelen, het heeft wiskundige definities nodig.
+
+00:05:41.860 --> 00:05:45.320
+Verfijn je instructies dus meedogenloos totdat de testresultaten consistent zijn.
+
+00:05:45.500 --> 00:05:49.080
+Elke keer dat je de tekst aanpast, stem je de beoordelingsengine af op reproduceerbaarheid.
+
+00:05:49.220 --> 00:05:53.040
+Het patroon dat je wilt, is dat identieke input elke keer identieke output produceert.
+
+00:05:53.560 --> 00:05:54.620
+Machinelogica, geen kantoorpraatjes.
+
+00:05:54.620 --> 00:06:00.760
+Kantoorpraatjes. Zodra je prompt betrouwbare beslissingen oplevert in meerdere testgevallen, heb je je AI goedkeurder effectief getraind.
+
+00:06:00.980 --> 00:06:06.960
+Injecteer nu de echte dynamische gegevens met tokens uit dataverse, zoals declaratiebedragen, aankoop- of indieningsdata.
+
+00:06:07.220 --> 00:06:09.460
+Deze vervangen je testwaarden tijdens live runs.
+
+00:06:09.720 --> 00:06:15.720
+Vanaf dat moment evalueert de AI elke declaratie in context en geeft een goedkeuringsfondis zodra er nieuwe gegevens verschijnen.
+
+00:06:15.720 --> 00:06:18.480
+Voer iteratieve tests uit voordat je de overwinning uitroept.
+
+00:06:18.640 --> 00:06:20.720
+Verander het bedrag in 600, wordt het afgewezen.
+
+00:06:20.860 --> 00:06:23.560
+Verander de datum naar drie maanden geleden, wordt het als ongeldig gemarkeerd.
+
+00:06:23.760 --> 00:06:27.140
+Voeg een onzinnige declaratie toe zoals aankoop van een iPad, detecteert het de discrepantie.
+
+00:06:27.280 --> 00:06:29.900
+Elke ronde zou een consistent oorzaakgevolg moeten aantonen.
+
+00:06:30.060 --> 00:06:33.840
+Als reacties fluctueren, ligt het probleem bij de duidelijkheid van je prompt, niet bij het AI-model.
+
+00:06:34.080 --> 00:06:38.580
+Wanneer er consistente patronen ontstaan, stel dan een NA-aankiewingsconventie vast voor je contentvariabelen.
+
+00:06:38.900 --> 00:06:43.160
+Voorvoegsels zoals straat, voor declaratiebedragen of num, voor aankoopdata bij numerieke waarden.
+
+00:06:43.420 --> 00:06:47.980
+Deze kleine discipline voorkomt chaos wanneer je later uitbreidt naar logica met meerdere vertakkingen.
+
+00:06:48.100 --> 00:06:53.420
+In dit stadium kan je geautomatiseerde goedkeurder zelfstandig beslissingen nemen op basis van beleid, zonder toezicht.
+
+00:06:53.580 --> 00:06:56.220
+Maar automatisering is geen dictatuur, het is delegatie.
+
+00:06:56.400 --> 00:06:59.320
+De machine zorgt voor snelheid en precisie, niet voor oordeelsvorming.
+
+00:06:59.500 --> 00:07:05.180
+Voor grensgevallen heb je escalatie nodig, een mens in de loop om te beoordelen wat de AI afwijst of onzeker vindt.
+
+00:07:05.180 --> 00:07:09.920
+Dat is waar de volgende fase in beeld komt en zo wordt autoriteit gedeeld tussen silicium en mens.
+
+00:07:10.100 --> 00:07:13.560
+Toevoegen van menselijk toezicht, meervasige en voorwaardelijke logica.
+
+00:07:13.800 --> 00:07:19.460
+Zodra je AI vol vertrouwen declaraties beoordeelt, kun je toevoegen wat bureaucratie een ironisch genoeg de menselijke maat noemen.
+
+00:07:19.660 --> 00:07:25.240
+In Copilot Studio betekent dit een handmatige fase, een controlepunt waar een echt persoon zijn oordeel kan geven.
+
+00:07:25.500 --> 00:07:26.920
+Zie het als je veiligheidsklep.
+
+00:07:27.120 --> 00:07:29.600
+Alles wat voorspelbaar is, stroomt automatisch door.
+
+00:07:29.820 --> 00:07:32.360
+Alles wat genuanceerd is, belandt op het bureau van een manager.
+
+00:07:32.360 --> 00:07:36.560
+Je begint in de goedkeuringsontwerper door direct naar de AI fase een handmatige fase toe te voegen.
+
+00:07:36.740 --> 00:07:38.660
+Dit creëert een tweede poort in je agentflow.
+
+00:07:38.880 --> 00:07:40.380
+De overdracht is voorwaardelijk.
+
+00:07:40.600 --> 00:07:44.120
+Alleen als het oordeel van de AI goedgekeurd is, gaan we door naar de menselijke fase.
+
+00:07:44.320 --> 00:07:47.120
+Als de AI afgewezen zegt, eindigt het proces daar direct.
+
+00:07:47.360 --> 00:07:50.580
+Waarom tijd verspillen door managers te vragen wat het beleid al heeft afgewezen?
+
+00:07:50.860 --> 00:07:53.540
+Efficiënt zie je selectieve aandacht vermont als automatisering.
+
+00:07:53.780 --> 00:07:55.420
+Laten we een voorbeeldscenario opzetten.
+
+00:07:55.680 --> 00:07:58.760
+Stel dat een werknemer een onkostenvergoeding indient voor een sportschoolabonnement.
+
+00:07:58.760 --> 00:08:01.900
+De AI keurt dit goed omdat alle criteria aan het beleid voldoen.
+
+00:08:02.080 --> 00:08:06.380
+Nu activeert die beslissing een handmatige fase op managerniveau genaamd managergoedkeuring.
+
+00:08:06.560 --> 00:08:11.940
+Achter de schermen configureer je deze fase met een titel zoals declaration en goedkeuringsverzoek van de indiener.
+
+00:08:12.140 --> 00:08:14.980
+Die variabele halen dynamisch gegevens uit dataverse.
+
+00:08:15.260 --> 00:08:19.940
+In het veld, toegewezen aan, bepaal je wie de taak ontvangt, meestal de manager van de indiener.
+
+00:08:20.100 --> 00:08:25.600
+Om deze routering te automatiseren, laat Copilot Studio je de Office 365 Users Connector integreren.
+
+00:08:25.600 --> 00:08:31.860
+Haal eerst het gebruikersrecord op van degene die de declaratie heeft gemaakt met de actie Rij ophalen op ID in de gebruikerstabel in dataverse.
+
+00:08:32.060 --> 00:08:33.900
+Dat haalt de informatie van de indiener op.
+
+00:08:34.100 --> 00:08:38.260
+Vervolgens haalt de actie Manager ophalen de manager van die gebruiker op via hun primaire e-mailadres.
+
+00:08:38.500 --> 00:08:42.280
+Geef dat resultaat terug aan je handmatige fase als een variabele zoals straatmanager e-mail.
+
+00:08:42.660 --> 00:08:45.240
+Resultaat, geen hard coding, geen verouderde hiërarchieën.
+
+00:08:45.420 --> 00:08:47.840
+Managers veranderen, de hiërarchie ververst zichzelf.
+
+00:08:48.060 --> 00:08:51.980
+Nu komt voorwaardelijke vertakking, de echte reden waarom goedkeuringen in meerdere fases bestaan.
+
+00:08:51.980 --> 00:08:54.600
+Je kunt logica direct in de agentflow introduceren.
+
+00:08:54.700 --> 00:08:59.860
+Als het declaratiebedrag groter is dan of gelijk is aan 150, voeg dan een extra fase toe voor beheerdergoedkeuring.
+
+00:09:00.060 --> 00:09:01.160
+Eindig anders het proces.
+
+00:09:01.460 --> 00:09:06.240
+Dit verandert een eenvoudige routine van twee stappen in een beslisboom met meerdere niveaus die zich aanpast aan de context.
+
+00:09:06.660 --> 00:09:09.000
+Declaraties met een lage waarde krijgen één menselijke beoordelaar.
+
+00:09:09.260 --> 00:09:12.160
+Declaraties met een hogere waarde of risico worden geëscaleerd voor extra controle.
+
+00:09:12.380 --> 00:09:15.080
+Voeg in de ontwerper een voorwaardeactie toe voordat je de flow sluit.
+
+00:09:15.260 --> 00:09:18.680
+Verwijs naar je numerieke variabelen, bijvoorbeeld num declaratiebedrag.
+
+00:09:18.680 --> 00:09:23.580
+Kies de operator groter dan of gelijk aan en stel de drempelwaarde in, zoals 150.
+
+00:09:23.900 --> 00:09:27.480
+Voeg in de indien waar tak nog een handmatige fase toegenaamd beheerdergoedkeuring.
+
+00:09:27.720 --> 00:09:30.660
+Wijs deze toe aan een vaste goedkeurder, zoals de compliancebeheerder.
+
+00:09:30.840 --> 00:09:32.980
+Eindig in de indien onwaar tak als goedgekeurd.
+
+00:09:33.180 --> 00:09:37.940
+Het effect, de workflow gedraagt zich als een rationele organisatie in plaats van als een universele flessenhals.
+
+00:09:38.120 --> 00:09:40.120
+Een beetje praktische humor is hier op zijn plaats.
+
+00:09:40.360 --> 00:09:43.340
+Ja, delegatie vereist nog steeds vertrouwen, geen wensdenken.
+
+00:09:43.560 --> 00:09:46.240
+Wijs geen brede beveiligingsrollen toe die alles kunnen goedkeuren.
+
+00:09:46.240 --> 00:09:50.680
+Beperkt machtigingen tot relevante gebruikers of groepen via oprollen gebaseerd toegangsbeheer in dataverse.
+
+00:09:50.880 --> 00:09:52.660
+Anders heb je chaos geautomatiseerd.
+
+00:09:52.820 --> 00:09:55.880
+Het testen van de structuur laat zien hoe soepel elk onderdeel in elkaar grijpt.
+
+00:09:56.120 --> 00:10:00.980
+Wanneer een declaratie onder de 150 dollar door de AI-controle komt, eindigt de stroom na goedkeuring door de manager.
+
+00:10:01.240 --> 00:10:05.880
+Bij bedragen boven de 150 dollar zet het systeem het beleefd in de wacht voor beoordeling door de beheerder voor afronding.
+
+00:10:06.080 --> 00:10:11.880
+Elk bad laat een ade-trail achter, het logboek van AI-redeneringen, tijdgestempelde goedkeuringen en geregistreerde resultaten opgeslagen in dataverse.
+
+00:10:12.080 --> 00:10:14.080
+Niemand kan later beweren, ik heb het nooit gezien.
+
+00:10:14.080 --> 00:10:15.860
+De database bewijst het tegendeel.
+
+00:10:16.020 --> 00:10:18.860
+Hou NAAM-evings, conventies gedisciplineerd tijdens het verfijnen.
+
+00:10:19.040 --> 00:10:24.500
+Voorzie menselijke stappen van duidelijke voorvoegsels, zoals manueel goedgekeurd of beheerder goedgekeurd, zodat je takken visueel kunt volgen.
+
+00:10:24.640 --> 00:10:27.680
+Het stroomdiagram moet leesbaar zijn als logica, niet als mysterieuze kunst.
+
+00:10:27.860 --> 00:10:30.820
+Zodra je tevreden bent, publiceer je het en test je met echte scenario's.
+
+00:10:31.020 --> 00:10:32.420
+Zie hoe de keten zich ontvouwt.
+
+00:10:32.560 --> 00:10:34.000
+AI evalueert onmiddellijk.
+
+00:10:34.180 --> 00:10:36.260
+De manager krijgt een gerichte goedkeuringstaak.
+
+00:10:36.400 --> 00:10:39.160
+De beheerder komt alleen in actie wanneer de voorwaarden daarom vragen.
+
+00:10:39.160 --> 00:10:45.020
+Het resultaat voelt minder als automatisering die alles doet en meer als een transparante hiërarchie die zichzelf beheert.
+
+00:10:45.240 --> 00:10:49.520
+Deze gelaagde orkestratie opent ook een nieuw terrein, documentvalidatie.
+
+00:10:49.700 --> 00:10:52.180
+Want soms ligt een formulierveld, maar de bon niet.
+
+00:10:52.380 --> 00:10:56.760
+De volgende stap is om de AI het fysieke bewijs te laten onderzoeken voordat het je inbox bereikt.
+
+00:10:57.020 --> 00:11:01.400
+Dat is waar bonvalidatie om de hoek komt kijken wat bureaucratie verandert in verifiëerbare wetenschap.
+
+00:11:01.660 --> 00:11:03.160
+Dynamische invoer en documentvalidatie.
+
+00:11:03.160 --> 00:11:10.100
+Laten we het hebben over bonnetjes, die kleine verfrommelde stukjes papier die mysterieus genoeg cruciaal bewijs worden zodra iemand terugbetaling wil.
+
+00:11:10.280 --> 00:11:13.640
+In een handmatig goedkeuringsproces verifiëren mensen dit op het oog.
+
+00:11:13.840 --> 00:11:16.340
+Ja, dat ziet eruit als een yogamat, geen jacht.
+
+00:11:16.520 --> 00:11:21.020
+In een geautomatiseerd proces laten we de AI dezelfde controle uitvoeren zonder vermoeidheid bij het oordelen.
+
+00:11:21.200 --> 00:11:25.620
+In Copilot Studio Agent Vloos komt documentvalidatie tot leven via dynamische contentinvoer,
+
+00:11:25.760 --> 00:11:29.560
+specifiek de mogelijkheid om een afbeelding of bestand door te geven aan je goedkeuringslogica.
+
+00:11:29.560 --> 00:11:32.660
+Dit voegt een derde zintuig toe aan je AI-goedkeurder, zicht.
+
+00:11:32.840 --> 00:11:38.200
+In plaats van alleen op tekstvelden te vertrouwen, leest het model het document en vergelijkt wat er staat met wat er is geüpload.
+
+00:11:38.340 --> 00:11:39.280
+Dit is de structuur.
+
+00:11:39.540 --> 00:11:43.240
+Binnen je AI-fase voeg je een nieuw invoertype toe genaamd afbeelding of document.
+
+00:11:43.460 --> 00:11:46.740
+Geef het een duidelijke naam, zoals doc-liggend streepje bon-liggend streepje bestand.
+
+00:11:46.900 --> 00:11:48.500
+Upload een voorbeeldbon om te testen.
+
+00:11:48.700 --> 00:11:51.240
+Dit gaat nog niet live, het traint alleen de logica opzet.
+
+00:11:51.440 --> 00:11:54.720
+Pas nu je instructie prompt aan om document-kruisvalidatie op te nemen.
+
+00:11:54.920 --> 00:11:56.520
+Je breidt je eerdere logica uit.
+
+00:11:56.520 --> 00:12:03.360
+Keur de declaratie goed als aan alle volgende voorwaarden is voldaan, bedrag 500, declaratiegegevens ondersteunen fysieke of mentale gezondheid, aankoopdatum binnen 30 dagen.
+
+00:12:03.560 --> 00:12:06.100
+En het bon-document komt overeen met het opgegeven item, bedrag en datum.
+
+00:12:06.300 --> 00:12:11.100
+Deze vierde voorwaarde transformeert je AI-goedkeurder van beleidshandhaver tot forensisch accountant.
+
+00:12:11.460 --> 00:12:17.740
+Wanneer de test draait, haalt het model leesbare tekst uit het document en controleert de consistentie met uw gestructureerde invoer.
+
+00:12:17.740 --> 00:12:24.860
+Als de bon een fitnessmat van 300 dollar op 22 augustus vermeld en uw declaratie zegt iets anders, verandert het oordeel in afgewezen.
+
+00:12:25.040 --> 00:12:28.520
+Voor de implementatie, voordat de goedkeuring draait, moet u dat document ophalen.
+
+00:12:28.760 --> 00:12:31.780
+Gebruik de actie een bestand of afbeelding downloaden vanuit dataverse.
+
+00:12:32.040 --> 00:12:35.600
+Richt u op dezelfde tabel waarin het declaratierrecord zich bevindt, waarschijnlijk declaraties.
+
+00:12:35.800 --> 00:12:39.600
+Kies bij de best- en scolon met bijlageveld, vaak iets als bon genoemd.
+
+00:12:39.600 --> 00:12:44.740
+Specificeer vervolgens dynamisch de rij ID vanuit de trigger, de unieke declaratie-identificatie.
+
+00:12:44.980 --> 00:12:48.920
+Deze actie geeft best- en smet-adata en inhoud terug, maar hier is de subtiele valkuil.
+
+00:12:49.120 --> 00:12:53.380
+De inhoudsuitvoer heeft een kleine aanpassing nodig om deze correct door de i te laten interpreteren.
+
+00:12:53.560 --> 00:13:00.120
+Wanneer u de bestandsinhoud toewijst aan uw documentbon invoer, opent u de expressie-editor en voegt u content toe aan de body-verwijzing.
+
+00:13:00.120 --> 00:13:04.280
+Die laatste aanpassing levert de werkelijke best- en bytes in plaats van de metadata-wrapper.
+
+00:13:04.520 --> 00:13:07.740
+Slaat u dit over, dan zal uw AI-enthousiast lege bonnen goedkeuren.
+
+00:13:07.740 --> 00:13:11.760
+Laten we synchronisatie bespreken, de Achilles-heel van document Workflows.
+
+00:13:11.940 --> 00:13:16.400
+De meeste dataverse tabellen slaan bijlagen pas op nadat het record is opgeslagen.
+
+00:13:16.640 --> 00:13:20.540
+Als uw flow bij creatie triggert, kan deze vuren voordat het bestand bestaat.
+
+00:13:20.760 --> 00:13:23.740
+Symptoom, de flow faalt of de inhoud van de bon is leeg.
+
+00:13:23.920 --> 00:13:25.180
+De oplossing is elegant.
+
+00:13:25.600 --> 00:13:31.340
+Wijzig de triggerconditioner bij itemwijziging, maar beperk deze tot alleen vuren wanneer de bonkolom wijzigt.
+
+00:13:31.540 --> 00:13:36.060
+Op die manier start de validatie zodra iemand een bestand upload of vervangt.
+
+00:13:36.060 --> 00:13:42.340
+Om dit te configureren, opent u de triggerinstellingen, kiest u gewijzigde kolommen en plakt u de logische naam van uw bonkolom,
+
+00:13:42.500 --> 00:13:45.800
+te vinden bij kolomdetails in dataverse onder geavanceerde hulpmiddelen.
+
+00:13:46.000 --> 00:13:47.700
+Eenmaal ingesteld, publiceert u.
+
+00:13:47.860 --> 00:13:49.920
+Nu gedraagt uw automatisering zich netjes.
+
+00:13:50.180 --> 00:13:52.520
+Deze wacht tot er daadwerkelijk iets te valideren valt.
+
+00:13:52.800 --> 00:13:56.140
+Wanneer de declaratie wordt bijgewerkt met een nieuwe bon, start de flow opnieuw.
+
+00:13:56.140 --> 00:14:00.560
+Deze downloaded bestand voert het door de AI-fase en controleert alle invoer.
+
+00:14:00.960 --> 00:14:08.040
+Bij discrepanties, zoals een afwijkend bedrag, verouderde datum of inconsistente beschrijvingen, wijst de AI dit af met uitleg.
+
+00:14:08.180 --> 00:14:13.120
+Het logboek met redenen zou kunnen zeggen, gedeclareerd bedrag 305 dollar verschilt van document totaal 300 dollar.
+
+00:14:13.660 --> 00:14:14.820
+Dat is compliant zonder klachten.
+
+00:14:15.000 --> 00:14:16.000
+De praktische impact.
+
+00:14:16.260 --> 00:14:18.140
+Elke indiening wordt zelfcontrolerend.
+
+00:14:18.400 --> 00:14:22.060
+Werknemers kunnen niet langer twijfelachtige bonnen of vage beschrijvingen indienen.
+
+00:14:22.060 --> 00:14:27.060
+AI levert het oordeel, dataverse levert het bewijs en geen van beide neemt koffiepauzes.
+
+00:14:27.300 --> 00:14:30.260
+Dus nee, documentvalidatie is geen overbodige luxe.
+
+00:14:30.440 --> 00:14:32.300
+Het is het immuungeheugen voor uw workflows.
+
+00:14:32.640 --> 00:14:40.320
+Uitschieters worden op moleculair niveau opgevangen, de tekens op echte bonnen en de menselijke reviewer wordt gepromoveerd van handmatige controleur naar uitzonderingsafhandelaar.
+
+00:14:40.900 --> 00:14:43.060
+Gefeliciteerd, u heeft nu eerlijkheid zelf geautomatiseerd.
+
+00:14:44.140 --> 00:14:47.220
+Betrouwbaarheid opbouwen, testen, versiebeheer en publiceren.
+
+00:14:47.440 --> 00:14:50.320
+Elke automatisering lijkt perfect tot het moment van uitvoering.
+
+00:14:50.320 --> 00:14:53.160
+Daarom is betrouwbaarheid geen fase, maar een discipline.
+
+00:14:53.400 --> 00:14:59.760
+Copilot Studio maakt die discipline verrassend eenvoudig met versiebeheer, testen en publicatiecontroles die direct in agentflows zijn ingebouwd.
+
+00:14:59.920 --> 00:15:01.400
+Begin met iteratief testen.
+
+00:15:01.580 --> 00:15:04.160
+Elke goedkeuringsflow is een miniatuur ecosysteem.
+
+00:15:04.400 --> 00:15:07.100
+Zelfs één verkeerde variabele naam kan voor chaos zorgen.
+
+00:15:07.340 --> 00:15:09.680
+Behandel testen daarom als een wetenschappelijk proces.
+
+00:15:09.940 --> 00:15:12.900
+Isoleer wijzigingen, pas data toe, observeer de uitvoer.
+
+00:15:13.060 --> 00:15:18.160
+In de flow editor laat Copilot Studio je voorbeeld data simuleren zonder productietriggers te implementeren.
+
+00:15:18.160 --> 00:15:25.120
+Voer afwijkende scenario's in, zoals de grote bedragen, verouderde datums of irrelevante namen en controleer of elk resultaat correct is.
+
+00:15:25.320 --> 00:15:27.420
+Ga daarna over op en aan eveningsconventies.
+
+00:15:27.620 --> 00:15:30.480
+Saai, absoluut, essentieel, levensbelangrijk.
+
+00:15:30.660 --> 00:15:32.700
+Voorzie elke variabele systematisch van een voorvoegsel.
+
+00:15:32.920 --> 00:15:35.400
+Straat voor strings, numm voor nummerieke waarden, dok voor bestanden.
+
+00:15:35.640 --> 00:15:37.300
+Label acties eveneens expliciet.
+
+00:15:37.500 --> 00:15:40.940
+Download ontvangstbewijs, controleer goedkeuring manager, update claim status.
+
+00:15:41.200 --> 00:15:46.500
+Want over drie maanden, als iemand vraagt waarom actie 7 niet werkt, zul je blij zijn met duidelijke sporen in plaats van graafwerk.
+
+00:15:46.500 --> 00:15:50.400
+Zodra individuele tests slagen, ga je verder met het valideren van randgevallen.
+
+00:15:50.620 --> 00:15:52.500
+Doe alsof je een onhandige gebruiker bent.
+
+00:15:52.680 --> 00:15:57.180
+Upload geen ontvangstbewijs, verander een datum naar volgend jaar, typ 500 in plaats van 500.
+
+00:15:57.460 --> 00:16:00.220
+Bevestig dat de AI het uitlegt en weigert zonder te crashen.
+
+00:16:00.440 --> 00:16:03.740
+Dit zijn geen hypothetische fouten, maar repetities voor de werkelijkheid.
+
+00:16:03.900 --> 00:16:09.740
+Hoe meer faalscenario's je vooraf neutraliseert, des te minder teams berichten je om 2 uur s'nachts krijgt dat de flow weer gestopt is.
+
+00:16:10.040 --> 00:16:11.720
+Publiceren introduceert governance.
+
+00:16:11.940 --> 00:16:16.280
+Elke keer dat je een belangrijke wijziging opslaat, maakt Copilot Studio stilletjes een nieuwe versie aan.
+
+00:16:16.280 --> 00:16:18.200
+Je kunt op elk gewenst moment terugdraaien.
+
+00:16:18.380 --> 00:16:19.640
+Geen angst voor overschrijven.
+
+00:16:19.840 --> 00:16:23.340
+Gebruik dit om experimentele zandbakomgevingen gescheiden te houden van productie.
+
+00:16:23.520 --> 00:16:26.940
+Een flow genaamd claimgoedkeuring dev, een andere claimgoedkeuring pro.
+
+00:16:27.080 --> 00:16:29.360
+Test in dev, publiceer pas als het stabiel is.
+
+00:16:29.580 --> 00:16:34.020
+Onthoud, betrouwbaarheid draait niet alleen om correctheid, maar om controle bij veranderingen.
+
+00:16:34.700 --> 00:16:37.020
+Benut na publicatie de activiteitslogboeken.
+
+00:16:37.280 --> 00:16:41.320
+Deze zijn niet voor de sier, het zijn juridisch sluitende verslagen van interacties tussen AI en mens.
+
+00:16:41.580 --> 00:16:44.500
+Tijdstempels, identiteit van goedkeurders, samenvattingen van de logica.
+
+00:16:44.700 --> 00:16:46.360
+Controleer deze logboeken periodiek.
+
+00:16:46.500 --> 00:16:48.020
+Patronen worden vanzelf zichtbaar.
+
+00:16:48.260 --> 00:16:50.140
+Welke regels leiden tot de meeste afwijzingen?
+
+00:16:50.260 --> 00:16:51.600
+Welke managers overrolden de AI?
+
+00:16:51.780 --> 00:16:53.740
+Hoe vaak worden compliance-stappen ingeschakeld?
+
+00:16:53.920 --> 00:16:56.480
+Die inzichten verfijnen zowel het beleid als het ontwerp.
+
+00:16:56.560 --> 00:16:57.900
+Nog een subtiele best practice.
+
+00:16:58.240 --> 00:17:02.020
+Automatiseer status updates terug naar dataverse records aan het einde van elke vertakking.
+
+00:17:02.200 --> 00:17:07.060
+De rij bijwerken actie moet een duidelijk veld instellen, zoals claim status is goedgekeurd of afgewezen.
+
+00:17:07.060 --> 00:17:09.420
+Dit zichtbare eindpunt versterkt het vertrouwen.
+
+00:17:09.580 --> 00:17:12.160
+Gebruikers zien beslissingen direct in hun eigen tabelweergave.
+
+00:17:12.360 --> 00:17:14.980
+Geen aparte tracking spreadsheets, geen spookgoedkeuringen.
+
+00:17:15.120 --> 00:17:18.480
+Zodra je systeem alle tests doorstaat, klik je met een gerust hart op publiceren.
+
+00:17:18.680 --> 00:17:23.620
+In tegenstelling tot eerdere generaties Power Automate Flows behouden Agent Flows contextuele metadata,
+
+00:17:23.940 --> 00:17:27.060
+het beslissingsschema van de AI, dynamische inhoudsbindings en versietext.
+
+00:17:27.240 --> 00:17:32.240
+Het resultaat is niet slechts een draaiend proces, maar een reproduceerbaar artefact, een auditeerbare automatisering.
+
+00:17:32.440 --> 00:17:34.540
+De uiteindelijke betrouwbaarheidscheck is mentaal.
+
+00:17:34.740 --> 00:17:36.420
+Weersta de neiging tot overengineering.
+
+00:17:36.420 --> 00:17:39.800
+Soms onthult een falende flote complexe regels geen technische baks.
+
+00:17:40.000 --> 00:17:41.700
+Stroomlijn de logica waar mogelijk.
+
+00:17:41.980 --> 00:17:45.360
+Minder stappen, duidelijkere instructies, minimale dubbelzinnigheid.
+
+00:17:45.760 --> 00:17:48.900
+Automatisering is geen willekeur, het is onnodige slimheid.
+
+00:17:49.160 --> 00:17:52.420
+Wanneer je deze fase afrondt, bereikt je goedkeuringssysteem operationele volwassenheid,
+
+00:17:53.200 --> 00:17:55.800
+getest, geversioneerd, terugdrijbaar en verifieerbaar.
+
+00:17:56.020 --> 00:17:58.660
+Elke uitkomst van AI-oordeel tot administratieve goedkeuring,
+
+00:17:58.900 --> 00:18:01.240
+laat een digitale voetafdruk achter die bestand is tegen controle.
+
+00:18:01.240 --> 00:18:05.720
+Dat is betrouwbaarheid in cijfers, geen gevoel, geen geluk, maar gestructureerde logica,
+
+00:18:06.000 --> 00:18:08.520
+getrouw vastgelegd door tools die voor je denken terwijl je slaapt.
+
+00:18:08.880 --> 00:18:10.720
+Resultaten en de waarde in de echte wereld.
+
+00:18:10.920 --> 00:18:13.140
+Wat gebeurt er als je bureaucratie overlaat aan wiskunde?
+
+00:18:13.360 --> 00:18:14.900
+De goedkeuringen houden op met wachten.
+
+00:18:15.120 --> 00:18:19.040
+Een AI-gestuurde agentflow met meerdere fasen verkort de doorlooptijd van dagen naar minuten,
+
+00:18:19.140 --> 00:18:21.240
+omdat beslissingen niet langer afhangen van agenda beschikbaarheid.
+
+00:18:21.980 --> 00:18:25.240
+Elke claim die aan objectief beleid voldoet, wordt direct goedgekeurd.
+
+00:18:25.240 --> 00:18:29.240
+Elk uitzonderlijk geval belandt netjes in de wachtrij van een manager met de context al bijgevoegd.
+
+00:18:29.900 --> 00:18:32.860
+Mensen maken waardeoordelen, geen administratieve bevestigingen.
+
+00:18:33.040 --> 00:18:35.300
+De impact is als eerste zichtbaar als tijdsbesparing.
+
+00:18:35.500 --> 00:18:38.740
+Een declaratie waar voorheen vier e-mails en twee herinneringen voor nodig waren,
+
+00:18:38.940 --> 00:18:40.140
+is nu voor de launch afgehandeld.
+
+00:18:40.360 --> 00:18:45.240
+Afdelingen ervaren kortere verwerkings, cyclie, minder stilstand en perfect gelogde redenatiepaden.
+
+00:18:46.000 --> 00:18:48.960
+Het goedkeuringsmechanisme is niet langer een onderbreking.
+
+00:18:49.220 --> 00:18:50.500
+Het wordt infrastructuur.
+
+00:18:50.800 --> 00:18:52.240
+Daarna volgt foutreductie.
+
+00:18:52.240 --> 00:18:56.300
+Door deterministische regels via AI af te dwingen, elimineer je subjectieve afwijkingen,
+
+00:18:56.440 --> 00:18:57.900
+de vloek van handmatige goedkeuringen.
+
+00:18:58.060 --> 00:19:00.640
+Geen gedoe meer met ik dacht dat dit onder gezondheid en welzijn viel.
+
+00:19:00.860 --> 00:19:03.980
+De AI interpreteert criteria elke keer op precies dezelfde manier.
+
+00:19:04.360 --> 00:19:07.200
+Consistentie schaalt in administratieve logica beter dan compassie.
+
+00:19:07.380 --> 00:19:11.040
+Managers behandelen alleen nog afwijkingen en zelfs die komen met een volledig audit trail.
+
+00:19:11.460 --> 00:19:14.080
+Data-invoer, besluitvormingsgeschiedenis, modelverklaring.
+
+00:19:14.280 --> 00:19:17.400
+Audits veranderen van paniekoefeningen in beleefde verificaties.
+
+00:19:17.620 --> 00:19:20.880
+Op organisatorisch niveau is dit niet alleen sneller, het is veiliger.
+
+00:19:20.880 --> 00:19:23.500
+Compliance is niet afhankelijk van geheugen of stemming.
+
+00:19:23.660 --> 00:19:24.560
+Het is ingebed.
+
+00:19:24.760 --> 00:19:27.840
+De dataverse logs laten zien wie goedkeurde, wanneer en waarom.
+
+00:19:28.020 --> 00:19:33.060
+Die transparantie ontmoedigt een cultuur van sluiproutes, omdat elke beslissing nu in doorzoekbare permanentie leeft.
+
+00:19:33.220 --> 00:19:38.480
+En filosofisch gezien verschuift de workflow van mens eerst met AI ondersteuning naar AI eerst met menselijke correctie.
+
+00:19:38.620 --> 00:19:40.440
+Praktisch bestuur, geen science fiction.
+
+00:19:40.700 --> 00:19:43.600
+AI regelt de handhaving van regels, mensen regelen het oordeel.
+
+00:19:43.760 --> 00:19:47.340
+De hybride aanpak produceert eerlijkere, snellere en uiteindelijk betrouwbaardere systemen.
+
+00:19:47.500 --> 00:19:49.280
+Stel je voor dat je dat aan een auditor uitlegt.
+
+00:19:49.280 --> 00:19:52.340
+De glimlach die daarop volgt, is de automatisering alleen al waard.
+
+00:19:52.520 --> 00:19:53.280
+Dus, dat is het.
+
+00:19:53.440 --> 00:19:56.420
+Microsoft Co-Pilot Studio is niet zomaar weer een automatiseringstool.
+
+00:19:56.580 --> 00:19:59.980
+Het is de plek waar de besluiteloosheid van je organisatie eindelijk met pensioen gaat.
+
+00:20:00.160 --> 00:20:04.040
+Je bouwt een goedkeurings-engine die in voorwaarden kan denken, verantwoord escaleert,
+
+00:20:04.240 --> 00:20:06.820
+bonnetoetst aan de realiteit en elke stap documenteert.
+
+00:20:07.060 --> 00:20:09.140
+Dat is geen flow, dat is een governance-model.
+
+00:20:09.360 --> 00:20:11.460
+Als je verder niets onthoudt, onthoud dan dit.
+
+00:20:11.620 --> 00:20:14.780
+AI moet beslissingen voorspelbaar maken en mensen uitzonderlijk.
+
+00:20:14.960 --> 00:20:17.580
+Stop met het uit gewoonte alles via mensen te laten lopen.
+
+00:20:17.580 --> 00:20:21.420
+Laat Logica de routine afhandelen, zodat managers uitzonderingen kunnen afhandelen.
+
+00:20:21.560 --> 00:20:24.880
+Als deze uit leg je een week wachten op manager goedkeuring heeft bespaard.
+
+00:20:25.060 --> 00:20:26.380
+Overweeg dan je te abonneren.
+
+00:20:26.540 --> 00:20:30.540
+De volgende tutorial duikt dieper in geavanceerde Co-Pilot Studio automatiseringen,
+
+00:20:30.700 --> 00:20:34.280
+waar deze agent flows verbinden met power platform analytics en adaptief beleid.
+
+00:20:34.480 --> 00:20:39.080
+Leg je upgraden pad vast, abonneer je, zet meldingen aan en laat nieuwe afleveringen automatisch implementeren.
+
+00:20:39.320 --> 00:20:43.340
+Geen handmatige controles, geen gemiste releases, enkel continu levering van nuttige kennis.
+
+00:20:43.580 --> 00:20:44.020
+Ga door.

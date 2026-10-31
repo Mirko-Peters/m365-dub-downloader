@@ -1,0 +1,1135 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:07.100
+Was wäre, wenn Ihr Softwareentwicklungsteam einen zusätzlichen Teamkollegen hätte, der nie müde wird, schneller lernt als jeder, den Sie kennen und die mühsame Arbeit ohne Klagen erledigt?
+
+00:00:07.900 --> 00:00:10.300
+Genau das zeichnet sich bei agentenbasierter KI ab.
+
+00:00:10.960 --> 00:00:20.340
+In diesem Video definieren wir zunächst, was agentenbasierte KI tatsächlich bedeutet, zeigen dann, wie sie in echten .NET und Azure Workflows funktioniert und untersuchen schließlich die Auswirkungen auf die Produktivität Ihres Teams.
+
+00:00:21.000 --> 00:00:24.840
+Am Ende werden Sie ein kleines Experiment kennen, das Sie diese Woche in Ihrer eigenen .NET-Pipeline ausprobieren können.
+
+00:00:24.840 --> 00:00:31.600
+Bevor wir jedoch zu Anwendungen und Ergebnissen kommen, müssen wir uns ansehen, was agentenbasierte KI wirklich von den Autovervollständigungstools unterscheidet, die Sie bereits kennen.
+
+00:00:33.060 --> 00:00:34.520
+Was macht agentenbasierte KI anders?
+
+00:00:35.280 --> 00:00:41.360
+Was agentenbasierte KI auszeichnet, ist nicht nur, dass Sie Code generieren kann, sondern dass Sie eher wie ein System von Teamkollegen mit unterschiedlichen Fähigkeiten arbeitet.
+
+00:00:42.280 --> 00:00:44.700
+Um dies zu verstehen, können wir es in drei Hauptmerkmale unterteilen.
+
+00:00:44.700 --> 00:00:52.620
+Die Art und Weise, wie jeder Agent Kontext und Gedächtnis bewahrt, wie mehrere Agenten wir ein Team koordinieren und der Unterschied zwischen einfacher Automatisierung und echter adaptiver Autonomie.
+
+00:00:52.620 --> 00:00:58.120
+Lassen Sie uns zunächst betrachten, was einen einzelnen Agenten auszeichnet, Kontext, Gedächtnis und Zielorientierung.
+
+00:00:58.640 --> 00:01:03.920
+Herkömmliche Autovervollständigung sagt das nächste Wort oder die nächste Zeile voraus, vergisst aber alles andere, sobald die Vorhersage getroffen wurde.
+
+00:01:04.580 --> 00:01:07.920
+Ein KI-Agent hingegen verfügt über ein Verständnis des übergeordneten Projekts.
+
+00:01:08.540 --> 00:01:13.420
+Er erinnert sich daran, was bereits ausprobiert wurde, weiß, wo sich der Code befindet und passt seine Ausgabe an, wenn sich etwas ändert.
+
+00:01:14.260 --> 00:01:20.040
+Diese Beständigkeit kommt der Zusammenarbeit mit einem Juniorentwickler näher, jemandem, der mit der Zeit lernt, anstatt nur zu raten, was Sie gerade wollen.
+
+00:01:20.040 --> 00:01:22.920
+Der Hauptunterschied hier zwischen Vorhersagen und Planen.
+
+00:01:23.360 --> 00:01:28.360
+Anstatt auf jeden Tastendruck isoliert zu reagieren, verfolgt ein Agent Ziele und passt sich an, während sich die Situation entwickelt.
+
+00:01:29.000 --> 00:01:30.920
+Als nächstes schauen wir uns an, wie mehrere Agenten zusammenarbeiten.
+
+00:01:31.360 --> 00:01:36.540
+Ein großes Missverständnis ist es, agentenbasierte KI als ein Subdev-Skript oder Makro zu betrachten, das nur repetitive Aufgaben automatisiert.
+
+00:01:36.940 --> 00:01:39.820
+Aber bei echten Softwareprojekten ist die Arbeit auf verschiedene Rollen verteilt.
+
+00:01:40.700 --> 00:01:44.780
+Architekten, Reviewer, Tester, Operatoren, Agenten können diese Aufteilung widerspiegeln,
+
+00:01:44.860 --> 00:01:47.940
+wobei jeder ein Teil des Lebenszyklus mit perfektem Erinnerungsvermögen und Konsistenz abdeckt.
+
+00:01:47.940 --> 00:01:54.420
+Stellen Sie sich einen Agenten vor, der sich dem Systemdesign widmet und Architekturmuster sowie Frameworks vorschlägt, die zu den Geschäftszielen passen.
+
+00:01:55.140 --> 00:01:59.380
+Ein anderer überprüft Codeänderungen, erkennt Probleme und behält dabei die gesamte Historie des Projekts im Blick.
+
+00:02:00.180 --> 00:02:05.700
+Ein dritter könnte die Testabdeckung basierend auf Benutzerdaten erweitern und Testfälle generieren, ohne dass Sie diese anfordern müssen.
+
+00:02:06.400 --> 00:02:11.960
+Jeder Agent ist spezialisiert, aber Sie koordinieren sich wie ein Team, immer verfügbar, immer konsistent und je nach Arbeitslast leicht skalierbar.
+
+00:02:11.960 --> 00:02:17.900
+Wo Menschen an Energie, Kontext oder Fokus verlieren, bleiben Agenten beständig und rufen Details präzise ab.
+
+00:02:18.700 --> 00:02:21.300
+Der letzte Punkt ist die Unterscheidung zwischen Automatisierung und Autonomie.
+
+00:02:22.300 --> 00:02:23.780
+Automatisierung gibt es in der Entwicklung schon lange.
+
+00:02:24.380 --> 00:02:26.560
+Denken Sie an Skripte, CICD-Pipelines und Vorlagen.
+
+00:02:27.340 --> 00:02:28.340
+Diese sind von Grund auf starr.
+
+00:02:28.920 --> 00:02:33.180
+Sie folgen exakten Anweisungen Schritt für Schritt, versagen aber, wenn sich Bedingungen unerwartet ändern.
+
+00:02:33.940 --> 00:02:35.240
+Autonomie verfolgt ein anderer Ansatz.
+
+00:02:35.240 --> 00:02:42.900
+KI-Agenten können spontan auf Änderungen reagieren, sich anpassen, wenn sich eine Abhängigkeitsversion ändert oder eine Dienstwahl überdenken, wenn Kosteneinschränkungen ins Spiel kommen.
+
+00:02:44.060 --> 00:02:47.700
+Anstatt vordefinierte Pfade auszuführen, treffen sie Entscheidungen unter dynamischen Bedingungen.
+
+00:02:48.500 --> 00:02:51.280
+Es ist ein Wandel von der statischen Ausführung zur adaptiven Problemlösung.
+
+00:02:51.780 --> 00:02:54.680
+Der Effekt dabei ist, dass diese Agenten nicht mehr nur auf Befehle warten.
+
+00:02:55.340 --> 00:02:59.780
+Sie können Lösungen vorschlagen, wenn Probleme auftreten, Risiken vor der Produktion aufzeigen.
+
+00:03:00.200 --> 00:03:02.460
+Und Pläne entwerfen, die Stunden an Einrichtungsarbeit sparen.
+
+00:03:02.460 --> 00:03:13.820
+Wenn der heutige GitHub-Copilot-Codeschnipsel ergänzen kann, agiert die morgige Version eher wie ein Projektmitarbeiter, der Roadmaps erstellt, Release-Strategien vorschlägt und sogar architektonische Entscheidungen markiert, die später Probleme verursachen könnten.
+
+00:03:14.900 --> 00:03:17.820
+Das bedeutet nicht, dass jedes Deployment ohne menschliches Eingreifen läuft.
+
+00:03:18.020 --> 00:03:23.940
+Aber es kann repetitive Eingriffe erheblich reduzieren und Entwicklern mehr Zeit für kreative, hochwertige Projektteile geben.
+
+00:03:25.140 --> 00:03:32.120
+Um eine frühere Ausdrucksweise in diesem Bereich zu präzisieren, statt zu fragen, was passiert, wenn die Bereitstellung von Azure-Ressourcen gar keinen Menschen mehr in der Schleife benötigt.
+
+00:03:33.460 --> 00:03:39.680
+Wäre eine genauere Aussage, diese Tools können den manuellen Einrichtungsaufwand senken, während wichtige Leitplanken unter menschlicher Kontrolle bleiben.
+
+00:03:41.710 --> 00:03:45.470
+Das Ergebnis ist nach wie vor transformativ, ohne dass die menschliche Aufsicht vollständig verschwindet.
+
+00:03:45.470 --> 00:03:51.050
+Die wichtigere Erkenntnis ist, dass agentenbasierte KI nicht nur ein weiteres Plug-in ist, das hier und da eine Aufgabe beschleunigt.
+
+00:03:51.830 --> 00:03:59.470
+Sie beginnt, wie ein echtes Teammitglied zu funktionieren und übernimmt Hintergrundaufgaben, damit Entwickler nicht damit beschäftigt sind, Details zu jagen, die ein stets aktives Gegenstück hätte verfolgen können.
+
+00:04:00.410 --> 00:04:05.570
+Die Kapazität des gesamten Teams wird vergrößert, da in Schlüsselbereichen digitale Agenten an der Seite menschlicher Spezialisten arbeiten.
+
+00:04:06.470 --> 00:04:10.410
+Die Theorie zu verstehen ist wichtig, aber entscheidend ist, wie sich das in vertrauten Umgebungen auswirkt.
+
+00:04:10.410 --> 00:04:16.490
+Hier ist also die Wissenslücke. Was ändert sich tatsächlich am ersten Tag eines neuen Projekts, wenn Agenten von Anfang an aktiv sind?
+
+00:04:17.330 --> 00:04:24.250
+Als nächstes betrachten wir ein konkretes Szenario innerhalb des .NET-Ökosystems, in dem diese Veränderungen auftreten, noch bevor sie die erste Zeile Code geschrieben haben.
+
+00:04:25.150 --> 00:04:31.750
+Neugestaltung des Entwickler-Workflows in .NET. In der .NET-Entwicklung beginnt die sichtbarste Veränderung damit, wie Projekte auf den Weg gebracht werden.
+
+00:04:32.650 --> 00:04:36.210
+Die Neugestaltung des Entwickler-Workflows lässt sich hier auf drei taktische Vorteile reduzieren.
+
+00:04:36.210 --> 00:04:41.930
+Schnelleres Architektur-Scaffolding, Projekt begleiten wie Kritik und ein spürbarer Rückgang der Ermüdung bei der Einrichtung.
+
+00:04:42.770 --> 00:04:44.150
+Der erste Punkt ist beschleunigte Scaffolding.
+
+00:04:44.790 --> 00:04:51.250
+Anstatt Visual Studio zu öffnen und auf eine leere Lösung zu starren, kann ein KI-Agent Architekturooptionen vorschlagen, die zu ihrem speziellen Anwendungsfall passen.
+
+00:04:52.030 --> 00:04:58.210
+Bei der Planung einer Web-API mit Echtzeit-Updates schlägt der Agent ein sauberes Schichtdesign vor und zeigt auf, wie Signal R natürlich in den Ablauf passt.
+
+00:04:58.210 --> 00:05:04.930
+Für eine Finanz-App stellt der Entity-Framework mit starker Typsicherheit und Active Directory Integration zusammen, bevor sie einen einzigen Ordner erstellt haben.
+
+00:05:06.210 --> 00:05:10.870
+Was normalerweise Runden von Diskussionen oder Stunden der Recherche erfordert, wird auf einige maßgeschneiderte Ausgangspunkte verdichtet.
+
+00:05:11.270 --> 00:05:12.770
+Dies sind jedoch keine endgültigen Blaupausen.
+
+00:05:13.110 --> 00:05:16.830
+Es sind Entwürfe. Teams sollten jeden Vorschlag validieren, indem sie eine kurze Checkliste durchgehen.
+
+00:05:17.470 --> 00:05:18.930
+Erfüllt die Authentifizierung die Anforderungen?
+
+00:05:19.430 --> 00:05:20.630
+Ist die Protokollierung korrekt eingebaut?
+
+00:05:20.990 --> 00:05:22.110
+Sind grundlegende Testfälle fahren?
+
+00:05:22.870 --> 00:05:25.910
+Diese unaufdringliche Governance stellt sicher, dass Geschwindigkeit nicht zulasten der Stabilität.
+
+00:05:26.170 --> 00:05:28.210
+Der zweite Vorteil ist die fortlaufende Kritik.
+
+00:05:28.990 --> 00:05:33.550
+Betrachten Sie es weniger als Code-Vervollständigung, sondern eher als einen Berater, der auf die Design-Konformität achtet.
+
+00:05:33.550 --> 00:05:39.490
+Wenn Sie ein Repository-Muster für den Datenzugriff erstellen, weist der Agent darauf hin, falls Sie von der Trennung der Zuständigkeiten abweichen.
+
+00:05:40.150 --> 00:05:45.090
+Fügen Sie einen neuen Controller hinzu, schlägt der passende Unit-Test vor oder hebt Inkonsistenzen mit dem Rest des Projekts hervor.
+
+00:05:46.070 --> 00:05:51.650
+Anstatt Sie mit Boilerplate-Code allein zu lassen, lenkt er die Struktur Ihres Systems mit jedem Commit in Richtung wartbarer Muster.
+
+00:05:51.650 --> 00:05:57.830
+Versuchen Sie für ein praktisches Experiment, Co-Pilot in Visual Studio, an einem kleinen ASP-Net-Core-Prototyp zu aktivieren.
+
+00:05:58.790 --> 00:06:01.630
+Vergleichen Sie dann, wie lange es dauert, die erste sinnvolle Anfrage zu bedienen.
+
+00:06:01.790 --> 00:06:05.270
+Ein Endpunkt mit Authentifizierung und Datenpersistenz im Vergleich zur manuellen Arbeit.
+
+00:06:06.110 --> 00:06:13.550
+Es ist keine Garantie für Zeitersparnis, aber der direkte Vergleich in Ihrer eigenen Umgebung ist oft der schnellste Weg, um zu beurteilen, ob diese Agenten einen spürbaren Einfluss haben.
+
+00:06:14.350 --> 00:06:17.070
+Der dritte Vorteil ist die reduzierte Einrichtung und kognitive Belastung.
+
+00:06:17.790 --> 00:06:20.670
+Ein Großteil der frühen Projektarbeit ist repetitiv.
+
+00:06:21.350 --> 00:06:26.270
+Authentifizierungs-Middleware einbinden, NuGet-Pakete abrufen, Protokollierung mit Application Insights einrichten, YAML-Pipelines schreiben.
+
+00:06:26.810 --> 00:06:31.850
+Ein Agent kann diese Teile sofort erstellen, einschließlich Stub-Integrations-Tests, die wissen, welche Abhängigkeiten vorhanden sind.
+
+00:06:32.350 --> 00:06:34.910
+Das nimmt Ihnen nicht die Kontrolle, sondern verschiebt, wohin Ihre Energie fließt.
+
+00:06:35.330 --> 00:06:40.870
+Anstatt einen Tag lang mit Konfigurationsdateien zu kämpfen, verbringen Sie diese Zeit damit, die Geschäftslogik zu implementieren, auf die es wirklich ankommt.
+
+00:06:40.870 --> 00:06:46.610
+Die Ermüdung durch Einrichtungsarbeiten entfällt und schafft Kapazitäten für kreative Designentscheidungen statt für mechanische Aufgaben.
+
+00:06:47.250 --> 00:06:50.170
+Was sich hier von herkömmlicher Automatisierung unterscheidet, ist die Flexibilität.
+
+00:06:50.710 --> 00:06:52.750
+Eine Projektvorlage liefert Ihnen statische Standardeinstellungen.
+
+00:06:53.310 --> 00:06:56.310
+Ein Agent passt sein Grundgerüst basierend auf Ihrem angegebenen Geschäftsziel an.
+
+00:06:56.810 --> 00:07:03.150
+Wenn Sie eine Kollaborations-App erstellen, erscheinen Caching-Strategien wie Redis und ereignisgesteuertes Design mit Azure Service Bus im erstellten Plan.
+
+00:07:04.390 --> 00:07:08.330
+Wenn Sie zu geplanten Workloads wechseln, erscheinen stattdessen Hintergrunddienste und Warteschlangenverarbeitung.
+
+00:07:08.330 --> 00:07:16.130
+Diese Reaktionsfähigkeit unterscheidet agentische KI von einfachen Skripten, da sie Empfehlungen bietet, die der Rolle eines erfahrenen Teammitglieds bei frühen Entscheidungen nahe kommen.
+
+00:07:16.750 --> 00:07:18.850
+Der Kontrast zur heutigen Nutzung von Co-Pilot ist deutlich.
+
+00:07:19.410 --> 00:07:23.750
+Derzeit sehen die meisten Entwickler es als eine Möglichkeit, gängige Syntax- oder Standardcode zu beschleunigen.
+
+00:07:24.250 --> 00:07:26.290
+Sie stellen eine Frage, das Tool vervollständigt die Zeile.
+
+00:07:26.290 --> 00:07:34.410
+Mit Agentenfunktion beginnt das Tool, auf Systemebene zu beraten, kontextbezogene Alternativen anzubieten und Kompromisse früh im Zyklus aufzuzeigen.
+
+00:07:35.370 --> 00:07:38.990
+Der Sprung erfolgt von der Generierung von Code-Schnipps in hin zur Kuration funktionierender Entwürfe.
+
+00:07:39.670 --> 00:07:45.030
+Und das ändert nicht nur, wie Code geschrieben wird, sondern auch, wie Teams die gesamte Lösung konzipieren, bevor sie sich festlegen.
+
+00:07:46.250 --> 00:07:48.350
+Nichts davon ersetzt die Notwendigkeit menschlicher Urteilskraft.
+
+00:07:48.350 --> 00:07:53.210
+Agenten können Frameworks, Abhängigkeiten und Praktiken vorschlagen, doch die Überprüfung liegt weiterhin beim Team.
+
+00:07:53.950 --> 00:07:55.810
+Betrachten Sie jede Empfehlung als einen Entwurf.
+
+00:07:56.530 --> 00:08:01.830
+Akzeptieren Sie die Teile, die Ihren Standards entsprechen, überarbeiten Sie den Rest und nutzen Sie die Erkenntnisse für die nächste Projektphase.
+
+00:08:02.710 --> 00:08:07.670
+Die KI übernimmt die repetitive Schwerstarbeit, während sich die Teammitglieder darauf konzentrieren, Technologiewahl und Strategie in Einklang zu bringen.
+
+00:08:08.090 --> 00:08:11.670
+Bisher haben wir betrachtet, wie Agenten die Programmierefahrung innerhalb von DocNet verändern.
+
+00:08:11.670 --> 00:08:16.170
+Doch der Einsatz von Agenten endet nicht beim Lösungsdesign oder der Projektstruktur.
+
+00:08:16.170 --> 00:08:23.590
+Sobald das Fundament steht, weitet sich dieselbe Intelligenz auf die Bereitstellung, Implementierung und Verwaltung der benötigten Infrastruktur aus.
+
+00:08:24.490 --> 00:08:28.750
+Ihr nehmt eine weitere bedeutende Transformationgestalt an, die sich nicht nur auf den lokalen Entwickler-Workflow beschränkt.
+
+00:08:29.330 --> 00:08:30.870
+Es geht um die Cloud-Umgebung, die diesen umgibt.
+
+00:08:32.110 --> 00:08:34.050
+Cloud-Agenten, die Azure im Autopilot-Modus betreiben.
+
+00:08:34.530 --> 00:08:39.250
+Lassen Sie uns den Fokus darauf verlagern, was passiert, wenn die Azure-Verwaltung selbst mit Hilfe von Agenten im Autopilot läuft.
+
+00:08:39.770 --> 00:08:42.650
+Die ursprüngliche Art, wie diese Diskussion geführt wird, klingt oft nach Science-Fiction.
+
+00:08:42.650 --> 00:08:46.190
+Was passiert, wenn die Bereitstellung von Azure-Ressourcen überhaupt kein Mensch mehr erfordert?
+
+00:08:47.710 --> 00:08:49.330
+Eine bessere Denkweise ist diese.
+
+00:08:50.430 --> 00:08:54.630
+Was passiert, wenn routinemäßige Bereitstellung und Drifterkennung weniger manuelles Eingreifen erfordern,
+
+00:08:54.830 --> 00:08:57.930
+weil Agenten wiederkehrende Aufgaben innerhalb definierter Leitplanken verwalten?
+
+00:08:59.030 --> 00:09:01.710
+Dieser Wandel ist wichtig, denn es geht nicht darum, Menschen zu ersetzen,
+
+00:09:01.790 --> 00:09:04.570
+sondern repetitive Arbeit auszulagern und gleichzeitig die Aufsicht zu behalten.
+
+00:09:05.110 --> 00:09:08.850
+Wer schon einmal eine ernsthafte Azure-Umgebung aufgebaut hat, weiß, wie unübersichtlich das wird.
+
+00:09:08.850 --> 00:09:12.090
+Man jongliert mit Vorlagen, Skripten und Pipeline-Jammel,
+
+00:09:12.210 --> 00:09:16.110
+während man zwischen CLI-Befehlen für Schnelligkeit und dem Portal für Ausnahmen wechselt.
+
+00:09:17.050 --> 00:09:19.530
+Jede Abkürzung wird zu technischer Schuld, hier nur darauf warten, ans Licht zu gucken.
+
+00:09:20.190 --> 00:09:25.090
+Eine VM, die außerhalb der Geschäftszeiten läuft, unbemerkt steigende Kosten oder ein ungeschützt exponiertes Speicherkonto.
+
+00:09:25.890 --> 00:09:29.090
+Und im Cloud-Betrieb führen selbst kleine Fehler zu unverhältnismäßig großen Kopfschmerzen.
+
+00:09:29.790 --> 00:09:32.950
+Rechnungen, die explodieren, Regionen, die die Resilienz gefährden oder Compliance-Lücken,
+
+00:09:33.030 --> 00:09:34.650
+die man zum denkbar schlechtesten Zeitpunkt entdeckt.
+
+00:09:34.650 --> 00:09:37.610
+Das ist die Müse, all die sich die meisten Teams ersparen wollen.
+
+00:09:37.890 --> 00:09:40.530
+Und hier beginnt ein Agent, sich wie ein autonomer Deployment Engineer anzufüllen.
+
+00:09:40.970 --> 00:09:44.610
+Die Idee ist einfach, sie geben geschäftliche Ziele, Leistungsanforderungen,
+
+00:09:44.910 --> 00:09:47.990
+Wiederherstellungsbedürfnisse, Compliance-Regeln und Budgetvorgaben an
+
+00:09:47.990 --> 00:09:51.130
+und der Agent übersetzt diese Absicht in Infrastrukturkonfigurationen.
+
+00:09:52.010 --> 00:09:54.810
+Statt zwischen mehreren Konsolen zu wechseln oder IDs manuell zu verknüpfen,
+
+00:09:54.890 --> 00:09:57.690
+sehen sie EIC-Vorlagen, die bereits auf ihre formulierten Ziele abgestimmt sind.
+
+00:09:57.690 --> 00:10:01.990
+Von da an überwacht derselbe Agent alles, führt Compliance-Prüfungen durch,
+
+00:10:02.370 --> 00:10:05.350
+simuliert mögliche Fehlkonfigurationen und wendet Korrekturvorschläge an,
+
+00:10:05.430 --> 00:10:07.250
+bevor Probleme in der Produktion eskalieren.
+
+00:10:08.090 --> 00:10:10.650
+Der Unterschied zu bestehender Automatisierung liegt in der Anpassungsfähigkeit.
+
+00:10:11.410 --> 00:10:15.150
+Eine normale CICD-Pipeline betrachtet ihre Jamel-Definitionen als unumstößlich.
+
+00:10:15.970 --> 00:10:18.810
+Sie funktionieren, bis sich die Realität ändert durch einen Abhängigkeitsupdate,
+
+00:10:18.890 --> 00:10:21.070
+einen plötzlichen Ansturm oder eine neue Compliance-Vorgabe
+
+00:10:21.070 --> 00:10:23.970
+und dann brechen diese statischen Anweisungen oder setzen etwas durch,
+
+00:10:23.970 --> 00:10:26.470
+das zwar gültig aussieht, aber die geschäftlichen Anforderungen nicht erfüllt.
+
+00:10:26.470 --> 00:10:29.330
+Eine agentengesteuerte Pipeline verhält sich anders.
+
+00:10:29.710 --> 00:10:33.130
+Sie behandelt diese Definitionen als Basis, aktualisiert sie aber, wenn sich die Bedingungen ändern.
+
+00:10:33.730 --> 00:10:37.510
+Anstatt darauf zu warten, dass eine Person einen Dienst skaliert oder die regionale Verteilung anpasst,
+
+00:10:37.870 --> 00:10:40.230
+erkennt sie Lastenmuster, sagt wahrscheinliche Schwellenwerte voraus
+
+00:10:40.230 --> 00:10:42.590
+und stellt im Voraus zusätzliche Kapazität bereit.
+
+00:10:43.830 --> 00:10:46.910
+Diese Anpassungsfähigkeit macht Szenarien in der Praxis weniger fehleranfällig.
+
+00:10:47.310 --> 00:10:49.950
+Denn sie sich eine .NET-App vor, die hauptsächlich Datenverkehr in den USA bedient.
+
+00:10:50.550 --> 00:10:52.450
+Eine Woche später tauchen neue Nutzer in Europa auf.
+
+00:10:52.450 --> 00:10:56.490
+Die Latenz steigt, aber niemand hat in der ursprünglichen YAML-Datei eine weitere Region berücksichtigt.
+
+00:10:56.990 --> 00:10:58.390
+Herkömmliche Automatisierung ignoriert das.
+
+00:10:58.710 --> 00:11:00.870
+Man merkt es erst, wenn Beschwerden eingehen und die Logs hin vorbestätigen.
+
+00:11:01.230 --> 00:11:04.370
+Ein Agent hingegen erkennt das Muster, stellt ein europäisches Replikat bereit
+
+00:11:04.370 --> 00:11:06.730
+und konfiguriert das Routing über Azure Front Door sofort.
+
+00:11:07.230 --> 00:11:08.670
+Er deployt nicht einfach und geht dann weg.
+
+00:11:09.070 --> 00:11:11.390
+Er gleicht Ressourcen ständig mit der beabsichtigten Zielsetzung ab.
+
+00:11:11.690 --> 00:11:14.210
+Fast wie ein Operator, der rund um die Uhr im Einsatz ist und ihm müde wird.
+
+00:11:14.410 --> 00:11:16.270
+Der eigentliche Vorteil geht über das Skalieren hinaus.
+
+00:11:16.270 --> 00:11:23.090
+Das kann bedeuten, dass der Agent einen versehentlich freigegebenen Storage-Container erkennt
+
+00:11:23.090 --> 00:11:27.010
+und diesen automatisch sperrt oder Abweichungen bei der Patch-Basis einer VM feststellt
+
+00:11:27.010 --> 00:11:28.330
+und sie wieder in den Soll-Zustand bringt.
+
+00:11:29.110 --> 00:11:32.270
+Das sind häufige, wenig sichtbare Aufgaben, die Menschen normalerweise erst später
+
+00:11:32.270 --> 00:11:33.730
+und nur mit großem Aufwand bemerken.
+
+00:11:34.770 --> 00:11:38.050
+Indem sie diese in den kontinuierlichen Zyklus integrieren, ersetzen sie keine Operator,
+
+00:11:38.130 --> 00:11:38.770
+sondern entlasten sie.
+
+00:11:39.430 --> 00:11:41.390
+Statt Energie mit Brandbekämpfung zu verschwenden,
+
+00:11:41.490 --> 00:11:43.650
+konzentrieren sie sich auf übergeordnete Planungsstrategien.
+
+00:11:43.950 --> 00:11:44.770
+Das ist eine wichtige Nuance.
+
+00:11:44.770 --> 00:11:46.470
+Menschliche Aufsicht verschwindet nicht.
+
+00:11:46.850 --> 00:11:50.950
+Ihre Rolle ändert sich vom zahlenweisen Abhaken von Checklisten hin zum Festlegen von Richtlinien zu Beginn.
+
+00:11:51.790 --> 00:11:52.930
+Welche Regionen sind erlaubt?
+
+00:11:53.050 --> 00:11:54.170
+Welche Kosten sind akzeptabel?
+
+00:11:54.410 --> 00:11:56.330
+Welche Compliance-Standards dürfen nicht verletzt werden?
+
+00:11:57.330 --> 00:11:59.530
+Ein praktischer erster Schritt für jedes Team, das dies testen möchte,
+
+00:11:59.650 --> 00:12:01.470
+ist die frühzeitige Definition von Leitplanken.
+
+00:12:02.030 --> 00:12:05.610
+Legen sie Kostenobergrenzen fest, bestimmen sie genehmigte Regionen und setzen sie Compliance-Grenzen.
+
+00:12:06.410 --> 00:12:09.510
+Der Agent fungiert dann als Durchsetzungsinstanz, nicht als unkontrollierte Akte.
+
+00:12:09.810 --> 00:12:10.890
+Das ist das maßgebliche Prinzip.
+
+00:12:11.030 --> 00:12:13.290
+Sie behalten die Kontrolle über die strategische Richtung,
+
+00:12:13.290 --> 00:12:15.750
+während der Agent-Schutzmaßnahmen in großem Umfang ausführt.
+
+00:12:16.210 --> 00:12:18.910
+Es bedeutet auch nicht, dass sie dem Agenten am ersten Tag die Produktion überlassen.
+
+00:12:19.570 --> 00:12:22.230
+Wenn sie risikoscheu sind, beginnen sie in einer kontrollierten Testumgebung.
+
+00:12:22.870 --> 00:12:25.190
+Setzen sie den Agenten einer nicht kritischen Arbeitslast aus
+
+00:12:25.190 --> 00:12:27.950
+oder wählen sie einen einzelnen Dienst wie Speicher oder Protokollierungsinfrastruktur
+
+00:12:27.950 --> 00:12:30.050
+und lassen sie ihn dort Abweichungen und Bereitstellungen verwalten.
+
+00:12:30.510 --> 00:12:33.150
+Auf diese Weise bauen sie Vertrauen in die Interpretation der Leitplanken auf,
+
+00:12:33.210 --> 00:12:34.410
+bevor sie dessen Einsatzbereich erweitern.
+
+00:12:34.410 --> 00:12:38.650
+Betrachten sie es als ein Pilotprojekt mit klar definiertem Umfang und geringem Risiko,
+
+00:12:38.750 --> 00:12:41.630
+genauso wie die meisten zuverlässigen DevOps-Praktiken ohnehin reifen.
+
+00:12:42.470 --> 00:12:47.250
+Im Kern ähnelt ein agentenbasierter Ansatz für Azure ERC weniger dem Schreiben dutzender statischer Skripte
+
+00:12:47.250 --> 00:12:49.110
+als vielmehr der Verwaltung einer dynamischen Checkliste.
+
+00:12:49.630 --> 00:12:51.910
+Generieren sie Vorlagen, führen sie vor Abprüfungen durch,
+
+00:12:52.230 --> 00:12:54.210
+überwachen sie Abweichungen und schlagen sie Korrekturen vor.
+
+00:12:54.490 --> 00:12:56.150
+Alles innerhalb der von ihnen konfigurierten Grenzen.
+
+00:12:56.590 --> 00:13:00.390
+Es ist strukturiert genug für Vertrauen, aber flexibel genug, um sich bei geänderten Bedingungen anzupassen.
+
+00:13:00.390 --> 00:13:04.490
+Natürlich ist die Bereitstellung und Skalierung der Infrastruktur nur eine Seite der Zuverlässigkeit.
+
+00:13:05.310 --> 00:13:06.930
+Das schwierigere Problem tritt oft später auf,
+
+00:13:07.330 --> 00:13:09.610
+sicherzustellen, dass der Code, den sie in dieser Umgebung bereitstellen,
+
+00:13:09.750 --> 00:13:11.230
+unter realen Bedingungen auch wirklich besteht.
+
+00:13:12.210 --> 00:13:15.550
+Und genau hier zeigt sich die nächste Herausforderung, die Frage, wie Fehler gefunden werden,
+
+00:13:15.810 --> 00:13:17.890
+die Menschen einfach nicht sehen, bis sie bereits in der Produktion sind.
+
+00:13:19.190 --> 00:13:20.750
+Autonomes Testen, Fehler die Menschen übersehen.
+
+00:13:21.310 --> 00:13:24.770
+Tests decken nur das ab, woran Menschen denken können, und das ist die zentrale Einschränkung.
+
+00:13:25.310 --> 00:13:27.750
+Die meisten Produktionsausfälle resultieren nicht aus dem Vorhersehbaren,
+
+00:13:27.970 --> 00:13:30.210
+sondern aus dem, was sich der menschlichen Vorstellungskraft entzieht.
+
+00:13:30.930 --> 00:13:35.170
+Autonome Testagenten schließen diese Lücke, indem sie sich auf Randfälle und dynamische Bedingungen konzentrieren,
+
+00:13:35.270 --> 00:13:37.190
+die es nie in eine typische Testsuite schaffen würden.
+
+00:13:37.850 --> 00:13:39.410
+Denken Sie an die Race Condition bei Skalierungszeit.
+
+00:13:39.770 --> 00:13:44.430
+Eine .NET-Anwendung in Azure funktioniert bei hoher Last während eines geplanten Stresstests möglicherweise einwandfrei.
+
+00:13:44.770 --> 00:13:48.030
+Aber bei Skalierungsereignissen, wenn neue Instanzen mitten im Datenverkehr hochgefahren werden,
+
+00:13:48.150 --> 00:13:49.870
+treten plötzlich Fehler bei der Sitzungsverwaltung auf.
+
+00:13:50.450 --> 00:13:53.770
+Wenn niemand einen Test speziell für diese Überschneidung entworfen hat, bleibt sie unbemerkt.
+
+00:13:53.770 --> 00:13:59.170
+Ein autonomer Agent erkennt die Anomalie, isoliert sie und generiert einen neuen Regressionstest für diese Bedingungen.
+
+00:13:59.710 --> 00:14:02.450
+Wenn die nächste Skalierung erfolgt, ist diese Sicherheitsvorkehrung bereits vorhanden
+
+00:14:02.450 --> 00:14:04.810
+und verwandelt ein verborgenes Risiko in ein überwachtes Szenario.
+
+00:14:05.230 --> 00:14:06.550
+Ein weiteres Beispiel ist die Eingabemutation.
+
+00:14:06.550 --> 00:14:10.270
+Menschliche Tester planen normalerweise mit sicheren oder vorhersehbaren Daten.
+
+00:14:10.930 --> 00:14:14.890
+Gültige Benutzernamen, korrekte API-Payloads oder offensichtliche Randfälle wie leere Strings.
+
+00:14:16.010 --> 00:14:19.750
+Ein Agent hingegen experimentiert mit Variationen, an die Entwickler nicht denken würden.
+
+00:14:20.690 --> 00:14:24.550
+Übergroße Anfragen, ungewöhnliche Codierungen, leichte Verzögerungen zwischen mehrstufigen Aufrufen.
+
+00:14:25.530 --> 00:14:28.670
+Dadurch kann der Fehler provozieren, die manuelle Testsuiten komplett übersehen würden.
+
+00:14:29.150 --> 00:14:31.150
+Der Wert liegt nicht nur in der Geschwindigkeit, sondern in der Vielfalt.
+
+00:14:31.150 --> 00:14:36.530
+Agenten erforschen abgelegene Bereiche von Eingaberäumen schneller, als es manuell geschriebene Testfälle jemals könnten.
+
+00:14:37.030 --> 00:14:40.770
+Was diesen Wandel von traditioneller Automatisierung unterscheidet, ist die Art und Weise, wie sich die Testsuite entwickelt.
+
+00:14:41.070 --> 00:14:44.130
+Ein von Menschen erstelltes Regressionspaket bleibt relativ statisch.
+
+00:14:44.650 --> 00:14:47.390
+Er spiegelt das Wissen und die Annahmen des Teams zu einem bestimmten Zeitpunkt wieder.
+
+00:14:48.390 --> 00:14:50.110
+Agenten machen daraus einen kontinuierlichen Prozess.
+
+00:14:50.430 --> 00:14:54.590
+Sie erweitern die Suite, während sich das System ändert und suchen ständig nach unberücksichtigten Zuständen.
+
+00:14:55.430 --> 00:14:58.710
+Anstatt das Entwicklermühsam fragile Skripte nach jeder Iteration aktualisieren,
+
+00:14:58.710 --> 00:15:02.510
+werden neue Testfälle dynamisch aus echten Beobachtungen des Systemverhaltens generiert.
+
+00:15:03.590 --> 00:15:04.890
+Dennoch gibt es ein wichtiges Vorbehalt.
+
+00:15:05.370 --> 00:15:08.350
+Nicht jeder von einem Agenten generierte Test verdient einen Platz in ihrer permanenten Suite.
+
+00:15:08.790 --> 00:15:13.810
+Instabile oder irrelevante Tests können sich schnell ansammeln, Zeit verschwenden und das Vertrauen in die Automatisierung unterraten.
+
+00:15:14.070 --> 00:15:16.870
+Deshalb ist Governance wichtig. Teams benötigen einen Überprüfungsprozess.
+
+00:15:17.150 --> 00:15:22.070
+Entwickler oder QI-Ingenieure sollten jeden vorgeschlagenen Test auf Stabilität und geschäftliche Relevanz prüfen,
+
+00:15:22.070 --> 00:15:24.230
+bevor er in das stabile Regressionspaket übernommen wird.
+
+00:15:24.230 --> 00:15:29.070
+Wie bei jeder Automatisierung sorgt eine Aufsicht dafür, dass diese Tools die Zuverlässigkeit erhöhen,
+
+00:15:29.390 --> 00:15:30.810
+anstatt Teams im Rauschen untergehen zu lassen.
+
+00:15:31.650 --> 00:15:35.050
+Ein weiteres Missverständnis, das ausgerannt werden sollte, ist die Vorstellung, dass Agentenfehler beheben.
+
+00:15:35.570 --> 00:15:38.110
+Sie schreiben weder Produktionscode um noch patchen sich schwachstelleneigenständig.
+
+00:15:38.450 --> 00:15:42.690
+Was sie jedoch außergewöhnlich gut können, ist das Aufzeigen reproduzierbarer Szenarien mit klaren Diagnosedetails.
+
+00:15:42.690 --> 00:15:48.370
+Für einen Entwickler macht eine Reihe von durch Agenten erfassten Schritten den Unterschied zwischen stundenlangem Rätselraten und einer schnellen Lösung.
+
+00:15:48.830 --> 00:15:52.610
+In einigen Fällen können Agenten eine mögliche Lösung basierend auf bekannten Mustern vorschlagen,
+
+00:15:52.750 --> 00:15:55.270
+aber die endgültige Entscheidung und Änderung bleibt in menschlicher Hand.
+
+00:15:56.050 --> 00:15:57.690
+So gesehen wird die Arbeitsteilung klarer.
+
+00:15:58.270 --> 00:16:01.030
+Maschinen leisten die Entdeckung, Menschen treffen die Beurteilung und führen die Reparatur durch.
+
+00:16:01.370 --> 00:16:03.330
+Der geschäftliche Nutzen liegt hier in weniger Feuerlöschaktionen.
+
+00:16:03.850 --> 00:16:10.510
+Teams haben weniger nächtliche Tickets, weniger Regressionen nach Releases und eine spürbare Zeitersparnis bei der Reproduktion von Fehlerschritten.
+
+00:16:10.510 --> 00:16:16.900
+Leistungsschwankungen werden in kontrollierten Umgebungen erkannt, anstatt erst bei den Endnutzern aufzutreten.
+
+00:16:17.660 --> 00:16:19.640
+Sicherheitslücken kommen bei internen Tests ans Licht.
+
+00:16:20.420 --> 00:16:22.500
+Nicht erst nach einem Compliance-Scan oder Penetrationstest.
+
+00:16:23.140 --> 00:16:29.120
+Dieser Wandel schafft Raum für die Qualitätssicherung, sich auf übergeordnete Fragen wie Benutzerfreundlichkeit, Workflow-Fluss und Barrierefreiheit zu konzentrieren.
+
+00:16:29.700 --> 00:16:31.800
+Bereiche, die keine autonome Engine sinnvoll beurteilen kann.
+
+00:16:32.220 --> 00:16:35.100
+Für Anwender, die erste Erfahrung sammeln möchten, fangen Sie klein an.
+
+00:16:35.780 --> 00:16:40.540
+Lassen Sie einen autonomen Testagenten für einen definierten Zeitraum in einer Staging- oder Pre-Production-Umgebung laufen.
+
+00:16:40.540 --> 00:16:44.180
+Vergleichen Sie die Liste der aufgedeckten Probleme mit Ihrem aktuellen Backlog.
+
+00:16:44.740 --> 00:16:46.200
+Betrachten Sie die Übung als Datensammlung.
+
+00:16:46.660 --> 00:16:47.860
+Sind die neuen Erkenntnisse wirklich nützlich?
+
+00:16:48.280 --> 00:16:49.460
+Überschneiden Sie sich mit bestehenden Tests.
+
+00:16:49.760 --> 00:16:51.840
+Decken Sie blinde Flecken auf, die für Ihr Unternehmen relevant sind?
+
+00:16:52.680 --> 00:16:57.340
+So betrachtet messen Sie den Return on Investment und setzen nicht Ihre Release-Qualität auf eine unbewiesene Technik.
+
+00:16:58.120 --> 00:17:01.440
+Und wenn Teams diese Art von Pilotprojekten durchführen, zeichnet sich ein Muster ab.
+
+00:17:01.440 --> 00:17:05.020
+Der eigentliche langfristige Vorteil liegt nicht nur darin, zusätzliche Bugs zu finden,
+
+00:17:05.120 --> 00:17:08.160
+sondern wie schnell diese Erkenntnisse in den gesamten Entwicklungszyklus zurückfließen können.
+
+00:17:09.460 --> 00:17:12.200
+Jede erfasste Anomalie und jede protokollierte Erkenntnis stellt Wissen dar,
+
+00:17:12.260 --> 00:17:13.940
+dass nicht mit dem Ende eines Sprints verschwinden sollte.
+
+00:17:14.820 --> 00:17:18.120
+Die Frage ist, wie diese Intelligenz gespeichert, geteilt und weitergegeben wird,
+
+00:17:18.660 --> 00:17:21.400
+damit sich dieselben Fehler nicht unter anderen Projektnahmen wiederholen.
+
+00:17:22.680 --> 00:17:24.200
+Den Intelligenzkreislauf in DevOps schließen.
+
+00:17:24.200 --> 00:17:28.480
+In DevOps ist eines der schwierigsten Probleme, wie schnell Wissen zwischen den Sprints verblasst.
+
+00:17:29.520 --> 00:17:31.580
+Probleme werden protokolliert, postmortems geschrieben.
+
+00:17:31.940 --> 00:17:35.280
+Doch beim Start des nächsten Projekts fließen viele dieser Lehren nicht in den Workflow zurück.
+
+00:17:35.980 --> 00:17:39.340
+Den Intelligenzkreislauf in DevOps zu schließen, bedeutet, diesen Verlustzyklus zu stoppen
+
+00:17:39.340 --> 00:17:42.020
+und sicherzustellen, dass das Gelernte die nächsten Schritte tatsächlich verbessert.
+
+00:17:42.860 --> 00:17:46.660
+Agentische KI unterstützt dies, indem sie sich dort einklingt, wo Wissen bereits fließt.
+
+00:17:47.260 --> 00:17:49.700
+Der erste Integrationspunkt ist das Einlesen von Logs und Telemetrie-Ding.
+
+00:17:50.420 --> 00:17:54.060
+Anstatt Ingenieure zu zwingen, Dashboards oder archivierte Vorfälle zu durchforsten,
+
+00:17:54.360 --> 00:17:57.660
+scannen Agenten kontinuierlich Metriken, Fehlerraten und Performance-Traces
+
+00:17:57.660 --> 00:17:59.600
+und verknüpfen Anomalien über Releases hinweg.
+
+00:18:00.560 --> 00:18:03.280
+Der zweite ist die Analyse der Pull-Request-Historien von Code-Reviews.
+
+00:18:03.820 --> 00:18:07.160
+Entscheidungen in Kommentaren enthalten oft Kontext zu Abwägungen oder Risiken,
+
+00:18:07.280 --> 00:18:08.800
+die nie in die Dokumentation gelangen.
+
+00:18:09.620 --> 00:18:12.900
+Durch die Verarbeitung dieser Konversationen bewahren Agenten das Warum hinter einem Ereignis
+
+00:18:12.900 --> 00:18:13.920
+nicht nur, was zusammengeführt wird.
+
+00:18:14.580 --> 00:18:17.440
+Der dritte ist die Zuordnung beobachteter Fehler zu Architekturempfehlungen.
+
+00:18:17.700 --> 00:18:20.960
+Wenn bestimmte Caching-Strategien, wiederholt Speicherprobleme verursachen
+
+00:18:20.960 --> 00:18:22.620
+oder Skalierungsmuster-Timeouts auslösen,
+
+00:18:22.620 --> 00:18:24.740
+werden diese Erkenntnisse während der Planung hervorgehoben,
+
+00:18:24.980 --> 00:18:26.980
+bevor dieselben Fehler in einem neuen System auftreten.
+
+00:18:27.980 --> 00:18:30.960
+Zusammen verbessern diese Integrationspunkte das institutionelle Gedächtnis
+
+00:18:30.960 --> 00:18:32.020
+ohne Perfektion zu versprechen.
+
+00:18:32.720 --> 00:18:35.540
+Der Wert liegt nicht darin, dass Agenten sich fehlerfrei an jedes Detail erinnern,
+
+00:18:35.600 --> 00:18:36.820
+sondern dass sie die Wahrscheinlichkeit erhöhen,
+
+00:18:36.880 --> 00:18:38.840
+dass vergangene Lehren zur richtigen Zeit wieder auftauchen.
+
+00:18:39.280 --> 00:18:40.320
+Menschliche Aufsicht bleibt wichtig.
+
+00:18:41.200 --> 00:18:44.220
+Entwickler sollten die Relevanz der gewonnenen Erkenntnisse validieren.
+
+00:18:44.560 --> 00:18:48.060
+Und Unternehmen sollten regelmäßige Audits der von Agenten erfassten Daten planen,
+
+00:18:48.060 --> 00:18:50.060
+um Drift oder Rauschen im System zu vermeiden.
+
+00:18:51.200 --> 00:18:53.580
+Durch sorgfältige Überprüfung wird die Intelligenz handlungsorientiert,
+
+00:18:53.640 --> 00:18:54.480
+statt überfordern zu Gökken.
+
+00:18:55.080 --> 00:18:56.900
+Doch wenn es ist ein weiterer Punkt, der nicht übergangen werden darf.
+
+00:18:57.300 --> 00:19:00.000
+Das Einspeisen von Logs, Pull-Requests und Deployment-Ergebnissen
+
+00:19:00.000 --> 00:19:03.760
+in ein Agentensystem wirft Fragen zu Datenschutz, Aufbewahrung und Compliance auf.
+
+00:19:04.360 --> 00:19:06.160
+Nicht jedes Artefakt sollte ewig existieren.
+
+00:19:06.340 --> 00:19:08.400
+Und nicht alle Daten sollten für jede Rolle zugänglich sein.
+
+00:19:09.340 --> 00:19:11.000
+Vor der Einführung einer solchen Gedächtnisebene
+
+00:19:11.000 --> 00:19:13.020
+müssen Teams klare Aufbewahrungsfristen definieren,
+
+00:19:13.020 --> 00:19:15.380
+Zugriffsrichtlinien festlegen und sicherstellen,
+
+00:19:15.700 --> 00:19:17.920
+dass sensible Daten bereinigt oder maskiert werden.
+
+00:19:18.740 --> 00:19:20.780
+Ohne diese Grenzen riskieren Sie die Schaffung
+
+00:19:20.780 --> 00:19:23.300
+eines unkontrollierten Schattenarchivs der Unternehmensgeschichte,
+
+00:19:23.500 --> 00:19:25.360
+das Audits eher erschwert als unterstützt.
+
+00:19:26.240 --> 00:19:28.820
+Für Entwickler ist der spürbarste Effekt beim Projektstart bemerkbar.
+
+00:19:29.340 --> 00:19:31.900
+Anstatt vage Erinnerungen daran, was beim letzten Mal schiefgelaufen ist,
+
+00:19:31.980 --> 00:19:33.520
+erscheinen Erkenntnisse direkt im Kontext.
+
+00:19:34.380 --> 00:19:37.540
+Starten Sie eine neue .NET Web API und das System könnte vorschlagen.
+
+00:19:38.440 --> 00:19:41.260
+Letztes Jahr verursachte diese Caching-Bibliothek Speicherlex unter Lasten.
+
+00:19:41.600 --> 00:19:42.620
+Ziehen Sie eine Alternative in Betracht.
+
+00:19:43.020 --> 00:19:44.820
+Oder während der Planung könnte es darauf hinweisen,
+
+00:19:44.920 --> 00:19:47.300
+dass bestimmte Dependency-Injection-Muster für Instabilität sorgen.
+
+00:19:48.120 --> 00:19:50.040
+Die Hinweise kommen rechtzeitig, nicht rückwirkend
+
+00:19:50.040 --> 00:19:52.600
+und verlagern den Fokus von der Problemlösung hin zur Prävention.
+
+00:19:53.640 --> 00:19:54.800
+So baut sich Projektwissen auf,
+
+00:19:54.860 --> 00:19:56.860
+anstatt bei jedem neuen Sprint wieder bei Null anzufangen.
+
+00:19:57.860 --> 00:19:59.420
+Es verändert auch die Art der Retrospektive.
+
+00:20:00.180 --> 00:20:02.540
+Klassische Retros sammeln Feedback zu einem bestimmten Zeitpunkt
+
+00:20:02.540 --> 00:20:03.220
+und machen dann weiter.
+
+00:20:04.080 --> 00:20:06.840
+Mit Agenten im Prozess wird dieses Wissen nicht einfach abgelegt.
+
+00:20:07.380 --> 00:20:09.800
+Es fließt kontinuierlich zurück in den Entwicklungszyklus.
+
+00:20:09.800 --> 00:20:13.620
+Logs von diesem Monat, Skalierungsanomalien aus dem letzten Quartal
+
+00:20:13.620 --> 00:20:15.440
+oder Performance-Rückschritte von vor zwei Jahren
+
+00:20:15.440 --> 00:20:17.180
+fließen alle in die heutigen Empfehlungen ein.
+
+00:20:18.440 --> 00:20:21.240
+Indem jedes Release-Teil eines kontinuierlichen Lärmprozesses wird,
+
+00:20:21.340 --> 00:20:23.280
+verringern Teams das Risiko für Déjà-vu-Fehler.
+
+00:20:24.360 --> 00:20:26.240
+Dennoch sollten Ergebnisse gemessen und nicht vorausgesetzt werden.
+
+00:20:26.880 --> 00:20:29.160
+Ein einfacher erster Schritt ist die Integration des Agenten
+
+00:20:29.160 --> 00:20:31.040
+mit einer einzelnen Telemetriequelle wie App-Logs
+
+00:20:31.040 --> 00:20:32.740
+oder einem APM-Feed für zwei Sprints.
+
+00:20:32.740 --> 00:20:35.940
+Vergleichen Sie dann, hat der Agent Muster erkannt, die Sie übersehen hatten?
+
+00:20:36.560 --> 00:20:39.240
+Haben diese Muster zu echten Änderungen am Code oder der Infrastruktur geführt?
+
+00:20:39.640 --> 00:20:41.460
+Und hat sich die Release-Qualität messbar verbessert?
+
+00:20:42.480 --> 00:20:46.360
+Wenn ja, dann ist eine Ausweitung auf PR-Historien oder Architektur-Mappings sinnvoll.
+
+00:20:47.240 --> 00:20:49.920
+Falls nicht, zeigt das Experiment selbst, wonach gebessert werden muss,
+
+00:20:49.980 --> 00:20:52.820
+sei es bei Datenquellen, Governance oder Prüfprozessen.
+
+00:20:53.920 --> 00:20:55.280
+Mit der Zeit sieht dies kumulativ aus.
+
+00:20:55.820 --> 00:20:59.180
+Durch ein besseres institutionelles Gedächtnis stabilisiert sich die Release-Geschwindigkeit,
+
+00:20:59.180 --> 00:21:02.760
+die Architektur wird resilienter und weniger Energie wird damit verschwendet,
+
+00:21:02.820 --> 00:21:04.160
+alte Fehler neu zu entdecken.
+
+00:21:05.540 --> 00:21:08.520
+Wissen geht nicht mehr verloren, sondern sammelt sich als nutzbare Ressource an,
+
+00:21:08.560 --> 00:21:10.200
+der Teams vertrauen können, der Teams vertrauen.
+
+00:21:10.440 --> 00:21:12.540
+An diesem Punkt wandelt sich die Rolle von Agentic AI.
+
+00:21:13.060 --> 00:21:14.840
+Sie ist nicht mehr nur ein Helfer in einer Entwicklungsphase.
+
+00:21:15.300 --> 00:21:18.240
+Sie beginnt, den gesamten Prozess zu verknüpfen und Erfahrung weiterzugeben,
+
+00:21:18.300 --> 00:21:19.280
+anstatt sie verhalten zu lassen.
+
+00:21:20.640 --> 00:21:23.600
+Diese Kontinuität macht DevOps von einer Reihe isolierter Aufgaben
+
+00:21:23.600 --> 00:21:26.460
+zu einem vernetzten Lebenszyklus und ebnet den Weg für den Wandel,
+
+00:21:26.460 --> 00:21:28.280
+den Software-Teams aktuell erleben.
+
+00:21:30.160 --> 00:21:32.460
+Genetic AI signalisiert eine praktische Wende in der Entwicklung.
+
+00:21:33.520 --> 00:21:34.960
+Konzept, es ist kein Code-Assistent,
+
+00:21:35.220 --> 00:21:37.200
+sondern ein System, das Gedächtnis, Kontext und Ziele
+
+00:21:37.200 --> 00:21:38.700
+über den gesamten Lebenszyklus hinwegträgt.
+
+00:21:39.480 --> 00:21:42.200
+Anwendung, die klarsten Einstiegspunkte für .NET und Azure Teams
+
+00:21:42.200 --> 00:21:43.640
+sind das Scaffolding neuer Projekte,
+
+00:21:43.720 --> 00:21:45.760
+das übertragen routinemäßiger Bereitstellungen an Agenten
+
+00:21:45.760 --> 00:21:47.780
+und Experimente mit automatisierter Testgenerierung.
+
+00:21:49.040 --> 00:21:50.700
+Auswirkungen, sorgfältig umgesetzt,
+
+00:21:50.840 --> 00:21:52.040
+rationalisiertes Workflows,
+
+00:21:52.200 --> 00:21:53.340
+reduziert den Setup-Aufwand
+
+00:21:53.340 --> 00:21:55.520
+und senkt die Gefahr von Déjà-vu-Fehlern in Projekten.
+
+00:21:56.180 --> 00:21:57.660
+Der beste nächste Schritt ist es,
+
+00:21:57.680 --> 00:21:59.000
+in ihrer eigenen Umgebung zu testen.
+
+00:21:59.480 --> 00:22:01.680
+Versuchen Sie, Co-Pilot für einen kleinen Prototyp zu aktivieren
+
+00:22:01.680 --> 00:22:03.520
+oder einen Agenten in der Staging-Umgebung laufen zu lassen
+
+00:22:03.520 --> 00:22:04.660
+und verfolgen Sie dann eine Kennzahl,
+
+00:22:04.740 --> 00:22:06.280
+eingesparte Zeit, gefundene Fehler, Abweichungen.
+
+00:22:06.960 --> 00:22:09.000
+Wenn Sie eine wiederkehrende DevOps-Herausforderung haben,
+
+00:22:09.080 --> 00:22:09.900
+die Ihr Team ausbremst,
+
+00:22:10.000 --> 00:22:10.900
+schreiben Sie sie in die Kommentare,
+
+00:22:11.020 --> 00:22:12.000
+damit andere vergleichen können.
+
+00:22:12.680 --> 00:22:14.800
+Und wenn Sie fundiertere Ratschläge zu .NET, Azure
+
+00:22:14.800 --> 00:22:16.100
+und der Einführung von KI wünschen,
+
+00:22:16.220 --> 00:22:17.980
+abonnieren Sie den Kanal für zukünftige Analysen.
+
+00:22:17.980 --> 00:22:19.800
+Die Erfolge erscheinen anfangs gering,
+
+00:22:20.020 --> 00:22:22.440
+summieren sich aber durch Governance, Kontrolle und stetige Iteration.

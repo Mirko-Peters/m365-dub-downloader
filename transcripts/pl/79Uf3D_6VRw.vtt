@@ -1,0 +1,1036 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:02.460
+Połowę dnia spędzasz, czekając na zatwierdzenia.
+
+00:00:02.660 --> 00:00:05.040
+Ktoś jest na urlopie, ktoś inny nie zauważył maila,
+
+00:00:05.200 --> 00:00:09.040
+a kiedy decyzja w końcu zapada, kontekst uzasadniający wniosek już dawno wygasł.
+
+00:00:09.280 --> 00:00:12.760
+Korporacyjny czyściec, postęp wstrzymywany przez ludzi, którzy przysięgają, że są zajęci.
+
+00:00:12.980 --> 00:00:15.220
+Wyobraź sobie teraz system, który po prostu nie czeka.
+
+00:00:15.400 --> 00:00:18.280
+Przepływ pracy, który rusza do przodu w momencie spełnienia warunków.
+
+00:00:18.420 --> 00:00:22.340
+Oto agent Flows w Microsoft, kopilot studio, pogrąca biurokracji w przebraniu automatyzacji.
+
+00:00:22.520 --> 00:00:25.160
+Tutaj sztuczna inteligencja staje się twoim pierwszym zatwierdzającym.
+
+00:00:25.160 --> 00:00:29.640
+Analizuje dane, porównuje je z polityką firmy i wydaje świadomą decyzję o akceptacji lub odrzuceniu,
+
+00:00:29.740 --> 00:00:31.280
+zanim człowiek zdąży mrugnąć okiem.
+
+00:00:31.480 --> 00:00:36.240
+Tylko wątpliwe przypadki trafiają do skrzynki menedżera, co oznacza szybkość bez rezygnacji z nadzoru.
+
+00:00:36.420 --> 00:00:40.840
+I w przeciwieństwie do starych systemów zatwierdzania, które załamują się pod ciężarem złożonych warunków,
+
+00:00:40.960 --> 00:00:45.100
+te oparte na AI skalują się, rozgałęziają, walidują i audytują w czasie rzeczywistym.
+
+00:00:45.300 --> 00:00:48.980
+W tym przewodniku pokażę ci, jak zbudować wieloetapowy system warunkowego zatwierdzania,
+
+00:00:49.120 --> 00:00:52.860
+który podejmuje decyzję szybciej niż twoi koledzy znajdą przycisk Odpowiedz wszystkim.
+
+00:00:52.860 --> 00:00:56.720
+Dowiesz się, jak skonfigurować etap, a i z własną logiką zatwierdzania,
+
+00:00:56.880 --> 00:01:01.840
+dodać ukierunkowane przeglądy ludzkie, zaprojektować dynamiczne warunki inteligentnego przekierowania
+
+00:01:01.840 --> 00:01:04.460
+i zintegrować walidację dokumentów dla zgodności.
+
+00:01:04.720 --> 00:01:08.240
+Na końcu otrzymasz zautomatyzowany proces, który wie, kiedy myśleć jak maszyna,
+
+00:01:08.340 --> 00:01:09.800
+a kiedy zdać się na ludzki osąd.
+
+00:01:09.980 --> 00:01:12.700
+Przestań stać w kolejce. Niech prowadzi cię logika.
+
+00:01:12.980 --> 00:01:14.840
+Problem z tradycyjnymi zatwierdzeniami.
+
+00:01:15.060 --> 00:01:18.780
+Tradycyjne ścieżki zatwierdzania to tragiczny remiks tej samej nieefektywności.
+
+00:01:18.780 --> 00:01:22.480
+Ktoś wysyła formularz, maile krążą, arkusze kalkulacyjne stają się niespójne,
+
+00:01:22.860 --> 00:01:26.020
+że kolejnymi przekierowaniami nikt nie pamięta, która wersja była ostateczna.
+
+00:01:26.200 --> 00:01:28.740
+Każdy uczestnik dodaje opóźnienie, a nie wartość.
+
+00:01:28.880 --> 00:01:31.700
+Ten proces nie zarządza pracą, on produkuje opóźnienia.
+
+00:01:31.900 --> 00:01:35.020
+Typowe przepływy zatwierdzania w Power Automatę próbują to rozwiązać,
+
+00:01:35.140 --> 00:01:37.240
+ale zacinają się, gdy pojawiają się niuanse.
+
+00:01:37.420 --> 00:01:41.240
+Pojedyncza ścieżka zatwierdzenia działa dobrze, jeśli potrzebujesz tylko prostego tak lub nie.
+
+00:01:41.440 --> 00:01:45.160
+W momencie, gdy dodajesz warstwy menedżerskie, limity wydatków czy specjalistyczne reguły,
+
+00:01:45.160 --> 00:01:46.440
+projekt zaczyna pękać w szwach.
+
+00:01:46.600 --> 00:01:49.840
+Kończysz z zagnieżdżonymi warunkami przypominającymi rosyjskie matrioszki nieeleganckie,
+
+00:01:49.840 --> 00:01:51.840
+kruche i niemożliwe do naprawienia po sześciu miesiącach.
+
+00:01:52.040 --> 00:01:55.060
+Jeden uszkodzony łącznik i cały system cicho przestaje działać.
+
+00:01:55.240 --> 00:01:58.760
+Ludzie stają się wąskimi gardłami albo mówiąc brutalnie węzłami opóźnień.
+
+00:01:58.940 --> 00:02:02.680
+Każda wiadomość, którą otrzymują, staje się kolejną asynchroniczną rundą wymiany danych.
+
+00:02:02.880 --> 00:02:06.660
+E-mail jako mechanizm zatwierdzania jest jak używanie gołębi pocztowych w świecie światłowodów.
+
+00:02:06.840 --> 00:02:08.620
+Technicznie to działa, ale nie powinno.
+
+00:02:08.800 --> 00:02:10.640
+Poznaj Microsoft Copilot Studio.
+
+00:02:10.640 --> 00:02:13.420
+To nie jest tylko kolejna wersja Power Automatę.
+
+00:02:13.420 --> 00:02:21.760
+Wprowadza agentowe przepływy pracy systemy zatwierdzania wspierane przez AI, w pełni zintegrowane ze źródłami danych, rolami i strukturami logicznymi Twojej organizacji.
+
+00:02:22.000 --> 00:02:25.680
+Łączy deterministyczne egzekwowanie polityk z adaptacyjnym podejmowaniem decyzji.
+
+00:02:25.860 --> 00:02:28.860
+Cała genialność tkwi w sposobie, w jaki rozdziela poszczególne etapy.
+
+00:02:29.020 --> 00:02:33.000
+Automatyzacja tam, gdzie zależy Ci na szybkości, człowiek tam, gdzie nadal wymagana jest weryfikacja.
+
+00:02:33.000 --> 00:02:35.360
+Pomyśl o tym, jak o przeprojektowanej hierarchii.
+
+00:02:35.540 --> 00:02:41.080
+Etap AI ocenia sztywne reguły, limity kwot, typy kategorii i zakresy dat z kliniczną skutecznością.
+
+00:02:41.080 --> 00:02:47.320
+Jeśli decyzja jest niejednoznaczna, proces kierowany jest do człowieka, bez zmuszania do stania w kolejce błahych spraw.
+
+00:02:47.520 --> 00:02:49.740
+Już samo to eliminuje wykładnicze opóźnienia.
+
+00:02:50.000 --> 00:02:55.780
+Zamiast 10 osób wykonujących żmudne przeglądy, a i natychmiast obsługuje 80%, kierując do ludzi tylko wyjątki.
+
+00:02:55.960 --> 00:03:03.260
+Oczywiście Copilot Studio śledzi wszystko poprzez szkielet Dataverse, tworząc weryfikowalne logi bez konieczności przeszukiwania archiwów poczty.
+
+00:03:03.440 --> 00:03:05.860
+Poprzednie przepływy pracy zostały zbudowane dla ludzi.
+
+00:03:05.860 --> 00:03:11.360
+Przepływy agentów są zbudowane wokół nich, angażując ludzi tylko wtedy, gdy wymagana jest interpretacja, a nie powtarzalność.
+
+00:03:11.580 --> 00:03:17.000
+Gdy zobaczysz, jak działa ta architektura, tradycyjne zatwierdzenia wydadzą się prymitywne, jak liczenie na liczydle przy świecach.
+
+00:03:17.220 --> 00:03:19.920
+Stawka jest prosta, zgodność, spójność i skala.
+
+00:03:20.160 --> 00:03:25.940
+Współczesne operacje toną bez zautomatyzowanej weryfikacji, a logika wspomagana przez AI to teraz podstawa niezawodności.
+
+00:03:26.180 --> 00:03:29.940
+Przechodząc od statycznych przepływów do warunkowych i audytowalnych przepływów agentów,
+
+00:03:30.060 --> 00:03:34.100
+przestajesz zarządzać zatwierdzeniami reaktywnie i zaczynasz traktować je jako żywe systemy.
+
+00:03:34.100 --> 00:03:37.140
+Różnica to nie tylko szybkość, to strukturalny ład.
+
+00:03:37.360 --> 00:03:40.440
+Budowanie etapu AI, nauka pierwszego osoby zatwierdzającej.
+
+00:03:40.640 --> 00:03:44.380
+Teraz czas na najciekawszą część, szkolenie twojego pierwszego cyfrowego biurokraty.
+
+00:03:44.560 --> 00:03:47.660
+Etap AI jest logicznym strażnikiem twojego procesu zatwierdzania.
+
+00:03:47.920 --> 00:03:52.740
+Jego zadaniem nie jest myślenie jak człowiek, lecz wykonywanie ustrukturyzowanego rozumowania z nadludzką spójnością.
+
+00:03:52.740 --> 00:03:57.780
+Czyta instrukcje, sprawdza je względem danych wejściowych i wydaje jeden z dwóch werdyktów, zatwierdzono lub odrzucono.
+
+00:03:58.020 --> 00:03:59.720
+Bez polityki, bez przerw na kawę.
+
+00:03:59.920 --> 00:04:02.000
+Zaczynasz od zdefiniowania nowego przepływu agenta.
+
+00:04:02.000 --> 00:04:06.980
+Podczas tworzenia etap AI znajduje się w centrum niczym pusty arkusz egzaminacyjny czekający na klucz odpowiedzi.
+
+00:04:07.180 --> 00:04:11.680
+Wyzwalacz zazwyczaj pochodzi z Dataverse rekord dodany lub zmodyfikowany w twojej tabeli roszczeń lub wydatków.
+
+00:04:11.920 --> 00:04:16.140
+Gdy roszczenie zostanie utworzone, etap ten się aktywuje, ocenia dane i podejmuje decyzje.
+
+00:04:16.360 --> 00:04:20.440
+Wewnątrz etapu najważniejszym polem jest prompt instrukcji, czyli mózg całej operacji.
+
+00:04:20.600 --> 00:04:24.240
+To tutaj opisujesz logikę zatwierdzania w prostym, lecz rygorystycznym języku.
+
+00:04:24.460 --> 00:04:27.580
+Napisz to tak, jakbyś instruował prawnika, który nigdy nie improwizuje.
+
+00:04:27.580 --> 00:04:35.680
+Na przykład zatwierdź roszczenie, jeśli kwota jest mniejsza niż 500, opis wspiera zdrowie fizyczne lub psychiczne, a data zakupu mieści się w 30 dniach od zgłoszenia.
+
+00:04:35.900 --> 00:04:38.140
+Odrzuć, jeśli jakakolwiek reguła nie jest spełniona.
+
+00:04:38.300 --> 00:04:39.740
+To wszystko, binarna jasność.
+
+00:04:39.960 --> 00:04:42.160
+Następnie zdefiniuj swoje dynamiczne dane wejściowe.
+
+00:04:42.360 --> 00:04:45.440
+Pomyśl o nich jak o zmiennych dostarczających rzeczywiste dane do twojej logiki.
+
+00:04:45.900 --> 00:04:48.560
+Najprawdopodobniej uwzględnisz kwotę, opis i datę zakupu.
+
+00:04:48.760 --> 00:04:54.740
+Każdy element jest dodawany jako treść, tekst lub liczba, które sztuczna inteligencja wykorzysta przy podejmowaniu decyzji.
+
+00:04:54.740 --> 00:04:59.720
+Copilot Studio klasyfikuje te dane wejściowe według typu, tekst, liczba lub dokument graficzny.
+
+00:04:59.960 --> 00:05:05.500
+Wybieraj trafnie, ponieważ mieszanie typów, na przykład liczby zapisanej jako tekst, dezorientuje ludzi i maszyny.
+
+00:05:05.700 --> 00:05:08.580
+Pod każdym polem wejściowym podaj przykładowe dane do testów.
+
+00:05:08.800 --> 00:05:11.180
+Stanowi to rusztowanie podczas kalibracji logiki.
+
+00:05:11.440 --> 00:05:17.200
+Na przykład wprowadź przykładowe roszczenie, mata do jogi, kwota 300, data zakupu 22 sierpnia.
+
+00:05:17.200 --> 00:05:24.580
+Po kliknięciu testuj, Copilot Studio uruchamia model wnioskowania oparty na technologii GPT i podaje decyzję wraz z wyjaśnieniem.
+
+00:05:24.840 --> 00:05:27.460
+Jeśli wynik jest zgodny z oczekiwaniami, to dobrze.
+
+00:05:27.780 --> 00:05:30.340
+Jeśli nie, Twoim instrukcjom brakuje determinizmu.
+
+00:05:30.520 --> 00:05:32.960
+I właśnie tutaj większość początkujących popełnia błąd.
+
+00:05:33.100 --> 00:05:38.040
+Szerokie lub niejednoznaczne sformułowania, jak rozsądny wydatek czy niedawny zakup to trucizna dla AI.
+
+00:05:38.320 --> 00:05:41.740
+System nie czyta nastrojów korporacyjnych, potrzebuje definicji matematycznych.
+
+00:05:41.900 --> 00:05:45.260
+Dlatego nieustannie dopracowuj instrukcje, aż wyniki testów będą spójne.
+
+00:05:45.260 --> 00:05:49.060
+Każda kolejna zmiana sformułowań dostraja silnik oceny pod kątem powtarzalności.
+
+00:05:49.320 --> 00:05:53.040
+Dążysz do wzorca, w którym identyczne dane wejściowe zawsze dają identyczny wynik.
+
+00:05:53.220 --> 00:05:55.060
+Logika maszynowa, a nie biurowe plotki.
+
+00:05:55.320 --> 00:06:00.860
+Gdy Twój prompt zapewnia wiarygodne decyzje w wielu przypadkach testowych, skutecznie wytrenowałeś swojego cyfrowego zatwierdzającego.
+
+00:06:01.040 --> 00:06:06.780
+Teraz wprowadź rzeczywiste dane dynamiczne za pomocą tokenów z Dataverse, szczegóły kwoty roszczenia, datę zakupu lub zgłoszenia.
+
+00:06:06.780 --> 00:06:09.660
+Zastąpią one wartości testowe podczas działania na żywo.
+
+00:06:09.840 --> 00:06:15.760
+Od tego momentu sztuczna inteligencja ocenia każde roszczenie w kontekście, zwracając werdykt w momencie pojawienia się nowych danych.
+
+00:06:16.020 --> 00:06:18.480
+Zanim ogłosisz sukces, przeprowadź testy iteracyjne.
+
+00:06:18.680 --> 00:06:20.760
+Zmień kwotę na 600, czy nastąpi odrzucenie.
+
+00:06:20.920 --> 00:06:23.700
+Zmień datę na sprzed 3 miesięcy, czy zostanie oznaczona jako nieważna.
+
+00:06:23.900 --> 00:06:26.880
+Dodaj niedorzeczne roszczenie, jak zakup iPada, czy wykryje niezgodność.
+
+00:06:27.060 --> 00:06:30.040
+Każda próba powinna wykazywać spójny związek przyczynowo-skutkowy.
+
+00:06:30.040 --> 00:06:33.980
+Jeśli odpowiedzi się wahają, problemem jest przejrzystość promptu, a nie model AI.
+
+00:06:33.980 --> 00:06:37.980
+Gdy wyłonią się spójne wzorce, ustal konwencję nazewnictwa dla zmiennych zawartości.
+
+00:06:38.780 --> 00:06:43.000
+Przedrostki takie jak stra dla kwoty roszczenia, czy nam dla daty zakupu.
+
+00:06:43.160 --> 00:06:46.980
+Ta drobna dyscyplina zapobiega chaosowi, gdy później przejdziesz do logiki wielogałęziowej.
+
+00:06:47.960 --> 00:06:53.360
+Na tym etapie twój zautomatyzowany system może podejmować niezależne decyzje w oparciu o politykę firmy bez nadzoru.
+
+00:06:53.740 --> 00:06:56.460
+Automatyzacja to jednak nie dyktatura, lecz delegowanie zadań.
+
+00:06:56.640 --> 00:06:59.080
+Maszyna dba o szybkość i precyzję, a nie o ocenę.
+
+00:06:59.080 --> 00:07:05.320
+W scenariuszach granicznych potrzebna będzie eskalacja człowiek, który przejrzy to, co AI odrzuci lub uzna za niepewne.
+
+00:07:05.580 --> 00:07:09.620
+Właśnie tu wchodzi kolejny etap i tak władza jest dzielona między krzem a ludzi.
+
+00:07:10.180 --> 00:07:13.540
+Dodanie nadzoru ludzkiego oraz logiki wieloetapowej i warunkowej.
+
+00:07:13.780 --> 00:07:19.380
+Gdy twój system AI będzie pewnie oceniał roszczenia, możesz dodać to, co biurokracje ironicznie nazywają ludzkim dotykiem.
+
+00:07:19.620 --> 00:07:24.860
+W Copilot Studio oznacza to etap ręczny, punkt kontrolny, w którym człowiek może wykazać się własnym osądem.
+
+00:07:24.860 --> 00:07:27.140
+Potraktuj to jako swój zawór bezpieczeństwa.
+
+00:07:27.360 --> 00:07:29.740
+Wszystko, co przewidywalne, przepływa automatycznie.
+
+00:07:29.960 --> 00:07:32.600
+Wszystko, co wymaga niuansów, trafia na biurko menedżera.
+
+00:07:32.820 --> 00:07:36.200
+Zaczynasz w projektancie zatwierdzeń, dodając etap ręczny zaraz po etapie AI.
+
+00:07:36.420 --> 00:07:38.880
+Tworzy to drugą bramkę w przepływie pracy twojego agenta.
+
+00:07:39.100 --> 00:07:39.860
+Przekazanie jest warunkowe.
+
+00:07:40.620 --> 00:07:44.020
+Tylko jeśli werdykt AI to zatwierdzono, przechodzimy do etapu ludzkiego.
+
+00:07:44.260 --> 00:07:47.000
+Jeśli AI mówi odrzucono, proces kończy się w tym miejscu.
+
+00:07:47.140 --> 00:07:50.720
+Po co tracić czas, prosząc menedżerów o potwierdzenie tego, co polityka już odrzuciła?
+
+00:07:50.720 --> 00:07:53.720
+Wydajność to selektywna uwaga ubrana w formę automatyzacji.
+
+00:07:53.880 --> 00:07:55.400
+Ustalmy przykładowy scenariusz.
+
+00:07:55.620 --> 00:07:58.640
+Załóżmy, że pracownik przesyła wniosek o zwrot kosztów karnetu na siłownię,
+
+00:07:58.800 --> 00:08:01.860
+a i zatwierdza go, ponieważ wszystkie kryteria są zgodne z polityką.
+
+00:08:02.100 --> 00:08:06.360
+Teraz ta decyzja wyzwala etap ręczny na poziomie menedżera, zwany zatwierdzeniem menedżerskim.
+
+00:08:06.600 --> 00:08:09.300
+Wewnątrz konfigurujesz ten etap tytułem, na przykład,
+
+00:08:09.600 --> 00:08:11.740
+wniosek o zatwierdzenie od wnioskodawcy.
+
+00:08:12.200 --> 00:08:14.880
+Te zmienne pobierają dane dynamicznie z Dataverse.
+
+00:08:14.880 --> 00:08:19.900
+W polu przypisane do określasz, kto otrzyma zadanie, zazwyczaj menedżer wnioskodawcy.
+
+00:08:20.100 --> 00:08:25.180
+Aby zautomatyzować to rutowanie, Copilot Studio pozwala zintegrować konektor użytkowników Office 365.
+
+00:08:25.800 --> 00:08:29.080
+Najpierw pobierz rekord użytkownika, który utworzył wniosek, używając akcji
+
+00:08:29.080 --> 00:08:31.880
+Pobierz wiersz według ID w tabeli użytkowników w Dataverse.
+
+00:08:32.040 --> 00:08:33.780
+To pobiera informacje o wnioskodawcy.
+
+00:08:34.020 --> 00:08:38.000
+Następnie akcja Pobierz menedżera znajduje przełożonego użytkownika za pomocą jego głównego adresu e-mail.
+
+00:08:38.200 --> 00:08:40.780
+Przekaż ten wynik z powrotem do etapu ręcznego jako zmienną, na przykład,
+
+00:08:40.780 --> 00:08:42.840
+STR, podkreślenie e-mail, podkreślenie menedżera.
+
+00:08:43.040 --> 00:08:45.360
+Wynik, brak sztywnych kodów, brak przestarzałych hierarchii.
+
+00:08:45.520 --> 00:08:47.920
+Menedżerowie się zmieniają, hierarchia odświeża się sama.
+
+00:08:48.100 --> 00:08:51.920
+Teraz przechodzimy do rozgałęzień warunkowych, to prawdziwy powód istnienia zatwierdzeń wieloetapowych.
+
+00:08:52.160 --> 00:08:54.720
+Możesz wprowadzić logikę bezpośrednio w przepływ pracy agenta.
+
+00:08:54.960 --> 00:08:59.740
+Jeśli kwota wniosku jest większa lub równa 150, dodaj dodatkowy etap zatwierdzenia przez administratora.
+
+00:08:59.920 --> 00:09:01.400
+W przeciwnym razie zakończ proces.
+
+00:09:01.640 --> 00:09:06.340
+To zmienia prostą, dwuetapową procedurę w wielopoziomowe drzewo decyzyjne dostosowujące się do kontekstu.
+
+00:09:06.340 --> 00:09:08.860
+Wnioski o niskiej wartości trafiają do jednego człowieka.
+
+00:09:09.040 --> 00:09:12.100
+Wnioski o wyższej wartości lub ryzykowne są eskalowane do dodatkowej weryfikacji.
+
+00:09:12.300 --> 00:09:15.040
+W projektancie wstaw akcję warunkową przed zakończeniem przepływu.
+
+00:09:15.180 --> 00:09:18.960
+Odwołaj się do swojej zmiennej liczbowej, na przykład nam podkreślenie kwota podkreślenie wniosku.
+
+00:09:19.180 --> 00:09:22.980
+Wybierz operator większe lub równe i ustaw próg, na przykład 150.
+
+00:09:23.540 --> 00:09:27.320
+W gałęzi, jeśli prawda, dodaj kolejny etap ręczny o nazwie zatwierdzenie przez administratora.
+
+00:09:27.440 --> 00:09:30.100
+Przypisz go do stałego osoby zatwierdzającej, na przykład administratora do spraw.
+
+00:09:30.400 --> 00:09:30.880
+Zgodności.
+
+00:09:31.100 --> 00:09:33.280
+W gałęzi, jeśli fałsz, zakończ jako zatwierdzone.
+
+00:09:33.280 --> 00:09:37.880
+Efekt przepływ pracy zachowuje się jak racjonalna organizacja, a nie jak uniwersalne wąskie gardło.
+
+00:09:38.060 --> 00:09:40.120
+Przyda się tutaj odrobina praktycznego humoru.
+
+00:09:40.240 --> 00:09:43.280
+Tak, delegowanie nadal wymaga zaufania, a nie tylko życzeniowego myślenia.
+
+00:09:43.440 --> 00:09:46.320
+Nie przypisuj szerokich ról zabezpieczeń, które pozwalają zatwierdzać wszystko.
+
+00:09:46.540 --> 00:09:50.640
+Ogranicz uprawnienia do odpowiednich użytkowników lub grup poprzez kontrolę dostępu opartą na rolach w Dataverse.
+
+00:09:50.860 --> 00:09:52.660
+W przeciwnym razie zautomatyzujesz anarchię.
+
+00:09:52.840 --> 00:09:56.020
+Testowanie struktury pokazuje, jak płynnie dopasowują się poszczególne elementy.
+
+00:09:56.020 --> 00:10:00.900
+Gdy wniosek poniżej 150 dolarów przejdzie weryfikację, a i proces kończy się po zatwierdzeniu przez menedżera.
+
+00:10:01.080 --> 00:10:06.000
+Gdy kwota przekracza 150 dolarów, system grzecznie ustawia go w kolejce do przeglądu przez administratora przed finalizacją.
+
+00:10:06.220 --> 00:10:11.660
+Każda ścieżka pozostawia ślad audytu, dziennik rozumowania, a i zatwierdzenia ze znacznikami czasu i zapisane wyniki przechowywane w Dataverse.
+
+00:10:11.860 --> 00:10:14.240
+Nikt nie będzie mógł później twierdzić, nigdy tego nie widziałem.
+
+00:10:14.480 --> 00:10:15.700
+Baza danych mówi co innego.
+
+00:10:15.940 --> 00:10:18.520
+Podczas dopracowywania zachowaj dyscyplinę w konwencjach nazewnictwa.
+
+00:10:18.520 --> 00:10:24.500
+Oznaczaj etapy ludzkie jasno, na przykład zatwierdzone przez menedżera, zatwierdzone przez administratora, aby móc wizualnie śledzić gałęzie.
+
+00:10:24.720 --> 00:10:27.600
+Schemat blokowy powinien być czytelny jak logika, a nie jak tajemnicza sztuka.
+
+00:10:27.860 --> 00:10:30.800
+Gdy będziesz zadowolony, opublikuj i przetestuj na rzeczywistych scenariuszach.
+
+00:10:30.960 --> 00:10:33.820
+Obserwuj, jak rozwija się łańcuch, a i ocenia natychmiast.
+
+00:10:34.040 --> 00:10:36.200
+Menedżer otrzymuje konkretne zadanie zatwierdzenia.
+
+00:10:36.500 --> 00:10:39.200
+Administrator wkracza tylko wtedy, gdy wymagają tego warunki.
+
+00:10:39.440 --> 00:10:45.160
+Rezultat przypomina mniej automatyzację wykonującą wszystko, a bardziej przejrzystą hierarchię, która obsługuje się sama.
+
+00:10:45.160 --> 00:10:49.260
+Ta warstwowa orkiestracja otwiera również nowy front – walidację dokumentów.
+
+00:10:49.380 --> 00:10:52.100
+Ponieważ czasami pole formularza kłamie, ale paragon nie.
+
+00:10:52.320 --> 00:10:57.300
+Następnym krokiem jest sprawienie, by AI zbadała dowody fizyczne, zanim w ogóle dotrą do Twojej skrzynki odbiorczej.
+
+00:10:57.420 --> 00:11:01.140
+Tu wkracza walidacja paragonów, zmieniając biurokrację w weryfikowalną naukę.
+
+00:11:01.340 --> 00:11:03.820
+Dynamiczne dane wejściowe i walidacja dokumentów.
+
+00:11:03.940 --> 00:11:10.300
+Porozmawiajmy o paragonach, tych małych, zmiętych kawałkach papieru, które tajemniczo stają się kluczowym dowodem, gdy ktoś chce zwrotu kosztów.
+
+00:11:10.300 --> 00:11:13.600
+W ręcznym procesie zatwierdzania ludzie weryfikują je na oko.
+
+00:11:13.600 --> 00:11:16.240
+Tak, to wygląda jak mata do jogi, a nie jacht.
+
+00:11:16.460 --> 00:11:20.960
+W procesie zautomatyzowanym zmuszamy AI do wykonania tego samego sprawdzenia bez zmęczenia oceną.
+
+00:11:21.200 --> 00:11:25.680
+W przepływach agentów Copilot Studio walidacja dokumentów ożywa dzięki dynamicznym danym wejściowym,
+
+00:11:25.800 --> 00:11:29.340
+a konkretnie możliwości przekazania obrazu lub pliku do logiki zatwierdzania.
+
+00:11:29.620 --> 00:11:32.740
+Dodaje to trzeci zmysł do Twojego narzędzia zatwierdzającego AI wzrok.
+
+00:11:32.960 --> 00:11:38.260
+Zamiast polegać wyłącznie na polach tekstowych, model odczytuje dokument i porównuje to, co napisano, z tym, co przesłano.
+
+00:11:38.260 --> 00:11:39.260
+Oto struktura.
+
+00:11:39.500 --> 00:11:43.440
+Wewnątrz etapu AI dodajesz nowy typ wejścia o nazwie obraz lub dokument.
+
+00:11:43.740 --> 00:11:46.400
+Oznacz go wyraźnie, na przykład jako klik paragonu.
+
+00:11:46.560 --> 00:11:48.440
+Prześlij przykładowy paragon do testów.
+
+00:11:48.580 --> 00:11:51.060
+To nie trafia do produkcji, jedynie trenuje układ logiki.
+
+00:11:51.300 --> 00:11:54.880
+Teraz dostosuj instrukcję promptu, aby uwzględnić weryfikację krzyżową dokumentu.
+
+00:11:55.080 --> 00:11:56.700
+Rozszerzasz swoją poprzednią logikę.
+
+00:11:56.900 --> 00:11:57.520
+Zatwierdź wniosek.
+
+00:11:57.520 --> 00:12:06.040
+Jeśli wszystkie poniższe warunki są spełnione, kwota 500, szczegóły wniosku dotyczą zdrowia fizycznego lub psychicznego, data zakupu w ciągu 30 dni, a dokument paragonu zgadza się z deklarowanym przedmiotem, kwotą i datą.
+
+00:12:06.200 --> 00:12:11.340
+Ten czwarty warunek zmienia Twoje narzędzie zatwierdzające AI z egzekutora polityki w księgowego śledczego.
+
+00:12:11.840 --> 00:12:17.400
+Podczas testu model wyodrębnia tekst z dokumentu i weryfikuje jego spójność ze wprowadzonymi danymi.
+
+00:12:17.400 --> 00:12:24.880
+Jeśli na paragonie widnieje mata do ćwiczeń za 300 dolarów z 22 sierpnia, a w zgłoszeniu podano co innego, werdykt zmienia się na odrzucony.
+
+00:12:24.880 --> 00:12:28.800
+Jeśli chodzi o wdrożenie, przed uruchomieniem zatwierdzania musisz pobrać ten dokument.
+
+00:12:28.980 --> 00:12:31.440
+Użyj akcji pobierania pliku lub obrazu z Dataverse.
+
+00:12:31.700 --> 00:12:35.440
+Wskaż tę samą tabelę, w której znajduje się rekord zgłoszenia, prawdopodobnie Claims.
+
+00:12:35.560 --> 00:12:39.540
+W kolumnie pliku wybierz pole załącznika, często nazywane na przykład Receipt.
+
+00:12:39.760 --> 00:12:44.780
+Następnie określ dynamicznie identyfikator wiersza z wyzwalacza, czyli unikalny identyfikator zgłoszenia.
+
+00:12:44.980 --> 00:12:48.820
+Ta akcja zwraca metadane i zawartość pliku, ale kryje się tu pewna pułapka.
+
+00:12:49.100 --> 00:12:53.460
+Dane wyjściowe zawartości wymagają niewielkiej korekty, aby AI mogła je poprawnie zinterpretować.
+
+00:12:53.460 --> 00:12:59.980
+Mapując zawartość pliku do pola wejściowego paragonu, otwórz edytor wyrażeń i dodaj Content do odwołania Body.
+
+00:13:00.220 --> 00:13:04.120
+Ta drobna poprawka dostarczy właściwe bajty pliku, a nie otoczkę metadanych.
+
+00:13:04.380 --> 00:13:07.680
+Jeśli to pominiesz, twoja AI z entuzjazmem zatwierdzi puste paragony.
+
+00:13:07.940 --> 00:13:11.720
+Zajmijmy się synchronizacją, czyli piętą achillesową przepływów pracy z dokumentami.
+
+00:13:11.940 --> 00:13:15.960
+Większość tabel Dataverse nie przechowuje załączników, dopóki rekord nie zostanie zapisany,
+
+00:13:16.100 --> 00:13:20.340
+więc jeśli przepływ uruchamia się przy tworzeniu rekordu, może zadziałać, zanim plik będzie istniał.
+
+00:13:20.340 --> 00:13:23.820
+Objaw przepływ kończy się niepowodzeniem lub zawartość paragonu jest pusta.
+
+00:13:24.040 --> 00:13:25.500
+Rozwiązanie jest eleganckie.
+
+00:13:25.740 --> 00:13:31.420
+Zmień warunek wyzwalania na modyfikację elementu, ale ogranicz go tak, aby uruchamiał się tylko przy zmianie kolumny paragonu.
+
+00:13:31.620 --> 00:13:35.520
+Dzięki temu w momencie przesłania lub zastąpienia pliku rozpoczyna się walidacja.
+
+00:13:36.200 --> 00:13:38.640
+Aby to skonfigurować, otwórz ustawienia wyzwalacza.
+
+00:13:38.780 --> 00:13:42.200
+Wybierz zmodyfikowane kolumny i wklej nazwę logiczną kolumny paragonu,
+
+00:13:42.300 --> 00:13:45.980
+którą można uzyskać w szczegółach kolumny Dataverse w zaawansowanych narzędziach.
+
+00:13:45.980 --> 00:13:49.960
+Po ustawieniu opublikuj. Teraz Twoja automatyzacja zachowuje się poprawnie.
+
+00:13:50.200 --> 00:13:52.420
+Czeka, aż faktycznie będzie coś do zweryfikowania.
+
+00:13:52.720 --> 00:13:56.260
+Gdy zgłoszenie jest aktualizowane o nowy paragon, przepływ uruchamia się ponownie.
+
+00:13:56.420 --> 00:14:00.240
+Pobiera plik, przesyła go przez etap A i weryfikuje wszystkie dane.
+
+00:14:01.020 --> 00:14:05.760
+Jeśli istnieją rozbieżności, niezgodność kwot, przestarzała data lub niespójne opisy,
+
+00:14:05.900 --> 00:14:07.960
+a i odrzuca wniosek wraz z wyjaśnieniem.
+
+00:14:08.220 --> 00:14:09.560
+Dziennik uzasadnień może brzmieć.
+
+00:14:09.560 --> 00:14:13.320
+Zgłoszona kwota 305 dolarów różni się od sumy na dokumencie 300 dolarów.
+
+00:14:13.440 --> 00:14:15.880
+To zgodność bez skarg, a praktyczny efekt?
+
+00:14:16.080 --> 00:14:18.340
+Każde zgłoszenie podlega automatycznej kontroli.
+
+00:14:18.520 --> 00:14:22.340
+Pracownicy nie mogą już przemycać wątpliwych paragonów czy niejasnych opisów,
+
+00:14:22.480 --> 00:14:27.120
+a i zapewnia osąd Dataverse dostarcza dowody, a żadne z nich nie robi przerw na kawę.
+
+00:14:27.400 --> 00:14:29.820
+Więc nie, walidacja dokumentów to nie przesada.
+
+00:14:29.980 --> 00:14:32.540
+To pamięć immunologiczna dla Twoich przepływów pracy.
+
+00:14:32.940 --> 00:14:37.040
+Nieprawidłowości są wyłapywane na poziomie molekularnym, czyli znaków wydrukowanych na paragonach,
+
+00:14:37.040 --> 00:14:40.480
+a recenzent awansuje z kontrolera ręcznego na obsługującego wyjątki.
+
+00:14:40.680 --> 00:14:43.340
+Gratulacje, właśnie zautomatyzowałeś uczciwość.
+
+00:14:43.700 --> 00:14:47.120
+Budowanie niezawodności, testowanie, wersjonowanie i publikowanie.
+
+00:14:47.360 --> 00:14:50.540
+Każda automatyzacja wygląda idealnie, dopóki nie zostanie uruchomiona.
+
+00:14:50.800 --> 00:14:53.140
+Dlatego niezawodność to nie etap, lecz dyscyplina.
+
+00:14:53.320 --> 00:14:57.820
+Kopilot Studio czyni tę dyscyplinę zaskakująco prostą dzięki kontroli wersji, testowaniu i publikowaniu
+
+00:14:57.820 --> 00:14:59.800
+w budowanym bezpośrednio w procesy agentów.
+
+00:15:00.020 --> 00:15:01.520
+Zacznij od testów iteracyjnych.
+
+00:15:01.720 --> 00:15:04.180
+Każdy proces zatwierdzania to miniaturowy ekosystem.
+
+00:15:04.180 --> 00:15:07.080
+Nawet jedna błędna nazwa zmiennej może wywołać chaos.
+
+00:15:07.260 --> 00:15:09.720
+Traktuj więc testowanie jak proces naukowy.
+
+00:15:09.920 --> 00:15:12.640
+Izoluj zmiany, wprowadzaj dane, obserwuj wyniki.
+
+00:15:12.920 --> 00:15:18.180
+W edytorze procesów Kopilot Studio pozwala symulować przykładowe dane bez uruchamiania produkcyjnych wyzwalaczy.
+
+00:15:18.420 --> 00:15:22.760
+Wprowadzaj warianty scenariuszy, zbyt wysokie kwoty, przestarzałe daty, nieistotne nazwy elementów
+
+00:15:22.760 --> 00:15:25.160
+i upewnij się, że każdy kończy się poprawnym werdyktem.
+
+00:15:25.340 --> 00:15:27.180
+Następnie przejdź do konwencji nazewnictwa.
+
+00:15:27.380 --> 00:15:27.760
+Nudne?
+
+00:15:27.980 --> 00:15:28.600
+Zdecydowanie?
+
+00:15:28.880 --> 00:15:29.420
+Niezbędne?
+
+00:15:29.640 --> 00:15:30.580
+Bardziej niż powietrze.
+
+00:15:30.800 --> 00:15:32.720
+Stosuj systematyczne przedrostki dla każdej zmiennej.
+
+00:15:32.720 --> 00:15:35.340
+STR dla ciągów tekstowych, NAM dla liczb, DOG dla plików.
+
+00:15:35.460 --> 00:15:37.360
+Podobnie etykietuj działania w sposób jawny.
+
+00:15:37.540 --> 00:15:40.960
+Pobierz plik paragonu, sprawdź zatwierdzenie menedżera, zaktualizuj status wniosku.
+
+00:15:41.160 --> 00:15:46.460
+Bo za trzy miesiące, gdy ktoś zapyta, dlaczego akcja numer 7 przestała działać, docenisz, że wskazówki są lepsze niż archeologia.
+
+00:15:46.700 --> 00:15:50.420
+Gdy testy indywidualne zakończą się sukcesem, rozszerz je o walidację scenariuszy granicznych.
+
+00:15:50.620 --> 00:15:52.660
+Wciel się w rolę niekompetentnego użytkownika.
+
+00:15:52.900 --> 00:15:56.860
+Nie załączaj paragonu, zmień datę na przyszły rok, wpisz 500 zamiast 500.
+
+00:15:56.860 --> 00:16:00.380
+Potwierdź, że AI wyjaśnia błąd i odrzuca wniosek bez zawieszania się.
+
+00:16:00.540 --> 00:16:03.580
+To nie są hipotetyczne wpadki, to próby generalne rzeczywistości.
+
+00:16:03.800 --> 00:16:09.860
+Im więcej błędów wyeliminujesz na początku, tym mniej wiadomości na Teams o dwóch w nocy dostaniesz z informacją, że proces znów stanął.
+
+00:16:09.860 --> 00:16:12.020
+Publikowanie wprowadza ład i zarządzanie.
+
+00:16:12.260 --> 00:16:16.060
+Za każdym razem, gdy zapisujesz ważną zmianę, Copilot Studio Cicho tworzy nową wersję.
+
+00:16:16.300 --> 00:16:17.960
+Możesz cofnąć zmiany w dowolnym momencie.
+
+00:16:18.260 --> 00:16:19.780
+Koniec z obawą o nadpisanie pracy.
+
+00:16:20.040 --> 00:16:23.140
+Użyj tego, by oddzielić piaskownice logiczne od środowiska produkcyjnego.
+
+00:16:23.400 --> 00:16:26.900
+Jeden proces nazwi zatwierdzanie wniosków DEV, a drugi zatwierdzanie wniosków PROD.
+
+00:16:27.020 --> 00:16:29.640
+Testuj w wersji DEV, publikuj tylko gdy jest stabilna.
+
+00:16:29.880 --> 00:16:33.880
+Pamiętaj, niezawodność to nie tylko poprawność, to kontrola w obliczu zmian.
+
+00:16:34.560 --> 00:16:37.140
+Po publikacji korzystaj z dzienników aktywności.
+
+00:16:37.140 --> 00:16:41.260
+Nie są one dekoracją, lecz prawnie wiążącym z zapisem interakcji, a i z człowiekiem.
+
+00:16:41.500 --> 00:16:44.140
+Znaczniki czasu, tożsamość osób zatwierdzających, podsumowania uzasadnień.
+
+00:16:44.820 --> 00:16:46.340
+Przeglądaj te dzienniki okresowo.
+
+00:16:46.600 --> 00:16:53.380
+Wzorce same się ujawnią, które reguły powodują najwięcej odrzuceń, którzy menedżerowie zmieniali decyzję, a jak często angażowane są kroki zgodności.
+
+00:16:53.600 --> 00:16:56.560
+Test postrzeżenia pozwalają ulepszyć zarówno politykę, jak i projekt.
+
+00:16:56.780 --> 00:16:58.140
+Inna subtelna, dobra praktyka.
+
+00:16:58.300 --> 00:17:01.740
+Automatyzuj aktualizację statusu w rekordach Dataverse na końcu każdej ścieżki.
+
+00:17:01.740 --> 00:17:07.300
+Akcja aktualizacji wiersza powinna ustawiać jasne pole, np. status wniosku na zatwierdzony lub odrzucony.
+
+00:17:07.440 --> 00:17:09.480
+Ten widoczny punkt końcowy buduje zaufanie.
+
+00:17:09.660 --> 00:17:12.060
+Użytkownicy widzą decyzję we własnych widokach tabeli.
+
+00:17:12.280 --> 00:17:15.100
+Brak oddzielnych arkuszy do śledzenia, brak widmowych zatwierdzeń.
+
+00:17:15.280 --> 00:17:18.380
+Gdy system przejdzie wszystkie testy, kliknij publikuj z cichą pewnością siebie.
+
+00:17:18.640 --> 00:17:21.360
+W przeciwieństwie do wcześniejszych generacji procesów Power Automate,
+
+00:17:21.500 --> 00:17:27.120
+procesy agentów zachowują metadany kontekstowe, schemat decyzji, a i powiązania z zawartością dynamiczną i tagi wersji.
+
+00:17:27.120 --> 00:17:32.200
+Wynikiem nie jest tylko działający proces, lecz powtarzalny artefakt podlegająca audytowi automatyzacja.
+
+00:17:32.380 --> 00:17:34.600
+Ostateczny test niezawodności odbywa się w głowie.
+
+00:17:34.780 --> 00:17:36.320
+Oprzyj się przesadnemu komplikowaniu.
+
+00:17:36.540 --> 00:17:39.880
+Czasami nieudany przepływ ujawnia zbyt złożone reguły, a nie błędy techniczne.
+
+00:17:40.080 --> 00:17:41.780
+Usprawniaj logikę, gdzie to możliwe.
+
+00:17:42.000 --> 00:17:45.140
+Mniej etapów, jaśniejsze instrukcje, minimum niejasności.
+
+00:17:45.820 --> 00:17:48.860
+Automatyzacja to nie losowość, to niepotrzebna przebiegłość.
+
+00:17:49.100 --> 00:17:52.500
+Po zakończeniu tego etapu Twój system zatwierdzania osiąga dojrzałość operacyjną,
+
+00:17:52.500 --> 00:17:55.920
+jest przetestowany, zwersjonowany, gotowy do wycofania i weryfikowalny.
+
+00:17:56.080 --> 00:18:01.140
+Każdy wynik od decyzji, a i po podpis administratora pozostawia cyfrowy ślad, który wytrzyma każdą kontrolę.
+
+00:18:01.260 --> 00:18:05.160
+To nie zawodność wymierna nieodczucie, nieszczęście, tylko ustrukturyzowane rozumowanie,
+
+00:18:05.300 --> 00:18:08.840
+wiernie rejestrowane przez narzędzia, które stworzyłeś, by myślały, gdy Ty śpisz.
+
+00:18:09.020 --> 00:18:10.560
+Wyniki i rzeczywiste korzyści.
+
+00:18:10.740 --> 00:18:13.180
+Co się dzieje, gdy przekazujesz biurokrację matematyce?
+
+00:18:13.500 --> 00:18:14.920
+Zatwierdzenia przestają czekać.
+
+00:18:15.100 --> 00:18:18.980
+Wspierany przez AI wieloetapowy przepływ agenta skraca czas realizacji z dni do minut,
+
+00:18:18.980 --> 00:18:21.680
+bo decyzje nie zależą już od dostępności w kalendarzu.
+
+00:18:21.840 --> 00:18:25.360
+Każdy wniosek spełniający obiektywne zasady jest zatwierdzany natychmiast.
+
+00:18:25.520 --> 00:18:29.660
+Każdy nietypowy przypadek trafia prosto do kolejki menedżera wraz z dołączonym kontekstem.
+
+00:18:29.900 --> 00:18:32.940
+Ludzie podejmują oceny wartościujące, a nie wykonują prace biurowe.
+
+00:18:33.180 --> 00:18:35.320
+Wpływ przejawia się najpierw jako skrócenie czasu.
+
+00:18:35.580 --> 00:18:40.120
+Zwrot kosztów, który kiedyś wymagał czterech maili i dwóch przypomnień, teraz jest załatwiony przed lunchem.
+
+00:18:40.380 --> 00:18:45.880
+Działy odnotowują krótsze cykle przetwarzania, mniej przestojów i idealnie zarejestrowane ścieżki rozumowania.
+
+00:18:45.880 --> 00:18:52.540
+Mechanizm zatwierdzania przestaje być przeszkodą, staje się infrastrukturą, później następuje redukcja błędów.
+
+00:18:52.700 --> 00:18:57.520
+Egzekwując deterministyczne reguły przez AI usuwasz subiektywną zmienność z more ręcznych zatwierdzeń.
+
+00:18:57.680 --> 00:19:01.040
+Koniec z argumentami typu myślałem, że to liczy się jako zdrowie i dobre samopoczucie.
+
+00:19:01.220 --> 00:19:03.800
+AI interpretuje kryteria w ten sam sposób za każdym razem.
+
+00:19:04.060 --> 00:19:07.300
+Spójność w logice administracyjnej sprawdza się lepiej niż współczucie.
+
+00:19:07.520 --> 00:19:11.180
+Menedżerowie zajmują się tylko anomaliami, a nawet te mają swój ścieżkę audytu.
+
+00:19:11.380 --> 00:19:14.120
+Dane wejściowe, historia decyzji, wyjaśnienie modelu.
+
+00:19:14.120 --> 00:19:17.480
+Audyty zmieniają się z panicznych działań w uprzejmą weryfikację.
+
+00:19:17.680 --> 00:19:20.880
+Na poziomie organizacyjnym to nie tylko szybciej, to bezpieczniej.
+
+00:19:21.140 --> 00:19:23.420
+Zgodność nie polega na pamięci czy nastroju.
+
+00:19:23.640 --> 00:19:24.460
+Jest wbudowana.
+
+00:19:24.740 --> 00:19:27.560
+Dzienniki Dataverse pokazują, kto zatwierdził, kiedy i dlaczego.
+
+00:19:27.800 --> 00:19:33.080
+Ta przejrzystość zniechęca do kultury chodzenia na skróty, ponieważ każda decyzja istnieje teraz w przeszukiwalnej formie na stałe.
+
+00:19:33.220 --> 00:19:38.480
+A filozoficznie przepływ zmienia się z człowiek przede wszystkim z pomocą AI na AI przede wszystkim z ludzką korektą.
+
+00:19:38.480 --> 00:19:43.500
+Praktyczne zarządzanie nie science fiction, a i zajmuje się egzekwowaniem reguł, ludzie zajmują się oceną.
+
+00:19:43.660 --> 00:19:47.320
+To połączenie tworzy bardziej sprawiedliwe, szybsze i ostatecznie bardziej godne zaufania systemy.
+
+00:19:47.500 --> 00:19:49.460
+Wyobraź sobie, że tłumaczysz to audytorowi.
+
+00:19:49.640 --> 00:19:52.180
+Uśmiech, który się pojawia, jest wart samej automatyzacji.
+
+00:19:52.420 --> 00:19:53.260
+Więc oto jest.
+
+00:19:53.480 --> 00:19:56.380
+Microsoft Copilot Studio to nie tylko kolejne narzędzie do automatyzacji.
+
+00:19:56.560 --> 00:19:59.920
+To miejsce, gdzie niezdecydowanie Twojej organizacji wreszcie przechodzi na emeryturę.
+
+00:19:59.920 --> 00:20:06.660
+Budujesz silnik zatwierdzania, który potrafi myśleć warunkowo, odpowiedzialnie eskalować, sprawdzać rachunki z rzeczywistością i dokumentować każdy swój ruch.
+
+00:20:06.780 --> 00:20:08.980
+To nie jest zwykły przepływ, to model zarządzania.
+
+00:20:09.200 --> 00:20:11.520
+Jeśli masz zapamiętać tylko jedną rzecz, zapamiętaj tę.
+
+00:20:11.720 --> 00:20:15.280
+Sztuczna inteligencja powinna czynić decyzje przewidywalnymi, a ludzi wyjątkowymi.
+
+00:20:15.440 --> 00:20:17.620
+Przestań z przyzwyczajenia kierować wszystko do ludzi.
+
+00:20:17.840 --> 00:20:21.240
+Pozwól logice zająć się rutyną, aby menedżerowie mogli zająć się wyjątkami.
+
+00:20:21.500 --> 00:20:25.920
+Jeśli ten przewodnik oszczędził Ci kolejnego tygodnia czekania na decyzję przełożonego, rozważ subskrypcję.
+
+00:20:25.920 --> 00:20:34.140
+Kolejny poradnik zgłębia zaawansowane automatyzacje w Copilot Studio, gdzie przepływy agentów łączą się z analityką Power Platform i adaptacyjnymi zasadami.
+
+00:20:34.360 --> 00:20:39.140
+Zablokuj swoją ścieżkę rozwoju, subskrybuj, włącz powiadomienia i pozwól, by nowe odcinki wdrażały się automatycznie.
+
+00:20:39.320 --> 00:20:43.280
+Bez ręcznego sprawdzania, bez przegapionych wydań, po prostu ciągłe dostarczanie użytecznej wiedzy.
+
+00:20:43.440 --> 00:20:44.040
+Kontynuuj.
