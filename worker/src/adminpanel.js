@@ -2,7 +2,7 @@
 const now = () => Math.floor(Date.now() / 1000);
 async function n(db, sql, ...b) { try { return (await db.prepare(sql).bind(...b).first())?.n ?? 0; } catch { return null; } }   // Tabelle fehlt -> null
 async function meta(db, k) { try { return (await db.prepare("SELECT v FROM meta WHERE k=?").bind(k).first())?.v ?? ""; } catch { return ""; } }
-const FLAGS = { tr_off: /^[01]$/, atr_off: /^[01]$/, atr_ent_cap: /^\d{1,4}$/, tr_queue_on: /^[01]$/ };
+const FLAGS = { tr_off: /^[01]$/, atr_off: /^[01]$/, atr_ent_cap: /^\d{1,4}$/, tr_queue_on: /^[01]$/, entity_source: /^(json|db)$/ };
 const QKINDS = new Set(["blog", "podcast", "video", "entity", "lblog", "notes"]), QLANGS = new Set(["en", "de", "fr", "es", "it", "nl", "pt", "pl", "id", "ru", "uk", "ar", "he", "ja", "ko"]);
 import { audit } from "./util.js";
 
@@ -33,7 +33,7 @@ export async function handleAdminPanel(env, request, url, path, user, J) {
         profiles_export_age: exp ? now() - exp.updated : null,
         item_tr: await n(db, "SELECT COUNT(*) n FROM item_tr"), ent_tr: await n(db, "SELECT COUNT(*) n FROM ent_tr"),
       },
-      flags: { tr_off: await meta(db, "tr_off"), atr_off: await meta(db, "atr_off"), atr_ent_cap: await meta(db, "atr_ent_cap"),
+      flags: { tr_off: await meta(db, "tr_off"), atr_off: await meta(db, "atr_off"), atr_ent_cap: await meta(db, "atr_ent_cap"), entity_source: (await meta(db, "entity_source")) || "json",
         atr_today: +(await meta(db, "atr_count:" + day)) || 0, atr_ent_today: +(await meta(db, "atr_ent:" + day)) || 0, key: !!env.ANTHROPIC_API_KEY },
     });
   }
