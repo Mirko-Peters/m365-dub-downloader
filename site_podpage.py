@@ -68,6 +68,94 @@ def day(s):
     return (s or "")[:10]
 
 
+def thumb_of(e, nrec=None):
+    """Bild der Folge: Spreaker-Folgenbild (Podpage-Sicherung oder RSS), sonst YouTube-Vorschau aus dem Video-Link, sonst leer."""
+    u = (e.get("image_path") or "")
+    if u.startswith("https://") and "None" not in u:
+        return u
+    m = re.search(r"(?:v=|youtu\.be/)([A-Za-z0-9_-]{11})", e.get("video_link") or "")
+    if m:
+        return f"https://i.ytimg.com/vi/{m.group(1)}/hqdefault.jpg"
+    i = (nrec or {}).get("image") or ""
+    return i if i.startswith("https://") else ""
+
+
+def short_desc(e, nrec=None, n=180):
+    """Kurzbeschreibung: Zusammenfassung, sonst erster Absatz der Show Notes (Spreaker/Editor), sonst Meta-Beschreibung - an Wortgrenze gekuerzt."""
+    t = plain(e.get("summary")) or plain(((nrec or {}).get("markup") or "").split("\n\n")[0].replace("*", "")) or plain(e.get("meta_description")) or plain(e.get("show_notes"))
+    t = re.sub(r"\{\{(?:link|img)\|[^|{}]*\|([^{}]*)\}\}", r"\1", t)
+    if len(t) <= n:
+        return t
+    return t[:n].rsplit(" ", 1)[0].rstrip(",;:- ") + "…"
+
+
+def _lst(v):
+    if isinstance(v, str):
+        try: v = json.loads(v)
+        except Exception: v = []
+    return v if isinstance(v, list) else []
+
+
+def iso_dur(sec):
+    try: sec = int(float(sec))
+    except Exception: return ""
+    if sec <= 0: return ""
+    h, m, s_ = sec // 3600, sec % 3600 // 60, sec % 60
+    return "PT" + (f"{h}H" if h else "") + (f"{m}M" if m or h else "") + f"{s_}S"
+
+
+_IDX = {}
+
+
+def episode_index(BASE):
+    """Einmal je Bau: alle Folgen der Hauptshow (Podpage-Sicherung) als Datensaetze fuer Entitaetsseiten und Folgenseiten.
+    items: slug, title, date, url, Kurzfassung, Kernpunkte/FAQ (Editor, Spreaker, sonst data/episode_sections), Gaeste; eg: Folge -> Gaeste; ge: Gast-Slug -> Folgen."""
+    if BASE in _IDX:
+        return _IDX[BASE]
+    eps = [e for e in load("episodes") if e.get("published") not in (False, "False") and e.get("hidden") not in (True, "True")]
+    eps.sort(key=lambda e: e["create_time"], reverse=True)
+    guests = [x for x in load("guests") if x.get("hidden") not in (True, "True")]
+    gnames = sorted(((gg["name"], gg) for gg in guests if len(gg["name"]) > 5), key=lambda x: -len(x[0]))
+    items, eg, ge, by_slug = [], {}, {}, {}
+    for e in eps:
+        nrec = SNT.get("en", title=e["name"])
+        kp, faq = _lst((nrec or {}).get("keypoints")), _lst((nrec or {}).get("faq"))
+        if not kp and not faq and e["slug"] in SECTIONS:
+            kp, faq = _lst(SECTIONS[e["slug"]].get("keypoints")), _lst(SECTIONS[e["slug"]].get("faq"))
+        faq = [x for x in faq if isinstance(x, dict) and x.get("q") and x.get("a")]
+        hay = (e["name"] + " " + plain(e.get("show_notes")) + " " + ((nrec or {}).get("markup") or "") + " " + " ".join(p.get("name", "") for p in _lst((nrec or {}).get("persons")))).lower()
+        eg[e["slug"]] = [gg for n, gg in gnames if n.lower() in hay][:5]
+        for gg in eg[e["slug"]]:
+            ge.setdefault(gg["slug"], []).append(e)
+        it = {"slug": e["slug"], "lang": "en", "e": {"title": e["name"], "desc": ""}, "date": day(e["create_time"]), "url": f"{BASE}/show/episodes/{e['slug']}/",
+              "sum": short_desc(e, nrec, 260), "keypoints": [x for x in kp if isinstance(x, str)], "faq": faq, "guests": [gg["slug"] for gg in eg[e["slug"]]],
+              "duration": iso_dur((nrec or {}).get("duration")), "number": (str(e.get("number") or "") if str(e.get("number") or "") not in ("None", "") else ""), "season": (str(e.get("season") or "") if str(e.get("season")) != "None" else "")}
+        it["_t"] = e["name"].lower(); it["_k"] = " ".join(it["keypoints"] + [x["q"] + " " + x["a"] for x in faq]).lower()
+        items.append(it); by_slug[e["slug"]] = it
+    _IDX[BASE] = {"eps": eps, "items": items, "eg": eg, "ge": ge, "by_slug": by_slug, "guests": guests}
+    return _IDX[BASE]
+
+
+def find_episodes(BASE, e, names, n=12):
+    """Folgen der Hauptshow zu einer Entitaet: Name/Alias im Titel zaehlt 3, in Kernpunkten/FAQ 1; die besten n nach Punkten, dann Datum.
+    Gast-Entitaeten bekommen ihre Auftritte (Namensnennung in Titel/Show Notes)."""
+    idx = episode_index(BASE)
+    if e.get("guest"):
+        slug = e["id"][:-6] if e["id"].endswith("-guest") else e["id"]
+        return [idx["by_slug"][x["slug"]] for x in idx["ge"].get(slug, []) if x["slug"] in idx["by_slug"]][:n]
+    rx = [re.compile(r"(?<![\w-])" + re.escape(x.lower()) + r"(?![\w-])") for x in names if len(x) > 1]
+    if not rx:
+        return []
+    hits = []
+    for it in idx["items"]:
+        sc = 3 * sum(1 for r in rx if r.search(it["_t"])) + sum(len(r.findall(it["_k"])) for r in rx)
+        if sc:
+            hits.append((sc, it["date"], it))
+    hits.sort(key=lambda x: (-x[0], x[1]), reverse=False)
+    hits.sort(key=lambda x: (x[0], x[1]), reverse=True)
+    return [it for _, _, it in hits[:n]]
+
+
 def make_guest_entities():
     """Gaeste -> Personen-Entitaeten (data/guest_entities.json); id = Podpage-Slug, bei Kollision mit Basis-Entitaeten Suffix -guest."""
     gs = load("guests")
@@ -108,16 +196,9 @@ def build(g):
         write(f"show/{rel}index.html", page("en", (title if title == NAME else f"{title} – {NAME}"), desc[:300], u, shell(body, side), alts, ld, xdefault=u, og_type=og, noindex=noindex))
         if not noindex: sitemap.append((u, last, None))
 
-    # Gaeste je Folge: Namensnennung in Titel/Show Notes
-    gnames = sorted(((gg["name"], gg) for gg in guests if len(gg["name"]) > 5), key=lambda x: -len(x[0]))
-    eg = {}
-    for e in eps:
-        _n = SNT.get("en", title=e["name"])
-        hay = (e["name"] + " " + plain(e.get("show_notes")) + " " + ((_n or {}).get("markup") or "") + " " + " ".join(p["name"] for p in (_n or {}).get("persons", []))).lower()
-        eg[e["slug"]] = [gg for n, gg in gnames if n.lower() in hay][:5]
-    ge = {}
-    for e in eps:
-        for gg in eg[e["slug"]]: ge.setdefault(gg["slug"], []).append(e)
+    # Gaeste je Folge (Namensnennung in Titel/Show Notes) aus dem gemeinsamen Folgenindex (auch fuer die Entitaetsseiten)
+    IDX = episode_index(BASE); eg, ge = IDX["eg"], IDX["ge"]
+    ep_about = g.get("ep_about") or {}   # Folge -> Entitaeten, die sie als Treffer fuehren (Gegenrichtung zu den Entitaetsseiten)
 
     def tr_for(e):
         r = enx.get(norm(e["name"]))
@@ -128,25 +209,6 @@ def build(g):
         return r, t
 
     def ep_url(e): return f"{root}episodes/{e['slug']}/"
-
-    def thumb_of(e, nrec=None):
-        """Bild der Folge: Spreaker-Folgenbild (Podpage-Sicherung oder RSS), sonst YouTube-Vorschau aus dem Video-Link, sonst leer."""
-        u = (e.get("image_path") or "")
-        if u.startswith("https://") and "None" not in u:
-            return u
-        m = re.search(r"(?:v=|youtu\.be/)([A-Za-z0-9_-]{11})", e.get("video_link") or "")
-        if m:
-            return f"https://i.ytimg.com/vi/{m.group(1)}/hqdefault.jpg"
-        i = (nrec or {}).get("image") or ""
-        return i if i.startswith("https://") else ""
-
-    def short_desc(e, nrec=None, n=180):
-        """Kurzbeschreibung: Zusammenfassung, sonst erster Absatz der Show Notes (Spreaker/Editor), sonst Meta-Beschreibung - an Wortgrenze gekuerzt."""
-        t = plain(e.get("summary")) or plain(((nrec or {}).get("markup") or "").split("\n\n")[0].replace("*", "")) or plain(e.get("meta_description")) or plain(e.get("show_notes"))
-        t = re.sub(r"\{\{(?:link|img)\|[^|{}]*\|([^{}]*)\}\}", r"\1", t)
-        if len(t) <= n:
-            return t
-        return t[:n].rsplit(" ", 1)[0].rstrip(",;:- ") + "…"
 
     def img_tag(u, alt, size):
         return f'<img src="{esc(u)}" alt="{esc(alt)}" width="{size}" height="{size}" loading="lazy" decoding="async" style="width:{size}px;height:{size}px;object-fit:cover;border-radius:.5rem;flex:none">' if u else ""
@@ -205,7 +267,7 @@ def build(g):
         plat_links = [(n, (elk.get(pk) or e.get(fld) or "")) for n, pk, fld in (("Apple Podcasts", "apple", "episode_apple_url_path"), ("Spotify", "spotify", "episode_spotify_url_path"), ("YouTube", "youtube", "video_link"), ("YouTube Music", "youtube_music", "episode_youtube_music_url_path"), ("Deezer", "deezer", None))]
         plat_links = [(n, u) for n, u in plat_links if u.startswith("http")]   # frisch zugeordnete Links gehen vor der Podpage-Sicherung
         ext = " · ".join(f'<a href="{esc(u)}" rel="noopener">{n}</a>' for n, u in plat_links)
-        hl = "".join(f'<a href="{BASE}/community/u/{h["slug"]}/">{esc(h["name"])}</a> ' for h in hosts if h.get("slug") == "mirko-peters")
+        hl = "".join(f'<a href="{BASE}/entity/mirko-peters/">{esc(h["name"])}</a> ' for h in hosts if h.get("slug") == "mirko-peters")   # Host ist die Personen-Entitaet (ein Profil-Handle mirko-peters gibt es nicht)
         oa = (g.get("orig_alts") or {}).get(e["slug"]) or {}
         also = ('<h2>Also available in other languages</h2><ul>' + "".join(f'<li><a href="{u}" hreflang="{lg}">{esc(t)}</a> <span class="mut">({lg})</span></li>' for lg, (u, t) in sorted(oa.items())) + "</ul>") if oa else ""
         gl = "".join(f'<li><a href="{root}guests/{gg["slug"]}/">{esc(gg["name"])}</a></li>' for gg in eg[e["slug"]])
@@ -215,9 +277,17 @@ def build(g):
                 + (f"<p>{ext}</p>" if ext else "") + (f'<p class="mut">Host: {hl}</p>' if hl else "") + (f"<h2>Guests</h2><ul>{gl}</ul>" if gl else "") + also
                 + (("<h2>Related articles</h2><ul>" + "".join(f'<li><a href="{bp_url(p)}">{esc(p["title"])}</a></li>' for p in bp_by_ep.get(e["slug"], [])[:6]) + "</ul>") if bp_by_ep.get(e["slug"]) else "") + tx + "</article>" + (g.get("author_box")("en") if g.get("author_box") else "")
                 + '<p style="display:flex;justify-content:space-between;gap:1em;margin-top:2em">' + (f'<a href="{ep_url(prev_)}">← {esc(prev_["name"][:60])}</a>' if prev_ else "<span></span>") + (f'<a href="{ep_url(next_)}">{esc(next_["name"][:60])} →</a>' if next_ else "") + "</p>")
-        ld = {"@context": "https://schema.org", "@type": "PodcastEpisode", "name": e["name"], "url": ep_url(e), "datePublished": day(e["create_time"]),
+        ld = {"@context": "https://schema.org", "@type": "PodcastEpisode", "@id": ep_url(e) + "#episode", "name": e["name"], "url": ep_url(e), "datePublished": day(e["create_time"]),
               "description": short_desc(e, nrec, 500), "partOfSeries": {"@type": "PodcastSeries", "name": NAME, "url": root}, "inLanguage": "en", **({"image": thumb_of(e, nrec)} if thumb_of(e, nrec) else {}), "author": {"@id": f"{BASE}/entity/mirko-peters/#entity"}}
-        if e.get("season"): ld["partOfSeason"] = {"@type": "PodcastSeason", "seasonNumber": e["season"]}
+        _it = IDX["by_slug"].get(e["slug"]) or {}
+        if _it.get("duration"): ld["timeRequired"] = _it["duration"]; ld["duration"] = _it["duration"]
+        if _it.get("number"): ld["episodeNumber"] = _it["number"]
+        if ep_about.get(e["slug"]): ld["about"] = [{"@id": f"{BASE}/entity/{x}/#entity"} for x in ep_about[e["slug"]][:12]]   # Entitaeten, deren Seite diese Folge fuehrt
+        _gids = [gent[gg["name"]] for gg in eg[e["slug"]] if gg["name"] in gent and gent[gg["name"]] in ents]
+        if _gids: ld["contributor"] = [{"@id": f"{BASE}/entity/{x}/#entity"} for x in _gids]
+        if e.get("season") and str(e["season"]) != "None": ld["partOfSeason"] = {"@type": "PodcastSeason", "seasonNumber": e["season"]}
+        _bc = {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "M365.FM", "item": f"{BASE}/"}, {"@type": "ListItem", "position": 2, "name": "Episodes", "item": f"{root}episodes/"}, {"@type": "ListItem", "position": 3, "name": e["name"], "item": ep_url(e)}]}
+        nld = list(nld) + [_bc]
         if r and r.get("audio"): ld["associatedMedia"] = {"@type": "AudioObject", "contentUrl": r["audio"]}
         if plat_links: ld["sameAs"] = [u for _, u in plat_links]
         if len(tr) > 200: ld["transcript"] = tr[:5000]
