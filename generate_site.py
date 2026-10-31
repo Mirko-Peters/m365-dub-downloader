@@ -1410,6 +1410,7 @@ def build():
         idx.append(f"<sitemap><loc>{BASE}/{f}</loc><lastmod>{lm}</lastmod></sitemap>")
     idx.append("</sitemapindex>")
     write("sitemap.xml", "\n".join(idx))
+    _showix = PP.episode_index(BASE)
     phase("Sitemaps")
     write("robots.txt", f"User-agent: *\nContent-Signal: search=yes, ai-input=yes, ai-train=yes\nAllow: /\n\n# KI-Suchen und Assistenten ausdrücklich erlaubt\n" + "".join(f"User-agent: {b}\nAllow: /\n\n" for b in ("GPTBot", "OAI-SearchBot", "ChatGPT-User", "ClaudeBot", "Claude-User", "Claude-SearchBot", "PerplexityBot", "Google-Extended", "Applebot-Extended", "Bingbot")) + f"Sitemap: {BASE}/sitemap.xml\n")
     # llms.txt (Überblick), llms-full.txt (alle Folgen), agent.json (Maschinen-Beschreibung), episodes.json (Datenfeed)
@@ -1419,6 +1420,13 @@ def build():
          "Author: Mirko Peters (Microsoft MVP), host of the M365.FM podcast and the m365 Show on YouTube, organizer of M365Con (free online conference, 2027-01-11 to 2027-01-22).", "",
          "## Core", f"- [About Mirko Peters]({BASE}/entity/mirko-peters/): profile, expertise, links", f"- [Microsoft MVP profile]({MVP}): official Microsoft MVP recognition of Mirko Peters", f"- [Full episode list]({BASE}/llms-full.txt): every episode with title, language and summary",
          f"- [Machine-readable feed]({BASE}/episodes.json): all episodes as JSON", f"- [Agent card]({BASE}/agent.json): capabilities for AI agents", f"- [Sitemap]({BASE}/sitemap.xml)", "",
+         "## Main show, knowledge graph and blog (English)",
+         f"- [M365.FM podcast, all episodes]({BASE}/show/episodes/): {len(_showix['items'])} English episodes with key points, FAQ and transcript – list in [llms-show.txt]({BASE}/llms-show.txt)",
+         f"- [Entities]({BASE}/entity/): {len(ENT.ENTS)} Microsoft products, concepts, certifications and people with definition, facts, sources, episodes and articles – list in [llms-entities.txt]({BASE}/llms-entities.txt), data in [entities.json]({BASE}/entities.json) and [entities.jsonld]({BASE}/entities.jsonld); each entity has a feed at /entity/<id>/feed.xml",
+         f"- [Blog]({BASE}/community/u/mirko-p/blog/): {sum(1 for p in _posts if p.get('lang') == 'en')} articles by Mirko Peters – list in [llms-blog.txt]({BASE}/llms-blog.txt), data in [articles.json]({BASE}/articles.json)",
+         f"- [Glossary]({BASE}/glossary/): short definitions of Microsoft terms (English and German)",
+         f"- [M365 Show live stream]({BASE}/live/): the running live show on YouTube, past and upcoming streams",
+         f"- Programmatic access: [OpenAPI]({BASE}/openapi.json), [MCP server card]({BASE}/.well-known/mcp/server-card.json), [A2A agent card]({BASE}/.well-known/agent-card.json), [auth.md]({BASE}/auth.md)", "",
          "## Languages"]
     for l in active:
         L.append(f"- [{LANGS[l][0]}]({BASE}/{l}/): {len(by_lang[l])} episodes – topics: " + ", ".join(cat_name(c, l) for c in ORDER if c in catidx[l]))
@@ -1426,6 +1434,24 @@ def build():
     for c in ORDER:
         L.append(f"- {cat_name(c, 'en')}: " + ", ".join(f"[{l}]({cat_url(l, c)})" for l in active if c in catidx[l]))
     write("llms.txt", "\n".join(L) + "\n")
+    # Hauptshow, Entitaeten und Blog als eigene Listen fuer KI-Suchen und Agenten (bisher kannten llms*.txt und episodes.json nur die Dub-Folgen)
+    _S = [f"# M365.FM podcast – all {len(_showix['items'])} English episodes", "", "> Conversations with Microsoft MVPs, product experts and architects about Microsoft 365, Copilot, Azure, Power Platform, security and AI; host Mirko Peters (Microsoft MVP). Each page has key points, FAQ, guests and a transcript.", ""]
+    for x in _showix["items"]:
+        _S.append(f"- [{x['e']['title']}]({x['url']}) – {x['date']}" + (f" – {x['sum'][:200]}" if x.get("sum") else "") + (f" – key points: {' | '.join(k[:120] for k in x['keypoints'][:3])}" if x.get("keypoints") else ""))
+    write("llms-show.txt", "\n".join(_S) + "\n")
+    _E = [f"# M365.FM entities – {len(ENT.ENTS)} Microsoft products, concepts, certifications and people", "", "> Each entity page has a definition, facts, sources, related episodes and articles, FAQ and a feed (/entity/<id>/feed.xml). JSON: /entities.json, JSON-LD: /entities.jsonld.", ""]
+    for e in sorted(ENT.ENTS.values(), key=lambda e: (e["type"], e["name"].lower())):
+        if e.get("type") == "person" and not (e.get("desc") or {}).get("en"): continue
+        _E.append(f"- [{e['name']}]({BASE}/entity/{e['id']}/) ({e['type']}): {((e.get('desc') or {}).get('en') or (e.get('desc') or {}).get('de') or '')[:220]}")
+    write("llms-entities.txt", "\n".join(_E) + "\n")
+    _B = [f"# M365.FM blog – articles by Mirko Peters", "", "> Articles about Microsoft 365, Copilot, Azure, Power Platform, security, governance and AI. Each article links its topics (entities).", ""]
+    _bp = sorted([p for p in _posts if p.get("lang") == "en"], key=lambda p: -(p.get("published") or 0))
+    for p in _bp:
+        _B.append(f"- [{p['title']}]({BASE}/community/u/{p['handle']}/blog/{p['slug']}/) – {BLG.iso(p['published'])}" + (f" – {(p.get('summary') or '')[:200]}" if p.get("summary") else "") + (f" – topics: {', '.join(ENT.ENTS[t]['name'] for t in (p.get('topics') or [])[:4] if t in ENT.ENTS)}" if p.get("topics") else ""))
+    write("llms-blog.txt", "\n".join(_B) + "\n")
+    write("articles.json", json.dumps({"name": "M365.FM blog", "author": "Mirko Peters", "generated": TODAY, "count": len(_bp), "articles": [
+        {"slug": p["slug"], "title": p["title"], "url": f"{BASE}/community/u/{p['handle']}/blog/{p['slug']}/", "date": BLG.iso(p["published"]), "summary": (p.get("summary") or "")[:300], "topics": [t for t in (p.get("topics") or []) if t in ENT.ENTS],
+         "translations": {q["lang"]: f"{BASE}/{q['lang']}/community/u/{q['handle']}/blog/{q['slug']}/" for q in _posts if q.get("tr_of") and q["slug"] == p["slug"] and q["handle"] == p["handle"]}} for p in _bp]}, ensure_ascii=False))
     F = [f"# M365.FM international – all episodes", "", f"> {summ}", ""]
     for l in active:
         F += [f"## {LANGS[l][0]} ({l})", ""]
@@ -1437,6 +1463,9 @@ def build():
              "categories": [cat_name(c, "en") for c in ORDER if c in cat_of[x["vid"]]], "tags": tagraw[l][x["vid"]], "youtube": f"https://youtu.be/{x['vid']}",
              "spreaker": f"https://www.spreaker.com/episode/{x['eid']}", "alternates": {k: url_of(v) for k, v in by_vid[x["vid"]].items()}}
             for l in active for x in by_lang[l]]
+    for x in feed: x["kind"] = "dub"
+    feed += [{"id": x["slug"], "kind": "show", "language": "en", "title": x["e"]["title"], "url": x["url"], "date": x["date"], "summary": (x.get("sum") or "")[:300], "keypoints": x.get("keypoints") or [],
+              "entities": (_ep_about.get(x["slug"]) or [])[:12], "guests": x.get("guests") or [], "duration": x.get("duration") or "", "alternates": {}} for x in _showix["items"]]
     write("episodes.json", json.dumps({"name": "M365.FM international", "author": "Mirko Peters", "generated": TODAY, "count": len(feed), "episodes": feed}, ensure_ascii=False))
     write("agent.json", json.dumps({
         "schemaVersion": "1.0", "name": "M365.FM international", "description": summ, "url": f"{BASE}/", "version": TODAY,
@@ -1444,12 +1473,15 @@ def build():
         "documentationUrl": f"{BASE}/llms.txt", "license": "Content © Mirko Peters / M365.FM. Citation with link to the episode page welcome.",
         "capabilities": {"streaming": False, "readOnly": True, "authentication": "none"},
         "languages": [LANGS[l][1] for l in active],
-        "interfaces": {"llms": f"{BASE}/llms.txt", "llmsFull": f"{BASE}/llms-full.txt", "episodesJson": f"{BASE}/episodes.json", "sitemap": f"{BASE}/sitemap.xml",
+        "interfaces": {"llms": f"{BASE}/llms.txt", "llmsFull": f"{BASE}/llms-full.txt", "llmsShow": f"{BASE}/llms-show.txt", "llmsEntities": f"{BASE}/llms-entities.txt", "llmsBlog": f"{BASE}/llms-blog.txt",
+                       "episodesJson": f"{BASE}/episodes.json", "entitiesJson": f"{BASE}/entities.json", "entitiesJsonLd": f"{BASE}/entities.jsonld", "articlesJson": f"{BASE}/articles.json", "openapi": f"{BASE}/openapi.json", "mcp": f"{BASE}/.well-known/mcp/server-card.json", "a2a": f"{BASE}/.well-known/agent-card.json", "sitemap": f"{BASE}/sitemap.xml",
                        "rss": {l: f"https://www.spreaker.com/show/{LANGS[l][3]}/episodes/feed" for l in active}},
         "skills": [
             {"id": "find-episode", "name": "Find an episode", "description": "Find podcast episodes about Microsoft 365, Copilot, Azure, Power Platform, security and AI governance in a given language. Use episodes.json (filter by language, categories, tags) and link to the episode page.", "inputModes": ["text"], "outputModes": ["application/json", "text/html"]},
             {"id": "translate-link", "name": "Same episode in another language", "description": "Each episode page lists its alternate-language versions (hreflang / 'alternates' in episodes.json).", "inputModes": ["text"], "outputModes": ["application/json"]},
-            {"id": "about-author", "name": "About Mirko Peters", "description": "Microsoft MVP, M365.FM host, M365Con organizer – see the about page.", "inputModes": ["text"], "outputModes": ["text/html"]}]
+            {"id": "about-author", "name": "About Mirko Peters", "description": "Microsoft MVP, M365.FM host, M365Con organizer – see the about page.", "inputModes": ["text"], "outputModes": ["text/html"]},
+            {"id": "find-entity", "name": "Look up a Microsoft product, concept or certification", "description": "entities.json / llms-entities.txt: definition, facts, sources, related episodes and articles for each entity; entity pages define schema.org nodes (#entity).", "inputModes": ["text"], "outputModes": ["application/json", "text/html"]},
+            {"id": "find-article", "name": "Find a blog article", "description": "articles.json / llms-blog.txt: articles with date, summary and topics (entity ids); episodes.json entries with kind 'show' carry the same entity ids.", "inputModes": ["text"], "outputModes": ["application/json", "text/html"]}]
     }, ensure_ascii=False, indent=1))
     write(".well-known/agent.json", (OUT / "agent.json").read_text(encoding="utf-8"))
     _card = json.loads((OUT / "agent.json").read_text(encoding="utf-8"))   # A2A Agent Card: dieselben Faehigkeiten, Schnittstelle ist /a2a im Worker (nur lesen)
