@@ -9,6 +9,7 @@ routes = [{ pattern = "api-dub.m365.fm", custom_domain = true, zone_name = "m365
 binding = "DB"
 database_name = "m365-dub"
 database_id = "REPLACE_WITH_D1_ID"   # wird vom Workflow (worker.yml) automatisch eingetragen
+migrations_dir = "migrations"   # versioniertes Schema: wrangler d1 migrations apply
 
 [triggers]
 crons = ["0 6 * * *", "*/30 * * * *"]   # Digest 06:00 UTC; Feeds der Creator alle 30 Minuten
@@ -18,3 +19,6 @@ SITE = "https://www.m365.fm"
 API = "https://api-dub.m365.fm"
 MAIL_FROM = "M365.FM <system@m365.fm>"
 VAPID_SUBJECT = "mailto:system@m365.fm"
+
+[observability]
+enabled = true   # Workers Logs (Fehler je Request und Cron im Dashboard sichtbar)

@@ -54,6 +54,12 @@ jobs:
         run: |
           pip install -q requests cryptography
           [ -f data/yt_auth.enc ] && python yt_auth.py env || echo "Noch nicht mit YouTube verbunden."
+      - name: Pruefen vor dem Deploy (Syntax, Tests, MCP-Abdeckung) - rot heisst kein Deploy
+        working-directory: worker
+        run: |
+          for f in src/*.js setup.mjs; do node --check "$f"; done
+          node --test
+          node ../tools/check_mcp_coverage.mjs
       - name: Installieren
         if: env.skip != '1'
         working-directory: worker
@@ -77,3 +83,11 @@ jobs:
           YT_REFRESH_TOKEN: ${{ env.YT_REFRESH_TOKEN || secrets.YT_REFRESH_TOKEN }}
           RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
           ADMIN_SUBS: ${{ secrets.ADMIN_SUBS }}
+      - name: D1-Sicherung aufheben (14 Tage)
+        if: always() && env.skip != '1'
+        uses: actions/upload-artifact@v4
+        with:
+          name: d1-backup-${{ github.run_id }}
+          path: worker/backup-d1.sql
+          retention-days: 14
+          if-no-files-found: warn
