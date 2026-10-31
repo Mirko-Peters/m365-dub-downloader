@@ -140,20 +140,23 @@ def find_episodes(BASE, e, names, n=12):
     """Folgen der Hauptshow zu einer Entitaet: Name/Alias im Titel zaehlt 3, in Kernpunkten/FAQ 1; die besten n nach Punkten, dann Datum.
     Gast-Entitaeten bekommen ihre Auftritte (Namensnennung in Titel/Show Notes)."""
     idx = episode_index(BASE)
-    if e.get("guest"):
+    app = []
+    if e.get("guest") or e.get("type") == "person":
         slug = e["id"][:-6] if e["id"].endswith("-guest") else e["id"]
-        return [idx["by_slug"][x["slug"]] for x in idx["ge"].get(slug, []) if x["slug"] in idx["by_slug"]][:n]
+        app = [idx["by_slug"][x["slug"]] for x in idx["ge"].get(slug, []) if x["slug"] in idx["by_slug"]]
+        if e.get("guest"):
+            return app[:n]
     rx = [re.compile(r"(?<![\w-])" + re.escape(x.lower()) + r"(?![\w-])") for x in names if len(x) > 1]
     if not rx:
-        return []
+        return app[:n]
     hits = []
     for it in idx["items"]:
         sc = 3 * sum(1 for r in rx if r.search(it["_t"])) + sum(len(r.findall(it["_k"])) for r in rx)
         if sc:
             hits.append((sc, it["date"], it))
-    hits.sort(key=lambda x: (-x[0], x[1]), reverse=False)
     hits.sort(key=lambda x: (x[0], x[1]), reverse=True)
-    return [it for _, _, it in hits[:n]]
+    seen = {x["slug"] for x in app}
+    return (app + [it for _, _, it in hits if it["slug"] not in seen])[:n]   # Auftritte als Gast zuerst, dann Folgen, die den Namen nennen
 
 
 def make_guest_entities():
@@ -161,8 +164,9 @@ def make_guest_entities():
     gs = load("guests")
     base = {e["id"] for e in json.loads((D / "entities.json").read_text("utf-8"))}
     out = []
+    merge = (json.loads((D / "guest_merge.json").read_text("utf-8")).get("merge") or {}) if (D / "guest_merge.json").exists() else {}
     for g in gs:
-        if g.get("hidden") in (True, "True"): continue
+        if g.get("hidden") in (True, "True") or g["slug"] in merge: continue   # doppelter Gast: kein eigener Eintrag, siehe data/guest_merge.json
         i = g["slug"] + ("-guest" if g["slug"] in base else "")
         bio = plain(g.get("bio"))
         same = [g[k] for k in ("linkedin_link", "twitter_link", "youtube_link", "instagram_link", "facebook_link", "threads_link", "bluesky_link", "mastodon_link", "tiktok_link", "twitch_link", "wikipedia_link", "imdb_link") if g.get(k)]
@@ -182,6 +186,9 @@ def build(g):
     pages = load("pages"); guests = [x for x in load("guests") if x.get("hidden") not in (True, "True")]
     enx = json.loads((D / "en_episodes.json").read_text("utf-8")) if (D / "en_episodes.json").exists() else {}
     ents = {e["id"]: e for e in json.loads((D / "guest_entities.json").read_text("utf-8"))} if (D / "guest_entities.json").exists() else {}
+    _gm = json.loads((D / "guest_merge.json").read_text("utf-8")) if (D / "guest_merge.json").exists() else {}
+    gmerge, galso = (_gm.get("merge") or {}), (_gm.get("also") or {})   # doppelte Gaeste -> Ziel-Entitaet; Gastseite verweist zusaetzlich auf diese Entitaeten
+    baseids = {e["id"] for e in json.loads((D / "entities.json").read_text("utf-8"))}
     gent = {gg["name"]: (gg["slug"] + ("-guest" if gg["slug"] not in {e["id"] for e in []} and gg["slug"] + "-guest" in ents else "")) for gg in guests}
     root = f"{BASE}/show/"; NAME = pod.get("name") or "M365.FM Podcast"
     navitems = (("", "Home"), ("episodes/", "Episodes"), *((("blog/", "Blog"),) if (PD / "blog_posts.json.gz").exists() else ()), *((("guests/", "Guests"),) if guests else ()), ("hosts/", "Hosts"), ("sponsors/", "Sponsors"), ("reviews/", "Reviews"), ("work-with-me/", "Work with me"), ("about/", "About"))
@@ -340,13 +347,15 @@ def build(g):
     gl = ""
     for gg in sorted(guests, key=lambda x: x["name"]):
         mine = ge.get(gg["slug"], [])
-        eid = next((i for i in (gg["slug"] + "-guest", gg["slug"]) if i in ents), gg["slug"])
-        ent = f'<p><a href="{BASE}/entity/{eid}/">Entity page</a></p>' if eid in ents else ""
+        eid = gmerge.get(gg["slug"]) or next((i for i in (gg["slug"] + "-guest", gg["slug"]) if i in ents), gg["slug"])
+        known = eid in ents or eid in baseids   # Gast-Entitaet oder zusammengefuehrte Basis-Entitaet
+        ent = f'<p><a href="{BASE}/entity/{eid}/">Entity page</a></p>' if known else ""
+        ent += "".join(f'<p><a href="{BASE}/entity/{x}/">Entity page: {esc(ents[x]["name"])}</a></p>' for x in galso.get(gg["slug"], []) if x in ents)
         soc = " · ".join(f'<a href="{esc(gg[k])}" rel="noopener">{n}</a>' for k, n in (("website", "Website"), ("linkedin_link", "LinkedIn"), ("twitter_link", "X"), ("youtube_link", "YouTube")) if gg.get(k))
         img = f'<img src="{esc(gg["image_path"])}" alt="{esc(gg["name"])}" width="120" height="120" style="border-radius:50%;object-fit:cover;float:right;margin:0 0 1em 1em" loading="lazy">' if (gg.get("image_path") or "").startswith("http") else ""
         body = (f'<article>{img}<h1>{esc(gg["name"])}</h1><p class="mut">{esc(gg.get("title") or "")}</p><div>{san(gg.get("bio"))}</div><p>{soc}</p>{ent}'
                 + (f'<h2>Episodes</h2><ul style="list-style:none;padding:0">{"".join(card(e) for e in mine)}</ul>' if mine else "") + "</article>")
-        ld = {"@context": "https://schema.org", "@type": "ProfilePage", "mainEntity": {"@type": "Person", "@id": f"{BASE}/entity/{eid}/#entity" if eid in ents else f"{root}guests/{gg['slug']}/#p", "name": gg["name"], "jobTitle": gg.get("title") or "",
+        ld = {"@context": "https://schema.org", "@type": "ProfilePage", "mainEntity": {"@type": "Person", "@id": f"{BASE}/entity/{eid}/#entity" if known else f"{root}guests/{gg['slug']}/#p", "name": gg["name"], "jobTitle": gg.get("title") or "",
               "sameAs": [gg[k] for k in ("linkedin_link", "twitter_link", "youtube_link", "website") if gg.get(k)]}}
         pub(f"guests/{gg['slug']}/", f"{gg['name']} – guest", plain(gg.get("bio")) or f"{gg['name']} on the {NAME}", body, ld, "profile")
         gl += f'<li style="margin:.4em 0"><a href="{root}guests/{gg["slug"]}/">{esc(gg["name"])}</a> <span class="mut">{esc(gg.get("title") or "")[:90]}</span></li>'
@@ -411,6 +420,10 @@ def build(g):
     for x in guests: add(f"/guests/{x['slug']}", f"/show/guests/{x['slug']}/")
     for old, new in (("/episodes", "/show/episodes/"), ("/guests", "/show/guests/"), ("/hosts", "/show/hosts/"), ("/people", "/show/hosts/"), ("/sponsors", "/show/sponsors/"), ("/reviews", "/show/reviews/"), ("/podroll", "/show/listen/"), ("/videos", "/show/"), ("/blog", "/community/u/mirko-p/blog/" if bposts else "/show/")): rd.setdefault(old, new)
     for p in bposts: rd[f"/blog/{p['slug']}"] = f"/community/u/mirko-p/blog/{p['slug']}/"; rd[f"/show/blog/{p['slug']}"] = f"/community/u/mirko-p/blog/{p['slug']}/"
+    for old, new in gmerge.items():   # zusammengefuehrte Personen: alte Entitaets-Adressen (alle Sprachpfade) auf die eine Entitaet
+        oid = old + "-guest" if old in baseids else old
+        for pre in [""] + [f"/{l}" for l in LG]:
+            rd[f"{pre}/entity/{oid}"] = f"{pre}/entity/{new}/"
     write("show/redirects.json", json.dumps(rd))
     write("show/redirect-conflicts.json", json.dumps(sorted(set(clash))))
     print(f"podpage: {len(eps)} Folgen, {len(guests)} Gaeste, {len(bposts)} Blogposts, {len(plist)} Seiten, {len(rd)} Weiterleitungen, Konflikte mit Plattform-Seiten: {sorted(set(clash))}")
