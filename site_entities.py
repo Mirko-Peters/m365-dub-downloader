@@ -228,8 +228,8 @@ def _iso(ts):
 def topic_posts(posts_by_topic, eid, lang):
     """Artikel einer Entitaet: bei sehr allgemeinen Entitaeten (> 60 Treffer) nur die Beitraege, deren Hauptthema sie ist; Seitensprache zuerst, dann Englisch."""
     ps = posts_by_topic.get(eid) or []
-    if len(ps) > 60:
-        ps = [p for p in ps if (p.get("topics") or [""])[0] == eid] or ps[:60]
+    if len(ps) > 60:   # sehr allgemeine Entitaet: nur Beitraege, bei denen sie Haupt- oder Zweitthema ist
+        ps = [p for p in ps if eid in (p.get("topics") or [])[:2]] or ps[:60]
     ps = [p for p in ps if p.get("lang") in (lang, "en")]
     return sorted(ps, key=lambda p: (p.get("lang") != lang, -(p.get("published") or 0)))
 
