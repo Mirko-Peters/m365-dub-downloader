@@ -1,3 +1,4 @@
+import re
 """Entitaetsdatenbank fuer das Microsoft-Oekosystem: Seiten, JSON-Exporte, Schema.org-Graph."""
 from site_i18n import T
 import site_updates as SU
@@ -271,7 +272,7 @@ def build(g, wiki_links, experts_by_ent, ep_find):
             counts[e["type"]] = counts.get(e["type"], 0) + 1
         filt = f'<button type="button" class="en-f" data-f="" aria-pressed="true">{esc(s["all"])} ({len(recs)})</button>' + "".join(f'<button type="button" class="en-f" data-f="{k}" aria-pressed="false">{esc(TL[k][li])} ({counts[k]})</button>' for k in TL if k in counts)
         js = ('<script>(function(){var b=[].slice.call(document.querySelectorAll(".en-f")),l=[].slice.call(document.querySelectorAll(".en-i")),o=document.getElementById("en-old"),cur=b[0];function ap(){l.forEach(function(i){i.hidden=(!!cur.dataset.f&&i.dataset.t!==cur.dataset.f)||(!!i.dataset.old&&!(o&&o.checked))})}b.forEach(function(x){x.addEventListener("click",function(){b.forEach(function(y){y.setAttribute("aria-pressed",y===x?"true":"false")});cur=x;ap()})});if(o)o.addEventListener("change",ap)})()</script>')
-        css = '<style>' + MED.CSS + '.en-ep{margin:1em 0}.en-ep h3{margin:.2em 0}.en-ep p{margin:.2em 0}.en-faq details,.wk-q{border:1px solid var(--bd);border-radius:.4em;padding:.5em .8em;margin:.4em 0;background:var(--card)}.en-faq summary{cursor:pointer;font-weight:600}.wk-a{margin:.4em 0 .4em 1em}.en-old{border:1px solid var(--bd);border-left:4px solid #b45309;background:var(--card);padding:.6em .9em;border-radius:.4em}.en-f{font:inherit;cursor:pointer;border:1px solid var(--bd);border-radius:2em;padding:.35em .9em;margin:.2em .3em .2em 0;background:var(--card);color:var(--fg);min-height:2.5rem}.en-f[aria-pressed=true]{background:var(--ac);color:var(--onac);border-color:var(--ac)}.en-list{list-style:none;padding:0}.en-list li{padding:.55em 0;border-bottom:1px solid var(--bd)}.en-list li[hidden]{display:none}.en-facts{border-collapse:collapse;width:100%}.en-facts th{text-align:start;padding:.4em .8em .4em 0;vertical-align:top;white-space:nowrap}.en-facts td{padding:.4em 0}.en-rel h3{margin:.9em 0 .2em;font-size:1rem}.en-rel ul{margin:.2em 0;padding-inline-start:1.3em}.en-artl{list-style:none;padding:0}.en-artl li{padding:.5em 0;border-bottom:1px solid var(--bd)}.en-arts details{margin:.6em 0}.en-arts summary{cursor:pointer}.en-upd{font-size:.9em}</style>'
+        css = '<style>' + MED.CSS + '.en-ep{margin:1em 0}.en-ep h3{margin:.2em 0}.en-ep p{margin:.2em 0}.en-faq details,.wk-q{border:1px solid var(--bd);border-radius:.4em;padding:.5em .8em;margin:.4em 0;background:var(--card)}.en-faq summary{cursor:pointer;font-weight:600}.wk-a{margin:.4em 0 .4em 1em}.en-old{border:1px solid var(--bd);border-left:4px solid #b45309;background:var(--card);padding:.6em .9em;border-radius:.4em}.en-f{font:inherit;cursor:pointer;border:1px solid var(--bd);border-radius:2em;padding:.35em .9em;margin:.2em .3em .2em 0;background:var(--card);color:var(--fg);min-height:2.5rem}.en-f[aria-pressed=true]{background:var(--ac);color:var(--onac);border-color:var(--ac)}.en-list{list-style:none;padding:0}.en-list li{padding:.55em 0;border-bottom:1px solid var(--bd)}.en-list li[hidden]{display:none}.en-facts{border-collapse:collapse;width:100%}.en-facts th{text-align:start;padding:.4em .8em .4em 0;vertical-align:top;white-space:nowrap}.en-facts td{padding:.4em 0}.en-rel h3{margin:.9em 0 .2em;font-size:1rem}.en-rel ul{margin:.2em 0;padding-inline-start:1.3em}.en-artl{list-style:none;padding:0}.en-artl li{padding:.5em 0;border-bottom:1px solid var(--bd)}.en-arts details{margin:.6em 0}.en-arts summary{cursor:pointer}.en-upd{font-size:.9em}.en-kp{border:1px solid var(--bd);border-inline-start:4px solid var(--ac,#0a5);border-radius:.4em;padding:.4em 1em;margin:1em 0}.en-kp h2{margin:.3em 0;font-size:1.1rem}.en-kp ul{margin:.3em 0;padding-inline-start:1.2em}</style>'
         newbtn = f'<div id="en-new" data-lang="{lang}"></div>'
         body = shell(lang, f'<h1>{esc(s["entities"])}</h1><p class="mut">{esc(s["intro"])}</p><p>{esc(s["count"].format(n=len(recs)))} · <a href="{BASE}/entities.json">{esc(s["export"])} (JSON)</a> · <a href="{BASE}/entities.jsonld">JSON-LD</a></p>{newbtn}<p><label><input type="checkbox" id="en-old"> {esc(OLD[lang][1])}</label></p><div role="group" aria-label="{esc(s["type"])}">{filt}</div><ul class="en-list">{"".join(card(e) for e in sorted(recs, key=lambda x: x["name"].lower()))}</ul>{js}'
                       f'<script>window.M365E={{api:"{api}",lang:"{lang}",base:"{BASE}",s:{json.dumps({k: s[k] for k in ("new",)}, ensure_ascii=False)}}}</script><script defer src="{BASE}/assets/entity.js"></script>')
@@ -346,10 +347,11 @@ def build(g, wiki_links, experts_by_ent, ep_find):
             if not e["desc"].get(lang if lang in ("en", "de") else "en"):
                 evl += f'<p class="mut"><a href="#en-edit">{T(lang, "This short description is not yet available in your language – feel free to add it.", "Diese Kurzbeschreibung gibt es noch nicht in deiner Sprache – gern ergänzen.")}</a></p>'
             gloss = f'<p class="mut"><a href="{BASE}/{pfx2(lang)}glossary/">{esc(s["glossary"])}</a></p>' if e["id"] in gl_ids else ""
-            eps = ep_find(e, lang)   # Folgen in der Sprache der Seite, sonst keine
+            eps = ep_find(e, lang)   # Folgen in der Sprache der Seite (englisch: Hauptshow), sonst keine
+            _u = lambda x: x.get("url") or url_of(x)
             ept = s.get("eps") or S["en"]["eps"]
             eb = (f'<h2>{esc(ept.format(t=e["name"]))}</h2>' + "".join(
-                f'<article class="en-ep"><h3><a href="{url_of(x)}">{esc(g["anchor_title"](x["e"]["title"]))}</a></h3><p class="mut">{esc(x.get("date", ""))}</p><p>{esc(g["ep_sum"](x))}</p></article>' for x in eps)) if eps else ""
+                f'<article class="en-ep"><h3><a href="{_u(x)}">{esc(g["anchor_title"](x["e"]["title"]))}</a></h3><p class="mut">{esc(x.get("date", ""))}</p><p>{esc(g["ep_sum"](x))}</p></article>' for x in eps)) if eps else ""
             tlab = TL[e["type"]][li]
             alt_h = T(lang, f"Title graphic: {e['name']} ({tlab})", f"Titelbild: {e['name']} ({tlab})")
             hero = MED.hero_svg(e, tlab, alt_h)
@@ -365,7 +367,7 @@ def build(g, wiki_links, experts_by_ent, ep_find):
                     _li.append(f'<li><a href="{_u}"><b>{esc(_n)}</b></a> <span class="mut">· {esc(_k)} · {esc(TL[ENTS[_id]["type"]][li])}</span>' + (f'<br>{esc(_dd)}' if _dd else "") + "</li>")
                     if len(_li) >= 14: break
                 relx = f'<h2>{T(lang, "Related topics in brief", "Verwandte Themen kurz erklärt")}</h2><ul class="en-relx">' + "".join(_li) + "</ul>" if _li else ""
-            tline = MED.timeline_svg([(x.get("date", ""), g["anchor_title"](x["e"]["title"]), url_of(x)) for x in eps], T(lang, f"Timeline of episodes about {e['name']}", f"Zeitleiste der Folgen zu {e['name']}"))
+            tline = MED.timeline_svg([(x.get("date", ""), g["anchor_title"](x["e"]["title"]), _u(x)) for x in eps], T(lang, f"Timeline of episodes about {e['name']}", f"Zeitleiste der Folgen zu {e['name']}"))
             ex = experts_by_ent.get(e["id"], [])
             ehtml = ""
             if ex:
@@ -392,17 +394,33 @@ def build(g, wiki_links, experts_by_ent, ep_find):
             data_attr = esc(json.dumps({k: e.get(k) for k in ("id", "name", "type", "aliases", "desc", "web", "docs", "wikipedia", "wikidata", "rel", "outdated", "replaced_by", "start", "end", "long", "logo", "version", "released", "license", "level", "exam", "valid_months")}, ensure_ascii=False))
             edit = f'<div id="en-edit" data-e="{data_attr}"></div>'
             _fq = [x for x in FAQ.get(e["id"], []) if x.get("lang", "en") == lang][:8]
-            faqbox = (f'<section class="en-faq"><h2>{T(lang, "Frequently asked questions", "Häufige Fragen")}</h2>' + "".join(f'<details><summary>{esc(x["q"])}</summary><p>{esc(x["a"])}</p></details>' for x in _fq) + "</section>") if _fq else ""
+            kpbox, _efq = "", []
+            if lang == "en" and eps:   # Kernpunkte und FAQ der Folgen, die den Namen nennen (nur englisch: keine gemischtsprachigen Seiten)
+                _nrx = [re.compile(r"(?<![\w-])" + re.escape(n) + r"(?![\w-])", re.I) for n in ent_names(e) if len(n) > 1]
+                _hit = lambda t: any(r.search(t) for r in _nrx)
+                _kps = [(k, x) for x in eps for k in (x.get("keypoints") or []) if _hit(k)][:5]
+                if _kps:
+                    kpbox = (f'<section class="en-kp"><h2>{esc("Key points about " + e["name"])}</h2><ul>'
+                             + "".join(f'<li>{esc(k)} <span class="mut">· <a href="{_u(x)}">{esc(g["anchor_title"](x["e"]["title"], 48))}</a></span></li>' for k, x in _kps) + "</ul></section>")
+                _seenq = {x["q"].strip().lower() for x in _fq}
+                for x in eps:
+                    for q in (x.get("faq") or []):
+                        if len(_efq) >= 5: break
+                        if q["q"].strip().lower() not in _seenq and (_hit(q["q"]) or _hit(q["a"])):
+                            _seenq.add(q["q"].strip().lower()); _efq.append({"q": q["q"], "a": q["a"], "src": x})
+            _allq = _fq + _efq
+            faqbox = (f'<section class="en-faq"><h2>{T(lang, "Frequently asked questions", "Häufige Fragen")}</h2>' + "".join(
+                f'<details><summary>{esc(x["q"])}</summary><p>{esc(x["a"])}' + (f' <span class="mut">· <a href="{_u(x["src"])}">{esc(T(lang, "From the episode", "Aus der Folge"))}: {esc(g["anchor_title"](x["src"]["e"]["title"], 48))}</a></span>' if x.get("src") else "") + "</p></details>" for x in _allq) + "</section>") if _allq else ""
             faqbox += f'<div id="en-qa" data-eid="{e["id"]}"></div>'
             wb = wiki_block(lang, e["id"], api, BASE, stat.get(e["id"]), wiki_links(lang))
             _arts = topic_posts(posts_by_topic, e["id"], lang)
             artbox, arturls = articles_block(BASE, e, lang, _arts, lambda a, b_: T(lang, a, b_))
             # echtes Aenderungsdatum: Entitaet selbst (Hash), Community-Bearbeitung, juengster Artikel, juengste Folge, juengste Frage
-            _mod = max([MOD.get(e["id"], TODAY), str(e.get("edited") or "")[:10], *[_iso(p.get("published")) for p in _arts[:1]], *[str(x.get("date", ""))[:10] for x in eps[:1]],
+            _mod = max([MOD.get(e["id"], TODAY), str(e.get("edited") or "")[:10], *[_iso(p.get("published")) for p in _arts[:1]], *[max((str(x.get("date", ""))[:10] for x in eps), default="")],
                         *[_iso(x.get("created")) for x in _fq[:1]]] + [""])
             _mod = _mod if len(_mod) == 10 and _mod <= TODAY else TODAY
             updline = f'<p class="mut en-upd">{esc(T(lang, "Last updated", "Zuletzt aktualisiert"))}: <time datetime="{_mod}">{_mod}</time></p>'
-            b = shell(lang, f'<nav aria-label="breadcrumb"><a href="{root}">{esc(s["entities"])}</a></nav><h1>{esc(e["name"])}</h1><p class="mut">{esc(TL[e["type"]][li])}</p><p style="font-size:1.1em">{esc(d)}</p>{oldbanner}{claim_html(e["id"], lang)}{hero}{longbox}{ft}{evl}{gloss}{artbox}'
+            b = shell(lang, f'<nav aria-label="breadcrumb"><a href="{root}">{esc(s["entities"])}</a></nav><h1>{esc(e["name"])}</h1><p class="mut">{esc(TL[e["type"]][li])}</p><p style="font-size:1.1em">{esc(d)}</p>{oldbanner}{claim_html(e["id"], lang)}{hero}{longbox}{ft}{evl}{gloss}{artbox}{kpbox}'
                           f'{faqbox}{relmap}{relx}<div class="en-rel">{rb}</div>{tline}{eb}{SU.block(lang, e["id"])}{wb}{("<h2>" + esc(s["experts"]) + "</h2>" + ehtml) if ehtml else ""}{updline}{edit}'
                           f'<script>window.M365E={{api:"{api}",lang:"{lang}",base:"{BASE}",s:{json.dumps({k: s[k] for k in ("edit_e",)}, ensure_ascii=False)}}}</script><script defer src="{BASE}/assets/entity.js"></script>')
             node = ent_ld(BASE, e, lang, gl_ids)
@@ -415,8 +433,14 @@ def build(g, wiki_links, experts_by_ent, ep_find):
             if arturls:
                 ld.append({"@context": "https://schema.org", "@type": "ItemList", "@id": u + "#articles", "name": T(lang, "Articles about {t}", "Artikel zu {t}").format(t=e["name"]), "numberOfItems": len(arturls),
                            "itemListElement": [{"@type": "ListItem", "position": i + 1, "url": x} for i, x in enumerate(arturls[:50])]})
-            if _fq:
-                ld.append({"@context": "https://schema.org", "@type": "FAQPage", "@id": u + "#faq", "mainEntity": [{"@type": "Question", "name": x["q"], "acceptedAnswer": {"@type": "Answer", "text": x["a"]}} for x in _fq]})
+            if _allq:
+                ld.append({"@context": "https://schema.org", "@type": "FAQPage", "@id": u + "#faq", "mainEntity": [{"@type": "Question", "name": x["q"], "acceptedAnswer": {"@type": "Answer", "text": x["a"]}} for x in _allq]})
+            if eps:
+                ld.append({"@context": "https://schema.org", "@type": "ItemList", "@id": u + "#episodes", "name": ept.format(t=e["name"]), "numberOfItems": len(eps),
+                           "itemListElement": [{"@type": "ListItem", "position": i + 1, "url": _u(x), "name": x["e"]["title"]} for i, x in enumerate(eps)]})
+                _epids = [{"@id": x["url"] + "#episode"} for x in eps if x.get("url")]   # Folgenseiten der Hauptshow definieren #episode
+                if _epids:
+                    node["subjectOf"] = (node.get("subjectOf") or []) + _epids
             # hreflang en/de nur bei echtem deutschem Text (Gast-Entitaeten haben de == en: dann ist /de/ ein Duplikat und bleibt ohne Index)
             _has_de = bool(e["desc"].get("de")) and e["desc"].get("de") != e["desc"].get("en") or bool((e.get("long") or {}).get("de"))
             _alts = {"en": eurl(BASE, "en", e["id"]), "de": eurl(BASE, "de", e["id"])} if _has_de else None
