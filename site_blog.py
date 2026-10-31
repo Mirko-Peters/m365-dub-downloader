@@ -126,8 +126,9 @@ def build(g, posts, people, api):
             return '<ul class="bl-list">' + "".join(f'<li><a href="{croot}u/{p["handle"]}/blog/{p["slug"]}/"><b>{esc(p["title"])}</b></a> <span class="mut">· {esc(pb[p["handle"]]["name"])} · {iso(p["published"])}</span>'
                                                    f'{("<br>" + esc(p["summary"])) if p.get("summary") else ""}</li>' for p in items) + "</ul>"
         is_by = lambda p, h: p["handle"] == h or any(c.get("handle") == h for c in (p.get("coauthors") or []))   # Co-Autoren: der Beitrag steht auch in ihrer Blogliste
+        _pub = lambda p: (p.get("tr_index") if p.get("tr_of") else (p.get("html") or p.get("votes", 0) >= INDEX_VOTES))   # zaehlt fuer den Index der Verzeichnisse: freigegebene Sprachfassungen, fruehere Beitraege, Beitraege mit Stimmen
         for h in sorted({p["handle"] for p in mine} | {c["handle"] for p in mine for c in (p.get("coauthors") or []) if c.get("handle") in pb}):
-            noidx = not any(is_by(p, h) and (p.get("html") or p.get("votes", 0) >= INDEX_VOTES) for p in mine)
+            noidx = not any(is_by(p, h) and _pub(p) for p in mine)
             it = sorted([p for p in mine if is_by(p, h)], key=lambda x: -x["published"]); ru = f"{croot}u/{h}/blog/"
             nm = pb[h]["name"]
             b = shell(lang, f'{CSS}<h1>{esc(title_blog)} – {esc(nm)}</h1><p><a href="{croot}u/{h}/">{esc(nm)}</a></p>{lst(it)}')
@@ -135,7 +136,7 @@ def build(g, posts, people, api):
             if not noidx:
                 sitemap.append((ru, TODAY, None))
             write(f"{pfx2(lang)}community/u/{h}/blog/feed.xml", rss(f"{title_blog} – {nm}", ru, it, croot, pb, lang))
-        noidx = not any(p.get("html") or p.get("votes", 0) >= INDEX_VOTES for p in mine)
+        noidx = not any(_pub(p) for p in mine)
         it = sorted(mine, key=lambda x: -x["published"]); ru = f"{croot}blog/"
         intro = T(lang, "Blog posts from members of the Microsoft community.", "Blogbeiträge von Mitgliedern der Microsoft-Community.")
         b = shell(lang, f'{CSS}<h1>{esc(title_blog)}</h1><p class="mut">{esc(intro)}</p>{lst(it)}')
