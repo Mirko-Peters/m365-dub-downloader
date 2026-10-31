@@ -3,7 +3,7 @@
 import { entityMap } from "./entities.js";
 
 const EDGE = { instance_of: 0.9, part_of: 0.8, requires: 0.8, covers: 0.7, related_to: 0.6, similar_to: 0.5, developed_by: 0.4, created_by: 0.4 };
-const LEVEL = { 1: 0.4, 2: 0.7, 3: 1 };
+const LEVEL = { 1: 0.4, 2: 0.7, 3: 1, 4: 1.2, 5: 1.4, 6: 1.6 };   // Stufen 4-6: Evangelist, Master, Master Evangelist (levels.js)
 
 // Entfernung und Gewicht aller Entitaeten innerhalb von maxHops Schritten (Breitensuche; das beste Gewicht je Entitaet zaehlt)
 export function neighbourhood(map, eid, maxHops = 2) {

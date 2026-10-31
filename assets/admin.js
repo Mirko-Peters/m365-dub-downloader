@@ -25,6 +25,9 @@
       p.appendChild(h("h2", { text: "Auf einen Blick" }));
       p.appendChild(h("div", { class: "adm-grid" }, [tile("Mitglieder", o.db.users), tile("Öffentliche Profile", o.db.profiles), tile("Blog-Beiträge live", o.db.blog_live), tile("Entitäten in der Datenbank", o.db.entities_db, "von " + (o.db.entities_file == null ? "?" : o.db.entities_file) + " in der Datei")]));
       var ops = h("div", {}); p.appendChild(h("h2", { text: "Betrieb" })); p.appendChild(ops); ops.appendChild(h("p", { class: "mut", text: "Lädt …" }));
+      var lvBtn = h("button", { type: "button", class: "btn", text: "Expertise-Stufen jetzt neu berechnen" }), lvMsg = h("span", { class: "mut", style: "margin-left:.6em" });
+      lvBtn.onclick = function () { lvBtn.disabled = true; lvMsg.textContent = "…"; api("/api/admin/expertise-sync", { method: "POST" }).then(function (r) { lvBtn.disabled = false; lvMsg.textContent = r.s === 200 ? ("✓ " + (r.j.evidence || 0) + " Belege, " + (r.j.pairs || 0) + " Themen-Paare, " + (r.j.changed || 0) + " geändert") : "Fehler " + r.s; }); };
+      p.appendChild(h("p", {}, [lvBtn, lvMsg]));
       api("/api/admin/panel/ops").then(function (r) { ops.textContent = ""; if (r.s !== 200) { ops.appendChild(h("p", { class: "adm-msg bad", text: "Betriebsdaten nicht abrufbar" })); return; }
         var fails = {}; (r.j.fails || []).forEach(function (f) { fails[f.name] = f.n; });
         var tb = h("table", { class: "adm-tbl adm-ops" }, [h("thead", {}, [h("tr", {}, [h("th", { text: "Aufgabe" }), h("th", { text: "Letzter Lauf" }), h("th", { text: "Status" }), h("th", { text: "Fehler 24 h" }), h("th", { text: "Info" })])])]);

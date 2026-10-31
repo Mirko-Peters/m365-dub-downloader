@@ -34,3 +34,8 @@ Ziel: MCP-Clients (Claude, ChatGPT, Cursor) verbinden sich mit einem Klick, stat
 ## Datenmodell Übersetzungen (Mirko, 31.10.): keine Dopplung je Sprache
 Ein Inhalt existiert genau einmal (Entität, Folge, Beitrag) in seiner Originalsprache; jede Sprachfassung ist ein Eintrag „ist Übersetzung von“ mit nur den übersetzten Feldern:
 `translation(kind, item_id, lang, field, text, src, quality, created)` – kind = entity | episode | blog | notes, field = title | summary | body | desc | long | keypoints | faq. Seiten entstehen aus Original plus Überlagerung der Sprachfassung; fehlt ein Feld, bleibt das Original sichtbar und markiert. Das ersetzt `item_tr`, `ent_tr`, `data/blog_i18n`, `data/podpage_i18n` (Paket 17) und spart die Mehrfachspeicherung ganzer Datensätze je Sprache. Ausspielung aus der Datenbank bzw. als fertige Seite im R2-Bucket, GitHub Pages trägt nur Englisch/Deutsch.
+
+## Expertise-Stufen (Paket 22, 1.11.2026)
+- Belege kommen aus Blog, Sessions, Podcast, Video, Bibliothek, Wiki, Entitäten, geprüften Zertifikaten, Antworten und Bestätigungen (`worker/src/levels.js`). Noch nicht als Beleg: Gastauftritte in der Hauptshow (Folgen-Register aus Paket 16/17, `episode_guest` ↔ beanspruchte Personen-Entität) – nach dem Merge von PR 69 als Beleg-Art `show` (Gewicht 4) ergänzen.
+- Firmenprofile tragen ihre Themen weiterhin selbst ein; bei Bedarf aus den Belegen der Team-Mitglieder ableiten.
+- Seitengröße (Messung 1.11.): je Seite stecken im Schnitt 4–6 KB Inline-CSS (`<style>` der Lern-/Wiki-/Mitglieder-Blöcke) und 4 KB Menü; Inline-CSS ins gehashte Stylesheet verschieben spart rund 150 MB über alle Seiten.

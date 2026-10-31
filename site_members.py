@@ -12,12 +12,16 @@ PROG_FULL = {"mvp": "Microsoft Most Valuable Professional (MVP)", "mct": "Micros
 PROG = {"mvp": ("Microsoft MVP", "Microsoft MVP"), "mct": ("Microsoft Certified Trainer (MCT)", "Microsoft Certified Trainer (MCT)"), "rd": ("Microsoft Regional Director", "Microsoft Regional Director"),
         "msa": ("Microsoft Student Ambassador", "Microsoft Student Ambassador"), "ms_employee": ("Microsoft employee", "Microsoft-Mitarbeiter:in"), "partner": ("Microsoft Partner", "Microsoft Partner")}
 KIND = {"linkedin": "LinkedIn", "github": "GitHub", "youtube": "YouTube", "x": "X", "mastodon": "Mastodon", "bluesky": "Bluesky", "twitch": "Twitch", "spotify": "Spotify", "apple": "Apple Podcasts", "amazon": "Amazon Music / Audible", "deezer": "Deezer", "instagram": "Instagram", "tiktok": "TikTok", "facebook": "Facebook", "blog": "Blog", "podcast": "Podcast", "newsletter": "Newsletter", "website": "Website", "other": "Link"}
-LV = {1: ("learning", "lernt"), 2: ("practitioner", "Praxis"), 3: ("expert", "Experte")}
+LV = {1: ("learning", "lernt"), 2: ("practitioner", "Praxis"), 3: ("expert", "Experte"), 4: ("Evangelist", "Evangelist"), 5: ("Master", "Master"), 6: ("Master Evangelist", "Master Evangelist")}   # gesetzt vom System (worker/src/levels.js)
+EVK = {"en": dict(blog="posts", coauthor="co-author", session="sessions", podcast="episodes", video="videos", guest="guest", library="library", listing="guest exchange", wiki="wiki", entity="entity", cert="certifications", answer="answers", self="former self-declaration"),
+       "de": dict(blog="Beiträge", coauthor="Co-Autor", session="Sessions", podcast="Folgen", video="Videos", guest="Gast", library="Bibliothek", listing="Gäste-Börse", wiki="Wiki", entity="Entität", cert="Zertifikate", answer="Antworten", self="frühere Selbstangabe")}
 S = {"en": dict(members="Members", companies="Companies", mintro="Experts of the Microsoft community – with programs such as MVP and MCT, certifications, topics and channels. Profiles are opt-in.", cintro="Companies in the Microsoft ecosystem and their teams.",
-                about="About", expertise="Topics and expertise", certs="Certifications", channels="Channels and links", contrib="Contributions", latest="Latest from this creator", team="Team", verified="confirmed by the editorial team", selfdecl="self-declared", endorsed="confirmed by {n} members",
+                about="About", expertise="Topics and expertise", certs="Certifications", channels="Channels and links", contrib="Contributions", latest="Latest from this creator", team="Team", verified="confirmed by the editorial team", selfdecl="self-declared", endorsed="confirmed by {n} members", evidence="evidence: {e}", points="{n} points",
+                levels="Levels are set by the system from evidence: learning, practitioner (3 points), expert (10 points or editorial confirmation), evangelist (expert + 100 endorsements by members), master (1000 endorsements), master evangelist (1000 endorsements by evangelists of the same topic). Evidence: published posts, confirmed sessions, episodes, videos, library items, wiki and entity edits, verified certifications, accepted answers.",
                 none="No public profiles yet.", join="Create your profile", filter="Filter", all="All", feed="Latest from the creators", feedtop="Most upvoted (30 days)", company="Company", country="Country", wiki="wiki edit", entity="entity edit", prog="Programs", size="Employees", site="Website", since="since"),
      "de": dict(members="Mitglieder", companies="Firmen", mintro="Expert:innen der Microsoft-Community – mit Programmen wie MVP und MCT, Zertifizierungen, Themen und Kanälen. Profile sind freiwillig.", cintro="Firmen im Microsoft-Ökosystem und ihre Teams.",
-                about="Über", expertise="Themen und Expertise", certs="Zertifizierungen", channels="Kanäle und Links", contrib="Beiträge", latest="Das Neueste von diesem Creator", team="Team", verified="vom Redaktionsteam bestätigt", selfdecl="Selbstangabe", endorsed="von {n} Mitgliedern bestätigt",
+                about="Über", expertise="Themen und Expertise", certs="Zertifizierungen", channels="Kanäle und Links", contrib="Beiträge", latest="Das Neueste von diesem Creator", team="Team", verified="vom Redaktionsteam bestätigt", selfdecl="Selbstangabe", endorsed="von {n} Mitgliedern bestätigt", evidence="belegt durch {e}", points="{n} Punkte",
+                levels="Die Stufen setzt das System aus Belegen: Lernt, Praxis (3 Punkte), Experte (10 Punkte oder Redaktion), Evangelist (Experte + 100 Bestätigungen von Mitgliedern), Master (1000 Bestätigungen), Master Evangelist (1000 Bestätigungen von Evangelisten im selben Thema). Belege: veröffentlichte Beiträge, bestätigte Sessions, Folgen, Videos, Bibliotheks-Einträge, Wiki- und Entitäts-Änderungen, geprüfte Zertifikate, angenommene Antworten.",
                 none="Noch keine öffentlichen Profile.", join="Eigenes Profil anlegen", filter="Filter", all="Alle", feed="Das Neueste der Creator", feedtop="Meist gelobt (30 Tage)", company="Firma", country="Land", wiki="Wiki-Änderung", entity="Entitäts-Änderung", prog="Programme", size="Mitarbeitende", site="Webseite", since="seit")}
 SIZE_N = {"1": (1, 1), "2-10": (2, 10), "11-50": (11, 50), "51-200": (51, 200), "201-1000": (201, 1000), "1000+": (1001, None)}
 
@@ -195,7 +199,7 @@ def build(g, people, orgs, extra=None):
     pb = {p["handle"]: p for p in people}; ob = {o["handle"]: o for o in orgs}
     css = ('<style>.mb-card{list-style:none;padding:.7em 0;border-bottom:1px solid var(--bd)}.mb-list{padding:0}.mb-tag{display:inline-block;border:1px solid var(--bd);border-radius:2em;padding:.1em .7em;margin:.15em .3em .15em 0;font-size:.88rem;background:var(--card)}'
            '.mb-tag.ok{border-color:var(--ac)}.mb-f{font:inherit;cursor:pointer;border:1px solid var(--bd);border-radius:2em;padding:.35em .9em;margin:.2em .3em .2em 0;background:var(--card);color:var(--fg);min-height:2.5rem}.mb-f[aria-pressed=true]{background:var(--ac);color:var(--onac);border-color:var(--ac)}'
-           '.mb-card[hidden]{display:none}.mb-facts{border-collapse:collapse}.mb-facts th{text-align:start;padding:.3em .8em .3em 0;vertical-align:top}.pf-item{display:flex;gap:.8em;align-items:flex-start;padding:.5em 0;border-bottom:1px solid var(--bd);list-style:none}.pf-item .vt{font:inherit;min-width:3.2rem;min-height:2.5rem;border:1px solid var(--bd);border-radius:.5em;background:var(--card);color:var(--fg);cursor:pointer}.pf-item .vt[aria-pressed=true]{background:var(--ac);color:var(--onac);border-color:var(--ac)}.pf-list{padding:0}</style>')
+           '.pf-lvl{font-weight:600}.pf-lvl4,.pf-lvl5,.pf-lvl6{color:var(--ac)}.pf-lvl5,.pf-lvl6{text-decoration:underline dotted}.pf-levels{font-size:.85rem;margin-top:.4em}.mb-card[hidden]{display:none}.mb-facts{border-collapse:collapse}.mb-facts th{text-align:start;padding:.3em .8em .3em 0;vertical-align:top}.pf-item{display:flex;gap:.8em;align-items:flex-start;padding:.5em 0;border-bottom:1px solid var(--bd);list-style:none}.pf-item .vt{font:inherit;min-width:3.2rem;min-height:2.5rem;border:1px solid var(--bd);border-radius:.5em;background:var(--card);color:var(--fg);cursor:pointer}.pf-item .vt[aria-pressed=true]{background:var(--ac);color:var(--onac);border-color:var(--ac)}.pf-list{padding:0}</style>')
     live_js = f'<script>window.M365P={{api:"{api}",base:"{BASE}"}}</script><script defer src="{BASE}/assets/pfpub.js"></script>'
 
     def rec_html(p, lang, li, pb):
@@ -209,22 +213,27 @@ def build(g, people, orgs, extra=None):
         return "".join(f'<span class="mb-tag{" ok" if p.get("verified") else ""}">{esc(PROG[p["p"]][li])}{" ✔" if p.get("verified") else ""}</span>' for p in x.get("programs", []))
 
     def exp_ul(x, lang, li, s, mine=None):
-        out = []
+        """Themen mit Stufe (1-6, vom System gesetzt), Punkten, Belegen und Bestaetigungen; Firmen: Selbstangabe wie bisher."""
+        out = []; lk = "de" if lang == "de" else "en"
         for e in x.get("expertise", []):
             if e["e"] not in ENTS:
                 continue
             en = ENTS[e["e"]]; note = []
-            if e.get("via"):
-                note.append(T(lang, "confirmed by session", "bestätigt durch Session") if e["via"] == "session" else T(lang, "shown by own posts", "belegt durch eigene Beiträge") if e["via"] == "post" else T(lang, "confirmed by certification", "bestätigt durch Zertifikat"))
-            elif e.get("verified"):
-                note.append(s["verified"])
-            elif e.get("endorsed"):
-                note.append(s["endorsed"].format(n=e["endorsed"]))
+            ev = e.get("ev") or {}
+            if x.get("type") == "o":
+                note.append(s["verified"] if e.get("verified") else s["selfdecl"])
             else:
-                note.append(s["selfdecl"])
-            out.append(f'<li><a href="{eurl(BASE, lang, e["e"])}">{esc(en["name"])}</a> <span class="mut">· {esc(LV[e.get("level", 2)][li])} · {esc(", ".join(note))}</span>'
+                note.append(s["points"].format(n=f"{e.get('score', 0):g}"))
+                if ev:
+                    note.append(s["evidence"].format(e=", ".join(f"{n} {EVK[lk].get(k, k)}" for k, n in ev.items() if n)))
+                if e.get("verified"):
+                    note.append(s["verified"])
+                if e.get("endorsed"):
+                    note.append(s["endorsed"].format(n=e["endorsed"]))
+            out.append(f'<li><a href="{eurl(BASE, lang, e["e"])}">{esc(en["name"])}</a> <span class="mut">· <b class="pf-lvl pf-lvl{int(e.get("level") or 1)}">{esc(LV.get(e.get("level") or 1, LV[1])[li])}</b> · {esc(" · ".join(note))}</span>'
                        f'<span class="pf-endorse" data-h="{esc(x["handle"])}" data-e="{e["e"]}"></span></li>')
-        return "<ul>" + "".join(out) + "</ul>" if out else ""
+        legend = f'<p class="mut pf-levels">{esc(s["levels"])}</p>' if out and x.get("type") != "o" else ""
+        return "<ul>" + "".join(out) + "</ul>" + legend if out else ""
 
     def items_ul(x):
         its = x.get("items", [])
