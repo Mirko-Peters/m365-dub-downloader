@@ -110,8 +110,6 @@ def person_entity(handle):
 def person_ld(BASE, p, orgs_by_handle):
     pid = f"{purl(BASE, 'en', 'u', p['handle'])}#person"
     n = {"@type": "Person", "@id": pid, "name": p["name"], "url": purl(BASE, "en", "u", p["handle"]), "mainEntityOfPage": {"@id": purl(BASE, "en", "u", p["handle"]) + "#profile"}}
-    if person_entity(p["handle"]):
-        n["sameAs"] = [f"{BASE}/entity/{person_entity(p['handle'])}/#entity"]   # dieselbe Person in der Entitaetsdatenbank
     if img_url("u", p):
         n["image"] = img_url("u", p)
     if p.get("recs"):
@@ -158,10 +156,10 @@ def person_ld(BASE, p, orgs_by_handle):
     if mem:
         n["memberOf"] = mem
     same = [c["url"] for c in p.get("channels", [])] + [x["url"] for x in p.get("programs", []) if x.get("verified") and x.get("url")]
-    if CLAIMED.get(p["handle"]):
-        same.append(eurl(BASE, "en", CLAIMED[p["handle"]]))
+    if person_entity(p["handle"]):   # dieselbe Person in der Entitaetsdatenbank: Seite und Knoten (eine Identitaet, Profil haengt daran)
+        same += [eurl(BASE, "en", person_entity(p["handle"])), f"{BASE}/entity/{person_entity(p['handle'])}/#entity"]
     if same:
-        n["sameAs"] = same
+        n["sameAs"] = list(dict.fromkeys(same))
     cnt = (p.get("counts") or {}); tot = cnt.get("wiki", 0) + cnt.get("entity", 0)
     if tot:
         n["agentInteractionStatistic"] = {"@type": "InteractionCounter", "interactionType": "https://schema.org/WriteAction", "userInteractionCount": tot}
