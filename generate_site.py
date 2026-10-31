@@ -16,6 +16,8 @@ import site_mcp as MCPS
 import site_seo as SEOR
 import site_live as LIVE
 import site_notes as SNT
+import site_shownotes as SNS   # T26
+SNALL = SNS.load_all()   # Vollfassungen der Shownotes je Spreaker-Folge (shownotes/site/<episode_id>.md)
 import site_ads as ADS
 import site_media as MED
 import site_sidebar as SBR
@@ -973,6 +975,11 @@ def build():
         yt = f"https://youtu.be/{vid}"
         tr = e.get("tr") or ""
         _nkp, _nnotes, _nfaq, _nld = SNT.blocks(SNT.get(l, ep_id=it["eid"]), l, edited_only=True)   # nur wenn im Editor bearbeitet: Kernpunkte, Show Notes, FAQ als eigene Bloecke
+        _snx = SNALL.get(str(it["eid"]))   # T26: Vollfassung der Shownotes fuer die Dub-Folge (shownotes/site/<spreaker_episode_id>.md)
+        if _snx:
+            _snh, _snld, _snfaq = SNS.render(_snx, l, LRN.ENTS, BASE)
+            _nnotes = _snh + f"<style>{SNS.CSS}</style>"; _nld = [x for x in _nld if x.get("@type") != "FAQPage"] + _snld
+            if _snfaq: _nfaq = ""
         notes_block = _nkp + _nnotes + _nfaq + (SNT.CSS if (_nkp or _nnotes or _nfaq) else "")
         _el = {k: u for k, u in elinks.get(f"{vid}:{l}", {}).items() if u}   # zugeordnete Plattform-Folgenlinks -> sameAs
         more = related(it, by_lang[l], tagsets[l], catsets[l])
