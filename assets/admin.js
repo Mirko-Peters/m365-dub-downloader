@@ -6,7 +6,10 @@
   function api(p, o) { o = o || {}; o.credentials = "include"; o.headers = Object.assign({ "x-requested-with": "m365" }, o.headers || {}); if (o.body && typeof o.body !== "string") { o.body = JSON.stringify(o.body); o.headers["content-type"] = "application/json"; } return fetch(API + p, o).then(function (r) { return r.json().catch(function () { return {}; }).then(function (j) { return { s: r.status, j: j }; }); }); }
   var TYPES = { product: "Produkt", platform: "Plattform", concept: "Konzept", org: "Firma", person: "Person", cert: "Zertifikat", event: "Event", media: "Medium", category: "Kategorie" };
   var ERR = { bad_name: "Name zu kurz", bad_type: "Typ fehlt", too_short: "Kurzbeschreibung fehlt (mindestens 20 Zeichen in Englisch oder Deutsch)", too_long: "Kurzbeschreibung zu lang (höchstens 300 Zeichen)", bad_url: "Eine Adresse ist ungültig (nur https, Docs nur microsoft.com, azure.com oder github.com)", bad_qid: "Wikidata-ID muss wie Q12345 aussehen", bad_relation: "Eine Beziehung zeigt auf eine unbekannte Entität", unchanged: "Nichts geändert", rate_limit: "Zu viele Änderungen in kurzer Zeit, bitte später", login: "Bitte anmelden", forbidden: "Nur für Admins" };
-  var tabs = [["ov", "Übersicht"], ["ent", "Entitäten"], ["db", "Datenbank"], ["sw", "Schalter"]], panes = {}, bar = h("div", { class: "adm-tabs", role: "tablist" });
+  var tabs = [["ov", "Übersicht"], ["tr", "Übersetzungen"], ["ent", "Entitäten"], ["db", "Datenbank"], ["sw", "Schalter"]], panes = {}, bar = h("div", { class: "adm-tabs", role: "tablist" });
+  var LANGN = { de: "Deutsch", fr: "Französisch", es: "Spanisch", it: "Italienisch", nl: "Niederländisch", pt: "Portugiesisch", pl: "Polnisch", id: "Indonesisch", ru: "Russisch", uk: "Ukrainisch", ar: "Arabisch", he: "Hebräisch", ja: "Japanisch", ko: "Koreanisch", en: "Englisch" };
+  var KINDN = { lblog: "Blog (früher)", blog: "Blog (Community)", podcast: "Podcast", video: "Video", notes: "Show Notes", entity: "Entität" };
+  function ago(t) { if (!t) return "–"; var d = Math.round(Date.now() / 1000 - t); return d < 90 ? d + " s" : d < 5400 ? Math.round(d / 60) + " min" : d < 172800 ? Math.round(d / 3600) + " h" : Math.round(d / 86400) + " d"; }
   function show(k) { tabs.forEach(function (t) { panes[t[0]].hidden = t[0] !== k; bar.querySelector("[data-k=" + t[0] + "]").setAttribute("aria-selected", t[0] === k ? "true" : "false"); }); try { location.hash = k; } catch (e) {} if (LOAD[k]) LOAD[k](); }
   tabs.forEach(function (t) { bar.appendChild(h("button", { type: "button", role: "tab", "data-k": t[0], text: t[1], onclick: function () { show(t[0]); } })); panes[t[0]] = h("section", { class: "adm-pane", hidden: "" }); });
   function tile(label, v, hint) { return h("div", { class: "adm-tile" + (v ? " on" : "") }, [h("b", { text: v == null ? "–" : String(v) }), h("span", { text: label }), hint ? h("small", { text: hint }) : null]); }
@@ -21,7 +24,18 @@
       p.appendChild(h("p", { class: "mut" }, ["Freigeben und ablehnen geht im Admin-Bereich der ", h("a", { href: BASE + "/community/", text: "Community" }), "."]));
       p.appendChild(h("h2", { text: "Auf einen Blick" }));
       p.appendChild(h("div", { class: "adm-grid" }, [tile("Mitglieder", o.db.users), tile("Öffentliche Profile", o.db.profiles), tile("Blog-Beiträge live", o.db.blog_live), tile("Entitäten in der Datenbank", o.db.entities_db, "von " + (o.db.entities_file == null ? "?" : o.db.entities_file) + " in der Datei")]));
+      var ops = h("div", {}); p.appendChild(h("h2", { text: "Betrieb" })); p.appendChild(ops); ops.appendChild(h("p", { class: "mut", text: "Lädt …" }));
+      api("/api/admin/panel/ops").then(function (r) { ops.textContent = ""; if (r.s !== 200) { ops.appendChild(h("p", { class: "adm-msg bad", text: "Betriebsdaten nicht abrufbar" })); return; }
+        var fails = {}; (r.j.fails || []).forEach(function (f) { fails[f.name] = f.n; });
+        var tb = h("table", { class: "adm-tbl adm-ops" }, [h("thead", {}, [h("tr", {}, [h("th", { text: "Aufgabe" }), h("th", { text: "Letzter Lauf" }), h("th", { text: "Status" }), h("th", { text: "Fehler 24 h" }), h("th", { text: "Info" })])])]);
+        var tbody = h("tbody"); (r.j.runs || []).forEach(function (x) { tbody.appendChild(h("tr", {}, [h("td", { text: x.name }), h("td", { text: "vor " + ago(x.started) }), h("td", { text: !x.finished ? "läuft" : x.ok ? "ok" : "Fehler" }), h("td", { text: String(fails[x.name] || 0) }), h("td", { text: (x.info || "").slice(0, 90) })])); });
+        if (!(r.j.runs || []).length) tbody.appendChild(h("tr", {}, [h("td", { colspan: "5", class: "mut", text: "Noch keine Läufe protokolliert (ab dem nächsten Cron-Lauf nach dem Deploy)." })]));
+        tb.appendChild(tbody); ops.appendChild(tb);
+        ops.appendChild(h("h3", { text: "Protokoll der Verwaltung" }));
+        var al = h("ul", { class: "adm-list" }); (r.j.audit || []).slice(0, 30).forEach(function (a) { al.appendChild(h("li", {}, [h("span", { class: "mut", text: "vor " + ago(a.created) + " · " }), h("b", { text: a.name || ("#" + a.user_id) }), " " + a.action + " " + (a.target || "") + (a.detail ? " · " + a.detail.slice(0, 80) : "")])); });
+        if (!(r.j.audit || []).length) al.appendChild(h("li", { class: "mut", text: "Noch keine Einträge." })); ops.appendChild(al); });
     }); },
+    tr: function () { if (panes.tr.firstChild) return; translations(); },
     db: function () { overview(function (o) { var p = panes.db, d = o.db, m = h("p", { class: "adm-msg" }); p.textContent = "";
       p.appendChild(h("h2", { text: "Umzug in die Datenbank" }));
       var miss = d.entities_file == null ? null : Math.max(0, d.entities_file - (d.entities_db || 0));
@@ -33,14 +47,49 @@
     sw: function () { overview(function (o) { var p = panes.sw, f = o.flags, m = h("p", { class: "adm-msg" }); p.textContent = "";
       p.appendChild(h("h2", { text: "Automatische Übersetzung (Haiku)" }));
       p.appendChild(h("p", { class: "mut", text: f.key ? "API-Schlüssel ist hinterlegt. Heute verbraucht: " + f.atr_today + " Übersetzungen für Inhalte, " + f.atr_ent_today + " für Entitäten." : "Kein API-Schlüssel hinterlegt: Die automatische Übersetzung läuft nicht." }));
-      function sw(k, label, on) { var b = h("button", { type: "button", class: "btn" + (on ? " main" : ""), "aria-pressed": on ? "true" : "false", text: label + ": " + (on ? "an" : "aus"), onclick: function () { api("/api/admin/panel/flag", { method: "POST", body: { k: k, v: on ? "1" : "0" } }).then(function (r) { if (r.s === 200) LOAD.sw(); else msg(m, ERR[r.j.error] || "Fehler", true); }); } }); return b; }
-      p.appendChild(h("p", {}, [sw("atr_off", "Neue Inhalte nach 24 Stunden übersetzen", f.atr_off !== "1"), " ", sw("tr_off", "Entitäten Englisch/Deutsch ergänzen", f.tr_off !== "1")]));
+      function sw(k, label, on) { var b = h("button", { type: "button", class: "btn" + (on ? " main" : ""), "aria-pressed": on ? "true" : "false", text: label + ": " + (on ? "an" : "aus"), onclick: function () { var nv = /_on$/.test(k) ? (on ? "0" : "1") : (on ? "1" : "0"); api("/api/admin/panel/flag", { method: "POST", body: { k: k, v: nv } }).then(function (r) { if (r.s === 200) LOAD.sw(); else msg(m, ERR[r.j.error] || "Fehler", true); }); } }); return b; }
+      p.appendChild(h("p", {}, [sw("atr_off", "Neue Inhalte nach 24 Stunden übersetzen", f.atr_off !== "1"), " ", sw("tr_off", "Entitäten Englisch/Deutsch ergänzen", f.tr_off !== "1"), " ", sw("tr_queue_on", "Vormerkungen mit Haiku abarbeiten", f.tr_queue_on === "1")]));
+      p.appendChild(h("p", { class: "mut", text: "Vormerkungen: Community-Inhalte und Entitäten übersetzt der Worker alle 30 Minuten (bis 6 je Lauf, Tageslimit 150), sobald der Schalter an ist. Frühere Blogbeiträge und Show Notes laufen über die GitHub-Workflows translate-blog (Eingabe queue=true) und translate-notes." }));
       var cap = h("input", { type: "number", min: "0", max: "2000", id: "adm-cap", value: f.atr_ent_cap || "300" });
       p.appendChild(h("p", {}, [h("label", { for: "adm-cap", text: "Tageslimit Entitäten-Übersetzungen " }), cap, " ", h("button", { type: "button", class: "btn", text: "Speichern", onclick: function () { api("/api/admin/panel/flag", { method: "POST", body: { k: "atr_ent_cap", v: String(Math.max(0, Math.min(2000, parseInt(cap.value, 10) || 0))) } }).then(function (r) { msg(m, r.s === 200 ? "Gespeichert." : (ERR[r.j.error] || "Fehler"), r.s !== 200); }); } })]));
       p.appendChild(m);
     }); },
     ent: function () { if (panes.ent.firstChild) return; entities(); }
   };
+
+  // ---------- Uebersetzungen: Uebersicht je Sprache, Filter, Vormerken ----------
+  function translations() {
+    var p = panes.tr, m = h("p", { class: "adm-msg" }), sum = h("div", { class: "adm-sum" }), kf = h("select", { "aria-label": "Art" }), lf = h("select", { "aria-label": "Sprache" }), sf = h("select", { "aria-label": "Status" }), q = h("input", { type: "search", placeholder: "Suchen im Titel", "aria-label": "Suchen" });
+    var tbl = h("table", { class: "adm-tbl" }), tbody = h("tbody"), head = h("thead"), bulk = h("button", { type: "button", class: "btn", text: "Alle gefilterten vormerken" }), unbulk = h("button", { type: "button", class: "btn", text: "Vormerkung zurücknehmen" }), cnt = h("span", { class: "mut" });
+    var D = null, Q = {};
+    kf.appendChild(h("option", { value: "", text: "Alle Arten" })); Object.keys(KINDN).forEach(function (k) { kf.appendChild(h("option", { value: k, text: KINDN[k] })); });
+    [["", "Alle Sprachen"]].concat(Object.keys(LANGN).filter(function (l) { return l !== "en"; }).map(function (l) { return [l, LANGN[l]]; })).forEach(function (x) { lf.appendChild(h("option", { value: x[0], text: x[1] })); });
+    [["", "Alle"], ["missing", "fehlt"], ["done", "vorhanden"], ["queued", "vorgemerkt"], ["failed", "fehlgeschlagen"], ["none", "komplett ohne Übersetzung"]].forEach(function (x) { sf.appendChild(h("option", { value: x[0], text: x[1] })); });
+    p.append(h("h2", { text: "Übersetzungen nach Sprache" }), h("p", { class: "mut", text: "Grün: vorhanden. Grau: fehlt, anklicken zum Vormerken. Blau: vorgemerkt (nochmal anklicken nimmt es zurück). Abgearbeitet wird, sobald unter Schalter „Vormerkungen mit Haiku abarbeiten“ an ist." }), sum, h("div", { class: "adm-row" }, [q, kf, lf, sf]), h("p", {}, [bulk, " ", unbulk, " ", cnt]), m, tbl);
+    tbl.append(head, tbody); tbody.appendChild(h("tr", {}, [h("td", { class: "mut", text: "Lädt …" })]));
+    function load() { api("/api/admin/panel/translations").then(function (r) { if (r.s !== 200) { msg(m, ERR[(r.j || {}).error] || "Übersicht nicht abrufbar", true); return; } D = r.j; Q = {}; (D.queue || []).forEach(function (x) { Q[x.kind + "|" + x.item_id + "|" + x.lang] = x; }); draw(); }); }
+    function state(r, l) { if (r.lang === l) return "src"; if (r.langs.indexOf(l) > -1) return "done"; var x = Q[r.k + "|" + r.id + "|" + l]; return x ? (x.status === "failed" ? "failed" : x.status === "done" ? "done" : "queued") : "missing"; }
+    function filtered() { var k = kf.value, l = lf.value, st = sf.value, s = q.value.trim().toLowerCase(), langs = D.langs; return (D.rows || []).filter(function (r) {
+      if (k && r.k !== k) return false; if (s && r.t.toLowerCase().indexOf(s) < 0) return false;
+      if (st === "none") return langs.every(function (x) { return state(r, x) === "missing" || state(r, x) === "src"; });
+      if (!st) return true; var ls = l ? [l] : langs; return ls.some(function (x) { return state(r, x) === st; }); }); }
+    function toggle(r, l, on) { api("/api/admin/panel/tr-queue", { method: "POST", body: { kind: r.k, id: r.id, lang: l, title: r.t, on: on } }).then(function (x) { if (x.s === 200) { if (on) Q[r.k + "|" + r.id + "|" + l] = { status: "open" }; else delete Q[r.k + "|" + r.id + "|" + l]; draw(); } else msg(m, ERR[(x.j || {}).error] || "Fehler", true); }); }
+    function draw() {
+      var langs = D.langs, rows = filtered(); sum.textContent = ""; head.textContent = ""; tbody.textContent = "";
+      langs.forEach(function (l) { var d = 0, qd = 0, miss = 0; (D.rows || []).forEach(function (r) { var st = state(r, l); if (st === "done") d++; else if (st === "queued" || st === "failed") qd++; else if (st === "missing") miss++; }); sum.appendChild(h("div", {}, [h("b", { text: d + " / " + (d + miss + qd) }), LANGN[l] || l, h("br"), h("small", { text: miss + " fehlen" + (qd ? ", " + qd + " vorgemerkt" : "") })])); });
+      head.appendChild(h("tr", {}, [h("th", { text: "Inhalt" }), h("th", { text: "Art" })].concat(langs.map(function (l) { return h("th", { text: l }); }))));
+      rows.slice(0, 300).forEach(function (r) { tbody.appendChild(h("tr", {}, [h("td", { text: r.t }), h("td", { class: "mut", text: KINDN[r.k] || r.k })].concat(langs.map(function (l) { var st = state(r, l);
+        if (st === "src") return h("td", { class: "mut", text: "Quelle" }); if (st === "done") return h("td", {}, [h("span", { class: "adm-chip ok", text: "✓" })]);
+        var b = h("button", { type: "button", class: "adm-chip" + (st === "queued" ? " q" : st === "failed" ? " fail" : ""), text: st === "queued" ? "◷" : st === "failed" ? "!" : "+", title: st === "queued" ? "vorgemerkt – zurücknehmen" : st === "failed" ? "fehlgeschlagen – erneut vormerken" : "vormerken", onclick: function () { toggle(r, l, st !== "queued"); } }); return h("td", {}, [b]); })))); });
+      cnt.textContent = rows.length + " Inhalte" + (rows.length > 300 ? " (300 angezeigt, bitte filtern)" : "");
+      bulk.onclick = function () { var l = lf.value; if (!l) { msg(m, "Bitte zuerst eine Sprache wählen.", true); return; } var items = rows.filter(function (r) { return state(r, l) === "missing" || state(r, l) === "failed"; }).slice(0, 500).map(function (r) { return { kind: r.k, id: r.id, lang: l, title: r.t }; }); if (!items.length) { msg(m, "Nichts vorzumerken."); return; }
+        api("/api/admin/panel/tr-queue", { method: "POST", body: { items: items, on: true } }).then(function (x) { if (x.s === 200) { msg(m, x.j.n + " vorgemerkt für " + LANGN[l] + "."); load(); } else msg(m, "Fehler", true); }); };
+      unbulk.onclick = function () { var l = lf.value; if (!l) { msg(m, "Bitte zuerst eine Sprache wählen.", true); return; } var items = rows.filter(function (r) { return state(r, l) === "queued" || state(r, l) === "failed"; }).slice(0, 500).map(function (r) { return { kind: r.k, id: r.id, lang: l }; }); if (!items.length) { msg(m, "Nichts vorgemerkt."); return; }
+        api("/api/admin/panel/tr-queue", { method: "POST", body: { items: items, on: false } }).then(function (x) { if (x.s === 200) { msg(m, x.j.n + " zurückgenommen."); load(); } else msg(m, "Fehler", true); }); };
+    }
+    [kf, lf, sf].forEach(function (e) { e.addEventListener("change", function () { if (D) draw(); }); }); q.addEventListener("input", function () { if (D) draw(); });
+    load();
+  }
 
   // ---------- Entitaeten ----------
   function entities() {

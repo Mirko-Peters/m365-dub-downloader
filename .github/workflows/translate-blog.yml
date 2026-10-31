@@ -1,4 +1,4 @@
-name: Blog uebersetzen (Uebersetzer-Team, 19 Sprachen)
+name: Blog uebersetzen (Uebersetzer-Team, 14 Sprachen)
 # Gesteuert vom Projektmanager (agents/blog-team/projektmanager.md). Kosten: Claude Haiku im Message Batch, Budget-Deckel BLOG_BUDGET_USD.
 on:
   workflow_dispatch:
@@ -8,7 +8,8 @@ on:
         type: choice
         options: [plan, pilot, run, collect, sample]
         default: plan
-      langs: { description: "Sprachen, kommagetrennt (leer = alle 19)", required: false, default: "" }
+      langs: { description: "Sprachen, kommagetrennt (leer = alle 14)", required: false, default: "" }
+      queue: { description: "Nur die in der Verwaltung (/admin/ -> Uebersetzungen) vorgemerkten Beitraege und Sprachen", type: boolean, required: false, default: false }
       limit: { description: "Artikel je Sprache (leer = alle offenen)", required: false, default: "" }
       order: { description: "newest oder oldest", required: false, default: "newest" }
       slugs: { description: "Nur diese Artikel (Slugs, kommagetrennt)", required: false, default: "" }
@@ -39,8 +40,10 @@ jobs:
           ORDER_IN: ${{ inputs.order }}
           SLUGS_IN: ${{ inputs.slugs }}
           REDO_IN: ${{ inputs.redo }}
+          QUEUE_IN: ${{ inputs.queue }}
         run: |
           ARGS=""
+          [ "$QUEUE_IN" = "true" ] && ARGS="$ARGS --queue"
           [ -n "$LANGS_IN" ] && ARGS="$ARGS --langs $LANGS_IN"
           [ -n "$ORDER_IN" ] && ARGS="$ARGS --order $ORDER_IN"
           [ -n "$SLUGS_IN" ] && ARGS="$ARGS --slugs $SLUGS_IN"

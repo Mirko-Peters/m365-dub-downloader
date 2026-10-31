@@ -1544,6 +1544,9 @@ Mirko Peters, {BASE}/about/
                 ".adm-tabs button[aria-selected=true]{border-color:var(--ac);background:var(--ac);color:#fff}.adm-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(11em,1fr));gap:10px}"
                 ".adm-tile{border:1px solid var(--bd);border-radius:.6em;padding:.8em;background:var(--card);display:flex;flex-direction:column;gap:.1em}.adm-tile b{font-size:1.7rem;line-height:1.1}.adm-tile.on b{color:var(--ac)}.adm-tile small{color:var(--mut)}"
                 ".adm-row{display:flex;gap:8px;flex-wrap:wrap}.adm-row input{flex:1;min-width:12em}.adm-row input,.adm-row select{font:inherit;padding:.5em .7em;border:1px solid var(--bd);border-radius:.4em;background:var(--card);color:inherit}.adm-list{list-style:none;padding:0;margin:1em 0}.adm-item{font:inherit;color:inherit;background:none;border:0;border-bottom:1px solid var(--bd);width:100%;text-align:start;padding:.55em .2em;cursor:pointer}.adm-item:hover{background:var(--card)}"
+                ".adm-tbl{width:100%;border-collapse:collapse;font-size:.92rem}.adm-tbl th,.adm-tbl td{text-align:start;padding:.35em .4em;border-bottom:1px solid var(--bd);vertical-align:top}.adm-tbl th{position:sticky;top:0;background:var(--bg)}"
+                ".adm-chip{display:inline-block;min-width:2.2em;text-align:center;font:600 .78rem/1.6 inherit;border:1px solid var(--bd);border-radius:1em;margin:1px;background:none;color:inherit;cursor:pointer;padding:0 .3em}.adm-chip.ok{background:#1e7a4a;color:#fff;border-color:#1e7a4a;cursor:default}.adm-chip.q{background:var(--ac);color:#fff;border-color:var(--ac)}.adm-chip.fail{border-color:#b43;color:#b43}"
+                ".adm-sum{display:grid;grid-template-columns:repeat(auto-fill,minmax(7.5em,1fr));gap:6px;margin:.6em 0}.adm-sum div{border:1px solid var(--bd);border-radius:.5em;padding:.4em .6em;background:var(--card)}.adm-sum b{display:block;font-size:1.1rem}.adm-sum small{color:var(--mut)}.adm-ops td{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:.85rem}"
                 ".adm-badge{font-size:.75rem;border:1px solid var(--bd);border-radius:1em;padding:.05em .6em;color:var(--mut)}.adm-badge.on{border-color:var(--ac);color:var(--ac)}"
                 ".adm-form{border:1px solid var(--bd);border-radius:.7em;padding:1em 1.2em;background:var(--card);margin:1em 0}.adm-field{display:flex;flex-direction:column;gap:.2em;margin:.7em 0}.adm-field input,.adm-field textarea,.adm-field select{font:inherit;padding:.45em .6em;border:1px solid var(--bd);border-radius:.4em;background:var(--bg);color:inherit}"
                 ".adm-msg{min-height:1.4em}.adm-msg.bad{color:var(--ac);font-weight:600}</style>")
@@ -1561,6 +1564,11 @@ Mirko Peters, {BASE}/about/
     json.dump([u for u, _, _ in sitemap], open(ROOT / "data" / "urls.json", "w"), indent=0)
     from site_i18n import write_src
     write_src(OUT, ROOT / "data" / "ui_js_en.json")
+    import site_trstatus as TRS
+    try:
+        TRS.build(write, TODAY, list(ENT.ENTS.values()), [{"slug": p["slug"], "title": p["title"]} for p in _posts if p.get("legacy") and p.get("lang") == "en"], [{"slug": x["slug"], "title": x["e"]["title"]} for x in PP.episode_index(BASE)["items"]])
+    except Exception as _e:
+        print("Uebersetzungsstatus nicht geschrieben:", str(_e)[:160])
     phase("Agenten-Dateien, 404, UI-Quellen")
     sizes()
     print(f"{len(items)} Episodenseiten, {len(active)} Sprachen, {len(sitemap)} URLs → docs/")
