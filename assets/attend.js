@@ -27,7 +27,13 @@
   var timer, shown = false, last;
   function css() { if (document.querySelector('link[href*="sbar.css"]')) return; var l = document.createElement("link"); l.rel = "stylesheet"; l.href = BASE + "/assets/sbar.css"; document.head.appendChild(l); }
   function close(days) { var o = document.getElementById("att-ov"); if (o) o.remove(); ls("m365_attend_until", String(Date.now() + days * 864e5)); if (last && last.focus) try { last.focus(); } catch (e) {} document.removeEventListener("keydown", esc); }
-  function esc(e) { if (e.key === "Escape") close(7); }
+  function esc(e) {
+    if (e.key === "Escape") { close(7); return; }
+    if (e.key !== "Tab") return;
+    var o = document.getElementById("att-ov"); if (!o) return;
+    var f = o.querySelectorAll("a[href],button:not([disabled])"), a = f[0], z = f[f.length - 1];
+    if (e.shiftKey && document.activeElement === a) { e.preventDefault(); z.focus(); } else if (!e.shiftKey && document.activeElement === z) { e.preventDefault(); a.focus(); }
+  }
   function show() {
     if (shown || document.hidden) { arm(); return; }
     shown = true; css(); last = document.activeElement;

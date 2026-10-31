@@ -503,13 +503,4 @@ def gloss_link(html_, lang, base, max_links=8):
     return re.sub(r"<(p|li)>.*?</\1>", blk, html_, flags=re.S)
 
 
-GLOSS_JS = """<script>(function(){try{var L=[].slice.call(document.querySelectorAll("a.gl[data-gd]"));if(!L.length)return;
-var st=document.createElement("style");st.textContent=".glpop{position:absolute;z-index:60;max-width:22em;background:var(--card);color:var(--fg);border:1px solid var(--ac);border-radius:.6em;padding:.7em .9em;box-shadow:0 8px 24px rgba(0,0,0,.2);font-size:.92rem;line-height:1.45}.glpop b{display:block;margin-bottom:.2em}.glpop a{font-weight:700}a.gl{border-bottom:1px dotted var(--ac);text-decoration:none}";document.head.appendChild(st);
-var pop=document.createElement("div");pop.className="glpop";pop.id="glpop";pop.setAttribute("role","tooltip");pop.hidden=true;document.body.appendChild(pop);var cur=null,touch=matchMedia("(hover:none)").matches;
-function show(a){cur=a;pop.textContent="";var b=document.createElement("b");b.textContent=a.dataset.gt;pop.appendChild(b);var p=document.createElement("span");p.textContent=a.dataset.gd;if(a.dataset.gl)p.lang=a.dataset.gl;pop.appendChild(p);
-if(touch){var m=document.createElement("a");m.href=a.href;m.textContent=" →";m.setAttribute("aria-label",a.dataset.gt);pop.appendChild(m)}
-pop.hidden=false;a.setAttribute("aria-describedby","glpop");var r=a.getBoundingClientRect(),x=Math.max(8,Math.min(r.left+scrollX,scrollX+document.documentElement.clientWidth-pop.offsetWidth-8));pop.style.left=x+"px";pop.style.top=(r.bottom+scrollY+6)+"px"}
-function hide(){pop.hidden=true;if(cur)cur.removeAttribute("aria-describedby");cur=null}
-L.forEach(function(a){a.addEventListener("mouseenter",function(){if(!touch)show(a)});a.addEventListener("mouseleave",function(){setTimeout(function(){if(!pop.matches(":hover"))hide()},120)});a.addEventListener("focus",function(){show(a)});a.addEventListener("blur",function(){setTimeout(function(){if(!pop.contains(document.activeElement))hide()},120)});
-a.addEventListener("click",function(e){if(touch&&cur!==a){e.preventDefault();show(a)}})});
-pop.addEventListener("mouseleave",hide);document.addEventListener("keydown",function(e){if(e.key==="Escape")hide()});document.addEventListener("click",function(e){if(cur&&!pop.contains(e.target)&&e.target!==cur)hide()})}catch(e){}})();</script>"""
+GLOSS_JS = ""   # Glossar-Tooltips liegen in assets/page.js

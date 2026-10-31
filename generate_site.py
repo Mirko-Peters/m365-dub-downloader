@@ -125,7 +125,7 @@ footer{border-top:1px solid var(--fg);margin-top:64px;padding:26px 0 48px;font-s
 .info{margin:1.6em 0;padding:20px 22px;border:1px solid var(--ln,#d9cfc2);background:#fff8;border-radius:6px}.info figcaption{font-family:Didot,"Bodoni 72",Georgia,serif;font-size:1.25rem;margin-bottom:14px}.info small{display:block;margin-top:12px;opacity:.6;font-size:.75rem}
 .isteps{list-style:none;padding:0;margin:0;display:grid;gap:12px}.isteps li{display:grid;grid-template-columns:36px 1fr;gap:2px 12px;align-items:start}.isteps i{grid-row:span 2;width:32px;height:32px;border-radius:50%;background:var(--ac);color:#fff;font-style:normal;display:flex;align-items:center;justify-content:center;font-weight:700}.isteps b{font-size:1rem}.isteps span{font-size:.92rem;opacity:.85}
 .icols{display:grid;grid-template-columns:1fr 1fr;gap:14px}.icol{border-top:3px solid var(--ac);padding-top:8px}.icol h4{margin:0 0 6px}.icol ul{margin:0;padding-left:18px}.ifacts{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px}.ifacts div{border-left:3px solid var(--ac);padding-left:10px}.ifacts b{display:block;font-size:1.5rem;font-family:Didot,"Bodoni 72",Georgia,serif}.ifacts span{font-size:.88rem}@media(max-width:560px){.icols{grid-template-columns:1fr}}
-.article{margin-top:2em;max-width:42em}.article h2{margin-top:1.6em}.article p,.article li{line-height:1.75}.cc{position:fixed;left:12px;right:12px;bottom:12px;z-index:50;max-width:760px;margin:0 auto;background:var(--ink);color:var(--onink);padding:12px 16px;display:flex;flex-wrap:wrap;gap:10px;align-items:center;box-shadow:0 6px 28px #0006}.cc[hidden]{display:none}.cc span{flex:1 1 260px;font-size:.92rem}.cc .btn{padding:6px 14px;color:var(--onink);border-color:var(--onink)}.cc .btn.main{color:#fff;border-color:var(--ac)}.share{border-top:1px solid var(--ln,#d9cfc2);margin-top:2.5em;padding:16px 0}.share .wrap{display:flex;flex-wrap:wrap;gap:8px;align-items:center}.share b{margin-right:6px}.share .btn{font-size:.85rem;padding:6px 12px}.showrow{font-size:.85rem;margin:10px 0 0}.showrow a{margin-right:12px}.yt{position:relative;margin:22px 0;aspect-ratio:16/9;background:#000;border-radius:4px;overflow:hidden;cursor:pointer}.yt img{width:100%;height:100%;object-fit:cover;opacity:.85}.yt button{position:absolute;inset:0;margin:auto;width:76px;height:76px;border-radius:50%;border:0;background:var(--ac);color:#fff;font-size:30px;cursor:pointer}.yt iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.article{margin-top:2em;max-width:42em}.article h2{margin-top:1.6em}.article p,.article li{line-height:1.75}.cc{position:fixed;left:12px;right:12px;bottom:12px;z-index:50;max-width:760px;margin:0 auto;background:var(--ink);color:var(--onink);padding:12px 16px;display:flex;flex-wrap:wrap;gap:10px;align-items:center;box-shadow:0 6px 28px #0006}.cc[hidden]{display:none}@media(max-width:1180px){body:has(.fshare) .cc{bottom:58px}}.cc span{flex:1 1 260px;font-size:.92rem}.cc .btn{padding:6px 14px;color:var(--onink);border-color:var(--onink)}.cc .btn.main{color:#fff;border-color:var(--ac)}.share{border-top:1px solid var(--ln,#d9cfc2);margin-top:2.5em;padding:16px 0}.share .wrap{display:flex;flex-wrap:wrap;gap:8px;align-items:center}.share b{margin-right:6px}.share .btn{font-size:.85rem;padding:6px 12px}.showrow{font-size:.85rem;margin:10px 0 0}.showrow a{margin-right:12px}.yt{position:relative;margin:22px 0;aspect-ratio:16/9;background:#000;border-radius:4px;overflow:hidden;cursor:pointer}.yt img{width:100%;height:100%;object-fit:cover;opacity:.85}.yt button{position:absolute;inset:0;margin:auto;width:76px;height:76px;border-radius:50%;border:0;background:var(--ac);color:#fff;font-size:30px;cursor:pointer}.yt iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
 .cover{margin:18px 0 6px;border-radius:4px;overflow:hidden;line-height:0}.cover svg{width:100%;height:auto;display:block}
 .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:0;border-top:1px solid var(--fg);border-bottom:1px solid var(--fg);margin:30px 0}
 .stats div{padding:18px 14px;border-inline-end:1px solid var(--bd)}.stats b{display:block;font:700 2.4rem/1 Didot,"Bodoni 72",Georgia,serif;color:var(--ac)}.stats span{font-size:.76rem;letter-spacing:.14em;text-transform:uppercase;color:var(--mut)}
@@ -250,9 +250,7 @@ def share_html(lang, url, title):
     fl = "".join(f'<a href="{h}" target="_blank" rel="noopener nofollow" aria-label="{n}" title="{n}" style="--bc:#{BRAND_ICONS[n][1]}">{brand_icon(n)}</a>' for n, h in nets)
     fbar = (f'<aside class="fshare" aria-label="{esc(SHARE_L.get(lang, "Share"))}">{fl}'
             f'<button type="button" data-share data-url="{url}" data-title="{esc(strip_tags(title))}" aria-label="{esc(COPY_L.get(lang, "Copy link"))}" title="{esc(COPY_L.get(lang, "Copy link"))}" style="--bc:#6B7280">{brand_icon("Copy")}</button></aside>')
-    return (fbar + ""
-            "<script>document.querySelectorAll('[data-share]').forEach(function(b){b.addEventListener('click',function(){var u=b.dataset.url,t=b.dataset.title;"
-            "if(navigator.share){navigator.share({title:t,url:u}).catch(function(){})}else if(navigator.clipboard){navigator.clipboard.writeText(u).then(function(){var o=b.textContent;b.textContent='✓';setTimeout(function(){b.textContent=o},1500)})}})});</script>")
+    return fbar   # Klick-Logik in assets/page.js
 
 
 CLARITY_ID = "v5hs0d3310"
@@ -268,14 +266,10 @@ CONSENT = {
 
 
 def consent_html(lang):
+    """Cookie-Hinweis; die Logik (Zustimmung merken, Clarity nur nach Zustimmung laden) liegt in assets/page.js."""
     m, a, d = CONSENT.get(lang, CONSENT["en"])
-    return (f'<div id="cc" class="cc" hidden role="region" aria-label="Cookies"><span>{esc(m)}</span><button type="button" class="btn main" id="cc1">{esc(a)}</button><button type="button" class="btn" id="cc0">{esc(d)}</button></div>'
-            "<script>(function(){var K='m365-consent',v=null;try{v=localStorage.getItem(K)}catch(e){}"
-            "function load(){(function(c,l,a,r,i,t,y){c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};t=l.createElement(r);t.async=1;t.src='https://www.clarity.ms/tag/'+i;"
-            f"y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y)}})(window,document,'clarity','script','{CLARITY_ID}')}}"
-            "var b=document.getElementById('cc');if(v==='1'){load()}else if(v===null){b.hidden=false}"
-            "function set(x){try{localStorage.setItem(K,x)}catch(e){}b.hidden=true;if(x==='1')load()}"
-            "document.getElementById('cc1').onclick=function(){set('1')};document.getElementById('cc0').onclick=function(){set('0')}})();</script>")
+    return (f'<div id="cc" class="cc" hidden role="region" aria-label="Cookies" data-id="{CLARITY_ID}"><span>{esc(m)}</span>'
+            f'<button type="button" class="btn main" id="cc1">{esc(a)}</button><button type="button" class="btn" id="cc0">{esc(d)}</button></div>')
 
 
 def ext_links(html_):
@@ -329,7 +323,7 @@ for _f in ("quiz_ui_en.json", "quiz_ui_i18n.json"):
 
 
 def quiz_html(qz, lang, title, url):
-    """Quiz-Block (Fragen als echte Radiogruppen; Logik in QUIZ_JS)."""
+    """Quiz-Block (Fragen als echte Radiogruppen; Logik in assets/page.js)."""
     try:
         t = dict(_QUI.get("en", {}))
         t.update(_QUI.get(lang, {}))
@@ -345,17 +339,6 @@ def quiz_html(qz, lang, title, url):
         return ""
 
 
-QUIZ_JS = """<script>(function(){try{var Q=document.getElementById("quiz");if(!Q)return;var C=JSON.parse(Q.querySelector(".qcfg").textContent),T=C.t,qs=[].slice.call(Q.querySelectorAll(".qq")),ctl=Q.querySelector(".qctl"),fb=Q.querySelector(".qfb"),i=0,score=0,done=false;
-function el(t,c,x){var e=document.createElement(t);if(c)e.className=c;if(x!=null)e.textContent=x;return e}
-function btn(x,f,m){var b=el("button","btn"+(m?" main":""),x);b.type="button";b.onclick=f;return b}
-function show(n){qs.forEach(function(q,j){q.hidden=j!==n});ctl.textContent="";fb.textContent="";fb.className="qfb";var q=qs[n];q.disabled=false;var b=btn(T.check,check,1);b.disabled=true;ctl.appendChild(b);q.onchange=function(){b.disabled=false};var f=q.querySelector("input");}
-function check(){var q=qs[i],a=+q.dataset.a,sel=q.querySelector("input:checked");if(!sel)return;var ok=+sel.value===a;if(ok)score++;q.disabled=true;[].forEach.call(q.querySelectorAll(".qo"),function(l,j){l.classList.toggle("ok",j===a);if(l.querySelector("input").checked&&!ok)l.classList.add("no")});
-fb.className="qfb "+(ok?"ok":"no");fb.textContent=(ok?T.correct:T.wrong+" "+T.right_answer+" "+q.querySelectorAll(".qo span")[a].textContent)+(q.dataset.why?" "+q.dataset.why:"");ctl.textContent="";ctl.appendChild(btn(i<qs.length-1?T.next:T.finish,function(){i++;i<qs.length?show(i):result()},1))}
-function result(){qs.forEach(function(q){q.hidden=true});ctl.textContent="";fb.className="qfb";var n=qs.length,pct=score/n;fb.textContent="";var r=el("div","qres");r.appendChild(el("p","qscore",T.score.replace("{s}",score).replace("{n}",n)));r.appendChild(el("p",null,pct>=.75?T.great:pct>=.5?T.good:T.tryagain));
-var txt=T.share_text.replace("{s}",score).replace("{n}",n).replace("{t}",C.title);var row=el("div","btns");
-row.appendChild(btn(T.share,function(){var u=C.url+"#quiz";if(navigator.share){navigator.share({title:C.title,text:txt,url:u}).catch(function(){})}else if(navigator.clipboard){navigator.clipboard.writeText(txt+" "+u).then(function(){fb.className="qfb ok";fb.textContent=T.copied})}},1));
-var a=el("a","btn","LinkedIn");a.href="https://www.linkedin.com/sharing/share-offsite/?url="+encodeURIComponent(C.url+"#quiz");a.target="_blank";a.rel="noopener nofollow";row.appendChild(a);row.appendChild(btn(T.retry,function(){i=0;score=0;qs.forEach(function(q){q.disabled=false;[].forEach.call(q.querySelectorAll("input"),function(x){x.checked=false});[].forEach.call(q.querySelectorAll(".qo"),function(l){l.classList.remove("ok","no")})});Q.removeChild(r);show(0)}));r.appendChild(row);Q.insertBefore(r,ctl)}
-show(0)}catch(e){}})()</script>"""
 
 
 def single_main(html_):
@@ -386,7 +369,7 @@ FXCSS = re.sub(r"/\*.*?\*/|\s*([{};:,])\s*", lambda m: m.group(1) or "", (ROOT /
 
 def page(lang, title, desc, canonical, body, alternates=None, jsonld=None, xdefault=None, og_type="article", extra_head="", noindex=False, side="", og_of=None):
     if lang in COMM_LANGS[2:] and any(k in canonical for k in ("/community/", "/entity/", "/glossary/")):
-        extra_head += f'<script src="{BASE}/assets/ui-{lang}.js"></script>'
+        extra_head += f'<script defer src="{BASE}/assets/ui-{lang}.js"></script>'
     hl = LANGS[lang][1] if lang in LANGS else "en"
     d = LANGS[lang][2] if lang in LANGS else "ltr"
     loc = LANGS[lang][4] if lang in LANGS else "en_US"
@@ -433,6 +416,7 @@ def page(lang, title, desc, canonical, body, alternates=None, jsonld=None, xdefa
 {ext_links(body)}
 {consent_html(lang)}
 {a11y_tags(lang)}
+<script defer src="{BASE}/assets/page.js"></script>
 <script defer src="{BASE}/assets/attend.js"></script>
 <script defer src="{BASE}/assets/smooth.js"></script>
 <script defer src="{BASE}/assets/fx.js"></script>
@@ -589,12 +573,18 @@ _CI = json.loads((ROOT / "data" / "community_i18n.json").read_text("utf-8")) if 
 
 def community_tags(lang, vid=None, mode=""):
     """Skripte/Stile fuer Community-Widgets (blenden sich aus, wenn die API nicht erreichbar ist)."""
-    t = dict(_CI.get("en", {}))
-    t.update(_CI.get(lang, {}))
     priv = f"{BASE}/{'datenschutz' if lang == 'de' else 'privacy'}/"
-    cfg = {"api": COMMUNITY_API, "lang": lang, "vid": vid, "t": t, "privacy": priv, "communityUrl": f"{BASE}/{lang}/community/"}
-    return (f'<link rel="stylesheet" href="{BASE}/assets/community.css">'
-            f'<script>window.M365C={json.dumps(cfg, ensure_ascii=False).replace("</", "<\\/")}</script><script defer src="{BASE}/assets/community.js"></script>')
+    cfg = {"api": COMMUNITY_API, "lang": lang, "vid": vid, "privacy": priv, "communityUrl": f"{BASE}/{lang}/community/"}
+    # Die Oberflaechentexte (ca. 6 KB je Sprache, auf jeder Seite gleich) liegen in assets/cm-<sprache>.js (gecacht), nicht mehr in jeder Seite.
+    return (f'<link rel="stylesheet" href="{BASE}/assets/community.css"><script defer src="{BASE}/assets/cm-{lang if lang in _CI else "en"}.js"></script>'
+            f'<script>window.M365C={json.dumps(cfg, ensure_ascii=False, separators=(",", ":")).replace("</", "<\\/")}</script><script defer src="{BASE}/assets/community.js"></script>')
+
+
+def write_cm_js(out):
+    """assets/cm-<sprache>.js: Texte der Community-Skripte je Sprache (Englisch als Rueckfall), einmal gecacht statt in jeder Seite."""
+    for lg in _CI:
+        t = dict(_CI.get("en", {})); t.update(_CI.get(lg, {}))
+        (out / "assets" / f"cm-{lg}.js").write_text("window.M365CT=" + json.dumps(t, ensure_ascii=False, separators=(",", ":")).replace("</", "<\\/") + ";", "utf-8")
 
 
 _ABOUT_L = set(json.loads((ROOT / "data" / "about_i18n.json").read_text("utf-8"))) if (ROOT / "data" / "about_i18n.json").exists() else set()
@@ -726,7 +716,6 @@ def author_box(lang):
             f'<p itemprop="description">{esc(bio)}</p></div></aside>')
 
 
-YT_JS = """<script>document.querySelectorAll('.yt').forEach(function(b){b.addEventListener('click',function(){var i=document.createElement('iframe');i.src='https://www.youtube-nocookie.com/embed/'+b.dataset.id+'?autoplay=1&rel=0';i.allow='accelerometer;autoplay;encrypted-media;picture-in-picture';i.allowFullscreen=true;i.title='YouTube';b.innerHTML='';b.appendChild(i)},{once:true})});</script>"""
 EXTRA = (("amazon_show", "Amazon Music"), ("deezer_show", "Deezer"), ("iheart_show", "iHeart"), ("castbox_show", "Castbox"), ("podcastaddict_show", "Podcast Addict"), ("podchaser_show", "Podchaser"))
 
 
@@ -762,18 +751,7 @@ def info_html(info):
         return ""
 
 
-INFO_JS = """<script>(function(){try{var f=document.querySelectorAll(".info");if(!f.length)return;var rm=matchMedia("(prefers-reduced-motion:reduce)").matches;if(!rm)document.documentElement.classList.add("js");
-function cnt(el){var t=el.textContent,m=t.match(/^(\\D*)(\\d[\\d.,]*)(.*)$/);if(!m||rm)return;var n=parseFloat(m[2].replace(/,/g,"")),d=(m[2].split(/[.]/)[1]||"").length;if(!isFinite(n)||n>1e6)return;var s=performance.now();(function st(x){var p=Math.min(1,(x-s)/900),v=n*(1-Math.pow(1-p,3));el.textContent=m[1]+(d?v.toFixed(d):Math.round(v).toLocaleString("en-US").replace(/,/g,m[2].indexOf(",")>-1?",":""))+m[3];if(p<1)requestAnimationFrame(st);else el.textContent=t})(s)}
-var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add("in");e.target.querySelectorAll(".ifacts b").forEach(cnt);io.unobserve(e.target)}})},{threshold:.25});
-f.forEach(function(x){io.observe(x);
-var fl=x.querySelectorAll(".iflow li");if(fl.length){var tm=null,ci=-1;function hl(i){ci=i;fl.forEach(function(o,j){o.classList.toggle("on",j<=i);o.classList.toggle("cur",j==i)})}fl.forEach(function(o,i){o.addEventListener("click",function(){clearInterval(tm);hl(i)});o.addEventListener("keydown",function(e){if(e.key=="Enter"||e.key==" "){e.preventDefault();clearInterval(tm);hl(i)}})});var pb2=x.querySelector(".iplay button");pb2.addEventListener("click",function(){clearInterval(tm);hl(-1);var k=0;hl(0);tm=setInterval(function(){k++;if(k>=fl.length){clearInterval(tm);return}hl(k)},900)});if(!rm){var io2=new IntersectionObserver(function(es){if(es[0].isIntersecting){pb2.click();io2.disconnect()}},{threshold:.6});io2.observe(x)}else hl(fl.length-1)}
-x.querySelectorAll(".isteps li").forEach(function(li,i,a){function go(){a.forEach(function(o,j){o.classList.toggle("on",j<=i);o.classList.toggle("cur",j==i)})}li.addEventListener("click",go);li.addEventListener("keydown",function(e){if(e.key=="Enter"||e.key==" "){e.preventDefault();go()}})});
-var ck=x.querySelectorAll(".ichecks li");function pr(){var n=0;ck.forEach(function(o){if(o.classList.contains("done"))n++});var b=x.querySelector(".iprog");if(b){b.firstChild.style.width=(ck.length?n*100/ck.length:0)+"%";b.setAttribute("data-t",n+" / "+ck.length)}}
-if(ck.length){var pb=document.createElement("div");pb.className="iprog";pb.innerHTML="<i></i>";x.querySelector(".ichecks").after(pb);ck.forEach(function(li){var bt=li.querySelector("button");li.addEventListener("click",function(){li.classList.toggle("done");if(bt)bt.setAttribute("aria-pressed",li.classList.contains("done"));pr()})});pr()}
-})}catch(e){}})()</script>"""
 
-PLAT_JS = """<script>(function(){try{var ua=navigator.userAgent||"",pl=navigator.platform||"";var apple=/iPhone|iPad|iPod|Macintosh|Mac OS X/.test(ua)||/Mac|iPhone|iPad/.test(pl)||(navigator.maxTouchPoints>1&&/Mac/.test(pl));
-var d=document.documentElement;if(apple)d.className+=" apple-first";var pick=document.querySelector(apple?'[data-p=apple]':'[data-p=spotify]')||document.querySelector('[data-p=spotify]')||document.querySelector('[data-p=apple]')||document.querySelector('[data-p=spreaker]');if(pick)pick.className+=" main"}catch(e){}})();</script>"""
 
 
 _T0 = [time.perf_counter()]
@@ -815,6 +793,7 @@ def build():
     (OUT / ".nojekyll").write_text("")
     if (ROOT / "assets").exists():
         shutil.copytree(ROOT / "assets", OUT / "assets")
+        write_cm_js(OUT)
         from site_i18n import write_ui_js
         write_ui_js(OUT)
 
@@ -1070,7 +1049,7 @@ def build():
 {('<h2>' + esc(ui[4]) + '</h2><div class="list">' + rel + '</div>') if rel else ''}
 <p style="margin-top:1.6em"><a class="btn" href="{BASE}/{l}/">{esc(ui[3])} →</a></p>
 <section id="c-comments"></section><section id="c-sub"></section></main>
-{footer(l)}{PLAT_JS}{INFO_JS}{LRN.GLOSS_JS}{QUIZ_JS if quiz_block else ''}{community_tags(l, vid)}"""
+{footer(l)}{community_tags(l, vid)}"""
         OG_COVER[canonical] = art_svg(vid, LANGS[l][0], lang=l)
         write(f'{l}/{it["slug"]}/index.html',
               page(l, e["title"], short(intro), canonical, body, alts, ld + _nld, xdefault=alts.get("en"), side=side_for(l, e["title"], body), extra_head=f'<meta property="article:section" content="{esc(cat_name(pc, l))}">' + "".join(f'<meta property="article:tag" content="{esc(t)}">' for t in tagraw[l][vid])))
@@ -1108,7 +1087,7 @@ def build():
 <div class="stats"><div><b>{len(newest)}</b><span>{esc(ui[3])}</span></div><div><b>{nvid}</b><span>Videos</span></div><div><b>{len(active)}</b><span>Languages</span></div></div>
 <div class="sec"><div class="kicker">01 · {esc(ui[3])}</div>{HUB.hub(globals_ctx, l, BASE, COMMUNITY_API, newest, lambda i: thumb_html(i))}</div></main>
 {m365con_band()}
-<main class="wrap"><section id="c-curator"></section><section id="c-sub"></section>{faq_html(l, "FAQ")}{author_box(l)}</main>{footer(l)}{PLAT_JS}{community_tags(l)}"""
+<main class="wrap"><section id="c-curator"></section><section id="c-sub"></section>{faq_html(l, "FAQ")}{author_box(l)}</main>{footer(l)}{community_tags(l)}"""
         write(f"{l}/index.html", page(l, title, short(d), f"{BASE}/{l}/", body, alts_home, ld, og_type="website", side=side_for(l, title, body)))
         sitemap.append((f"{BASE}/{l}/", TODAY, alts_home))
 
