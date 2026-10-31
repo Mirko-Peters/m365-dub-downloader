@@ -123,7 +123,7 @@ def publish(write, BASE):
     if not cfg.exists() or not json.loads(cfg.read_text("utf-8")).get("enabled"):
         return 0
     its = items(BASE)
-    rows = [{"slug": p["slug"], "title": p["title"], "summary": p["summary"], "html": p["html"], "topics": p["topics"], "faq": p["faq"], "published": p["published"], "updated": p["updated"]} for p in its]
+    rows = [{"slug": p["slug"], "title": p["title"], "summary": p["summary"], "html": p["html"], "topics": p["topics"], "faq": p["faq"], "published": p["published"], "updated": p["updated"]} for p in its if not p.get("tr_of")]   # nur die englischen Originale (Sprachfassungen liegen im R2-Bucket, nicht im Import)
     for i in range(0, len(rows), PER):
         write(f"blog-import/part-{i // PER + 1}.json", R2.rewrite(json.dumps(rows[i:i + PER], ensure_ascii=False, separators=(",", ":"))))
     write("blog-import/index.json", json.dumps({"total": len(rows), "per": PER}))
