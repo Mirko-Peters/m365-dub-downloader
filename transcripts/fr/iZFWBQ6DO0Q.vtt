@@ -1,0 +1,1708 @@
+WEBVTT
+
+00:00:00.270 --> 00:00:07.250
+Près pour 10 jours consacrés à Microsoft 365, Copilot, l'IA, Azure et aux acteurs qui façonnent l'avenir du travail, Axe.
+
+00:00:07.850 --> 00:00:11.230
+En janvier, la M365 Con est de retour et nous voyons les choses en grand.
+
+00:00:11.610 --> 00:00:12.250
+Et nous voyons grand.
+
+00:00:12.990 --> 00:00:17.890
+Rejoignez-nous pour des sessions en direct, des démos concrètes et des conseils pratiques d'experts et de MVPs du monde entier.
+
+00:00:18.730 --> 00:00:20.950
+Pas de diapositif générique, pas de jargon inutile.
+
+00:00:21.970 --> 00:00:23.170
+Nous abordons les vrais défis.
+
+00:00:23.810 --> 00:00:28.530
+Copilot Studio, agent IA, fabrique, sécurité, gouvernance et automatisation.
+
+00:00:28.530 --> 00:00:34.370
+Que vous soyez informaticien, développeur ou dirigeant, des sessions sont conçues pour vous, nés.
+
+00:00:35.550 --> 00:00:39.930
+Avec 10 jours complets, explorez plusieurs technologies et connectez-vous à une communauté mondiale.
+
+00:00:40.950 --> 00:00:44.270
+Suivez le direct et ramenez des connaissances pratiques au sein de votre entreprise.
+
+00:00:45.230 --> 00:00:48.930
+Janvier 2027, 10 jours, une seule communauté Microsoft.
+
+00:00:49.470 --> 00:00:50.650
+Les inscriptions sont ouvertes.
+
+00:00:51.750 --> 00:00:52.990
+Réservez votre place dès aujourd'hui.
+
+00:00:52.990 --> 00:00:57.950
+Rendez-vous sur m365con.net
+
+00:00:57.950 --> 00:01:02.320
+Inscrivez-vous sur m365con.net.
+
+00:01:02.640 --> 00:01:03.220
+Nous vous attendons.
+
+00:01:03.700 --> 00:01:04.600
+En direct en janvier.
+
+00:01:05.420 --> 00:01:09.400
+Que se passe-t-il lorsqu'un attaquant vole un mot de passe légitime au lieu de franchir le pare-feu ?
+
+00:01:10.060 --> 00:01:13.540
+Je suis votre outmire Copiters et nous parlons aujourd'hui de Microsoft Defender for Identity.
+
+00:01:14.320 --> 00:01:17.980
+La plupart des outils de sécurité se concentrent sur le périmètre et lui surveillent les logiciels malveillants,
+
+00:01:18.120 --> 00:01:19.520
+les fichiers suspects et le trafic réseau inhabituel.
+
+00:01:19.520 --> 00:01:22.100
+Mais les attaques sur l'identité contournent tout cela.
+
+00:01:22.700 --> 00:01:25.020
+Un attaquant avec un mot de passe volée n'a pas besoin de s'introduire.
+
+00:01:25.400 --> 00:01:27.840
+Il se connecte simplement et de l'extérieur tout semble normal.
+
+00:01:28.960 --> 00:01:32.440
+A la fin de cet épisode, vous comprendrez ce qu'est réellement Microsoft Defender for Identity,
+
+00:01:32.580 --> 00:01:36.360
+pourquoi il existe et comment il détecte les menaces ignorées par les outils traditionnels.
+
+00:01:37.640 --> 00:01:40.780
+Commençons par voir pourquoi la sécurité de l'identité est devenue le nouveau champ de bataille.
+
+00:01:41.460 --> 00:01:42.780
+Le problème de la sécurité des identités.
+
+00:01:43.220 --> 00:01:45.660
+Il y a 20 ans, sécuriser un réseau signifiait verrouiller le bâtiment.
+
+00:01:45.660 --> 00:01:50.380
+On installait un pare-feu, un antivirus sur chaque machine et on conseillait des mots de passe robustes.
+
+00:01:51.040 --> 00:01:54.240
+Cela fonctionnait bien car les attaquants devaient franchir vos défenses pour entrer.
+
+00:01:55.120 --> 00:01:58.880
+Ils devaient trouver une faille, l'exploiter, puis se déplacer dans votre réseau.
+
+00:01:59.540 --> 00:02:01.400
+Le périmètre était le mur et ce mur était solide.
+
+00:02:01.540 --> 00:02:03.320
+Mais voilà, cette approche ne fonctionne plus.
+
+00:02:03.960 --> 00:02:05.540
+Les attaquants ne s'introduisent plus, ils se connectent.
+
+00:02:05.820 --> 00:02:07.680
+Ils récupèrent un mot de passe légitime par hameçonnage,
+
+00:02:08.040 --> 00:02:11.080
+fuite de données ou simple devinette et entrent par la grande porte.
+
+00:02:11.980 --> 00:02:14.720
+Les identifiants compromis sont impliqués dans 70 attaques par ensongiciel.
+
+00:02:14.720 --> 00:02:17.460
+Ce n'est pas un problème marginal, c'est le principal vecteur d'intrusion.
+
+00:02:17.880 --> 00:02:18.780
+Et les chiffres sont alarmants.
+
+00:02:19.020 --> 00:02:23.720
+70% des organisations ont subi au moins une faille de sécurité liée à l'identité en 2025.
+
+00:02:24.020 --> 00:02:26.040
+Le coût moyen de récupération 1,64 millions.
+
+00:02:26.460 --> 00:02:29.020
+Il ne s'agit pas seulement de la rançon, mais aussi de la rédactivité,
+
+00:02:29.160 --> 00:02:31.460
+de l'enquête, des frais juridiques, des amendes et de l'image de marque.
+
+00:02:32.460 --> 00:02:35.680
+Pour les entreprises de taille moyenne, le coût médian est toujours de 750 000 dollars.
+
+00:02:36.240 --> 00:02:38.500
+Ce n'est donc pas un risque théorique, cela arrive partout.
+
+00:02:39.540 --> 00:02:40.260
+Voici le problème central.
+
+00:02:40.260 --> 00:02:43.100
+Les outils de sécurité traditionnels surveillent les logiciels malveillants,
+
+00:02:43.180 --> 00:02:45.060
+les fichiers suspects et les connexions réseau inhabituelles.
+
+00:02:45.500 --> 00:02:47.020
+Mais ils ne comprennent pas le comportement des utilisateurs.
+
+00:02:47.240 --> 00:02:49.020
+Ils ne savent pas si une connexion est normale ou suspecte.
+
+00:02:49.340 --> 00:02:52.240
+Un attaquant avec un mot de passe volé ressemble exactement à un utilisateur légitime.
+
+00:02:52.620 --> 00:02:55.180
+Au même nom d'utilisateur, le même mot de passe, le même processus d'authentification.
+
+00:02:55.660 --> 00:02:56.660
+La seule différence est l'intention.
+
+00:02:57.140 --> 00:02:58.900
+Et à moins de surveiller les comportements anormaux,
+
+00:02:59.080 --> 00:03:01.080
+vous ne le verrez que lorsqu'il sera trop tard.
+
+00:03:01.660 --> 00:03:03.940
+C'est la lacune que Defender for Identity a été conçue pour combler.
+
+00:03:04.300 --> 00:03:05.240
+Ils surveillent ceux qui surveillent.
+
+00:03:05.240 --> 00:03:07.700
+Ils contrôlent votre infrastructure d'identité,
+
+00:03:07.840 --> 00:03:09.660
+apprend ce qui est normal pour chaque utilisateur et appareil
+
+00:03:09.660 --> 00:03:10.780
+et signale tout ce qui ne correspond pas.
+
+00:03:11.740 --> 00:03:12.980
+Ils ne cherchent pas de logiciel malveillant.
+
+00:03:13.100 --> 00:03:14.240
+Ils cherchent des comportements incohérents.
+
+00:03:15.220 --> 00:03:17.140
+Alors qu'est-ce que Defender for Identity exactement ?
+
+00:03:17.140 --> 00:03:18.640
+Et comment fonctionne-t-il ?
+
+00:03:18.640 --> 00:03:20.240
+Qu'est-ce que Defender for Identity ?
+
+00:03:20.240 --> 00:03:21.340
+Voici la définition la plus simple.
+
+00:03:21.900 --> 00:03:24.820
+Microsoft Defender for Identity est un outil de sécurité basé sur le cloud
+
+00:03:24.820 --> 00:03:28.020
+qui surveille votre active directory local pour détecter les attaques basées sur l'identité.
+
+00:03:28.740 --> 00:03:31.020
+Notez que je n'ai pas dit entre ID, c'est une confusion fréquente.
+
+00:03:31.020 --> 00:03:34.480
+Defender for Identity se concentre sur votre infrastructure d'identité locale
+
+00:03:34.480 --> 00:03:38.020
+incluant les contrôleurs de domaine active directory et les serveurs ADFS.
+
+00:03:38.540 --> 00:03:40.320
+Ce sont les éléments qui résident dans votre propre centre de données
+
+00:03:40.320 --> 00:03:41.300
+ou sur vos propres serveurs.
+
+00:03:41.660 --> 00:03:42.920
+Ce n'est pas une solution purement cloud.
+
+00:03:43.260 --> 00:03:44.380
+Un temps pour cela fonctionne-t-il ?
+
+00:03:44.380 --> 00:03:45.660
+Il utilise des analyses comportementales.
+
+00:03:45.920 --> 00:03:48.180
+Il apprend ce qui est normal pour chaque utilisateur et chaque appareil
+
+00:03:48.180 --> 00:03:49.960
+puis signale toute anomalie.
+
+00:03:50.440 --> 00:03:52.900
+Considérez cela comme un agent de sécurité qui connaît la routine de chaque employé.
+
+00:03:53.300 --> 00:03:57.380
+Il sait qu'il arrive à 8h00, qu'il travaille tard et qu'il accède à la salle des serveurs.
+
+00:03:57.980 --> 00:04:00.900
+Si quelqu'un se présente à 3h00 du matin pour tenter d'ouvrir la salle des serveurs,
+
+00:04:00.900 --> 00:04:01.980
+l'agent le remarque immédiatement.
+
+00:04:02.620 --> 00:04:04.220
+C'est exactement ce que fait Defender for Identity,
+
+00:04:04.300 --> 00:04:07.140
+mais pour votre environnement numérique, clarifions ce que cet outil n'est pas.
+
+00:04:07.660 --> 00:04:10.720
+Ce n'est ni un antivirus, ni un pare-feu, ni une solution de gestion des correctifs.
+
+00:04:11.220 --> 00:04:14.060
+C'est de la détection de menaces liées à l'identité, une catégorie totalement différente.
+
+00:04:14.720 --> 00:04:17.360
+Ils ne cherchent pas de fichiers malveillants, ils cherchent des comportements malveillants.
+
+00:04:17.980 --> 00:04:20.320
+La distinction est importante, car les attaques les plus dangereuses aujourd'hui
+
+00:04:20.320 --> 00:04:22.940
+n'utilisent aucun logiciel malveillant, ils utilisent des identifiants légitimes.
+
+00:04:23.360 --> 00:04:26.080
+Defender for Identity se trouve au sein de Microsoft Defender XDA,
+
+00:04:26.200 --> 00:04:28.400
+la plateforme de détection et de réponses étendue de Microsoft.
+
+00:04:30.900 --> 00:04:34.640
+Avec Defender for Endpoint, Defender for Office 365 et Microsoft Sentinel.
+
+00:04:35.420 --> 00:04:39.540
+Ainsi, lorsqu'un Defender for Identity détecte une connexion suspecte sur un contrôleur de domaine,
+
+00:04:39.780 --> 00:04:43.560
+il peut la recouper avec un email de phishing détecté par Defender for Office 365
+
+00:04:43.560 --> 00:04:47.480
+ou un processus suspect sur l'ordinateur portable d'un utilisateur détecté par Defender for Endpoint.
+
+00:04:48.280 --> 00:04:49.840
+La vraie valeur ne réside pas dans une seule alerte,
+
+00:04:49.880 --> 00:04:52.560
+mais dans la manière dont ces outils collaborent pour raconter l'histoire complète d'une attaque.
+
+00:04:53.240 --> 00:04:55.280
+Une alerte isolée peut sembler être un faux positif,
+
+00:04:55.580 --> 00:04:58.000
+mais lorsque vous voyez l'image globale, incluant l'email de phishing,
+
+00:04:58.000 --> 00:05:00.080
+les identifiants compromis et le mouvement latéral,
+
+00:05:00.080 --> 00:05:01.700
+vous savez exactement ce qui s'est passé.
+
+00:05:02.220 --> 00:05:04.580
+Regardons sous le capot pour voir comment il détecte réellement les menaces.
+
+00:05:05.540 --> 00:05:07.700
+Comment cela fonctionne, capteur et analyse comportement d'ordre.
+
+00:05:08.260 --> 00:05:11.400
+Defender for Identity utilise des capteurs légers installés sur vos contrôleurs de domaine.
+
+00:05:12.140 --> 00:05:13.080
+C'est la pièce maîtresse du puzzle.
+
+00:05:13.840 --> 00:05:14.960
+Sans ce capteur, rien ne se passe.
+
+00:05:15.300 --> 00:05:18.380
+Le capteur capture les données et conçus pour être aussi discret que possible,
+
+00:05:18.760 --> 00:05:20.220
+fonctionnant silencieusement en arrière-plan,
+
+00:05:20.440 --> 00:05:22.360
+lisant le trafic réseau et les événements Windows
+
+00:05:22.360 --> 00:05:24.100
+sans ralentir votre contrôleur de domaine.
+
+00:05:24.100 --> 00:05:27.780
+Considérez ces capteurs comme les yeux et les oreilles du système.
+
+00:05:28.280 --> 00:05:30.140
+Ils capturent trois types principaux d'informations.
+
+00:05:30.260 --> 00:05:32.300
+Le trafic réseau, pour voir les requêtes d'authentification
+
+00:05:32.300 --> 00:05:34.080
+circulant entre les machines, les événements Windows,
+
+00:05:34.180 --> 00:05:35.760
+pour voir ce qui se passe au niveau du système d'exploitation,
+
+00:05:35.920 --> 00:05:38.740
+et l'activité d'authentification, pour voir qui se connecte, d'où et quand.
+
+00:05:39.860 --> 00:05:42.300
+Toutes ces données sont envoyées au service cloud de Defender for Identity
+
+00:05:42.300 --> 00:05:43.420
+pour Analyse, pour Analyse.
+
+00:05:43.700 --> 00:05:45.200
+Le capteur ne fait pas le travail lourd lui-même,
+
+00:05:45.280 --> 00:05:46.480
+il se contente de collecter et de transmettre.
+
+00:05:46.900 --> 00:05:49.200
+Une fois que les données atteignent le cloud, le vrai travail commence.
+
+00:05:49.940 --> 00:05:51.860
+Le service cloud établit un profil de référence
+
+00:05:51.860 --> 00:05:53.580
+pour chaque utilisateur de votre environnement.
+
+00:05:54.560 --> 00:05:56.140
+Il apprend leurs heures de connexion habituelles,
+
+00:05:56.460 --> 00:05:57.660
+les postes de travail qu'ils utilisent
+
+00:05:57.660 --> 00:05:59.140
+et les ressources auxquelles ils accèdent normalement.
+
+00:05:59.820 --> 00:06:01.020
+C'est la partie comportementale.
+
+00:06:01.560 --> 00:06:04.080
+Le système n'est pas livré avec des règles préconfigurées sur ce qui est normal.
+
+00:06:04.580 --> 00:06:05.720
+Il apprend de votre environnement réel,
+
+00:06:05.720 --> 00:06:08.560
+et c'est important car la notion de cas normal est diffère pour chaque organisation.
+
+00:06:09.180 --> 00:06:10.540
+Lorsqu'un élément s'écarte de cette référence,
+
+00:06:10.540 --> 00:06:12.520
+une alerte est déclenchée. Par exemple,
+
+00:06:12.740 --> 00:06:14.840
+un utilisateur qui se connecte toujours de 9h00 à 17h00
+
+00:06:14.840 --> 00:06:16.640
+s'authentifie soudainement à 3h00 du matin
+
+00:06:16.640 --> 00:06:18.520
+depuis un poste de travail qu'il n'a jamais utilisé auparavant.
+
+00:06:18.900 --> 00:06:20.440
+C'est une anomalie, le système l'assignale.
+
+00:06:20.680 --> 00:06:22.380
+Il ne suppose pas immédiatement qu'elle est malveillante,
+
+00:06:22.460 --> 00:06:24.760
+mais il déclenche l'alerte pour que votre équipe de sécurité puisse enquêter.
+
+00:06:25.240 --> 00:06:27.140
+Quel type d'attaque détecte-t-il réellement ?
+
+00:06:27.140 --> 00:06:28.460
+La liste est longue, mais voici les principales.
+
+00:06:28.940 --> 00:06:30.020
+Les attaques Pass-Air,
+
+00:06:30.020 --> 00:06:31.900
+où un attaquant vole un H de mot de passe
+
+00:06:31.900 --> 00:06:33.060
+et l'utilise pour s'authentifier.
+
+00:06:33.060 --> 00:06:34.440
+Le Gerberos Tinecto,
+
+00:06:34.520 --> 00:06:35.880
+où un attaquant demande des tickets de service
+
+00:06:35.880 --> 00:06:37.960
+pour des comptes privilégiés et les déchiffres hors ligne.
+
+00:06:38.360 --> 00:06:39.820
+L'utilisation de Golden Ticket to Go,
+
+00:06:39.940 --> 00:06:41.580
+où un attaquant falsifie un ticket Kerberos
+
+00:06:41.580 --> 00:06:42.740
+pour obtenir un accès complet au domaine.
+
+00:06:43.240 --> 00:06:44.000
+Les attaques à CAC,
+
+00:06:44.300 --> 00:06:45.020
+des C-Sink-Uker,
+
+00:06:45.360 --> 00:06:47.720
+où un attaquant prétend être un contrôleur de domaine et de mot de passe.
+
+00:06:48.780 --> 00:06:49.660
+Et le déplacement latéral,
+
+00:06:49.740 --> 00:06:51.240
+où un attaquant utilise un compte compromis
+
+00:06:51.240 --> 00:06:52.300
+pour passer d'une machine à l'autre.
+
+00:06:53.420 --> 00:06:56.000
+Chaque détection est associée au framework Mitre-ATT-NCK,
+
+00:06:56.200 --> 00:06:58.140
+qui est la norme industrielle pour décrire les techniques d'attaque.
+
+00:06:58.760 --> 00:07:00.860
+Ainsi, lorsque Defender for Identity signale quelque chose,
+
+00:07:00.860 --> 00:07:03.200
+il ne dit pas seulement « Activité suspecte ».
+
+00:07:03.200 --> 00:07:05.840
+Il indique qu'il s'agit d'une attaque passe de hache associée à la technique.
+
+00:07:08.650 --> 00:07:10.730
+Cela donne à votre équipe de sécurité un contexte immédiat
+
+00:07:10.730 --> 00:07:12.390
+sur ce à quoi elle est confrontée et comment réagir.
+
+00:07:12.950 --> 00:07:13.670
+Voici la vélée différence.
+
+00:07:14.150 --> 00:07:15.590
+Il ne vous dit pas seulement qu'un événement a eu lieu.
+
+00:07:15.830 --> 00:07:16.870
+Il vous montre la chronologie de l'attaque.
+
+00:07:17.230 --> 00:07:19.530
+Il retrace comment l'attaquant est passé du point A au point B.
+
+00:07:20.370 --> 00:07:22.210
+Au lieu d'une simple alerte connexion suspecte,
+
+00:07:22.390 --> 00:07:23.630
+vous obtenez toute l'histoire,
+
+00:07:24.310 --> 00:07:26.050
+le compromis initial, le déplacement latéral,
+
+00:07:26.210 --> 00:07:28.230
+l'élévation de privilèges et la domination du domaine.
+
+00:07:28.590 --> 00:07:30.250
+Tout est relié dans une chronologie unique.
+
+00:07:30.250 --> 00:07:32.930
+C'est la différence entre un outil qui vous alerte
+
+00:07:32.930 --> 00:07:34.130
+et un outil qui vous aide à comprendre.
+
+00:07:35.170 --> 00:07:36.630
+Passons en revue les étapes d'une attaque
+
+00:07:36.630 --> 00:07:39.050
+et voyons où Defender for Identity détecte chacune d'elles.
+
+00:07:39.970 --> 00:07:40.950
+Le cycle de vie de l'attaque, il couvre.
+
+00:07:41.670 --> 00:07:43.090
+Les attaquants suivent un modèle prévisible.
+
+00:07:43.730 --> 00:07:44.490
+Ce n'est absolument pas aléatoire.
+
+00:07:44.970 --> 00:07:45.830
+Ils franchissent des étapes
+
+00:07:45.830 --> 00:07:47.410
+et chaque étape a un objectif précis.
+
+00:07:47.950 --> 00:07:49.090
+Les étapes sont la reconnaissance,
+
+00:07:49.470 --> 00:07:50.310
+les identifiants compromis,
+
+00:07:50.430 --> 00:07:52.070
+le déplacement latéral et la domination du domaine.
+
+00:07:52.810 --> 00:07:53.810
+Une fois que vous comprenez ces étapes,
+
+00:07:53.870 --> 00:07:56.010
+vous verrez exactement où se situe Defender for Identity.
+
+00:07:56.570 --> 00:07:58.270
+Mais à quoi cela ressemble-t-il concrètement ?
+
+00:07:58.270 --> 00:07:59.250
+Commençons par la reconnaissance.
+
+00:07:59.250 --> 00:08:00.790
+L'attaquant n'a encore aucun accès.
+
+00:08:01.370 --> 00:08:03.110
+Il observe simplement, scanne votre réseau,
+
+00:08:03.330 --> 00:08:04.410
+recherche des comptes, des groupes
+
+00:08:04.410 --> 00:08:05.390
+et des relations d'approbation.
+
+00:08:06.150 --> 00:08:07.850
+Il essaie de savoir qui sont les administrateurs,
+
+00:08:07.990 --> 00:08:09.530
+quels comptes ont des privilèges élevés
+
+00:08:09.530 --> 00:08:10.810
+et comment le domaine est structuré.
+
+00:08:11.510 --> 00:08:13.030
+Ils utilisent souvent des outils comme Blowdown
+
+00:08:13.030 --> 00:08:14.210
+pour cartographier l'environnement.
+
+00:08:14.750 --> 00:08:16.190
+Defender for Identity repère cela
+
+00:08:16.190 --> 00:08:17.950
+en surveillant les requêtes LDAP suspectes
+
+00:08:17.950 --> 00:08:19.230
+ou les tentatives d'énumération.
+
+00:08:19.930 --> 00:08:21.430
+Une alerte se déclenche lorsque quelqu'un commence
+
+00:08:21.430 --> 00:08:23.150
+à interroger tous les comptes administrateurs de domaine
+
+00:08:23.150 --> 00:08:24.690
+depuis une station qu'il n'a jamais fait auparavant.
+
+00:08:25.130 --> 00:08:26.270
+L'attaquant n'a encore rien fait de mal,
+
+00:08:26.350 --> 00:08:27.230
+mais vous savez qu'il observe.
+
+00:08:29.250 --> 00:08:31.370
+L'attaquant a trouvé un moyen d'obtenir un mot de passe
+
+00:08:31.370 --> 00:08:32.890
+via le phishing, une fuite de données
+
+00:08:32.890 --> 00:08:33.950
+ou en l'achetant sur le dark web.
+
+00:08:34.830 --> 00:08:36.170
+Maintenant, il possède un nom d'utilisateur
+
+00:08:36.170 --> 00:08:36.970
+et un mot de passe légitime.
+
+00:08:37.490 --> 00:08:39.990
+Defender for Identity signale les connexions inhabituelles à ce stade.
+
+00:08:40.550 --> 00:08:42.530
+Les connexions inhabituelles incluent un utilisateur
+
+00:08:42.530 --> 00:08:44.470
+se connectant depuis un nouvel emplacement à 3h du matin
+
+00:08:44.470 --> 00:08:46.550
+ou accédant soudainement à des centaines de fichiers
+
+00:08:46.550 --> 00:08:47.810
+au lieu de ces 5 habituels.
+
+00:08:48.270 --> 00:08:49.990
+Ah, ce sont des écarts de comportement
+
+00:08:49.990 --> 00:08:51.990
+qui ne nécessitent pas de détection de logiciels malveillants.
+
+00:08:52.490 --> 00:08:53.310
+Il nécessite simplement de comprendre
+
+00:08:53.310 --> 00:08:54.250
+à quoi ressemble une activité normale.
+
+00:08:54.870 --> 00:08:55.830
+Puis vient le déplacement latéral.
+
+00:08:55.830 --> 00:08:57.310
+L'attaquant a un pied dans la place
+
+00:08:57.310 --> 00:08:59.170
+mais ce n'est probablement pas encore un compte privilégié.
+
+00:08:59.490 --> 00:09:00.710
+Ils doivent se déplacer sur votre réseau
+
+00:09:00.710 --> 00:09:01.910
+pour atteindre des cibles de grande valeur.
+
+00:09:02.570 --> 00:09:04.170
+Ils utilisent des techniques comme le pass de hash,
+
+00:09:04.250 --> 00:09:04.890
+le pass de ticket
+
+00:09:04.890 --> 00:09:06.130
+et l overpass pass de hash
+
+00:09:06.130 --> 00:09:07.090
+pour sauter d'une machine à l'autre.
+
+00:09:07.610 --> 00:09:09.610
+Chaque saut ressemble à une authentification légitime
+
+00:09:09.610 --> 00:09:10.390
+mais le modèle est suspect.
+
+00:09:10.870 --> 00:09:12.410
+Defender for Identity détecte cela
+
+00:09:12.410 --> 00:09:13.830
+en surveillant les anomalies d'authentification.
+
+00:09:14.470 --> 00:09:15.850
+Si un compte utilisateur s'authentifie
+
+00:09:15.850 --> 00:09:17.630
+depuis 3 postes de travail différents en 5 minutes
+
+00:09:17.630 --> 00:09:19.110
+ce n'est pas un comportement humain normal.
+
+00:09:19.490 --> 00:09:20.830
+Il s'agit d'un attaquant se déplaçant latéral.
+
+00:09:21.230 --> 00:09:22.250
+Enfin, la domination du domaine.
+
+00:09:22.750 --> 00:09:23.150
+Ce que vous voyez.
+
+00:09:23.150 --> 00:09:25.130
+Les alertes, les incidents et les mesures à prendre.
+
+00:09:25.570 --> 00:09:26.870
+Ouvrez le portail Microsoft Defender
+
+00:09:26.870 --> 00:09:28.350
+sur security.microsoft.com
+
+00:09:28.350 --> 00:09:29.210
+et accédez aux identités.
+
+00:09:29.690 --> 00:09:30.430
+C'est votre centre de commande.
+
+00:09:30.990 --> 00:09:31.930
+La première chose que vous verrez
+
+00:09:31.930 --> 00:09:32.610
+est le tableau de bord
+
+00:09:32.610 --> 00:09:33.830
+qui vous donne un aperçu rapide
+
+00:09:33.830 --> 00:09:34.490
+de tout ce qui se passe
+
+00:09:34.490 --> 00:09:36.450
+dans votre environnement d'identité.
+
+00:09:37.270 --> 00:09:38.330
+Les utilisateurs surveillés,
+
+00:09:38.790 --> 00:09:40.150
+le nombre d'alertes actives ouvertes
+
+00:09:40.150 --> 00:09:41.550
+et l'état de santé de vos capteurs.
+
+00:09:42.610 --> 00:09:43.390
+Il est conçu pour vous donner
+
+00:09:43.390 --> 00:09:44.490
+une vue d'ensemble en quelques secondes
+
+00:09:44.490 --> 00:09:45.050
+pas en quelques minutes.
+
+00:09:45.950 --> 00:09:47.230
+Il y a aussi un score sur ce tableau de bord
+
+00:09:47.230 --> 00:09:48.650
+appelé score de sécurité des identités.
+
+00:09:49.430 --> 00:09:50.370
+C'est un chiffre de 0 à 100
+
+00:09:50.370 --> 00:09:51.030
+qui montre à quel point
+
+00:09:51.030 --> 00:09:52.610
+vous protégez votre infrastructure d'identité.
+
+00:09:53.130 --> 00:09:54.130
+Ce n'est pas une mesure théorique,
+
+00:09:54.230 --> 00:09:55.310
+elle est basée sur des configurations
+
+00:09:55.310 --> 00:09:56.570
+et des recommandations réelles.
+
+00:09:57.050 --> 00:09:57.750
+Si vous avez des contrôleurs
+
+00:09:57.750 --> 00:09:58.510
+de domaine sans capteur,
+
+00:09:58.590 --> 00:09:59.130
+votre score baisse.
+
+00:09:59.670 --> 00:10:00.890
+Si vous avez des utilisateurs
+
+00:10:00.890 --> 00:10:02.130
+sans authentification multifacteur,
+
+00:10:02.210 --> 00:10:02.650
+votre score baisse.
+
+00:10:03.250 --> 00:10:03.970
+Corrigez ces problèmes
+
+00:10:03.970 --> 00:10:04.830
+et votre score augmentera.
+
+00:10:05.630 --> 00:10:06.450
+C'est un moyen concret
+
+00:10:06.450 --> 00:10:07.970
+de suivre votre posture de sécurité
+
+00:10:07.970 --> 00:10:08.510
+au fil du temps.
+
+00:10:08.770 --> 00:10:09.610
+Parlons maintenant des alertes.
+
+00:10:10.090 --> 00:10:10.870
+Les alertes sont générées
+
+00:10:10.870 --> 00:10:11.790
+par des règles de détection,
+
+00:10:12.230 --> 00:10:13.210
+des conditions préconfigurées
+
+00:10:13.210 --> 00:10:13.670
+qui définissent
+
+00:10:13.670 --> 00:10:14.150
+à quoi ressemble
+
+00:10:14.150 --> 00:10:15.070
+un comportement suspect.
+
+00:10:15.730 --> 00:10:16.650
+Basé sur des années de recherche
+
+00:10:16.650 --> 00:10:17.110
+sur les menaces,
+
+00:10:17.210 --> 00:10:17.990
+Microsoft a élaboré
+
+00:10:17.990 --> 00:10:18.750
+des centaines de ces règles.
+
+00:10:18.750 --> 00:10:20.050
+Lorsqu'un utilisateur
+
+00:10:20.050 --> 00:10:20.570
+se connecte depuis
+
+00:10:20.570 --> 00:10:21.390
+un emplacement inhabituel,
+
+00:10:21.490 --> 00:10:22.310
+c'est une règle de détection.
+
+00:10:22.650 --> 00:10:23.310
+Lorsque quelqu'un tente
+
+00:10:23.310 --> 00:10:24.050
+une attaque de synchronisation
+
+00:10:24.050 --> 00:10:24.690
+de contrôleur de domaine,
+
+00:10:24.750 --> 00:10:25.290
+c'est une règle de détection.
+
+00:10:25.530 --> 00:10:26.330
+Lorsqu'un attaquant utilise
+
+00:10:26.330 --> 00:10:26.950
+un golden ticket,
+
+00:10:27.070 --> 00:10:27.850
+c'est une règle de détection.
+
+00:10:28.590 --> 00:10:29.670
+Le système compare constamment
+
+00:10:29.670 --> 00:10:30.230
+ce qui se passe
+
+00:10:30.230 --> 00:10:30.890
+dans votre environnement
+
+00:10:30.890 --> 00:10:31.530
+avec ces règles.
+
+00:10:32.290 --> 00:10:33.230
+Mais voici le point important.
+
+00:10:33.370 --> 00:10:33.970
+Plusieurs alertes
+
+00:10:33.970 --> 00:10:34.610
+peuvent se combiner
+
+00:10:34.610 --> 00:10:35.470
+en un seul incident.
+
+00:10:36.150 --> 00:10:37.210
+C'est important car les attaquants
+
+00:10:37.210 --> 00:10:38.550
+ne font pas qu'une seule chose suspecte.
+
+00:10:39.150 --> 00:10:40.170
+Ils font beaucoup de choses en séquence.
+
+00:10:40.590 --> 00:10:41.130
+Une alerte unique
+
+00:10:41.130 --> 00:10:42.290
+peut sembler être un faux positif,
+
+00:10:42.650 --> 00:10:43.130
+mais quand vous voyez
+
+00:10:43.130 --> 00:10:43.810
+et l'incident complet.
+
+00:10:44.190 --> 00:10:44.770
+La reconnaissance,
+
+00:10:44.930 --> 00:10:45.930
+la compromission des identifiants,
+
+00:10:46.070 --> 00:10:46.750
+le déplacement latéral,
+
+00:10:46.810 --> 00:10:47.650
+la domination du domaine.
+
+00:10:47.750 --> 00:10:48.570
+Vous savez exactement
+
+00:10:48.570 --> 00:10:49.090
+ce qui s'est passé.
+
+00:10:49.690 --> 00:10:50.450
+L'incident et l'histoire.
+
+00:10:51.030 --> 00:10:51.730
+Les alertes ne sont que
+
+00:10:51.730 --> 00:10:52.510
+des phrases individuelles.
+
+00:10:53.010 --> 00:10:53.850
+Chaque incident inclut
+
+00:10:53.850 --> 00:10:54.510
+un graphe d'attaque.
+
+00:10:54.930 --> 00:10:55.890
+Il s'agit d'une carte visuelle
+
+00:10:55.890 --> 00:10:56.750
+de la façon dont l'attaquant
+
+00:10:56.750 --> 00:10:57.770
+s'est déplacé dans votre environnement.
+
+00:10:58.130 --> 00:10:59.150
+Il vous montre le point de départ,
+
+00:10:59.330 --> 00:11:00.030
+chaque étape du chemin
+
+00:11:00.030 --> 00:11:01.150
+et la destination finale.
+
+00:11:01.990 --> 00:11:02.230
+Vous pouvez voir
+
+00:11:02.230 --> 00:11:03.250
+quels comptes ont été compromis,
+
+00:11:03.330 --> 00:11:04.310
+quelles machines ont été consultées
+
+00:11:04.310 --> 00:11:05.490
+et quelles techniques ont été utilisées.
+
+00:11:06.050 --> 00:11:06.650
+C'est comme visionner
+
+00:11:06.650 --> 00:11:07.630
+l'enregistrement d'une caméra
+
+00:11:07.630 --> 00:11:08.710
+de sécurité de toute l'attaque,
+
+00:11:09.130 --> 00:11:09.830
+mais sous forme de schéma.
+
+00:11:10.430 --> 00:11:10.970
+Et vous pouvez agir
+
+00:11:10.970 --> 00:11:12.010
+directement depuis le portail.
+
+00:11:12.550 --> 00:11:13.250
+Si vous identifiez
+
+00:11:13.250 --> 00:11:14.430
+un compte utilisateur compromis,
+
+00:11:14.750 --> 00:11:15.530
+inutile de vous connecter
+
+00:11:15.530 --> 00:11:16.450
+à votre contrôleur de domaine
+
+00:11:16.450 --> 00:11:17.110
+pour le désactiver.
+
+00:11:17.550 --> 00:11:18.170
+Vous pouvez le faire directement
+
+00:11:18.170 --> 00:11:19.050
+depuis le portail Defender.
+
+00:11:19.610 --> 00:11:20.190
+Désactiver le compte,
+
+00:11:20.290 --> 00:11:21.070
+forcez une réinitialisation
+
+00:11:21.070 --> 00:11:21.490
+de mot de passe,
+
+00:11:21.650 --> 00:11:22.770
+demandez une tentative de connexion.
+
+00:11:23.410 --> 00:11:24.230
+Le capteur communique
+
+00:11:24.230 --> 00:11:25.690
+avec votre active directory sur site
+
+00:11:25.690 --> 00:11:26.590
+et effectue le changement
+
+00:11:26.590 --> 00:11:27.290
+instantanément.
+
+00:11:28.190 --> 00:11:28.810
+C'est là tout l'intérêt
+
+00:11:28.810 --> 00:11:29.410
+d'avoir le capteur
+
+00:11:29.410 --> 00:11:30.250
+sur votre contrôleur de domaine.
+
+00:11:30.810 --> 00:11:31.650
+Il ne se contente pas d'écouter
+
+00:11:31.650 --> 00:11:32.030
+et peut agir.
+
+00:11:32.450 --> 00:11:32.870
+Vous pouvez également
+
+00:11:32.870 --> 00:11:33.850
+configurer des notifications
+
+00:11:33.850 --> 00:11:34.210
+par email.
+
+00:11:34.710 --> 00:11:35.430
+Lorsqu'une alerte critique
+
+00:11:35.430 --> 00:11:35.970
+se déclenche,
+
+00:11:36.050 --> 00:11:36.850
+votre équipe de sécurité
+
+00:11:36.850 --> 00:11:37.770
+reçoit un email instantané.
+
+00:11:38.130 --> 00:11:38.530
+Ils n'ont pas besoin
+
+00:11:38.530 --> 00:11:39.090
+de surveiller le tableau
+
+00:11:39.090 --> 00:11:40.370
+de bord 24004 et CGC.
+
+00:11:40.670 --> 00:11:41.510
+Le système, les alertes.
+
+00:11:41.830 --> 00:11:42.490
+Et comme les alertes
+
+00:11:42.490 --> 00:11:43.410
+sont associées au framework
+
+00:11:43.410 --> 00:11:44.170
+Mitra et NCK,
+
+00:11:44.390 --> 00:11:45.290
+ils savent exactement
+
+00:11:45.290 --> 00:11:46.010
+à quel type d'attaque
+
+00:11:46.010 --> 00:11:46.490
+ils ont à faire
+
+00:11:46.490 --> 00:11:47.990
+avant même d'ouvrir le portail.
+
+00:11:49.090 --> 00:11:49.690
+Au-delà des bases,
+
+00:11:49.770 --> 00:11:50.970
+il existe quelques fonctionnalités
+
+00:11:50.970 --> 00:11:51.650
+avancées qui méritent
+
+00:11:51.650 --> 00:11:52.050
+d'être connues.
+
+00:11:52.790 --> 00:11:53.270
+Les pots de miel,
+
+00:11:53.370 --> 00:11:54.390
+le marquage et les exclusions.
+
+00:11:54.810 --> 00:11:55.250
+Parlons des comptes
+
+00:11:55.250 --> 00:11:55.970
+aux nipotes ou pots de miel.
+
+00:11:56.250 --> 00:11:57.490
+Aussi appelés Honey Tokens,
+
+00:11:57.990 --> 00:11:59.250
+ils portent bien leur nom.
+
+00:11:59.770 --> 00:12:00.410
+Ce sont de faux comptes
+
+00:12:00.410 --> 00:12:01.610
+utilisateurs créés spécifiquement
+
+00:12:01.610 --> 00:12:02.530
+pour attirer les attaquants.
+
+00:12:03.210 --> 00:12:03.830
+Vous leur donnez un nom
+
+00:12:03.830 --> 00:12:04.370
+tentant comme
+
+00:12:04.370 --> 00:12:05.430
+Administrator Exchange
+
+00:12:05.430 --> 00:12:06.430
+ou Service de sauvegarde de domaine.
+
+00:12:07.170 --> 00:12:07.730
+Vous leur attribuez
+
+00:12:07.730 --> 00:12:08.610
+une appartenance à un groupe
+
+00:12:08.610 --> 00:12:09.230
+ou privé d'AGV.
+
+00:12:09.590 --> 00:12:10.230
+Mais voici le piège.
+
+00:12:10.750 --> 00:12:11.390
+Ces comptes n'ont aucune
+
+00:12:11.390 --> 00:12:12.030
+utilité réelle.
+
+00:12:12.430 --> 00:12:13.070
+Personne ne devrait jamais
+
+00:12:13.070 --> 00:12:13.690
+se connecter avec eux.
+
+00:12:13.990 --> 00:12:14.670
+Ils ne servent à aucune
+
+00:12:14.670 --> 00:12:15.310
+fin légitime.
+
+00:12:15.770 --> 00:12:16.410
+Ils restent simplement là
+
+00:12:16.410 --> 00:12:16.870
+en attente.
+
+00:12:17.350 --> 00:12:18.110
+Si quelqu'un se connecte
+
+00:12:18.110 --> 00:12:18.810
+à un compte pots de miel,
+
+00:12:19.030 --> 00:12:19.830
+vous le savez immédiatement.
+
+00:12:20.470 --> 00:12:21.030
+Pas parce que vous avez
+
+00:12:21.030 --> 00:12:21.830
+configuré une surveillance
+
+00:12:21.830 --> 00:12:22.650
+personnalisée ou écrit
+
+00:12:22.650 --> 00:12:23.270
+une règle de détection
+
+00:12:23.270 --> 00:12:24.110
+complexe,
+
+00:12:24.190 --> 00:12:24.570
+mais parce que
+
+00:12:24.570 --> 00:12:25.470
+Defender for Identity
+
+00:12:25.470 --> 00:12:26.010
+sait que ce compte
+
+00:12:26.010 --> 00:12:27.070
+ne doit jamais être utilisé.
+
+00:12:27.650 --> 00:12:28.150
+Dès que quelqu'un
+
+00:12:28.150 --> 00:12:28.850
+s'authentifie avec,
+
+00:12:28.950 --> 00:12:29.670
+une alerte se déclenche
+
+00:12:29.670 --> 00:12:30.850
+et vous savez exactement
+
+00:12:30.850 --> 00:12:31.350
+ce qui s'est passé.
+
+00:12:31.790 --> 00:12:32.490
+Un attaquant a trouvé
+
+00:12:32.490 --> 00:12:33.050
+votre compte leur
+
+00:12:33.050 --> 00:12:33.850
+et a essayé de l'utiliser.
+
+00:12:34.350 --> 00:12:35.410
+Ce n'est pas un faux positif,
+
+00:12:35.510 --> 00:12:36.170
+c'est une tentative
+
+00:12:36.170 --> 00:12:37.110
+d'intrusion confirmée.
+
+00:12:37.750 --> 00:12:38.370
+Vous pouvez déconfigurer
+
+00:12:38.370 --> 00:12:38.850
+dans le portail
+
+00:12:38.850 --> 00:12:39.790
+Defender sous paramètre
+
+00:12:39.790 --> 00:12:40.690
+Identité et jetons.
+
+00:12:41.450 --> 00:12:42.490
+Cela prend environ 30 secondes.
+
+00:12:42.990 --> 00:12:43.650
+Le marquage d'entité
+
+00:12:43.650 --> 00:12:44.390
+est une autre fonctionnalité.
+
+00:12:44.730 --> 00:12:44.990
+Vous pouvez marquer
+
+00:12:44.990 --> 00:12:45.830
+des utilisateurs,
+
+00:12:45.970 --> 00:12:46.790
+des appareils ou des groupes
+
+00:12:46.790 --> 00:12:47.690
+spécifiques comme sensibles
+
+00:12:47.690 --> 00:12:48.630
+pour une surveillance accrue,
+
+00:12:48.790 --> 00:12:49.330
+pour une surveillance.
+
+00:12:49.490 --> 00:12:50.670
+Réfléchissez à ce que cela signifie.
+
+00:12:50.790 --> 00:12:51.230
+Si vous marquez
+
+00:12:51.230 --> 00:12:52.030
+un compte administrateur
+
+00:12:52.030 --> 00:12:52.990
+de domaine comme sensibles,
+
+00:12:53.270 --> 00:12:54.210
+Defender for Identity
+
+00:12:54.210 --> 00:12:55.150
+surveille plus étroitement
+
+00:12:55.150 --> 00:12:55.990
+chaque action effectuée
+
+00:12:55.990 --> 00:12:56.490
+par ce compte.
+
+00:12:56.970 --> 00:12:57.910
+Toute déviation par rapport
+
+00:12:57.910 --> 00:12:58.690
+au comportement normal
+
+00:12:58.690 --> 00:12:59.810
+est signalée avec une priorité
+
+00:12:59.810 --> 00:13:00.230
+plus élevée.
+
+00:13:00.690 --> 00:13:01.370
+Tout mouvement latéral
+
+00:13:01.370 --> 00:13:02.030
+impliquant ce compte
+
+00:13:02.030 --> 00:13:03.010
+est remonté en priorité.
+
+00:13:03.670 --> 00:13:04.190
+C'est comme placer
+
+00:13:04.190 --> 00:13:04.850
+un traceur GPS
+
+00:13:04.850 --> 00:13:05.850
+sur vos actifs de précieux.
+
+00:13:06.290 --> 00:13:06.550
+Et enfin,
+
+00:13:06.610 --> 00:13:07.450
+il existe des règles d'exclusion.
+
+00:13:07.750 --> 00:13:08.730
+Parfois, des outils de sécurité
+
+00:13:08.730 --> 00:13:10.370
+ou des processus administratifs légitimes
+
+00:13:10.370 --> 00:13:11.270
+déclenchent de fausses alertes.
+
+00:13:11.610 --> 00:13:12.650
+Votre scanner de vulnérabilité
+
+00:13:17.690 --> 00:13:18.290
+contrôleur de domaine
+
+00:13:18.290 --> 00:13:19.170
+à des heures inhabituelles.
+
+00:13:19.530 --> 00:13:20.470
+Cela semble également suspect.
+
+00:13:20.890 --> 00:13:21.410
+Vous pouvez exclure
+
+00:13:21.410 --> 00:13:22.050
+des adresses IP,
+
+00:13:22.210 --> 00:13:23.470
+appareils ou utilisateurs spécifiques
+
+00:13:23.470 --> 00:13:24.570
+de certaines règles de détection
+
+00:13:24.570 --> 00:13:25.710
+pour éviter que ces faux positifs
+
+00:13:25.710 --> 00:13:26.390
+n'encombrent votre fil
+
+00:13:26.390 --> 00:13:27.050
+d'attente d'alerte.
+
+00:13:28.430 --> 00:13:29.130
+Les exclusions globales
+
+00:13:29.130 --> 00:13:29.670
+s'appliquent à toutes
+
+00:13:29.670 --> 00:13:30.470
+les règles de détection.
+
+00:13:31.150 --> 00:13:32.010
+Les exclusions par règles
+
+00:13:32.010 --> 00:13:32.630
+sont plus ciblées.
+
+00:13:33.390 --> 00:13:34.170
+L'objectif est le même.
+
+00:13:34.490 --> 00:13:34.990
+Réduire le bruit
+
+00:13:34.990 --> 00:13:35.990
+pour que votre équipe de sécurité
+
+00:13:35.990 --> 00:13:37.210
+se concentre sur les menaces réelles.
+
+00:13:37.670 --> 00:13:38.510
+Defender for Identity
+
+00:13:38.510 --> 00:13:39.250
+ne fonctionne pas seul.
+
+00:13:39.650 --> 00:13:40.610
+Voyons comment il s'intègre
+
+00:13:40.610 --> 00:13:41.270
+dans une vue d'ensemble.
+
+00:13:41.970 --> 00:13:42.590
+Comment il s'intègre
+
+00:13:42.590 --> 00:13:43.190
+dans l'écosystème
+
+00:13:43.190 --> 00:13:44.650
+de sécurité Microsoft ?
+
+00:13:44.650 --> 00:13:46.010
+Alors comment Defender for Identity
+
+00:13:46.010 --> 00:13:46.570
+s'intègre-t-il
+
+00:13:46.570 --> 00:13:47.290
+dans la vision globale
+
+00:13:47.290 --> 00:13:48.970
+de la sécurité de Microsoft ?
+
+00:13:48.970 --> 00:13:49.830
+Considérez-le comme une pièce
+
+00:13:49.830 --> 00:13:50.910
+du puzzle Defender XDR.
+
+00:13:51.370 --> 00:13:51.750
+Individuellement,
+
+00:13:51.870 --> 00:13:52.530
+chaque outil est utile,
+
+00:13:52.970 --> 00:13:53.930
+mais la véritable puissance
+
+00:13:53.930 --> 00:13:54.810
+réside dans leur collaboration.
+
+00:13:55.730 --> 00:13:56.550
+Defender for Endpoint
+
+00:13:56.550 --> 00:13:57.390
+protège vos appareils.
+
+00:13:57.970 --> 00:13:58.930
+Il vérifie chaque ordinateur
+
+00:13:58.930 --> 00:13:59.650
+portable et serveur
+
+00:13:59.650 --> 00:14:00.350
+à la recherche de logiciels
+
+00:14:00.350 --> 00:14:00.650
+malveillants
+
+00:14:00.650 --> 00:14:01.310
+et d'activités réseaux.
+
+00:14:01.770 --> 00:14:03.190
+Defender for Office 365
+
+00:14:03.190 --> 00:14:04.370
+protège vos outils de messagerie
+
+00:14:04.370 --> 00:14:04.830
+et de collaboration
+
+00:14:04.830 --> 00:14:05.790
+en détectant les tentatives
+
+00:14:05.790 --> 00:14:06.230
+d'hameçonnage
+
+00:14:06.230 --> 00:14:07.050
+et les pièces jointes malveillantes.
+
+00:14:07.590 --> 00:14:08.650
+Et Defender for Identity
+
+00:14:08.650 --> 00:14:09.790
+surveillez vos comptes utilisateurs
+
+00:14:09.790 --> 00:14:11.010
+pour détecter les identifiants volés,
+
+00:14:11.230 --> 00:14:12.030
+les déplacements latéraux
+
+00:14:12.030 --> 00:14:13.050
+et la domination du domaine.
+
+00:14:13.910 --> 00:14:14.270
+Individuellement,
+
+00:14:14.390 --> 00:14:15.130
+chaque outil est utile,
+
+00:14:15.570 --> 00:14:16.450
+mais le point clé est qu'en somme,
+
+00:14:16.590 --> 00:14:17.390
+il partage des signaux
+
+00:14:17.390 --> 00:14:18.450
+et relie les événements.
+
+00:14:19.350 --> 00:14:20.570
+Imaginez une connexion suspecte
+
+00:14:20.570 --> 00:14:21.610
+sur un contrôleur de domaine.
+
+00:14:22.250 --> 00:14:22.850
+Cette même connexion
+
+00:14:22.850 --> 00:14:23.410
+pourrait être liée
+
+00:14:23.410 --> 00:14:24.290
+à un email de hameçonnage
+
+00:14:24.290 --> 00:14:24.990
+déjà détecté par
+
+00:14:24.990 --> 00:14:26.310
+Defender for Office 365.
+
+00:14:26.990 --> 00:14:27.750
+L'attaquant a compromis
+
+00:14:27.750 --> 00:14:28.170
+la boîte mail
+
+00:14:28.170 --> 00:14:28.750
+et tente maintenant
+
+00:14:28.750 --> 00:14:29.790
+de se déplacer latéralement.
+
+00:14:30.810 --> 00:14:31.730
+Defender for Identity
+
+00:14:31.730 --> 00:14:32.430
+voit la connexion,
+
+00:14:32.570 --> 00:14:33.950
+Defender for Office 365
+
+00:14:33.950 --> 00:14:34.490
+voit l'email
+
+00:14:34.490 --> 00:14:35.750
+et la plateforme Microsoft
+
+00:14:35.750 --> 00:14:36.490
+Defender XDR
+
+00:14:36.490 --> 00:14:37.470
+crée un incident unique.
+
+00:14:37.470 --> 00:14:38.890
+C'est la différence
+
+00:14:38.890 --> 00:14:39.750
+entre des alertes isolées
+
+00:14:39.750 --> 00:14:40.830
+et le récit complet d'une attaque.
+
+00:14:41.670 --> 00:14:42.250
+Il s'intègre également
+
+00:14:42.250 --> 00:14:43.070
+avec Microsoft Sentinel
+
+00:14:43.070 --> 00:14:44.110
+qui est le SIEM Native Cloud
+
+00:14:44.110 --> 00:14:44.790
+de Microsoft.
+
+00:14:45.590 --> 00:14:46.070
+C'est là que vous allez
+
+00:14:46.070 --> 00:14:46.810
+pour la recherche avancée
+
+00:14:46.810 --> 00:14:47.130
+de menaces
+
+00:14:47.130 --> 00:14:48.070
+et les détections personnelles.
+
+00:14:48.390 --> 00:14:48.930
+Vous pouvez rédiger
+
+00:14:48.930 --> 00:14:49.690
+des requêtes custauds
+
+00:14:49.690 --> 00:14:50.630
+qui parcourent toutes vos données
+
+00:14:50.630 --> 00:14:51.930
+Defender, Identity,
+
+00:14:52.130 --> 00:14:52.810
+Endpoint, Email,
+
+00:14:52.890 --> 00:14:53.530
+Application Cloud
+
+00:14:53.530 --> 00:14:54.750
+pour trouver des modèles
+
+00:14:54.750 --> 00:14:55.590
+que les règles automatisées
+
+00:14:55.590 --> 00:14:56.330
+ne détectent pas toujours.
+
+00:14:57.290 --> 00:14:58.090
+Et il fonctionne parallèlement
+
+00:14:58.090 --> 00:14:58.530
+à Microsoft
+
+00:14:58.530 --> 00:14:59.290
+Entra ID Protection.
+
+00:14:59.830 --> 00:15:00.490
+Voici la distinction.
+
+00:15:01.010 --> 00:15:01.790
+Entra ID Protection
+
+00:15:01.790 --> 00:15:02.390
+gère les risques
+
+00:15:02.390 --> 00:15:03.490
+de connexion basées sur le cloud
+
+00:15:03.490 --> 00:15:04.170
+comme les accès risques.

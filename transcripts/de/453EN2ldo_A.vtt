@@ -1,0 +1,892 @@
+WEBVTT
+
+00:00:00.430 --> 00:00:06.690
+Bereit für 10 Tage Microsoft 365, Co-Pilot, KI, Azure und die Menschen, die die Zukunft der Arbeit gestalten?
+
+00:00:07.630 --> 00:00:11.870
+Diesen Januar ist die M3M565-Con zurück und wird noch größer.
+
+00:00:12.890 --> 00:00:18.010
+Nehmen Sie an Live-Sitzungen, Demos aus der Praxis und praktischem Wissen von MVPs und Branchenexperten aus aller Welt teil.
+
+00:00:18.710 --> 00:00:21.150
+Keine generischen Folien, keine endlosen Schlagwörter.
+
+00:00:21.970 --> 00:00:28.770
+Wir stellen uns den echten Herausforderungen Co-Pilot Studio, KI-Agents, Fabric, Sicherheit, Governance und Automatisierung.
+
+00:00:28.770 --> 00:00:34.390
+Ganz gleich, ob Sie IT-Experte, Entwickler oder Führungskraft sind, es gibt speziell auf Sie zugeschnittene Sitzungen.
+
+00:00:35.470 --> 00:00:39.970
+An 10 vollen Tagen können Sie verschiedene Technologien kennenlernen und sich mit einer globalen Community vernetzen.
+
+00:00:40.890 --> 00:00:44.310
+Sehen Sie sich die Live-Übertragung an und nehmen Sie praktische Einblicke mit nach Hause in Ihr Unternehmen.
+
+00:00:45.210 --> 00:00:48.750
+Januar 2027, 10 Tage, eine Microsoft-Community.
+
+00:00:49.430 --> 00:00:50.610
+Die Registrierung ist ab sofort möglich.
+
+00:00:51.750 --> 00:00:55.530
+Besuchen Sie m3m555.net und sichern Sie sich noch heute Ihren Platz.
+
+00:00:56.530 --> 00:00:58.190
+Das ist m3m5.net.
+
+00:00:58.770 --> 00:01:04.890
+Melden Sie sich jetzt auf m3m5.net an und wir sehen uns im Januar live, live.
+
+00:01:05.330 --> 00:01:07.550
+Willkommen zu einer weiteren Folge von Microsoft Knowledge Nuggets.
+
+00:01:07.950 --> 00:01:09.070
+Ich bin der Gastgeber Milko Peters.
+
+00:01:09.610 --> 00:01:11.150
+Das heutige Thema ist Azure Traffic Management.
+
+00:01:12.070 --> 00:01:14.950
+Stellen Sie sich vor, Sie haben eine Web-App entwickelt, die Menschen auf der ganzen Welt verwenden möchten.
+
+00:01:15.550 --> 00:01:18.970
+Benutzer in Tokio, London und Sao Paulo versuchen alle gleichzeitig auf ihre App zuzugreifen.
+
+00:01:19.770 --> 00:01:20.510
+Aber hier ist das Problem.
+
+00:01:20.630 --> 00:01:24.290
+Jeder einzelne dieser Benutzer greift auf einen Server in einer Region zu, sagen wir in Virginia.
+
+00:01:24.290 --> 00:01:30.230
+Der Benutzer in Tokio wartet über 200 Millisekunden pro Anforderung und der Benutzer in Sao Paulo hat eine noch schlechtere Erfahrung.
+
+00:01:30.230 --> 00:01:36.590
+Wenn dieses Rechenzentrum in Virginia ausfällt, ein Stromausfall, ein Netzwerkausfall oder etwas Unerwartetes vorliegt, ist Ihre gesamte App offline.
+
+00:01:37.350 --> 00:01:40.070
+Jeder Benutzer überall ist eine einzelne Fehlerquelle und ein großes Problem.
+
+00:01:40.070 --> 00:01:44.690
+Was wäre also, wenn Sie jeden Benutzer automatisch an den nächstgelegenen, schnellsten und fehlerfreisten Server weiterleiten würden?
+
+00:01:45.070 --> 00:01:48.030
+Was wäre, wenn ein Benutzer in Tokio von einem Rechenzentrum in Japan bedient würden?
+
+00:01:48.510 --> 00:01:53.870
+Ein Benutzer in London aus Irland und wenn eine Region ausfällt, wird der Datenverkehr einfach an eine andere Stelle verschoben, ohne dass Sie etwas tun müssen?
+
+00:01:54.650 --> 00:01:57.450
+Genau das macht Azure Traffic Manager und zwar auf DNS-Ebene.
+
+00:01:58.150 --> 00:01:59.450
+Das heißt, es ist einfacher als Sie denken.
+
+00:01:59.450 --> 00:02:06.670
+Am Ende dieser Folge wissen Sie, was Traffic Manager eigentlich ist, wie seine sechs Routing-Methoden funktionieren und wann Sie welche verwenden und wann Sie welche verwenden.
+
+00:02:06.790 --> 00:02:08.050
+Holen Sie sich Ihren Kaffee und legen wir los.
+
+00:02:08.610 --> 00:02:11.250
+Warum global ist Datenverkehrsrouting wichtig? Lassen Sie es uns aufschlüsseln.
+
+00:02:11.590 --> 00:02:16.910
+Die meisten Leute, wenn Sie den Begriff Lastenausgleich hören, denken an einen einzelnen Server, der den Datenverkehr auf mehrere Computer an einem Rechenzentrum verteilt.
+
+00:02:17.330 --> 00:02:20.350
+Das ist Azure Load Balancer und es eignet sich hervorragend für eine einzelne Rechnung.
+
+00:02:20.430 --> 00:02:22.850
+Doch was passiert, wenn Ihre Benutzer über verschiedene Kontinente verteilt sind?
+
+00:02:22.990 --> 00:02:27.190
+Ein Benutzer in Japan, der auf einen Server in Virginia zugreift, wird nie eine schnelle Antwort erhalten.
+
+00:02:27.190 --> 00:02:30.150
+Die physikalischen Grundlagen des Internets lassen das einfach nicht zu.
+
+00:02:30.570 --> 00:02:34.510
+Licht breitet sich mit einer festen Geschwindigkeit aus und jeder Netzwerk-Hopfe verursacht Verzögerungen.
+
+00:02:35.210 --> 00:02:37.590
+Das lässt sich nicht mit besserem Code oder einem schnelleren Dienst beheben.
+
+00:02:37.690 --> 00:02:39.190
+Denn langsame Apps verlieren Benutzer.
+
+00:02:39.830 --> 00:02:46.210
+Eine Verzögerung von einer Sekunde reduziert die Conversions um 7% an regionaler Ausfall, verlangsamt nicht nur die Abläufe, sondern setzt Ihre gesamte App offline.
+
+00:02:46.830 --> 00:02:49.990
+Ihre Nutzer können Sie nicht erreichen, Ihre Einnahmen bleiben aus und Ihr Ruf leitet.
+
+00:02:50.430 --> 00:02:56.430
+Vor 20 Jahren bestand der alte Ansatz darin, in jeder Region Server zu installieren und die Nutzer manuell an den richtigen Server weiterzuleiten.
+
+00:02:56.430 --> 00:03:02.610
+DNS-Einträge wurden manuell aktualisiert, Tabellenkalkulationen darüber geführt, welche Nutzer wohin gegangen sind und man betete, dass man beim Failover gemacht hatte.
+
+00:03:03.390 --> 00:03:07.290
+Dieser Ansatz ist unpraktisch und instabil, da er nicht skalierbar ist und unter Druck zusammenbricht.
+
+00:03:08.030 --> 00:03:12.930
+Der neue Ansatz ist ein einzelner DNS-basierter Traffic Director, der den besten Endpunkt pro Nutzer und Anfrage auswählt.
+
+00:03:13.790 --> 00:03:15.430
+Er erfordert keine manuellen Updates oder instabilen Kalkulationen.
+
+00:03:16.630 --> 00:03:21.070
+Stattdessen wird geprüft, wo sich der Nutzer befindet, welche Endpunkte fehlerfrei sind und der beste Endpunkt wird zurückgegeben.
+
+00:03:21.070 --> 00:03:29.670
+Stellen Sie sich das wie ein globales Flugsicherungssystem vor, bei dem jedes Rechenzentrum ein Flughafen ist und der Traffic Manager der Kontrollturm ist, der jeden Nutzer zum nächstgelegenen verfügbaren Server leitet.
+
+00:03:30.270 --> 00:03:31.330
+Hier kommt Traffic Manager ins Spiel.
+
+00:03:32.130 --> 00:03:34.550
+Sprechen wir also darüber, was Traffic Manager eigentlich ist.
+
+00:03:35.330 --> 00:03:36.330
+Ist die einfachste Definition.
+
+00:03:36.830 --> 00:03:40.130
+Traffic Manager ist ein DNS-basierter Lastenausgleich, der auf globaler Ebene ausgeführt wird.
+
+00:03:40.650 --> 00:03:44.570
+Stellen Sie sich das wie einen intelligenten Empfangstresen am Eingang eines Bürogebäudes auf der ganzen Welt vor.
+
+00:03:44.570 --> 00:03:48.570
+Wenn Sie hereinkommen, nimmt der Empfangsmitarbeiter weder Ihre Anrufe entgegen noch bearbeitet Ihre Unterlagen.
+
+00:03:48.850 --> 00:03:50.070
+Er verweist Sie lediglich an die richtige Eta.
+
+00:03:50.450 --> 00:03:51.590
+Das ist alles, was Traffic Manager tut.
+
+00:03:51.990 --> 00:03:53.390
+Er verweist Benutzer an den richtigen Server.
+
+00:03:53.850 --> 00:03:54.770
+Hier ist der wichtigste Unterschied.
+
+00:03:55.290 --> 00:03:57.730
+Traffic Manager sieht nie Ihren tatsächlichen Datenverkehr.
+
+00:03:58.270 --> 00:04:01.450
+Er leitet keine Anforderungen als Proxy weiter, überprüft keine Pakete und speichert keine Inhalte zu.
+
+00:04:01.710 --> 00:04:05.550
+Wenn ein Benutzer Ihren Domain-Namen in seinen Browser eingibt, wird eine DNS-Abfrage gesendet.
+
+00:04:06.010 --> 00:04:12.490
+Traffic Manager beantwortet diese Abfrage mit der IP-Adresse des besten, nächstgelegenen, fehlerfreisten Endpunkts, den Sie als Priorität konfiguriert haben.
+
+00:04:12.490 --> 00:04:17.670
+Dann stellt der Benutzer eine direkte Verbindung mit diesem Endpunkt her und Traffic Manager tritt vollständig in den Hintergrund.
+
+00:04:17.970 --> 00:04:23.490
+Das bedeutet, dass Ihrem Datenverkehrsfahrt keinerlei Latenz hinzugefügt wird, da er sich nicht in der Mitte des Datenflusses befindet und die Daten nicht verlangsamen.
+
+00:04:23.890 --> 00:04:29.890
+Er funktioniert auch mit jedem beliebigen Endpunkt mit Internetzugriff, mit Azure-Diensten, Servern in einer anderen Cloud und sogar mit Ihrem eigenen lokalen Rechenzentrum.
+
+00:04:30.830 --> 00:04:35.310
+Solange der Endpunkt über eine öffentliche IP-Adresse oder einen Domain-Namen verfügt, kann Traffic Manager Daten dorthin weiterleiten.
+
+00:04:35.830 --> 00:04:38.730
+Da es sich um einen globalen Dienst handelt, ist er gegenüber regionalen Ausfällen widerschenkt.
+
+00:04:38.730 --> 00:04:44.690
+Wenn eine gesamte Azure-Region ausfällt, wird Traffic Manager weiterhin ausgeführt und leitet Benutzern fehlerfreie Endpunkte an anderen Stellen weiter.
+
+00:04:45.530 --> 00:04:47.530
+Woher weiß Traffic Manager, welche Endpunkte fehlerfrei sind?
+
+00:04:48.050 --> 00:04:54.330
+Sie werden standardmäßig alle 30 Sekunden getestet, wobei eine HTTP- oder HTTPS-Anforderung an einen bestimmten Pfad auf jedem Endpunkt gesendet wird.
+
+00:04:54.750 --> 00:04:58.330
+Wenn der Endpunkt innerhalb eines Timeouts mit einem Statuscode der Ebene 200 antwortet, ist er fehlerfrei.
+
+00:04:58.990 --> 00:05:04.110
+Wenn er mehrmals hintereinander nicht antwortet, kennzeichnet Traffic Manager ihn als beeinträchtigt und leitet keine Benutzer mehr dorthin weiter.
+
+00:05:04.110 --> 00:05:08.750
+Wenn der Endpunkt wiederhergestellt ist, erkennt Traffic Manager dies ebenfalls und nimmt ihn wieder in die Rotation auf.
+
+00:05:09.330 --> 00:05:12.030
+Diese Integritätsüberwachung ermöglicht das automatische Failover.
+
+00:05:12.650 --> 00:05:16.890
+Sehen wir uns nun die verschiedenen Methoden an, mit denen Traffic Manager entscheidet, an welchen Endpunktbenutzer weitergeleitet werden.
+
+00:05:17.590 --> 00:05:18.870
+Wir kommen die Routing-Methoden ins Spiel.
+
+00:05:21.070 --> 00:05:22.990
+Prioritätsrouting, Notfallwiederherstellung leicht gemacht.
+
+00:05:23.850 --> 00:05:25.670
+Prioritätsrouting ist die am einfachsten zu verstehende Methode.
+
+00:05:25.930 --> 00:05:28.110
+Sie ordnen ihre Endpunkte von 1 bis zur gewünschten Anzahl.
+
+00:05:28.410 --> 00:05:28.810
+Das ist alles.
+
+00:05:29.050 --> 00:05:30.630
+Der gesamte Datenverkehr hält Priorität 1.
+
+00:05:30.630 --> 00:05:33.350
+Wenn dieser Endpunkt ausfällt, erhält der Datenverkehr Priorität 2.
+
+00:05:33.470 --> 00:05:35.930
+Denn 3 USWs handelt sich um eine Aktiv-Passiv-Konfiguration.
+
+00:05:36.750 --> 00:05:38.210
+Ein Endpunkt kümmert sich um alles die anderen.
+
+00:05:38.350 --> 00:05:39.770
+Warte Schleife, eine Warte Schleife.
+
+00:05:40.050 --> 00:05:41.010
+Hier ist ein Beispiel aus der Praxis.
+
+00:05:41.530 --> 00:05:45.450
+Angenommen, Ihre primären Server werden in USA-Osten ausgeführt und Sie haben Einsicherungsserver in Europa-Westen.
+
+00:05:45.610 --> 00:05:49.030
+Sie legen USA-Osten als Priorität 1 und Europa-Westen als Priorität 2 fest.
+
+00:05:49.310 --> 00:05:51.570
+Im Normalfall werden alle Benutzer an USA-Osten weitergeleitet.
+
+00:05:52.070 --> 00:05:57.550
+Wenn es jedoch in USA-Osten kommt, wie durch einen Stromausfall oder ein Netzwerkproblem erkennt Traffic Manager dies innerhalb von Sekunden.
+
+00:05:57.550 --> 00:06:01.610
+Neue Benutzer werden nicht mehr an USA-Osten weitergeleitet, sondern an Europa-Westen.
+
+00:06:02.110 --> 00:06:05.170
+Ihre App bleibt online und Ihre Benutzer bemerken möglicherweise nicht einmal, dass etwas passiert ist.
+
+00:06:05.830 --> 00:06:06.670
+Hier gibt es ein wichtiges Detail.
+
+00:06:07.130 --> 00:06:08.870
+Vorhandene Benutzer behalten ihre aktuelle Verbindung.
+
+00:06:09.210 --> 00:06:11.530
+DNS-basiertes Routing wirkt sich nur auf neue DNS-Look-Absolven.
+
+00:06:11.530 --> 00:06:18.350
+Wenn also jemand Ihre App bereits geladen hat und über eine aktive Sitzung verfügt, wird diese Sitzung weiterhin an den ursprünglichen Endpunkt weitergeleitet, bis sie beendet wird oder der DNS-Cache abläuft.
+
+00:06:18.610 --> 00:06:22.670
+Aus diesem Grund sollten Sie Ihre DNS-TTL niedrig festlegen. 30 bis 60 Sekunden sind der optimale Wert.
+
+00:06:23.250 --> 00:06:26.490
+Eine niedrige TTL bedeutet, dass DNS-Auflösungsmodule häufiger nach Updates suchen.
+
+00:06:26.930 --> 00:06:29.790
+Wenn Traffic Manager also zwischen Endpunkten wechselt, wird die Änderung schneller übernommen.
+
+00:06:30.110 --> 00:06:32.750
+Ein häufiger Fehler besteht darin, dass vergessen wird, das Failover zu testen.
+
+00:06:33.270 --> 00:06:36.870
+Wir legen ein Prioritäts-Routing fest, stellen Ihre Sicherungsregionen bereit und gehen dann einfach davon aus, dass alles funktioniert.
+
+00:06:37.270 --> 00:06:40.610
+Aber hier ist der Clou. Ihre Sicherungsregion muss die Gesamtlast verarbeiten können.
+
+00:06:40.610 --> 00:06:49.830
+Wenn Ihre primäre Region eine Million Benutzer pro Tag verarbeitet und Ihre Sicherungsregion im Normalbetrieb nur 100.000 Benutzer, kann diese Sicherungsregion ausfallen, wenn der gesamte Datenverkehr plötzlich dorthin verlagert wird.
+
+00:06:50.830 --> 00:06:53.890
+Testen Sie Ihr Failover. Simulieren Sie tatsächlichen Ausfall und beobachten Sie, was passiert.
+
+00:06:54.250 --> 00:06:55.490
+Nur so können Sie sicherstellen, dass alles funktioniert.
+
+00:06:55.990 --> 00:07:00.410
+Priorität hat Ihre App bei Fehlern am Laufen zu halten. Aber wie sieht es mit der Geschwindigkeit für alle aus?
+
+00:07:01.450 --> 00:07:05.650
+Leistungsrouting. Schwindigkeit hat oberste Priorität. Leistungsrouting funktioniert anders als Prioritätsrouting.
+
+00:07:06.130 --> 00:07:10.510
+Anstelle von immer zuerst diesen Endpunkt verwenden, heißt es, jeden Benutzer an den Endpunkt weiterleiten,
+
+00:07:10.510 --> 00:07:11.630
+der Ihnen die schnellste Verbindung bietet.
+
+00:07:12.150 --> 00:07:14.330
+Ein Benutzer in Tokio wird also an einen Server in Japan weitergeleitet.
+
+00:07:14.650 --> 00:07:16.230
+Ein Benutzer in London wird nach Irland weitergeleitet.
+
+00:07:16.530 --> 00:07:18.430
+Ein Benutzer in Sao Paulo wird nach Brasilien weitergeleitet.
+
+00:07:18.870 --> 00:07:21.450
+Jeder Benutzer erhält die schnellstmögliche Erfahrung, egal wo er sich befindet.
+
+00:07:22.030 --> 00:07:24.710
+Woher weiß Traffic Manager, welcher Endpunkt der schnellste ist?
+
+00:07:25.090 --> 00:07:26.930
+Er verwendet eine sogenannte Internetlatenztabelle.
+
+00:07:27.430 --> 00:07:29.510
+Stellen Sie sich diese wie eine Karte vor, die von Azure auf den neuesten Stand greift.
+
+00:07:29.850 --> 00:07:33.970
+Sie verfolgt die tatsächliche Netzwerklatenz zwischen verschiedenen Teilen der Welt und jeder Azure-Region nach.
+
+00:07:33.970 --> 00:07:39.530
+Wenn eine DNS-Abfrage eingeht, überprüft Traffic Manager, wo sich der DNS-Resolver des Benutzers befindet,
+
+00:07:39.730 --> 00:07:43.970
+schlägt in der Latenztabelle nach und gibt den Endpunkt zurück, der dem Benutzer die geringste Latenz bietet.
+
+00:07:44.930 --> 00:07:46.190
+Hier ist etwas, das Sie vielleicht überraschen wird.
+
+00:07:46.590 --> 00:07:47.930
+Es basiert nicht auf der physischen Entfernung.
+
+00:07:48.330 --> 00:07:52.750
+Ein Benutzer in Indien erhält möglicherweise eine geringere Latenz nach USA, Osten als nach Südostasien,
+
+00:07:52.890 --> 00:07:56.370
+je nachdem, wie die Unterseekabel und Internetknoten den Datenverkehr zu diesem Zeitpunkt weiterleiten.
+
+00:07:56.710 --> 00:08:00.810
+Die Latenztabelle erfasst die tatsächlichen Netzwerkbedingungen, nicht nur die Luftlinie, nicht nur die Luftlinie.
+
+00:08:00.810 --> 00:08:04.250
+Daher ist der nächstgelegene Endpunkt nicht immer der geografisch nächstgelegene.
+
+00:08:05.150 --> 00:08:09.210
+Leistungsrouting eignet sich hervorragend für globale Apps, bei denen die Benutzererfahrung von der Geschwindigkeit abhängt.
+
+00:08:10.010 --> 00:08:13.290
+E-Commerce-Websites, Video-Streaming-Tools für die Zusammenarbeit in Echtzeit all jene Bereiche,
+
+00:08:13.390 --> 00:08:15.350
+in denen eine langsame Antwort den Verlust eines Benutzers bedeutet.
+
+00:08:15.590 --> 00:08:16.290
+Es gibt jedoch einen Haken.
+
+00:08:16.670 --> 00:08:19.290
+Es berücksichtigt nicht, wie viel Last jeder Endpunkt bereits verarbeitet.
+
+00:08:19.830 --> 00:08:24.410
+Wenn Ihre Region USA Osten zu 95 Prozent, Ihre Region Europa-Westen zu 20 Prozent ausgelastet ist,
+
+00:08:24.410 --> 00:08:28.190
+leitet das leistungsorientierte Routing neue Benutzer möglicherweise trotzdem an die Region USA möglicherweise herrschen.
+
+00:08:28.770 --> 00:08:29.870
+Ihre Serverauslastung ist im Routing.
+
+00:08:29.870 --> 00:08:36.390
+Daher kombinieren Sie in der Regel das leistungsorientierte Routing mit anderen Lastenausgleichsmodulen in jeder Region Azure Load Balancer oder Application Gateway,
+
+00:08:36.810 --> 00:08:41.130
+um die tatsächliche Verteilung des Datenverkehrs auf Ihres Server zu verarbeiten, sobald der Benutzer in der richtigen Region ankommt.
+
+00:08:41.730 --> 00:08:43.610
+Das leistungsorientierte Routing optimiert die Geschwindigkeit.
+
+00:08:44.210 --> 00:08:47.010
+Was aber, wenn Sie steuern müssen, wie viel Datenverkehr jeder Endpunkt erhält?
+
+00:08:48.210 --> 00:08:50.750
+Gewichtetes und geografisches Routing, Kontrolle und Compliance.
+
+00:08:51.170 --> 00:08:52.990
+Beim leistungsorientierten Routing geht es um Geschwindigkeit.
+
+00:08:52.990 --> 00:08:56.170
+Was aber, wenn Sie genau steuern möchten, wie viel Datenverkehr jeder Endpunkt erhält?
+
+00:08:56.730 --> 00:08:59.290
+Oder wenn Sie benutzerbasierend auf Ihrem Standort auf der Welt weiterleiten möchten?
+
+00:08:59.690 --> 00:09:01.570
+Hier kommen gewichtetes und geografisches Routing-Spiel.
+
+00:09:01.850 --> 00:09:03.110
+Beginnen wir mit dem gewichteten Routing.
+
+00:09:03.490 --> 00:09:05.070
+Dies ist genau das, wonach es sich anhört.
+
+00:09:05.870 --> 00:09:08.950
+Sie weisen jedem Endpunkt eine Gewichtung zu, eine Zahl zwischen 1 und 1000.
+
+00:09:09.630 --> 00:09:12.690
+Traffic Manager verteilt dann den Datenverkehr proportional auf Grundlage dieser Gewichtung.
+
+00:09:12.690 --> 00:09:17.450
+Wenn Sie also Endpunkt A mit einer Gewichtung von 80 und Endpunkt B mit einer Gewichtung von 20 haben,
+
+00:09:17.670 --> 00:09:21.350
+werden etwa 80% Ihrer Benutzer an A und 20% an B weitergeleitet.
+
+00:09:21.730 --> 00:09:22.450
+Einfache Mathematik.
+
+00:09:22.930 --> 00:09:23.710
+Warum sollten Sie das tun?
+
+00:09:24.070 --> 00:09:25.050
+Denken Sie an einen Canary Release.
+
+00:09:25.490 --> 00:09:28.670
+Sie haben eine neue Version Ihrer App erstellt und möchten Sie mit echten Benutzern testen,
+
+00:09:28.730 --> 00:09:29.830
+bevor Sie sie für alle bereitstellen.
+
+00:09:30.330 --> 00:09:32.970
+Sie richten einen zweiten Endpunkt ein, auf dem die neue Version ausgeführt wird,
+
+00:09:33.030 --> 00:09:36.690
+weisen Ihnen eine Gewichtung von 5 und Ihrem aktuellen Produktionsendpunkt eine Gewichtung von 590 zu.
+
+00:09:36.970 --> 00:09:38.830
+5% Ihrer Nutzer greifen auf die neue Version zu.
+
+00:09:38.830 --> 00:09:40.710
+Sie achten auf Fehler, überwachen die Leistung
+
+00:09:40.710 --> 00:09:43.810
+und wenn alles gut aussieht, erhöhen Sie langsam die Gewichtung der neuen Version,
+
+00:09:43.950 --> 00:09:46.890
+vielleicht nächste Woche um 20%, dann um 50%, dann um 100%.
+
+00:09:46.890 --> 00:09:50.050
+Wenn etwas schief geht, setzen Sie die Gewichtung wieder auf 0 zurück und das Problem ist eingedämmt.
+
+00:09:50.430 --> 00:09:54.130
+Keine Big Bang-Bereitstellung, kein Rollback eines fehlerhaften Releases vor den Augen aller Ihrer Nutzer.
+
+00:09:54.470 --> 00:09:55.930
+Dieselbe Idee gilt für A-B-Tests.
+
+00:09:56.410 --> 00:09:58.490
+Sie möchten feststellen, ob ein neues Feature das Engagement verbessert.
+
+00:09:58.810 --> 00:10:02.230
+Senden Sie die Hälfte Ihrer Nutzer mit gleichen Gewichtungen an Version A und die andere Hälfte an Version B.
+
+00:10:02.350 --> 00:10:03.150
+Vergleichen Sie die Ergebnisse.
+
+00:10:03.470 --> 00:10:05.390
+Oder Sie migrieren Nutzer von einer Region in eine andere.
+
+00:10:06.030 --> 00:10:09.290
+Verschieben Sie die Gewichtung über einige Wochen schrittweise von der alten in die neue Region.
+
+00:10:09.290 --> 00:10:11.410
+Hier ist jedoch etwas wichtig zu verstehen.
+
+00:10:11.870 --> 00:10:13.410
+Gewichtetes Routing ist kein Round-Robin-Verfahren.
+
+00:10:13.710 --> 00:10:15.810
+Es wechselt nicht jeweils an Anforderungen zwischen Endpunkten.
+
+00:10:16.170 --> 00:10:17.790
+Es handelt sich um eine statistische Verteilung.
+
+00:10:17.870 --> 00:10:20.790
+Bei einer großen Anzahl von Anforderungen wird der Datenverkehr entsprechend Ihrer Gewichtungen aufgeteilt.
+
+00:10:21.290 --> 00:10:23.450
+Ein einzelner Nutzer, der mehrere Anforderungen stellt,
+
+00:10:23.710 --> 00:10:25.650
+trifft möglicherweise immer wieder auf denselben Endpunkt,
+
+00:10:25.750 --> 00:10:27.650
+da sein DNS-Resolver das Ergebnis zwischenspeichert.
+
+00:10:28.010 --> 00:10:29.290
+Stellen Sie sich das also nicht als perfekte Lastverteilung.
+
+00:10:30.030 --> 00:10:32.770
+Stellen Sie sich vor, Sie steuern den Gesamtanteil des Datenverkehrs im Zeitverlauf.
+
+00:10:33.290 --> 00:10:34.730
+Sprechen wir nun über geografisches Routing.
+
+00:10:35.070 --> 00:10:38.090
+Bei diesem Routing werden Benutzer basierend darauf weitergeleitet, wo Ihre DNS-Erfang hat.
+
+00:10:38.090 --> 00:10:40.190
+Land, Kontinent oder eine bestimmte Region.
+
+00:10:41.030 --> 00:10:43.490
+Ein Benutzer in Deutschland wird also einen Endpunkt in Frankfurt weitergeleitet.
+
+00:10:43.930 --> 00:10:46.850
+Ein Benutzer in Brasilien wird dann ihren Endpunkt in Sao Paulo weitergeleitet.
+
+00:10:47.230 --> 00:10:48.410
+Diese Detailebene ist sehr detailliert.
+
+00:10:48.770 --> 00:10:49.650
+Warum sollten Sie dies verwenden?
+
+00:10:49.910 --> 00:10:50.970
+Datenhoheit ist ein wichtiges Thema.
+
+00:10:51.370 --> 00:10:53.290
+Die Vorschriften der Europäischen Union schreiben möglicherweise vor,
+
+00:10:53.350 --> 00:10:54.330
+dass Benutzerdaten in Europa bleiben.
+
+00:10:54.630 --> 00:10:57.010
+Mit geografischem Routing können Sie dies auf DNS-Ebene durchsetzen.
+
+00:10:57.270 --> 00:10:59.050
+Ein Benutzer aus Frankreich löst Ihre Domäne auf
+
+00:10:59.050 --> 00:11:02.270
+und der Traffic-Manager gibt die IP-Adresse Ihres europäischen Endpunkts zurück.
+
+00:11:02.670 --> 00:11:03.990
+Deine Daten verlassen niemals den Kontinent.
+
+00:11:04.350 --> 00:11:05.910
+Dasselbe gilt für lokalisierte Inhalte.
+
+00:11:05.910 --> 00:11:08.970
+Wenn Sie möchten, dass Benutzer in Japan eine japanische Version Ihrer Website sehen,
+
+00:11:09.450 --> 00:11:12.490
+werden Sie durch geografisches Routing an den Endpunkt weitergeleitet, der diesen Inhalt bereitsteht.
+
+00:11:12.750 --> 00:11:13.890
+Eine wichtige Regel müssen Sie kennen.
+
+00:11:14.190 --> 00:11:16.830
+Jede geografische Region muss genau einem Endpunkt zugeordnet sein.
+
+00:11:17.290 --> 00:11:19.350
+Sie können ein einzelnes Land nicht auf zwei Endpunkte aufteilen.
+
+00:11:19.810 --> 00:11:21.530
+Wenn Sie also Benutzer in Deutschland haben und möchten,
+
+00:11:21.670 --> 00:11:24.130
+dass 50% nach Frankfurt und 50% nach Berlin geleitet werden,
+
+00:11:24.410 --> 00:11:26.290
+können Sie dies nicht allein mit geografischem Routing bewerkschieben.
+
+00:11:26.490 --> 00:11:28.130
+Stattdessen müssten Sie ein geschachteltes Profil verwenden.
+
+00:11:28.130 --> 00:11:30.330
+Geschachtelte Profile sind genau das, wonach der Name schon sagt.
+
+00:11:30.730 --> 00:11:32.710
+Sie fügen ein Traffic-Manager-Profil in ein anderes ein.
+
+00:11:33.110 --> 00:11:36.830
+Auf der obersten Ebene verwenden Sie also geografisches Routing um europäische Benutzer an ein Profil,
+
+00:11:37.210 --> 00:11:39.010
+nordamerikanische Benutzer an ein anderes US-E-Zene.
+
+00:11:39.410 --> 00:11:41.770
+Anschließend verwenden Sie innerhalb jedes dieser Profile gewichtetes Routing
+
+00:11:41.770 --> 00:11:44.050
+und den Datenverkehr zwischen Endpunkten innerhalb dieser Region aufzuteilen.
+
+00:11:44.410 --> 00:11:47.310
+Geografisch ganz oben für die Einhaltung von Vorschriften gewichtet und für die Kontrolle.
+
+00:11:47.310 --> 00:11:48.750
+Das ist eine leistungsstarke Kombination.
+
+00:11:48.750 --> 00:11:51.510
+Zwei weitere Routing-Methoden behandeln spezifische Resszenarien.
+
+00:11:51.770 --> 00:11:52.370
+Werfen einen Blick darauf.
+
+00:11:53.170 --> 00:11:55.710
+Mehrwertiges und Subnet-Routing für eine differenzierte Steuerung.
+
+00:11:56.350 --> 00:11:58.370
+Mehrwertiges Routing ist ein einfacher, aber nützlicher Trick.
+
+00:11:58.650 --> 00:12:01.270
+Anstatt nur einen Endpunkt in der DNS-Antwort zurückzugeben,
+
+00:12:01.670 --> 00:12:05.110
+sendet Traffic-Manager mehrere fehlerfreie IP-Adressen gleichzeitig zurück.
+
+00:12:05.610 --> 00:12:07.830
+Ihr Browser oder Ihre App wählt die erste aus der Liste aus,
+
+00:12:07.990 --> 00:12:11.430
+wodurch die Last verteilt wird, ohne dass Traffic-Manager für jede Anforderung eine Entscheidung treffen muss.
+
+00:12:11.710 --> 00:12:12.330
+Es gibt jedoch einen Hack.
+
+00:12:12.730 --> 00:12:15.630
+Multi-Value funktioniert nur mit IPv4 und IPv6 Endpunkten.
+
+00:12:15.630 --> 00:12:19.510
+Daher können Sie es nicht mit App-Diensten, Cloud-Diensten oder Endpunkten verwenden,
+
+00:12:19.850 --> 00:12:22.050
+die einen Domänen-Namen anstelle einer IP-Adresse verwenden.
+
+00:12:22.470 --> 00:12:24.230
+Es ist ausschließlich für IP-basierte Endpunkte vorgesehen.
+
+00:12:24.630 --> 00:12:27.170
+Wenn Sie über diese verfügen, wird das System jedoch widerstandsfähiger,
+
+00:12:27.270 --> 00:12:30.230
+da der Client beim Ausfall einer IP-Adresse eine andere aus der Liste ausprobieren kann,
+
+00:12:30.290 --> 00:12:31.790
+ohne eine neue DNS-Suche durchführen zu müssen.
+
+00:12:31.890 --> 00:12:33.890
+Dies bedeutet ein schnelleres Failover auf der Client-Seite.
+
+00:12:34.410 --> 00:12:37.050
+Subnet-Routing ist noch spezieller, aber leistungsstark, wenn Sie es benötigen.
+
+00:12:37.350 --> 00:12:40.830
+Es leitet Benutzer basierend auf dem Quell-IP-Subnetz weiter, aus dem Ihre DNS-Abfrage stammt.
+
+00:12:40.830 --> 00:12:44.650
+Sie können also den IP-Adressbereich Ihres Unternehmens einem Staging-Endpunkt zuordnen
+
+00:12:44.650 --> 00:12:46.270
+und alle anderen erhalten die Produktionsversion.
+
+00:12:47.010 --> 00:12:51.330
+Sie können Benutzer auch von einem bestimmten VPN-Subnetz zu einem dedizierten Backend für Tests weiterleiten.
+
+00:12:52.110 --> 00:12:55.670
+Stellen Sie sich ein internes Test-Szenario vor, bei dem Ihr Entwicklungsteam im Büro arbeitet.
+
+00:12:56.470 --> 00:12:58.930
+Die DNS-Abfragen stammen aus Ihrem Unternehmens-IP-Bereich
+
+00:12:58.930 --> 00:13:02.810
+und Sie ordnen diesen Bereich einer Staging-Umgebung zu, in der Sie den neuesten Bild testen können.
+
+00:13:03.430 --> 00:13:05.330
+Alle anderen im Internet erhalten die Produktionsversion.
+
+00:13:05.330 --> 00:13:10.990
+Keine speziellen URLs, keine VPN-Konfigurationen, nur transparentes Routing basierend darauf, woher die Anforderungen stammen.
+
+00:13:11.370 --> 00:13:12.410
+Beide Methoden sind Nischenmethoden.
+
+00:13:12.730 --> 00:13:17.390
+Die meisten Benutzer verwenden für ihr primäres Datenverkehrsmanagement die Methoden Priorität, Leistung, Gewichtung, Gewichtung oder Geld.
+
+00:13:17.590 --> 00:13:19.990
+Aber mehrere Werte und Subnetz sind verfügbar, wenn Sie sie benötigen.
+
+00:13:20.050 --> 00:13:22.250
+Und Sie lösen Probleme, die mit den anderen Methoden nicht gelöst werden können.
+
+00:13:23.290 --> 00:13:24.290
+Integritätsüberwachung und Fehlerpraxis
+
+00:13:24.290 --> 00:13:28.790
+Alle diese Routing-Methoden hängen von einer Sache ab, dem Wissen, welche Endpunkte tatsächlich fehlerfrei sind.
+
+00:13:29.110 --> 00:13:31.470
+Das Weiterleiten von Datenverkehr an einen defekten Server hilft niemandem.
+
+00:13:31.470 --> 00:13:34.670
+Lassen Sie uns darüber sprechen, wie die Integritätsüberwachung in der Praxis funktioniert.
+
+00:13:34.670 --> 00:13:38.430
+Traffic-Manager sendet standardmäßig alle 30 Sekunden einen Integritätstest an jeden Endpunkt.
+
+00:13:39.030 --> 00:13:43.030
+Dieser Test ist eine HTTP- oder HTTPS-Anforderung an einen bestimmten Pfad auf Ihrem Endpunkt.
+
+00:13:43.730 --> 00:13:48.510
+Innerhalb eines bestimmten Timeout-Zeitraums wird eine Antwort mit einem Statuscode zwischen 200 und 299 erwartet.
+
+00:13:48.910 --> 00:13:50.850
+Wenn der Endpunkt ordnungsgemäß antwortet, ist er fehlerfrei.
+
+00:13:51.290 --> 00:13:52.810
+Tut er dies nicht, versucht Traffic-Manager es erneut.
+
+00:13:53.750 --> 00:13:56.170
+Nach einer konfigurbaren Anzahl von Fehlern, standardmäßig drei,
+
+00:13:56.470 --> 00:13:59.690
+kennzeichnet Traffic-Manager diesen Endpunkt als beeinträchtigt und schließt ihn vom Routing aus,
+
+00:13:59.690 --> 00:14:01.270
+bis er die Integritätsprüfungen wieder besteht.
+
+00:14:01.890 --> 00:14:03.710
+Sie können das Prüfintervall und das Timeout konfigurieren.
+
+00:14:04.290 --> 00:14:05.670
+Schnellere Prüfungen bedeuten ein schnelleres Fehler.
+
+00:14:06.250 --> 00:14:08.850
+Wenn Sie das Intervall auf 10 Sekunden statt auf 30 festlegen,
+
+00:14:08.990 --> 00:14:12.090
+erkennt Traffic-Manager Fehler früher und leitet den Datenverkehr schneller um.
+
+00:14:12.730 --> 00:14:15.310
+Allerdings belasten schnellere Prüfungen Ihre Endpunkte stärker,
+
+00:14:15.430 --> 00:14:17.950
+da jede Prüfung eine Anforderung ist, die Ihr Server verarbeiten muss.
+
+00:14:18.310 --> 00:14:21.410
+Wenn Sie also über tausende von Endpunkten verfügen und alle 10 Sekunden eine Prüfung durchführen,
+
+00:14:21.490 --> 00:14:22.250
+summieren sich die Anforderungen.
+
+00:14:22.430 --> 00:14:24.290
+Da müssen Sie Geschwindigkeit und Mehraufwand gegeneinander haben.
+
+00:14:24.290 --> 00:14:27.990
+Die tatsächliche Auswirkung einer ordnungsgemäßen Konfiguration der Integritätsprüfung
+
+00:14:27.990 --> 00:14:31.130
+ist der Unterschied zwischen einem reibungslosen Failover und einem Fehlalarm, der Ihr Routing unterbricht.
+
+00:14:31.130 --> 00:14:34.750
+Wenn Ihre Prüfung zu empfindlich ist, können Sie einen Endpunkt als beeinträchtigt kennzeichnen,
+
+00:14:34.830 --> 00:14:35.850
+obwohl er eigentlich in Ordnung ist.
+
+00:14:36.670 --> 00:14:40.990
+Eine vorübergehende Spitze bei der Latenz, eine kurze Netzwerkstörung oder eine langsame Datenbankabfrage.
+
+00:14:41.090 --> 00:14:43.070
+All diese Faktoren können einen falsch positiven Wert auslösen.
+
+00:14:43.550 --> 00:14:46.070
+Wenn Traffic-Manager keine Benutzer mehr an diesen Endpunkt sendet,
+
+00:14:46.430 --> 00:14:48.230
+haben Sie soeben einen unnötigen Ausfall verursacht.
+
+00:14:48.730 --> 00:14:49.430
+Ist ein häufiger Fehler.
+
+00:14:49.430 --> 00:14:53.390
+Benutzer legen den Testpfad mit nur einem Schrägstrich auf das Stammverzeichnis Ihrer Anwendung fest.
+
+00:14:53.970 --> 00:14:57.030
+Das ist für eine grundlegende Integritätsprüfung ausreichend, aber nicht ideal,
+
+00:14:57.250 --> 00:14:59.130
+da die Stammseite möglicherweise langsam geladen wird,
+
+00:14:59.390 --> 00:15:02.290
+wenn sie eine vollständige Seite mit Datenbankabfragen, Bildern und JavaScript rendert.
+
+00:15:02.870 --> 00:15:06.150
+Ein besserer Ansatz besteht darin, einen dedizierten Endpunkt für die Integritätsprüfung zu erstellen.
+
+00:15:06.470 --> 00:15:08.350
+Dabei sollte es sich um eine einfache Funktion handeln,
+
+00:15:08.430 --> 00:15:11.530
+die schnell den Statuscode 200 zurückgibt und bestätigt, dass die Anwendung ausgeführt wird.
+
+00:15:11.770 --> 00:15:14.450
+Keine Datenbankabfragen, keine umfangreiche Verarbeitung, nur ein Hardbeat.
+
+00:15:14.450 --> 00:15:18.470
+Auf diese Weise sind Ihre Tests schnell und zuverlässig und lösen mit geringerer Wahrscheinlichkeit Fehlalarme aus.
+
+00:15:19.110 --> 00:15:20.210
+Lassen Sie mich noch einmal zusammenfassen,
+
+00:15:20.270 --> 00:15:22.930
+wann Sie Traffic Manager im Vergleich zu anderen Optionen tatsächlich verwenden sollten.
+
+00:15:24.110 --> 00:15:25.150
+Fazit und Entscheidungshilfe
+
+00:15:25.150 --> 00:15:26.750
+Hier also eine kurze Zusammenfassung.
+
+00:15:27.230 --> 00:15:31.050
+Traffic Manager ist ein DNS-basierter globaler Datenverkehrsmanager mit sechs Routing-Methoden.
+
+00:15:31.310 --> 00:15:32.690
+Er verarbeitet Ihren Datenverkehr nicht tatsächlich.
+
+00:15:33.190 --> 00:15:36.430
+Es leitet Benutzer einfach an dem richtigen Ort weiter, aber Sie haben auf der von Ihnen ausgewählten mit.
+
+00:15:37.190 --> 00:15:38.570
+Prioritätsrouting dient der Notfallwiederherstellung.
+
+00:15:39.070 --> 00:15:41.490
+Damit wird Ihre App auch dann ausgeführt, wenn eine gesamte Region ausfährt.
+
+00:15:42.530 --> 00:15:44.190
+Beim Leistungsrouting dreht sich alles umgeschwindig.
+
+00:15:45.010 --> 00:15:47.710
+Es leitet jeden Benutzer an den Endpunkt mit der geringsten Latenz weiter.
+
+00:15:48.370 --> 00:15:52.110
+Gewichtetes Routing ermöglicht Ihnen kontrollierte Rollouts wie Canary-Reses oder AB-Tests.
+
+00:15:53.610 --> 00:15:55.070
+Geografisches Routing kümmert Sie Compliance.
+
+00:15:55.490 --> 00:15:58.550
+Sie speichern Daten in der richtigen Region, je nachdem, wo sich Ihre Benutzer befinden.
+
+00:15:59.010 --> 00:16:02.190
+Mehrwertig dient der einfachen Verteilung auf IP-Ebene über mehrere Adressen.
+
+00:16:02.990 --> 00:16:06.290
+Und Subnets Routing routet basierend auf der Quell-IP der DNS-Abfrage.
+
+00:16:06.850 --> 00:16:09.670
+Lassen Sie uns nun darüber sprechen, wie sich Traffic Manager in eine echte Architektur einführen.
+
+00:16:09.870 --> 00:16:10.390
+Lernen Sie sich vor.

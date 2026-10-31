@@ -1,0 +1,1342 @@
+WEBVTT
+
+00:00:00.690 --> 00:00:06.510
+Bereit für 10 Tage Microsoft 365 Co-Pilot KI-Azure und die Menschen, die die Zukunft der Arbeit gestalten?
+
+00:00:07.530 --> 00:00:11.190
+Diesen Januar ist die M-Tron 65-Con zurück und zwar noch größer.
+
+00:00:12.410 --> 00:00:18.070
+Seien Sie dabei bei Live-Sitzungen, Demos aus der Praxis und praktischem Wissen von MVPs und Branchenexperten aus aller Welt.
+
+00:00:18.730 --> 00:00:21.130
+Keine generischen Folien, keine endlosen Schlagworte.
+
+00:00:21.930 --> 00:00:28.770
+Wir stellen uns den echten Herausforderungen Co-Pilot Studio, KI-Agents, Fabric, Sicherheit, Governance und Automatisierung.
+
+00:00:28.770 --> 00:00:34.310
+Ganz gleich, ob Sie IT-Experte, Entwickler oder Führungskraft sind, es gibt speziell auf Sie zugeschnittene Sitzungen.
+
+00:00:35.510 --> 00:00:40.010
+An 10 vollen Tagen können Sie verschiedene Technologien kennenlernen und sich mit einer globalen Community vernetzen.
+
+00:00:40.770 --> 00:00:44.330
+Sehen Sie sich die Live-Übertragung an und nehmen Sie praktische Einblicke mit nach Hause in Ihr Unternehmen.
+
+00:00:45.070 --> 00:00:48.730
+Januar 2027, 10 Tage, eine Microsoft Community.
+
+00:00:49.410 --> 00:00:50.650
+Die Registrierung ist ab sofort möglich.
+
+00:00:51.710 --> 00:00:52.950
+Gehen Sie noch heute zu Ihrem Standort.
+
+00:00:53.950 --> 00:00:58.270
+Das ist m325-conton.net.
+
+00:00:58.770 --> 00:01:04.730
+Melden Sie sich jetzt unter m325-conton.net an und wir sehen uns im Januar live.
+
+00:01:05.230 --> 00:01:07.550
+Willkommen zurück zu einer neuen Folge von Microsoft Knowledge Nuggets.
+
+00:01:07.970 --> 00:01:11.330
+Ich bin Ihr Gastgeber Mirko Peters und heute befassen wir uns mit einem realen Datenproblem.
+
+00:01:12.930 --> 00:01:14.170
+Lassen Sie mich Sie folgendes fragen.
+
+00:01:14.270 --> 00:01:17.890
+Stellen Sie sich vor, Sie arbeiten in einer Fabrik mit 1000 Sensoren für Temperatur, Druck und Vibration.
+
+00:01:18.010 --> 00:01:19.230
+Wieder unterbrochen, laufen, laufen und und und und und und.
+
+00:01:19.230 --> 00:01:21.490
+Das sind also 1000 Datenpunkte pro Sekunde.
+
+00:01:22.610 --> 00:01:24.490
+Vor 20 Jahren war die Lösung einfach.
+
+00:01:24.990 --> 00:01:29.670
+Sie haben tagsüber all diese Daten gesammelt, in einer Datei gespeichert und dann um Mitternacht einen Batchjob ausgeführt, um die Daten zu verarbeiten.
+
+00:01:30.450 --> 00:01:33.050
+Am nächsten Morgen hatten Sie dann einen Bericht, der Ihnen zeigte, was gestern passiert war.
+
+00:01:33.830 --> 00:01:36.550
+Das hat gut funktioniert, als schnell genug bedeutete, dass es morgen früh sein würde.
+
+00:01:37.350 --> 00:01:38.370
+Aber die Welt hat sich verändert.
+
+00:01:38.370 --> 00:01:42.770
+Sensoren wurden billiger, Apps wurden intelligenter und die Nutzer erwarten sofortige Antworten.
+
+00:01:43.630 --> 00:01:46.270
+Dieser nächtliche Batchjob bedeutet, dass Ihre Daten immer einen Tag alt sind.
+
+00:01:46.670 --> 00:01:51.250
+Und in einer Welt, in der eine überhitzte Maschine innerhalb von Minuten einen Brand verursachen kann, sind Daten von einem Tag nutzlos.
+
+00:01:51.590 --> 00:01:54.410
+Also stellen Sie auf Echtzeit um und erfassen die Daten, sobald sie generiert werden.
+
+00:01:54.990 --> 00:01:56.090
+Aber hier fangen die Probleme an.
+
+00:01:56.790 --> 00:01:59.750
+Versuchen Sie mal, all diese Streaming-Daten in eine herkömmliche Datenbank zu stellen.
+
+00:01:59.890 --> 00:02:00.790
+Und sie gerät einfach ins Stocken.
+
+00:02:01.570 --> 00:02:05.610
+Datenbanken sind für Abfragen und Transaktionen konzipiert, nicht für die Verarbeitung einer Flut von Ereignissen.
+
+00:02:05.610 --> 00:02:09.090
+Sie versuchen es mit einer normalen Nachrichtenwarteschlange und das funktioniert eine Zeit lang.
+
+00:02:09.170 --> 00:02:13.250
+Aber Warteschlangen sind dafür konzipiert, dass ein einzelner Konzipiert, dass ein einzelner Consumer eine Nachricht abrufende verarbeitet.
+
+00:02:13.350 --> 00:02:19.810
+Sie sind also nicht für Millionen von Ereignissen pro Sekunde mit mehreren nachgelagerten Systemen konzipiert, die alle denselben Stream lesen möchten.
+
+00:02:20.690 --> 00:02:21.850
+Das ist die zentrale Herausforderung.
+
+00:02:22.290 --> 00:02:29.130
+Sie benötigen eine Möglichkeit, riesige Datenmengen zu verarbeiten, diese zu puffern, damit nichts verloren geht und sie in Echtzeit an mehrere Consumer zu verteilen.
+
+00:02:29.570 --> 00:02:30.430
+Das ist kein Datenbankproblem.
+
+00:02:30.870 --> 00:02:31.790
+Es ist kein Warteschlangenproblem.
+
+00:02:32.150 --> 00:02:33.110
+Das sind Streaming-Probleme.
+
+00:02:33.290 --> 00:02:33.950
+Also wie kann man das lösen?
+
+00:02:33.950 --> 00:02:35.430
+Hier kommt Azure Event Hubs ins Spiel.
+
+00:02:36.130 --> 00:02:36.970
+Was ist Azure Event Hubs?
+
+00:02:37.870 --> 00:02:39.050
+Hier ist die einfachste Definition.
+
+00:02:40.090 --> 00:02:45.530
+Azure Event Hubs ist eine vollständig verwaltete Echtzeit-Datenstreaming-Plattform, die speziell dafür entwickelt wurde, mit geringer Latenz zu verarbeiten.
+
+00:02:46.590 --> 00:02:49.210
+Beachten Sie, dass ich nicht Nachrichtenwarteschlange oder Datenbank gesagt habe.
+
+00:02:49.830 --> 00:02:51.950
+Event Hubs ist keine Warteschlange und keine Datenbank.
+
+00:02:52.370 --> 00:02:54.030
+Es ist ein Datenstrom und der Unterschied ist wichtig.
+
+00:02:54.490 --> 00:02:57.410
+Eine Warteschlange enthält eine Nachricht, bis ein Consumer sie abruf und ist sie weg.
+
+00:02:57.730 --> 00:03:00.190
+Eine Datenbank speichert Daten, damit Sie sie später erfragen können.
+
+00:03:00.610 --> 00:03:01.670
+Ein Datenstrom ist jedoch anders.
+
+00:03:01.670 --> 00:03:07.750
+Es handelt sich um einen kontinuierlichen Fluss von Ereignissen, die mehrere Leser unabhängig voneinander in ihrem eigenen Tempo lesen können, ohne dass Datenstrom entfernt werden müssen.
+
+00:03:08.970 --> 00:03:10.210
+Lassen Sie uns nun ein paar Mythen ausräumen.
+
+00:03:10.530 --> 00:03:12.630
+Event Hubs können Millionen von Ereignissen pro Sekunde verarbeiten.
+
+00:03:13.130 --> 00:03:18.210
+Wir sprechen hier von der Aufnahme von Hunderttausenden von Nachrichten pro Sekunde von Tausenden von Produzenten von Produzenten.
+
+00:03:18.210 --> 00:03:19.950
+Dies geschieht mit sehr geringer Latenz.
+
+00:03:20.090 --> 00:03:23.890
+Von Senden eines Ereignisses bis zu dem Zeitpunkt, an dem ein Consumer es lesen kann, vergehen nur Millisekunden.
+
+00:03:25.230 --> 00:03:27.410
+Folgendes überrascht viele, Event Hubs ist Kafka-kompatibel.
+
+00:03:28.510 --> 00:03:36.530
+Wenn Sie also bereits mit Apache Kafka gearbeitet haben, können Sie Ihre vorhandenen Kafka-Tools und Clients verwenden, um mit Event Hubs zu kommunizieren, ohne ein neues Protokoll erlernen oder Ihre Anwendungen neu schreiben zu müssen.
+
+00:03:36.870 --> 00:03:37.990
+Event Hubs spricht dieselbe Sprache.
+
+00:03:38.470 --> 00:03:42.230
+Am einfachsten kann man sich Event Hubs als eine Art Hochgeschwindigkeitsdateneingangstür vorstellen.
+
+00:03:42.950 --> 00:03:45.270
+Denken Sie sich ein belebtes Bürogebäude während der Hauptverkehrszeit vor.
+
+00:03:45.270 --> 00:03:51.410
+Hunderte von Menschen betreten jede Minute die Eingangstür und die Tür hält sie nicht auf, stellt keine Fragen und leitet sie nicht in bestimmte Räume um.
+
+00:03:52.170 --> 00:03:53.370
+Sie lässt sie einfach schnell herein.
+
+00:03:54.130 --> 00:03:56.190
+Das Event Hubs. Es ist die Eingangstür für Ihre Daten.
+
+00:03:56.650 --> 00:03:59.350
+Die Daten werden nicht verarbeitet, analysiert oder entschieden, was damit zu tun ist.
+
+00:03:59.770 --> 00:04:05.070
+Die Daten werden einfach so schnell wie möglich in Ihre Azure-Umgebung eingeschleust, damit Ihre nachgelagerten Systeme die eigentliche Arbeit erledigen können.
+
+00:04:05.270 --> 00:04:07.750
+Aber wie funktioniert das eigentlich? Lassen Sie uns die Einzelbeschlüsse.
+
+00:04:08.270 --> 00:04:10.750
+Die Bausteine, Partitionen, Consumergruppen, Durchsatz.
+
+00:04:11.170 --> 00:04:14.050
+In jedem Event Hub gibt es also eine Struktur, die das Ganze zum Funktionieren bringt.
+
+00:04:14.050 --> 00:04:15.790
+Das wichtigste Element ist die Partition.
+
+00:04:16.090 --> 00:04:17.950
+Stellen Sie sich eine Partition, wenn eine Fahrspur von der Autobahn fährt.
+
+00:04:18.190 --> 00:04:19.810
+Daten kommen an und landen auf einer dieser Fahrspur.
+
+00:04:20.170 --> 00:04:20.710
+Hier ist der Schlüssel.
+
+00:04:21.130 --> 00:04:24.150
+Innerhalb jeder Fahrspur bleibt die Reihenfolge der Ereignisse genau in der Reihenfolge, in der Sie eingegangen sind.
+
+00:04:24.430 --> 00:04:27.470
+Ereignis 1 kommt vor Ereignis 2 und Ereignis 2 vor Ereignis 3.
+
+00:04:27.930 --> 00:04:29.730
+Diese Reihenfolge ändert sich innerhalb dieser Lainy.
+
+00:04:30.190 --> 00:04:33.210
+Wenn Ihre Anwendung Ereignisse, also in der exakten Reihenfolge benötigt, behalten Sie sie nicht.
+
+00:04:33.590 --> 00:04:38.610
+Sie können zwischen 2 und 32 Partitionen pro Event Hub haben und legen diese Zahl fest, wenn Sie den Hub erstellen.
+
+00:04:39.090 --> 00:04:40.210
+Sie kann später nicht mehr geändert werden.
+
+00:04:40.210 --> 00:04:42.830
+Daher müssen Sie sich im Voraus Gedanken über Ihren Durchsatzbedarf machen.
+
+00:04:43.170 --> 00:04:44.990
+Mehr Partitionen bedeuten mehr parallele Verarbeitung.
+
+00:04:45.570 --> 00:04:51.150
+Wenn Sie ein hohes Ereignis auf Komma warten, benötigen Sie mehr Partitionen, damit mehrere Consumer gleichzeitig aus verschiedenen Lanes lesen können.
+
+00:04:51.810 --> 00:04:53.590
+Mehr Partitionen bedeuten jedoch auch mehr Komplexität.
+
+00:04:54.030 --> 00:04:57.650
+Zwausträglich gilt, dass Sie Ihre Wahl nicht willkürlich, sondern basierend auf dem erwarteten Durchsatz treffen sollten.
+
+00:04:57.970 --> 00:05:00.050
+Wenn Sie sich nicht sicher sind, beginnen Sie mit einer kleineren Größe und testen.
+
+00:05:00.490 --> 00:05:01.690
+Partitionen allein reichen nicht aus.
+
+00:05:01.970 --> 00:05:03.090
+Sie benötigen auch Consumergruppen.
+
+00:05:03.090 --> 00:05:06.950
+Eine Consumergruppe ist einfach eine separate Downstream-Anwendung, die denselben Stream liest.
+
+00:05:07.410 --> 00:05:09.890
+Jede Consumergruppe erhält eine eigene, unabhängige Kopie.
+
+00:05:10.590 --> 00:05:16.950
+Wenn Sie also eine Gruppe für Echtzeitanalysen und eine andere für die Archivierung im Speicher haben, lesen beide gleichzeitig dieselben Ereignisse, ohne sich zu stören.
+
+00:05:17.690 --> 00:05:20.290
+Die Analysegruppe liest Temperaturdaten, um Anomalien zu erkennen.
+
+00:05:20.870 --> 00:05:24.430
+Die Archivierungsgruppe liest dieselben Daten und sendet sie zur Langzeitspeicherung an einen Data Lake.
+
+00:05:24.830 --> 00:05:25.850
+Beide Gruppen sehen jedes Ereignis.
+
+00:05:26.390 --> 00:05:27.410
+Keine Gruppe blockiert die andere.
+
+00:05:27.830 --> 00:05:28.670
+Und das ist ein wichtiger Aspekt.
+
+00:05:28.670 --> 00:05:32.310
+In einer herkömmlichen Warteschlange wird eine Nachricht von einem Prozessor verarbeitet und ist dann weg.
+
+00:05:32.670 --> 00:05:35.230
+Hier können mehrere Consumer denselben Datenstrom unabhängig von einer Nächsten.
+
+00:05:35.510 --> 00:05:36.890
+Das ist die Stärke von Consumergruppen.
+
+00:05:37.170 --> 00:05:39.430
+Aber wie messen Sie, wie viele Daten Ihr Event-Hub verarbeiten kann?
+
+00:05:39.790 --> 00:05:41.050
+Hier kommen die Durchsatzeinheiten ins Spiel.
+
+00:05:41.550 --> 00:05:43.990
+Eine Durchsatzeinheit oder TU ist ein Maß für die Kapazität.
+
+00:05:44.690 --> 00:05:49.690
+Eine TU bietet Ihnen 1 MB pro Sekunde an eingehenden Daten und 2 MB pro Sekunde an ausgehenden Daten.
+
+00:05:50.170 --> 00:05:53.190
+Wenn Sie also 10 MB pro Sekunde erfassen müssen, benötigen Sie mindestens 10 TUs.
+
+00:05:53.250 --> 00:05:56.490
+Sie können manuell hochskalieren oder die automatische Erhöhung aktivieren,
+
+00:05:56.490 --> 00:05:58.850
+wodurch Ihre TUs bei Datenverkehrsspitzen automatisch erhöht werden.
+
+00:05:59.310 --> 00:06:02.050
+Sie zahlen für die maximale Anzahl an TUs, die in einer Stunde genutzt werden.
+
+00:06:02.590 --> 00:06:07.310
+Wenn Sie also 20 TUs für 10 Minuten verwenden, bauen Sie für die gesamte Stunde 20 TUs ein.
+
+00:06:07.990 --> 00:06:09.130
+Noch ein Aspekt Aufbewahrung.
+
+00:06:09.570 --> 00:06:11.670
+Ereignisse verschwinden nicht aus dem Haupt, nachdem sie verbraucht wurden.
+
+00:06:12.050 --> 00:06:13.710
+Sie verbleiben für einen konfigurierbaren Zeitrahmen.
+
+00:06:13.870 --> 00:06:15.670
+Im Standardtarif sind das 1 bis 7 Tage.
+
+00:06:15.970 --> 00:06:17.470
+Im Premiumtarif bis zu 90 Tage.
+
+00:06:17.810 --> 00:06:19.270
+Dies ermöglicht etwas, das als Wiedergabe bezeichnet.
+
+00:06:19.670 --> 00:06:21.370
+Wenn Ihr nachgelagerter Consumer ausfällt
+
+00:06:21.370 --> 00:06:23.710
+oder Sie Daten für eine neue Analyse erneut verarbeiten müssen,
+
+00:06:23.790 --> 00:06:25.710
+können Sie zurückgehen und alte Ereignisse erneut lesen.
+
+00:06:25.710 --> 00:06:27.570
+Das ist anders als bei einer Warteschlange,
+
+00:06:27.650 --> 00:06:29.650
+bei der eine Nachricht, sobald sie verbraucht wurde, für immer verloren ist.
+
+00:06:29.850 --> 00:06:31.070
+Kennen Sie also die einzelnen Bestandteile,
+
+00:06:31.170 --> 00:06:33.170
+aber wir arbeiten sie in einem echten System tatsächlich zusammen.
+
+00:06:34.170 --> 00:06:34.530
+Funktionsweise.
+
+00:06:34.890 --> 00:06:36.070
+Das Producer- und Consumer-Modell.
+
+00:06:36.710 --> 00:06:38.450
+Lassen Sie uns den Ablauf von Anfang bis Ende durchgehen.
+
+00:06:38.930 --> 00:06:39.890
+Auf der einen Seite haben Sie Producer.
+
+00:06:40.510 --> 00:06:42.050
+Ein Producer ist eine beliebige Anwendung
+
+00:06:42.050 --> 00:06:43.810
+oder ein Gerät, das Ereignisse an den Hubs sendet.
+
+00:06:44.270 --> 00:06:46.330
+Dabei kann es sich um einen Temperatursensor in einer Fabrik,
+
+00:06:46.410 --> 00:06:48.050
+einen Webserver der Seitenaufrufe protokolliert
+
+00:06:48.050 --> 00:06:50.090
+oder eine Banking-App handeln, die Transaktionsdaten sendet.
+
+00:06:50.490 --> 00:06:53.430
+Produzenten können über drei verschiedene Protokolle mit Event-Hubs kommunizieren.
+
+00:06:53.430 --> 00:06:55.270
+In AMQP, HTTPS oder Kafka.
+
+00:06:55.890 --> 00:06:57.510
+Es gibt also eine Möglichkeit, eine Verbindung herzustellen,
+
+00:06:57.570 --> 00:06:58.970
+ganz gleich, welche Sprache oder Plattform Sie verwenden.
+
+00:06:59.290 --> 00:07:00.790
+Wenn ein Produzent ein Ereignis sendet,
+
+00:07:00.870 --> 00:07:02.510
+entscheidet der Hub, in welche Partition es verschoben.
+
+00:07:03.250 --> 00:07:05.510
+Standardmäßig werden Ereignisse im Round-Rubin-Verfahren verteilt.
+
+00:07:06.010 --> 00:07:07.850
+Das erste Ereignis wird am Partition 1 verschoben,
+
+00:07:07.930 --> 00:07:09.150
+das zweite am Partition 2 USB.
+
+00:07:09.330 --> 00:07:10.610
+Sie können aber auch einen Partitionsschlüssel verwenden.
+
+00:07:10.870 --> 00:07:13.030
+Wenn Sie möchten, dass alle Ereignisse von demselben Gerät
+
+00:07:13.030 --> 00:07:15.150
+in derselben Partition landen, legen Sie die Geräte-ID
+
+00:07:15.150 --> 00:07:16.050
+als Partitionsschlüssel für.
+
+00:07:16.050 --> 00:07:17.910
+Auf diese Weise bleibt die Reihenfolge der Ereignisse
+
+00:07:17.910 --> 00:07:18.670
+von diesem Gerät erhalten.
+
+00:07:18.670 --> 00:07:20.770
+Der Hub selbst führt nicht viele Verarbeitungsvorgänge auf.
+
+00:07:21.030 --> 00:07:22.590
+Er puffert die Ereignisse und speichert sie
+
+00:07:22.590 --> 00:07:24.470
+für den Aufbewahrungszeitraum in den Partitionen.
+
+00:07:24.830 --> 00:07:26.010
+Stellen Sie sich das als ein Aufbewahrungswort.
+
+00:07:26.370 --> 00:07:27.830
+Die Ereignisse verbleiben dort und warten darauf,
+
+00:07:27.890 --> 00:07:28.410
+dass sie gelesen werden.
+
+00:07:29.330 --> 00:07:30.710
+Auf der anderen Seite gibt es Konsumenten.
+
+00:07:31.150 --> 00:07:32.650
+Konsumenten sind nachgelagerte Anwendungen,
+
+00:07:32.750 --> 00:07:33.650
+die Daten aus dem Hub lesen.
+
+00:07:34.050 --> 00:07:34.930
+Und hier kommt der wichtige Teil.
+
+00:07:35.410 --> 00:07:36.550
+Konsumenten verwenden ein Pull-Modell.
+
+00:07:37.010 --> 00:07:37.950
+Sie steuern ihr eigenes Tempo.
+
+00:07:38.350 --> 00:07:39.530
+Sie erhalten keine Push-Ereignisse,
+
+00:07:39.650 --> 00:07:41.450
+sondern fordern Ereignisse an, wenn diese bereit sind.
+
+00:07:41.890 --> 00:07:43.390
+Dies unterscheidet sich von einer Warteschlange,
+
+00:07:43.470 --> 00:07:45.250
+bei der das System nachrichten an einen Consumer-Push.
+
+00:07:45.510 --> 00:07:46.350
+Hier entscheidet der Consumer,
+
+00:07:46.350 --> 00:07:47.730
+wann der nächste Batch abgerufen werden soll.
+
+00:07:48.250 --> 00:07:50.770
+Jede Consumer-Gruppe verfolgt ihre eigene Position im Stream.
+
+00:07:51.290 --> 00:07:52.770
+Diese Position wird als Offset bezeichnet.
+
+00:07:53.190 --> 00:07:54.410
+Der Offset teilt dem Consumer mit,
+
+00:07:54.490 --> 00:07:55.910
+welche Ereignisse er bereits verarbeitet hat.
+
+00:07:56.590 --> 00:07:58.950
+Der Consumer speichert diesen Offset an einem dauerhaften Ort,
+
+00:07:59.290 --> 00:08:00.450
+in der Regel im Azure Blob-Speicher.
+
+00:08:00.890 --> 00:08:02.570
+Dieser Vorgang wird als Prüfpunktspeicherung bezeichnet.
+
+00:08:02.810 --> 00:08:04.130
+Hier werden die Gründe für die Bedeutung von Prüfpunkten.
+
+00:08:04.550 --> 00:08:05.910
+Stellen Sie sich vor, Ihre Konsumeranwendung
+
+00:08:05.910 --> 00:08:07.950
+stürzt während der Verarbeitung eines Ereignis-Badges ab.
+
+00:08:08.350 --> 00:08:11.010
+Beim Neustart liest sie den letzten Prüfpunkt aus dem Blob-Speicher
+
+00:08:11.010 --> 00:08:12.630
+und setzt die Arbeit genau an diesem Punkt fort.
+
+00:08:13.170 --> 00:08:14.830
+Sie verarbeitet alte Ereignisse nicht erneut
+
+00:08:14.830 --> 00:08:15.930
+und überspringt keine Ereignisse.
+
+00:08:16.290 --> 00:08:17.810
+Sie setzt die Arbeit genau dort fort, wo sie aufgehört.
+
+00:08:18.130 --> 00:08:19.590
+Das ist Zuverlässigkeit ohne Komplexität.
+
+00:08:20.010 --> 00:08:20.990
+Die wichtigste Erkenntnis ist,
+
+00:08:21.090 --> 00:08:23.770
+dass Event-Hubs Produzenten und Konsumenten vollständig entkoppelt.
+
+00:08:24.330 --> 00:08:25.930
+Produzenten wissen nicht, wer ihre Daten liest.
+
+00:08:26.330 --> 00:08:27.690
+Consumer wissen nicht, wer die Daten sendet.
+
+00:08:28.110 --> 00:08:28.670
+Es ist unabhängig.
+
+00:08:28.910 --> 00:08:31.250
+Der Hub befindet sich in der Mitte und puffert und verteilt Ereignisse.
+
+00:08:31.650 --> 00:08:32.830
+Jede Seite arbeitet in ihrem eigenen Tempel.
+
+00:08:33.570 --> 00:08:35.430
+Diese Entkopplung macht Event-Hubs so leistungsstark
+
+00:08:35.430 --> 00:08:37.670
+für den Aufbau skalierbarer, widerstandsfähiger Systeme.
+
+00:08:38.450 --> 00:08:40.430
+Verdeutlichen wir dies anhand realer Szenarien.
+
+00:08:41.250 --> 00:08:42.070
+Reale Anwendungsfälle.
+
+00:08:42.070 --> 00:08:44.950
+Beginnen wir mit dem wichtigsten, IoT-Telemetrie.
+
+00:08:45.370 --> 00:08:47.610
+Stellen Sie sich eine intelligente Fabrik mit tausenden von Sensoren vor.
+
+00:08:48.090 --> 00:08:49.370
+Jede Maschine verfügt über Sensoren,
+
+00:08:49.450 --> 00:08:51.570
+die Temperatur, Druck, Vibration und Energieverbrauch messen.
+
+00:08:52.230 --> 00:08:53.910
+Jeder einzelne sendet alle paar Sekunden an Messwert.
+
+00:08:54.310 --> 00:08:55.990
+Das sind nicht hunderte von Ereignissen pro Sekunde,
+
+00:08:56.090 --> 00:08:57.770
+sondern hunderttausende oder vielleicht Millionen,
+
+00:08:58.130 --> 00:08:59.010
+je nach Größe der Fabrik.
+
+00:08:59.390 --> 00:09:01.630
+Sie können diese Daten nicht in einer herkömmlichen Datenbank speichern,
+
+00:09:01.750 --> 00:09:02.890
+nicht mit einem Batch-Auftrag verarbeiten,
+
+00:09:02.990 --> 00:09:04.090
+der einmal täglich ausgeführt wird.
+
+00:09:04.570 --> 00:09:05.970
+Bis Sie den Bericht erhalten, ist eine Maschine
+
+00:09:05.970 --> 00:09:08.210
+möglicherweise bereits überhitzt und hat die Produktion eingestellt.
+
+00:09:08.650 --> 00:09:11.070
+Daher leiten Sie alle Sensordaten an Event-Hubs weiter,
+
+00:09:11.070 --> 00:09:12.690
+die die Daten problemlos verarbeiten.
+
+00:09:13.450 --> 00:09:15.630
+Anschließend verbinden Sie Azure Stream Analytics mit dem Hub,
+
+00:09:15.730 --> 00:09:17.910
+damit Echtzeitabfragen für die Daten ausgeführt werden können.
+
+00:09:18.450 --> 00:09:20.470
+Wenn ein Temperaturmesswert einen Schwellenwert überschreitet,
+
+00:09:20.550 --> 00:09:22.810
+wird eine Warnung ausgelöst, ein Wartungsteam wird benachrichtigt
+
+00:09:22.810 --> 00:09:24.730
+und ein Computer wird heruntergefahren, bevor er ausfällt.
+
+00:09:25.190 --> 00:09:26.290
+Es ist vorausschauende Wartung in Aktion.
+
+00:09:26.950 --> 00:09:29.070
+Ein weiterer häufiger Anwendungsfall ist die Anwendungsprotokollierung
+
+00:09:29.070 --> 00:09:29.530
+und Überwachung.
+
+00:09:29.990 --> 00:09:31.950
+Angenommen, Sie betreiben eine Microservice-Architektur
+
+00:09:31.950 --> 00:09:34.230
+mit 50 verschiedenen Diensten, die alle unterschiedliche Dinge tun.
+
+00:09:35.030 --> 00:09:36.750
+Jeder Dienst generiert Protokolle mit Fehlern,
+
+00:09:36.830 --> 00:09:37.990
+Warnungen und Leistungsmetriken.
+
+00:09:37.990 --> 00:09:40.910
+Früher haben Sie diese Protokolle in Dateien auf jedem Server geschrieben
+
+00:09:40.910 --> 00:09:43.410
+und wenn etwas kaputt ging, mussten Sie sich bei fünf verschiedenen Computern anmelden,
+
+00:09:43.470 --> 00:09:44.150
+um den Fehler zu finden.
+
+00:09:44.670 --> 00:09:45.230
+Das ist ein Albtraum.
+
+00:09:46.330 --> 00:09:48.530
+Stattdessen veranlassen Sie, dass jeder Dienst seine Protokolle
+
+00:09:48.530 --> 00:09:49.970
+an einen einzelnen Event-Hub sendet.
+
+00:09:50.250 --> 00:09:51.150
+Eine zentrale Pipeline.
+
+00:09:52.350 --> 00:09:53.950
+Dann erstellen Sie mehrere Consumer-Gruppen.
+
+00:09:54.510 --> 00:09:56.530
+Eine Gruppe liest den Stream und sendet kritische Fehler
+
+00:09:56.530 --> 00:09:57.670
+an ein Echtzeitwarnsystem.
+
+00:09:58.330 --> 00:10:00.110
+Eine andere Gruppe liest denselben Stream
+
+00:10:00.110 --> 00:10:02.510
+und schreibt alle Protokolle zur langfristigen Speicherung und Analyse
+
+00:10:02.510 --> 00:10:03.250
+in Azure Data Lake.
+
+00:10:03.250 --> 00:10:06.170
+Eine dritte Gruppe speist ein Live-Dashboard aus den Systemzustand anzeigen.
+
+00:10:06.630 --> 00:10:08.390
+Jedes Team sieht dieselben Daten in Echtzeit,
+
+00:10:08.570 --> 00:10:09.770
+ohne sich gegenseitig zu stören.
+
+00:10:10.250 --> 00:10:11.770
+Klick-Stream-Analysen sind ein weiterer wichtiger Aspekt.
+
+00:10:12.150 --> 00:10:13.650
+Stellen Sie sich vor, Sie betreiben eine E-Commerce-Website.
+
+00:10:13.910 --> 00:10:15.630
+Jeder Klick, jeder Seitenaufruf, jede Suchanfrage
+
+00:10:15.630 --> 00:10:17.470
+und jedes Ereignis bei dem der Nutzer in den wahren Kopf will Liquid
+
+00:10:17.470 --> 00:10:18.290
+wird an Event-Hubs gesendet.
+
+00:10:18.370 --> 00:10:20.170
+Das ist ein riesiger Strom von Daten zum Nutzerverhalten.
+
+00:10:20.730 --> 00:10:22.870
+Nachgelagerte Verbraucher analysieren den Strom in Echtzeit.
+
+00:10:23.290 --> 00:10:24.750
+Ein Verbraucher erstellt Benutzerprofile,
+
+00:10:24.830 --> 00:10:26.350
+die zeigen, welche Produkte sich die Nutzer ansehen
+
+00:10:26.350 --> 00:10:27.430
+und welche Kategorien sie durchsuchen.
+
+00:10:27.430 --> 00:10:29.310
+Ein anderer Verbraucher erkennt Trends
+
+00:10:29.310 --> 00:10:30.850
+und sieht, welche Produkte plötzlich beliebt sind.
+
+00:10:31.570 --> 00:10:33.890
+Ein dritter Verbraucher personalisiert das Einkaufserlebnis,
+
+00:10:34.210 --> 00:10:35.810
+indem er Empfehlungen auf der Grundlage dessen anzeigt,
+
+00:10:35.890 --> 00:10:37.010
+worauf der Nutzer gerade geklickt hat.
+
+00:10:37.310 --> 00:10:39.090
+All dies geschieht in Millisekunden, nicht über Nacht.
+
+00:10:39.550 --> 00:10:41.110
+Und dann ist da noch die Betrugserkennung im Finanzwesen.
+
+00:10:41.610 --> 00:10:43.650
+Banken verarbeiten jeden Tag Millionen von Transaktionen.
+
+00:10:44.610 --> 00:10:46.630
+Kreditkartenabbuchungen, Überweisungen, Online-Zahlungen.
+
+00:10:47.250 --> 00:10:48.730
+Jede Transaktion ist ein Ereignis
+
+00:10:48.730 --> 00:10:51.230
+und jede einzelne muss in Echtzeit auf Betrug hin bewertet werden.
+
+00:10:51.730 --> 00:10:53.090
+Sie können nicht auf einen Batch-Auftrag warten,
+
+00:10:53.450 --> 00:10:55.250
+denn wenn eine betrügerische Transaktion durchgeführt wird,
+
+00:10:55.290 --> 00:10:55.750
+ist das Geld weg.
+
+00:10:55.750 --> 00:10:58.150
+Daher überträgt die Bank jede Transaktion an Event-Hubs.
+
+00:10:58.770 --> 00:11:00.090
+Nachgelagerte Machine-Learning-Modelle
+
+00:11:00.090 --> 00:11:01.090
+verarbeiten den Datenstrom
+
+00:11:01.090 --> 00:11:03.130
+und bewerten jede Transaktion auf Betrugsrisiko.
+
+00:11:03.810 --> 00:11:05.570
+Verdächtige Transaktionen werden innerhalb von Sekunden
+
+00:11:05.570 --> 00:11:06.450
+gekennzeichnet und blockiert.
+
+00:11:07.110 --> 00:11:09.210
+In der Zwischenzeit speisen separate Verbrauchergruppen
+
+00:11:09.210 --> 00:11:10.830
+denselben Datenstrom in Compliance-Systeme
+
+00:11:10.830 --> 00:11:12.330
+für die Berichterstattung über gesetzliche Bestimmungen
+
+00:11:12.330 --> 00:11:13.290
+und in operative Dashboards
+
+00:11:13.290 --> 00:11:14.750
+zur Überwachung des Transaktionsvolumens ein.
+
+00:11:15.350 --> 00:11:16.350
+Drei verschiedene Verbraucher,
+
+00:11:16.430 --> 00:11:17.690
+die alle denselben Datenstrom lesen
+
+00:11:17.690 --> 00:11:18.890
+und dabei unterschiedliche Dinge tun.
+
+00:11:19.170 --> 00:11:21.290
+Der rote Faden, der sich durch alle diese Szenarien zieht,
+
+00:11:21.330 --> 00:11:21.830
+ist derselbe.
+
+00:11:21.930 --> 00:11:23.510
+Hohes Volumen, mehrere Verbraucher
+
+00:11:23.510 --> 00:11:25.530
+und die Notwendigkeit von Echtzeit-Informationen.
+
+00:11:25.930 --> 00:11:27.370
+Event-Hubs ist nicht die Lösung für jedes Problem,
+
+00:11:27.530 --> 00:11:29.510
+aber in dieser Kombination ist es das richtige Tool
+
+00:11:29.510 --> 00:11:30.570
+für die Aufgabe.
+
+00:11:31.330 --> 00:11:33.490
+Nun ist Event-Hubs nicht der einzige Messaging-Dienst in Azure.
+
+00:11:34.170 --> 00:11:34.890
+Vergleichen wir mit den anderen.
+
+00:11:35.590 --> 00:11:37.690
+Event-Hubs im Vergleich zu Event-Grid und Service-Bus.
+
+00:11:38.390 --> 00:11:39.870
+Azure verfügt über drei Hauptdienste
+
+00:11:39.870 --> 00:11:40.850
+zum Verschieben von Daten.
+
+00:11:41.030 --> 00:11:42.650
+Event-Grid, Event-Hubs und Service-Bus.
+
+00:11:43.510 --> 00:11:44.430
+Diese werden oft verwechselt,
+
+00:11:44.490 --> 00:11:45.670
+deshalb wollen wir das Ganze aufklären.
+
+00:11:46.130 --> 00:11:47.230
+Event-Grid ist der Rauchmelder.
+
+00:11:47.730 --> 00:11:48.750
+Es ist schlank und reaktionsschnell.
+
+00:11:48.750 --> 00:11:49.970
+Wenn etwas passiert,
+
+00:11:50.650 --> 00:11:52.170
+wird ein Blob in den Speicher hochgeladen.
+
+00:11:52.690 --> 00:11:54.530
+Der Status eines virtuellen Computers ändert sich.
+
+00:11:55.050 --> 00:11:56.070
+Eine Ressource wird erstellt.
+
+00:11:56.650 --> 00:11:57.790
+Event-Grid löst ein Ereignis aus.
+
+00:11:58.250 --> 00:11:59.450
+Es überträgt nicht die Daten selbst,
+
+00:11:59.510 --> 00:12:00.970
+sondern meldet nur, hey, etwas ist passiert.
+
+00:12:01.430 --> 00:12:02.990
+Anschließend wird diese Benachrichtigung an Händler
+
+00:12:02.990 --> 00:12:04.610
+wie Azure Functions oder Logic Apps weitergeleitet.
+
+00:12:04.990 --> 00:12:06.230
+Event-Grid ist kein Datenstrom
+
+00:12:06.230 --> 00:12:07.710
+und nicht für hohen Durchsatz konzipiert.
+
+00:12:08.030 --> 00:12:09.330
+Es wird für diskrete Ereignisse vorgesehen,
+
+00:12:09.390 --> 00:12:10.290
+die eine schnelle Reaktion erfüllen.
+
+00:12:10.630 --> 00:12:12.770
+Es eignet sich am besten für Trigger zum Hochladen von Blobs,
+
+00:12:12.870 --> 00:12:13.990
+Änderungen des Ressourcenstatus
+
+00:12:13.990 --> 00:12:14.830
+und serverlose Workflows.
+
+00:12:15.330 --> 00:12:16.390
+Service-Bus ist der Postdienst.
+
+00:12:16.390 --> 00:12:18.890
+Er ist zuverlässig geordnet und garantiert die Zustellung.
+
+00:12:19.330 --> 00:12:20.990
+Wenn Sie eine Nachricht über Service-Bus senden,
+
+00:12:21.050 --> 00:12:21.770
+wissen Sie, dass sie ankommen.
+
+00:12:22.250 --> 00:12:24.330
+Service-Bus unterstützt die First-in-First-out-Reihenfolge
+
+00:12:24.330 --> 00:12:25.810
+der Erkennung von Duplikaten und Transaktionen.
+
+00:12:26.030 --> 00:12:27.490
+Wenn eine Nachricht nicht verarbeitet werden kann,
+
+00:12:27.550 --> 00:12:29.550
+wird sie in eine Warteschlange für unzustellbare Nachrichten verschoben,
+
+00:12:29.610 --> 00:12:30.530
+in der Sie sich später überprüfen können.
+
+00:12:30.670 --> 00:12:32.410
+Service-Bus wurde für geschäftskritische Workflows
+
+00:12:32.410 --> 00:12:34.150
+wie Zahlungsabwicklung, Auftragserfüllung
+
+00:12:34.150 --> 00:12:35.430
+und Genehmigungsketten entwickelt.
+
+00:12:36.230 --> 00:12:38.050
+Service-Bus verarbeitet tausende von Nachrichten pro Sekunde,
+
+00:12:38.150 --> 00:12:38.390
+nicht Millionen.
+
+00:12:38.830 --> 00:12:39.570
+Das ist auch gut so,
+
+00:12:39.630 --> 00:12:40.710
+denn wenn Sie eine Zahlung verarbeiten,
+
+00:12:40.710 --> 00:12:42.510
+benötigen Sie nicht Millionen von Ereignissen pro Sekunde.
+
+00:12:42.870 --> 00:12:44.310
+Jede einzelne Nachricht muss genau einmal
+
+00:12:44.310 --> 00:12:45.510
+in der richtigen Reihenfolge ankommen.
+
+00:12:45.930 --> 00:12:47.010
+EventHubs ist die Überwachungskamera.
+
+00:12:47.630 --> 00:12:49.530
+Es zeichnet alles zur Wiedergabe und Analyse auf.
+
+00:12:50.290 --> 00:12:51.690
+Das wurde für Streaming mit hohem Volumen
+
+00:12:51.690 --> 00:12:53.550
+und Millionen von Ereignissen pro Sekunde entwickelt
+
+00:12:53.550 --> 00:12:54.910
+und mehrere Consumer können denselben Stream
+
+00:12:54.910 --> 00:12:55.770
+unabhängig von Analysen.
+
+00:12:56.290 --> 00:12:58.150
+Ereignisse verbleiben Tage oder Wochen lang im Hub,
+
+00:12:58.210 --> 00:12:59.570
+sodass Sie sie bei Bedarf erneut abspielen können.
+
+00:12:59.910 --> 00:13:01.670
+EventHubs ist nicht für Transaktionsnachrichten vorgesehen.
+
+00:13:02.030 --> 00:13:03.170
+Es ist für Telemetriedaten,
+
+00:13:03.310 --> 00:13:05.390
+Analysepipelines und alle Szenarien vorgesehen,
+
+00:13:05.710 --> 00:13:07.130
+in denen Sie große Datenmengen erfassen
+
+00:13:07.130 --> 00:13:08.650
+und an mehrere Consumer verteilen müssen.
+
+00:13:08.650 --> 00:13:10.010
+Wie treffen Sie also Ihre Entscheidung?
+
+00:13:10.370 --> 00:13:11.290
+Stellen Sie sich drei Fragen.
+
+00:13:11.770 --> 00:13:12.650
+Reagieren Sie auf eine Änderung.
+
+00:13:12.990 --> 00:13:14.970
+Ein Blob wurde hochgeladen, eine VM wurde erstellt,
+
+00:13:15.050 --> 00:13:16.290
+der Status einer Ressource wurde geändert.
+
+00:13:16.590 --> 00:13:17.190
+Das ist EventGrid.
+
+00:13:17.590 --> 00:13:18.970
+Benötigen Sie eine garantierte Zustellung,
+
+00:13:19.050 --> 00:13:19.770
+eine strikte Reihenfolge.
+
+00:13:20.130 --> 00:13:21.910
+Zahlungen verarbeiten, Workflows ausführen,
+
+00:13:22.050 --> 00:13:23.270
+Geschäftstransaktionen koordinieren,
+
+00:13:23.390 --> 00:13:24.070
+das ist Servicebus.
+
+00:13:24.610 --> 00:13:26.150
+Streamen Sie große Datenmengen für Analysen,
+
+00:13:26.230 --> 00:13:28.170
+IoT-Telemetriedaten, Anwendungsprotokolle,
+
+00:13:28.210 --> 00:13:29.750
+Clickstreams oder zur Betrugserkennung
+
+00:13:29.750 --> 00:13:30.790
+oder zur Betrugserkenntung.
+
+00:13:30.910 --> 00:13:31.650
+Das ist EventHubs.
+
+00:13:32.370 --> 00:13:32.930
+Aber das ist der Clou.
+
+00:13:33.270 --> 00:13:34.550
+Sie müssen sich nicht für einen von beiden entscheiden.
+
+00:13:34.550 --> 00:13:35.950
+Diese Dienste arbeiten zusammen.
+
+00:13:35.950 --> 00:13:37.910
+EventHubs erfassen den Rohdatenstrom.
+
+00:13:38.590 --> 00:13:40.490
+EventGrid reagiert auf Ereignisse in diesem Strom
+
+00:13:40.490 --> 00:13:41.970
+und löst nachgelagerte Aktionen aus.
+
+00:13:42.510 --> 00:13:44.690
+Servicebus verarbeitet die zuverlässige Nachrichtenübermittlung
+
+00:13:44.690 --> 00:13:45.470
+für Geschäftsworkflows.
+
+00:13:45.810 --> 00:13:46.810
+Wenn Sie beides zusammen verwenden,
+
+00:13:46.910 --> 00:13:47.990
+erhalten Sie das Beste aus beiden Welten.
+
+00:13:48.430 --> 00:13:50.410
+Sprechen wir über die Kosten für den Betrieb dieser Art von Pipeline.
+
+00:13:51.010 --> 00:13:51.710
+Preise und Tarife
+
+00:13:51.710 --> 00:13:53.070
+Sprechen wir über die Kosten,
+
+00:13:53.290 --> 00:13:54.950
+denn zu wissen, was EventHubs leistet, ist eine Sache.
+
+00:13:55.230 --> 00:13:56.710
+Aber zu wissen, was es kostet, ist eine ganz andere.
+
+00:13:57.410 --> 00:13:58.730
+EventHubs verfügt über vier Tarife,
+
+00:13:58.850 --> 00:13:59.870
+wobei Basic der günstigste ist.
+
+00:13:59.870 --> 00:14:01.530
+Er bietet einen Tag Aufbewahrungsdauer,
+
+00:14:01.850 --> 00:14:02.570
+eingeschränkte Features
+
+00:14:02.570 --> 00:14:04.270
+und die niedrigsten Kosten pro Durchsatzeinheit.
+
+00:14:04.830 --> 00:14:06.110
+Dies eignet sich für einfache Szenarien,
+
+00:14:06.190 --> 00:14:06.930
+in denen Sie nicht viel benötigen.
+
+00:14:07.270 --> 00:14:08.810
+Die meisten Benutzer überspringen jedoch Basic
+
+00:14:08.810 --> 00:14:09.530
+und beginnen mit Stand.
+
+00:14:09.930 --> 00:14:10.970
+Standard ist die optimale Lösung.
+
+00:14:11.590 --> 00:14:13.450
+Sie bietet bis zu sieben Tage Aufbewahrungsdauer,
+
+00:14:13.570 --> 00:14:15.750
+EventHubs Capture für die automatische Archivierung im Speicher,
+
+00:14:15.930 --> 00:14:16.910
+Kafka-Kompatibilität
+
+00:14:16.910 --> 00:14:18.290
+und bis zu 20 Consumer-Gruppen.
+
+00:14:19.170 --> 00:14:20.470
+Dies deckt die meisten Produktionsworkloads.
+
+00:14:20.990 --> 00:14:22.310
+Wenn Sie also etwas Konkretes entwickeln,
+
+00:14:22.390 --> 00:14:23.230
+sollten Sie in der Regel hier beginnen.
+
+00:14:23.650 --> 00:14:24.490
+Premium ist eine Stufe höher.
+
+00:14:24.570 --> 00:14:26.630
+Sie erhalten 90 Tage Aufbewahrungsdauer,
+
+00:14:26.750 --> 00:14:28.310
+1TB Speicher pro Verarbeitungseinheit,
+
+00:14:28.370 --> 00:14:29.170
+vorhersagbare Leistungen
+
+00:14:29.170 --> 00:14:30.690
+für die Netunterstützung für die Netzwerkisolierung.
+
+00:14:32.570 --> 00:14:35.570
+Diese Stufe ist für anspruchsvolle Workloads konzipiert,
+
+00:14:35.650 --> 00:14:37.230
+bei denen Latenz und Isolation eine richtige Rolle spielen.
+
+00:14:37.550 --> 00:14:38.630
+Dedicate ist die oberste Stufe.
+
+00:14:38.990 --> 00:14:39.930
+Ein Single-Tenant-Cluster
+
+00:14:39.930 --> 00:14:42.110
+nur für Sie mit 10TB pro Kapazitätseinheiten.
+
+00:14:42.450 --> 00:14:43.830
+Er eignet sich für sehr große Workloads,
+
+00:14:43.850 --> 00:14:45.310
+bei denen Sie die gesamte Umgebung für sich benötigen.
+
+00:14:45.670 --> 00:14:46.430
+Ja, er ist teuer,
+
+00:14:46.530 --> 00:14:48.530
+aber wenn Sie kontinuierlich große Mengen verarbeiten,
+
+00:14:48.910 --> 00:14:50.970
+kann er kostengünstiger sein als die Skalierung Premium.
+
+00:14:51.450 --> 00:14:52.410
+Was sind also die Kostentreppen?
+
+00:14:52.730 --> 00:14:53.350
+Vier Faktoren.
+
+00:14:54.030 --> 00:14:54.430
+Durchsatzeinheiten?
+
+00:14:54.770 --> 00:14:56.710
+Die Menge der zu verschiebenden Daten.
+
+00:14:57.390 --> 00:14:57.770
+Aufbewahrungsdauer?
+
+00:14:58.170 --> 00:14:59.490
+Wie lange Sie Ereignisse aufbewahren?
+
+00:14:59.810 --> 00:15:01.490
+Erfassung, ob Sie im Speicher archivieren?
+
+00:15:01.830 --> 00:15:03.030
+Und Georeplikation,
+
+00:15:03.370 --> 00:15:04.690
+wenn Sie Daten für die Notfallwiederherstellung
+
+00:15:04.690 --> 00:15:05.790
+regionsübergreifend kopieren.
+
+00:15:06.510 --> 00:15:07.950
+Hier sind ein paar Tipps zur Kostenoptimierung.
+
+00:15:08.490 --> 00:15:09.270
+Beginnen Sie mit Standard
+
+00:15:09.270 --> 00:15:10.930
+und skalieren Sie nur bei Bedarf hoch.
+
+00:15:11.530 --> 00:15:13.450
+Verwenden Sie eine kurze Aufbewahrungsdauer für wichtige Daten.
+
+00:15:13.770 --> 00:15:15.550
+Bewahren Sie die Daten ein oder zwei Tage im Hub auf
+
+00:15:15.550 --> 00:15:17.030
+und lagern Sie sie dann für die Langzeitanalyse
+
+00:15:17.030 --> 00:15:18.950
+in einen kostengünstigen Speicher wie Blob oder Dadalek aus.
+
+00:15:19.310 --> 00:15:20.610
+Überwachen Sie Ihre Durchsatznutzung,
+
+00:15:20.690 --> 00:15:21.930
+dimensionieren Sie Ihre TOs richtig
+
+00:15:21.930 --> 00:15:22.850
+und stellen Sie nicht zu viele Daten.
+
+00:15:22.850 --> 00:15:24.830
+Verwenden Sie außerdem nach Möglichkeit
+
+00:15:24.830 --> 00:15:26.950
+HTTP für Absender anstelle von AMQP,
+
+00:15:27.190 --> 00:15:28.950
+da für AMQP-Verbindungen Gebühren anfallen,
+
+00:15:29.050 --> 00:15:30.130
+für HTTP jedoch nicht.
+
+00:15:30.850 --> 00:15:32.430
+Sehen wir uns nun eine einfache Architektur an,
+
+00:15:32.490 --> 00:15:33.630
+um zu sehen, wie Sie tatsächlich loslegen.
+
+00:15:34.430 --> 00:15:35.830
+Erste Schritte, eine einfache Architektur.
+
+00:15:36.390 --> 00:15:37.510
+Das grundlegende Muster ist einfach.
+
+00:15:38.010 --> 00:15:39.710
+Produzenten senden Ereignisse an Event Hubs
+
+00:15:39.710 --> 00:15:41.490
+und Konsumenten lesen von Event Hubs.
+
+00:15:41.970 --> 00:15:42.450
+Das ist alles.
+
+00:15:42.890 --> 00:15:43.750
+Hier ist ein konkretes Beispiel.
+
+00:15:44.210 --> 00:15:44.770
+Stellen Sie sich vor,
+
+00:15:44.830 --> 00:15:46.970
+IoT-Geräte senden Temperaturdaten an Event Hubs.
+
+00:15:47.530 --> 00:15:49.110
+Eine Azure-Funktion wird durch jeden neuen Batch
+
+00:15:49.110 --> 00:15:50.090
+von Ereignissen ausgelöst
+
+00:15:50.090 --> 00:15:51.330
+und die Funktion verarbeitet die Daten.
+
+00:15:51.930 --> 00:15:53.670
+Sie filtert möglicherweise Messwerte heraus,
+
+00:15:53.750 --> 00:15:54.810
+die im normalen Bereich liegen,
+
+00:15:54.910 --> 00:15:55.950
+behält nur die Anomalien bei
+
+00:15:55.950 --> 00:15:57.750
+und schreibt diese dann zur schnellen Abfrage in Cosmos DB.
+
+00:15:58.070 --> 00:15:59.630
+Das ist eine vollständige Pipeline in drei Diensten.
+
+00:16:00.410 --> 00:16:01.350
+Das Schöne an Funktionen ist,
+
+00:16:01.410 --> 00:16:03.690
+dass sie automatisch mit ihrer Partitionsanzahl skaliert werden.
+
+00:16:04.310 --> 00:16:05.570
+Wenn Sie über acht Partitionen verfügen,
+
+00:16:05.670 --> 00:16:07.350
+können Funktionen bis zu acht Instanzen hochfahren,
+
+00:16:07.350 --> 00:16:08.190
+wobei jeder Messwert
+
+00:16:08.190 --> 00:16:38.170
+und schreibt diese dann aufgrund der Abfrage in Cosmos DB.

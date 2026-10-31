@@ -1,0 +1,850 @@
+WEBVTT
+
+00:00:00.420 --> 00:00:06.480
+Bereit für 10 Tage voller Microsoft 365 Co-Pilot, KI, Azure und den Menschen, die die Zukunft der Arbeit gestalten?
+
+00:00:07.500 --> 00:00:12.540
+Diesen Januar ist die M365-Con zurück und wir legen noch eins drauf und wir legen noch eins drauf.
+
+00:00:12.960 --> 00:00:17.860
+Seien Sie bei Live-Sessions, Praxis-Demos und Expertenwissen von MVPs und Branchenprofis weltweit dabei.
+
+00:00:18.760 --> 00:00:21.060
+Keine generischen Folien. Kein endloses Buzzword-Bingo.
+
+00:00:21.980 --> 00:00:28.580
+Wir gehen echte Herausforderungen an. Co-Pilot Studio, KI-Agenten, Fabrik, Sicherheit, Governance und Automatisierung.
+
+00:00:28.580 --> 00:00:34.280
+Egal ob IT-Profi, Entwickler oder Führungskraft-E-Skip-Sessions, die genau auf Sie zugeschnitten sind.
+
+00:00:35.480 --> 00:00:40.120
+An 10 vollen Tagen können Sie diverse Technologien erkunden und sich mit einer globalen Community vernetzen.
+
+00:00:40.860 --> 00:00:44.280
+Schauen Sie live zu und nehmen Sie praktische Erkenntnisse mit zurück in Ihr Unternehmen.
+
+00:00:45.160 --> 00:00:50.620
+Januar 2027. 10 Tage. Eine Microsoft-Community. Die Registrierung ist ab sofort geöffnet.
+
+00:00:51.680 --> 00:00:55.280
+Besuchen Sie M355.net und sichern Sie sich noch heute Ihren Platz.
+
+00:00:55.280 --> 00:00:58.760
+Ah, das ist M35560con.net.
+
+00:01:00.000 --> 00:01:02.900
+Melden Sie sich jetzt unter M35560con.net an.
+
+00:01:03.660 --> 00:01:04.740
+Wir sehen uns im Januar live.
+
+00:01:05.240 --> 00:01:08.940
+Das heutige Thema hat fast jeder schon einmal gehört, aber die wenigsten verstehen es wirklich Azure.
+
+00:01:09.340 --> 00:01:10.040
+Disk Storage.
+
+00:01:10.380 --> 00:01:10.460
+Ja.
+
+00:01:11.000 --> 00:01:15.980
+Es ist das virtuelle Laufwerk für Ihre Cloud-VMs und der Punkt ist, jede VM, die Sie erstellen, benötigt Speicher.
+
+00:01:16.540 --> 00:01:20.380
+Wählen Sie den falschen Typ. Zahlen Sie entweder viel zu viel oder erhalten eine miserable Leistung.
+
+00:01:20.380 --> 00:01:24.800
+Am Ende dieser Folge kennen Sie die vier Haupt-Festplattentypen und wissen genau, wann Sie welchen einsetzen.
+
+00:01:25.780 --> 00:01:27.100
+Schnappen Sie sich Ihren Kaffee und legen wir los.
+
+00:01:27.840 --> 00:01:30.560
+Warum der Festplattentyp wichtig ist. Geschwindigkeit, Kapazität und Kosten.
+
+00:01:30.860 --> 00:01:32.260
+Also warum ist der Festplattentyp überhaupt wichtig?
+
+00:01:32.840 --> 00:01:34.220
+Drei Faktoren bestimmen die Leistung.
+
+00:01:34.640 --> 00:01:36.100
+IOPs, Durchsatz und Latenz.
+
+00:01:37.280 --> 00:01:39.820
+IOPS steht für Input-Output-Operationen pro Sekunde.
+
+00:01:40.600 --> 00:01:43.540
+Im Grunde, wie viele Lese- oder Schreibvorgänge die Festplatte gleichzeitig verarbeiten kann.
+
+00:01:44.080 --> 00:01:46.880
+Der Durchsatz ist die Datentransferrate, gemessen in Megabyte pro Sekunde.
+
+00:01:46.880 --> 00:01:51.180
+Die Latenz ist die Verzögerung, also wie lange das erste Byte nach der Anforderung benötigt, um anzukommen.
+
+00:01:51.580 --> 00:01:52.520
+Dähen Sie sich wie Fahrzeuge vor.
+
+00:01:52.880 --> 00:01:55.060
+Eine Limousine erledigt alltägliche Besorgungprobleme.
+
+00:01:55.120 --> 00:01:56.400
+Ein Pick-up-Truck kriegt schwere Lasten.
+
+00:01:56.740 --> 00:01:58.400
+Und der Rennwagen ist auf reine Geschwindigkeit ausgelegt.
+
+00:01:58.740 --> 00:02:00.380
+Verschiedene Festplattentypen folgen demselben Muster.
+
+00:02:00.900 --> 00:02:02.160
+Standard-SSD ist Ihre Limousine.
+
+00:02:02.480 --> 00:02:03.780
+Premium-SSD ist der Lastwagen.
+
+00:02:04.320 --> 00:02:06.680
+Premium-SSD V2 ist ein Sportwagen, den Sie selbst tun können.
+
+00:02:07.120 --> 00:02:08.480
+Und Ultradisc ist ein Formel-1-Rennwagen.
+
+00:02:08.960 --> 00:02:09.540
+Ist der Kompromiss.
+
+00:02:09.880 --> 00:02:11.200
+Höhere Leistung kostet mehr Geld.
+
+00:02:11.200 --> 00:02:19.060
+Der Trick besteht darin, die Festplatte an den tatsächlichen Bedarf Ihrer Workload anzupassen, um weder zu viel bereitzustellen und Geld zu verschwenden, noch zu wenig und langsame Performance zu erhalten.
+
+00:02:19.800 --> 00:02:23.200
+Fangen wir also mit den zwei großen Kategorien von Festplatten an, die Sie an eine VM anschließen.
+
+00:02:24.220 --> 00:02:25.960
+Betriebssystem-Datenträger versus Datendatenträger, die zwei Varianten.
+
+00:02:26.340 --> 00:02:29.540
+Wenn Sie eine VM in Azure erstellen, erhält Sie automatisch einen Betriebssystem-Datenträger.
+
+00:02:29.880 --> 00:02:33.600
+Dieser Datenträger enthält das Betriebssystem Windows oder Linux und ist der Ort, von dem die Form startet.
+
+00:02:33.600 --> 00:02:39.700
+Der Betriebssystem-Datenträger ist auf maximal 4 TB begrenzt, was für das Betriebssystem selbst und ein paar grundlegende Anwendungen erst ausreichend ist.
+
+00:02:40.060 --> 00:02:42.480
+Aber hier ist der Punkt. Sie können auch Datenträger hinzufügen.
+
+00:02:43.020 --> 00:02:47.620
+Diese sind optional und werden separat eingebunden, etwa für Anwendungen, Datenbanken oder Dateispeicher.
+
+00:02:48.180 --> 00:02:53.100
+Jeder Datenträger kann bis zu 64 TB groß sein und Sie können mehrere Datenträger an eine einzelne VM anschließen.
+
+00:02:53.620 --> 00:02:54.500
+Benötigen Sie mehr Speicherplatz.
+
+00:02:54.780 --> 00:02:55.660
+Fügen Sie einfach einen weiteren Dreiher.
+
+00:02:55.660 --> 00:02:59.640
+Sowohl Betriebssystem als auch Datenträger nutzen dieselben vier Leistungsklassen.
+
+00:03:00.680 --> 00:03:04.440
+Standard-SSD, Premium-SSD, Premium-SSD-V2 und Ultra-Disk.
+
+00:03:05.040 --> 00:03:06.980
+Der Unterschied liegt nicht in der Geschwindigkeit, sondern im Verwendungsweck.
+
+00:03:07.340 --> 00:03:09.020
+Ein Betriebssystem-Datenträger führt das Betriebssystem.
+
+00:03:09.340 --> 00:03:10.740
+Ein Datenträger führt Ihre Anwendungen aus.
+
+00:03:11.160 --> 00:03:13.200
+Doch beide basieren auf denselben zugrunde liegenden Datenträgeln.
+
+00:03:13.620 --> 00:03:15.780
+Noch etwas. Azure-Festplatten-Speicher ist persistent.
+
+00:03:15.960 --> 00:03:19.500
+Das bedeutet, Ihre Daten bleiben erhalten, selbst wenn die VM gestoppt oder neu gestartet wird.
+
+00:03:19.660 --> 00:03:21.340
+Nichts geht verloren, wenn Sie über Nacht herunterfahren.
+
+00:03:21.780 --> 00:03:22.980
+Lassen Sie uns die vier Klassen betrachten.
+
+00:03:23.320 --> 00:03:24.380
+Beginnt mit der kostengünstigsten.
+
+00:03:25.660 --> 00:03:27.460
+Standard-SSD, das preiswerte Arbeitstier.
+
+00:03:28.000 --> 00:03:30.540
+Beginnen wir mit der Einstiegsoption, der Standard-SSD.
+
+00:03:31.200 --> 00:03:33.780
+Dies ist die kostengünstigste Option pro Gigabyte unter den SSD-Klassen
+
+00:03:33.780 --> 00:03:35.900
+und bietet ordentliche Leistung für grundlegende Arbeitslasten.
+
+00:03:36.220 --> 00:03:41.020
+Wir sprechen von maximal etwa 6000 EOP-S und einem Durchsatz von bis zu 600 MB pro Sekunde,
+
+00:03:41.240 --> 00:03:42.800
+je nach gewählter Datenträgergröße.
+
+00:03:43.240 --> 00:03:44.440
+Wann sollten Sie diese also verwirklichen?
+
+00:03:44.440 --> 00:03:47.900
+Denken Sie an Entwicklungs- und Testumgebungen, in denen Sie VMs zum Experimentieren hochfahren.
+
+00:03:48.140 --> 00:03:49.640
+Webserver, die kein hohes Verkehrsaufkommen haben.
+
+00:03:50.060 --> 00:03:53.120
+Anwendungen mit geringem Datenverkehr, bei denen eine Verzögerung von ein paar Sekunden kommt in dem DASCH.
+
+00:03:53.240 --> 00:03:54.840
+Erinnern Sie sich an den Fahrzeugvergleich von vorhin.
+
+00:03:54.840 --> 00:03:56.780
+Die Standard-SSD ist Ihre zuverlässige Musik.
+
+00:03:57.060 --> 00:03:58.440
+Sie bringt sie zum Supermarkt und wieder zurück.
+
+00:03:58.680 --> 00:04:00.280
+Sie bewältigt den täglichen Arbeitsweg problemlos.
+
+00:04:00.520 --> 00:04:03.280
+Aber Sie würden damit keinen Anhänger voller Holz ziehen oder auf einer Rennstrecke fahren.
+
+00:04:03.920 --> 00:04:06.040
+Sie ist für alltägliche Aufgaben gebaut, nicht für Schwerstarbeit.
+
+00:04:06.720 --> 00:04:08.300
+Und hier müssen Sie ehrlich zu sich selbst sein.
+
+00:04:08.760 --> 00:04:12.100
+Wenn Sie eine Produktionsdatenbank betreiben, sei es SQL Server, Oracle oder MySQL,
+
+00:04:12.100 --> 00:04:13.540
+überspringen Sie die Standard-SSD.
+
+00:04:14.520 --> 00:04:16.340
+Dasselbe gilt für alles, was latenzempfindlich ist,
+
+00:04:16.600 --> 00:04:20.320
+wie Echtzeitanwendungen oder Aufgaben, die sehr viele ELA-Operationen pro Sekunde erfordern.
+
+00:04:20.640 --> 00:04:22.180
+Dafür ist die Standard-SSD einfach nicht ausgelegt.
+
+00:04:22.180 --> 00:04:25.220
+Für diese Szenarien benötigen Sie die nächste Stufe, Premium-SSD.
+
+00:04:26.120 --> 00:04:28.200
+Premium-SSD, der zuverlässige Profi.
+
+00:04:28.680 --> 00:04:31.420
+Premium-SSD bewältigt Produktionsarbeitslasten, ohne in Schwitzen zu kommen.
+
+00:04:31.740 --> 00:04:35.380
+Sie erhalten konsistent niedrige Latenzzeiten und deutlich höhere EOPs als bei einer Standard-SSD.
+
+00:04:35.640 --> 00:04:36.920
+Hier zeigt sich echte Leistung.
+
+00:04:37.340 --> 00:04:38.920
+Äh, hier ist die einfache Übersicht.
+
+00:04:38.920 --> 00:04:42.280
+Bei Premium-SSD ist die Leistung direkt an die Datenträgergröße gebunden.
+
+00:04:42.620 --> 00:04:45.060
+Wählen Sie eine Datenträgergröße, die bestimmt, wie viele EOPs Sie freischalten.
+
+00:04:45.060 --> 00:04:47.780
+Eine P30 mit 1TB bietet Ihnen 5000 EOP.
+
+00:04:48.100 --> 00:04:50.520
+Eine P60 mit 4TB liefert 20.000 EOP.
+
+00:04:50.980 --> 00:04:52.560
+Ein größerer Datenträger bedeutet mehr Leistung.
+
+00:04:52.820 --> 00:04:53.920
+Wann sollten Sie sich also dafür entscheiden?
+
+00:04:54.300 --> 00:04:56.840
+Für Unternehmensanwendungen, die zuverlässige Leistung erfordern.
+
+00:04:57.520 --> 00:05:01.300
+SQL-Server-Datenbanken, die nicht riesig sind, aber konsistente Antwortzeiten verlangen.
+
+00:05:01.980 --> 00:05:04.200
+Virtuelle Desktops, bei denen Benutzer eine sofortige Reaktion erwarten.
+
+00:05:04.460 --> 00:05:05.680
+Premium-SSD bewältigt all das.
+
+00:05:06.000 --> 00:05:06.880
+Aber hier liegt die Einschränkung.
+
+00:05:07.260 --> 00:05:10.560
+Da die Leistung an die Datenträgergröße gekoppelt ist, sind Sie an feste Stufen gebunden.
+
+00:05:10.560 --> 00:05:11.600
+Sie möchten mehr EOP.
+
+00:05:11.900 --> 00:05:14.660
+Sie müssen einen größeren Datenträger kaufen, auch wenn Sie den zusätzlichen Speicherplatz
+
+00:05:14.660 --> 00:05:15.160
+nicht benötigen.
+
+00:05:15.580 --> 00:05:16.840
+Das führt zu Überprovisionierung.
+
+00:05:17.180 --> 00:05:20.580
+Sie bezahlen für Kapazität, die Sie nie nutzen, nur um die benötigte Leistung zu erhalten.
+
+00:05:21.120 --> 00:05:22.560
+Stellen Sie sich für den zuverlässigen Arbeits-LKW.
+
+00:05:23.080 --> 00:05:24.860
+Es zuverlässig bewährt und erledigt die Arbeit.
+
+00:05:25.460 --> 00:05:28.400
+Aber Sie bezahlen für den ganzen LKW, auch wenn Sie die zusätzliche Ladekapazität nur
+
+00:05:28.400 --> 00:05:29.160
+einmal im Monat brauchen.
+
+00:05:29.520 --> 00:05:32.060
+Sie können nicht einfach nur die Ladefläche für einen Tag mieten und das Führerhaus stehen
+
+00:05:32.060 --> 00:05:32.240
+lassen.
+
+00:05:32.980 --> 00:05:35.880
+Genau dieses Problem soll Premium-SSD-V2 lösen.
+
+00:05:37.180 --> 00:05:39.360
+Premium-SSD-V2, der flexible Leistungsträger.
+
+00:05:39.360 --> 00:05:40.880
+Jetzt wird es interessant.
+
+00:05:41.780 --> 00:05:45.320
+Premium-SSD-V2 behebt das Hauptproblem der normalen Premium-SSD, nämlich gezwungen zu
+
+00:05:45.320 --> 00:05:47.740
+sein, mehr Kapazität zu kaufen, nur um mehr Leistung zu erhalten.
+
+00:05:48.660 --> 00:05:52.600
+Mit Premium-SSD-V2 können Sie Kapazität, EOPs und Durchsatz unabhängig voneinander
+
+00:05:52.600 --> 00:05:52.960
+anpassen.
+
+00:05:53.340 --> 00:05:54.760
+Keine Ausfallzeiten, keine Datenträger aus.
+
+00:05:55.000 --> 00:05:56.540
+Ändern Sie einfach die Einstellungen, das geschieht.
+
+00:05:57.000 --> 00:05:57.860
+Die Basis großzügig.
+
+00:05:58.180 --> 00:06:03.440
+Sie erhalten 3000 EOPs und 125 MB pro Sekunde Durchsatz ohne Aufpreis.
+
+00:06:04.200 --> 00:06:07.000
+Das ist bereits mehr als manche Standard-SSDs als Maximum erreichen.
+
+00:06:07.000 --> 00:06:11.080
+Von dort aus können Sie auf 80.000 EOPs und 1.000 MB pro Sekunde skalieren.
+
+00:06:11.840 --> 00:06:14.020
+Mehr als genug für die meisten allgemeinen Unternehmensworkloads.
+
+00:06:14.380 --> 00:06:16.760
+Die Kapazität reicht von 1 GB bis zu 64 TB.
+
+00:06:17.600 --> 00:06:20.400
+Egal, ob Sie einen kleinen Datenträger für eine leichte App oder einen riesigen für
+
+00:06:20.400 --> 00:06:23.060
+ein Data-Warehouse benötigen, Premium-SSD-V2 deckt es ab.
+
+00:06:23.680 --> 00:06:24.340
+Und die Latenz?
+
+00:06:24.700 --> 00:06:25.480
+Unter einer Millisekunde.
+
+00:06:25.900 --> 00:06:29.120
+Für viele Workloads ist es mit Ultradisk vergleichbar, ohne den Ultra-Preis.
+
+00:06:29.540 --> 00:06:30.260
+Hier liegt der wahre Wert.
+
+00:06:30.680 --> 00:06:34.620
+Premium-SSD-V2 ist bei vergleichbarem Leistungsniveau deutlich günstiger als Ultradisk.
+
+00:06:34.620 --> 00:06:36.720
+Sie zahlen keinen Aufpreis für den Namen.
+
+00:06:37.060 --> 00:06:38.320
+Sie bezahlen genau für das, was Sie benötigen.
+
+00:06:38.680 --> 00:06:40.440
+Benötigen Sie hohe EOPs, aber keinen massiven Durchsatz.
+
+00:06:40.700 --> 00:06:41.500
+Stimmen Sie es entsprechend an.
+
+00:06:41.640 --> 00:06:43.240
+Benötigen Sie hohen Durchsatz, aber moderate EOPs?
+
+00:06:43.740 --> 00:06:44.520
+Stimmen Sie es anders an.
+
+00:06:44.740 --> 00:06:46.560
+Kein Einheitsformat, das Ihnen aufgezwungen wird.
+
+00:06:46.760 --> 00:06:47.580
+Wofür ist es am besten gehalten?
+
+00:06:48.060 --> 00:06:49.440
+Mainstream-Produktionsdatenbanken.
+
+00:06:49.760 --> 00:06:50.640
+Geschäftskritische Anwendungen.
+
+00:06:50.960 --> 00:06:54.160
+Jede Arbeitslast, die hohe Leistung erfordert, aber nicht das Maximum von Ultradisk benötigt.
+
+00:06:54.280 --> 00:06:56.080
+SQL-Server, Oracle, MongoDB, Cassandra.
+
+00:06:56.440 --> 00:06:58.060
+Die Datenbanken, die echte Unternehmen antreiben.
+
+00:06:58.340 --> 00:06:59.880
+Premium-SSD-V2 bewältigt Sie alle.
+
+00:07:00.280 --> 00:07:01.500
+Eine Einschränkung ist erwähnenswert.
+
+00:07:04.620 --> 00:07:09.320
+Das bedeutet, Ihre Daten werden dreifach innerhalb eines einzigen Rechenzentrums repliziert.
+
+00:07:09.720 --> 00:07:11.700
+Zone redundanter Speicher wird noch nicht unterstützt.
+
+00:07:12.220 --> 00:07:16.220
+Wenn Sie Ihre Daten für höhere Ausfallsicherheit, also über mehrere Verfügbarkeitszonen, verteilen müssen,
+
+00:07:16.580 --> 00:07:19.720
+benötigen Sie andere Optionen oder müssen Redundanz auf Anwendungsebene hinzufügen.
+
+00:07:20.600 --> 00:07:23.580
+Dennoch ist Premium-SSD-V2 für die meisten Szenarien der ideale Mittelweg.
+
+00:07:24.080 --> 00:07:26.620
+Sie erhalten die Flexibilität, den Speicher passend zu skalieren,
+
+00:07:26.720 --> 00:07:29.600
+die Leistung für anspruchsvolle Arbeitslasten und eine Kostenstruktur,
+
+00:07:29.680 --> 00:07:31.080
+die Sie für bessere EOPs nicht bestraft.
+
+00:07:31.660 --> 00:07:34.080
+Doch wenn Ihre Arbeitslast absolut höchste Leistung erfordert,
+
+00:07:34.080 --> 00:07:37.440
+denken Sie an SAP HANA, elektronische Gesundheitsakten oder Echtzeithandel.
+
+00:07:38.440 --> 00:07:39.440
+Es gibt noch eine weitere Stufe.
+
+00:07:40.080 --> 00:07:41.280
+Ultradisc, der Supersportfahrt.
+
+00:07:41.620 --> 00:07:42.880
+Lassen Sie uns nun über Ultradisc sprechen.
+
+00:07:43.260 --> 00:07:44.040
+Dies ist die höchste Stufe.
+
+00:07:44.520 --> 00:07:46.840
+Wir sprechen von bis zu 400.000 EOPs pro Datenträger,
+
+00:07:47.100 --> 00:07:49.600
+10.000 Megabyte pro Sekunde Durchsatz und Atenzzeiten,
+
+00:07:49.700 --> 00:07:51.540
+die in Mikrosekunden gemessen werden, nicht in Millisekunden.
+
+00:07:52.400 --> 00:07:52.840
+Mikrosekunden.
+
+00:07:53.260 --> 00:07:55.020
+Ultradisc ist für kritische Arbeitslasten konzipiert,
+
+00:07:55.080 --> 00:07:56.300
+bei denen Sie sich keine Ausfallzeiten leisten können.
+
+00:07:56.740 --> 00:07:57.660
+Apps, die schnell sein müssen.
+
+00:07:57.880 --> 00:08:00.140
+Massive In-Memory-Datenbanken wie SAP HANA,
+
+00:08:00.440 --> 00:08:02.880
+Krankensysteme, bei denen Ärzte Informationen sofort benötigen.
+
+00:08:02.880 --> 00:08:06.100
+Hochfrequenzhandelsplattformen, bei denen Mikrosekunden Millionen kosten.
+
+00:08:06.520 --> 00:08:09.100
+KI- und Machine Learning Jobs, die riesige Datensätze verarbeiten.
+
+00:08:09.500 --> 00:08:10.660
+Die Preisgestaltung ist ebenfalls alles.
+
+00:08:11.020 --> 00:08:12.420
+Leistung und Kapazität sind getrennt.
+
+00:08:12.880 --> 00:08:14.400
+Sie wählen Ihre EOPs und Ihren Durchsatz
+
+00:08:14.400 --> 00:08:16.080
+und bezahlen diese separat vom Speicher.
+
+00:08:16.400 --> 00:08:18.320
+Sie können also einen kleinen Datenträger mit hoher Geschwindigkeit
+
+00:08:18.320 --> 00:08:20.120
+oder einen großen Datenträger mit moderater Geschwindigkeit haben.
+
+00:08:20.240 --> 00:08:22.380
+Sie müssen keine zusätzliche Kapazität kaufen, nur um die EOPs.
+
+00:08:22.640 --> 00:08:23.960
+Es gibt auch zonenredundanten Speicher.
+
+00:08:24.440 --> 00:08:27.000
+TLS kopiert Ihre Daten über drei Zonen in derselben Region hinweg.
+
+00:08:27.000 --> 00:08:29.420
+Wenn also ein Rechenzentrum ausfällt, funktioniert Ihr Datenträger.
+
+00:08:29.420 --> 00:08:31.980
+Das ist wichtig für die Arbeitslasten, die Ultradisc bewältigt.
+
+00:08:32.500 --> 00:08:33.540
+Nun zu einer neueren Funktion.
+
+00:08:33.800 --> 00:08:34.960
+Instant Access Snapshots.
+
+00:08:35.720 --> 00:08:38.220
+Die ist als Vorschauversion für Ultradisc und Premium SSD verfügbar.
+
+00:08:38.700 --> 00:08:41.340
+Normalerweise dauert das Erstellen eines Datenträgers aus einem Snapshot-Zeit,
+
+00:08:41.440 --> 00:08:42.440
+während die Daten wiederhergestellt werden.
+
+00:08:42.740 --> 00:08:45.800
+Mit dem sofortigen Zugriff können Sie einen Datenträger in Sekunden statt in Stunden erstellen.
+
+00:08:46.320 --> 00:08:48.440
+Und der neue Datenträger hat sofort nahezu die volle Leistung.
+
+00:08:49.120 --> 00:08:50.720
+Für die Notfallwiederherstellung ist das eine große Sache.
+
+00:08:51.040 --> 00:08:53.320
+Sie können in Minuten eine vollständige Kopie Ihrer Datenbank hochfahren,
+
+00:08:53.320 --> 00:08:56.460
+deren Sie sich Ultradisc wie einen Formel-1-Rennwagen vor unglaubliche Geschwindigkeit.
+
+00:08:56.800 --> 00:08:57.720
+Jede Millisekunde zählt.
+
+00:08:58.440 --> 00:09:00.780
+Aber Sie fahren keinen Formel-1-Wagen, um Lebensmittel einzukaufen.
+
+00:09:01.360 --> 00:09:03.760
+Er ist für eines gebaut, so schnell zu sein, wie es physikalisch möglich ist.
+
+00:09:04.260 --> 00:09:05.300
+Und Sie bezahlen für diese Geschwindigkeit.
+
+00:09:05.540 --> 00:09:06.500
+Dann sollten Sie es also nicht verwenden.
+
+00:09:06.840 --> 00:09:08.580
+Für die meisten Workloads ist Ultradisc überdimensioniert.
+
+00:09:08.860 --> 00:09:12.180
+Premium SSD V2 deckt 95% der Fälle für deutlich weniger Geld ab.
+
+00:09:12.740 --> 00:09:16.160
+Wenn Sie kein SAP HANA, eine Handelsplattform oder etwas Extremes betreiben,
+
+00:09:16.260 --> 00:09:17.360
+brauchen Sie keine Ultradisc.
+
+00:09:17.760 --> 00:09:19.160
+Beginnen Sie mit Premium SSD V2.
+
+00:09:19.580 --> 00:09:21.620
+Wechseln Sie nur zu Ultra, wenn Ihr Monitoring zeigt, dass Sie es benötigen.
+
+00:09:21.620 --> 00:09:23.100
+Wir haben also die vier Stufen behandelt.
+
+00:09:23.280 --> 00:09:24.200
+Wie trifft man nun die richtige Wahl?
+
+00:09:24.520 --> 00:09:25.440
+Wie wählt man den richtigen Daten?
+
+00:09:25.840 --> 00:09:26.780
+Sie kennen nun die vier Stufen.
+
+00:09:27.160 --> 00:09:27.960
+Wie entscheiden Sie sich jetzt?
+
+00:09:28.220 --> 00:09:29.060
+Beginnen Sie mit drei Fragen.
+
+00:09:29.460 --> 00:09:31.080
+Erstens ist es eine Produktionsumgebung oder Entwicklungsstufe.
+
+00:09:31.280 --> 00:09:35.060
+Für Entwicklungen, Tests oder einen Web-Server mit geringem Traffic reicht eine Standard-SSD völlig aus.
+
+00:09:35.240 --> 00:09:35.860
+Verbrechen Sie sich nicht.
+
+00:09:36.000 --> 00:09:37.960
+Sie spart Geld und bietet eine gute Leistung.
+
+00:09:38.200 --> 00:09:39.980
+Zweitens, welche IOPS und Latenz benötigen Sie?
+
+00:09:40.320 --> 00:09:43.300
+Wenn Sie geringe Latenz und tausende von IOPS brauchen, benötigen Sie Premium.
+
+00:09:43.660 --> 00:09:44.880
+Die Frage ist, welche Premium-Stufe.
+
+00:09:45.180 --> 00:09:47.600
+Wenn Ihre Arbeitslast stabil ist, reicht eine reguläre Premium-SSD auch.
+
+00:09:47.600 --> 00:09:52.100
+Wenn Sie Flexibilität bei der Leistungsanpassung ohne Festplattentausch wünschen, wählen Sie Premium-SSD-V2.
+
+00:09:52.660 --> 00:09:53.640
+Drittens, wie hoch ist Ihr Budget?
+
+00:09:53.920 --> 00:09:54.500
+Ihr würdet ernst.
+
+00:09:54.960 --> 00:09:58.140
+Premium-SSD-V2 ist in den meisten Fällen bei ähnlicher Leistung günstiger als Ultra.
+
+00:09:58.840 --> 00:10:02.420
+Aber wenn Sie SAP-HANA oder ein Handelssystem betreiben, zählt Geschwindigkeit mehr als Kosten.
+
+00:10:02.960 --> 00:10:03.980
+Ich gebe Ihnen einen kurzen Leitfaden.
+
+00:10:04.460 --> 00:10:06.680
+Entwicklung, Tests und Web-Server, Standard-SSD.
+
+00:10:06.680 --> 00:10:09.540
+Produktion mit moderaten IOPS, Premium-SSD.
+
+00:10:10.060 --> 00:10:13.760
+Produktion mit hohen IOPS, bei der Sie Flexibilität wünschen, Premium-SSD-V2.
+
+00:10:14.400 --> 00:10:17.760
+Extreme IOPS, bei denen eine Latenz unter einer Millisekunde kritisch ist, UltraDisk.
+
+00:10:18.260 --> 00:10:20.700
+Hier sind einige Tipps zur Kostenoptimierung, die tatsächlich Geld sparen.
+
+00:10:21.060 --> 00:10:22.580
+Wählen Sie von Anfang an die richtige Datenträgergröße.
+
+00:10:22.880 --> 00:10:25.540
+Kaufen Sie keine 4TB Premium-SSD, wenn Sie nur 500 GB.
+
+00:10:25.900 --> 00:10:28.200
+Verwenden Sie nach Möglichkeit Premium-SSD-V2 statt Ultra.
+
+00:10:28.720 --> 00:10:30.260
+Sie deckt die meisten Fälle für weniger Geld an.
+
+00:10:30.700 --> 00:10:31.540
+Beinigen Sie alte Snipschatz.
+
+00:10:31.920 --> 00:10:32.760
+Sie häufen sich an, küssten wir.
+
+00:10:33.260 --> 00:10:36.220
+Wählen Sie LRS statt ZRS, wenn Sie keine Zone-Redundanz benötigen.
+
+00:10:36.680 --> 00:10:40.040
+LRS ist günstiger und bietet dennoch drei Kopien innerhalb eines Rechenzentrums.
+
+00:10:40.880 --> 00:10:42.720
+Um eines müssen Sie sich keine Sorgen machen, die Verschlüsselung.
+
+00:10:43.140 --> 00:10:46.060
+Die serversärtige Verschlüsselung mit 256-Bit-AIS ist immer aktiviert.
+
+00:10:46.300 --> 00:10:47.700
+Sie ist 142-konform.
+
+00:10:48.060 --> 00:10:49.540
+Nichts muss aktiviert oder konfiguriert werden.
+
+00:10:49.760 --> 00:10:51.600
+Ihre Daten werden standardmäßig im Ruhe-Zustand verschlüsselt.
+
+00:10:51.820 --> 00:10:54.360
+Wenn Sie mehr Kontrolle benötigen, können Sie kundenseitig verwaltete Schlüssel verwenden.
+
+00:10:54.580 --> 00:10:56.680
+Aber für die meisten Szenarien reicht die Standardverschlüsselung aus.
+
+00:10:57.080 --> 00:10:59.340
+Bevor wir abschließen, gehen wir noch auf ein paar weitere Funktionen ein,
+
+00:10:59.400 --> 00:11:01.060
+die für Dauerhaftigkeit und Sicherheit wichtig sind.
+
+00:11:02.340 --> 00:11:04.180
+Sicherheit, Dauerhaftigkeit und Snapshots.
+
+00:11:04.180 --> 00:11:07.220
+Azure Disk Storage zielt auf 9,9% Verfügbarkeit ab.
+
+00:11:07.900 --> 00:11:08.740
+Das sind fast 5,9.
+
+00:11:09.080 --> 00:11:10.000
+Wie erreichen Sie das?
+
+00:11:10.340 --> 00:11:10.720
+Ganz einfach.
+
+00:11:11.140 --> 00:11:12.420
+Drei Kopien von jedem Datenelement.
+
+00:11:13.200 --> 00:11:16.500
+Bei lokal-Redundantem Speicher bleiben diese drei Kopien in einem einzigen Rechenzentrum.
+
+00:11:17.040 --> 00:11:19.300
+Fällt ein Datenträger aus, übernimmt sofort eine andere Kopie.
+
+00:11:20.000 --> 00:11:23.780
+Bei zonen-Redundantem Speicher verteilen sich die Kopien auf drei Verfügbarkeitszonen in derselben Region.
+
+00:11:24.320 --> 00:11:26.600
+Hört ein ganzes Rechenzentrum aus, bleiben Ihre Daten sicher.
+
+00:11:27.100 --> 00:11:28.540
+Verschlüsselung standardmäßig immer aktiviert.
+
+00:11:28.540 --> 00:11:33.360
+Server-seitige Verschlüsselung nutzt 256-Bit-AES und erfüllt FIPS 142 Standards.
+
+00:11:34.160 --> 00:11:35.160
+Dies deckt ruhende Daten ab.
+
+00:11:35.620 --> 00:11:36.900
+Vielleicht benötigen Sie jedoch mehr Kontrollen.
+
+00:11:37.300 --> 00:11:39.800
+Kundenseitig verwaltete Schlüssel ermöglichen es Ihnen, Verschlüssel selbst zu halten.
+
+00:11:40.460 --> 00:11:41.740
+Verschlüsselung am Haus geht noch einen Schritt weiter.
+
+00:11:42.180 --> 00:11:44.580
+Sie umfasst temporäre Datenträger und Caches, die der Standard nicht ablösen.
+
+00:11:44.580 --> 00:11:50.120
+Das war es für Tal, der Alkutusu ist.
+
+00:11:50.200 --> 00:11:50.700
+μπο additionnet die Salación an,
+
+00:11:50.700 --> 00:11:51.560
+dieiri und Magdan Christian P tried pseudo.
+
+00:11:51.580 --> 00:11:52.320
+Beschwingung auf dasal.
+
+00:11:52.740 --> 00:11:53.360
+Das war es für Tal, der Ast11.
+
+00:11:53.780 --> 00:11:54.520
+ителей Quachen wird dasal.
+
+00:11:54.680 --> 00:11:55.120
+т dB Atkwagge, Triflauch hierunterburden.
+
+00:11:57.200 --> 00:11:57.240
+gedraht, wasst gar nichts.
+
+00:11:57.340 --> 00:11:59.740
+Dann löten Sie weiter nach euch die nasty Assamptと思aré.
+
+00:11:59.900 --> 00:12:01.580
+Herz kann la Grandeahahaha.
+
+00:12:01.620 --> 00:12:03.080
+check Ho Renéimmer durchba lantern.
+
+00:12:03.600 --> 00:12:05.840
+Torare war, auf die Abwech ist sehr offen.
+
+00:12:06.720 --> 00:12:07.640
+끝ine configure das in Mord english.
+
+00:12:07.760 --> 00:12:08.680
+Ja enemy隻, repet das Store.
+
+00:12:09.260 --> 00:12:10.180
+nicht nur,ι nossa.
+
+00:12:10.360 --> 00:12:11.380
+1976-D drills ver in passing.
+
+00:12:11.480 --> 00:12:12.260
+Wir sind soot alle T Tage monitor.
+
+00:12:12.520 --> 00:12:13.140
+ist ja auch закон об es sicher.

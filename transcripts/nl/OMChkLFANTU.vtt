@@ -1,0 +1,937 @@
+WEBVTT
+
+00:00:00.140 --> 00:00:07.480
+Klaar voor 10 dagen Microsoft 365, Copilot, AI, Azure en de mensen die de toekomst van werk vormgeven?
+
+00:00:07.720 --> 00:00:12.620
+Deze januari is de M365 Conference terug en we pakken het groter aan.
+
+00:00:12.860 --> 00:00:18.560
+Doe mee voor live sessies, praktijkdemos en praktische kennis van MVPs en experts uit de hele wereld.
+
+00:00:18.780 --> 00:00:21.620
+Geen algemene sliedes, geen eindeloze modewoorden.
+
+00:00:21.620 --> 00:00:28.620
+We pakken de echte uitdagingen aan Copilot Studio, AI Agents, Fabric, Beveiliging, Governance en Automatisering.
+
+00:00:28.620 --> 00:00:34.980
+Of je nu een IT-professional, ontwikkelaar of bedrijfsleider bent, er zijn sessies speciaal voor jou.
+
+00:00:35.260 --> 00:00:40.500
+Met 10 volledige dagen kun je diverse technologieën verkennen en in contact komen met een wereldwijde community.
+
+00:00:40.900 --> 00:00:44.560
+Kijk live mee en neem praktische inzichten mee terug naar je organisatie.
+
+00:00:44.900 --> 00:00:49.140
+Januari 2027, 10 dagen, 1 Microsoft Community.
+
+00:00:49.140 --> 00:00:51.200
+De registratie is nu geopend.
+
+00:00:53.160 --> 00:00:54.500
+Claim vandaag nog je plek.
+
+00:00:56.720 --> 00:00:58.980
+Dat is m365.com.net
+
+00:00:58.980 --> 00:01:04.700
+Schrijf je nu in op m365.com.net en we zien je live in januari.
+
+00:01:04.880 --> 00:01:10.080
+Hallo iedereen en welkom bij een nieuwe aflevering van Microsoft Knowledge Nuggets hier op M365.
+
+00:01:10.240 --> 00:01:12.920
+FM, EOW, TMNM, Milko Peters.
+
+00:01:13.240 --> 00:01:15.340
+Wat is Microsoft Entra Cloud Sync precies?
+
+00:01:15.540 --> 00:01:19.160
+Is het gewoon een andere naam voor Entra Connect of lost het een ander probleem op?
+
+00:01:19.160 --> 00:01:23.260
+Veel bedrijven houden werknemersaccounts nog steeds in Active Directory binnen hun eigen netwerk.
+
+00:01:23.400 --> 00:01:25.780
+Toch werken medewerkers in Microsoft 365.
+
+00:01:25.780 --> 00:01:30.220
+Ze hebben Teams, Exchange Online E-mail, OneDrive bestanden en cloud-apps nodig.
+
+00:01:30.440 --> 00:01:32.700
+Dat creëert twee plekken waar identiteit ertoe doet.
+
+00:01:32.920 --> 00:01:39.320
+Zonder koppeling tussen beiden kan iemand wel in Active Directory bestaan, maar niet in Entra ID, de cloud-receptie voor Microsoft 365.
+
+00:01:39.940 --> 00:01:41.440
+Wachtwoorden komen niet overeen.
+
+00:01:41.660 --> 00:01:42.640
+Toegang komt te laat.
+
+00:01:42.880 --> 00:01:45.540
+IT moet uiteindelijk hetzelfde werk twee keer doen.
+
+00:01:45.880 --> 00:01:49.440
+Entra Connect werd de vertrouwde lokale tool voor het koppelen van die twee plekken.
+
+00:01:49.440 --> 00:01:54.100
+Cloud Sync bewandelt een ander pad, waarbij meer synchronisatiewerk wordt afgehandeld in Microsoft Entra.
+
+00:01:54.300 --> 00:01:58.480
+Aan het eind weet je precies wat het doet, waarom het bestaat en wat er in 2026 is veranderd.
+
+00:01:58.580 --> 00:02:01.660
+Maar één grens bepaalt nog steeds of het geschikt is voor jouw bedrijf.
+
+00:02:01.880 --> 00:02:05.160
+Waarom identiteitssynchronisatie een eenvoudiger model nodig heeft.
+
+00:02:05.400 --> 00:02:06.820
+Begin bij een nieuwe medewerker.
+
+00:02:07.020 --> 00:02:09.320
+Auer vertelt IT dat Maya maandag begint.
+
+00:02:09.320 --> 00:02:15.400
+Iemand maakt Maya's account aan in Active Directory, wat veel bedrijven nog steeds gebruiken als lokale personeelsadministratie.
+
+00:02:15.560 --> 00:02:21.160
+Haar naam, werk, e-mail, afdeling, manager, groepslidmaatschappen en wachtwoordgegevens beginnen allemaal daar.
+
+00:02:21.420 --> 00:02:23.320
+Maar Maya werkt niet alleen binnen het bedrijfsnetwerk.
+
+00:02:24.200 --> 00:02:25.940
+Ze moet thuis kunnen inloggen op Teams.
+
+00:02:26.200 --> 00:02:28.200
+Ze heeft haar Exchange Online Mailbooks nodig.
+
+00:02:28.400 --> 00:02:34.960
+Haar Teams laat bestanden op in SharePoint en ze heeft mogelijk toegang nodig tot salarisadministratie, CRM, trainingen of andere cloud-apps voor haar eerste dag voorbij is.
+
+00:02:35.120 --> 00:02:37.200
+Eén persoon heeft één werkende identiteit nodig.
+
+00:02:37.200 --> 00:02:41.140
+Die identiteit moet op beide plekken verschijnen terwijl deze nog steeds naar dezelfde Maya verwijst.
+
+00:02:41.280 --> 00:02:42.820
+Haar inlognaam moet overeenkomen.
+
+00:02:43.020 --> 00:02:45.000
+Haar groepsinformatie moet de cloud bereiken.
+
+00:02:45.280 --> 00:02:51.180
+Wanneer haar wachtwoord in Active Directory wijzigt, moet Microsoft 365 dat wachtwoord ook veilig kunnen bevestigen.
+
+00:02:51.420 --> 00:02:53.600
+Dat is de taak van identiteitssynchronisatie.
+
+00:02:53.860 --> 00:02:57.580
+Zie Active Directory als het archief in de kelder van een kantoorgebouw.
+
+00:02:57.640 --> 00:03:00.440
+Het bevat de personeelsgegevens die het bedrijf al vertrouwt.
+
+00:03:00.600 --> 00:03:06.160
+Entra ID zit bij de receptie boven en bepaalt wie Microsoft 365 mag betreden en welke ruimtes zij kunnen gebruiken.
+
+00:03:06.160 --> 00:03:11.120
+Als het archief en de receptie geen informatie delen, wordt Maya bij de deur tegengehouden.
+
+00:03:11.320 --> 00:03:14.280
+Twintig jaar geleden zorgde die kloof voor veelhandmatig werk.
+
+00:03:14.500 --> 00:03:18.660
+Een IT-team moest lokaal een account aanmaken en vervolgens nog een account in een cloud-dienst.
+
+00:03:18.920 --> 00:03:25.060
+Wanneer Maya van naam veranderde, van team wisselde of het bedrijf verliet, moest iemand onthouden waar al haar gegevens stonden.
+
+00:03:25.340 --> 00:03:26.400
+Mensen vergeten dingen.
+
+00:03:26.640 --> 00:03:30.120
+Het synchroniseren van identiteit veranderde het dagelijkse IT-werk.
+
+00:03:30.120 --> 00:03:37.220
+Een wijziging in Active Directory kon doorvoeren naar Entra ID, zodat het cloud-account het lokale account volgde in plaats van een tweede, apart record te worden.
+
+00:03:37.440 --> 00:03:39.340
+Lange tijd deed Entra Connect dat werk.
+
+00:03:39.560 --> 00:03:42.240
+Entra Connect draait op een server binnen het bedrijfsnetwerk.
+
+00:03:42.440 --> 00:03:48.900
+Het leest Active Directory, past lokale synchronisatieregels toe, houdt een eigen lokale gegevensopslag bij en stuurt goedgekeurde wijzigingen naar Entra ID.
+
+00:03:49.160 --> 00:03:52.940
+Het kan veel, vooral wanneer een bedrijf diepe controle nodig heeft over hoe data zich verplaatst.
+
+00:03:53.100 --> 00:03:55.380
+Die flexibiliteit brengt verantwoordelijkheid met zich mee.
+
+00:03:55.380 --> 00:03:56.960
+Iemand moet de server onderhouden.
+
+00:03:57.120 --> 00:03:58.460
+Iemand moet updates uitvoeren.
+
+00:03:58.640 --> 00:04:02.480
+Iemand moet de lokale regels begrijpen als een gebruikerssynchronisatie niet verloopt zoals verwacht.
+
+00:04:02.620 --> 00:04:08.940
+En als de hoofdsynchronisatieserver stopt met werken, kunnen wijzigingen Microsoft 365 niet meer bereiken totdat IT het probleem oplost of een herstelplan volgt.
+
+00:04:09.100 --> 00:04:11.420
+Voor Maya kan dit betekenen dat haar account moet wachten.
+
+00:04:11.700 --> 00:04:21.260
+Voor een bedrijf met honderden of duizenden mensen kan dit betekenen dat nieuwe medewerkers niet in cloud-apps verschijnen, uitgeschakelde accounts langer toegang houden en ondersteuningsvragen zich opstapelen.
+
+00:04:21.440 --> 00:04:24.140
+Het probleem is niet dat Entra Connect als product faalde.
+
+00:04:24.140 --> 00:04:27.340
+Het is dat elke lokale engine lokaal werk met zich meebrengt.
+
+00:04:27.460 --> 00:04:30.220
+Veel bedrijven willen minder bewegende onderdelen op hun eigen servers.
+
+00:04:30.420 --> 00:04:32.040
+Cloud-synchronisatie volgt dat idee.
+
+00:04:32.280 --> 00:04:39.460
+In plaats van de grote synchronisatie-engine, gedetailleerde verwerking en de meeste regels in je netwerk te plaatsen, handelt Microsoft Entra dat werk grotendeels af in de cloud.
+
+00:04:39.620 --> 00:04:44.600
+Je lokale netwerk behoudt een kleiner verbindingspunt dat Active Directory kan lezen en veilig naar buiten kan communiceren.
+
+00:04:44.800 --> 00:04:46.160
+Het archief blijft waar het is.
+
+00:04:46.360 --> 00:04:48.560
+De verwerking verplaatst zich dichter naar de receptie.
+
+00:04:48.560 --> 00:04:55.000
+Dat kan de hoeveelheid lokale software die uw team moet beheren verminderen, terwijl Active Directory de plek blijft waar werknemersgegevens beginnen.
+
+00:04:55.200 --> 00:05:01.520
+Het verandert ook hoe u over herstel denkt, vooral wanneer een bedrijf meerdere vestigingen, meerdere mappen of een recente fusie heeft.
+
+00:05:01.760 --> 00:05:06.560
+Dus, als het voornaamste synchronisatiewerk in de cloud plaatsvindt, wat blijft er dan precies binnen uw bedrijfsnetwerk?
+
+00:05:07.440 --> 00:05:10.120
+Dat is wat Microsoft Entra Cloud Sync eigenlijk is.
+
+00:05:10.120 --> 00:05:17.940
+Microsoft Entra Cloud Sync is een door de cloud beheerde manier om geselecteerde personen, groepen en contactpersonen vanuit Active Directory naar Entra ID te kopiëren.
+
+00:05:18.160 --> 00:05:20.000
+Zie het als een beveiligde koeriersdienst.
+
+00:05:20.220 --> 00:05:23.200
+Uw Active Directory bevat de personeelsgegevens binnen uw netwerk.
+
+00:05:23.380 --> 00:05:28.120
+Entra ID heeft de goedgekeurde delen van die gegevens nodig zodat mensen kunnen inloggen op Microsoft 365.
+
+00:05:28.400 --> 00:05:34.420
+Cloud Sync plaatst een kleine koerier, de provisioning agent genaamd, in uw netwerk om die informatie veilig tussen de twee te vervoeren.
+
+00:05:34.600 --> 00:05:36.960
+De koerier houdt er geen tweede archiefsysteem op na.
+
+00:05:36.960 --> 00:05:42.920
+Hij leest de map informatie die u goedkeurt, versleutelt deze en stuurt deze via een uitgaande verbinding naar Microsoft Entra.
+
+00:05:43.120 --> 00:05:46.620
+Een uitgaande verbinding betekent dat de agent de communicatie met de cloud start.
+
+00:05:46.800 --> 00:05:50.520
+U hoeft uw netwerk niet open te stellen en te wachten op een onbekende inkomende verbinding.
+
+00:05:50.780 --> 00:05:52.460
+Dat is een nuttig beveiligingsdetail.
+
+00:05:52.660 --> 00:05:56.120
+De agent kan Active Directory bereiken omdat deze zich binnen uw netwerk bevindt.
+
+00:05:56.340 --> 00:06:00.220
+Microsoft Entra kan de gegevens verwerken omdat de agent ze veilig naar de cloud verzendt.
+
+00:06:00.260 --> 00:06:04.900
+De twee zijden kunnen samenwerken zonder de volledige synchronisatie engine op uw eigen server te plaatsen.
+
+00:06:04.900 --> 00:06:07.640
+Achter de schermen doet Entra het grootste deel van het werk.
+
+00:06:07.840 --> 00:06:10.360
+Het controleert of een persoon al bestaat in Entra ID.
+
+00:06:10.680 --> 00:06:12.280
+Het past uw gekozen bereik toe.
+
+00:06:12.460 --> 00:06:14.620
+Het volgt de veldtoewijzingen die u heeft ingesteld.
+
+00:06:14.840 --> 00:06:18.780
+Vervolgens maakt of werkt het het cloud-object bij wanneer de informatie overeenkomt met uw regels.
+
+00:06:18.960 --> 00:06:20.680
+U beheert die keuzes in de Entra portal.
+
+00:06:21.000 --> 00:06:23.280
+Dit is een grote verandering als u Entra Connect kent.
+
+00:06:23.480 --> 00:06:28.320
+Bij Entra Connect vindt veel van de logica en probleemoplossing plaats op de server die de synchronisatietool uitvoert.
+
+00:06:28.320 --> 00:06:35.620
+Met CloudSync maakt u een configuratie in de portal, kiest u wat er gesynchroniseerd moet worden, wijst u de velden toe en controleert u de resultaten op één cloudlocatie.
+
+00:06:35.800 --> 00:06:37.380
+De lokale agent blijft klein.
+
+00:06:37.600 --> 00:06:42.300
+Er is geen grote lokale synchronisatie engine met een lokale SQL database voor CloudSync.
+
+00:06:42.500 --> 00:06:47.600
+U hoeft nu niet telkens een lokale regeleditor te openen wanneer u een basistoewijzing wilt controleren.
+
+00:06:47.980 --> 00:06:53.300
+Microsoft regelt updates voor de agent, terwijl uw team zich richt op de identiteitsregels die belangrijk zijn voor het bedrijf.
+
+00:06:53.460 --> 00:06:55.820
+Dat betekent voor mijn team niet dat u de controle verliest.
+
+00:06:55.820 --> 00:06:59.160
+U kiest nog steeds zelf de personen en groepen die Entra ID mogen betreden.
+
+00:06:59.260 --> 00:07:03.380
+U kunt velden kiezen zoals weergave naam, afdeling, telefoonnummer of manager.
+
+00:07:03.640 --> 00:07:09.380
+Een toewijzing beantwoordt simpelweg de vraag welk label in het Active Directory record moet welk label in Entra ID vullen.
+
+00:07:09.580 --> 00:07:13.000
+Voor veel bedrijven dekken de standaardtoewijzingen de normale personeelsaccounts.
+
+00:07:13.120 --> 00:07:17.380
+Als uw Active Directory weergave naam Maya Patel is, kan Entra ID Maya Patel ontvangen.
+
+00:07:17.580 --> 00:07:21.600
+Als haar afdeling verandert van sales naar customer success, kan die update haar cloudaccount bereiken.
+
+00:07:21.600 --> 00:07:26.920
+Als haar groepslidmaatschap haar toegang geeft tot een Microsoft 365 bron, kan de groepsinformatie ook synchroniseren.
+
+00:07:27.140 --> 00:07:29.080
+Sommige opstellingen vereisen kleine wijzigingen.
+
+00:07:29.260 --> 00:07:33.320
+CloudSync bevat eenvoudige expressies voor gevallen waarin u een waarde moet aanpassen terwijl deze wordt verplaatst.
+
+00:07:33.500 --> 00:07:37.240
+Misschien wil een bedrijf een achtervoegsel toevoegen aan een weergave naam voor een bepaalde set accounts.
+
+00:07:37.460 --> 00:07:42.080
+U kunt dat instellen in de cloudconfiguratie in plaats van een uitgebreide set lokale synchronisatieregels te bouwen.
+
+00:07:42.260 --> 00:07:43.520
+Houd dat onderscheid in gedachten.
+
+00:07:43.760 --> 00:07:47.000
+CloudSync geeft u verstandige controle voor algemene identiteitswerkzaamheden.
+
+00:07:47.000 --> 00:07:53.060
+Het is niet geautomatiseerd ontworpen om elke geavanceerde aanpassing te kopiëren die een langlopende Entra Connect opstelling kan bevatten.
+
+00:07:53.200 --> 00:07:58.920
+We komen later terug op die beslissing, omdat dit u kan behoeden voor het kiezen van de tool alleen omdat ik zei dat deze nieuwe is.
+
+00:07:59.240 --> 00:08:01.040
+Wachtwoorden roepen de meeste vragen op.
+
+00:08:01.180 --> 00:08:03.880
+CloudSync kan wachtwoordhash synchronisatie gebruiken.
+
+00:08:04.100 --> 00:08:05.900
+Die term klinkt alarmrender dan het is.
+
+00:08:06.140 --> 00:08:09.480
+Het leesbare wachtwoord wordt niet naar Microsoft Entra verzonden.
+
+00:08:09.480 --> 00:08:17.620
+In plaats daarvan maakt Active Directory beveiligde wachtwoord verificatiegegevens aan en gebruikt Entra ID die informatie om een aanmelding veilig te controleren.
+
+00:08:17.760 --> 00:08:21.280
+Dus kan Maya haar bedrijfswachtwoord gebruiken voor Microsoft 365.
+
+00:08:21.560 --> 00:08:23.720
+Haar wachtwoord begint nog steeds in Active Directory.
+
+00:08:24.020 --> 00:08:28.100
+Wanneer ze het daar wijzigt, synchroniseert de bijgewerkte verificatie informatie naar Entra ID.
+
+00:08:28.380 --> 00:08:33.480
+Microsoft 365 kan vervolgens haar aanmelding bevestigen zonder een leesbare kopie van het wachtwoord op te slaan.
+
+00:08:33.620 --> 00:08:35.740
+Eén eigenaarschapsregel houdt alles duidelijk.
+
+00:08:35.740 --> 00:08:41.180
+Wanneer een gebruiker synchroniseert vanuit Active Directory, blijft Active Directory de plek waar u de synchronisatiedetails bewerkt.
+
+00:08:41.340 --> 00:08:47.800
+Als de afdeling of functietitel van Maya of Tim moet veranderen, wijzigt u dit in Active Directory, waarna CloudSync die wijziging doorvoert naar Entra ID.
+
+00:08:48.080 --> 00:08:50.900
+U zult vaak zien dat die cloudvelden vergrendeld zijn voor bewerking.
+
+00:08:51.160 --> 00:08:52.180
+Dat is geen probleem.
+
+00:08:52.360 --> 00:08:54.300
+Het vertelt u waar het account vandaan komt.
+
+00:08:54.520 --> 00:09:01.780
+U kunt dat eigenaarschap later wijzigen via een geplande wijziging van de bron van autoriteit, maar CloudSync verandert lokale accounts niet stilletjes in door de cloudbeheerde accounts.
+
+00:09:01.780 --> 00:09:08.300
+De agent verklaart waarom CloudSync lichter aanvoelt, maar het volgende deel verklaart waarom het ook kan blijven werken wanneer één server offline gaat.
+
+00:09:08.460 --> 00:09:10.940
+Hoe CloudSync blijft werken wanneer een server uitvalt.
+
+00:09:11.140 --> 00:09:14.420
+Een synchronisatietool helpt alleen zolang deze Active Directory kan bereiken.
+
+00:09:14.660 --> 00:09:19.200
+Stel je een maandagochtend voor waarop een server dringend opnieuw moet worden opgestart of de schijf onverwacht uitvalt.
+
+00:09:19.380 --> 00:09:24.340
+Een manager maakt een nieuwe medewerker aan in Active Directory, maar die persoon verschijnt niet in Microsoft 365.
+
+00:09:24.960 --> 00:09:28.940
+Iemand deactiveert een vertrokken medewerker, maar het cloudaccount voert de wijziging niet direct door.
+
+00:09:28.940 --> 00:09:31.260
+Die vertragingen zorgen voor extra werk voor IT.
+
+00:09:31.540 --> 00:09:38.040
+Bij een traditionele EntraConnect opstelling draaien bedrijven vaak één actieve Sync server en houden ze een tweede server in staging mode als reserve.
+
+00:09:38.300 --> 00:09:43.320
+Die reserve server vereist planning, testen en een duidelijk proces voor het overnemen van taken als de actieve server uitvalt.
+
+00:09:43.480 --> 00:09:45.100
+CloudSync kiest een andere aanpak.
+
+00:09:45.280 --> 00:09:49.000
+Je kunt meer dan één provisioning agent installeren in hetzelfde Active Directory domein.
+
+00:09:49.200 --> 00:09:54.980
+Elke agent maakt verbinding met dezelfde CloudSync configuratie in Microsoft Entra en ze kunnen allemaal dezelfde directory informatie lezen.
+
+00:09:55.160 --> 00:09:57.920
+Je hoeft één agent niet als de vaste hoofdserver te behandelen.
+
+00:09:57.920 --> 00:10:00.880
+Microsoft Entra houdt de beschikbare agents in de gaten.
+
+00:10:01.080 --> 00:10:05.940
+Als één agent offline gaat, kan de clouddienst een andere werkende agent gebruiken om het werk voort te zetten.
+
+00:10:06.180 --> 00:10:12.120
+Dat is ingebouwde hoge beschikbaarheid, wat simpelweg betekent dat je voorkomt dat één server een single point of failure wordt.
+
+00:10:12.360 --> 00:10:14.920
+Denk aan twee helpdesk die gebruik maken van hetzelfde personeelsbestand.
+
+00:10:15.640 --> 00:10:19.540
+Als de ene balie voor de dag sluit, kan de andere nog steeds oproepen aannemen en mensen registreren.
+
+00:10:19.740 --> 00:10:23.280
+De mensen in het bedrijf hoeven niet te weten welke balie hun verzoek heeft afgehandeld.
+
+00:10:23.500 --> 00:10:25.180
+Ze willen gewoon dat hun toegang werkt.
+
+00:10:25.180 --> 00:10:30.920
+Dat is het praktische voordeel. In plaats van een handmatig failoverplan rond een grote lokale sync-engine te bouwen,
+
+00:10:31.140 --> 00:10:34.860
+installeer je meerdere lichtgewicht-agents en laat je Entra de online-agents gebruiken.
+
+00:10:35.040 --> 00:10:39.620
+Je moet nog steeds de gezondheid van de agents controleren, de server up-to-date houden en je herstelplan testen.
+
+00:10:39.920 --> 00:10:43.380
+Ingebouwde failover neemt de noodzaak voor verantwoordelijk IT-beheer niet weg.
+
+00:10:43.560 --> 00:10:45.620
+Het verlicht wel de druk op één enkele machine.
+
+00:10:45.860 --> 00:10:49.380
+CloudSync helpt ook wanneer een bedrijf afzonderlijke Active Directory forests heeft.
+
+00:10:49.560 --> 00:10:52.220
+Een forest is een afzonderlijke Active Directory-omgeving.
+
+00:10:52.220 --> 00:10:55.320
+Je hebt er misschien een omdat je bedrijf een ander bedrijf heeft overgenomen.
+
+00:10:55.540 --> 00:11:02.220
+De twee bedrijven gebruiken mogelijk verschillende domeinen, andere netwerken en gescheiden lokale directories die niet direct met elkaar kunnen communiceren.
+
+00:11:03.060 --> 00:11:04.700
+Dat is gebruikelijk na een fusie.
+
+00:11:04.900 --> 00:11:07.660
+Met CloudSync kun je bij elk forest een agent installeren.
+
+00:11:07.900 --> 00:11:13.180
+Elke agent leest zijn eigen lokale Active Directory en maakt vervolgens verbinding met dezelfde Microsoft EntraTenant.
+
+00:11:13.380 --> 00:11:17.400
+De cloud wordt de gedeelde bestemming, zelfs als de lokale directories gescheiden blijven.
+
+00:11:17.560 --> 00:11:20.760
+Er is geen direct netwerkpad tussen de forests vereist voor deze opstelling.
+
+00:11:20.760 --> 00:11:24.160
+Stel je voor dat een bedrijf in Londen een onderneming in Toronto overneemt.
+
+00:11:24.300 --> 00:11:30.520
+Beide teams moeten dezelfde Microsoft 365-tenant gebruiken, maar het koppelen van hun oude directory-netwerken zou maanden duren en beveiligingsvragen oproepen.
+
+00:11:30.640 --> 00:11:35.140
+Een agent in Londen kan Londense accounts synchroniseren, terwijl een agent in Toronto Toronto-accounts synchroniseert.
+
+00:11:35.360 --> 00:11:38.040
+Beide sets gebruikers kunnen in dezelfde EntraID terechtkomen.
+
+00:11:38.260 --> 00:11:43.220
+Dit kan tijd geven om het grotere directory-werk te plannen zonder dat mensen de toegang tot teams, e-mail en cloudapps verliezen.
+
+00:11:43.400 --> 00:11:45.020
+Er zijn nog steeds praktische vereisten.
+
+00:11:45.280 --> 00:11:48.520
+Elk agent heeft een betrouwbare verbinding nodig met zijn lokale Active Directory.
+
+00:11:48.520 --> 00:11:53.600
+Daarnaast is uitgaande toegang nodig via uw firewall of proxy naar Microsoft U-TMS Cloud Services.
+
+00:11:53.800 --> 00:11:57.140
+U plaatst de agent niet zomaar op een willekeurige computer in de hoop dat het werkt.
+
+00:11:57.340 --> 00:12:02.740
+Installeer deze op ondersteunde servers, geef de juiste lokale toegang en installeer meer dan één agent voor een productieomgeving.
+
+00:12:03.340 --> 00:12:04.940
+Beschikbaarheid houdt de verbinding in stand.
+
+00:12:05.180 --> 00:12:11.860
+Maar beslissen welke accounts via die verbinding worden verzonden, is net zo belangrijk voor wat er wordt gesynchroniseerd en hoe u de controle behoudt.
+
+00:12:11.860 --> 00:12:17.600
+Voordat CloudSync accounts naar Entra ID verplaatst, moet u precies bepalen wie er binnen het synchronisatiebereik valt.
+
+00:12:17.820 --> 00:12:21.580
+Bereik betekent het deel van de Active Directory dat CloudSync mag lezen en kopiëren.
+
+00:12:21.740 --> 00:12:28.680
+U kunt alle ondersteunde objecten in een domein kiezen, wat geschikt kan zijn voor een klein bedrijf met één schone directory en één duidelijke set werknemersaccounts.
+
+00:12:28.880 --> 00:12:38.580
+Grotere bedrijven hebben meestal meer zorg nodig, omdat Active Directory oude testgebruikers, serviceaccounts, trainingsaccounts en groepen kan bevatten die niemand in Microsoft 365 verwacht.
+
+00:12:38.580 --> 00:12:46.460
+Een nauwe start voorkomt verrassingen. CloudSync stelt u in staat om het bereik te beperken per organisatieeenheid, vaak een OE genoemd, of per beveiligingsgroep.
+
+00:12:46.560 --> 00:12:49.080
+Een OE is als een gelabelde map in Active Directory.
+
+00:12:49.680 --> 00:12:57.220
+U heeft er misschien een genaamd, onze werknemers, of een andere genaamd, onze aannemers, of wellicht onze IT-testaccounts.
+
+00:12:57.580 --> 00:13:03.040
+Als alleen de OE met werknemers Microsoft 365 moet bereiken, kunt u die OE selecteren.
+
+00:13:03.260 --> 00:13:05.480
+Bereik op basis van groepen biedt u een andere optie.
+
+00:13:05.480 --> 00:13:10.040
+In plaats van een hele map te selecteren, kiest u een beveiligingsgroep en voegt u alleen de mensen toe die u wilt testen.
+
+00:13:10.180 --> 00:13:13.800
+Dit werkt goed als u een kleine pilot wilt draaien zonder accounts in uw directory te verplaatsen.
+
+00:13:13.940 --> 00:13:14.980
+Begin met een testgroep.
+
+00:13:15.140 --> 00:13:18.020
+Kies een paar bekende gebruikers die veilig in Entra ID kunnen verschijnen.
+
+00:13:18.280 --> 00:13:21.120
+Controleer hun inlognamen, afdelingsgegevens en groepslidmaatschappen.
+
+00:13:21.280 --> 00:13:24.800
+Bevestig dat de juiste accounts verschijnen en breed het bereik uit zodra u de resultaten vertrouwt.
+
+00:13:24.940 --> 00:13:27.460
+Die kleine controle kan een zeer langdurige opschoonklus besparen.
+
+00:13:27.660 --> 00:13:30.820
+Nadat u hebt bepaald wie er mag synchroniseren, bepaalt u welke details met hem meer reizen.
+
+00:13:30.820 --> 00:13:33.860
+Dit wordt attribuutmapping genoemd, maar het betekent iets eenvoudigs.
+
+00:13:34.060 --> 00:13:37.900
+Welk veld in een Active Directory account vult welk veld in het Entra ID account.
+
+00:13:38.080 --> 00:13:43.900
+Een gebruikersrecord kan een voornaam, achternaam, weergave naam, telefoonnummer, kantoor, manager en afdeling bevatten.
+
+00:13:44.060 --> 00:13:46.920
+CloudSync bevat standaard toewijzingen voor algemene configuraties.
+
+00:13:47.100 --> 00:13:50.220
+In veel gevallen kun je die standaardinstellingen in eerste instantie beter laten voor wat ze zijn.
+
+00:13:50.420 --> 00:13:55.560
+Ze dekken de gangbare velden die de meeste bedrijven nodig hebben en maken het makkelijker om te zien wat er veranderd is als een resultaat niet klopt.
+
+00:13:55.720 --> 00:13:59.000
+Je kunt een toewijzing aanpassen als daar duidelijke zakelijke redenen voor zijn.
+
+00:13:59.000 --> 00:14:04.740
+Een bedrijf kan bijvoorbeeld een telefoonnummer opslaan in een lokaal veld dat niet overeenkomt met het Entra veld dat ze willen vullen.
+
+00:14:04.940 --> 00:14:06.440
+CloudSync kan dat veld toewijzen.
+
+00:14:06.620 --> 00:14:11.720
+Het ondersteunt ook eenvoudige expressies voor kleine wijzigingen aan een waarde, zonder dat je grote sets lokale regels hoeft te bouwen.
+
+00:14:11.880 --> 00:14:14.580
+Maar maak van een overzichtelijke configuratie niet zomaar een puzzel.
+
+00:14:14.760 --> 00:14:20.000
+Als je identiteitsproces afhangt van complexe, ongebruikelijke logica, leg die vereisten dan vast voordat je toewijzingen wijzigt.
+
+00:14:20.200 --> 00:14:24.620
+Voor normale accounts zijn duidelijke standaardinstellingen beter dan slimme regels die na zes maanden niemand meer begrijpt.
+
+00:14:24.620 --> 00:14:28.320
+CloudSync biedt een veilige manier om te testen voordat je een brede synchronisatie inschakelt.
+
+00:14:28.520 --> 00:14:30.560
+Dit proces heet Provisioning on Demand.
+
+00:14:30.740 --> 00:14:34.060
+Je kiest één gebruiker en vraagt aan CloudSync, wat zou je met dit account doen?
+
+00:14:34.240 --> 00:14:38.640
+Het resultaat toont of de agent de gebruiker heeft gevonden, of de gebruiker binnen je bereik valt,
+
+00:14:38.900 --> 00:14:43.500
+of Entra ID een overeenkomend account heeft gevonden en of CloudSync het zou aanmaken of bijwerken.
+
+00:14:43.680 --> 00:14:46.260
+Je ziet de beslissing voordat deze van invloed is op de rest.
+
+00:14:46.540 --> 00:14:49.900
+Stel je voor dat een IT-team een pilotgroep maakt genaamd CloudSync-test.
+
+00:14:49.900 --> 00:14:55.100
+Iemand voegt per ongeluk een grotere groep toe aan die pilotgroep en die groep bevat honderden medewerkers.
+
+00:14:55.420 --> 00:15:01.780
+Provisioning on Demand legt dit bereik probleem bloot terwijl het team eenpersoon test in plaats van nadat er honderden accounts in de tenant verschijnen.
+
+00:15:02.000 --> 00:15:04.300
+Dat is het soort fout dat je vroegtijdig wilt ontdekken.
+
+00:15:04.540 --> 00:15:08.040
+CloudSync bevat ook beveiliging tegen het per ongeluk verwijderen van gegevens.
+
+00:15:08.240 --> 00:15:11.660
+Als een configuratie plotseling een groot aantal gebruikers of groepen probeert te verwijderen,
+
+00:15:11.840 --> 00:15:16.720
+kan de service de uitvoering stoppen en de configuratie in quarantaine plaatsen in plaats van de schade direct door te voeren in Entra ID.
+
+00:15:17.000 --> 00:15:19.280
+Beheerders ontvangen een waarschuwing en kunnen het onderzoeken.
+
+00:15:19.280 --> 00:15:21.820
+De Entra Portal biedt je ook inrichtingslogboeken.
+
+00:15:22.060 --> 00:15:27.040
+Zoek op een gebruiker en je ziet wat er is gebeurd, of het object overeenkwam, of een veld een fout veroorzaakte,
+
+00:15:27.300 --> 00:15:30.280
+of de agent verbinding maakte en of de configuratie gezond blijft.
+
+00:15:30.480 --> 00:15:33.360
+Wanneer identiteitssynchronisatie goed werkt, merk je er niets van.
+
+00:15:33.540 --> 00:15:37.420
+Als er iets misgaat, vertellen die logboeken je waar je moet zoeken in plaats van dat je moet gissen.
+
+00:15:37.620 --> 00:15:42.960
+CloudSync dekt inmiddels een breder scala aan behoeften, maar het is nog niet bedoeld om elke Entra Connect configuratie te vervangen.
+
+00:15:43.200 --> 00:15:47.040
+HMM, CloudSync versus Entra Connect en de verschuiving in 2026.
+
+00:15:47.040 --> 00:15:50.140
+Dus, moet elk bedrijf overstappen van Entra Connect naar CloudSync?
+
+00:15:50.280 --> 00:15:54.480
+Nee, CloudSync is nieuwer, maar nieuwer betekent niet automatisch dat het bij uw configuratie past.
+
+00:15:54.660 --> 00:15:59.660
+De juiste keuze hangt af van wat uw identiteitssysteem vandaag moet doen, niet van welk product moderner klinkt.
+
+00:15:59.760 --> 00:16:04.700
+CloudSync is geschikt voor bedrijven die een eenvoudigere lokale configuratie en in de cloud beheerde synchronisatie instellingen willen.
+
+00:16:04.880 --> 00:16:09.500
+Het werkt goed wanneer u vooral wilt dat gebruikers, groepen en contactpersonen uit Active Directory in Entra ID verschijnen.
+
+00:16:09.660 --> 00:16:16.340
+Het past ook bij bedrijven met afzonderlijke forests, waarbij elke locatie verbinding kan maken met dezelfde Entra Tenant zonder eerst al die lokale netwerken samen te voegen.
+
+00:16:16.340 --> 00:16:18.800
+Het biedt u ook bereik, bepaling op basis van groepen.
+
+00:16:18.960 --> 00:16:23.940
+Dat kan handig zijn wanneer u eerst één bedrijfsonderdeel, één nieuw kantoor of een kleine groep gebruikers wilt toevoegen.
+
+00:16:24.120 --> 00:16:30.760
+U kunt de synchronisatie instellingen in de Entra portal beheren, de agents daar controleren en voorkomen dat u een grotere synchronisatie engine op één centrale server draait.
+
+00:16:30.920 --> 00:16:32.620
+Entra Connect heeft nog steeds zijn plek.
+
+00:16:32.620 --> 00:16:38.860
+Sommige bedrijven vertrouwen op aanmeldmethode die CloudSync niet op dezelfde manier ondersteunt, zoals Pass-Through Verificatie of Federatie.
+
+00:16:39.000 --> 00:16:43.560
+Pass-Through Verificatie controleert een wachtwoord in Active Directory op het moment dat een gebruiker zich aanmeldt.
+
+00:16:43.660 --> 00:16:48.260
+Federatie stuurt het aanmeldverzoek naar een ander identiteitssysteem, vaak een systeem dat het bedrijf al gebruikt.
+
+00:16:48.460 --> 00:16:50.520
+Die configuraties vereisen een zorgvuldige planning.
+
+00:16:50.760 --> 00:16:54.120
+Entra Connect kan ook geschikt zijn voor bedrijven met geavanceerde lokale synchronisatie regels.
+
+00:16:54.320 --> 00:17:00.760
+Misschien combineren ze gegevens uit ongebruikelijke velden, passen ze gedetailleerde filterlogica toe of zijn ze afhankelijk van oude aangepaste regels die jaren nodig hadden om op te bouwen.
+
+00:17:02.620 --> 00:17:05.420
+Een hulpprogramma zonder elke regel te controleren, kan problemen veroorzaken.
+
+00:17:05.580 --> 00:17:07.560
+Exchange Hybrid kan de keuze ook beïnvloeden.
+
+00:17:07.760 --> 00:17:11.480
+Een bedrijf draait mogelijk nog steeds delen van Exchange lokaal terwijl ze Exchange online gebruiken.
+
+00:17:11.720 --> 00:17:15.080
+Sommige Exchange taken vereisen dat details teruggeschreven worden naar Active Directory.
+
+00:17:15.360 --> 00:17:20.040
+Zo blijven Microsoft 365 en de Exchange configuratie op één lijn wat betreft e-mail gerelateerde informatie.
+
+00:17:20.240 --> 00:17:23.640
+Uw exacte Exchange configuratie bepaalt of CloudSync ondersteunt wat u nodig heeft.
+
+00:17:23.840 --> 00:17:25.820
+Die beslissing veranderde in 2026.
+
+00:17:26.080 --> 00:17:29.120
+CloudSync bevat nu apparaatsynchronisatie voor hybride Entra-ID-koppeling.
+
+00:17:29.120 --> 00:17:33.100
+Dat is van belang wanneer zakelijke Windows apparaten nog steeds tot de lokale Active Directory behoren,
+
+00:17:33.260 --> 00:17:35.940
+maar ook een identiteit in Entra-ID nodig hebben voor cloudtoegang en beheer.
+
+00:17:36.100 --> 00:17:39.240
+Voor veel bedrijven hield apparaatsynchronisatie Entra Connect in stand.
+
+00:17:39.460 --> 00:17:44.080
+Nu kan CloudSync ook in die behoefte voorzien wat één reden wegneemt waarom sommige teams het niet konden overwegen.
+
+00:17:44.280 --> 00:17:48.160
+U moet nog steeds uw apparaatconfiguratie, uw Windows plannen en uw gebruik van Intune controleren.
+
+00:17:48.340 --> 00:17:50.480
+Maar de keuze draait niet langer alleen om gebruikers en groepen.
+
+00:17:50.640 --> 00:17:54.600
+Microsoft heeft ook het terugschrijven van Exchange Hybrid kenmerken toegevoegd in openbare preview.
+
+00:17:54.600 --> 00:17:59.860
+Kort gezegd, CloudSync kan nu bepaalde Exchange gerelateerde details vanuit de cloud terugsturen naar Active Directory.
+
+00:18:00.080 --> 00:18:05.760
+Public Preview betekent dat Microsoft nog praktijkervaring en feedback verzamelt voordat de functie volledig wordt vrijgegeven.
+
+00:18:05.940 --> 00:18:08.020
+Behandel het dus voorzichtiger dan een gevestigde functie.
+
+00:18:08.220 --> 00:18:11.600
+Verplaats een Exchange-instelling niet automatisch op basis van één zin in een productupdate.
+
+00:18:12.480 --> 00:18:18.580
+Lees de huidige Microsoft-documentatie, test met niet-productie-accounts en bevestig de exacte kenmerken die uw bedrijf nodig heeft.
+
+00:18:18.780 --> 00:18:22.580
+Exchange kan medogenloos zijn als identiteitsgegevens niet precies overeenkomen.
+
+00:18:22.580 --> 00:18:25.560
+CloudSync brengt ook vertrouwde veiligheidscontroles naar de portal.
+
+00:18:25.760 --> 00:18:27.740
+U kunt wachtwoord-hesynchronisatie gebruiken.
+
+00:18:27.880 --> 00:18:30.920
+U kunt meldingen instellen zodat de juiste personen op de hoogte zijn van een probleem.
+
+00:18:31.080 --> 00:18:33.380
+U kunt bescherming tegen onbedoelde verwijdering instellen.
+
+00:18:33.540 --> 00:18:38.160
+U kunt de configuratie beheren vanuit Entra in plaats van de lokale Sync-server als het middelpunt van alles te beschouwen.
+
+00:18:38.320 --> 00:18:40.500
+De tools komen qua dekking steeds dichter bij elkaar.
+
+00:18:40.680 --> 00:18:44.140
+Toch is CloudSync niet voor elk bedrijf een tijdelijke vervanging voor Entra Connect.
+
+00:18:44.400 --> 00:18:46.520
+Denk bij de keuze aan het kiezen van een voertuig.
+
+00:18:46.520 --> 00:18:51.440
+Een kleine bestelwagen is wellicht geschikt voor een lokale bezorgroute omdat deze makkelijk rijdt en makkelijk parkeert.
+
+00:18:51.580 --> 00:18:55.220
+De zware vrachtwagen is geschikt voor een andere klus omdat hij ladingen kan vervoeren die de bestelwagen niet aan kan.
+
+00:18:55.400 --> 00:18:56.780
+Geen van beide keuzes is fout.
+
+00:18:57.040 --> 00:18:58.980
+Stel een paar directe vragen voordat u beslist.
+
+00:18:59.200 --> 00:19:02.220
+Heeft u één Active Directory Forest of meerdere niet-verbonden forests?
+
+00:19:02.460 --> 00:19:04.280
+Heeft u hybride apparaatsynchronisatie nodig?
+
+00:19:04.480 --> 00:19:06.420
+Vertrouwt u op geavanceerde aangepaste regels?
+
+00:19:06.660 --> 00:19:08.100
+Welke aanmeldmethode gebruikt u?
+
+00:19:08.240 --> 00:19:09.700
+Heeft Exchange Rideback nodig?
+
+00:19:09.900 --> 00:19:12.880
+En als de huidige Sync-service uitvalt, hoe snel kunt u dan herstellen?
+
+00:19:13.100 --> 00:19:14.120
+Noteer de antwoorden.
+
+00:19:14.360 --> 00:19:17.660
+De definitieve beslissing moet niet beginnen met een alles-in-één migratie.
+
+00:19:17.840 --> 00:19:23.700
+Het moet beginnen met een kleine, gecontroleerde test die bewijst dat CloudSync uw werkelijke accounts en verrijsten aan kan.
+
+00:19:24.100 --> 00:19:26.100
+Een veilige eerste zet voor uw bedrijf.
+
+00:19:26.300 --> 00:19:28.900
+Begin met het tekenen van een eenvoudige identiteitskaart.
+
+00:19:29.080 --> 00:19:31.420
+Noteer elk Active Directory Forest en domein.
+
+00:19:31.620 --> 00:19:34.460
+Noteer of u al EntraConnect gebruikt, welke gebruikers nu synchroniseren,
+
+00:19:34.460 --> 00:19:38.380
+welke apparaten hybride identiteit nodig hebben en waar uw mailsysteem nog afhankelijk is van lokale Active Directory.
+
+00:19:38.600 --> 00:19:39.460
+Hou het eenvoudig.
+
+00:19:39.640 --> 00:19:42.040
+Vergelijk vervolgens uw behoefte met de huidige CloudSync-ondersteuning.
+
+00:19:42.260 --> 00:19:43.780
+Controleer eerst uw aanmeldmethode.
+
+00:19:44.060 --> 00:19:45.400
+Controleer de exchange-verrijsten.
+
+00:19:45.620 --> 00:19:50.500
+Controleer apparaten, writeback en eventuele aangepaste toewijzingen die jaren geleden zijn gemaakt en waar sindsdien niemand meer naar heeft gekeken.
+
+00:19:50.660 --> 00:19:52.800
+Die lijst kan verborgen afhankelijkheden blootleggen.
+
+00:19:52.960 --> 00:19:56.480
+Als CloudSync past, installeer dan tenminste twee Provisioning Agents voor productie.
+
+00:19:56.640 --> 00:20:02.360
+Eén agent werkt misschien in een lab, maar productie-identiteitssynchronisatie moet niet op één server draaien als u dat kunt voorkomen.
+
+00:20:02.420 --> 00:20:04.540
+Bouw vervolgens een beperkte configuratie.
+
+00:20:04.740 --> 00:20:07.540
+Kies een testorganisatie-eenheid of een kleine beveiligingsgroep.
+
+00:20:07.540 --> 00:20:10.640
+Gebruik de standaardtoewijzingen, tenzij u een duidelijke reden heeft om ze te wijzigen.
+
+00:20:10.780 --> 00:20:14.900
+Kies vervolgens een bekende gebruiker en voer Provision on the mind uit voordat uw reguliere synchronisatie inschakelt.
+
+00:20:15.100 --> 00:20:16.620
+Lees het resultaat zorgvuldig door.
+
+00:20:16.920 --> 00:20:21.440
+Controleer of Entra de juiste persoon vindt, het verwachte account aanmaakt en de verwachte velden verstuurt.
+
+00:20:21.620 --> 00:20:26.420
+Bekijk ook de Portal Lux, want een groene status alleen bewijst niet dat de bedrijfsregels werken.
+
+00:20:26.620 --> 00:20:29.100
+Eén waarschuwing is belangrijk tijdens een verplaatsing.
+
+00:20:29.100 --> 00:20:30.320
+Ga er niet vanuit dat.

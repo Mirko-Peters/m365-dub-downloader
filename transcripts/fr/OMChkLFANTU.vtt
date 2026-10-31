@@ -1,0 +1,1240 @@
+WEBVTT
+
+00:00:00.300 --> 00:00:06.740
+Prêt pour 10 jours consacrés à Microsoft 365, Copilot, l'IA, Azure et aux personnes qui façonnent l'avenir du travail.
+
+00:00:07.520 --> 00:00:12.160
+En janvier prochain, la conférence M365 est de retour et nous voyons encore plus grand.
+
+00:00:12.920 --> 00:00:18.100
+Rejoignez-nous pour des sessions en direct, des démonstrations concrètes et les connaissances pratiques de MVP et d'experts du secteur du monde entier.
+
+00:00:18.900 --> 00:00:21.220
+Pas de diapositives génériques, pas de jargon interminable.
+
+00:00:22.060 --> 00:00:23.180
+Nous nous attaquons aux vrais défis.
+
+00:00:23.780 --> 00:00:28.820
+Copilot Studio, Agent IA, Fabrique, Sécurité, Gouvernance et Automatisation.
+
+00:00:28.820 --> 00:00:34.320
+Que vous soyez professionnel de l'informatique, développeur ou dirigeant d'entreprise, il y a des sessions conçues pour vous.
+
+00:00:35.520 --> 00:00:40.140
+Avec 10 jours complets, vous pouvez explorer de multiples technologies et échanger avec une communauté mondiale.
+
+00:00:40.980 --> 00:00:44.100
+Suivez-nous en direct et rapportez des idées pratiques dans votre organisation.
+
+00:00:45.220 --> 00:00:50.660
+Janvier 2027, 10 jours. Une seule communauté, Microsoft. Les inscriptions sont ouvertes.
+
+00:00:52.480 --> 00:00:54.820
+Réservez votre place dès aujourd'hui.
+
+00:00:54.820 --> 00:00:58.360
+C'est sur m365con.net.
+
+00:01:00.240 --> 00:01:03.320
+Inscrivez-vous sur m365con.net et nous vous attendons.
+
+00:01:03.720 --> 00:01:04.620
+En direct en janvier.
+
+00:01:05.280 --> 00:01:09.700
+Bonjour à tous et bienvenue dans un nouvel épisode de Microsoft Knowledge Nuggets ici sur M365.
+
+00:01:10.500 --> 00:01:12.440
+FM et OWD MNM Milko Peters.
+
+00:01:13.200 --> 00:01:15.540
+Qu'est-ce que Microsoft Entra Cloud Sync exactement ?
+
+00:01:15.540 --> 00:01:18.820
+S'agit-il simplement d'un autre nom pour Entra Connect ou résout-il un problème différent ?
+
+00:01:19.440 --> 00:01:23.160
+De nombreuses entreprises conservent encore les comptes des employés dans l'active directory de leur propre réseau.
+
+00:01:23.160 --> 00:01:25.640
+Pourtant, les employés travaillent sur Microsoft 365.
+
+00:01:26.240 --> 00:01:29.720
+Ils ont besoin de Teams, de la messagerie Exchange Online, des fichiers OneDrive et d'applications cloud.
+
+00:01:30.540 --> 00:01:32.300
+Cela crée deux endroits où l'identité est importante.
+
+00:01:32.900 --> 00:01:38.400
+Sans lien entre eux, quelqu'un peut exister dans Active Directory, mais pas dans Entra ID, le guichet d'accueil cloud de Microsoft 365.
+
+00:01:39.400 --> 00:01:40.920
+Les mots de passe ne correspondent pas.
+
+00:01:41.660 --> 00:01:42.380
+L'accès arrive en retard.
+
+00:01:43.200 --> 00:01:44.960
+L'informatique finit par faire le même travail deux fois.
+
+00:01:46.400 --> 00:01:49.260
+Entra Connect est devenu l'outil local familier pour relier ces deux environnements.
+
+00:01:49.260 --> 00:01:53.960
+Cloud Sync emprunte une voie différente, avec une plus grande partie du travail de synchronisation géré dans Microsoft Entra.
+
+00:01:54.360 --> 00:01:57.460
+A la fin, vous saurez ce qu'il fait, pourquoi il existe et ce qui a changé en 2026.
+
+00:01:58.560 --> 00:02:00.760
+Cependant, une limite détermine toujours s'il convient à votre entreprise.
+
+00:02:02.540 --> 00:02:05.640
+Pourquoi la synchronisation d'identité a besoin d'un modèle plus simple ?
+
+00:02:05.640 --> 00:02:06.720
+Commençons par un nouvel employé.
+
+00:02:07.120 --> 00:02:08.960
+Les RH informent l'informatique que Maya commence lundi.
+
+00:02:09.880 --> 00:02:14.280
+Quelqu'un crée le compte Active Directory de Maya, que beaucoup d'entreprises utilisent encore, comme classeur local pour le personnel.
+
+00:02:14.280 --> 00:02:20.580
+Son nom, son adresse e-mail professionnel, son service, son responsable, son appartenance à des groupes, et ses détails de mots de passe commencent tous là.
+
+00:02:21.580 --> 00:02:23.840
+Mais Maya ne travaille pas uniquement au sein du réseau de l'entreprise.
+
+00:02:24.420 --> 00:02:25.800
+Elle doit se connecter à Teams depuis chez elle.
+
+00:02:26.320 --> 00:02:27.780
+Elle a besoin de sa boîte aux lettres Exchange Online.
+
+00:02:28.480 --> 00:02:29.940
+Son équipe stocke des fichiers sur SharePoint.
+
+00:02:30.420 --> 00:02:34.820
+Elle pourrait avoir besoin d'accéder à la paye, au CRM, à la formation ou à d'autres applications cloud avant la fin de sa première journée.
+
+00:02:35.280 --> 00:02:37.000
+Une personne a besoin d'une seule identité fonctionnelle.
+
+00:02:37.640 --> 00:02:40.580
+Cette identité doit apparaître aux deux endroits tout en désignant la même Maya.
+
+00:02:41.340 --> 00:02:42.740
+Son nom de connexion doit correspondre.
+
+00:02:42.740 --> 00:02:44.400
+Ces informations de groupe doivent atteindre le cloud.
+
+00:02:45.120 --> 00:02:50.700
+Lorsque son mot de passe change dans Active Directory, Microsoft 365 doit également pouvoir le confirmer en toute sécurité.
+
+00:02:51.420 --> 00:02:53.040
+C'est le rôle de la synchronisation d'identité.
+
+00:02:53.720 --> 00:02:57.140
+Considéré Active Directory, comme le classeur situé au sous-sol d'un immeuble de bureau,
+
+00:02:58.020 --> 00:03:00.100
+il contient les dossiers du personnel auquel l'entreprise fait déjà confiance.
+
+00:03:00.740 --> 00:03:05.220
+EntraID se trouve à la réception, à l'étage, et décide qui peut accéder à Microsoft 365 et quelles salles ils peuvent utiliser.
+
+00:03:06.440 --> 00:03:10.160
+Si le classeur et la réception ne communiquent pas, Maya est arrêtée à la porte.
+
+00:03:10.160 --> 00:03:13.940
+Il y a 20 ans, ce décalage entraînait beaucoup de travail manuel.
+
+00:03:14.440 --> 00:03:17.960
+Une équipe informatique devait créer un compte localement, puis un autre dans un service cloud.
+
+00:03:18.820 --> 00:03:21.280
+Lorsque Maya changeait de nom, d'équipe ou quittait l'entreprise,
+
+00:03:21.540 --> 00:03:24.660
+quelqu'un devait se souvenir de tous les endroits où ces données étaient stockées.
+
+00:03:25.460 --> 00:03:25.940
+Les gens oublient.
+
+00:03:26.980 --> 00:03:30.000
+Cette nouvelle approche de synchronisation des identités a changé le travail informatique quotidien.
+
+00:03:30.000 --> 00:03:36.420
+Un changement dans Active Directory pouvait être répercuté dans EntraID permettant au compte cloud de suivre le compte local au lieu de devenir une seconde fiche séparée.
+
+00:03:37.500 --> 00:03:39.260
+Pendant longtemps, EntraConnect a pris en charge ce travail.
+
+00:03:39.700 --> 00:03:42.040
+EntraConnect s'exécute sur un serveur à l'intérieur du réseau de l'entreprise.
+
+00:03:42.540 --> 00:03:48.800
+Il lie à Active Directory, applique des règles de synchronisation locale, gère son propre stockage de données locales et envoie les modifications approuvées à EntraID.
+
+00:03:49.340 --> 00:03:52.820
+Il offre de nombreuses possibilités, surtout lorsqu'une entreprise a besoin d'un contrôle approfondi sur le flux des données.
+
+00:03:53.320 --> 00:03:55.000
+Cette flexibilité s'accompagne de responsabilités.
+
+00:03:55.000 --> 00:03:56.560
+Quelqu'un doit surveiller le serveur.
+
+00:03:57.160 --> 00:03:58.060
+Quelqu'un doit le mettre à jour.
+
+00:03:58.560 --> 00:04:02.100
+Quelqu'un doit comprendre les règles locales si un utilisateur ne parvient pas à s'authentifier comme prévu.
+
+00:04:02.620 --> 00:04:08.760
+Et si le serveur de synchronisation principale tombe en panne, les changements peuvent ne plus atteindre Microsoft 365 jusqu'à ce que l'informatique résolve le problème ou suivant le plan de récupération.
+
+00:04:09.100 --> 00:04:10.800
+Pour Maya, cela peut signifier que son compte est en attente.
+
+00:04:11.320 --> 00:04:15.920
+Pour une entreprise de centaines ou milliers de personnes, cela signifie que les nouveaux arrivants n'apparaissent pas dans les applications cloud,
+
+00:04:15.920 --> 00:04:20.060
+que les comptes désactivés tardent à perdre l'accès et que les appels au support s'accumulent.
+
+00:04:20.420 --> 00:04:20.900
+S'accumulent.
+
+00:04:21.840 --> 00:04:24.120
+Le problème ne vient pas du fait qu'EntraConnect ait échoué en tant que produit.
+
+00:04:24.120 --> 00:04:26.960
+C'est simplement que chaque moteur local implique un travail local.
+
+00:04:27.700 --> 00:04:30.080
+Beaucoup d'entreprises veulent moins d'éléments à gérer sur leur propre serveur.
+
+00:04:30.360 --> 00:04:31.640
+La synchronisation cloud suit cette logique.
+
+00:04:31.940 --> 00:04:38.840
+Au lieu de placer le moteur de synchronisation volumineux, le traitement détaillé et la plupart des règles au sein de votre réseau Microsoft entragèrent une grande partie de ce travail dans le cloud.
+
+00:04:39.680 --> 00:04:44.440
+Votre réseau local conserve un point de connexion plus léger capable de lire Active Directory et de communiquer en toute sécurité vers l'extérieur.
+
+00:04:44.800 --> 00:04:45.720
+Le classeur reste le WID.
+
+00:04:46.240 --> 00:04:48.000
+Le traitement se rapproche de la réception.
+
+00:04:48.620 --> 00:04:51.260
+Cela peut réduire la quantité de logiciels locaux que votre équipe doit gérer,
+
+00:04:51.260 --> 00:04:54.480
+tout en conservant Active Directory comme point d'origine des données des employés.
+
+00:04:55.140 --> 00:04:57.000
+Cela modifie également votre approche de la récupération,
+
+00:04:57.220 --> 00:05:00.920
+surtout lorsqu'une entreprise possède plusieurs bureaux, plusieurs annuaires ou a récemment effectué une fusion.
+
+00:05:01.560 --> 00:05:07.260
+Alors si le travail de synchronisation principale s'effectue dans le cloud, qu'est-ce qui reste exactement dans votre réseau d'entreprise ?
+
+00:05:07.260 --> 00:05:09.780
+C'est précisément ce qu'est Microsoft Entra Cloud Sync.
+
+00:05:10.460 --> 00:05:14.320
+Microsoft Entra Cloud Sync est un moyen géré par le cloud pour copier des utilisateurs, des groupes,
+
+00:05:14.560 --> 00:05:17.660
+et des contacts sélectionnés depuis Active Directory vers Entra ID vers Entra E.
+
+00:05:17.660 --> 00:05:19.960
+Considérez cela comme un service de messagerie sécurisé.
+
+00:05:20.280 --> 00:05:23.180
+Votre Active Directory conserve les dossiers du personnel au sein de votre réseau.
+
+00:05:23.600 --> 00:05:27.440
+Entra ID a besoin des parties approuvées de ces dossiers pour que les utilisateurs puissent se connecter à Microsoft 365.
+
+00:05:28.360 --> 00:05:31.120
+Cloud Sync installe un petit coursier appelé agent de provisionnement dans votre réseau
+
+00:05:31.120 --> 00:05:33.840
+pour transporter ces informations en toute sécurité entre les deux.
+
+00:05:34.680 --> 00:05:36.540
+Le coursier ne conserve pas de second système de fichiers.
+
+00:05:37.240 --> 00:05:40.160
+Il lit les informations d'annuaire que vous approuvez, les chiffres et les envois,
+
+00:05:40.520 --> 00:05:42.660
+via une connexion sortante vers Microsoft Entra.
+
+00:05:43.120 --> 00:05:46.180
+Une connexion sortante signifie que c'est l'agent qui initie la communication avec le cloud.
+
+00:05:46.180 --> 00:05:49.940
+Vous n'avez pas besoin d'ouvrir votre réseau et d'attendre qu'une connexion inconnue y entre.
+
+00:05:50.780 --> 00:05:52.340
+C'est un détail de sécurité utile.
+
+00:05:52.860 --> 00:05:55.680
+L'agent peut accéder à Active Directory car il est situé à l'intérieur de votre réseau.
+
+00:05:56.180 --> 00:05:59.640
+Microsoft Entra peut traiter les données car l'agent les envoie de manière sécurisée vers le cloud.
+
+00:06:00.340 --> 00:06:04.060
+Les deux parties peuvent collaborer sans avoir à installer le moteur de synchronisation complet sur votre propre serveur.
+
+00:06:05.060 --> 00:06:07.100
+En coulisses, Entra gère la majeure partie du travail.
+
+00:06:08.200 --> 00:06:10.080
+Il vérifie si une personne existe déjà dans Entra ID.
+
+00:06:10.800 --> 00:06:12.060
+Il applique l'étendue que vous avez choisi.
+
+00:06:12.720 --> 00:06:14.180
+Il suit les mappages de champs que vous avez définis.
+
+00:06:14.180 --> 00:06:18.560
+Ensuite, il crée ou met à jour l'objet cloud lorsque les informations correspondent à vos règles.
+
+00:06:19.100 --> 00:06:20.420
+Vous gérez ses choix dans le portail Entra.
+
+00:06:20.940 --> 00:06:22.640
+C'est un changement majeur si vous connaissez Entra Connect.
+
+00:06:23.240 --> 00:06:27.780
+Avec Entra Connect, une grande partie de la logique et du dépannage s'effectue sur le serveur qui exécute l'outil de synchronisation.
+
+00:06:28.520 --> 00:06:32.280
+Avec Cloud Sync, vous créez une configuration dans le portail, choisissez ce qui doit être synchronisé,
+
+00:06:32.700 --> 00:06:35.340
+mapez les champs et vérifiez les résultats dans un emplacement cloud unique.
+
+00:06:35.880 --> 00:06:36.960
+L'agent local reste léger.
+
+00:06:36.960 --> 00:06:41.680
+Il n'y a pas de moteur de synchronisation locale volumineux avec une base de données SQL locale pour Cloud Sync.
+
+00:06:42.480 --> 00:06:47.100
+Vous n'avez plus besoin d'ouvrir un éditeur de règles locales chaque fois que vous devez vérifier un mappage de base.
+
+00:06:48.460 --> 00:06:53.040
+Microsoft gère les mises à jour de l'agent tandis que votre équipe se concentre sur les règles d'identité importantes pour l'entreprise.
+
+00:06:53.840 --> 00:06:55.460
+Pour mon équipe, cela ne signifie pas que vous perdez le contrôle.
+
+00:06:55.960 --> 00:06:58.220
+Vous choisissez toujours les personnes et les groupes qui peuvent accéder à Entra ID.
+
+00:06:58.220 --> 00:07:03.000
+Vous pouvez choisir des champs tels que le nom complet, le service, le numéro de téléphone ou le responsable.
+
+00:07:04.120 --> 00:07:05.700
+Un mappage répond simplement à une question claire.
+
+00:07:05.900 --> 00:07:09.780
+Quelle étiquette de l'enregistrement Active Directory doit remplir quelle étiquette dans Entra ID ?
+
+00:07:09.780 --> 00:07:12.560
+Pour de nombreuses entreprises, les mappages par défaut couvrent les comptes du personnel classique.
+
+00:07:13.140 --> 00:07:17.120
+Si votre nom complet Active Directory indique Maya Patel, Entra ID peut recevoir Maya Patel.
+
+00:07:17.700 --> 00:07:21.060
+Si son service passe des ventes au succès client, cette mise à jour peut atteindre son compte cloud.
+
+00:07:21.820 --> 00:07:24.600
+Si son appartenance à un groupe lui donne accès à une ressource Microsoft 365,
+
+00:07:24.600 --> 00:07:27.020
+les informations du groupe peuvent également être synchronisées.
+
+00:07:27.020 --> 00:07:28.800
+Certaines configurations nécessitent de légère bénéfice.
+
+00:07:29.060 --> 00:07:33.060
+La synchronisation cloud inclut des expressions simples pour les cas où vous devez ajuster une valeur lors de son transfert.
+
+00:07:33.440 --> 00:07:36.980
+Peut-être qu'une entreprise souhaite ajouter un suffixe au nom complet pour un certain ensemble de comptes.
+
+00:07:37.700 --> 00:07:41.800
+Vous pouvez le définir dans la configuration cloud plutôt que créer une série complexe de règles de synchronisation locale.
+
+00:07:42.360 --> 00:07:43.240
+Regardez cette distinction à l'esprit.
+
+00:07:43.680 --> 00:07:46.640
+La synchronisation cloud vous offre un contrôle judicieux pour les tâches d'identité courantes.
+
+00:07:47.180 --> 00:07:52.060
+Elle n'est pas automatisée pour copier chaque personnalisation avancée qu'une configuration Entra Connect de longue date peut contenir.
+
+00:07:52.640 --> 00:07:54.400
+Nous reviendrons sur cette décision plus tard,
+
+00:07:54.400 --> 00:07:58.560
+car elle peut vous éviter de choisir l'outil simplement parce qu'il est plus récent.
+
+00:07:59.480 --> 00:08:00.780
+Les mots de passe soulèvent le plus grand de questions.
+
+00:08:01.220 --> 00:08:03.640
+La synchronisation cloud peut utiliser la synchronisation de la châche de mot de passe.
+
+00:08:03.880 --> 00:08:05.600
+Cette expression semble plus alarmante qu'elle ne l'est en réalité.
+
+00:08:06.300 --> 00:08:09.080
+Le mot de passe lisible n'est jamais envoyé à Microsoft Entra.
+
+00:08:09.860 --> 00:08:13.540
+Au lieu de cela, Active Directory crée des informations de vérification de mot de passe protégé.
+
+00:08:13.980 --> 00:08:17.380
+Et Entra ID les utilise pour vérifier la connexion d'une personne en toute sécurité.
+
+00:08:18.240 --> 00:08:21.100
+Ainsi, Maya peut utiliser son mot de passe d'entreprise pour Microsoft 365.
+
+00:08:21.660 --> 00:08:23.120
+Son mot de passe commence toujours dans Active Directory.
+
+00:08:23.900 --> 00:08:27.500
+Lorsqu'elle le modifie là-bas, les informations de vérification mise à jour se synchronisent avec Entra ID.
+
+00:08:28.660 --> 00:08:32.960
+Microsoft 365 peut alors confirmer sa connexion sans stocker de copie lisible du mot de passe.
+
+00:08:33.620 --> 00:08:35.260
+Une règle de propriété permet de garder les choses claires.
+
+00:08:36.260 --> 00:08:40.800
+Lorsqu'un utilisateur est synchronisé depuis Active Directory, Active Directory reste l'endroit où vous modifiez les détails de synchronisation.
+
+00:08:41.280 --> 00:08:44.920
+Si le service ou le titre du poste de Maya ou de Team doit changer, vous le modifiez dans Active Directory,
+
+00:08:45.020 --> 00:08:47.560
+puis la synchronisation cloud répercute ce changement dans Entra ID.
+
+00:08:48.320 --> 00:08:50.360
+Vous verrez souvent ces champs cloud verrouillés pour l'édition.
+
+00:08:50.940 --> 00:08:51.940
+Ce n'est absolument pas un problème.
+
+00:08:52.560 --> 00:08:53.840
+Cela vous indique d'où provient le compte.
+
+00:08:54.540 --> 00:08:57.820
+Vous pouvez changer cette propriété ultérieurement via un changement de source d'autorité planifiée.
+
+00:08:57.820 --> 00:09:01.340
+Mais la synchronisation cloud ne transforme pas silencieusement les comptes locaux en comptes gérés par le cloud.
+
+00:09:02.000 --> 00:09:04.360
+L'agent explique pourquoi la synchronisation cloud semble plus légère.
+
+00:09:04.360 --> 00:09:07.820
+Mais la partie suivante explique pourquoi elle peut continuer à fonctionner lorsqu'un serveur tombe en panne.
+
+00:09:08.740 --> 00:09:11.400
+Comment la synchronisation cloud continue de fonctionner lorsqu'un serveur tombe en panne ?
+
+00:09:11.400 --> 00:09:13.920
+Un outil de synchronisation n'est utile que tant qu'il peut atteindre Active Directory.
+
+00:09:14.320 --> 00:09:18.800
+Imaginez un lundi matin où un serveur a besoin d'un redémarrage urgent ou que son disque tombe en panne sans avertissement.
+
+00:09:19.720 --> 00:09:24.040
+Un responsable crée une nouvelle recrue dans Active Directory, mais cette personne n'apparaît pas dans Microsoft 365.
+
+00:09:24.860 --> 00:09:26.940
+Quelqu'un désactive un employé ayant quitté l'entreprise.
+
+00:09:27.240 --> 00:09:28.620
+Mais le compte cloud attend toujours ce changement.
+
+00:09:29.160 --> 00:09:30.940
+Ces délais génèrent une charge de travail réelle pour l'informatique.
+
+00:09:30.940 --> 00:09:37.620
+Avec une configuration AntraConnect traditionnelle, les entreprises utilisent souvent un serveur de synchronisation actif et un autre en mode intermédiaire comme sauvegarde.
+
+00:09:38.540 --> 00:09:43.120
+Cette sauvegarde nécessite de la planification des tests et un processus clair pour prendre le relais en quête panne du serveur actif.
+
+00:09:43.600 --> 00:09:44.900
+CloudSync adopte une approche différente.
+
+00:09:45.360 --> 00:09:48.280
+Vous pouvez installer plusieurs agents de provisionnement dans le même domaine Active Directory.
+
+00:09:49.280 --> 00:09:54.300
+Chaque agent se connecte à la même configuration CloudSync dans Microsoft Antra, et chacun peut lire les mêmes informations d'annuaire.
+
+00:09:55.000 --> 00:09:57.820
+Vous n'avez pas besoin de considérer un agent comme le responsable permanent.
+
+00:09:57.820 --> 00:10:00.340
+Microsoft Antra surveille les agents disponibles.
+
+00:10:01.020 --> 00:10:05.180
+Si un agent se déconnecte, le service cloud peut utiliser un autre agent sain pour poursuivre le travail.
+
+00:10:06.160 --> 00:10:11.940
+Il s'agit d'une haute disponibilité intégrée, ce qui signifie simplement que vous évitez qu'un seul serveur ne devienne un point de défaillance unique.
+
+00:10:12.580 --> 00:10:15.040
+Pensez à deux centres d'assistance utilisant le même répertoire de personnel.
+
+00:10:15.840 --> 00:10:19.060
+Si un centre ferme pour la journée, l'autre peut toujours prendre des appels et enregistrer les personnes.
+
+00:10:19.740 --> 00:10:22.740
+Les employés de l'entreprise n'ont pas besoin de savoir quel bureau a traité leurs demandes.
+
+00:10:23.480 --> 00:10:24.660
+Ils ont juste besoin que leur accès fonctionne.
+
+00:10:25.280 --> 00:10:26.420
+C'est là tout l'avantage pratique.
+
+00:10:26.420 --> 00:10:30.900
+Au lieu de créer un plan de basculement manuel autour d'un moteur de synchronisation locale lourd,
+
+00:10:31.160 --> 00:10:34.220
+vous installez plusieurs agents légers et laissez Antra utiliser ceux qui sont en ligne.
+
+00:10:35.400 --> 00:10:38.860
+Vous devez toujours surveiller la santé des agents, maintenir le serveur à jour et tester votre plan de récupération.
+
+00:10:39.940 --> 00:10:42.960
+Le basculement intégré ne supprime pas le besoin d'une gestion informatique responsable.
+
+00:10:43.580 --> 00:10:45.580
+Il soulage simplement une partie de la pression exercée sur une seule machine.
+
+00:10:46.160 --> 00:10:49.280
+CloudSync aide également lorsqu'une entreprise dispose de forêts Active Directory distinctes.
+
+00:10:49.800 --> 00:10:51.860
+Une forêt est un environnement Active Directory séparé.
+
+00:10:52.380 --> 00:10:54.540
+Vous pourriez en avoir une parce que votre entreprise en a racheté une autre.
+
+00:10:54.540 --> 00:11:02.000
+Les deux entreprises peuvent utiliser des domaines, des réseaux et des répertoires locaux distincts qui ne peuvent pas communiquer directement.
+
+00:11:03.200 --> 00:11:04.380
+C'est courant après une fusion.
+
+00:11:05.160 --> 00:11:07.500
+Avec CloudSync, vous pouvez installer un agent près de chaque forêt.
+
+00:11:08.140 --> 00:11:12.760
+Chaque agent lit son propre Active Directory local, puis se connecte vers l'extérieur au même tenant Microsoft en train.
+
+00:11:13.320 --> 00:11:17.180
+Le cloud devient la destination partagée, même lorsque les répertoires locaux restent séparés.
+
+00:11:17.180 --> 00:11:20.540
+Aucun chemin réseau direct entre les forêts n'est requis pour cette configuration.
+
+00:11:21.280 --> 00:11:23.440
+Imaginez qu'une entreprise à Londres acquière une société à Toronto.
+
+00:11:24.180 --> 00:11:26.680
+Les deux équipes doivent utiliser le même tenant Microsoft 365,
+
+00:11:27.260 --> 00:11:30.180
+mais connecter leurs anciens réseaux d'annuaire prendrait des mois et soulèverait des questions de sécurité.
+
+00:11:30.780 --> 00:11:34.800
+Un agent à Londres peut synchroniser les comptes de Londres, tandis qu'un agent à Toronto synchronise ceux de Toronto.
+
+00:11:35.460 --> 00:11:37.460
+Les deux ensembles d'utilisateurs peuvent aboutir dans le même entre-ID.
+
+00:11:37.980 --> 00:11:40.260
+Cela permet de prendre le temps de planifier le travail sur le répertoire global,
+
+00:11:40.380 --> 00:11:43.300
+sans empêcher les utilisateurs d'accéder à Teams, à leurs messageries et aux applications cloud.
+
+00:11:43.300 --> 00:11:44.900
+Il existe néanmoins des exigences prêtes.
+
+00:11:45.360 --> 00:11:48.160
+Chaque agent a besoin d'une connexion fiable à son Active Directory local.
+
+00:11:48.860 --> 00:11:53.000
+Il nécessite également un accès sortant via votre pare-feu ou proxy vers les services cloud Microsoft UTMS.
+
+00:11:53.900 --> 00:11:56.860
+Vous ne pouvez pas installer l'agent sur un ordinateur au hasard et espérer que tout fonctionne.
+
+00:11:57.340 --> 00:12:00.180
+Placez-le sur des serveurs pris en charge, accordez-lui les accès locaux appropriés
+
+00:12:00.180 --> 00:12:02.260
+et installez plusieurs agents pour une configuration de production.
+
+00:12:02.700 --> 00:12:04.460
+La disponibilité permet de maintenir la connexion active.
+
+00:12:05.220 --> 00:12:09.280
+Mais décider quels comptes doivent transiter via cette connexion est tout aussi important pour le contenu.
+
+00:12:09.620 --> 00:12:11.060
+Synchronisez et votre contrôle.
+
+00:12:11.060 --> 00:12:14.600
+Avant que CloudSync ne commence à transférer des comptes vers EntraID,
+
+00:12:14.680 --> 00:12:17.260
+déterminer précisément qu'il doit être inclus dans le périmètre de synchronisation.
+
+00:12:17.980 --> 00:12:21.200
+Le périmètre désigne la partie d'Active Directory que CloudSync est autorisé à lire et à copier.
+
+00:12:21.700 --> 00:12:23.840
+Vous pouvez choisir tous les objets pris en charge dans un domaine,
+
+00:12:23.980 --> 00:12:27.960
+ce qui peut convenir à une petite entreprise avec un répertoire propre et un ensemble clair de comptes employés.
+
+00:12:28.820 --> 00:12:31.040
+Les grandes entreprises nécessitent généralement plus de précautions,
+
+00:12:31.040 --> 00:12:34.080
+car Active Directory peut contenir d'anciens comptes de test, comptes de service,
+
+00:12:34.640 --> 00:12:38.040
+comptes de formation et groupes que personne ne souhaite voir dans Microsoft 365.
+
+00:12:39.000 --> 00:12:40.540
+Démarrer avec un périmètre restreint et vide-les sur moi.
+
+00:12:40.840 --> 00:12:43.580
+CloudSync vous permet de limiter le périmètre par unité d'organisation,
+
+00:12:43.720 --> 00:12:45.580
+souvent appelée OU ou par groupe de sécurité.
+
+00:12:46.280 --> 00:12:48.660
+Une OU est comparable à un dossier étiqueté au sein d'Active Directory.
+
+00:12:50.020 --> 00:12:51.700
+Vous pourriez en avoir une appelée, NOS,
+
+00:12:52.120 --> 00:12:54.080
+sans employé, une autre, nos prestataires,
+
+00:12:54.440 --> 00:12:56.460
+ou encore nos comptes de test IT.
+
+00:12:57.700 --> 00:12:58.760
+Si seule l'OU.
+
+00:12:59.020 --> 00:13:01.160
+Des employés doivent atteindre Microsoft 365,
+
+00:13:01.420 --> 00:13:02.880
+vous pouvez sélectionner uniquement cette OU.
+
+00:13:03.460 --> 00:13:05.160
+Le périmètre basé sur les groupes vous offre une autre.
+
+00:13:05.620 --> 00:13:06.780
+Au lieu de sélectionner un dossier entier,
+
+00:13:06.880 --> 00:13:09.820
+vous choisissez un groupe de sécurité et y ajoutez uniquement les personnes que vous souhaitez tester.
+
+00:13:09.820 --> 00:13:12.400
+Cela fonctionne bien lorsque vous souhaitez effectuer un petit projet pilote
+
+00:13:12.400 --> 00:13:13.680
+sans déplacer les comptes dans votre répertoire.
+
+00:13:14.060 --> 00:13:14.840
+Commencez par un groupe de tests.
+
+00:13:15.200 --> 00:13:17.560
+Sélectionnez quelques utilisateurs connus qui peuvent apparaître sans risque dans Entride.
+
+00:13:18.060 --> 00:13:19.060
+Vérifiez leur nom de connexion,
+
+00:13:19.140 --> 00:13:20.940
+les détails de leur service et leurs appartenances à des groupes.
+
+00:13:21.400 --> 00:13:22.560
+Confirmez que les bons comptes apparaissent,
+
+00:13:22.780 --> 00:13:24.820
+puis élargissez le périmètre lorsque vous avez confiance dans le résultat.
+
+00:13:25.060 --> 00:13:27.200
+Cette petite vérification peut vous éviter un travail de détour et je faisais.
+
+00:13:27.540 --> 00:13:29.180
+Une fois que vous avez décidé qui peut se synchroniser,
+
+00:13:29.260 --> 00:13:30.520
+vous déterminez quels détails les accompagnent.
+
+00:13:30.960 --> 00:13:32.100
+C'est ce qu'on appelle le mappage d'attributs,
+
+00:13:32.160 --> 00:13:33.120
+mais cela signifie quelque chose de simple.
+
+00:13:33.120 --> 00:13:40.340
+Un enregistrement utilisateur peut inclure un prénom,
+
+00:13:40.660 --> 00:13:42.280
+un nom, un nom d'affichage, un numéro de téléphone,
+
+00:13:42.380 --> 00:13:43.620
+un bureau, un responsable et un service.
+
+00:13:44.500 --> 00:13:46.860
+CloudSync inclut des mappages par défaut pour les configurations courantes.
+
+00:13:47.300 --> 00:13:47.860
+Dans de nombreux cas,
+
+00:13:47.940 --> 00:13:49.540
+vous devriez laisser ces paramètres par défaut dans un premier.
+
+00:13:50.020 --> 00:13:52.380
+Il couvre les champs habituels dont la plupart des entreprises ont besoin
+
+00:13:52.380 --> 00:13:55.080
+et facilite la compréhension des changements en cas de résultat inattendu.
+
+00:13:55.880 --> 00:13:58.460
+Vous pouvez ajuster un mappage lorsque des raisons métiers clairs le justifient.
+
+00:13:58.460 --> 00:14:01.480
+Par exemple, une entreprise peut stocker un numéro de téléphone
+
+00:14:01.480 --> 00:14:03.120
+dans un champ local qui ne correspond pas au champ,
+
+00:14:03.360 --> 00:14:04.340
+en trac qu'elle souhaite remplir.
+
+00:14:05.180 --> 00:14:06.140
+CloudSync peut mapper ce champ.
+
+00:14:06.640 --> 00:14:08.440
+Il prend également en charge des expressions simples
+
+00:14:08.440 --> 00:14:10.100
+pour apporter de petites modifications à une valeur
+
+00:14:10.100 --> 00:14:11.700
+sans créer un vaste ensemble de règles locales.
+
+00:14:11.940 --> 00:14:14.120
+Mais ne transformez pas inutilement une configuration propre en castro.
+
+00:14:14.740 --> 00:14:17.620
+Si votre processus d'identité repose sur une logique complexe et inhabituelle,
+
+00:14:17.900 --> 00:14:19.560
+notez cette exigence avant de modifier les mappages.
+
+00:14:20.300 --> 00:14:21.940
+Pour les comptes normaux, des valeurs par défaut clairs
+
+00:14:21.940 --> 00:14:24.280
+valent mieux que des règles ingénieuses que personne ne comprend six mois plus tard.
+
+00:14:25.160 --> 00:14:26.440
+CloudSync vous offre un moyen sûr de tester
+
+00:14:26.440 --> 00:14:27.840
+avant d'activer une synchronisation étendue.
+
+00:14:27.840 --> 00:14:30.020
+Il automatise ce qu'on appelle le provisionnement à la demande.
+
+00:14:30.620 --> 00:14:32.480
+Vous choisissez un utilisateur et demandez à CloudSync
+
+00:14:32.480 --> 00:14:34.100
+« Oh, que ferais-tu avec ce compte ? »
+
+00:14:34.100 --> 00:14:36.200
+Le résultat indique si l'agent a trouvé l'utilisateur,
+
+00:14:36.320 --> 00:14:38.120
+si celui-ci entre dans votre périmètre,
+
+00:14:38.220 --> 00:14:40.360
+si entre ID, a trouvé un compte correspondant
+
+00:14:40.360 --> 00:14:43.240
+et si CloudSync le créerait ou le mettrait à jour.
+
+00:14:43.960 --> 00:14:45.880
+Vous pouvez voir la décision avant qu'elle n'affecte tout le reste.
+
+00:14:46.680 --> 00:14:49.200
+Imaginez qu'une équipe informatique crée un groupe pilote appelé Test CloudSync.
+
+00:14:50.060 --> 00:14:52.460
+Quelqu'un ajoute accidentellement un groupe plus large à l'intérieur
+
+00:14:52.460 --> 00:14:54.660
+contenant des centaines d'employés.
+
+00:14:55.360 --> 00:14:57.600
+Le provisionnement à la demande révèle le problème de périmètre
+
+00:14:57.600 --> 00:14:59.020
+pendant que l'équipe teste une personne
+
+00:14:59.020 --> 00:15:01.360
+plutôt qu'après l'apparition de centaines de comptes dans le locataire.
+
+00:15:02.080 --> 00:15:03.860
+Pour moi, c'est le genre d'erreur que vous voulez détecter rapidement.
+
+00:15:05.160 --> 00:15:07.540
+CloudSync inclut également une protection contre la suppression accidentale.
+
+00:15:08.320 --> 00:15:09.700
+Si une configuration tente soudainement
+
+00:15:09.700 --> 00:15:11.580
+de supprimer un grand nombre d'utilisateurs ou de groupes,
+
+00:15:11.660 --> 00:15:12.980
+le service peut arrêter l'exécution
+
+00:15:12.980 --> 00:15:14.400
+et mettre la configuration en quarantaine
+
+00:15:14.400 --> 00:15:16.500
+plutôt que de répercuter ses dommages dans Entra ID.
+
+00:15:17.220 --> 00:15:18.840
+Les administrateurs reçoivent une alerte et peuvent enquêter.
+
+00:15:19.280 --> 00:15:21.280
+Le portail Entra vous fournit également des journaux provisionnés.
+
+00:15:21.280 --> 00:15:23.780
+Recherchez un utilisateur pour voir ce qui s'est passé.
+
+00:15:24.200 --> 00:15:26.740
+Si l'objet a correspondu, si un champ a causé une erreur,
+
+00:15:26.840 --> 00:15:29.740
+si l'agence est connectée et si la configuration reste saine.
+
+00:15:30.700 --> 00:15:32.420
+Quand la synchronisation d'identité fonctionne bien,
+
+00:15:32.540 --> 00:15:33.100
+on se fait discrète.
+
+00:15:33.420 --> 00:15:34.340
+Quand quelque chose ne va pas,
+
+00:15:34.540 --> 00:15:35.640
+ces journaux vous indiquent où chercher,
+
+00:15:36.020 --> 00:15:36.860
+au lieu de vous laisser deviner.
+
+00:15:38.120 --> 00:15:40.300
+CloudSync ouvre désormais un éventail de besoins plus large,
+
+00:15:40.380 --> 00:15:42.640
+mais il n'est pas destiné à remplacer toutes les installations Entra Connect.
+
+00:15:43.760 --> 00:15:46.320
+CloudSync face à Entra Connect est la transition de 2026.
+
+00:15:46.320 --> 00:15:50.520
+Alors, chaque entreprise doit-elle passer d'Entra Connect à CloudSync ?
+
+00:15:50.520 --> 00:15:51.420
+CloudSync est plus récent,
+
+00:15:51.460 --> 00:15:52.860
+mais plus récent ne signifie pas automatiquement
+
+00:15:52.860 --> 00:15:53.940
+qu'il aide à adapter à votre configuration.
+
+00:15:54.560 --> 00:15:57.160
+Le bon choix dépend de ce que votre système d'identité doit faire aujourd'hui,
+
+00:15:57.360 --> 00:15:59.280
+et non du produit qui semble le plus moderne.
+
+00:16:00.240 --> 00:16:01.240
+CloudSync convient aux entreprises
+
+00:16:01.240 --> 00:16:02.820
+qui souhaitent une configuration locale plus simple
+
+00:16:02.820 --> 00:16:04.380
+et des paramètres de synchronisation gérés dans le cloud.
+
+00:16:04.800 --> 00:16:06.320
+Il fonctionne bien lorsque vous avez principalement besoin
+
+00:16:06.320 --> 00:16:08.440
+que les utilisateurs, les groupes et les contacts d'Active Directory
+
+00:16:08.440 --> 00:16:09.120
+t'apparaissent dans Entra.
+
+00:16:09.380 --> 00:16:12.000
+Il convient également aux entreprises avec des forêts distinctes
+
+00:16:12.000 --> 00:16:13.920
+où chaque site peut se connecter au même tenant Entra
+
+00:16:13.920 --> 00:16:16.200
+sans avoir à fusionner tous ses réseaux locaux.
+
+00:16:16.660 --> 00:16:18.660
+Il offre également une mise en périmètre basée sur les groupes.
+
+00:16:18.780 --> 00:16:20.660
+Cela peut être utile lorsque vous souhaitez intégrer d'abord
+
+00:16:20.660 --> 00:16:22.300
+une unité commerciale, un nouveau bureau
+
+00:16:22.300 --> 00:16:23.560
+ou un petit groupe d'utilisateurs.
+
+00:16:24.280 --> 00:16:26.640
+Vous pouvez gérer les paramètres de synchronisation dans le portail Entra,
+
+00:16:26.880 --> 00:16:27.660
+y surveiller les agents
+
+00:16:27.660 --> 00:16:29.680
+et éviter de faire tourner un moteur de synchronisation lourd
+
+00:16:29.680 --> 00:16:30.380
+sur un serveur central.
+
+00:16:31.000 --> 00:16:32.080
+Entra Connect a toujours sa place.
+
+00:16:32.680 --> 00:16:34.640
+Certaines entreprises s'appuient sur des méthodes de connexion
+
+00:16:34.640 --> 00:16:36.460
+que CloudSync ne prend pas en charge de la même manière
+
+00:16:36.460 --> 00:16:38.920
+comme l'authentification directe ou la fédération ou la fédération.
+
+00:16:38.920 --> 00:16:40.820
+L'authentification directe vérifie le mot de passe
+
+00:16:40.820 --> 00:16:43.040
+auprès d'Active Directory au moment où l'utilisateur se connecte.
+
+00:16:43.040 --> 00:16:46.540
+La fédération envoie la demande de connexion à un autre système d'identité
+
+00:16:46.540 --> 00:16:48.060
+souvent déjà utilisé par l'entreprise.
+
+00:16:48.780 --> 00:16:50.320
+Ces configurations nécessitent une planification mini.
+
+00:16:50.640 --> 00:16:52.240
+Entra Connect peut également convenir aux entreprises
+
+00:16:52.240 --> 00:16:53.680
+ayant des règles de synchronisation locales rencées.
+
+00:16:54.140 --> 00:16:56.160
+Peut-être combinent-elles des données issues de champs inhabituels,
+
+00:16:56.500 --> 00:16:57.980
+appliquent-elles une logique de filtrage détaillée
+
+00:16:57.980 --> 00:17:00.500
+ou dépendent-elles d'anciennes règles personnalisées créées sur des années.
+
+00:17:01.300 --> 00:17:03.360
+Remplacer une telle configuration par un outil plus simple
+
+00:17:03.360 --> 00:17:04.960
+sans vérifier chaque règle peut créer des problèmes.
+
+00:17:05.380 --> 00:17:07.140
+Exchange Hybrid peut également influencer ce choix.
+
+00:17:07.140 --> 00:17:10.160
+L'entreprise peut continuer à exécuter certaines parties d'Exchange localement
+
+00:17:10.160 --> 00:17:11.180
+tout en utilisant Exchange Online.
+
+00:17:11.820 --> 00:17:14.640
+Certaines tâches Exchange nécessitent une réécriture d'informations dans Active Directory.
+
+00:17:15.400 --> 00:17:17.580
+Ainsi, Microsoft 365 et la configuration Exchange
+
+00:17:17.580 --> 00:17:19.700
+restent en phase concernant les informations relatives à la messagerie.
+
+00:17:20.340 --> 00:17:23.540
+Votre configuration Exchange exact détermine si CloudSync prend en charge vos besoins.
+
+00:17:24.120 --> 00:17:25.580
+Cette décision a changé en 2026.
+
+00:17:25.900 --> 00:17:28.740
+CloudSync inclut désormais la synchronisation des appareils pour la jointure hybride à entrée.
+
+00:17:29.080 --> 00:17:30.940
+C'est important lorsque les appareils Windows de l'entreprise
+
+00:17:30.940 --> 00:17:32.500
+appartiennent toujours à l'Active Directory local,
+
+00:17:32.800 --> 00:17:35.500
+mais ont aussi besoin d'une identité dans Entra ID pour l'accès et la gestion cloud.
+
+00:17:35.500 --> 00:17:38.860
+Pour beaucoup d'entreprises, la synchronisation des appareils justifiait le maintien d'entreprise.
+
+00:17:39.500 --> 00:17:41.300
+Désormais, CloudSync peut également répondre à ce besoin,
+
+00:17:41.400 --> 00:17:43.740
+ce qui supprime une raison pour laquelle certaines équipes ne pouvaient pas l'envisager.
+
+00:17:44.420 --> 00:17:46.480
+Vous devez toujours vérifier votre configuration d'appareils,
+
+00:17:46.660 --> 00:17:48.320
+vos plans Windows et votre utilisation de iTunes,
+
+00:17:48.420 --> 00:17:50.260
+mais le choix ne concerne plus seulement les utilisateurs à l'aigle.
+
+00:17:50.840 --> 00:17:54.280
+Microsoft a également ajouté la réécriture des attributs Exchange Hybrid en version préliminaire publique.
+
+00:17:54.780 --> 00:17:57.980
+En clair, CloudSync peut désormais renvoyer certaines informations liées à Exchange
+
+00:17:57.980 --> 00:17:59.340
+depuis le cloud vers Active Directory.
+
+00:18:00.040 --> 00:18:03.220
+La préversion publique signifie que Microsoft recueille encore des retours d'utilisation réelles
+
+00:18:03.220 --> 00:18:05.340
+avant de déclarer la fonctionnalité pleinement publiée,
+
+00:18:05.340 --> 00:18:07.680
+et traitez-la donc avec plus de prudence qu'une fonction établie de longue date.
+
+00:18:08.360 --> 00:18:10.060
+Ne migrez pas automatiquement une configuration Exchange
+
+00:18:10.060 --> 00:18:11.840
+sur la base d'une seule phrase dans une mise à jour de produit.
+
+00:18:12.700 --> 00:18:14.340
+Lisez la documentation Microsoft actuelle,
+
+00:18:14.540 --> 00:18:15.800
+testez avec des comptes hors production
+
+00:18:15.800 --> 00:18:18.260
+et confirmez les attributs exacts dont votre entreprise a besoin.
+
+00:18:18.980 --> 00:18:22.020
+Exchange peut être impitoyable lorsque les détails d'identité ne correspondent pas parfaitement.
+
+00:18:23.040 --> 00:18:25.820
+La synchronisation cloud apporte également des contrôles de sécurité familier dans le portail.
+
+00:18:26.080 --> 00:18:27.620
+Vous pouvez utiliser la synchronisation de la châche de mot de passe.
+
+00:18:27.620 --> 00:18:30.440
+Vous pouvez configurer des notifications afin que les bonnes personnes soient informées d'un problème.
+
+00:18:30.440 --> 00:18:33.060
+Vous pouvez définir une protection contre la suppression accidentelle.
+
+00:18:33.060 --> 00:18:34.940
+Vous pouvez gérer la configuration de puits-entra
+
+00:18:34.940 --> 00:18:37.620
+plutôt que de considérer le serveur de synchronisation locale comme le centre de tour.
+
+00:18:37.620 --> 00:18:39.940
+Les outils se rapprochent en termes de couverture fonctionnelle.
+
+00:18:39.940 --> 00:18:43.720
+Pourtant, la synchronisation cloud n'est pas un remplacement temporaire d'un track connect pour chaque entreprise.
+
+00:18:43.720 --> 00:18:45.900
+Considérez ce choix comme le choix d'un véhicule.
+
+00:18:45.900 --> 00:18:51.300
+Une petite camionnette peut convenir à une tournée de livraison locale car elle est facile à utiliser et à garer.
+
+00:18:52.060 --> 00:18:54.960
+Calour convient à un travail différent car il transporte des charges que la camionnette ne peut pas prendre.
+
+00:18:55.660 --> 00:18:56.520
+Aucun des deux choix n'est mauvais.
+
+00:18:56.780 --> 00:18:58.420
+Posez quelques questions directes avant de décider.
+
+00:18:59.120 --> 00:19:02.820
+Avez-vous une seule forêt Active Directory ou plusieurs forêts déconnectées ?
+
+00:19:02.820 --> 00:19:04.540
+Avez-vous besoin de la synchronisation hybride des appartements ?
+
+00:19:04.540 --> 00:19:06.400
+Dépendez-vous de règles personnalisées avancées ?
+
+00:19:06.400 --> 00:19:08.140
+Quelle méthode de connexion utilisez-vous ?
+
+00:19:08.140 --> 00:19:09.740
+Exchange nécessite-t-il une réécriture rébile ?
+
+00:19:09.740 --> 00:19:13.140
+Et si le service de synchronisation actuel tombe en panne, à quelle vitesse pouvez-vous récupérer ?
+
+00:19:13.140 --> 00:19:13.880
+Notez les réponses.
+
+00:19:13.880 --> 00:19:16.980
+La décision finale ne devrait pas commencer par une migration complète immédiate.
+
+00:19:17.500 --> 00:19:19.420
+Elle devrait débuter par un petit test contrôlé,
+
+00:19:19.820 --> 00:19:23.300
+prouvant que la synchronisation cloud peut gérer vos comptes et vos besoins réels.
+
+00:19:24.440 --> 00:19:25.740
+Une première étape sûre pour votre entreprise.
+
+00:19:26.820 --> 00:19:28.360
+Commencez par dessiner une carte d'identité simple.
+
+00:19:29.200 --> 00:19:30.800
+Listez chaque forêt et domaine Active Directory.
+
+00:19:31.660 --> 00:19:34.860
+Notez si vous exécutez déjà en Traconnect quels utilisateurs se synchronisent aujourd'hui,
+
+00:19:35.000 --> 00:19:38.780
+quels appareils nécessitent une identité hybride et où votre système de messagerie dépend encore de l'Active Directory local.
+
+00:19:38.960 --> 00:19:39.340
+Restez simple.
+
+00:19:39.740 --> 00:19:41.860
+Comparer ensuite vos besoins avec le support actuel de la synchronisation.
+
+00:19:42.260 --> 00:19:43.500
+Vérifiez d'abord votre méthode de connexion.
+
+00:19:43.880 --> 00:19:44.860
+Vérifiez les exigences d'action.
+
+00:19:45.480 --> 00:19:46.260
+Vérifiez les appareils.
+
+00:19:46.540 --> 00:19:49.880
+La réécriture et tout ma page personnalisé fait il y a des années et que personne n'a consulté depuis.
+
+00:19:50.780 --> 00:19:52.400
+Cette liste peut révéler des dépendances cachées.
+
+00:19:52.960 --> 00:19:55.880
+Si la synchronisation cloud convient, installez au moins deux agents de provisionnement pour la production.
+
+00:19:56.440 --> 00:19:57.880
+Un seul agent peut fonctionner en laboratoire,
+
+00:19:58.120 --> 00:20:02.420
+mais la synchronisation d'identité en production ne devrait pas dépendre d'un seul serveur si vous pouvez l'éviter.
+
+00:20:02.420 --> 00:20:04.420
+Construisez ensuite une configuration restreinte.
+
+00:20:04.760 --> 00:20:07.160
+Choisissez une unité organisationnelle de test ou un petit groupe de sécurité.
+
+00:20:07.760 --> 00:20:10.200
+Utilisez les mappages par défaut, sauf si vous avez raison claire de les modifier.
+
+00:20:10.800 --> 00:20:14.740
+Choisissez ensuite un utilisateur connu et exécutez le provisionnement à la demande avant d'activer la synchronisation régulière.
+
+00:20:15.160 --> 00:20:16.140
+Lisez le résultat attentivement.
+
+00:20:16.640 --> 00:20:20.400
+Vérifiez si Entra trouve la bonne personne, créez le compte attendu et envoie les champs requis.
+
+00:20:20.400 --> 00:20:22.660
+Consultez aussi les journaux du portail,
+
+00:20:22.920 --> 00:20:26.060
+car un statut vert ne suffit pas à confirmer que les règles métiers fonctionnent.
+
+00:20:26.800 --> 00:20:28.400
+Un avertissement est important lors d'un transfert.
+
+00:20:29.080 --> 00:20:30.400
+Ne partez pas du principe que...
