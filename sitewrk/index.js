@@ -36,11 +36,11 @@ export default {
       : isStatic ? { cacheEverything: true, cacheTtl: 86400 }
       : { cacheEverything: true, cacheTtlByStatus: { "200-299": 600, "404": 60, "500-599": 0 } };   // HTML: 10 Min am Rand, Purge nach jedem Deploy
     const res = await fetch(request, { cf });
-    // Seiten aus dem R2-Bucket (Paket 20): was der Seitenbau nicht in GitHub Pages legt (duenne Sprachfassungen der Folgen), liegt unter pages/<pfad>/index.html im Bucket
+    // Seiten aus dem R2-Bucket (Paket 20): uebersetzte Seiten (Blog-Sprachfassungen, Sprachfassungen der Folgen) liegen unter pages/<pfad>/index.html im Bucket statt in GitHub Pages - gleiche Adressen, indexierbar
     if (res.status === 404 && env.PAGES && !IMG.test(p)) {
       const key = "pages" + (p.endsWith("/") ? p : p + "/") + "index.html";
       const obj = await env.PAGES.get(key).catch(() => null);
-      if (obj) { const h2 = new Headers({ "content-type": "text/html; charset=utf-8", "cache-control": "public, max-age=0, s-maxage=600, stale-while-revalidate=86400", "x-robots-tag": "noindex" }); for (const [k, v] of Object.entries(SEC)) h2.set(k, v); return new Response(obj.body, { status: 200, headers: h2 }); }
+      if (obj) { const h2 = new Headers({ "content-type": "text/html; charset=utf-8", "cache-control": "public, max-age=0, s-maxage=600, stale-while-revalidate=86400" }); for (const [k, v] of Object.entries(SEC)) h2.set(k, v); return new Response(obj.body, { status: 200, headers: h2 }); }
       const m = /^\/(de|es|fr|it|pt|nl|pl|id|ru|uk|ar|he|ja|ko)\/show\/episodes\/([a-z0-9-]+)\/?$/.exec(p);   // noch nicht hochgeladen: englisches Original statt 404
       if (m) return Response.redirect(url.origin + "/show/episodes/" + m[2] + "/", 301);
     }
