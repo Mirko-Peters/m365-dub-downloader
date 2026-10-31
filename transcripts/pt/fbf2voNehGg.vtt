@@ -1,0 +1,2332 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:03.460
+Você conhece aquela sensação ruim quando o seu formulário do PowerPages não valida
+
+00:00:03.460 --> 00:00:07.400
+e as mensagens de erro são tão úteis quanto um erro 404 de cérebro não encontrado?
+
+00:00:07.820 --> 00:00:09.200
+Esse problema é exatamente o que vamos ver hoje.
+
+00:00:09.940 --> 00:00:11.100
+Vamos cobrir cinco passos.
+
+00:00:11.240 --> 00:00:14.400
+Otimizar modelos Liquid, acelerar JavaScript e validação de formulários,
+
+00:00:14.820 --> 00:00:16.760
+obter explicações de código em linguagem simples,
+
+00:00:16.960 --> 00:00:19.480
+integrar HTML com Bootstrap para layouts responsivos
+
+00:00:19.480 --> 00:00:21.460
+e simplificar chamadas de API Web.
+
+00:00:22.580 --> 00:00:26.240
+Um aviso rápido, você precisará do VS Code com extensão Power Platform Tools,
+
+00:00:26.240 --> 00:00:31.680
+o GitHub Copilot Chat e o conteúdo do seu site extraído via Power Platform CLI com autenticação DataVersity.
+
+00:00:32.460 --> 00:00:34.020
+Essa configuração torna o Copilot contexto.
+
+00:00:34.480 --> 00:00:36.780
+Com isso, o Copilot espera de sugerir trechos de código aleatórios.
+
+00:00:37.180 --> 00:00:39.640
+Ele fornece código iterativo e contextual que reduz a tentativa E.
+
+00:00:40.040 --> 00:00:42.880
+Vou mostrar os prompts exatos para que você mesmo possa replicar os resultados.
+
+00:00:43.780 --> 00:00:45.300
+E como a maioria das dores começa com JavaScript,
+
+00:00:45.600 --> 00:00:48.800
+vamos entrar no que acontece quando seus erros de formulário parecem uma falha crítica.
+
+00:00:49.600 --> 00:00:51.380
+Quando o JavaScript parece uma falha crítica,
+
+00:00:51.380 --> 00:00:55.320
+ele pode transformar o que deveria ser uma verificação simples de formulário em um desastre rapidamente.
+
+00:00:55.320 --> 00:00:58.840
+Uma tecla digitada no lugar errado e, em vez de impedir uma entrada inválida,
+
+00:00:58.980 --> 00:01:00.040
+todo o fluxo entra em colapso.
+
+00:01:00.440 --> 00:01:02.420
+É geralmente quando você fica sentado encarando a tela
+
+00:01:02.420 --> 00:01:05.780
+imaginando como o banana conseguiu passar pela sua lógica de validação cuidadosamente escrita.
+
+00:01:06.440 --> 00:01:09.160
+Você conhece o processo, um formulário que parece inofensivo,
+
+00:01:09.200 --> 00:01:13.000
+um validador feito para filtrar absurdos e um usuário esperto digitando a única coisa que você não previu.
+
+00:01:13.800 --> 00:01:16.000
+De repente, seus logs do console explodem com reclamações
+
+00:01:16.000 --> 00:01:17.840
+e cada aba do VS Code parece um beco sem saída.
+
+00:01:18.620 --> 00:01:20.240
+Os erros pequenos são os que mais doem.
+
+00:01:20.460 --> 00:01:22.020
+Um ponto e vírgula faltando,
+
+00:01:22.220 --> 00:01:23.940
+ou um erro de escopo que faz sentido na sua cabeça,
+
+00:01:23.940 --> 00:01:26.040
+mas que age como dano venenoso quando o código é executado.
+
+00:01:26.520 --> 00:01:29.280
+Essas pequenas falhas aparecem em implantações reais o tempo todo
+
+00:01:29.280 --> 00:01:33.220
+e explicam por que uma validação quebrada é um chamado tão comum no desenvolvimento web.
+
+00:01:34.380 --> 00:01:35.760
+Normalmente, sua abordagem é força bruta.
+
+00:01:36.080 --> 00:01:37.380
+Você ajusta uma linha, atualiza,
+
+00:01:37.860 --> 00:01:38.760
+barrado por outro erro,
+
+00:01:38.840 --> 00:01:41.200
+então repete o ciclo até que algo finalmente funcione.
+
+00:01:42.260 --> 00:01:43.260
+Uma noite inteira se esvai,
+
+00:01:43.380 --> 00:01:45.880
+e o resultado final é muitas vezes apenas um escrito improvisado que funciona.
+
+00:01:46.560 --> 00:01:47.760
+Sem elegância, sem aprendizado.
+
+00:01:48.160 --> 00:01:50.760
+Por isso que depurar a validação parece aquela falha crítica clássica.
+
+00:01:50.760 --> 00:01:54.280
+Você tá tentando, mas o resultado joga contra você.
+
+00:01:54.740 --> 00:01:55.640
+É que o Copilot entra.
+
+00:01:56.180 --> 00:01:58.500
+Sugestões genéricas do Copilot às vezes ajudam,
+
+00:01:58.620 --> 00:02:00.720
+mas na maior parte do tempo parecem fragmentos aleatórios
+
+00:02:00.720 --> 00:02:02.180
+tirados de um registro de missão esquecido.
+
+00:02:02.620 --> 00:02:04.300
+O texto na intenção é errados nos detalhes.
+
+00:02:04.560 --> 00:02:07.000
+Isso acontece porque o Copilot comum não conhece as peculiaridades do PowerPage.
+
+00:02:07.540 --> 00:02:08.800
+Mas adicione ao participante,
+
+00:02:08.860 --> 00:02:09.660
+arroba PowerPages,
+
+00:02:09.700 --> 00:02:11.440
+e de repente ele para de cuspir código padrão
+
+00:02:11.440 --> 00:02:13.880
+e passa a oferecer código contextual moldado pro seu ambiente.
+
+00:02:14.580 --> 00:02:17.480
+A Microsoft a criou pra lidar com as especificidades do PowerPages,
+
+00:02:17.480 --> 00:02:19.460
+incluindo modelos líquidos de vínculos com Dataverse,
+
+00:02:19.580 --> 00:02:22.580
+o que significa que as sugestões levam em conta os recursos que geralmente causam problemas.
+
+00:02:23.360 --> 00:02:25.300
+E não se trata apenas de gerar trechos de código.
+
+00:02:25.420 --> 00:02:28.960
+A integração arroba PowerPages também pode explicar construções específicas do PowerPages,
+
+00:02:29.040 --> 00:02:31.240
+para que você não apenas colhe e torça pelo melhor,
+
+00:02:31.340 --> 00:02:33.220
+mas realmente entenda por que um script faz o que faz.
+
+00:02:33.880 --> 00:02:36.660
+Isso torna a depuração menos como caminhar de olhos vendados,
+
+00:02:36.720 --> 00:02:39.560
+e mais como trabalhar ao lado de alguém que já superou o mesmo desafio.
+
+00:02:40.120 --> 00:02:42.680
+Por exemplo, você pode literalmente digitar este prompt no chat do Copilot.
+
+00:02:43.140 --> 00:02:43.480
+Arroba PowerPages.
+
+00:02:43.480 --> 00:02:46.480
+Arroba PowerPages escreva um código JavaScript para validação de campo de formulário,
+
+00:02:46.540 --> 00:02:48.580
+para verificar se o valor do campo de telefone está no formato válido.
+
+00:02:49.360 --> 00:02:50.320
+Isso não é apenas teoria,
+
+00:02:50.420 --> 00:02:53.560
+é uma entrada pronta para demonstração que você verá mais adiante neste passo a passo.
+
+00:02:54.120 --> 00:02:56.060
+Código retornado não é um trecho genérico da web,
+
+00:02:56.200 --> 00:03:00.040
+ele é diretamente aplicável e projetado para compilar no seu contexto do PowerPages.
+
+00:03:00.820 --> 00:03:02.320
+Essa previsibilidade é a verdadeira mudança.
+
+00:03:02.960 --> 00:03:03.960
+Com o Copilot genérico,
+
+00:03:04.140 --> 00:03:06.400
+parece que você trouxe um bardo que pode tocar o acorde certo,
+
+00:03:06.400 --> 00:03:08.920
+mas metade das vezes a melodia não tem nada a ver com a sua batalha atual.
+
+00:03:09.700 --> 00:03:11.820
+Com o arroba PowerPages é como viajar com um explorador
+
+00:03:11.820 --> 00:03:13.420
+que já sabe onde as armadilhas estão escondidas.
+
+00:03:14.160 --> 00:03:16.200
+A missão deixa de ser sobre sobreviver a armadilhas
+
+00:03:16.200 --> 00:03:18.260
+e passa a ser sobre projetar experiências de usuário claras.
+
+00:03:19.000 --> 00:03:20.980
+A ferramenta não substitui seu julgamento ao Aprimor.
+
+00:03:21.380 --> 00:03:23.320
+Você ainda decide o que conta com a entrada válida
+
+00:03:23.320 --> 00:03:24.940
+e como os erros devem orientar o usuário.
+
+00:03:25.580 --> 00:03:28.680
+Mas, em vez de gastar tempo com erros de sintaxe e erros de digitação booleanos,
+
+00:03:28.920 --> 00:03:31.160
+você dedica seu esforço para tornar o fluxo de trabalho intuitivo.
+
+00:03:31.680 --> 00:03:32.700
+Quando tratadas corretamente,
+
+00:03:32.700 --> 00:03:34.640
+essas etapas de validação deixam de ser obstáculos
+
+00:03:34.640 --> 00:03:37.300
+e passam a fazer parte de uma narrativa fluida para quem estiver usando o formulário.
+
+00:03:37.800 --> 00:03:39.240
+Pode não parecer uma grande vitória,
+
+00:03:39.400 --> 00:03:42.620
+mas impedir as falhas básicas é o que evita uma enxurrada de chamados simples
+
+00:03:42.620 --> 00:03:43.420
+mais à frente.
+
+00:03:44.500 --> 00:03:46.400
+Uma vez que o Copilot assume o trabalho pesado
+
+00:03:46.400 --> 00:03:47.840
+de gerar código de validação preciso,
+
+00:03:47.960 --> 00:03:49.420
+seu tempo muda do modo sobrevivência
+
+00:03:49.420 --> 00:03:51.440
+para o aprimoramento real do comportamento do aplicativo.
+
+00:03:52.160 --> 00:03:53.000
+Essa diferença importa,
+
+00:03:53.100 --> 00:03:54.780
+porque quando você vê como comandos bem direcionados
+
+00:03:54.780 --> 00:03:55.980
+mudam o fluxo da geração de código,
+
+00:03:56.060 --> 00:03:58.800
+você começa a se perguntar o que mais esses comandos podem desbloquear.
+
+00:03:59.160 --> 00:04:02.720
+E é aí que a verdadeira vantagem de usar o Copilot com Power Pages se torna clara.
+
+00:04:03.680 --> 00:04:05.100
+Obtendo vantagem em comandos do Copilot.
+
+00:04:05.700 --> 00:04:07.980
+Obter vantagem aqui significa saber os comandos certos
+
+00:04:07.980 --> 00:04:10.580
+para usar no Copilot em vez de esperar que a sorte esteja ao seu lado.
+
+00:04:10.580 --> 00:04:14.040
+Essa é a verdadeira força de usar o participante em arroba Power Pages.
+
+00:04:14.540 --> 00:04:16.920
+Ele transforma o chat do Copilot de um ajudante genérico
+
+00:04:16.920 --> 00:04:18.220
+em um parceiro com contexto,
+
+00:04:18.400 --> 00:04:20.100
+criado por seu ambiente Power Pages.
+
+00:04:20.820 --> 00:04:21.600
+Veja como invocá-lo.
+
+00:04:22.120 --> 00:04:23.060
+Dentro do VS Code,
+
+00:04:23.240 --> 00:04:24.540
+abra o painel de chat do Copilot
+
+00:04:24.540 --> 00:04:27.140
+e digite seu prompt começando com arroba Power Pages.
+
+00:04:27.720 --> 00:04:29.360
+Essa tag é o que sinaliza o Copilot
+
+00:04:29.360 --> 00:04:31.720
+para carregar o cérebro do Power Pages em vez do modo padrão.
+
+00:04:32.760 --> 00:04:33.920
+Você pode pedir validadores,
+
+00:04:34.080 --> 00:04:34.800
+snippets de Liquid
+
+00:04:34.800 --> 00:04:36.860
+ou até chamadas vinculadas ao Data Virus
+
+00:04:36.860 --> 00:04:38.700
+e o Copilot moldará suas respostas
+
+00:04:38.700 --> 00:04:40.700
+para se adequar ao sistema em que você está programando.
+
+00:04:41.820 --> 00:04:42.700
+Agora, antes que isso funcione,
+
+00:04:42.780 --> 00:04:43.760
+você precisa da configuração certa.
+
+00:04:44.500 --> 00:04:45.780
+Visual Studio Code instalado,
+
+00:04:45.960 --> 00:04:47.520
+a extensão Power Platform Tools,
+
+00:04:47.660 --> 00:04:49.120
+a extensão GitHub Copilot Chat
+
+00:04:49.120 --> 00:04:50.560
+e o Power Platform CLI
+
+00:04:50.560 --> 00:04:52.160
+autenticado no seu ambiente Dataverse.
+
+00:04:53.620 --> 00:04:55.740
+A etapa de autenticação é a mais importante,
+
+00:04:55.880 --> 00:04:57.380
+pois o Copilot só entende seu ambiente
+
+00:04:57.380 --> 00:04:58.860
+depois que você baixa o conteúdo do site
+
+00:04:58.860 --> 00:05:00.180
+no VS Code estando logado.
+
+00:05:01.000 --> 00:05:02.140
+Sim, isso ele está apenas adivinhando.
+
+00:05:02.600 --> 00:05:03.520
+E um aviso sobre governança.
+
+00:05:03.520 --> 00:05:05.660
+Alguns recursos do Copilot para Power Pages
+
+00:05:05.660 --> 00:05:06.640
+ainda estão em versão prévia
+
+00:05:06.640 --> 00:05:08.100
+e os administradores do TN controlam
+
+00:05:08.100 --> 00:05:09.440
+se estão habilitados via Copilot Hub
+
+00:05:09.440 --> 00:05:10.520
+nas configurações de governança.
+
+00:05:11.460 --> 00:05:12.760
+Não se surpreenda se os recursos demonstrados
+
+00:05:12.760 --> 00:05:13.780
+aqui estiverem desativados, não só.
+
+00:05:14.080 --> 00:05:15.320
+Isso é uma configuração de administrador, não.
+
+00:05:15.780 --> 00:05:17.300
+Veja a diferença depois que seja configurado.
+
+00:05:17.840 --> 00:05:20.300
+Copilot comum é como pedir conselhos de batalha a um bardo.
+
+00:05:20.980 --> 00:05:22.460
+Você receberá uma melodia agradável,
+
+00:05:22.540 --> 00:05:23.700
+talvez um comentário genérico,
+
+00:05:23.780 --> 00:05:25.140
+mas nada dos detalhes necessários
+
+00:05:25.140 --> 00:05:26.240
+ao lidar com modelos líquidos
+
+00:05:26.240 --> 00:05:27.520
+ou campos de entidades do Dataverse.
+
+00:05:28.720 --> 00:05:29.860
+Participante arroba Power Pages
+
+00:05:29.860 --> 00:05:31.600
+é mais como um batedor que já mapeou o terreno.
+
+00:05:31.600 --> 00:05:33.680
+Não é apenas código que compila
+
+00:05:33.680 --> 00:05:35.380
+é código que referencia os vínculos corretos
+
+00:05:35.380 --> 00:05:36.860
+encaixa em validadores de formulário
+
+00:05:36.860 --> 00:05:38.760
+e se alinha ao funcionamento do Power Pages.
+
+00:05:40.060 --> 00:05:42.020
+Uma metáfora, um contraste, um resultado.
+
+00:05:42.760 --> 00:05:44.340
+Saída utilizável e consciente do contexto
+
+00:05:44.340 --> 00:05:45.860
+em vez de snippets genéricos frágeis.
+
+00:05:46.260 --> 00:05:46.960
+Vamos falar de resultados.
+
+00:05:47.480 --> 00:05:48.880
+Se você pedir uma rotina de validação
+
+00:05:48.880 --> 00:05:49.780
+ao Copilot simples,
+
+00:05:50.000 --> 00:05:51.040
+provavelmente receberá um script
+
+00:05:51.040 --> 00:05:52.720
+que funcione em um formulário HTML básico.
+
+00:05:52.960 --> 00:05:54.300
+Mas ao colocá-lo no Power Pages
+
+00:05:54.300 --> 00:05:55.260
+você encontrará falhas.
+
+00:05:55.740 --> 00:05:57.020
+Sem reconhecimento do esquema de entidade,
+
+00:05:57.200 --> 00:05:58.660
+sem noção do que as tags Liquid fazem
+
+00:05:58.660 --> 00:06:00.920
+e definitivamente sem consciência das regras do Dataverse.
+
+00:06:01.640 --> 00:06:02.600
+Funciona como fita adesiva.
+
+00:06:02.680 --> 00:06:03.580
+Gruda, mas não é confiável.
+
+00:06:04.240 --> 00:06:06.480
+Faça o mesmo pedido com arroba Power Pages na frente
+
+00:06:06.480 --> 00:06:07.980
+e, de repente, você tem validadores
+
+00:06:07.980 --> 00:06:08.820
+que não apenas funcionam,
+
+00:06:08.860 --> 00:06:10.360
+mas se vinculam às referências de campo de entidade
+
+00:06:10.360 --> 00:06:11.360
+de que você realmente precisa.
+
+00:06:11.900 --> 00:06:13.480
+Mesmo pedido, saída ajustada ao contexto
+
+00:06:13.480 --> 00:06:15.300
+sem necessidade de sessões de correção na madrugada.
+
+00:06:15.800 --> 00:06:17.260
+E isso não se trata apenas de gerar scripts.
+
+00:06:17.820 --> 00:06:19.180
+Comandos como arroba Power Pages
+
+00:06:19.180 --> 00:06:20.240
+explicam o código a seguir,
+
+00:06:20.380 --> 00:06:21.900
+percent include page copy percent,
+
+00:06:22.100 --> 00:06:23.660
+oferece explicações em linguagens simples
+
+00:06:23.660 --> 00:06:25.880
+sobre constructs específicos de Liquid ou Power Pages.
+
+00:06:25.880 --> 00:06:27.880
+Você não está copiando e colando as cegas,
+
+00:06:27.940 --> 00:06:29.140
+você está realmente construindo conhecimento.
+
+00:06:29.900 --> 00:06:31.000
+Isso é um tipo diferente de poder
+
+00:06:31.000 --> 00:06:33.040
+porque você aprende as escritas enquanto as utiliza.
+
+00:06:34.000 --> 00:06:35.540
+Quanto mais você trabalha com esses comandos,
+
+00:06:35.660 --> 00:06:36.700
+mais seu fluxo de trabalho muda.
+
+00:06:37.480 --> 00:06:39.460
+Em vez de corrigir erros sozinho às duas da manhã,
+
+00:06:39.780 --> 00:06:41.620
+você trata o Copilot como um segundo par de olhos
+
+00:06:41.620 --> 00:06:44.820
+que já conhece o que quebrou em 90% de construções similares.
+
+00:06:45.960 --> 00:06:47.900
+Os comandos não lhe dão códigos de trapaça,
+
+00:06:47.980 --> 00:06:49.420
+eles lhe dão insights e exemplos funcionais
+
+00:06:49.420 --> 00:06:50.840
+que respeitam as peculiaridades do ambiente.
+
+00:06:51.380 --> 00:06:53.040
+Eles poupam você de ciclas em neves de retramar.
+
+00:06:53.040 --> 00:06:54.680
+Em uma função comum do Copilot,
+
+00:06:54.840 --> 00:06:56.120
+você ficará em um meio termo.
+
+00:06:56.840 --> 00:06:58.200
+Script decente, retrabalho extra,
+
+00:06:58.260 --> 00:06:59.520
+algumas tentativas e erros até encaixar.
+
+00:07:00.320 --> 00:07:01.940
+Em uma função no arroba Power Pages,
+
+00:07:02.140 --> 00:07:03.180
+parece um acerto crítico.
+
+00:07:04.320 --> 00:07:06.260
+Scripts de validação se encaixam perfeitamente
+
+00:07:06.260 --> 00:07:07.340
+no seu formulário Power Pages,
+
+00:07:07.500 --> 00:07:08.500
+include de Liquid, funcionam,
+
+00:07:08.620 --> 00:07:10.240
+e as vinculações do Dataverse não geram erros.
+
+00:07:10.700 --> 00:07:12.300
+Não é sorte, é o que acontece
+
+00:07:12.300 --> 00:07:14.460
+quando o Copilot conhece o terreno que você está programando.
+
+00:07:15.240 --> 00:07:17.320
+Essa vantagem, porém, só lhe dá o primeiro rascunho.
+
+00:07:17.840 --> 00:07:18.820
+Um trecho de código funcional
+
+00:07:18.820 --> 00:07:20.120
+não significa uma experiência finalizada.
+
+00:07:20.120 --> 00:07:22.220
+Usuários digitam entradas estranhas,
+
+00:07:22.300 --> 00:07:23.760
+mensagens de erro precisam de detalhes,
+
+00:07:23.840 --> 00:07:25.620
+e scripts precisam evoluir além do rascunho básico
+
+00:07:25.620 --> 00:07:26.160
+que o Copilot tem.
+
+00:07:26.560 --> 00:07:28.040
+E é aí que o próximo desafio começa.
+
+00:07:28.860 --> 00:07:31.040
+De scripts básicos para um código totalmente blindado,
+
+00:07:31.140 --> 00:07:33.020
+tudo começa onde a maioria das validações começa,
+
+00:07:33.100 --> 00:07:34.080
+na estrutura simples.
+
+00:07:34.580 --> 00:07:35.240
+Na estrutura simples.
+
+00:07:35.480 --> 00:07:36.720
+Você recebe um primeiro rascunho,
+
+00:07:36.880 --> 00:07:37.680
+um script simples,
+
+00:07:37.760 --> 00:07:38.720
+que tecnicamente funciona,
+
+00:07:38.800 --> 00:07:40.160
+mas bloqueia apenas o absurdo mais ou menos.
+
+00:07:40.860 --> 00:07:42.220
+Pense nisso como um lutador de nível 1
+
+00:07:42.220 --> 00:07:43.280
+segurando um escudo de papelão.
+
+00:07:43.980 --> 00:07:45.520
+Funciona para um ou dois golpes fracos,
+
+00:07:45.520 --> 00:07:46.740
+mas no momento em que um usuário real
+
+00:07:46.740 --> 00:07:48.060
+começa a atacar, a coisa se estiressa.
+
+00:07:48.060 --> 00:07:49.660
+Qualquer um que já tenha lançado um formulário
+
+00:07:49.660 --> 00:07:51.820
+sabe que o script nunca dura muito em seu estado inicial.
+
+00:07:52.660 --> 00:07:54.280
+Você se protege contra erros fáceis,
+
+00:07:54.320 --> 00:07:56.580
+mas então o usuário cola um emoji em um campo de telefone
+
+00:07:56.580 --> 00:07:58.340
+ou digita uma data de nascimento no futuro.
+
+00:07:59.160 --> 00:08:00.500
+De repente, sua defesa entra em colapso,
+
+00:08:00.600 --> 00:08:01.720
+o ticket chega na sua caixa de entrada
+
+00:08:01.720 --> 00:08:02.980
+e você fica com uma validação frágil
+
+00:08:02.980 --> 00:08:04.340
+que não faz nada além de agitar os braços.
+
+00:08:05.120 --> 00:08:07.000
+O problema central não é apenas a cobertura da validação,
+
+00:08:07.060 --> 00:08:07.520
+é o feedback.
+
+00:08:08.200 --> 00:08:09.780
+Uma mensagem como entrada inválida
+
+00:08:09.780 --> 00:08:12.500
+é o equivalente de software a uma porta trancada sem aviso.
+
+00:08:13.060 --> 00:08:14.180
+Ela não diz nada aos usuários,
+
+00:08:14.280 --> 00:08:15.400
+então eles tentam adivinhar falham de novo
+
+00:08:15.400 --> 00:08:16.700
+e eventualmente jogam o problema para você.
+
+00:08:16.700 --> 00:08:18.440
+É aí que seus tickets de suporte
+
+00:08:18.440 --> 00:08:20.360
+se multiplicam pelos mesmos motivos previsíveis.
+
+00:08:20.980 --> 00:08:21.520
+Aqui está mudando.
+
+00:08:21.980 --> 00:08:23.760
+Esses ecript papelão não precisam continuar frágeis.
+
+00:08:24.580 --> 00:08:26.480
+Com o Copilot, você não aceita apenas o esqueleto,
+
+00:08:26.560 --> 00:08:27.540
+você o transforma em armadura.
+
+00:08:28.180 --> 00:08:29.840
+E o fluxo de trabalho é simples o suficiente
+
+00:08:29.840 --> 00:08:31.640
+para lembrar como um ciclo de quatro etapas
+
+00:08:31.640 --> 00:08:32.360
+gere o esqueleto,
+
+00:08:32.560 --> 00:08:34.300
+peça ao Copilot para melhorar as mensagens de erro,
+
+00:08:34.680 --> 00:08:36.240
+adicione o tratamento de casos extremos
+
+00:08:36.240 --> 00:08:37.240
+e finalmente implemente.
+
+00:08:37.700 --> 00:08:39.260
+Cada etapa transforma a lâmina fina
+
+00:08:39.260 --> 00:08:40.980
+em uma arma real em que você confia em campo.
+
+00:08:41.560 --> 00:08:42.460
+O Copilot trabalha em sessão,
+
+00:08:42.540 --> 00:08:43.380
+o que torna tudo rápido.
+
+00:08:43.380 --> 00:08:46.440
+Como você está dentro do mesmo chat de onde veio o esqueleto,
+
+00:08:46.520 --> 00:08:47.720
+basta digitar, atualize o código
+
+00:08:47.720 --> 00:08:49.500
+e escreva mensagens de erro detalhadas.
+
+00:08:50.720 --> 00:08:51.720
+O Copilot não começa do zero,
+
+00:08:51.780 --> 00:08:53.060
+ele literalmente atualiza o código
+
+00:08:53.060 --> 00:08:54.200
+que você já tinha no seu editor.
+
+00:08:55.260 --> 00:08:57.160
+Sem alternar entre abas e navegador
+
+00:08:57.160 --> 00:08:58.520
+ou reconstruir prompts do zero.
+
+00:08:59.100 --> 00:09:00.360
+É interativo, não é copia e colar.
+
+00:09:00.760 --> 00:09:01.980
+E você pode ver o impacto imediatamente.
+
+00:09:02.420 --> 00:09:03.340
+Imagine o antes e o depois.
+
+00:09:04.020 --> 00:09:05.760
+Seu primeiro rascunho retorna a entrada inválida.
+
+00:09:07.140 --> 00:09:08.360
+Após um refinamento, ele diz,
+
+00:09:08.360 --> 00:09:10.300
+o número de telefone deve conter apenas dígitos
+
+00:09:10.300 --> 00:09:11.500
+e pelo menos 10 caracteres.
+
+00:09:12.220 --> 00:09:13.920
+Essa clareza transforma a experiência do usuário.
+
+00:09:14.460 --> 00:09:15.840
+Em vez de um muro, você constrói um guia.
+
+00:09:16.800 --> 00:09:18.760
+Eles sabem o que deu errado e como corrigir sozinhos.
+
+00:09:19.320 --> 00:09:20.600
+Sem tickets, sem reclamações,
+
+00:09:20.720 --> 00:09:21.840
+menos tempo perdido para você.
+
+00:09:22.540 --> 00:09:23.780
+Peça mais para casos extremos
+
+00:09:23.780 --> 00:09:25.020
+e o Copilot amplia a blindagem.
+
+00:09:25.760 --> 00:09:27.080
+Precisa verificar se caracteres especiais
+
+00:09:27.080 --> 00:09:28.240
+estão entrando em campos numéricos?
+
+00:09:29.000 --> 00:09:30.280
+Peça ao Copilot no mesmo chat.
+
+00:09:30.900 --> 00:09:31.940
+Quer respostas mais detalhadas
+
+00:09:31.940 --> 00:09:32.960
+para diferentes tipos de falha?
+
+00:09:33.640 --> 00:09:34.280
+Veja um fluxo de trabalho.
+
+00:09:34.280 --> 00:09:37.040
+A cada vez, o script se fortalece um pouco mais
+
+00:09:37.040 --> 00:09:38.960
+com o contexto ligado ao seu ambiente Power Pages,
+
+00:09:39.080 --> 00:09:40.540
+não apenas código web genérico.
+
+00:09:41.520 --> 00:09:42.500
+Realmente acontece uma mudança
+
+00:09:42.500 --> 00:09:43.440
+na forma como você depura.
+
+00:09:43.920 --> 00:09:45.020
+Você para de apagar incêndios
+
+00:09:45.020 --> 00:09:46.080
+em linhas de sintaxe quebrada
+
+00:09:46.080 --> 00:09:47.400
+e começa a escober rascunhos funcionais.
+
+00:09:48.400 --> 00:09:50.220
+O Copilot l entrega uma base funcional,
+
+00:09:50.340 --> 00:09:51.580
+então sua energia vai para o polimento.
+
+00:09:52.520 --> 00:09:53.480
+Em vez de tentativa e erro
+
+00:09:53.480 --> 00:09:54.760
+com peculiaridades de sintaxe,
+
+00:09:54.860 --> 00:09:55.800
+você molda deliberadamente
+
+00:09:55.800 --> 00:09:57.200
+como o código responde ao usuário.
+
+00:09:57.760 --> 00:09:58.980
+Isso reduz horas de retrabalho
+
+00:09:58.980 --> 00:10:00.280
+e diminui a sobrecarga de suporte.
+
+00:10:00.880 --> 00:10:02.840
+Quando você olha através desse ciclo de estrutura,
+
+00:10:02.840 --> 00:10:03.900
+refinar mensagens,
+
+00:10:04.040 --> 00:10:05.420
+fortalecer contra casos extremos
+
+00:10:05.420 --> 00:10:05.800
+e implantar,
+
+00:10:05.860 --> 00:10:06.800
+percebe que não está apenas
+
+00:10:06.800 --> 00:10:07.780
+evitando o caos de dados,
+
+00:10:07.860 --> 00:10:08.660
+mas reduzindo ativamente
+
+00:10:08.660 --> 00:10:09.860
+a carga de suporte futura.
+
+00:10:10.660 --> 00:10:12.020
+Cada mensagem de erro bem elaborada
+
+00:10:12.020 --> 00:10:13.200
+é um porquê isso não funciona.
+
+00:10:13.580 --> 00:10:13.700
+Vino.
+
+00:10:14.180 --> 00:10:15.140
+Antiquete a menos na sua filha.
+
+00:10:15.700 --> 00:10:16.940
+Cada caso extremo tratado
+
+00:10:16.940 --> 00:10:17.920
+é um campo frágil a menos
+
+00:10:17.920 --> 00:10:19.100
+esperando para estourar na produção.
+
+00:10:19.920 --> 00:10:21.340
+Quando os refinamentos do Copilot
+
+00:10:21.340 --> 00:10:22.160
+são adicionados,
+
+00:10:22.280 --> 00:10:23.580
+o esqueleto ainda existe sob a armadura,
+
+00:10:23.680 --> 00:10:25.120
+mas está completamente transformado.
+
+00:10:25.760 --> 00:10:27.120
+O que começou como um paliativo
+
+00:10:27.120 --> 00:10:28.680
+torna-se algo resiliente
+
+00:10:28.680 --> 00:10:29.520
+para dados de produção,
+
+00:10:29.520 --> 00:10:31.480
+com um feedback que educa o usuário
+
+00:10:31.480 --> 00:10:32.480
+em vez de bloqueá-lo.
+
+00:10:33.160 --> 00:10:34.020
+Com um escudo de papel
+
+00:10:34.020 --> 00:10:35.000
+reforjado em chapa de metal,
+
+00:10:35.140 --> 00:10:36.260
+isso muda como a batalha é sentida
+
+00:10:36.260 --> 00:10:37.200
+em ambos os lados da tela.
+
+00:10:37.960 --> 00:10:39.260
+Embora a validação via script
+
+00:10:39.260 --> 00:10:40.580
+seja uma peça do quebra-cabeça,
+
+00:10:40.760 --> 00:10:42.220
+há um campo de batalha maior ao redor.
+
+00:10:42.720 --> 00:10:43.960
+O código pode ser blindado,
+
+00:10:44.060 --> 00:10:44.920
+mas a questão passa a ser
+
+00:10:44.920 --> 00:10:45.800
+como você gerencia
+
+00:10:45.800 --> 00:10:46.880
+toda a estrutura onde ele vive
+
+00:10:46.880 --> 00:10:47.740
+sem perder velocidade.
+
+00:10:48.440 --> 00:10:49.700
+É aí que surge o próximo desafio,
+
+00:10:50.140 --> 00:10:50.860
+não no script em si,
+
+00:10:50.920 --> 00:10:51.900
+mas na forma como você lida
+
+00:10:51.900 --> 00:10:52.820
+com o mapa do seu site.
+
+00:10:54.500 --> 00:10:55.540
+Editando o mapa da masmorra
+
+00:10:55.540 --> 00:10:56.520
+com CLI e VS Code.
+
+00:10:57.160 --> 00:10:58.800
+Quando você quer ir além de scripts isolados
+
+00:10:58.800 --> 00:11:00.220
+e começar a gerenciar todo o seu site,
+
+00:11:00.320 --> 00:11:00.900
+precisa de algo,
+
+00:11:01.160 --> 00:11:02.140
+além de edições manuais.
+
+00:11:02.140 --> 00:11:03.640
+Você precisa de um mapa adequado.
+
+00:11:04.320 --> 00:11:05.460
+Editar o mapa da masmorra
+
+00:11:05.460 --> 00:11:06.640
+com CLI e VS Code
+
+00:11:06.640 --> 00:11:07.640
+é como você para devagar
+
+00:11:07.640 --> 00:11:08.560
+por corredores cegos
+
+00:11:08.560 --> 00:11:10.120
+e passa a manter cada corredor à vista.
+
+00:11:11.100 --> 00:11:11.860
+O jeito bagunçado
+
+00:11:11.860 --> 00:11:13.120
+é alternar abas no design studio
+
+00:11:13.120 --> 00:11:13.640
+do navegador,
+
+00:11:13.740 --> 00:11:14.360
+pular para um terminal
+
+00:11:14.360 --> 00:11:15.220
+e ficar movendo arquivos
+
+00:11:15.220 --> 00:11:15.700
+de um lado para o outro
+
+00:11:15.700 --> 00:11:16.820
+só para fazer uma pequena alteração.
+
+00:11:17.640 --> 00:11:17.960
+Funciona,
+
+00:11:18.020 --> 00:11:18.840
+mas parece desajeitado.
+
+00:11:19.320 --> 00:11:20.020
+O jeito integrado
+
+00:11:20.020 --> 00:11:21.020
+é baixar todo o conteúdo
+
+00:11:21.020 --> 00:11:22.060
+do seu site localmente
+
+00:11:22.060 --> 00:11:23.060
+com a CLI do Power Platform,
+
+00:11:23.060 --> 00:11:24.280
+depois editar e implantar
+
+00:11:24.280 --> 00:11:25.000
+através da extensão
+
+00:11:25.000 --> 00:11:25.920
+Power Platform Tools
+
+00:11:25.920 --> 00:11:26.820
+no VS Code
+
+00:11:26.820 --> 00:11:27.840
+um fluxo de trabalho
+
+00:11:27.840 --> 00:11:28.720
+sem passos intermediários
+
+00:11:28.720 --> 00:11:29.240
+desnecessários.
+
+00:11:29.480 --> 00:11:30.100
+Veja como funciona.
+
+00:11:30.700 --> 00:11:31.660
+Antes de qualquer coisa,
+
+00:11:31.760 --> 00:11:32.440
+você se autentica
+
+00:11:32.440 --> 00:11:33.760
+no seu ambiente Dataverse.
+
+00:11:34.940 --> 00:11:35.440
+Pense nisso
+
+00:11:35.440 --> 00:11:36.720
+como destrancar a porta da frente
+
+00:11:36.720 --> 00:11:37.380
+para que a CLI
+
+00:11:37.380 --> 00:11:38.400
+possa acessar o seu site.
+
+00:11:39.240 --> 00:11:40.200
+Uma vez autenticado,
+
+00:11:40.300 --> 00:11:40.820
+você executa
+
+00:11:40.820 --> 00:11:41.540
+um único comando
+
+00:11:41.540 --> 00:11:42.680
+para baixar o conteúdo do site
+
+00:11:42.680 --> 00:11:43.280
+para seu espaço
+
+00:11:43.280 --> 00:11:44.080
+de trabalho local.
+
+00:11:45.120 --> 00:11:45.660
+Esse download
+
+00:11:45.660 --> 00:11:46.400
+traz os modelos,
+
+00:11:46.520 --> 00:11:46.820
+scripts,
+
+00:11:46.960 --> 00:11:48.000
+CSS e recursos.
+
+00:11:49.240 --> 00:11:50.060
+Uma cópia completa
+
+00:11:50.060 --> 00:11:50.600
+dos insights
+
+00:11:50.600 --> 00:11:51.260
+do seu site
+
+00:11:51.260 --> 00:11:51.940
+na sua máquina.
+
+00:11:52.840 --> 00:11:53.340
+O Copilot
+
+00:11:53.340 --> 00:11:54.360
+também se beneficia,
+
+00:11:54.680 --> 00:11:55.580
+pois com arquivos locais
+
+00:11:55.580 --> 00:11:56.340
+ele pode referenciar
+
+00:11:56.340 --> 00:11:57.220
+entidades específicas
+
+00:11:57.220 --> 00:11:57.640
+do ambiente
+
+00:11:57.640 --> 00:11:58.300
+em vez de fazer
+
+00:11:58.300 --> 00:11:59.400
+suposições genéricas.
+
+00:12:00.400 --> 00:12:00.720
+A partir daí,
+
+00:12:00.780 --> 00:12:01.200
+você permanece
+
+00:12:01.200 --> 00:12:01.680
+no VS Code.
+
+00:12:02.120 --> 00:12:02.580
+Quer ajustar
+
+00:12:02.580 --> 00:12:03.240
+um modelo Liquid?
+
+00:12:03.820 --> 00:12:04.520
+O arquivo está logo ali.
+
+00:12:04.920 --> 00:12:05.780
+Corrigi a lógica de validação.
+
+00:12:06.220 --> 00:12:07.040
+Abra o arquivo JavaScript
+
+00:12:07.040 --> 00:12:07.740
+ao lado dele.
+
+00:12:08.320 --> 00:12:09.320
+Como tudo está centralizado,
+
+00:12:09.400 --> 00:12:10.180
+você vê em tempo real
+
+00:12:10.180 --> 00:12:11.320
+como as peças se conectam
+
+00:12:11.320 --> 00:12:12.180
+em vez de alternar
+
+00:12:12.180 --> 00:12:12.820
+entre ferramentas
+
+00:12:12.820 --> 00:12:13.300
+sem contexto
+
+00:12:13.300 --> 00:12:14.060
+do panorama geral.
+
+00:12:15.240 --> 00:12:16.760
+A extensão Power Platform Tools
+
+00:12:16.760 --> 00:12:17.380
+torna os comandos
+
+00:12:17.380 --> 00:12:18.260
+da CLI digeríveis.
+
+00:12:26.530 --> 00:12:27.030
+Isso significa
+
+00:12:27.030 --> 00:12:27.410
+não precisar
+
+00:12:27.410 --> 00:12:28.530
+memorizar sequências longas
+
+00:12:28.530 --> 00:12:29.250
+toda vez que executar
+
+00:12:29.250 --> 00:12:29.910
+os mesmos comandos
+
+00:12:29.910 --> 00:12:30.710
+curtos repetidamente.
+
+00:12:31.530 --> 00:12:32.450
+Achar e editar a implanta.
+
+00:12:32.910 --> 00:12:33.430
+Siga o suave,
+
+00:12:33.910 --> 00:12:34.830
+sem fragmentos restantes
+
+00:12:34.830 --> 00:12:35.750
+ficando fora de sincronismo.
+
+00:12:36.070 --> 00:12:36.830
+A implantação em si
+
+00:12:36.830 --> 00:12:37.610
+também é simplificada.
+
+00:12:38.290 --> 00:12:39.250
+Após fazer as edições,
+
+00:12:39.370 --> 00:12:40.430
+você usa o mesmo fluxo
+
+00:12:40.430 --> 00:12:41.270
+baseado em CLI
+
+00:12:41.270 --> 00:12:42.350
+para enviar as alterações
+
+00:12:42.350 --> 00:12:43.190
+de volta ao seu ambiente
+
+00:12:43.190 --> 00:12:43.890
+Power Pages.
+
+00:12:44.530 --> 00:12:45.330
+Isso fecha o ciclo
+
+00:12:45.330 --> 00:12:46.270
+sem o trabalho dobrado
+
+00:12:46.270 --> 00:12:46.710
+de costume
+
+00:12:46.710 --> 00:12:47.590
+ou problema de versão.
+
+00:12:48.190 --> 00:12:48.990
+Você não está copiando
+
+00:12:48.990 --> 00:12:49.930
+pastas manualmente
+
+00:12:49.930 --> 00:12:50.610
+ou torcendo para que
+
+00:12:50.610 --> 00:12:51.630
+sua sessão no navegador
+
+00:12:51.630 --> 00:12:52.070
+não expire.
+
+00:12:53.070 --> 00:12:53.850
+Você mantém tudo
+
+00:12:53.850 --> 00:12:54.290
+em um ambiente
+
+00:12:54.290 --> 00:12:55.410
+que realmente controla.
+
+00:12:56.490 --> 00:12:56.830
+E o ganho
+
+00:12:56.830 --> 00:12:57.350
+de produtividade
+
+00:12:57.350 --> 00:12:58.250
+aparece de verdade
+
+00:12:58.250 --> 00:12:58.810
+ao adicionar
+
+00:12:58.810 --> 00:12:59.850
+o Copilot nesse ciclo.
+
+00:13:00.230 --> 00:13:00.930
+Em vez de manipular
+
+00:13:00.930 --> 00:13:01.950
+trechos desconectados,
+
+00:13:02.110 --> 00:13:02.790
+agora seus prompts
+
+00:13:02.790 --> 00:13:03.630
+do arroba Power Pages
+
+00:13:03.630 --> 00:13:04.710
+acontecem no mesmo espaço
+
+00:13:04.710 --> 00:13:05.410
+de trabalho do conteúdo
+
+00:13:05.410 --> 00:13:05.870
+do seu site.
+
+00:13:06.330 --> 00:13:06.970
+Você pode ajustar
+
+00:13:06.970 --> 00:13:07.990
+um script de validação
+
+00:13:07.990 --> 00:13:08.790
+e testar imediatamente
+
+00:13:08.790 --> 00:13:09.350
+como ele interage
+
+00:13:09.350 --> 00:13:10.030
+com modelos líquidos
+
+00:13:10.030 --> 00:13:10.810
+a duas abas de distância.
+
+00:13:11.250 --> 00:13:11.730
+É um ambiente,
+
+00:13:11.830 --> 00:13:12.310
+um contexto,
+
+00:13:12.390 --> 00:13:13.210
+um passo da pergunta
+
+00:13:13.210 --> 00:13:13.810
+à resposta.
+
+00:13:14.930 --> 00:13:15.710
+Para tornar concreto,
+
+00:13:15.790 --> 00:13:16.730
+mostrei uma pequena demonstração.
+
+00:13:17.290 --> 00:13:18.370
+Execute um comando CLI
+
+00:13:18.370 --> 00:13:19.270
+para baixar seu site,
+
+00:13:19.630 --> 00:13:20.410
+abra o arquivo líquido
+
+00:13:20.410 --> 00:13:20.950
+de uma página
+
+00:13:20.950 --> 00:13:22.050
+e seu script de validação
+
+00:13:22.050 --> 00:13:22.630
+no VS Code
+
+00:13:22.630 --> 00:13:23.330
+e depois peça
+
+00:13:23.330 --> 00:13:24.630
+ao arroba Power Pages
+
+00:13:24.630 --> 00:13:25.110
+para melhorar
+
+00:13:25.110 --> 00:13:25.910
+as mensagens de erro.
+
+00:13:26.410 --> 00:13:27.270
+Esse é o ciclo completo.
+
+00:13:28.070 --> 00:13:28.850
+Mapa à sua frente,
+
+00:13:28.950 --> 00:13:29.710
+arquivos ao alcance,
+
+00:13:29.810 --> 00:13:30.910
+assistente de IA em espera.
+
+00:13:33.000 --> 00:13:33.740
+A verdadeira vitória
+
+00:13:33.740 --> 00:13:34.300
+não é adicionar
+
+00:13:34.300 --> 00:13:34.980
+mais ferramentas,
+
+00:13:35.040 --> 00:13:35.980
+é consolidá-las.
+
+00:13:36.920 --> 00:13:37.480
+Você elimina
+
+00:13:37.480 --> 00:13:38.400
+alternâncias de contexto,
+
+00:13:38.540 --> 00:13:39.080
+mantém o foco
+
+00:13:39.080 --> 00:13:39.480
+e trabalha
+
+00:13:39.480 --> 00:13:40.300
+em um ambiente estável
+
+00:13:40.300 --> 00:13:41.100
+onde codificação,
+
+00:13:41.220 --> 00:13:42.380
+conteúdo e assistência
+
+00:13:42.380 --> 00:13:42.960
+se alinham.
+
+00:13:44.000 --> 00:13:44.820
+Isso economiza tempo,
+
+00:13:44.920 --> 00:13:45.680
+mas mais importante,
+
+00:13:45.840 --> 00:13:46.880
+evita que você gaste energia
+
+00:13:46.880 --> 00:13:47.460
+com distrações
+
+00:13:47.460 --> 00:13:47.940
+em vez de focar
+
+00:13:47.940 --> 00:13:48.780
+na construção real.
+
+00:13:49.640 --> 00:13:49.960
+Com o mapa
+
+00:13:49.960 --> 00:13:50.760
+finalmente em mãos,
+
+00:13:50.820 --> 00:13:51.960
+você não fica mais tropeçando
+
+00:13:51.960 --> 00:13:52.400
+sem saber
+
+00:13:52.400 --> 00:13:53.600
+onde está o próximo obstáculo.
+
+00:13:54.540 --> 00:13:55.500
+Mas mesmo com o layout
+
+00:13:55.500 --> 00:13:56.400
+da masmorra claro,
+
+00:13:56.500 --> 00:13:57.640
+algumas lutas permanecem,
+
+00:13:58.000 --> 00:13:58.620
+pois quando o chefão
+
+00:13:58.620 --> 00:13:59.500
+aparece disfarçado
+
+00:13:59.500 --> 00:14:00.380
+de erros de depuração,
+
+00:14:00.460 --> 00:14:00.980
+o teste real
+
+00:14:00.980 --> 00:14:01.620
+é se você consegue
+
+00:14:01.620 --> 00:14:02.580
+ler seu padrão de ataque.
+
+00:14:03.940 --> 00:14:04.520
+E essa é uma batalha
+
+00:14:04.520 --> 00:14:05.480
+para a qual muitos desenvolvedores
+
+00:14:05.480 --> 00:14:06.180
+ainda vão às cegas,
+
+00:14:07.040 --> 00:14:07.840
+depurando batalhas
+
+00:14:07.840 --> 00:14:08.820
+contra chefões com copilot.
+
+00:14:09.540 --> 00:14:10.580
+Às vezes o verdadeiro teste
+
+00:14:10.580 --> 00:14:11.620
+não é escrever código novo,
+
+00:14:11.700 --> 00:14:12.080
+mas entender
+
+00:14:12.080 --> 00:14:13.060
+porque algo que você achava
+
+00:14:13.060 --> 00:14:13.500
+que estava bom
+
+00:14:13.500 --> 00:14:14.840
+de repente se torna um problema.
+
+00:14:16.120 --> 00:14:16.800
+É aí que a depuração
+
+00:14:16.800 --> 00:14:17.780
+de batalhas contra chefões
+
+00:14:17.780 --> 00:14:18.320
+com copilot
+
+00:14:18.320 --> 00:14:19.000
+entra em jogo.
+
+00:14:20.520 --> 00:14:21.380
+Depurar Power Pages
+
+00:14:21.380 --> 00:14:22.540
+pode parecer trocar golpes
+
+00:14:22.540 --> 00:14:23.340
+com um monstro chefão
+
+00:14:23.340 --> 00:14:24.640
+que esconde seu padrão de ataque,
+
+00:14:24.640 --> 00:14:26.340
+os erros parecem aleatórios,
+
+00:14:26.640 --> 00:14:27.940
+os logs gritam sem contexto.
+
+00:14:28.780 --> 00:14:29.960
+Você vai escolher scripts longos
+
+00:14:29.960 --> 00:14:30.760
+sem saber se o problema
+
+00:14:30.760 --> 00:14:31.420
+é sintaxe,
+
+00:14:31.500 --> 00:14:32.420
+uma falha na tag Liquid
+
+00:14:32.420 --> 00:14:33.600
+ou vinculações do Dataverse
+
+00:14:33.600 --> 00:14:34.760
+que se recusam a cooperar.
+
+00:14:35.280 --> 00:14:35.860
+O que deveria ser
+
+00:14:35.860 --> 00:14:36.620
+um conserto rápido
+
+00:14:36.620 --> 00:14:37.580
+consome uma sessão inteira
+
+00:14:37.580 --> 00:14:38.360
+porque você está traduzindo
+
+00:14:38.360 --> 00:14:39.420
+coisas sem sentido linha por linha.
+
+00:14:39.880 --> 00:14:40.820
+O Liquid torna isso mais difícil.
+
+00:14:41.520 --> 00:14:42.120
+Uma pequena tag
+
+00:14:42.120 --> 00:14:42.820
+pode mudar a página.
+
+00:14:43.460 --> 00:14:44.340
+Às vezes de forma organizada,
+
+00:14:44.420 --> 00:14:45.600
+às vezes de forma espetacularmente errada.
+
+00:14:46.840 --> 00:14:47.920
+1% include percent
+
+00:14:47.920 --> 00:14:49.240
+insere conteúdo sem problemas.
+
+00:14:50.420 --> 00:14:51.180
+Outro em um contexto
+
+00:14:51.180 --> 00:14:52.080
+ligeiramente diferente
+
+00:14:52.080 --> 00:14:53.220
+arruina todo o seu layout.
+
+00:14:53.220 --> 00:14:54.760
+As vinculações do Dataverse
+
+00:14:54.760 --> 00:14:55.520
+adicionam mais a trilha.
+
+00:14:55.900 --> 00:14:56.780
+Elas podem ser resolvidas
+
+00:14:56.780 --> 00:14:57.700
+corretamente em um formulário
+
+00:14:57.700 --> 00:14:58.800
+e falhar silenciosamente em um.
+
+00:14:59.260 --> 00:15:00.440
+A própria orientação da Microsoft
+
+00:15:00.440 --> 00:15:01.360
+reconhece essa peculiaridade.
+
+00:15:01.960 --> 00:15:02.820
+Liquid e Dataverse
+
+00:15:02.820 --> 00:15:04.100
+se comportam de maneira diferente
+
+00:15:04.100 --> 00:15:04.820
+dependendo da posição,
+
+00:15:05.220 --> 00:15:05.800
+o que significa que
+
+00:15:05.800 --> 00:15:07.020
+mover o código até funcionar
+
+00:15:07.020 --> 00:15:07.900
+se torna seu fluxo
+
+00:15:07.900 --> 00:15:08.640
+de trabalho não oficial.
+
+00:15:09.240 --> 00:15:09.920
+É precisamente aí
+
+00:15:09.920 --> 00:15:10.480
+que o participante
+
+00:15:10.480 --> 00:15:11.220
+arroba a PowerPage
+
+00:15:11.220 --> 00:15:11.700
+do Copilot
+
+00:15:11.700 --> 00:15:12.560
+muda suas chances.
+
+00:15:13.160 --> 00:15:14.120
+Em vez de perder uma tarde
+
+00:15:14.120 --> 00:15:15.300
+fazendo experimentos a cegas,
+
+00:15:15.420 --> 00:15:16.320
+você pode colocar o código
+
+00:15:16.320 --> 00:15:17.240
+sob um holofote.
+
+00:15:17.840 --> 00:15:19.480
+Você literalmente digita
+
+00:15:19.480 --> 00:15:20.220
+arroba a PowerPage
+
+00:15:20.220 --> 00:15:21.040
+e explica o seguinte código.
+
+00:15:21.040 --> 00:15:22.580
+Percent Include Page Copy
+
+00:15:22.580 --> 00:15:23.480
+Percent
+
+00:15:23.480 --> 00:15:24.780
+no chat do Copilot.
+
+00:15:25.620 --> 00:15:26.200
+Sem rodeios,
+
+00:15:26.320 --> 00:15:27.440
+sem conselhos genéricos.
+
+00:15:28.280 --> 00:15:29.320
+O resultado é uma explicação
+
+00:15:29.320 --> 00:15:30.160
+clara detalhando
+
+00:15:30.160 --> 00:15:31.100
+o que aquela tag faz,
+
+00:15:31.180 --> 00:15:31.820
+o que ela puxa
+
+00:15:31.820 --> 00:15:32.800
+e por que sua posição
+
+00:15:32.800 --> 00:15:33.680
+na página afeta
+
+00:15:33.680 --> 00:15:34.360
+o comportamento.
+
+00:15:35.300 --> 00:15:35.720
+Na prática,
+
+00:15:35.840 --> 00:15:36.700
+você para de adivinhar
+
+00:15:36.700 --> 00:15:37.380
+e finalmente tem
+
+00:15:37.380 --> 00:15:38.120
+um script legível
+
+00:15:38.120 --> 00:15:39.120
+dos movimentos do chefão.
+
+00:15:39.780 --> 00:15:40.780
+Para aproveitar ao máximo,
+
+00:15:40.960 --> 00:15:41.820
+estruture a sua depuração
+
+00:15:41.820 --> 00:15:42.860
+como uma demonstração rápida.
+
+00:15:43.520 --> 00:15:43.740
+Primeiro,
+
+00:15:43.800 --> 00:15:44.600
+identifique o trecho com erro.
+
+00:15:45.040 --> 00:15:45.860
+Um formulário que explode
+
+00:15:45.860 --> 00:15:46.680
+após uma tag include.
+
+00:15:46.680 --> 00:15:47.800
+Segundo,
+
+00:15:47.900 --> 00:15:48.800
+coloque o código exato
+
+00:15:48.800 --> 00:15:49.320
+no Copilot
+
+00:15:49.320 --> 00:15:50.280
+com o comando explicação.
+
+00:15:50.860 --> 00:15:51.240
+Terceiro,
+
+00:15:51.320 --> 00:15:52.580
+aplique a explicação do Copilot
+
+00:15:52.580 --> 00:15:53.700
+em uma pequena reescrita
+
+00:15:53.700 --> 00:15:54.440
+ou ajuste layout.
+
+00:15:55.220 --> 00:15:55.640
+No teste,
+
+00:15:56.040 --> 00:15:56.880
+os passos são compactos
+
+00:15:56.880 --> 00:15:57.860
+de explicar e aplicar a testa.
+
+00:15:58.260 --> 00:15:58.820
+Teve resultados
+
+00:15:58.820 --> 00:15:59.400
+sem ficar preso
+
+00:15:59.400 --> 00:16:00.100
+em um ciclo infinito
+
+00:16:00.100 --> 00:16:00.660
+de tentar te ver.
+
+00:16:01.220 --> 00:16:01.640
+E o Copilot
+
+00:16:01.640 --> 00:16:02.620
+vai muito além da tradução.
+
+00:16:03.120 --> 00:16:03.680
+No mesmo chat,
+
+00:16:03.760 --> 00:16:04.520
+você pode pedir uma correção.
+
+00:16:05.100 --> 00:16:05.440
+Por exemplo,
+
+00:16:05.540 --> 00:16:06.520
+o Copilot pode sugerir
+
+00:16:06.520 --> 00:16:07.460
+ajustar como include
+
+00:16:07.460 --> 00:16:08.420
+alinhado para funcionar
+
+00:16:08.420 --> 00:16:09.080
+bem com o seu layout
+
+00:16:09.080 --> 00:16:10.220
+ou pode ajustar o JavaScript
+
+00:16:10.220 --> 00:16:11.220
+para que o manipulador
+
+00:16:11.220 --> 00:16:11.640
+de eventos
+
+00:16:11.640 --> 00:16:12.400
+seja disparado
+
+00:16:12.400 --> 00:16:13.600
+sem travar o console.
+
+00:16:13.840 --> 00:16:14.640
+Sem travar o console.
+
+00:16:14.640 --> 00:16:15.500
+Como ele funciona
+
+00:16:15.500 --> 00:16:16.740
+com reconhecimento de contexto
+
+00:16:16.740 --> 00:16:17.600
+no seu espaço de trabalho
+
+00:16:17.600 --> 00:16:18.240
+do Power Pages,
+
+00:16:18.340 --> 00:16:19.180
+as sugestões se conectam
+
+00:16:19.180 --> 00:16:20.080
+diretamente ao seu ambiente
+
+00:16:20.080 --> 00:16:20.840
+em vez de ficarem perdidas
+
+00:16:20.840 --> 00:16:21.920
+informações genéricas da web.
+
+00:16:22.160 --> 00:16:22.800
+Essa é a diferença
+
+00:16:22.800 --> 00:16:24.240
+entre um vendedor de poções aleatório
+
+00:16:24.240 --> 00:16:25.300
+e alguém que realmente conhece
+
+00:16:25.300 --> 00:16:26.400
+o chefe que você está enfrentando.
+
+00:16:26.940 --> 00:16:27.600
+Benefício imediato.
+
+00:16:28.020 --> 00:16:29.180
+Em vez de passar metade do dia
+
+00:16:29.180 --> 00:16:30.560
+isolando uma vinculação quebrada,
+
+00:16:30.660 --> 00:16:31.500
+você vai direto ao ponto
+
+00:16:31.500 --> 00:16:32.360
+para entender por que ela falha.
+
+00:16:32.700 --> 00:16:33.800
+Isso transforma a depuração
+
+00:16:33.800 --> 00:16:34.940
+de algo aleatório e cansativo
+
+00:16:34.940 --> 00:16:35.540
+em algo tático.
+
+00:16:36.060 --> 00:16:36.620
+Você viu o que que quebrou,
+
+00:16:36.720 --> 00:16:37.740
+aplica uma correção focada
+
+00:16:37.740 --> 00:16:39.160
+e confirma se o comportamento estabiliza.
+
+00:16:39.640 --> 00:16:40.780
+Parece menos como tirar dados
+
+00:16:40.780 --> 00:16:41.800
+de uma bolsa amaldiçoada
+
+00:16:41.800 --> 00:16:42.620
+e mais como reagir
+
+00:16:42.620 --> 00:16:43.380
+a padrões visíveis.
+
+00:16:44.000 --> 00:16:45.080
+Aqui está o contraste na prática.
+
+00:16:45.660 --> 00:16:47.400
+Antes, uma mensagem de erro como
+
+00:16:47.400 --> 00:16:48.420
+algo deu errado
+
+00:16:48.420 --> 00:16:49.400
+deixava você circulando
+
+00:16:49.400 --> 00:16:50.260
+o problema sem parar.
+
+00:16:51.200 --> 00:16:52.280
+Com a explicação do Copilot,
+
+00:16:52.420 --> 00:16:53.440
+você aprende que a tag include
+
+00:16:53.440 --> 00:16:54.620
+carrega um fragmento específico
+
+00:16:54.620 --> 00:16:55.420
+da página e,
+
+00:16:55.820 --> 00:16:56.340
+na sua posição,
+
+00:16:56.440 --> 00:16:56.980
+ela sobrescreveu
+
+00:16:56.980 --> 00:16:57.920
+um container necessário.
+
+00:16:58.940 --> 00:16:59.900
+Você reescreve a posição
+
+00:16:59.900 --> 00:17:00.860
+como o Copilot sugere
+
+00:17:00.860 --> 00:17:01.940
+e testa novamente o formário.
+
+00:17:02.580 --> 00:17:03.420
+Em três etapas,
+
+00:17:03.480 --> 00:17:04.300
+você vai dar confusão
+
+00:17:04.300 --> 00:17:04.940
+à resolução.
+
+00:17:05.940 --> 00:17:06.520
+Claro, uma regra
+
+00:17:06.520 --> 00:17:07.320
+que vale a pena repetir.
+
+00:17:07.960 --> 00:17:09.300
+Copilot faz ótimas sugestões,
+
+00:17:09.300 --> 00:17:10.320
+mas não é uma garantia.
+
+00:17:11.020 --> 00:17:11.980
+Sempre revise e teste
+
+00:17:11.980 --> 00:17:13.100
+antes de implantar em produção.
+
+00:17:13.780 --> 00:17:14.520
+Trate os resultados
+
+00:17:14.520 --> 00:17:15.440
+como um guia de estratégia,
+
+00:17:15.500 --> 00:17:16.180
+não como um item lendário
+
+00:17:16.180 --> 00:17:16.760
+que você pode equipar
+
+00:17:16.760 --> 00:17:17.300
+de olhos fechados.
+
+00:17:17.920 --> 00:17:18.800
+Eles economizam tempo,
+
+00:17:18.900 --> 00:17:19.460
+mas é o seu julgamento
+
+00:17:19.460 --> 00:17:20.180
+que mantém o sistema está.
+
+00:17:20.700 --> 00:17:21.740
+Ao construir esse ciclo
+
+00:17:21.740 --> 00:17:22.140
+de feedback,
+
+00:17:22.220 --> 00:17:23.460
+explicar, ajustar, confirmar,
+
+00:17:23.500 --> 00:17:24.220
+você elimina o fator
+
+00:17:24.220 --> 00:17:25.300
+intimidador da depuração.
+
+00:17:25.940 --> 00:17:26.800
+O Liquid não parece
+
+00:17:26.800 --> 00:17:27.960
+mais um brincalhão caótico,
+
+00:17:28.120 --> 00:17:29.440
+as peculiaridades do Dataverse
+
+00:17:29.440 --> 00:17:30.720
+deixam de ser mistérios totais
+
+00:17:30.720 --> 00:17:31.980
+e até as surpresas do JavaScript
+
+00:17:31.980 --> 00:17:32.960
+se tornam contra-ataques
+
+00:17:32.960 --> 00:17:33.580
+gerenciáveis.
+
+00:17:34.280 --> 00:17:35.420
+Uma batalha contra um chefe
+
+00:17:35.420 --> 00:17:36.120
+é ainda um desafio,
+
+00:17:36.180 --> 00:17:37.120
+mas você luta com visão
+
+00:17:37.120 --> 00:17:37.980
+em vez de levar golpes
+
+00:17:37.980 --> 00:17:38.820
+de ângulos aleatórios.
+
+00:17:39.100 --> 00:17:40.180
+E essa mudança de perspectiva
+
+00:17:40.180 --> 00:17:40.940
+é a verdadeira vitória.
+
+00:17:41.720 --> 00:17:42.620
+Depurar com Copilot
+
+00:17:42.620 --> 00:17:43.720
+não apaga o encontro.
+
+00:17:44.580 --> 00:17:45.400
+Você ainda codifica,
+
+00:17:45.540 --> 00:17:46.000
+ainda testa
+
+00:17:46.000 --> 00:17:47.080
+e ainda soluciona problemas,
+
+00:17:47.260 --> 00:17:48.500
+mas para de desperdiçar energia
+
+00:17:48.500 --> 00:17:49.300
+tentando decifrar
+
+00:17:49.300 --> 00:17:50.340
+resultados misteriosos
+
+00:17:50.340 --> 00:17:50.920
+e começa a jogar
+
+00:17:50.920 --> 00:17:51.880
+com uma vantagem confiável,
+
+00:17:52.060 --> 00:17:52.800
+o que prepara o cenário
+
+00:17:52.800 --> 00:17:53.460
+para a parte final,
+
+00:17:54.380 --> 00:17:55.300
+o que todas essas mudanças
+
+00:17:55.300 --> 00:17:56.640
+representam quando você se afasta
+
+00:17:56.640 --> 00:17:57.660
+e olha para a missão maior.
+
+00:17:58.720 --> 00:17:59.860
+A conclusão se resume a isto.
+
+00:18:00.440 --> 00:18:01.600
+Copilot não está pulando lutas,
+
+00:18:01.660 --> 00:18:02.280
+ele está mudando a forma
+
+00:18:02.280 --> 00:18:02.900
+como você desencarna.
+
+00:18:03.500 --> 00:18:05.200
+Você sai da frágil tentativa
+
+00:18:05.200 --> 00:18:06.480
+e erro para um código assistido
+
+00:18:06.480 --> 00:18:07.420
+por IA que se explica,
+
+00:18:07.540 --> 00:18:08.280
+refina sob comando
+
+00:18:08.280 --> 00:18:08.980
+e cria fluxos
+
+00:18:08.980 --> 00:18:09.880
+que os usuários realmente
+
+00:18:09.880 --> 00:18:10.820
+conseguem navegar
+
+00:18:10.820 --> 00:18:12.060
+sem desistir de frustração.
+
+00:18:12.860 --> 00:18:14.120
+Aqui estão suas cinco vitórias.
+
+00:18:14.240 --> 00:18:15.380
+Simplificar modelos líquidos
+
+00:18:15.380 --> 00:18:16.180
+e acelerar JavaScript
+
+00:18:16.180 --> 00:18:17.440
+e validação de formulários.
+
+00:18:17.560 --> 00:18:18.620
+Obter explicações simples
+
+00:18:18.620 --> 00:18:19.660
+para textos complexos,
+
+00:18:19.780 --> 00:18:21.100
+inserir HTML e Bootstrap
+
+00:18:21.100 --> 00:18:22.260
+para layouts responsivos
+
+00:18:22.260 --> 00:18:23.340
+e simplificar chamadas
+
+00:18:23.340 --> 00:18:24.860
+de API web sem suposições.
+
+00:18:25.960 --> 00:18:26.420
+Alguns recursos
+
+00:18:26.420 --> 00:18:27.120
+ainda estão em versão premium.
+
+00:18:27.580 --> 00:18:28.920
+Os administradores do Locatários
+
+00:18:28.920 --> 00:18:30.060
+ativam pelo hub do Copilot
+
+00:18:30.060 --> 00:18:30.940
+no centro de administração
+
+00:18:30.940 --> 00:18:31.580
+do Power Platform,
+
+00:18:31.720 --> 00:18:32.400
+então verifique com seu
+
+00:18:32.400 --> 00:18:33.260
+se algo parecia ausente.
+
+00:18:34.120 --> 00:18:34.760
+Chefe derrotado,
+
+00:18:34.840 --> 00:18:35.440
+spoiler garantido.
+
+00:18:35.860 --> 00:18:36.920
+Equipe o bônus de inscrição,
+
+00:18:37.080 --> 00:18:37.620
+ative o sino
+
+00:18:37.620 --> 00:18:38.620
+para futuras demonstrações
+
+00:18:38.620 --> 00:18:39.360
+e deixe um comentário
+
+00:18:39.360 --> 00:18:40.260
+com um problema de validação
+
+00:18:40.260 --> 00:18:40.660
+ou de líquido
+
+00:18:40.660 --> 00:18:41.240
+que você gostaria
+
+00:18:41.240 --> 00:18:42.340
+que o Copilot resolvesse seguir.
+
+00:18:42.880 --> 00:18:43.460
+Vamos aprimorar
+
+00:18:43.460 --> 00:18:44.400
+nossos próximos tutoriais
+
+00:18:44.400 --> 00:18:45.200
+com base nos seus difíceis.

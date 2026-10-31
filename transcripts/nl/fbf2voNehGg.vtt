@@ -1,0 +1,865 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:07.460
+Ken je dat wegzakkende gevoel wanneer je Power Pages formulier niet valideert en de foutmeldingen ongeveer net zo nuttig zijn als een 404 Brain Not Found?
+
+00:00:07.680 --> 00:00:09.720
+Dat pijnpunt gaan we vandaag precies oplossen.
+
+00:00:09.960 --> 00:00:15.040
+We behandelen vijf stappen, Liquid Template stroomlijnen, JavaScript en formuliervalidatie versnellen,
+
+00:00:15.240 --> 00:00:22.040
+begrijpelijke uitleg van code krijgen, HTML integreren met Bootstrap voor responsive layouts en web API aanroepen vereenvoudigen.
+
+00:00:22.040 --> 00:00:31.880
+Een snelle waarschuwing, je hebt VS-code nodig met de Power Platform Tools Extensie, GitHub Copilot Chat en je siteinhoud binnengehaald via de Power Platform CLI met dataverse authenticatie.
+
+00:00:32.100 --> 00:00:34.060
+Die opzet maakt Copilot context bewust.
+
+00:00:34.280 --> 00:00:37.040
+Met die basis stopt Copilot met het lukraak werpen van codefragmenten.
+
+00:00:37.180 --> 00:00:40.220
+Het geeft contextuele, iteratieve code die vallen en opstaan vermindert.
+
+00:00:40.360 --> 00:00:43.540
+Ik laat je de exacte prompts zien, zodat je de resultaten zelf kunt repliceren.
+
+00:00:43.740 --> 00:00:49.620
+En aangezien de meeste frustratie begint bij JavaScript, laten we kijken wat er gebeurt als je formulierfouten aanvoelen als een natuurlijke misstap.
+
+00:00:49.620 --> 00:00:55.660
+Wanneer JavaScript aanvoelt als een natuurlijke misstap, kan het een eenvoudige formuliercontrole snel in een ramp veranderen.
+
+00:00:55.800 --> 00:01:00.180
+Een verkeerde toetsaanslag en in plaats van slechte invoer te stoppen, stoort de hele flow in.
+
+00:01:00.420 --> 00:01:06.260
+Dat is meestal het moment waarop je naar het scherm staart en je afvraagt hoe, banaan, ooit voorbij je zorgvuldig geschreven validatielogica is gekomen.
+
+00:01:06.440 --> 00:01:13.400
+Je kent het wel, een formulier dat onschuldig lijkt, een validator bedoelt om onzin te filteren en een slimme gebruiker die net dat ene intypt waar je geen rekening mee hield.
+
+00:01:13.600 --> 00:01:18.500
+Ineens exploderen je console laks met klachten en voelt elk tabblad in VS-code als een doodlopende weg.
+
+00:01:18.500 --> 00:01:20.540
+De kleine fouten komen het hardst aan.
+
+00:01:20.720 --> 00:01:26.240
+Een ontbrekende puntkomma of een scoopfout die in je hoofd logisch lijkt, maar als gif werkt zodra de code draait.
+
+00:01:26.460 --> 00:01:33.720
+Deze kleine slippertjes duiken constant op in echte implementaties en verklaren waarom kapotte validatie zo'n bekend ticket is bij webontwikkeling.
+
+00:01:33.960 --> 00:01:36.000
+Normaal gesproken is je aanpak brood kracht.
+
+00:01:36.200 --> 00:01:41.820
+Je past een regel aan, ververst, wordt teruggefloten door een nieuwe fout en herhaalt de cyclus totdat er eindelijk iets blijft werken.
+
+00:01:42.000 --> 00:01:46.260
+Een avond verdampt en het eindresultaat is vaak slechts een met daktape aan elkaar hangend script dat net draait.
+
+00:01:46.260 --> 00:01:48.180
+Geen elegantie, geen leermoment.
+
+00:01:48.380 --> 00:01:51.740
+Daarom voelt het debuggen van validatie als die klassieke natuurlijke misstap.
+
+00:01:51.860 --> 00:01:54.260
+Je doet je best, maar de kansen zijn tegen je gekeerd.
+
+00:01:54.500 --> 00:01:56.320
+Dit is waar Copilot om de hoek komt kijken.
+
+00:01:56.680 --> 00:02:02.180
+Algemene Copilot suggesties helpen soms, maar vaak lijken ze op willekeurige fragmenten uit een halfvergeten logboek.
+
+00:02:02.340 --> 00:02:04.080
+Nuttig in de kern, fout in de details.
+
+00:02:04.400 --> 00:02:07.720
+Dat komt omdat de standaard Copilot de eigenaardigheden van Powerpages niet kent.
+
+00:02:07.880 --> 00:02:11.820
+Maar voeg de ad Powerpages-streepje deelnemer toe en plotseling spuugt het geen standaardteksten meer,
+
+00:02:11.900 --> 00:02:14.440
+maar biedt het context bewuste code die precies in jouw omgeving past.
+
+00:02:14.440 --> 00:02:17.520
+Microsoft heeft het gebouwd om Powerpages-specifieke zaken aan te pakken,
+
+00:02:17.660 --> 00:02:19.620
+waaronder liquid schablonen en dataverse koppelingen,
+
+00:02:19.720 --> 00:02:23.140
+wat betekent dat de suggesties rekening houden met de functies waar je normaal gesproken over struikelt.
+
+00:02:23.260 --> 00:02:25.460
+En het gaat niet alleen om het genereren van codefragmenten.
+
+00:02:25.540 --> 00:02:29.860
+De ad Powerpages-streepje integratie kan ook Powerpages-specifieke constructies uitleggen,
+
+00:02:29.900 --> 00:02:31.640
+zodat je niet zomaar iets plakt en hoopt op het beste,
+
+00:02:31.840 --> 00:02:33.780
+maar daadwerkelijk begrijpt waarom een script doet wat het doet.
+
+00:02:34.000 --> 00:02:36.400
+Dat maakt debuggen minder als geblinddoekt rondwalen
+
+00:02:36.400 --> 00:02:39.680
+en meer als werken naast iemand die dezelfde kerk er al heeft verkend.
+
+00:02:39.680 --> 00:02:42.960
+Je kunt bijvoorbeeld letterlijk deze prompt typen in de Copilot-chat.
+
+00:02:43.120 --> 00:02:46.200
+Ad Powerpages schrijft JavaScript-code voor formulierveldvalidatie
+
+00:02:46.200 --> 00:02:49.080
+om te controleren of de waarde van het telefoonveld het juiste formaat heeft.
+
+00:02:49.280 --> 00:02:54.000
+Dat is geen theorie, dat is een reproduceerbare, demoklare invoer die je later in deze walkthrough zult zien.
+
+00:02:54.200 --> 00:02:56.580
+De code die je terugkrijgt is geen vaagwebfragment,
+
+00:02:56.780 --> 00:03:00.440
+maar direct toepasbaar en ontworpen om te compileren binnen je Powerpages-context.
+
+00:03:00.660 --> 00:03:02.560
+Die voorspelbaarheid is de echte verandering.
+
+00:03:02.800 --> 00:03:06.800
+Met de algemene Copilot voelt het alsof je een barthab ingehuurd die misschien het juiste akkoord aanslaat,
+
+00:03:06.800 --> 00:03:09.500
+maar de helft van de tijd heeft de melodie niets te maken met je huidige strijd.
+
+00:03:09.660 --> 00:03:13.880
+Met Ad Powerpages is het meer alsof je reist met een ranger die al weet waar de valkuilen zich verschuilen.
+
+00:03:14.060 --> 00:03:16.340
+De zoektocht draait minder om het overleven van valstrikken
+
+00:03:16.340 --> 00:03:18.600
+en meer om het ontwerpen van heldere gebruikerservaringen.
+
+00:03:18.740 --> 00:03:21.320
+De tool vervangt je beoordelingsvermogen niet, maar scherpt het aan.
+
+00:03:21.540 --> 00:03:25.500
+Jij bepaalt nog steeds wat geld als geldige invoer en hoe foutmeldingen de gebruiker moeten begeleiden.
+
+00:03:25.680 --> 00:03:28.860
+Maar in plaats van tijd te verspillen aan syntaxfouten en typfouten in booleans,
+
+00:03:29.020 --> 00:03:31.340
+besteken je energie aan het intuïtief maken van de workflow.
+
+00:03:31.340 --> 00:03:34.820
+Indien correct afgehandeld, stoppen die validatiestappen als wegversperringen
+
+00:03:34.820 --> 00:03:37.700
+en worden ze onderdeel van een soepel verloop voor iedereen die het formulier gebruikt.
+
+00:03:37.840 --> 00:03:39.700
+Het voelt misschien niet als een flitsende overwinning,
+
+00:03:39.960 --> 00:03:44.120
+maar het voorkomen van basisfouten bespaart je later een vloedgolf aan eenvoudige supporttickets.
+
+00:03:44.400 --> 00:03:48.620
+Zodra Copilot het zware werk van het genereren van nauwkeurige validatiecode op zich neemt,
+
+00:03:48.700 --> 00:03:51.880
+verschuift je tijd van overlevingsmodus naar het daadwerkelijk verfijnen van het appgedrag.
+
+00:03:52.040 --> 00:03:56.540
+Dat verschil is belangrijk, want wanneer je ziet hoe goed gerichte opdrachten de stroom van codegeneratie veranderen,
+
+00:03:56.540 --> 00:03:59.080
+begin je je af te vragen wat die opdrachten nog meer kunnen ontgrendelen.
+
+00:03:59.260 --> 00:04:03.080
+En dat is wanneer het echte voordeel van het gebruik van Copilot met powerpages duidelijk wordt.
+
+00:04:03.260 --> 00:04:05.620
+Het krijgen van een voorsprong met Copilot-commando's.
+
+00:04:05.740 --> 00:04:08.920
+Een voorsprong krijgen betekent hier de juiste opdrachten kennen om in Copilot in te voeren,
+
+00:04:09.040 --> 00:04:11.160
+in plaats van te hopen dat de dobbelstenen in jouw voordeel vallen.
+
+00:04:11.360 --> 00:04:14.600
+Dat is de werkelijke kracht van het gebruik van de ad powerpages-deelnemer.
+
+00:04:14.800 --> 00:04:18.620
+Het transformeert Copilot-chat van een algemene helper naar een contextbewuste partner
+
+00:04:18.620 --> 00:04:20.600
+die is gebouwd voor jouw powerpages-omgeving.
+
+00:04:20.820 --> 00:04:22.000
+Hier is hoe je het aanroept.
+
+00:04:22.000 --> 00:04:27.440
+Open in VS-code het Copilot-chat-venster en type vervolgens je prompt met ad powerpages aan het begin.
+
+00:04:27.680 --> 00:04:32.340
+Die tag is wat Copilot signaleert om het powerpages-brein te laden in plaats van de standaardmodus.
+
+00:04:32.520 --> 00:04:37.040
+Je kunt vragen om validators, liquid snippets en zelfs dataverse gebonden aanroepen
+
+00:04:37.040 --> 00:04:41.340
+en Copilot stemt de antwoorden af op het systeem waar je daadwerkelijk voor programmeert.
+
+00:04:41.560 --> 00:04:44.140
+Voordat dat werkt heb je de juiste configuratie nodig.
+
+00:04:44.140 --> 00:04:49.760
+Visual Studio code geïnstalleerd, de Power Platform Tools extensie, de GitHub Copilot chat extensie
+
+00:04:49.760 --> 00:04:53.160
+en de Power Platform CLI geauthenticeerd met je dataverse omgeving.
+
+00:04:53.340 --> 00:04:56.980
+De authenticatiestap is het belangrijkst omdat Copilot je omgeving pas begrijpt
+
+00:04:56.980 --> 00:05:00.660
+zodra je de site inhoud in VS-code hebt binnengehaald terwijl je bent ingelogd.
+
+00:05:00.760 --> 00:05:02.160
+Zonder dat is het puur GIS-werk.
+
+00:05:02.360 --> 00:05:04.140
+En nog een kanttekening wat betreft governance.
+
+00:05:04.420 --> 00:05:06.740
+Sommige copilot-functies voor powerpages zijn nog in preview
+
+00:05:06.740 --> 00:05:10.660
+en tenantbeheerders bepalen via de Copilot-hub in de governance instellingen of deze zijn ingeschakeld.
+
+00:05:10.660 --> 00:05:13.880
+Wees niet verrast als functies die hier gedemonstreerd worden in jouw organisatie uitgeschakeld zijn.
+
+00:05:13.880 --> 00:05:15.740
+Dat is een beheerdersinstelling, geen bak.
+
+00:05:15.920 --> 00:05:17.860
+Dit is het verschil zodra alles is ingesteld.
+
+00:05:18.020 --> 00:05:21.000
+De gewone copilot is als een bart om advies op het slagveld vragen.
+
+00:05:21.160 --> 00:05:23.880
+Je krijgt een prettig deuntje, misschien wat algemeen commentaar,
+
+00:05:24.040 --> 00:05:27.740
+maar niet de details die je nodig hebt voor liquid templates of dataverse entiteitsvelden.
+
+00:05:27.940 --> 00:05:32.220
+De add powerpages-streepje deelnemer lijkt meer op een ranger die het terrein al in kaart heeft gebracht.
+
+00:05:32.420 --> 00:05:36.080
+Het is niet alleen code die compileert, het is code die verwijst naar de juiste bindingen,
+
+00:05:36.300 --> 00:05:39.640
+past in formulier validators en aansluit bij hoe powerpages echt werkt.
+
+00:05:39.640 --> 00:05:41.640
+Eén metafoor, één contrast, één resultaat.
+
+00:05:42.440 --> 00:05:46.000
+Bruikbare, contextbewuste output in plaats van fragiele, generieke snippets.
+
+00:05:46.220 --> 00:05:47.600
+Laten we het over resultaten hebben.
+
+00:05:47.800 --> 00:05:50.040
+Als je de standaard copilot om een validatieroutine vraagt,
+
+00:05:50.160 --> 00:05:52.800
+krijg je waarschijnlijk een script dat werkt in een basis HTML formulier.
+
+00:05:53.000 --> 00:05:55.720
+Zet het echter in powerpages en je loopt tegen blinde vlekken aan.
+
+00:05:55.920 --> 00:05:58.940
+Geen herkenning van entiteitsschema's, geen idee wat liquid text doen
+
+00:05:58.940 --> 00:06:01.260
+en absoluut geen besef van dataverse regels.
+
+00:06:01.440 --> 00:06:04.040
+Het werkt als duct tape, plakkerig, maar onbetrouwbaar.
+
+00:06:04.040 --> 00:06:06.740
+Doe hetzelfde verzoek met add powerpages aan het begin
+
+00:06:06.740 --> 00:06:11.540
+en plotseling heb je validators die niet alleen werken, maar ook binden aan de juiste veldverwijzingen die je echt nodig hebt.
+
+00:06:11.760 --> 00:06:15.420
+Zelfde verzoek, context aangepaste output, geen nachtelijke fix is meer nodig.
+
+00:06:15.620 --> 00:06:17.800
+En dit gaat niet alleen over het genereren van scripts.
+
+00:06:18.040 --> 00:06:20.820
+Commando's zoals add powerpages explain the following code,
+
+00:06:21.100 --> 00:06:22.640
+percent include page copy percent,
+
+00:06:22.860 --> 00:06:26.460
+geven je begrijpelijke uitleg over liquid of powerpages specifieke constructies.
+
+00:06:26.660 --> 00:06:29.760
+Je kopieert en plakt niet blind, je bouwt daadwerkelijk begrip op.
+
+00:06:29.760 --> 00:06:33.600
+Dat is een ander soort kracht, omdat je de spreuken leert terwijl je ze uitspreekt.
+
+00:06:33.800 --> 00:06:37.100
+Hoe langer je met deze commando's werkt, hoe meer je workflow verandert.
+
+00:06:37.280 --> 00:06:39.880
+In plaats van om twee uur s'nachts alleen fouten te herstellen,
+
+00:06:40.200 --> 00:06:45.340
+behandel je copilot als een tweede paar ogen dat al weet wat er in 90% van vergelijkbare beelds misgaat.
+
+00:06:45.480 --> 00:06:47.120
+De commando's geven je geen cheat codes.
+
+00:06:47.440 --> 00:06:51.180
+Ze geven je inzicht en werkende voorbeelden die rekening houden met de eigenaardigheden van de omgeving.
+
+00:06:51.400 --> 00:06:53.380
+Ze besparen je eindeloze revisierondes.
+
+00:06:53.580 --> 00:06:56.420
+In een reguliere copilot rol kom je ergens in het midden uit.
+
+00:06:56.420 --> 00:07:00.080
+Redelijk script, extra werk, wat vallen en opstaan voordat het past.
+
+00:07:00.280 --> 00:07:03.640
+In een add powerpages-streepje rol voelt het als een natuurlijke 20.
+
+00:07:04.500 --> 00:07:07.060
+Validatiescripts passen naadloos in je powerpages-formulier.
+
+00:07:07.260 --> 00:07:08.520
+Liquid includes werken echt.
+
+00:07:08.800 --> 00:07:10.540
+Dataverse bindings geven geen fouten.
+
+00:07:10.760 --> 00:07:14.840
+Dat is geen geluk, dat gebeurt wanneer copilot het terrein kent waarvoor je programmeert.
+
+00:07:15.060 --> 00:07:17.560
+Dat voordeel brengt je echter alleen bij het eerste concept.
+
+00:07:17.780 --> 00:07:20.420
+Een werkend fragment betekent nog geen voltooide ervaring.
+
+00:07:20.660 --> 00:07:22.040
+Gebruikers voeren vreemde dingen in.
+
+00:07:22.040 --> 00:07:26.560
+Foutmeldingen hebben details nodig en scripts moeten verder evolueren dan het basisontwerp van Copilot.
+
+00:07:26.760 --> 00:07:28.620
+En daar begint de volgende uitdaging.
+
+00:07:28.980 --> 00:07:34.840
+Van scriptskeletten naar volledig bepanceerde code begint waar de meeste validatie begint, bij de basis.
+
+00:07:35.220 --> 00:07:40.640
+Je krijgt een eerste versie, een simpel script dat technisch werkt, maar alleen de meest voor de hand liggende onzin blokkeert.
+
+00:07:40.880 --> 00:07:43.360
+Zie het als een level 1 vechter met een kartonnen schild.
+
+00:07:43.560 --> 00:07:48.120
+Het werkt tegen een paar zwakke slagen, maar zodra een echte gebruiker begint te rammen, versplintert het.
+
+00:07:48.120 --> 00:07:52.640
+Iedereen die wel eens een formulier heeft opgeleverd, weet dat het script niet lang in zijn beginstatus blijft.
+
+00:07:52.760 --> 00:07:58.860
+Je beveiligt tegen simpele fouten, maar dan plakt een gebruiker een emoji in een telefoonveld of typt morgen als geboortedatum.
+
+00:07:59.060 --> 00:08:04.520
+Plotseling stort je verdediging in, stromen de tickets binnen en blijft er breekbare validatie over die nauwelijks iets doet.
+
+00:08:04.720 --> 00:08:08.120
+Het fundamentele probleem is niet alleen de validatiedekking, maar de feedback.
+
+00:08:08.300 --> 00:08:12.720
+Een melding als ongeldige invoer is softwarematig de tegenhanger van een gesloten deur zonder bordje.
+
+00:08:12.880 --> 00:08:17.100
+Het vertelt gebruikers niets, dus ze gokken, falen opnieuw en gooien het probleem uiteindelijk bij jou over de schutting.
+
+00:08:17.100 --> 00:08:20.860
+Dat is wanneer je helpdesktickets zich vermenigvuldigen om dezelfde voorspelbare redenen.
+
+00:08:20.960 --> 00:08:24.380
+Hier is de omslag. Die kartonnen scripts hoeven niet fragiel te blijven.
+
+00:08:24.580 --> 00:08:28.160
+Met Copilot accepteer je niet alleen het skelet, je bouwt het uit tot een harnas.
+
+00:08:28.340 --> 00:08:31.680
+En de workflow is eenvoudig genoeg om als een vierstapslust te onthouden.
+
+00:08:31.900 --> 00:08:37.320
+Genereer het skelet, vraag Copilot om foutmeldingen te verbeteren, voeg randgevallen toe en implementeer.
+
+00:08:37.480 --> 00:08:41.380
+Elke stap upgrade het dunne heft tot een echt wapen waar je in het veld op vertrouwt.
+
+00:08:41.620 --> 00:08:44.080
+Copilot werkt in een sessie, wat het snel maakt.
+
+00:08:44.080 --> 00:08:50.300
+Omdat je in dezelfde chat zit waar het skelet vandaan kwam, typ je gewoon updatecode en schrijf gedetailleerde foutmeldingen.
+
+00:08:50.480 --> 00:08:54.960
+Copilot begint niet vanaf nul, het werkt letterlijk de code bij die je al in je editor had.
+
+00:08:55.160 --> 00:08:58.580
+Geen gedoe tussen browser-tabladen of prompts vanaf nul opnieuw opbouwen.
+
+00:08:58.760 --> 00:09:00.780
+Het is iteratief, niet knippen en plakken.
+
+00:09:00.920 --> 00:09:02.420
+En je ziet de impact onmiddellijk.
+
+00:09:02.620 --> 00:09:03.740
+Stel je het verschil voor.
+
+00:09:03.920 --> 00:09:06.600
+Je eerste versie geeft de melding ongeldige invoer.
+
+00:09:06.600 --> 00:09:11.660
+Na één verfijning staat er, telefoonnummer moet alleen cijfers bevatten en minimaal 10 tekens lang zijn.
+
+00:09:11.900 --> 00:09:14.280
+Die duidelijkheid transformeert de gebruikerservaring.
+
+00:09:14.500 --> 00:09:16.320
+In plaats van een muur, bouw je een leuning.
+
+00:09:16.620 --> 00:09:19.060
+Ze weten wat er misging en hoe ze het zelf kunnen herstellen.
+
+00:09:19.320 --> 00:09:22.280
+Geen ticket, geen gemopper, minder verloren tijd aan jouw kant.
+
+00:09:22.520 --> 00:09:25.580
+Vraag opnieuw om randgevallen en Copilot breidt de beveiliging uit.
+
+00:09:25.820 --> 00:09:28.500
+Moet je controleren op speciale tekens in nummerieke velden?
+
+00:09:28.740 --> 00:09:30.680
+Vraag het aan Copilot in dezelfde thread.
+
+00:09:30.900 --> 00:09:33.480
+Wil je meer gelaagde antwoorden voor verschillende soorten fouten?
+
+00:09:33.480 --> 00:09:41.020
+Hetzelfde proces. Elke keer wordt het script iets sterker, met context die is gekoppeld aan je powerpages-omgeving, niet zomaar generieke webcode.
+
+00:09:41.220 --> 00:09:43.680
+Wat er echt gebeurt, is een verandering in hoe je debat.
+
+00:09:43.860 --> 00:09:48.200
+Je stopt met het blussen van brandjes bij foutieve syntax en begint met het boetseren van werkende ontwerpen.
+
+00:09:48.380 --> 00:09:52.080
+Copilot geeft je al een functionele basis, dus je energie gaat naar het verfijnen.
+
+00:09:52.240 --> 00:09:57.480
+In plaats van vallen en opstaan met syntax-eigenaardigheden, vorm je bewust hoe de code communiceert met de gebruiker.
+
+00:09:57.720 --> 00:10:00.800
+Dat bespaart uren aan herstelwerk en vermindert de druk op support.
+
+00:10:00.800 --> 00:10:10.340
+Wanneer je het doordielus bekijkt skelet, berichten verfijnen, beveiligen tegen randgevallen, implementeren besef je dat je niet alleen data chaos voorkomt, maar actief de toekomstige supportlast verlaagt.
+
+00:10:10.540 --> 00:10:15.280
+Elk zorgvuldig opgesteld foutbericht is één waarom werkt dit niet, tik het minder in je wachtrij.
+
+00:10:15.460 --> 00:10:19.680
+Elk afgehandeld randgeval is één kwetsbaar veld minder dat in productie kan exploderen.
+
+00:10:19.680 --> 00:10:25.820
+Tegen de tijd dat de verfijningen van copilot zijn toegevoegd, bestaat het skelet nog steeds onder het panser, maar is het volledig getransformeerd.
+
+00:10:25.960 --> 00:10:32.660
+Wat begon als een noodoplossing wordt iets dat robuust genoeg is voor productiedata, met feedback die de gebruiker onderwijst in plaats van blokkeert.
+
+00:10:32.840 --> 00:10:37.820
+Als een papieren schild dat is omgesmeed tot een harnas, verandert het hoe de strijd aan beide kanten van het scherm aanvoelt.
+
+00:10:38.020 --> 00:10:42.560
+En hoewel gescripte validatie een stukje van de puzzel is, ligt er een groter strijdtoneel omheen.
+
+00:10:42.760 --> 00:10:48.080
+De code kan worden bepanserd, maar de vraag wordt, hoe beheer je de volledige structuur waar binnen het leeft zonder te vertragen?
+
+00:10:48.080 --> 00:10:53.780
+Dat is waar de volgende uitdaging zich voordoet, niet in het script zelf, maar in de manier waarop je de kaart van je site beheert.
+
+00:10:54.000 --> 00:10:56.780
+De dungeonkaart bewerken met CLI en VS code
+
+00:10:56.780 --> 00:11:02.540
+Wanneer je verder wilt kijken dan individuele scripts en je hele site wilt gaan beheren, heb je meer nodig dan brute force aanpassingen.
+
+00:11:02.720 --> 00:11:04.000
+Je hebt een goede kaart nodig.
+
+00:11:04.200 --> 00:11:10.580
+De dungeonkaart bewerken met CLI en VS code is de manier om te stoppen met blind rondwalen en in plaats daarvan elke gang in het zicht te houden.
+
+00:11:10.740 --> 00:11:17.420
+De rommelige manier is jongleren met tabbladen in de browser design studio, overschakelen naar een terminal en dan bestanden heen en weer schuiven voor een kleine wijziging.
+
+00:11:17.420 --> 00:11:19.320
+Het werkt, maar het voelt onhandig aan.
+
+00:11:19.480 --> 00:11:27.400
+De geïntegreerde manier is al je siteinhoud lokaal downloaden met de Power Platform CLI en vervolgens bewerken en implementeren via de Power Platform Tools extensie in VS code.
+
+00:11:27.620 --> 00:11:29.360
+Eén workflow zonder tussenstappen.
+
+00:11:29.600 --> 00:11:30.280
+Zo werkt het.
+
+00:11:30.700 --> 00:11:34.280
+Voordat je iets doet, verifieer je jezelf bij je dataverse omgeving.
+
+00:11:34.980 --> 00:11:38.700
+Zie het als het openen van de voordeur zodat de CLI je site kan bereiken.
+
+00:11:38.700 --> 00:11:44.640
+Eenmaal geverifieerd voer je één commando uit om de websiteinhoud naar je lokale werkruimte te downloaden.
+
+00:11:45.040 --> 00:11:48.940
+Die pool haalt de templates, scripts, CSS en assets binnen.
+
+00:11:49.220 --> 00:11:52.280
+Een volledige kopie van de inzichten van je site op je machine.
+
+00:11:52.520 --> 00:11:59.520
+Copilot profiteert hier ook van, want met lokale bestanden kan het verwijzen naar omgevingsspecifieke entiteiten in plaats van algemene gissingen te doen.
+
+00:11:59.760 --> 00:12:01.740
+Vanaf dat punt blijf je altijd in VS code.
+
+00:12:01.740 --> 00:12:04.800
+Wil je een Liquid Template aanpassen? Het bestand staat daar gewoon.
+
+00:12:05.460 --> 00:12:08.520
+Validatielogica herstellen? Open het JavaScript bestand dat ernaast staat.
+
+00:12:08.700 --> 00:12:14.900
+En omdat alles gecentraliseerd is, zie je in realtime hoe onderdelen samenhangen, in plaats van te wisselen tussen tools zonder context van het grotere geheel.
+
+00:12:15.060 --> 00:12:18.780
+De Power Platform Tools extensie maakt de CLI-commando's begrijpelijk.
+
+00:12:18.920 --> 00:12:25.980
+Je hebt nog steeds de ruwe opdrachtregel tot je beschikking, maar die bevindt zich nu in de geïntegreerde terminal van VS code, gekoppeld aan de werkruimte waarin je werkt.
+
+00:12:25.980 --> 00:12:30.600
+Dat betekent dat je geen lange reeksen hoeft te onthouden als je telkens dezelfde korte commando's uitvoert.
+
+00:12:30.600 --> 00:12:33.860
+Downloaden, bewerken, implementeren. Een soepele cyclus.
+
+00:12:34.120 --> 00:12:38.360
+Geen achtergebleven fragmenten die uit de pas lopen. De implementatie zelf wordt ook eenvoudiger.
+
+00:12:38.580 --> 00:12:44.240
+Na het aanbrengen van wijzigingen gebruik je dezelfde CLI-workflow om ze terug te pushen naar je Power Pages-omgeving.
+
+00:12:44.500 --> 00:12:48.200
+Dat sluit de cirkel zonder het gebruikelijke dubbele werk of versieproblemen.
+
+00:12:48.360 --> 00:12:52.720
+Je kopieert geen mappen handmatig en hoeft niet te hopen dat je browsersessie niet is verlopen.
+
+00:12:52.720 --> 00:12:55.900
+Je houdt alles in één omgeving die je daadwerkelijk beheert.
+
+00:12:56.060 --> 00:13:00.060
+En de productiviteitswinst is pas echt zichtbaar als je Copilot aan die cyclus toevoegt.
+
+00:13:00.060 --> 00:13:06.120
+In plaats van met losse fragmenten te jong leren, vinden je at Power Pages-streepje prompts nu plaats in dezelfde werkruimte als je site inhoudt.
+
+00:13:06.220 --> 00:13:11.060
+Je kunt een validatiescript aanpassen en direct testen hoe het interacteert met Liquid templates die twee tabbladen verderop staan.
+
+00:13:11.260 --> 00:13:14.600
+Het is één omgeving, één context, één stap van vraag naar antwoord.
+
+00:13:14.740 --> 00:13:17.340
+Om het concreet te maken, laat ik het je zien in een korte demo.
+
+00:13:17.340 --> 00:13:26.340
+Voer 1 CLI-commando uit om je site op te halen, open zowel het Liquid-bestand als het validatiescript van een pagina in VS-code en vraag at Power Pages om de foutmeldingen te verbeteren.
+
+00:13:26.540 --> 00:13:27.700
+Dat is de hele cyclus.
+
+00:13:27.900 --> 00:13:31.820
+Kaart voor je neus, bestanden binnen handbereik, AI-assistent stand-by.
+
+00:13:32.920 --> 00:13:36.460
+De echte winst is niet dat je meer tools toevoegt, maar dat je ze consolideert.
+
+00:13:36.620 --> 00:13:43.620
+Je elimineert contextwisselingen, blijft gefocust en werkt binnen één stabiel kader waar codering, content en ondersteuning samenkomen.
+
+00:13:43.620 --> 00:13:49.480
+Het bespaart tijd, maar belangrijker nog, het voorkomt dat je energie verspilt aan afleidingen in plaats van aan het eigenlijke bouwen.
+
+00:13:49.660 --> 00:13:54.140
+Met de kaart eindelijk in handen, struikel je niet langer rond in de vraag waar het volgende knelpunt zit.
+
+00:13:54.340 --> 00:14:03.440
+Maar zelfs met een duidelijke indeling van de dungeon blijven sommige gevechten over, want als de eindbaas verschijnt als een stapel foutmeldingen, is de echte test of je het aanvalspatroon kunt lezen.
+
+00:14:03.620 --> 00:14:06.580
+En dat is een strijd waar veel ontwikkelaars nog steeds blind in gaan.
+
+00:14:06.860 --> 00:14:09.420
+Eindbaas-gevechten debuggen met co-pilot aan boord.
+
+00:14:09.420 --> 00:14:15.460
+Soms is de echte test niet het schrijven van nieuwe code, maar uitzoeken waarom iets dat prima leek plotseling vijandig wordt.
+
+00:14:15.820 --> 00:14:19.780
+Dat is waar het debuggen van eindbaas-gevechten met co-pilot aan boord van pas komt.
+
+00:14:20.000 --> 00:14:25.200
+Het debuggen van power pages kan aanvoelen als een gevecht met een eindbaas die zijn aanvalspatroon verbergt.
+
+00:14:25.340 --> 00:14:26.660
+Fouten lijken willekeurig.
+
+00:14:26.820 --> 00:14:28.420
+De lags schreeuwen zonder context.
+
+00:14:28.660 --> 00:14:34.980
+Je spit door lange scripts, onzeker of het probleem syntax is, een haperende liquid tech of dataverse koppelingen die niet meewerken.
+
+00:14:34.980 --> 00:14:39.700
+Wat een snelle oplossing had moeten zijn, vreet een hele sessie op omdat je regel voor regelwartaal moet vertalen.
+
+00:14:39.920 --> 00:14:41.120
+Liquid maakt dit lastiger.
+
+00:14:41.320 --> 00:14:43.580
+Een kleine tech kan de hele pagina veranderen.
+
+00:14:43.800 --> 00:14:45.920
+Soms netjes, soms spectaculair fout.
+
+00:14:46.540 --> 00:14:49.700
+De ene, percent include percent, plaatst moeiteloos content.
+
+00:14:49.940 --> 00:14:53.380
+De andere, in een net iets andere context, brengt je hele layout ten val.
+
+00:14:53.780 --> 00:14:55.720
+Dataverse koppelingen voegen meer wrijving toe.
+
+00:14:55.920 --> 00:14:58.960
+Ze werken correct op het ene formulier en falen stilzwijgend op het andere.
+
+00:14:59.160 --> 00:15:02.080
+De eigen richtlijnen van Microsoft erkennen deze eigenaardigheid.
+
+00:15:02.080 --> 00:15:09.180
+Liquid en dataverse gedragen zich verschillend afhankelijk van de plaatsing, wat betekent dat gewoon verschuiven tot het werkt, je onofficiële workflow wordt.
+
+00:15:09.420 --> 00:15:12.840
+Dat is precies waar Copilot in Power Pages je kansen vergroot.
+
+00:15:12.980 --> 00:15:17.900
+In plaats van een middag te verspillen aan blinde experimenten, kun je de code onder een vergrootglas leggen.
+
+00:15:18.080 --> 00:15:25.200
+Je typt letterlijk, at Power Pages legt de volgende code uit, percent include page copy, percent in de Copilot chat.
+
+00:15:25.500 --> 00:15:27.800
+Geen vage praat, geen algemeen advies.
+
+00:15:27.800 --> 00:15:34.940
+De output is een heldere uitleg die vertelt wat die tag doet, wat deze ophaalt en waarom de positie op de pagina het gedrag beïnvloedt.
+
+00:15:35.020 --> 00:15:39.300
+Kortom, je stopt met gokken en hebt eindelijk een leesbaar script van de zetten van de eindpaas.
+
+00:15:39.460 --> 00:15:42.940
+Om er het maximale uit te halen, structureer je het debuggen als een korte demo.
+
+00:15:43.440 --> 00:15:44.940
+Identificeer eerst het foutieve fragment.
+
+00:15:45.240 --> 00:15:47.200
+Een formulier implodeert na een include tag.
+
+00:15:47.380 --> 00:15:50.660
+Plaats ten tweede de exacte code in Copilot met het uitleg, commando.
+
+00:15:50.660 --> 00:15:54.840
+Gebruik ten derde de uitleg van Copilot voor een kleine herschrijving of layout aanpassing.
+
+00:15:55.000 --> 00:15:55.660
+Testen daarna.
+
+00:15:55.840 --> 00:15:58.280
+De stappen zijn compact, uitleggen, toepassen, testen.
+
+00:15:58.400 --> 00:16:01.180
+Je ziet resultaat zonder vast te lopen in eindeloos vallen en opstaan.
+
+00:16:01.280 --> 00:16:03.120
+En Copilot gaat verder dan alleen vertalen.
+
+00:16:03.300 --> 00:16:05.420
+In dezelfde chat kun je vragen om een oplossing.
+
+00:16:05.680 --> 00:16:10.380
+Copilot kan bijvoorbeeld voorstellen de nesting van een include aan te passen voor een betere layout.
+
+00:16:10.380 --> 00:16:14.580
+Of de javascript bijsturen zodat een event-handler niet de console laat crashen.
+
+00:16:14.580 --> 00:16:21.740
+Omdat het contextbewust werkt in je powerpages-omgeving, sluit het advies direct aan bij jouw situatie in plaats van algemene webkennis te spuien.
+
+00:16:21.960 --> 00:16:26.420
+Dat is het verschil tussen een willekeurige drankjesverkoper en iemand die de eindbaas kent die je aan het bevechten bent.
+
+00:16:26.580 --> 00:16:28.060
+Het voordeel is direct merkbaar.
+
+00:16:28.240 --> 00:16:32.720
+In plaats van een halve dag kwijt te zijn aan het isoleren van één kapotte binding, begrijp je direct waarom het misgaat.
+
+00:16:32.880 --> 00:16:35.680
+Dat maakt debuggen van een moeizame gokspel tot iets tactisch.
+
+00:16:35.840 --> 00:16:39.540
+Je ziet wat er kapot is, past een gerichte patch toe en controleert of het gedrag stabiliseert.
+
+00:16:39.700 --> 00:16:43.960
+Het voelt minder als gokken met een vervloekte dobbelsteen en meer als reageren op zichtbare patronen.
+
+00:16:43.960 --> 00:16:45.720
+Hier is het contrast in de praktijk.
+
+00:16:45.940 --> 00:16:50.860
+Vroeger liet een foutmelding als er is iets misgegaan, je eindeloos rondjes draaien om het probleem.
+
+00:16:51.060 --> 00:16:58.380
+Met de uitleg van Copilot leer je dat er een clue-tekken specifiek pagina-fragment laat en dat het in jouw opzet een vereiste container overschreef.
+
+00:16:58.460 --> 00:17:02.620
+Je herschrijft de plaatsing zoals Copilot voorstelt, test opnieuw en het formulier blijft heel.
+
+00:17:02.820 --> 00:17:05.200
+In drie stappen ga je van verwarring naar resolutie.
+
+00:17:05.520 --> 00:17:07.640
+Natuurlijk is er een regel die het herhalen waard is.
+
+00:17:07.860 --> 00:17:10.640
+Copilot doet sterke suggesties, maar het is geen garantie.
+
+00:17:10.940 --> 00:17:13.640
+Controleer en test altijd voordat je iets naar productie verplaatst.
+
+00:17:13.640 --> 00:17:17.640
+Zie de output als een strategiegids, niet als instant buiten je blind kunt uitrusten.
+
+00:17:17.760 --> 00:17:20.560
+Het bespaart tijd, maar jouw oordeel houdt het systeem stabiel.
+
+00:17:20.780 --> 00:17:25.940
+Zodra je die feedbackloop van uitleggen, aanpassen en bevestigen opbouwt, neemt de drempelfrees voor debuggen af.
+
+00:17:26.120 --> 00:17:28.280
+Liquid voelt niet langer als een chaotische trickster.
+
+00:17:28.660 --> 00:17:33.980
+Dataverse eigenaardigheden zijn geen mysteries meer en zelfs JavaScript verrassingen worden beheersbaar tegen aanvallen.
+
+00:17:34.160 --> 00:17:39.120
+Een baasgevecht blijft een uitdaging, maar je vecht met inzicht in plaats van willekeurige klappen te incasseren.
+
+00:17:39.120 --> 00:17:41.540
+En die verandering in perspectief is de echte winst.
+
+00:17:41.760 --> 00:17:44.240
+Debuggen met Copilot wist het gevecht niet uit.
+
+00:17:44.500 --> 00:17:53.820
+Je codeert, test en lost problemen op, maar je verspilt geen energie meer aan mysterieuze outputs en begint met een betrouwbaar voordeel, wat de weg vrijmaakt voor het laatste stuk.
+
+00:17:54.000 --> 00:17:58.340
+Waar al deze veranderingen toe leiden zodra je een stap terug doet en kijkt naar de grotere missie.
+
+00:17:58.340 --> 00:18:00.020
+De conclusie komt hierop neer.
+
+00:18:00.200 --> 00:18:03.420
+Copilot slaat gevechten niet over, het verandert de manier waarop je ze voert.
+
+00:18:03.600 --> 00:18:12.560
+Je stapt af van fragiel, vallen en opstaan en gaat naar AI ondersteun de code die zichzelf uitlegt, verfijnt op commando en flows bout die gebruikers echt kunnen gebruiken zonder gefrustreerd af te haken.
+
+00:18:12.780 --> 00:18:25.400
+Dit zijn je vijf winstpunten, stroomlijn Liquid schablonen, versnel JavaScript en formuliervalidatie, krijg begrijpelijke uitleg voor lastige codefragmenten, voeg HTML en Bootstrap toe voor responsieve layouts en vereenvoudig web API aanroepen zonder GISwerk.
+
+00:18:25.400 --> 00:18:27.280
+Sommige functies zijn nog in preview.
+
+00:18:27.540 --> 00:18:33.920
+Tenantbeheerders schakelen deze in via de Copilot-hap in het Power Platform Beheer Centrum, dus overleg met hen als er onderdelen lijken te ontbreken.
+
+00:18:34.140 --> 00:18:35.460
+Baas verslagen, buit binnen.
+
+00:18:35.700 --> 00:18:42.460
+Activeer de abonneren baf, klik op het belletje voor toekomstige demo's en laat een reactie achter met het validatie- of liquidprobleem dat Copilot als volgende moet aanpakken.
+
+00:18:42.460 --> 00:18:45.460
+We zullen toekomstige walkthroughs toespitsen op jouw lastigste tickets.

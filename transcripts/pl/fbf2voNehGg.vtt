@@ -1,0 +1,814 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:07.580
+Znasz to uczucie, gdy formularz PowerPages nie chce się zwalidować, a komunikaty o błędach są tak samo przydatne jak błąd 404, mózg nieznaleziony.
+
+00:00:07.740 --> 00:00:09.680
+Ten właśnie problem rozwiążemy dzisiaj.
+
+00:00:09.900 --> 00:00:17.100
+Omówimy pięć kroków usprawnianie szablonów Liquid, przyspieszanie JavaScriptu i walidacji formularzy, uzyskiwanie wyjaśnień kodu prostym językiem,
+
+00:00:17.280 --> 00:00:21.980
+integrację HTML z Bootstrapem dla elastycznych układów oraz upraszczanie wywołań WebAPI.
+
+00:00:21.980 --> 00:00:31.520
+Jedna krótka uwaga, będziesz potrzebować VS Code z rozszerzeniem Power Platform Tools, GitHub Copilot Hat oraz zawartości witryny pobranej przez Cli Power Platform z uwierzytelnianiem Dataverse.
+
+00:00:31.720 --> 00:00:34.420
+Taka konfiguracja sprawia, że Copilot staje się świadomy kontekstu.
+
+00:00:34.620 --> 00:00:36.980
+Dzięki temu Copilot przestaje wyrzucać losowe fragmenty kodu.
+
+00:00:37.240 --> 00:00:40.320
+Zaczyna podawać iteracyjny kod kontekstowy, co ogranicza metodę prób i błędów.
+
+00:00:40.480 --> 00:00:43.400
+Pokażę Ci dokładne prompty, abyś mógł samodzielnie powtórzyć te wyniki.
+
+00:00:43.620 --> 00:00:49.660
+A ponieważ większość problemów zaczyna się od JavaScriptu, przejdźmy do tego, co się dzieje, gdy błędy formularza przypominają pechowe rzuty w grach RPG.
+
+00:00:49.660 --> 00:00:55.600
+Gdy JavaScript zachowuje się jak pechowy rzut, potrafi szybko zamienić proste sprawdzenie formularza w katastrofę.
+
+00:00:55.940 --> 00:00:59.960
+Jeden błędny znak i zamiast zatrzymać złe dane, cały proces załamuje się.
+
+00:01:00.220 --> 00:01:06.400
+Zazwyczaj wtedy siedzisz, wpatrując się w ekran i zastanawiając, jak banan mógł przejść przez Twoją starannie napisaną logikę walidacji.
+
+00:01:06.680 --> 00:01:13.420
+Znasz to nieszkodliwy formularz, walidator mający odfiltrować bzdury i sprytny użytkownik, który wpisuje coś, czego nie przewidziałeś.
+
+00:01:13.620 --> 00:01:18.300
+Nagle konsola wybucha błędami, a każda karta w VS Code wydaje się ślepym załukiem.
+
+00:01:18.300 --> 00:01:20.180
+Małe błędy bolą najbardziej.
+
+00:01:20.500 --> 00:01:26.340
+Brakujący średnik lub błąd zakresu, który w Twojej głowie ma sens, ale podczas uruchamiania kodu działa jak trucizna.
+
+00:01:26.560 --> 00:01:33.780
+Takie drobne wpadki zdarzają się w prawdziwych wdrożeniach cały czas i wyjaśniają, dlaczego niedziałająca walidacja to tak częsty problem w tworzeniu stron.
+
+00:01:33.780 --> 00:01:36.280
+Zazwyczaj Twoje podejście to siła brute force.
+
+00:01:36.500 --> 00:01:41.480
+Zmieniasz linię, odświeżasz, dostajesz kolejny błąd i powtarzasz cykl, aż w końcu coś zadziała.
+
+00:01:41.780 --> 00:01:46.080
+Wieczór mija, a efekt końcowy to często tylko łatany na taśmę skrypt, który po prostu działa.
+
+00:01:46.320 --> 00:01:47.780
+Bez elegancji, bez wartości edukacyjnej.
+
+00:01:48.620 --> 00:01:51.820
+Dlatego debugowanie walidacji przypomina klasyczną porażkę w grze.
+
+00:01:52.040 --> 00:01:54.340
+Próbujesz, ale szanse są przeciwko Tobie.
+
+00:01:54.520 --> 00:01:55.820
+Tu właśnie wkracza kopilot.
+
+00:01:55.820 --> 00:02:02.180
+Ogólne sugestie kopilota czasem pomagają, ale często wyglądają jak losowe fragmenty wyciągnięte z zapomnianego dziennika zadań.
+
+00:02:02.300 --> 00:02:04.440
+Użyteczne w założeniu, błędne w szczegółach.
+
+00:02:04.640 --> 00:02:07.600
+Dzieje się tak, ponieważ zwykły kopilot nie zna specyfiki Power Pages.
+
+00:02:07.820 --> 00:02:14.400
+Ale dodaj uczestnika Power Pages, a nagle przestaje on wyrzucać generyczny kod, oferując w zamian rozwiązania kontekstowe, dopasowane do Twojego środowiska.
+
+00:02:14.620 --> 00:02:19.480
+Firma Microsoft stworzyła to narzędzie z myślą o specyfice Power Pages, w tym szablonach Liquid i powiązaniach Dataverse,
+
+00:02:19.480 --> 00:02:23.200
+co oznacza, że sugestie uwzględniają funkcje, które zazwyczaj sprawiają najwięcej problemów.
+
+00:02:23.200 --> 00:02:29.080
+Nie chodzi tylko o generowanie fragmentów kodu, integracja Power Pages potrafi również wyjaśniać konstrukcje specyficzne dla Power Pages,
+
+00:02:29.200 --> 00:02:33.480
+dzięki czemu nie musisz kopiować w ciemno, a faktycznie rozumiesz, dlaczego skrypt działa tak, a nie inaczej.
+
+00:02:33.700 --> 00:02:39.900
+Dzięki temu debagowanie przestaje być jak błądzenie z zawiązanymi oczami, a zaczyna przypominać pracę u boku kogoś, kto już pokonał tę samą ścieżkę.
+
+00:02:40.080 --> 00:02:43.100
+Na przykład możesz wpisać dokładnie takie polecenie w czacie kopilota.
+
+00:02:43.100 --> 00:02:49.000
+Power Pages napisz kod JavaScript do walidacji pola formularza, aby zweryfikować, czy wartość pola telefonu ma prawidłowy format.
+
+00:02:49.000 --> 00:02:53.880
+To nie tylko teoria, to gotowy do użycia w demonstracji wkład, który zobaczysz później w tym przewodniku.
+
+00:02:54.040 --> 00:03:00.560
+Otrzymany kod nie jest niejasnym fragmentem z sieci, lecz rozwiązaniem bezpośrednio zastosowalnym i zaprojektowanym tak, by działało w kontekście Power Pages.
+
+00:03:00.740 --> 00:03:02.560
+Ta przewidywalność to prawdziwy przełom.
+
+00:03:02.740 --> 00:03:06.600
+Przy standardowym kopilocie czujesz się, jakbyś zaangażował barda, który może zagra odpowiedni akord,
+
+00:03:06.720 --> 00:03:09.600
+ale przez większość czasu melodia nie ma związku z twoją aktualną walką.
+
+00:03:09.600 --> 00:03:13.700
+Z Power Pages to bardziej jak podróżowanie z łowcą, który wie, gdzie kryją się pułapki.
+
+00:03:13.700 --> 00:03:18.560
+Wyprawa staje się mniej kwestią przetrwania w pułapkach, a bardziej projektowaniem przejrzystych doświadczeń użytkownika.
+
+00:03:18.800 --> 00:03:21.300
+Narzędzie nie zastępuje twojego osądu, lecz go wyostrza.
+
+00:03:21.440 --> 00:03:25.560
+To ty nadal decydujesz, co stanowi poprawne dane wejściowe i jak błędy powinny kierować użytkownikiem.
+
+00:03:25.760 --> 00:03:31.460
+Zamiast tracić czas na błędy składniowe i literówki w wartościach logicznych, skupiasz swoje wysiłki na tworzeniu intuicyjnego przepływu pracy.
+
+00:03:31.720 --> 00:03:37.680
+Właściwie obsłużone kroki walidacji przestają być przeszkodami, a stają się częścią płynnego procesu dla każdego, kto korzysta z formularza.
+
+00:03:37.680 --> 00:03:44.140
+Może nie wygląda to na spektakularne zwycięstwo, ale eliminacja podstawowych błędów chroni cię przed lawiną zgłoszeń w przyszłości.
+
+00:03:44.400 --> 00:03:51.780
+Gdy kopilot przejmuje żmudną pracę generowania dokładnego kodu walidacyjnego, twój czas przesuwa się z trybu przetrwania na rzeczywiste udoskonalanie działania aplikacji.
+
+00:03:51.960 --> 00:03:59.060
+Ta różnica ma znaczenie, ponieważ widząc, jak dobrze ukierunkowane polecenia zmieniają proces generowania kodu, zaczynasz zastanawiać się, co jeszcze mogą odblokować.
+
+00:03:59.240 --> 00:04:03.200
+I właśnie wtedy prawdziwa zaleta korzystania z kopilota w Power Pages staje się oczywista.
+
+00:04:03.200 --> 00:04:11.100
+Uzyskanie przewagi dzięki poleceniom kopilota. Uzyskanie przewagi oznacza tutaj znajomość odpowiednich poleceń dla kopilota, zamiast liczenia na łód szczęścia.
+
+00:04:11.280 --> 00:04:14.300
+To właśnie prawdziwa siła korzystania z uczestnika Power Pages.
+
+00:04:14.560 --> 00:04:20.660
+Przekształca on czat kopilota z ogólnego pomocnika w świadomego kontekstu partnera, stworzonego dla Twojego środowiska Power Pages.
+
+00:04:20.880 --> 00:04:27.420
+Oto jak go wywołać. W VS Code otwórz okno czatu kopilot, a następnie wpisz swoje polecenie, zaczynając od Power Pages.
+
+00:04:27.620 --> 00:04:32.400
+Ten znacznik sygnalizuje kopilotowi, aby załadował mózg Power Pages zamiast trybu standardowego.
+
+00:04:32.400 --> 00:04:41.240
+Możesz prosić o walidatory, fragmenty kodu Liquid, a nawet wywołania powiązane z Dataverse, a kopilot dostosuje odpowiedzi do systemu, w którym faktycznie kodujesz.
+
+00:04:41.480 --> 00:04:44.240
+Zanim to zadziała, potrzebujesz odpowiedniego przygotowania.
+
+00:04:44.520 --> 00:04:53.040
+Zainstalowane Visual Studio Code, rozszerzenie Power Platform Tools, rozszerzenie GitHub Kopilot HAT oraz Power Platform CLI uwierzytelnione w Twoim środowisku Dataverse.
+
+00:04:53.240 --> 00:05:00.740
+Krok uwierzytelnienia jest najważniejszy, ponieważ kopilot rozumie Twoje środowisko dopiero wtedy, gdy pobierzesz zawartość witryny do VS Code będąc zalogowanym.
+
+00:05:00.740 --> 00:05:04.160
+Bez tego tylko zgaduję. I jeszcze jedna uwaga dotycząca zarządzania.
+
+00:05:04.380 --> 00:05:10.680
+Niektóre funkcje kopilota dla Power Pages są wciąż w fazie testów, a administratorzy dzierżawy kontrolują ich włączanie przez kopilot hub w ustawieniach zarządzania.
+
+00:05:10.860 --> 00:05:13.780
+Nie zdziw się, jeśli prezentowane tu funkcje są wyłączone w Twojej organizacji.
+
+00:05:13.940 --> 00:05:15.780
+To przełącznik administratora, a nie błąd.
+
+00:05:15.880 --> 00:05:17.920
+Oto różnica, gdy już wszystko skonfigurujesz.
+
+00:05:18.140 --> 00:05:20.960
+Zwykły kopilot jest jak proszenie barda o porady na polu bitwy.
+
+00:05:20.960 --> 00:05:28.060
+Dostaniesz przyjemną melodię, może jakiś ogólny komentarz, ale żadnych szczegółów potrzebnych przy pracy z szablonami Liquid lub polami NC Dataverse.
+
+00:05:28.280 --> 00:05:32.020
+Uczestnik Power Pages jest bardziej jak zwiadowca, który już zbadał teren.
+
+00:05:32.160 --> 00:05:33.820
+To nie tylko kod, który się kompiluje.
+
+00:05:33.960 --> 00:05:39.640
+To kod, który odwołuje się do poprawnych powiązań, pasuje do walidatorów formularzy i zgadza się z działaniem Power Pages.
+
+00:05:39.860 --> 00:05:42.360
+Jedna metafora, jeden kontrast, jedna korzyść.
+
+00:05:42.520 --> 00:05:46.060
+Użyteczne wyniki świadome kontekstu zamiast kruchych, generycznych fragmentów.
+
+00:05:46.060 --> 00:05:47.500
+Porozmawiajmy o wynikach.
+
+00:05:47.640 --> 00:05:52.660
+Jeśli poprosisz zwykłego kopilota o procedurę walidacji, prawdopodobnie dostaniesz skrypt działający w prostym formularzu HTML.
+
+00:05:53.020 --> 00:05:55.680
+Wklej go jednak do Power Pages, a napotkasz martwe punkty.
+
+00:05:55.920 --> 00:06:01.200
+Brak rozpoznania schematu NC, brak pojęcia o znacznikach Liquid i zdecydowanie brak świadomości reguł Dataverse.
+
+00:06:01.440 --> 00:06:04.060
+Działa jak taśma klejąca, trzyma się, ale jest zawodne.
+
+00:06:04.260 --> 00:06:11.440
+Wpisz to samo zapytanie z Power Pages na początek, a nagle otrzymasz walidatory, które nie tylko działają, ale łączą się z odpowiednimi polami NC, których potrzebujesz.
+
+00:06:11.440 --> 00:06:15.620
+To samo zapytanie, wyjście dostosowane do kontekstu, bez konieczności nocnego poprawiania kodu.
+
+00:06:15.800 --> 00:06:17.840
+I nie chodzi tu tylko o generowanie skryptów.
+
+00:06:18.000 --> 00:06:26.360
+Polecenia typu Power Pages wyjaśni poniższy kod %IncludePageCopyProcent oferują proste wyjaśnienia konstrukcji Liquid lub elementów specyficznych dla Power Pages.
+
+00:06:26.580 --> 00:06:29.640
+Nie kopiujesz na ślepo, lecz faktycznie budujesz swoje zrozumienie.
+
+00:06:29.820 --> 00:06:33.380
+To inny rodzaj mocy, ponieważ uczysz się run, jednocześnie ich używając.
+
+00:06:33.600 --> 00:06:37.280
+Im dłużej pracujesz z tymi poleceniami, tym bardziej zmienia się twój sposób pracy.
+
+00:06:37.280 --> 00:06:45.380
+Zamiast poprawiać błędy w samotności o drugiej w nocy, traktujesz kopilota jak drugą parę oczu, która zna już przyczyny awarii z 90% podobnych projektów.
+
+00:06:45.500 --> 00:06:51.060
+Te polecenia nie dają kodów do oszukiwania, dają wgląd i gotowe przykłady, które szanują specyficzne dziwactwa Twojego środowiska.
+
+00:06:51.300 --> 00:06:53.540
+Oszczędzają Ci niekończących się cykli poprawek.
+
+00:06:53.700 --> 00:06:56.300
+W standardowej roli kopilota znajdziesz się gdzieś po środku.
+
+00:06:56.520 --> 00:07:00.360
+Przyzwoity skrypt, trochę poprawek, trochę prób i błędów, zanim wszystko zacznie działać.
+
+00:07:00.520 --> 00:07:03.620
+W roli Power Pages czuje się to jak naturalne 20 na kości.
+
+00:07:03.620 --> 00:07:10.560
+Skrypty walidacji idealnie pasują do formularza Power Pages, wstawki Liquid przechodzą, a powiązania Dataverse nie wyrzucają błędów.
+
+00:07:10.680 --> 00:07:15.080
+To nieszczęście, to efekt sytuacji, w której kopilot zna teren, na którym kodujesz.
+
+00:07:15.240 --> 00:07:17.460
+Ta przewaga daje jednak tylko pierwszy szkic.
+
+00:07:17.660 --> 00:07:20.360
+Działający fragment kodu nie oznacza gotowego rozwiązania.
+
+00:07:20.560 --> 00:07:26.680
+Użytkownicy wpisują dziwne dane, komunikaty błędów potrzebują szczegółów, a skrypty muszą wyewoluować poza szkielet, który daje Ci kopilot.
+
+00:07:26.840 --> 00:07:28.580
+I tu zaczyna się kolejne wyzwanie.
+
+00:07:28.580 --> 00:07:34.900
+Droga od szkieletów skryptów do w pełni opancerzonego kodu zaczyna się tam, gdzie większość walidacji od podstaw.
+
+00:07:35.220 --> 00:07:40.360
+Dostajesz pierwszy szkic, prosty skrypt, który technicznie działa, ale blokuje tylko najbardziej oczywiste błędy.
+
+00:07:40.560 --> 00:07:43.640
+Pomyśl o tym jak o wojowniku na pierwszym poziomie z tekturową tarczą.
+
+00:07:43.640 --> 00:07:48.220
+Działa przy jednym czy dwóch słabych ciosach, ale gdy prawdziwy użytkownik zaczyna atakować, tarcza pęka.
+
+00:07:48.400 --> 00:07:52.460
+Każdy, kto wdrożył formularz, wie, że skrypt nie przetrwa długo w swojej początkowej formie.
+
+00:07:52.460 --> 00:07:58.780
+Zabezpieczasz się przed prostymi błędami, ale potem użytkownik wkleja emoji w pole telefonu lub wpisuje datę urodzenia z przyszłości.
+
+00:07:59.040 --> 00:08:04.580
+Nagle Twoja obrona upada, zgłoszenia trafiają do skrzynki, a Ty zostajesz z kruchą walidacją, która jest bezradna.
+
+00:08:04.800 --> 00:08:08.180
+Głównym problemem nie jest tylko zakres walidacji, ale informacja zwrotna.
+
+00:08:08.340 --> 00:08:12.760
+Komunikat typu nieprawidłowe dane to programowy odpowiednik zamkniętych drzwi bez żadnej tabliczki.
+
+00:08:13.000 --> 00:08:17.040
+Nic nie mówi użytkownikom, więc zgadują, znów popełniają głąd i ostatecznie zwalają problem na Ciebie.
+
+00:08:17.040 --> 00:08:21.020
+To właśnie wtedy zgłoszenia do pomocy technicznej mnożą się z tych samych przewidywalnych powodów.
+
+00:08:21.140 --> 00:08:21.780
+Oto zmiana.
+
+00:08:21.980 --> 00:08:24.300
+Te tekturowe skrypty nie muszą pozostać kruche.
+
+00:08:24.560 --> 00:08:27.980
+Z kopilotem nie tylko akceptujesz szkielet, ale przekuwasz go w zbroję.
+
+00:08:28.160 --> 00:08:32.080
+A przepływ pracy jest na tyle prosty, że można go zapamiętać jako czterostopniową pętlę.
+
+00:08:32.200 --> 00:08:37.320
+Wygeneruj szkielet, poproś kopilota o poprawę komunikatów błędów, dodaj obsługę przypadków brzegowych i wdruż.
+
+00:08:37.480 --> 00:08:41.200
+Każdy krok zmienia delikatny projekt w prawdziwą broń, której ufasz w terenie.
+
+00:08:41.380 --> 00:08:44.100
+Kopilot pracuje w sesji, co sprawia, że jest to szybkie.
+
+00:08:44.100 --> 00:08:50.400
+Ponieważ jesteś w tym samym czacie, z którego pochodził szkielet, po prostu wpisujesz, zaktualizuj kod i napisz szczegółowe komunikaty błędów.
+
+00:08:50.540 --> 00:08:55.060
+Kopilot nie zaczyna od zera, on dosłownie aktualizuje kod, który masz bezpośrednio w edytorze.
+
+00:08:55.260 --> 00:08:58.600
+Bez przełączania się między kartami przeglądarki i tworzenia promptów od zera.
+
+00:08:58.760 --> 00:09:00.780
+To proces iteracyjny, a nie kopiuj w klej.
+
+00:09:00.920 --> 00:09:02.140
+I od razu widzisz efekt.
+
+00:09:02.380 --> 00:09:03.860
+Wyobraź sobie stan przed i po.
+
+00:09:04.060 --> 00:09:06.680
+Twój pierwszy szkic wyrzuca nieprawidłowe dane wejściowe.
+
+00:09:06.860 --> 00:09:11.820
+Po jednej poprawce brzmi, numer telefonu musi składać się z samych cyfr i mieć co najmniej 10 znaków.
+
+00:09:11.820 --> 00:09:14.080
+Ta jasność zmienia doświadczenie użytkownika.
+
+00:09:14.340 --> 00:09:16.220
+Zamiast muru budujesz linę prowadzącą.
+
+00:09:16.420 --> 00:09:19.160
+Użytkownicy wiedzą, co poszło nie tak i jak samodzielnie to naprawić.
+
+00:09:19.360 --> 00:09:22.260
+Zero zgłoszeń, zero narzekań, mniej straconego czasu po Twojej stronie.
+
+00:09:22.520 --> 00:09:25.580
+Naciśnij ponownie w przypadku nietypowych sytuacji, a kopilot rozszerzy ochronę.
+
+00:09:25.780 --> 00:09:28.760
+Musisz sprawdzić, czy znaki specjalne nie przedostają się do pól liczbowych?
+
+00:09:28.960 --> 00:09:30.640
+Zapytaj kopilota w tym samym wątku.
+
+00:09:30.880 --> 00:09:33.580
+Chcesz więcej warstwowych odpowiedzi dla różnych typów błędów?
+
+00:09:33.700 --> 00:09:34.600
+Ten sam proces.
+
+00:09:34.600 --> 00:09:41.080
+Za każdym razem skrypt staje się nieco solidniejszy, a dzieje się to w kontekście Twojego środowiska Power Pages, a nie tylko ogólnego kodu webowego.
+
+00:09:41.300 --> 00:09:43.740
+W rzeczywistości zmienia się sposób, w jaki debagujesz.
+
+00:09:43.900 --> 00:09:48.080
+Przestajesz gasić pożary pojedynczych linii zepsutej składni, a zaczynasz rzeźbić działające wersje.
+
+00:09:48.260 --> 00:09:52.460
+Kopilot daje Ci już gotową podstawę, więc Twoja energia idzie w dopracowywanie szczegółów.
+
+00:09:52.520 --> 00:09:57.420
+Zamiast prób i błędów z dziwactwami składni, celowo kształtujesz to, jak kod odpowiada użytkownikowi.
+
+00:09:57.580 --> 00:10:00.720
+To redukuje godziny poprawek i ogranicza napływ zgłoszeń do wsparcia.
+
+00:10:00.720 --> 00:10:10.020
+Kiedy spojrzysz na to przez pryzmat pętli, szkielet, dopracowanie komunikatów, wzmocnienie na nietypowe przypadki, wdrożenie zdasz sobie sprawę, że nie tylko zapobiegasz chaosowi danych, ale aktywnie zmniejszasz przyszłe obciążenie wsparcia.
+
+00:10:10.240 --> 00:10:13.460
+Każdy starannie przygotowany komunikat o błędzie to jedno pytanie, dlaczego to nie działa?
+
+00:10:13.680 --> 00:10:15.680
+Mniej, mniej w Twojej kolejce zgłoszeń.
+
+00:10:15.900 --> 00:10:19.920
+Każdy obsłużony nietypowy przypadek to jedno kruche pole mniej, które mogłoby zawieść na produkcji.
+
+00:10:20.160 --> 00:10:25.400
+Gdy poprawki kopilota zostaną nałożone, szkielet wciąż istnieje pod pancerzem, ale jest całkowicie odmieniony.
+
+00:10:25.400 --> 00:10:33.280
+To, co zaczęło się jako rozwiązanie tymczasowe, staje się czymś wystarczająco odpornym dla danych produkcyjnych, z informacją zwrotną, która edukuje użytkownika zamiast go blokować.
+
+00:10:33.440 --> 00:10:37.520
+Jak papierowa tarcza przekuta w płytową, zmienia to odczucia obu stron ekranu.
+
+00:10:37.660 --> 00:10:42.440
+I choć walidacja skryptowa to tylko element układanki, wokół niej rozciąga się większe pole bitwy.
+
+00:10:42.640 --> 00:10:48.200
+Kot może być opancerzony, ale pojawia się pytanie, jak zarządzać całą strukturą, w której się znajduje, nie spowalniając tempa.
+
+00:10:48.360 --> 00:10:53.840
+To właśnie tutaj pojawia się kolejne wyzwanie, nie w samym skrypcie, ale w sposobie, w jaki zarządzasz mapą swojej witryny.
+
+00:10:53.840 --> 00:10:56.720
+Edycja mapy lochów za pomocą CLI i VS Code
+
+00:10:56.720 --> 00:11:02.540
+Gdy chcesz wyjść poza pojedyncze skrypty i zacząć zarządzać całą witryną, potrzebujesz czegoś więcej niż tylko siłowej edycji.
+
+00:11:02.740 --> 00:11:04.120
+Potrzebujesz porządnej mapy.
+
+00:11:04.320 --> 00:11:10.460
+Edycja mapy lochów za pomocą CLI i VS Code to sposób na to, by przestać błądzić po ciemnych korytarzach i mieć każdy z nich na widoku.
+
+00:11:10.700 --> 00:11:17.540
+Chaotyczny sposób to żonglowanie kartami w studiu projektowym przeglądarki, przeskakiwanie do terminala i ciągłe przerzucanie plików tylko po to, by wprowadzić drobną zmianę.
+
+00:11:17.540 --> 00:11:27.040
+To działa, ale jest mało wygodne. Zintegrowane podejście polega na pobraniu całej zawartości witryny lokalnie za pomocą Power Platform CLI, a następnie edycji i wdrażaniu przez rozszerzenie Power Platform Tools w VS Code.
+
+00:11:27.280 --> 00:11:29.360
+Jeden przepływ pracy bez zbędnych kroków.
+
+00:11:29.560 --> 00:11:30.480
+Oto jak to wygląda.
+
+00:11:30.780 --> 00:11:34.360
+Zanim cokolwiek zrobisz, uwierzytelniasz się w swoim środowisku Dataverse.
+
+00:11:34.580 --> 00:11:39.160
+Pomyśl o tym, jak o otwarciu drzwi wejściowych, aby CLI mogło uzyskać dostęp do Twojej witryny.
+
+00:11:39.160 --> 00:11:44.620
+Po uwierzytelnieniu uruchamiasz jedno polecenie, aby pobrać zawartość witryny do lokalnego obszaru roboczego.
+
+00:11:45.000 --> 00:11:48.920
+To pobranie sprowadza szablony, skrypty, pliki CSS i zasoby.
+
+00:11:49.320 --> 00:11:52.320
+Pełna kopia danych Twojej witryny na Twoim komputerze.
+
+00:11:52.580 --> 00:11:59.480
+Kopilot również na tym zyskuje, ponieważ dzięki lokalnym plikom może odwoływać się do obiektów specyficznych dla środowiska, zamiast zgadywać.
+
+00:11:59.620 --> 00:12:01.900
+Od tego momentu cały czas jesteś w VS Code.
+
+00:12:02.120 --> 00:12:03.500
+Chcesz dostosować szablon Liquid?
+
+00:12:03.700 --> 00:12:04.780
+Plik jest pod ręką.
+
+00:12:05.000 --> 00:12:06.200
+Naprawić logikę walidacji?
+
+00:12:06.200 --> 00:12:14.860
+Otwórz plik JavaScript znajdujący się obok, a ponieważ wszystko jest scentralizowane, widzisz w czasie rzeczywistym, jak łączą się elementy, zamiast przełączać się między narzędziami bez pełnego obrazu sytuacji.
+
+00:12:15.060 --> 00:12:18.800
+Rozszerzenie Power Platform Tools sprawia, że polecenia CLI są łatwiejsze w obsłudze.
+
+00:12:19.020 --> 00:12:25.980
+Nadal masz do dyspozycji surowy wiersz poleceń, ale teraz żyje on w zintegrowanym terminalu VS Code, powiązany z obszarem roboczym, w którym już kodujesz.
+
+00:12:26.180 --> 00:12:31.180
+Oznacza to brak konieczności zapamiętywania długich ciągów znaków przy każdym uruchamianiu tych samych krótkich poleceń.
+
+00:12:31.180 --> 00:12:32.680
+Pobierz, edytuj, wdruż.
+
+00:12:32.840 --> 00:12:33.620
+Płynny cykl.
+
+00:12:33.620 --> 00:12:35.980
+Żadne fragmenty nie wymkną się z synchronizacji.
+
+00:12:36.220 --> 00:12:38.140
+Samo wdrażanie również staje się prostsze.
+
+00:12:38.300 --> 00:12:44.300
+Po dokonaniu edycji używasz tego samego przepływu pracy opartego na CLI, aby wypchnąć zmiany z powrotem do środowiska Power Pages.
+
+00:12:44.540 --> 00:12:48.140
+To zamyka pętlę bez typowego podwójnego przetwarzania czy błędów wersji.
+
+00:12:48.360 --> 00:12:52.680
+Nie kopiujesz folderów ręcznie ani nie martwisz się, czy sesja przeglądarki wygasła.
+
+00:12:52.880 --> 00:12:56.100
+Trzymasz wszystko w jednym środowisku, które faktycznie kontrolujesz.
+
+00:12:56.340 --> 00:13:00.020
+Wzrost produktywności jest naprawdę widoczny, gdy włączysz do tego kopilota.
+
+00:13:00.020 --> 00:13:06.140
+Zamiast żonglować odizolowanymi fragmentami, Twoje zapytania Power Pages odbywają się teraz w tym samym obszarze roboczym, co zawartość witryny.
+
+00:13:06.360 --> 00:13:11.100
+Możesz poprawić skrypt walidacji i natychmiast przetestować, jak współdziała z szablonami Liquid w sąsiedniej karcie.
+
+00:13:11.340 --> 00:13:14.640
+Jedno środowisko, jeden kontekst, jeden krok od pytania do odpowiedzi.
+
+00:13:14.800 --> 00:13:17.260
+Aby pokazać to konkretnie, przedstawię krótkie demo.
+
+00:13:17.260 --> 00:13:26.560
+Uruchom jedno polecenie CLI, aby pobrać witrynę, otwórz plik Liquid, stronę oraz skrypt walidacji w VS Code, a następnie poproś Power Pages o ulepszenie komunikatów o błędach.
+
+00:13:26.680 --> 00:13:27.480
+To cały cykl.
+
+00:13:27.800 --> 00:13:31.600
+Mapa przed Tobą, pliki w zasięgu ręki, asystent AI w gotowości.
+
+00:13:32.460 --> 00:13:36.480
+Prawdziwy zysk nie polega na dodawaniu kolejnych narzędzi, lecz na ich konsolidacji.
+
+00:13:36.740 --> 00:13:43.820
+Eliminujesz przełączanie kontekstów, utrzymujesz skupienie i pracujesz w ramach jednego stabilnego środowiska, gdzie kod, zawartość i wsparcie współgrają ze sobą.
+
+00:13:43.820 --> 00:13:49.200
+Oszczędza to czas, ale co ważniejsze, chroni przed marnowaniem energii na rozpraszacze zamiast na faktyczne budowanie.
+
+00:13:49.480 --> 00:13:54.280
+Mając wreszcie mapę w dłoniach, nie błąkasz się już bez celu, zastanawiając się, gdzie jest kolejny punkt krytyczny.
+
+00:13:54.280 --> 00:14:03.280
+Jednak nawet przy przejrzystym układzie lochu, niektóre walki pozostają, bo gdy boss pojawia się pod postacią sterty błędów debugowania, prawdziwym testem jest to, czy potrafisz odczytać jego schemat ataku.
+
+00:14:03.480 --> 00:14:06.980
+I to jest walka, do której wielu programistów wciąż przystępuje na oślep.
+
+00:14:07.120 --> 00:14:09.140
+Debugowanie walk z bossami z kopilotem.
+
+00:14:09.140 --> 00:14:15.800
+Czasami prawdziwym testem nie jest pisanie nowego kodu, lecz odkrycie, dlaczego coś, co wydawało się sprawne, nagle staje się problematyczne.
+
+00:14:16.020 --> 00:14:19.740
+Właśnie tutaj do gry wchodzi debugowanie walk z bossami przy użyciu kopilota.
+
+00:14:20.020 --> 00:14:24.800
+Debugowanie Power Pages może przypominać wymianę ciosów z bossem, który ukrywa swój schemat ataku.
+
+00:14:25.040 --> 00:14:26.640
+Błędy wyglądają na przypadkowe.
+
+00:14:26.860 --> 00:14:28.140
+Logi krzyczą bez żadnego kontekstu.
+
+00:14:28.840 --> 00:14:34.880
+Przeszukujesz długie skrypty, nie mając pewności, czy problemem jest składnia błąd tagu liquid, czy niedziałające powiązania datavers.
+
+00:14:34.880 --> 00:14:39.520
+To, co powinno być szybką poprawką, pochłania całą sesję, ponieważ linijka po linijce tłumaczysz bełkot.
+
+00:14:39.700 --> 00:14:41.180
+Liquid dodatkowo to utrudnia.
+
+00:14:41.420 --> 00:14:43.480
+Jeden mały tag może zmienić całą stronę.
+
+00:14:43.640 --> 00:14:46.320
+Czasami elegancko, a czasami w sposób katastrofalny.
+
+00:14:46.560 --> 00:14:50.080
+Jeden znacznik %include% wstawia treść bez żadnego problemu.
+
+00:14:50.260 --> 00:14:53.240
+Inny, w nieco innym kontekście, niszczy cały układ strony.
+
+00:14:53.440 --> 00:14:55.700
+Powiązania datavers dodają jeszcze więcej trudności.
+
+00:14:56.000 --> 00:14:58.940
+Mogą działać poprawnie na jednym formularzu, a na innym zawieść w ciszy.
+
+00:14:59.160 --> 00:15:02.120
+Własna dokumentacja Microsoftu przyznaje, że to dziwne zachowanie istnieje.
+
+00:15:02.120 --> 00:15:05.240
+Liquid i datavers zachowują się różnie w zależności od umiejscowienia,
+
+00:15:05.380 --> 00:15:09.260
+co sprawia, że Twoim nieoficjalnym trybem pracy staje się przesuwanie elementów, aż zadziałają.
+
+00:15:09.500 --> 00:15:12.880
+Właśnie tutaj udział Copilota w Power Pages zmienia Twoje szanse.
+
+00:15:13.180 --> 00:15:17.900
+Zamiast tracić popołudnie na ślepe eksperymenty, możesz rzucić na kod odpowiednie światło.
+
+00:15:18.420 --> 00:15:24.120
+Wpisujesz dosłownie w czat Copilota at Power Pages wyjaśnij poniższy kod %include page copy%
+
+00:15:24.120 --> 00:15:27.900
+Żadnego wymijania, żadnych ogólnych porad.
+
+00:15:28.100 --> 00:15:34.980
+Wynikiem jest wyjaśnienie prostym językiem, co robi dany tak, co pobiera i dlaczego jego pozycja na stronie wpływa na zachowanie.
+
+00:15:35.320 --> 00:15:39.200
+W efekcie przestajesz zgadywać i masz wreszcie czytelny zapis ruchów bossa.
+
+00:15:39.380 --> 00:15:42.980
+Aby w pełni z tego skorzystać, zorganizuj swoje debugowanie jak szybkie demo.
+
+00:15:43.220 --> 00:15:44.920
+Najpierw zidentyfikuj błędny fragment.
+
+00:15:45.260 --> 00:15:47.180
+Formularz sypie się zaraz po tagu include.
+
+00:15:47.180 --> 00:15:50.560
+Po drugie, wrzuć ten konkretny kod do Copilota z komendą wyjaśnienia.
+
+00:15:50.740 --> 00:15:54.640
+Po trzecie, wykorzystaj wyjaśnienie Copilota do drobnej poprawki kodu lub zmiany układu.
+
+00:15:54.800 --> 00:15:55.820
+Następnie przetestuj.
+
+00:15:55.980 --> 00:15:58.260
+Kroki są zwięzłe, wyjaśnij, zastosuj, przetestuj.
+
+00:15:58.460 --> 00:16:03.260
+Widzisz wyniki bez wpadania w pułapkę niekończących się prób i błędów, a Copilot idzie znacznie dalej niż tylko tłumaczenie.
+
+00:16:03.440 --> 00:16:05.500
+W tym samym czacie możesz poprosić o poprawkę.
+
+00:16:05.740 --> 00:16:14.380
+Na przykład Copilot może zasugerować zmiany zagnieżdżenia include, aby pasowało do układu strony, albo skorygować JavaScript, by obsługa zdarzeń nie zaujszała konsoli.
+
+00:16:14.380 --> 00:16:21.900
+Dzięki temu, że działa w oparciu o kontekst Twojego obszaru roboczego, Power Pages porady odnoszą się bezpośrednio do Twojego środowiska, zamiast być ogólnymi wskazówkami z sieci.
+
+00:16:22.040 --> 00:16:26.460
+To różnica między przypadkowym sprzedawcą mikstur, a kimś, kto naprawdę zna bossa, z którym walczysz.
+
+00:16:26.600 --> 00:16:27.380
+Korzyść jest natychmiastowa.
+
+00:16:28.200 --> 00:16:32.720
+Zamiast spędzać pół dnia na izolowaniu jednego uszkodzonego powiązania, od razu przechodzisz do zrozumienia przyczyny błędu.
+
+00:16:32.860 --> 00:16:35.600
+To zmienia debagowanie z żmudnego losowania w działanie taktyczne.
+
+00:16:35.840 --> 00:16:39.640
+Widzisz, co się zepsuło? Stosujesz precyzyjną poprawkę i sprawdzasz, czy system się stabilizuje.
+
+00:16:39.640 --> 00:16:44.020
+Mniej przypomina to losowanie kości z przeklętej sakiewki, a bardziej reagowanie na widoczne wzorce.
+
+00:16:44.200 --> 00:16:45.500
+Oto kontrast w praktyce.
+
+00:16:45.740 --> 00:16:50.940
+Wcześniej komunikat o błędzie typu, coś poszło nie tak, sprawiał, że kręciłeś się w kółko wokół problemu.
+
+00:16:51.140 --> 00:16:58.240
+Dzięki wyjaśnieniu kopilota dowiadujesz się, że znacznik include ładuje fragment strony, który w Twoim ustawieniu nadpisywał wymagany kontener.
+
+00:16:58.500 --> 00:17:02.280
+Zmieniasz położenie zgodnie z sugestią kopilota, testujesz ponownie i formularz działa.
+
+00:17:02.500 --> 00:17:04.640
+W trzech krokach przechodzisz od dezorientacji do rozwiązania.
+
+00:17:04.640 --> 00:17:07.860
+Oczywiście jest jedna zasada, którą warto powtarzać.
+
+00:17:07.980 --> 00:17:10.780
+Kopilot przedstawia trafne sugestie, ale nie daje gwarancji.
+
+00:17:11.000 --> 00:17:13.480
+Zawsze sprawdzaj i testuj kod przed wdrożeniem na produkcję.
+
+00:17:13.660 --> 00:17:17.520
+Traktuj wyniki jak poradnik strategiczny, a nie jak gotowy łup, który możesz wyposażyć w ciemno.
+
+00:17:17.680 --> 00:17:20.760
+Oszczędzają czas, ale to Twój osąd zapewnia stabilność systemu.
+
+00:17:20.920 --> 00:17:25.880
+Gdy zbudujesz tę pętlę zwrotną wyjaśnij, dostosuj, potwierdź, zmniejszasz onieśmielający charakter debugowania.
+
+00:17:26.120 --> 00:17:30.380
+Liquid przestaje być chaotycznym psotnikiem, dziwactwa Dataverse przestają być zagadkami,
+
+00:17:30.380 --> 00:17:34.040
+a nawet niespodzianki w JavaScript stają się możliwymi do odparcia atakami.
+
+00:17:34.040 --> 00:17:39.100
+Walka z bossem nadal jest wyzwaniem, ale walczysz z wizją, zamiast zbierać ciosy z nieznanych stron,
+
+00:17:39.240 --> 00:17:41.440
+a ta zmiana perspektywy to prawdziwa wygrana.
+
+00:17:41.680 --> 00:17:44.280
+Debugowanie z kopilotem nie usuwa trudnych zadań.
+
+00:17:44.500 --> 00:17:46.980
+Nadal kodujesz, testujesz i rozwiązujesz problemy,
+
+00:17:47.100 --> 00:17:50.660
+ale przestajesz marnować energię na wpatrywanie się w tajemnicze komunikaty
+
+00:17:50.660 --> 00:17:53.900
+i zyskujesz przewagę, co przygotowuje grunt pod ostatni etap.
+
+00:17:54.140 --> 00:17:58.320
+Oto co oznaczają te wszystkie zmiany, gdy spojrzysz na całość z szerszej perspektywy.
+
+00:17:58.580 --> 00:17:59.960
+Wniosek sprowadza się do tego.
+
+00:18:00.160 --> 00:18:03.280
+Kopilot nie pomija walk, on zmienia sposób, w jaki je toczysz.
+
+00:18:03.280 --> 00:18:06.280
+Przechodzisz od kruchych prób i błędów do kodu wspomaganego przez AI,
+
+00:18:06.460 --> 00:18:09.720
+który tłumaczy swoje działanie, udoskonala się na żądanie i tworzy procesy,
+
+00:18:09.820 --> 00:18:12.720
+w których użytkownicy mogą się poruszać bez rezygnacji z frustracji.
+
+00:18:12.880 --> 00:18:13.800
+Oto pięć korzyści.
+
+00:18:13.940 --> 00:18:17.660
+Usprawnienie szablonów Liquid, przyspieszenie JavaScriptu i walidacji formularzy,
+
+00:18:17.760 --> 00:18:19.660
+proste wyjaśnienia trudnych fragmentów kodu,
+
+00:18:19.840 --> 00:18:22.940
+łatwe wstawianie HTML i Bootstrap dla responsywnych układów
+
+00:18:22.940 --> 00:18:25.160
+oraz uproszczenie wywołań API bez zgadywania.
+
+00:18:25.380 --> 00:18:27.580
+Niektóre funkcje są wciąż w fazie testowej.
+
+00:18:27.580 --> 00:18:31.740
+Administratorzy dzierżawy włączają je w Centrum Kopilot w Power Platform Admin Center,
+
+00:18:31.880 --> 00:18:33.700
+więc sprawdź u nich, jeśli czegoś brakuje.
+
+00:18:33.940 --> 00:18:35.560
+Bo spokonany łup zabezpieczony.
+
+00:18:35.760 --> 00:18:38.220
+Włącz subskrypcję i powiadomienia, aby nie przegapić nowych prezentacji
+
+00:18:38.220 --> 00:18:40.600
+oraz zostaw komentarz z problemem dotyczącym walidacji lub Liquid,
+
+00:18:40.740 --> 00:18:42.480
+którym Kopilot ma zająć się w następnej kolejności.
+
+00:18:42.700 --> 00:18:45.520
+Dopracujemy przyszłe poradniki pod kątem Twoich najtrudniejszych zgłoszeń.
+
+00:18:45.520 --> 00:19:15.500
+Dziękuje za uwagę.

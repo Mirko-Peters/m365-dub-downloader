@@ -1,0 +1,3091 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:03.260
+Hai mai desiderato che Business Central sbrigasse al posto tuo le attività noiose?
+
+00:00:03.660 --> 00:00:06.080
+Come riconciliare pagamenti o scrivere descrizioni di prodotti,
+
+00:00:06.240 --> 00:00:09.080
+invece di sommergerti di clic extra e notate di sofferenza su Excel?
+
+00:00:09.780 --> 00:00:10.740
+Questa è la promessa di Copal.
+
+00:00:11.020 --> 00:00:15.160
+E prima che tu lo chieda, sì, è integrato in Business Central online senza costi aggiuntivi,
+
+00:00:15.780 --> 00:00:18.020
+ma non aspettarti che funzioni sulla tua installazione on-premise.
+
+00:00:18.560 --> 00:00:19.160
+Ecco il punto.
+
+00:00:19.600 --> 00:00:22.060
+La maggior parte degli amministratori non va oltre le demo preconfezionate.
+
+00:00:22.320 --> 00:00:25.220
+Oggi analizzeremo tutto nel dettaglio per mostrarti come far funzionare Copal e tua azienda.
+
+00:00:26.040 --> 00:00:29.060
+Alla fine avrai una lista di controllo da testare nel tuo ambiente sandbox.
+
+00:00:30.000 --> 00:00:33.120
+E tutto inizia dal menu nascosto di cui Microsoft parla malapena.
+
+00:00:33.740 --> 00:00:36.220
+Il menu segreto di Copilot, il vero potere di Copilot,
+
+00:00:36.360 --> 00:00:38.740
+non risiede nei pulsanti appariscenti che vedi sulla scheda cliente.
+
+00:00:39.200 --> 00:00:41.520
+Il vero trucco è ciò che Microsoft ha lasciato sotto la superficie.
+
+00:00:42.140 --> 00:00:45.080
+Troverai quei punti di estensione all'interno dello spazio dei nomi System AI,
+
+00:00:45.640 --> 00:00:48.180
+cerca la code unit Copilot Capability e i relativi Enum.
+
+00:00:48.680 --> 00:00:50.460
+È lì che risiedono i veri ganci per i sviluppatori.
+
+00:00:50.880 --> 00:00:52.660
+Non si tratta di artefatti casuali nei codici sorgere.
+
+00:00:52.980 --> 00:00:56.500
+Sono stati creati per permetterti di definire e registrare le tue funzioni basate sull'IA,
+
+00:00:56.500 --> 00:00:59.620
+invece di aspettare che Microsoft rilasci una nuova demo ogni trimestre.
+
+00:01:00.000 --> 00:01:02.500
+Il menu con cui interagiscono quasi tutti è solo la superficie.
+
+00:01:03.080 --> 00:01:06.160
+Inserisci dati di fatturazione, tieni un riepilogo pulito, magari scrivi una descrizione prodotto.
+
+00:01:07.520 --> 00:01:09.540
+Ma quelli sono scenari dimostrativi per dire guardate funziona.
+
+00:01:10.200 --> 00:01:15.340
+In realtà, le viscere di Business Central contengono oggetti come Copilot Capability e Copilot Availability.
+
+00:01:15.920 --> 00:01:19.220
+In parole povere, la Capability è l'insieme di abilità che stai creando per Copilot.
+
+00:01:20.000 --> 00:01:24.180
+La Availability dice al sistema quando e dove quell'abilità deve apparire per gli utenti finali.
+
+00:01:25.180 --> 00:01:27.620
+Insieme, non sono solo un menu di widget e apre confezionati.
+
+00:01:28.360 --> 00:01:30.740
+Sono un framework per rendere Copilot specifico per la tua azienda.
+
+00:01:31.400 --> 00:01:32.180
+Ecco il punto cruciale.
+
+00:01:32.400 --> 00:01:35.820
+Molti amministratori pensano che Copilot sia completamente blindato come una scatola nera luce.
+
+00:01:36.340 --> 00:01:37.860
+Usano ciò che ci alzano e le spalle vanno avanti.
+
+00:01:38.280 --> 00:01:39.880
+Non vanno mai a cercare controlli extra.
+
+00:01:40.400 --> 00:01:42.360
+Ma a livello di sviluppatore hai diverse levi a disposizione.
+
+00:01:42.360 --> 00:01:46.400
+Sì, esiste un modo per gli amministratori di vedere i risultati di ciò che gli sviluppatori registrano.
+
+00:01:47.140 --> 00:01:50.080
+Vai alla pagina funzionalità Copilot e agente dentro Business Central.
+
+00:01:50.680 --> 00:01:52.380
+Ogni funzionalità che registri appare lì.
+
+00:01:53.120 --> 00:01:55.740
+Gli amministratori possono disattivarle una per una se qualcosa non funziona bene.
+
+00:01:56.180 --> 00:02:00.620
+Quella connessione gli sviluppatori definiscono nella linea L, gli amministratori gestiscono nell'interfaccia
+
+00:02:00.620 --> 00:02:02.740
+e il ponte che rende tutto questo più che pura teoria.
+
+00:02:03.260 --> 00:02:07.700
+Non pensarlo come un dispositivo Apple bloccato ma piuttosto come una console con comandi di debug nascosti.
+
+00:02:08.240 --> 00:02:11.960
+Se tutto ciò che fai è cliccare sul pulsante principale di Copilot e sprecando un sacco di potenziale.
+
+00:02:12.360 --> 00:02:15.080
+È come guidare una Tesla e avanzare solo a passo d'uomo nel traffico.
+
+00:02:15.900 --> 00:02:19.620
+L'interruttore della modalità Ludiclus esiste, ma finché non lo aziona resta girare a vuoto.
+
+00:02:20.120 --> 00:02:20.760
+La stessa cosa qui.
+
+00:02:21.020 --> 00:02:25.180
+Gli oggetti dello spazio dei nomi sono già nel tuo tenant, ma se non sai dove guardare, non li userai mai.
+
+00:02:25.680 --> 00:02:27.240
+Quindi di quanta potenza stiamo parlando?
+
+00:02:28.080 --> 00:02:30.960
+Il modulo I all'interno di Business Central offre completamente di testo,
+
+00:02:31.020 --> 00:02:34.720
+completamente in stile chat per flussi di lavoro e embedding per la ricerca semantica.
+
+00:02:35.780 --> 00:02:39.220
+Ciò significa che puoi costruire una funzionalità che ad esempio redige ordini di acquisto
+
+00:02:39.220 --> 00:02:42.180
+basati sui modelli della tua azienda invece che sulle ipotesi di Microsoft.
+
+00:02:42.360 --> 00:02:45.920
+Significa anche che puoi creare assistenti che parlano con la voce della tua azienda,
+
+00:02:46.020 --> 00:02:47.940
+non come una sterile circolare delle risorse umane.
+
+00:02:48.520 --> 00:02:50.140
+È una breve nota prima che qualcuno si faccia stranetto.
+
+00:02:50.560 --> 00:02:53.560
+La funzione di anteprima della chat con Copilot che potresti aver visto in Business Central
+
+00:02:53.560 --> 00:02:55.000
+non è estendibile tramite questo modulo.
+
+00:02:55.500 --> 00:02:56.520
+Quella chat segue una propria strada.
+
+00:02:56.960 --> 00:02:59.800
+Ciò che puoi estendere avviene tramite il modello di capacità descritto qui.
+
+00:03:00.120 --> 00:03:02.620
+Microsoft non è stata molto brava a far emergere questo aspetto nel suo mago.
+
+00:03:03.020 --> 00:03:06.760
+Sia nei documenti, ma sepolto in una sezione tecnica arida che pochi amministratori leggono.
+
+00:03:06.880 --> 00:03:09.260
+Ma una volta che sai che questi oggetti esistono in quadro campo.
+
+00:03:09.260 --> 00:03:12.240
+Ogni stranezza finanziaria, ogni bizzarro campo personalizzato,
+
+00:03:12.440 --> 00:03:13.980
+ogni complesso flusso di approvazione,
+
+00:03:14.360 --> 00:03:16.640
+tutto può essere gestito con la tua funzionalità Copilot.
+
+00:03:17.120 --> 00:03:19.460
+Invece di aspettare che Redmond cali qualcosa dall'alto,
+
+00:03:19.680 --> 00:03:21.960
+puoi adattare l'assistente direttamente al tuo ambiente.
+
+00:03:23.040 --> 00:03:25.420
+Naturalmente nulla di così potente arriva senza etichette di avvertenza.
+
+00:03:25.780 --> 00:03:26.680
+Questi sono strumenti affidati.
+
+00:03:26.980 --> 00:03:29.220
+Registrare le funzionalità in moderato può creare conflitti,
+
+00:03:29.340 --> 00:03:31.160
+specialmente quando Microsoft rilascia aggiornamenti.
+
+00:03:31.160 --> 00:03:35.200
+Se sbagli, all'improvviso, sandbox si rompe o, peggio, blocchi gli utenti in produzione.
+
+00:03:35.820 --> 00:03:38.400
+Ecco perché la pagina delle funzionalità di Copilot è degli agenti importanti.
+
+00:03:39.020 --> 00:03:40.480
+Non solo offre visibilità agli amministratori,
+
+00:03:40.540 --> 00:03:41.860
+ma ti dà un interruttore di arresto rapido
+
+00:03:41.860 --> 00:03:44.160
+se il tuo cervello personalizzato inizia a comportarsi male.
+
+00:03:44.800 --> 00:03:45.880
+Quindi il vantaggio qui è semplice.
+
+00:03:46.320 --> 00:03:47.880
+Sì, c'è un menu segreto sotto Copilot.
+
+00:03:48.300 --> 00:03:49.300
+Sì, è già presente in ogni tenant.
+
+00:03:49.700 --> 00:03:52.600
+E sì, trasforma Copilot da un giocattolo dimostrativo in qualcosa di utile,
+
+00:03:52.660 --> 00:03:54.320
+ma sapere che esiste è solo il primo passo.
+
+00:03:54.320 --> 00:03:57.340
+Il vero trucco è registrare quelle funzionalità in modo sicuro,
+
+00:03:57.420 --> 00:03:59.660
+così da aggiungere potenza senza bruciare il tuo ambiente.
+
+00:04:00.920 --> 00:04:01.740
+Ed è qui che andremo dopo.
+
+00:04:03.120 --> 00:04:04.800
+Registrare senza bruciare il tuo tenant.
+
+00:04:05.480 --> 00:04:08.360
+Registrare una funzionalità Copilot non è un vago trucco magico.
+
+00:04:09.100 --> 00:04:11.880
+In termini semplici a L significa creare un'estensione enum
+
+00:04:11.880 --> 00:04:13.380
+per l'enum della funzionalità Copilot
+
+00:04:13.380 --> 00:04:15.540
+e poi usare una code unit di installazione e aggiornamento
+
+00:04:15.540 --> 00:04:16.960
+che chiama la funzionalità Copilot.
+
+00:04:17.780 --> 00:04:18.560
+Registra funzionalità.
+
+00:04:18.960 --> 00:04:20.800
+È la stretta di mano con cui dice Business Central.
+
+00:04:21.120 --> 00:04:22.020
+Ecco una nuova funzione IA.
+
+00:04:22.420 --> 00:04:23.480
+Trattala come parte del sistema.
+
+00:04:23.480 --> 00:04:26.300
+Senza quella chiamata la tua estensione potrebbe compilarsi
+
+00:04:26.300 --> 00:04:28.220
+ma Copilot non saprà nemmeno che la funzione esiste.
+
+00:04:28.860 --> 00:04:30.840
+Immaginala come la presentazione di documenti per il risorso no.
+
+00:04:31.180 --> 00:04:34.560
+Nessun record nell'organigramma, nessuna scrivania, nessuna email, nessun dipendente.
+
+00:04:35.340 --> 00:04:38.980
+Una volta definita la base, il dettaglio successivo riguarda ambito e nomenclatura.
+
+00:04:39.800 --> 00:04:42.140
+Ogni funzionalità che registri vive nello stesso ecosistema
+
+00:04:42.140 --> 00:04:43.720
+che Microsoft aggiorna costantemente.
+
+00:04:44.300 --> 00:04:46.640
+Se ricicli un nome generico o riservi un ID approssimativo
+
+00:04:46.640 --> 00:04:48.240
+stai praticamente cercando un conflitto.
+
+00:04:48.820 --> 00:04:51.100
+Diciamo che la chiami Sales Helper e la contrassegni con un valore enum.
+
+00:04:51.100 --> 00:04:55.360
+Poi Microsoft rilascia un futuro aggiornamento con una funzionalità integrata nello stesso spazio.
+
+00:04:56.020 --> 00:04:57.680
+All'improvviso il sistema non sa quale mostrare
+
+00:04:57.680 --> 00:04:59.980
+e tuo codice va in conflitto con Redmond durante l'esecuzione.
+
+00:05:00.560 --> 00:05:01.980
+La soluzione è noiosa ma è essenziale.
+
+00:05:02.540 --> 00:05:04.400
+Scegli i nomi univoci e assegni ai tuoi valori enum
+
+00:05:04.400 --> 00:05:05.860
+che non si sovrappongono a quelli comuni
+
+00:05:05.860 --> 00:05:07.780
+e dai una versione deliberata all'intera estensione.
+
+00:05:08.320 --> 00:05:09.920
+Aggiungi i numeri di versione per monitorare
+
+00:05:09.920 --> 00:05:11.240
+se il sandbox è alla 1.2
+
+00:05:11.240 --> 00:05:13.120
+mentre la produzione è ancora alla 1.0.
+
+00:05:13.900 --> 00:05:15.300
+E se qualcosa cambia nella piattaforma
+
+00:05:15.300 --> 00:05:16.540
+le tue code unit di aggiornamento
+
+00:05:16.540 --> 00:05:18.820
+sono lo strumento per portare avanti la funzionalità in sicurezza.
+
+00:05:19.600 --> 00:05:21.600
+Senza di quelle stai attaccando con il nastro adesivo
+
+00:05:21.600 --> 00:05:23.160
+nuovi cavi in un vecchio quadro elettrico
+
+00:05:23.160 --> 00:05:24.460
+sperando che nulla prenda fuoco.
+
+00:05:24.900 --> 00:05:26.880
+Ecco dove troppi sviluppatori diventano superficiali.
+
+00:05:27.300 --> 00:05:28.900
+Pubblicano l'estensione direttamente in produzione
+
+00:05:28.900 --> 00:05:30.060
+perché ha solo una funzionalità.
+
+00:05:30.700 --> 00:05:31.980
+È lì che il tuo plasco viene preso da sempre.
+
+00:05:31.980 --> 00:05:33.280
+Il percorso corretto è semplice.
+
+00:05:33.660 --> 00:05:34.340
+Prima sono in sandbox.
+
+00:05:35.080 --> 00:05:36.720
+Rompi, la rifattorizza, la testala di nuovo
+
+00:05:36.720 --> 00:05:38.560
+e solo quando funziona correttamente passa la produzione.
+
+00:05:39.140 --> 00:05:40.800
+Quello rilascio controllato riduce le sorprese.
+
+00:05:41.240 --> 00:05:42.540
+E non si tratta solo di compilare codice,
+
+00:05:42.700 --> 00:05:43.460
+si tratta di governance.
+
+00:05:44.360 --> 00:05:45.740
+La pagina delle funzionalità di Copilot
+
+00:05:45.740 --> 00:05:46.940
+e degli agenti in Business Central
+
+00:05:46.940 --> 00:05:48.180
+funge anche da controllo di validità.
+
+00:05:48.860 --> 00:05:51.140
+Se la tua funzionalità non appare lì dopo la registrazione
+
+00:05:51.140 --> 00:05:52.620
+non è registrata correttamente.
+
+00:05:53.380 --> 00:05:54.440
+Quella pagina riflette dal sistema.
+
+00:05:54.980 --> 00:05:56.040
+Solo dopo averla validata lì
+
+00:05:56.040 --> 00:05:58.020
+dovresti consegnarla per la revisione dell'amministratore.
+
+00:05:58.720 --> 00:05:59.960
+E a proposito di amministratori
+
+00:05:59.960 --> 00:06:02.000
+attivare e disattivare le funzionalità di Copilot
+
+00:06:02.000 --> 00:06:03.660
+oltre a configurare il movimento dei dati
+
+00:06:03.660 --> 00:06:05.500
+è qualcosa che possono fare solo gli amministratori
+
+00:06:05.500 --> 00:06:07.820
+con super permessi un ruolo di amministratore di Business Central.
+
+00:06:09.020 --> 00:06:10.740
+Pianifica questo passaggio di governance in antico.
+
+00:06:11.300 --> 00:06:12.100
+Un rapido consiglio
+
+00:06:12.100 --> 00:06:13.740
+quando registri user parametro opzionale
+
+00:06:13.740 --> 00:06:15.000
+LearnMoreURL.txt
+
+00:06:15.000 --> 00:06:18.100
+Questo apparirà direttamente nella pagina di amministrazione
+
+00:06:18.100 --> 00:06:19.780
+delle funzionalità di Copilot e degli agenti.
+
+00:06:20.360 --> 00:06:22.400
+Non è solo un tocco di classe, documentazione integrata.
+
+00:06:23.260 --> 00:06:24.780
+Invece di far cercare agli amministratori
+
+00:06:24.780 --> 00:06:26.320
+un link wiki o disturbarti su Teams
+
+00:06:26.320 --> 00:06:28.200
+possono cliccare direttamente sulla descrizione
+
+00:06:28.200 --> 00:06:30.140
+di cosa fa la funzionalità e come usarla.
+
+00:06:30.680 --> 00:06:31.940
+Immaginano come scrivere le istruzioni
+
+00:06:31.940 --> 00:06:33.360
+direttamente sull'interruttore della luce
+
+00:06:33.360 --> 00:06:35.160
+così la persona successiva non premerà quello sbagliato.
+
+00:06:35.540 --> 00:06:37.500
+Ecco una lista di best practice che riduce i rischi.
+
+00:06:38.100 --> 00:06:39.780
+Primo, esegui tutto in un ambiente sandbox
+
+00:06:39.780 --> 00:06:40.520
+prima della produzione.
+
+00:06:40.860 --> 00:06:42.040
+Secondo, scegli valori enum
+
+00:06:42.040 --> 00:06:43.500
+univoci ed evita intervalli comuni.
+
+00:06:44.080 --> 00:06:45.960
+Terzo, usa sempre unità di aggiornamento
+
+00:06:45.960 --> 00:06:47.760
+di installazione per percorsi puliti.
+
+00:06:48.280 --> 00:06:49.700
+Quarto, lega l'URL di approfondimento
+
+00:06:49.700 --> 00:06:51.440
+così gli amministratori non dovranno tirare a indovinare.
+
+00:06:51.920 --> 00:06:52.860
+Segui queste quattro regole
+
+00:06:52.860 --> 00:06:53.900
+e manterrai il tuo tennis double.
+
+00:06:54.360 --> 00:06:56.140
+Ignorale e ti ritroverai a ripristinare database
+
+00:06:58.200 --> 00:06:59.120
+il parcheggio è ancora valida.
+
+00:06:59.580 --> 00:07:00.600
+Registrare una funzionalità
+
+00:07:00.600 --> 00:07:02.080
+è come riservare ufficialmente un posto
+
+00:07:02.080 --> 00:07:02.840
+per la tua nuova auto.
+
+00:07:03.440 --> 00:07:04.660
+Compila la documentazione corretta
+
+00:07:04.660 --> 00:07:05.720
+sarà tua e tutti saranno feliti.
+
+00:07:06.360 --> 00:07:08.040
+Salta il processo, parcheggia in zona rossa
+
+00:07:08.040 --> 00:07:09.840
+e bloccherai l'accesso ai vigili del fuoco
+
+00:07:09.840 --> 00:07:10.700
+facendo arrabbiare tutti.
+
+00:07:10.960 --> 00:07:12.100
+La registrazione serve a creare
+
+00:07:12.100 --> 00:07:13.760
+uno spazio sicuro per la tua funzionalità
+
+00:07:13.760 --> 00:07:15.640
+affinché Business Central e aggiornamenti Microsoft
+
+00:07:15.640 --> 00:07:16.800
+possano coesistere a lungo.
+
+00:07:17.220 --> 00:07:18.520
+In sintesi, tratta la registrazione
+
+00:07:18.520 --> 00:07:19.540
+come codice di produzione
+
+00:07:19.540 --> 00:07:20.620
+perché è esattamente ciò che è.
+
+00:07:21.260 --> 00:07:23.020
+Testa in sandbox, mantieni il tuo scopo univo
+
+00:07:23.020 --> 00:07:24.240
+e traccia le versioni in direttuità
+
+00:07:24.240 --> 00:07:25.700
+di codice di aggiornamento a prova di errore.
+
+00:07:26.080 --> 00:07:27.180
+Se succede qualcosa di strano
+
+00:07:27.180 --> 00:07:28.700
+la pagina delle funzionalità di Copilot
+
+00:07:28.700 --> 00:07:29.320
+e degli agenti
+
+00:07:29.320 --> 00:07:30.740
+insieme al tuo URL di approfondimento
+
+00:07:30.740 --> 00:07:31.900
+permetteranno agli amministratori
+
+00:07:31.900 --> 00:07:32.640
+di trovare e capire
+
+00:07:32.640 --> 00:07:34.060
+se è necessario disattivare la funzione.
+
+00:07:34.840 --> 00:07:36.820
+Fatta bene, la registrazione garantisce stabilità.
+
+00:07:37.400 --> 00:07:38.920
+Fatta male, ti prepara al caos.
+
+00:07:39.660 --> 00:07:41.120
+Una volta consolidato questo aspetto
+
+00:07:41.120 --> 00:07:42.160
+noterei che la funzionalità
+
+00:07:42.160 --> 00:07:43.440
+è operativa ma generica.
+
+00:07:44.180 --> 00:07:45.340
+Risponde ma senza carattere.
+
+00:07:45.820 --> 00:07:47.120
+È come assumere una persona brillante
+
+00:07:47.120 --> 00:07:48.060
+che si presenta alle riunioni.
+
+00:07:48.840 --> 00:07:50.680
+Passo successivo è insegnare al tuo Copilot
+
+00:07:50.680 --> 00:07:51.460
+come comportarsi
+
+00:07:51.460 --> 00:07:53.540
+perché altrimenti suonerà meno come un assistente fidato
+
+00:07:53.540 --> 00:07:54.400
+più come un adolescente
+
+00:07:54.400 --> 00:07:55.340
+che alza gli occhi al cielo
+
+00:07:55.340 --> 00:07:56.280
+davanti alle tue domande.
+
+00:08:06.650 --> 00:08:08.390
+Nella documentazione per sviluppatori Microsoft
+
+00:08:08.390 --> 00:08:10.470
+un metaprompt è il messaggio di sistema principale
+
+00:08:10.470 --> 00:08:11.830
+che definisce il profilo del modello
+
+00:08:11.830 --> 00:08:13.450
+il formato di output e linee guida.
+
+00:08:14.110 --> 00:08:14.770
+In parole semplici
+
+00:08:14.770 --> 00:08:15.870
+c'è la descrizione del lavoro di lui.
+
+00:08:16.530 --> 00:08:17.750
+Un prompt utente è una tantum
+
+00:08:17.750 --> 00:08:18.870
+ma è una richiesta specifica
+
+00:08:18.870 --> 00:08:19.810
+mentre il metaprompt
+
+00:08:19.810 --> 00:08:20.850
+sono istruzioni permanenti
+
+00:08:20.850 --> 00:08:21.910
+integrate in ogni risposta.
+
+00:08:22.690 --> 00:08:23.590
+Senza di esso Copilot
+
+00:08:23.590 --> 00:08:25.190
+non sa se deve suonare come un contabile
+
+00:08:25.190 --> 00:08:26.030
+o un copywriter.
+
+00:08:26.490 --> 00:08:27.090
+Terrà semplice venere.
+
+00:08:27.590 --> 00:08:28.150
+Mettiamola così
+
+00:08:28.150 --> 00:08:29.210
+non assumeresti mai nessuno
+
+00:08:29.210 --> 00:08:30.750
+senza fornire una descrizione del ruolo.
+
+00:08:31.470 --> 00:08:32.050
+Il metaprompt
+
+00:08:32.050 --> 00:08:33.390
+è esattamente questo per l'IA.
+
+00:08:34.250 --> 00:08:34.890
+Dice a Copilot
+
+00:08:34.890 --> 00:08:35.950
+quando rimanere formale
+
+00:08:35.950 --> 00:08:37.390
+come formattare i risultati
+
+00:08:37.390 --> 00:08:38.270
+quale tono usare
+
+00:08:38.270 --> 00:08:39.790
+e cosa deve assolutamente evitare.
+
+00:08:40.690 --> 00:08:41.430
+Questo fa la differenza
+
+00:08:41.430 --> 00:08:42.450
+tra risposte che si adattano
+
+00:08:42.450 --> 00:08:43.210
+al tuo flusso di lavoro
+
+00:08:43.210 --> 00:08:44.070
+e risposte che sembrano
+
+00:08:44.070 --> 00:08:44.530
+un vecchio clip
+
+00:08:44.530 --> 00:08:45.590
+con opinioni personali.
+
+00:08:46.370 --> 00:08:46.970
+Gli amministratori
+
+00:08:46.970 --> 00:08:48.190
+spesso confondono i metaprompt
+
+00:08:48.190 --> 00:08:48.670
+con i prompt
+
+00:08:48.670 --> 00:08:49.790
+motivo per cui si frustrano.
+
+00:08:50.430 --> 00:08:51.450
+Se lanci semplicemente
+
+00:08:51.450 --> 00:08:52.650
+dammi le voci di registro
+
+00:08:52.650 --> 00:08:54.010
+a Copilot senza contesto
+
+00:08:54.010 --> 00:08:55.130
+inventerà il proprio stile.
+
+00:08:56.030 --> 00:08:56.950
+Magari paragrafi lunghi
+
+00:08:56.950 --> 00:08:58.390
+magari campi che non esistono.
+
+00:08:59.130 --> 00:09:00.110
+Inserisci la stessa richiesta
+
+00:09:00.110 --> 00:09:00.750
+nel metaprompt
+
+00:09:00.750 --> 00:09:02.090
+come se è un assistente finanziario.
+
+00:09:02.430 --> 00:09:03.630
+Fornisce sempre le voci di registro
+
+00:09:03.630 --> 00:09:04.430
+come elenchi puntati
+
+00:09:04.430 --> 00:09:05.250
+usando i nomi dei campi
+
+00:09:05.250 --> 00:09:06.030
+di Business Central.
+
+00:09:06.610 --> 00:09:07.190
+Solo un esempio.
+
+00:09:07.630 --> 00:09:08.030
+All'improvviso
+
+00:09:08.030 --> 00:09:08.790
+le risposte sono pulite
+
+00:09:08.790 --> 00:09:10.070
+e strutturate di facile consultazione.
+
+00:09:10.730 --> 00:09:11.710
+Il guardrail viene impostato
+
+00:09:11.710 --> 00:09:12.110
+ancora prima
+
+00:09:12.110 --> 00:09:13.090
+che la richiesta venga eseguita.
+
+00:09:13.790 --> 00:09:14.490
+Microsoft ha introdotto
+
+00:09:14.490 --> 00:09:15.470
+questa distinzione di proposito.
+
+00:09:16.030 --> 00:09:17.450
+I prompt sono richieste temporanee
+
+00:09:17.450 --> 00:09:18.210
+mentre i metaprompt
+
+00:09:18.210 --> 00:09:19.110
+rimangono persistenti
+
+00:09:19.110 --> 00:09:20.110
+per tutto il contesto della chat.
+
+00:09:20.310 --> 00:09:20.950
+Gli sviluppatori
+
+00:09:20.950 --> 00:09:21.850
+li impostano tramite
+
+00:09:21.850 --> 00:09:22.530
+la code unit
+
+00:09:22.530 --> 00:09:23.950
+dei messaggi chat AOAI
+
+00:09:23.950 --> 00:09:24.350
+chiamando
+
+00:09:24.350 --> 00:09:25.930
+Set Primary System Message.
+
+00:09:27.190 --> 00:09:28.170
+Memorizzare il metaprompt
+
+00:09:28.170 --> 00:09:29.590
+in uno spazio di archiviazione isolato
+
+00:09:29.590 --> 00:09:30.630
+permette alla tua estensione
+
+00:09:30.630 --> 00:09:31.170
+di recuperarlo
+
+00:09:31.170 --> 00:09:32.210
+e aggiornarlo in sicurezza
+
+00:09:32.210 --> 00:09:33.530
+invece di scrivere il testo
+
+00:09:33.530 --> 00:09:34.570
+direttamente nel file AL.
+
+00:09:35.190 --> 00:09:35.850
+Se hai dato un'occhiata
+
+00:09:35.850 --> 00:09:36.610
+alla documentazione
+
+00:09:36.610 --> 00:09:37.270
+vedrai esempi
+
+00:09:37.270 --> 00:09:37.610
+che usano
+
+00:09:37.610 --> 00:09:38.690
+Isolated Storage Set
+
+00:09:38.690 --> 00:09:40.370
+e Isolated Storage Cat.
+
+00:09:40.930 --> 00:09:41.510
+È il modello corretto
+
+00:09:41.510 --> 00:09:41.950
+per l'eduzione.
+
+00:09:42.410 --> 00:09:43.390
+Mantieni il tuo metaprompt
+
+00:09:43.390 --> 00:09:43.910
+disponibile
+
+00:09:43.910 --> 00:09:44.390
+ma protetto
+
+00:09:44.390 --> 00:09:45.430
+dal perimetro di sicurezza
+
+00:09:45.430 --> 00:09:46.170
+dell'estensione.
+
+00:09:46.790 --> 00:09:47.830
+Passiamo ora ai dettagli tecnici.
+
+00:09:48.190 --> 00:09:48.930
+Quando invii l'input
+
+00:09:48.930 --> 00:09:49.430
+dell'utente
+
+00:09:49.430 --> 00:09:50.510
+al servizio Azure Open AI
+
+00:09:50.510 --> 00:09:51.470
+tramite il modulo AI
+
+00:09:51.470 --> 00:09:52.190
+di Business Central
+
+00:09:52.190 --> 00:09:53.130
+hai a che fare con budget
+
+00:09:53.130 --> 00:09:53.450
+di token
+
+00:09:53.450 --> 00:09:54.450
+impostazioni di temperatura
+
+00:09:54.450 --> 00:09:55.170
+che ti piaccia o no.
+
+00:09:56.210 --> 00:09:56.750
+Budget dei token
+
+00:09:56.750 --> 00:09:57.470
+sono importanti.
+
+00:09:57.570 --> 00:09:58.110
+Tuo metaprompt
+
+00:09:58.110 --> 00:09:59.050
+più il prompt dell'utente
+
+00:09:59.050 --> 00:09:59.610
+contano ai fini
+
+00:09:59.610 --> 00:10:00.310
+del limite di token
+
+00:10:00.310 --> 00:10:00.670
+da modello.
+
+00:10:01.070 --> 00:10:02.050
+Quindi non inserire messaggi
+
+00:10:02.050 --> 00:10:02.570
+di sistema lunghi
+
+00:10:02.570 --> 00:10:02.930
+come Roma.
+
+00:10:03.530 --> 00:10:03.970
+Sii preciso
+
+00:10:03.970 --> 00:10:05.070
+e la temperatura
+
+00:10:05.070 --> 00:10:05.850
+controlla la casualità.
+
+00:10:06.270 --> 00:10:07.570
+Imposta una temperatura bassa
+
+00:10:07.570 --> 00:10:08.370
+vicino allo zero
+
+00:10:08.370 --> 00:10:09.110
+per scenari finanziari
+
+00:10:09.110 --> 00:10:09.870
+in cui servono output
+
+00:10:09.870 --> 00:10:10.450
+deterministici
+
+00:10:10.450 --> 00:10:11.170
+e precisi nei campi.
+
+00:10:11.710 --> 00:10:12.210
+Se stai creando
+
+00:10:12.210 --> 00:10:13.230
+una funzionalità di marketing
+
+00:10:13.230 --> 00:10:14.110
+vuoi bozze più creative
+
+00:10:14.110 --> 00:10:14.910
+alza la temperatura
+
+00:10:14.910 --> 00:10:16.090
+e lascia che improvvisi.
+
+00:10:16.590 --> 00:10:17.330
+Non si tratta di indovinare.
+
+00:10:17.710 --> 00:10:17.950
+È scritto
+
+00:10:17.950 --> 00:10:18.670
+nelle guide di sviluppo.
+
+00:10:19.130 --> 00:10:19.750
+Un'altra promemoria
+
+00:10:19.750 --> 00:10:20.310
+sulla conformità.
+
+00:10:20.310 --> 00:10:21.090
+A revisori
+
+00:10:21.090 --> 00:10:21.810
+non importerà nulla
+
+00:10:21.810 --> 00:10:22.430
+della tua creatività.
+
+00:10:22.810 --> 00:10:23.290
+Allora interessa
+
+00:10:23.290 --> 00:10:24.070
+che i numeri corrispondano.
+
+00:10:24.610 --> 00:10:25.250
+Il tuo metaprompt
+
+00:10:25.250 --> 00:10:25.910
+dovrebbe includere
+
+00:10:25.910 --> 00:10:27.170
+regole di formatazione esplicite
+
+00:10:27.170 --> 00:10:28.010
+strutture di risposta
+
+00:10:28.010 --> 00:10:28.570
+e restrizioni
+
+00:10:28.570 --> 00:10:29.570
+su commenti rilevanti.
+
+00:10:30.410 --> 00:10:30.970
+In questo modo
+
+00:10:30.970 --> 00:10:31.790
+gli output di Copilot
+
+00:10:31.790 --> 00:10:32.710
+non sono solo gradevoli
+
+00:10:32.710 --> 00:10:33.150
+per gli utenti.
+
+00:10:33.490 --> 00:10:34.290
+Soprovvivono ai sistemi
+
+00:10:34.290 --> 00:10:35.130
+a valle e controlli.
+
+00:10:35.790 --> 00:10:36.610
+Considera il metaprompt
+
+00:10:36.610 --> 00:10:37.690
+come parte documentazione
+
+00:10:37.690 --> 00:10:38.610
+e parte controllo del rischio.
+
+00:10:39.030 --> 00:10:39.910
+La distinzione di personalità
+
+00:10:39.910 --> 00:10:40.310
+è dove le cose
+
+00:10:40.310 --> 00:10:40.910
+si fanno interessate.
+
+00:10:41.270 --> 00:10:41.790
+Il metaprompt
+
+00:10:41.790 --> 00:10:42.790
+del copilot di marketing
+
+00:10:42.790 --> 00:10:43.390
+potrebbe dirgli
+
+00:10:43.390 --> 00:10:44.450
+di usare un linguaggio persuasivo
+
+00:10:44.450 --> 00:10:45.170
+e di inventare slogan
+
+00:10:45.170 --> 00:10:45.650
+per i prodotti.
+
+00:10:46.070 --> 00:10:47.050
+Mentre il copilot finanziario
+
+00:10:47.050 --> 00:10:48.030
+dice produci registrazioni
+
+00:10:48.030 --> 00:10:48.850
+contabili strutturate
+
+00:10:48.850 --> 00:10:49.490
+senza aggettivi.
+
+00:10:50.570 --> 00:10:51.350
+Stessa AI di base
+
+00:10:51.350 --> 00:10:52.550
+e risultati completamente diversi
+
+00:10:52.550 --> 00:10:53.070
+perché definisci
+
+00:10:53.070 --> 00:10:54.230
+la personalità in anticipo.
+
+00:10:54.910 --> 00:10:55.470
+Questa è la differenza
+
+00:10:55.470 --> 00:10:56.450
+tra un'automazione pratica
+
+00:10:56.450 --> 00:10:57.350
+e output ingannevoli
+
+00:10:57.350 --> 00:10:58.410
+che nessuno può usare davvero.
+
+00:10:59.170 --> 00:10:59.970
+E anche se questa sezione
+
+00:10:59.970 --> 00:11:00.810
+riguarda le buone maniere
+
+00:11:00.810 --> 00:11:01.330
+non può ignorare
+
+00:11:01.330 --> 00:11:02.230
+l'infrastruttura sottostante.
+
+00:11:02.870 --> 00:11:03.670
+I metaprom funzionano
+
+00:11:03.670 --> 00:11:04.370
+solo se la connessione
+
+00:11:04.370 --> 00:11:04.650
+da Azure
+
+00:11:04.650 --> 00:11:05.610
+è configurata correttamente.
+
+00:11:06.530 --> 00:11:07.310
+Le AI non li elabora
+
+00:11:07.310 --> 00:11:07.810
+localmente
+
+00:11:07.810 --> 00:11:08.590
+in Business Central.
+
+00:11:08.990 --> 00:11:09.770
+Passa tutto attraverso
+
+00:11:09.770 --> 00:11:10.250
+il back-end
+
+00:11:10.250 --> 00:11:11.270
+di Azure Open AI.
+
+00:11:11.270 --> 00:11:13.030
+Se sbagli quella pipeline
+
+00:11:13.030 --> 00:11:13.730
+non conterà quanto
+
+00:11:13.730 --> 00:11:14.510
+bene hai scritto le regole.
+
+00:11:14.810 --> 00:11:15.510
+Avrai comunque errori
+
+00:11:15.510 --> 00:11:16.070
+e forse peggio
+
+00:11:16.070 --> 00:11:16.690
+chiavi attivate
+
+00:11:16.690 --> 00:11:17.210
+in modo errato.
+
+00:11:17.650 --> 00:11:18.070
+In sintesi
+
+00:11:18.070 --> 00:11:18.850
+i prompt sono richiesti.
+
+00:11:19.150 --> 00:11:20.190
+Metaprom sono ordini permanenti.
+
+00:11:20.810 --> 00:11:21.250
+Scrivili bene
+
+00:11:21.250 --> 00:11:22.170
+e conservali in modo sicuro
+
+00:11:22.170 --> 00:11:22.910
+controlla i token
+
+00:11:22.910 --> 00:11:23.950
+e imposta la temperatura
+
+00:11:23.950 --> 00:11:24.830
+adatta al compito.
+
+00:11:25.410 --> 00:11:26.150
+È così che trasformi
+
+00:11:26.150 --> 00:11:26.490
+il copilot
+
+00:11:26.490 --> 00:11:27.510
+a un chiacchierone casuale
+
+00:11:27.510 --> 00:11:28.730
+in un assistente specifico
+
+00:11:28.730 --> 00:11:29.530
+di cui ti puoi fidare.
+
+00:11:30.490 --> 00:11:31.630
+Se lavori con negligenza
+
+00:11:31.630 --> 00:11:32.350
+passerai le notti
+
+00:11:32.350 --> 00:11:33.450
+a correggere sciocchezze
+
+00:11:33.450 --> 00:11:33.950
+ma nemmeno.
+
+00:11:34.330 --> 00:11:34.990
+Il miglior prompt
+
+00:11:34.990 --> 00:11:35.630
+ti salverà
+
+00:11:35.630 --> 00:11:36.410
+se le credenziali
+
+00:11:36.410 --> 00:11:37.130
+sono esposte.
+
+00:11:37.130 --> 00:11:38.890
+Il vero pericolo
+
+00:11:38.890 --> 00:11:39.670
+non è nel tono
+
+00:11:39.670 --> 00:11:40.370
+o nel formato
+
+00:11:40.370 --> 00:11:41.090
+ma in come proteggi
+
+00:11:41.090 --> 00:11:41.450
+le chiavi
+
+00:11:41.450 --> 00:11:41.950
+che permettono
+
+00:11:41.950 --> 00:11:42.330
+a Copilot
+
+00:11:42.330 --> 00:11:42.910
+di comunicare
+
+00:11:42.910 --> 00:11:43.810
+con Azure Open AI.
+
+00:11:45.590 --> 00:11:46.430
+Proteggere le chiavi
+
+00:11:46.430 --> 00:11:46.950
+la sicurezza
+
+00:11:46.950 --> 00:11:47.730
+azzur fatta bene.
+
+00:11:48.670 --> 00:11:49.390
+Proteggere le chiavi
+
+00:11:49.390 --> 00:11:50.190
+non è affascinante
+
+00:11:50.190 --> 00:11:51.170
+ma è ciò che mantiene
+
+00:11:51.170 --> 00:11:52.090
+sicuro il tuo tenant
+
+00:11:52.090 --> 00:11:53.150
+evitando incidenti.
+
+00:11:54.330 --> 00:11:54.910
+Quando Copilot
+
+00:11:54.910 --> 00:11:55.870
+chiama Azure Open AI
+
+00:11:55.870 --> 00:11:56.630
+necessita sempre
+
+00:11:56.630 --> 00:11:57.570
+di tre elementi.
+
+00:11:58.530 --> 00:11:59.550
+L'endpoint della risorsa
+
+00:11:59.550 --> 00:12:00.370
+ovvero l'URL
+
+00:12:00.370 --> 00:12:01.210
+di Azure Open AI
+
+00:12:01.210 --> 00:12:01.550
+in nome
+
+00:12:01.550 --> 00:12:02.630
+della distribuzione
+
+00:12:02.630 --> 00:12:03.310
+e la chiave API.
+
+00:12:04.190 --> 00:12:04.490
+Insieme
+
+00:12:04.490 --> 00:12:05.210
+questi tre formano
+
+00:12:05.210 --> 00:12:05.790
+la stretta di mano
+
+00:12:05.790 --> 00:12:06.750
+che autorizza il tuo tenant
+
+00:12:06.750 --> 00:12:07.690
+a dialogare con il modello.
+
+00:12:08.490 --> 00:12:09.150
+Lasciarne anche solo
+
+00:12:09.150 --> 00:12:09.610
+un esposto
+
+00:12:09.610 --> 00:12:10.390
+non significa fare
+
+00:12:10.390 --> 00:12:11.110
+IA ma simulare
+
+00:12:11.110 --> 00:12:11.770
+una violazione.
+
+00:12:12.570 --> 00:12:13.030
+Siamo chiari
+
+00:12:13.030 --> 00:12:13.750
+non inserire mai
+
+00:12:13.750 --> 00:12:14.250
+questi valori
+
+00:12:14.250 --> 00:12:15.310
+direttamente nel codice
+
+00:12:15.310 --> 00:12:15.790
+AL.
+
+00:12:16.710 --> 00:12:17.930
+Se inserisci una chiave API
+
+00:12:17.930 --> 00:12:18.650
+nel codice
+
+00:12:18.650 --> 00:12:19.570
+o su GitHub
+
+00:12:19.570 --> 00:12:20.250
+per comodità
+
+00:12:20.250 --> 00:12:20.790
+inviti
+
+00:12:20.790 --> 00:12:21.610
+gli scanner
+
+00:12:21.610 --> 00:12:22.210
+a banchettare
+
+00:12:22.210 --> 00:12:23.470
+nel tuo repository.
+
+00:12:24.650 --> 00:12:25.210
+Gli sviluppatori
+
+00:12:25.210 --> 00:12:25.890
+possono sminuire
+
+00:12:25.890 --> 00:12:26.290
+il problema
+
+00:12:26.290 --> 00:12:26.950
+ma i repository
+
+00:12:26.950 --> 00:12:28.070
+vengono costantemente
+
+00:12:28.070 --> 00:12:28.650
+scansionati
+
+00:12:28.650 --> 00:12:29.990
+alla ricerca di segreti.
+
+00:12:30.190 --> 00:12:30.930
+È così che i dati reali
+
+00:12:30.930 --> 00:12:31.370
+dei clienti
+
+00:12:31.370 --> 00:12:32.470
+finiscono su siti pubblici.
+
+00:12:32.890 --> 00:12:33.410
+Non puoi risolvere
+
+00:12:33.410 --> 00:12:33.910
+questo problema
+
+00:12:33.910 --> 00:12:34.730
+con un semplice aggiornamento.
+
+00:12:34.730 --> 00:12:35.750
+La strada sicura
+
+00:12:35.750 --> 00:12:36.570
+è già stata tracciata
+
+00:12:36.570 --> 00:12:37.230
+da Microsoft.
+
+00:12:37.950 --> 00:12:38.970
+Per sviluppo e test
+
+00:12:38.970 --> 00:12:39.850
+l'archiviazione isolata
+
+00:12:39.850 --> 00:12:40.950
+in A è la scelta ideale.
+
+00:12:41.610 --> 00:12:42.090
+Immaginala come
+
+00:12:42.090 --> 00:12:42.850
+un armadietto privato
+
+00:12:42.850 --> 00:12:43.390
+o estensione.
+
+00:12:44.150 --> 00:12:44.930
+Le chiavi entrano lì
+
+00:12:44.930 --> 00:12:45.810
+nessun'altra estensione
+
+00:12:45.810 --> 00:12:46.370
+può vederle.
+
+00:12:47.230 --> 00:12:48.190
+Mantiene tutto contenuto
+
+00:12:48.190 --> 00:12:49.110
+leggero e semplice.
+
+00:12:49.990 --> 00:12:50.970
+È perfetto per sandbox
+
+00:12:50.970 --> 00:12:51.870
+e build di sviluppo
+
+00:12:51.870 --> 00:12:52.970
+ma non illuderti
+
+00:12:52.970 --> 00:12:53.870
+l'archiviazione isolata
+
+00:12:53.870 --> 00:12:54.870
+non è per la produzione.
+
+00:12:55.830 --> 00:12:56.730
+Il suo ambito locale
+
+00:12:56.730 --> 00:12:57.650
+è utile per iterare
+
+00:12:57.650 --> 00:12:58.430
+ma non è progettato
+
+00:12:58.430 --> 00:12:58.850
+come cavò
+
+00:12:58.850 --> 00:12:59.530
+quando sono in gioco
+
+00:12:59.530 --> 00:13:00.550
+dati e utenti reali.
+
+00:13:01.770 --> 00:13:02.630
+Quando vai in produzione
+
+00:13:02.630 --> 00:13:03.730
+l'unica mossa responsabile
+
+00:13:03.730 --> 00:13:04.250
+app Key Vault
+
+00:13:04.250 --> 00:13:05.010
+o Azure Key Vault
+
+00:13:05.010 --> 00:13:05.770
+per distribuzioni
+
+00:13:05.770 --> 00:13:06.470
+su larga scala.
+
+00:13:07.610 --> 00:13:08.350
+Considera una cassetta
+
+00:13:08.350 --> 00:13:09.110
+di sicurezza in banca
+
+00:13:09.110 --> 00:13:09.690
+invece di nascondere
+
+00:13:09.690 --> 00:13:10.590
+i contanti nel cassetto.
+
+00:13:11.550 --> 00:13:11.910
+Key Vault
+
+00:13:11.910 --> 00:13:13.110
+conserva le tue chiavi API
+
+00:13:13.110 --> 00:13:14.250
+in un contenitore protetto
+
+00:13:14.250 --> 00:13:15.290
+con policy di logging
+
+00:13:15.290 --> 00:13:16.750
+e rotazione adeguate.
+
+00:13:17.530 --> 00:13:18.550
+Integra la tua estensione
+
+00:13:18.550 --> 00:13:19.010
+e richiama ciò
+
+00:13:19.010 --> 00:13:19.750
+che serve a runtime
+
+00:13:19.750 --> 00:13:20.790
+e non esporre mai
+
+00:13:20.790 --> 00:13:21.730
+la chiave nel codice.
+
+00:13:22.470 --> 00:13:22.910
+È il modello
+
+00:13:22.910 --> 00:13:23.990
+che gli auditori apprezzano
+
+00:13:23.990 --> 00:13:24.650
+perché dimostra
+
+00:13:24.650 --> 00:13:25.210
+che i segreti
+
+00:13:25.210 --> 00:13:26.570
+non sono mai stati in chiaro.
+
+00:13:27.330 --> 00:13:28.270
+È una governance noiosa
+
+00:13:28.270 --> 00:13:28.730
+ma la noia
+
+00:13:28.730 --> 00:13:29.570
+è esattamente ciò che vuoi
+
+00:13:29.570 --> 00:13:30.050
+quando arrivano
+
+00:13:30.050 --> 00:13:31.610
+i team di conformità.
+
+00:13:32.290 --> 00:13:32.770
+Ecco un dettaglio
+
+00:13:32.770 --> 00:13:33.410
+tratto direttamente
+
+00:13:33.410 --> 00:13:34.070
+dalla documentazione
+
+00:13:34.070 --> 00:13:34.650
+che fa la differenza.
+
+00:13:35.250 --> 00:13:35.630
+In AL
+
+00:13:35.630 --> 00:13:36.450
+puoi memorizzare
+
+00:13:36.450 --> 00:13:37.070
+la chiave API
+
+00:13:37.070 --> 00:13:38.070
+come testo segreto.
+
+00:13:39.170 --> 00:13:39.710
+In questo modo
+
+00:13:39.710 --> 00:13:40.630
+anche durante il debug
+
+00:13:40.630 --> 00:13:41.110
+la chiave
+
+00:13:41.110 --> 00:13:42.050
+non appare in chiaro
+
+00:13:42.050 --> 00:13:42.830
+per essere catturata
+
+00:13:42.830 --> 00:13:43.390
+da screenshot.
+
+00:13:44.450 --> 00:13:45.070
+Il testo segreto
+
+00:13:45.070 --> 00:13:45.490
+è esattamente
+
+00:13:45.490 --> 00:13:46.010
+ciò che suggerisce.
+
+00:13:46.550 --> 00:13:47.690
+Nasconde i valori sensibili
+
+00:13:47.690 --> 00:13:48.470
+durante l'esecuzione.
+
+00:13:49.190 --> 00:13:49.830
+Se non ricordi altro
+
+00:13:49.830 --> 00:13:50.530
+di questa sezione
+
+00:13:50.530 --> 00:13:51.910
+ricorda che questa opzione esiste.
+
+00:13:52.890 --> 00:13:53.690
+Elimina uno dei vettori
+
+00:13:53.690 --> 00:13:54.570
+di fuga più sciocchi
+
+00:13:54.570 --> 00:13:55.750
+l'esposizione accidentale
+
+00:13:55.750 --> 00:13:56.750
+da parte dello sviluppatore
+
+00:13:56.750 --> 00:13:57.450
+nel debugger.
+
+00:13:59.070 --> 00:13:59.850
+Ora definiamo
+
+00:13:59.850 --> 00:14:00.850
+cosa fare e cosa non fare
+
+00:14:00.850 --> 00:14:02.110
+parlando come veri amministratori.
+
+00:14:02.770 --> 00:14:04.330
+Non inserire chiavi API
+
+00:14:04.330 --> 00:14:05.150
+nel codice AL
+
+00:14:05.150 --> 00:14:06.270
+né incollarle nei repository.
+
+00:14:06.770 --> 00:14:07.370
+È un invito a nozze
+
+00:14:07.370 --> 00:14:08.250
+per il furto di credenziali.
+
+00:14:09.170 --> 00:14:09.870
+Usa l'archiviazione
+
+00:14:09.870 --> 00:14:10.790
+isolata per lo sviluppo
+
+00:14:10.790 --> 00:14:11.130
+e i test
+
+00:14:11.130 --> 00:14:12.410
+così manterrà il team produttivo
+
+00:14:12.410 --> 00:14:13.830
+senza inviare segreti in chiaro.
+
+00:14:15.150 --> 00:14:15.690
+Non trascinare
+
+00:14:15.690 --> 00:14:16.470
+quel modello di sviluppo
+
+00:14:16.470 --> 00:14:16.750
+in produttivo.
+
+00:14:17.010 --> 00:14:17.570
+Non è un cavo
+
+00:14:17.570 --> 00:14:18.210
+è uno schedario.
+
+00:14:19.130 --> 00:14:19.790
+Collega la tua build
+
+00:14:19.790 --> 00:14:20.730
+di produzione al key vault
+
+00:14:20.730 --> 00:14:21.650
+è l'unico posto
+
+00:14:21.650 --> 00:14:22.170
+a cui quelle chiavi
+
+00:14:22.170 --> 00:14:22.810
+appartengono a te.
+
+00:14:23.290 --> 00:14:24.410
+Un altro punto di buon senso
+
+00:14:24.410 --> 00:14:25.330
+le autorizzazioni utenti
+
+00:14:25.330 --> 00:14:26.430
+all'interno di Business Central
+
+00:14:26.430 --> 00:14:27.410
+non bloccano magicamente
+
+00:14:27.410 --> 00:14:28.030
+le chiavi API.
+
+00:14:29.130 --> 00:14:29.490
+Copilot
+
+00:14:29.490 --> 00:14:30.330
+otterrà edita il controllo
+
+00:14:30.330 --> 00:14:31.390
+di accesso ai dati aziendali
+
+00:14:31.390 --> 00:14:32.310
+certo ma le chiavi servono
+
+00:14:32.310 --> 00:14:33.550
+ad autenticare l'intero servizio.
+
+00:14:33.990 --> 00:14:35.130
+Se una chiave viene trafugata
+
+00:14:35.130 --> 00:14:36.130
+estranei possono impersonare
+
+00:14:36.130 --> 00:14:36.710
+l'integrazione.
+
+00:14:37.370 --> 00:14:38.250
+Quindi smettila di fingere
+
+00:14:38.250 --> 00:14:38.730
+che la definizione
+
+00:14:38.730 --> 00:14:39.510
+di aliame di autorizzazione
+
+00:14:39.510 --> 00:14:40.350
+di sa non lo fa.
+
+00:14:40.890 --> 00:14:41.550
+E se vuoi combalidare
+
+00:14:41.550 --> 00:14:42.490
+la tua configurazione
+
+00:14:42.490 --> 00:14:43.310
+la procedura ufficiale
+
+00:14:43.310 --> 00:14:44.410
+è la sequenza di autorizzazione
+
+00:14:44.410 --> 00:14:45.730
+impostata nell'unità di codice
+
+00:14:45.730 --> 00:14:46.410
+ESL OpenAI.
+
+00:14:47.130 --> 00:14:47.750
+È lì che inserisci
+
+00:14:47.750 --> 00:14:48.650
+l'URL della risorsa
+
+00:14:48.650 --> 00:14:49.110
+e il deployment
+
+00:14:49.110 --> 00:14:49.710
+della chiave API
+
+00:14:49.710 --> 00:14:50.630
+per verificare che tutto
+
+00:14:50.630 --> 00:14:51.310
+sia allineato.
+
+00:14:51.990 --> 00:14:52.350
+Se sbagli
+
+00:14:52.350 --> 00:14:52.710
+il copilot
+
+00:14:52.710 --> 00:14:53.710
+non verrà nemmeno caricato.
+
+00:14:54.030 --> 00:14:54.630
+Se lo fai a metà
+
+00:14:54.630 --> 00:14:55.950
+otterrai errori silenziosi
+
+00:14:55.950 --> 00:14:56.370
+che gli utenti
+
+00:14:56.370 --> 00:14:57.410
+troveranno prima di te.
+
+00:14:58.110 --> 00:14:58.830
+La soluzione è semplice.
+
+00:14:59.170 --> 00:14:59.950
+Segui la catena in ordine
+
+00:14:59.950 --> 00:15:00.630
+testa l'appuratamente
+
+00:15:00.630 --> 00:15:01.190
+sviluppo
+
+00:15:01.190 --> 00:15:02.230
+poi passa alla preproduzione
+
+00:15:02.230 --> 00:15:03.150
+e infine alla produzione.
+
+00:15:03.690 --> 00:15:04.270
+Tre ambienti
+
+00:15:04.270 --> 00:15:05.170
+tre set di chiavi
+
+00:15:05.170 --> 00:15:05.990
+una pipeline
+
+00:15:05.990 --> 00:15:06.710
+che funziona davvero
+
+00:15:06.710 --> 00:15:07.390
+sotto carico.
+
+00:15:07.750 --> 00:15:08.050
+Ecco quindi
+
+00:15:08.050 --> 00:15:08.770
+la tua lista di controllo
+
+00:15:08.770 --> 00:15:09.130
+per evitare
+
+00:15:09.130 --> 00:15:10.550
+archiviazione isolata
+
+00:15:10.550 --> 00:15:11.070
+in sviluppo
+
+00:15:11.070 --> 00:15:12.030
+chi volti in produzione
+
+00:15:12.030 --> 00:15:12.930
+racchiudi la chiave
+
+00:15:12.930 --> 00:15:14.070
+AI in testo segreto
+
+00:15:14.070 --> 00:15:15.350
+non inserire mai valori
+
+00:15:15.350 --> 00:15:15.930
+nel codice
+
+00:15:15.930 --> 00:15:16.870
+e avvia sempre
+
+00:15:16.870 --> 00:15:17.910
+la catena di autorizzazione
+
+00:15:17.910 --> 00:15:18.350
+completa
+
+00:15:18.350 --> 00:15:19.330
+prima di considerare
+
+00:15:19.330 --> 00:15:20.350
+il lavoro finito.
+
+00:15:21.510 --> 00:15:22.050
+Questo modello
+
+00:15:22.050 --> 00:15:22.610
+mantiene la tua
+
+00:15:22.610 --> 00:15:23.450
+integrazione di copilot
+
+00:15:23.450 --> 00:15:24.850
+attiva, sicura, conforme
+
+00:15:24.850 --> 00:15:26.170
+senza emergenze notturne.
+
+00:15:27.030 --> 00:15:27.710
+Gestito l'aspetto
+
+00:15:27.710 --> 00:15:28.430
+della sicurezza
+
+00:15:28.430 --> 00:15:29.250
+la sfida successiva
+
+00:15:29.250 --> 00:15:29.750
+riguarda meno
+
+00:15:29.750 --> 00:15:30.810
+dove nascondere le chiavi
+
+00:15:30.810 --> 00:15:31.970
+e più come far connettere
+
+00:15:31.970 --> 00:15:32.650
+tutte le parti
+
+00:15:32.650 --> 00:15:33.870
+senza costanti messaggi
+
+00:15:33.870 --> 00:15:34.450
+di errore.
+
+00:15:35.570 --> 00:15:36.710
+Perché avere una funzionalità
+
+00:15:36.710 --> 00:15:37.390
+o un metaprompto
+
+00:15:37.390 --> 00:15:38.070
+e una chiave sicura
+
+00:15:38.070 --> 00:15:38.730
+non serve a molto
+
+00:15:38.730 --> 00:15:39.550
+se restano isolati
+
+00:15:39.550 --> 00:15:40.730
+e si rifiutano di collaborare.
+
+00:15:41.130 --> 00:15:41.750
+È qui che entra in gioco
+
+00:15:41.750 --> 00:15:42.690
+il cablaggio del flusso di lavoro.
+
+00:15:43.450 --> 00:15:44.350
+Dal progetto alla realtà
+
+00:15:44.350 --> 00:15:45.590
+collegando il flusso di lavoro
+
+00:15:45.590 --> 00:15:46.950
+parliamo di ciò
+
+00:15:46.950 --> 00:15:48.050
+che trasforma componenti
+
+00:15:48.050 --> 00:15:48.970
+sparsi in un vero flusso
+
+00:15:48.970 --> 00:15:50.390
+di lavoro copilot funzionante.
+
+00:15:51.290 --> 00:15:51.770
+Ha registrato
+
+00:15:51.770 --> 00:15:52.510
+una funzionalità
+
+00:15:52.510 --> 00:15:53.330
+definito l'ambito
+
+00:15:53.330 --> 00:15:54.070
+ottenuto le chiavi
+
+00:15:54.070 --> 00:15:55.270
+e scritto il metaprompto
+
+00:15:55.270 --> 00:15:57.430
+ma se non li metti in ordine
+
+00:15:57.430 --> 00:15:58.090
+otterrai
+
+00:15:58.090 --> 00:15:59.670
+solo un pulsante luccicante
+
+00:15:59.670 --> 00:16:00.590
+che va in errore
+
+00:16:00.590 --> 00:16:01.350
+o non fa nulla
+
+00:16:01.350 --> 00:16:02.130
+finché gli utenti
+
+00:16:02.130 --> 00:16:03.510
+non aprono ticket.
+
+00:16:04.850 --> 00:16:06.090
+Ecco la sequenza ridotta
+
+00:16:06.090 --> 00:16:07.270
+a 5 semplici passaggi.
+
+00:16:07.870 --> 00:16:08.390
+Primo passaggio
+
+00:16:08.390 --> 00:16:08.970
+funzionalità
+
+00:16:08.970 --> 00:16:10.010
+Secondo passaggio
+
+00:16:10.010 --> 00:16:10.630
+disponibilità
+
+00:16:10.630 --> 00:16:11.650
+Terzo passaggio
+
+00:16:11.650 --> 00:16:12.310
+autorizzazione
+
+00:16:12.310 --> 00:16:13.290
+Quarto passaggio
+
+00:16:13.290 --> 00:16:14.230
+metaprompto
+
+00:16:14.230 --> 00:16:14.710
+Quinto passaggio
+
+00:16:14.710 --> 00:16:15.170
+pilotaggio
+
+00:16:15.170 --> 00:16:16.570
+Ricorda questi 5
+
+00:16:16.570 --> 00:16:17.170
+e avrai sempre
+
+00:16:17.170 --> 00:16:18.130
+lo schema di collegamento
+
+00:16:18.130 --> 00:16:18.350
+in me
+
+00:16:18.350 --> 00:16:19.330
+La funzionalità
+
+00:16:19.330 --> 00:16:20.110
+conferisce l'abilità
+
+00:16:20.110 --> 00:16:20.750
+la disponibilità
+
+00:16:20.750 --> 00:16:21.530
+definisce il pubblico
+
+00:16:21.530 --> 00:16:22.090
+l'autorizzazione
+
+00:16:22.090 --> 00:16:22.850
+attiva il cervello
+
+00:16:22.850 --> 00:16:23.630
+il metaprompto
+
+00:16:23.630 --> 00:16:24.330
+detto alle buone maniere
+
+00:16:24.330 --> 00:16:24.810
+il pilotaggio
+
+00:16:24.810 --> 00:16:25.810
+prova che funziona davvero
+
+00:16:25.810 --> 00:16:26.930
+questo è l'intero ciclo
+
+00:16:26.930 --> 00:16:27.730
+primo passaggio
+
+00:16:27.730 --> 00:16:28.250
+funzionalità
+
+00:16:28.250 --> 00:16:29.530
+in AL significa
+
+00:16:29.530 --> 00:16:30.290
+estendere l'enum
+
+00:16:30.290 --> 00:16:31.010
+della funzionalità
+
+00:16:31.010 --> 00:16:31.490
+copilot
+
+00:16:31.490 --> 00:16:32.250
+con un'estensione
+
+00:16:32.250 --> 00:16:32.490
+enum
+
+00:16:32.490 --> 00:16:33.250
+puoi registrarla
+
+00:16:33.250 --> 00:16:33.910
+in una codiunita
+
+00:16:33.910 --> 00:16:34.510
+di installazione
+
+00:16:34.510 --> 00:16:35.090
+o aggiornamento
+
+00:16:35.090 --> 00:16:35.530
+chiamandola
+
+00:16:35.530 --> 00:16:36.050
+funzionalità
+
+00:16:36.050 --> 00:16:36.630
+copilot
+
+00:16:36.630 --> 00:16:38.310
+registra la funzionalità
+
+00:16:38.310 --> 00:16:39.390
+è l'annuncio ufficiale
+
+00:16:39.390 --> 00:16:39.890
+che dice ecco
+
+00:16:39.890 --> 00:16:40.530
+una nuova abilità
+
+00:16:40.530 --> 00:16:41.370
+dell'assistente
+
+00:16:41.370 --> 00:16:42.490
+dà di uno spazio
+
+00:16:42.490 --> 00:16:42.890
+nel sistema
+
+00:16:42.890 --> 00:16:43.890
+senza questo
+
+00:16:43.890 --> 00:16:44.810
+Business Central
+
+00:16:44.810 --> 00:16:45.410
+non saprà mai
+
+00:16:45.410 --> 00:16:46.270
+che la tua funzionalità
+
+00:16:46.270 --> 00:16:47.670
+dovrebbe esistere
+
+00:16:47.670 --> 00:16:48.730
+secondo passaggio
+
+00:16:48.730 --> 00:16:49.150
+disponibile
+
+00:16:49.150 --> 00:16:50.530
+una volta definita
+
+00:16:50.530 --> 00:16:50.950
+l'abilità
+
+00:16:50.950 --> 00:16:51.510
+ne stabilisci
+
+00:16:51.510 --> 00:16:52.450
+l'ambito di visibilità
+
+00:16:52.450 --> 00:16:54.030
+questo si controlla
+
+00:16:54.030 --> 00:16:54.650
+tramite la pagina
+
+00:16:54.650 --> 00:16:55.210
+di amministrazione
+
+00:16:55.210 --> 00:16:55.630
+delle funzioni
+
+00:16:55.630 --> 00:16:56.070
+datico payload
+
+00:16:56.070 --> 00:16:57.090
+le cd2
+
+00:16:57.090 --> 00:16:57.810
+è contrassegnata
+
+00:16:57.810 --> 00:16:58.410
+come anteprima
+
+00:16:58.410 --> 00:16:59.010
+solo interno
+
+00:16:59.010 --> 00:17:00.030
+e generalmente disponibile
+
+00:17:00.030 --> 00:17:00.990
+gli sviluppatori
+
+00:17:00.990 --> 00:17:01.950
+lo vedono come metadati
+
+00:17:01.950 --> 00:17:02.850
+ma per gli amministratori
+
+00:17:02.850 --> 00:17:03.410
+e l'interruttore
+
+00:17:03.410 --> 00:17:04.010
+per il rilascio
+
+00:17:04.010 --> 00:17:04.870
+usalo
+
+00:17:04.870 --> 00:17:06.510
+se salti questo passaggio
+
+00:17:06.510 --> 00:17:07.210
+rischi di esporre
+
+00:17:07.210 --> 00:17:08.070
+funzionalità incomplete
+
+00:17:08.070 --> 00:17:08.730
+a tutti gli utenti
+
+00:17:08.730 --> 00:17:09.670
+prima che siano stabili
+
+00:17:09.670 --> 00:17:11.350
+terzo passaggio
+
+00:17:11.350 --> 00:17:11.950
+autorizzazione
+
+00:17:11.950 --> 00:17:13.310
+ora colleghi il back-end
+
+00:17:13.310 --> 00:17:14.130
+di Azure OpenAI
+
+00:17:14.130 --> 00:17:15.290
+tramite la code unit
+
+00:17:15.290 --> 00:17:16.270
+di Azure OpenAI
+
+00:17:16.270 --> 00:17:18.550
+ti serve la classica triade
+
+00:17:18.550 --> 00:17:19.890
+endpoint della risorsa
+
+00:17:19.890 --> 00:17:21.150
+URL di Azure OpenAI
+
+00:17:21.150 --> 00:17:22.230
+nome della distribuzione
+
+00:17:22.230 --> 00:17:22.910
+e chiave API
+
+00:17:22.910 --> 00:17:25.150
+chiama Azure OpenAI
+
+00:17:25.150 --> 00:17:26.630
+imposta l'autorizzazione
+
+00:17:26.630 --> 00:17:27.290
+con quei valori
+
+00:17:27.290 --> 00:17:29.650
+se la funzionalità
+
+00:17:29.650 --> 00:17:30.390
+era l'annuncio di lavoro
+
+00:17:30.390 --> 00:17:31.050
+e la disponibilità
+
+00:17:31.050 --> 00:17:31.550
+al contratto
+
+00:17:31.550 --> 00:17:32.090
+l'autorizzazione
+
+00:17:32.090 --> 00:17:32.430
+è il badge
+
+00:17:32.430 --> 00:17:32.930
+per far entrare
+
+00:17:32.930 --> 00:17:34.030
+l'assistente nell'edificio
+
+00:17:34.030 --> 00:17:35.290
+senza di essere
+
+00:17:35.290 --> 00:17:35.650
+la funzione
+
+00:17:35.650 --> 00:17:36.170
+resta bloccata
+
+00:17:36.170 --> 00:17:37.090
+davanti alla portaventura
+
+00:17:37.090 --> 00:17:37.730
+quarto passaggio
+
+00:17:37.730 --> 00:17:38.130
+metaprom
+
+00:17:38.130 --> 00:17:39.510
+qui inserisci
+
+00:17:39.510 --> 00:17:40.470
+le istruzioni permanenti
+
+00:17:40.470 --> 00:17:40.970
+che definiscono
+
+00:17:40.970 --> 00:17:41.610
+tono, struttura
+
+00:17:41.610 --> 00:17:42.270
+e formattazione
+
+00:17:42.270 --> 00:17:43.430
+usa i messaggi
+
+00:17:43.430 --> 00:17:44.170
+di chat AI
+
+00:17:44.170 --> 00:17:46.090
+imposta il messaggio
+
+00:17:46.090 --> 00:17:46.910
+di sistema primario
+
+00:17:46.910 --> 00:17:48.030
+per recuperare il metaprom
+
+00:17:48.030 --> 00:17:48.710
+che hai archiviato
+
+00:17:48.710 --> 00:17:49.290
+in modo sicuro
+
+00:17:49.290 --> 00:17:50.290
+in uno storage isolato
+
+00:17:50.290 --> 00:17:50.790
+o in produzione
+
+00:17:50.790 --> 00:17:51.830
+referenziato da Key Vault
+
+00:17:51.830 --> 00:17:53.170
+è qui che dici
+
+00:17:53.170 --> 00:17:54.230
+sei un assistente preventivo
+
+00:17:54.230 --> 00:17:55.890
+oppure sei un assistente finanziario
+
+00:17:55.890 --> 00:17:56.690
+e definisci
+
+00:17:56.690 --> 00:17:57.830
+l'aspetto dell'output
+
+00:17:57.830 --> 00:17:59.270
+senza questo
+
+00:17:59.270 --> 00:18:00.350
+l'assistente alza le spalle
+
+00:18:00.350 --> 00:18:00.930
+e inventa tutto
+
+00:18:00.930 --> 00:18:01.590
+quinto passaggio
+
+00:18:01.590 --> 00:18:02.010
+pilotaggio
+
+00:18:02.010 --> 00:18:03.190
+distribuiscilo prima
+
+00:18:03.190 --> 00:18:03.910
+a un piccolo gruppo
+
+00:18:03.910 --> 00:18:05.010
+fornisci loro la funzionalità
+
+00:18:05.010 --> 00:18:05.730
+raccogli i feedback
+
+00:18:05.730 --> 00:18:06.690
+e monitora la telemetria
+
+00:18:06.690 --> 00:18:07.830
+il modulo AI
+
+00:18:07.830 --> 00:18:08.650
+registra l'utilizzo
+
+00:18:08.650 --> 00:18:09.210
+così puoi vedere
+
+00:18:09.210 --> 00:18:10.310
+se produce risultati puliti
+
+00:18:10.310 --> 00:18:11.290
+o se genera dati inutili
+
+00:18:11.290 --> 00:18:12.670
+e prima di espanderti
+
+00:18:12.670 --> 00:18:13.630
+ti serve un piano di rollback
+
+00:18:13.630 --> 00:18:14.690
+è buona notizia
+
+00:18:14.690 --> 00:18:15.130
+che la pagina
+
+00:18:15.130 --> 00:18:15.710
+delle funzionalità
+
+00:18:15.710 --> 00:18:16.170
+di copilot
+
+00:18:16.170 --> 00:18:16.730
+degli agenti
+
+00:18:16.730 --> 00:18:17.070
+funge anche
+
+00:18:17.070 --> 00:18:18.170
+dei dispositivi di metodo
+
+00:18:18.170 --> 00:18:18.930
+gli amministratori
+
+00:18:18.930 --> 00:18:19.810
+possono disattivare
+
+00:18:19.810 --> 00:18:20.370
+istantaneamente
+
+00:18:20.370 --> 00:18:21.310
+le singole funzionalità
+
+00:18:21.310 --> 00:18:22.590
+se qualcosa inizia a non funzionare
+
+00:18:22.590 --> 00:18:23.910
+quella stessa pagina
+
+00:18:23.910 --> 00:18:24.350
+mostra anche
+
+00:18:24.350 --> 00:18:24.870
+l'interruttore
+
+00:18:24.870 --> 00:18:25.370
+per il movimento
+
+00:18:25.370 --> 00:18:26.150
+consentito dei dati
+
+00:18:26.150 --> 00:18:26.810
+tra le regiografiche
+
+00:18:26.810 --> 00:18:27.670
+se la tua configurazione
+
+00:18:27.670 --> 00:18:28.710
+è a zero attraverso più regione
+
+00:18:28.710 --> 00:18:29.550
+se vedi quell'opzione
+
+00:18:29.550 --> 00:18:30.410
+presta attenzione
+
+00:18:30.410 --> 00:18:31.690
+qualcuno della conformità
+
+00:18:31.690 --> 00:18:32.310
+lo farà
+
+00:18:32.310 --> 00:18:33.070
+vediamo di mettere a punto
+
+00:18:33.070 --> 00:18:33.610
+questa sequenza
+
+00:18:33.610 --> 00:18:33.990
+con esempio
+
+00:18:33.990 --> 00:18:35.370
+un team ha creato
+
+00:18:35.370 --> 00:18:35.770
+un copilot
+
+00:18:35.770 --> 00:18:36.490
+per i suggerimenti
+
+00:18:36.490 --> 00:18:37.310
+sugli ordini di venti
+
+00:18:37.310 --> 00:18:38.010
+hanno iniziato
+
+00:18:38.010 --> 00:18:38.770
+con un'estensione
+
+00:18:38.770 --> 00:18:39.070
+enum
+
+00:18:39.070 --> 00:18:40.090
+per la funzionalità copilot
+
+00:18:40.090 --> 00:18:40.690
+e l'hanno collegata
+
+00:18:40.690 --> 00:18:41.570
+a una code unit installata
+
+00:18:41.570 --> 00:18:42.950
+l'hanno contrassegnata
+
+00:18:42.950 --> 00:18:43.430
+come anteprima
+
+00:18:43.430 --> 00:18:43.950
+nella pagina
+
+00:18:43.950 --> 00:18:44.550
+delle funzionalità
+
+00:18:44.550 --> 00:18:45.010
+di copilot
+
+00:18:45.010 --> 00:18:45.590
+e degli agenti
+
+00:18:45.590 --> 00:18:46.410
+in modo che fosse visibile
+
+00:18:46.410 --> 00:18:47.310
+solo gli utenti di test
+
+00:18:47.310 --> 00:18:48.170
+poi hanno chiamato
+
+00:18:48.170 --> 00:18:48.830
+Azure OpenAI
+
+00:18:48.830 --> 00:18:49.950
+hanno impostato
+
+00:18:49.950 --> 00:18:50.550
+l'autorizzazione
+
+00:18:50.550 --> 00:18:50.990
+con endpoint
+
+00:18:50.990 --> 00:18:51.830
+distribuzione chiave
+
+00:18:51.830 --> 00:18:52.370
+affinché il modello
+
+00:18:52.370 --> 00:18:53.450
+potesse effettivamente rispondere
+
+00:18:53.450 --> 00:18:54.990
+successivamente
+
+00:18:54.990 --> 00:18:55.490
+hanno scritto
+
+00:18:55.490 --> 00:18:56.070
+un metaprompto
+
+00:18:56.070 --> 00:18:56.870
+in un archivio isolato
+
+00:18:56.870 --> 00:18:57.490
+e l'hanno impostato
+
+00:18:57.490 --> 00:18:58.390
+con i messaggi di chat
+
+00:18:58.390 --> 00:18:58.770
+o AI
+
+00:18:58.770 --> 00:19:00.330
+imposta il messaggio
+
+00:19:00.330 --> 00:19:01.190
+di sistema principale
+
+00:19:01.190 --> 00:19:02.450
+ti ho un assistente preventivo
+
+00:19:02.450 --> 00:19:03.670
+suggerisci pacchetti
+
+00:19:03.670 --> 00:19:04.170
+e formatali
+
+00:19:04.170 --> 00:19:04.990
+come righe di articolo
+
+00:19:04.990 --> 00:19:06.350
+nessuna chiacchiera superflua
+
+00:19:06.350 --> 00:19:07.070
+nella fase pilota
+
+00:19:07.070 --> 00:19:07.670
+da piccoli gruppi
+
+00:19:07.670 --> 00:19:08.350
+hanno effettuato test
+
+00:19:08.350 --> 00:19:08.970
+finché i risultati
+
+00:19:08.970 --> 00:19:09.790
+non sono stati preveniti
+
+00:19:09.790 --> 00:19:10.770
+solo allora
+
+00:19:10.770 --> 00:19:11.510
+hanno contrassegnato
+
+00:19:11.510 --> 00:19:12.470
+la disponibilità come GA
+
+00:19:12.470 --> 00:19:13.250
+rendendolo attivo
+
+00:19:13.250 --> 00:19:13.910
+per tutti gli utenti
+
+00:19:13.910 --> 00:19:14.490
+delle vendite
+
+00:19:14.490 --> 00:19:15.570
+il risultato
+
+00:19:15.570 --> 00:19:15.950
+un copilot
+
+00:19:15.950 --> 00:19:16.870
+che consigliava pacchetti
+
+00:19:16.870 --> 00:19:17.870
+invece di scrivere in utilità
+
+00:19:17.870 --> 00:19:19.510
+il livello di governance
+
+00:19:19.510 --> 00:19:20.390
+qui non è opzionale
+
+00:19:20.390 --> 00:19:21.770
+se qualcosa va storto
+
+00:19:21.770 --> 00:19:22.330
+gli amministratori
+
+00:19:22.330 --> 00:19:23.010
+possono disattivare
+
+00:19:23.010 --> 00:19:23.550
+l'interruttore
+
+00:19:23.550 --> 00:19:24.310
+prima che l'identichiamo
+
+00:19:24.310 --> 00:19:25.370
+quella mentalità
+
+00:19:25.370 --> 00:19:26.370
+da interruttore di sicurezza
+
+00:19:26.370 --> 00:19:26.970
+è ciò che mantiene
+
+00:19:26.970 --> 00:19:27.990
+i copilot personalizzati
+
+00:19:27.990 --> 00:19:28.450
+produttivi
+
+00:19:28.450 --> 00:19:29.270
+anziché di romperli
+
+00:19:29.270 --> 00:19:30.530
+applicala come faresti
+
+00:19:30.530 --> 00:19:31.570
+con qualsiasi estensione
+
+00:19:31.570 --> 00:19:32.370
+rilasci graduali
+
+00:19:32.370 --> 00:19:33.210
+ambito limitato
+
+00:19:33.210 --> 00:19:34.030
+test misurabili
+
+00:19:34.030 --> 00:19:35.310
+line non riceve
+
+00:19:35.310 --> 00:19:35.950
+un lascia passare
+
+00:19:35.950 --> 00:19:36.810
+esegui ogni parte
+
+00:19:36.810 --> 00:19:37.290
+in isolamento
+
+00:19:37.290 --> 00:19:38.030
+quando effetti i test
+
+00:19:38.030 --> 00:19:39.190
+non colleghi la intera catena
+
+00:19:39.190 --> 00:19:39.930
+tranne che funzioni
+
+00:19:39.930 --> 00:19:41.370
+convalida la registrazione
+
+00:19:41.370 --> 00:19:42.130
+della funzionalità
+
+00:19:42.130 --> 00:19:43.450
+verifica che la disponibilità
+
+00:19:43.450 --> 00:19:44.330
+appaia correttamente
+
+00:19:44.330 --> 00:19:45.450
+conferma l'autorizzazione
+
+00:19:45.450 --> 00:19:46.330
+con set authorization
+
+00:19:46.330 --> 00:19:47.390
+quindi conferma
+
+00:19:47.390 --> 00:19:48.010
+che il metaprompt
+
+00:19:48.010 --> 00:19:49.650
+sia efficace nelle risposte
+
+00:19:49.650 --> 00:19:50.850
+solo quando ogni pezzo funziona
+
+00:19:50.850 --> 00:19:51.950
+lascia che gli utenti finali
+
+00:19:51.950 --> 00:19:52.530
+lo utilizzino
+
+00:19:52.530 --> 00:19:53.550
+questo è il ponte
+
+00:19:53.550 --> 00:19:54.390
+dal progetto alla realtà
+
+00:19:54.390 --> 00:19:55.530
+in poche parole
+
+00:19:55.530 --> 00:19:56.150
+la funzionalità
+
+00:19:56.150 --> 00:19:56.990
+definisce le abilità
+
+00:19:56.990 --> 00:19:57.590
+la disponibilità
+
+00:19:57.590 --> 00:19:58.390
+delimita il pubblico
+
+00:19:58.390 --> 00:19:58.970
+l'autorizzazione
+
+00:19:58.970 --> 00:19:59.510
+apre la porta
+
+00:19:59.510 --> 00:20:00.090
+il metaprompt
+
+00:20:00.090 --> 00:20:00.970
+stabilisce le regole
+
+00:20:00.970 --> 00:20:01.930
+e il pilota dimostra
+
+00:20:01.930 --> 00:20:02.370
+che il sistema
+
+00:20:02.370 --> 00:20:04.090
+non ti metterà in imbarazzo
+
+00:20:04.090 --> 00:20:05.110
+se ottieni questi risultati
+
+00:20:05.110 --> 00:20:05.670
+sarai in vantaggio
+
+00:20:05.670 --> 00:20:06.510
+rispetto ai rilasci ufficiali
+
+00:20:06.510 --> 00:20:07.030
+delle funzionalità
+
+00:20:07.030 --> 00:20:08.070
+e questo ci riporta
+
+00:20:08.070 --> 00:20:08.810
+al punto principale
+
+00:20:08.810 --> 00:20:09.470
+questi passaggi
+
+00:20:09.470 --> 00:20:10.230
+sono ciò che ti permette
+
+00:20:10.230 --> 00:20:11.030
+di plasmare Copilot
+
+00:20:11.030 --> 00:20:11.970
+attorno alla tua attività
+
+00:20:11.970 --> 00:20:12.930
+invece di seguire
+
+00:20:12.930 --> 00:20:13.330
+passivamente
+
+00:20:13.330 --> 00:20:14.050
+qualsiasi demo
+
+00:20:14.050 --> 00:20:14.750
+preconfezionata
+
+00:20:14.750 --> 00:20:15.550
+mostrata da Microsoft
+
+00:20:15.550 --> 00:20:16.190
+sul palco
+
+00:20:16.190 --> 00:20:18.070
+quindi ecco il riepilogo
+
+00:20:18.070 --> 00:20:19.430
+tre cose da tenere a mente
+
+00:20:19.430 --> 00:20:20.270
+primo
+
+00:20:20.270 --> 00:20:21.390
+estendi Copilot
+
+00:20:21.390 --> 00:20:22.430
+tramite l'ID sistema
+
+00:20:22.430 --> 00:20:23.710
+registrando le funzionalità
+
+00:20:23.710 --> 00:20:25.010
+due
+
+00:20:25.010 --> 00:20:26.090
+proteggi la connessione azzur
+
+00:20:26.090 --> 00:20:27.510
+usa l'archiviazione isolata
+
+00:20:27.510 --> 00:20:28.190
+durante i test
+
+00:20:28.190 --> 00:20:29.070
+ma sposta quelle chiavi
+
+00:20:29.070 --> 00:20:29.490
+in key vault
+
+00:20:29.490 --> 00:20:30.210
+per la produzione
+
+00:20:30.210 --> 00:20:31.770
+tre pilota e governa
+
+00:20:31.770 --> 00:20:32.370
+le funzionalità
+
+00:20:32.370 --> 00:20:32.910
+dalla pagina
+
+00:20:32.910 --> 00:20:33.510
+delle funzionalità
+
+00:20:33.510 --> 00:20:34.490
+di Copilot e agenti
+
+00:20:34.490 --> 00:20:35.250
+così gli amministratori
+
+00:20:35.250 --> 00:20:36.930
+hanno sempre il controllo totale
+
+00:20:36.930 --> 00:20:37.750
+un rapido promemoria
+
+00:20:37.750 --> 00:20:38.850
+per chi si occupa di governance
+
+00:20:38.850 --> 00:20:40.090
+Copilot eredita
+
+00:20:40.090 --> 00:20:41.030
+le autorizzazioni utente
+
+00:20:41.030 --> 00:20:41.930
+quindi non legge mai
+
+00:20:41.930 --> 00:20:42.490
+ciò a cui l'utente
+
+00:20:42.490 --> 00:20:43.190
+non può accedere
+
+00:20:43.190 --> 00:20:44.070
+e Microsoft
+
+00:20:44.070 --> 00:20:44.870
+non addestra modelli
+
+00:20:44.870 --> 00:20:45.670
+sui dati del tuo tenant
+
+00:20:45.670 --> 00:20:46.150
+a meno che tu
+
+00:20:46.150 --> 00:20:47.450
+non lo consente esplicitamente
+
+00:20:47.450 --> 00:20:49.030
+prossimo passo
+
+00:20:49.030 --> 00:20:49.950
+prova una funzionalità
+
+00:20:49.950 --> 00:20:50.970
+nel tuo ambiente sandbox
+
+00:20:50.970 --> 00:20:51.630
+questa settimana
+
+00:20:51.630 --> 00:20:52.530
+e verifica che funzioni
+
+00:20:52.530 --> 00:20:53.030
+correttamente
+
+00:20:53.030 --> 00:20:54.150
+seguendo la lista di controllo
+
+00:20:56.090 --> 00:20:56.510
+M365Show
+
+00:20:56.510 --> 00:20:57.070
+per aggiornamenti
+
+00:20:57.070 --> 00:20:57.970
+sulla guida di sopravvivenza
+
+00:20:57.970 --> 00:20:58.590
+e segui la pagina
+
+00:20:58.590 --> 00:21:00.010
+LinkedIn di M365Show
+
+00:21:00.010 --> 00:21:00.810
+per non perdere i live streaming
+
+00:21:00.810 --> 00:21:01.210
+con gli MVP
+
+00:21:01.210 --> 00:21:01.930
+che hanno già testato
+
+00:21:01.930 --> 00:21:02.790
+e risolto questi problemi
