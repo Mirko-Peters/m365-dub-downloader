@@ -51,8 +51,8 @@ def build(g, posts, people, api):
     sitemap, TODAY = g["sitemap"], g["TODAY"]
     shell = lambda lang, b: f'{header(lang, "")}<main class="wrap" style="max-width:48em">{b}</main>{footer(lang) if lang in LANGS else footer_en()}'
     pb = {p["handle"]: p for p in people}
-    if any(p.get("legacy") for p in posts) and "mirko-peters" not in pb:   # frueherer Blog: Autor ist auch ohne Profil-Export da
-        pb["mirko-peters"] = {"handle": "mirko-peters", "name": "Mirko Peters"}
+    if any(p.get("legacy") for p in posts) and "mirko-p" not in pb:   # frueherer Blog: Autor ist auch ohne Profil-Export da
+        pb["mirko-p"] = {"handle": "mirko-p", "name": "Mirko Peters"}
     posts = [p for p in posts if p["handle"] in pb]
     links = {i: [e["name"], f"{BASE}/entity/{i}/"] for i, e in ENTS.items()}
     for lang in COMM_LANGS:

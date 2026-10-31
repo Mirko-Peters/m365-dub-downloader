@@ -164,7 +164,7 @@ def build(g):
         bposts = [p for p in json.loads(_gz.open(_bf, "rt", encoding="utf-8").read()) if p.get("title") and p.get("html")]
         bposts.sort(key=lambda p: p.get("iso") or "", reverse=True)
     eslug = {e["slug"] for e in eps}; bslug = {p["slug"] for p in bposts}
-    def bp_url(p): return f"{BASE}/community/u/mirko-peters/blog/{p['slug']}/"   # Blogbeitraege sind Community-Beitraege von mirko-peters (site_legacy_blog.py)
+    def bp_url(p): return f"{BASE}/community/u/mirko-p/blog/{p['slug']}/"   # Blogbeitraege sind Community-Beitraege von mirko-p (site_legacy_blog.py)
     def fixlinks(h):
         def rep(m):
             u = m.group(1); path = _re.sub(r"^https?://(www\.)?m365\.fm", "", u)
@@ -280,13 +280,13 @@ def build(g):
         gl += f'<li style="margin:.4em 0"><a href="{root}guests/{gg["slug"]}/">{esc(gg["name"])}</a> <span class="mut">{esc(gg.get("title") or "")[:90]}</span></li>'
     if guests: pub("guests/", "Guests", f"{len(guests)} guests of the {NAME}.", f'<h1>Guests</h1><ul style="list-style:none;padding:0">{gl}</ul>')
 
-    # Blog: die Beitraege sind jetzt Community-Beitraege von mirko-peters (site_legacy_blog.py + site_blog.py); hier nur Weiterleitungsseiten fuer die kurz genutzten Adressen /show/blog/...
+    # Blog: die Beitraege sind jetzt Community-Beitraege von mirko-p (site_legacy_blog.py + site_blog.py); hier nur Weiterleitungsseiten fuer die kurz genutzten Adressen /show/blog/...
     def _stub(to, label):
         return (f'<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="robots" content="noindex"><meta http-equiv="refresh" content="0;url={to}">'
                 f'<link rel="canonical" href="{to}"><title>{esc(label)}</title></head><body><p><a href="{to}">{esc(label)}</a></p></body></html>')
     for p in bposts:
         write(f"show/blog/{p['slug']}/index.html", _stub(bp_url(p), p["title"]))
-    write("show/blog/index.html", _stub(f"{BASE}/community/u/mirko-peters/blog/", "Blog"))
+    write("show/blog/index.html", _stub(f"{BASE}/community/u/mirko-p/blog/", "Blog"))
 
     # Hosts, Sponsoren, Reviews, Downloads, Links
     hb = "".join(f'<section><h2>{esc(h["name"])}</h2><p class="mut">{esc(h.get("title") or "")}</p>{san(h.get("bio"))}</section>' for h in hosts)
@@ -322,7 +322,7 @@ def build(g):
     shp = json.loads((D / "platforms.json").read_text("utf-8")).get("en", {}) if (D / "platforms.json").exists() else {}
     listen = " · ".join(f'<a href="{esc(shp[k])}" rel="noopener">{n}</a>' for k, n in (("apple_show", "Apple Podcasts"), ("spotify_show", "Spotify"), ("amazon_show", "Amazon Music"), ("deezer_show", "Deezer"), ("iheart_show", "iHeart"), ("youtube_show", "YouTube"), ("youtube_music_show", "YouTube Music"), ("castbox_show", "Castbox"), ("podcastaddict_show", "Podcast Addict"), ("podchaser_show", "Podchaser")) if shp.get(k))
     hub = (f'<h1>{esc(NAME)}</h1><p>{esc(plain(pod.get("description")))[:600]}</p>' + (f'<p><strong>Listen on:</strong> {listen}</p>' if listen else "") + f'<h2>Latest episodes</h2><ul style="list-style:none;padding:0">{"".join(card(e) for e in eps[:20])}</ul>'
-           f'<p><a href="{root}episodes/">All {len(eps)} episodes →</a></p>' + (f'<h2>Latest articles</h2><ul>{"".join(f"<li><a href=\"{bp_url(p)}\">{esc(p[chr(116)+chr(105)+chr(116)+chr(108)+chr(101)])}</a></li>" for p in bposts[:8])}</ul><p><a href="{BASE}/community/u/mirko-peters/blog/">All {len(bposts)} articles →</a></p>' if bposts else "") + (f"<h2>Topics</h2><ul>{ct}</ul>" if ct else ""))
+           f'<p><a href="{root}episodes/">All {len(eps)} episodes →</a></p>' + (f'<h2>Latest articles</h2><ul>{"".join(f"<li><a href=\"{bp_url(p)}\">{esc(p[chr(116)+chr(105)+chr(116)+chr(108)+chr(101)])}</a></li>" for p in bposts[:8])}</ul><p><a href="{BASE}/community/u/mirko-p/blog/">All {len(bposts)} articles →</a></p>' if bposts else "") + (f"<h2>Topics</h2><ul>{ct}</ul>" if ct else ""))
     ld = {"@context": "https://schema.org", "@type": "PodcastSeries", "name": NAME, "url": root, "description": plain(pod.get("description"))[:500], "inLanguage": "en", "webFeed": "https://www.spreaker.com/show/6704921/episodes/feed", **({"sameAs": [shp[k] for k in ("apple_show", "spotify_show", "amazon_show", "deezer_show", "iheart_show", "youtube_show", "youtube_music_show", "castbox_show", "podcastaddict_show", "podchaser_show") if shp.get(k)]} if shp else {})}
     pub("", NAME, plain(pod.get("description")) or NAME, hub, ld)
     # Weiterleitungsliste fuer den Umzug (Podpage-Struktur: Folgen und Seiten direkt unter /<slug>/, Gaeste unter /guests/<slug>/, Blog /blog/<slug>/)
@@ -337,8 +337,8 @@ def build(g):
     for e in eps: add(f"/{e['slug']}", f"/show/episodes/{e['slug']}/")
     for sl, _ in plist: add(f"/{sl}", f"/show/{sl}/")
     for x in guests: add(f"/guests/{x['slug']}", f"/show/guests/{x['slug']}/")
-    for old, new in (("/episodes", "/show/episodes/"), ("/guests", "/show/guests/"), ("/hosts", "/show/hosts/"), ("/people", "/show/hosts/"), ("/sponsors", "/show/sponsors/"), ("/reviews", "/show/reviews/"), ("/podroll", "/show/listen/"), ("/videos", "/show/"), ("/blog", "/community/u/mirko-peters/blog/" if bposts else "/show/")): rd.setdefault(old, new)
-    for p in bposts: rd[f"/blog/{p['slug']}"] = f"/community/u/mirko-peters/blog/{p['slug']}/"; rd[f"/show/blog/{p['slug']}"] = f"/community/u/mirko-peters/blog/{p['slug']}/"
+    for old, new in (("/episodes", "/show/episodes/"), ("/guests", "/show/guests/"), ("/hosts", "/show/hosts/"), ("/people", "/show/hosts/"), ("/sponsors", "/show/sponsors/"), ("/reviews", "/show/reviews/"), ("/podroll", "/show/listen/"), ("/videos", "/show/"), ("/blog", "/community/u/mirko-p/blog/" if bposts else "/show/")): rd.setdefault(old, new)
+    for p in bposts: rd[f"/blog/{p['slug']}"] = f"/community/u/mirko-p/blog/{p['slug']}/"; rd[f"/show/blog/{p['slug']}"] = f"/community/u/mirko-p/blog/{p['slug']}/"
     write("show/redirects.json", json.dumps(rd))
     write("show/redirect-conflicts.json", json.dumps(sorted(set(clash))))
     print(f"podpage: {len(eps)} Folgen, {len(guests)} Gaeste, {len(bposts)} Blogposts, {len(plist)} Seiten, {len(rd)} Weiterleitungen, Konflikte mit Plattform-Seiten: {sorted(set(clash))}")

@@ -26,6 +26,7 @@ export default {
         if (to) return Response.redirect(url.origin + to + url.search, 301);
       }
     }
+    { const mp = /^(\/[a-z]{2})?\/community\/u\/mirko-peters(\/.*)?$/.exec(url.pathname); if (mp) return Response.redirect(url.origin + (mp[1] || "") + "/community/u/mirko-p" + (mp[2] || "/") + url.search, 301); }   // alter Name des Blog-Profils
     if (/^\/(pa|hi|ml|ta|te)(\/|$)/.test(url.pathname)) return Response.redirect(url.origin + "/", 301);   // diese Sprachen gibt es nicht mehr (Punjabi, Hindi, Malayalam, Tamil, Telugu)
     const p = url.pathname, isImg = IMG.test(p), isStatic = STATIC.test(p) || FONT.test(p);
     const cf = isImg ? { cacheEverything: true, cacheTtl: 604800, polish: "lossy", mirage: true }

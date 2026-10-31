@@ -1239,7 +1239,7 @@ def build():
     ENT.build(_ctx, lambda lang: LRN.gloss_links(lang, BASE), MEM.experts_index(_people, _orgs), _ep_find)
     import site_blog as BLG
     import site_legacy_blog as LBL
-    _posts = BLG.fetch_posts(COMMUNITY_API); _have = {p["slug"] for p in _posts if p["handle"] == "mirko-peters"}
+    _posts = BLG.fetch_posts(COMMUNITY_API); _have = {p["slug"] for p in _posts if p["handle"] == "mirko-p"}
     _posts += [p for p in LBL.items(BASE) if p["slug"] not in _have]; LBL.publish(write, BASE); MEM.BLOGLANGS = {p["lang"] for p in _posts}   # plus die frueheren Podpage-Blogbeitraege als Community-Beitraege von mirko-peters
     for _p in _posts: MEM.BLOGS.setdefault(_p["handle"], set()).add(_p["lang"])
     MEM.build(_ctx, _people, _orgs, extra={l: EVT.blocks(BASE, _events, l) for l in COMM_LANGS})
