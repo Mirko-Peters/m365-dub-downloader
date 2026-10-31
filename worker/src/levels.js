@@ -5,11 +5,11 @@
 export const LEVEL_NAMES = { 1: ["Learning", "Lernt"], 2: ["Practitioner", "Praxis"], 3: ["Expert", "Experte"], 4: ["Evangelist", "Evangelist"], 5: ["Master", "Master"], 6: ["Master Evangelist", "Master Evangelist"] };
 // Gewicht je Beleg und Obergrenze je Art (viele kleine Beitraege machen allein keinen Experten)
 export const WEIGHTS = { blog: 3, coauthor: 2, session: 5, podcast: 4, video: 3, guest: 2, library: 1, listing: 0.5, wiki: 1, entity: 1, cert: 4, answer: 1, self: 1 };
-export const CAPS = { blog: 15, coauthor: 6, session: 15, podcast: 12, video: 9, guest: 6, library: 5, listing: 0.5, wiki: 5, entity: 5, cert: 8, answer: 5, self: 3, endorse: 10 };
+export const CAPS = { blog: 15, coauthor: 6, session: 15, podcast: 12, video: 9, guest: 6, library: 5, listing: 0.5, wiki: 5, entity: 5, cert: 8, answer: 5, self: 3, endorse: 5 };   // Bestaetigungen allein reichen hoechstens fuer Praxis
 export const THRESH = { practitioner: 3, expert: 10, evangelist: 100, master: 1000, master_evangelist: 1000 };
 const TOPIC_T = ["product", "platform", "concept", "category"];
 
-// Punkte = Summe je Art, jede Art gedeckelt; Bestaetigungen zaehlen bis 10
+// Punkte = Summe je Art, jede Art gedeckelt; Bestaetigungen zaehlen bis 5 Punkte (Experte braucht eigene Beitraege oder die Redaktion)
 export function scoreOf(byKind, endorsed = 0) {
   let s = 0;
   for (const [k, w] of Object.entries(byKind || {})) s += Math.min(CAPS[k] ?? 5, +w || 0);
@@ -32,7 +32,8 @@ async function batch(db, stmts) { for (let i = 0; i < stmts.length; i += 80) awa
 // Belege aller Mitglieder aus den Quelltabellen (uid, eid, kind, item, weight)
 export async function collectEvidence(env, entityMap) {
   const db = env.DB, emap = await entityMap(env), out = [], seen = new Set();
-  const add = (uid, eid, kind, item, w) => { const k = `${uid}|${eid}|${kind}|${item}`; if (!uid || !emap.has(eid) || seen.has(k)) return; seen.add(k); out.push({ uid: +uid, eid, kind, item: String(item), w: w ?? WEIGHTS[kind] }); };
+  const users = new Set((await rows(db, "SELECT id FROM users WHERE banned=0")).map((u) => u.id));
+  const add = (uid, eid, kind, item, w) => { const k = `${uid}|${eid}|${kind}|${item}`; if (!uid || !users.has(+uid) || !emap.has(eid) || seen.has(k)) return; seen.add(k); out.push({ uid: +uid, eid, kind, item: String(item), w: w ?? WEIGHTS[kind] }); };
   const topics = (r, uid, kind, item) => { for (const t of parse(r.topics).slice(0, 10)) if (typeof t === "string") add(uid, t, kind, item); };
   for (const r of await rows(db, "SELECT id,user_id,topics FROM blog_posts WHERE status='live'")) topics(r, r.user_id, "blog", r.id);
   for (const r of await rows(db, "SELECT b.id,c.user_id,b.topics FROM blog_coauthors c JOIN blog_posts b ON b.id=c.post_id WHERE c.status='confirmed' AND b.status='live'")) topics(r, r.user_id, "coauthor", r.id);
@@ -54,9 +55,17 @@ export async function collectEvidence(env, entityMap) {
   return out;
 }
 
+// Fruehere Selbstangaben einmalig als Beleg 'self' uebernehmen (Gewicht = alte Stufe, hoechstens 3) - bevor eine Stufe zum ersten Mal berechnet wird
+export async function seedSelf(db, t, filter = null) {
+  const r = await db.prepare(`INSERT OR IGNORE INTO expertise_evidence(owner_id,eid,kind,item_id,weight,created) SELECT x.owner_id,x.eid,'self','',MIN(x.level,3),? FROM expertise x WHERE x.owner_type='u'${filter ? " AND x.owner_id=? AND x.eid=?" : ""} AND NOT EXISTS (SELECT 1 FROM expertise_score s WHERE s.owner_id=x.owner_id AND s.eid=x.eid)`).bind(t, ...(filter ? [filter.uid, filter.eid] : [])).run();
+  return r?.meta?.changes || 0;
+}
+
 // Kennzahlen und Stufe je Person und Thema neu berechnen; filter = { uid, eid } fuer ein Paar (nach einer Bestaetigung), sonst alle
 export async function computeLevels(db, filter = null) {
   const t = Math.floor(Date.now() / 1000), W = filter ? " WHERE owner_id=? AND eid=?" : "", B = filter ? [filter.uid, filter.eid] : [];
+  await seedSelf(db, t, filter);
+  if (!filter) await db.batch([db.prepare("DELETE FROM expertise_evidence WHERE owner_id NOT IN (SELECT id FROM users)"), db.prepare("DELETE FROM expertise_score WHERE owner_id NOT IN (SELECT id FROM users)"), db.prepare("DELETE FROM expertise WHERE owner_type='u' AND owner_id NOT IN (SELECT id FROM users)")]);   // geloeschte Konten
   const pairs = new Map(), key = (u, e) => `${u}|${e}`;
   const get = (u, e) => { const k = key(u, e); if (!pairs.has(k)) pairs.set(k, { uid: u, eid: e, by: {}, endorsed: 0, endorsedEv: 0, verified: 0, level: 0, score: null, known: false }); return pairs.get(k); };
   for (const r of await rows(db, `SELECT owner_id,eid,kind,SUM(weight) w FROM expertise_evidence${W} GROUP BY owner_id,eid,kind`, ...B)) get(r.owner_id, r.eid).by[r.kind] = r.w;
@@ -80,7 +89,7 @@ export async function syncExpertise(env, entityMap) {
   const ev = await collectEvidence(env, entityMap);
   await db.prepare("DELETE FROM expertise_evidence WHERE kind<>'self'").run();
   await batch(db, ev.map((e) => db.prepare("INSERT OR IGNORE INTO expertise_evidence(owner_id,eid,kind,item_id,weight,created) VALUES(?,?,?,?,?,?)").bind(e.uid, e.eid, e.kind, e.item, e.w, t)));
-  const seeded = await db.prepare("INSERT OR IGNORE INTO expertise_evidence(owner_id,eid,kind,item_id,weight,created) SELECT x.owner_id,x.eid,'self','',MIN(x.level,3),? FROM expertise x WHERE x.owner_type='u' AND NOT EXISTS (SELECT 1 FROM expertise_score s WHERE s.owner_id=x.owner_id AND s.eid=x.eid)").bind(t).run();
+  const seeded = await seedSelf(db, t);
   const r = await computeLevels(db);
-  return { evidence: ev.length, seeded: seeded?.meta?.changes || 0, ...r };
+  return { evidence: ev.length, seeded, ...r };
 }

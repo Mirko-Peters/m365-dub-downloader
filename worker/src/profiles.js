@@ -387,8 +387,8 @@ export async function handleProfiles(env, request, url, path, user, J) {
     const b = await body(); const o = await resolve(db, "u:" + b.handle);
     if (!o || !ID.test(b.e || "") || o.id === user.id) return J({ error: "bad_request" }, 400);
     if (!(await db.prepare("SELECT 1 x FROM expertise WHERE owner_type='u' AND owner_id=? AND eid=?").bind(o.id, b.e).first())) return J({ error: "not_found" }, 404);
+    if (!(await rateLimit(db, `endorse:${user.id}`, 30, 86400))) return J({ error: "rate_limit" }, 429);   // auch Zuruecknahmen (jede loest eine Neuberechnung aus)
     if (method === "POST") {
-      if (!(await rateLimit(db, `endorse:${user.id}`, 30, 86400))) return J({ error: "rate_limit" }, 429);
       await db.prepare("INSERT OR IGNORE INTO endorsements(owner_id,eid,by_id,created) VALUES(?,?,?,?)").bind(o.id, b.e, user.id, now()).run();
     } else await db.prepare("DELETE FROM endorsements WHERE owner_id=? AND eid=? AND by_id=?").bind(o.id, b.e, user.id).run();
     await computeLevels(db, { uid: o.id, eid: b.e }).catch(() => 0);   // Stufe sofort nachziehen (Evangelist ab 100, Master ab 1000 Bestaetigungen)
@@ -594,7 +594,7 @@ export async function deleteUserData(db, id) {
     db.prepare("DELETE FROM org_members WHERE user_id=?").bind(id),
     db.prepare("DELETE FROM item_votes WHERE user_id=? OR item_id IN (SELECT id FROM feed_items WHERE owner_type='u' AND owner_id=?)").bind(id, id),
     db.prepare("DELETE FROM feed_items WHERE owner_type='u' AND owner_id=?").bind(id), db.prepare("DELETE FROM channels WHERE owner_type='u' AND owner_id=?").bind(id),
-    db.prepare("DELETE FROM expertise WHERE owner_type='u' AND owner_id=?").bind(id), db.prepare("DELETE FROM programs WHERE owner_type='u' AND owner_id=?").bind(id),
+    db.prepare("DELETE FROM expertise WHERE owner_type='u' AND owner_id=?").bind(id), db.prepare("DELETE FROM expertise_evidence WHERE owner_id=?").bind(id), db.prepare("DELETE FROM expertise_score WHERE owner_id=?").bind(id), db.prepare("DELETE FROM programs WHERE owner_type='u' AND owner_id=?").bind(id),
     db.prepare("DELETE FROM profile_private WHERE user_id=?").bind(id), db.prepare("DELETE FROM profile_i18n WHERE user_id=?").bind(id), db.prepare("DELETE FROM certs WHERE user_id=?").bind(id), db.prepare("DELETE FROM cert_check WHERE user_id=?").bind(id), db.prepare("DELETE FROM cert_endorse WHERE owner_id=? OR by_id=?").bind(id, id), db.prepare("DELETE FROM endorsements WHERE owner_id=? OR by_id=?").bind(id, id),
     db.prepare("DELETE FROM profiles WHERE user_id=?").bind(id),
     db.prepare("DELETE FROM entity_rev WHERE user_id=? AND status IN ('pending','rejected')").bind(id), db.prepare("UPDATE entity_rev SET user_id=0 WHERE user_id=?").bind(id));

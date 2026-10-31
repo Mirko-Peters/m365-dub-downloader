@@ -70,7 +70,8 @@ test("levels: Punkte sind je Art gedeckelt, Stufen 1-6 folgen Belegen und Bestae
   assert.equal(scoreOf({ self: 3 }, 50), CAPS.self + CAPS.endorse, "Selbstangabe und Bestaetigungen gedeckelt");
   assert.equal(levelOf({ score: 0 }), 1); assert.equal(levelOf({ score: THRESH.practitioner }), 2); assert.equal(levelOf({ score: THRESH.expert }), 3);
   assert.equal(levelOf({ score: 1, verified: 1 }), 3, "Redaktion bestaetigt = Experte");
-  assert.equal(levelOf({ score: 2, endorsed: 5000 }), 1, "ohne Expertenstufe keine hoeheren Stufen (Bestaetigungen zaehlen nur ueber scoreOf bis 10 Punkte)");
+  assert.equal(levelOf({ score: 2, endorsed: 5000 }), 1, "ohne Expertenstufe keine hoeheren Stufen");
+  assert.equal(levelOf({ score: scoreOf({}, 500) }), 2, "Bestaetigungen allein reichen hoechstens fuer Praxis");
   assert.equal(levelOf({ score: 12, endorsed: 99 }), 3); assert.equal(levelOf({ score: 12, endorsed: 100 }), 4, "Evangelist ab 100 Bestaetigungen");
   assert.equal(levelOf({ score: 12, endorsed: 1000 }), 5, "Master ab 1000"); assert.equal(levelOf({ score: 12, endorsed: 1000, endorsedEv: 1000 }), 6, "Master Evangelist ab 1000 Evangelisten");
   assert.equal(levelName(6), "Master Evangelist"); assert.equal(levelName(2, true), "Praxis");
@@ -108,4 +109,14 @@ test("levels: syncExpertise baut Belege aus den Quelltabellen und setzt Stufen (
   for (let i = 10; i < 110; i++) raw.exec(`INSERT INTO endorsements(owner_id,eid,by_id,created) VALUES(1,'power-bi',${i},${t})`);
   await computeLevels(db, { uid: 1, eid: "power-bi" });
   assert.equal(raw.prepare("SELECT level FROM expertise WHERE owner_id=1 AND eid='power-bi'").get().level, 4, "102 Bestaetigungen: Evangelist");
+  // Paar-Pfad vor dem ersten vollen Lauf (Bestaetigung direkt nach dem Deploy): Selbstangabe wird trotzdem uebernommen
+  raw.exec(`INSERT INTO users(id,provider,sub,name,role,banned,created) VALUES(4,'g','4','Dana','user',0,${t}); INSERT INTO expertise(owner_type,owner_id,eid,level,verified) VALUES('u',4,'fabric',3,0); INSERT INTO endorsements(owner_id,eid,by_id,created) VALUES(4,'fabric',1,${t})`);
+  await computeLevels(db, { uid: 4, eid: "fabric" });
+  assert.equal(raw.prepare("SELECT COUNT(*) n FROM expertise_evidence WHERE owner_id=4 AND kind='self'").get().n, 1, "self-Beleg auch im Paar-Pfad");
+  assert.equal(raw.prepare("SELECT level FROM expertise WHERE owner_id=4 AND eid='fabric'").get().level, 2, "3 (self) + 1 (Bestaetigung) = 4 Punkte -> Praxis");
+  // geloeschtes Konto: deleteUserData raeumt Belege und Kennzahlen, der naechste Lauf legt nichts neu an
+  const { deleteUserData } = await import("../src/profiles.js");
+  await deleteUserData(db, 4); raw.exec("DELETE FROM users WHERE id=4");
+  await syncExpertise({ DB: db }, async () => emap);
+  assert.equal(raw.prepare("SELECT COUNT(*) n FROM expertise WHERE owner_id=4").get().n + raw.prepare("SELECT COUNT(*) n FROM expertise_evidence WHERE owner_id=4").get().n + raw.prepare("SELECT COUNT(*) n FROM expertise_score WHERE owner_id=4").get().n, 0, "nichts bleibt fuer das geloeschte Konto");
 });

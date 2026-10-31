@@ -416,7 +416,7 @@ export default {
     T("importEntitiesFromSite", () => importEntitiesFromSite(env));
     T("importEpisodes", () => importEpisodes(env));
     T("importTranslations", () => importTranslations(env));
-    T("syncExpertise", () => syncExpertise(env, entityMap));
+    if (event.cron !== "0 6 * * *") T("syncExpertise", () => syncExpertise(env, entityMap));   // nicht doppelt um 06:00 (beide Zeitplaene feuern)
     ctx.waitUntil(env.DB.prepare("DELETE FROM cron_runs WHERE started<?").bind(Math.floor(Date.now() / 1000) - 7 * 86400).run().catch(() => 0));
   },
 };
