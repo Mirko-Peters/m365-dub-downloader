@@ -14,22 +14,39 @@ const longTxt = (s, n) => String(s || "").replace(/[<>]/g, "").replace(/https?:\
 const isMs = (h) => /(^|\.)(microsoft\.com|azure\.com|office\.com|visualstudio\.com|github\.com|github\.io|microsoft365\.com|linkedin\.com)$/i.test(h);
 
 // Basisliste (statisch veroeffentlicht) fuer Verweisziele; 10 Minuten im Edge-Cache
-export async function baseIds(env) {
-  try {
-    const c = caches.default, key = new Request(env.SITE + "/entities.json");
-    let r = await c.match(key);
-    if (!r) { r = await fetch(key); if (!r.ok) return new Set(); const cl = new Response(r.body, r); cl.headers.set("cache-control", "max-age=600"); await c.put(key, cl.clone()); r = cl; }
-    return new Set(((await r.json()).entities || []).map((e) => e.id));
-  } catch { return new Set(); }
+// Quelle der Entitaeten (Paket 14): meta entity_source = "db" -> die Datenbank (entity_rev live) ist die einzige Quelle, entities.json der Seite wird nicht mehr gelesen;
+// Standard "json" -> wie bisher Datei plus Datenbank. Rueckfallschalter in der Verwaltung; der Cron importEntitiesFromSite holt neue Eintraege der Datei in die Datenbank.
+async function source(env) { try { return (await env.DB.prepare("SELECT v FROM meta WHERE k='entity_source'").first())?.v || "json"; } catch { return "json"; } }
+
+async function siteEntities(env, ttl = 600) {
+  try { return ((await (await fetch(env.SITE + "/entities.json", { cf: { cacheTtl: ttl } })).json()).entities || []); } catch { return []; }
 }
 
-// Alle Entitaeten (Basis + live aus der DB) als Map
+export async function baseIds(env) {
+  const ids = new Set(((await env.DB.prepare("SELECT DISTINCT eid FROM entity_rev WHERE status='live'").all().catch(() => ({ results: [] }))).results || []).map((r) => r.eid));
+  if ((await source(env)) === "db") return ids;
+  for (const e of await siteEntities(env)) ids.add(e.id);
+  return ids;
+}
+
+// Alle Entitaeten als Map: Datenbank (live) und, solange entity_source=json, die Datei als Grundlage darunter
 export async function entityMap(env) {
   const base = new Map();
-  try { const j = await (await fetch(env.SITE + "/entities.json", { cf: { cacheTtl: 600 } })).json(); for (const e of j.entities || []) base.set(e.id, e); } catch { /* ohne Basis nur DB */ }
+  if ((await source(env)) !== "db") for (const e of await siteEntities(env)) base.set(e.id, e);
   const rows = (await env.DB.prepare("SELECT eid,data FROM entity_rev WHERE status='live' ORDER BY id").all()).results || [];
   for (const r of rows) { try { base.set(r.eid, { id: r.eid, ...JSON.parse(r.data) }); } catch { /* defekte Zeile ignorieren */ } }
   return base;
+}
+
+// Cron: neue Eintraege aus entities.json (Repo) in die Datenbank uebernehmen (nur IDs ohne live-Fassung; nichts wird ueberschrieben) - ersetzt den Knopf in der Verwaltung fuer den laufenden Betrieb
+export async function importEntitiesFromSite(env) {
+  const db = env.DB, list = await siteEntities(env, 0);
+  if (!list.length) return { skipped: "entities.json nicht erreichbar" };
+  const have = new Set(((await db.prepare("SELECT DISTINCT eid FROM entity_rev WHERE status='live'").all()).results || []).map((r) => r.eid));
+  const todo = list.filter((e) => e && /^[a-z0-9][a-z0-9-]{1,79}$/.test(e.id || "") && e.name && e.type && !have.has(e.id)), t = Math.floor(Date.now() / 1000);
+  for (let i = 0; i < todo.length; i += 50)
+    await db.batch(todo.slice(i, i + 50).map((e) => { const { id, ...data } = e; return db.prepare("INSERT INTO entity_rev(eid,data,summary,user_id,status,created) VALUES(?,?,?,0,'live',?)").bind(id, JSON.stringify(data), "Übernahme aus entities.json", t); }));
+  return { imported: todo.length, db: have.size + todo.length, file: list.length };
 }
 
 // Wer ein geprueftes Zertifikat hat, darf direkt Themen/Konzepte bearbeiten und abstimmen, die mit diesem Zertifikat verknuepft sind
