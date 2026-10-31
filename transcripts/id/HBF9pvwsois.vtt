@@ -1,0 +1,787 @@
+WEBVTT
+
+00:00:00.340 --> 00:00:07.020
+Siap untuk 10 hari pembahasan Microsoft 365, Copilot AI Azure, dan para penggerak masa depan dunia kerja?
+
+00:00:07.860 --> 00:00:11.780
+Januari ini, M365 Con kembali hadir dan kami tampil lebih besar.
+
+00:00:12.860 --> 00:00:18.060
+Bergabunglah untuk sesi langsung, demo dunia nyata, dan pengetahuan praktis dari MVP serta pakar industri dunia.
+
+00:00:18.780 --> 00:00:21.100
+Tanpa selet umum, tanpa jargon, yang tak henti-hentinya.
+
+00:00:21.960 --> 00:00:28.560
+Kami membahas tantangan nyata, Copilot Studio, agen AI, fabrik, keamanan, tata kelola, dan otomatisasi.
+
+00:00:28.560 --> 00:00:34.300
+Baik Anda seorang profesional TI, pengembang, atau pemimpin bisnis, ada sesi yang dirancang untuk Anda.
+
+00:00:35.440 --> 00:00:40.080
+Selama 10 hari penuh, Anda dapat menjelajahi berbagai teknologi dan terhubung dengan komunitas global.
+
+00:00:40.880 --> 00:00:44.280
+Tonton secara langsung, dan bawa wasam praktis kembali ke organisasi Anda.
+
+00:00:45.120 --> 00:00:48.900
+Januari 2027, 10 hari, satu komunitas Microsoft.
+
+00:00:49.420 --> 00:00:50.520
+Pendaftaran sudah dibuka sekarang.
+
+00:00:51.760 --> 00:00:55.580
+Kunjungi M365 Con.net dan amankan tempat Anda hari ini.
+
+00:00:55.580 --> 00:00:58.680
+Itu M365 Con.net not.
+
+00:01:00.180 --> 00:01:04.620
+Bergabunglah sekarang di M365 Con.net, dan sampai jumpa secara langsung di bulan Januari.
+
+00:01:05.120 --> 00:01:09.120
+Topik hari ini adalah sesuatu yang hampir semua pengembang Microsoft 365 pernah dengar.
+
+00:01:09.860 --> 00:01:12.500
+Namun kebanyakan orang tidak benar-benar memahami cara kerjanya di balik layar.
+
+00:01:12.900 --> 00:01:15.520
+Saya berbicara tentang pemberitahuan perubahan J-Notifications Microsoft.
+
+00:01:16.160 --> 00:01:17.840
+Apa sebenarnya itu, dan mengapa Anda harus peduli?
+
+00:01:18.720 --> 00:01:19.580
+Mari kita mulai selesaikan.
+
+00:01:19.580 --> 00:01:23.760
+Bayangkan Anda membangun aplikasi yang perlu tahu kapan sesuatu berubah di Microsoft 365.
+
+00:01:24.220 --> 00:01:29.260
+Mungkin email baru masuk, seseorang memperbarui file di SharePoint, atau pengguna baru ditambahkan ke direktori perusahaan.
+
+00:01:29.560 --> 00:01:30.460
+Bagaimana cara aplikasi Anda?
+
+00:01:30.860 --> 00:01:32.500
+Masalahnya, cara lama adalah dengan poli.
+
+00:01:33.220 --> 00:01:36.460
+Aplikasi Anda mengirim permintaan ke Microsoft Graph setiap beberapa menit dan bertanya,
+
+00:01:36.780 --> 00:01:38.100
+ada yang baru sejak terakhir saya cek?
+
+00:01:38.440 --> 00:01:40.480
+Jika tidak ada yang berubah, Anda menyanyiakan satu permintaan.
+
+00:01:40.760 --> 00:01:44.480
+Dan jika ada yang berubah 5 detik setelah pengecekan, Anda tidak akan tahu sampai siklus berikut.
+
+00:01:44.480 --> 00:01:50.040
+Anda mungkin mengecek terlalu sering membuang sumber daya dan berisiko terkena throttling atau terlalu jarang yang berarti Anda lawatkan sesuatu.
+
+00:01:50.380 --> 00:01:53.300
+Microsoft sebenarnya melakukan throttling pada aplikasi yang melakukan polling terlalu akibat.
+
+00:01:53.920 --> 00:01:58.660
+Mengembang menyebutnya Graph Jail, dan aplikasi Anda diblokir sementara karena terlalu banyak permintaan-permintaan.
+
+00:01:59.100 --> 00:02:00.660
+Jadi pertanyaannya adalah, bukan keadaan cara yang lebih baik.
+
+00:02:01.300 --> 00:02:03.680
+Bagaimana jika ahli aplikasi Anda terus bertanya, apakah ada yang baru?
+
+00:02:03.840 --> 00:02:07.840
+Sistem beritahu Anda saat sesuatu berubah, itulah tepatnya fungsi pemberitahuan perubahan.
+
+00:02:09.080 --> 00:02:11.120
+Apa itu pemberitahuan perubahan Microsoft Graph?
+
+00:02:11.720 --> 00:02:12.640
+Ini definisi yang paling sederhana.
+
+00:02:12.640 --> 00:02:19.080
+Pemberitahuan perubahan memungkinkan aplikasi Anda bereaksi secara instan terhadap peristiwa di Microsoft 365 tanpa pengecekan terus-menerus.
+
+00:02:19.840 --> 00:02:21.460
+Anggap saja seperti sensor gerak pada kotak suratan.
+
+00:02:22.100 --> 00:02:27.000
+Alih-alih berjalan melewatinya setiap jam untuk mengintip ke dalam, Anda memasang sensor yang memberitahu Anda saat surat tiba.
+
+00:02:27.300 --> 00:02:29.760
+Anda berhenti membuang waktu untuk pengecekan kosong dan tidak pernah melewatkan Anda.
+
+00:02:30.160 --> 00:02:32.040
+Itulah yang dilakukan pemberitahuan perubahan untuk aplikasi Anda.
+
+00:02:32.580 --> 00:02:39.380
+Saat ada perubahan, seperti email baru, file yang diperbarui, atau acara kalender, Microsoft Graph mengirimkan notifikasi ke aplikasi Anda secara otomatis.
+
+00:02:39.880 --> 00:02:40.500
+Tidak perlu polling.
+
+00:02:40.500 --> 00:02:45.340
+Sistem ini memiliki dua bagian, yaitu langganan dan notifikasi yang bekerja bersama.
+
+00:02:45.940 --> 00:02:48.920
+Langganan adalah tempat Anda memberitahu Microsoft Graph apa yang ingin dipatuh.
+
+00:02:49.560 --> 00:02:52.540
+Anda bisa mengatakan, hey beritahu saya jika ada pesan baru yang masuk ke kotak masuk ini.
+
+00:02:53.240 --> 00:02:56.100
+Atau beritahu saya jika sebuah file diperbarui di pustaka SharePoint ini.
+
+00:02:56.680 --> 00:02:58.440
+Anda mendaftarkan minat Anda dan Graph akan mencatat.
+
+00:02:58.440 --> 00:03:00.160
+Notifikasi adalah apa yang terjadi setelahnya.
+
+00:03:00.620 --> 00:03:04.220
+Saat perubahan terjadi, Graph mengirimkan HTTP POST ke endpoint yang Anda sediakan.
+
+00:03:04.620 --> 00:03:09.440
+Aplikasi Anda menerima POST tersebut dan mengetahui ada sesuatu yang terjadi lalu bisa memutuskan tindakan selanjutnya,
+
+00:03:09.620 --> 00:03:12.740
+seperti mengambil data baru memicu alur kerja atau memperbarui basis data.
+
+00:03:13.520 --> 00:03:14.660
+Inilah perbedaan utama dari polling.
+
+00:03:15.180 --> 00:03:16.780
+Notifikasi dikirimkan secara otomatis.
+
+00:03:17.180 --> 00:03:20.620
+Aplikasi Anda tidak perlu bertanya, sistem akan mendorong informasi tersebut saat itu juga.
+
+00:03:20.940 --> 00:03:21.580
+Itulah keajaiban.
+
+00:03:22.080 --> 00:03:25.480
+Microsoft Graph mendukung notifikasi perubahan untuk berbagai macam sumber daya.
+
+00:03:26.140 --> 00:03:30.660
+Pesan, acara, kontak, pengguna, grup, file, pesan, teams, peringatan, keamanan, hampir semua.
+
+00:03:30.820 --> 00:03:33.260
+Yang dapat Anda akses melalui Graph bisa dipantau perubahannya.
+
+00:03:34.020 --> 00:03:35.060
+Namun bagaimana cara menyiapkannya?
+
+00:03:35.580 --> 00:03:38.080
+Bagaimana cara memberitahu Graph apa yang harus dipantau dan kemana harus mengirim peringatan?
+
+00:03:38.440 --> 00:03:39.120
+Membuat langganan.
+
+00:03:39.560 --> 00:03:40.820
+Memberitahu Graph apa yang harus dipantau.
+
+00:03:41.140 --> 00:03:41.920
+Jadi apa itu langganan?
+
+00:03:41.920 --> 00:03:43.460
+Itu hanyalah permintaan pendaftaran.
+
+00:03:43.460 --> 00:03:45.620
+Aplikasi Anda mengatakan beritahu saja jika Anda terjadi.
+
+00:03:45.940 --> 00:03:47.980
+Dan Anda mengirimkan permintaan tersebut ke API Microsoft.
+
+00:03:48.540 --> 00:03:49.360
+Graph menyimpannya ada menu.
+
+00:03:49.920 --> 00:03:52.240
+Anda perlu memberikan beberapa detang kepada Graph dalam permintaan tersebut.
+
+00:03:52.640 --> 00:03:55.320
+Pertama, sumber daya yang ingin dipantau, yaitu jalur ke data tersebut.
+
+00:03:55.840 --> 00:03:58.220
+Misalnya, users jika Anda melontoh perubahan pada akun pengguna.
+
+00:03:58.860 --> 00:04:00.840
+Atau, may spammer folder seperti inbox plus.
+
+00:04:01.420 --> 00:04:03.100
+Messages jika Anda ingin tahu tentang email baru.
+
+00:04:03.780 --> 00:04:04.700
+Selanjutnya, jenis perubah.
+
+00:04:05.520 --> 00:04:07.460
+Apakah Anda ingin tahu saat sesuatu dibuat atau dihapus?
+
+00:04:07.980 --> 00:04:09.800
+Anda bisa memilih salah satu atau minta kepinggian segalanya.
+
+00:04:10.080 --> 00:04:11.420
+Ketiga, URL notifikasi.
+
+00:04:11.740 --> 00:04:12.840
+Ini adalah alamat endpoint Anda.
+
+00:04:12.840 --> 00:04:15.320
+Tempat Grab harus mengirim notifikasi saat sesuatu terjadi.
+
+00:04:15.980 --> 00:04:18.320
+Ini harus berupaya endpoint HTTPS yang dapat diakses secara publik.
+
+00:04:18.640 --> 00:04:19.820
+Tidak dijalankan pintas untuk hati.
+
+00:04:19.900 --> 00:04:20.820
+Keempat, tanggal kedalawarsa.
+
+00:04:21.340 --> 00:04:22.360
+Langganan tidak berlangsung selama.
+
+00:04:22.840 --> 00:04:25.380
+Anda memilih tanggal dan waktu mendatang saat langganan berakhir.
+
+00:04:25.800 --> 00:04:27.780
+Namun, sumber daya yang berbeda memiliki masa berlaku maksimal.
+
+00:04:28.580 --> 00:04:30.220
+Pesan Outlook bisa berlangsung hingga 7 hari.
+
+00:04:30.860 --> 00:04:32.400
+Pesan obrolan Teams maksimal 3 hari.
+
+00:04:33.100 --> 00:04:34.600
+Relca point bisa bertahan sekitar 30 hari.
+
+00:04:35.100 --> 00:04:35.700
+Formasi kehadiran?
+
+00:04:36.160 --> 00:04:37.440
+Itu kedalawarsa setelah hanya 1 jam.
+
+00:04:38.040 --> 00:04:38.920
+Berikut adalah contoh konkret.
+
+00:04:38.920 --> 00:04:41.880
+Katakan Anda ingin tahu seseorang di perusahaan Anda mengubah catatan mereka.
+
+00:04:42.580 --> 00:04:45.980
+Anda membuat langganan untuk sumber daya pengguna dengan jenis perubahan diperbarui.
+
+00:04:46.500 --> 00:04:50.060
+Anda mengarahkannya ke URL notifikasi Anda dan mengatur kedalawarsa beberapa hari ke depan.
+
+00:04:50.400 --> 00:04:52.380
+Saat seseorang memperbarui profil mereka di Azure AD,
+
+00:04:52.620 --> 00:04:55.200
+Grab mengirimkan post ke endpoint Anda dengan pilot notifikasi.
+
+00:04:55.680 --> 00:04:58.240
+Pilot tersebut mencakup ID pengguna dan memberitahu Anda apa yang berubah.
+
+00:04:58.240 --> 00:05:01.560
+Aplikasi Anda kemudian dapat menindak lanjutinya memperbarui sistem SDM,
+
+00:05:01.660 --> 00:05:03.560
+memicu notifikasi ke manajer mereka apapun yang Anda butuh.
+
+00:05:03.840 --> 00:05:06.200
+Grab menanggapi permintaan langganan Anda dengan ID langganan.
+
+00:05:07.040 --> 00:05:10.840
+Anda akan memerlukan ID tersebut nanti untuk mengelola langganan, memperbarui, atau menghapusnya.
+
+00:05:11.260 --> 00:05:11.840
+Namun ini poinnya.
+
+00:05:12.180 --> 00:05:13.740
+Sebelum Grab mulai mengirim notifikasi,
+
+00:05:13.860 --> 00:05:17.040
+ia perlu mengonfirmasi bahwa endpoint Anda benar aktif dan mendengarkan.
+
+00:05:17.580 --> 00:05:18.400
+Itu memerlukan jabat tangan.
+
+00:05:19.300 --> 00:05:21.300
+Penjelasan token validasi, jabat tangan.
+
+00:05:21.800 --> 00:05:23.120
+Saat Anda membuat langganan,
+
+00:05:23.300 --> 00:05:25.840
+Microsoft Grab tidak langsung mempercayai endpoint Anda begitu saja.
+
+00:05:25.840 --> 00:05:28.620
+Ia mengirimkan ping uji terlebih dahulu, sebuah permintaan verifikasi.
+
+00:05:29.180 --> 00:05:32.240
+Ping tersebut mencakup token validasi serangkain karakter acak.
+
+00:05:32.920 --> 00:05:36.380
+Anda harus menangkap token tersebut dan mengirimkannya kembali sebagai teks biasa dalam 10 detik.
+
+00:05:36.980 --> 00:05:39.180
+Bayangkan seperti kure pengiriman yang membunyikan berpintu Anda
+
+00:05:39.180 --> 00:05:41.020
+untuk memastikan Anda di rumah sebelum meninggalkan pak.
+
+00:05:41.440 --> 00:05:43.400
+Jika tidak ada yang menjawab, kure tidak meninggalkan apapun.
+
+00:05:43.840 --> 00:05:44.240
+Lihat di sini.
+
+00:05:44.720 --> 00:05:47.060
+Jika endpoint Anda tidak mengemakan kembali token validasi,
+
+00:05:47.280 --> 00:05:48.720
+Grab tidak akan mengirim notifikasi ke sana.
+
+00:05:49.300 --> 00:05:51.940
+Responsnya harus berupa teks biasa, bukan JSON atau XML,
+
+00:05:52.360 --> 00:05:53.460
+hanya string token mentah.
+
+00:05:53.840 --> 00:05:55.680
+Jika formatnya salah, jabat tangan gagal.
+
+00:05:56.040 --> 00:05:56.960
+Ini adalah pemeriksaan kamu.
+
+00:05:57.480 --> 00:06:00.360
+Ini membuktikan endpoint Anda aktif mendengarkan dan berada di bawah kendali Anda.
+
+00:06:00.900 --> 00:06:03.940
+Ini mencegah seseorang mengarahkan langganan ke URL yang bukan miliknya
+
+00:06:03.940 --> 00:06:06.520
+berharap untuk mencegah notifikasi yang ditujukan untuk orang lain.
+
+00:06:06.980 --> 00:06:08.240
+Tidak ada jabat tangan berarti tidak ada langgan.
+
+00:06:08.620 --> 00:06:11.300
+Kerap menolak permintaan pembuatan dan Anda mendapatkan kesalahan.
+
+00:06:11.620 --> 00:06:12.960
+Anda memperbaiki endpoint Anda dan mencoba lagi.
+
+00:06:13.320 --> 00:06:14.400
+Telah jabat tangan berhasil,
+
+00:06:14.700 --> 00:06:16.580
+langganan aktif dan notifikasi mulai mengalir.
+
+00:06:17.420 --> 00:06:18.000
+Namun di poin ini,
+
+00:06:18.660 --> 00:06:19.560
+notifikasi tidak mengalir.
+
+00:06:20.340 --> 00:06:21.700
+Menjaga koneksi tetap aktif.
+
+00:06:22.420 --> 00:06:23.060
+Pembaruan langganan.
+
+00:06:23.060 --> 00:06:25.580
+Setiap langganan memiliki tanggal kedaluan warsa.
+
+00:06:25.840 --> 00:06:26.840
+Anda mengaturnya saat Anda membuat.
+
+00:06:27.200 --> 00:06:27.840
+Grap menegakkannya.
+
+00:06:28.400 --> 00:06:29.160
+Saat hari itu tiba,
+
+00:06:29.520 --> 00:06:30.120
+langganan berhenti.
+
+00:06:30.560 --> 00:06:31.460
+Tidak ada notifikasi lagi.
+
+00:06:32.920 --> 00:06:33.820
+Bayangkan seperti metran bari.
+
+00:06:34.680 --> 00:06:37.400
+Anda masukkan waktu dan saat waktu habis bendera metran kedaluan warsa.
+
+00:06:37.960 --> 00:06:39.400
+Sumber daya berbeda memiliki batas yang berbeda.
+
+00:06:39.900 --> 00:06:41.660
+Pesan Outlook bisa berjalan selama 7 hari.
+
+00:06:42.000 --> 00:06:43.180
+Pesan obrolan Teams 3 hari.
+
+00:06:43.260 --> 00:06:45.380
+File SharePoint bertahan sekitar 30 hari.
+
+00:06:45.540 --> 00:06:47.000
+Informasi kehadiran hanya 1 jam.
+
+00:06:47.000 --> 00:06:50.320
+Jadi aplikasi Anda tidak bisa begitu saja membuat langganan lalu melupakan.
+
+00:06:50.660 --> 00:06:52.300
+Anda merlukan proses yang menjaganya tetap aktif.
+
+00:06:52.500 --> 00:06:53.460
+Memperbarui langganan atau sederhana.
+
+00:06:53.720 --> 00:06:55.440
+Kirim permintaan patch dengan ID langganan.
+
+00:06:55.980 --> 00:06:57.180
+Sertakan tanggal kedaluan warsa yang baru.
+
+00:06:57.760 --> 00:06:59.200
+Lakukan sebelum yang saat ini berakhir.
+
+00:06:59.380 --> 00:07:00.920
+Dan graph akan memperpanjang langganan.
+
+00:07:01.420 --> 00:07:02.740
+Berikut praktek terbaik yang saya sarankan.
+
+00:07:03.280 --> 00:07:05.720
+Periksa stempel waktu kedaluan warsa pada setiap notifikasi yang Anda terima.
+
+00:07:06.180 --> 00:07:07.440
+Jika sudah mendekati waktu berakhir,
+
+00:07:07.520 --> 00:07:08.960
+misalnya dalam 1 hari perbarui 1 juga.
+
+00:07:09.180 --> 00:07:12.420
+Dengan begitu, Anda tidak perlu tugas latar belakang terpisah hanya untuk mengelola langganan.
+
+00:07:13.080 --> 00:07:15.440
+Microsoft juga menambahkan notifikasi siklus hidup.
+
+00:07:15.440 --> 00:07:18.000
+Peringatan ini memberitahu Anda sebelum melanggan kedaluan warsa.
+
+00:07:18.340 --> 00:07:20.600
+Peringatan ini memberitahu saat langganan Anda akan berakhir
+
+00:07:20.600 --> 00:07:22.300
+atau saat token akses perlu otorisasi ulang.
+
+00:07:22.760 --> 00:07:25.640
+Berlanggananlah pada ini dan aplikasi Anda dapat memperbarui sebelum Anda masalah.
+
+00:07:25.940 --> 00:07:28.640
+Namun bagaimana jika titik akhir Anda mati atau Anda melewatkan jendela pembaru?
+
+00:07:28.980 --> 00:07:30.140
+Disitulah jaring pengaman perperan.
+
+00:07:31.220 --> 00:07:33.820
+Saat keadaan menjadi buruk, keandalan dan jaring pengaman diperlukan.
+
+00:07:34.260 --> 00:07:37.220
+Langganan Anda aktif titik akhir Anda mendengarkan notifikasi mengalir.
+
+00:07:37.620 --> 00:07:39.680
+Semuanya tampak baik tetapi apa yang terjadi ketika ada sesuatu yang rusak?
+
+00:07:40.060 --> 00:07:42.120
+Mungkin titik akhir Anda mati untuk pemeliharaan,
+
+00:07:42.120 --> 00:07:46.600
+masalah jaringan menjatuhkan notifikasi atau Anda melewatkan jendela pembaruan dan langganan kedalu warsa.
+
+00:07:46.900 --> 00:07:47.660
+Hal-hal seperti ini bisa terjadi.
+
+00:07:47.900 --> 00:07:49.260
+Pertanyaan adalah bagaimana memulihkannya?
+
+00:07:49.760 --> 00:07:53.300
+Microsoft Graph mengharapkan titik akhir webhook Anda merespons dengan cepat dalam 3 detik.
+
+00:07:53.500 --> 00:07:55.300
+Jika memakan waktu lebih lama, Graph menandainya sebagai lama.
+
+00:07:55.640 --> 00:07:58.960
+Jika lebih dari 10% respons Anda melebihi 3 detik dalam periode 10 menit,
+
+00:07:59.100 --> 00:08:01.180
+Graph menunda notifikasi Anda selama 10 menit.
+
+00:08:01.680 --> 00:08:04.720
+Graph hanya mengirim sampel kecil untuk meriksa apakah Anda sudah keadaan yang buruk.
+
+00:08:05.120 --> 00:08:08.460
+Jika lebih dari 15% respons Anda melebihi batas waktu coba ulang 10 detik,
+
+00:08:08.460 --> 00:08:10.100
+Graph menandai titik akhir Anda sebagai terputus.
+
+00:08:10.100 --> 00:08:11.860
+Notifikasi berhenti sepenuhnya selama 10 menit.
+
+00:08:12.060 --> 00:08:13.820
+Notifikasi tersebut Anda tidak bisa mendapatkan kecil.
+
+00:08:14.140 --> 00:08:15.900
+Jadi titik akhir Anda harus cepat dan andal.
+
+00:08:16.340 --> 00:08:19.600
+Itu tidak berarti Anda harus memproses setiap notifikasi dalam waktu kurang dari 3 detik.
+
+00:08:20.060 --> 00:08:22.520
+Cukup akui penerimaan dengan cepat menggunakan respons 2 accepted,
+
+00:08:22.720 --> 00:08:24.720
+lalu proses notifikasi secara asinkron.
+
+00:08:25.140 --> 00:08:26.400
+Masukkan dalam tangan, tangan ini nanti.
+
+00:08:26.800 --> 00:08:28.020
+Kuncinya adalah respons 4 tersebut.
+
+00:08:28.400 --> 00:08:30.500
+Bahkan dengan titik akhir yang sempurna, hal-hal masih bisa salah.
+
+00:08:30.820 --> 00:08:31.800
+Langganan bisa ke dalam luar saham.
+
+00:08:32.280 --> 00:08:33.280
+Gangguan jaringan bisa terjadi.
+
+00:08:33.620 --> 00:08:36.640
+Microsoft Graph sendiri mungkin melewatkan notifikasi dalam kasus yang jarang terjadi.
+
+00:08:36.640 --> 00:08:39.000
+Itulah mengapa Anda memerlukan jaring pengaman, yaitu Query Delta.
+
+00:08:39.200 --> 00:08:39.860
+Bayangkan seperti ini.
+
+00:08:40.160 --> 00:08:41.720
+Notifikasi perubahan adalah alarm kebakaran.
+
+00:08:41.960 --> 00:08:43.840
+Notifikasi tersebut memberitahu Anda bahwa sesuatu sedang terdiri.
+
+00:08:44.000 --> 00:08:45.340
+Query Delta adalah sistem penyeram air.
+
+00:08:45.580 --> 00:08:47.140
+Query Delta menangkap apapun yang terlewakan oleh Anda.
+
+00:08:47.420 --> 00:08:48.220
+Doanya bekerja bersama.
+
+00:08:48.480 --> 00:08:49.720
+Notifikasi memberi Anda keseran waktunya.
+
+00:08:50.280 --> 00:08:53.080
+Query Delta memberi Anda gambar lengkap yang bisa Anda rekonsidasi kapan saja.
+
+00:08:53.740 --> 00:08:54.940
+Pola yang disarankan sangat sederhana.
+
+00:08:55.200 --> 00:08:56.900
+Kunakan notifikasi perubahan untuk keseran istana.
+
+00:08:57.620 --> 00:08:58.860
+Jalankan Query Delta secara berkala,
+
+00:08:59.060 --> 00:09:01.880
+mungkin setiap beberapa jam atau sekali sehari untuk menangkap apapun yang terlewat.
+
+00:09:01.880 --> 00:09:05.100
+Dengan cara ini, meskipun notifikasi hilang atau langganan kedalu warsa,
+
+00:09:05.220 --> 00:09:07.200
+Anda tidak akan pernah melewatkan perubahan secara permukaan.
+
+00:09:07.940 --> 00:09:08.880
+Kasus penggunaan dunia nyata.
+
+00:09:09.420 --> 00:09:10.060
+Apa yang bisa Anda bangun?
+
+00:09:10.440 --> 00:09:11.740
+Jadi apa sebenarnya yang dimungkinkan oleh hal ini?
+
+00:09:12.100 --> 00:09:13.660
+Izinkan saya memandu Anda melalui beberapa contoh.
+
+00:09:13.900 --> 00:09:14.800
+Ambil contoh otomatis sihat.
+
+00:09:15.240 --> 00:09:17.040
+Bayangkan seseorang bergabung dengan perusahaan Anda besok.
+
+00:09:17.420 --> 00:09:20.360
+Saat Entra ID membuat pengguna baru, notifikasi perubahan akan terpicu.
+
+00:09:20.880 --> 00:09:23.660
+Aplikasi Anda mengambil profil mereka dan membuat akun di platform HR.
+
+00:09:23.660 --> 00:09:25.260
+Pelacakan waktu dan akses gedung Anda.
+
+00:09:25.480 --> 00:09:26.420
+Semuanya dalam hitungan detik.
+
+00:09:26.640 --> 00:09:27.560
+Tanpa polling, tanpa benda.
+
+00:09:27.560 --> 00:09:30.640
+Untuk peringatan keamanan, misalnya akun pengguna dinonaktifkan.
+
+00:09:31.500 --> 00:09:34.060
+Notifikasi perubahan memicu alur kerja yang memeriksa perubahan,
+
+00:09:34.180 --> 00:09:36.120
+mencurigakan dan memberitahu tim keamanan Anda.
+
+00:09:36.600 --> 00:09:38.100
+Dulu Anda harus melakukan polling setiap beberapa.
+
+00:09:38.480 --> 00:09:39.300
+Sekarang semuanya instan.
+
+00:09:39.660 --> 00:09:40.980
+Pemprosesan konten bekerja dengan sama.
+
+00:09:41.560 --> 00:09:44.880
+Saat file masuk ke pustaka dokumen SharePoint, Anda ingin tahu apakah itu faktor.
+
+00:09:45.500 --> 00:09:47.220
+Notifikasi memberitahu Anda bahwa ada file baru.
+
+00:09:47.720 --> 00:09:49.660
+Aplikasi Anda mengambilnya, menjalankannya melalui AI
+
+00:09:49.660 --> 00:09:51.720
+untuk mengklasifikasikannya dan mengirimkannya ke sistem pengeluaran.
+
+00:09:51.780 --> 00:09:52.500
+Yang tepat semuanya teman.
+
+00:09:53.020 --> 00:09:55.340
+Dasber waktu nyata memungkinkan Anda melihat analitik saat terjadi,
+
+00:09:55.340 --> 00:09:56.320
+bukan dari beberapa jamion.
+
+00:09:56.600 --> 00:09:59.600
+Notifikasi perubahan menyinkronkan dataverse ke Fabric secara instan.
+
+00:09:59.920 --> 00:10:02.120
+Dashboard Power BI Anda diperbarui secara hampir waktu nyata.
+
+00:10:02.520 --> 00:10:03.580
+Ini salah satu yang menurut saya menarik.
+
+00:10:04.060 --> 00:10:04.800
+Konektor Copilot.
+
+00:10:05.320 --> 00:10:07.900
+Microsoft menambahkan sinkronisasi waktu nyata melalui webhook
+
+00:10:07.900 --> 00:10:09.780
+sehingga agen AI merespons detik saat data book.
+
+00:10:10.400 --> 00:10:13.120
+Saat catatan pelanggan diperbarui di Dynamics 365 365,
+
+00:10:13.700 --> 00:10:16.560
+agen Copilot langsung membuat tindak lanjut tanpa menunggu.
+
+00:10:17.980 --> 00:10:19.220
+Semua contoh ini memiliki satu kesamaan.
+
+00:10:20.040 --> 00:10:21.260
+Sebelum ada notifikasi perubahan,
+
+00:10:21.480 --> 00:10:24.220
+Anda membuat pekerjaan terjadwal yang melakukan polling setiap jam atau hari.
+
+00:10:24.220 --> 00:10:26.860
+Itu berhasil, tetapi lambat, boros, dan rentan.
+
+00:10:27.760 --> 00:10:29.280
+Notifikasi perubahan membangunan data tersebut.
+
+00:10:29.760 --> 00:10:31.640
+Waktu nyata, berbasis peristiwa, instan.
+
+00:10:32.880 --> 00:10:34.200
+Memilih saluran pengiriman yang tepat.
+
+00:10:34.540 --> 00:10:36.100
+Tidak setiap aplikasi membutuhkan pengiriman sama.
+
+00:10:36.420 --> 00:10:37.260
+Mari kita lihat opsi Anda.
+
+00:10:37.640 --> 00:10:38.660
+Webhook adalah yang paling sederhana.
+
+00:10:39.240 --> 00:10:41.140
+Gerak mengirim HTTP post ke titik akhir Anda,
+
+00:10:41.220 --> 00:10:42.800
+Anda memprosesnya, lalu selesai.
+
+00:10:43.100 --> 00:10:44.200
+Untuk volume rendah hingga menengah,
+
+00:10:44.340 --> 00:10:46.280
+katakanlah beberapa ratus notifikasi per jam itu berkesan.
+
+00:10:46.640 --> 00:10:48.160
+Namun bagaimana jika Anda membutuhkan sesuatu?
+
+00:10:48.740 --> 00:10:51.460
+Ribuan notifikasi per detik dapat membebani satu titik akhir.
+
+00:10:52.080 --> 00:10:53.200
+Anda membutuhkan sesuatu yang lebih baik.
+
+00:10:53.200 --> 00:10:55.600
+Event Hubs menangani jutaan peristiwa per detik.
+
+00:10:56.580 --> 00:10:58.580
+Alih-alih, Graph mengirim notifikasi satu per satu
+
+00:10:58.580 --> 00:10:59.520
+yang mengirimkannya ke Hub.
+
+00:11:00.020 --> 00:11:02.060
+Aplikasi Anda membaca dengan cepatannya sendiri risiko banjir Anda.
+
+00:11:02.620 --> 00:11:03.920
+Ini untuk skenario perusahaan besar
+
+00:11:03.920 --> 00:11:06.300
+seperti ribuan situs SharePoint atau jutaan kotak surat.
+
+00:11:07.080 --> 00:11:08.540
+Lalu ada Event Grid opsi tanpa server.
+
+00:11:08.920 --> 00:11:11.280
+Ini mengirimkan notifikasi ke Azure Functions atau Logic Apps,
+
+00:11:11.400 --> 00:11:14.040
+serta menangani percobaan ulang dan data lettering secara otomatis.

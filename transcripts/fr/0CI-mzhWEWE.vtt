@@ -1,0 +1,916 @@
+WEBVTT
+
+00:00:00.270 --> 00:00:07.130
+Prêt pour 10 jours consacrés à Microsoft 365, Copilot, l'IA, Azure et aux personnes qui façonnent l'avenir du travail, 5.
+
+00:00:07.570 --> 00:00:12.130
+En janvier prochain, la conférence M365 est de retour et nous voyons plus grand.
+
+00:00:12.790 --> 00:00:18.350
+Rejoignez-nous pour des sessions en direct, des démonstrations concrètes et des connaissances pratiques partagées par des MVP et des experts du secteur du monde entier.
+
+00:00:18.790 --> 00:00:20.930
+Pas de diapositif générique, pas de jargon sans fin.
+
+00:00:22.010 --> 00:00:23.170
+Nous abordons les vrais défis.
+
+00:00:23.810 --> 00:00:28.490
+Copilot Studio, les agents IA fabriquent la sécurité, la gouvernance et l'automatisation.
+
+00:00:28.490 --> 00:00:34.390
+Que vous soyez professionnel de l'informatique, développeur ou dirigeant d'entreprise, des sessions sont conçues pour vous.
+
+00:00:35.470 --> 00:00:40.090
+Avec 10 jours complets, vous pourrez explorer de multiples technologies et échanger avec une communauté mondiale.
+
+00:00:40.950 --> 00:00:44.190
+Assister au direct et ramener des idées concrètes dans votre organisation.
+
+00:00:45.210 --> 00:00:48.870
+Janvier 2027, 10 jours, une seule communauté Microsoft.
+
+00:00:49.390 --> 00:00:50.490
+Les inscriptions sont désormais ouvertes.
+
+00:00:51.870 --> 00:00:55.510
+Rendez-vous sur m365con.net pour réserver votre place dès aujourd'hui.
+
+00:00:55.510 --> 00:00:58.430
+C'est m365con.net.
+
+00:01:00.290 --> 00:01:03.290
+Rejoignez-nous sur m365con.net et nous vous attendons.
+
+00:01:03.690 --> 00:01:04.590
+En direct en janvier.
+
+00:01:05.330 --> 00:01:09.770
+Bonjour à tous et bienvenue dans un nouvel épisode des Microsoft Knowledge Nuggets ici sur M365FM.
+
+00:01:10.490 --> 00:01:11.170
+Je suis Mirko Peters.
+
+00:01:11.730 --> 00:01:15.470
+Imaginez que vous déplaciez une ancienne application métier d'un serveur de votre bureau vers une machine virtuelle Azure.
+
+00:01:16.030 --> 00:01:18.710
+L'application est maintenant dans le cloud, mais elle réclame toujours un domaine Windows.
+
+00:01:19.230 --> 00:01:24.410
+Elle veut rejoindre ce domaine, rechercher des utilisateurs via LDAP, les connecter avec Kerberos et appliquer des stratégies de groupe.
+
+00:01:24.410 --> 00:01:27.930
+La plupart des gens supposent qu'EntraID remplace toutes les fonctions d'Active Directory.
+
+00:01:28.390 --> 00:01:28.890
+Ce n'est pas le cas.
+
+00:01:29.310 --> 00:01:31.570
+Les applications cloud modernes peuvent vous connecter via EntraID,
+
+00:01:31.750 --> 00:01:35.990
+mais les anciennes applications Windows attendent toujours le même type de domaine que celui utilisé dans votre salle des serveurs.
+
+00:01:36.590 --> 00:01:40.970
+A la fin de cet épisode, vous comprendrez où se situe EntraID, Active Directory et EntraDomain Services.
+
+00:01:41.730 --> 00:01:44.130
+Et il y a un détail qui change votre façon de gérer le tout.
+
+00:01:44.830 --> 00:01:47.030
+Les informations d'identité ne circulent que dans une seule direction.
+
+00:01:48.050 --> 00:01:50.870
+Pourquoi EntraID seul ne peut pas exécuter toutes les applications à réalité ?
+
+00:01:50.870 --> 00:01:52.190
+Commençons par ce qu'EntraID fait de bien.
+
+00:01:52.190 --> 00:01:54.290
+C'est la réception de vos services cloud.
+
+00:01:55.090 --> 00:02:01.190
+Il sait qui vous êtes, vérifie votre connexion et décide si vous pouvez accéder à Microsoft 365 Teams, SharePoint ou à une application métier dans le cloud.
+
+00:02:02.070 --> 00:02:05.730
+Vous connectez une fois, puis vous passez d'un service à l'autre sans avoir à retaper votre mot de passe sans cesse.
+
+00:02:06.350 --> 00:02:07.230
+C'est l'authentification unique.
+
+00:02:08.230 --> 00:02:11.190
+EntraID peut également demander une seconde vérification via l'authentification multifacteur.
+
+00:02:12.030 --> 00:02:16.510
+Examinez l'appareil que vous utilisez, votre lieu de connexion et les règles d'accès définies par votre entreprise.
+
+00:02:16.930 --> 00:02:17.090
+Voilà.
+
+00:02:17.090 --> 00:02:19.510
+Pour une application modèle, ce modèle fonctionne très bien.
+
+00:02:19.870 --> 00:02:24.130
+Vous ouvrez un navigateur, l'application vous envoie vers EntraID, vous vous connectez, vous approuvez peut-être une demande sur votre téléphone,
+
+00:02:24.250 --> 00:02:28.490
+puis EntraID envoie en coulisses un message de connexion sécurisé à l'application, sécurisez l'application.
+
+00:02:28.650 --> 00:02:30.190
+L'application lit ce message et vous laisse entrer.
+
+00:02:30.630 --> 00:02:36.810
+Avec ce modèle, nul besoin de jonction à un domaine, d'ancien Windows Server, ni d'exigence pour l'application de parcourir un annuaire d'entreprise classique.
+
+00:02:37.310 --> 00:02:39.510
+Mais les applications plus anciennes ont vu le jour dans un monde différent.
+
+00:02:39.510 --> 00:02:44.670
+Imaginez une application financière qui tourne sur Windows Server depuis des années, où les utilisateurs se connectent depuis des PC joints à un domaine.
+
+00:02:45.150 --> 00:02:50.450
+L'application recherche les détails des employés via LDAP, une méthode courante pour les logiciels anciens afin d'interroger un annuaire d'entreprise.
+
+00:02:51.030 --> 00:02:55.070
+Elle peut utiliser Kerberos, une ancienne méthode de connexion Windows permettant au système de se faire confier.
+
+00:02:55.510 --> 00:02:59.690
+Elle peut s'appuyer sur la stratégie de groupe, cet ensemble de règles d'entreprise qui contrôlent les paramètres des ordinateurs Windows.
+
+00:03:00.350 --> 00:03:02.910
+Cette application ne sait pas lire un message de connexion cloud moderne.
+
+00:03:03.550 --> 00:03:06.470
+Elle s'attend à appeler le réseau pour trouver un domaine Windows traditionnel.
+
+00:03:06.470 --> 00:03:11.890
+Et si elle n'en trouve pas, l'application peut échouer à connecter les utilisateurs, ne pas trouver de compte de service ou simplement refuser de démarrer.
+
+00:03:12.530 --> 00:03:14.630
+Vous avez probablement déjà vu ce schéma en dehors de l'informatique.
+
+00:03:15.350 --> 00:03:18.090
+Une nouvelle prise électrique ne sert à rien si la fiche d'une vieille machine ne s'y adapte pas.
+
+00:03:18.590 --> 00:03:20.450
+L'électricité est présente, mais la connexion est inadaptée.
+
+00:03:20.870 --> 00:03:24.670
+Maintenant, imaginez que l'entreprise déplace cette application financière et sa base de données vers des machines virtuelles Azure.
+
+00:03:25.110 --> 00:03:27.010
+Les serveurs ont déménagé, mais l'ancien besoin subsiste.
+
+00:03:27.430 --> 00:03:32.290
+Vous pourriez laisser Active Directory au bureau et connecter Azure à celui-ci via un VPN, un tunnel, réseau privé.
+
+00:03:32.290 --> 00:03:36.490
+Ainsi, l'application dans Azure envoie des requêtes via cette connexion dès qu'elle a besoin du domaine.
+
+00:03:37.270 --> 00:03:42.010
+Cela peut fonctionner, mais l'application dépend désormais de la liaison réseau et de la disponibilité du contrôleur de domaine sur site.
+
+00:03:42.610 --> 00:03:45.490
+Et si cette connexion rencontre un problème, l'application cloud peut également en avoir.
+
+00:03:45.950 --> 00:03:49.330
+Un autre choix consiste à créer vos propres machines virtuelles de contrôleurs de domaine dans Azure.
+
+00:03:49.970 --> 00:03:54.870
+Un contrôleur est le serveur qui exécute le domaine Active Directory traditionnel, gérant l'annuaire, les connexions et d'autres tâches de domaine.
+
+00:03:56.110 --> 00:03:58.490
+Cela fonctionne aussi, mais votre équipe possède désormais davantage de serveurs.
+
+00:03:58.890 --> 00:04:00.170
+Quelqu'un doit les mettre à jour et les surveiller.
+
+00:04:00.170 --> 00:04:06.170
+Il vous faut des sauvegardes, des plans de récupération, un plan de synchronisation des contrôleurs de domaine et vous devez protéger les puissants comptes administrateurs.
+
+00:04:07.650 --> 00:04:09.030
+Pour certaines entreprises, ce contrôle est pertinent.
+
+00:04:09.490 --> 00:04:12.430
+Pour d'autres, c'est du travail supplémentaire juste pour satisfaire une application ancienne.
+
+00:04:13.090 --> 00:04:14.670
+Le fossé est donc assez étroit, mais il est bien réel.
+
+00:04:15.170 --> 00:04:18.570
+Une application réside dans Azure, mais elle parle toujours l'ancien langage Active Directory.
+
+00:04:19.450 --> 00:04:21.390
+Ce qu'est réellement Microsoft Entra Domain Services.
+
+00:04:21.650 --> 00:04:26.550
+Microsoft Entra Domain Services est un domaine Windows géré qui s'exécute au sein de votre réseau Azure.
+
+00:04:26.910 --> 00:04:27.990
+C'est la définition en termes simples.
+
+00:04:27.990 --> 00:04:31.130
+Les contrôleurs de domaine fonctionnent en arrière-plan, entièrement gérés par Microsoft,
+
+00:04:31.250 --> 00:04:36.390
+tandis que vos machines virtuelles Azure et vos applications plus anciennes utilisent des services de domaine familiers auxquels elles sont habituées, auxquelles elles sont habituées.
+
+00:04:36.610 --> 00:04:38.510
+Considérez votre configuration cloud comme un immeuble de bureau.
+
+00:04:38.890 --> 00:04:40.210
+Entra ID en est la réception.
+
+00:04:40.830 --> 00:04:46.310
+Il vérifie votre identité lorsque vous vous connectez à Microsoft 365 ou à une autre application cloud et applique les règles de l'entreprise lors de cette connexion.
+
+00:04:46.890 --> 00:04:48.950
+Entra Domain Services se situe dans un bureau verrouillé à l'arrière.
+
+00:04:48.950 --> 00:04:52.750
+Les anciens systèmes n'ont pas besoin de passer par la réception comme le fait une application cloud moderne.
+
+00:04:53.490 --> 00:04:57.610
+Ils ont besoin d'un répertoire à l'ancienne à proximité qui comprenne leur langage et puisse répondre à leurs requêtes.
+
+00:04:58.090 --> 00:04:59.430
+Ce bureau à l'arrière est le domaine géré.
+
+00:05:00.030 --> 00:05:02.570
+Voici le point important, vous n'avez pas besoin de créer vous-même les contrôleurs de domaine.
+
+00:05:03.030 --> 00:05:04.610
+Vous ne vous y connectez pas via le bureau à distance.
+
+00:05:05.010 --> 00:05:08.410
+Vous n'avez pas à décider combien d'exécuter, à les mettre à jour sous Windows ou à gérer la connexion entre eux.
+
+00:05:08.770 --> 00:05:09.810
+Microsoft s'occupe de tout cela.
+
+00:05:10.270 --> 00:05:14.010
+Votre rôle est de connecter les machines virtuelles Azure et les applications appropriées au domaine géré.
+
+00:05:14.010 --> 00:05:17.390
+Une fois connectées, elles peuvent utiliser les services Active Directory familier.
+
+00:05:17.850 --> 00:05:19.530
+Une machine virtuelle Windows peut rejoindre le domaine.
+
+00:05:19.810 --> 00:05:23.290
+Et une application plus ancienne peut utiliser LDAP pour rechercher des personnes, dégrouper des détails d'annu.
+
+00:05:23.430 --> 00:05:28.550
+Elle peut utiliser Kerberos, la méthode de connexion que les anciennes applications métiers attendent souvent lorsqu'un serveur doit en approuver un autre.
+
+00:05:29.170 --> 00:05:33.350
+Elle peut également utiliser NTLM, une autre ancienne méthode de connexion Windows dont certaines applications ont encore besoin.
+
+00:05:34.090 --> 00:05:38.830
+Le domaine géré fournit aussi le DNS, ce qui aide les systèmes à trouver le bon serveur par son nom plutôt que par une suite de chiffres.
+
+00:05:38.830 --> 00:05:44.710
+Et il prend en charge les stratégies du groupe afin que vous puissiez appliquer certains paramètres Windows aux ordinateurs et aux utilisateurs de ce domaine géré.
+
+00:05:45.050 --> 00:05:46.190
+Cette liste semble technique, je le sais.
+
+00:05:46.670 --> 00:05:48.150
+Voyez cela plutôt comme un bureau de traduction.
+
+00:05:48.950 --> 00:05:51.570
+Votre application demande dans l'ancien langage Windows qui est cet utilisateur.
+
+00:05:52.430 --> 00:05:54.590
+Ce serveur peut-il faire confiance à cet autre savoir ?
+
+00:05:54.590 --> 00:05:55.830
+Où se trouve la base de données ?
+
+00:05:55.830 --> 00:05:58.110
+Quel paramètre cet ordinateur doit-il utiliser ?
+
+00:05:58.110 --> 00:06:01.570
+Entra Domain Services comprend ces questions et donne le type de réponse attendue par l'application.
+
+00:06:02.270 --> 00:06:04.170
+Mais il ne crée pas une seconde liste principale d'employés.
+
+00:06:04.810 --> 00:06:06.710
+L'enregistrement d'identité principale reste dans EntraID.
+
+00:06:06.710 --> 00:06:12.550
+Les utilisateurs et groupes d'EntraID sont copiés dans le domaine géré afin que l'ancien application puisse les voir et les utiliser sous une forme qu'elle comprend.
+
+00:06:13.010 --> 00:06:18.650
+Si votre entreprise dispose également d'un Active Directory sur site, les identités peuvent déjà atteindre EntraID depuis celui-ci avant d'être copiés dans Domain Services.
+
+00:06:19.330 --> 00:06:20.070
+La direction est importante.
+
+00:06:20.490 --> 00:06:24.350
+Les détails d'identité circulent vers EntraDomain Services et ne repartent pas dans l'autre sens.
+
+00:06:24.730 --> 00:06:27.890
+Ainsi, si un utilisateur provient d'EntraID, vous gérez cet utilisateur dans EntraID.
+
+00:06:28.630 --> 00:06:32.350
+Si l'utilisateur provient à l'origine de votre Active Directory sur site, vous gérez cet utilisateur à cet endroit.
+
+00:06:32.350 --> 00:06:36.550
+Vous ne devez pas utiliser Domain Services pour modifier la fiche principale d'un employé.
+
+00:06:37.150 --> 00:06:40.910
+Cela évite que le domaine géré ne devienne un second classeur contenant des versions différentes de la même personne.
+
+00:06:41.650 --> 00:06:42.950
+Il y a un point qui piège beaucoup de monde.
+
+00:06:43.070 --> 00:06:49.630
+Lors de la configuration les mots de passe, la connexion cloud moderne et l'ancienne connexion Windows n'utilisent pas les mots de passe de la même manière en arrière-plan.
+
+00:06:50.190 --> 00:06:55.190
+Pour que Kerberos et NTLM fonctionnent, Domain Services a besoin d'une forme protégée de mots de passe compatibles avec ses anciennes méthodes.
+
+00:06:55.190 --> 00:06:57.790
+Microsoft ne conserve jamais votre mot de passe en texte.
+
+00:06:58.190 --> 00:07:05.710
+Le service a besoin des informations de mots de passe protégés appropriées avant qu'un utilisateur ne puisse se connecter à une machine virtuelle ou une ancienne application via le domaine géré.
+
+00:07:06.550 --> 00:07:11.210
+Pour les utilisateurs exclusivement cloud, cela signifie souvent qu'ils doivent changer leur mot de passe après l'activation de Domain Services.
+
+00:07:12.110 --> 00:07:15.210
+Ce changement de mot de passe crée la forme protégée nécessaire au domaine géré.
+
+00:07:15.770 --> 00:07:22.110
+Tant que cela n'est pas fait, l'utilisateur peut se connecter à Microsoft 365 sans problème, mais échouera lorsqu'il tentera d'utiliser l'ancien style de domaine.
+
+00:07:22.770 --> 00:07:23.730
+Cela peut sembler étrange au début.
+
+00:07:23.730 --> 00:07:28.550
+L'utilisateur a déjà un compte, le mot de passe fonctionne déjà, pourtant l'application héritée ne peut toujours pas l'utiliser.
+
+00:07:29.230 --> 00:07:30.670
+L'élément manquant n'est pas le compte utilisateur.
+
+00:07:31.330 --> 00:07:34.230
+C'est la forme de mot de passe protégée requise par ses anciennes méthodes de connexion.
+
+00:07:34.930 --> 00:07:37.210
+Domain Services possède également une limite claire quant à son fonctionnement.
+
+00:07:37.930 --> 00:07:40.370
+Il s'exécute au sein d'un réseau virtuel Azure, souvent appelé VNet,
+
+00:07:41.050 --> 00:07:46.030
+où machines virtuelles Azure ont besoin d'un accès réseau à ce VNet et doivent utiliser les paramètres DNS du domaine géré pour le localiser.
+
+00:07:47.130 --> 00:07:50.210
+Il ne s'agit pas d'un répertoire public que n'importe quel appareil sur Internet peut contacter.
+
+00:07:50.210 --> 00:07:54.210
+C'est un service de domaine privé pour les charges de travail connectées au réseau Azure approprié.
+
+00:07:54.970 --> 00:07:58.110
+Ainsi, lorsqu'une application nécessite un ancien comportement Active Directory dans Azure,
+
+00:07:58.230 --> 00:08:00.110
+Domain Services lui offre un emplacement géré pour le trouver.
+
+00:08:00.850 --> 00:08:02.010
+Cela nous amène à la question suivante.
+
+00:08:02.330 --> 00:08:06.210
+Quelle est sa place par rapport à EntraID et à votre domaine Active Directory existant ?
+
+00:08:06.210 --> 00:08:08.190
+Les noms se ressemblent, mais leurs rôles sont très différents.
+
+00:08:09.650 --> 00:08:13.190
+EntraID, Active Directory et Domain Services, des rôles différents.
+
+00:08:13.190 --> 00:08:17.230
+Les noms sont proches, il est donc facile de les considérer comme des versions différentes du même produit.
+
+00:08:17.750 --> 00:08:18.270
+Ce n'est pas le cas.
+
+00:08:18.890 --> 00:08:21.250
+Chacun gère une partie différente de l'identité de votre entreprise.
+
+00:08:21.590 --> 00:08:23.890
+Et une fois que vous voyez le rôle de chacun, le choix devient beaucoup plus clair.
+
+00:08:24.850 --> 00:08:26.030
+EntraID gère l'identité cloud.
+
+00:08:26.750 --> 00:08:30.250
+Lorsque vous ouvrez Microsoft 365, Teams, SharePoint ou une application métier moderne,
+
+00:08:30.430 --> 00:08:32.910
+EntraID vérifie votre connexion et contrôle ce à quoi vous pouvez accéder.
+
+00:08:33.730 --> 00:08:36.270
+Il prend également en charge l'authentification multifacteur et les règles d'accès,
+
+00:08:36.770 --> 00:08:39.810
+comme demander une vérification de connexion plus stricte lorsque vous travaillez depuis un appareil inconnu.
+
+00:08:40.370 --> 00:08:41.470
+Il est conçu pour les services cloud.
+
+00:08:41.470 --> 00:08:44.810
+Une application moderne n'a pas besoin d'être sur le même réseau qu'EntraID
+
+00:08:44.810 --> 00:08:47.010
+car elle utilise des méthodes de connexion basées sur le web.
+
+00:08:47.570 --> 00:08:49.270
+Vous vous connectez via un navigateur ou une application,
+
+00:08:49.530 --> 00:08:52.550
+EntraID confirme votre identité et l'application reçoit la preuve que vous êtes autorisé.
+
+00:08:53.130 --> 00:08:54.890
+C'est le modèle classique pour les nouvelles applications cloud.
+
+00:08:55.510 --> 00:08:59.470
+Active Directory Domain Services, souvent abrégé en Active Directory, rempli de fonctions différentes.
+
+00:09:00.330 --> 00:09:03.010
+Il s'agit du domaine Windows traditionnel que de nombreuses entreprises exploitent
+
+00:09:03.010 --> 00:09:05.030
+dans leur propre bureau, centre de données ou salle serveur.
+
+00:09:05.470 --> 00:09:08.190
+L'entreprise possède les contrôleurs de domaine, choisit leur configuration
+
+00:09:08.190 --> 00:09:09.890
+et gère l'intégralité du domaine de AZ.
+
+00:09:09.890 --> 00:09:13.070
+Il permet de contrôler les PC Windows, de gérer les serveurs locaux
+
+00:09:13.070 --> 00:09:16.150
+et de fournir les méthodes de connexion ancienne attendues par les applications métiers historiques.
+
+00:09:16.750 --> 00:09:18.530
+Ce niveau de contrôle implique des responsabilités.
+
+00:09:19.170 --> 00:09:21.370
+Votre équipe informatique gère le domaine, s'occupe des serveurs
+
+00:09:21.370 --> 00:09:23.270
+et décide du fonctionnement de l'annuaire pour l'entreprise.
+
+00:09:25.110 --> 00:09:27.090
+EntraDomain Services se situe entre ces deux mondes.
+
+00:09:27.630 --> 00:09:29.430
+Il offre aux charges de travail Azure un domaine Windows
+
+00:09:29.430 --> 00:09:31.490
+géré lorsqu'elle nécessite les fonctionnalités d'Active Directory,
+
+00:09:31.690 --> 00:09:34.030
+mais Microsoft gère la partie contrôleur de domaine A.
+
+00:09:34.030 --> 00:09:37.570
+Vous utilisez ce domaine pour les machines virtuelles Azure et les applications anciennes
+
+00:09:37.570 --> 00:09:40.490
+sans avoir à gérer vous-même un domaine Active Directory traditionnel.
+
+00:09:41.070 --> 00:09:42.450
+Considérez cela comme un système de classement.
+
+00:09:42.850 --> 00:09:45.610
+EntraID détient le registre principal des employés pour le travail dans le cloud.
+
+00:09:46.090 --> 00:09:48.150
+C'est là que l'entreprise conserve les enregistrements utilisés
+
+00:09:48.150 --> 00:09:50.650
+pour Microsoft 365 et les connexions cloud modernes.
+
+00:09:50.910 --> 00:09:52.930
+Domain Services fournis aux anciennes applications Azure,
+
+00:09:53.130 --> 00:09:54.870
+une copie compatible des enregistrements dont elles ont besoin.
+
+00:09:55.310 --> 00:09:57.630
+Ces applications peuvent ouvrir le type de classeurs familiers
+
+00:09:57.630 --> 00:09:59.810
+et trouver les utilisateurs, groupes et détails de connexion
+
+00:09:59.810 --> 00:10:01.110
+dans l'ancien format qu'elles comprennent.
+
+00:10:01.110 --> 00:10:04.270
+On n'a pas besoin de reconstruire l'application, simplement parce qu'elle a été déplacée vers Azure.
+
+00:10:04.630 --> 00:10:06.770
+Une entreprise cloud only peut également utiliser cette configuration.
+
+00:10:07.250 --> 00:10:09.590
+Imaginez une entreprise qui n'a jamais utilisé de contrôleur de domaine local.
+
+00:10:10.230 --> 00:10:12.650
+Tout le monde se connecte à Microsoft 365 via EntraID
+
+00:10:12.650 --> 00:10:14.670
+et l'entreprise commence à utiliser des machines virtuelles Azure
+
+00:10:14.670 --> 00:10:16.290
+pour une application Windows ancienne.
+
+00:10:16.870 --> 00:10:19.350
+Cette entreprise n'a pas besoin de créer un domaine Active Directory sur site
+
+00:10:19.350 --> 00:10:20.350
+juste pour cette application.
+
+00:10:21.230 --> 00:10:23.490
+Au lieu de cela, elle peut utiliser EntraDomain Services
+
+00:10:23.490 --> 00:10:25.430
+pour les machines virtuelles Azure qui ont besoin d'un domaine,
+
+00:10:25.530 --> 00:10:27.790
+tandis que le reste de l'entreprise continue d'utiliser EntraID.
+
+00:10:28.530 --> 00:10:30.310
+Une entreprise hybride a un point de départ différent.
+
+00:10:30.310 --> 00:10:32.570
+Elle peut déjà utiliser Active Directory en interne
+
+00:10:32.570 --> 00:10:34.850
+avec des utilisateurs et des groupes synchronisés vers EntraID.
+
+00:10:35.430 --> 00:10:37.630
+Ces personnes peuvent alors apparaître dans EntraDomain Services
+
+00:10:37.630 --> 00:10:39.130
+pour les charges de travail exécutées dans Azure.
+
+00:10:39.670 --> 00:10:40.610
+Le flux ressemble à ceci.
+
+00:10:41.370 --> 00:10:44.650
+L'Active Directory existant de l'entreprise envoie les détails d'identité à EntraID
+
+00:10:44.650 --> 00:10:47.410
+et EntraID fournit la copie compatible à Domain Services.
+
+00:10:48.550 --> 00:10:51.670
+Cela ne signifie pas que Domain Services remplace le domaine sur site d'origine.
+
+00:10:52.270 --> 00:10:54.730
+Le bureau peut toujours avoir besoin de son propre domaine Active Directory
+
+00:10:54.730 --> 00:10:57.290
+pour les PC locaux, les serveurs locaux, les systèmes d'usines
+
+00:10:57.290 --> 00:10:58.630
+ou les applications restant sur site.
+
+00:10:59.550 --> 00:11:01.410
+Domain Services ne gère que la partie Azure
+
+00:11:01.410 --> 00:11:04.430
+où le comportement d'un domaine traditionnel administré convient à la charge de travail.
+
+00:11:04.890 --> 00:11:07.270
+Cela ne transforme pas non plus EntraID en un Active Directory complet.
+
+00:11:07.550 --> 00:11:09.330
+EntraID demeure un service d'identité cloud.
+
+00:11:10.130 --> 00:11:13.730
+Domain Services ajoute un domaine administré pour certains besoins anciens,
+
+00:11:14.030 --> 00:11:16.990
+mais il ne vous offre pas toutes les options ni tout le contrôle dont vous disposez
+
+00:11:16.990 --> 00:11:18.730
+en gérant vous-même Active Directory.
+
+00:11:19.530 --> 00:11:21.110
+Visualisez donc trois tâches distinctes.
+
+00:11:21.230 --> 00:11:22.850
+EntraID gère les connexions cloud modernes.
+
+00:11:23.530 --> 00:11:26.090
+Active Directory gère le domaine Windows que votre entreprise exploite elle-même.
+
+00:11:26.850 --> 00:11:29.290
+EntraDomain Services gère les charges de travail Azure héritées
+
+00:11:29.290 --> 00:11:33.490
+nécessitant un domaine Windows sans vous demander d'exécuter les contrôleurs de domaine vous-même.
+
+00:11:34.070 --> 00:11:35.190
+Vous pouvez poser une bien meilleure question.
+
+00:11:36.070 --> 00:11:38.350
+Quand Domain Services est-il adapté à la charge de travail ?
+
+00:11:38.350 --> 00:11:40.590
+Et quand devriez-vous choisir autre chose ?
+
+00:11:40.590 --> 00:11:42.990
+Quand Domain Services convient ? Et quand il ne convient pas ?
+
+00:11:42.990 --> 00:11:44.450
+Commencez par l'application, pas par le nom du produit.
+
+00:11:44.450 --> 00:11:49.510
+Si une ancienne application utilise LDAP, un langage ancien pour vérifier les noms d'utilisateurs et mots de passe,
+
+00:11:49.710 --> 00:11:52.150
+et que vous voulez migrer vers Azure, Domain Services peut être idéal.
+
+00:11:52.550 --> 00:11:55.910
+L'application continue d'utiliser ce qu'elle connaît déjà sans nécessiter une réécriture complète.
+
+00:11:56.390 --> 00:11:58.690
+C'est important quand l'application fonctionne encore, que l'entreprise en a besoin
+
+00:11:58.690 --> 00:12:00.890
+et que réécrire le code de connexion coûterait trop de temps ou d'argent.
+
+00:12:01.650 --> 00:12:06.270
+Autre scénario courant, un groupe de machines virtuelles Azure doit se comporter comme des ordinateurs de domaine normaux.
+
+00:12:07.090 --> 00:12:09.330
+Le personnel peut avoir besoin de se connecter à Windows avec son compte professionnel.
+
+00:12:09.550 --> 00:12:11.310
+Un service peut nécessiter un compte de service,
+
+00:12:11.470 --> 00:12:14.250
+utilisé par une application pour se connecter à un autre système comme une base de données.
+
+00:12:15.030 --> 00:12:18.310
+Vous pourriez avoir besoin de la stratégie de groupe pour appliquer les paramètres de l'entreprise à ses machines virtuelles.
+
+00:12:18.950 --> 00:12:22.550
+Dans ces cas, Domain Services offre aux machines Azure le comportement de domaine qu'elles attendent.
+
+00:12:23.330 --> 00:12:24.930
+Le service bureau à distance entre également dans ce cas.
+
+00:12:25.210 --> 00:12:28.430
+Imaginez des employés se connectant à des bureaux Windows partagés ou à des applications dans Azure.
+
+00:12:29.370 --> 00:12:33.610
+Ces systèmes dépendent souvent d'un domaine Windows pour la connexion des utilisateurs et la gestion des ordinateurs.
+
+00:12:34.170 --> 00:12:38.630
+Domain Services fournit cette couche de domaine sans que votre équipe ait à créer des machines virtuelles de contrôleurs de domaine à partir de zéro.
+
+00:12:39.230 --> 00:12:41.290
+Les applications anciennes comportent souvent plus d'une partie.
+
+00:12:41.290 --> 00:12:44.910
+Il peut y avoir un serveur web en façade, un serveur d'application au milieu et une base de données à l'arrière.
+
+00:12:45.750 --> 00:12:49.590
+Le serveur d'application doit prouver son identité avant que la base de données n'accepte une connexion.
+
+00:12:50.170 --> 00:12:52.230
+Lorsque cette confiance repose sur des comptes de service Windows,
+
+00:12:52.470 --> 00:12:54.570
+Domain Services maintient ses connexions après la migration.
+
+00:12:54.570 --> 00:12:59.330
+En résumé, votre équipe bénéficie du comportement de domaine ancien requis par la charge de travail,
+
+00:12:59.730 --> 00:13:04.190
+tandis que Microsoft gère le travail des contrôleurs de domaine, qui sinon alourdirait votre liste de serveurs.
+
+00:13:04.770 --> 00:13:07.030
+Mais ne choisissez pas Domain Services simplement parce que vous utilisez Azure.
+
+00:13:07.510 --> 00:13:09.750
+Une nouvelle application cloud doit se connecter directement via EntraID.
+
+00:13:10.450 --> 00:13:14.270
+Si elle prend en charge les méthodes de connexion modernes, elle redirige les utilisateurs vers EntraID,
+
+00:13:14.490 --> 00:13:17.570
+reçoit la preuve de connexion et bénéficie des règles d'accès cloud et de l'authentification multifacteur.
+
+00:13:17.570 --> 00:13:20.850
+C'est la voie la plus simple pour les nouveaux logiciels.
+
+00:13:21.390 --> 00:13:23.670
+Les services de domaine aident une application qui utilise l'ancien langage.
+
+00:13:24.330 --> 00:13:26.450
+Ce n'est pas une raison pour apprendre cet ancien langage aux nouvelles applications.
+
+00:13:26.830 --> 00:13:29.030
+Il existe également des limites strictes que vous devez d'abord vérifier.
+
+00:13:29.830 --> 00:13:32.670
+Certaines applications ne se contentent pas de lire dans Active Directory, elles y écrits légalement.
+
+00:13:32.970 --> 00:13:37.230
+Par exemple, une application peut vouloir créer ou modifier des entrées d'annuaire dans le cadre de son fonctionnement normal.
+
+00:13:38.110 --> 00:13:41.570
+Domain Services ne convient pas lorsque l'application nécessite un accès en écriture LDAP.
+
+00:13:42.310 --> 00:13:45.450
+Le même avertissement s'applique si une application doit modifier le schéma Active Directory,
+
+00:13:45.450 --> 00:13:47.850
+l'ensemble des champs qui définissent ce que l'annuaire peut stocker.
+
+00:13:48.910 --> 00:13:51.830
+Certains logiciels plus anciens vous demandent d'ajouter leur propre champ avant de s'exécuter.
+
+00:13:52.290 --> 00:13:54.530
+Un domaine manager ne vous permet pas de modifier cette conception sous-jacente.
+
+00:13:55.130 --> 00:13:57.950
+Vous devriez également marquer une pause si votre équipe a besoin d'un contrôle total sur le domaine.
+
+00:13:58.490 --> 00:14:00.830
+Peut-être avez-vous besoin d'un accès direct au contrôleur du domaine.
+
+00:14:01.190 --> 00:14:03.690
+Peut-être avez-vous besoin de droits d'administrateur domaine qui offrent un contrôle très large.
+
+00:14:04.490 --> 00:14:07.850
+Ou peut-être avez-vous besoin d'une conception d'annuaire complexe que vous souhaitez construire et gérer à votre façon.
+
+00:14:08.650 --> 00:14:10.750
+Cela vous oriente vers une gestion autonome d'Active Directory,
+
+00:14:10.750 --> 00:14:13.370
+que ce soit sur site ou sur des machines virtuelles, dans Azure.
+
+00:14:13.370 --> 00:14:18.250
+Domaine Services vous donne délibérément moins de contrôle car Microsoft gère le service de domaine principal.
+
+00:14:18.870 --> 00:14:20.830
+Posez-vous donc une question simple avant de choisir une voie.
+
+00:14:22.050 --> 00:14:26.410
+Cette charge de travail a-t-elle besoin de l'ancien langage Active Directory ou peut-elle utiliser le moderne entre ID ?
+
+00:14:26.410 --> 00:14:28.170
+Si elle peut utiliser le moderne entre ID, commencez pas.
+
+00:14:28.470 --> 00:14:32.430
+Si elle nécessite un comportement de domaine ancien, mais sans exiger que vous possédiez chaque partie du domaine,
+
+00:14:32.630 --> 00:14:33.810
+Domaine Services peut très bien convenir.
+
+00:14:34.430 --> 00:14:38.790
+Et si l'application doit réécrire l'annuaire, modifier son schéma ou donner à votre équipe un contrôle total du domaine,
+
+00:14:38.790 --> 00:14:40.090
+elle a besoin d'un autre foyer.
+
+00:14:40.790 --> 00:14:42.830
+Choisir un domaine manager implique d'accepter un compromis.
+
+00:14:43.370 --> 00:14:47.530
+Microsoft s'occupe des contrôleurs de domaine et vous renoncez à une partie du contrôle associé à leur gestion autonome.
+
+00:14:48.690 --> 00:14:50.370
+Les compromis du service manager que vous devez connaître.
+
+00:14:50.910 --> 00:14:55.010
+Cette approche manager économise du travail, mais elle modifie également ce que votre équipe informatique peut contrôler.
+
+00:14:55.510 --> 00:15:00.310
+Microsoft gère les contrôleurs de domaine, les maintiens synchronisés, applique les correctifs et gère la disponibilité en arrière-plan.
+
+00:15:00.850 --> 00:15:04.710
+Vous n'avez pas besoin de prévoir l'emplacement de chaque contrôleur de domaine, ni d'en rester un après une panne de serveur.
+
+00:15:05.330 --> 00:15:06.950
+C'est pourquoi de nombreuses équipes le choisissent.
+
+00:15:06.950 --> 00:15:14.590
+Mais vous ne pouvez pas accéder à ces contrôleurs de domaine via le bureau à distance, et vous n'obtenez pas les droits d'administrateur de domaine ou d'entreprise car elle donnerait un contrôle sur les parties gérées par Microsoft.
+
+00:15:15.410 --> 00:15:19.070
+A la place, Microsoft fournit un groupe appelé Entra Domain Services Administrators.
+
+00:15:19.890 --> 00:15:24.710
+Ajoutez les personnes chargées de gérer le domaine à ce groupe, puis utilisez une machine virtuelle de gestion jointe au domaine géré.
+
+00:15:25.590 --> 00:15:29.570
+Depuis cette machine, vous pouvez utiliser les outils Active Directory habituels pour gérer ce que Microsoft autorise.
+
+00:15:30.070 --> 00:15:32.710
+Par exemple, vous pouvez créer vos propres unités d'organisation ou OU.
+
+00:15:33.410 --> 00:15:36.530
+Voyez-les comme des dossiers pour les objets du domaine tels que les ordinateurs ou les comptes de service.
+
+00:15:36.930 --> 00:15:40.610
+Vous pouvez gérer les enregistrements DNS, créer et appliquer des stratégies de groupe pour les paramètres pris en charge.
+
+00:15:41.230 --> 00:15:45.310
+Vous pouvez également gérer les ordinateurs qui rejoignent le domaine, ce qui est souvent la raison principale de l'existence du service.
+
+00:15:45.970 --> 00:15:46.790
+Ces limites sont volontaires.
+
+00:15:46.850 --> 00:15:50.650
+Vous ne pouvez pas ajouter de contrôleur de domaine supplémentaire, modifier le schéma Active Directory,
+
+00:15:50.830 --> 00:15:54.010
+ni considérer le domaine géré comme un lieu où les modifications sont répercutées dans Entra ID.
+
+00:15:54.010 --> 00:15:56.810
+Par conséquent, maintenir la gestion des utilisateurs et des groupes dans l'annuaire source.
+
+00:15:57.530 --> 00:15:59.690
+Pour une entreprise exclusivement dans le cloud, cette source est Entra ID.
+
+00:16:00.610 --> 00:16:04.390
+Pour une entreprise hybride, il s'agit de l'Active Directory local qui se synchronise avec Entra ID.
+
+00:16:05.370 --> 00:16:06.970
+Cette règle permet d'éviter une erreur fréquente.
+
+00:16:07.410 --> 00:16:10.750
+Quelqu'un voit un utilisateur dans le domaine géré et le modifie sur place en pensant que cela sera permanent.
+
+00:16:11.410 --> 00:16:15.770
+Mais cette modification ne deviendra pas l'enregistrement officiel de l'entreprise d'Entra ID ou dans l'Active Directory local.
+
+00:16:16.450 --> 00:16:18.730
+Garder le domaine géré privé au sein du réseau Azure,
+
+00:16:19.450 --> 00:16:22.930
+il ne doit prendre en charge que les charges de travail qui en ont besoin et non devenir un annuaire général pour l'entreprise.
+
+00:16:22.930 --> 00:16:28.230
+Limiter l'accès réseau, protéger la machine de gestion et ne donner l'accès à l'administrateur qu'aux personnes qui en ont besoin.
+
+00:16:29.030 --> 00:16:30.510
+Vous choisissez un service avec des garde-fous.
+
+00:16:31.070 --> 00:16:34.890
+Ces garde-fous lègent votre charge de travail tout en vous empêchant de modifier les composants appartenant à Microsoft.
+
+00:16:36.570 --> 00:16:37.970
+Une histoire simple de migration vers Azure.
+
+00:16:38.610 --> 00:16:42.250
+Imaginez une société financière faisant fonctionner une ancienne application sur des serveurs au sein de ses propres bureaux.
+
+00:16:42.590 --> 00:16:44.590
+Cette application s'appuie sur LDAP pour trouver les employés.
+
+00:16:44.850 --> 00:16:46.370
+Elle utilise Kerberos lorsque les utilisateurs se connaissent.
+
+00:16:46.370 --> 00:16:49.610
+Et son serveur s'authentifie avec un compte de service pour accéder à la base de données financière.
+
+00:16:50.030 --> 00:16:53.730
+L'entreprise souhaite déplacer à la fois l'application et sa base de données vers des machines virtuelles Azure.
+
+00:16:54.670 --> 00:16:57.550
+Une option consiste à maintenir l'application connectée au domaine du bureau via un VPN,
+
+00:16:57.710 --> 00:17:01.930
+mais l'application Azure dépend alors de cette connexion réseau et des contrôleurs de domaines locaux au quotidien.
+
+00:17:02.770 --> 00:17:05.710
+D'autres options consistent à faire fonctionner de nouvelles machines virtuelles de contrôleurs de domaines d'Azure.
+
+00:17:06.050 --> 00:17:07.750
+Cela maintient davantage de trafic au sein d'Azure,
+
+00:17:07.870 --> 00:17:11.850
+mais ajoute des serveurs Windows que l'équipe informatique doit patcher, surveiller, sauvegarder et restaurer.
+
+00:17:11.850 --> 00:17:13.150
+L'équipe choisit une autre voie.
+
+00:17:13.670 --> 00:17:15.850
+Leurs utilisateurs et groupes sont déjà synchronisés dans notre ID.
+
+00:17:16.490 --> 00:17:19.290
+Ils activent Entra Domain Services, connectent le réseau virtuel Azure.

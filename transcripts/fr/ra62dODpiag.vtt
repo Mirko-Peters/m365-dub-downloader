@@ -1,0 +1,1399 @@
+WEBVTT
+
+00:00:00.370 --> 00:00:06.890
+Prêt pour 10 jours de Microsoft 365, Copilots, IA, Azure et des acteurs qui façonnent l'avenir du travail.
+
+00:00:07.990 --> 00:00:11.950
+En janvier, la M365 con est de retour et nous voyons encore plus grand.
+
+00:00:12.950 --> 00:00:18.030
+Rejoignez-nous pour des sessions en direct, des démos concrètes et des connaissances pratiques partagées par des MVP et experts mondiaux.
+
+00:00:18.710 --> 00:00:21.210
+Pas de diapositives génériques, pas de jargon marketing interminable.
+
+00:00:22.030 --> 00:00:23.210
+Nous abordons les vrais défis.
+
+00:00:23.830 --> 00:00:28.510
+Copilot Studio, agent IA, fabrique, sécurité, gouvernance et automatisation.
+
+00:00:28.510 --> 00:00:34.210
+Que vous soyez pro-IT, développeur ou dirigeant, des sessions sont conçues pour vous.
+
+00:00:35.550 --> 00:00:39.950
+Avec 10 jours complets, explorez plusieurs technologies et connectez-vous avec une communauté mondiale.
+
+00:00:40.990 --> 00:00:44.270
+Suivez le direct et rapportez des idées concrètes dans votre entreprise.
+
+00:00:45.210 --> 00:00:48.510
+Janvier 2027, 10 jours, une seule communauté, Microsoft.
+
+00:00:49.470 --> 00:00:50.650
+Les inscriptions sont ouvertes.
+
+00:00:51.930 --> 00:00:55.590
+Rendez-vous sur m365con.net pour réserver votre place dès aujourd'hui.
+
+00:00:55.590 --> 00:00:58.450
+C'est m365con.net.
+
+00:01:00.170 --> 00:01:02.410
+Inscrivez-vous sur m365con.net.
+
+00:01:02.590 --> 00:01:03.230
+Nous vous attendons.
+
+00:01:03.610 --> 00:01:04.670
+En janvier A.
+
+00:01:05.290 --> 00:01:09.910
+Bonjour à tous et bienvenue dans un nouvel épisode de Microsoft Knowledge Nugget sur M365FM.
+
+00:01:10.450 --> 00:01:11.050
+Je suis votre Peter.
+
+00:01:11.350 --> 00:01:14.490
+Le sujet d'aujourd'hui est connu de tous ceux qui utilisent Microsoft 365,
+
+00:01:15.150 --> 00:01:16.930
+mais peu savent l'expliquer clairement.
+
+00:01:17.730 --> 00:01:19.430
+Que sont exactement les webhook graphs ?
+
+00:01:19.430 --> 00:01:22.190
+Pourquoi s'y intéresser plutôt que de continuer avec l'ancienne méthode ?
+
+00:01:22.190 --> 00:01:23.630
+Imaginez que vous attendiez une lettre importante.
+
+00:01:23.990 --> 00:01:25.210
+Vous allez à votre boîte aux lettres, elle est vide.
+
+00:01:25.670 --> 00:01:26.170
+Vous rentrez chez vous.
+
+00:01:26.530 --> 00:01:27.870
+10 minutes plus tard, vous vérifiez à nouveau.
+
+00:01:28.230 --> 00:01:28.610
+Toujours rien.
+
+00:01:29.070 --> 00:01:30.630
+Faites cela toute la journée, perdant votre énergie.
+
+00:01:31.010 --> 00:01:31.450
+C'est ça le polling.
+
+00:01:31.890 --> 00:01:32.810
+Imaginez maintenant un monde différent.
+
+00:01:33.230 --> 00:01:35.210
+Le facteur sonne à votre porte dès qu'une lettre arrive.
+
+00:01:35.590 --> 00:01:36.150
+Ne vérifiez pas.
+
+00:01:36.430 --> 00:01:37.170
+Vous attendez la soirée.
+
+00:01:37.530 --> 00:01:38.090
+C'est ça un webhook.
+
+00:01:38.090 --> 00:01:41.270
+A la fin de cet épisode, vous comprendrez ce que sont les webhook graphs,
+
+00:01:41.430 --> 00:01:44.490
+pourquoi ils remplacent les vérifications constantes et comment tout cela s'articule.
+
+00:01:45.550 --> 00:01:46.150
+Le problème du polling.
+
+00:01:46.670 --> 00:01:47.250
+Analysons cela.
+
+00:01:48.150 --> 00:01:51.010
+Pour comprendre l'utilité des webhooks, il faut comprendre pourquoi le polling est nuisible.
+
+00:01:51.550 --> 00:01:53.310
+Voici comment fonctionnent la plupart des applications aujourd'hui.
+
+00:01:53.590 --> 00:01:54.610
+Votre application atteint une réponse.
+
+00:01:54.790 --> 00:01:57.350
+Elle demande à Microsoft Graph, hey, y a-t-il de nouveaux utilisateurs ?
+
+00:01:57.350 --> 00:01:58.070
+Graph webhook, non.
+
+00:01:58.690 --> 00:02:00.110
+Votre application attend un peu, puis demande à nouveau.
+
+00:02:00.210 --> 00:02:02.190
+Y a-t-il des nouveaux utilisateurs, même ?
+
+00:02:02.190 --> 00:02:02.650
+Toujours rien.
+
+00:02:03.430 --> 00:02:04.970
+En boucle, ce processus est le polling.
+
+00:02:05.550 --> 00:02:08.070
+C'est comme appeler constamment un ami pour savoir s'il a des nouvelles.
+
+00:02:08.730 --> 00:02:11.130
+Vous composez le numéro, il décroche, vous demandez, il dit non, vous raccrochez,
+
+00:02:11.650 --> 00:02:15.230
+puis vous rappelez 5 minutes plus tard et encore après, vous perdez votre temps et le sien.
+
+00:02:15.670 --> 00:02:16.570
+Vous devenez probablement agaçant.
+
+00:02:16.970 --> 00:02:19.730
+Imaginez maintenant des milliers d'applications faisant cela à Microsoft Graph simultanément.
+
+00:02:20.350 --> 00:02:22.090
+Chaque application interroge toutes les quelques minutes,
+
+00:02:22.270 --> 00:02:24.190
+posant les mêmes questions, obtenant les mêmes réponses.
+
+00:02:24.610 --> 00:02:25.370
+Cela fait beaucoup de bruit.
+
+00:02:26.070 --> 00:02:28.750
+Microsoft a un nom pour ce sondage trop agressif, la limitation de débit,
+
+00:02:28.970 --> 00:02:31.030
+ou ce que certains développeurs appellent la prison Graph.
+
+00:02:31.850 --> 00:02:33.770
+Quand vous envoyez trop de requêtes, Microsoft dit,
+
+00:02:33.890 --> 00:02:35.370
+«accord, vous avez fini pour un moment ».
+
+00:02:35.370 --> 00:02:37.290
+Il limite le nombre d'appels que votre application peut effectuer.
+
+00:02:37.290 --> 00:02:38.790
+Une fois limité, tout ralentit.
+
+00:02:39.450 --> 00:02:40.470
+Les requêtes légitimes s'accumulent.
+
+00:02:40.830 --> 00:02:42.110
+Votre application cesse de fonctionner correctement.
+
+00:02:42.430 --> 00:02:43.590
+Vous ne savez pas quand vous serez libéré.
+
+00:02:44.070 --> 00:02:45.610
+De combien de requêtes parlons-nous ?
+
+00:02:45.610 --> 00:02:48.070
+Disons que votre application interroge toutes les 5 minutes les changements d'utilisateur.
+
+00:02:48.630 --> 00:02:50.110
+Cela représente 12 requêtes par heure.
+
+00:02:50.690 --> 00:02:53.830
+Sur une journée entière, cela fait 288 requêtes, et ce n'est que pour une seule ressource.
+
+00:02:54.310 --> 00:02:57.570
+Si vous interrogez aussi les groupes, les fichiers, les messages et les événements du calendrier,
+
+00:02:57.710 --> 00:02:59.910
+vous accumulez des milliers de requêtes inutiles par jour.
+
+00:03:00.610 --> 00:03:03.350
+La plupart ne renvoient rien, aucun changement, mais vous avez quand même effectué l'appel.
+
+00:03:03.350 --> 00:03:04.430
+Et voici le problème.
+
+00:03:04.610 --> 00:03:08.070
+Même si vous interrogez toutes les 5 minutes, vous n'obtenez toujours pas de mise à jour en temps réel.
+
+00:03:08.850 --> 00:03:10.870
+Un changement pourrait survenir une minute après vos derniers sondages.
+
+00:03:11.290 --> 00:03:12.730
+Vous ne le saurez pas avant 4 minutes de plus.
+
+00:03:13.330 --> 00:03:15.470
+Vous gaspillez des ressources et manquez toujours le coche.
+
+00:03:16.270 --> 00:03:17.970
+Maintenant, comparez cela avec une approche événementielle.
+
+00:03:18.350 --> 00:03:21.490
+Au lieu d'appeler Microsoft Graph toutes les quelques minutes, vous attendez que Microsoft Graph vous appelle.
+
+00:03:21.930 --> 00:03:22.650
+Configure un écouteur.
+
+00:03:23.030 --> 00:03:24.850
+Quand quelque chose change, Graph vous envoie une notification.
+
+00:03:25.550 --> 00:03:26.130
+Vous ne composez pas les mots.
+
+00:03:26.430 --> 00:03:27.350
+Vous décrochez quand le téléphone sonne.
+
+00:03:27.350 --> 00:03:29.490
+Qu'est-ce qu'un webhook ?
+
+00:03:29.490 --> 00:03:31.150
+Alors, qu'est-ce qu'un webhook exactement ?
+
+00:03:31.150 --> 00:03:32.270
+Voici la définition la plus simple.
+
+00:03:32.790 --> 00:03:35.850
+Un webhook est une requête HTTP envoyée automatiquement quand quelque chose se produit.
+
+00:03:36.670 --> 00:03:38.670
+Vous ne le demandez pas, le serveur vous transmet simplement.
+
+00:03:39.870 --> 00:03:40.790
+Considérez cela comme une sonnette.
+
+00:03:41.150 --> 00:03:42.830
+Vous ne restez pas dehors à vérifier toutes les quelques minutes.
+
+00:03:43.190 --> 00:03:44.030
+Vous installez une sonnette.
+
+00:03:44.390 --> 00:03:45.510
+Quand quelqu'un arrive, il sonne.
+
+00:03:45.970 --> 00:03:46.750
+Vous entendez la sonnerie.
+
+00:03:47.170 --> 00:03:48.570
+La sonnette surveille pour vous.
+
+00:03:49.570 --> 00:03:51.410
+Les webhooks sont parfois appelés API inversés.
+
+00:03:52.210 --> 00:03:54.890
+Avec une API normale, votre application fait une requête et le serveur répond.
+
+00:03:55.470 --> 00:03:56.410
+Votre application est aux commandes.
+
+00:03:56.410 --> 00:03:58.730
+Avec un webhook, le serveur envoie la requête à votre application.
+
+00:03:59.150 --> 00:04:02.090
+Le serveur est aux commandes, mais pousse les données au lieu d'attendre que vous les demandiez.
+
+00:04:02.650 --> 00:04:04.730
+Microsoft Graph utilise aussi des webhooks.
+
+00:04:04.830 --> 00:04:06.870
+Mais Microsoft les appelle des notifications de changement.
+
+00:04:07.510 --> 00:04:08.730
+C'est la même chose, juste sous un nom différent.
+
+00:04:09.570 --> 00:04:11.490
+Quand quelque chose change dans Microsoft 365,
+
+00:04:12.110 --> 00:04:14.710
+Graph envoie un HTTP posté à une URL que vous fournissez.
+
+00:04:15.570 --> 00:04:17.550
+Ce poste contient des informations sur ce qui a changé.
+
+00:04:17.910 --> 00:04:19.490
+Il y a beaucoup de choses pour lesquelles vous pouvez être notifié.
+
+00:04:20.190 --> 00:04:22.250
+Un nouvel utilisateur est créé dans votre tenant.
+
+00:04:22.450 --> 00:04:23.810
+Un fichier est mis à jour dans SharePoint.
+
+00:04:23.810 --> 00:04:25.230
+Un message est envoyé dans Teams.
+
+00:04:25.230 --> 00:04:26.690
+Un événement de calendrier échange.
+
+00:04:27.050 --> 00:04:28.190
+Ou un groupe accueille un nouveau membre.
+
+00:04:29.050 --> 00:04:30.370
+Tout cela peut déclencher une notification.
+
+00:04:30.970 --> 00:04:31.670
+Voici un exemple concret.
+
+00:04:32.010 --> 00:04:33.910
+Imaginez que vous gérez une entreprise avec un système de suivi du temps.
+
+00:04:34.250 --> 00:04:36.810
+Lorsqu'un nouvel employé arrive, vous souhaitez créer un compte automatiquement.
+
+00:04:37.390 --> 00:04:39.410
+Sans webhooks, vous interrogez le point de terminaison des utilisateurs
+
+00:04:39.410 --> 00:04:41.090
+toutes les quelques minutes pour vérifier si la nouvelle personne.
+
+00:04:41.730 --> 00:04:44.190
+Avec les webhooks, vous vous abonnez aux événements de création d'utilisateurs.
+
+00:04:44.790 --> 00:04:47.110
+Quand quelqu'un arrive, Graph envoie une notification à votre application.
+
+00:04:47.670 --> 00:04:49.410
+Votre application la reçoit, la valide,
+
+00:04:49.410 --> 00:04:51.330
+et crée le compte, le tout, en quelques secondes.
+
+00:04:51.770 --> 00:04:53.250
+Pas d'interrogation, pas de requête inutile.
+
+00:04:54.070 --> 00:04:54.630
+Un autre exemple.
+
+00:04:55.030 --> 00:04:57.870
+Vous avez une biothèque de documents SharePoint où des reçus sont téléchargés ?
+
+00:04:57.870 --> 00:04:59.810
+Sans webhook, vous interrogez la bibliothèque en permanence.
+
+00:05:00.390 --> 00:05:02.670
+Avec les webhooks, Graph vous prévient dès qu'un fichier est ajouté.
+
+00:05:03.210 --> 00:05:05.470
+Votre application le récupère, vérifie s'il s'agit d'un reçu,
+
+00:05:05.570 --> 00:05:06.550
+et le traite automatiquement.
+
+00:05:07.270 --> 00:05:08.290
+C'est la puissance des webhooks.
+
+00:05:08.710 --> 00:05:11.110
+Au lieu que votre application demande constamment, y a-t-il du nouveau ?
+
+00:05:11.110 --> 00:05:13.050
+Vous laissez le système vous prévenir quand quelque chose se produit.
+
+00:05:13.270 --> 00:05:15.750
+C'est plus efficace, plus fiable et beaucoup plus rapide.
+
+00:05:16.710 --> 00:05:18.730
+Comment fonctionnent les webhooks Microsoft Graph ?
+
+00:05:18.730 --> 00:05:21.090
+Maintenant, vous savez ce que sont les webhooks et pourquoi l'interrogation pose problème.
+
+00:05:21.370 --> 00:05:23.790
+Voyons comment fonctionnent réellement les webhooks Microsoft Graph,
+
+00:05:23.910 --> 00:05:25.570
+car le flux est plus simple que vous ne le pensez.
+
+00:05:26.190 --> 00:05:27.250
+Cela repose sur trois éléments.
+
+00:05:27.490 --> 00:05:30.350
+Un abonnement, une notification et votre point de terminaison.
+
+00:05:31.350 --> 00:05:32.290
+Premièrement, vous craignez l'abonnement.
+
+00:05:32.710 --> 00:05:33.690
+Vous dites à Microsoft Graph,
+
+00:05:34.050 --> 00:05:36.150
+« Eh, je veux savoir quand cet élément spécifique change ».
+
+00:05:36.150 --> 00:05:38.950
+Vous fournissez à Graph les détails de ce qu'il faut surveiller et où envoyer l'information.
+
+00:05:39.730 --> 00:05:41.310
+Voyez cela comme une inscription et une alerte.
+
+00:05:41.750 --> 00:05:43.910
+Vous dites au système ce qui vous intéresse et vous lui donnez vos coordonnées.
+
+00:05:44.810 --> 00:05:46.410
+Deuxièmement, Microsoft Graph surveille cette ressource.
+
+00:05:46.730 --> 00:05:47.590
+Il contrôle les changements.
+
+00:05:47.950 --> 00:05:50.030
+Quand quelque chose se produit, comme la création d'un utilisateur,
+
+00:05:50.110 --> 00:05:51.570
+la mise à jour d'un fichier ou l'arrivée d'un message,
+
+00:05:51.910 --> 00:05:52.530
+Graph le remarque.
+
+00:05:53.030 --> 00:05:54.190
+Troisièmement, Graph envoie une notification.
+
+00:05:54.670 --> 00:05:56.950
+Il envoie une requête HTTP poste à l'URL que vous avez fournie.
+
+00:05:57.350 --> 00:05:59.530
+Ce poste contient des informations sur ce qui a changé.
+
+00:06:00.190 --> 00:06:02.470
+Votre point de terminaison le reçoit et votre application le traite.
+
+00:06:02.950 --> 00:06:04.110
+Ainsi, le flux général est simple.
+
+00:06:04.510 --> 00:06:05.630
+Vous vous abonnez, Graph surveille.
+
+00:06:05.830 --> 00:06:07.730
+Graph envoie un poste et quand quelque chose change,
+
+00:06:08.330 --> 00:06:10.070
+analysons un peu plus ces trois blocs de construction.
+
+00:06:10.070 --> 00:06:12.650
+L'abonnement est votre demande d'alerte.
+
+00:06:13.210 --> 00:06:13.710
+C'est comme dire,
+
+00:06:13.830 --> 00:06:16.790
+« Hé, je veux savoir quand un nouvel utilisateur est ajouté à mon tenant. »
+
+00:06:16.790 --> 00:06:18.830
+Vous envoyez cette requête à Microsoft Graph et Graph la stock.
+
+00:06:19.830 --> 00:06:21.590
+À partir de ce moment-là, Graph surveille pour vous.
+
+00:06:22.550 --> 00:06:23.830
+La notification et l'alerte elle-même,
+
+00:06:24.130 --> 00:06:26.550
+une requête HTTP poste et que Graph envoie à votre point de terminaison.
+
+00:06:26.990 --> 00:06:29.010
+Le corps de la requête poste contient les détails du changement,
+
+00:06:29.110 --> 00:06:31.810
+comme la ressource modifiée, le type de changement et le moment où il s'est produit.
+
+00:06:32.410 --> 00:06:34.070
+Votre point de terminaison est la porte que vous laissez ouverte.
+
+00:06:34.470 --> 00:06:37.350
+Il s'agit d'une URL sur votre serveur configuré pour recevoir ces requêtes poste.
+
+00:06:37.410 --> 00:06:39.150
+Il doit simplement être à l'écouter et répondre rapidement.
+
+00:06:39.150 --> 00:06:39.830
+C'est tout.
+
+00:06:40.190 --> 00:06:42.170
+Aucune logique complexe n'est requise à la réception.
+
+00:06:42.650 --> 00:06:45.010
+Il suffit de capturer la notification d'en accuser réception et de la traîne.
+
+00:06:45.330 --> 00:06:46.110
+Comprends-moi dans cela, Pauling.
+
+00:06:46.610 --> 00:06:50.270
+Avec le Pauling, vous envoyez des centaines de requêtes JET pour demander quoi de neuf.
+
+00:06:50.490 --> 00:06:52.010
+La plupart du temps, la réponse est non.
+
+00:06:52.770 --> 00:06:54.990
+Avec les webbooks, il n'y a qu'une seule requête poste, la notification.
+
+00:06:55.490 --> 00:06:55.770
+C'est tout.
+
+00:06:56.150 --> 00:06:57.130
+Un seul message ou une centaine.
+
+00:06:57.510 --> 00:06:59.070
+La différence d'efficacité est énorme.
+
+00:06:59.310 --> 00:07:01.330
+Et votre point de terminaison n'a pas besoin d'être complexe.
+
+00:07:01.850 --> 00:07:05.010
+Il doit juste être accessible publiquement, par les HTTPS et répondre rapidement.
+
+00:07:05.530 --> 00:07:07.390
+Nous verrons ce que signifie rapidement aucune dans un instant.
+
+00:07:07.970 --> 00:07:09.030
+Mais l'idée fondamentale est simple.
+
+00:07:09.730 --> 00:07:10.890
+Votre point de terminaison, écoute.
+
+00:07:11.030 --> 00:07:11.950
+Graf appelle, vous répondez.
+
+00:07:12.290 --> 00:07:13.050
+Et c'est terminé.
+
+00:07:14.570 --> 00:07:15.370
+Création d'un abonnement.
+
+00:07:15.890 --> 00:07:17.890
+Alors, comment en configurer un concrètement ?
+
+00:07:17.890 --> 00:07:20.210
+Passons en revue la création d'un abonnement étape par étape.
+
+00:07:20.590 --> 00:07:24.150
+Vous commencez par envoyer une requête HTTP Post vers une URL spécifique sur Microsoft Graf.
+
+00:07:24.770 --> 00:07:26.090
+Cette URL est HTTPS.
+
+00:07:26.310 --> 00:07:28.790
+Slash graph.microsoft.com slash v1.orosh subscriptions.
+
+00:07:29.490 --> 00:07:31.590
+Vous envoyez directement la requête au point de terminaison des abonnements.
+
+00:07:32.030 --> 00:07:35.030
+Dans le corps de cette requête, vous incluez les détails de ce à quoi vous souhaitez vous abonner.
+
+00:07:35.810 --> 00:07:37.110
+Il y a quatre champs clés que vous devez fournir.
+
+00:07:37.570 --> 00:07:38.770
+Le premier est l'URL de notification.
+
+00:07:39.150 --> 00:07:40.850
+C'est l'URL de votre point de terminaison.
+
+00:07:41.250 --> 00:07:43.290
+L'endroit où Microsoft Graf enverra les notifications.
+
+00:07:43.830 --> 00:07:47.410
+Elle doit être en HTTPS et accessible publiquement car Graf doit pouvoir l'atteindre depuis Internet.
+
+00:07:47.910 --> 00:07:48.710
+Le deuxième est la ressource.
+
+00:07:49.210 --> 00:07:50.510
+Cela indique à Graf ce que vous voulez surveiller.
+
+00:07:51.050 --> 00:07:52.870
+Vous spécifiez le chemin d'accès à la ressource Microsoft Word.
+
+00:07:53.250 --> 00:07:56.190
+Par exemple, le User's Gear, si vous voulez surveiller les changements d'utilisateurs,
+
+00:07:56.190 --> 00:08:00.090
+ou ME slash mailfolders slash inbox slash messages gear pour les nouveaux emails.
+
+00:08:00.610 --> 00:08:02.590
+La ressource indique précisément un graph qui vous intéresse.
+
+00:08:02.950 --> 00:08:04.030
+Le troisième est le type de changement.
+
+00:08:04.790 --> 00:08:07.090
+Cela indique à Graf pour quel type de changement vous notifiez.
+
+00:08:07.690 --> 00:08:10.490
+Vous pouvez spécifier Created, Unback et Deleted, Uncabiner ou Toutes Combinées.
+
+00:08:11.150 --> 00:08:14.530
+Si seuls les nouveaux utilisateurs créés vous intéressent, réglez le type de changement sur CréCreatedBug.
+
+00:08:14.850 --> 00:08:17.210
+Si les mises à jour vous intéressent aussi, réglez-le sur CreatedUpdate.
+
+00:08:17.570 --> 00:08:19.310
+Le quatrième est la date et l'heure d'expiration.
+
+00:08:19.870 --> 00:08:22.590
+C'est le moment où l'abonnement expire car les abonnements ne sont pas éternels.
+
+00:08:23.330 --> 00:08:26.730
+Définissez une date et une heure et Graf cessera d'envoyer des notifications après ce délai.
+
+00:08:27.190 --> 00:08:29.370
+La durée maximale dépend de la ressource que vous surveillez.
+
+00:08:29.810 --> 00:08:31.970
+Pour les utilisateurs et les groupes, le maximum est d'environ 3 jours.
+
+00:08:32.450 --> 00:08:35.350
+Pour les éléments dans SharePoint ou OneDrive, cela peut aller jusqu'à 30 jours.
+
+00:08:36.010 --> 00:08:38.230
+Vous devez consulter la documentation pour chaque type de ressource.
+
+00:08:38.870 --> 00:08:41.550
+Il existe aussi un champ facultatif à mentionner, l'état du client.
+
+00:08:42.130 --> 00:08:43.670
+C'est une chaîne secrète que vous créez ?
+
+00:08:43.670 --> 00:08:44.390
+Elle peut être ce que vous voulez.
+
+00:08:45.190 --> 00:08:47.090
+Une chaîne aléatoire, un guide, ce que vous choisissez.
+
+00:08:47.970 --> 00:08:51.570
+Microsoft Graph inclut cette valeur dans chaque notification envoyée à votre point de terminaison,
+
+00:08:52.210 --> 00:08:54.790
+vous permettant de vérifier qu'elle provient bien de votre abonnement.
+
+00:08:55.770 --> 00:08:58.890
+Si quelqu'un tente d'envoyer de fausses notifications, l'état du client ne correspondra pas
+
+00:08:58.890 --> 00:09:00.710
+et vous pourrez immédiatement les rejeter.
+
+00:09:01.150 --> 00:09:02.990
+C'est une mesure de sécurité simple mais importante.
+
+00:09:03.790 --> 00:09:06.370
+Créer un abonnement, c'est comme s'abonner à un journal.
+
+00:09:07.170 --> 00:09:08.170
+Donnez au journal votre adresse.
+
+00:09:08.730 --> 00:09:09.790
+C'est votre URL de notification.
+
+00:09:10.810 --> 00:09:13.670
+Vous indiquez les sections souhaitées, c'est votre ressource et le type de changement.
+
+00:09:13.670 --> 00:09:15.430
+Puis la durée de l'abonnement.
+
+00:09:16.230 --> 00:09:17.390
+C'est votre date et heure d'expiration.
+
+00:09:18.010 --> 00:09:18.990
+Le journal s'occupe du reste.
+
+00:09:19.530 --> 00:09:20.710
+Mais attention, les abonnements expirent.
+
+00:09:21.670 --> 00:09:23.050
+Vous ne pouvez pas en créer un et l'oublier.
+
+00:09:24.130 --> 00:09:25.510
+Une fois la date d'expiration passée,
+
+00:09:25.670 --> 00:09:28.290
+Graf, arrête les notifications et votre abonnement est supprimé.
+
+00:09:28.290 --> 00:09:33.050
+Pour continuer à recevoir des notifications, vous devez renouveler l'abonnement avant expiration
+
+00:09:33.050 --> 00:09:36.050
+en envoyant une requête PATCH avec une nouvelle date d'expiration.
+
+00:09:37.210 --> 00:09:39.270
+Créer un abonnement est donc la première étape mais pas la dernière.
+
+00:09:39.870 --> 00:09:41.050
+Vous devez en gérer le cycle de vie.
+
+00:09:41.410 --> 00:09:42.550
+Nous en parlerons plus en détail plus tard.
+
+00:09:43.070 --> 00:09:43.850
+La poignée de main de validation.
+
+00:09:44.530 --> 00:09:47.330
+Avant que votre abonnement ne soit actif, il y a une étape incontournable.
+
+00:09:47.890 --> 00:09:51.390
+Microsoft Graf n'accepte pas votre demande simplement en commençant à envoyer des notifications.
+
+00:09:52.030 --> 00:09:54.850
+Il doit d'abord confirmer que votre point de terminaison est réel et prêt à les recevoir.
+
+00:09:54.850 --> 00:09:56.190
+Voici comment cela fonctionne.
+
+00:09:56.570 --> 00:09:58.230
+Dès l'envoi de votre requête POST création,
+
+00:09:58.970 --> 00:10:02.250
+Microsoft Graf envoie immédiatement un test POST à votre URL de notification.
+
+00:10:03.250 --> 00:10:05.810
+Ce test contient un paramètre de requête appelé jeton de validation.
+
+00:10:06.410 --> 00:10:07.150
+C'est juste une chaîne aléatoire.
+
+00:10:07.790 --> 00:10:09.770
+Votre point de terminaison doit récupérer ce jeton
+
+00:10:09.770 --> 00:10:12.650
+et le renvoyer comme réponse en texte brut dans un délai de 10 secondes.
+
+00:10:13.350 --> 00:10:14.750
+Imaginez un coursier livrant un colis.
+
+00:10:15.430 --> 00:10:17.830
+Il arrive à votre porte et demande, est-ce bien la bonne adresse ?
+
+00:10:17.830 --> 00:10:18.710
+Pouvez-vous confirmer ?
+
+00:10:18.710 --> 00:10:19.750
+Vous devez signer pour le confirmer.
+
+00:10:20.130 --> 00:10:21.030
+Si vous ne le faites pas, il s'en va.
+
+00:10:21.490 --> 00:10:22.590
+Le coursier ne laisse pas le colis.
+
+00:10:23.070 --> 00:10:23.690
+Il part tout simplement.
+
+00:10:23.690 --> 00:10:25.250
+C'est exactement ce qui se passe ici.
+
+00:10:25.850 --> 00:10:26.590
+Microsoft Graf vous dit
+
+00:10:26.590 --> 00:10:28.610
+« Arac, je m'apprête à vous envoyer des notifications importantes.
+
+00:10:29.250 --> 00:10:31.250
+Prouvez que vous êtes bien le destinataire à la bonne adresse.
+
+00:10:32.610 --> 00:10:34.910
+Votre point de terminaison répond en renvoyant le jeton de validation,
+
+00:10:35.170 --> 00:10:36.670
+ce qui indique à Graf « Oui, je suis là.
+
+00:10:38.150 --> 00:10:40.430
+J'écoute. Envoyez-moi les notifications. »
+
+00:10:40.430 --> 00:10:42.090
+C'est ici que beaucoup de développeurs font une erreur.
+
+00:10:43.510 --> 00:10:45.410
+Le jeton de validation doit être renvoyé en texte brut,
+
+00:10:45.770 --> 00:10:47.490
+pas en JSON, pas en HTML, en texte brut.
+
+00:10:47.490 --> 00:10:50.870
+Et la réponse doit avoir un en-tête de type de contenu défini sur text-slash-plane.
+
+00:10:51.530 --> 00:10:54.270
+Si vous le renvoyez encapsulé dans du JSON ou encodé de quelque manière que ce soit,
+
+00:10:54.350 --> 00:10:55.070
+la validation échoue.
+
+00:10:55.630 --> 00:10:56.810
+Votre abonnement ne sera pas créé.
+
+00:10:57.270 --> 00:10:59.850
+Microsoft Graf renvoie une erreur et vous vous demandez ce qui a mal tourné.
+
+00:11:00.290 --> 00:11:01.830
+Il y a un autre détail technique important à connaître.
+
+00:11:02.250 --> 00:11:05.690
+Le service de validation de Microsoft Graf ne prend pas en charge TLS 1.3 de manière fiable.
+
+00:11:06.150 --> 00:11:07.330
+Il négocie un TLS 1.2.
+
+00:11:07.330 --> 00:11:10.970
+Donc, si votre point de terminaison n'accepte que les connexions TLS 1.3,
+
+00:11:11.150 --> 00:11:13.770
+la liaison de validation échoue avant même que votre code ne s'exécute.
+
+00:11:14.370 --> 00:11:17.470
+Vous devez vous assurer que votre point de terminaison prend en charge TLS 1.2,
+
+00:11:17.650 --> 00:11:18.810
+au moins pour l'étape de validation.
+
+00:11:19.810 --> 00:11:22.930
+Après cela, vous pouvez imposer la version TLS de votre choix pour les notifications réelles.
+
+00:11:23.910 --> 00:11:26.670
+La bonne nouvelle est que cette liaison de validation n'a lieu qu'une seule fois par abonnement.
+
+00:11:27.170 --> 00:11:30.870
+Ce n'est pas quelque chose que votre point de terminaison doit gérer à chaque notification juste la première fois.
+
+00:11:31.850 --> 00:11:34.010
+Une fois que Graf a confirmé que votre point de terminaison est réel,
+
+00:11:34.330 --> 00:11:35.810
+il lui fait confiance pour que la durée de l'abonnement.
+
+00:11:35.810 --> 00:11:38.030
+Il vous suffit donc de réussir cette opération une seule fois.
+
+00:11:39.030 --> 00:11:40.350
+Gestion des notifications et sécurité
+
+00:11:40.350 --> 00:11:43.430
+Une fois la liaison de validation effectuée et votre abonnement activé,
+
+00:11:43.530 --> 00:11:45.410
+Microsoft Graf commence à envoyer ces notifications.
+
+00:11:46.430 --> 00:11:49.190
+A quoi cela ressemble-t-il en pratique ?
+
+00:11:49.190 --> 00:11:52.550
+Lorsqu'un changement survient, Graf envoie un HTTP post à votre point de terminaison
+
+00:11:52.550 --> 00:11:54.090
+avec un objet JSON dans le corps.
+
+00:11:54.650 --> 00:11:56.970
+Cet objet contient la ressource modifiée, le type de changement,
+
+00:11:57.150 --> 00:12:00.070
+création, mise à jour ou suppression et un horodatage.
+
+00:12:00.890 --> 00:12:03.950
+Il inclut également la valeur d'état client que vous avez définie lors de la création de l'abonnement.
+
+00:12:03.950 --> 00:12:06.850
+C'est votre chaîne secrète, votre moyen de savoir que le message est authentique.
+
+00:12:07.450 --> 00:12:09.510
+Voici donc la première chose à faire lorsqu'une notification arrive.
+
+00:12:10.290 --> 00:12:11.190
+Validez cet état client.
+
+00:12:11.610 --> 00:12:14.950
+Comparez la valeur de la notification avec le secret que vous avez stocké lors de la création de l'abonnement.
+
+00:12:15.670 --> 00:12:18.370
+S'ils ne correspondent pas, rejetez-la immédiatement car il pourrait s'agir d'un faux,
+
+00:12:18.490 --> 00:12:21.230
+quelqu'un essayant de tromper votre système pour traiter des données corrompues.
+
+00:12:21.890 --> 00:12:24.190
+C'est important car votre point de terminaison est accessible sur l'internet public.
+
+00:12:24.190 --> 00:12:26.870
+Quiconque connaît votre URL pourrait lui envoyer une requête poste.
+
+00:12:27.730 --> 00:12:32.270
+Sans validation de l'état client, vous n'auriez aucun moyen de distinguer une vraie notification Microsoft Graph d'une fausse.
+
+00:12:33.450 --> 00:12:35.430
+C'est une vérification simple, mais c'est votre première ligne de défense.
+
+00:12:35.850 --> 00:12:38.930
+Une fois que vous avez confirmé que la notification est légitime, vous devez répondre rapidement.
+
+00:12:39.830 --> 00:12:43.210
+Microsoft Graph attend une réponse HTTP de niveau 200 dans un délai de 3 secondes.
+
+00:12:43.650 --> 00:12:44.730
+Si vous prenez trop de temps, Graph l'aura.
+
+00:12:44.730 --> 00:12:48.110
+Et si cela se produit trop souvent, Graph change son comportement envers vous.
+
+00:12:48.610 --> 00:12:49.570
+Voici comment fonctionne l'imitation.
+
+00:12:50.050 --> 00:12:53.610
+Si plus de 10% de vos réponses dépassent le délai de 3 secondes sur une période de 10 minutes,
+
+00:12:53.730 --> 00:12:56.130
+Microsoft Graph marque votre point de terminaison comme lent.
+
+00:12:57.150 --> 00:12:59.570
+Lorsque cela arrive, les nouvelles notifications sont retardées de 10 minutes.
+
+00:13:00.170 --> 00:13:02.690
+Elles finissent par arriver, mais vous perdez la distribution en temps réel.
+
+00:13:03.270 --> 00:13:06.670
+Et si la situation empire avec plus de 15% de vos réponses dépassant 10 secondes,
+
+00:13:06.890 --> 00:13:08.990
+Graph marque votre point de terminaison comme abandonné.
+
+00:13:09.850 --> 00:13:12.370
+Dans cet état, les notifications sont entièrement supprimées pendant 10 minutes.
+
+00:13:12.550 --> 00:13:13.570
+Voici la partie inquiétante.
+
+00:13:13.570 --> 00:13:15.510
+Les notifications supprimées ne peuvent pas être récupérées.
+
+00:13:15.830 --> 00:13:17.430
+Elles sont perdues et vous ne les reverrez jamais.
+
+00:13:17.830 --> 00:13:19.130
+Voyez cela comme une ligne téléphonique occupée.
+
+00:13:19.550 --> 00:13:21.550
+Si vous ne décrochez pas rapidement, l'appelant essaiera plus tard.
+
+00:13:22.070 --> 00:13:24.470
+Et si vous ne décrochez jamais, l'appelant finit par abandonner.
+
+00:13:24.990 --> 00:13:27.610
+Microsoft Graph est l'appelant et votre point de terminaison est le téléphone.
+
+00:13:28.270 --> 00:13:29.710
+Décrochez vite ou risquez de perdre le message.
+
+00:13:30.390 --> 00:13:31.890
+Alors quelle est la meilleure pratique ici ?
+
+00:13:31.890 --> 00:13:33.870
+Accuser réception immédiatement et traiter de manière asynchrone.
+
+00:13:34.790 --> 00:13:36.790
+Votre point de terminaison doit valider l'état du client,
+
+00:13:37.010 --> 00:13:40.330
+accepter la notification et renvoyer une réponse 200 ou 202 aussi vite que possible.
+
+00:13:40.330 --> 00:13:43.950
+Ensuite, poussez la notification dans une file d'attente pour un traitement en arrière-plan.
+
+00:13:44.590 --> 00:13:47.330
+Une file d'attente Azure, un service bus ou même une simple table de base de données.
+
+00:13:47.770 --> 00:13:49.650
+L'objectif est de sortir rapidement du cycle de réponse
+
+00:13:49.650 --> 00:13:52.150
+et de laisser vos processus d'arrière-plan gérés, les tâches lourdes.
+
+00:13:52.770 --> 00:13:53.730
+Et un dernier rappel de sécurité.
+
+00:13:53.990 --> 00:13:56.010
+Votre point de terminaison doit être en HTTPS sans exception.
+
+00:13:56.670 --> 00:13:59.510
+Microsoft Graph n'enverra pas de notification vers un point de terminaison HTTP.
+
+00:14:00.110 --> 00:14:01.810
+Et votre point de terminaison doit être accessible publiquement.
+
+00:14:02.190 --> 00:14:04.210
+S'il est derrière un pare-feu ou un VPN, Graph ne peut pas l'atteindre.
+
+00:14:04.210 --> 00:14:06.930
+Pour le développement, vous pouvez utiliser des outils comme Engrock
+
+00:14:06.930 --> 00:14:08.850
+pour créer un tunnel public vers votre machine locale.
+
+00:14:09.570 --> 00:14:12.590
+Là en production, votre point de terminaison doit se trouver là où Graph peut le trouver.
+
+00:14:13.950 --> 00:14:15.610
+Cycle de vie du maintien des notifications.
+
+00:14:16.310 --> 00:14:19.630
+Vous avez donc configuré votre abonnement, les notifications arrivent et tout semble fonctionner.
+
+00:14:20.230 --> 00:14:21.910
+Mais voici un point qui prend beaucoup de monde au dépourvu.
+
+00:14:22.450 --> 00:14:23.830
+Votre abonnement a une date d'expiration.
+
+00:14:24.290 --> 00:14:24.990
+Il ne dure pas étonnant.
+
+00:14:25.550 --> 00:14:26.670
+Selon la ressource que vous surveillez,
+
+00:14:26.730 --> 00:14:29.890
+la durée maximale d'abonnement est généralement comprise entre 3 et 7 jours.
+
+00:14:30.430 --> 00:14:32.350
+Pour certaines ressources comme les éléments de lecteur dans SharePoint,
+
+00:14:32.350 --> 00:14:33.630
+vous pouvez obtenir jusqu'à 30 jours.
+
+00:14:33.630 --> 00:14:35.410
+Mais l'essentiel est que ce n'est pas permanent.
+
+00:14:35.930 --> 00:14:38.050
+Vous ne pouvez pas créer un abonnement et l'oublier.
+
+00:14:38.490 --> 00:14:39.850
+Considérez cela comme un abonnement à un magazine.
+
+00:14:40.450 --> 00:14:42.570
+Vous vous abonnez, vous commencez à recevoir les numéros et tout va bien.
+
+00:14:43.330 --> 00:14:45.910
+Mais si vous ne renouvelez pas avant l'expiration, les numéros cessent d'arriver.
+
+00:14:46.390 --> 00:14:46.910
+C'est la même chose ici.
+
+00:14:47.350 --> 00:14:49.950
+Si votre abonnement expire, Microsoft Graph cesse d'envoyer des notifications.
+
+00:14:50.650 --> 00:14:53.250
+Et vous pourriez ne pas vous en rendre compte avant de vous demander pourquoi rien ne se passe.
+
+00:14:53.590 --> 00:14:54.790
+Vous avez donc besoin de stratégie de renouvellement.
+
+00:14:55.090 --> 00:14:56.130
+La méthode de renouvellement est simple.
+
+00:14:56.430 --> 00:14:59.870
+Envoyez une requête PTH au point de terminaison de l'abonnement en utilisant son identifiant
+
+00:14:59.870 --> 00:15:02.350
+et mettez à jour la date d'expiration vers une date future.
+
+00:15:02.790 --> 00:15:04.370
+Cela prolonge la durée de vie de l'abonnement.
+
+00:15:04.910 --> 00:15:08.390
+Vous pouvez répéter cette opération autant de fois que vous le souhaitez tant que vous le faites avant l'expiration actuelle.
+
+00:15:09.130 --> 00:15:12.650
+Microsoft Graph vous aide ici grâce à ce qu'on appelle les notifications de cycle de vie.
+
+00:15:13.410 --> 00:15:17.590
+Lors de la création d'un abonnement, vous pouvez fournir une URL distincte appelée URL de notification de cycle de vie.
+
+00:15:18.450 --> 00:15:21.530
+Microsoft Graph envoie des alertes à cette URL lorsque certains événements surviennent.
+
+00:15:22.270 --> 00:15:25.370
+Par exemple, quand votre abonnement est sur le point d'expirer, quand votre jeton d'accès va expirer
+
+00:15:25.370 --> 00:15:27.310
+ou quand les autorisations de votre application changent.
+
+00:15:28.290 --> 00:15:30.150
+Ces notifications de cycle de vie vous préviennent à l'avance.
+
+00:15:30.390 --> 00:15:32.290
+Vous n'avez pas besoin de deviner quand votre abonnement prendra fin.
+
+00:15:32.690 --> 00:15:35.350
+Graph vous indique, hé, votre abonnement expire dans quelques heures.
+
+00:15:35.730 --> 00:15:36.570
+Vous devriez peut-être le renouveler.
+
+00:15:36.830 --> 00:15:40.390
+C'est comme recevoir un rappel de votre éditeur de magazine signalant que votre abonnement arrive à échéance.
+
+00:15:41.490 --> 00:15:42.650
+Très utile si vous y prêtez attention.
+
+00:15:43.110 --> 00:15:45.310
+Mais que se passe-t-il si les choses tournent mal malgré tout ?
+
+00:15:45.310 --> 00:15:48.350
+Peut-être que votre point de terminaison tombe en panne ou que des notifications sont perdues
+
+00:15:48.350 --> 00:15:49.910
+parce que vous étiez trop lent de faire alors.
+
+00:15:50.290 --> 00:15:53.310
+C'est là qu'intervient la requête Delta, une fonctionnalité distincte de Microsoft Graph
+
+00:15:53.310 --> 00:15:56.010
+qui vous permet de demander qu'est-ce qui a changé depuis ma dernière vérification
+
+00:15:56.010 --> 00:15:58.370
+qu'elle ne renvoie que les changements, rien d'autre.
+
+00:15:59.190 --> 00:16:00.010
+Voici comment cela fonctionne.
+
+00:16:00.230 --> 00:16:02.050
+La première fois que vous exécutez une requête Delta sur une ressource,
+
+00:16:02.110 --> 00:16:04.510
+disant que les utilisateurs, Graph renvoie tous les utilisateurs de votre tenant.
+
+00:16:05.190 --> 00:16:07.630
+Mais il renvoie également quelque chose en plus, un lien spécial appelé lien Delta.
+
+00:16:08.370 --> 00:16:09.050
+Vous enregistrez ce lien.
+
+00:16:09.370 --> 00:16:11.770
+La prochaine fois que vous exécutez la même requête, vous utilisez ce lien Delta.
+
+00:16:12.190 --> 00:16:13.590
+Et au lieu de récupérer tous les utilisateurs,
+
+00:16:13.590 --> 00:16:16.210
+vous obtenez uniquement ceux qui ont changé depuis votre dernière requête.
+
+00:16:16.850 --> 00:16:19.090
+Nouveaux utilisateurs, utilisateurs mis à jour, utilisateurs supprimés.
+
+00:16:19.270 --> 00:16:19.550
+C'est tout.
+
+00:16:20.910 --> 00:16:22.750
+Considérez cela comme la lecture d'une liste de nouveautés
+
+00:16:22.750 --> 00:16:24.630
+plutôt que de lire l'encyclopédie entière à chaque fois.
+
+00:16:25.070 --> 00:16:26.110
+Beaucoup plus rapide, beaucoup moins de données.
+
+00:16:26.430 --> 00:16:27.410
+Voici maintenant le modèle intelligent.
+
+00:16:27.790 --> 00:16:29.250
+Combiner les webbooks avec la requête Delta.
+
+00:16:29.890 --> 00:16:31.810
+Utilisez les webbooks pour savoir quand quelque chose a changé,
+
+00:16:31.970 --> 00:16:34.170
+puis utilisez la requête Delta pour découvrir exactement ce qui a changé.
+
+00:16:34.630 --> 00:16:35.710
+Laissez-moi vous expliquer pourquoi ça importe.
+
+00:16:35.890 --> 00:16:37.590
+Les webbooks sont rapides, ne sont pas parfaits.
+
+00:16:37.670 --> 00:16:39.630
+Les notifications peuvent être perdus, les abonnements peuvent expirer
+
+00:16:39.630 --> 00:16:41.150
+et votre point de terminaison peut tomber en panne.
+
+00:16:41.150 --> 00:16:43.550
+Mais la requête Delta est fiable, vous pouvez l'exécuter à tout moment
+
+00:16:43.550 --> 00:16:45.950
+et elle vous donne une liste complète des changements depuis votre dernière vérification.
+
+00:16:46.630 --> 00:16:48.870
+Ainsi, même si vous manquez une notification, vous pouvez vous rattraper.
+
+00:16:49.730 --> 00:16:50.490
+Voici le flux typique.
+
+00:16:51.110 --> 00:16:52.890
+Configurez un abonnement webbook pour les changements d'utilisateurs.
+
+00:16:53.650 --> 00:16:55.790
+Exécutez une requête Delta initiale pour obtenir un détail de base
+
+00:16:55.790 --> 00:16:56.610
+et enregistrer le lien Delta.
+
+00:16:57.150 --> 00:16:59.250
+Lorsqu'un webbook arrive pour vous signaler un changement d'utilisateur,
+
+00:16:59.570 --> 00:17:01.550
+exécutez une requête Delta avec votre lien Delta enregistré.
+
+00:17:02.070 --> 00:17:03.250
+Cela vous donne le changement exact.
+
+00:17:03.590 --> 00:17:05.910
+Traitez-le, puis enregistrez le nouveau lien Delta provenant de cette réponse.
+
+00:17:05.910 --> 00:17:08.370
+A la prochaine réception d'un webbook, répétez le processus.
+
+00:17:08.970 --> 00:17:11.410
+Et si vous manquez une notification ou si votre abonnement expire,
+
+00:17:11.590 --> 00:17:15.210
+relancez simplement la requête Delta, vous obtiendrez tout ce que vous y a manqué.
+
+00:17:15.510 --> 00:17:16.130
+C'est un filet de sécurité.
+
+00:17:16.490 --> 00:17:19.150
+Les webbooks vous apportent la rapidité et la requête Delta vous apporte la fiabilité.
+
+00:17:19.750 --> 00:17:21.350
+Ensemble, ils forment une combinaison puissante.
+
+00:17:22.310 --> 00:17:23.510
+Exemple concret à les prochaines étapes.
+
+00:17:24.150 --> 00:17:26.070
+Imaginez qu'un nouvel employé rejoigne votre entreprise demain.
+
+00:17:27.030 --> 00:17:29.570
+Une personne DRH crée son compte dans Microsoft Entraili
+
+00:17:29.570 --> 00:17:31.790
+et cette action déclenche une réaction.
+
+00:17:32.190 --> 00:17:32.510
+Enchaîne.
+
+00:17:33.250 --> 00:17:35.550
+Si vous avez configuré un abonnement webbook pour les changements d'utilisateur,
+
+00:17:35.630 --> 00:17:36.930
+Microsoft Graph le remarque instantanément
+
+00:17:36.930 --> 00:17:38.570
+et envoie une requête postée à votre point de terminaison.
+
+00:17:39.230 --> 00:17:39.990
+Voici ce qui se passe ensuite.
+
+00:17:40.410 --> 00:17:42.110
+Votre point de terminaison reçoit la notification,
+
+00:17:42.450 --> 00:17:44.250
+valide l'état du client et s'il correspond à votre secret,
+
+00:17:44.430 --> 00:17:45.670
+vous savez qu'il est légitime.
+
+00:17:46.490 --> 00:17:49.870
+Vous renvoyez une réponse 202 acceptée dans les 3 secondes pour accuser réception,
+
+00:17:50.130 --> 00:17:51.210
+puis votre processus d'arrière-plan.
+
+00:17:51.650 --> 00:17:52.810
+Prends le relais.
+
+00:17:53.330 --> 00:17:54.970
+Le processus voit qu'un utilisateur a été créé,
+
+00:17:55.010 --> 00:17:56.590
+mais comme la notification n'inclut pas tous les détails,
+
+00:17:56.590 --> 00:17:58.810
+il exécute une requête Delta avec votre lien enregistré.
+
+00:17:59.570 --> 00:18:01.830
+Cela renvoie les informations complètes du nouvel utilisateur.
+
+00:18:01.950 --> 00:18:04.910
+Nom, email, service, intitulé de poste, manager, tout ce dont vous avez besoin.
+
+00:18:05.550 --> 00:18:07.530
+Désormais, votre processus utilise ces informations
+
+00:18:07.530 --> 00:18:10.450
+pour créer un compte pour le nouvel employé dans votre système de suivi du temps entier.
+
+00:18:10.810 --> 00:18:11.730
+Il envoie un email de bienvenue.
+
+00:18:12.090 --> 00:18:13.750
+Il les ajoute aux listes de distribution appropriées.
+
+00:18:14.630 --> 00:18:16.890
+Tout cela se produit quelques secondes seulement après la création du compte
+
+00:18:16.890 --> 00:18:17.910
+par les RH dans EntraID.
+
+00:18:18.470 --> 00:18:20.810
+Pas de scrutation, pas d'étape manuelle, pas de délai.
+
+00:18:21.710 --> 00:18:22.610
+Pensez à l'alternative.
+
+00:18:23.170 --> 00:18:25.830
+Sans webhooks, vous devriez interroger le point de terminaison utilisateur
+
+00:18:25.830 --> 00:18:27.610
+toutes les quelques minutes, soit des centaines de requêtes par jour.
+
+00:18:27.850 --> 00:18:29.110
+Et même là, vous pourriez mettre plusieurs minutes
+
+00:18:29.110 --> 00:18:30.370
+à détecter le nouvel utilisateur.
+
+00:18:30.810 --> 00:18:31.890
+Avec les webhooks, c'est instantané.
+
+00:18:32.210 --> 00:18:33.790
+Une notification et une requête Delta, c'est fini.
+
+00:18:34.290 --> 00:18:36.410
+Dès là la vraie valeur, votre système devient plus rapide,
+
+00:18:36.590 --> 00:18:38.890
+plus efficace et moins susceptible d'atteindre les limites de limitation.
+
+00:18:39.350 --> 00:18:40.870
+Au lieu de demander constamment des mises à jour à Graf,
+
+00:18:40.910 --> 00:18:42.770
+vous laissez Graf vous informer quand quelque chose se produit.
+
+00:18:43.190 --> 00:18:45.630
+C'est un changement fondamental dans la façon dont vous concevez vos intégrations.
+
+00:18:46.050 --> 00:18:47.030
+Voici donc ce que je veux que vous essayez.
+
+00:18:47.330 --> 00:18:49.270
+Pensez à un processus pour lequel vous utilisez actuellement l'inscrutation.
+
+00:18:49.910 --> 00:18:51.910
+Peut-être vérifiez-vous l'arrivée d'email dans une boîte partagée.
+
+00:18:52.290 --> 00:18:54.490
+Peut-être surveillez-vous les modifications de fichiers dans SharePoint.
+
+00:18:55.250 --> 00:18:57.370
+Peut-être suivez-vous les mises à jour d'utilisateurs pour vos RH.
+
+00:18:57.690 --> 00:18:59.530
+Vos webhook pourraient-ils remplacer ce type d'interrogations ?
+
+00:18:59.530 --> 00:19:01.570
+Dans la plupart des cas, oui, et vous n'avez pas tout à créer.

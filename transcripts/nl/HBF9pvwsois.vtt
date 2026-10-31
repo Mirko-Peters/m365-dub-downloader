@@ -1,0 +1,691 @@
+WEBVTT
+
+00:00:00.230 --> 00:00:07.550
+Klaar voor 10 dagen vol Microsoft 365, Copilot, AI, Azure en de mensen die de toekomst van werk vormgeven?
+
+00:00:07.830 --> 00:00:12.450
+Deze januari is M365, kom terug en we pakken het grootser aan.
+
+00:00:12.670 --> 00:00:18.530
+Doe mee voor live sessies, praktijkdemos en bruikbare kennis van MVPs en experts van over de hele wereld.
+
+00:00:18.770 --> 00:00:21.750
+Geen algemene presentaties, geen eindeloos jargon.
+
+00:00:21.950 --> 00:00:29.110
+We pakken de echte uitdagingen aan Copilot Studio, AI Agents, Fabric, Beveiliging, Governance en Automatisering.
+
+00:00:29.110 --> 00:00:34.830
+Of je nu IT-professional, ontwikkelaar of business leader bent, er zijn sessies speciaal voor jou.
+
+00:00:35.210 --> 00:00:40.510
+Met 10 volledige dagen kun je diverse technologieën verkennen en in contact komen met een wereldwijde community.
+
+00:00:40.910 --> 00:00:44.550
+Kijk live mee en neem praktische inzichten mee terug naar je organisatie.
+
+00:00:44.890 --> 00:00:49.150
+Januari 2027, 10 dagen, 1 Microsoft Community.
+
+00:00:49.410 --> 00:00:51.170
+De registratie is nu geopend.
+
+00:00:51.850 --> 00:00:55.890
+Ga naar m365.com.net en verzeker je vandaag nog van een plek.
+
+00:00:56.230 --> 00:00:58.930
+Dat is m365.com.net.
+
+00:01:00.110 --> 00:01:04.730
+Meld je nu aan op m365.com.net, dan zien we je live in januari.
+
+00:01:04.890 --> 00:01:09.850
+Het onderwerp van vandaag is er een waar bijna iedereen die met Microsoft 365 bouwt wel eens van heeft gehoord.
+
+00:01:10.030 --> 00:01:12.890
+Maar de meesten begrijpen niet echt hoe het achter de schermen werkt.
+
+00:01:13.070 --> 00:01:15.670
+Ik heb het over Microsoft Graph wijzigingsmeldingen.
+
+00:01:15.830 --> 00:01:18.090
+Wat zijn ze precies en waarom zou ik je interesseren?
+
+00:01:18.290 --> 00:01:20.230
+Laten we beginnen bij het probleem dat ze oplossen.
+
+00:01:20.490 --> 00:01:23.970
+Stel je voor dat je een app bouwt die moet weten wanneer er iets verandert in Microsoft 365.
+
+00:01:23.970 --> 00:01:29.590
+Misschien komt er een nieuwe e-mail binnen, werkt iemand een bestand bij een SharePoint of wordt er een nieuwe gebruiker toegevoegd aan je bedrijfsmap.
+
+00:01:29.590 --> 00:01:30.830
+Hoe komt je app daarachter?
+
+00:01:31.010 --> 00:01:32.910
+Dit is het punt, de oude manier is pollen.
+
+00:01:33.070 --> 00:01:38.110
+Je app stuurt elke paar minuten een verzoek naar Microsoft Graph en vraagt, is er iets nieuws sinds de laatste keer?
+
+00:01:38.290 --> 00:01:40.610
+Als er niets is veranderd, heb je een verzoek verspild.
+
+00:01:40.790 --> 00:01:44.830
+En als er vijf seconden na je controle iets verandert, weet je dat pas bij de volgende cyclus.
+
+00:01:44.830 --> 00:01:50.510
+Je controleert of te vaak wat middelen verspilt en het risico op fratteling met zich meebrengt, of te zelden, waardoor je dingen mist.
+
+00:01:50.890 --> 00:01:53.630
+Microsoft blokkeert apps die te agressief pollen zelfs.
+
+00:01:53.990 --> 00:01:58.790
+Ontwikkelaars noemen het de Graph gevangenis, waarbij je app een tijdje wordt geblokkeerd vanwege te veel verzoeken.
+
+00:01:58.970 --> 00:02:00.990
+Dus de vraag is, is er geen betere manier?
+
+00:02:01.230 --> 00:02:06.310
+Wat als, in plaats van dat je app constant vraagt of er iets nieuws is, het systeem je gewoon laat weten wanneer er iets is veranderd?
+
+00:02:06.430 --> 00:02:08.530
+Dat is precies wat wijzigingsmeldingen doen.
+
+00:02:09.050 --> 00:02:10.830
+Wat zijn Microsoft Graph wijzigingsmeldingen?
+
+00:02:11.510 --> 00:02:13.150
+Hier is de simpelste definitie.
+
+00:02:13.150 --> 00:02:19.590
+Met wijzigingsmeldingen kan je app direct reageren op gebeurtenissen in Microsoft 365 zonder constant te controleren.
+
+00:02:19.750 --> 00:02:21.810
+Zie het als een bewegingssensor op je brievenbus.
+
+00:02:22.010 --> 00:02:26.950
+In plaats van elk uur langs te lopen om te kijken, installeer je een sensor die je een seintje geeft zodra haar post arriveert.
+
+00:02:27.090 --> 00:02:30.230
+Je stopt met het verspillen van tijd aan lege controles en mist nooit meer een bezorging.
+
+00:02:30.470 --> 00:02:32.670
+Dat is wat wijzigingsmeldingen voor je app betekenen.
+
+00:02:32.930 --> 00:02:39.950
+Wanneer er iets verandert, zoals een nieuwe e-mail, een bijgewerkt bestand of een agendaafspraak, stuurt Microsoft Graph automatisch een melding naar uw app.
+
+00:02:39.950 --> 00:02:45.730
+Polling is niet nodig. Dit systeem bestaat uit twee onderdelen, een abonnement en een melding, die samenwerken.
+
+00:02:45.910 --> 00:02:49.270
+Met het abonnement vertelt u Microsoft Graph wat u in de gaten wilt houden.
+
+00:02:49.430 --> 00:02:53.030
+U geeft bijvoorbeeld aan, laat het me weten wanneer er een nieuw bericht in deze inbox binnenkomt.
+
+00:02:53.130 --> 00:02:56.470
+Of, geef een seintje als er een bestand wordt bijgewerkt in deze SharePoint bibliotheek.
+
+00:02:56.590 --> 00:02:58.790
+U registreert uw interesse en Graph noteert dit.
+
+00:02:58.950 --> 00:03:00.430
+De melding is wat er daarna gebeurt.
+
+00:03:00.430 --> 00:03:04.830
+Wanneer de wijziging plaatsvindt, stuurt Graph een HTTP-post naar een eindpunt dat u opgeeft.
+
+00:03:04.990 --> 00:03:12.870
+Uw app ontvangt die post, weet dat er iets is gebeurd en kan dan beslissen wat er moet gebeuren, zoals nieuwe gegevens ophalen, een workflow activeren of een database bijwerken.
+
+00:03:13.090 --> 00:03:14.890
+Dit is het belangrijkste verschil met polling.
+
+00:03:15.170 --> 00:03:17.150
+Meldingen worden automatisch afgeleverd.
+
+00:03:17.270 --> 00:03:20.710
+Uw app hoeft er niet om te vragen, het systeem plus de informatie zodra het gebeurt.
+
+00:03:20.930 --> 00:03:21.970
+Dat is de magie ervan.
+
+00:03:21.970 --> 00:03:25.770
+Microsoft Graph ondersteunt wijzigingsmeldingen voor een breed scala aan resources.
+
+00:03:26.070 --> 00:03:30.930
+Berichten, afspraken, contactpersonen, gebruikers, groepen, bestanden, teamsberichten, beveiligingswaarschuwingen.
+
+00:03:31.010 --> 00:03:33.890
+Bijna alles wat u via Graph kunt benaderen, kan worden gecontroleerd op wijzigingen.
+
+00:03:34.050 --> 00:03:35.230
+Maar hoe zet u dit eigenlijk op?
+
+00:03:35.370 --> 00:03:37.990
+Hoe vertelt u Graph wat er gevolgd moet worden en waar de meldingen naartoe moeten?
+
+00:03:38.170 --> 00:03:40.810
+Een abonnement maken, Graph vertellen wat er in de gaten gehouden moet worden.
+
+00:03:40.990 --> 00:03:42.150
+Dus, wat is een abonnement?
+
+00:03:42.310 --> 00:03:43.990
+Het is simpelweg een registratieverzoek.
+
+00:03:43.990 --> 00:03:45.910
+Uw app zegt, laat het me weten wanneer dit gebeurt.
+
+00:03:46.070 --> 00:03:48.410
+En u verstuurt dat verzoek naar de Microsoft Graph API.
+
+00:03:48.710 --> 00:03:49.970
+Graph slaat het op en wacht af.
+
+00:03:49.970 --> 00:03:52.490
+U moet in dat verzoek een paar details aan Graph doorgeven.
+
+00:03:52.650 --> 00:03:55.530
+Ten eerste de resource die u wilt volgen, het pad naar de gegevens.
+
+00:03:55.790 --> 00:03:58.970
+Bijvoorbeeld users, als u wijzigingen in gebruikersaccounts wilt monitoren.
+
+00:03:59.170 --> 00:04:03.250
+Of met mailfolders, inbox, messages, als u op de hoogte wilt blijven van nieuwe e-mails.
+
+00:04:03.570 --> 00:04:04.990
+Vervolgens het type wijziging.
+
+00:04:05.230 --> 00:04:07.950
+Wilt u weten wanneer er iets wordt gemaakt, bijgewerkt of verwijderd.
+
+00:04:08.050 --> 00:04:09.970
+U kunt er één kiezen of ze alle drie opvragen.
+
+00:04:09.970 --> 00:04:11.630
+Ten derde de notificatie URL.
+
+00:04:12.050 --> 00:04:15.630
+Dit is het adres van uw eindpunt, de plek waar Graph de melding naartoe moet sturen als er iets gebeurt.
+
+00:04:15.830 --> 00:04:18.270
+Dit moet een publiek toegankelijk HTTPS eindpunt zijn.
+
+00:04:18.490 --> 00:04:19.790
+Daar zijn geen sluiproutes voor.
+
+00:04:19.970 --> 00:04:21.290
+Ten vierde de verloopdatum.
+
+00:04:21.650 --> 00:04:22.910
+Abonnementen duren niet eeuwig.
+
+00:04:23.090 --> 00:04:25.510
+U kiest een toekomstige datum en tijd waarop het abonnement verloopt.
+
+00:04:25.670 --> 00:04:28.330
+Maar let op, verschillende resources hebben verschillende maximale levensduur.
+
+00:04:28.470 --> 00:04:30.570
+Outlook berichten kunnen tot zeven dagen geldig blijven.
+
+00:04:30.730 --> 00:04:32.610
+Teams chatberichten hebben een limiet van drie dagen.
+
+00:04:32.830 --> 00:04:35.010
+SharePoint bestanden kunnen ongeveer dertig dagen blijven bestaan.
+
+00:04:35.910 --> 00:04:36.310
+Aanwezigheidsinformatie?
+
+00:04:36.510 --> 00:04:37.930
+Dat verloopt na slechts één uur.
+
+00:04:37.930 --> 00:04:39.410
+Hier is een concreet voorbeeld.
+
+00:04:39.670 --> 00:04:42.590
+Stel dat je wilt weten wanneer iemand in je bedrijf zijn functietitel wijzigt.
+
+00:04:42.750 --> 00:04:46.350
+Je maakt een abonnement aan voor de resource users met als wijzigingstype updated.
+
+00:04:46.350 --> 00:04:50.310
+Je koppelt dit aan je notificatie URL en stelt de verloopdatum over een paar dagen in.
+
+00:04:50.490 --> 00:04:55.330
+Wanneer iemand zijn profiel in Azure AD bijwerkt, stuurt Graf een post naar je appoint met een notificatie payload.
+
+00:04:55.590 --> 00:04:58.670
+Die payload bevat de idee van de gebruiker en vertelt je wat er is gewijzigd.
+
+00:04:58.790 --> 00:05:03.690
+Je app kan daar op actie ondernemen, een hour systeem bijwerken, een melding sturen naar de manager, wat je maar nodig hebt.
+
+00:05:03.910 --> 00:05:06.750
+Graf reageert op je abonnementsverzoek met een abonnementsidee.
+
+00:05:06.910 --> 00:05:11.010
+Die idee heb je later nodig om het abonnement te beheren, vernieuwen, bijwerken of verwijderen.
+
+00:05:11.010 --> 00:05:17.310
+Maar dit is belangrijk. Voordat Graf notificaties gaat sturen, moet bevestigd worden dat je het point echt actief is en luistert.
+
+00:05:17.510 --> 00:05:21.730
+Daarvoor is een handshake vereist. De handshake validatietoken uitgelegd.
+
+00:05:21.890 --> 00:05:26.210
+Wanneer je een abonnement aanmaakt, vertrouwt Microsoft Graf je het point niet zomaar blindelings.
+
+00:05:26.410 --> 00:05:29.390
+Het stuurt eerst een testping, een verificatieverzoek.
+
+00:05:29.450 --> 00:05:32.730
+Die ping bevat een validatietoken, een willekeurige reekstekens.
+
+00:05:32.950 --> 00:05:36.610
+Je het point moet die token opvangen en binnen 10 seconden als platte tekst terugsturen.
+
+00:05:36.610 --> 00:05:41.070
+Zie het als een bezorger die aanbelt om te controleren of je thuis bent voordat hij een pakket achterlaat.
+
+00:05:41.170 --> 00:05:43.570
+Als niemand open doet, laat de bezorger niets achter.
+
+00:05:43.870 --> 00:05:49.130
+Hetzelfde geldt hier. Als je het point de validatietoken niet terugstuurt, zou Graf er geen notificaties naartoe sturen.
+
+00:05:49.330 --> 00:05:53.510
+Het antwoord moet platte tekst zijn, geen JSON of XML, gewoon de ruwe tokenreeks.
+
+00:05:53.710 --> 00:05:55.950
+Kies je het verkeerde formaat, dan mislukt de handshake.
+
+00:05:56.090 --> 00:06:00.910
+Het is een beveiligingscontrole. Het bewijst dat je het point actief is, luistert en onder jouw controle valt.
+
+00:06:00.910 --> 00:06:06.550
+Het voorkomt dat iemand een abonnement koppelt aan een URL die niet van hen is, in de hoop notificaties voor iemand anders te onderscheppen.
+
+00:06:06.730 --> 00:06:08.550
+Geen handshake betekent geen abonnement.
+
+00:06:08.770 --> 00:06:11.370
+Graf wijst het aanvraagverzoek af en je krijgt een foutmelding.
+
+00:06:11.550 --> 00:06:13.350
+Je herstelt je het point en probeert het opnieuw.
+
+00:06:13.550 --> 00:06:17.390
+Zodra de handshake slaagt, is het abonnement actief en beginnen de notificaties te stromen.
+
+00:06:17.570 --> 00:06:20.150
+Maar hier is het punt. Ze stromen niet voor eeuwig.
+
+00:06:20.530 --> 00:06:21.990
+De verbinding in stand houden.
+
+00:06:22.910 --> 00:06:23.350
+Abonnementsverlenging.
+
+00:06:23.570 --> 00:06:25.430
+Elk abonnement heeft een verloopdatum.
+
+00:06:25.610 --> 00:06:27.190
+Die stel je in wanneer je het aanmaakt.
+
+00:06:27.410 --> 00:06:28.330
+Graf dwingt dit af.
+
+00:06:28.390 --> 00:06:30.610
+Wanneer die dag aanbreekt, stopt het abonnement.
+
+00:06:30.810 --> 00:06:32.110
+Geen notificaties meer.
+
+00:06:32.830 --> 00:06:34.230
+Zie het als een parkeermeter.
+
+00:06:34.230 --> 00:06:37.390
+Je voert de tijd in en wanneer deze op is, verloopt de meter.
+
+00:06:37.750 --> 00:06:39.890
+Verschillende resources hebben verschillende limieten.
+
+00:06:40.090 --> 00:06:41.830
+Outlook berichten kunnen 7 dagen lopen.
+
+00:06:42.070 --> 00:06:43.430
+Teams chatberichten 3 dagen.
+
+00:06:43.690 --> 00:06:45.450
+Sharepoint bestanden ongeveer 30 dagen.
+
+00:06:46.210 --> 00:06:47.330
+Aanwezigheidsinformatie slechts 1 uur.
+
+00:06:47.470 --> 00:06:50.390
+Je app kan dus niet zomaar een abonnement aanmaken en het daarna vergeten.
+
+00:06:50.530 --> 00:06:52.410
+Je hebt een proces nodig dat het in leven houdt.
+
+00:06:52.550 --> 00:06:53.750
+Vernieuwen is eenvoudig.
+
+00:06:53.970 --> 00:06:56.090
+Stuur een patchverzoek met het abonnements-idee.
+
+00:06:56.290 --> 00:06:57.730
+Voeg een nieuwe verloopdatum toe.
+
+00:06:57.950 --> 00:07:01.070
+Doe dit voordat de huidige verloopt en Graf het abonnement verlengt.
+
+00:07:01.070 --> 00:07:03.030
+Dit is de best practice die ik aanbeveel.
+
+00:07:03.350 --> 00:07:06.030
+Controleer de verloopdatum bij elke melding die je ontvangt.
+
+00:07:06.130 --> 00:07:09.170
+Als het bijna verloopt, zeg binnen een dag, vernieuw het dan direct.
+
+00:07:09.350 --> 00:07:12.910
+Op die manier heb je geen aparte achtergrondtaak nodig om abonnementen te beheren.
+
+00:07:13.110 --> 00:07:15.070
+Microsoft heeft ook levenscyclusmeldingen toegevoegd.
+
+00:07:15.810 --> 00:07:18.470
+Deze waarschuwingen informeren je voordat een abonnement verloopt.
+
+00:07:18.670 --> 00:07:22.730
+Ze vertellen je wanneer je abonnement afloopt of wanneer je toegangstoken opnieuw moet worden geautoriseerd.
+
+00:07:22.950 --> 00:07:25.870
+Meld je hierop aan, zodat je app kan vernieuwen voordat er iets misgaat.
+
+00:07:25.870 --> 00:07:28.770
+Maar wat als je eindpunt uitvalt of je een verlengingsperiode mist?
+
+00:07:28.970 --> 00:07:30.990
+Dat is waar het vangnet om de hoek komt kijken.
+
+00:07:31.250 --> 00:07:33.890
+Wanneer dingen misgaan, betrouwbaarheid en vangnetten.
+
+00:07:34.050 --> 00:07:37.450
+Je abonnement is actief, je eindpunt luistert, meldingen stromen binnen.
+
+00:07:37.630 --> 00:07:40.010
+Alles ziet er goed uit, maar wat gebeurt er als er iets stuk gaat?
+
+00:07:40.230 --> 00:07:42.030
+Misschien is je eindpunt offline voor onderhoud.
+
+00:07:42.230 --> 00:07:46.630
+Een netwerkprobleem blokkeert een melding of je mist simpelweg de verlengingsperiode en het abonnement verloopt.
+
+00:07:46.830 --> 00:07:47.910
+Dit soort dingen gebeurt.
+
+00:07:48.090 --> 00:07:49.510
+De vraag is, hoe herstel je dit?
+
+00:07:49.870 --> 00:07:53.350
+Microsoft Craft verwacht dat je webhoek eindpunt snel reageert binnen drie seconden.
+
+00:07:53.350 --> 00:07:55.610
+Als het langer duurt, markeert Craft het als traag.
+
+00:07:55.710 --> 00:08:01.170
+Als meer dan 10% van je reacties langer dan drie seconden duurt in een periode van 10 minuten, vertraagt Craft je meldingen met 10 minuten.
+
+00:08:01.330 --> 00:08:04.190
+Het verstuurt dan slechts een klein monster om te kijken of je hersteld bent.
+
+00:08:04.370 --> 00:08:05.110
+Het wordt erger.
+
+00:08:05.330 --> 00:08:09.970
+Als meer dan 15% van je reacties de time-out van 10 seconden overschrijdt, markeert Craft je eindpunt als verwijderd.
+
+00:08:10.150 --> 00:08:11.850
+Meldingen stoppen volledig voor 10 minuten.
+
+00:08:12.070 --> 00:08:12.710
+Ze zijn weg.
+
+00:08:12.890 --> 00:08:14.270
+Je kunt ze niet meer terugkrijgen.
+
+00:08:14.470 --> 00:08:16.370
+Je eindpunt moet dus snel en betrouwbaar zijn.
+
+00:08:16.610 --> 00:08:19.810
+Dat betekent niet dat je elke melding in minder dan drie seconden moet verwerken.
+
+00:08:19.810 --> 00:08:24.550
+Bevestig de ontvangst snel met een 202 accepted reactie en verwerk de melding daarna asynchroon.
+
+00:08:24.730 --> 00:08:25.670
+Zet het in de wachtrij.
+
+00:08:25.870 --> 00:08:26.870
+Handel het later af.
+
+00:08:27.010 --> 00:08:28.350
+De sleutel is die snelle reactie.
+
+00:08:28.590 --> 00:08:30.930
+Zelfs met een perfect eindpunt kan er nog steeds iets misgaan.
+
+00:08:31.290 --> 00:08:32.150
+Abonnementen verlopen.
+
+00:08:32.750 --> 00:08:33.710
+Netwerkstoringen komen voor.
+
+00:08:33.950 --> 00:08:36.710
+Microsoft Craft zelf kan in zeldzame gevallen een melding missen.
+
+00:08:36.930 --> 00:08:38.110
+Daarom heb je een vangnet nodig.
+
+00:08:38.270 --> 00:08:38.910
+Delta Queries.
+
+00:08:39.190 --> 00:08:40.110
+Zie het op deze manier.
+
+00:08:40.790 --> 00:08:41.990
+Wijzigingsmeldingen zijn het brandalarm.
+
+00:08:42.170 --> 00:08:43.550
+Ze vertellen je dat er nu iets gebeurt.
+
+00:08:43.790 --> 00:08:45.490
+Delta Queries zijn de sprinklerinstallatie.
+
+00:08:45.690 --> 00:08:47.330
+Ze vangen alles op wat het alarm heeft gemist.
+
+00:08:47.330 --> 00:08:48.310
+Ze werken samen.
+
+00:08:48.530 --> 00:08:50.150
+Meldingen geven je realtime bewustzijn.
+
+00:08:50.390 --> 00:08:53.430
+Delta Queries geven je een compleet beeld dat je op elk moment kunt afstemmen.
+
+00:08:53.470 --> 00:08:55.190
+Het aanbevolen patroon is eenvoudig.
+
+00:08:55.410 --> 00:08:57.610
+Gebruik wijzigingsmeldingen voor onmiddellijke notificatie.
+
+00:08:57.850 --> 00:08:59.210
+Voer periodiek een Delta Query uit.
+
+00:08:59.410 --> 00:09:02.390
+Misschien elke paar uur of eenmaal per dag om alles wat er doorheen is geglipt op te vangen.
+
+00:09:02.590 --> 00:09:04.710
+Op deze manier mis je nooit permanent een wijziging.
+
+00:09:04.950 --> 00:09:07.670
+Zelfs als een melding verloren is gegaan of een abonnement is verlopen.
+
+00:09:07.930 --> 00:09:08.970
+Praktische toepassingen.
+
+00:09:09.230 --> 00:09:10.110
+Wat je kunt bouwen.
+
+00:09:10.350 --> 00:09:11.810
+Dus, wat maakt dit eigenlijk mogelijk?
+
+00:09:12.010 --> 00:09:13.710
+Ik neem je mee door enkele echte voorbeelden.
+
+00:09:13.710 --> 00:09:15.090
+Neem Our Automatisering.
+
+00:09:15.090 --> 00:09:17.430
+Stel je voor dat er morgen iemand bij je bedrijf komt werken.
+
+00:09:17.590 --> 00:09:20.970
+Op het moment dat Entra ID een nieuwe gebruiker aanmaakt, wordt er een wijzigingsmelding verstuurd.
+
+00:09:21.130 --> 00:09:25.170
+Je app haalt het profiel op en maakt accounts aan in je oude platform voor urenregistratie en gebouwtoegang.
+
+00:09:25.290 --> 00:09:26.310
+Allemaal binnen enkele seconden.
+
+00:09:26.490 --> 00:09:27.970
+Geen polling, geen vertragingen.
+
+00:09:28.130 --> 00:09:29.270
+Voor beveiligingswaarschuwingen.
+
+00:09:29.390 --> 00:09:31.410
+Stel dat het account van een gebruiker wordt uitgeschakeld.
+
+00:09:31.550 --> 00:09:36.310
+Een wijzigingsmelding activeert een workflow die controleert op verdachte wijzigingen en je beveiligingsteam waarschuwt.
+
+00:09:36.470 --> 00:09:38.210
+Voorheen moest je elke paar minuten polen.
+
+00:09:38.410 --> 00:09:39.350
+Nu gebeurt het direct.
+
+00:09:39.950 --> 00:09:41.450
+Contentverwerking werkt op dezelfde manier.
+
+00:09:41.450 --> 00:09:45.570
+Wanneer een bestand in een SharePoint documentbibliotheek belandt, wil je weten of het een factuur is.
+
+00:09:45.730 --> 00:09:47.650
+De melding vertelt je dat er een nieuw bestand is.
+
+00:09:47.830 --> 00:09:51.670
+Je app haalt het op, laat het door AI klassificeren en stuurt het naar het juiste onkostensysteem.
+
+00:09:51.810 --> 00:09:52.690
+Allemaal automatisch.
+
+00:09:52.910 --> 00:09:56.350
+Real-time dashboards laten je analyses zien terwijl ze gebeuren, niet van uren geleden.
+
+00:09:57.010 --> 00:09:59.570
+Wijzigingsmeldingen synchroniseren dataverse direct met Fabric.
+
+00:09:59.730 --> 00:10:02.390
+Je Power BI dashboards worden bijna in real-time bijgewerkt.
+
+00:10:02.590 --> 00:10:03.970
+Dit is er een die ik interessant vind.
+
+00:10:04.150 --> 00:10:05.250
+Copilot Connectors.
+
+00:10:05.470 --> 00:10:10.410
+Microsoft voegt real-time synchronisatie toe via webhooks, zodat AI agents reageren zodra gegevens veranderen.
+
+00:10:10.410 --> 00:10:17.170
+Wanneer een klantrecord in Dynamics 365 wordt bijgewerkt, genereert een copilot-agent direct een follow-up, zonder wachttijd.
+
+00:10:17.730 --> 00:10:19.830
+Al deze voorbeelden hebben één ding gemeen.
+
+00:10:20.030 --> 00:10:24.170
+Voor wijzigingsmeldingen bouwde je geplande taken die elk uur of elke dag polden.
+
+00:10:24.390 --> 00:10:27.370
+Het werkte, maar was traag, inefficiënt en kwetsbaar.
+
+00:10:28.150 --> 00:10:29.730
+Wijzigingsmeldingen draaien dat model om.
+
+00:10:29.890 --> 00:10:31.990
+Real-time, event-driven, direct.
+
+00:10:32.210 --> 00:10:33.870
+Het juiste bezorgkanaal kiezen.
+
+00:10:34.110 --> 00:10:36.170
+Niet elke app heeft dezelfde bezorgmethode nodig.
+
+00:10:36.170 --> 00:10:37.690
+Laten we naar je opties kijken.
+
+00:10:37.890 --> 00:10:39.290
+Webhooks zijn het eenvoudigst.
+
+00:10:39.430 --> 00:10:41.610
+Graph stuurt een HTTP-post naar je eindpunt.
+
+00:10:41.810 --> 00:10:43.030
+Jij verwerkt deze en gaat door.
+
+00:10:43.210 --> 00:10:46.730
+Voor een laag tot gemiddeld volume, zeg een paar honderd meldingen per uur, werkt dat prima.
+
+00:10:46.950 --> 00:10:48.450
+Maar wat als je iets groters bouwt?
+
+00:10:48.630 --> 00:10:51.770
+Duizenden meldingen per seconde kunnen een enkel eindpunt overbelasten.
+
+00:10:51.990 --> 00:10:53.390
+Je hebt iets krachttigers nodig.
+
+00:10:53.610 --> 00:10:56.210
+Event Hubs kan miljoenen gebeurtenissen per seconde verwerken.
+
+00:10:56.430 --> 00:10:59.730
+In plaats van dat Graph meldingen één voor één verstuurd, worden ze naar een hub gestuurd.
+
+00:10:59.870 --> 00:11:02.610
+Je app leest op eigen tempo, met een laag risico op overstroming.
+
+00:11:02.610 --> 00:11:06.730
+Dit is voor grote bedrijfscenario's zoals duizenden SharePoint sites of miljoenen mailboxen.
+
+00:11:06.850 --> 00:11:09.230
+En dan is er nog Event Grid, de serverloze optie.
+
+00:11:09.430 --> 00:11:13.550
+Het verstuurt meldingen naar Azure Functions of Logic Apps en handelt automatisch Retreats
+
+00:11:13.550 --> 00:11:14.470
+en Deadlettering af.

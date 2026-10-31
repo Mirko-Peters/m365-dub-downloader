@@ -1,0 +1,1126 @@
+WEBVTT
+
+00:00:00.340 --> 00:00:06.900
+Siap untuk 10 hari pembahasan Microsoft 365, Copilot, AI Azure, dan para penggerak masa depan dunia kerja.
+
+00:00:07.860 --> 00:00:12.020
+Januari ini, M365 Conference kembali hadir dengan skala yang lebih besar.
+
+00:00:12.740 --> 00:00:18.460
+Bergabunglah bersama kami untuk sesi langsung demo dunia nyata dan pengetahuan praktis dari MVP serta pakar industri di seluruh dunia.
+
+00:00:18.880 --> 00:00:21.160
+Tanpa slide yang umum, tanpa istilah teknis yang berteret.
+
+00:00:21.480 --> 00:00:28.880
+Kami akan membahas tantangan nyata, Copilot Studio, Agen AI, Fabrik, Keamanan, Tata Kuala, dan Otomatisasi.
+
+00:00:28.880 --> 00:00:34.520
+Baik Anda seorang profesional TI, pengembang, atau pemimpin bisnis, tersedia sesi yang dirancang khusus untuk Anda.
+
+00:00:35.500 --> 00:00:40.100
+Selama 10 hari penuh, Anda bisa menjelajahi berbagai teknologi dan terhubung dengan komunitas global.
+
+00:00:40.860 --> 00:00:44.300
+Saksikan secara langsung, dan bawa wasam praktis kembali ke organisasi Anda.
+
+00:00:45.080 --> 00:00:47.420
+Januari 2027, 10 hari.
+
+00:00:47.960 --> 00:00:48.900
+Satu komunitas Microsoft.
+
+00:00:49.160 --> 00:00:50.560
+Pendaftaran telah dibuka sekarang.
+
+00:00:51.800 --> 00:00:55.360
+Kunjungi M365Chan.net dan amankan tempat Anda hari ini.
+
+00:00:55.360 --> 00:00:58.780
+Itu adalah M36.net.net
+
+00:00:58.780 --> 00:01:04.760
+Bergabunglah sekarang di M365Chan.net dan sampai jumpa secara langsung di bulan Januari.
+
+00:01:05.440 --> 00:01:09.780
+Halo semuanya dan selamat datang di episode lain dari Microsoft Knowledge Nuggets di M365FM.
+
+00:01:10.520 --> 00:01:11.160
+Saya Mirko Peters.
+
+00:01:11.720 --> 00:01:15.480
+Bayangkan Anda memindahkan aplikasi bisnis selama dari server di kantor Anda ke mesin virtual Azure.
+
+00:01:16.020 --> 00:01:18.720
+Aplikasi tersebut kini berada di Cloud tetapi masih meminta domain Windows.
+
+00:01:19.180 --> 00:01:22.420
+Aplikasi itu ingin bergabung dengan domain tersebut, mencari orang melalui LDAP,
+
+00:01:22.420 --> 00:01:24.660
+masuk ke penggunaan dengan Kerberos, dan menerapkan kebijakan.
+
+00:01:24.940 --> 00:01:28.200
+Kebanyakan orang berasumsi EntraID menggantikan setiap tugas Active Directory.
+
+00:01:28.480 --> 00:01:28.920
+Jadi demikian.
+
+00:01:29.380 --> 00:01:31.860
+Aplikasi Cloud Modern dapat membuat Anda masuk melalui EntraID,
+
+00:01:32.060 --> 00:01:36.100
+tetapi aplikasi Windows yang lebih lama tetap mengharapkan domain yang sama seperti yang mereka gunakan di ruang server.
+
+00:01:36.540 --> 00:01:41.100
+Di akhir episode ini, Anda akan melihat di mana posisi EntraID Active Directory dan EntraDomain Services,
+
+00:01:41.420 --> 00:01:44.020
+serta ada satu detail yang mengubah cara Anda mengelola semuanya.
+
+00:01:44.880 --> 00:01:47.060
+Informasi identitas hanya mengalir dalam satu arah.
+
+00:01:48.020 --> 00:01:50.460
+Mengapa EntraID saja tidak bisa menjalankan setiap aplikasi lab?
+
+00:01:50.460 --> 00:01:52.400
+Mari kita mulai dengan apa yang dilakukan EntraID dengan.
+
+00:01:52.820 --> 00:01:54.320
+Ini adalah meja resepsionis untuk layanan cloud.
+
+00:01:54.720 --> 00:01:56.020
+Sistem ini tahu siapa Anda,
+
+00:01:56.240 --> 00:01:57.280
+memeriksa proses masuk Anda,
+
+00:01:57.400 --> 00:01:59.640
+dan memutuskan apakah Anda boleh mengakses Microsoft 3.0,
+
+00:01:59.780 --> 00:02:01.840
+dan setiap aplikasi bisnis di cloud.
+
+00:02:02.040 --> 00:02:02.800
+Anda masuk sekali,
+
+00:02:02.980 --> 00:02:05.920
+lalu berpindah antar layanan tanpa harus mengetik kata sandi berulang kali.
+
+00:02:06.360 --> 00:02:07.020
+Itulah ases masuk-ases.
+
+00:02:08.180 --> 00:02:11.840
+EntraID juga dapat meminta pemeriksaan masuk kedua melalui autentikasi multifaktor,
+
+00:02:12.060 --> 00:02:13.400
+memeriksa perangkat yang Anda gunakan,
+
+00:02:13.520 --> 00:02:14.320
+dari mana Anda masuk,
+
+00:02:14.480 --> 00:02:16.960
+dan aturan yang ditetapkan perusahaan Anda terkait akses.
+
+00:02:16.960 --> 00:02:18.640
+Untuk aplikasi modern,
+
+00:02:18.740 --> 00:02:19.640
+pola tersebut bekerja sangat.
+
+00:02:20.000 --> 00:02:20.920
+Anda membuka browser,
+
+00:02:21.160 --> 00:02:22.480
+aplikasi mengirim Anda ke EntraID,
+
+00:02:22.620 --> 00:02:24.540
+Anda masuk mungkin menyetujui permintaan di ponsel,
+
+00:02:24.700 --> 00:02:27.960
+lalu EntraID mengirimkan pesan masuk yang aman ke aplikasi di balik layar.
+
+00:02:28.640 --> 00:02:30.180
+Aplikasi membaca pesan tersebut dan mengizinkan Anda.
+
+00:02:30.580 --> 00:02:31.240
+Dengan pola ini,
+
+00:02:31.420 --> 00:02:32.620
+tidak perlu lagi bergabung ke domain,
+
+00:02:32.780 --> 00:02:34.160
+tidak ada Windows Server lama yang terlibat,
+
+00:02:34.280 --> 00:02:37.120
+dan tidak ada persyaratan bagi aplikasi untuk mencari rektori perusahaan klasik.
+
+00:02:37.680 --> 00:02:39.440
+Namun aplikasi yang lebih lama tumbuh di dunia berbeda.
+
+00:02:39.920 --> 00:02:42.840
+Bayangkan aplikasi keuangan yang telah berjalan di Windows Server selama bertahun-tahun,
+
+00:02:42.840 --> 00:02:44.580
+tempat pengguna masuk dari PC yang terhubung ke domain.
+
+00:02:45.100 --> 00:02:47.560
+Aplikasi tersebut mencari detail karyawan melalui LDAP,
+
+00:02:47.760 --> 00:02:50.580
+cara umum bagi perangkat menak lama untuk mencari rektori perusahaan.
+
+00:02:51.160 --> 00:02:52.500
+Aplikasi mungkin menggunakan Gerberos,
+
+00:02:52.600 --> 00:02:54.920
+metode masuk Windows lama yang memungkinkan sistem untuk saling percaya.
+
+00:02:55.400 --> 00:02:57.140
+Aplikasi mungkin mengandalkan kebijakan grup,
+
+00:02:57.260 --> 00:02:59.820
+sekumpulan aturan perusahaan yang dapat mengontrol pengaturan di komputer Windows.
+
+00:03:00.360 --> 00:03:02.860
+Aplikasi tersebut tidak tahu cara membaca pesan masuk cloud modern.
+
+00:03:03.620 --> 00:03:06.740
+Aplikasi tersebut berharap untuk memanggil jaringan dan menemukan domain Windows tradisional.
+
+00:03:07.140 --> 00:03:08.340
+Dan jika tidak dapat menemukannya,
+
+00:03:08.500 --> 00:03:10.060
+aplikasi mungkin gagal memasukkan pengguna,
+
+00:03:10.060 --> 00:03:12.320
+gagal menemukan akun layanan atau sekadar menolak untuk dimulai.
+
+00:03:12.640 --> 00:03:14.540
+Anda mungkin pernah melihat pola ini di luar bidang IT juga.
+
+00:03:15.360 --> 00:03:18.060
+Stop kontak baru tidak membantu jika stiker pada mesin lama tidak pas.
+
+00:03:18.720 --> 00:03:20.300
+Listriknya ada, tetapi semuanya salah.
+
+00:03:20.900 --> 00:03:24.480
+Sekarang, bayangkan perusahaan memindahkan aplikasi keuangan dan basis datanya ke komputer virtual Azure.
+
+00:03:25.120 --> 00:03:27.000
+Server telah berpindah, tetapi kebutuhan namanya belum.
+
+00:03:27.280 --> 00:03:29.300
+Anda dapat membiarkan Active Directory di kantor
+
+00:03:29.300 --> 00:03:32.420
+dan menghubungkan Azure kembali ke sana melalui VPN terowongan jaringan pribadi.
+
+00:03:32.880 --> 00:03:36.640
+Jadi, aplikasi di Azure mengirimkan permintaan melalui koneksi tersebut kapanpun yang merlukan domain.
+
+00:03:36.640 --> 00:03:42.040
+Hal itu bisa berhasil, tetapi aplikasi sekarang bergantung pada tautan jaringan dan pengontrol domain lokal agar tetap tersedia.
+
+00:03:42.640 --> 00:03:45.560
+Dan jika koneksi tersebut bermasalah, aplikasi cloud mungkin juga mengalami masalah.
+
+00:03:46.120 --> 00:03:49.400
+Pilihan lainnya adalah membuat komputer virtual pengontrol domain Anda sendiri di Azure.
+
+00:03:49.980 --> 00:03:52.780
+Pengontrol adalah server yang menjalankan domain Active Directory tradisional,
+
+00:03:52.980 --> 00:03:55.200
+menangani direktori, proses masuk, dan tugas domain lainnya.
+
+00:03:56.140 --> 00:03:58.460
+Hal itu juga berhasil, tetapi sekarang tim Anda memiliki lebih banyak server.
+
+00:03:58.460 --> 00:04:00.460
+Seseorang perlu melakukan patch dan memantau server tersebut.
+
+00:04:00.700 --> 00:04:04.360
+Anda memerlukan cadangan, rencana pemulihan, rencana untuk mengincronkan pengontrol domain
+
+00:04:04.360 --> 00:04:07.340
+dan Anda juga perlu melindungi akun admin yang kuat yang mengontrol domain tersebut.
+
+00:04:07.600 --> 00:04:09.020
+Bagi beberapa perusahaan kendaya tersebut, masuk.
+
+00:04:09.300 --> 00:04:12.540
+Bagi yang lain, itu adalah pekerjaan tambahan hanya untuk menjaga agar aplikasi lama.
+
+00:04:13.060 --> 00:04:14.600
+Jadi, kesenjangannya cukup sempit, tetapi nyat.
+
+00:04:15.200 --> 00:04:18.660
+Sebuah aplikasi ada di Azure, namun masih menggunakan bahasa Active Directory yang lama.
+
+00:04:19.500 --> 00:04:21.400
+Apa sebenarnya Microsoft Entra Domain Services itu?
+
+00:04:21.840 --> 00:04:26.340
+Microsoft Entra Domain Services adalah domain Windows terkelola yang berjalan di dalam jaringan Azure Anda.
+
+00:04:26.340 --> 00:04:27.820
+Itulah definisi sederhananya.
+
+00:04:28.620 --> 00:04:31.500
+Mengontrol domain berjalan di balik layar, dikelola sepenuhnya oleh Microsoft,
+
+00:04:31.780 --> 00:04:36.060
+sementara mesin virtual Azure dan aplikasi lama Anda menggunakan layanan domain familiar yang mereka butuhkan.
+
+00:04:36.500 --> 00:04:38.360
+Bayangkan pengaturan cloud Anda sebagai sebuah gedungkan.
+
+00:04:38.860 --> 00:04:40.420
+Entra ID adalah meja resepsionis di depan.
+
+00:04:40.780 --> 00:04:44.540
+Layanan ini memperiksa siapa Anda saat masuk ke Microsoft 365 atau aplikasi cloud lainnya,
+
+00:04:44.640 --> 00:04:46.680
+serta menerapkan aturan perusahaan terkait proses masuknya.
+
+00:04:46.860 --> 00:04:49.000
+Entra Domain Services berada di ruang kantor belakang yang terkunci.
+
+00:04:49.380 --> 00:04:52.760
+Sistem lama tidak perlu mengunjungi meja resepsionis seperti yang dilakukan aplikasi cloud modern.
+
+00:04:52.760 --> 00:04:57.720
+Mereka memerlukan direktori bergaya lama di dekatnya yang memahami bahasa mereka dan dapat menjawab permintaan mereka.
+
+00:04:58.060 --> 00:04:59.580
+Ruang kantor belakang itu adalah domain terkelola.
+
+00:05:00.000 --> 00:05:02.500
+Intinya adalah Anda tidak perlu membangun pengontrol domain sendiri.
+
+00:05:02.960 --> 00:05:04.660
+Anda tidak perlu masuk ke sistem tersebut dengan remote test.
+
+00:05:05.020 --> 00:05:08.820
+Anda tidak perlu menentukan berapa banyak yang dijalankan menambah Windows di dalamnya atau mengelola koneksi antersek.
+
+00:05:08.920 --> 00:05:09.980
+Microsoft menangani semua hal ini.
+
+00:05:10.260 --> 00:05:14.180
+Tugas Anda adalah menghubungkan mesin virtual Azure dan aplikasi yang tepat ke domain terkelola.
+
+00:05:14.620 --> 00:05:17.380
+Setelah terhubung, mereka dapat menggunakan layanan aktif direktori yang familiar.
+
+00:05:17.380 --> 00:05:23.120
+VM Windows dapat bergabung ke domain dan aplikasi lama dapat menggunakan LDAP untuk mencari orang, grup, dan detail direktori.
+
+00:05:23.480 --> 00:05:28.740
+Sistem ini dapat menggunakan Kerberos, metode masuk yang sering diharapkan oleh aplikasi bisnis lama saat satu server pemeriksa server lain.
+
+00:05:29.240 --> 00:05:33.400
+Sistem ini juga dapat menggunakan NTLM, metode masuk Windows lama lainnya yang masih dibutuhkan oleh beberapa aplikasi.
+
+00:05:33.960 --> 00:05:38.980
+Domain terkelola juga menyediakan DNS yang membantu sistem menemukan server yang tepat berdasarkan nama, bukan deretan angka.
+
+00:05:38.980 --> 00:05:44.840
+Layanan ini juga mendukung kebijakan grup, sehingga Anda dapat menerapkan pengaturan Windows tertentu ke komputer dan pengguna di domain terkelola tersebut.
+
+00:05:45.120 --> 00:05:46.320
+Daftar itu terdengar tangis, saya tahu.
+
+00:05:46.740 --> 00:05:48.260
+Bayangkan itu sebagai meja penerjemah.
+
+00:05:48.940 --> 00:05:51.440
+Aplikasi Anda bertanya dalam bahasa Windows lama, siapa pengguna ini?
+
+00:05:52.400 --> 00:05:53.820
+Bisakah server ini mercaya server itu?
+
+00:05:54.540 --> 00:05:55.320
+Di mana database-nya?
+
+00:05:55.880 --> 00:05:57.240
+Pengaturan apa yang harus digunakan komputer ini?
+
+00:05:58.000 --> 00:06:02.040
+Entra Domain Services memahami pertanyaan-pertanyaan tersebut dan memberikan jawaban yang diharapkan aplikasi,
+
+00:06:02.040 --> 00:06:04.240
+namun tidak membuat daftar karyawan utama yang kedua.
+
+00:06:04.840 --> 00:06:06.780
+Catatan identitas utama tetap berada di Entra ID.
+
+00:06:06.780 --> 00:06:12.660
+Pengguna dan grup dari Entra ID disalin ke domain terkelola sehingga aplikasi lama dapat melihat dan menggunakannya dalam bentuk yang dipahaminya.
+
+00:06:13.060 --> 00:06:18.700
+Jika perusahaan Anda juga memiliki Active Directory lokal, identitas mungkin sudah mencapai Entra ID dari sana sebelum disalin ke Domain Services.
+
+00:06:19.380 --> 00:06:20.320
+Araliran data penting di sini.
+
+00:06:20.760 --> 00:06:22.900
+Detail identitas mengalir ke Entra Domain Services.
+
+00:06:23.420 --> 00:06:24.340
+Data tersebut tidak mengalir kemah.
+
+00:06:24.640 --> 00:06:28.100
+Jadi jika pengguna berasal dari Entra ID, Anda mengelola pengguna tersebut di Entra ID.
+
+00:06:28.300 --> 00:06:32.340
+Jika pengguna asli berasal dari Active Directory lokal Anda, Anda mengelola pengguna tersebut di sana.
+
+00:06:32.940 --> 00:06:36.700
+Anda tidak memperlakukan Domain Services sebagai tempat untuk mengedit catatan utama karyawan.
+
+00:06:37.300 --> 00:06:41.060
+Hal itu mencegah domain terkelola menjadi lemari arsip kedua dengan versi data orang yang sama.
+
+00:06:41.880 --> 00:06:44.640
+Mengarang satu bagian yang sering menjoditkan banyak orang saat penyiapan, yaitu katasan.
+
+00:06:45.040 --> 00:06:49.680
+Proses masuk Cloud Modern dan proses masuk Windows lama tidak menggunakan katasan di dengan cara yang sama di balik layar.
+
+00:06:50.100 --> 00:06:55.420
+Agar Kerberos dan NTLM berfungsi, Domain Services merlukan bentuk data katasan di terlindungi yang mendukung metode lama tersebut.
+
+00:06:55.680 --> 00:06:58.080
+Microsoft tidak pernah menyimpan katasan di dalam bentuk text-based.
+
+00:06:58.440 --> 00:07:05.560
+Layanan ini memerlukan informasi katasan di terlindungi yang tepat sebelum pengguna dapat masuk ke VM yang bergabung dengan domain atau aplikasi lama melalui domain terkelola.
+
+00:07:05.560 --> 00:07:11.180
+Bagi pengguna khusus Cloud, seringkali pengguna perlu mengubah katasan di mereka setelah domain services diaktifkan.
+
+00:07:11.940 --> 00:07:15.440
+Perubahan katasan di tersebut menciptakan bentuk terlindungi yang diperlukan untuk domain terkelola.
+
+00:07:16.080 --> 00:07:22.000
+Sebelum itu terjadi, pengguna mungkin dapat masuk ke Microsoft di ganan lancar tetapi gagal saat mencoba menggunakan domain gaya lama.
+
+00:07:22.000 --> 00:07:23.720
+Awal ini mungkin terasa aneh.
+
+00:07:24.140 --> 00:07:28.560
+Pengguna sudah memiliki akun, kata Sandi sudah berfungsi namun aplikasi lama tetap tidak bisa menggunakannya.
+
+00:07:29.240 --> 00:07:30.580
+Bagian yang hilang bukanlah akun pengguna.
+
+00:07:31.240 --> 00:07:34.300
+Melainkan bentuk kata Sandi terlindungi yang diperlukan oleh metode masa ulama tersebut.
+
+00:07:34.840 --> 00:07:37.180
+Domain services juga memiliki batasan yang jelas mengenai area kerjanya.
+
+00:07:37.860 --> 00:07:40.660
+Layanan ini berjalan di dalam jaringan virtual Azure yang sering disebut sebagai VM.
+
+00:07:41.000 --> 00:07:46.600
+VM Azure Anda memerlukan akses jaringan ke Vina tersebut dan mereka harus menggunakan pengaturan DNS domain terkelola agar dapat menemukannya.
+
+00:07:46.600 --> 00:07:50.180
+Ini bukan direktori publik yang dapat dihubungi oleh setiap perangkat di internet.
+
+00:07:50.840 --> 00:07:54.440
+Ini adalah layanan domain pribadi untuk beban kerja yang terhubung ke jaringan Azure yang tersebut.
+
+00:07:54.840 --> 00:08:00.260
+Jadi ketika suatu aplikasi memerlukan perilaku Active Directory lama di Azure, domain services menyediakan tempat terkelola untuk menemukannya.
+
+00:08:00.800 --> 00:08:02.260
+Hal itu membawa kita ke pertanyaan berikutnya.
+
+00:08:02.260 --> 00:08:05.820
+Di mana posisi layanan ini di samping Enter ID dan domain Active Directory Anda yang sudah ada.
+
+00:08:06.220 --> 00:08:08.340
+Namanya terdengar mirip tetapi tugasnya sangat berbeda.
+
+00:08:09.420 --> 00:08:11.800
+Enter ID, Active Directory, dan domain services.
+
+00:08:12.620 --> 00:08:13.220
+Tugas yang berbeda.
+
+00:08:13.220 --> 00:08:17.300
+Namanya hampir sama, jadi mudah untuk menganggapnya sebagai versi berbeda dari produk yang sama.
+
+00:08:17.800 --> 00:08:18.180
+Bukan begitu.
+
+00:08:18.740 --> 00:08:21.440
+Masing-masing menangani bagian berbeda dari gambaran identitas perusahaan Anda.
+
+00:08:21.640 --> 00:08:24.300
+Dan setelah Anda mengetahui tugas masing-masing, pilihannya menjadi jauh lebih jelas.
+
+00:08:24.840 --> 00:08:26.180
+Enter ID menangani identitas cloud.
+
+00:08:26.420 --> 00:08:30.280
+Saat Anda membuka Microsoft 365, Teams, SharePoint, atau aplikasi bisnis modern,
+
+00:08:30.400 --> 00:08:33.180
+Enter ID memiksa proses masuk Anda dan mengontrol apa yang dapat Anda akses.
+
+00:08:33.720 --> 00:08:36.480
+Layanan ini juga mendukung autentikasi multifaktor dan aturan akses,
+
+00:08:36.760 --> 00:08:40.000
+seperti meminta pemeriksaan masuk yang lebih kuat saat Anda bekerja dari perangkat yang tidak dikenal.
+
+00:08:40.420 --> 00:08:41.480
+Ini dipangun untuk layanan cloud.
+
+00:08:41.480 --> 00:08:44.900
+Aplikasi modern tidak perlu berada di jaringan yang sama dengan Enter ID
+
+00:08:44.900 --> 00:08:47.020
+karena menggunakan metode masuk berbasis web.
+
+00:08:47.500 --> 00:08:50.580
+Anda masuk melalui browser atau aplikasi Enter ID memanfirmasi identitas Anda
+
+00:08:50.580 --> 00:08:52.760
+dan aplikasi menerima bukti bahwa Anda diceritakan masuk.
+
+00:08:53.120 --> 00:08:54.880
+Itu adalah pola normal untuk aplikasi cloud.
+
+00:08:55.440 --> 00:08:58.500
+Active Directory Domain Services, yang sering disingkat sebagai Active Directory,
+
+00:08:58.780 --> 00:08:59.480
+lakukan tugas yang berbeda.
+
+00:09:00.140 --> 00:09:03.560
+Ini adalah domain Windows tradisional yang dijalankan banyak perusahaan di kantor, pusat data,
+
+00:09:03.700 --> 00:09:04.780
+atau ruang server mereka sendiri.
+
+00:09:05.440 --> 00:09:08.160
+Perusahaan memiliki domain controller, memilih cara mengaturnya,
+
+00:09:08.160 --> 00:09:10.300
+dan mengelola seluruh domain dari awal hingga akhir.
+
+00:09:10.300 --> 00:09:13.360
+Layanan ini dapat mengontrol PC Windows, mendukung server lokal,
+
+00:09:13.460 --> 00:09:16.160
+dan menyediakan metode masuk lama yang dibutuhkan aplikasi bisnis jangka panjang.
+
+00:09:16.680 --> 00:09:18.560
+Tingkat kontrol tersebut disertai dengan tanggung jawab.
+
+00:09:18.940 --> 00:09:20.780
+Tim TI Anda menjalankan domain mengurus server,
+
+00:09:20.980 --> 00:09:24.300
+dan menentukan bagaimana direktori tersebut harus bekerja bagi perusahaan.
+
+00:09:25.100 --> 00:09:27.220
+Enter Domain Services berada di antara kedua dunia tersebut.
+
+00:09:27.680 --> 00:09:29.900
+Layanan ini memberikan workload Azure domain Windows terkola
+
+00:09:29.900 --> 00:09:31.840
+saat mereka membutuhkan perilaku Active Directory lama
+
+00:09:31.840 --> 00:09:33.980
+tetapi Microsoft yang menjalankan sisi domain controllernya.
+
+00:09:33.980 --> 00:09:37.140
+Anda menggunakan domain tersebut untuk VM Azure dan aplikasi lama
+
+00:09:37.140 --> 00:09:40.600
+tanpa harus menanggung tukis penuh dalam menjalankan domain Active Directory tradisional sendiri.
+
+00:09:41.040 --> 00:09:42.540
+Anggap saja ini sebagai sistem lemari arsip.
+
+00:09:42.940 --> 00:09:45.640
+Entra ID menyimpan catatan utama karyawan untuk pekerjaan cloud.
+
+00:09:46.020 --> 00:09:48.320
+Disitulah perusahaan menyimpan catatan kerja yang digunakan
+
+00:09:48.320 --> 00:09:50.560
+untuk Microsoft 365 dan proses masuk cloud model.
+
+00:09:50.980 --> 00:09:53.240
+Domain service memberi aplikasi Azure lama salinan catatan
+
+00:09:53.240 --> 00:09:54.620
+yang mereka butuhkan agar kompatibel.
+
+00:09:55.240 --> 00:09:58.040
+Aplikasi tersebut dapat membuka jenis lemari arsip yang sudah dikenal
+
+00:09:58.040 --> 00:10:01.420
+dan menemukan pengguna, grup, serta retail masuk dalam format lama yang mereka mengerti.
+
+00:10:01.740 --> 00:10:04.440
+Anda tidak perlu membangun ulang aplikasi hanya karena aplikasi tersebut dipindahkan ke.
+
+00:10:04.620 --> 00:10:06.940
+Perusahaan yang hanya menggunakan cloud juga dapat menggunakan pengaturan ini.
+
+00:10:07.280 --> 00:10:09.700
+Bayangkan sebuah perusahaan yang tidak pernah menjalankan domain controller lokal.
+
+00:10:10.320 --> 00:10:12.960
+Semua orang masuk ke Microsoft 365 melalui Entra ID
+
+00:10:12.960 --> 00:10:16.080
+dan bisnis mulai menggunakan VM Azure untuk aplikasi Windows lama.
+
+00:10:16.780 --> 00:10:19.360
+Perusahaan itu tidak perlu membangun domain Active Directory lokal
+
+00:10:19.360 --> 00:10:20.560
+hanya untuk aplikasi tersebut.
+
+00:10:21.100 --> 00:10:23.380
+Sebaliknya, mereka bisa menggunakan Entra Domain Services
+
+00:10:23.380 --> 00:10:25.260
+untuk VM Azure yang membutuhkan perilaku domain
+
+00:10:25.260 --> 00:10:28.260
+sementara bagian lain perusahaan tetap menggunakan Entra ID untuk pekerjaan cloud-based.
+
+00:10:28.680 --> 00:10:30.440
+Perusahaan hibrida memiliki titik awal yang berpilih.
+
+00:10:30.880 --> 00:10:32.960
+Mereka mungkin sudah menjalankan Active Directory di kantor
+
+00:10:32.960 --> 00:10:34.880
+dengan pengguna dan grup yang disinkronkan ke Entra ID.
+
+00:10:35.620 --> 00:10:37.980
+Orang-orang tersebut kemudian dapat muncul di Entra Domain Services
+
+00:10:37.980 --> 00:10:39.300
+untuk beban kerja yang berjalan di Azure.
+
+00:10:39.680 --> 00:10:40.540
+Alurnya terlihat seperti ini.
+
+00:10:41.220 --> 00:10:44.360
+Active Directory perusahaan yang sudah ada mengirim detail identitas ke Entra ID
+
+00:10:44.360 --> 00:10:47.480
+dan Entra ID menyediakan salinan yang kompatibel ke domain services.
+
+00:10:48.520 --> 00:10:51.640
+Itu tidak berarti domain services menggantikan domain lokal yang asli.
+
+00:10:52.280 --> 00:10:54.540
+Kantor mungkin masih memerlukan domain Active Directory sendiri
+
+00:10:54.540 --> 00:10:56.800
+untuk PC lokal, server lokal, sistem pabrik,
+
+00:10:56.900 --> 00:10:58.640
+atau aplikasi yang tetap ada di lokasi.
+
+00:10:59.740 --> 00:11:01.440
+Domain services hanya menangani bagian Azure
+
+00:11:01.440 --> 00:11:04.380
+di mana perilaku domain gaya lama yang dikelola sesuai dengan beban kerjanya.
+
+00:11:04.900 --> 00:11:07.100
+Dan layanan ini juga tidak mengubah Entra ID menjadi Active Ring.
+
+00:11:07.460 --> 00:11:09.560
+Entra ID tetap menjadi layanan identitas berbasis cloud.
+
+00:11:10.180 --> 00:11:11.520
+Domain services menambahkan,
+
+00:11:11.880 --> 00:11:13.760
+domain terkelola untuk kebutuhan lama tertentu,
+
+00:11:14.060 --> 00:11:16.360
+tetapi tidak memberikan semua opsi dan kendali penuh
+
+00:11:16.360 --> 00:11:18.680
+seperti saat Anda menjalankan Active Directory sendiri.
+
+00:11:19.440 --> 00:11:20.700
+Jadi bayangkan tiga tugas yang terpisah.
+
+00:11:21.200 --> 00:11:22.800
+Entra ID menangani proses masuk cloud model.
+
+00:11:22.800 --> 00:11:26.260
+Active Directory menangani domain Windows yang dijalankan oleh perusahaan Anda sebut.
+
+00:11:26.800 --> 00:11:28.980
+Entra domain services menangani beban kerja Azure lama
+
+00:11:28.980 --> 00:11:30.180
+yang masih membutuhkan domain Windows
+
+00:11:30.180 --> 00:11:32.280
+tanpa mengharuskan Anda menjalankan pengendali domain
+
+00:11:32.280 --> 00:11:33.440
+dengan tugas-tugas tersebut.
+
+00:11:34.020 --> 00:11:35.400
+Anda bisa mengajukan pertanyaan jauh lebih baik.
+
+00:11:36.160 --> 00:11:38.140
+Kapan domain services cocok untuk beban kerja tersebut
+
+00:11:38.140 --> 00:11:39.640
+dan kapan Anda harus memilih yang lain?
+
+00:11:40.540 --> 00:11:42.200
+Kapan domain services cocok dan kapan tidak?
+
+00:11:43.000 --> 00:11:44.420
+Mulai dengan aplikasinya bukan nama produk.
+
+00:11:45.100 --> 00:11:46.820
+Jika aplikasi lama menggunakan LDAP,
+
+00:11:47.060 --> 00:11:49.260
+yakni bahasa lama untuk memeriksa nama pengguna dan kata sandi,
+
+00:11:49.260 --> 00:11:52.420
+dan Anda memindahkannya ke Azure, domain services bisa menjadi pilihan yang tepat.
+
+00:11:52.620 --> 00:11:54.900
+Aplikasi tersebut tetap menggunakan apa yang sudah dipahaminya
+
+00:11:54.900 --> 00:11:55.960
+tanpa harus menulis ulang sepenuh.
+
+00:11:56.360 --> 00:11:58.160
+Hal ini penting jika aplikasi masih berfungsi,
+
+00:11:58.240 --> 00:11:59.760
+bisnis membutuhkannya dan menulis ulang kode masuk
+
+00:11:59.760 --> 00:12:01.120
+akan memakan terlalu banyak waktu biaya.
+
+00:12:01.660 --> 00:12:02.620
+Skenario umum lainnya,
+
+00:12:02.900 --> 00:12:06.200
+sekompok mesin virtual Azure perlu bertindak seperti komputer domain normal.
+
+00:12:07.160 --> 00:12:09.100
+Staff mungkin perlu masuk ke Windows dengan akun kerja mereka.
+
+00:12:09.760 --> 00:12:11.140
+Layanan mungkin memerlukan akun layanan,
+
+00:12:11.140 --> 00:12:14.360
+yaitu akun yang digunakan aplikasi untuk terhubung ke sistem lain seperti basis data.
+
+00:12:15.060 --> 00:12:16.600
+Anda mungkin memerlukan kebijakan grup
+
+00:12:16.600 --> 00:12:18.260
+untuk menerapkan pengaturan perusampar tersebut.
+
+00:12:18.900 --> 00:12:19.780
+Dalam kasus tersebut,
+
+00:12:19.920 --> 00:12:22.760
+domain services memberikan perilaku domain yang diharapkan oleh mesin-mesin Azure.
+
+00:12:23.340 --> 00:12:24.800
+Demo desktop services juga cok di sini.
+
+00:12:25.160 --> 00:12:26.720
+Bayangkan karyawan yang terhubung ke desktop
+
+00:12:26.720 --> 00:12:28.460
+atau aplikasi Windows bersama di Azure.
+
+00:12:29.360 --> 00:12:31.520
+Sistem tersebut seringkali bergantung pada domain Windows
+
+00:12:31.520 --> 00:12:33.560
+untuk proses masuk pengguna dan manajemen komputer.
+
+00:12:34.080 --> 00:12:36.100
+Domain services menyediakan lapisan domain tersebut
+
+00:12:36.100 --> 00:12:38.800
+tanpa tim Anda harus membangun mesin virtual pengendari domain dari no.
+
+00:12:39.280 --> 00:12:41.420
+Aplikasi lama seringkali memiliki lebih dari satu bagian.
+
+00:12:41.740 --> 00:12:43.040
+Mungkin ada server web di depan,
+
+00:12:43.140 --> 00:12:45.200
+server aplikasi di tengah, dan basis data di belakang.
+
+00:12:45.200 --> 00:12:47.820
+Server aplikasi harus membuktikan identitasnya
+
+00:12:47.820 --> 00:12:49.440
+sebelum basis data menerima koneksi.
+
+00:12:50.080 --> 00:12:52.240
+Ketika kepercayaan itu bergantung pada akun layanan Windows,
+
+00:12:52.380 --> 00:12:54.960
+domain services menjaga koneksi tersebut tetap berfungsi setelah pemindahan.
+
+00:12:55.360 --> 00:12:58.040
+Intinya, tim Anda mendapatkan perilaku domain lama
+
+00:12:58.040 --> 00:12:59.620
+yang dibutuhkan beban kerja tersebut
+
+00:12:59.620 --> 00:13:01.940
+sementara Microsoft menangani tugas pengendali domain
+
+00:13:01.940 --> 00:13:04.040
+yang seharusnya membebani daftar server Anda.
+
+00:13:04.740 --> 00:13:07.040
+Namun, jangan pilih domain services hanya karena Anda menggunakan it.
+
+00:13:07.420 --> 00:13:09.860
+Aplikasi cloud baru sebaiknya masuk share langsung melalui Enter ID.
+
+00:13:09.860 --> 00:13:12.380
+Jika aplikasi tersebut mendukung matahari masuk modern,
+
+00:13:12.580 --> 00:13:14.080
+ia akan mengarahkan pengguna Enter ID,
+
+00:13:14.320 --> 00:13:14.980
+menerima bukti masuk,
+
+00:13:15.100 --> 00:13:16.840
+serta mendapatkan manfaat aturan akses cloud
+
+00:13:16.840 --> 00:13:18.260
+dan autentikasi multifaktor.
+
+00:13:19.280 --> 00:13:20.760
+Itu adalah jalur yang lebih rapi untuk perangkat.
+
+00:13:21.240 --> 00:13:23.520
+Domain service membantu aplikasi yang menggunakan bahasa lama.
+
+00:13:24.240 --> 00:13:26.660
+Itu bukan alasan untuk mengajarkan bahasa lama tersebut kepada aplikasi berat.
+
+00:13:26.820 --> 00:13:29.200
+Ada juga batasan ketat yang perlu Anda periksa terlebih dahulu.
+
+00:13:29.600 --> 00:13:31.700
+Beberapa aplikasi tidak hanya membaca dari konektif direktori,
+
+00:13:31.800 --> 00:13:32.760
+tetapi juga menduskan kembali ke dalam.
+
+00:13:32.760 --> 00:13:36.020
+Misalnya, aplikasi mungkin perlu membuat atau mengubah entry direktori
+
+00:13:36.020 --> 00:13:37.540
+sebagai bagian dari tugas normalnya.
+
+00:13:38.140 --> 00:13:40.140
+Domain services tidak cocok jika aplikasi tersebut
+
+00:13:40.140 --> 00:13:41.580
+memerlukan akses tulis LDAP.
+
+00:13:42.280 --> 00:13:44.400
+Peringatan yang sama berlaku jika aplikasi perlu mengubah
+
+00:13:44.400 --> 00:13:45.200
+skema Active Directory,
+
+00:13:45.440 --> 00:13:47.940
+yaitu sekumpulan bidang yang menentukan apa yang dapat disimpan direktori.
+
+00:13:48.900 --> 00:13:51.320
+Beberapa perangkat lunak lama meminta Anda menambahkan bidangnya sendiri
+
+00:13:51.320 --> 00:13:51.940
+sebelum dapat disimpan.
+
+00:13:52.180 --> 00:13:54.640
+Domain terkelola tidak memungkinkan Anda mengubah desain data tersebut.
+
+00:13:54.980 --> 00:13:56.940
+Anda juga harus berhenti sejenak jika tim Anda membutuhkan
+
+00:13:56.940 --> 00:13:58.000
+kontrol penuh atas domain itu sendiri.
+
+00:13:58.440 --> 00:14:00.900
+Mungkin Anda memerlukan akses langsung ke pengendali domain-domain kontrol.
+
+00:14:00.900 --> 00:14:03.920
+Mungkin Anda memerlukan akses admin domain yang memberikan kontrol sangat luas.
+
+00:14:04.380 --> 00:14:06.280
+Atau mungkin Anda memerlukan desain direktori rumit
+
+00:14:06.280 --> 00:14:08.060
+yang ingin Anda bangun dan jalankan dengan cara Anda sendiri.
+
+00:14:08.680 --> 00:14:11.100
+Hal itu mengarah pada menjalankan Active Directory sendiri,
+
+00:14:11.440 --> 00:14:13.920
+baik di lokal maupun di mesin virtual di Azure.
+
+00:14:14.660 --> 00:14:16.480
+Domain services sengaja memberikan kontrol lebih sedikit
+
+00:14:16.480 --> 00:14:18.360
+karena Microsoft menjalankan layanan domain ini tersebut.
+
+00:14:18.760 --> 00:14:20.840
+Jadi ajukan satu pertanyaan sederhana sebelum Anda memilih cara.
+
+00:14:21.780 --> 00:14:24.520
+Apakah beban kerja ini memerlukan bahasa Active Directory lama
+
+00:14:24.520 --> 00:14:25.960
+atau dapat menggunakan Enter ID modern?
+
+00:14:26.220 --> 00:14:28.100
+Jika dapat menggunakan Enter ID modern mulai lari saja.
+
+00:14:28.280 --> 00:14:30.040
+Jika memerlukan berlaku domain lama,
+
+00:14:30.040 --> 00:14:32.060
+tetapi tidak mengharuskan Anda memiliki setiap bagian domain.
+
+00:14:32.160 --> 00:14:33.880
+Domain services bisa menjadi pilihan yang sangat tepat.
+
+00:14:34.420 --> 00:14:37.120
+Dan jika aplikasi perlu menulis ulang direktori mengubah skemanya
+
+00:14:37.120 --> 00:14:39.180
+atau memberikan tim Anda kontrol domain total,
+
+00:14:39.340 --> 00:14:40.240
+ia memerlukan tempat lain.
+
+00:14:40.700 --> 00:14:42.840
+Memilih domain terkelola berarti menerima sebuah kompromi.
+
+00:14:43.360 --> 00:14:44.720
+Microsoft menangani pengendali domain
+
+00:14:44.720 --> 00:14:47.540
+dan Anda melepaskan sebagian kontrol yang didapat jika menjalankannya sendiri.
+
+00:14:48.700 --> 00:14:50.360
+Kompromi layanan terkelola yang perlu Anda ketahui.
+
+00:14:50.860 --> 00:14:52.760
+Pendekatan terkelola tersebut menghemat pekerjaan
+
+00:14:52.760 --> 00:14:54.880
+tetapi juga mengubah apa yang dapat dikontrol oleh tim TIA.
+
+00:14:55.440 --> 00:14:57.960
+Microsoft menjalankan pengendali domain menjaga sinkronisasinya,
+
+00:14:57.960 --> 00:15:00.260
+menerapkan patch, dan menangani ketersediaan di balik layar.
+
+00:15:00.820 --> 00:15:03.240
+Anda tidak perlu merencanakan lokasi setiap pengendali domain
+
+00:15:03.240 --> 00:15:04.880
+atau memulihkannya setelah kegagalan server.
+
+00:15:05.200 --> 00:15:06.740
+Itulah sebabnya banyak tim memilihnya.
+
+00:15:06.880 --> 00:15:09.860
+Tetapi Anda tidak dapat melakukan remote desktop ke pengendali domain tersebut
+
+00:15:09.860 --> 00:15:12.640
+dan Anda tidak mendapatkan hak admin domain atau admin perusahaan
+
+00:15:12.640 --> 00:15:15.140
+karena hal itu akan memberikan kontrol atas bagian-bagian yang dikelola Microsoft.
+
+00:15:15.440 --> 00:15:17.500
+Sebagai gantinya, Microsoft menyediakan grup bernama
+
+00:15:17.500 --> 00:15:19.040
+Entra Domain Services Administrators.
+
+00:15:19.680 --> 00:15:22.180
+Masukkan orang-orang yang perlu mengelola domain ke dalam grup tersebut,
+
+00:15:22.320 --> 00:15:24.960
+lalu gunakan mesin virtual management yang bergabung dengan domain terkelola.
+
+00:15:24.960 --> 00:15:28.460
+Dari mesin tersebut, Anda bisa menggunakan alat Active Directory yang familiar
+
+00:15:28.460 --> 00:15:29.600
+untuk mengelola apa yang diizinkan.
+
+00:15:29.780 --> 00:15:32.940
+Sebagai contoh, Anda bisa membuat unit organisasi atau OU Anda sendiri.
+
+00:15:33.440 --> 00:15:36.540
+Anggaplah itu sebagai folder untuk objek domain seperti komputer atau akum layanan.
+
+00:15:36.940 --> 00:15:38.140
+Anda dapat mengelola catatan DNS,
+
+00:15:38.300 --> 00:15:40.820
+Anda bisa membuat dan menerapkan kebijakan grup untuk pengaturan yang dikut.
+
+00:15:41.140 --> 00:15:43.320
+Anda juga bisa mengelola komputer yang bergabung dengan domain
+
+00:15:43.320 --> 00:15:45.460
+yang seringkali menjadi alasan utama layanan ini ada.
+
+00:15:45.860 --> 00:15:46.700
+Batasan ini dibuat dengan sengaja.
+
+00:15:47.140 --> 00:15:49.320
+Anda tidak bisa menambahkan pengendali domain lagi,
+
+00:15:49.600 --> 00:15:50.720
+mengubah skema Active Directory,
+
+00:15:50.720 --> 00:15:53.980
+atau memperlakukan domain terkelola sebagai tempat perubahan mengalir kembali counter ID.
+
+00:15:53.980 --> 00:15:56.860
+Jadi, pertahankan pengelolaan pengguna dan grup di direktori sumber.
+
+00:15:57.440 --> 00:15:59.860
+Untuk perusahaan yang hanya berbasis code, sumbernya adalah Enter ID.
+
+00:16:00.660 --> 00:16:04.560
+Untuk perusahaan hibrida, sumbernya adalah Active Directory lokal yang disinkronkan ke Enter ID.
+
+00:16:05.300 --> 00:16:06.880
+Aturan ini mencegah kesalahan yang seringkat.
+
+00:16:07.400 --> 00:16:09.540
+Seseorang melihat pengguna di domain terkelola dan mengubahnya di sana
+
+00:16:09.540 --> 00:16:10.920
+dengan asumsi perubahan itu akan tetapkan.
+
+00:16:11.480 --> 00:16:14.360
+Namun, perubahan itu tidak akan menjadi catatan perusahaan di Enter ID
+
+00:16:14.360 --> 00:16:15.700
+atau Active Directory lokal.
+
+00:16:16.560 --> 00:16:18.860
+Jaga agar domain terkelola tetap privat di dalam jaringan Azure.
+
+00:16:19.160 --> 00:16:21.460
+Domen ini seharusnya hanya mendukung beban kerja yang memutukannya,
+
+00:16:21.620 --> 00:16:22.960
+bukan menjadi direktori perusahaan umum.
+
+00:16:22.960 --> 00:16:25.920
+Batasi akses jaringan, lindungi mesin manajemen,
+
+00:16:26.120 --> 00:16:28.440
+dan berikan akses admin hanya kepada orang yang membutuhkannya.
+
+00:16:29.040 --> 00:16:30.560
+Anda memilih layanan dengan batasan pengaman.
+
+00:16:30.980 --> 00:16:33.180
+Batasan pengaman tersebut menghapus sebagian pekerjaan sekaligus
+
+00:16:33.180 --> 00:16:35.020
+mencegah Anda mengubah bagian yang dibaliki Microsoft.
+
+00:16:36.620 --> 00:16:38.080
+Sebuah cerita migrasi Azure yang sederhana.
+
+00:16:38.620 --> 00:16:41.220
+Bayangkan sebuah perusahaan keuangan yang menjalankan aplikasi lama di server
+
+00:16:41.220 --> 00:16:42.180
+di dalam kantor mereka sendiri.
+
+00:16:42.620 --> 00:16:44.580
+Aplikasi itu mengandalkan LTP untuk menemukan karyawan.
+
+00:16:44.880 --> 00:16:46.200
+Aplikasi itu menggunakan kiberosotor.
+
+00:16:46.200 --> 00:16:49.720
+Dan servernya melakukan autentikasi dengan akun layanan untuk mencapai basis data keuangan.
+
+00:16:50.100 --> 00:16:53.660
+Perusahaan ingin memindahkan aplikasi dan basis datanya ke dalam mesin virtual Azure.
+
+00:16:54.520 --> 00:16:57.860
+Salah satu opsinya adalah menjaga aplikasi tetap terhubung ke domain kantor melalui VPN.
+
+00:16:58.060 --> 00:17:00.660
+Tetapi aplikasi Azure tersebut akan bergantung pada koneksi jaringan itu
+
+00:17:00.660 --> 00:17:02.160
+dan pengendali domain lokal setiap harinya.
+
+00:17:02.160 --> 00:17:05.600
+Opsi lainnya adalah menjalankan mesin virtual pengendali domain baru di Azure
+
+00:17:05.600 --> 00:17:07.820
+atau menjaga lebih banyak lalu lintas di dalam Azure
+
+00:17:07.820 --> 00:17:11.960
+tetapi menambah server Windows yang harus ditambal, dipantau, dicadangkan, dan dipulihkan oleh tim IT.
+
+00:17:12.240 --> 00:17:13.400
+Tersebut memiliki cara yang berbeda.
+
+00:17:13.700 --> 00:17:15.820
+Pengguna dan grup mereka sudah disinkronkan ke Entra ID.
+
+00:17:16.340 --> 00:17:17.900
+Mereka mengaktifkan layanan domain Entra,
+
+00:17:18.380 --> 00:17:19.720
+menghubungkan jaringan virtual Azure.

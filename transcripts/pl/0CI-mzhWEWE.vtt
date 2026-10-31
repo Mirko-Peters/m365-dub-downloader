@@ -1,0 +1,784 @@
+WEBVTT
+
+00:00:00.110 --> 00:00:07.510
+Gotowi na 10 dni Microsoft 365, Kopilota, AI, Azure oraz ludzi kształtujących przyszłość pracy?
+
+00:00:07.970 --> 00:00:12.310
+W styczniu konferencja M365 powraca i będzie jeszcze większa.
+
+00:00:12.850 --> 00:00:18.310
+Dołącz do nas na sesję na żywo praktyczne dema i wiedzę od MVP oraz ekspertów z całego świata.
+
+00:00:18.590 --> 00:00:22.030
+Żadnych ogólnych slajdów, żadnego niekończącego się żargonu.
+
+00:00:22.330 --> 00:00:28.810
+Zajmiemy się realnymi wyzwaniami, Kopilot Studio, agentami, AI, Fabrik, bezpieczeństwem, ładem i automatyzacją.
+
+00:00:28.810 --> 00:00:35.130
+Niezależnie od tego, czy jesteś informatykiem, programistą czy liderem biznesowym, przygotowaliśmy sesję dla Ciebie.
+
+00:00:35.350 --> 00:00:40.530
+Podczas 10 pełnych dni odkryjesz nowe technologie i nawiążesz kontakty z globalną społecznością.
+
+00:00:40.730 --> 00:00:44.390
+Oglądaj na żywo i zabierz praktyczne wnioski do swojej organizacji.
+
+00:00:44.390 --> 00:00:51.290
+Styczeń 2027 roku. 10 dni. Jedna społeczność Microsoft. Rejestracja jest już otwarta.
+
+00:00:51.770 --> 00:00:55.990
+Wejdź na m365con.net i zarezerwuj miejsce już dziś.
+
+00:00:55.990 --> 00:00:58.850
+To m365con.net
+
+00:00:58.850 --> 00:01:04.830
+Dołącz teraz na m365con.net. Widzimy się na żywo w styczniu.
+
+00:01:05.010 --> 00:01:10.030
+Witajcie wszyscy w kolejnym odcinku Microsoft Knowledge Nugget tutaj w M365FM.
+
+00:01:10.230 --> 00:01:11.450
+Nazywam się Mirko Peters.
+
+00:01:11.710 --> 00:01:15.970
+Wyobraź sobie, że przenosisz starą aplikację biznesową z serwera w biurze na maszynę wirtualną Azure.
+
+00:01:16.210 --> 00:01:18.950
+Aplikacja jest już w chmurze, ale nadal wymaga domeny Windows.
+
+00:01:18.950 --> 00:01:24.690
+Chce dołączyć do domeny, wyszukiwać użytkowników przez LDAP, logować ich za pomocą Kerberos i stosować zasady grupy.
+
+00:01:24.850 --> 00:01:28.470
+Większość ludzi zakłada, że EntraID zastępuje każdą funkcję Active Directory.
+
+00:01:28.730 --> 00:01:36.230
+Tak nie jest. Nowoczesne aplikacje chmurowe logują przez EntraID, ale starsze aplikacje Windows nadal oczekują domeny znanej z serwerowni.
+
+00:01:36.410 --> 00:01:44.370
+Pod koniec tego odcinka zrozumiesz, gdzie pasują EntraID Active Directory i Entra Domain Services oraz poznasz szczegół zmieniający zarządzanie tym wszystkim.
+
+00:01:44.370 --> 00:01:47.390
+Informacje o tożsamości przepływają tylko w jednym kierunku.
+
+00:01:47.670 --> 00:01:50.550
+Dlaczego samo EntraID nie obsłuży każdej starszej aplikacji?
+
+00:01:50.770 --> 00:01:52.970
+Zacznijmy od tego, co EntraID robi dobrze.
+
+00:01:53.150 --> 00:01:54.870
+To recepcja Twoich usług w chmurze.
+
+00:01:55.110 --> 00:02:01.770
+Wie, kim jesteś, sprawdza logowanie i decyduje, czy możesz wejść do Microsoft 365, Teams, SharePoint lub aplikacji biznesowej w chmurze.
+
+00:02:01.970 --> 00:02:06.050
+Logujesz się raz, a potem przechodzisz między usługami bez konieczności ciągłego wpisywania hasła.
+
+00:02:06.230 --> 00:02:08.330
+To właśnie logowanie jednokrotne SSO.
+
+00:02:08.330 --> 00:02:17.050
+EntraID może też wymagać drugiego etapu logowania przez uwierzytelnianie wieloskładnikowe, sprawdzać używane urządzenie, lokalizacje i zasady dostępu firmy.
+
+00:02:17.270 --> 00:02:20.090
+W przypadku nowoczesnych aplikacji ten model sprawdza się świetnie.
+
+00:02:20.250 --> 00:02:28.090
+Otwierasz przeglądarkę, aplikacja wysyła Cię do EntraID, logujesz się, zatwierdzasz powiadomienie na telefonie, a EntraID wysyła aplikacji bezpieczny komunikat logowania w tle.
+
+00:02:28.330 --> 00:02:30.650
+Aplikacja odczytuje ten komunikat i daje Ci dostęp.
+
+00:02:30.850 --> 00:02:37.270
+W tym modelu nie ma potrzeby dołączania do domeny używania starego systemu Windows Server ani wymagania, aby aplikacja przeszukiwała klasyczny katalog firmowy.
+
+00:02:37.270 --> 00:02:39.850
+Ale starsze aplikacje wyrosły w zupełnie innym świecie.
+
+00:02:40.030 --> 00:02:45.090
+Wyobraź sobie aplikację finansową, która od lat działa na Windows Server, gdzie użytkownicy logują się z komputerów przyłączonych do domeny.
+
+00:02:45.250 --> 00:02:50.650
+Aplikacja sprawdza dane pracowników przez LDAP, co jest powszechnym sposobem przeszukiwania katalogu firmy przez starsze oprogramowanie.
+
+00:02:50.890 --> 00:02:55.330
+Może wykorzystywać protokół Kerberos, starszą metodę logowania w systemie Windows, która pozwala systemom wzajemnie sobie ufać.
+
+00:02:55.490 --> 00:03:00.110
+Może polegać na zasadach grupy, czyli zestawie reguł firmowych, które pozwalają kontrolować ustawienia na komputerach z systemem Windows.
+
+00:03:00.270 --> 00:03:03.430
+Taka aplikacja nie potrafi odczytać nowoczesnego komunikatu logowania w chmurze.
+
+00:03:03.430 --> 00:03:07.070
+Oczekuje ona możliwości połączenia się przez sieć i znalezienia tradycyjnej domeny Windows.
+
+00:03:07.250 --> 00:03:12.370
+A jeśli jej nie znajdzie, aplikacja może nie zalogować użytkowników, nie znaleźć konta usługi lub po prostu odmówić uruchomienia.
+
+00:03:12.550 --> 00:03:14.850
+Pewnie widziałeś ten schemat również poza branżą IT.
+
+00:03:15.010 --> 00:03:18.310
+Nowe gniazdko elektryczne nie pomoże, jeśli wtyczka starego urządzenia nie pasuje.
+
+00:03:18.490 --> 00:03:20.870
+Pront jest dostępny, ale połączenie jest niewłaściwe.
+
+00:03:21.050 --> 00:03:24.830
+Wyobraź sobie teraz firmę przenoszącą tę aplikację finansową i jej bazę danych na maszyny wirtualne Azure.
+
+00:03:25.050 --> 00:03:27.470
+Serwery zostały przeniesione, ale stare potrzeby pozostały.
+
+00:03:27.470 --> 00:03:32.850
+Można zostawić Active Directory w biurze i połączyć Azure z powrotem za pomocą VPN, czyli prywatnego tunelu sieciowego.
+
+00:03:33.090 --> 00:03:36.950
+Wtedy aplikacja w Azure wysyła żądania przez to połączenie, kiedy tylko potrzebuje domeny.
+
+00:03:37.210 --> 00:03:42.230
+Może to działać, ale aplikacja jest teraz zależna od dostępności łącza sieciowego oraz lokalnego kontrolera domeny.
+
+00:03:42.410 --> 00:03:46.070
+A jeśli z tym połączeniem wystąpi problem, aplikacja w chmurze również może mieć problemy.
+
+00:03:46.230 --> 00:03:49.790
+Innym wyborem jest stworzenie własnych maszyn wirtualnych z kontrolerami domeny w Azure.
+
+00:03:49.990 --> 00:03:55.570
+Kontroler to serwer obsługujący tradycyjną domenę Active Directory, zarządzający katalogiem, logowaniami i innymi zadaniami domeny.
+
+00:03:55.570 --> 00:03:58.790
+To również działa, ale teraz Twój zespół zarządza większą liczbą serwerów.
+
+00:03:58.910 --> 00:04:00.850
+Ktoś musi je aktualizować i monitorować.
+
+00:04:01.030 --> 00:04:07.310
+Potrzebujesz kopii zapasowych, planów odzyskiwania, planu synchronizacji, kontrolerów domeny oraz ochrony uprzywilejowanych kont administratorów.
+
+00:04:07.470 --> 00:04:09.250
+Dla niektórych firm taka kontrola ma sens.
+
+00:04:09.470 --> 00:04:12.850
+Dla innych to dodatkowa praca tylko po to, by utrzymać starszą aplikację w działaniu.
+
+00:04:13.050 --> 00:04:15.290
+Luka jest więc dość wąska, ale całkiem realna.
+
+00:04:15.490 --> 00:04:19.410
+Aplikacja znajduje się w Azure, a mimo to wciąż mówi językiem starego Active Directory.
+
+00:04:19.410 --> 00:04:26.410
+Czym w rzeczywistości jest Microsoft Entra Domain Services, to zarządzana domena Windows działająca wewnątrz Twojej sieci Azure.
+
+00:04:26.630 --> 00:04:28.450
+To definicja w najprostszych słowach.
+
+00:04:28.590 --> 00:04:36.090
+Kontrolery domeny działają w tle, w pełni zarządzane przez firmę Microsoft, podczas gdy Twoje maszyny wirtualne Azure i starsze aplikacje korzystają ze znanych usług domnowych, których oczekują.
+
+00:04:36.270 --> 00:04:38.850
+Pomyśl o swojej konfiguracji w chmurze jak o budynku biurowym.
+
+00:04:39.050 --> 00:04:40.690
+Entra ID to przednia recepcja.
+
+00:04:40.930 --> 00:04:46.470
+Sprawdza, kim jesteś, gdy logujesz się do Microsoft 365 lub innej aplikacji w chmurze i stosuje firmowe zasady dotyczące tego logowania.
+
+00:04:46.470 --> 00:04:49.390
+Entra Domain Services znajduje się w zamkniętym biurze na zapleczu.
+
+00:04:49.590 --> 00:04:53.250
+Starsze systemy nie muszą odwiedzać tej recepcji tak, jak robi to nowoczesna aplikacja w chmurze.
+
+00:04:53.410 --> 00:04:57.770
+Potrzebują w pobliżu katalogu w starym stylu, który rozumie ich język i może odpowiedzieć na ich żądania.
+
+00:04:57.930 --> 00:04:59.870
+To biuro na zapleczu to domena zarządzana.
+
+00:05:00.110 --> 00:05:02.710
+Rzecz w tym, że nie musisz samodzielnie budować kontrolerów domeny.
+
+00:05:02.890 --> 00:05:04.870
+Nie logujesz się do nich za pomocą pulpitu zdalnego.
+
+00:05:05.070 --> 00:05:08.630
+Nie decydujesz, ile ich uruchomić, nie instalujesz na nich poprawek systemu Windows, ani nie zarządzasz połączeniami między nimi.
+
+00:05:08.830 --> 00:05:10.270
+Microsoft zajmuje się tym wszystkim.
+
+00:05:10.270 --> 00:05:14.490
+Twoim zadaniem jest połączenie odpowiednich maszyn wirtualnych Azure i aplikacji z domeną zarządzaną.
+
+00:05:14.690 --> 00:05:17.710
+Gdy zostaną połączone, mogą korzystać ze znanych usług Active Directory.
+
+00:05:17.970 --> 00:05:23.430
+Maszyna wirtualna z systemem Windows może dołączyć do domeny, a starsza aplikacja może używać LDAP do wyszukiwania osób grup i szczegółów katalogu.
+
+00:05:23.610 --> 00:05:28.910
+Może używać protokołu Kerberos, metody logowania, której starsze aplikacje biznesowe często oczekują, gdy jeden serwer musi ufać innemu.
+
+00:05:29.130 --> 00:05:33.830
+Może również używać NTLM, kolejnej starszej metody logowania do systemu Windows, której niektóre aplikacje wciąż wymagają.
+
+00:05:33.830 --> 00:05:39.330
+Domena zarządzana zapewnia również usługę DNS, która pomaga systemom znaleźć odpowiedni serwer po nazwie, a nie po ciągu cyfr.
+
+00:05:39.470 --> 00:05:44.910
+Obsługuje także zasady grupy, dzięki czemu można zastosować określone ustawienia systemu Windows do komputerów i użytkowników w tej domenie zarządzanej.
+
+00:05:45.030 --> 00:05:46.510
+Wiem, ta lista brzmi technicznie.
+
+00:05:46.750 --> 00:05:48.750
+Wyobraź sobie to raczej jako biurko tłumacza.
+
+00:05:48.930 --> 00:05:52.050
+Twoja aplikacja pyta w starym języku Windows, kim jest ten użytkownik.
+
+00:05:52.230 --> 00:05:54.370
+Czy ten serwer może ufać tamtemu serwerowi?
+
+00:05:54.610 --> 00:05:55.630
+Gdzie jest baza danych?
+
+00:05:55.870 --> 00:05:57.910
+Jakich ustawień powinien używać ten komputer?
+
+00:05:57.910 --> 00:06:04.530
+Entra Domain Services rozumie te pytania i udziela odpowiedzi, jakich oczekuje aplikacja, ale nie tworzy drugiej głównej listy pracowników.
+
+00:06:04.710 --> 00:06:06.990
+Główny rekord tożsamości pozostaje w Entra ID.
+
+00:06:07.230 --> 00:06:12.890
+Użytkownicy i grupy z Entra ID są kopiowani do domeny zarządzanej, dzięki czemu starsza aplikacja może ich widzieć i używać w formie, którą rozumie.
+
+00:06:13.050 --> 00:06:18.970
+Jeśli Twoja firma posiada również lokalną usługę Active Directory, tożsamości mogą już trafiać stamtąd do Entra ID, zanim zostaną skopiowane do Domain Services.
+
+00:06:19.170 --> 00:06:20.430
+Kierunek ma tutaj znaczenie.
+
+00:06:20.690 --> 00:06:23.290
+Szczegóły tożsamości przepływają do Entra Domain Services.
+
+00:06:23.290 --> 00:06:28.390
+Nie przepływają z powrotem, więc jeśli użytkownik pochodzi z Entra ID, zarządzasz nim w Entra ID.
+
+00:06:28.610 --> 00:06:32.970
+Jeśli użytkownik pierwotnie pochodzi z Twojej lokalnej usługi Active Directory, zarządzasz nim właśnie tam.
+
+00:06:33.150 --> 00:06:37.050
+Nie należy traktować usług domnowych jako miejsca do edycji głównego rekordu pracownika.
+
+00:06:37.310 --> 00:06:41.410
+Zapobiega to przekształceniu domeny zarządzanej w drugą kartotekę z różnymi wersjami tej samej osoby.
+
+00:06:41.690 --> 00:06:45.090
+Jest jednak jeden element, który zaskakuje wiele osób podczas konfiguracji – hasła.
+
+00:06:45.290 --> 00:06:49.890
+Nowoczesne logowanie do chmury i starsze logowanie do systemu Windows nie używają haseł w dokładnie taki sam sposób.
+
+00:06:49.890 --> 00:06:55.590
+Aby protokoły Kerberos i NTLM działały, usługi domnowe wymagają zabezpieczonej formy danych haseł, która obsługuje te starsze metody.
+
+00:06:55.790 --> 00:06:58.590
+Firma Microsoft nigdy nie przechowuje hasła w postaci zwykłego tekstu.
+
+00:06:58.770 --> 00:07:01.350
+Zamiast tego usługa potrzebuje odpowiednich zabezpieczonych informacji o haśle,
+
+00:07:01.450 --> 00:07:06.350
+zanim użytkownik będzie mógł zalogować się do maszyny wirtualnej dołączonej do domeny lub starszej aplikacji za pośrednictwem domeny zarządzanej.
+
+00:07:06.490 --> 00:07:12.110
+W przypadku użytkowników korzystających wyłącznie z chmury często oznacza to, że użytkownik musi zmienić hasło po włączeniu usług domnowych.
+
+00:07:12.110 --> 00:07:15.690
+Ta zmiana hasła tworzy zabezpieczoną formę wymaganą przez domeny zarządzaną.
+
+00:07:15.870 --> 00:07:22.390
+Dopóki to nie nastąpi, użytkownik może bez problemu zalogować się do usługi Microsoft 365, ale nie uda mu się skorzystać ze starszego stylu domeny.
+
+00:07:22.550 --> 00:07:24.230
+Na początku może się to wydawać dziwne.
+
+00:07:24.410 --> 00:07:28.810
+Użytkownik ma już konto, hasło działa, a mimo to starsza aplikacja nadal nie może z niego skorzystać.
+
+00:07:29.010 --> 00:07:31.170
+Brakującym elementem nie jest konto użytkownika.
+
+00:07:31.450 --> 00:07:34.690
+Jest nim zabezpieczona forma hasła wymagana przez te starsze metody logowania.
+
+00:07:34.910 --> 00:07:37.450
+Usługi domnowe mają również wyraźną granicę działania.
+
+00:07:37.450 --> 00:07:41.150
+Działają one wewnątrz sieci wirtualnej platformy Azure, często nazywanej siecią w net.
+
+00:07:41.290 --> 00:07:46.990
+Maszyny wirtualne Azure muszą mieć dostęp sieciowy do tej sieci w net i muszą używać ustawień DNS domeny zarządzanej, aby móc ją znaleźć.
+
+00:07:47.130 --> 00:07:50.810
+Nie jest to publiczny katalog, z którym może się skontaktować każde urządzenie w internecie.
+
+00:07:50.970 --> 00:07:54.530
+To prywatna usługa domnowa dla obciążeń podłączonych do odpowiedniej sieci Azure.
+
+00:07:54.750 --> 00:08:00.590
+Gdy aplikacja wymaga w Azure zachowania starej usługi Active Directory, usługi domnowe zapewniają zarządzane miejsce, w którym może ona znaleźć to zachowanie.
+
+00:08:00.590 --> 00:08:02.350
+To prowadzi nas do kolejnego pytania.
+
+00:08:02.590 --> 00:08:05.890
+Jak to się ma do Entra ID i istniejącej domeny Active Directory?
+
+00:08:05.890 --> 00:08:09.030
+Nazwy brzmią podobnie, ale ich zadania są bardzo różne.
+
+00:08:09.270 --> 00:08:12.330
+Entra ID, Active Directory i usługi domnowe.
+
+00:08:12.530 --> 00:08:17.770
+Różne zadania, nazwy są zbliżone, więc łatwo jest traktować je jako różne wersje tego samego produktu.
+
+00:08:17.910 --> 00:08:18.570
+Tak nie jest.
+
+00:08:18.770 --> 00:08:24.330
+Każda z nich obsługuje inną część tożsamości firmy, a gdy już poznasz zadania każdej z nich, wybór stanie się znacznie jaśniejszy.
+
+00:08:24.530 --> 00:08:26.650
+Entra ID obsługuje tożsamość w chmurze.
+
+00:08:26.650 --> 00:08:33.590
+Gdy otwierasz Microsoft 365, Teams, SharePoint lub nowoczesną aplikację biznesową, Entra ID weryfikuje, logowanie i kontroluje, do czego masz dostęp.
+
+00:08:33.590 --> 00:08:39.890
+Obsługuje również uwierzytelnianie wieloskładnikowe i reguły dostępu, takie jak wymuszanie silniejszej kontroli logowania podczas pracy z nieznanego urządzenia.
+
+00:08:40.110 --> 00:08:42.070
+Jest stworzona z myślą o usługach w chmurze.
+
+00:08:42.290 --> 00:08:47.270
+Nowoczesna aplikacja nie musi znajdować się w tej samej sieci, co Entra ID, ponieważ wykorzystuje internetowe metody logowania.
+
+00:08:47.510 --> 00:08:52.990
+Logujesz się przez przeglądarkę lub aplikację Entra ID potwierdza Twoją tożsamość, a aplikacja otrzymuje dowód, że masz uprawnienia dostępu.
+
+00:08:53.110 --> 00:08:55.350
+To standardowy model dla nowych aplikacji chmurowych.
+
+00:08:55.570 --> 00:09:00.090
+Active Directory Domain Services, często nazywany w skrócie Active Directory, pełni inną funkcję.
+
+00:09:00.090 --> 00:09:05.310
+To tradycyjna domena Windows, którą wiele firm utrzymuje we własnych biurach, centrach danych lub serwerowniach.
+
+00:09:05.490 --> 00:09:10.390
+Firma jest właścicielem kontrolerów domeny, decyduje o ich konfiguracji i zarządza całą domeną od podstaw.
+
+00:09:10.650 --> 00:09:16.510
+Może ona kontrolować komputery z systemem Windows, obsługiwać serwery lokalne i zapewniać starsze metody logowania, których wymagają długo działające aplikacje biznesowe.
+
+00:09:16.690 --> 00:09:19.150
+Taki poziom kontroli wiąże się z dużą odpowiedzialnością.
+
+00:09:19.350 --> 00:09:24.190
+Twój zespół ID zarządza domeną, dba o serwery i decyduje o tym, jak katalog ma funkcjonować w firmie.
+
+00:09:24.430 --> 00:09:27.430
+Entra Domain Services znajduje się pomiędzy tymi dwoma światami.
+
+00:09:27.430 --> 00:09:34.350
+Zapewnia obciążeniom w Azure zarządzaną domeny Windows, gdy wymagają one starszego zachowania Active Directory, przy czym Microsoft zajmuje się stroną kontrolerów domeny.
+
+00:09:34.570 --> 00:09:40.750
+Możesz korzystać z domeny dla maszyn wirtualnych Azure i starszych aplikacji, nie przejmując na siebie pełnego zadania prowadzenia tradycyjnej domeny Active Directory.
+
+00:09:40.950 --> 00:09:42.790
+Pomyśl o tym, jak o systemie kartotek.
+
+00:09:42.930 --> 00:09:45.910
+Entra ID przechowuje główny rejestr pracowników do pracy w chmurze.
+
+00:09:46.070 --> 00:09:50.770
+To tam firma przechowuje dokumentację używaną dla Microsoft 365 i nowoczesnych logowań chmurowych.
+
+00:09:50.990 --> 00:09:55.130
+Domain Services dostarcza starszym aplikacjom Azure kompatybilną kopię rejestrów, których potrzebują.
+
+00:09:55.130 --> 00:10:01.330
+Aplikacje te mogą otwierać znany im typ kartoteki i znajdować użytkowników, grupy oraz szczegóły logowania w starym formacie, które rozumieją.
+
+00:10:01.490 --> 00:10:04.250
+Nie musisz przebudowywać aplikacji tylko dlatego, że przeniosła się do Azure.
+
+00:10:04.470 --> 00:10:07.210
+Firma korzystająca wyłącznie z chmury również może użyć tej konfiguracji.
+
+00:10:07.430 --> 00:10:10.250
+Wyobraź sobie firmę, która nigdy nie korzystała z lokalnych kontrolerów domeny.
+
+00:10:10.470 --> 00:10:16.610
+Wszyscy logują się do Microsoft 365 przez Entra ID, a firma zaczyna używać maszyn wirtualnych Azure dla starszej aplikacji Windows.
+
+00:10:16.850 --> 00:10:20.890
+Firma ta nie musi tworzyć lokalnej domeny Active Directory tylko dla tej jednej aplikacji.
+
+00:10:20.890 --> 00:10:25.310
+Zamiast tego może użyć Entra Domain Services dla maszyn wirtualnych Azure wymagających zachowania domeny,
+
+00:10:25.410 --> 00:10:28.530
+podczas gdy reszta firmy nadal używa Entra ID do standardowej pracy w chmurze.
+
+00:10:28.670 --> 00:10:30.550
+Firma hybrydowa ma inny punkt wyjścia.
+
+00:10:30.810 --> 00:10:35.290
+Może już prowadzić Active Directory w swoim biurze z użytkownikami i grupami synchronizowanymi z Entra ID.
+
+00:10:35.510 --> 00:10:39.410
+Osoby te mogą następnie pojawić się w Entra Domain Services dla obciążeń działających w Azure.
+
+00:10:39.630 --> 00:10:41.190
+Przepływ wygląda następująco.
+
+00:10:41.350 --> 00:10:45.070
+Istniejące w firmie Active Directory przesyła szczegóły tożsamości do Entra ID,
+
+00:10:45.170 --> 00:10:48.150
+a Entra ID udostępnia kompatybilną kopię dla Domain Services.
+
+00:10:48.150 --> 00:10:52.190
+Nie oznacza to jednak, że Domain Services zastępuje oryginalną lokalną domenę.
+
+00:10:52.350 --> 00:10:56.010
+Biuro może nadal potrzebować własnej domeny Active Directory dla lokalnych komputerów,
+
+00:10:56.130 --> 00:10:59.110
+serwerów, systemów fabrycznych czy aplikacji pozostających na miejscu.
+
+00:10:59.290 --> 00:11:01.810
+Usługa Domain Services obsługuje tylko tę część platformy Azure,
+
+00:11:01.970 --> 00:11:04.410
+w której zarządzane zachowanie domeny w starym stylu pasuje do obciążenia.
+
+00:11:04.590 --> 00:11:07.530
+I nie zmienia ona również usługi Entra ID w pełnoprawną usługę Active Directory.
+
+00:11:07.750 --> 00:11:10.230
+Entra ID pozostaje chmurową usługą tożsamości.
+
+00:11:10.490 --> 00:11:13.870
+Domain Services dodaje zarządzaną domenę dla określonych starszych potrzeb,
+
+00:11:13.870 --> 00:11:18.670
+ale nie zapewnia wszystkich opcji i pełnej kontroli, jaką masz, gdy sam obsługujesz Active Directory.
+
+00:11:18.990 --> 00:11:20.850
+Wyobraź sobie więc trzy osobne zadania.
+
+00:11:21.070 --> 00:11:23.370
+Entra ID obsługuje nowoczesne logowania w chmurze.
+
+00:11:23.570 --> 00:11:26.890
+Active Directory obsługuje domeny Windows, którą Twoja firma prowadzi samodzielnie.
+
+00:11:27.050 --> 00:11:29.730
+Entra Domain Services obsługuje starsze obciążenia w Azure,
+
+00:11:29.890 --> 00:11:33.950
+które nadal wymagają domeny Windows bez konieczności samodzielnego utrzymywania kontrolerów domeny.
+
+00:11:34.190 --> 00:11:35.830
+Możesz zadać znacznie lepsze pytanie.
+
+00:11:36.090 --> 00:11:40.090
+Kiedy Domain Services pasuje do obciążenia, a kiedy należy wybrać coś innego?
+
+00:11:40.090 --> 00:11:42.630
+Kiedy Domain Services się sprawdza, a kiedy nie.
+
+00:11:42.890 --> 00:11:45.090
+Zacznij od aplikacji, a nie od nazwy produktu.
+
+00:11:45.230 --> 00:11:49.310
+Jeśli starsza aplikacja używa LDAP, czyli starego języka do sprawdzania nazw użytkowników i haseł,
+
+00:11:49.370 --> 00:11:52.410
+a Ty przenosisz ją do Azure, Domain Services może być świetnym rozwiązaniem.
+
+00:11:52.590 --> 00:11:56.170
+Aplikacja nadal używa tego, co już rozumie, bez konieczności pełnego przepisywania kodu.
+
+00:11:56.370 --> 00:11:58.850
+Ma to znaczenie, gdy aplikacja nadal działa, biznes jej potrzebuje,
+
+00:11:58.930 --> 00:12:01.450
+a przepisanie kodu logowania kosztowałoby zbyt wiele czasu lub pieniędzy.
+
+00:12:01.670 --> 00:12:06.410
+Inny, częsty scenariusz, grupa maszyn wirtualnych Azure musi zachowywać się jak zwykłe komputery domnowe.
+
+00:12:06.410 --> 00:12:09.870
+Personel może potrzebować logowania do systemu Windows przy użyciu swojego konta służbowego.
+
+00:12:10.030 --> 00:12:14.790
+Usługa może wymagać konta serwisowego konta, którego aplikacja używa do łączenia się z innym systemem, takim jak baza danych.
+
+00:12:14.990 --> 00:12:18.630
+Możesz potrzebować zasad grupy, aby zastosować ustawienia firmowe do tych maszyn wirtualnych.
+
+00:12:18.790 --> 00:12:22.850
+W takich przypadkach Domain Services zapewnia maszynom w Azure zachowanie domnowe, którego oczekują.
+
+00:12:23.070 --> 00:12:25.090
+Usługi pulpitu zdalnego również tutaj pasują.
+
+00:12:25.370 --> 00:12:29.190
+Wyobraź sobie pracowników łączących się ze współdzielonymi pulpitami lub aplikacjami Windows w Azure.
+
+00:12:29.470 --> 00:12:33.710
+Systemy te często polegają na domenie Windows w kwestii logowania użytkowników i zarządzania komputerami.
+
+00:12:33.710 --> 00:12:38.990
+Domain Services dostarcza tę warstwę domeny bez konieczności tworzenia od podstaw maszyn wirtualnych z kontrolerami domeny przez Twój zespół.
+
+00:12:39.190 --> 00:12:41.730
+Starsze aplikacje często składają się z więcej niż jednej części.
+
+00:12:42.030 --> 00:12:45.690
+Może to być serwer www z przodu, serwer aplikacji w środku i baza danych na zapleczu.
+
+00:12:45.910 --> 00:12:49.930
+Serwer aplikacji musi potwierdzić swoją tożsamość, zanim baza danych zaakceptuje połączenie.
+
+00:12:50.190 --> 00:12:55.270
+Jeśli to zaufanie opiera się na kontach serwisowych Windows, Domain Services utrzymuje te połączenia po przeniesieniu.
+
+00:12:55.270 --> 00:13:04.090
+Oto sedno, Twój zespół otrzymuje starsze zachowanie domeny, którego wymaga obciążenie, podczas gdy Microsoft zajmuje się pracą kontrolera domeny, która inaczej obciążałaby Twoją listę serwerów.
+
+00:13:04.190 --> 00:13:07.330
+Pamiętaj jednak, by nie wybierać Domain Services tylko dlatego, że używasz Azure.
+
+00:13:07.550 --> 00:13:10.470
+Nowa aplikacja w chmurze powinna logować się bezpośrednio przez EntraID.
+
+00:13:10.710 --> 00:13:18.710
+Jeśli obsługuje nowoczesne metody logowania, przekierowuje użytkowników do EntraID, otrzymuje potwierdzenie logowania i korzysta z zasad dostępu do chmury oraz uwierzytelniania wieloskładnikowego.
+
+00:13:18.870 --> 00:13:20.270
+To czystsza ścieżka dla nowego oprogramowania.
+
+00:13:21.110 --> 00:13:24.010
+Domain Services pomaga aplikacjom, które posługują się starym językiem.
+
+00:13:25.270 --> 00:13:26.690
+Nowe aplikacje tego starego języka.
+
+00:13:26.930 --> 00:13:29.590
+Istnieją również twarde ograniczenia, które należy najpierw sprawdzić.
+
+00:13:29.790 --> 00:13:33.330
+Niektóre aplikacje nie tylko odczytują dane z Active Directory, ale też zapisują je z powrotem.
+
+00:13:33.490 --> 00:13:37.790
+Na przykład aplikacja może chcieć tworzyć lub zmieniać wpisy w katalogu w ramach swojej normalnej pracy.
+
+00:13:38.090 --> 00:13:41.810
+Domain Services nie sprawdzi się, gdy aplikacja wymaga zapisu przez LDAP.
+
+00:13:42.070 --> 00:13:48.550
+To samo ostrzeżenie dotyczy sytuacji, gdy aplikacja musi zmienić schemat Active Directory, czyli zestaw pól określających, co katalog może przechowywać.
+
+00:13:48.750 --> 00:13:51.850
+Niektóre starsze programy wymagają dodania własnych pól przed uruchomieniem.
+
+00:13:51.930 --> 00:13:54.810
+Zarządzana domena nie pozwala na zmianę tego podstawowego projektu.
+
+00:13:54.810 --> 00:13:58.310
+Powinieneś się również zatrzymać, jeśli twój zespół potrzebuje pełnej kontroli nad samą domeną.
+
+00:13:58.530 --> 00:14:01.070
+Być może potrzebujesz bezpośredniego dostępu do kontrolerów domeny.
+
+00:14:01.310 --> 00:14:04.550
+Może potrzebujesz uprawnień administratora domeny, które dają bardzo szeroką kontrolę.
+
+00:14:04.670 --> 00:14:08.810
+A może potrzebujesz skomplikowanej struktury katalogu, którą chcesz zbudować i prowadzić po swojemu.
+
+00:14:08.970 --> 00:14:13.810
+Wtedy lepiej samodzielnie zarządzać Active Directory lokalnie lub na maszynach wirtualnych w Azure.
+
+00:14:14.090 --> 00:14:18.730
+Domain Services celowo zapewnia mniejszą kontrolę, ponieważ to Microsoft zarządza podstawową usługą domnową.
+
+00:14:18.730 --> 00:14:21.490
+Zadaj więc jedno proste pytanie, zanim wybierzesz ścieżkę.
+
+00:14:21.630 --> 00:14:25.870
+Czy to obciążenie potrzebuje starego języka Active Directory, czy może korzystać z nowoczesnego Entra ID?
+
+00:14:26.110 --> 00:14:28.650
+Jeśli może używać nowoczesnego Entra ID, zacznij od tego.
+
+00:14:28.870 --> 00:14:32.610
+Jeśli potrzebuje starego zachowania domeny, ale nie wymaga posiadania pełnej kontroli nad każdym jej elementem,
+
+00:14:32.670 --> 00:14:34.430
+Domain Services może być dobrym rozwiązaniem.
+
+00:14:34.570 --> 00:14:39.030
+A jeśli aplikacja musi zapisywać w katalogu, zmieniać jego schemat lub wymaga pełnej kontroli domeny,
+
+00:14:39.130 --> 00:14:40.230
+potrzebuje innego miejsca.
+
+00:14:40.490 --> 00:14:43.190
+Wybór zarządzanej domeny oznacza akceptację pewnego kompromisu.
+
+00:14:43.190 --> 00:14:48.170
+Microsoft zajmuje się kontrolerami domeny, a Ty rezygnujesz z części kontroli, którą masz przy samodzielnym ich prowadzeniu.
+
+00:14:48.350 --> 00:14:50.770
+Kompromisy zarządzanej usługi, o których musisz wiedzieć.
+
+00:14:51.010 --> 00:14:55.310
+Takie zarządzane podejście oszczędza pracę, ale zmienia również zakres kontroli Twojego zespołu ID.
+
+00:14:55.470 --> 00:15:00.650
+Microsoft obsługuje kontrolery domeny, utrzymuje je w synchronizacji, stosuje poprawki i dba o dostępność w tle.
+
+00:15:00.850 --> 00:15:05.230
+Nie musisz planować lokalizacji każdego kontrolera domeny, ani odzyskiwać go po awarii serwera.
+
+00:15:05.390 --> 00:15:09.230
+Dlatego wiele zespołów wybiera to rozwiązanie, ale nie masz dostępu zdalnego do tych kontrolerów
+
+00:15:09.230 --> 00:15:14.970
+i nie otrzymujesz uprawnień administratora domeny lub przedsiębiorstwa, ponieważ dawałyby one kontrolę nad elementami zarządzanymi przez Microsoft.
+
+00:15:15.250 --> 00:15:19.450
+Zamiast tego Microsoft udostępnia grupę o nazwie Entra Domain Services Administrators.
+
+00:15:19.710 --> 00:15:25.310
+Dodaj osoby, które mają zarządzać domeną do tej grupy, a następnie użyj maszyny wirtualnej do zarządzania dołączonej do domeny zarządzanej.
+
+00:15:25.450 --> 00:15:29.810
+Z poziomu tej maszyny możesz używać znanych narzędzi Active Directory do zarządzania tym, na co pozwala Microsoft.
+
+00:15:30.070 --> 00:15:33.150
+Na przykład możesz tworzyć własne jednostki organizacyjne, czyli OU.
+
+00:15:33.150 --> 00:15:36.810
+Traktuj je jak foldery na obiekty domnowe, takie jak komputery czy konta usług.
+
+00:15:37.030 --> 00:15:41.050
+Możesz zarządzać rekordami DNS oraz tworzyć i stosować zasady grupy dla obsługiwanych ustawień.
+
+00:15:41.270 --> 00:15:45.650
+Możesz również zarządzać komputerami dołączonymi do domeny, co często jest głównym powodem istnienia tej usługi.
+
+00:15:45.810 --> 00:15:47.150
+Te ograniczenia są celowe.
+
+00:15:47.350 --> 00:15:50.390
+Nie możesz dodawać kolejnych kontrolerów domeny, zmieniać schematu Active Directory,
+
+00:15:50.550 --> 00:15:53.950
+ani traktować domeny zarządzanej jako miejsca, z którego zmiany wracają do Entra ID.
+
+00:15:54.210 --> 00:15:57.290
+Dlatego zarządzanie użytkownikami i grupami należy zachować w katalogu źródłowym.
+
+00:15:57.290 --> 00:16:00.490
+Dla firmy korzystającej wyłącznie z chmury tym źródłem jest Entra ID.
+
+00:16:00.490 --> 00:16:04.950
+Dla firmy w modelu hybrydowym jest to lokalny Active Directory synchronizowany z Entra ID.
+
+00:16:05.150 --> 00:16:07.070
+Ta zasada zapobiega częstemu błędowi.
+
+00:16:07.290 --> 00:16:11.470
+Ktoś widzi użytkownika w domenie zarządzanej i wprowadza zmiany, zakładając, że zostaną one zapisane.
+
+00:16:11.670 --> 00:16:16.050
+Jednak ta zmiana nie stanie się rekordem firmy w Entra ID, ani w lokalnym Active Directory.
+
+00:16:16.310 --> 00:16:19.210
+Utrzymuj domenę zarządzaną jako prywatną wewnątrz sieci Azure.
+
+00:16:19.450 --> 00:16:23.370
+Powinna ona obsługiwać tylko potrzebne obciążenia, a nie być głównym katalogiem firmy.
+
+00:16:23.370 --> 00:16:28.650
+Ogranicz dostęp sieciowy, chroń maszynę do zarządzania i przyznawaj dostęp administratora tylko tym, którzy go potrzebują.
+
+00:16:28.650 --> 00:16:30.970
+Wybierasz usługę z określonymi zabezpieczeniami.
+
+00:16:31.150 --> 00:16:36.170
+Te zabezpieczenia zdejmują z Ciebie część pracy, jednocześnie uniemożliwiając zmianę elementów należących do Microsoftu.
+
+00:16:36.330 --> 00:16:38.010
+Prosta historia migracji do Azure.
+
+00:16:38.270 --> 00:16:42.050
+Wyobraź sobie firmę finansową korzystającą ze starej aplikacji na serwerach wewnątrz własnego biura.
+
+00:16:42.250 --> 00:16:44.610
+Ta aplikacja polega na LDAP przy wyszukiwaniu pracowników.
+
+00:16:44.770 --> 00:16:46.790
+Podczas logowania użytkowników korzysta z protokołu Kerberos,
+
+00:16:46.910 --> 00:16:50.370
+a jej serwer uwierzytelnia się za pomocą konta usługi, aby uzyskać dostęp do bazy danych finansowych.
+
+00:16:50.370 --> 00:16:54.270
+Firma chce przenieść zarówno aplikację, jak i bazę danych do maszyn wirtualnych Azure.
+
+00:16:54.270 --> 00:16:57.810
+Jedną z opcji jest utrzymanie połączenia aplikacji z domeną biurową przez VPN,
+
+00:16:58.030 --> 00:17:02.310
+ale wtedy aplikacja w Azure codziennie zależy od tego połączenia sieciowego i lokalnych kontrolerów domeny.
+
+00:17:02.530 --> 00:17:05.870
+Inną opcją jest uruchomienie nowych maszyn wirtualnych kontrolerów domeny w Azure.
+
+00:17:06.130 --> 00:17:08.830
+Dzięki temu więcej ruchu pozostaje wewnątrz Azure, ale dochodzą serwery Windows,
+
+00:17:08.970 --> 00:17:11.830
+które zespół IT musi aktualizować, monitorować, archiwizować i odzyskiwać.
+
+00:17:12.050 --> 00:17:13.590
+Zespół wybiera inne rozwiązanie.
+
+00:17:13.590 --> 00:17:16.430
+Ich użytkownicy i grupy są już synchronizowane z Entra ID.
+
+00:17:16.670 --> 00:17:19.910
+Włączają usługi do nowe Entra, podłączają wirtualną sieć Azure.

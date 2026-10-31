@@ -1,0 +1,760 @@
+WEBVTT
+
+00:00:00.370 --> 00:00:06.430
+Pronto per 10 giorni di Microsoft 365, Copilot, EA Azure e le persone che stanno plasmando il futuro del lavoro?
+
+00:00:07.510 --> 00:00:11.510
+Questo gennaio, M365 contorna e sarà ancora più grande.
+
+00:00:12.630 --> 00:00:18.010
+Unisciti a noi per sessioni dal vivo, demo concrete e conoscenze pratiche da MVP ed esperti del settore in tutto il mondo.
+
+00:00:18.810 --> 00:00:21.130
+Niente slide generiche, niente gergo infinito.
+
+00:00:22.130 --> 00:00:23.370
+Affrontiamo le sfide reali.
+
+00:00:23.890 --> 00:00:28.530
+Copilot Studio, agenti IA, Fabric, sicurezza, governance e automazione.
+
+00:00:28.530 --> 00:00:34.310
+Che tu sia un professionista IT, uno sviluppatore o un leader aziendale, ci sono sessioni pensate per te.
+
+00:00:35.450 --> 00:00:39.990
+Con 10 giorni interi puoi esplorare diverse tecnologie e connetterti con una community globale.
+
+00:00:40.890 --> 00:00:44.250
+Guarda in diretta e porta intuizioni pratiche nella tua organizzazione.
+
+00:00:45.130 --> 00:00:48.830
+Gennaio 2027, 10 giorni, un'unica community Microsoft.
+
+00:00:49.390 --> 00:00:50.610
+Le registrazioni sono aperte.
+
+00:00:51.810 --> 00:00:55.570
+Vai su m365con.net e assicurati il tuo posto oggi stesso.
+
+00:00:55.570 --> 00:00:58.750
+Il sito è m365con.net
+
+00:00:58.750 --> 00:01:03.110
+Iscriviti ora su m365con.net e ci vediamo.
+
+00:01:03.650 --> 00:01:04.570
+In diretta a gennaio.
+
+00:01:05.290 --> 00:01:09.430
+L'argomento di oggi è qualcosa di cui quasi tutti coloro che sviluppano con Microsoft 365 hanno sentito parlare.
+
+00:01:09.870 --> 00:01:12.510
+Ma la maggior parte delle persone non capisce davvero come funzioni dietro le quinte.
+
+00:01:13.010 --> 00:01:15.290
+Sto parlando delle notifiche di modifica di Microsoft Graph.
+
+00:01:16.170 --> 00:01:17.990
+Cosa sono esattamente perché dovrebbero interessarti?
+
+00:01:18.690 --> 00:01:19.890
+Partiamo dal problema che risolve.
+
+00:01:20.410 --> 00:01:23.510
+Immagine di creare un'app che deve sapere quando qualcosa cambia a Microsoft 365.
+
+00:01:23.510 --> 00:01:29.010
+Magari arriva una nuova email, qualcuno aggiorna un file in SharePoint, un nuovo utente, viene aggiunto alla directory aziendale.
+
+00:01:29.530 --> 00:01:30.470
+Come fa la tua app a scoprirlo?
+
+00:01:30.770 --> 00:01:32.190
+Punto è che il vecchio metodo è il polling.
+
+00:01:33.210 --> 00:01:35.990
+La tua app invia una richiesta a Microsoft Graph ogni pochi minuti chiedendo
+
+00:01:35.990 --> 00:01:37.970
+C'è qualcosa di nuovo dall'ultimo controllo?
+
+00:01:38.490 --> 00:01:40.170
+Se non è cambiato nulla è sprecato una richiesta.
+
+00:01:40.830 --> 00:01:44.690
+Se qualcosa fosse cambiato 5 secondi dopo il tuo controllo non lo sapresti fino al ciclo successivo.
+
+00:01:44.690 --> 00:01:49.650
+O controlli troppo spesso sprecando risorse e rischiando limitazioni o troppo raramente perdendo informazioni.
+
+00:01:50.490 --> 00:01:53.190
+Microsoft limita le app che effettuano il polling in modo troppo aggressivo.
+
+00:01:53.910 --> 00:01:58.230
+Gli sviluppatori la chiamano GraphJail e la tua app viene bloccata per un po' perché fa troppe richieste.
+
+00:01:58.930 --> 00:02:00.810
+Quindi la domanda è, non esiste un modo migliore?
+
+00:02:01.270 --> 00:02:05.410
+E se invece che continuare a chiedere se c'è qualcosa di nuovo il sistema ti avvisasse, quando qualcosa cambia?
+
+00:02:06.230 --> 00:02:07.930
+È esattamente quello che fanno le notifiche di modifica.
+
+00:02:09.210 --> 00:02:11.170
+Cosa sono le notifiche di modifica di Microsoft Graph?
+
+00:02:11.390 --> 00:02:12.710
+Ecco la definizione più semplice.
+
+00:02:13.210 --> 00:02:19.050
+Le notifiche di modifica consentono alla tua app di reagire istantaneamente agli eventi in Microsoft 365 senza controlli costanti.
+
+00:02:19.750 --> 00:02:21.470
+Pensalo come un sensore di movimento sulla tua cassetta.
+
+00:02:21.470 --> 00:02:26.850
+Invece di passarci davanti ogni ora per sbirciare dentro, installi un sensore che ti avvisa nel momento in cui arriva la posta.
+
+00:02:27.450 --> 00:02:29.710
+Smetti di perdere tempo con controlli a vuoto e non perdi mai una consiglia.
+
+00:02:30.250 --> 00:02:31.970
+È questo che fanno le notifiche di modifica per la tua app.
+
+00:02:31.970 --> 00:02:39.410
+Quando qualcosa cambia, come una nuova email, un file aggiornato, un evento del calendario, Microsoft Graph invia automaticamente una notifica alla tua app.
+
+00:02:39.850 --> 00:02:40.710
+Nessun polling richiesto.
+
+00:02:41.710 --> 00:02:43.410
+Ora questo sistema è composto da due elementi.
+
+00:02:43.450 --> 00:02:45.530
+Una sottoscrizione a notifica, che lavorano insieme.
+
+00:02:46.010 --> 00:02:48.350
+La sottoscrizione è il modo in cui dici a Microsoft Graph cosa vuoi monitorare.
+
+00:02:48.350 --> 00:02:52.530
+Dici cose come, ehi, avvisami quando qualcuno invia un nuovo messaggio a questa posta in arrivo.
+
+00:02:53.250 --> 00:02:56.130
+Oppure, dimmi quando un file viene aggiornato in questa libreria SharePoint.
+
+00:02:56.730 --> 00:02:58.410
+Registri il tuo interesse e Graph ne prende notte.
+
+00:02:58.790 --> 00:03:00.030
+La notifica è ciò che accade dopo.
+
+00:03:00.570 --> 00:03:04.170
+Quando si verifica il cambiamento, Graph invia un HTTP post a un endpoint fornito da te.
+
+00:03:04.810 --> 00:03:12.070
+La tua app riceve quel post, sa che è successo qualcosa e può decidere cosa fare, come recuperare i nuovi dati, avviare un flusso di lavoro o aggiornare un database.
+
+00:03:12.070 --> 00:03:14.790
+Ecco la differenza fondamentale rispetto a loro.
+
+00:03:15.130 --> 00:03:16.910
+Le notifiche vengono consegnate automaticamente.
+
+00:03:17.230 --> 00:03:20.650
+La tua app non deve chiedere nulla, il sistema invia le informazioni nel momento stesso in cui accadono.
+
+00:03:20.950 --> 00:03:21.670
+E questa è la magia.
+
+00:03:22.090 --> 00:03:25.270
+Microsoft Graph supporta le notifiche di modifica per una vasta gamma di risorse.
+
+00:03:26.210 --> 00:03:29.930
+Messaggi, eventi, contatti, utenti, gruppi, file, messaggi di Teams, avvisi di sicurezza.
+
+00:03:30.030 --> 00:03:33.270
+Praticamente tutto ciò a cui puoi accedere tramite Graph può essere monitorato per le modifiche.
+
+00:03:34.070 --> 00:03:35.250
+Ma come si configura tutto questo?
+
+00:03:35.610 --> 00:03:37.850
+Come dice a Graph cosa monitorare e dove inviare gli avvisi?
+
+00:03:38.410 --> 00:03:40.770
+Creando una sottoscrizione, dicendo a Graph cosa controllare.
+
+00:03:40.770 --> 00:03:41.970
+Questa è una sottoscrizione.
+
+00:03:42.350 --> 00:03:43.730
+È semplicemente una richiesta di registrazione.
+
+00:03:43.990 --> 00:03:47.950
+La tua app dice avvisami quando succede questa cosa e invita le richieste all'app di Microsoft Graph.
+
+00:03:48.410 --> 00:03:49.310
+Graph la memorizza e attende.
+
+00:03:50.030 --> 00:03:52.030
+Devi fornire a Graph alcuni dettagli in quella richiesta.
+
+00:03:52.670 --> 00:03:54.230
+Primo, la risorsa che vuoi monitorare.
+
+00:03:54.530 --> 00:03:55.410
+Il percorso verso i dati.
+
+00:03:55.830 --> 00:03:58.410
+Ad esempio, user, se stai monitorando le modifiche agli account utente.
+
+00:03:58.950 --> 00:04:03.010
+Oppure, mail, splash, email, folder, splash, messages, se vuoi sapere quando arrivano nuove email.
+
+00:04:03.870 --> 00:04:04.970
+Successivamente, il tipo di modifiche.
+
+00:04:05.230 --> 00:04:07.690
+Vuoi sapere quando qualcosa viene creato, aggiornato o eliminato.
+
+00:04:08.150 --> 00:04:09.770
+Puoi sceglierne uno, richiederle tutte e tre.
+
+00:04:10.070 --> 00:04:11.370
+Terzo, l'url della notifica.
+
+00:04:11.370 --> 00:04:15.610
+Questo è l'indirizzo del tuo endpoint, il luogo in cui Graph deve inviare la notifica quando accade qualcosa.
+
+00:04:15.970 --> 00:04:18.290
+Deve essere un endpoint HTTPS accessibile pubblicamente.
+
+00:04:18.630 --> 00:04:19.490
+Non sono messi scocciatore.
+
+00:04:19.910 --> 00:04:20.950
+Quarto, la data di scadenza.
+
+00:04:21.270 --> 00:04:22.590
+Le sottoscrizioni non durano per sempre.
+
+00:04:23.030 --> 00:04:25.490
+Scegli una data e un orario futuro in cui la sottoscrizione scadrà.
+
+00:04:25.810 --> 00:04:27.930
+Tuttavia, risorse diverse hanno durate massime differenti.
+
+00:04:28.470 --> 00:04:30.470
+I messaggi di Outlook possono durare fino a sette giorni.
+
+00:04:30.790 --> 00:04:32.710
+I messaggi di chat di Teams durano al massimo tre giorni.
+
+00:04:32.710 --> 00:04:34.790
+I file di SharePoint possono durare circa 30 giorni.
+
+00:04:35.150 --> 00:04:35.950
+Informazioni sulle presenze.
+
+00:04:36.250 --> 00:04:37.490
+Scadono dopo appena un'ora?
+
+00:04:38.110 --> 00:04:38.910
+Ecco un esempio concreto.
+
+00:04:39.410 --> 00:04:42.030
+Diciamo che vuoi sapere quando qualcuno in azienda cambia il proprio titolo di lavoro.
+
+00:04:42.570 --> 00:04:45.970
+Crea una sottoscrizione per la risorsa utente con un tipo di modifica aggiornato.
+
+00:04:45.970 --> 00:04:49.670
+Indirizzi l'URL di notifica e imposti la scadenza qualche giorno dopo.
+
+00:04:50.390 --> 00:04:52.270
+Quando qualcuno aggiorna il proprio profilo in Azure ID,
+
+00:04:52.650 --> 00:04:55.130
+Graph invia un post al tuo endpoint con un payload di notifica.
+
+00:04:55.770 --> 00:04:58.230
+Quel payload include l'ID utente e ti comunica cosa è cambiato.
+
+00:04:58.810 --> 00:05:03.050
+La tua app può quindi agire, aggiornare un sistema a carrile e inviare una notifica al manager, quello che ti serve.
+
+00:05:03.710 --> 00:05:06.390
+Graph risponde alla tua richiesta di sottoscrizione con un ID sottoscrizione.
+
+00:05:06.670 --> 00:05:10.750
+Ti serviva quell'ID in seguito per gestire la sottoscrizione, rinnovarla, aggiornarla, aggiornarla.
+
+00:05:11.270 --> 00:05:11.770
+Ma c'è una cosa.
+
+00:05:12.150 --> 00:05:13.730
+Prima che Graph inizi a inviare notifiche,
+
+00:05:13.730 --> 00:05:16.970
+deve confermare che il tuo endpoint sia effettivamente attivo e in ascolto.
+
+00:05:17.590 --> 00:05:18.430
+Ciò richiede un handshake.
+
+00:05:19.230 --> 00:05:21.250
+Il token di convalida dell'handshake spiegato?
+
+00:05:22.170 --> 00:05:23.310
+Quando crea una sottoscrizione,
+
+00:05:23.590 --> 00:05:25.750
+Microsoft Graph non si fida ciecamente del tuo endpoint.
+
+00:05:26.350 --> 00:05:28.750
+Gli apriamo un ping di prova, una richiesta di verifica.
+
+00:05:29.550 --> 00:05:32.310
+Quel ping include un token di convalida, una stringa casuale di caratteri.
+
+00:05:32.870 --> 00:05:36.430
+Il tuo endpoint deve catturare quel token e rispedirlo come testo semplice entro 10 secondi.
+
+00:05:37.130 --> 00:05:40.930
+Immaginalo come un corriere che suona il campanello per confermare che sei in casa prima di lasciare un pacco.
+
+00:05:41.510 --> 00:05:43.350
+Se nessuno risponde, il corriere non lascia nulla.
+
+00:05:43.730 --> 00:05:44.330
+Lo stesso vorrei qui.
+
+00:05:44.770 --> 00:05:47.110
+Se il tuo endpoint non rimanda indietro il token di convalida,
+
+00:05:47.310 --> 00:05:48.530
+Graph non invierà notifiche.
+
+00:05:49.290 --> 00:05:53.370
+La risposta deve essere testo semplice, non JSON o XML, solo la stringa grezza del token.
+
+00:05:54.150 --> 00:05:55.710
+Se sbagli il formato, l'handshake fallisce.
+
+00:05:56.150 --> 00:05:56.990
+È un controllo di sicurezza.
+
+00:05:57.530 --> 00:06:00.250
+Dimostra che il tuo endpoint è attivo, in ascolto e sotto il tuo controllo.
+
+00:06:01.130 --> 00:06:04.110
+Impedisce a qualcuno di puntare una sottoscrizione a un URL che non possiede,
+
+00:06:04.110 --> 00:06:06.270
+sperando di intercettare notifiche destinate ad altri.
+
+00:06:06.870 --> 00:06:08.410
+Niente handshake significa niente sottoscrizione.
+
+00:06:08.750 --> 00:06:11.250
+Graph rifiuta la richiesta di creazione e riceve un errore.
+
+00:06:11.650 --> 00:06:12.790
+Correggi il tuo endpoint e riprovi.
+
+00:06:12.790 --> 00:06:16.670
+Una volta è riuscito l'handshake, la sottoscrizione è attiva e le notifiche iniziano ad arrivare.
+
+00:06:17.490 --> 00:06:17.990
+Ma c'è una cosa.
+
+00:06:18.650 --> 00:06:19.510
+Non arrivano per sempre.
+
+00:06:20.610 --> 00:06:21.670
+Mantieni la connessione attiva.
+
+00:06:22.430 --> 00:06:23.250
+Rinnovo della sottoscrizione.
+
+00:06:23.690 --> 00:06:25.430
+Ogni sottoscrizione ha una data di scadenza.
+
+00:06:25.870 --> 00:06:26.810
+La imposti quando la crei.
+
+00:06:27.230 --> 00:06:28.110
+Graph la fa rispettare.
+
+00:06:28.430 --> 00:06:30.150
+Quando arriva quel giorno, la sottoscrizione si ferma.
+
+00:06:30.530 --> 00:06:31.250
+Niente più notifiche.
+
+00:06:32.750 --> 00:06:33.950
+Immagino come un parchimetro.
+
+00:06:34.910 --> 00:06:37.390
+Imposti il tempo quando scade il contatore e segnala la scadenza.
+
+00:06:37.970 --> 00:06:39.390
+Risorse diverse hanno limiti diversi.
+
+00:06:39.390 --> 00:06:41.590
+I messaggi Outlook possono durare 7 giorni.
+
+00:06:41.910 --> 00:06:43.270
+I messaggi chat di Teams 3 giorni.
+
+00:06:43.530 --> 00:06:45.170
+I file SharePoint circa 30 giorni.
+
+00:06:45.470 --> 00:06:46.490
+Le informazioni sulla presenza.
+
+00:06:46.590 --> 00:06:46.990
+Solo un'ora.
+
+00:06:48.050 --> 00:06:50.430
+Quindi la tua app non può semplicemente creare una sottoscrizione dimenticata.
+
+00:06:50.750 --> 00:06:52.050
+Hai bisogno di un processo che la mantenga a T.
+
+00:06:52.390 --> 00:06:53.170
+Il rinnovo è semplice.
+
+00:06:53.650 --> 00:06:55.570
+Invia una richiesta patch con l'ID della sottoscrizione.
+
+00:06:56.010 --> 00:06:57.170
+Includi una nuova data di scadenza.
+
+00:06:57.810 --> 00:07:00.710
+Fallo prima che quella attuale scada e graph estenderà la sottoscrizione.
+
+00:07:01.510 --> 00:07:02.670
+Ecco la best practice che consiglio.
+
+00:07:03.330 --> 00:07:05.750
+Controlla il timestamp di scadenza su ogni notifica che ricevi.
+
+00:07:05.750 --> 00:07:08.850
+Se avvicina la scadenza, diciamo entro un giorno, rinnovala subito.
+
+00:07:09.450 --> 00:07:12.390
+In questo modo non ti serve un lavoro in background separato per gestire le sottoscrizioni.
+
+00:07:13.090 --> 00:07:15.290
+Microsoft ha aggiunto anche notifiche sul ciclo di vita.
+
+00:07:15.810 --> 00:07:18.030
+Questi avvisi ti preavvisano prima che una sottoscrizione scada.
+
+00:07:18.350 --> 00:07:22.410
+Ti indicano quando la sottoscrizione sta per terminare o quando il token di accesso richiede una riautorizzazione?
+
+00:07:22.830 --> 00:07:25.570
+Iscriviti a queste e la tua app potrà rinnovare prima che qualcosa si rompa.
+
+00:07:26.030 --> 00:07:27.450
+Ma cosa succede se il tuo endpoint va giù?
+
+00:07:27.630 --> 00:07:28.470
+Perdi la finestra di no.
+
+00:07:28.890 --> 00:07:30.330
+È qui che entri in gioco la rete di sicurezza.
+
+00:07:31.230 --> 00:07:33.990
+Quando le cose vanno male, servono affidabilità ai reti di sicurezza.
+
+00:07:34.250 --> 00:07:37.190
+La tua sottoscrizione è attiva, l'endpoint è in ascolto, le notifiche fluiscono.
+
+00:07:37.590 --> 00:07:39.730
+Tutto sembra a posto, ma cosa succede quando qualcosa si rompa?
+
+00:07:40.090 --> 00:07:41.750
+Magari l'endpoint va giù per manutenzione.
+
+00:07:42.050 --> 00:07:43.670
+Un problema di rete fa perdere una notifica.
+
+00:07:44.010 --> 00:07:46.670
+O semplicemente perdi la finestra di rinnovo e la sottoscrizione scada.
+
+00:07:46.970 --> 00:07:47.670
+Queste cose succedono.
+
+00:07:47.950 --> 00:07:49.090
+La domanda è come recuperi.
+
+00:07:49.730 --> 00:07:53.110
+Microsoft Graph si aspetta che il tuo endpoint webbook risponda rapidamente, entro tre secondi.
+
+00:07:53.450 --> 00:07:55.070
+Se impiega più tempo, Graph lo segna come l'è.
+
+00:07:55.070 --> 00:08:01.370
+Se oltre il 10% delle tue risposte supera i 3 secondi in un periodo di 10 minuti, Graph ritarda le notifiche di 10 minuti.
+
+00:08:01.750 --> 00:08:03.810
+Invia solo un piccolo campione per verificare se ti sia ripreso.
+
+00:08:04.250 --> 00:08:04.610
+Va peggio.
+
+00:08:05.170 --> 00:08:10.150
+Se oltre il 15% delle tue risposte supera il timeout di riprova di 10 secondi, Graph segna il tuo endpoint come abbandonato.
+
+00:08:10.350 --> 00:08:11.950
+Le notifiche si fermano del tutto per 10 minuti.
+
+00:08:12.230 --> 00:08:12.650
+Non persi.
+
+00:08:12.870 --> 00:08:13.530
+Non puoi recuperarle.
+
+00:08:14.010 --> 00:08:15.930
+Quindi il tuo endpoint deve essere veloce e affidabile.
+
+00:08:16.370 --> 00:08:19.470
+Ciò non significa dover elaborare ogni notifica in meno di 3 secondi.
+
+00:08:19.750 --> 00:08:24.470
+Basta confermare l'eccezione rapidamente con una risposta 202 accepted, poi elabora la notifica in modo sincrono.
+
+00:08:25.070 --> 00:08:25.590
+Mettila in conno.
+
+00:08:25.890 --> 00:08:26.790
+Gestiscila in seguo.
+
+00:08:26.850 --> 00:08:28.110
+La chiave è quella risposta veloce.
+
+00:08:28.490 --> 00:08:30.670
+Anche con un endpoint perfetto le cose possono ancora andare storte.
+
+00:08:30.950 --> 00:08:31.890
+Le sottoscrizioni scadono.
+
+00:08:32.350 --> 00:08:33.330
+Capitano problemi di rete.
+
+00:08:33.670 --> 00:08:36.490
+In rari casi lo stesso Microsoft Graph potrebbe perdere una notifica.
+
+00:08:36.970 --> 00:08:38.730
+Ecco perché serve una rete di sicurezza, le Delta Query.
+
+00:08:39.170 --> 00:08:39.910
+Pensala in questo modo.
+
+00:08:40.190 --> 00:08:41.830
+Le notifiche di modifica sono l'allarme antincente.
+
+00:08:42.070 --> 00:08:43.670
+Ti segnalano che qualcosa sta succedendo proprio.
+
+00:08:43.990 --> 00:08:45.430
+Le Delta Query sono un impianto a pioggia.
+
+00:08:45.810 --> 00:08:47.130
+Catturano tutto ciò che l'allarme ha ancato.
+
+00:08:47.350 --> 00:08:47.910
+Lavorano insieme.
+
+00:08:47.910 --> 00:08:50.230
+Le notifiche ti danno consapevolezza in tempo reale.
+
+00:08:50.230 --> 00:08:53.130
+Le Delta Query ti offrono un quadro completo che puoi riconciliare in qualsiasi momento.
+
+00:08:53.610 --> 00:08:54.730
+Il pattern consigliato è semplice.
+
+00:08:55.230 --> 00:08:57.190
+Usa le notifiche di modifica per una consapevolezza immediata.
+
+00:08:57.650 --> 00:09:01.090
+Segui una Delta Query periodicamente, magari ogni poche ore o una volta al giorno, per rilevare
+
+00:09:01.090 --> 00:09:01.930
+eventuali sfuggite.
+
+00:09:02.290 --> 00:09:05.830
+In questo modo, anche se una notifica viene persa o una sottoscrizione scade, non perderai
+
+00:09:05.830 --> 00:09:07.130
+mai una modifica in modo permanente.
+
+00:09:07.930 --> 00:09:08.990
+Casi d'uso nel mondo reale.
+
+00:09:09.450 --> 00:09:10.170
+Cosa puoi costruire?
+
+00:09:10.530 --> 00:09:11.790
+Quindi, cosa rende possibile tutto questo?
+
+00:09:11.910 --> 00:09:13.510
+Lascia che ti mostri alcuni esempi reali.
+
+00:09:13.770 --> 00:09:14.790
+Prendiamo l'automazione di risorse.
+
+00:09:15.230 --> 00:09:16.970
+Immagina che qualcuno si unisca alla tua azienda domani.
+
+00:09:17.370 --> 00:09:20.530
+Nel momento in cui entrai di crea un nuovo utente, viene inviata una notifica di modifica.
+
+00:09:20.910 --> 00:09:24.830
+La tua app recupera il profilo e crea gli account nella piattaforma HR per rilevamento, presenza
+
+00:09:24.830 --> 00:09:25.630
+e l'accesso agli edifici.
+
+00:09:25.730 --> 00:09:26.430
+Tutto in pochi secondi.
+
+00:09:26.650 --> 00:09:27.650
+Nessun polli, nessun ritardo.
+
+00:09:28.070 --> 00:09:30.810
+Su pure avvisi di sicurezza, supponiamo che l'account di utente venga disabilito.
+
+00:09:31.470 --> 00:09:34.850
+Una notifica di modifica avvia un flusso di lavoro che controlla cambiamenti sospetti e
+
+00:09:34.850 --> 00:09:35.970
+avvisi a team di sicurezza.
+
+00:09:36.450 --> 00:09:38.070
+Prima avresti dovuto eseguire il polli in prima.
+
+00:09:38.510 --> 00:09:39.170
+Ora è istantaneo.
+
+00:09:39.170 --> 00:09:41.250
+L'elaborazione dei contenuti funziona allo stesso modo.
+
+00:09:41.510 --> 00:09:44.690
+Quando un file arriva in una raccolta di documenti di SharePoint, vuoi sapere se si tratta di
+
+00:09:44.690 --> 00:09:45.110
+una fattura.
+
+00:09:45.610 --> 00:09:47.230
+La notifica ti informa che esiste un nuovo file.
+
+00:09:47.850 --> 00:09:50.670
+La tua app lo recupera e lo analizza tramite l'intelligenza artificiale per classificarlo
+
+00:09:50.670 --> 00:09:51.390
+e per classificarlo.
+
+00:09:51.750 --> 00:09:52.190
+Automaticamente.
+
+00:09:53.030 --> 00:09:55.790
+I dashboard in tempo reale ti permettono di vedere le analisi mentre accadono non quelle
+
+00:09:55.790 --> 00:09:56.130
+di ore fa.
+
+00:09:56.550 --> 00:09:59.470
+Le notifiche di modifica sincronizzano Dataverse con Fabric istantaneamente.
+
+00:09:59.850 --> 00:10:02.050
+I tuoi dashboard di Power BI si aggiornano quasi in tempo reale.
+
+00:10:02.510 --> 00:10:03.690
+Ecco un esempio che trovo interessante.
+
+00:10:04.050 --> 00:10:04.910
+Connettori di Copilot.
+
+00:10:04.910 --> 00:10:08.410
+Microsoft aggiunge la sincronizzazione in tempo reale tramite Webbook così gli agenti
+
+00:10:08.410 --> 00:10:09.850
+AI rispondono al momento in cui i dati cambi.
+
+00:10:10.330 --> 00:10:14.670
+Quando un record cliente viene aggiornato in NERAMICS 365, un agente Copilot genera un
+
+00:10:14.670 --> 00:10:16.470
+follow-up immediatamente, senza attese.
+
+00:10:17.970 --> 00:10:19.390
+Tutti questi esempi hanno una cosa in comune.
+
+00:10:20.170 --> 00:10:23.510
+Prima delle notifiche di modifica creavi job pianificati che eseguivano il polling ogni
+
+00:10:23.510 --> 00:10:24.030
+ora o giorno.
+
+00:10:24.570 --> 00:10:26.890
+Funzionava, ma era lento, inefficiente e fragile.
+
+00:10:27.710 --> 00:10:29.370
+Le notifiche di modifica capovolgono quei modelli.
+
+00:10:29.750 --> 00:10:31.630
+Tempo reale, basato su eventi, istantanei.
+
+00:10:31.630 --> 00:10:34.290
+Scegliere il canale di consegno giusto.
+
+00:10:34.510 --> 00:10:36.110
+Non ogni app necessita dello stesso tipo di consegno.
+
+00:10:36.450 --> 00:10:37.230
+Vediamo le tue opzioni.
+
+00:10:37.690 --> 00:10:38.630
+I webbook sono i più semplici.
+
+00:10:39.370 --> 00:10:42.510
+Graph invia un HTTP post al tuo endpoint, tu lo elabori e procedi.
+
+00:10:43.110 --> 00:10:46.150
+Per volumi da bassi a medi diciamo alcune centinaia di notifiche all'ora funziona bene.
+
+00:10:46.770 --> 00:10:48.330
+Ma cosa succede se stai costruendo qualcosa di più?
+
+00:10:48.670 --> 00:10:51.550
+Migliaia di notifiche al secondo possono sovraccaricare un singolo endpoint.
+
+00:10:52.090 --> 00:10:53.330
+Hai bisogno di qualcosa di più potente.
+
+00:10:53.810 --> 00:10:55.470
+Event Hub si gestisce milioni di eventi al secondo.
+
+00:10:55.470 --> 00:10:59.370
+Invece di inviare notifiche una ad una, Graph le invia a un hub.
+
+00:10:59.990 --> 00:11:02.170
+A tua app legge il proprio ritmo, con basso rischio di sovraccarico.
+
+00:11:02.650 --> 00:11:06.430
+Questo è per grandi scenari aziendali come migliaia di siti di SharePoint o milioni di caselle postali.
+
+00:11:07.070 --> 00:11:08.550
+Poi c'è Event Grid e l'opzione Serverless.
+
+00:11:09.030 --> 00:11:13.850
+Invia notifiche ad Azure Functions o Logic Apps e gestisce automaticamente i tentativi e la dead lettering.
+
+00:11:13.850 --> 00:11:33.130
+Invia notifiche ad Azure Functions o Logic Apps e gestisce automaticamente i tentativi e la dead lettering.

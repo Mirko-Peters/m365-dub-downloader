@@ -1,0 +1,757 @@
+WEBVTT
+
+00:00:00.020 --> 00:00:07.560
+Gotowi na 10 dni z Microsoft 365, kopilotem sztuczną inteligencją, azur i ludźmi kształtującymi przyszłość pracy?
+
+00:00:07.760 --> 00:00:12.360
+W styczniu powraca M365Con i tym razem działamy z większym rozmachem.
+
+00:00:12.600 --> 00:00:18.380
+Dołącz do nas podczas sesji na żywo praktycznych pokazów i zdobądź wiedzę od MVP oraz ekspertów z całego świata.
+
+00:00:18.560 --> 00:00:21.860
+Koniec z ogólnymi prezentacjami i niekończącymi się modnymi hasłami.
+
+00:00:22.120 --> 00:00:29.100
+Zajmujemy się prawdziwymi wyzwaniami, kopilot studio, agentami, a i fabrik, bezpieczeństwem, ładem korporacyjnym i automatyzacją.
+
+00:00:29.100 --> 00:00:35.100
+Niezależnie od tego, czy jesteś informatykiem, programistą czy liderem biznesowym, przygotowaliśmy sesję właśnie dla Ciebie.
+
+00:00:35.300 --> 00:00:40.580
+Podczas 10 pełnych dni możesz zgłębić wiele technologii i nawiązać kontakt z globalną społecznością.
+
+00:00:40.780 --> 00:00:44.580
+Oglądaj na żywo i zabierz praktyczne wskazówki do swojej organizacji.
+
+00:00:44.840 --> 00:00:49.100
+Styczeń 2027 roku, 10 dni, jedna społeczność Microsoft.
+
+00:00:49.460 --> 00:00:51.100
+Rejestracja jest już otwarta.
+
+00:00:51.760 --> 00:00:55.960
+Wejdź na m365con.net i zarezerwuj miejsce już dziś.
+
+00:00:55.960 --> 00:00:58.820
+To m365con.net.
+
+00:00:59.100 --> 00:01:03.020
+Dołącz teraz na m365con.net.
+
+00:01:03.180 --> 00:01:04.660
+Widzimy się na żywo w styczniu.
+
+00:01:04.840 --> 00:01:09.060
+Dzisiejszy temat to coś, o czym słyszał prawie każdy budujący rozwiązania w Microsoft 365.
+
+00:01:09.760 --> 00:01:12.880
+Większość osób jednak nie do końca rozumie, jak to działa od kulis.
+
+00:01:13.080 --> 00:01:15.540
+Mówię o powiadomieniach o zmianach w Microsoft Graph.
+
+00:01:15.740 --> 00:01:18.160
+Czym dokładnie są i dlaczego powinny Cię zainteresować?
+
+00:01:18.420 --> 00:01:20.200
+Zacznijmy od problemu, który rozwiązują.
+
+00:01:20.440 --> 00:01:24.000
+Wyobraź sobie, że budujesz aplikację, która musi wiedzieć, kiedy coś zmienia się w Microsoft 365.
+
+00:01:24.100 --> 00:01:28.940
+Może przychodzi nowy e-mail, ktoś aktualizuje plik w SharePoint lub nowy użytkownik zostaje dodany do katalogu firmy.
+
+00:01:29.100 --> 00:01:30.760
+Skąd Twoja aplikacja ma się o tym dowiedzieć?
+
+00:01:31.020 --> 00:01:33.180
+Rzecz w tym, że starym sposobem jest odpytywanie polling.
+
+00:01:33.420 --> 00:01:38.160
+Twoja aplikacja wysyła zapytanie do Microsoft Graph co kilka minut i pyta, czy pojawiło się coś nowego od ostatniego razu.
+
+00:01:38.380 --> 00:01:40.720
+Jeśli nic się nie zmieniło, zmarnowałeś jedno zapytanie.
+
+00:01:40.880 --> 00:01:44.900
+A jeśli coś zmieniło się 5 sekund po Twoim sprawdzeniu, nie dowiesz się o tym do następnego cyklu.
+
+00:01:44.900 --> 00:01:50.020
+Sprawdzasz albo za często, marnując zasoby i ryzykując ograniczenia, albo za rzadko, co oznacza, że coś przegapisz.
+
+00:01:50.200 --> 00:01:53.760
+Microsoft faktycznie ogranicza przepustowość aplikacji, które odpytują zbyt agresywnie.
+
+00:01:53.940 --> 00:01:55.460
+Programiści nazywają to Graph Jail.
+
+00:01:55.620 --> 00:01:58.780
+Twoja aplikacja zostaje na chwilę zablokowana za zbyt dużą liczbę zapytań.
+
+00:01:58.920 --> 00:02:01.160
+Pojawia się więc pytanie, czy nie ma lepszego sposobu?
+
+00:02:01.300 --> 00:02:06.260
+Co by było, gdyby zamiast ciągłego pytania aplikacji o nowości, system po prostu informował Cię, gdy coś się zmieni?
+
+00:02:06.440 --> 00:02:08.600
+Dokładnie to robią powiadomienia o zmianach.
+
+00:02:08.920 --> 00:02:11.400
+Czym są powiadomienia o zmianach w Microsoft Graph?
+
+00:02:11.560 --> 00:02:12.960
+Oto najprostsza definicja.
+
+00:02:13.160 --> 00:02:19.280
+Powiadomienia o zmianach pozwalają Twojej aplikacji reagować natychmiast na zdarzenia w Microsoft 365 bez ciągłego sprawdzania.
+
+00:02:19.500 --> 00:02:22.100
+Pomyśl o tym, jak o czujniku ruchu przy swojej skrzynce pocztowej.
+
+00:02:22.320 --> 00:02:26.860
+Zamiast zaglądać do niej co godzinę, instalujesz czujnik, który daje sygnał w momencie dostarczenia poczty.
+
+00:02:27.040 --> 00:02:30.020
+Przestajesz marnować czas na puste sprawdzenia i nigdy nie przegapisz przesyłki.
+
+00:02:30.160 --> 00:02:32.720
+To właśnie robią powiadomienia o zmianach dla Twojej aplikacji.
+
+00:02:32.720 --> 00:02:36.760
+Gdy coś się zmienia, na przykład pojawia się nowy e-mail, zaktualizowany plik lub wydarzenie w kalendarzu,
+
+00:02:36.860 --> 00:02:39.620
+Microsoft Graph automatycznie wysyła powiadomienie do Twojej aplikacji.
+
+00:02:39.820 --> 00:02:40.720
+Nie jest wymagane odpytywanie.
+
+00:02:41.480 --> 00:02:45.680
+System ten składa się z dwóch elementów, subskrypcji i powiadomienia, które współpracują ze sobą.
+
+00:02:46.040 --> 00:02:49.240
+Subskrypcja to moment, w którym informujesz Microsoft Graph, co chcesz obserwować.
+
+00:02:49.460 --> 00:02:53.080
+Mówisz na przykład, hej, daj mi znać, gdy ktoś wyśle nową wiadomość do tej skrzynki odbiorczej.
+
+00:02:53.180 --> 00:02:56.200
+Albo powiadom mnie, gdy plik zostanie zaktualizowany w tej bibliotece SharePoint.
+
+00:02:56.480 --> 00:02:58.620
+Rejestrujesz swoje zainteresowanie, a Graph je odnotowuje.
+
+00:02:58.620 --> 00:03:00.680
+Powiadomienie to etap, który następuje później.
+
+00:03:00.680 --> 00:03:04.760
+Gdy wystąpi zmiana, Graph wysyła żądanie HTTP Post do podanego przez Ciebie punktu końcowego.
+
+00:03:04.960 --> 00:03:09.200
+Twoja aplikacja odbiera ten komunikat Post, wie, że coś się stało i może zdecydować, co zrobić,
+
+00:03:09.340 --> 00:03:12.640
+na przykład pobrać nowe dane, uruchomić proces lub zaktualizować bazę danych.
+
+00:03:12.840 --> 00:03:14.920
+Oto kluczowa różnica w porównaniu z odpytywaniem.
+
+00:03:15.120 --> 00:03:17.000
+Powiadomienia są dostarczane automatycznie.
+
+00:03:17.200 --> 00:03:18.560
+Twoja aplikacja nie musi o nic pytać.
+
+00:03:18.720 --> 00:03:20.620
+System przesyła informacje w momencie ich wystąpienia.
+
+00:03:20.820 --> 00:03:22.320
+Na tym polega magia tego rozwiązania.
+
+00:03:22.560 --> 00:03:25.960
+Microsoft Graph obsługuje powiadomienia o zmianach dla szerokiej gamy zasobów.
+
+00:03:25.960 --> 00:03:29.280
+Wiadomości, wydarzenia, kontakty, użytkownicy, grupy, pliki, wiadomości w Teams,
+
+00:03:29.440 --> 00:03:32.080
+alerty bezpieczeństwa, właściwie wszystko, do czego masz dostęp przez Graph,
+
+00:03:32.200 --> 00:03:33.460
+można monitorować pod kątem zmian.
+
+00:03:33.680 --> 00:03:35.320
+Jak jednak faktycznie to skonfigurować?
+
+00:03:35.500 --> 00:03:38.160
+Jak powiedzieć systemowi Graph, co ma obserwować i gdzie wysyłać alerty?
+
+00:03:38.320 --> 00:03:40.820
+Tworząc subskrypcję, mówisz systemowi Graph, co ma obserwować.
+
+00:03:41.000 --> 00:03:42.160
+Czym więc jest subskrypcja?
+
+00:03:42.320 --> 00:03:43.700
+To po prostu żądanie rejestracji.
+
+00:03:43.880 --> 00:03:46.080
+Twoja aplikacja mówi, daj mi znać, kiedy wydarzy się ta konkretna rzecz.
+
+00:03:46.280 --> 00:03:48.420
+Wysyłasz to żądanie do interfejsu API Microsoft Graph.
+
+00:03:48.420 --> 00:03:49.840
+Graph zapisuje je i czeka.
+
+00:03:49.840 --> 00:03:52.640
+W tym żądaniu musisz podać systemowi Graph kilka szczegółów.
+
+00:03:52.760 --> 00:03:55.620
+Po pierwsze, zasób, który chcesz obserwować, czyli ścieżkę do danych.
+
+00:03:55.860 --> 00:03:58.920
+Na przykład Users, jeśli monitorujesz zmiany w kontach użytkowników.
+
+00:03:59.060 --> 00:04:03.460
+Lub Me, Mail Folders, Inbox, Messages, jeśli chcesz otrzymywać powiadomienia o nowych e-mailach.
+
+00:04:03.640 --> 00:04:04.700
+Następnie typ zmiany.
+
+00:04:04.840 --> 00:04:07.820
+Czy chcesz wiedzieć, kiedy coś zostało utworzone, zaktualizowane czy usunięte?
+
+00:04:08.000 --> 00:04:10.040
+Możesz wybrać jedną opcję lub poprosić o wszystkie trzy.
+
+00:04:10.200 --> 00:04:11.860
+Po trzecie, adres URL powiadomienia.
+
+00:04:11.860 --> 00:04:15.680
+To adres Twojego punktu końcowego, miejsce, do którego Graph powinien wysłać powiadomienie, gdy coś się stanie.
+
+00:04:15.920 --> 00:04:18.320
+Musi to być publicznie dostępny punkt końcowy HTTPS.
+
+00:04:18.500 --> 00:04:19.640
+Tutaj nie ma dróg na skróty.
+
+00:04:19.820 --> 00:04:21.240
+Po czwarte, data wygaśnięcia.
+
+00:04:21.600 --> 00:04:22.880
+Subskrypcje nie trwają wiecznie.
+
+00:04:23.160 --> 00:04:25.540
+Wybierasz przyszłą datę i godzinę, kiedy subskrypcja wygaśnie.
+
+00:04:25.780 --> 00:04:28.060
+Różne zasoby mają jednak różne maksymalne czasy trwania.
+
+00:04:28.300 --> 00:04:30.400
+Subskrypcje wiadomości Outlook mogą trwać do 7 dni.
+
+00:04:30.620 --> 00:04:32.740
+Wiadomości na czacie w Teams wygasają maksymalnie po 3 dniach.
+
+00:04:32.880 --> 00:04:34.940
+Pliki SharePoint mogą być przechowywane przez około 30 dni.
+
+00:04:35.120 --> 00:04:36.220
+Informacje o obecności?
+
+00:04:36.440 --> 00:04:38.100
+Wygasają one po zaledwie jednej godzinie.
+
+00:04:38.100 --> 00:04:39.320
+Oto konkretny przykład.
+
+00:04:39.320 --> 00:04:42.580
+Załóżmy, że chcesz wiedzieć, kiedy ktoś w Twojej firmie zmieni swoje stanowisko.
+
+00:04:42.800 --> 00:04:46.320
+Tworzysz subskrypcję dla zasobu użytkowników z typem zmiany Zaktualizowano.
+
+00:04:46.560 --> 00:04:50.080
+Wskazujesz swój adres URL powiadomień i ustawiasz wygaśnięcie na kilka dni.
+
+00:04:50.320 --> 00:04:55.320
+Gdy ktoś zaktualizuje swój profil w Azure Ad, Graph wysyła żądanie post do Twojego punktu końcowego z ładunkiem powiadomienia.
+
+00:04:55.480 --> 00:04:58.660
+Ten ładunek zawiera identyfikator użytkownika i informuje o tym, co uległo zmianie.
+
+00:04:58.660 --> 00:05:03.460
+Twoja aplikacja może wtedy zareagować, zaktualizować system HR, wysłać powiadomienie do menedżera lub wykonać inne potrzebne czynności.
+
+00:05:03.680 --> 00:05:06.780
+Graph odpowiada na żądanie subskrypcji, przesyłając identyfikator subskrypcji.
+
+00:05:07.040 --> 00:05:10.880
+Będzie on potrzebny później do zarządzania subskrypcją, jej odnawiania, aktualizowania lub usuwania.
+
+00:05:11.040 --> 00:05:12.160
+Ale jest pewien szczegół.
+
+00:05:12.380 --> 00:05:16.640
+Zanim Graph zacznie wysyłać powiadomienia, musi potwierdzić, że Twój punkt końcowy faktycznie działa i nasłuchuje.
+
+00:05:16.880 --> 00:05:21.920
+Wymaga to wykonania tak zwanej uścisku dłoni, handshake, wyjaśnienie tokena walidacji uścisku dłoni.
+
+00:05:21.920 --> 00:05:26.140
+Kiedy tworzysz subskrypcję, Microsoft Graph nie ufa Twojemu punktowi końcowemu w ciemno.
+
+00:05:26.320 --> 00:05:29.220
+Najpierw wysyła testowy sygnał, czyli żądanie weryfikacji.
+
+00:05:29.400 --> 00:05:32.560
+Ten sygnał zawiera token walidacji, czyli losowy ciąg znaków.
+
+00:05:32.720 --> 00:05:36.780
+Twój punkt końcowy musi przechwycić ten token i odesłać go jako zwykły tekst w ciągu 10 sekund.
+
+00:05:36.940 --> 00:05:41.000
+Pomyśl o tym, jak o kurierze dzwoniącym do drzwi, aby sprawdzić, czy jesteś w domu, zanim zostawi paczkę.
+
+00:05:41.220 --> 00:05:43.620
+Jeśli nikt nie odpowiada, kurier niczego nie zostawia.
+
+00:05:43.840 --> 00:05:44.760
+Podobnie jest tutaj.
+
+00:05:44.760 --> 00:05:49.040
+Jeśli Twój punkt końcowy nie odeśle tokena walidacji, Graph nie wyśle do niego powiadomień.
+
+00:05:49.160 --> 00:05:53.560
+Odpowiedź musi być zwykłym tekstem, nie JSON czy XML, tylko surowym ciągiem tokena.
+
+00:05:53.700 --> 00:05:56.180
+Jeśli format będzie błędny, uścisk dłoni nie powiedzie się.
+
+00:05:56.320 --> 00:05:57.180
+To zabezpieczenie.
+
+00:05:57.440 --> 00:06:00.840
+Dowodzi ono, że Twój punkt końcowy działa, nasłuchuje i jest pod Twoją kontrolą.
+
+00:06:01.040 --> 00:06:06.520
+Zapobiega to sytuacji, w której ktoś wskazuje subskrypcję na adres URL, do którego nie ma praw, mając nadzieję na przechwycenie powiadomień przeznaczonych dla kogoś innego.
+
+00:06:06.740 --> 00:06:08.680
+Brak uścisku dłoni oznacza brak subskrypcji.
+
+00:06:08.920 --> 00:06:11.300
+Graph odrzuca żądanie utworzenia i otrzymujesz błąd.
+
+00:06:11.300 --> 00:06:13.300
+Naprawiasz swój punkt końcowy i próbujesz ponownie.
+
+00:06:13.480 --> 00:06:17.200
+Gdy uścisk dłoni zakończy się powodzeniem, subskrypcja staje się aktywna i powiadomienia zaczynają napływać.
+
+00:06:17.360 --> 00:06:18.480
+Ale jest pewien szczegół.
+
+00:06:18.480 --> 00:06:20.480
+Nie napływają one w nieskończoność.
+
+00:06:20.700 --> 00:06:21.820
+Utrzymywanie połączenia.
+
+00:06:22.080 --> 00:06:23.300
+Odnawianie subskrypcji.
+
+00:06:23.520 --> 00:06:25.400
+Każda subskrypcja ma datę wygaśnięcia.
+
+00:06:25.600 --> 00:06:26.980
+Ustawiasz ją podczas tworzenia.
+
+00:06:27.240 --> 00:06:28.460
+Graph egzekwuje ten termin.
+
+00:06:28.720 --> 00:06:30.760
+Gdy nadejdzie ten dzień, subskrypcja wygasa.
+
+00:06:30.940 --> 00:06:31.960
+Koniec powiadomień.
+
+00:06:32.660 --> 00:06:33.480
+Potraktuj to jak parkometr.
+
+00:06:34.340 --> 00:06:37.880
+Wpłacasz pieniądze za czas, a gdy ten minie, flaga wygaśnięcia się podnosi.
+
+00:06:38.080 --> 00:06:39.720
+Różne zasoby mają różne limity.
+
+00:06:39.940 --> 00:06:47.200
+Wiadomości Outlook mogą działać przez 7 dni, czaty Teams przez 3 dni, pliki SharePoint przez około 30 dni, a informacje o obecności tylko przez 1 godzinę.
+
+00:06:47.340 --> 00:06:50.280
+Twoja aplikacja nie może po prostu utworzyć subskrypcji i o niej zapomnieć.
+
+00:06:50.400 --> 00:06:52.320
+Potrzebujesz procesu, który utrzyma ją przy życiu.
+
+00:06:52.480 --> 00:06:53.580
+Odnawianie jest proste.
+
+00:06:53.780 --> 00:06:55.940
+Wyślij żądanie patch z identyfikatorem subskrypcji.
+
+00:06:56.160 --> 00:06:57.780
+Uwzględnij nową datę wygaśnięcia.
+
+00:06:58.020 --> 00:07:01.000
+Zrób to przed wygaśnięciem obecnej, a Graph przedłuży subskrypcję.
+
+00:07:01.200 --> 00:07:03.080
+Oto najlepsza praktyka, którą zalecam.
+
+00:07:03.320 --> 00:07:06.120
+Sprawdzaj znacznik czasu wygaśnięcia w każdym otrzymanym powiadomieniu.
+
+00:07:06.120 --> 00:07:09.280
+Jeśli termin jest bliski, powiedzmy w ciągu dnia, odnów ją od razu.
+
+00:07:09.480 --> 00:07:12.120
+Dzięki temu nie potrzebujesz osobnego zadania w tle do zarządzania subskrypcjami.
+
+00:07:12.920 --> 00:07:15.620
+Firma Microsoft dodała również powiadomienia o cyklu życia.
+
+00:07:15.840 --> 00:07:18.260
+Te alerty ostrzegają przed wygaśnięciem subskrypcji.
+
+00:07:18.460 --> 00:07:22.420
+Informują, kiedy subskrypcja ma się skończyć lub kiedy token dostępu wymaga ponownej autoryzacji.
+
+00:07:22.680 --> 00:07:25.900
+Zasubskrybuj je, a Twoja aplikacja odnowi się, zanim cokolwiek przestanie działać.
+
+00:07:26.000 --> 00:07:28.880
+Co jednak, jeśli Twój punkt końcowy padnie lub przegapisz okno odnowienia?
+
+00:07:29.060 --> 00:07:30.940
+Tutaj przydaje się siatka bezpieczeństwa.
+
+00:07:31.140 --> 00:07:33.820
+Kiedy coś idzie nie tak, niezawodność i siatki bezpieczeństwa.
+
+00:07:33.820 --> 00:07:37.440
+Twoja subskrypcja jest aktywna, punkt końcowy nasłuchuje, powiadomienia napływają.
+
+00:07:37.640 --> 00:07:40.140
+Wszystko wygląda dobrze, ale co się stanie, gdy coś się zepsuje?
+
+00:07:40.340 --> 00:07:42.560
+Może Twój punkt końcowy wyłączył się na czas konserwacji?
+
+00:07:42.660 --> 00:07:46.480
+Problem sieciowy zgubił powiadomienie lub po prostu przegapiłeś okno odnowienia i subskrypcja wygasła?
+
+00:07:46.620 --> 00:07:47.680
+Takie rzeczy się zdarzają.
+
+00:07:47.880 --> 00:07:49.680
+Pytanie brzmi, jak odzyskać sprawność?
+
+00:07:49.800 --> 00:07:53.200
+Microsoft Graph oczekuje, że Twój punkt końcowy webhuk zareaguje szybko, w ciągu 3 sekund.
+
+00:07:53.360 --> 00:07:55.740
+Jeśli zajmuje to więcej czasu, Graph oznacza go jako wolny.
+
+00:07:55.920 --> 00:07:59.580
+Jeśli ponad 10% Twoich odpowiedzi przekracza 3 sekundy w dowolnym 10-minutowym oknie,
+
+00:07:59.580 --> 00:08:01.200
+Graph opóźnia powiadomienia o 10 minut.
+
+00:08:01.400 --> 00:08:04.220
+Wysyła tylko małą próbkę, aby sprawdzić, czy odzyskałeś sprawność.
+
+00:08:04.380 --> 00:08:05.000
+Jest gorzej.
+
+00:08:05.220 --> 00:08:08.240
+Jeśli ponad 15% Twoich odpowiedzi przekracza 10-sekundowy limit czasu ponowienia,
+
+00:08:08.340 --> 00:08:09.720
+Graph oznacza punkt końcowy jako porzucony.
+
+00:08:09.860 --> 00:08:11.980
+Powiadomienia zostają całkowicie wstrzymane na 10 minut.
+
+00:08:12.300 --> 00:08:12.780
+Przepadają.
+
+00:08:12.980 --> 00:08:16.480
+Nie możesz ich odzyskać, dlatego Twój punkt końcowy musi być szybki i niezawodny.
+
+00:08:16.660 --> 00:08:19.880
+Nie oznacza to, że musisz przetworzyć każde powiadomienie w czasie poniżej 3 sekund.
+
+00:08:20.080 --> 00:08:22.660
+Wystarczy szybko potwierdzić otrzymanie odpowiedzią 202 Accepted,
+
+00:08:22.660 --> 00:08:24.660
+a następnie przetworzyć powiadomienie asynchronicznie.
+
+00:08:24.820 --> 00:08:25.660
+Dodaj do kolejki.
+
+00:08:25.840 --> 00:08:26.620
+Obsłuż później.
+
+00:08:26.820 --> 00:08:28.160
+Kluczem jest ta szybka reakcja.
+
+00:08:28.400 --> 00:08:30.860
+Nawet przy idealnym punkcie końcowym pewne rzeczy mogą pójść nie tak.
+
+00:08:31.120 --> 00:08:32.140
+Subskrypcje wygasają.
+
+00:08:32.400 --> 00:08:33.700
+Zdarzają się problemy z siecią.
+
+00:08:33.920 --> 00:08:36.560
+W rzadkich przypadkach sam Microsoft Graph może pominąć powiadomienie.
+
+00:08:36.760 --> 00:08:38.180
+Dlatego potrzebujesz siatki bezpieczeństwa?
+
+00:08:38.280 --> 00:08:38.800
+Zapytań Delta.
+
+00:08:39.000 --> 00:08:40.040
+Pomyśl o tym w ten sposób.
+
+00:08:40.260 --> 00:08:42.020
+Powiadomienia o zmianach to alarm przeciwpożarowy.
+
+00:08:42.240 --> 00:08:43.800
+Mówią Ci, że coś dzieje się właśnie teraz.
+
+00:08:44.040 --> 00:08:45.500
+Zapytania Delta to system zraszaczy.
+
+00:08:45.720 --> 00:08:47.200
+Wyłapują wszystko, co ominął alarm.
+
+00:08:47.460 --> 00:08:48.140
+Działają razem.
+
+00:08:48.140 --> 00:08:50.280
+Powiadomienia dają świadomość w czasie rzeczywistym.
+
+00:08:50.480 --> 00:08:53.420
+Zapytania Delta dają pełny obraz, który możesz uzgodnić w dowolnym momencie.
+
+00:08:53.720 --> 00:08:55.140
+Zalecany wzorzec jest prosty.
+
+00:08:55.300 --> 00:08:57.500
+Używaj powiadomień o zmianach, aby być na bieżąco.
+
+00:08:57.700 --> 00:08:59.100
+Uruchamiaj okresowo zapytania Delta,
+
+00:08:59.240 --> 00:09:00.780
+na przykład co kilka godzin lub raz dziennie,
+
+00:09:00.880 --> 00:09:02.220
+aby wyłapać ewentualne przeoczenia.
+
+00:09:02.520 --> 00:09:05.420
+Dzięki temu, nawet jeśli powiadomienie zaginie lub subskrypcja wygaśnie,
+
+00:09:05.580 --> 00:09:07.400
+żadna zmiana nie zostanie trwale pominięta.
+
+00:09:07.640 --> 00:09:09.020
+Rzeczywiste przypadki użycia.
+
+00:09:09.020 --> 00:09:10.160
+Co możesz zbudować?
+
+00:09:10.340 --> 00:09:11.700
+Co więc to faktycznie umożliwia?
+
+00:09:11.860 --> 00:09:13.820
+Pozwól, że przedstawię kilka realnych przykładów.
+
+00:09:13.820 --> 00:09:15.260
+Weźmy automatyzację działu kadr.
+
+00:09:15.420 --> 00:09:17.460
+Wyobraź sobie, że jutro ktoś dołącza do Twojej firmy.
+
+00:09:17.620 --> 00:09:19.500
+W chwili, gdy EntraID tworzy nowego użytkownika,
+
+00:09:19.640 --> 00:09:20.980
+wysyłane jest powiadomienie o zmianie.
+
+00:09:21.140 --> 00:09:23.560
+Twoja aplikacja pobiera profil i tworzy konta w systemie kadrowym,
+
+00:09:23.660 --> 00:09:26.240
+rejestracji czasu pracy i dostępu do budynku wszystko w kilka sekund.
+
+00:09:26.400 --> 00:09:27.820
+Bez odpytywania, bez opóźnień.
+
+00:09:28.020 --> 00:09:29.600
+W przypadku alertów bezpieczeństwa powiedzmy,
+
+00:09:29.680 --> 00:09:31.220
+że konto użytkownika zostaje zablokowane.
+
+00:09:31.400 --> 00:09:32.980
+Powiadomienie o zmianie uruchamia przepływ pracy,
+
+00:09:32.980 --> 00:09:35.400
+który sprawdza podejrzane aktywności i ostrzega zespół do spraw.
+
+00:09:35.840 --> 00:09:36.320
+Bezpieczeństwa.
+
+00:09:36.320 --> 00:09:38.300
+Wcześniej trzeba było sprawdzać co kilka minut.
+
+00:09:38.440 --> 00:09:39.720
+Teraz dzieje się to natychmiast.
+
+00:09:39.900 --> 00:09:41.680
+Przetwarzanie treści działa w ten sam sposób.
+
+00:09:41.920 --> 00:09:43.920
+Gdy plik trafia do biblioteki dokumentów SharePoint,
+
+00:09:44.100 --> 00:09:45.240
+chcesz wiedzieć, czy to faktura.
+
+00:09:45.440 --> 00:09:47.760
+Powiadomienie informuje, że pojawił się nowy plik.
+
+00:09:47.900 --> 00:09:49.980
+Twoja aplikacja pobiera go, klasyfikuje przy użyciu AI
+
+00:09:49.980 --> 00:09:52.600
+i przesyła do odpowiedniego systemu rozliczeń całkowicie automatycznie.
+
+00:09:52.780 --> 00:09:54.120
+Pulpity nawigacyjne w czasie rzeczywistym
+
+00:09:54.120 --> 00:09:56.460
+pozwalają widzieć analitykę na bieżąco, a nie sprzed kilku godzin.
+
+00:09:56.620 --> 00:09:59.420
+Powiadomienia o zmianach natychmiast synchronizują Dataverse z Fabric.
+
+00:09:59.580 --> 00:10:02.120
+Twoje pulpity Power BI aktualizują się niemal w czasie rzeczywistym.
+
+00:10:02.120 --> 00:10:04.200
+Oto przykład, który uważam za interesujący.
+
+00:10:04.360 --> 00:10:05.300
+Łączniki Copilot.
+
+00:10:05.480 --> 00:10:08.040
+Microsoft dodaje synchronizację w czasie rzeczywistym przez WebHockey,
+
+00:10:08.200 --> 00:10:10.400
+dzięki czemu agenci AI reagują w sekundzie zmiany danych.
+
+00:10:10.620 --> 00:10:14.160
+Gdy rekord klienta w Dynamics 365 zostaje zaktualizowany,
+
+00:10:14.300 --> 00:10:17.120
+agent Copilot natychmiast generuje działania następcze bez czekania.
+
+00:10:17.400 --> 00:10:19.640
+Wszystkie te przykłady mają jedną wspólną cechę.
+
+00:10:19.840 --> 00:10:22.460
+Przed powiadomieniami o zmianach tworzyło się zaplanowane zadania,
+
+00:10:22.600 --> 00:10:24.300
+które sprawdzały dane co godzinę lub dzień.
+
+00:10:24.540 --> 00:10:27.180
+Działało to, ale było wolne, nieefektywne i zawodne.
+
+00:10:27.340 --> 00:10:29.320
+Powiadomienia o zmianach odwracają ten model.
+
+00:10:29.320 --> 00:10:32.220
+Czas rzeczywisty, sterowanie zdarzeniami, natychmiastowe działanie.
+
+00:10:32.420 --> 00:10:33.960
+Wybór właściwego kanału dostarczania.
+
+00:10:34.140 --> 00:10:36.240
+Nie każda aplikacja wymaga tego samego sposobu dostarczania.
+
+00:10:36.440 --> 00:10:37.820
+Przyjrzyjmy się dostępnym opcjom.
+
+00:10:38.020 --> 00:10:39.320
+WebHockey są najprostsze.
+
+00:10:39.500 --> 00:10:41.760
+Graph wysyła HTTP post do Twojego punktu końcowego.
+
+00:10:41.880 --> 00:10:42.860
+Ty przetwarzasz go i gotowe.
+
+00:10:43.080 --> 00:10:45.780
+Dla małego i średniego wolumenu powiedzmy kilkuset powiadomień na godzinę.
+
+00:10:45.900 --> 00:10:46.660
+Sprawdza się to świetnie.
+
+00:10:46.820 --> 00:10:48.540
+Co jednak, jeśli budujesz coś większego?
+
+00:10:48.740 --> 00:10:51.880
+Tysiące powiadomień na sekundę mogą przeciążyć pojedynczy punkt końcowy.
+
+00:10:52.080 --> 00:10:53.520
+Potrzebujesz czegoś mocniejszego.
+
+00:10:53.520 --> 00:10:56.160
+Event Hubs obsługuje miliony zdarzeń na sekundę.
+
+00:10:56.320 --> 00:10:58.000
+Zamiast wysyłać powiadomienia pojedynczo,
+
+00:10:58.100 --> 00:10:59.580
+Graph przesyła je do centrum zdarzeń.
+
+00:10:59.740 --> 00:11:02.480
+Twoja aplikacja odczytuje je w swoim tempie z niskim ryzykiem przeciążenia.
+
+00:11:02.740 --> 00:11:04.540
+Jest to rozwiązanie dla dużych scenariuszy korporacyjnych,
+
+00:11:04.640 --> 00:11:06.780
+takich jak tysiące witryn SharePoint czy miliony skrzynek pocztowych.
+
+00:11:06.960 --> 00:11:09.000
+Istnieje też Event Grid, opcja bezserwerowa.
+
+00:11:09.220 --> 00:11:11.420
+Wysyła powiadomienia do usług Azure Functions lub Logic Apps
+
+00:11:11.420 --> 00:11:14.440
+oraz automatycznie obsługuje ponawianie prób i kolejki wiadomości niedoręczalnych.

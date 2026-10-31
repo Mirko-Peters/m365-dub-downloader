@@ -1,0 +1,1720 @@
+WEBVTT
+
+00:00:00.300 --> 00:00:06.780
+Siap untuk 10 hari pembahasan Microsoft 365, Copilot, AI, Azure, dan para tokoh pembentuk masa depan kerja.
+
+00:00:07.700 --> 00:00:11.940
+Januari ini, M365 con kembali dan kami hadir. Lebih besar.
+
+00:00:12.840 --> 00:00:18.000
+Bergabunglah dengan kami untuk sesi langsung demo nyata dan pengetahuan praktis dari MVP dan pakar industri global.
+
+00:00:18.800 --> 00:00:21.140
+Tanpa celet umum, tanpa jargon yang bertele-tele.
+
+00:00:21.980 --> 00:00:23.180
+Kami membahas tantangan nyata.
+
+00:00:23.740 --> 00:00:28.600
+Copilot Studio, agen AI, Fabrik, Keamanan, Tata Kelola, dan Otomatisasi.
+
+00:00:28.600 --> 00:00:34.260
+Baik Anda seorang profesional TI, pengembang, atau pemimpin bisnis, ada sesi yang dirancang untuk Anda.
+
+00:00:35.460 --> 00:00:40.060
+Selama 10 hari penuh, Anda dapat menjelajahi berbagai teknologi dan terhubung dengan komunitas global.
+
+00:00:40.880 --> 00:00:44.300
+Tonton langsung, dan bawa pulang wawasan praktis untuk organisasi Anda.
+
+00:00:45.200 --> 00:00:48.840
+Januari 2027, 10 hari, satu komunitas Microsoft.
+
+00:00:49.400 --> 00:00:50.500
+Pendaftaran sudah dibuka sekarang.
+
+00:00:51.840 --> 00:00:55.220
+Kunjungi M365 con.net dan amankan tempat Anda hari ini.
+
+00:00:55.220 --> 00:00:58.800
+Itu M365 con.net net.
+
+00:01:00.180 --> 00:01:04.640
+Bergabunglah sekarang di M365 con.net dan sampai jumpa secara langsung di bulan Januari.
+
+00:01:04.640 --> 00:01:09.940
+Halo semuanya, dan selamat datang di episode lain Microsoft Knowledge Nuggets di M365 FM.
+
+00:01:10.400 --> 00:01:11.380
+Saya membawa acara Anda melalui kapital.
+
+00:01:11.660 --> 00:01:15.740
+Topik hari ini adalah sesuatu yang hampir semua orang yang membangun dengan Microsoft 365 pernah dengar,
+
+00:01:15.880 --> 00:01:17.600
+tapi sangat sedikit yang bisa menjelaskannya dengan jelas.
+
+00:01:18.100 --> 00:01:18.980
+Apa sebenarnya Bapu Grab itu?
+
+00:01:19.420 --> 00:01:21.620
+Mengapa Anda harus memedulikannya alih-alih melakukan cara lama?
+
+00:01:22.080 --> 00:01:23.460
+Bayangkan Anda sedang menunggu surat penting.
+
+00:01:23.880 --> 00:01:25.360
+Anda berjalan ke kota surat, ternyata kosong.
+
+00:01:25.680 --> 00:01:26.240
+Anda berjalan kemulia.
+
+00:01:26.500 --> 00:01:27.980
+10 menit kemudian, Anda meriksa lagi.
+
+00:01:28.240 --> 00:01:28.780
+Masih tidak ada apa-apa.
+
+00:01:28.780 --> 00:01:30.760
+Anda melakukan ini sepanjang hari membuang waktu dan yang lain.
+
+00:01:30.980 --> 00:01:31.480
+Belapoling.
+
+00:01:31.480 --> 00:01:32.800
+Terang bayangkan dunia yang berbeda.
+
+00:01:33.160 --> 00:01:35.240
+Tukang pos membunyikan bel pintu Anda saat surat tiba.
+
+00:01:35.600 --> 00:01:36.340
+Anda tidak perlu meriksa.
+
+00:01:36.560 --> 00:01:37.380
+Anda menunggu bel berbual.
+
+00:01:37.600 --> 00:01:37.980
+Lalu webhook.
+
+00:01:38.560 --> 00:01:41.180
+Di akhir episode ini, Anda akan memahami apa itu webhook graph,
+
+00:01:41.340 --> 00:01:42.940
+mengapa itu menggantikan pengecekan konstan,
+
+00:01:43.000 --> 00:01:44.640
+dan bagaimana bagian-bagiannya saling berkaitan.
+
+00:01:45.580 --> 00:01:46.080
+Masalah polling.
+
+00:01:46.660 --> 00:01:47.200
+Mari kita berakhir.
+
+00:01:47.800 --> 00:01:49.520
+Untuk memahami mengapa webhook itu penting,
+
+00:01:49.600 --> 00:01:51.160
+Anda perlu memahami mengapa polling itu merugikan.
+
+00:01:51.640 --> 00:01:53.320
+Beginilah cara sebagian besar aplikasi bekerja saat itu.
+
+00:01:53.580 --> 00:01:54.460
+Aplikasi Anda menurunkan jawab.
+
+00:01:54.820 --> 00:01:56.120
+Ia bertanya kepada Microsoft Graph,
+
+00:01:56.220 --> 00:01:56.940
+Hei, ada pengguna baru?
+
+00:01:57.520 --> 00:01:58.320
+Graph menjawab tidak ada.
+
+00:01:59.160 --> 00:02:00.420
+Jadi aplikasi Anda menunggu sebentar,
+
+00:02:00.500 --> 00:02:01.040
+lalu bertanya lagi,
+
+00:02:01.080 --> 00:02:01.820
+ada pengguna baru sekarang?
+
+00:02:02.420 --> 00:02:02.940
+Pasti tidak ada.
+
+00:02:03.460 --> 00:02:05.040
+Berulang-ulang, proses ini disebut polling.
+
+00:02:05.620 --> 00:02:07.520
+Bayangkan seperti terus-menerus menelpon teman untuk bertanya,
+
+00:02:07.620 --> 00:02:08.240
+apakah mereka punya apa?
+
+00:02:08.560 --> 00:02:09.760
+Anda menelpon, mereka mengangkat,
+
+00:02:09.840 --> 00:02:11.360
+Anda bertanya, mereka bilang tidak, Anda menutup-tutup.
+
+00:02:11.540 --> 00:02:13.840
+Lalu Anda menelpon lagi 5 menit kemudian, dan seterus.
+
+00:02:14.040 --> 00:02:15.580
+Anda membuang waktu mereka dan waktu Anda sendiri.
+
+00:02:15.720 --> 00:02:16.520
+Anda mungkin mengganggu mereka.
+
+00:02:16.940 --> 00:02:18.780
+Sekarang bayangkan ribuan aplikasi melakukan ini
+
+00:02:18.780 --> 00:02:19.860
+ke Microsoft Graph secara besar.
+
+00:02:19.860 --> 00:02:22.200
+Setiap aplikasi melakukan polling setiap beberapa menit,
+
+00:02:22.280 --> 00:02:23.160
+menanyakan hal yang sama,
+
+00:02:23.160 --> 00:02:24.320
+mendapatkan jawaban yang sama.
+
+00:02:24.580 --> 00:02:25.660
+Itu menghasilkan banyak sekali kemudian.
+
+00:02:25.920 --> 00:02:28.560
+Microsoft memiliki istilah saat Anda melakukan polling terlalu agresif,
+
+00:02:28.640 --> 00:02:29.140
+yaitu throttling,
+
+00:02:29.340 --> 00:02:31.200
+atau yang sering disebut pengembang sebagai graph jail.
+
+00:02:32.140 --> 00:02:33.660
+Saat Anda mengirim terlalu banyak permintaan,
+
+00:02:33.740 --> 00:02:34.260
+Microsoft berkata,
+
+00:02:34.360 --> 00:02:35.380
+oke, Anda berhenti dulu untuk sementara.
+
+00:02:35.620 --> 00:02:37.360
+Mereka membatasi berapa banyak panggilan untuk aplikasi.
+
+00:02:37.640 --> 00:02:39.180
+Setelah Anda terkena throttling, semuanya melambat.
+
+00:02:39.500 --> 00:02:40.420
+Permintaan yang saja jadi menelpon.
+
+00:02:40.880 --> 00:02:42.000
+Aplikasi Anda berkungsi dengan benar.
+
+00:02:42.380 --> 00:02:43.700
+Anda tidak tahu kapan Anda akan dibebaskan.
+
+00:02:44.000 --> 00:02:45.240
+Berapa banyak permintaan yang kita bicarakan?
+
+00:02:45.240 --> 00:02:48.000
+Katakanlah aplikasi Anda melakukan polling setiap 5 menit untuk berumur.
+
+00:02:48.460 --> 00:02:49.880
+Itu berarti 12 permintaan per jam.
+
+00:02:50.620 --> 00:02:52.620
+Dalam 1 hari penuh, itu adalah 28 permintaan,
+
+00:02:52.660 --> 00:02:53.840
+dan itu hanya untuk 1 sumber daya.
+
+00:02:54.240 --> 00:02:57.420
+Jika Anda juga melakukan polling untuk grup, file, pesan, dan acara kalender,
+
+00:02:57.580 --> 00:02:59.900
+Anda akan mengumpulkan ribuan permintaan tidak perlu per hari.
+
+00:03:00.580 --> 00:03:01.800
+Sebagian besar tidak menghasilkan apa-apa,
+
+00:03:01.900 --> 00:03:03.500
+nol perubahan, tetapi Anda tetap melakukan panggilan.
+
+00:03:03.500 --> 00:03:06.260
+Dan masalahnya, meskipun Anda melakukan polling setiap 5 menit,
+
+00:03:06.360 --> 00:03:08.200
+Anda tetap tidak mendapatkan pembaruan waktu nyata.
+
+00:03:08.780 --> 00:03:10.920
+Sebuah perubahan bisa terjadi 1 menit setelah polling terakhiran.
+
+00:03:11.260 --> 00:03:12.840
+Anda baru akan mengetahuinya 4 menit kemudian.
+
+00:03:12.840 --> 00:03:15.740
+Anda membuang-buang sumber daya dan tetap melewatkan waktu yang terakhir.
+
+00:03:16.140 --> 00:03:17.960
+Sekarang bandingkan itu dengan berkatan berbasis peristi.
+
+00:03:18.320 --> 00:03:20.500
+Alih-alih memanggil Microsoft Grab setiap beberapa menit,
+
+00:03:20.560 --> 00:03:21.760
+Anda menunggu Microsoft Grab memanggilan.
+
+00:03:22.060 --> 00:03:22.840
+Anda menyiapkan pendengar.
+
+00:03:23.120 --> 00:03:24.940
+Saat ada yang berubah, Grab mengirimkan Anda pemberitahuan.
+
+00:03:25.520 --> 00:03:27.480
+Nah, tidak perlu, Anda mengangkat telepon saat berikut.
+
+00:03:28.080 --> 00:03:28.740
+Apa itu webhook?
+
+00:03:29.260 --> 00:03:30.620
+Jadi, apa sebenarnya webhook itu?
+
+00:03:31.100 --> 00:03:32.320
+Berikut adalah definisi paling sederhana.
+
+00:03:32.680 --> 00:03:35.980
+Webhook adalah permintaan HTTP yang dikirim secara otomatis saat sesuatu terjadi.
+
+00:03:36.660 --> 00:03:39.060
+Anda tidak memintanya, server langsung mengirimkannya kepada Anda.
+
+00:03:39.640 --> 00:03:40.680
+Anggap saja seperti bell pintu.
+
+00:03:40.680 --> 00:03:43.000
+Anda tidak perlu berdiri di luar dan meriksa sebeberapa menit.
+
+00:03:43.220 --> 00:03:44.140
+Anda memasang bell pintu.
+
+00:03:44.480 --> 00:03:45.700
+Saat seorang datang, mereka membunyikannya.
+
+00:03:46.000 --> 00:03:47.040
+Anda mendengar bunyinya lalu membuka.
+
+00:03:47.220 --> 00:03:48.800
+Bell pintu melakukan pengawasan untuk Anda.
+
+00:03:49.560 --> 00:03:51.440
+Webhook terkadang disebut sebagai API terbalik.
+
+00:03:52.080 --> 00:03:55.000
+Dengan API normal, aplikasi Anda membuat permintaan dan server merespon.
+
+00:03:55.420 --> 00:03:56.320
+Aplikasi Anda menggendali.
+
+00:03:56.700 --> 00:03:58.900
+Dengan webhook, server mengirimkan permintaan ke aplikasi Anda.
+
+00:03:59.220 --> 00:04:02.280
+Server yang memegang kendali, tetapi mendorong data alih-alih menunggu Anda bertanya.
+
+00:04:02.620 --> 00:04:04.120
+Microsoft Grab juga menggunakan webhook,
+
+00:04:04.420 --> 00:04:06.760
+tetapi Microsoft menyebutnya sebagai pemberitahuan perubahan.
+
+00:04:07.420 --> 00:04:08.880
+Itu hal yang sama, hanya namanya saja yang berbeda.
+
+00:04:08.880 --> 00:04:11.140
+Saat ada perubahan di Microsoft 365,
+
+00:04:11.940 --> 00:04:14.760
+Graph mengirimkan HTTP post ke URL yang Anda sediakan.
+
+00:04:15.500 --> 00:04:17.440
+Post tersebut berisi informasi tentang apa yang berubah.
+
+00:04:17.900 --> 00:04:19.560
+Ada banyak hal yang bisa Anda dapatkan pemberitahuan.
+
+00:04:20.300 --> 00:04:21.920
+Pengguna baru dibuat di penyewa Anda.
+
+00:04:22.460 --> 00:04:23.760
+File diperbarui di SharePoint.
+
+00:04:23.980 --> 00:04:26.120
+Pesan dikirim di Teams, acara kalender yang berubah,
+
+00:04:26.240 --> 00:04:28.020
+atau grup yang mendapatkan anggota baru.
+
+00:04:29.040 --> 00:04:30.540
+Semua ini dapat memicu pemberitahuan.
+
+00:04:30.860 --> 00:04:31.780
+Berikut adalah contoh nyata.
+
+00:04:32.100 --> 00:04:33.920
+Katakanlah Anda menjalankan perusahaan dengan sistem perjakan otak.
+
+00:04:34.180 --> 00:04:37.060
+Saat karyawan baru bergabung, Anda ingin membuat akun secara otomatis.
+
+00:04:37.060 --> 00:04:40.360
+Tanpa webhook, Anda melakukan polling ke endpoint pengguna setiap beberapa menit
+
+00:04:40.360 --> 00:04:41.200
+untuk memilih seorang baru.
+
+00:04:41.780 --> 00:04:44.180
+Dengan webhook, Anda berlangganan ke acara pembuatan pengguna.
+
+00:04:44.640 --> 00:04:47.260
+Saat seseorang bergabung, Graph mengirimkan pemberitahuan ke aplikasi Anda.
+
+00:04:47.620 --> 00:04:50.280
+Aplikasi Anda menerimanya, memvalidasinya, dan membuat akun.
+
+00:04:50.640 --> 00:04:51.520
+Semuanya dalam hitungan detik.
+
+00:04:51.820 --> 00:04:53.320
+Tidak ada polling, tidak ada permintaan yang sia-sia.
+
+00:04:54.060 --> 00:04:57.280
+Contoh lain, Anda memiliki pustaka dokumen SharePoint tempat Anda terima diunggah.
+
+00:04:57.800 --> 00:04:59.700
+Tanpa webhook, Anda terus-menerus melakukan polling ke pustaka.
+
+00:05:00.060 --> 00:05:02.720
+Dengan webhook, Graph memberitahu Anda saat file ditambahkan.
+
+00:05:03.100 --> 00:05:04.200
+Aplikasi Anda mengambilnya,
+
+00:05:04.200 --> 00:05:06.760
+meriksa apakah itu tanda terima, dan memprosesnya secara otomatis.
+
+00:05:07.180 --> 00:05:08.100
+Itulah kekuatan webhook.
+
+00:05:08.800 --> 00:05:10.740
+Alih-alih aplikasi Anda terus-menerus bertanya ada yang baru.
+
+00:05:11.360 --> 00:05:12.940
+Anda membiarkan sistem memberitahu Anda saat satu.
+
+00:05:13.260 --> 00:05:15.820
+Ini lebih efisien, lebih andal, dan jauh lebih cepat.
+
+00:05:16.900 --> 00:05:18.200
+Cara kerja webhook Microsoft Graph
+
+00:05:18.200 --> 00:05:21.120
+Sekarang Anda tahu apa itu webhook, dan mengapa polling menjadi masalahnya.
+
+00:05:21.380 --> 00:05:23.180
+Mari kita lihat cara kerja webhook Microsoft Graph,
+
+00:05:23.300 --> 00:05:25.500
+yang sebenarnya karena alurnya lebih sederhana dari yang Anda kira.
+
+00:05:26.180 --> 00:05:27.420
+Ini bergantung pada tiga hal,
+
+00:05:27.520 --> 00:05:30.080
+langganan, pemberitahuan, dan endpoint Anda.
+
+00:05:31.240 --> 00:05:32.340
+Pertama, Anda membuat langgan.
+
+00:05:32.340 --> 00:05:33.940
+Anda memberitahu Microsoft Graph.
+
+00:05:34.200 --> 00:05:35.980
+Hei, saya ingin tahu kapan hal khusus ini berubah.
+
+00:05:36.420 --> 00:05:38.560
+Anda memberikan detail kepada Graph tentang apa yang harus dipantau,
+
+00:05:38.600 --> 00:05:39.400
+dan kemana harus mengirimkan.
+
+00:05:39.700 --> 00:05:41.380
+Anggap saja seperti mendaftar untuk mendapatkan peringatan.
+
+00:05:41.740 --> 00:05:43.340
+Anda memberitahu sistem apa yang Anda perlulikan,
+
+00:05:43.440 --> 00:05:44.340
+dan memberikan informasi kontak.
+
+00:05:44.660 --> 00:05:46.400
+Kedua, Microsoft Graph memantau sumber daya tersebut.
+
+00:05:46.740 --> 00:05:47.680
+Sistem ini memantau perubahan.
+
+00:05:48.080 --> 00:05:50.020
+Saat sesuatu terjadi, seperti pengguna dipuat,
+
+00:05:50.140 --> 00:05:51.440
+file diperbarui, atau pesan tiba,
+
+00:05:51.700 --> 00:05:52.440
+Graph menyadarinya.
+
+00:05:52.960 --> 00:05:54.280
+Ketiga, Graph mengirimkan pemberitah.
+
+00:05:54.620 --> 00:05:56.920
+Graph mengirimkan HTTP post ke URL yang Anda berikan.
+
+00:05:57.360 --> 00:05:59.520
+Post tersebut berisi informasi tentang apa yang berubah.
+
+00:06:00.160 --> 00:06:01.080
+Endpoint Anda menerimanya,
+
+00:06:01.180 --> 00:06:02.520
+dan aplikasi Anda memprosesnya.
+
+00:06:02.880 --> 00:06:04.060
+Jadi, alur tingkat tinggi itu sederhana.
+
+00:06:04.420 --> 00:06:05.880
+Anda berlangganan, Graph memantau,
+
+00:06:05.960 --> 00:06:07.900
+Graph mengirimkan post saat sesuatu berubah.
+
+00:06:08.280 --> 00:06:10.440
+Mari kita bahas ketiga blok penyusun tersebut sedikit lebih benar.
+
+00:06:10.760 --> 00:06:12.700
+Langganan adalah permintaan Anda untuk mendapatkan peringatan.
+
+00:06:13.240 --> 00:06:14.000
+Ini seperti mengatakan,
+
+00:06:14.140 --> 00:06:16.340
+saya ingin tahu kapan pengguna baru ditambahkan ke penyewa saya.
+
+00:06:17.240 --> 00:06:19.520
+Anda mengirimkan permintaan itu ke Microsoft Graph dan Graphnya.
+
+00:06:19.520 --> 00:06:21.760
+Sejak saat itu, Graph memantau atas nama Anda.
+
+00:06:22.620 --> 00:06:24.140
+Notifikasi adalah peringatan itu sendiri,
+
+00:06:24.260 --> 00:06:26.300
+sebuah HTTP post yang Graph kirim ke endpoint Anda.
+
+00:06:26.760 --> 00:06:28.320
+Isi post memuat detail tentang perubahan,
+
+00:06:28.480 --> 00:06:29.680
+seperti sumber daya apa yang berubah,
+
+00:06:29.780 --> 00:06:31.280
+jenis perubahan, dan kapan itu terjadi,
+
+00:06:31.500 --> 00:06:32.280
+dan kapan itu terjadi.
+
+00:06:32.460 --> 00:06:34.000
+Endpoint Anda adalah pintu yang Anda builkan terbuka.
+
+00:06:34.420 --> 00:06:35.620
+Ini adalah URL di server Anda,
+
+00:06:35.860 --> 00:06:37.520
+yang dikonfigurasi untuk menerima permintaan post.
+
+00:06:37.660 --> 00:06:39.260
+Endpoint hanya perlu mendengarkan dan berespon cepat.
+
+00:06:39.580 --> 00:06:40.040
+Hanya itu saja.
+
+00:06:40.040 --> 00:06:42.320
+Tidak diperlukan logika rumit di sisi penerima.
+
+00:06:42.700 --> 00:06:43.760
+Cukup tangkap notifikasinya,
+
+00:06:43.880 --> 00:06:44.880
+beri konfirmasi, dan proses.
+
+00:06:45.340 --> 00:06:46.080
+Perang bandingkan polling.
+
+00:06:46.080 --> 00:06:49.040
+Dengan polling, Anda mengirim ratusan permintaan KET.
+
+00:06:49.200 --> 00:06:49.860
+Masing-masing bertanya,
+
+00:06:49.980 --> 00:06:50.420
+ada yang baru?
+
+00:06:51.120 --> 00:06:52.120
+Seringkali jawabannya adalah tidak.
+
+00:06:52.680 --> 00:06:54.060
+Dengan webhook, hanya ada satu post,
+
+00:06:54.180 --> 00:06:55.100
+yaitu notifikasi itu.
+
+00:06:55.500 --> 00:06:55.820
+Selesai.
+
+00:06:56.140 --> 00:06:57.040
+Satu pesan alih ratusan.
+
+00:06:57.580 --> 00:06:59.200
+Perbedaan efisiensinya sangat besar,
+
+00:06:59.360 --> 00:07:00.900
+dan endpoint Anda tidak perlu rumit.
+
+00:07:01.840 --> 00:07:04.200
+Ia hanya perlu dapat diakses publik menggunakan HTTPS
+
+00:07:04.200 --> 00:07:05.320
+dan merespons dengan cepat.
+
+00:07:05.880 --> 00:07:07.100
+Kita akan membahas apa arti cepat nanti.
+
+00:07:07.620 --> 00:07:09.080
+Namun ide dasarnya sederhana.
+
+00:07:09.680 --> 00:07:10.700
+Endpoint Anda mendengarkan.
+
+00:07:10.900 --> 00:07:11.580
+Graph memanggil.
+
+00:07:11.840 --> 00:07:13.040
+Anda merespons dan selesai.
+
+00:07:14.560 --> 00:07:15.100
+Membuat langgan.
+
+00:07:15.100 --> 00:07:17.160
+Jadi bagaimana cara Anda mengaturnya?
+
+00:07:17.840 --> 00:07:20.100
+Mari kita bahas cara membuat langganan langkah demi langkah.
+
+00:07:20.560 --> 00:07:22.600
+Anda mulai dengan mengirim permintaan HTTP Post
+
+00:07:22.600 --> 00:07:24.140
+ke URL tertentu di Microsoft Graph.
+
+00:07:24.760 --> 00:07:25.740
+URL tersebut adalah
+
+00:07:25.740 --> 00:07:26.340
+HTTPS,
+
+00:07:26.440 --> 00:07:26.740
+selgrab,
+
+00:07:26.840 --> 00:07:27.500
+dan microsoft.com,
+
+00:07:27.560 --> 00:07:28.780
+selvej 1.0 per subscription.
+
+00:07:29.580 --> 00:07:31.340
+Anda memposting langsung ke endpoint langganan.
+
+00:07:31.940 --> 00:07:33.100
+Di dalam isi permintaan tersebut,
+
+00:07:33.220 --> 00:07:35.180
+Anda menyatakan detail tentang apa yang ingin Anda langgani.
+
+00:07:35.760 --> 00:07:37.160
+Ada empat kolom utama yang perlu Anda sediakan.
+
+00:07:37.600 --> 00:07:39.020
+Pertama adalah URL notifikasi.
+
+00:07:39.460 --> 00:07:40.820
+Ini adalah URL endpoint Anda,
+
+00:07:40.820 --> 00:07:42.820
+tempat di mana Microsoft Graph akan mengirimkan notifikasi.
+
+00:07:43.820 --> 00:07:45.820
+Harus HTTPS dan harus dapat diakses publik
+
+00:07:45.820 --> 00:07:47.460
+karena graph perlu menjangkaunya dari internet.
+
+00:07:47.900 --> 00:07:48.800
+Kedua adalah sumber daya.
+
+00:07:49.180 --> 00:07:50.520
+Ini memberitahu graph apa yang ingin Anda pantau.
+
+00:07:51.020 --> 00:07:52.900
+Anda menentukan jalur sumber daya Microsoft Graph.
+
+00:07:53.240 --> 00:07:53.560
+Misalnya,
+
+00:07:53.740 --> 00:07:55.700
+users jika Anda ingin memantau perubahan pengguna
+
+00:07:55.700 --> 00:07:56.660
+atau memberi folder
+
+00:07:56.660 --> 00:07:57.880
+space inbox space messages
+
+00:07:57.880 --> 00:08:00.060
+jika Anda ingin memantau email baru di kotak masuk Anda.
+
+00:08:00.580 --> 00:08:02.680
+Sumber daya memberitahu graph dengan tepat apa yang Anda peduli.
+
+00:08:02.960 --> 00:08:04.080
+Ketiga adalah jenis perubahan.
+
+00:08:04.720 --> 00:08:05.960
+Ini memberitahu graph jenis perubahan
+
+00:08:05.960 --> 00:08:07.220
+apa yang perlu diberitakan kepada Anda.
+
+00:08:07.380 --> 00:08:09.200
+Anda dapat menentukan created, updated,
+
+00:08:09.320 --> 00:08:09.540
+delighted,
+
+00:08:09.660 --> 00:08:10.420
+atau kombinasi apapun.
+
+00:08:10.420 --> 00:08:13.100
+Jadi, jika Anda hanya peduli dengan pembuatan pengguna baru,
+
+00:08:13.220 --> 00:08:14.480
+Anda mengatur jenis perubahan ke create.
+
+00:08:14.860 --> 00:08:16.080
+Jika Anda juga peduli dengan pembaruan,
+
+00:08:16.180 --> 00:08:17.320
+Anda mengaturnya ke created, updated.
+
+00:08:17.780 --> 00:08:19.280
+Keempat adalah waktu kedaluarsa.
+
+00:08:19.860 --> 00:08:21.040
+Ini adalah saat langgan berakhir
+
+00:08:21.040 --> 00:08:22.460
+karena langganan tidak berlangsung selamanya.
+
+00:08:23.160 --> 00:08:24.180
+Anda menetapkan tanggal,
+
+00:08:24.480 --> 00:08:25.500
+dan waktu dan graph berhenti
+
+00:08:25.500 --> 00:08:26.960
+mengirim notifikasi setelah titik resum.
+
+00:08:27.160 --> 00:08:29.300
+Durasi maksimum bergantung pada sumber daya yang Anda pantau.
+
+00:08:29.820 --> 00:08:30.620
+Untuk pengguna dan grup,
+
+00:08:30.720 --> 00:08:31.980
+batas maksimalnya ada sekitar tiga hari.
+
+00:08:32.420 --> 00:08:34.100
+Untuk item drive di sharepoint atau one drive,
+
+00:08:34.360 --> 00:08:35.360
+bisa mencapai 30 hari.
+
+00:08:35.420 --> 00:08:37.240
+Anda perlu memperiksa dokumentasi
+
+00:08:37.240 --> 00:08:38.260
+untuk setiap tipe sumber daya.
+
+00:08:38.840 --> 00:08:40.640
+Ada juga kolom opsional yang perlu disebutkan,
+
+00:08:40.840 --> 00:08:41.580
+yaitu client state.
+
+00:08:42.000 --> 00:08:43.220
+Ini adalah string resi yang Anda buat sendiri.
+
+00:08:43.640 --> 00:08:44.200
+Isinya bisa apa saja,
+
+00:08:44.280 --> 00:08:44.660
+saya keinginan.
+
+00:08:45.060 --> 00:08:46.000
+String acak, kuit,
+
+00:08:46.080 --> 00:08:47.080
+atau apapun yang Anda pilih.
+
+00:08:47.740 --> 00:08:49.240
+Microsoft Graph menyertakan nilai ini
+
+00:08:49.240 --> 00:08:50.800
+di setiap notifikasi ke endpoint Anda,
+
+00:08:50.900 --> 00:08:51.720
+dan Anda menggunakannya
+
+00:08:51.720 --> 00:08:53.880
+untuk meverifikasi bahwa notifikasi itu benar
+
+00:08:53.880 --> 00:08:54.740
+dari langganan Anda.
+
+00:08:55.640 --> 00:08:57.700
+Jika ada yang mencoba mengirim notifikasi palsu
+
+00:08:57.700 --> 00:08:58.340
+ke endpoint Anda,
+
+00:08:58.660 --> 00:08:59.600
+client state tidak akan cocok,
+
+00:08:59.680 --> 00:09:00.780
+dan Anda bisa langsung menolaknya.
+
+00:09:00.780 --> 00:09:02.520
+Ini adalah langkah keamanan sederhana,
+
+00:09:02.640 --> 00:09:03.020
+namun penting.
+
+00:09:03.760 --> 00:09:04.940
+Membuat langganan itu seperti
+
+00:09:04.940 --> 00:09:06.320
+mendaftar pengiriman koran.
+
+00:09:07.060 --> 00:09:08.280
+Anda memberikan alamat Anda ke pihak koran.
+
+00:09:08.680 --> 00:09:09.940
+Itu adalah URL notifikasian.
+
+00:09:10.640 --> 00:09:12.360
+Anda memberitahu bagaimana yang diinginkan
+
+00:09:12.360 --> 00:09:14.220
+itu adalah sumber daya dan jenis perubahan Anda,
+
+00:09:14.340 --> 00:09:15.940
+lalu berapa lama pengiriman harus berlanjur.
+
+00:09:16.340 --> 00:09:17.580
+Itu adalah waktu kedaluarsaan.
+
+00:09:17.960 --> 00:09:19.220
+Pihak koran yang akan menangani sisanya.
+
+00:09:19.540 --> 00:09:19.940
+Namun ingat,
+
+00:09:20.060 --> 00:09:21.020
+langganan akan kedaluarsa.
+
+00:09:21.640 --> 00:09:22.540
+Anda tidak bisa membuatnya,
+
+00:09:22.620 --> 00:09:23.240
+lalu merupakannya begitu.
+
+00:09:24.160 --> 00:09:25.500
+Setelah waktu kedaluarsa berlalu,
+
+00:09:25.640 --> 00:09:27.180
+Graph berhenti mengirim notifikasi
+
+00:09:27.180 --> 00:09:28.460
+dan langganan Anda berakhir.
+
+00:09:28.940 --> 00:09:30.680
+Jika ingin terus menerima notifikasi,
+
+00:09:30.800 --> 00:09:32.720
+Anda harus memperbarui langganan sebelum kedaluarsa
+
+00:09:32.720 --> 00:09:34.340
+dengan mengirim permintaan patch ke endpoint
+
+00:09:34.340 --> 00:09:35.620
+dan langgan patch ke endpoint langganan
+
+00:09:35.620 --> 00:09:36.640
+dengan waktu kedaluarsa baru.
+
+00:09:37.240 --> 00:09:38.660
+Jadi membuat langganan adalah langkah pertama,
+
+00:09:38.800 --> 00:09:39.520
+tapi bukan yang terakhir.
+
+00:09:39.920 --> 00:09:41.140
+Anda perlu mengolah siklus hidupnya.
+
+00:09:41.420 --> 00:09:42.460
+Kita akan membahasnya lebih lanjut nanti.
+
+00:09:43.080 --> 00:09:43.920
+Jabat Tangan Validasi
+
+00:09:43.920 --> 00:09:45.680
+Sebelum langganan Anda aktif,
+
+00:09:45.800 --> 00:09:47.360
+ada satu langkah yang tidak boleh dilewat.
+
+00:09:47.840 --> 00:09:49.300
+Microsoft Graph tidak langsung menerima
+
+00:09:49.300 --> 00:09:50.140
+permintaan langganan
+
+00:09:50.140 --> 00:09:51.500
+dan mulai mengirim notifikasi.
+
+00:09:52.040 --> 00:09:53.600
+Ia perlu memastikan endpoint Anda nyata
+
+00:09:53.600 --> 00:09:54.920
+dan siap menerimanya terlebih dahulu.
+
+00:09:55.460 --> 00:09:56.060
+Begini cara kerja.
+
+00:09:56.560 --> 00:09:57.860
+Saat Anda mengirim permintaan pos
+
+00:09:57.860 --> 00:09:58.720
+untuk membuat langganan,
+
+00:09:59.040 --> 00:10:00.880
+Microsoft Graph segera mengirim pos uji coba
+
+00:10:00.880 --> 00:10:02.320
+ke URL notifikasi Anda.
+
+00:10:02.320 --> 00:10:05.040
+Pos uji coba itu menyertakan parameter query
+
+00:10:05.040 --> 00:10:05.900
+bernama Validation Talk.
+
+00:10:06.320 --> 00:10:07.100
+Itu hanyalah string acak.
+
+00:10:07.680 --> 00:10:09.140
+Endpoint Anda harus mengambil token itu
+
+00:10:09.140 --> 00:10:11.160
+dan mengirimkannya kembali sebagai respons teks biasa
+
+00:10:11.160 --> 00:10:12.860
+dan Anda harus melakukannya dalam waktu 10 detik.
+
+00:10:13.280 --> 00:10:14.780
+Bayangkan seperti kurir mengantar paket.
+
+00:10:15.400 --> 00:10:16.700
+Mereka muncul di depan pintu dan bertanya,
+
+00:10:16.800 --> 00:10:17.620
+apakah ini alamat yang benar?
+
+00:10:17.980 --> 00:10:18.660
+Bisa ada konfirmasi?
+
+00:10:18.900 --> 00:10:19.700
+Anda harus menandatangani.
+
+00:10:20.000 --> 00:10:20.900
+Jika tidak, mereka akan pergi.
+
+00:10:21.420 --> 00:10:22.580
+Kurir tidak akan meninggalkan paket.
+
+00:10:23.020 --> 00:10:23.800
+Mereka pergi begitu saja.
+
+00:10:24.180 --> 00:10:25.120
+Itulah tepatnya yang terjadi di sini.
+
+00:10:25.820 --> 00:10:26.760
+Microsoft Graph mengatakan,
+
+00:10:26.760 --> 00:10:28.540
+saya akan mengirimkan notifikasi penting kepada Anda.
+
+00:10:28.540 --> 00:10:31.400
+Buktikan bahwa Anda orang yang tepat di alamat yang benar.
+
+00:10:33.060 --> 00:10:35.700
+Endpoint Anda merespons dengan mengemakan token validasi
+
+00:10:35.700 --> 00:10:36.880
+yang beritahu Graph,
+
+00:10:37.140 --> 00:10:37.760
+ya, saya di sini.
+
+00:10:38.200 --> 00:10:38.760
+Saya mendengarkan.
+
+00:10:39.160 --> 00:10:40.240
+Kirimkan notifikasinya kepada saya.
+
+00:10:41.020 --> 00:10:42.760
+Nah, di sinilah banyak pengembang sering melakukan kesalahan.
+
+00:10:43.460 --> 00:10:45.380
+Token validasi harus dikembalikan sebagai teks biasa.
+
+00:10:45.760 --> 00:10:46.820
+Bukan JSON, bukan HTML,
+
+00:10:46.980 --> 00:10:47.620
+memiliki teks biasa.
+
+00:10:48.120 --> 00:10:50.000
+Dan responsnya harus memiliki header tipe konten
+
+00:10:50.000 --> 00:10:51.040
+yang diatur ke teks per plan.
+
+00:10:51.040 --> 00:10:53.340
+Jika Anda mengirimnya kembali dalam bungkus JSON
+
+00:10:53.340 --> 00:10:54.640
+atau di-encode dengan cara apapun,
+
+00:10:54.720 --> 00:10:55.340
+validasi akankan.
+
+00:10:55.580 --> 00:10:56.600
+Langganan Anda tidak akan dibuat.
+
+00:10:57.160 --> 00:10:58.660
+Microsoft Graph akan mengembalikan kesalahan
+
+00:10:58.660 --> 00:11:00.260
+dan Anda akan kebingungan mencari tahu apa yang sudah.
+
+00:11:00.360 --> 00:11:01.960
+Ada detail teknis lain yang perlu diketahui.
+
+00:11:02.340 --> 00:11:03.620
+Layanan validasi Microsoft Graph
+
+00:11:03.620 --> 00:11:05.600
+tidak mendukung TLS 1.3 secara andal.
+
+00:11:06.120 --> 00:11:07.660
+Layanan ini menegosiasikan TLS 1.3.
+
+00:11:08.040 --> 00:11:11.140
+Jadi, jika endpoint Anda hanya menerima koneksi TLS 1.3,
+
+00:11:11.280 --> 00:11:12.460
+jabat tangan validasi akan gagal
+
+00:11:12.460 --> 00:11:14.100
+sebelum kode aplikasi Anda sempat berjalan.
+
+00:11:14.600 --> 00:11:17.240
+Anda harus memastikan endpoint Anda mendukung TLS 1.2
+
+00:11:17.240 --> 00:11:18.960
+setidaknya untuk langkah validasi.
+
+00:11:18.960 --> 00:11:21.440
+Setelah itu, Anda bisa menerapkan versi TLS
+
+00:11:21.440 --> 00:11:23.420
+apapun yang Anda inginkan untuk notifikasi yang sebenarnya.
+
+00:11:23.900 --> 00:11:24.540
+Kabar baiknya adalah
+
+00:11:24.540 --> 00:11:26.680
+jabat tangan validasi ini hanya terjadi sekali perlangganan.
+
+00:11:27.120 --> 00:11:28.880
+Ini bukan sesuatu yang harus ditangani endpoint Anda
+
+00:11:28.880 --> 00:11:31.000
+setiap kali notifikasi tiba hanya pada saat pertama kali.
+
+00:11:31.820 --> 00:11:33.620
+Setelah Graph mengonfirmasi bahwa endpoint Anda nyata,
+
+00:11:33.740 --> 00:11:35.900
+Graph akan mempercayainya selama masa langganan tersebut.
+
+00:11:36.420 --> 00:11:38.020
+Jadi, Anda hanya perlu melakukan ini dengan benar-benar satu.
+
+00:11:39.000 --> 00:11:40.360
+Menangani notifikasi dan keamanan.
+
+00:11:40.960 --> 00:11:42.380
+Setelah jabat tangan validasi berhasil
+
+00:11:42.380 --> 00:11:43.560
+dan langganan Anda aktif,
+
+00:11:43.680 --> 00:11:45.880
+Microsoft Graph mulai mengirimkan notifikasi tersebut.
+
+00:11:46.680 --> 00:11:48.380
+Jadi, seperti apa bentuk notifikasi tersebut dan beraktif?
+
+00:11:48.960 --> 00:11:50.100
+Saat ada perubahan,
+
+00:11:50.200 --> 00:11:52.080
+Graph mengirimkan HTTP POS ke endpoint Anda
+
+00:11:52.080 --> 00:11:53.860
+dengan objek JSON di bagian body.
+
+00:11:54.580 --> 00:11:56.600
+Objek tersebut berisi sumber daya yang berubah,
+
+00:11:56.720 --> 00:11:57.700
+jenis perubahan yang terjadi,
+
+00:11:57.820 --> 00:11:59.980
+dibuat, diperbarui, atau dihapus, dan stempel waktu.
+
+00:12:00.820 --> 00:12:02.720
+Objek tersebut juga menyertakan nilai status klien
+
+00:12:02.720 --> 00:12:04.120
+yang Anda tetapkan saat membuat langganan.
+
+00:12:04.360 --> 00:12:05.360
+Itu adalah string rahasia Anda,
+
+00:12:05.460 --> 00:12:06.920
+cara Anda untuk mengetahui bahwa pesan tersebut.
+
+00:12:07.100 --> 00:12:09.660
+Jadi, inilah hal pertama yang harus dilakukan saat notifikasi tiba.
+
+00:12:10.000 --> 00:12:11.260
+Validasi status klien tersebut.
+
+00:12:11.640 --> 00:12:13.280
+Bandingkan nilai dalam notifikasi dengan rahasia
+
+00:12:13.280 --> 00:12:14.800
+yang Anda simpan saat membuat langganan.
+
+00:12:14.800 --> 00:12:16.400
+Jika tidak cocok,
+
+00:12:16.500 --> 00:12:18.220
+segera abaikan karena bisa jadi itu palsu
+
+00:12:18.220 --> 00:12:19.780
+seseorang yang mencoba menipu sistem Anda
+
+00:12:19.780 --> 00:12:21.140
+agar memproses data yang buruk.
+
+00:12:21.920 --> 00:12:24.080
+Hal ini penting karena endpoint Anda berada di internet topik.
+
+00:12:24.640 --> 00:12:26.840
+Siapapun yang mengetahui URL Anda bisa mengirim POS ke sana.
+
+00:12:27.400 --> 00:12:28.680
+Tanpa validasi status klien,
+
+00:12:28.780 --> 00:12:30.400
+Anda tidak akan punya cara untuk membedakan
+
+00:12:30.400 --> 00:12:32.520
+notifikasi Microsoft Graph yang asli dan yang palsu.
+
+00:12:33.260 --> 00:12:34.080
+Ini ada pemiksa sederhana,
+
+00:12:34.200 --> 00:12:35.300
+tetapi merupakan garis pertanian.
+
+00:12:35.760 --> 00:12:38.120
+Setelah Anda mengonfirmasi bahwa notifikasi tersebut sah,
+
+00:12:38.120 --> 00:12:39.440
+Anda harus merespons dengan cepat.
+
+00:12:39.440 --> 00:12:43.200
+Microsoft Graph mengharapkan respons HTTP level 200 dalam waktu 3 detik.
+
+00:12:43.600 --> 00:12:44.280
+Jika Anda lebih lambat,
+
+00:12:44.380 --> 00:12:44.980
+Graph akan mengetahui.
+
+00:12:45.400 --> 00:12:46.860
+Dan jika itu terlalu sering terjadi,
+
+00:12:46.980 --> 00:12:48.420
+Graph mulai memperlakukan Anda dengan berbeda.
+
+00:12:48.680 --> 00:12:49.620
+Beginilah cara kerja pembatasan.
+
+00:12:50.060 --> 00:12:51.360
+Jika lebih dari 10 persen respons Anda
+
+00:12:51.360 --> 00:12:53.960
+melebihi jendela waktu 3 detik dalam periode 10 menit apapun,
+
+00:12:54.040 --> 00:12:56.340
+Microsoft Graph menandai titik akhir Anda sebagai lambat.
+
+00:12:57.080 --> 00:12:57.680
+Saat itu terjadi,
+
+00:12:57.780 --> 00:12:59.700
+notifikasi baru akan tertunda selama 10 menit.
+
+00:13:00.060 --> 00:13:01.520
+Notifikasi tersebut berakhirnya tetap akan tiba,
+
+00:13:01.520 --> 00:13:02.840
+tetapi Anda kehilangan pengiliran waktunya.
+
+00:13:03.240 --> 00:13:06.440
+Dan jika kondisinya memburuk dengan lebih dari 15 persen respons Anda
+
+00:13:06.440 --> 00:13:09.580
+dan melebihi 10 detik, Graph menandai titik akhir Anda sebagai terputus doping.
+
+00:13:09.820 --> 00:13:10.660
+Dalam kondisi tersebut,
+
+00:13:10.760 --> 00:13:12.620
+notifikasi akan dihentikan sepenuhnya selama 10 menit.
+
+00:13:12.800 --> 00:13:13.580
+Inilah bagian yang menakutkan.
+
+00:13:13.840 --> 00:13:15.240
+Notifikasi yang terputus tidak dapat dipulihkan.
+
+00:13:15.680 --> 00:13:17.460
+Notifikasi itu hilang dan Anda tidak akan pernah memperkenalkan.
+
+00:13:17.820 --> 00:13:19.200
+Anggapnya ini seperti saluran teleponnya simp.
+
+00:13:19.500 --> 00:13:20.640
+Jika Anda tidak mengangkat dengan cepat,
+
+00:13:20.720 --> 00:13:21.560
+penelpon akan mencoba lagi.
+
+00:13:21.940 --> 00:13:23.320
+Namun jika Anda tidak pernah mengangkat,
+
+00:13:23.420 --> 00:13:24.480
+akhirnya penelpon akan menyerah.
+
+00:13:24.920 --> 00:13:26.300
+Microsoft Graph adalah penelponnya
+
+00:13:26.300 --> 00:13:27.700
+dan titik akhir Anda adalah teleponnya.
+
+00:13:27.920 --> 00:13:29.820
+Angkat dengan cepat atau Anda berisiko kehilangan pesan.
+
+00:13:30.360 --> 00:13:31.460
+Jadi apa praktik terbaiknya di sini?
+
+00:13:36.440 --> 00:13:40.700
+Menerima notifikasi dan mengembalikan respons 200 atau 202 secepat mungkin.
+
+00:13:41.240 --> 00:13:44.120
+Kemudian masukkan notifikasi ke dalam antrean untuk diproses di latar belakang.
+
+00:13:44.560 --> 00:13:47.440
+Antrean Azure, bus layanan, bahkan tabel basi data yang sederhana.
+
+00:13:47.800 --> 00:13:49.700
+Intinya adalah keluar dari siklus respons dengan cepat
+
+00:13:49.700 --> 00:13:52.240
+dan biarkan pekerja latar belakang Anda menangani beban kerja beratnya.
+
+00:13:52.800 --> 00:13:54.000
+Dan satu pengingat keamanan lagi,
+
+00:13:54.120 --> 00:13:56.040
+titik akhir Anda harus HTTPS tanpa pengecualian.
+
+00:13:56.500 --> 00:13:59.540
+Microsoft Graph tidak akan mengirim notifikasi ke titik akhir HTTP.
+
+00:14:00.260 --> 00:14:01.780
+Dan titik akhir Anda harus dapat diakses publik.
+
+00:14:02.140 --> 00:14:04.060
+Jika berada dibalik firewall atau VPN, Graph tidak pernah menjaga.
+
+00:14:04.060 --> 00:14:07.140
+Untuk pengembangan, Anda dapat menggunakan alat seperti ngerok
+
+00:14:07.140 --> 00:14:08.660
+untuk membuat terowongan publik ke musim lokal.
+
+00:14:09.140 --> 00:14:12.900
+Namun untuk produksi, titik akhir Anda harus berada di tempat yang dapat ditemukan oleh Graph.
+
+00:14:13.980 --> 00:14:15.620
+Jaga siklus hidup notifikasi tetap aktif.
+
+00:14:16.320 --> 00:14:19.740
+Jadi Anda telah menyiapkan langganan, notifikasi mengalir, dan semuanya tampak baik.
+
+00:14:20.180 --> 00:14:21.960
+Tetapi ada sesuatu yang membuat banyak orang mengat.
+
+00:14:22.360 --> 00:14:23.700
+Langganan Anda memiliki tanggal kedaluan.
+
+00:14:24.260 --> 00:14:25.060
+Langganan itu tidak bertansel.
+
+00:14:25.420 --> 00:14:27.060
+Tergantung pada sumber daya Anda pantal,
+
+00:14:27.200 --> 00:14:29.820
+durasi langganan maksimum biasanya antara 3 hingga 7 hari.
+
+00:14:30.040 --> 00:14:32.380
+Untuk beberapa sumber daya seperti item drive di SharePoint,
+
+00:14:32.480 --> 00:14:33.840
+Anda bisa mendapatkan hingga 30 hari.
+
+00:14:34.140 --> 00:14:35.380
+Namun intinya, ini tidak permanen.
+
+00:14:35.920 --> 00:14:38.140
+Anda tidak bisa membuat langganan lalu melupakannya begitu saja.
+
+00:14:38.520 --> 00:14:39.560
+Anggaplah ini seperti langganan menjal.
+
+00:14:40.160 --> 00:14:42.740
+Anda mendaftar, Anda mulai melambang edisi, dan semuanya berjalan lancar.
+
+00:14:43.240 --> 00:14:46.020
+Namun jika Anda tidak memperbaruinya sebelum langganan habis, edisinya berhenti datang.
+
+00:14:46.360 --> 00:14:47.060
+Hal yang sama juga berlaku.
+
+00:14:47.380 --> 00:14:50.080
+Jika langganan Anda berakhir, Microsoft Group berhenti mengirimkan notifikasi.
+
+00:14:50.560 --> 00:14:53.140
+Dan Anda mungkin tidak menyadarinya sampai Anda bertanya-tanya mengapa tidak ada yang terjadi.
+
+00:14:53.520 --> 00:14:54.920
+Jadi Anda memerlukan strategi perpandang.
+
+00:14:55.200 --> 00:14:56.140
+Cara berbarunya cukup sederhana.
+
+00:14:56.140 --> 00:14:59.260
+Kirim permintaan patch ke endpoint langganan menggunakan ID langganan,
+
+00:14:59.320 --> 00:15:02.320
+dan perbarui tanggal serta waktu kedaluarsa ke tanggal baru di masa mendatang.
+
+00:15:02.760 --> 00:15:04.280
+Hal itu akan memperpanjang masa aktif langganan.
+
+00:15:04.760 --> 00:15:08.600
+Anda dapat melakukannya sesering mungkin selama Anda melakukannya sebelum waktu kedaluarsa saat ini berakhir.
+
+00:15:09.020 --> 00:15:12.880
+Kini, Microsoft Graph sebenarnya membantu Anda dengan sesuatu yang disebut notifikasi siklus hidup.
+
+00:15:12.880 --> 00:15:17.440
+Saat membuat langganan, Anda dapat memberikan URL terpisah yang disebut URL notifikasi siklus hidup.
+
+00:15:18.080 --> 00:15:21.760
+Microsoft Graph mengirimkan peringatan ke URL tersebut ketika hal-hal tertentu terjadi.
+
+00:15:22.320 --> 00:15:27.020
+Seperti saat langganan Anda akan kedaluarsa, token akses Anda akan habis, atau izin aplikasi Anda berubah.
+
+00:15:28.100 --> 00:15:30.040
+Notifikasi siklus hidup ini memberi Anda pemberitahuan.
+
+00:15:30.400 --> 00:15:32.300
+Anda tidak perlu menebak kapan langganan Anda akan berakhir.
+
+00:15:32.660 --> 00:15:35.420
+Graph memberitahu Anda, hey, langgan Anda berakhir dalam beberapa jam lagi.
+
+00:15:35.760 --> 00:15:36.660
+Anda mungkin ini memperbarui.
+
+00:15:37.220 --> 00:15:41.040
+Ini seperti menerima pengingat dari penerbit majalah bahwa langganan Anda akan segera berakhir.
+
+00:15:41.520 --> 00:15:42.740
+Sangat membantu jika Anda memperhatikan ini.
+
+00:15:43.220 --> 00:15:44.460
+Namun apa yang terjadi jika ada masalah?
+
+00:15:45.320 --> 00:15:49.100
+Mungkin endpoint Anda tidak aktif untuk sementara, atau notifikasi terlewat karena Anda terlalu lambat.
+
+00:15:49.540 --> 00:15:49.880
+Lalu bagaimana?
+
+00:15:50.340 --> 00:15:51.620
+Disitulah Delta Query berperan.
+
+00:15:51.700 --> 00:15:54.660
+Delta Query adalah fitur terpisah dari Microsoft Graph yang mengungkinkan Anda bertanya,
+
+00:15:54.800 --> 00:15:56.400
+apa yang berubah sejak terakhir kali saya memeriksa?
+
+00:15:57.100 --> 00:15:58.840
+Dan ia hanya mengembalikan perubahannya saja tidak yang lain.
+
+00:15:59.340 --> 00:15:59.840
+Gini cara kejangan.
+
+00:16:00.140 --> 00:16:02.320
+Pertama kali Anda menjalankan Delta Query pada sumber daya,
+
+00:16:02.320 --> 00:16:04.460
+misalnya pengguna Graph mengembalikan semua pengguna di tainan Anda.
+
+00:16:04.980 --> 00:16:07.880
+Namun ia juga mengembalikan sesuatu yang ekstra, sebuah tautan khusus yang disebut Delta.
+
+00:16:08.220 --> 00:16:09.080
+Anda menyimpan tahu sebut.
+
+00:16:09.080 --> 00:16:11.840
+Lain kali saat Anda menjalankan query yang sama, Anda menggunakan Delta Leaders.
+
+00:16:12.200 --> 00:16:16.360
+Dan alih-alih mendapatkan semua pengguna lagi, Anda hanya mendapatkan mereka yang berubah sejak permintaan terakhir Anda.
+
+00:16:16.880 --> 00:16:18.840
+Pengguna baru, pengguna yang diperbarui, pengguna yang dihapus.
+
+00:16:19.220 --> 00:16:19.620
+Hanya itu.
+
+00:16:20.800 --> 00:16:22.680
+Anggap saja seperti membaca daftar apa yang baru,
+
+00:16:22.760 --> 00:16:24.660
+alih-alih membaca seluruh ensiklopedia setiap saat.
+
+00:16:25.040 --> 00:16:26.020
+Jauh lebih cepat, jauh lebih sedikit.
+
+00:16:26.200 --> 00:16:27.340
+Nah ini adalah pola yang cerdas.
+
+00:16:27.720 --> 00:16:29.040
+Kombinasikan Webhook dengan Delta Query.
+
+00:16:29.640 --> 00:16:32.020
+Gunakan Webhook untuk memberitahu Anda saat ada perubahan,
+
+00:16:32.120 --> 00:16:34.560
+lalu gunakan Delta Query untuk mengetahui apa tepatnya yang berubah.
+
+00:16:34.620 --> 00:16:35.520
+Disini saya menjelaskan mengapa.
+
+00:16:39.080 --> 00:16:41.060
+Dan bisa ke dalawarsa dan endpoint Anda bisa tidak aktif.
+
+00:16:41.280 --> 00:16:42.240
+Namun Delta Query sangat anak.
+
+00:16:42.620 --> 00:16:43.960
+Anda dapat menjalankannya kapan saja,
+
+00:16:44.080 --> 00:16:46.300
+dan ini akan memberikan daftar lengkap perubahan sejak pemeriksaan terakhir.
+
+00:16:46.560 --> 00:16:49.000
+Jadi meskipun Anda melewatkan notifikasi, Anda tetap bisa mengejarnya.
+
+00:16:49.680 --> 00:16:50.660
+Berikut adalah alur yang umum.
+
+00:16:51.040 --> 00:16:52.820
+Siapkan langganan Webhook untuk perubahan pengguna.
+
+00:16:53.580 --> 00:16:56.620
+Jalankan query Delta awal untuk mendapatkan status dasar dan disimpan tautan Deltanya.
+
+00:16:57.160 --> 00:16:59.300
+Saat Webhook masuk yang memberitahu Anda ada perubahan pengguna,
+
+00:16:59.540 --> 00:17:01.660
+jalankan query Delta menggunakan tautan Delta yang telah disimpan.
+
+00:17:01.920 --> 00:17:03.200
+Hal itu akan memberikan perubahan yang tepat.
+
+00:17:03.200 --> 00:17:05.840
+Proses perubahan tersebut melalui simpan tautan Delta baru dari SMS.
+
+00:17:06.280 --> 00:17:08.280
+Lain kali saat ada Webhook masuk, ulangi proses tersebut.
+
+00:17:08.800 --> 00:17:10.380
+Dan jika Anda melewatkan notifikasi,
+
+00:17:10.640 --> 00:17:11.980
+atau jika langganan Anda ke dalawarsa,
+
+00:17:12.480 --> 00:17:13.960
+jalankan saja kembali query Delta tersebut.
+
+00:17:14.340 --> 00:17:15.180
+Anda akan langsung yang terawatkan.
+
+00:17:15.520 --> 00:17:16.100
+Berjaring pengamal.
+
+00:17:16.400 --> 00:17:19.060
+Webhook memberikan kecepatan dan query Delta memberikan keandalan.
+
+00:17:19.640 --> 00:17:21.380
+Bersama-sama keduanya menjadi kombinasi yang hebat.
+
+00:17:22.140 --> 00:17:23.580
+Contoh dunia nyata dan langkah selanjutnya.
+
+00:17:24.020 --> 00:17:26.240
+Bayangkan seorang karyawan baru bergabung dengan perusahaan Anda besok.
+
+00:17:26.240 --> 00:17:29.960
+Seseorang di HR membuat akun mereka di Microsoft Enter ID
+
+00:17:29.960 --> 00:17:32.240
+dan tindakan tunggal itu memicu reaksi berantai.
+
+00:17:33.280 --> 00:17:35.680
+Jika Anda telah menyiapkan pelangganan Webhook untuk perubahan pengguna,
+
+00:17:35.840 --> 00:17:37.160
+Microsoft Graph akan langsung mengetahuinya
+
+00:17:37.160 --> 00:17:38.540
+dan mengirimkan push di endpoint Anda.
+
+00:17:39.240 --> 00:17:40.060
+Ini yang terjadi selanjutnya.
+
+00:17:40.380 --> 00:17:42.000
+Endpoint Anda menerima notifikasi,
+
+00:17:42.360 --> 00:17:43.460
+memvalidasi status klien,
+
+00:17:43.600 --> 00:17:44.840
+dan jika cocok dengan rahasia Anda,
+
+00:17:45.000 --> 00:17:45.740
+Anda tahu itu valid.
+
+00:17:46.420 --> 00:17:48.020
+Anda memberikan respons 2-2,
+
+00:17:48.160 --> 00:17:49.280
+accepted dalam 3 detik,
+
+00:17:49.360 --> 00:17:50.500
+mengakui notifikasi tersebut,
+
+00:17:50.500 --> 00:17:52.680
+lalu pekerja latar belakang Anda akan mengambilnya.
+
+00:17:53.200 --> 00:17:54.580
+Pekerja melihat pengguna telah dibuat,
+
+00:17:54.660 --> 00:17:56.160
+namun notifikasi tidak mencakup semua detail
+
+00:17:56.160 --> 00:17:57.460
+jadi ia menjalankan query data
+
+00:17:57.460 --> 00:17:58.940
+menggunakan tautan data yang tersimpan.
+
+00:17:59.620 --> 00:18:01.640
+Itu akan mengembalikan informasi lengkap pengguna baru,
+
+00:18:01.800 --> 00:18:03.820
+nama, email, departemen, jepatan, manajer,
+
+00:18:03.920 --> 00:18:04.740
+semua yang Anda perlukan.
+
+00:18:05.420 --> 00:18:07.320
+Sekarang pekerja Anda mengambil informasi tersebut
+
+00:18:07.320 --> 00:18:08.760
+dan membuat akun untuk karyawan baru
+
+00:18:08.760 --> 00:18:10.400
+di sistem pelajakan waktu pihak ketiga Anda.
+
+00:18:10.720 --> 00:18:11.900
+Sistem mengirimkan email selama datang.
+
+00:18:12.200 --> 00:18:14.060
+Sistem menambahkan mereka ke daftar distribusi yang sesuai.
+
+00:18:14.660 --> 00:18:16.200
+Semua ini terjadi dalam hitungan detik
+
+00:18:16.200 --> 00:18:17.800
+setelah HR membuat akun di Enter ID
+
+00:18:17.800 --> 00:18:18.940
+tanpa polling,
+
+00:18:19.280 --> 00:18:19.920
+tanpa langkah manual,
+
+00:18:20.420 --> 00:18:21.160
+tanpa kemungkinan.
+
+00:18:21.860 --> 00:18:22.580
+Pikirkan tentang tipnya.
+
+00:18:23.000 --> 00:18:23.580
+Tanpa Webhook,
+
+00:18:23.580 --> 00:18:26.320
+Anda harus melakukan polling ke endpoint pengguna setiap beberapa menit,
+
+00:18:26.440 --> 00:18:27.380
+ratusan permintaan per hari,
+
+00:18:27.560 --> 00:18:29.180
+dan bahkan saat itu Anda mungkin baru mengetahui
+
+00:18:29.180 --> 00:18:30.580
+pengguna baru tersebut setelah beberapa menit.
+
+00:18:30.820 --> 00:18:31.860
+Dengan Webhook, semuanya instan.
+
+00:18:32.200 --> 00:18:33.900
+Satu notifikasi, satu query delta selesai.
+
+00:18:34.240 --> 00:18:34.900
+Itulah nilai sebenarnya.
+
+00:18:35.340 --> 00:18:36.500
+Sistem Anda menjadi lebih cepat,
+
+00:18:36.620 --> 00:18:37.120
+lebih efisien,
+
+00:18:37.200 --> 00:18:38.960
+dan lebih kecil kemungkinannya untuk mencapai batas token.
+
+00:18:39.280 --> 00:18:40.880
+Alih-alih terus-menerus meminta pembaruan ke Grab,
+
+00:18:40.960 --> 00:18:42.980
+Anda membiarkan Grab memberitahu Anda saat sesuatu terjadi.
+
+00:18:43.320 --> 00:18:45.520
+Ini adalah perubahan mendasar dalam cara Anda membangun integrasi.
+
+00:18:45.880 --> 00:18:47.100
+Jadi inilah yang saya minta untuk Anda, Jok.
+
+00:18:47.100 --> 00:18:49.340
+Pikirkan suatu proses yang saat ini Anda gunakan dengan cara polling.
+
+00:18:49.840 --> 00:18:51.900
+Mungkin Anda sedang meriksa email baru di kotak surat bersama.
+
+00:18:52.260 --> 00:18:54.620
+Mungkin Anda sedang memantau perubahan file di pustaka SharePoint.
+
+00:18:55.160 --> 00:18:57.300
+Mungkin Anda sedang memantau pembaruan pengguna untuk sistem HRA.
+
+00:18:57.720 --> 00:18:59.040
+Bisa kakak Webhook menggantikan polling tersebut?
+
+00:18:59.480 --> 00:19:00.840
+Dalam kebanyakan kasus, jawabannya ya.
+
+00:19:00.920 --> 00:19:02.200
+Dan Anda tidak perlu membangun semuanya.
+
+00:19:02.200 --> 00:19:32.180
+Terima kasih telah menonton!

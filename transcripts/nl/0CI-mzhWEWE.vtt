@@ -1,0 +1,772 @@
+WEBVTT
+
+00:00:00.140 --> 00:00:07.520
+Klaar voor 10 dagen Microsoft 365, Copilot, AI, Azure en de mensen die de toekomst van werk vormgeven?
+
+00:00:07.780 --> 00:00:12.440
+Deze januari is de M365 Conference terug en we pakken groter uit.
+
+00:00:12.680 --> 00:00:18.320
+Doe mee voor live sessies, praktijkdemo's en praktische kennis van MVP's en experts van over de hele wereld.
+
+00:00:18.520 --> 00:00:21.820
+Geen algemene presentaties, geen eindeloze modewoorden.
+
+00:00:21.820 --> 00:00:29.160
+We pakken de echte uitdagingen aan Copilot Studio, AI Agents, Fabric, Beveiliging, Governance en Automatisering.
+
+00:00:29.160 --> 00:00:34.920
+Of je nu IT-professional, ontwikkelaar of bedrijfsleider bent, er zijn sessies speciaal voor jou.
+
+00:00:35.240 --> 00:00:40.500
+Met 10 volledige dagen kun je diverse technologieën verkennen en in contact komen met een wereldwijde community.
+
+00:00:40.840 --> 00:00:44.460
+Kijk live mee en neem praktische inzichten mee terug naar je organisatie.
+
+00:00:44.680 --> 00:00:49.260
+Januari 2027, 10 dagen, 1 Microsoft Community.
+
+00:00:49.860 --> 00:00:51.300
+Registratie is nu geopend.
+
+00:00:51.820 --> 00:00:55.880
+Ga naar m365.com.net en verzeker je vandaag nog van een plek.
+
+00:00:56.660 --> 00:00:58.920
+Dat is m365.com.net.
+
+00:00:59.160 --> 00:01:04.720
+Meld je aan op m365.com.net en we zien je live in januari.
+
+00:01:04.920 --> 00:01:10.120
+Hallo iedereen en welkom bij een nieuwe aflevering van Microsoft Knowledge Nuggets hier op m365.fm.
+
+00:01:10.300 --> 00:01:11.400
+Ik ben Mirko Peters.
+
+00:01:11.740 --> 00:01:15.900
+Stel je voor dat je een oude bedrijfsapp verplaatst van een server op kantoor naar een virtuele Azure machine.
+
+00:01:16.120 --> 00:01:19.180
+De app staat nu in de cloud, maar vraagt nog steeds om een Windows domein.
+
+00:01:19.180 --> 00:01:24.600
+Hij wil lid worden van dat domein, mensen opzoeken via LDAP, gebruikers aanmelden met Kerberos en groepsbeleid toepassen.
+
+00:01:24.600 --> 00:01:28.580
+De meeste mensen gaan ervan uit dat Entra ID elke taak van Active Directory vervangt.
+
+00:01:28.660 --> 00:01:29.380
+Dat doet het niet.
+
+00:01:29.600 --> 00:01:36.300
+Moderne cloud apps kunnen je via Entra ID laten aanmelden, maar oudere Windows apps verwachten hetzelfde type domein als in de serverruimte.
+
+00:01:36.500 --> 00:01:44.600
+Aan het einde van deze aflevering zie je waar Entra ID, Active Directory en Entra Domain Services elk passen en er is één detail dat de manier waarop je alles beheert verandert.
+
+00:01:44.600 --> 00:01:47.560
+Identiteitsinformatie reist slechts in één richting.
+
+00:01:47.800 --> 00:01:50.480
+Waarom Entra ID alleen niet elke legacy-app kan draaien?
+
+00:01:50.700 --> 00:01:52.820
+Laten we beginnen met wat Entra ID goed doet.
+
+00:01:53.040 --> 00:01:54.760
+Het is de receptie voor je clouddiensten.
+
+00:01:54.960 --> 00:02:01.860
+Het weet wie je bent, controleert je aanmelding en beslist of je toegang krijgt tot Microsoft 365, Teams, SharePoint of een zakelijke app in de cloud.
+
+00:02:02.040 --> 00:02:06.440
+Je meldt je eenmalig aan en wisselt vervolgens tussen diensten zonder telkens opnieuw je wachtwoord in te voeren.
+
+00:02:06.640 --> 00:02:07.740
+Dat is single sign-on.
+
+00:02:07.740 --> 00:02:17.400
+Entra ID kan ook vragen om een tweede controle via multifactor-authenticatie, kijk naar het apparaat dat je gebruikt, waar je vandaan inlogt en de toegangsregels van je bedrijf.
+
+00:02:17.540 --> 00:02:19.760
+Voor een moderne app werkt dat patroon heel goed.
+
+00:02:19.940 --> 00:02:28.580
+Je opent een browser, de app stuurt je door naar Entra ID, je meldt je aan, keurt eventueel een verzoek op je telefoon goed en dan stuurt Entra ID op de achtergrond een beveiligd aanmeldbericht naar de app.
+
+00:02:28.680 --> 00:02:30.560
+De app leest dat bericht en geeft je toegang.
+
+00:02:30.560 --> 00:02:37.240
+Bij dit patroon is een domeinkoppeling niet nodig, komt er geen oude Windows-server aan te pas en hoeft de app geen klassieke bedrijfsmap te doorzoeken.
+
+00:02:37.240 --> 00:02:39.760
+Maar oudere apps zijn opgegroeid in een andere wereld.
+
+00:02:39.960 --> 00:02:45.180
+Stel je een financiële app voor die al jaren op een Windows-server draait, waarbij gebruikers inloggen vanaf computers die aan een domein zijn gekoppeld.
+
+00:02:45.340 --> 00:02:50.720
+De app zoekt werknemers gegevens op via LDAP, een gebruikelijke manier voor oudere software om een bedrijfsmap te doorzoeken.
+
+00:02:50.960 --> 00:02:55.280
+Misschien gebruikt het Kerberos, een oudere Windows-inlog-methode waarmee systemen elkaar kunnen vertrouwen.
+
+00:02:55.480 --> 00:03:00.240
+Misschien is het afhankelijk van groepsbeleid, de reeks bedrijfsregels die instellingen op Windows-computers kunnen beheren.
+
+00:03:00.420 --> 00:03:03.220
+Die app weet niet hoe hij een modern inlogbericht uit de cloud moet lezen.
+
+00:03:03.220 --> 00:03:07.100
+Hij verwacht via het netwerk verbinding te maken en een traditioneel Windows-domein te vinden.
+
+00:03:07.260 --> 00:03:12.400
+En als hij er geen kan vinden, kan de app gebruikers niet inloggen, een service-account niet vinden of simpelweg weigeren op te starten.
+
+00:03:12.540 --> 00:03:14.940
+Je hebt dit patroon waarschijnlijk ook buiten de IT gezien.
+
+00:03:15.120 --> 00:03:18.220
+Een nieuw stopcontact helpt niet als de stekker van een oude machine niet past.
+
+00:03:18.400 --> 00:03:20.840
+De stroom is aanwezig, maar de aansluiting is verkeerd.
+
+00:03:21.020 --> 00:03:24.940
+Stel je nu voor dat het bedrijf die financiële app en de database ervan verplaatst naar virtuele Azure-machines.
+
+00:03:25.120 --> 00:03:27.320
+De servers zijn verhuisd, maar de oude behoefte niet.
+
+00:03:27.320 --> 00:03:32.900
+Je zou Active Directory op kantoor kunnen laten staan en Azure ermee kunnen verbinden via een VPN, een privé-tunnel door het netwerk.
+
+00:03:33.080 --> 00:03:37.000
+Dus de app in Azure verstuurt verzoeken over die verbinding wanneer hij het domein nodig heeft.
+
+00:03:37.240 --> 00:03:42.380
+Dat kan werken, maar de app is nu afhankelijk van de netwerkverbinding en de beschikbaarheid van de on-premises domeincontroller.
+
+00:03:42.600 --> 00:03:45.800
+En als die verbinding een probleem heeft, kan de cloud-app ook een probleem hebben.
+
+00:03:46.000 --> 00:03:49.820
+Een andere keuze is om je eigen virtuele domeincontroller machines in Azure te maken.
+
+00:03:50.020 --> 00:03:55.940
+Een controller is de server die het traditionele Active Directory domein draait en de map inloggegevens en andere domeintaken beheert.
+
+00:03:55.940 --> 00:03:58.620
+Dat werkt ook, maar nu heeft je team meer servers in beheer.
+
+00:03:58.780 --> 00:04:00.460
+Iemand moet ze patchen en monitoren.
+
+00:04:00.660 --> 00:04:07.280
+Je hebt backups nodig, herstelplannen, een plan om domingcontrollers synchroon te houden en je moet de krachtige beheerdersaccounts beschermen die het domein controleren.
+
+00:04:07.440 --> 00:04:09.480
+Voor sommige bedrijven is die controle logisch.
+
+00:04:09.700 --> 00:04:12.920
+Voor anderen is het extra werk alleen maar om een oudere app tevreden te houden.
+
+00:04:13.120 --> 00:04:15.280
+Dus, de kloof is vrij smal, maar wel echt.
+
+00:04:15.480 --> 00:04:19.080
+Een app woont in Azure, maar spreekt nog steeds de oude Active Directory taal.
+
+00:04:19.080 --> 00:04:26.640
+Wat Microsoft Entra Domain Services in feite is, Microsoft Entra Domain Services is een beheerd Windows domein dat binnen je Azure netwerk draait.
+
+00:04:26.860 --> 00:04:28.380
+Dat is de eenvoudige definitie.
+
+00:04:28.580 --> 00:04:32.140
+De domingcontrollers draaien op de achtergrond en worden volledig door Microsoft beheerd,
+
+00:04:32.280 --> 00:04:36.320
+terwijl uw Azure virtuele machines en oudere apps de vertrouwde doming services gebruiken die ze verwachten.
+
+00:04:36.520 --> 00:04:38.080
+Zie uw cloudconfiguratie als een kantoorgebouw.
+
+00:04:38.860 --> 00:04:40.740
+Entra ID is de receptie bij de ingang.
+
+00:04:40.900 --> 00:04:46.400
+Het controleert wie u bent wanneer u zich aanmeldt bij Microsoft 365 of een andere cloud-app en past de bedrijfsregels toe op die aanmelding.
+
+00:04:46.400 --> 00:04:49.560
+Entra Domain Services bevindt zich in een afgesloten kantoorruimte aan de achterkant.
+
+00:04:49.680 --> 00:04:53.120
+Oudere systemen hoeven niet langs die receptie te gaan zoals een moderne cloud-app dat doet.
+
+00:04:53.360 --> 00:04:57.620
+Zij hebben een klassieke directory in de buurt nodig, een die hun taal begrijpt en hun verzoeken kan beantwoorden.
+
+00:04:57.820 --> 00:05:00.040
+Die kantoorruimte aan de achterkant is het beheerde domein.
+
+00:05:00.200 --> 00:05:02.800
+Het punt is, u hoeft de domingcontrollers niet zelf te bouwen.
+
+00:05:02.980 --> 00:05:04.920
+U meldt zich er niet op aan met extern bureaublad.
+
+00:05:05.080 --> 00:05:08.680
+U bepaalt niet hoeveel er draaien, u hoeft Windows niet te patchen en de verbinding ertussen niet te beheren.
+
+00:05:08.980 --> 00:05:10.260
+Microsoft zorgt voor dat alles.
+
+00:05:10.260 --> 00:05:14.300
+Uw taak is om de juiste Azure virtuele machines en apps te verbinden met het beheerde domein.
+
+00:05:14.460 --> 00:05:17.900
+Zodra ze verbonden zijn, kunnen ze vertrouwde Active Directory Services gebruiken.
+
+00:05:18.060 --> 00:05:23.380
+Een Windows VM kan lid worden van het domein en een oudere app kan LDAP gebruiken om personen, groepen en directory gegevens op te zoeken.
+
+00:05:23.540 --> 00:05:28.920
+Het kan Kerberos gebruiken, de aanmeldmethode die oudere bedrijfsapps vaak verwachten wanneer de ene server de andere moet vertrouwen.
+
+00:05:29.080 --> 00:05:33.840
+Het kan ook een TLM gebruiken, een andere oudere Windows aanmeldmethode die sommige apps nog steeds nodig hebben.
+
+00:05:33.840 --> 00:05:39.360
+Het beheerde domein biedt ook DNS, wat systemen helpt de juiste server te vinden op naam in plaats van op een reeks getallen.
+
+00:05:39.540 --> 00:05:44.760
+En het ondersteunt groepsbeleid, zodat u bepaalde Windows instellingen kunt toepassen op computers en gebruikers in dat beheerde domein.
+
+00:05:44.940 --> 00:05:46.780
+Die lijst klinkt technisch, dat weet ik.
+
+00:05:46.960 --> 00:05:48.900
+Zie het in plaats daarvan als een vertaalbalie.
+
+00:05:49.060 --> 00:05:52.120
+Uw app vraagt in de oude Windows taal, wie is deze gebruiker?
+
+00:05:52.300 --> 00:05:54.240
+Kan deze server die server vertrouwen?
+
+00:05:54.460 --> 00:05:55.260
+Waar is de database?
+
+00:05:55.720 --> 00:05:57.860
+Welke instellingen moet deze computer gebruiken?
+
+00:05:58.060 --> 00:06:01.740
+Entra Domain Services begrijpt die vragen en geeft het type antwoord dat de app verwacht.
+
+00:06:01.740 --> 00:06:04.300
+Maar het creëert geen tweede hoofdlijst met werknemers.
+
+00:06:04.460 --> 00:06:07.180
+Het hoofddossier van identiteiten blijft in Entra ID staan.
+
+00:06:07.400 --> 00:06:10.300
+Gebruikers en groepen uit Entra ID worden gekopieerd naar het beheerde domein,
+
+00:06:10.480 --> 00:06:12.920
+zodat de oudere app ze kan zien en gebruiken in de vorm die hij begrijpt.
+
+00:06:13.100 --> 00:06:15.240
+Als uw bedrijf ook een on-premises Active Directory heeft,
+
+00:06:15.380 --> 00:06:19.060
+kunnen identiteiten daarvandaan al Entra ID bereiken voordat ze worden gekopieerd naar Domain Services.
+
+00:06:19.320 --> 00:06:20.340
+Richting is hier van belang.
+
+00:06:21.100 --> 00:06:23.100
+Identiteitsgegevens stromen in Entra Domain Services.
+
+00:06:23.400 --> 00:06:24.700
+Ze stromen niet terug naar buiten.
+
+00:06:24.960 --> 00:06:28.520
+Dus, als een gebruiker uit Entra ID komt, beheert u die gebruiker in Entra ID.
+
+00:06:28.520 --> 00:06:33.020
+Als de gebruiker oorspronkelijk uit uw on-premises Active Directory komt, beheert u de gebruiker daar.
+
+00:06:33.180 --> 00:06:36.960
+Je gebruikt Domain Services niet als de plek om het hoofdpersoneels dossier te bewerken.
+
+00:06:37.160 --> 00:06:41.380
+Zo voorkom je dat het beheerde domein een tweede archiefkast wordt met verschillende versies van dezelfde persoon.
+
+00:06:41.580 --> 00:06:45.000
+Nu is er één onderdeel waar veel mensen tijdens de configuratie tegenaan lopen, wachtwoorden.
+
+00:06:45.200 --> 00:06:50.000
+Moderne cloud-ameldingen en oudere Windows-ameldingen gebruiken wachtwoorden achter de schermen niet op precies dezelfde manier.
+
+00:06:50.160 --> 00:06:51.820
+Om Kerberos en een TLM te laten werken,
+
+00:06:51.980 --> 00:06:55.860
+heeft Domain Services een beveiligde vorm van wachtwoordgegevens nodig die die oudere methoden ondersteunt.
+
+00:06:55.860 --> 00:06:58.480
+Microsoft slaat je wachtwoord nooit op als platte tekst.
+
+00:06:58.600 --> 00:07:06.160
+In plaats daarvan heeft de service de juiste beveiligde wachtwoordinformatie nodig voordat een gebruiker kan inloggen op een VM in het domein of een oudere app via het beheerde domein.
+
+00:07:06.340 --> 00:07:12.060
+Voor gebruikers die alleen in de cloud werken, betekent dit vaak dat de gebruiker zijn wachtwoord moet wijzigen nadat Domain Services is ingeschakeld.
+
+00:07:12.240 --> 00:07:15.840
+Die wachtwoordwijziging creëert de beveiligde vorm die nodig is voor het beheerde domein.
+
+00:07:15.840 --> 00:07:22.420
+Totdat dat gebeurt, kan de gebruiker prima inloggen op Microsoft 365, maar toch falen bij het gebruik van het domein in oude stijl.
+
+00:07:22.620 --> 00:07:24.220
+Dat kan in het begin vreemd aanvoelen.
+
+00:07:24.420 --> 00:07:28.640
+De gebruiker heeft al een account, het wachtwoord werkt al, maar de legacy app kan het toch niet gebruiken.
+
+00:07:28.800 --> 00:07:31.080
+Het ontbrekende stukje is niet het gebruikersaccount.
+
+00:07:31.300 --> 00:07:34.680
+Het is de beveiligde wachtwoordvorm die vereist is voor die oudere aanmeldingsmethode.
+
+00:07:34.920 --> 00:07:37.720
+Domain Services heeft ook een duidelijke grens waarbinnen het werkt.
+
+00:07:37.860 --> 00:07:41.160
+Het draait binnen een virtueel Azure netwerk, vaak een VNet genoemd.
+
+00:07:41.160 --> 00:07:47.020
+Je Azure VM's hebben netwerktoegang tot dat VNet nodig en ze moeten de DNS-instelling van het beheerde domein gebruiken om het te kunnen vinden.
+
+00:07:47.240 --> 00:07:50.600
+Dit is geen openbare directory die elk apparaat op internet kan bereiken.
+
+00:07:50.800 --> 00:07:54.720
+Het is een privé-domainservice voor workloads die verbonden zijn met het juiste Azure-netwerk.
+
+00:07:54.940 --> 00:08:00.520
+Dus wanneer een app oud Active Directory gedrag nodig heeft in Azure, liet Domain Services een beheerde plek om dat gedrag te vinden.
+
+00:08:00.740 --> 00:08:02.360
+Dat brengt ons bij de volgende vraag.
+
+00:08:02.560 --> 00:08:05.780
+Waar past dit naast Entra ID en je bestaande Active Directory domein?
+
+00:08:05.940 --> 00:08:09.100
+De namen klinken vergelijkbaar, maar hun taken zijn heel verschillend.
+
+00:08:09.100 --> 00:08:12.140
+Entra ID Active Directory and Domain Services
+
+00:08:12.140 --> 00:08:13.320
+Verschillende taken.
+
+00:08:13.560 --> 00:08:17.680
+De namen liggen dicht bij elkaar, dus het is makkelijk om dit als verschillende versies van hetzelfde product te zien.
+
+00:08:17.920 --> 00:08:18.680
+Dat zijn ze niet.
+
+00:08:18.860 --> 00:08:24.500
+Elk verwerkt een ander onderdeel van het identiteitsplaatje van je bedrijf en zodra je ziet wat de taak van elk is, wordt de keuze veel duidelijker.
+
+00:08:24.680 --> 00:08:26.580
+Entra ID beheert cloud-identiteit.
+
+00:08:26.840 --> 00:08:33.580
+Wanneer je Microsoft 365, Teams, SharePoint of een moderne zakelijke app opent, controleert Entra ID je aanmelding en regelt het wat je kunt openen.
+
+00:08:33.580 --> 00:08:40.120
+Het ondersteunt ook meervoudige verificatie- en toegangsregels, zoals het vragen om een strengere aanmeldingscontrole wanneer je vanaf een onbekend apparaat werkt.
+
+00:08:40.260 --> 00:08:41.800
+Het is gebouwd voor cloud-services.
+
+00:08:42.080 --> 00:08:47.480
+Een moderne app hoeft niet op hetzelfde netwerk te zitten als Entra ID, omdat deze gebruik maakt van webgebaseerde aanmeldmethode.
+
+00:08:47.660 --> 00:08:52.920
+Je meldt je aan via een browser of een app, Entra ID bevestigt wie je bent en de app ontvangt het bewijs dat je toegang hebt.
+
+00:08:53.120 --> 00:08:55.320
+Dat is het normale patroon voor nieuwe cloud-apps.
+
+00:08:55.520 --> 00:08:59.940
+Active Directory Domain Services, vaak afgekort tot Active Directory, vervult een andere rol.
+
+00:08:59.940 --> 00:09:05.260
+Dit is het traditionele Windows-domein dat veel bedrijven in hun eigen kantoren, datacenters of serverruimtes draaien.
+
+00:09:05.400 --> 00:09:10.540
+Het bedrijf is eigenaar van de domain controllers, bepaalt hoe ze worden ingesteld en beheert het volledige domein van boven tot onder.
+
+00:09:10.740 --> 00:09:16.320
+Het kan Windows-pc's aansturen, lokale servers ondersteunen en de oudere aanmeldmethode bieden die langlopende bedrijfsapplicaties verwachten.
+
+00:09:16.520 --> 00:09:19.240
+Dat niveau van controle brengt de nodige verantwoordelijkheid met zich mee.
+
+00:09:19.420 --> 00:09:24.220
+Je IT-team beheert het domein, onderhoudt de servers en beslist hoe de directory voor het bedrijf moet werken.
+
+00:09:24.600 --> 00:09:27.380
+Entra Domain Services bevindt zich tussen die twee werelden in.
+
+00:09:27.380 --> 00:09:34.380
+Het biedt Azure Workloads een beheerd Windows-domein wanneer ze ouderwets Active Directory-gedrag vereisen, maar Microsoft beheert de domeincontroller kant ervan.
+
+00:09:34.540 --> 00:09:40.880
+Je gebruikt het domein voor Azure VM's en oudere apps zonder zelf de volledige taak van het beheren van een traditioneel Active Directory-domein op je te nemen.
+
+00:09:41.120 --> 00:09:42.640
+Zie het als een archiefkastsysteem.
+
+00:09:42.860 --> 00:09:45.820
+Entra ID bevat het belangrijkste werknemersdossier voor cloudwerk.
+
+00:09:46.040 --> 00:09:50.860
+Dat is waar het bedrijf de werkbestanden bijhoudt die worden gebruikt voor Microsoft 365 en moderne cloud-aanmeldingen.
+
+00:09:51.080 --> 00:09:55.200
+Domain Services geeft oudere Azure-apps een compatibele kopie van de gegevens die ze nodig hebben.
+
+00:09:55.200 --> 00:10:01.320
+Die apps kunnen de vertrouwde archiefkast openen en gebruikers, groepen en inloggegevens vinden in de oude indeling die ze begrijpen.
+
+00:10:01.500 --> 00:10:04.560
+Je hoeft de app niet opnieuw op te bouwen alleen omdat deze naar Azure is verhuisd.
+
+00:10:04.680 --> 00:10:07.000
+Een cloud-only bedrijf kan deze opzet ook gebruiken.
+
+00:10:07.260 --> 00:10:10.260
+Stel je een bedrijf voor dat nog nooit lokale domingcontrollers heeft gebruikt.
+
+00:10:10.440 --> 00:10:16.700
+Iedereen meldt zich aan bij Microsoft 365 via Entra ID en het bedrijf gaat Azure VM's gebruiken voor een oudere Windows-app.
+
+00:10:16.860 --> 00:10:21.040
+Dat bedrijf hoeft geen on-premises Active Directory-domein op te zetten enkel voor die ene app.
+
+00:10:21.040 --> 00:10:28.440
+In plaats daarvan kan het Entra Domain Services gebruiken voor de Azure VM's die domeingedrag vereisen, terwijl de rest van het bedrijf Entra ID blijft gebruiken voor regulier cloudwerk.
+
+00:10:28.580 --> 00:10:30.040
+Een hybride bedrijf heeft een ander vertrekpunt.
+
+00:10:30.800 --> 00:10:35.200
+Het draait wellicht al Active Directory op kantoor met gebruikers en groepen die worden gesynchroniseerd naar Entra ID.
+
+00:10:35.480 --> 00:10:39.540
+Die personen kunnen vervolgens verschijnen in Entra Domain Services voor workloads die in Azure draaien.
+
+00:10:39.700 --> 00:10:41.100
+De stroom ziet er als volgt uit.
+
+00:10:41.100 --> 00:10:48.080
+De bestaande Active Directory van het bedrijf stuurt identiteitsgegevens naar Entra ID en Entra ID levert de compatibele kopie aan Domain Services.
+
+00:10:48.380 --> 00:10:52.220
+Dat betekent niet dat Domain Services het oorspronkelijke on-premises domein vervangt.
+
+00:10:52.300 --> 00:10:59.360
+Het kantoor heeft mogelijk nog een eigen Active Directory-domein nodig voor lokale PC's, lokale servers, fabrieksystemen of applicaties die op locatie blijven.
+
+00:10:59.580 --> 00:11:04.500
+Domain Services regelt alleen het Azure-gedeelte waar beheerd domeingedrag van de oude stijl past bij de werklast.
+
+00:11:04.660 --> 00:11:07.500
+En het verandert Entra ID ook niet in een volledige Active Directory.
+
+00:11:07.760 --> 00:11:10.080
+Entra ID blijft een cloud-identiteitsdienst.
+
+00:11:10.080 --> 00:11:18.860
+Domain Services voegt een beheerd domein toe voor bepaalde oudere behoeften, maar biedt niet elke optie en elk controleniveau dat je hebt als je zelf Active Directory beheert.
+
+00:11:19.080 --> 00:11:20.940
+Stel je dus drie afzonderlijke taken voor.
+
+00:11:21.160 --> 00:11:23.360
+Entra ID regelt moderne cloud-aanholdingen.
+
+00:11:23.560 --> 00:11:26.780
+Active Directory beheert het Windows-domein dat jouw bedrijf zelf draait.
+
+00:11:26.980 --> 00:11:33.980
+Entra Domain Services regelt verouderde Azure-werklasten die nog een Windows-domein nodig hebben, zonder dat je zelf de domingcontrollers hoeft te beheren.
+
+00:11:33.980 --> 00:11:35.920
+Je kunt een veel betere vraag stellen.
+
+00:11:36.160 --> 00:11:40.040
+Wanneer past Domain Services bij de werklast en wanneer moet je iets anders kiezen?
+
+00:11:40.480 --> 00:11:42.700
+Wanneer Domain Services past en wanneer niet?
+
+00:11:42.920 --> 00:11:44.920
+Begin bij de app, niet bij de productnaam.
+
+00:11:45.080 --> 00:11:52.420
+Als een oudere app LDAP gebruikt, een oude taal voor het controleren van gebruikersnamen en wachtwoorden, en je verplaatst deze naar Azure, dan kan Domain Services uitstekend passen.
+
+00:11:52.580 --> 00:11:56.200
+De app blijft gebruiken wat hij al begrijpt zonder dat een volledige herschrijving nodig is.
+
+00:11:56.420 --> 00:12:01.300
+Dat is belangrijk als de app nog werkt, het bedrijf hem nodig heeft en het herschrijven van de aanmeldcode te veel tijd of geld zou kosten.
+
+00:12:01.300 --> 00:12:06.620
+Een ander veelvoorkomend scenario is dat een groep Azure virtuele machines zich moet gedragen als normale domingcomputers.
+
+00:12:06.880 --> 00:12:09.640
+Medewerkers moeten zich wellicht met hun werkaccount aanmelden bij Windows.
+
+00:12:09.840 --> 00:12:14.660
+Een service heeft mogelijk een serviceaccount nodig, een account dat een app gebruikt om verbinding te maken met een ander systeem, zoals een database.
+
+00:12:15.040 --> 00:12:18.700
+Mogelijk heb je groepsbeleid nodig om bedrijfsinstellingen toe te passen op die virtuele machines.
+
+00:12:18.960 --> 00:12:22.880
+In die gevallen geeft Domain Services de Azure machines het domeingedrag dat ze verwachten.
+
+00:12:23.080 --> 00:12:25.040
+Remote Desktop Services past hier ook bij.
+
+00:12:25.040 --> 00:12:29.180
+Stel je medewerkers voor die verbinding maken met gedeelde Windows Desktops of apps in Azure.
+
+00:12:29.400 --> 00:12:33.760
+Die systemen zijn vaak afhankelijk van een Windows domein voor gebruikersaanmelding en computerbeheer.
+
+00:12:33.980 --> 00:12:39.160
+Domain Services biedt die dominglaag zonder dat jouw team vanaf nul virtuele machines voor domingcontrollers hoeft op te bouwen.
+
+00:12:39.340 --> 00:12:41.480
+Oudere apps bestaan vaak uit meer dan één onderdeel.
+
+00:12:41.660 --> 00:12:45.760
+Er is wellicht een webserver aan de voorkant, een appserver in het midden en een database aan de achterkant.
+
+00:12:45.940 --> 00:12:49.820
+De appserver moet zijn identiteit bewijzen voordat de database een verbinding accepteert.
+
+00:12:49.820 --> 00:12:55.380
+Wanneer dat vertrouwen gebaseerd is op Windows Service Accounts, houdt Domain Services die verbindingen in stand na de verplaatsing.
+
+00:12:55.540 --> 00:12:59.240
+Het punt is, jouw team krijgt het oudere domeingedrag dat de werklast vereist,
+
+00:12:59.440 --> 00:13:04.280
+terwijl Microsoft het werk aan de domeincontroller afhandelt dat anders op jouw serverlijst zou staan.
+
+00:13:04.480 --> 00:13:07.320
+Maar kies Domain Services niet alleen omdat je Azure gebruikt.
+
+00:13:07.500 --> 00:13:10.020
+Een nieuwe cloudapp moet direct inloggen via Entra ID.
+
+00:13:10.340 --> 00:13:14.460
+Als de app moderne inlogmethoden ondersteunt, stuurt deze gebruikers door naar Entra ID,
+
+00:13:14.680 --> 00:13:18.800
+ontvangt een bewijs van de aanmelding en profiteert van cloudtoegangsregels en meervoudige verificatie.
+
+00:13:18.800 --> 00:13:21.100
+Dat is de meest schone weg voor nieuwe software.
+
+00:13:21.420 --> 00:13:23.980
+Domain Services helpt een app die de oude taal spreekt.
+
+00:13:24.180 --> 00:13:26.720
+Dat is geen reden om nieuwe apps die oude taal aan te leren.
+
+00:13:26.920 --> 00:13:29.460
+Er zijn ook strikte limieten die je eerst moet controleren.
+
+00:13:29.680 --> 00:13:33.160
+Sommige apps lezen niet alleen uit Active Directory, ze schrijven er ook naar terug.
+
+00:13:33.320 --> 00:13:37.940
+Een app wil bijvoorbeeld directory vermeldingen aanmaken of wijzigen als onderdeel van het normale werk.
+
+00:13:38.180 --> 00:13:41.880
+Domain Services is niet geschikt wanneer de app LDAP schrijftoegang vereist.
+
+00:13:42.100 --> 00:13:45.580
+Dezelfde waarschuwing geldt als een app het Active Directory schema moet wijzigen,
+
+00:13:45.860 --> 00:13:48.240
+de zet velden die bepaalt wat de directory kan opslaan.
+
+00:13:48.240 --> 00:13:51.980
+Sommige oudere software vraagt je om eigen velden toe te voegen voordat het programma draait.
+
+00:13:52.120 --> 00:13:54.820
+Een beheerd domein staat niet toe dat je dat onderliggende ontwerp wijzigt.
+
+00:13:55.000 --> 00:13:58.380
+Je moet ook even stilstaan als je 10 volledige controle over het domein zelf nodig heeft.
+
+00:13:58.600 --> 00:14:01.100
+Misschien heb je directe toegang nodig tot domingcontrollers.
+
+00:14:01.280 --> 00:14:04.420
+Misschien heb je domeinbeheerdersrechten nodig die zeer ruime controle bieden.
+
+00:14:04.520 --> 00:14:08.700
+Of misschien heb je een complex directory ontwerp nodig dat je op je eigen manier wilt opbouwen en beheren.
+
+00:14:08.880 --> 00:14:14.080
+Dat wijst richting het zelfdraaien van Active Directory, on-premises of op virtuele machines in Azure.
+
+00:14:14.080 --> 00:14:18.620
+Domain Services geeft je bewust minder controle omdat Microsoft de kerndomeinservice beheert.
+
+00:14:18.840 --> 00:14:21.520
+Stel jezelf dus één eenvoudige vraag voordat je een pad kiest.
+
+00:14:21.720 --> 00:14:25.980
+Heeft deze workload de oude Active Directory taal nodig of kan deze het moderne Entra ID spreken?
+
+00:14:26.160 --> 00:14:28.720
+Als het moderne Entra ID gebruikt kan worden, begin daar dan.
+
+00:14:28.860 --> 00:14:34.220
+Als het oud domein gedrag vereist, maar je niet elk onderdeel van het domein hoeft te bezitten, dan kan domainservices heel goed passen.
+
+00:14:34.360 --> 00:14:40.500
+En als de app de directory moet herschrijven, het schema moet wijzigen of je 10 totale domeincontrole moet geven, heeft het een andere plek nodig.
+
+00:14:40.500 --> 00:14:43.220
+Kiezen voor een beheerd domein betekent een afweging maken.
+
+00:14:43.540 --> 00:14:48.180
+Microsoft zorgt voor de domingcontrollers en jij geeft een deel van de controle op die je hebt bij zelfbeheer.
+
+00:14:48.360 --> 00:14:50.880
+De afwegingen voor beheerde services die je moet kennen.
+
+00:14:51.100 --> 00:14:54.980
+Die beheerde aanpak scheelt werk, maar verandert ook wat je IT-team kan beheren.
+
+00:14:55.280 --> 00:15:00.780
+Microsoft beheert de domingcontrollers, houdt ze gesynchroniseerd, past patches toe en regelt de beschikbaarheid op de achtergrond.
+
+00:15:00.960 --> 00:15:05.080
+U hoeft niet te plannen waar elke domeincontroller staat of er een te herstellen na een server-storing.
+
+00:15:05.080 --> 00:15:12.040
+Daarom kiezen veel teams hiervoor, maar je kunt niet via extern bureaublad inloggen op die domingcontrollers en je krijgt geen domein- of enterprise-beheerdersrechten,
+
+00:15:12.220 --> 00:15:15.160
+omdat die controle zouden geven over de onderdelen die Microsoft beheert.
+
+00:15:15.320 --> 00:15:19.480
+In plaats daarvan biedt Microsoft een groep genaamd Entradomein Services Administrators.
+
+00:15:19.720 --> 00:15:25.220
+Plaats de mensen die het domein moeten beheren in die groep en gebruik vervolgens een beheervirtuele machine die is gekoppeld aan het beheerde domein.
+
+00:15:25.420 --> 00:15:29.980
+Vanaf die machine kun je vertrouwde Active Directory tools gebruiken om te beheren wat Microsoft toestaat.
+
+00:15:29.980 --> 00:15:36.680
+Je kunt bijvoorbeeld je eigen organisatieeenheden of OU's maken. Zie ze als mappen voor domeinobjecten zoals computers of service accounts.
+
+00:15:36.940 --> 00:15:40.980
+Je kunt DNS records beheren en groepsbeleid maken en toepassen voor ondersteunde instellingen.
+
+00:15:41.120 --> 00:15:45.380
+Je kunt ook de computers beheren die lid worden van het domein, wat vaak de hoofdreden is dat de dienst bestaat.
+
+00:15:45.620 --> 00:15:47.380
+Deze beperkingen zijn bewust aangebracht.
+
+00:15:47.580 --> 00:15:54.240
+Je kunt geen extra domeincontrollers toevoegen, het Active Directory schema wijzigen of het beheerde domein beschouwen als een plek waar wijzigingen terugvloeien naar Entra ID.
+
+00:15:54.240 --> 00:16:00.240
+Beheer gebruikers en groepen daarom in de Brondirectory. Voor een bedrijf dat alleen de cloud gebruikt, is die bron Entra ID.
+
+00:16:00.580 --> 00:16:04.820
+Voor een hybride bedrijf is het de On-Premises Active Directory die synchroniseert met Entra ID.
+
+00:16:05.160 --> 00:16:07.180
+Deze regel voorkomt een fout die we vaak zien.
+
+00:16:07.420 --> 00:16:11.520
+Iemand ziet een gebruiker in het beheerde domein en wijzigt deze daar in de veronderstelling dat dit definitief is.
+
+00:16:11.520 --> 00:16:16.120
+Maar die wijziging wordt niet het bedrijfsrecord in Entra ID of de On-Premises Active Directory.
+
+00:16:16.380 --> 00:16:19.000
+Hou het beheerde domein privé binnen Azure netwerken.
+
+00:16:19.180 --> 00:16:23.620
+Het moet alleen de workloads ondersteunen die het nodig hebben en niet een algemene bedrijfsdirectory worden.
+
+00:16:23.620 --> 00:16:28.920
+Beperkt netwerk toegang, beveiligt de beheermachine en geeft alleen beheerdersrechten aan mensen die dat nodig hebben.
+
+00:16:29.080 --> 00:16:30.620
+Je kiest voor een dienst met vangrails.
+
+00:16:30.840 --> 00:16:35.960
+Die vangrails nemen wat werk uit handen en voorkomen tegelijkertijd dat je onderdelen wijzigt die eigendom zijn van Microsoft.
+
+00:16:36.300 --> 00:16:38.240
+Een eenvoudig Azure migratie verhaal.
+
+00:16:38.240 --> 00:16:42.280
+Stel je een financieel bedrijf voordat een oude app draait op servers in hun eigen kantoor.
+
+00:16:42.480 --> 00:16:44.440
+Die app vertrouwt op LDAP om werknemers te vinden.
+
+00:16:44.660 --> 00:16:46.680
+Het gebruikt Kerberos wanneer mensen zich aanmelden.
+
+00:16:46.860 --> 00:16:50.240
+En de server verifieert met een serviceaccount om de financiële database te bereiken.
+
+00:16:50.240 --> 00:16:54.220
+Het bedrijf wil zowel de app als de database verplaatsen naar Azure virtuele machines.
+
+00:16:54.480 --> 00:17:02.220
+Een optie is om de app via een VPN verbonden te houden met het kantoordomein, maar dan is de Azure app elke dag afhankelijk van die netwerkverbinding en de lokale domingcontrollers.
+
+00:17:02.420 --> 00:17:06.040
+Een andere optie is het draaien van nieuwe virtuele machines voor domingcontrollers in Azure.
+
+00:17:06.260 --> 00:17:11.860
+Dat houdt meer verkeer binnen Azure, maar voegt Windows servers toe die het IT-team moet patchen, monitoren, backuppen en herstellen.
+
+00:17:12.060 --> 00:17:13.380
+Het team kiest een andere weg.
+
+00:17:13.580 --> 00:17:16.200
+Hun gebruikers en groepen synchroniseren al naar Entra ID.
+
+00:17:16.200 --> 00:17:19.980
+Ze schakelen Entra Domain Services in, koppelen het virtuele Azure netwerk.

@@ -1,0 +1,787 @@
+WEBVTT
+
+00:00:00.510 --> 00:00:06.850
+Bereit für 10 Tage Microsoft 365, Co-Pilot, KI, Azure und die Menschen, die die Zukunft der Arbeit gestalten?
+
+00:00:07.810 --> 00:00:11.250
+Diesen Januar ist die M3 365-Con zurück und zwar noch größer.
+
+00:00:11.590 --> 00:00:12.310
+Und zwar noch größer.
+
+00:00:12.830 --> 00:00:18.210
+Seien Sie dabei bei Live-Sessions, Demos aus der Praxis und erfahren Sie praktisches Wissen von MVPs und Branchenexperten aus aller Welt.
+
+00:00:18.770 --> 00:00:21.090
+Keine generischen Folien, keine endlosen Schlagworte.
+
+00:00:21.990 --> 00:00:23.650
+Wir stellen uns den echten Herausforderungen.
+
+00:00:23.830 --> 00:00:28.530
+Co-Pilot Studio, KI-Agents, Fabric, Sicherheit, Governance und Automatisierung.
+
+00:00:28.530 --> 00:00:34.270
+Ganz gleich, ob Sie IT-Experte, Entwickler oder Führungskraft sind, es gibt speziell auf Sie zugeschnittene Sessions.
+
+00:00:35.410 --> 00:00:40.130
+An 10 vollen Tagen können Sie verschiedene Technologien kennenlernen und sich mit einer globalen Community vernetzen.
+
+00:00:40.830 --> 00:00:44.350
+Sehen Sie sich die Live-Übertragung an und nehmen Sie praktische Einblicke mit nach Hause in Ihr Unternehmen.
+
+00:00:45.090 --> 00:00:48.850
+Januar 2027, 10 Tage, eine Microsoft-Community.
+
+00:00:49.390 --> 00:00:50.570
+Die Registrierung ist ab sofort möglich.
+
+00:00:51.810 --> 00:00:55.410
+Besuchen Sie m335.net und sichern Sie sich noch heute Ihren Platz.
+
+00:00:55.410 --> 00:00:58.670
+Das ist m335.net.
+
+00:01:00.170 --> 00:01:03.090
+Melden Sie sich jetzt auf m335.net an.
+
+00:01:03.550 --> 00:01:04.730
+Und wir sehen uns im Januar live.
+
+00:01:04.930 --> 00:01:07.950
+Das heutige Thema ist etwas, von dem die meisten Leute noch nie gehört haben.
+
+00:01:08.030 --> 00:01:12.290
+Aber es ist eines der leistungsstärksten Tools, um Microsoft 365 abzurufen und wann abzurufen.
+
+00:01:12.710 --> 00:01:14.050
+Es heißt Microsoft Graph Data Connect.
+
+00:01:14.530 --> 00:01:15.230
+Folgendes ist wichtig.
+
+00:01:15.350 --> 00:01:19.230
+Sie haben wahrscheinlich schon versucht, Daten aus SharePoint oder Teams mit der regulären Graph API abzurufen.
+
+00:01:19.830 --> 00:01:21.850
+Bei einigen wenigen Elementen funktioniert das problemlos.
+
+00:01:21.850 --> 00:01:24.930
+Das aber, wenn Sie Millionen von Datensätzen benötigen, werden Sie von Drosselung und Paginierung hart getrunken.
+
+00:01:25.090 --> 00:01:30.130
+Sie erhalten Ratenbegrenzungen, HTTP 429 Fehler und verbringen mehr Zeit mit der Verwaltung von Wiederholungsversuchen als mit der eigentlichen Arbeit.
+
+00:01:30.490 --> 00:01:32.010
+Mit Graph Data Connect können Sie all das umgehen.
+
+00:01:32.330 --> 00:01:36.110
+Mit einer einzigen Anforderung können Terabytes an Daten in Azure oder Microsoft Fabric verschoben werden.
+
+00:01:36.370 --> 00:01:37.670
+Keine Paginierung, keine Drosselung.
+
+00:01:38.070 --> 00:01:43.270
+Am Ende dieser Folge wissen Sie genau, was es ist, wie es sich von den regulären Graph APIs unterscheidet und wann Sie es verwenden sollten.
+
+00:01:43.990 --> 00:01:45.970
+Das Skalierungsproblem mit m365.net.
+
+00:01:45.970 --> 00:01:50.490
+Lassen Sie uns also aufschlüsseln, warum reguläre API-Aufrufe für umfangreiche Analysen einfach nicht ausreichen.
+
+00:01:50.970 --> 00:01:54.030
+Jeden Tag generiert Microsoft 365 Milliarden von Interaktionen.
+
+00:01:54.450 --> 00:01:58.410
+Gesendete E-Mails, gepostete Teams-Nachrichten, hochgeladene Dateien, geplante Besprechungen.
+
+00:01:58.750 --> 00:02:00.090
+Diese Daten befinden sich in Ihrem System.
+
+00:02:00.430 --> 00:02:04.990
+Wenn Sie diese analysieren möchten, beispielsweise um Muster der Zusammenarbeit zwischen Abteilungen zu verstehen, müssen Sie sie abrufen.
+
+00:02:05.530 --> 00:02:06.410
+Hier fangen die Probleme an.
+
+00:02:06.730 --> 00:02:08.990
+Die standardmäßige Graph APIs für den Echtzeitzugriff konsumieren.
+
+00:02:09.390 --> 00:02:11.890
+Sie fragen die Nachrichten eines Benutzers ab und erhalten die letzten 20.
+
+00:02:12.050 --> 00:02:13.810
+Fragen Sie nach den nächsten 20, paginieren Sie es.
+
+00:02:13.810 --> 00:02:19.890
+Wenn Sie zu schnell abfragen, werden Sie mit HTTP 429 Fehlern gedrosselt und müssen zurückstellen, warten und es erneut versuchen.
+
+00:02:20.390 --> 00:02:21.730
+Im kleinen Maßstab funktioniert das gut.
+
+00:02:22.110 --> 00:02:25.650
+Stellen Sie sich jedoch vor, Sie möchten jede SharePoint-Website in einem Unternehmen mit 10.000 Benutzern erlösen.
+
+00:02:25.910 --> 00:02:29.970
+Selbst mit Batch-Verarbeitung würde dies Stunden oder Tage dauern und Sie müssen die ganze Zeit mit Ratenbeschränkungen kämpfen.
+
+00:02:30.190 --> 00:02:32.490
+Wenn Sie dies regelmäßig tun müssen, ist es einfach nicht nachhaltig.
+
+00:02:33.130 --> 00:02:34.550
+Aus diesem Grund gibt es Graph Data Connect.
+
+00:02:34.970 --> 00:02:36.170
+Es ist kein Ersatz für die Graph API.
+
+00:02:36.670 --> 00:02:38.430
+Es ist ein völlig anderes Tool für eine andere Aufgabe.
+
+00:02:38.430 --> 00:02:45.250
+Die Graph API verarbeitet Echtzeitzugriffe auf kleine Datenmengen, während Data Connect für die Massenextraktion in großem Umfang konzipiert ist.
+
+00:02:46.390 --> 00:02:47.590
+Was ist Graph Data Connect eigentlich?
+
+00:02:48.470 --> 00:02:49.270
+Was ist Graph Data Connect?
+
+00:02:49.870 --> 00:02:51.470
+Lassen Sie uns zunächst eine häufige Verwirrung.
+
+00:02:52.050 --> 00:02:55.210
+Microsoft Graph ist das Gateway zu allen Microsoft 365 Daten.
+
+00:02:55.790 --> 00:02:59.010
+Das umfasst Benutzer, Nachrichtendateien, Kalender, Teams und Sicherheitssignale.
+
+00:02:59.010 --> 00:03:04.670
+Es ist der zentrale Endpunkt für alles, aber es gibt drei verschiedene Möglichkeiten, mit diesen Daten zu interagieren und die Benutzer verwechseln die Software.
+
+00:03:04.990 --> 00:03:06.130
+Zunächst ist da die Graph API.
+
+00:03:06.570 --> 00:03:08.130
+Das ist das Echtzeit-Anforderungs-Antwort-Modell.
+
+00:03:08.510 --> 00:03:11.370
+Sie fragen nach dem Postfach eines einzelnen Benutzers und erhalten es sofort zurück.
+
+00:03:11.650 --> 00:03:13.810
+Es eignet sich hervorragend zum Erstellen von Apps und zur Verarbeitung.
+
+00:03:13.890 --> 00:03:15.310
+Kleine Abfragen ist aber nicht für die Skalierung-Konzept.
+
+00:03:15.590 --> 00:03:16.590
+Dann gibt es noch Graph Connectors.
+
+00:03:16.890 --> 00:03:20.850
+Diese importieren externe Daten für die Suche und Co-Pilot in Microsoft 365 um eine Erfassung.
+
+00:03:20.950 --> 00:03:21.570
+Keine Extraktion.
+
+00:03:21.990 --> 00:03:23.270
+Sie ziehen die Daten ein, nicht heraus.
+
+00:03:23.750 --> 00:03:25.210
+Und schließlich gibt es noch Graph Data Connect.
+
+00:03:25.690 --> 00:03:26.630
+Dies ist eine Massenextraktion.
+
+00:03:26.630 --> 00:03:31.330
+Graph Data Connect ruft riesige Datensätze aus Microsoft 365 in ihre eigene Analyseumgebung ab.
+
+00:03:31.570 --> 00:03:32.670
+Genau darüber sprechen wir heute.
+
+00:03:33.250 --> 00:03:33.970
+Denken Sie es sich so vor.
+
+00:03:34.030 --> 00:03:36.850
+Die Verwendung der Graph API ist so, als würden Sie ein Bibliothekar um ein Buch auf einmal bitten.
+
+00:03:37.350 --> 00:03:41.490
+Sie gehen zum Schreibtisch, bitten um ein Buch, ergibt es Ihnen und dann gehen Sie zurück und bitten um ein weiteres.
+
+00:03:42.270 --> 00:03:43.210
+Es funktioniert es aber langsam.
+
+00:03:43.990 --> 00:03:46.950
+Mit Graph Data Connect können Sie sagen, ich möchte ein Exemplar von jedem Buch in diesem Bereich.
+
+00:03:47.310 --> 00:03:49.050
+Und sich diese auf einer Palette ins Büro liefern lassen.
+
+00:03:49.490 --> 00:03:51.190
+Eine Anfrage, eine Lieferung, alles was Sie brauchen.
+
+00:03:51.590 --> 00:03:52.590
+Wie funktioniert das nun konkret?
+
+00:03:52.990 --> 00:03:55.790
+Sie erstellen eine geplante Pipeline, in der Sie definieren, welche Daten Sie benötigen.
+
+00:03:55.790 --> 00:03:58.350
+SharePoint-Websites, Teams, Chats, Exchange, Postfächer.
+
+00:03:58.930 --> 00:04:01.850
+Und legen Sie ein Ziel wie ein Azure-Speicherkonto oder Fabric Lakehouse fest?
+
+00:04:02.690 --> 00:04:05.790
+Anschließend stellt Microsoft diese Daten als Paketdateien direkt in Ihrem Speicherbereich.
+
+00:04:06.330 --> 00:04:09.290
+Keine Paginierung, keine Drosselung und Kopierauftrag und schon ist es erledigt.
+
+00:04:09.990 --> 00:04:13.270
+Die Daten kommen im Delta-Paket-Format an, das effizient ist und sofort analysiert werden kann.
+
+00:04:13.770 --> 00:04:17.410
+Sie können Daten mit SQL-Abfragen, Powerberichte erstellen oder Machine Learning-Modelle ausführen.
+
+00:04:17.410 --> 00:04:19.970
+All das erfolgt über eine einzige Exaktions-Pipeline.
+
+00:04:20.650 --> 00:04:21.410
+Das ist also die Kernidee.
+
+00:04:22.050 --> 00:04:27.250
+Graph Data Connect ist für die Analyse Ihres gesamten M365-Datenbestands gedacht, nicht nur eines kleinen Ausschnitts.
+
+00:04:27.970 --> 00:04:32.870
+Als nächstes sprechen wir über das Sicherheitsmodell, das Ihre sensiblen Daten schützt, die Sicherheits- und Governance-Ebene.
+
+00:04:33.810 --> 00:04:37.670
+Jetzt denken Sie, vielleicht kann ich einfach die E-Mails alle in ein Speicherkonto verschieben und damit machen, was ich will.
+
+00:04:37.910 --> 00:04:40.770
+Und die Antwort ist nein. Und hier ist der Grund, warum das sogar gut so ist.
+
+00:04:41.310 --> 00:04:48.150
+Da Graph Data Connect sensible Daten wie E-Mails, Teams, Nachrichten und Dateien verarbeitet, ist sein Sicherheitsmodell viel strenger als das der regulären Graph-API.
+
+00:04:48.570 --> 00:04:51.850
+Und das beabsichtigt. Sie möchten kein so leistungsstarkes Tool ohne angemessene Schutzmaßnahmen.
+
+00:04:52.170 --> 00:04:54.210
+Erstens erfordert es die explizite Zustimmung des Administrators.
+
+00:04:54.510 --> 00:04:58.930
+Ein Administrator muss jede Anwendung genehmigen und genau definieren, auf welche Datensätze sie zugreifen kann.
+
+00:04:59.610 --> 00:05:00.270
+Und ich meine genau das.
+
+00:05:00.630 --> 00:05:02.090
+Sie können den Bereich bis auf die Eigenschaftsüberschauen.
+
+00:05:02.090 --> 00:05:04.890
+Sie möchten nur Website-URLs, aber keine Website besitzen? Das können Sie festlegen.
+
+00:05:05.090 --> 00:05:08.070
+Sie möchten nur Nachrichtenzeitstempel, aber keine Nachrichteninhalte? Auch das können Sie festlegen.
+
+00:05:08.310 --> 00:05:11.050
+Dies ist wesentlich detaillierter als die standardmäßigen Graph-API-Berechtigungen,
+
+00:05:11.390 --> 00:05:13.750
+die in der Regel für einen bestimmten Ressourcentyp Alles-oder-Nichts-Berechtigungen beinhaltet.
+
+00:05:13.890 --> 00:05:16.470
+Zweitens werden die Daten standardmäßig während der Übertragung verschlüsselt.
+
+00:05:16.770 --> 00:05:19.130
+Microsoft stellt die Daten bereits verschlüsselt in Ihrem Speicher bereit.
+
+00:05:19.510 --> 00:05:23.070
+Wenn Sie noch mehr Kontrolle wünschen, können Sie Ihre eigenen Verschlüsselungsschlüssel über Azure Key Vault einbringen.
+
+00:05:23.630 --> 00:05:26.890
+Und so funktioniert es. Ihre Daten werden mit einem Schlüssel verschlüsselt, den nur Sie besitzen.
+
+00:05:26.890 --> 00:05:30.390
+Microsoft speichert die verschlüsselte Version dieses Schlüssels, kann sie aber nicht entschlüsseln.
+
+00:05:30.750 --> 00:05:33.490
+Nur Ihre Anwendung kann die Daten mithilfe Ihres privaten Schlüssels entsperren.
+
+00:05:33.790 --> 00:05:36.450
+Das bedeutet, dass nicht einmal Microsoft Ihre Daten während der Zustellung lesen kann.
+
+00:05:37.090 --> 00:05:38.950
+Drittens gibt es die Identitätsverschleierung.
+
+00:05:39.830 --> 00:05:44.330
+Echte Benutzer-IDs wie E-Mail-Adressen und Benutzerprinzipallnamen werden durch nicht umkehrbare Token ersetzt.
+
+00:05:45.070 --> 00:05:49.790
+Sie können also weiterhin Trends analysieren, wie viele Benutzer auf die Datei zugreifen oder welche Abteilung am meisten kommuniziert.
+
+00:05:49.870 --> 00:05:51.870
+Aber Sie können diese Daten nicht mit einer bestimmten Person verbinden.
+
+00:05:51.870 --> 00:05:55.890
+Dies ist von entscheidender Bedeutung für die Einhaltung der Datenschutzbestimmungen, insbesondere mit Vorschriften wie der DSGV.
+
+00:05:55.890 --> 00:05:57.710
+Viertens wird jede Pipeline-Ausführung protokolliert.
+
+00:05:57.970 --> 00:06:04.430
+So entsteht ein lückenloser Prüffahrt, aus dem hervorgeht, wer was genehmigt hat, wann Daten extrahiert wurden, welche Datensätze verwendet wurden, wie viele Daten übertragen wurden.
+
+00:06:05.170 --> 00:06:08.550
+Wenn ein Prüfer fragt, wer hat auf diese Daten zugegriffen und warum, haben Sie die Antwort.
+
+00:06:09.230 --> 00:06:14.090
+Diese Sicherheitsebene macht Data Connect für regulierte Branchen wie das Gesundheitswesen, den Finanzsektor und die Behörden sicher.
+
+00:06:14.790 --> 00:06:17.190
+Sie erhalten leistungsstark Analysen ohne sich um Compliance auflanken.
+
+00:06:17.310 --> 00:06:20.350
+Die Daten verlassen zu keinem Zeitpunkt ihre Kontrolle und jeder Schritt wird nachverfolgt.
+
+00:06:20.930 --> 00:06:21.830
+Wo landen die Daten, Xander?
+
+00:06:22.650 --> 00:06:25.250
+Wo landen die Daten, nachdem sie Microsoft 365 verlassen haben?
+
+00:06:25.690 --> 00:06:29.990
+Ursprünglich konnte Graph Data Connect Daten nur an Azure Synapse oder Azure Data Lake Storage senden.
+
+00:06:30.510 --> 00:06:33.250
+Das hat gut funktioniert, wenn Sie ein Dateningenieur waren, der mit diesen Tools gearbeitet hat.
+
+00:06:33.630 --> 00:06:36.810
+Aber für Wirtschaftsanalysten oder Berufseinsteiger war das nicht gerade benutzerfreundlich.
+
+00:06:37.490 --> 00:06:38.350
+Das hat sich heute geändert.
+
+00:06:38.890 --> 00:06:43.630
+Data Connect arbeitet jetzt direkt mit Microsoft Fabric zusammen und Sie können Fabric Lakehouse als Ziel festlegen, festlegen.
+
+00:06:44.050 --> 00:06:48.230
+Die Daten werden als Delta-Paket-Dateien angezeigt und können ohne zusätzliche Einrichtung analysiert werden.
+
+00:06:48.650 --> 00:06:50.830
+Falls Sie Fabric bereits nutzen, ist dies der einfachste Weg.
+
+00:06:50.830 --> 00:06:52.430
+Sie sind aber nicht an Fabric gebunden.
+
+00:06:52.930 --> 00:06:59.570
+Sie können auch Azure Data Factory Pipelines verwenden, um die Extraktion zu verwalten, sie so zu planen, dass sie jede Nacht ausgeführt wird, sodass Ihre Analyseumgebung immer über aktuelle Daten verfügt.
+
+00:07:00.170 --> 00:07:04.110
+Sie können die Daten auf Azure Blob Storage, Azure Data Lake oder ein beliebiges kompatibles Ziel verweisen.
+
+00:07:04.790 --> 00:07:06.810
+Aber hier ist der Clou, Sie sind nicht an ein Ziel gebunden.
+
+00:07:07.350 --> 00:07:11.470
+Zu Ihren Optionen gehören Azure, Fabric und sogar Plattformen von Drittanbietern über benutzerdefinierte Pipelines.
+
+00:07:11.870 --> 00:07:13.310
+Sobald die Daten eintreffen, gehören sie ihnen.
+
+00:07:13.730 --> 00:07:15.290
+Sie entscheiden, wohin sie gehen und was mit ihnen geschieht.
+
+00:07:15.690 --> 00:07:17.090
+Diese Flexibilität macht den Mehrwert aus.
+
+00:07:17.510 --> 00:07:25.970
+Sie können M365-Daten mit Daten aus anderen Systemen, wie Ihrem CRM, ERP oder HR-System kombinieren und zu ein umfassendes Bild Ihres gesamten Unternehmens erstellen.
+
+00:07:26.290 --> 00:07:29.130
+Das ist mit der regulären Graph API allein schlichtweg nicht möglich.
+
+00:07:30.130 --> 00:07:31.750
+Vergleicht man dies mit anderen Extraktionshutsen.
+
+00:07:32.170 --> 00:07:35.210
+Sie denken, vielleicht kann ich nicht einfach Power Automate oder ein benutzerdefiniertes Skript verwenden.
+
+00:07:35.790 --> 00:07:37.970
+Sehen wir uns an, wann welches Tool geeignet ist und wann nicht.
+
+00:07:38.810 --> 00:07:41.850
+Power Automate eignet sich hervorragend für die Automatisierung in Echtzeit und kleinem Maßstab.
+
+00:07:42.150 --> 00:07:45.510
+Sie lösen einen Flow aus, wenn eine Datei hinzugefügt wird und es wird eine Benachrichtigung gesendet.
+
+00:07:45.590 --> 00:07:46.670
+Das funktioniert aber. Hier ist der Haken.
+
+00:07:47.070 --> 00:07:48.870
+Power Automate verarbeitet Kilobytes, keine Terabytes.
+
+00:07:49.210 --> 00:07:50.630
+Es verfügt über kein Muster für die Massenextraktion.
+
+00:07:50.950 --> 00:07:56.850
+Wenn Sie versuchen, Millionen von Datensätzen über einen Flow abzurufen, kommt es zu einem Timeout, stößt dann die API-Grenzwerte oder schlägt einfach still und heimlich fehl.
+
+00:07:56.850 --> 00:07:58.750
+Es ist das falsche Tool für diese Aufgabe.
+
+00:07:59.150 --> 00:08:01.250
+Benutzerdefinierte Graph API-Scripts eignen sich gut für Kleine.
+
+00:08:01.650 --> 00:08:04.390
+Sie schreiben ein PowerShell-Skript, durchlaufen die Seiten und rufen ihre Daten an.
+
+00:08:04.690 --> 00:08:08.810
+Aufgrund von Paginierungs- und Drosselungsgrenzwerten ist dies jedoch für eine vollständige Mandantenanalyse unpraktisch,
+
+00:08:08.990 --> 00:08:11.970
+da Sie Wiederholungsversuche, Batch-Verarbeitung und Ratenbegrenzung selbst verwalten müssen.
+
+00:08:12.330 --> 00:08:15.730
+Und wenn Ihr Skript stundenlang ausgeführt wird und auf halbem Weg fehlt, schlägt viel Glück beim Debuggen.
+
+00:08:16.070 --> 00:08:20.190
+Azure Data Factory verfügt über mehr als 90 Connectors und ist eine solide Wahl für die Verwaltung von ETH-Pipelines.
+
+00:08:20.510 --> 00:08:24.010
+ADF selbst stellt jedoch keine direkte Verbindung zur M3-Vumfang her, den großen Umfang her.
+
+00:08:24.010 --> 00:08:26.750
+Es wird ein Quer-Connector benötigt und hier füllt Data Connect die Lücke.
+
+00:08:27.310 --> 00:08:29.430
+ADF wird zum Manager und Data Connect zur Datenquelle.
+
+00:08:30.550 --> 00:08:33.650
+Graph Data Connect wurde speziell für M3-65 Massendaten entwickelt.
+
+00:08:34.210 --> 00:08:36.010
+Eine Pipeline kann Millionen von Datensätzen extrahieren.
+
+00:08:36.250 --> 00:08:37.230
+Der Nachteil ist die Latenz.
+
+00:08:37.530 --> 00:08:40.730
+Bei jeder Pipeline-Ausführung dauert es etwa 45 Minuten, bis die Daten verschoben werden.
+
+00:08:41.070 --> 00:08:45.890
+Sie ist also nicht für Echtzeit-Dashboards geeignet, sondern für geplante, umfangreiche Analysen, die jede Nacht oder wöchentlich ausgeführt werden.
+
+00:08:46.050 --> 00:08:46.770
+Jane setzt sich so vor.
+
+00:08:46.870 --> 00:08:50.350
+Power Automate ist in Echtzeit verfügbar, kann kleine Datenmengen verarbeiten und erfordert wenig Kunden.
+
+00:08:50.350 --> 00:08:54.150
+Die Graph API ist in Echtzeit verfügbar, kann mittlere Datenmengen verarbeiten und erfordert einen Entwickler.
+
+00:08:54.510 --> 00:08:58.570
+Graph Data Connect ist geplant, kann große Datenmengen verarbeiten und erfordert die Zustimmung des Administrators.
+
+00:08:58.930 --> 00:09:00.750
+Das sind drei verschiedene Tools für drei verschiedene Aufgaben.
+
+00:09:01.270 --> 00:09:04.190
+Wenn Sie eine Echtzeit-Benachrichtigung benötigen, wenn sich eine Datei ändert, verwenden Sie Power Automat.
+
+00:09:04.490 --> 00:09:09.570
+Wenn Sie jede Nacht Nutzungsmuster auf allen Ihren SharePoint-Websites analysieren müssen, verwenden Sie Graph Data Connect.
+
+00:09:10.070 --> 00:09:12.410
+Versuchen Sie nicht, ein Tool für etwas zu zwingen, für das es nicht entwickelt wurde.
+
+00:09:13.910 --> 00:09:14.710
+Anwendungsverluste 3
+
+00:09:14.710 --> 00:09:16.490
+Was können Sie nun mit all diesen Daten tun?
+
+00:09:16.890 --> 00:09:18.210
+Ich gebe Ihnen ein paar konkrete Beispiele.
+
+00:09:18.810 --> 00:09:19.950
+Zunächst einmal die Sicherheitsanalyse.
+
+00:09:20.450 --> 00:09:25.110
+Sie können Überwachungsprotokolle und Aktivitätsdaten aus Exchange und SharePoint abrufen und dann eine Anomalieerkennung ausführen,
+
+00:09:25.190 --> 00:09:27.710
+um kompromittierte Konten oder ungewöhnliche Daten-Zukunftsmuster zu erkennen.
+
+00:09:28.330 --> 00:09:31.750
+Wenn ein Mitarbeiter plötzlich um zwei und morgens tausende von Dateien herunterlädt, sollten Sie das wissen.
+
+00:09:32.750 --> 00:09:35.330
+Data Connect liefert Ihnen die Rohdaten, um eine solche Erkennung zu erstellen.
+
+00:09:35.750 --> 00:09:37.470
+Ein Blick in die Zusammenarbeit sind ein weiterer wichtiger Sinn.
+
+00:09:37.590 --> 00:09:41.710
+Durch die Analyse von Teams, Nachrichten und Besprechungsdaten können Sie nachvollziehen, wie Teams wirklich zusammenarbeiten.
+
+00:09:42.430 --> 00:09:44.010
+Welche Abteilungen kommunizieren am häufigsten miteinander?
+
+00:09:44.010 --> 00:09:45.850
+Wo liegen die engen Pässe in Ihrem Workflow?
+
+00:09:46.270 --> 00:09:49.290
+Sie können Fragen beantworten, wie arbeiten funktionsübergreifende Teams tatsächlich zusammen?
+
+00:09:49.590 --> 00:09:51.770
+Oder sitzen Sie einfach nur in Besprechungen, ohne zu raten?
+
+00:09:52.350 --> 00:09:53.870
+Dann gibt es noch die skalierbare Inhaltsverwaltung.
+
+00:09:54.270 --> 00:09:58.630
+Sie können Metadaten aus Millionen von SharePoint-Dateien abrufen, veraltete Inhalte finden, die seit Jahren nicht mehr bearbeitet wurden.
+
+00:09:58.750 --> 00:10:04.450
+Doppelte Dateien identifizieren die Speicherplatzbelegen, die Speicherplatzbelegen und die Speicherplatzbelegen und dokumentvertraulichen Kennzeichnen und Kennzeichnen, die dort nicht vorhanden sein sollen.
+
+00:10:04.570 --> 00:10:08.590
+Eine derartige Datenhygiene lässt sich manuell nicht bewerkstelligen, doch mit Data Connected ist hier in Kinderspiel.
+
+00:10:08.810 --> 00:10:10.410
+Die Mitarbeitererfahrung ist am wachsenden Anwendungsfall.
+
+00:10:10.410 --> 00:10:16.530
+Kombinieren Sie Viva-Insights-Daten mit HR-Daten, um Fragen wie die folgenden zu beantworten, sind Teams mit häufigen Meetings produktiver oder weniger produktiv?
+
+00:10:16.910 --> 00:10:18.190
+Der Schlüssel ist die Identitätsverschleitung.
+
+00:10:18.570 --> 00:10:21.070
+Sie können Muster analysieren, ohne individuelle Identitäten preiszugeben.
+
+00:10:21.390 --> 00:10:23.270
+So erhalten Sie Einblicke ohne das Risiko für die Privatsphäre.
+
+00:10:23.610 --> 00:10:26.090
+Und hier ist ein Aspekt, der immer wichtiger wird, die Bereitschaft für Kopien.
+
+00:10:26.410 --> 00:10:29.410
+Bevor Sie Microsoft Copilot einführen, müssen Sie Ihren Datenbestand verstehen.
+
+00:10:29.810 --> 00:10:30.790
+Wo sind Ihre Daten gespeichert?
+
+00:10:31.070 --> 00:10:31.750
+Wie sind sie organisiert?
+
+00:10:32.150 --> 00:10:32.950
+Welche Berechtigung gilt?
+
+00:10:33.430 --> 00:10:35.230
+Data Connect kann Ihnen diese Bestandsaufnahme ermöglichen.
+
+00:10:35.230 --> 00:10:40.530
+Sie können sehen, welche Websites über zu viel Berechtigung verfügen, welche Dateien verwaist sind und wo sensible Daten möglicherweise offengelegt werden.
+
+00:10:40.730 --> 00:10:43.890
+Ohne diese Grundlage könnte Copilot Dinge ans Licht bringen, die Sie lieber nicht sehen möchten.
+
+00:10:44.250 --> 00:10:44.990
+Es ist ein konkretes Beispiel.
+
+00:10:45.630 --> 00:10:51.110
+Die Polytechnische Universität Mailand hat mit Data Connected die Stimmung der Mitarbeiter in großem Umfang bei tausenden von Benutzern analysiert.
+
+00:10:51.930 --> 00:10:54.710
+Sie erhielten objektiv detaillierte Daten, die Sie auf keine andere Weise hätten erhalten können.
+
+00:10:55.150 --> 00:10:58.570
+Keine Umfragen, keine Verzerrungen, nur echte Verhaltensdaten darüber, wie Menschen tatsächlich arbeiten.
+
+00:10:58.870 --> 00:10:59.990
+Das ist die Stärke dieses Tools.
+
+00:11:00.710 --> 00:11:01.930
+Eine einfache Einrichtungsanleitung.
+
+00:11:01.930 --> 00:11:05.570
+Das mag kompliziert klingen, aber die eigentliche Einrichtung ist überraschend einfach.
+
+00:11:06.270 --> 00:11:06.850
+Ich führe Schritt durch.
+
+00:11:07.450 --> 00:11:10.650
+Aktivieren Sie zunächst Graph Data Connect im Microsoft 365 Admin Center.
+
+00:11:11.330 --> 00:11:14.450
+Lassen Sie es in den Organisationseinstellungen, suchen Sie den Schalter Data Connect und aktivieren.
+
+00:11:14.650 --> 00:11:16.930
+Wählen Sie dann die Datasets aus, die Sie verfügbar machen möchten.
+
+00:11:17.070 --> 00:11:18.710
+SharePoint, OneDrive, Exchange, Teams.
+
+00:11:19.250 --> 00:11:20.710
+Sie können später jederzeit weiter hinzunehmen.
+
+00:11:20.990 --> 00:11:23.890
+Erstellen Sie zweitens eine App-Registrierung in Microsoft Entra-ID.
+
+00:11:24.330 --> 00:11:25.690
+Dies ist die Identität Ihrer Anwendung.
+
+00:11:26.190 --> 00:11:27.810
+Stellen Sie sich das wie eine Art Ausweis für die Pipeline vor.
+
+00:11:27.950 --> 00:11:30.870
+Sie müssen sich die App-ID notieren und einen geheimen kleinen Schlüssel generieren.
+
+00:11:30.870 --> 00:11:32.590
+Bewahren Sie diesen Schlüssel einem sicheren Art.
+
+00:11:32.930 --> 00:11:34.330
+Sie benötigen ihn, wenn Sie die Verbindung einladen.
+
+00:11:35.370 --> 00:11:38.350
+Erstellen Sie drittens eine Graph Data Connect Anwendung im Azure Portal.
+
+00:11:38.850 --> 00:11:41.970
+Verknüpfen Sie sie mit der soeben erstellten App-Registrierung und wählen Sie dann Ihr Ziel aus.
+
+00:11:42.290 --> 00:11:44.630
+Für die meisten Anfänger ist ein Fabric Lakehouse die einfachste Option.
+
+00:11:45.150 --> 00:11:48.730
+Keine zusätzlichen Speicherkonten zu verwalten, keine komplexe Konfiguration, einfach nur zeigen und loslegen.
+
+00:11:49.070 --> 00:11:50.330
+Viertens ist dies das Governance Game.
+
+00:11:50.890 --> 00:11:54.330
+Kehren Sie zum Microsoft 365 Admin Center zurück und genehmigen Sie die Anwendung.
+
+00:11:54.330 --> 00:12:01.410
+Ein Administrator überprüft die angeforderten Datasets und Berechtigungen, gibt an, auf welche Daten zugegriffen wird, welche Spalten enthalten sind und erteilt dann seine Zustimmung.
+
+00:12:02.310 --> 00:12:05.010
+Mit diesem Schritt wird sichergestellt, dass nichts ohne explizite Genehmigung geschieht.
+
+00:12:05.690 --> 00:12:08.530
+Fünftens, erstellen Sie eine Pipeline in Fabric oder Azure Data Factory.
+
+00:12:08.970 --> 00:12:11.850
+Verwenden Sie die Kopieaktivität mit der Microsoft 365-Quell.
+
+00:12:12.210 --> 00:12:13.070
+Wählen Sie Ihr Dataset aus.
+
+00:12:13.610 --> 00:12:15.150
+Beispielsweise SharePoint Websites Basis.
+
+00:12:15.510 --> 00:12:17.710
+Konfigurieren Sie einen Datumsfilter, wenn Sie nur aktuelle Daten haben.
+
+00:12:17.970 --> 00:12:19.010
+Verweisen Sie ihn auf Ihr Haus ansehen.
+
+00:12:19.290 --> 00:12:20.130
+Lässt Ihr Großteil arbeiten.
+
+00:12:20.530 --> 00:12:21.710
+Sechstens, führen Sie die Pipeline aus.
+
+00:12:21.970 --> 00:12:22.490
+Hier müssen Sie warten.
+
+00:12:22.890 --> 00:12:26.130
+Die anfängliche Vorbereitung dauert etwa 45 Minuten, während Microsoft Ihre Daten vorbereitet.
+
+00:12:26.490 --> 00:12:29.490
+Danach werden die Daten als Delta-Paket-Dateien eingespeist und das war's.
+
+00:12:30.190 --> 00:12:36.050
+Von dort aus können Sie die Daten mit SQL-Abfragen, Power BI-Berichte erstellen oder Machine Learning-Modelle ausführen, alles innerhalb von Fabric.
+
+00:12:37.210 --> 00:12:38.530
+Einschränkungen und worauf Sie achten sollten.
+
+00:12:39.010 --> 00:12:42.370
+Bevor Sie loslegen und dies einrichten, möchte ich Sie durch ein paar Dinge führen, die Sie beachten sollten.
+
+00:12:42.630 --> 00:12:43.390
+Erstens, die Latenz.
+
+00:12:43.390 --> 00:12:47.150
+Dieser Mehraufwand von 45 Minuten ist real, daher eignet sich Data Connect nicht für Echtzeit-Dashboards.
+
+00:12:47.470 --> 00:12:50.530
+Wenn Sie alle paar Minuten aktualisierte Daten benötigen, ist dies nicht das richtige Tool für Sie.
+
+00:12:50.790 --> 00:12:52.510
+Es ist für nächtliche oder wöchentliche Analysen konzipiert.
+
+00:12:52.790 --> 00:12:53.570
+Planen Sie also entsprechend.
+
+00:12:53.950 --> 00:12:54.950
+Als nächstes der Mandantbezug.
+
+00:12:55.150 --> 00:12:58.250
+Sie können keine Daten in einen anderen Microsoft 365 Mandanten abrufen.
+
+00:12:58.550 --> 00:13:00.310
+Die Daten bleiben innerhalb Ihrer Organisationsgrenzen.
+
+00:13:00.710 --> 00:13:04.210
+Wenn Sie als Berater mehrere Mandanten verwalten, benötigen Sie für jeden Mandanten separate Pipelines.
+
+00:13:04.910 --> 00:13:07.090
+Die Verfügbarkeit von Datensätzen ist ein weiterer zu beachtender Aspekt.
+
+00:13:07.350 --> 00:13:09.830
+Nicht alle M365-Daten sind über Data Connect verfügbar.
+
+00:13:09.830 --> 00:13:15.530
+Die grundlegenden Datensätze decken SharePoint, Exchange, Teams und Gruppen ab, aber möglicherweise fehlen einige erweiterte Eigenschaften.
+
+00:13:15.570 --> 00:13:18.230
+Überprüfen Sie die Dokumentation, bevor Sie sich für eine bestimmte Analyse entscheiden.
+
+00:13:18.570 --> 00:13:19.190
+Nun zu den Kosten.
+
+00:13:19.870 --> 00:13:21.530
+Data Connect hat eine verbrauchsbasierte Preisgestaltung.
+
+00:13:21.810 --> 00:13:23.330
+Die Kosten werden pro abgerufen im Objekt bei.
+
+00:13:23.470 --> 00:13:27.870
+Für einen kleinen Mandanten ist das vernachlässigbar, aber für einen Mandanten mit 100.000 Benutzern unmilliert sich der Betrag schnell.
+
+00:13:28.070 --> 00:13:28.810
+Summiert sich der Betrag schnell.
+
+00:13:28.910 --> 00:13:31.210
+Planen Sie Ihr Budget entsprechend und testen Sie zunächst mit einem Klender.
+
+00:13:31.530 --> 00:13:32.910
+Auch der Genehmigungsprozess ist wichtig.
+
+00:13:32.910 --> 00:13:35.550
+Jede Anwendung benötigt Administratoreinwilligung.
+
+00:13:36.090 --> 00:13:39.370
+Wenn Sie die Datensätze ändern oder neue Spalten hinzufügen, müssen Sie die Genehmigung erneut erteilen.
+
+00:13:39.710 --> 00:13:41.910
+Dekrieren Sie dies in Ihren Workflow, damit Sie nicht überrascht werden, wenn eine Pipeline...
+
+00:13:41.910 --> 00:14:11.890
+...
