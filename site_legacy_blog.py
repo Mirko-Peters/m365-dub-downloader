@@ -8,8 +8,10 @@ import site_media as MED
 import site_podpage as P
 import site_r2 as R2
 import site_sidebar as SBR
+import site_topics as TOP
 
 HANDLE, NAME = "mirko-p", "Mirko Peters"   # echtes Community-Profil von Mirko
+TOPICS = {}   # Slug -> Themen der frueheren Beitraege (auch fuer die schon in der Datenbank liegenden Fassungen, deren Themen beim Import eingefroren wurden)
 
 
 def _ts(s):
@@ -98,11 +100,12 @@ def items(BASE):
                      if _u.startswith("https://") and "None" not in _u and _ep else MED.hero_svg({"id": "blog-" + p["slug"], "name": p["title"], "type": "media"}, "Blog", "Titelbild: " + p["title"]))
             _hero = f'<figure style="margin:1em 0">{_hero}</figure>' if _hero.startswith("<img") else _hero   # hero_svg bringt sein eigenes <figure> mit
             html = _hero + html
-        topics = [e["id"] for e in ix.match(p["title"] + " " + text[:3000], k=6)]
+        topics = TOP.score_topics(ix, p["title"], text, key=p["slug"]); TOPICS[p["slug"]] = topics   # gewichtete Zuordnung (site_topics), gecacht je Beitrag
         pub = _ts(p.get("iso")); upd = _ts(p.get("modified")) or pub
         out.append({"id": 900_000_000 + zlib.crc32(p["slug"].encode()) % 90_000_000, "handle": HANDLE, "name": NAME, "slug": p["slug"], "title": p["title"], "summary": (p.get("desc") or "")[:400],
                     "body": "", "html": html, "lang": "en", "topics": topics, "keypoints": [], "faq": _faq(p.get("faq")), "published": pub, "created": pub, "updated": upd, "votes": 0,
                     "coauthors": [], "legacy": True, "images": re.findall(r'<img[^>]+src="(https://[^"]+)"', html), "src": p, "hero": _hero})
+    TOP.save()
     by_slug = {x["slug"]: x for x in out}
     out += translations(BASE, by_slug, fix)
     for x in out: x.pop("src", None); x.pop("hero", None)
