@@ -1,0 +1,21 @@
+name: Wikidata-Vorschlaege fuer Entitaeten (manuell, nur Vorschlagsliste)
+on:
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  suggest:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.12" }
+      - name: Vorschlaege sammeln (traegt nichts in entities.json ein - Sichtung durch den Eigentuemer, dann tools/wikidata_suggest.py --apply)
+        run: python tools/wikidata_suggest.py
+      - name: Liste speichern
+        run: |
+          if [ -n "$(git status --porcelain data/wikidata_suggestions.json)" ]; then
+            git config user.name "m365-site-bot"; git config user.email "actions@users.noreply.github.com"
+            git add data/wikidata_suggestions.json && git commit -m "Wikidata-Vorschlaege aktualisiert (Sichtung offen)"
+            git pull --rebase -q && git push -q
+          fi
