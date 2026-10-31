@@ -178,9 +178,68 @@ def is_old(e, today):
 FAQ = {}   # eid -> [{q, a, lang}] aus /api/qa/export
 
 
+MOD_FILE = Path(__file__).parent / "data" / "entity_mod.json"
+
+
+def mod_dates(recs, TODAY):
+    """Echtes Aenderungsdatum je Entitaet: Inhalts-Hash der Entitaet wird in data/entity_mod.json gefuehrt (vom Seitenbau committet);
+    aendert sich der Inhalt, wandert das Datum auf heute - sonst bleibt es stehen (statt bei jedem Bau TODAY)."""
+    import hashlib
+    try:
+        old = json.loads(MOD_FILE.read_text("utf-8")) if MOD_FILE.exists() else {}
+    except Exception:
+        old = {}
+    out = {}
+    for e in recs:
+        h = hashlib.sha1(json.dumps({k: v for k, v in e.items() if k != "edited"}, sort_keys=True, ensure_ascii=False).encode("utf-8")).hexdigest()[:16]
+        o = old.get(e["id"]) or {}
+        out[e["id"]] = {"h": h, "d": o["d"] if o.get("h") == h and o.get("d") else TODAY}
+    try:
+        MOD_FILE.write_text(json.dumps(out, ensure_ascii=False, indent=0, sort_keys=True), encoding="utf-8")
+    except Exception:
+        pass
+    return {k: v["d"] for k, v in out.items()}
+
+
+def _iso(ts):
+    from datetime import datetime, timezone
+    try:
+        return datetime.fromtimestamp(int(ts), timezone.utc).strftime("%Y-%m-%d")
+    except Exception:
+        return ""
+
+
+def topic_posts(posts_by_topic, eid, lang):
+    """Artikel einer Entitaet: bei sehr allgemeinen Entitaeten (> 60 Treffer) nur die Beitraege, deren Hauptthema sie ist; Seitensprache zuerst, dann Englisch."""
+    ps = posts_by_topic.get(eid) or []
+    if len(ps) > 60:
+        ps = [p for p in ps if (p.get("topics") or [""])[0] == eid] or ps[:60]
+    ps = [p for p in ps if p.get("lang") in (lang, "en")]
+    return sorted(ps, key=lambda p: (p.get("lang") != lang, -(p.get("published") or 0)))
+
+
+def articles_block(BASE, e, lang, posts, T_):
+    if not posts:
+        return "", []
+    def purl(p):
+        return f"{BASE}{pfx(p['lang']) if p['lang'] in ('de',) else ''}/community/u/{p['handle']}/blog/{p['slug']}/"
+    def item(p):
+        sm = (p.get("summary") or "")[:180]
+        return (f'<li class="en-art"><a href="{purl(p)}"><b>{esc(p["title"])}</b></a><br><span class="mut"><time datetime="{_iso(p.get("published"))}">{_iso(p.get("published"))}</time> · {esc(p.get("name") or p["handle"])}</span>'
+                + (f'<br>{esc(sm)}' if sm else "") + "</li>")
+    head, rest = posts[:20], posts[20:100]
+    h = f'<section class="en-arts"><h2>{esc(T_("Articles about {t}", "Artikel zu {t}").format(t=e["name"]))} <span class="mut">({len(posts)})</span></h2><ul class="en-artl">' + "".join(item(p) for p in head) + "</ul>"
+    if rest:
+        h += f'<details><summary>{esc(T_("{n} more articles", "{n} weitere Artikel").format(n=len(posts) - 20))}</summary><ul class="en-artl">' + "".join(f'<li><a href="{purl(p)}">{esc(p["title"])}</a> <span class="mut">· {_iso(p.get("published"))}</span></li>' for p in rest) + "</ul></details>"
+    h += "</section>"
+    return h, [purl(p) for p in head + rest]
+
+
 def build(g, wiki_links, experts_by_ent, ep_find):
     global BASE_
     BASE_ = g["BASE"]
+    posts_by_topic = g.get("posts_by_topic") or {}
+    author_box = g.get("author_box")
     """g: ctx wie bei build_learn. experts_by_ent: eid -> [{kind,handle,name,headline,verified,level,endorsed}]; ep_find(entity)->[episodes]."""
     BASE, write, page, header, footer, footer_en, LANGS = g["BASE"], g["write"], g["page"], g["header"], g["footer"], g["footer_en"], g["LANGS"]
     sitemap, TODAY, url_of = g["sitemap"], g["TODAY"], g["url_of"]
@@ -191,6 +250,7 @@ def build(g, wiki_links, experts_by_ent, ep_find):
 
     # --- Exporte ---
     recs = sorted(ENTS.values(), key=lambda e: e["id"])
+    MOD = mod_dates(recs, TODAY)
     write("entities.json", json.dumps({"version": 1, "generated": TODAY, "license": "CC BY 4.0, M365.FM community", "entities": recs}, ensure_ascii=False, indent=1))
     write("entities.jsonld", json.dumps({"@context": "https://schema.org", "@graph": [ent_ld(BASE, e, "en", gl_ids) for e in recs]}, ensure_ascii=False))
     sitemap.append((f"{BASE}/entities.jsonld", TODAY, None))
@@ -211,7 +271,7 @@ def build(g, wiki_links, experts_by_ent, ep_find):
             counts[e["type"]] = counts.get(e["type"], 0) + 1
         filt = f'<button type="button" class="en-f" data-f="" aria-pressed="true">{esc(s["all"])} ({len(recs)})</button>' + "".join(f'<button type="button" class="en-f" data-f="{k}" aria-pressed="false">{esc(TL[k][li])} ({counts[k]})</button>' for k in TL if k in counts)
         js = ('<script>(function(){var b=[].slice.call(document.querySelectorAll(".en-f")),l=[].slice.call(document.querySelectorAll(".en-i")),o=document.getElementById("en-old"),cur=b[0];function ap(){l.forEach(function(i){i.hidden=(!!cur.dataset.f&&i.dataset.t!==cur.dataset.f)||(!!i.dataset.old&&!(o&&o.checked))})}b.forEach(function(x){x.addEventListener("click",function(){b.forEach(function(y){y.setAttribute("aria-pressed",y===x?"true":"false")});cur=x;ap()})});if(o)o.addEventListener("change",ap)})()</script>')
-        css = '<style>' + MED.CSS + '.en-ep{margin:1em 0}.en-ep h3{margin:.2em 0}.en-ep p{margin:.2em 0}.en-faq details,.wk-q{border:1px solid var(--bd);border-radius:.4em;padding:.5em .8em;margin:.4em 0;background:var(--card)}.en-faq summary{cursor:pointer;font-weight:600}.wk-a{margin:.4em 0 .4em 1em}.en-old{border:1px solid var(--bd);border-left:4px solid #b45309;background:var(--card);padding:.6em .9em;border-radius:.4em}.en-f{font:inherit;cursor:pointer;border:1px solid var(--bd);border-radius:2em;padding:.35em .9em;margin:.2em .3em .2em 0;background:var(--card);color:var(--fg);min-height:2.5rem}.en-f[aria-pressed=true]{background:var(--ac);color:var(--onac);border-color:var(--ac)}.en-list{list-style:none;padding:0}.en-list li{padding:.55em 0;border-bottom:1px solid var(--bd)}.en-list li[hidden]{display:none}.en-facts{border-collapse:collapse;width:100%}.en-facts th{text-align:start;padding:.4em .8em .4em 0;vertical-align:top;white-space:nowrap}.en-facts td{padding:.4em 0}.en-rel h3{margin:.9em 0 .2em;font-size:1rem}.en-rel ul{margin:.2em 0;padding-inline-start:1.3em}</style>'
+        css = '<style>' + MED.CSS + '.en-ep{margin:1em 0}.en-ep h3{margin:.2em 0}.en-ep p{margin:.2em 0}.en-faq details,.wk-q{border:1px solid var(--bd);border-radius:.4em;padding:.5em .8em;margin:.4em 0;background:var(--card)}.en-faq summary{cursor:pointer;font-weight:600}.wk-a{margin:.4em 0 .4em 1em}.en-old{border:1px solid var(--bd);border-left:4px solid #b45309;background:var(--card);padding:.6em .9em;border-radius:.4em}.en-f{font:inherit;cursor:pointer;border:1px solid var(--bd);border-radius:2em;padding:.35em .9em;margin:.2em .3em .2em 0;background:var(--card);color:var(--fg);min-height:2.5rem}.en-f[aria-pressed=true]{background:var(--ac);color:var(--onac);border-color:var(--ac)}.en-list{list-style:none;padding:0}.en-list li{padding:.55em 0;border-bottom:1px solid var(--bd)}.en-list li[hidden]{display:none}.en-facts{border-collapse:collapse;width:100%}.en-facts th{text-align:start;padding:.4em .8em .4em 0;vertical-align:top;white-space:nowrap}.en-facts td{padding:.4em 0}.en-rel h3{margin:.9em 0 .2em;font-size:1rem}.en-rel ul{margin:.2em 0;padding-inline-start:1.3em}.en-artl{list-style:none;padding:0}.en-artl li{padding:.5em 0;border-bottom:1px solid var(--bd)}.en-arts details{margin:.6em 0}.en-arts summary{cursor:pointer}.en-upd{font-size:.9em}</style>'
         newbtn = f'<div id="en-new" data-lang="{lang}"></div>'
         body = shell(lang, f'<h1>{esc(s["entities"])}</h1><p class="mut">{esc(s["intro"])}</p><p>{esc(s["count"].format(n=len(recs)))} · <a href="{BASE}/entities.json">{esc(s["export"])} (JSON)</a> · <a href="{BASE}/entities.jsonld">JSON-LD</a></p>{newbtn}<p><label><input type="checkbox" id="en-old"> {esc(OLD[lang][1])}</label></p><div role="group" aria-label="{esc(s["type"])}">{filt}</div><ul class="en-list">{"".join(card(e) for e in sorted(recs, key=lambda x: x["name"].lower()))}</ul>{js}'
                       f'<script>window.M365E={{api:"{api}",lang:"{lang}",base:"{BASE}",s:{json.dumps({k: s[k] for k in ("new",)}, ensure_ascii=False)}}}</script><script defer src="{BASE}/assets/entity.js"></script>')
@@ -335,17 +395,34 @@ def build(g, wiki_links, experts_by_ent, ep_find):
             faqbox = (f'<section class="en-faq"><h2>{T(lang, "Frequently asked questions", "Häufige Fragen")}</h2>' + "".join(f'<details><summary>{esc(x["q"])}</summary><p>{esc(x["a"])}</p></details>' for x in _fq) + "</section>") if _fq else ""
             faqbox += f'<div id="en-qa" data-eid="{e["id"]}"></div>'
             wb = wiki_block(lang, e["id"], api, BASE, stat.get(e["id"]), wiki_links(lang))
-            b = shell(lang, f'<nav aria-label="breadcrumb"><a href="{root}">{esc(s["entities"])}</a></nav><h1>{esc(e["name"])}</h1><p class="mut">{esc(TL[e["type"]][li])}</p><p style="font-size:1.1em">{esc(d)}</p>{oldbanner}{claim_html(e["id"], lang)}{hero}{longbox}{ft}{evl}{gloss}'
-                          f'{faqbox}{relmap}{relx}<div class="en-rel">{rb}</div>{tline}{eb}{SU.block(lang, e["id"])}{wb}{("<h2>" + esc(s["experts"]) + "</h2>" + ehtml) if ehtml else ""}{edit}'
+            _arts = topic_posts(posts_by_topic, e["id"], lang)
+            artbox, arturls = articles_block(BASE, e, lang, _arts, lambda a, b_: T(lang, a, b_))
+            # echtes Aenderungsdatum: Entitaet selbst (Hash), Community-Bearbeitung, juengster Artikel, juengste Folge, juengste Frage
+            _mod = max([MOD.get(e["id"], TODAY), str(e.get("edited") or "")[:10], *[_iso(p.get("published")) for p in _arts[:1]], *[str(x.get("date", ""))[:10] for x in eps[:1]],
+                        *[_iso(x.get("created")) for x in _fq[:1]]] + [""])
+            _mod = _mod if len(_mod) == 10 and _mod <= TODAY else TODAY
+            updline = f'<p class="mut en-upd">{esc(T(lang, "Last updated", "Zuletzt aktualisiert"))}: <time datetime="{_mod}">{_mod}</time></p>'
+            b = shell(lang, f'<nav aria-label="breadcrumb"><a href="{root}">{esc(s["entities"])}</a></nav><h1>{esc(e["name"])}</h1><p class="mut">{esc(TL[e["type"]][li])}</p><p style="font-size:1.1em">{esc(d)}</p>{oldbanner}{claim_html(e["id"], lang)}{hero}{longbox}{ft}{evl}{gloss}{artbox}'
+                          f'{faqbox}{relmap}{relx}<div class="en-rel">{rb}</div>{tline}{eb}{SU.block(lang, e["id"])}{wb}{("<h2>" + esc(s["experts"]) + "</h2>" + ehtml) if ehtml else ""}{updline}{edit}'
                           f'<script>window.M365E={{api:"{api}",lang:"{lang}",base:"{BASE}",s:{json.dumps({k: s[k] for k in ("edit_e",)}, ensure_ascii=False)}}}</script><script defer src="{BASE}/assets/entity.js"></script>')
             node = ent_ld(BASE, e, lang, gl_ids)
-            ld = [{"@context": "https://schema.org", "@type": "WebPage", "@id": u + "#page", "url": u, "name": e["name"], "inLanguage": lang, "mainEntity": node, "dateModified": TODAY,
+            if arturls:
+                node["subjectOf"] = [{"@id": x + "#post"} for x in arturls[:20]]   # Artikel ueber diese Entitaet (Gegenrichtung zu BlogPosting.about)
+            ld = [{"@context": "https://schema.org", "@type": "WebPage", "@id": u + "#page", "url": u, "name": e["name"], "inLanguage": lang, "mainEntity": node, "dateModified": _mod,
                    "isPartOf": {"@id": f"{BASE}/#website"}, "relatedLink": [f"{root}{x}/" for k, v in groups.items() for x in v][:25],
+                   **({"hasPart": {"@id": u + "#articles"}} if arturls else {}),
                    "breadcrumb": {"@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": s["entities"], "item": root}, {"@type": "ListItem", "position": 2, "name": e["name"], "item": u}]}}]
+            if arturls:
+                ld.append({"@context": "https://schema.org", "@type": "ItemList", "@id": u + "#articles", "name": T(lang, "Articles about {t}", "Artikel zu {t}").format(t=e["name"]), "numberOfItems": len(arturls),
+                           "itemListElement": [{"@type": "ListItem", "position": i + 1, "url": x} for i, x in enumerate(arturls[:50])]})
             if _fq:
                 ld.append({"@context": "https://schema.org", "@type": "FAQPage", "@id": u + "#faq", "mainEntity": [{"@type": "Question", "name": x["q"], "acceptedAnswer": {"@type": "Answer", "text": x["a"]}} for x in _fq]})
-            write(f"{rel}/{e['id']}/index.html", page(lang, f'{e["name"]} – {TL[e["type"]][li]} | M365.FM', d[:155], u, b, None, ld, og_type="website", extra_head=LCSS + css, noindex=lang not in ("en", "de")))
-            if lang in ("en", "de"): sitemap.append((u, TODAY, None))
+            # hreflang en/de nur bei echtem deutschem Text (Gast-Entitaeten haben de == en: dann ist /de/ ein Duplikat und bleibt ohne Index)
+            _has_de = bool(e["desc"].get("de")) and e["desc"].get("de") != e["desc"].get("en") or bool((e.get("long") or {}).get("de"))
+            _alts = {"en": eurl(BASE, "en", e["id"]), "de": eurl(BASE, "de", e["id"])} if _has_de else None
+            _noidx = lang not in ("en", "de") or (lang == "de" and not _has_de)
+            write(f"{rel}/{e['id']}/index.html", page(lang, f'{e["name"]} – {TL[e["type"]][li]} | M365.FM', d[:155], u, b, _alts if lang in ("en", "de") else None, ld, xdefault=eurl(BASE, "en", e["id"]), og_type="website", extra_head=LCSS + css, noindex=_noidx))
+            if not _noidx: sitemap.append((u, _mod, _alts))
 
 
 overlay("entities.S", S)

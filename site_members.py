@@ -100,11 +100,18 @@ def img_tag(kind, x, alt):
 
 
 CLAIMED = {}   # profil-handle -> entity id
+AUTHOR_ENT = {"mirko-p": "mirko-peters"}   # Profil-Handle -> Entitaet derselben Person (auch ohne Claim): Blog-Autor und Entitaet sind eine Identitaet
+
+
+def person_entity(handle):
+    return CLAIMED.get(handle) or AUTHOR_ENT.get(handle)
 
 
 def person_ld(BASE, p, orgs_by_handle):
     pid = f"{purl(BASE, 'en', 'u', p['handle'])}#person"
     n = {"@type": "Person", "@id": pid, "name": p["name"], "url": purl(BASE, "en", "u", p["handle"]), "mainEntityOfPage": {"@id": purl(BASE, "en", "u", p["handle"]) + "#profile"}}
+    if person_entity(p["handle"]):
+        n["sameAs"] = [f"{BASE}/entity/{person_entity(p['handle'])}/#entity"]   # dieselbe Person in der Entitaetsdatenbank
     if img_url("u", p):
         n["image"] = img_url("u", p)
     if p.get("recs"):

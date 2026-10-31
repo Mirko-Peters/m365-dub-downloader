@@ -51,7 +51,7 @@ def build(g, vids, people, api):
             ld = [{"@context": "https://schema.org", "@type": "VideoObject", "@id": u + "#video", "url": u, "name": v["title"], "description": (v.get("description") or "")[:500], "inLanguage": lang,
                    "uploadDate": iso(v["published"]), "thumbnailUrl": f"https://i.ytimg.com/vi/{v['video_id']}/hqdefault.jpg", "embedUrl": f"https://www.youtube.com/embed/{v['video_id']}",
                    "contentUrl": f"https://youtu.be/{v['video_id']}", "author": {"@type": "Person", "@id": au + "#person", "name": v["name"], "url": au}, **({"actor": [{"@type": "Person", "@id": f"{BASE}/community/u/{g['handle']}/#person", "name": g["name"], "url": f"{BASE}/community/u/{g['handle']}/"} for g in gs]} if gs else {}),
-                   "publisher": {"@id": f"{BASE}/#org"}, "about": [{"@id": f"{BASE}/entity/{t}/#thing"} for t in topics]}]
+                   "publisher": {"@id": f"{BASE}/#org"}, "about": [{"@id": f"{BASE}/entity/{t}/#entity"} for t in topics]}]
             write(f"{pfx2(lang)}community/video/{v['slug']}/index.html", page(lang, f'{v["title"]} – {ttl} | M365.FM', (v.get("description") or "")[:155], u, b, None, ld, og_type="video.other", extra_head=LCSS, noindex=v["title"].startswith("[Test]")))
             if not v["title"].startswith("[Test]"): sitemap.append((u, iso(v["published"]), None))
         it = sorted(mine, key=lambda x: -x["published"]); ru = f"{croot}video/"

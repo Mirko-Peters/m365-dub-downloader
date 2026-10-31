@@ -63,7 +63,7 @@ def build(g, items, people, api):
             lang_code = KINDS.get(p["kind"], KINDS["other"])[2]
             node = {"@type": "SoftwareSourceCode" if lang_code else "CreativeWork", "@id": u + "#item", "name": p["title"], "description": p.get("summary") or "", "inLanguage": lang,
                     "datePublished": iso(p["published"]), "dateModified": iso(p.get("updated") or p["published"]), "version": str(p.get("version", 1)), "text": p["body"][:5000],
-                    "author": {"@type": "Person", "@id": au + "#person", "name": a["name"], "url": au}, "about": [{"@id": f"{BASE}/entity/{t}/#thing"} for t in topics]}
+                    "author": {"@type": "Person", "@id": au + "#person", "name": a["name"], "url": au}, "about": [{"@id": f"{BASE}/entity/{t}/#entity"} for t in topics]}
             if lang_code: node["programmingLanguage"] = lang_code
             ld = [{"@context": "https://schema.org", **node}]
             noidx = p.get("votes", 0) < INDEX_VOTES
