@@ -348,10 +348,10 @@ def build(g, wiki_links, experts_by_ent, ep_find):
                 evl += f'<p class="mut"><a href="#en-edit">{T(lang, "This short description is not yet available in your language – feel free to add it.", "Diese Kurzbeschreibung gibt es noch nicht in deiner Sprache – gern ergänzen.")}</a></p>'
             gloss = f'<p class="mut"><a href="{BASE}/{pfx2(lang)}glossary/">{esc(s["glossary"])}</a></p>' if e["id"] in gl_ids else ""
             eps = ep_find(e, lang)   # Folgen in der Sprache der Seite (englisch: Hauptshow), sonst keine
-            _u = lambda x: x.get("url") or url_of(x)
+            _epu = lambda x: x.get("url") or url_of(x)
             ept = s.get("eps") or S["en"]["eps"]
             eb = (f'<h2>{esc(ept.format(t=e["name"]))}</h2>' + "".join(
-                f'<article class="en-ep"><h3><a href="{_u(x)}">{esc(g["anchor_title"](x["e"]["title"]))}</a></h3><p class="mut">{esc(x.get("date", ""))}</p><p>{esc(g["ep_sum"](x))}</p></article>' for x in eps)) if eps else ""
+                f'<article class="en-ep"><h3><a href="{_epu(x)}">{esc(g["anchor_title"](x["e"]["title"]))}</a></h3><p class="mut">{esc(x.get("date", ""))}</p><p>{esc(g["ep_sum"](x))}</p></article>' for x in eps)) if eps else ""
             tlab = TL[e["type"]][li]
             alt_h = T(lang, f"Title graphic: {e['name']} ({tlab})", f"Titelbild: {e['name']} ({tlab})")
             hero = MED.hero_svg(e, tlab, alt_h)
@@ -367,7 +367,7 @@ def build(g, wiki_links, experts_by_ent, ep_find):
                     _li.append(f'<li><a href="{_u}"><b>{esc(_n)}</b></a> <span class="mut">· {esc(_k)} · {esc(TL[ENTS[_id]["type"]][li])}</span>' + (f'<br>{esc(_dd)}' if _dd else "") + "</li>")
                     if len(_li) >= 14: break
                 relx = f'<h2>{T(lang, "Related topics in brief", "Verwandte Themen kurz erklärt")}</h2><ul class="en-relx">' + "".join(_li) + "</ul>" if _li else ""
-            tline = MED.timeline_svg([(x.get("date", ""), g["anchor_title"](x["e"]["title"]), _u(x)) for x in eps], T(lang, f"Timeline of episodes about {e['name']}", f"Zeitleiste der Folgen zu {e['name']}"))
+            tline = MED.timeline_svg([(x.get("date", ""), g["anchor_title"](x["e"]["title"]), _epu(x)) for x in eps], T(lang, f"Timeline of episodes about {e['name']}", f"Zeitleiste der Folgen zu {e['name']}"))
             ex = experts_by_ent.get(e["id"], [])
             ehtml = ""
             if ex:
@@ -401,7 +401,7 @@ def build(g, wiki_links, experts_by_ent, ep_find):
                 _kps = [(k, x) for x in eps for k in (x.get("keypoints") or []) if _hit(k)][:5]
                 if _kps:
                     kpbox = (f'<section class="en-kp"><h2>{esc("Key points about " + e["name"])}</h2><ul>'
-                             + "".join(f'<li>{esc(k)} <span class="mut">· <a href="{_u(x)}">{esc(g["anchor_title"](x["e"]["title"], 48))}</a></span></li>' for k, x in _kps) + "</ul></section>")
+                             + "".join(f'<li>{esc(k)} <span class="mut">· <a href="{_epu(x)}">{esc(g["anchor_title"](x["e"]["title"], 48))}</a></span></li>' for k, x in _kps) + "</ul></section>")
                 _seenq = {x["q"].strip().lower() for x in _fq}
                 for x in eps:
                     for q in (x.get("faq") or []):
@@ -410,7 +410,7 @@ def build(g, wiki_links, experts_by_ent, ep_find):
                             _seenq.add(q["q"].strip().lower()); _efq.append({"q": q["q"], "a": q["a"], "src": x})
             _allq = _fq + _efq
             faqbox = (f'<section class="en-faq"><h2>{T(lang, "Frequently asked questions", "Häufige Fragen")}</h2>' + "".join(
-                f'<details><summary>{esc(x["q"])}</summary><p>{esc(x["a"])}' + (f' <span class="mut">· <a href="{_u(x["src"])}">{esc(T(lang, "From the episode", "Aus der Folge"))}: {esc(g["anchor_title"](x["src"]["e"]["title"], 48))}</a></span>' if x.get("src") else "") + "</p></details>" for x in _allq) + "</section>") if _allq else ""
+                f'<details><summary>{esc(x["q"])}</summary><p>{esc(x["a"])}' + (f' <span class="mut">· <a href="{_epu(x["src"])}">{esc(T(lang, "From the episode", "Aus der Folge"))}: {esc(g["anchor_title"](x["src"]["e"]["title"], 48))}</a></span>' if x.get("src") else "") + "</p></details>" for x in _allq) + "</section>") if _allq else ""
             faqbox += f'<div id="en-qa" data-eid="{e["id"]}"></div>'
             wb = wiki_block(lang, e["id"], api, BASE, stat.get(e["id"]), wiki_links(lang))
             _arts = topic_posts(posts_by_topic, e["id"], lang)
@@ -437,7 +437,7 @@ def build(g, wiki_links, experts_by_ent, ep_find):
                 ld.append({"@context": "https://schema.org", "@type": "FAQPage", "@id": u + "#faq", "mainEntity": [{"@type": "Question", "name": x["q"], "acceptedAnswer": {"@type": "Answer", "text": x["a"]}} for x in _allq]})
             if eps:
                 ld.append({"@context": "https://schema.org", "@type": "ItemList", "@id": u + "#episodes", "name": ept.format(t=e["name"]), "numberOfItems": len(eps),
-                           "itemListElement": [{"@type": "ListItem", "position": i + 1, "url": _u(x), "name": x["e"]["title"]} for i, x in enumerate(eps)]})
+                           "itemListElement": [{"@type": "ListItem", "position": i + 1, "url": _epu(x), "name": x["e"]["title"]} for i, x in enumerate(eps)]})
                 _epids = [{"@id": x["url"] + "#episode"} for x in eps if x.get("url")]   # Folgenseiten der Hauptshow definieren #episode
                 if _epids:
                     node["subjectOf"] = (node.get("subjectOf") or []) + _epids
