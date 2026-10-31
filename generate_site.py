@@ -1603,6 +1603,14 @@ Mirko Peters, {BASE}/about/
         TRS.build(write, TODAY, list(ENT.ENTS.values()), [{"slug": p["slug"], "title": p["title"]} for p in _posts if p.get("legacy") and p.get("lang") == "en"], [{"slug": x["slug"], "title": x["e"]["title"]} for x in PP.episode_index(BASE)["items"]])
     except Exception as _e:
         print("Uebersetzungsstatus nicht geschrieben:", str(_e)[:160])
+    # Inhalt <-> Entitaet mit Gewicht fuer die Datenbank (content_topic, Paket 13): fruehere Beitraege (Slug) und Folgen der Hauptshow (Slug); der Worker uebernimmt die Liste alle 30 Minuten
+    _tj = []
+    for _p in _posts:
+        if _p.get("handle") == "mirko-p" and _p.get("html") and _p.get("lang") == "en":
+            for _i, _t in enumerate((_p.get("topics") or [])[:8]): _tj.append({"kind": "lblog", "id": _p["slug"], "eid": _t, "w": round(max(0.2, 1 - _i * 0.15), 2)})
+    for _slug, _eids in _ep_about.items():
+        for _i, _t in enumerate(_eids[:8]): _tj.append({"kind": "show", "id": _slug, "eid": _t, "w": round(max(0.2, 1 - _i * 0.15), 2)})
+    write("topics.json", json.dumps({"generated": TODAY, "count": len(_tj), "items": _tj}, ensure_ascii=False))
     phase("Agenten-Dateien, 404, UI-Quellen")
     sizes()
     print(f"{len(items)} Episodenseiten, {len(active)} Sprachen, {len(sitemap)} URLs → docs/")
