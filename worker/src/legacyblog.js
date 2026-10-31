@@ -1,9 +1,9 @@
-// Fruehere Podpage-Blogbeitraege nach und nach als Community-Beitraege von mirko-peters in die Datenbank uebernehmen.
+// Fruehere Podpage-Blogbeitraege nach und nach als Community-Beitraege von mirko-p in die Datenbank uebernehmen.
 // Quelle: statische Dateien der eigenen Seite (SITE/blog-import/index.json + part-N.json, vom Seitenbau erzeugt, HTML bereits bereinigt).
 // Je Cron-Lauf hoechstens BATCH Beitraege; der Fortschritt steht in blog_import. Wiederholbar: bei vorhandenem Beitrag (UNIQUE user_id, slug) wird nur das HTML erneuert, und nur wenn der Beitrag nie bearbeitet wurde.
 import { ensureSectionCols } from "./sections.js";
 
-const BATCH = 60, OWNER = "mirko-peters", VER = 2;   // VER erhoehen = Uebernahme einmal von vorn (bereits uebernommene, nie bearbeitete Beitraege bekommen den neuen HTML-Stand)
+const BATCH = 60, OWNER = "mirko-p", VER = 2;   // VER erhoehen = Uebernahme einmal von vorn (bereits uebernommene, nie bearbeitete Beitraege bekommen den neuen HTML-Stand)
 const clean = (s, n) => String(s || "").replace(/[\u0000-\u0008\u000b\u000c\u000e-\u001f]/g, "").slice(0, n);
 
 export async function importLegacyBlog(env) {

@@ -1,5 +1,5 @@
-"""Die frueheren Podpage-Blogbeitraege (data/podpage/blog_posts.json.gz) als Community-Beitraege von mirko-peters.
-Sie werden von site_blog.build wie echte Community-Beitraege ausgegeben (URL /community/u/mirko-peters/blog/<slug>/, Autorenzeile, Verzeichnisse, RSS),
+"""Die frueheren Podpage-Blogbeitraege (data/podpage/blog_posts.json.gz) als Community-Beitraege von mirko-p.
+Sie werden von site_blog.build wie echte Community-Beitraege ausgegeben (URL /community/u/mirko-p/blog/<slug>/, Autorenzeile, Verzeichnisse, RSS),
 bleiben aber statisch (HTML mit Tabellen und Bildern bleibt vollstaendig erhalten; kein Datenbank-Eintrag, kein Laengenlimit des Wiki-Markups)."""
 import ast, re, zlib
 from datetime import datetime, timezone
@@ -9,7 +9,7 @@ import site_podpage as P
 import site_r2 as R2
 import site_sidebar as SBR
 
-HANDLE, NAME = "mirko-peters", "Mirko Peters"
+HANDLE, NAME = "mirko-p", "Mirko Peters"   # echtes Community-Profil von Mirko
 
 
 def _ts(s):
