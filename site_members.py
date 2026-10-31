@@ -27,18 +27,13 @@ CACHE = Path(__file__).parent / "data" / "members_export.json"   # letzte erfolg
 
 def _fetch_export(url):
     """Wie _fetch_json, nennt aber den Grund des Fehlers im Build-Log (HTTP-Status, Zeitueberschreitung, Alter des Zwischenspeichers)."""
-    import sys, urllib.request
-    try:
-        with urllib.request.urlopen(urllib.request.Request(url, headers={"user-agent": "m365-dub-build"}), timeout=120) as r:
-            age = r.headers.get("x-export-age"); stale = r.headers.get("x-export-stale")
-            print(f"Profil-Export: HTTP {r.status}, Alter {age}s{', veraltet' if stale else ''}", file=sys.stderr)
-            j = json.loads(r.read().decode("utf-8"))
-            if j.get("failed"):
-                print(f"Profil-Export: {j['failed']} Profile fehlgeschlagen, erster Fehler: {(j.get('errors') or ['?'])[0]}", file=sys.stderr)
-            return j
-    except Exception as e:
-        print(f"Profil-Export Fehler: {type(e).__name__}: {str(e)[:160]}", file=sys.stderr)
-        return None
+    import sys, site_fetch as SF
+    j = SF.fetch(url)
+    if j is None:
+        print("Profil-Export Fehler: nicht erreichbar und nicht gespeichert", file=sys.stderr)
+    elif j.get("failed"):
+        print(f"Profil-Export: {j['failed']} Profile fehlgeschlagen, erster Fehler: {(j.get('errors') or ['?'])[0]}", file=sys.stderr)
+    return j
 
 
 def fetch_members(api):

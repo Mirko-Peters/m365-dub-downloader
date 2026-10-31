@@ -28,10 +28,8 @@ def remote():
     if _REMOTE is None:
         _REMOTE = {}
         try:
-            import urllib.request, os
-            api = os.environ.get("COMMUNITY_API", "https://api-dub.m365.fm")
-            with urllib.request.urlopen(api + "/api/ui-i18n", timeout=20) as r:
-                _REMOTE = json.load(r)
+            import os, site_fetch as SF
+            _REMOTE = SF.fetch(os.environ.get("COMMUNITY_API", "https://api-dub.m365.fm") + "/api/ui-i18n") or {}
         except Exception:
             pass
     return _REMOTE
