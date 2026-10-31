@@ -7,6 +7,7 @@ import { importLegacyBlog } from "./legacyblog.js";
 import { handleA2a } from "./a2a.js";
 import { handleAdminPanel } from "./adminpanel.js";
 import { autoTranslateItems, autoTranslateEntities, runTrQueue } from "./autotr.js";
+import { syncLiveEvents } from "./liveevents.js";
 import { entityMap } from "./entities.js";
 import { handleProfiles, deleteUserData, refreshProfilesExport } from "./profiles.js";
 import { handleEvents, deleteUserEvents, ensureM365Con } from "./events.js";
@@ -404,6 +405,7 @@ export default {
     T("refreshProfilesExport", () => refreshProfilesExport(env));
     T("remindInvites", () => remindInvites(env));
     T("runTrQueue", () => runTrQueue(env, entityMap));
+    T("syncLiveEvents", () => syncLiveEvents(env, entityMap));
     ctx.waitUntil(env.DB.prepare("DELETE FROM cron_runs WHERE started<?").bind(Math.floor(Date.now() / 1000) - 7 * 86400).run().catch(() => 0));
   },
 };
