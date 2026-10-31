@@ -291,7 +291,8 @@ def build(g):
         if r and r.get("audio"): ld["associatedMedia"] = {"@type": "AudioObject", "contentUrl": r["audio"]}
         if plat_links: ld["sameAs"] = [u for _, u in plat_links]
         if len(tr) > 200: ld["transcript"] = tr[:5000]
-        alts = {"en": ep_url(e), **{l: loc_url(l, f"episodes/{e['slug']}/") for l in TRL if e["slug"] in TRL[l] and TRL[l][e["slug"]][0]}}
+        # Alternates nur fuer Sprachfassungen mit uebersetzten Show Notes (150 je Sprache); die uebrigen ~14.000 Fassungen (nur Titel + Teaser) bleiben noindex und ausserhalb der Sitemap
+        alts = {"en": ep_url(e), **{l: loc_url(l, f"episodes/{e['slug']}/") for l in TRL if e["slug"] in TRL[l] and TRL[l][e["slug"]][0] and NTL.get(l, {}).get(e["slug"])}}
         pub(f"episodes/{e['slug']}/", e.get("meta_title") or e["name"], e.get("meta_description") or short_desc(e, nrec, 155), body, ([ld] + nld) if nld else ld, "article", last=day(e.get("update_time")) or TODAY, alts=alts if len(alts) > 1 else None)
         # lokalisierte Fassungen dieser Folge
         for l in TRL:
@@ -307,8 +308,9 @@ def build(g):
             lald = {"@context": "https://schema.org", "@type": "PodcastEpisode", "name": lt, "url": lu, "datePublished": day(e["create_time"]), "description": ls[:500],
                     "inLanguage": LG[l][1], "partOfSeries": {"@type": "PodcastSeries", "name": NAME, "url": root}, "author": {"@id": f"{BASE}/entity/mirko-peters/#entity"}}
             if r and r.get("audio"): lald["associatedMedia"] = {"@type": "AudioObject", "contentUrl": r["audio"]}
-            write(f"{l}/show/episodes/{e['slug']}/index.html", g["page"](l, f"{lt} – {NAME}", ls[:300], lu, f'{g["header"](l, "")}<main class="wrap">{lbody}</main>{g["footer"](l)}', alts, [lald], xdefault=ep_url(e), og_type="article", og_of=ep_url(e)))
-            sitemap.append((lu, day(e.get("update_time")) or TODAY, None))
+            _thin = not ln   # nur Titel und Teaser: fuer Besucher da, fuer Suchmaschinen nicht (Googles Regel zu skaliertem Inhalt)
+            write(f"{l}/show/episodes/{e['slug']}/index.html", g["page"](l, f"{lt} – {NAME}", ls[:300], lu, f'{g["header"](l, "")}<main class="wrap">{lbody}</main>{g["footer"](l)}', None if _thin else alts, [lald], xdefault=ep_url(e), og_type="article", og_of=ep_url(e), noindex=_thin))
+            if not _thin: sitemap.append((lu, day(e.get("update_time")) or TODAY, None))
 
     # Listen (paginiert)
     pages_n = (len(eps) + PER - 1) // PER

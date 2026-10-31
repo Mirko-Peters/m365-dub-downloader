@@ -22,7 +22,7 @@ TEAM = ROOT / "agents" / "blog-team"
 SRC = ROOT / "data" / "podpage" / "blog_posts.json.gz"
 LANGS = ("de", "fr", "es", "it", "nl", "pt", "pl", "id", "ru", "uk", "ar", "he", "ja", "ko")
 NAMES = {"de": "German", "es": "Spanish", "fr": "French", "it": "Italian", "pt": "Brazilian Portuguese", "nl": "Dutch", "pl": "Polish", "id": "Indonesian", "ru": "Russian",
-         "uk": "Ukrainian", "ar": "Arabic", "he": "Hebrew", "hi": "Hindi", "ja": "Japanese", "ko": "Korean", "ml": "Malayalam", "pa": "Punjabi (Gurmukhi)", "ta": "Tamil", "te": "Telugu"}
+         "uk": "Ukrainian", "ar": "Arabic", "he": "Hebrew", "ja": "Japanese", "ko": "Korean"}
 WORK = ROOT / "work" / "blog-i18n"
 MODEL = os.environ.get("TRANSLATE_MODEL", "claude-haiku-5-5")
 AGENT_MODEL = os.environ.get("AGENT_MODEL", "claude-agent")   # Herkunft bei Weg B
@@ -34,7 +34,7 @@ MAX_TOK = int(os.environ.get("MAX_TOKENS", "16000"))
 PER_BATCH = int(os.environ.get("PER_BATCH", "5000"))
 WAIT_MIN = int(os.environ.get("WAIT_MIN", "300"))
 # Ausgabe-Tokens je Quell-Token (Schaetzung bis Messwerte in usage.json da sind)
-FACTOR = {**{l: 1.5 for l in LANGS}, "ru": 2.2, "uk": 2.2, "ar": 2.2, "he": 2.2, "ja": 1.8, "ko": 2.0, "hi": 3.5, "pa": 4.5, "ml": 5.5, "ta": 5.5, "te": 5.5}
+FACTOR = {**{l: 1.5 for l in LANGS}, "ru": 2.2, "uk": 2.2, "ar": 2.2, "he": 2.2, "ja": 1.8, "ko": 2.0}
 PER_AGENT = int(os.environ.get("PER_AGENT", "2"))         # Artikel je Agent und Runde
 NEW_DAYS = int(os.environ.get("NEW_DAYS", "14"))
 BUCKETS = 16
@@ -42,8 +42,8 @@ BUCKETS = 16
 KEEP = ["Microsoft 365", "Microsoft Teams", "SharePoint", "OneDrive", "Copilot Studio", "Copilot", "Power BI", "Power Apps", "Power Automate", "Power Platform", "Dataverse",
         "Azure", "Entra", "Intune", "Purview", "Defender", "Sentinel", "Fabric", "Exchange Online", "Outlook", "Excel", "PowerPoint", "Word", "Viva", "Loop", "Planner",
         "Dynamics 365", "GitHub", "Windows", "Microsoft Graph", "PowerShell", "Mirko Peters", "M365.FM", "M365 Show", "M365Con", "MVP"]
-SCRIPT = {"ru": "Ѐ-ӿ", "uk": "Ѐ-ӿ", "ar": "؀-ۿ", "he": "֐-׿", "hi": "ऀ-ॿ", "ja": "぀-ヿ一-鿿",
-          "ko": "가-힯ᄀ-ᇿ", "ml": "ഀ-ൿ", "pa": "਀-੿", "ta": "஀-௿", "te": "ఀ-౿"}
+SCRIPT = {"ru": "Ѐ-ӿ", "uk": "Ѐ-ӿ", "ar": "؀-ۿ", "he": "֐-׿", "ja": "぀-ヿ一-鿿",
+          "ko": "가-힯ᄀ-ᇿ"}
 BLOCK = {"p", "li", "h2", "h3", "h4", "blockquote", "td", "th", "ul", "ol", "table", "thead", "tbody", "tr", "hr", "pre"}
 
 

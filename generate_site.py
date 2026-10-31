@@ -49,7 +49,7 @@ LANGS = {
     "ru": ("Русский", "ru", "ltr", 7393247, "ru_RU"), "uk": ("Українська", "uk", "ltr", 7393254, "uk_UA"),
     "ar": ("العربية", "ar", "rtl", 7393221, "ar_AR"), "he": ("עברית", "he", "rtl", 7393227, "he_IL"),
     "ja": ("日本語", "ja", "ltr", 7393232, "ja_JP"),
-    "ko": ("한국어", "ko", "ltr", 7393236, "ko_KR"),
+    "ko": ("한국어", "ko", "ltr", 7393236, "ko_KR")
 }
 
 # UI-Texte je Sprache: listen, watch, transcript, all, more, about, bio, home
@@ -78,21 +78,11 @@ UI = {
         "Mirko Peters خبير Microsoft MVP ومقدّم بودكاست M365.FM ومُطلق مؤتمر M365Con المجاني عبر الإنترنت.", "الرئيسية"),
  "he": ("האזינו עכשיו", "צפו בסרטון ב-YouTube", "קראו את התמלול", "כל הפרקים", "פרקים נוספים", "על Mirko Peters",
         "Mirko Peters הוא Microsoft MVP, מנחה הפודקאסט M365.FM ויוזם הכנס המקוון והחינמי M365Con.", "דף הבית"),
- "hi": ("अभी सुनें", "YouTube पर वीडियो देखें", "ट्रांसक्रिप्ट पढ़ें", "सभी एपिसोड", "और एपिसोड", "Mirko Peters के बारे में",
-        "Mirko Peters Microsoft MVP, पॉडकास्ट M365.FM के होस्ट और निःशुल्क ऑनलाइन कॉन्फ़्रेंस M365Con के आयोजक हैं।", "होम"),
  "ja": ("今すぐ聴く", "YouTube で動画を見る", "文字起こしを読む", "すべてのエピソード", "他のエピソード", "Mirko Peters について",
         "Mirko Peters は Microsoft MVP であり、ポッドキャスト M365.FM のホスト、無料オンライン カンファレンス M365Con の主催者です。", "ホーム"),
  "ko": ("지금 듣기", "YouTube에서 영상 보기", "대본 읽기", "모든 에피소드", "다른 에피소드", "Mirko Peters 소개",
-        "Mirko Peters는 Microsoft MVP이자 팟캐스트 M365.FM의 진행자이며 무료 온라인 컨퍼런스 M365Con의 주최자입니다.", "홈"),
- "ml": ("ഇപ്പോൾ കേൾക്കൂ", "YouTube-ൽ വീഡിയോ കാണൂ", "ട്രാൻസ്ക്രിപ്റ്റ് വായിക്കൂ", "എല്ലാ എപ്പിസോഡുകളും", "കൂടുതൽ എപ്പിസോഡുകൾ", "Mirko Peters നെക്കുറിച്ച്",
-        "Mirko Peters ഒരു Microsoft MVP ആണ്; M365.FM പോഡ്കാസ്റ്റിന്റെ ഹോസ്റ്റും സൗജന്യ ഓൺലൈൻ കോൺഫറൻസ് M365Con-ന്റെ സംഘാടകനും.", "ഹോം"),
- "pa": ("ਹੁਣੇ ਸੁਣੋ", "YouTube 'ਤੇ ਵੀਡੀਓ ਦੇਖੋ", "ਟ੍ਰਾਂਸਕ੍ਰਿਪਟ ਪੜ੍ਹੋ", "ਸਾਰੇ ਐਪੀਸੋਡ", "ਹੋਰ ਐਪੀਸੋਡ", "Mirko Peters ਬਾਰੇ",
-        "Mirko Peters Microsoft MVP, ਪੌਡਕਾਸਟ M365.FM ਦੇ ਹੋਸਟ ਅਤੇ ਮੁਫ਼ਤ ਆਨਲਾਈਨ ਕਾਨਫ਼ਰੰਸ M365Con ਦੇ ਪ੍ਰਬੰਧਕ ਹਨ।", "ਮੁੱਖ ਪੰਨਾ"),
- "ta": ("இப்போது கேளுங்கள்", "YouTube-இல் வீடியோவைப் பாருங்கள்", "எழுத்துப்படியைப் படியுங்கள்", "அனைத்து எபிசோட்களும்", "மேலும் எபிசோட்கள்", "Mirko Peters பற்றி",
-        "Mirko Peters ஒரு Microsoft MVP; M365.FM பாட்காஸ்ட்டின் தொகுப்பாளர் மற்றும் இலவச ஆன்லைன் மாநாடு M365Con-ஐ நடத்துபவர்.", "முகப்பு"),
- "te": ("ఇప్పుడే వినండి", "YouTube లో వీడియో చూడండి", "ట్రాన్స్క్రిప్ట్ చదవండి", "అన్ని ఎపిసోడ్‌లు", "మరిన్ని ఎపిసోడ్‌లు", "Mirko Peters గురించి",
-        "Mirko Peters ఒక Microsoft MVP; M365.FM పాడ్‌కాస్ట్ హోస్ట్, ఉచిత ఆన్‌లైన్ కాన్ఫరెన్స్ M365Con నిర్వాహకుడు.", "హోమ్"),
-}
+        "Mirko Peters는 Microsoft MVP이자 팟캐스트 M365.FM의 진행자이며 무료 온라인 컨퍼런스 M365Con의 주최자입니다.", "홈")
+ }
 
 CSS = """:root{--bg:#f6f1ea;--fg:#141210;--mut:#6b645c;--ac:#b4233c;--card:#fffdf9;--bd:#1412101f;--ink:#141210;--onink:#f6f1ea}
 @media (prefers-color-scheme:dark){:root{--bg:#0e0d0c;--fg:#f1ebe2;--mut:#a39a8e;--ac:#ff5a72;--card:#171513;--bd:#f1ebe226;--ink:#f1ebe2;--onink:#0e0d0c}}
@@ -205,21 +195,18 @@ def lang_switch(cur, alt_urls, home_langs):
 TOP_L = {"de": "Top-Folgen der Woche", "es": "Episodios más escuchados de la semana", "fr": "Épisodes les plus écoutés cette semaine", "it": "Episodi più ascoltati della settimana",
          "pt": "Episódios mais ouvidos da semana", "nl": "Meest beluisterde afleveringen van de week", "pl": "Najczęściej słuchane odcinki tygodnia", "id": "Episode terpopuler minggu ini",
          "ru": "Самые популярные выпуски недели", "uk": "Найпопулярніші випуски тижня", "ar": "أكثر الحلقات استماعًا هذا الأسبوع", "he": "הפרקים המובילים השבוע",
-         "hi": "इस सप्ताह के टॉप एपिसोड", "ja": "今週の人気エピソード", "ko": "이번 주 인기 에피소드", "ml": "ഈ ആഴ്ചയിലെ ടോപ്പ് എപ്പിസോഡുകൾ", "pa": "ਇਸ ਹਫ਼ਤੇ ਦੇ ਟੌਪ ਐਪੀਸੋਡ",
-         "ta": "இந்த வாரத்தின் சிறந்த எபிசோடுகள்", "te": "ఈ వారం టాప్ ఎపిసోడ్లు", "en": "Top episodes this week"}
+         "ja": "今週の人気エピソード", "ko": "이번 주 인기 에피소드", "en": "Top episodes this week"}
 REC_L = {"de": "Empfohlene Folgen", "es": "Episodios recomendados", "fr": "Épisodes recommandés", "it": "Episodi consigliati", "pt": "Episódios recomendados",
          "nl": "Aanbevolen afleveringen", "pl": "Polecane odcinki", "id": "Episode pilihan", "ru": "Рекомендуемые выпуски", "uk": "Рекомендовані випуски",
-         "ar": "حلقات مختارة", "he": "פרקים מומלצים", "hi": "चुनिंदा एपिसोड", "ja": "おすすめエピソード", "ko": "추천 에피소드", "ml": "തിരഞ്ഞെടുത്ത എപ്പിസോഡുകൾ",
-         "pa": "ਚੁਣੇ ਹੋਏ ਐਪੀਸੋਡ", "ta": "பரிந்துரைக்கப்பட்ட எபிசோடுகள்", "te": "సిఫార్సు చేసిన ఎపిసోడ్లు", "en": "Recommended episodes"}
+         "ar": "حلقات مختارة", "he": "פרקים מומלצים", "ja": "おすすめエピソード", "ko": "추천 에피소드", "en": "Recommended episodes"}
 OGLIST = []
 TOP_REAL = set()   # Sprachen mit echten Statistikdaten (wird im Build gesetzt)
 SHARE_L = {"de": "Teilen", "es": "Compartir", "fr": "Partager", "it": "Condividi", "pt": "Compartilhar", "nl": "Delen", "pl": "Udostępnij",
-           "id": "Bagikan", "ru": "Поделиться", "uk": "Поділитися", "ar": "مشاركة", "he": "שיתוף", "hi": "शेयर करें", "ja": "シェア",
-           "ko": "공유", "ml": "പങ്കിടുക", "pa": "ਸਾਂਝਾ ਕਰੋ", "ta": "பகிர்", "te": "షేర్ చేయండి", "en": "Share"}
+           "id": "Bagikan", "ru": "Поделиться", "uk": "Поділитися", "ar": "مشاركة", "he": "שיתוף", "ja": "シェア",
+           "ko": "공유", "en": "Share"}
 COPY_L = {"de": "Link kopieren", "es": "Copiar enlace", "fr": "Copier le lien", "it": "Copia link", "pt": "Copiar link", "nl": "Link kopiëren",
           "pl": "Kopiuj link", "id": "Salin tautan", "ru": "Копировать ссылку", "uk": "Копіювати посилання", "ar": "نسخ الرابط", "he": "העתקת קישור",
-          "hi": "लिंक कॉपी करें", "ja": "リンクをコピー", "ko": "링크 복사", "ml": "ലിങ്ക് പകർത്തുക", "pa": "ਲਿੰਕ ਕਾਪੀ ਕਰੋ", "ta": "இணைப்பை நகலெடு",
-          "te": "లింక్ కాపీ", "en": "Copy link"}
+          "ja": "リンクをコピー", "ko": "링크 복사", "en": "Copy link"}
 
 
 def seo_title(t):
@@ -240,7 +227,7 @@ BRAND_ICONS = {
     "Reddit": ("M12 0C5.373 0 0 5.373 0 12c0 3.314 1.343 6.314 3.515 8.485l-2.286 2.286C.775 23.225 1.097 24 1.738 24H12c6.627 0 12-5.373 12-12S18.627 0 12 0Zm4.388 3.199c1.104 0 1.999.895 1.999 1.999 0 1.105-.895 2-1.999 2-.946 0-1.739-.657-1.947-1.539v.002c-1.147.162-2.032 1.15-2.032 2.341v.007c1.776.067 3.4.567 4.686 1.363.473-.363 1.064-.58 1.707-.58 1.547 0 2.802 1.254 2.802 2.802 0 1.117-.655 2.081-1.601 2.531-.088 3.256-3.637 5.876-7.997 5.876-4.361 0-7.905-2.617-7.998-5.87-.954-.447-1.614-1.415-1.614-2.538 0-1.548 1.255-2.802 2.803-2.802.645 0 1.239.218 1.712.585 1.275-.79 2.881-1.291 4.64-1.365v-.01c0-1.663 1.263-3.034 2.88-3.207.188-.911.993-1.595 1.959-1.595Zm-8.085 8.376c-.784 0-1.459.78-1.506 1.797-.047 1.016.64 1.429 1.426 1.429.786 0 1.371-.369 1.418-1.385.047-1.017-.553-1.841-1.338-1.841Zm7.406 0c-.786 0-1.385.824-1.338 1.841.047 1.017.634 1.385 1.418 1.385.785 0 1.473-.413 1.426-1.429-.046-1.017-.721-1.797-1.506-1.797Zm-3.703 4.013c-.974 0-1.907.048-2.77.135-.147.015-.241.168-.183.305.483 1.154 1.622 1.964 2.953 1.964 1.33 0 2.47-.81 2.953-1.964.057-.137-.037-.29-.184-.305-.863-.087-1.795-.135-2.769-.135Z", "FF4500"),
     "YouTube": ("M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z", "FF0000"),
     "E-Mail": ("M3 5h18a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1zm1.6 2L12 12.6 19.4 7H4.6zM4 9.2V17h16V9.2l-8 6-8-6z", "EA4335"),
-    "Copy": ("M10.6 13.4a1 1 0 0 1 0-1.4l3-3a3 3 0 0 1 4.2 4.2l-2 2a1 1 0 1 1-1.4-1.4l2-2a1 1 0 0 0-1.4-1.4l-3 3a1 1 0 0 1-1.4 0zM13.4 10.6a1 1 0 0 1 0 1.4l-3 3a3 3 0 0 1-4.2-4.2l2-2a1 1 0 0 1 1.4 1.4l-2 2a1 1 0 0 0 1.4 1.4l3-3a1 1 0 0 1 1.4 0z", "6B7280"),
+    "Copy": ("M10.6 13.4a1 1 0 0 1 0-1.4l3-3a3 3 0 0 1 4.2 4.2l-2 2a1 1 0 1 1-1.4-1.4l2-2a1 1 0 0 0-1.4-1.4l-3 3a1 1 0 0 1-1.4 0zM13.4 10.6a1 1 0 0 1 0 1.4l-3 3a3 3 0 0 1-4.2-4.2l2-2a1 1 0 0 1 1.4 1.4l-2 2a1 1 0 0 0 1.4 1.4l3-3a1 1 0 0 1 1.4 0z", "6B7280")
 }
 
 
@@ -273,10 +260,8 @@ CONSENT = {
     "pl": ("Używamy Microsoft Clarity do analizy korzystania ze strony.", "Akceptuję", "Odrzucam"), "id": ("Kami memakai Microsoft Clarity untuk analisis penggunaan.", "Terima", "Tolak"),
     "ru": ("Мы используем Microsoft Clarity для анализа использования сайта.", "Принять", "Отклонить"), "uk": ("Ми використовуємо Microsoft Clarity для аналізу використання сайту.", "Прийняти", "Відхилити"),
     "ar": ("نستخدم Microsoft Clarity لتحليل الاستخدام.", "قبول", "رفض"), "he": ("אנו משתמשים ב-Microsoft Clarity לניתוח שימוש.", "אישור", "דחייה"),
-    "hi": ("हम उपयोग विश्लेषण के लिए Microsoft Clarity का उपयोग करते हैं।", "स्वीकार करें", "अस्वीकार करें"), "ja": ("利用状況の分析に Microsoft Clarity を使用しています。", "同意する", "拒否する"),
-    "ko": ("이용 분석을 위해 Microsoft Clarity를 사용합니다.", "동의", "거부"), "ml": ("ഉപയോഗ വിശകലനത്തിനായി ഞങ്ങൾ Microsoft Clarity ഉപയോഗിക്കുന്നു.", "അംഗീകരിക്കുക", "നിരസിക്കുക"),
-    "pa": ("ਅਸੀਂ ਵਰਤੋਂ ਦੇ ਵਿਸ਼ਲੇਸ਼ਣ ਲਈ Microsoft Clarity ਵਰਤਦੇ ਹਾਂ।", "ਮਨਜ਼ੂਰ", "ਇਨਕਾਰ"), "ta": ("பயன்பாட்டு பகுப்பாய்விற்கு Microsoft Clarity பயன்படுத்துகிறோம்.", "ஏற்கிறேன்", "மறுக்கிறேன்"),
-    "te": ("వినియోగ విశ్లేషణ కోసం మేము Microsoft Clarity ఉపయోగిస్తాము.", "అంగీకరించు", "తిరస్కరించు"), "en": ("We use Microsoft Clarity for usage analytics.", "Accept", "Decline")}
+    "ja": ("利用状況の分析に Microsoft Clarity を使用しています。", "同意する", "拒否する"),
+    "ko": ("이용 분석을 위해 Microsoft Clarity를 사용합니다.", "동의", "거부"), "en": ("We use Microsoft Clarity for usage analytics.", "Accept", "Decline")}
 
 
 def consent_html(lang):
@@ -312,8 +297,7 @@ def ext_links(html_):
 
 SKIP_T = {"en": "Skip to content", "de": "Zum Inhalt springen", "es": "Saltar al contenido", "fr": "Aller au contenu", "it": "Vai al contenuto", "pt": "Saltar para o conteúdo",
           "nl": "Naar de inhoud", "pl": "Przejdź do treści", "id": "Langsung ke konten", "ru": "Перейти к содержимому", "uk": "Перейти до вмісту", "ar": "انتقل إلى المحتوى",
-          "he": "דלג לתוכן", "hi": "सामग्री पर जाएँ", "ja": "本文へスキップ", "ko": "본문으로 건너뛰기", "ml": "ഉള്ളടക്കത്തിലേക്ക് പോകുക", "pa": "ਸਮੱਗਰੀ ’ਤੇ ਜਾਓ",
-          "ta": "உள்ளடக்கத்திற்குச் செல்", "te": "కంటెంట్‌కు వెళ్లండి"}
+          "he": "דלג לתוכן", "ja": "本文へスキップ", "ko": "본문으로 건너뛰기", }
 
 
 _A11Y = {}
@@ -556,8 +540,8 @@ def event_ld():
 
 FAQ_T = {"de": "Häufige Fragen", "es": "Preguntas frecuentes", "fr": "Questions fréquentes", "it": "Domande frequenti", "pt": "Perguntas frequentes",
          "nl": "Veelgestelde vragen", "pl": "Najczęstsze pytania", "id": "Pertanyaan umum", "ru": "Частые вопросы", "uk": "Часті запитання",
-         "ar": "الأسئلة الشائعة", "he": "שאלות נפוצות", "hi": "अक्सर पूछे जाने वाले प्रश्न", "ja": "よくある質問", "ko": "자주 묻는 질문",
-         "ml": "പതിവ് ചോദ്യങ്ങൾ", "pa": "ਅਕਸਰ ਪੁੱਛੇ ਜਾਂਦੇ ਸਵਾਲ", "ta": "அடிக்கடி கேட்கப்படும் கேள்விகள்", "te": "తరచుగా అడిగే ప్రశ్నలు"}
+         "ar": "الأسئلة الشائعة", "he": "שאלות נפוצות", "ja": "よくある質問", "ko": "자주 묻는 질문"
+         }
 
 
 def faq_ld(lang):
@@ -580,9 +564,8 @@ BAR_T = {"en": "M365Con 2027 – free online conference", "de": "M365Con 2027 �
          "fr": "M365Con 2027 – conférence en ligne gratuite", "it": "M365Con 2027 – conferenza online gratuita", "pt": "M365Con 2027 – conferência online gratuita",
          "nl": "M365Con 2027 – gratis online conferentie", "pl": "M365Con 2027 – bezpłatna konferencja online", "id": "M365Con 2027 – konferensi online gratis",
          "ru": "M365Con 2027 – бесплатная онлайн-конференция", "uk": "M365Con 2027 – безкоштовна онлайн-конференція", "ar": "M365Con 2027 – مؤتمر مجاني عبر الإنترنت",
-         "he": "M365Con 2027 – כנס אונליין חינמי", "hi": "M365Con 2027 – मुफ़्त ऑनलाइन सम्मेलन", "ja": "M365Con 2027 – 無料オンラインカンファレンス",
-         "ko": "M365Con 2027 – 무료 온라인 컨퍼런스", "ml": "M365Con 2027 – സൗജന്യ ഓൺലൈൻ കോൺഫറൻസ്", "pa": "M365Con 2027 – ਮੁਫ਼ਤ ਆਨਲਾਈਨ ਕਾਨਫਰੰਸ",
-         "ta": "M365Con 2027 – இலவச ஆன்லைன் மாநாடு", "te": "M365Con 2027 – ఉచిత ఆన్‌లైన్ సమావేశం"}
+         "he": "M365Con 2027 – כנס אונליין חינמי", "ja": "M365Con 2027 – 無料オンラインカンファレンス",
+         "ko": "M365Con 2027 – 무료 온라인 컨퍼런스", }
 M365CON_END = date(2027, 1, 22)
 
 
@@ -1435,7 +1418,7 @@ def build():
         "skills": [
             {"id": "find-episode", "name": "Find an episode", "description": "Find podcast episodes about Microsoft 365, Copilot, Azure, Power Platform, security and AI governance in a given language. Use episodes.json (filter by language, categories, tags) and link to the episode page.", "inputModes": ["text"], "outputModes": ["application/json", "text/html"]},
             {"id": "translate-link", "name": "Same episode in another language", "description": "Each episode page lists its alternate-language versions (hreflang / 'alternates' in episodes.json).", "inputModes": ["text"], "outputModes": ["application/json"]},
-            {"id": "about-author", "name": "About Mirko Peters", "description": "Microsoft MVP, M365.FM host, M365Con organizer – see the about page.", "inputModes": ["text"], "outputModes": ["text/html"]}],
+            {"id": "about-author", "name": "About Mirko Peters", "description": "Microsoft MVP, M365.FM host, M365Con organizer – see the about page.", "inputModes": ["text"], "outputModes": ["text/html"]}]
     }, ensure_ascii=False, indent=1))
     write(".well-known/agent.json", (OUT / "agent.json").read_text(encoding="utf-8"))
     _card = json.loads((OUT / "agent.json").read_text(encoding="utf-8"))   # A2A Agent Card: dieselben Faehigkeiten, Schnittstelle ist /a2a im Worker (nur lesen)
@@ -1463,7 +1446,7 @@ def build():
         "find-m365-experts": ("Find community experts for a Microsoft topic, including experts on related topics, with the public MCP tool find_experts.",
             f"# Find M365 experts\n\nUse the public MCP server `https://api-dub.m365.fm/mcp` (Streamable HTTP, JSON-RPC, no sign-in for reading).\n\n1. Call the tool `find_experts` with an entity id (for example `copilot`, `purview`, `intune`; entity pages live at {BASE}/entity/<id>/).\n2. The result ranks members by their expertise on the topic and on related topics (graph search, up to 2 hops).\n3. Link to the expert's profile when you name them.\n\nPlain REST alternative: `GET https://api-dub.m365.fm/api/experts?e=<entity-id>&hops=2&limit=12`.\n"),
         "use-m365-mcp": ("Connect to the M365.FM MCP server: read tools without sign-in, write tools with a personal access token.",
-            f"# Use the M365.FM MCP server\n\nEndpoint: `https://api-dub.m365.fm/mcp` (Streamable HTTP, JSON-RPC 2.0).\n\n- Reading (blog, shows, entities, experts, events): no credentials.\n- Writing and personal data (for example `save_blog_post`, `get_my_profile`): send `Authorization: Bearer m365_...`. A signed-in member creates the token under their profile; agents cannot register themselves. Details: {BASE}/auth.md.\n- Call `tools/list` first; each tool describes its parameters. Never invent entity ids: look them up at {BASE}/entity/ or with the tool `suggest_entities`.\n"),
+            f"# Use the M365.FM MCP server\n\nEndpoint: `https://api-dub.m365.fm/mcp` (Streamable HTTP, JSON-RPC 2.0).\n\n- Reading (blog, shows, entities, experts, events): no credentials.\n- Writing and personal data (for example `save_blog_post`, `get_my_profile`): send `Authorization: Bearer m365_...`. A signed-in member creates the token under their profile; agents cannot register themselves. Details: {BASE}/auth.md.\n- Call `tools/list` first; each tool describes its parameters. Never invent entity ids: look them up at {BASE}/entity/ or with the tool `suggest_entities`.\n")
     }
     _idx = []
     for _n, (_d, _md) in _sk.items():
@@ -1532,7 +1515,7 @@ Mirko Peters, {BASE}/about/
 <pre id=c style="white-space:pre-wrap;word-break:break-all;background:#1d2126;padding:14px;border:1px solid #444"></pre><button id=b style="display:none;padding:10px 18px">Code kopieren</button>
 <script>var q=new URLSearchParams(location.search),c=q.get("code");if(c){document.getElementById("m").textContent="Code (in das Programm bzw. den GitHub-Workflow einfügen):";document.getElementById("c").textContent=c;var b=document.getElementById("b");b.style.display="inline-block";b.onclick=function(){navigator.clipboard.writeText(c);b.textContent="Kopiert ✓"}}else if(q.get("error")){document.getElementById("m").textContent="Fehler: "+q.get("error")}</script></body>""")
     write("og-manifest.json", json.dumps(OGLIST, ensure_ascii=False))
-    write("404.html", page("en", "Not found", "Page not found", f"{BASE}/404.html", '<main class="wrap"><h1>404</h1><p><a class="btn" href="%s/">M365.FM</a></p></main>' % BASE))
+    write("404.html", page("en", "Not found", "Page not found", f"{BASE}/404.html", '<main class="wrap"><h1>404</h1><p><a class="btn" href="%s/">M365.FM</a></p></main>' % BASE, noindex=True))
     json.dump([u for u, _, _ in sitemap], open(ROOT / "data" / "urls.json", "w"), indent=0)
     from site_i18n import write_src
     write_src(OUT, ROOT / "data" / "ui_js_en.json")

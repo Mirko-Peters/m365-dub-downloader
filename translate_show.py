@@ -8,7 +8,7 @@ import site_podpage as P
 MODEL = os.environ.get("TRANSLATE_MODEL", "claude-haiku-5-5")
 OUT = Path(__file__).parent / "data" / "podpage_i18n"
 NAMES = {"de": "German", "es": "Spanish", "fr": "French", "it": "Italian", "pt": "Portuguese", "nl": "Dutch", "pl": "Polish", "id": "Indonesian", "ru": "Russian", "uk": "Ukrainian",
-         "ar": "Arabic", "he": "Hebrew", "hi": "Hindi", "ja": "Japanese", "ko": "Korean", "ml": "Malayalam", "pa": "Punjabi", "ta": "Tamil", "te": "Telugu"}
+         "ar": "Arabic", "he": "Hebrew", "ja": "Japanese", "ko": "Korean", }
 
 
 # Haiku 5.5, Message Batch (50 % Rabatt, Prompts bis 100K Tokens): $ je 1 Mio. Tokens
