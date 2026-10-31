@@ -1,0 +1,63 @@
+name: Shownotes nach Spreaker schreiben (T25)
+# Schreibt freigegebene Shownotes (shownotes/spreaker/<episode_id>.html) in die Spreaker-Episodenbeschreibungen.
+# Ohne Datei shownotes/APPROVED nur Dry-Run (Diff in shownotes/DRYRUN.md); shownotes/PAUSED haelt alles an.
+# Zugang wie die uebrigen Workflows: Secret SPREAKER_TOKEN, sonst die OAuth-Verbindung (data/spreaker_auth.enc + SPREAKER_CLIENT_*).
+on:
+  schedule:
+    - cron: "23 */2 * * *"
+  workflow_dispatch:
+    inputs:
+      limit:
+        description: "Folgen je Lauf (meistgehoerte zuerst)"
+        default: "150"
+      dry_run:
+        description: "Nur Diff schreiben, nichts bei Spreaker aendern"
+        type: boolean
+        default: false
+      dry_limit:
+        description: "Folgen im Dry-Run-Diff"
+        default: "10"
+      ids:
+        description: "Nur diese Episoden-IDs (Komma-getrennt, optional)"
+        default: ""
+permissions:
+  contents: write
+concurrency:
+  group: apply-shownotes
+  cancel-in-progress: false
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Gibt es Shownotes?
+        id: has
+        run: |
+          if ls shownotes/spreaker/*.html >/dev/null 2>&1; then echo "yes=1" >> "$GITHUB_OUTPUT"; else echo "yes=0" >> "$GITHUB_OUTPUT"; echo "Keine Dateien unter shownotes/spreaker/ - nichts zu tun"; fi
+      - uses: actions/setup-python@v5
+        if: steps.has.outputs.yes == '1'
+        with: { python-version: "3.12" }
+      - run: pip install -q requests cryptography
+        if: steps.has.outputs.yes == '1'
+      - name: Dateien pruefen (ohne API)
+        if: steps.has.outputs.yes == '1'
+        run: python tools/apply_shownotes.py --check || echo "::warning::Ungueltige Shownotes-Dateien (siehe oben) werden uebersprungen"
+      - name: Schreiben bzw. Dry-Run
+        if: steps.has.outputs.yes == '1'
+        env:
+          SPREAKER_TOKEN: ${{ secrets.SPREAKER_TOKEN }}
+          SPREAKER_CLIENT_ID: ${{ secrets.SPREAKER_CLIENT_ID }}
+          SPREAKER_CLIENT_SECRET: ${{ secrets.SPREAKER_CLIENT_SECRET }}
+          LIMIT: ${{ inputs.limit || '150' }}
+          DRY_LIMIT: ${{ inputs.dry_limit || '10' }}
+          IDS: ${{ inputs.ids || '' }}
+          DRY: ${{ inputs.dry_run == true && '--dry-run' || '' }}
+        run: python tools/apply_shownotes.py --limit "$LIMIT" --dry-limit "$DRY_LIMIT" --ids "$IDS" $DRY
+      - name: Protokoll speichern
+        if: always() && steps.has.outputs.yes == '1'
+        run: |
+          git config user.name "m365-site-bot"; git config user.email "actions@users.noreply.github.com"
+          git add -A shownotes/APPLIED.txt shownotes/DRYRUN.md shownotes/plays.json data/spreaker_auth.enc 2>/dev/null || true
+          if git diff --cached --quiet; then echo "Nichts zu speichern"; exit 0; fi
+          git commit -q -m "Shownotes -> Spreaker: Protokoll $(date -u +%Y-%m-%dT%H:%MZ)"
+          (git pull --rebase -q -X theirs || git rebase --abort) && git push -q
