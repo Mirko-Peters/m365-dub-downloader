@@ -13,7 +13,7 @@ REQ = {
     "Article": ["headline", "datePublished", "author", "image"],
     "BreadcrumbList": ["itemListElement"],
     "FAQPage": ["mainEntity"],
-    "Person": ["name"], "Organization": ["name", "url"], "CollectionPage": ["name", "url"],
+    "Person": ["name"], "Organization": ["name"], "CollectionPage": ["name", "url"],
     "ProfilePage": ["mainEntity"], "Event": ["name", "startDate", "location"], "WebSite": ["name", "url"],
 }
 iso = re.compile(r"^\d{4}-\d{2}-\d{2}(T[\d:.+\-Z]+)?$")

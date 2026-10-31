@@ -60,6 +60,8 @@ def main():
     manual = json.loads((D / "speaker_manual.json").read_text("utf-8")) if (D / "speaker_manual.json").exists() else {}
     never = {(norm(a), norm(b)) for a, b in manual.get("never", [])}
     base = {e["id"]: e for e in json.loads((D / "entities.json").read_text("utf-8"))}
+    gf = D / "guest_entities.json"
+    guest_ids = {e["id"] for e in json.loads(gf.read_text("utf-8"))} if gf.exists() else set()   # Podcast-Gaeste: Speaker koennen per links darauf zeigen
     recs, sessions_of = [], {}   # recs: ein Eintrag je (Programm, Speaker-ID)
     for fn, handle, etitle in PROGRAMS:
         f = D / fn
@@ -139,7 +141,7 @@ def main():
                 topics[t] = topics.get(t, 0) + 1
         top = [t for t, _ in sorted(topics.items(), key=lambda kv: (-kv[1], kv[0])) if t in base][:6]
         sp = {"id": eid, "name": canon, "aliases": aliases, "company": company, "title": title, "events": events, "sessions": ses, "topics": top,
-              **({"handle": link["handle"]} if link.get("handle") else {}), "existing": eid in base}
+              **({"handle": link["handle"]} if link.get("handle") else {}), "existing": eid in base or eid in guest_ids}
         speakers.append(sp)
         if len(idx) > 1 and (aliases or len({r["event"] for r in members}) > 1):
             merged.append({"name": canon, "aliases": aliases, "events": [e["handle"] for e in events]})

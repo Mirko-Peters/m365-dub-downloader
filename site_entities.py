@@ -152,10 +152,20 @@ def ent_ld(BASE, e, lang, glossary_set=None):
     elif t == "person":
         if e.get("job"):
             n["jobTitle"] = e["job"]
+        if e.get("image") and str(e["image"]).startswith("https://"):
+            n["image"] = e["image"]
         if e.get("company"):
-            n["worksFor"] = {"@type": "Organization", "name": e["company"]}
-        if SPEAKERS.get(e["id"], {}).get("events"):   # Auftritte als Speaker (Events der Plattform)
-            n["performerIn"] = [{"@type": "Event", "name": x["title"], "url": f"{BASE}/community/events/{x['handle']}/"} for x in SPEAKERS[e["id"]]["events"]]
+            _org = next((x for x in ENTS.values() if x["type"] == "org" and x["name"].lower() == e["company"].lower()), None)
+            n["worksFor"] = {"@id": eid_of(BASE, _org["id"])} if _org else {"@type": "Organization", "name": e["company"]}
+        if SPEAKERS.get(e["id"], {}).get("events"):   # Auftritte als Speaker (Events der Plattform): mit Beginn und Online-Ort, sonst unvollstaendiges Event-Schema
+            _ses = SPEAKERS[e["id"]].get("sessions") or []
+            n["performerIn"] = []
+            for x in SPEAKERS[e["id"]]["events"]:
+                _st = sorted(s_["start"] for s_ in _ses if s_.get("event") == x["handle"] and s_.get("start"))
+                _ev = {"@type": "Event", "name": x["title"], "url": f"{BASE}/community/events/{x['handle']}/", "eventAttendanceMode": "https://schema.org/OnlineEventAttendanceMode",
+                       "location": {"@type": "VirtualLocation", "url": f"{BASE}/community/events/{x['handle']}/"}}
+                if _st: _ev["startDate"] = _st[0]
+                n["performerIn"].append(_ev)
     return n
 
 
@@ -463,8 +473,13 @@ def build(g, wiki_links, experts_by_ent, ep_find):
                     node["subjectOf"] = (node.get("subjectOf") or []) + _epids
             # hreflang en/de nur bei echtem deutschem Text (Gast-Entitaeten haben de == en: dann ist /de/ ein Duplikat und bleibt ohne Index)
             _has_de = bool(e["desc"].get("de")) and e["desc"].get("de") != e["desc"].get("en") or bool((e.get("long") or {}).get("de")) or bool(GENTEXT.get(e["id"], {}).get("de"))
-            _alts = {"en": eurl(BASE, "en", e["id"]), "de": eurl(BASE, "de", e["id"])} if _has_de else None
-            _noidx = lang not in ("en", "de") or (lang == "de" and not _has_de)
+            _thin = False
+            if e["type"] == "person" and e["id"] != AUTHOR_EID:   # Personen: nur mit echter Beschreibung (nicht der Speaker-Schablone) oder mehreren Auftritten in den Index
+                _app = len(eps) + len((SPEAKERS.get(e["id"]) or {}).get("sessions") or [])
+                _real = (len(e["desc"].get("en") or "") > 80 and not e.get("speaker")) or bool((e.get("long") or {}).get("en"))
+                _thin = not _real and _app < 2
+            _alts = {"en": eurl(BASE, "en", e["id"]), "de": eurl(BASE, "de", e["id"])} if _has_de and not _thin else None
+            _noidx = lang not in ("en", "de") or (lang == "de" and not _has_de) or _thin
             write(f"{rel}/{e['id']}/index.html", page(lang, f'{e["name"]} – {TL[e["type"]][li]} | M365.FM', d[:155], u, b, _alts if lang in ("en", "de") else None, ld, xdefault=eurl(BASE, "en", e["id"]), og_type="website", extra_head=LCSS + css, noindex=_noidx))
             if not _noidx: sitemap.append((u, _mod, _alts))
 
