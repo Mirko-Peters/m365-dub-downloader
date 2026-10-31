@@ -45,7 +45,10 @@ export async function collectEvidence(env, entityMap) {
   // Sessions: Sprecher per Profil-Handle, bestaetigt oder vom Veranstalter selbst
   const byHandle = new Map((await rows(db, "SELECT user_id,handle FROM profiles WHERE handle IS NOT NULL")).map((p) => [p.handle, p.user_id]));
   for (const r of await rows(db, "SELECT s.id,s.topics,s.speakers,e.owner_id oid FROM event_sessions s JOIN events e ON e.id=s.event_id WHERE s.status='live' AND s.topics<>'[]'")) {
-    for (const x of parse(r.speakers)) { const uid = x && x.h ? byHandle.get(x.h) : 0; if (uid && (x.s === "confirmed" || r.oid === uid)) topics(r, uid, "session", r.id); }
+    for (const x of parse(r.speakers)) {
+      const uid = x && x.h ? byHandle.get(x.h) : 0; if (!uid || !(x.s === "confirmed" || r.oid === uid)) continue;
+      for (const t of parse(r.topics).slice(0, 10)) if (typeof t === "string") add(uid, t, "session", r.id, r.oid === uid ? 2 : WEIGHTS.session);   // Session auf der eigenen Veranstaltung zaehlt wie ein Co-Autor-Beitrag (keine Fremdbestaetigung)
+    }
   }
   for (const r of await rows(db, "SELECT id,user_id,term FROM wiki_rev WHERE user_id>0 AND status IN ('live','old')")) add(r.user_id, r.term, "wiki", r.id);
   for (const r of await rows(db, "SELECT id,user_id,eid FROM entity_rev WHERE user_id>0 AND status IN ('live','old')")) add(r.user_id, r.eid, "entity", r.id);
@@ -71,13 +74,13 @@ export async function computeLevels(db, filter = null) {
   for (const r of await rows(db, `SELECT owner_id,eid,kind,SUM(weight) w FROM expertise_evidence${W} GROUP BY owner_id,eid,kind`, ...B)) get(r.owner_id, r.eid).by[r.kind] = r.w;
   for (const r of await rows(db, `SELECT owner_id,eid,COUNT(*) n FROM endorsements${W} GROUP BY owner_id,eid`, ...B)) get(r.owner_id, r.eid).endorsed = r.n;
   for (const r of await rows(db, `SELECT n.owner_id,n.eid,COUNT(*) n FROM endorsements n JOIN expertise x ON x.owner_type='u' AND x.owner_id=n.by_id AND x.eid=n.eid AND x.level>=4${filter ? " WHERE n.owner_id=? AND n.eid=?" : ""} GROUP BY n.owner_id,n.eid`, ...B)) get(r.owner_id, r.eid).endorsedEv = r.n;
-  for (const r of await rows(db, `SELECT x.owner_id,x.eid,x.level,x.verified,s.score FROM expertise x LEFT JOIN expertise_score s ON s.owner_id=x.owner_id AND s.eid=x.eid WHERE x.owner_type='u'${W ? " AND x.owner_id=? AND x.eid=?" : ""}`, ...B)) { const p = get(r.owner_id, r.eid); p.known = true; p.level = r.level; p.verified = r.verified ? 1 : 0; p.score = r.score; }
+  for (const r of await rows(db, `SELECT x.owner_id,x.eid,x.level,x.verified,s.score,s.endorsed se,s.endorsed_ev sev FROM expertise x LEFT JOIN expertise_score s ON s.owner_id=x.owner_id AND s.eid=x.eid WHERE x.owner_type='u'${W ? " AND x.owner_id=? AND x.eid=?" : ""}`, ...B)) { const p = get(r.owner_id, r.eid); p.known = true; p.level = r.level; p.verified = r.verified ? 1 : 0; p.score = r.score; p.se = r.se; p.sev = r.sev; }
   const ops = []; let changed = 0;
   for (const p of pairs.values()) {
     const score = scoreOf(p.by, p.endorsed), level = levelOf({ score, endorsed: p.endorsed, endorsedEv: p.endorsedEv, verified: p.verified });
     if (!p.known || p.level !== level) ops.push(db.prepare("INSERT INTO expertise(owner_type,owner_id,eid,level,verified) VALUES('u',?,?,?,0) ON CONFLICT(owner_type,owner_id,eid) DO UPDATE SET level=excluded.level").bind(p.uid, p.eid, level));
     if (!p.known || p.level !== level || p.score !== score) { changed++; ops.push(db.prepare("INSERT INTO expertise_score(owner_id,eid,score,endorsed,endorsed_ev,updated) VALUES(?,?,?,?,?,?) ON CONFLICT(owner_id,eid) DO UPDATE SET score=excluded.score,endorsed=excluded.endorsed,endorsed_ev=excluded.endorsed_ev,updated=excluded.updated").bind(p.uid, p.eid, score, p.endorsed, p.endorsedEv, t)); }
-    else ops.push(db.prepare("UPDATE expertise_score SET endorsed=?,endorsed_ev=?,updated=? WHERE owner_id=? AND eid=? AND (endorsed<>? OR endorsed_ev<>?)").bind(p.endorsed, p.endorsedEv, t, p.uid, p.eid, p.endorsed, p.endorsedEv));
+    else if (p.se !== p.endorsed || p.sev !== p.endorsedEv) ops.push(db.prepare("UPDATE expertise_score SET endorsed=?,endorsed_ev=?,updated=? WHERE owner_id=? AND eid=?").bind(p.endorsed, p.endorsedEv, t, p.uid, p.eid));   // nur schreiben, wenn sich etwas geaendert hat
   }
   await batch(db, ops);
   return { pairs: pairs.size, changed };

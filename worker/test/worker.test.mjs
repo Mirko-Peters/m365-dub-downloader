@@ -97,11 +97,11 @@ test("levels: syncExpertise baut Belege aus den Quelltabellen und setzt Stufen (
   const { syncExpertise, computeLevels } = await import("../src/levels.js");
   const r = await syncExpertise({ DB: db }, async () => emap);
   const ev = raw.prepare("SELECT owner_id,eid,kind,COUNT(*) n,SUM(weight) w FROM expertise_evidence GROUP BY owner_id,eid,kind ORDER BY owner_id,eid,kind").all();
-  assert.deepEqual(ev.map((x) => [x.owner_id, x.eid, x.kind, x.n, x.w]), [[1, "fabric", "blog", 1, 3], [1, "fabric", "cert", 1, 4], [1, "power-bi", "blog", 2, 6], [1, "power-bi", "cert", 1, 4], [1, "power-bi", "session", 1, 5], [2, "power-bi", "self", 1, 3], [2, "power-bi", "session", 1, 5], [3, "power-bi", "self", 1, 2]],
-    "Entwuerfe zaehlen nicht; unbestaetigter Sprecher zaehlt nur, wenn er der Veranstalter ist (Ben); Selbstangaben einmal als 'self' uebernommen");
+  assert.deepEqual(ev.map((x) => [x.owner_id, x.eid, x.kind, x.n, x.w]), [[1, "fabric", "blog", 1, 3], [1, "fabric", "cert", 1, 4], [1, "power-bi", "blog", 2, 6], [1, "power-bi", "cert", 1, 4], [1, "power-bi", "session", 1, 5], [2, "power-bi", "self", 1, 3], [2, "power-bi", "session", 1, 2], [3, "power-bi", "self", 1, 2]],
+    "Entwuerfe zaehlen nicht; unbestaetigter Sprecher zaehlt nur, wenn er der Veranstalter ist (Ben, eigene Veranstaltung = Gewicht 2); Selbstangaben einmal als 'self' uebernommen");
   assert.equal(r.seeded, 2);
   const lv = Object.fromEntries(raw.prepare("SELECT owner_id||':'||eid k,level FROM expertise WHERE owner_type='u'").all().map((x) => [x.k, x.level]));
-  assert.deepEqual(lv, { "1:fabric": 2, "1:power-bi": 3, "2:power-bi": 2, "3:power-bi": 3 }, "Anna: 6+4+5+2 Punkte = Experte, Fabric 7 = Praxis; Ben: Selbstangabe 3 + eigene Session 5 = 8 -> Praxis; Cem: Redaktion bestaetigt -> Experte");
+  assert.deepEqual(lv, { "1:fabric": 2, "1:power-bi": 3, "2:power-bi": 2, "3:power-bi": 3 }, "Anna: 6+4+5+2 Punkte = Experte, Fabric 7 = Praxis; Ben: Selbstangabe 3 + eigene Session 2 = 5 -> Praxis; Cem: Redaktion bestaetigt -> Experte");
   const sc = raw.prepare("SELECT score,endorsed FROM expertise_score WHERE owner_id=1 AND eid='power-bi'").get();
   assert.equal(sc.score, 17); assert.equal(sc.endorsed, 2);
   // zweiter Lauf: keine doppelte Uebernahme, nichts aendert sich; Bestaetigungen bis zur Stufe Evangelist werden nachgezogen
