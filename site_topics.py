@@ -8,7 +8,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).parent
 CACHE = ROOT / "data" / "cache" / "blog_topics.json"
-GENERIC = {"microsoft-365", "microsoft", "compliance", "automation", "governance", "security", "ai", "artificial-intelligence", "cloud", "data", "microsoft-tool", "copilot"}
+GENERIC = {"microsoft-365", "microsoft", "compliance", "automation", "governance", "security", "ai", "artificial-intelligence", "cloud", "data", "microsoft-tool", "copilot", "prompt", "agent", "ai-agent"}
 _C = {}
 
 
@@ -45,7 +45,7 @@ def score_topics(ix, title, text, k=8, key=None):
     for i in list(sc):
         if i in GENERIC and i not in in_title: sc[i] *= 0.35   # allgemeine Begriffe nur mit Titeltreffer voll werten
     order = sorted(sc, key=lambda i: (-sc[i], i in GENERIC, i))
-    top = [i for i in order if sc[i] >= 1.5][:k] or order[:min(k, 2)]
+    top = [i for i in order if sc[i] >= 1][:k] or order[:min(k, 2)]
     spec = [i for i in top if i not in GENERIC and ix.by[i]["type"] not in ("category",)]
     if spec and top and top[0] in GENERIC: top = [spec[0]] + [i for i in top if i != spec[0]]   # Hauptthema moeglichst spezifisch
     if key:
