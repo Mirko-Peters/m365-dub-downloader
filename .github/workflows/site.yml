@@ -49,7 +49,7 @@ jobs:
           if [ -n "$(git status --porcelain data/top.json data/published.json data/spreaker_auth.enc)" ]; then
             git config user.name "m365-site-bot"; git config user.email "actions@users.noreply.github.com"
             git add data/top.json data/published.json data/spreaker_auth.enc && git commit -m "Spreaker-Daten aktualisiert"
-            git pull --rebase -q && git push -q
+            (git pull --rebase -q -X theirs || git rebase --abort) && git push -q
           fi
       - name: Englische Original-Titel der Videos holen (YouTube oEmbed)
         if: github.event_name != 'push'
@@ -59,7 +59,7 @@ jobs:
           if [ -n "$(git status --porcelain data/en_titles.json)" ]; then
             git config user.name "m365-site-bot"; git config user.email "actions@users.noreply.github.com"
             git add data/en_titles.json && git commit -m "Englische Original-Titel aktualisiert"
-            git pull --rebase -q && git push -q
+            (git pull --rebase -q -X theirs || git rebase --abort) && git push -q
           fi
       - name: Englische Show - Audio und Transkripte (Spreaker-RSS)
         if: github.event_name != 'push'
@@ -69,7 +69,7 @@ jobs:
           if [ -n "$(git status --porcelain data/en_episodes.json data/en_transcripts)" ]; then
             git config user.name "m365-site-bot"; git config user.email "actions@users.noreply.github.com"
             git add data/en_episodes.json data/en_transcripts && git commit -m "Englische Show: Audio/Transkripte aktualisiert"
-            git pull --rebase -q && git push -q
+            (git pull --rebase -q -X theirs || git rebase --abort) && git push -q
           fi
       - name: Bewertungen einsammeln (Apple Podcasts)
         if: github.event_name != 'push'
@@ -79,7 +79,7 @@ jobs:
           if [ -n "$(git status --porcelain data/reviews_ext.json)" ]; then
             git config user.name "m365-site-bot"; git config user.email "actions@users.noreply.github.com"
             git add data/reviews_ext.json && git commit -m "Bewertungen aktualisiert"
-            git pull --rebase -q && git push -q
+            (git pull --rebase -q -X theirs || git rebase --abort) && git push -q
           fi
       - name: Spotify-Folgenlinks einsammeln (ohne API) – nur täglich/manuell, bei Pushes gilt der gespeicherte Stand
         if: github.event_name != 'push'
@@ -91,7 +91,7 @@ jobs:
           python scrape_spotify.py
           if [ -n "$(git status --porcelain data/spotify_links.json)" ]; then
             git config user.name "m365-site-bot"; git config user.email "actions@users.noreply.github.com"
-            git add data/spotify_links.json && git commit -m "Spotify-Folgenlinks aktualisiert" && git pull --rebase -q && git push -q || true
+            git add data/spotify_links.json && git commit -m "Spotify-Folgenlinks aktualisiert" && (git pull --rebase -q -X theirs || git rebase --abort) && git push -q || true
           fi
       - name: Speaker der Events zusammenfuehren (Personen-Entitaeten, Sessions)
         run: python tools/build_speakers.py
@@ -103,7 +103,7 @@ jobs:
           if [ -n "$(git status --porcelain data/show_notes)" ]; then
             git config user.name "m365-site-bot"; git config user.email "actions@users.noreply.github.com"
             git add data/show_notes && git commit -m "Show Notes aus Spreaker aktualisiert" -q
-            git pull --rebase -q && git push -q
+            (git pull --rebase -q -X theirs || git rebase --abort) && git push -q
           fi
       - name: M365 Show (Livestreams) von YouTube holen
         timeout-minutes: 8
@@ -118,7 +118,7 @@ jobs:
           if [ -n "$(git status --porcelain data/live.json)" ]; then
             git config user.name "m365-site-bot"; git config user.email "actions@users.noreply.github.com"
             git add data/live.json && git commit -m "M365 Show: Streams aktualisiert" -q
-            git pull --rebase -q && git push -q
+            (git pull --rebase -q -X theirs || git rebase --abort) && git push -q
           fi
       - name: Folgenlinks zu Apple, Spotify, Deezer, YouTube zuordnen (taeglich/manuell, bei Pushes gilt der gespeicherte Stand)
         if: github.event_name != 'push'
@@ -133,7 +133,7 @@ jobs:
           if [ -n "$(git status --porcelain data/episode_links.json data/episode_links_report.json data/platforms.json)" ]; then
             git config user.name "m365-site-bot"; git config user.email "actions@users.noreply.github.com"
             git add data/episode_links.json data/episode_links_report.json data/platforms.json && git commit -m "Plattform-Folgenlinks aktualisiert" -q
-            git pull --rebase -q && git push -q
+            (git pull --rebase -q -X theirs || git rebase --abort) && git push -q
           fi
       - run: python generate_site.py
       - name: Pruefung - Profilseiten vorhanden?
@@ -147,7 +147,7 @@ jobs:
           if [ -n "$(git status --porcelain data/money_keywords.json data/members_export.json data/entity_mod.json)" ]; then
             git config user.name "m365-site-bot"; git config user.email "actions@users.noreply.github.com"
             git add data/money_keywords.json data/members_export.json data/entity_mod.json && git commit -m "Money-Keywords, Profil-Export und Entitaets-Aenderungsdaten aktualisiert"
-            git pull --rebase -q && git push -q || true
+            (git pull --rebase -q -X theirs || git rebase --abort) && git push -q || true
           fi
       - name: Interne Links prüfen
         continue-on-error: true
