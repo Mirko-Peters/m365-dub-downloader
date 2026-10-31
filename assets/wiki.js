@@ -1,9 +1,9 @@
-/* Community-Wiki (Glossar + Entitaeten). Nutzt window.M365W = {api, term, lang, t, links:{id:[name,url]}}.
+/* Community-Wiki (Glossar + Entitaeten). Nutzt window.M365W = {api, term, lang}; Texte (M365WT) und Verknuepfungen (M365WL, id -> [name, url]) aus assets/wk-<sprache>.js.
    Markup: ## / ### Ueberschrift, **fett**, *kursiv*, "- " und "1. " Listen, "> " Zitat, [[id|Text]] interne Links,
    {{ref|Titel|https://url|Herausgeber|Datum}} Quelle (Fussnote), {{cn}} = Beleg fehlt. Ausgabe nur ueber DOM-Knoten (kein innerHTML). */
 (function () {
   var W = window.M365W; if (!W || !W.api) return;
-  var T = W.t || {}, L = W.links || {}, root = document.getElementById("c-wiki"); if (!root) return;
+  var T = W.t || window.M365WT || {}, L = W.links || window.M365WL || {}, root = document.getElementById("c-wiki"); if (!root) return;
   function h(tag, a, kids) { var e = document.createElement(tag); for (var k in (a || {})) { if (k === "class") e.className = a[k]; else if (k === "text") e.textContent = a[k]; else if (k.slice(0, 2) === "on") e.addEventListener(k.slice(2), a[k]); else e.setAttribute(k, a[k]); } (kids || []).forEach(function (c) { if (c != null) e.appendChild(typeof c === "string" ? document.createTextNode(c) : c); }); return e; }
   function txt(s) { return document.createTextNode(s); }
   function api(path, o) { o = o || {}; o.credentials = "include"; o.headers = Object.assign({ "x-requested-with": "m365" }, o.headers || {}); if (o.body && typeof o.body !== "string") { o.body = JSON.stringify(o.body); o.headers["content-type"] = "application/json"; } return fetch(W.api + path, o).then(function (r) { return r.json().then(function (j) { return { s: r.status, j: j }; }); }); }
@@ -27,7 +27,7 @@
       } else if (m[0] === "{{cn}}") {
         parent.appendChild(h("sup", { class: "wk-cn" }, [h("span", { text: "[" + T.cn + "]" })]));
       } else if (m[4]) {
-        var t = L[m[4]];
+        var t = m[4] === W.term ? null : L[m[4]];
         if (t) parent.appendChild(h("a", { href: t[1], text: m[5] || t[0] })); else parent.appendChild(txt(m[5] || m[4]));
       } else if (m[6] != null) { var b = h("strong"); inline(m[6], ctx, b); parent.appendChild(b); }
       else { var i = h("em"); inline(m[7], ctx, i); parent.appendChild(i); }

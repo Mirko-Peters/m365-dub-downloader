@@ -245,10 +245,18 @@ def gloss_links(lang, base):
 def wiki_block(lang, term_id, api, base, static, links=None):
     w = WT.get(lang, WT["en"])
     links = links or {}
-    cfg = json.dumps({"api": api, "term": term_id, "lang": lang, "t": w, "links": {k: v for k, v in links.items() if k != term_id}}, ensure_ascii=False).replace("</", "<\\/")
+    # Texte und die Liste aller verlinkbaren Begriffe (ca. 52 KB) liegen je Sprache in assets/wk-<sprache>.js (write_wk_js), nicht in jeder Seite.
+    cfg = json.dumps({"api": api, "term": term_id, "lang": lang}, ensure_ascii=False).replace("</", "<\\/")
     st = f'<div class="wk-static wk-body">{wiki_render(static["body"], links, w)[0]}</div>' if static else ""
     return (f'{WCSS}<section aria-labelledby="wk-h"><h2 id="wk-h">{esc(w["h"])}</h2><p class="mut">{esc(w["intro"])}</p><div id="c-wiki">{st}</div></section>'
-            f'<script>window.M365W={cfg}</script><script defer src="{base}/assets/wiki.js"></script>')
+            f'<script defer src="{base}/assets/wk-{lang}.js"></script><script>window.M365W={cfg}</script><script defer src="{base}/assets/wiki.js"></script>')
+
+
+def write_wk_js(write, lang, links):
+    """assets/wk-<sprache>.js: Oberflaechentexte des Wiki-Teils und alle verlinkbaren Begriffe (id -> [Name, URL]) einmal je Sprache."""
+    w = WT.get(lang, WT["en"])
+    write(f"assets/wk-{lang}.js", "window.M365WT=" + json.dumps(w, ensure_ascii=False, separators=(",", ":")).replace("</", "<\\/")
+          + ";window.M365WL=" + json.dumps(links, ensure_ascii=False, separators=(",", ":")).replace("</", "<\\/") + ";")
 
 
 def build_learn(ctx):
