@@ -27,3 +27,7 @@ Ziel: MCP-Clients (Claude, ChatGPT, Cursor) verbinden sich mit einem Klick, stat
 3. `/.well-known/oauth-protected-resource` (RFC 9728) mit `resource`, `authorization_servers`, `scopes_supported`, `bearer_methods_supported: ["header"]`; der MCP-Server antwortet bei 401 mit `WWW-Authenticate: Bearer resource_metadata="…"`.
 4. `auth.md` um `agent_auth` ergänzen. Der alte Weg über persönliche Tokens bleibt bestehen.
 5. Erst auf einer Testumgebung bauen und prüfen (Sicherheit und Anmeldung betroffen), danach mit Freigabe live schalten.
+
+## Gemeldet am 31.10.2026 (Mirko)
+- **Bug, englische Seiten:** In der Sidebar-Karte „M365.FM Show“ (Home, Episodes, Blog, Guests, Hosts, Sponsors, Reviews, Work with me, About) stimmt etwas nicht – prüfen: Links (Blog zeigt noch auf /show/blog/, das nur noch weiterleitet), Reihenfolge und ob die Karte auf allen englischen Seiten erscheinen soll.
+- **Live Show als Events (nur Englisch):** Der Menüpunkt „M365 Show Live“ bleibt auf den englischen Seiten. Die gelaufenen und die kommenden Streams (auch die der M365Con) werden als Events im Community-System geführt (ein Event je Stream, Vergangenes als vergangenes Event), „Live“ wird ein Untermenüpunkt (z. B. unter Show), und zu jedem Stream entsteht ein Beitrag (Feed/Blog) – Quelle data/live.json (sync_live.py, heute 113 Streams). Umsetzung als eigenes Paket nach Paket 12: Import-Cron im Worker (Event je Stream, idempotent über die YouTube-ID), Seitenbau liest die Events, Menü anpassen.
