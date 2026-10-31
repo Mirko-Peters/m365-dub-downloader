@@ -37,7 +37,11 @@ writeFileSync("wrangler.toml", toml);
 console.log("D1:", db.name);
 
 // 2) Schema anwenden (idempotent)
-const sch = run(["d1", "execute", "m365-dub", "--remote", "--file=schema.sql"]);
+// Sicherung vor jeder Schemaaenderung (Artefakt im Workflow), dann versionierte Migrationen (migrations/, Tabelle d1_migrations merkt sich den Stand)
+const bak = run(["d1", "export", "m365-dub", "--remote", "--output=backup-d1.sql"]);
+console.log("D1-Sicherung:", bak.status === 0 ? "backup-d1.sql" : "FEHLER " + (bak.stderr || bak.stdout).slice(0, 300));
+if (bak.status !== 0) fail("Ohne Sicherung keine Migration");
+const sch = run(["d1", "migrations", "apply", "m365-dub", "--remote"]);
 if (sch.status !== 0) fail("Schema: " + sch.stderr);
 console.log("Schema ok");
 

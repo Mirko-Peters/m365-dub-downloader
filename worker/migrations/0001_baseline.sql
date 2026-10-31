@@ -1,3 +1,6 @@
+-- Ausgangsstand (wird von wrangler d1 migrations apply genau einmal angewendet; alle Anweisungen sind idempotent: IF NOT EXISTS).
+-- Weitere Aenderungen: neue Datei 0002_*.sql usw. Spalten in bestehenden Tabellen weiterhin ueber die ensure*-Funktionen (SQLite kennt kein ADD COLUMN IF NOT EXISTS).
+
 -- D1-Schema fuer die Community-Funktionen (idempotent)
 CREATE TABLE IF NOT EXISTS users (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -141,7 +144,9 @@ CREATE TABLE IF NOT EXISTS channels (          -- Social-Media-Kanaele, optional
   feed TEXT NOT NULL DEFAULT '',               -- RSS/Atom-URL (https)
   fetched INTEGER NOT NULL DEFAULT 0,
   fails INTEGER NOT NULL DEFAULT 0,
-  UNIQUE(owner_type, owner_id, url)
+  UNIQUE(owner_type, owner_id, url),
+  followers INTEGER NOT NULL DEFAULT 0,
+  followers_at INTEGER NOT NULL DEFAULT 0
 );
 CREATE TABLE IF NOT EXISTS feed_items (        -- nur Titel, Link und Datum (kein Volltext)
   id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -151,7 +156,14 @@ CREATE TABLE IF NOT EXISTS feed_items (        -- nur Titel, Link und Datum (kei
   url TEXT NOT NULL UNIQUE,
   title TEXT NOT NULL,
   published INTEGER NOT NULL,
-  hidden INTEGER NOT NULL DEFAULT 0
+  hidden INTEGER NOT NULL DEFAULT 0,
+  summary TEXT NOT NULL DEFAULT '',
+  thumb TEXT NOT NULL DEFAULT '',
+  body TEXT NOT NULL DEFAULT '',
+  topics TEXT NOT NULL DEFAULT '[]',
+  seo_at INTEGER NOT NULL DEFAULT 0,
+  keypoints TEXT NOT NULL DEFAULT '[]',
+  faq TEXT NOT NULL DEFAULT '[]'
 );
 CREATE INDEX IF NOT EXISTS idx_feed_owner ON feed_items(owner_type, owner_id, published);
 CREATE INDEX IF NOT EXISTS idx_feed_pub ON feed_items(published);
@@ -547,7 +559,9 @@ CREATE TABLE IF NOT EXISTS blog_posts (          -- Blog je Mitglied; status: dr
   updated INTEGER NOT NULL,
   published INTEGER NOT NULL DEFAULT 0,
   html TEXT NOT NULL DEFAULT '',                 -- vollstaendiger HTML-Inhalt uebernommener Beitraege (leer bei Wiki-Beitraegen)
-  UNIQUE (user_id, slug)
+  UNIQUE (user_id, slug),
+  keypoints TEXT NOT NULL DEFAULT '[]',
+  faq TEXT NOT NULL DEFAULT '[]'
 );
 CREATE TABLE IF NOT EXISTS blog_import (          -- Fortschritt der Uebernahme der frueheren Podpage-Beitraege (legacyblog.js)
   k TEXT PRIMARY KEY,
@@ -648,7 +662,8 @@ CREATE TABLE IF NOT EXISTS lib_items (           -- Copilot-Bibliothek: Prompts,
   created INTEGER NOT NULL,
   updated INTEGER NOT NULL,
   published INTEGER NOT NULL DEFAULT 0,
-  UNIQUE (user_id, slug)
+  UNIQUE (user_id, slug),
+  link TEXT NOT NULL DEFAULT ''
 );
 CREATE TABLE IF NOT EXISTS lib_votes (
   item_id INTEGER NOT NULL,
@@ -677,3 +692,29 @@ CREATE TABLE IF NOT EXISTS export_cache (          -- zwischengespeicherte Expor
   v TEXT NOT NULL,
   updated INTEGER NOT NULL
 );
+
+-- Tabellen und Indizes, die bisher nur zur Laufzeit (ensure*-Funktionen) entstanden sind
+CREATE TABLE IF NOT EXISTS item_tr (kind TEXT NOT NULL, item_id INTEGER NOT NULL, lang TEXT NOT NULL, title TEXT NOT NULL DEFAULT '', summary TEXT NOT NULL DEFAULT '', body TEXT NOT NULL DEFAULT '', src TEXT NOT NULL DEFAULT 'auto', created INTEGER NOT NULL, PRIMARY KEY (kind, item_id, lang));
+CREATE TABLE IF NOT EXISTS ent_tr (eid TEXT NOT NULL, field TEXT NOT NULL, lang TEXT NOT NULL, text TEXT NOT NULL, created INTEGER NOT NULL, PRIMARY KEY (eid, field, lang));
+CREATE TABLE IF NOT EXISTS ent_tr_seen (eid TEXT NOT NULL, field TEXT NOT NULL, first INTEGER NOT NULL, h TEXT NOT NULL DEFAULT '', PRIMARY KEY (eid, field));
+CREATE TABLE IF NOT EXISTS entity_invites (token TEXT PRIMARY KEY, eid TEXT NOT NULL, name TEXT NOT NULL, email TEXT NOT NULL, by_user INTEGER NOT NULL, status TEXT NOT NULL DEFAULT 'sent', created INTEGER NOT NULL, reminded INTEGER NOT NULL DEFAULT 0, UNIQUE(eid, email));
+CREATE TABLE IF NOT EXISTS entity_contacts (eid TEXT PRIMARY KEY, email TEXT NOT NULL, name TEXT NOT NULL, created INTEGER NOT NULL);
+CREATE TABLE IF NOT EXISTS invite_block (email TEXT PRIMARY KEY, created INTEGER NOT NULL);
+CREATE TABLE IF NOT EXISTS mail_addr (user_id INTEGER PRIMARY KEY, email TEXT NOT NULL, verified INTEGER NOT NULL DEFAULT 0, token TEXT NOT NULL DEFAULT '', created INTEGER NOT NULL);
+CREATE TABLE IF NOT EXISTS mail_prefs (user_id INTEGER NOT NULL, kind TEXT NOT NULL, on_ INTEGER NOT NULL, PRIMARY KEY (user_id, kind));
+CREATE TABLE IF NOT EXISTS mail_outbox (id INTEGER PRIMARY KEY AUTOINCREMENT, user_id INTEGER NOT NULL, kind TEXT NOT NULL, subject TEXT NOT NULL, html TEXT NOT NULL, key TEXT NOT NULL DEFAULT '', created INTEGER NOT NULL, sent INTEGER NOT NULL DEFAULT 0, tries INTEGER NOT NULL DEFAULT 0, err TEXT NOT NULL DEFAULT '');
+CREATE UNIQUE INDEX IF NOT EXISTS idx_outbox_key ON mail_outbox(key) WHERE key!='';
+CREATE TABLE IF NOT EXISTS org_offers (org_id INTEGER NOT NULL, eid TEXT NOT NULL, kind TEXT NOT NULL DEFAULT 'product', created INTEGER NOT NULL, PRIMARY KEY (org_id, eid));
+CREATE TABLE IF NOT EXISTS org_ms (org_id INTEGER NOT NULL, area TEXT NOT NULL, level TEXT NOT NULL, since TEXT NOT NULL DEFAULT '', PRIMARY KEY (org_id, area));
+CREATE TABLE IF NOT EXISTS show_reviews (id INTEGER PRIMARY KEY AUTOINCREMENT, show TEXT NOT NULL, user_id INTEGER NOT NULL, rating INTEGER NOT NULL, title TEXT NOT NULL DEFAULT '', body TEXT NOT NULL DEFAULT '', status TEXT NOT NULL DEFAULT 'published', created INTEGER NOT NULL, updated INTEGER NOT NULL, UNIQUE(show,user_id));
+CREATE TABLE IF NOT EXISTS review_helpful (review_id INTEGER NOT NULL, user_id INTEGER NOT NULL, created INTEGER NOT NULL, PRIMARY KEY(review_id,user_id));
+CREATE TABLE IF NOT EXISTS shows (id INTEGER PRIMARY KEY AUTOINCREMENT, user_id INTEGER NOT NULL, slug TEXT NOT NULL UNIQUE, title TEXT NOT NULL, descr TEXT NOT NULL DEFAULT '', feed TEXT NOT NULL, site TEXT NOT NULL DEFAULT '', image TEXT NOT NULL DEFAULT '', lang TEXT NOT NULL DEFAULT 'en', status TEXT NOT NULL DEFAULT 'pending', created INTEGER NOT NULL, synced INTEGER NOT NULL DEFAULT 0, err TEXT NOT NULL DEFAULT '', consent INTEGER NOT NULL DEFAULT 0);
+CREATE TABLE IF NOT EXISTS show_eps (id INTEGER PRIMARY KEY AUTOINCREMENT, show_id INTEGER NOT NULL, guid TEXT NOT NULL, slug TEXT NOT NULL, title TEXT NOT NULL, descr TEXT NOT NULL DEFAULT '', pub INTEGER NOT NULL DEFAULT 0, audio TEXT NOT NULL DEFAULT '', dur TEXT NOT NULL DEFAULT '', image TEXT NOT NULL DEFAULT '', season INTEGER, num INTEGER, link TEXT NOT NULL DEFAULT '', tr_url TEXT NOT NULL DEFAULT '', transcript TEXT NOT NULL DEFAULT '', UNIQUE(show_id, guid));
+CREATE TABLE IF NOT EXISTS wish (id INTEGER PRIMARY KEY AUTOINCREMENT, user_id INTEGER NOT NULL, title TEXT NOT NULL, body TEXT NOT NULL DEFAULT '', status TEXT NOT NULL DEFAULT 'open', note TEXT NOT NULL DEFAULT '', created INTEGER NOT NULL, updated INTEGER NOT NULL, done_at INTEGER NOT NULL DEFAULT 0);
+CREATE TABLE IF NOT EXISTS wish_votes (wish_id INTEGER NOT NULL, user_id INTEGER NOT NULL, PRIMARY KEY (wish_id, user_id));
+
+-- Indizes fuer die haeufigsten Abfragen (Profil-Export, Vorschlagslisten, Blog je Mitglied)
+CREATE INDEX IF NOT EXISTS idx_entity_rev_user ON entity_rev(user_id, created);
+CREATE INDEX IF NOT EXISTS idx_entity_rev_status ON entity_rev(status, created);
+CREATE INDEX IF NOT EXISTS idx_blog_user ON blog_posts(user_id, published);
+CREATE INDEX IF NOT EXISTS idx_wiki_user ON wiki_rev(user_id, created);
