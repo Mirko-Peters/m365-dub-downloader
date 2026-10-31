@@ -223,7 +223,8 @@ def build(g, people, orgs, extra=None):
             if x.get("type") == "o":
                 note.append(s["verified"] if e.get("verified") else s["selfdecl"])
             else:
-                note.append(s["points"].format(n=f"{e.get('score', 0):g}"))
+                if "score" in e:   # aeltere Exporte (vor Paket 22) kennen die Punkte noch nicht
+                    note.append(s["points"].format(n=f"{e.get('score') or 0:g}"))
                 if ev:
                     note.append(s["evidence"].format(e=", ".join(f"{n} {EVK[lk].get(k, k)}" for k, n in ev.items() if n)))
                 if e.get("verified"):

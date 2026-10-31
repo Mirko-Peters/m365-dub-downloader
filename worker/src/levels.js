@@ -26,7 +26,7 @@ export function levelOf({ score = 0, endorsed = 0, endorsedEv = 0, verified = 0 
 export const levelName = (l, de) => (LEVEL_NAMES[l] || LEVEL_NAMES[1])[de ? 1 : 0];
 
 const parse = (s) => { try { const v = JSON.parse(s || "[]"); return Array.isArray(v) ? v : []; } catch { return []; } };
-const rows = async (db, sql, ...b) => ((await db.prepare(sql).bind(...b).all().catch(() => ({ results: [] }))).results || []);
+const rows = async (db, sql, ...b) => ((await db.prepare(sql).bind(...b).all()).results || []);   // Fehler durchreichen: lieber kein Lauf (cron_runs ok=0) als Belege loeschen und Stufen auf leeren Daten berechnen
 async function batch(db, stmts) { for (let i = 0; i < stmts.length; i += 80) await db.batch(stmts.slice(i, i + 80)); }
 
 // Belege aller Mitglieder aus den Quelltabellen (uid, eid, kind, item, weight)
