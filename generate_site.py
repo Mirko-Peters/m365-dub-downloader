@@ -667,7 +667,8 @@ def footer(lang):
     ui = UI.get(lang)
     about = ui[5] if ui else "About Mirko Peters"
     _tl = lang if lang in LANGS else "en"
-    _top = f'<a href="{BASE}/{_tl}/top/">{esc((TOP_L if _tl in TOP_REAL else REC_L).get(_tl, "Top"))}</a>'
+    # Top-/Empfehlungsseiten gibt es nur je Dub-Sprache; englische Seiten verlinken die Folgenliste der Hauptshow (vorher /en/top/ = 404 auf jeder englischen Seite)
+    _top = f'<a href="{BASE}/{_tl}/top/">{esc((TOP_L if _tl in TOP_REAL else REC_L).get(_tl, "Top"))}</a>' if _tl in LANGS else f'<a href="{BASE}/show/episodes/">Recommended episodes</a>'
     _nw = f'<a href="{BASE}/{"de/" if lang == "de" else ""}updates/">{"Updates & Roadmap" if lang == "de" else "Updates & roadmap"}</a>'
     return (f'<footer><div class="wrap">{_top}{_nw}<a href="https://www.m365.fm">m365.fm</a>'
             f'<a href="https://m365con.net">M365Con</a><a class="soc" href="{LINKEDIN}" rel="me" style="--bc:#0A66C2">{brand_icon("LinkedIn")}<span>LinkedIn</span></a><a class="soc" href="{YT_CHANNEL}" style="--bc:#FF0000">{brand_icon("YouTube")}<span>YouTube</span></a>'
@@ -676,7 +677,7 @@ def footer(lang):
             f'<div style="margin-top:10px">© {date.today().year} Mirko Peters · M365.FM</div></div></footer>')
 
 
-AUTHOR_HANDLE = "mirko-peters"
+AUTHOR_HANDLE = "mirko-p"   # Handle des oeffentlichen Profils (Community), nicht die Entitaets-ID mirko-peters
 AUTHOR = {}   # oeffentliches Profil des Autors (Quelle der Wahrheit), faellt auf festen Text zurueck
 
 
@@ -1236,12 +1237,19 @@ def build():
     ENT.CLAIMS.update({c["eid"]: c["handle"] for c in _cl}); MEM.CLAIMED.update({c["handle"]: c["eid"] for c in _cl})
     import site_updates as _SU
     _SU.load(COMMUNITY_API)
-    ENT.build(_ctx, lambda lang: LRN.gloss_links(lang, BASE), MEM.experts_index(_people, _orgs), _ep_find)
     import site_blog as BLG
     import site_legacy_blog as LBL
     _posts = BLG.fetch_posts(COMMUNITY_API); _have = {p["slug"] for p in _posts if p["handle"] == "mirko-p"}
-    _posts += [p for p in LBL.items(BASE) if p["slug"] not in _have]; LBL.publish(write, BASE); MEM.BLOGLANGS = {p["lang"] for p in _posts}   # plus die frueheren Podpage-Blogbeitraege als Community-Beitraege von mirko-peters
+    _posts += [p for p in LBL.items(BASE) if p["slug"] not in _have]; LBL.publish(write, BASE); MEM.BLOGLANGS = {p["lang"] for p in _posts}   # plus die frueheren Podpage-Blogbeitraege als Community-Beitraege von mirko-p
     for _p in _posts: MEM.BLOGS.setdefault(_p["handle"], set()).add(_p["lang"])
+    _pname = {x["handle"]: x["name"] for x in _people}
+    _pbt = {}   # Entitaet -> Blogbeitraege (neueste zuerst): jede Entitaetsseite zeigt und verlinkt ihre Artikel
+    for _p in sorted(_posts, key=lambda x: x.get("published") or 0, reverse=True):
+        _p.setdefault("name", _pname.get(_p["handle"], _p["handle"]))
+        for _t in _p.get("topics", []):
+            _pbt.setdefault(_t, []).append(_p)
+    _ctx["posts_by_topic"] = _pbt; _ctx["author_box"] = author_box
+    ENT.build(_ctx, lambda lang: LRN.gloss_links(lang, BASE), MEM.experts_index(_people, _orgs), _ep_find)
     MEM.build(_ctx, _people, _orgs, extra={l: EVT.blocks(BASE, _events, l) for l in COMM_LANGS})
     EVT.build(_ctx, _events, _people, _orgs)
     BLG.build(_ctx, _posts, _people, COMMUNITY_API)
@@ -1355,7 +1363,7 @@ def build():
         for u, lm, alts in entries:
             x.append(f"<url><loc>{u}</loc><lastmod>{lm}</lastmod>")
             for k, au in (alts or {}).items():
-                x.append(f'<xhtml:link rel="alternate" hreflang="{LANGS[k][1]}" href="{au}"/>')
+                x.append(f'<xhtml:link rel="alternate" hreflang="{LANGS[k][1] if k in LANGS else k}" href="{au}"/>')   # en ist nicht in LANGS
             x.append("</url>")
         x.append("</urlset>")
         return "\n".join(x)

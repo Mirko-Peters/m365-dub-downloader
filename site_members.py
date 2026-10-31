@@ -100,6 +100,11 @@ def img_tag(kind, x, alt):
 
 
 CLAIMED = {}   # profil-handle -> entity id
+AUTHOR_ENT = {"mirko-p": "mirko-peters"}   # Profil-Handle -> Entitaet derselben Person (auch ohne Claim): Blog-Autor und Entitaet sind eine Identitaet
+
+
+def person_entity(handle):
+    return CLAIMED.get(handle) or AUTHOR_ENT.get(handle)
 
 
 def person_ld(BASE, p, orgs_by_handle):
@@ -151,10 +156,10 @@ def person_ld(BASE, p, orgs_by_handle):
     if mem:
         n["memberOf"] = mem
     same = [c["url"] for c in p.get("channels", [])] + [x["url"] for x in p.get("programs", []) if x.get("verified") and x.get("url")]
-    if CLAIMED.get(p["handle"]):
-        same.append(eurl(BASE, "en", CLAIMED[p["handle"]]))
+    if person_entity(p["handle"]):   # dieselbe Person in der Entitaetsdatenbank: Seite und Knoten (eine Identitaet, Profil haengt daran)
+        same += [eurl(BASE, "en", person_entity(p["handle"])), f"{BASE}/entity/{person_entity(p['handle'])}/#entity"]
     if same:
-        n["sameAs"] = same
+        n["sameAs"] = list(dict.fromkeys(same))
     cnt = (p.get("counts") or {}); tot = cnt.get("wiki", 0) + cnt.get("entity", 0)
     if tot:
         n["agentInteractionStatistic"] = {"@type": "InteractionCounter", "interactionType": "https://schema.org/WriteAction", "userInteractionCount": tot}

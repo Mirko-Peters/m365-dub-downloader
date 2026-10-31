@@ -51,7 +51,7 @@ def build(g, items, api):
                             f'<p class="mut">{esc(T(lang, "Title, description and thumbnail come from the creator’s public feed; the original stays with its author.", "Titel, Beschreibung und Vorschaubild stammen aus dem öffentlichen Feed des Creators; das Original bleibt beim Urheber."))}</p>')
             node = {"@type": "VideoObject" if it["kind"] == "youtube" else "Article", "@id": u + "#item", "name": it["title"], "headline": it["title"], "description": (it.get("summary") or it["title"])[:300],
                     "datePublished": iso(it["published"]), "inLanguage": lang, "isBasedOn": it["url"], "author": {"@type": "Person" if it["type"] == "u" else "Organization", "name": it["name"], "url": who},
-                    "about": [{"@id": f"{BASE}/entity/{t}/#thing"} for t in topics]}
+                    "about": [{"@id": f"{BASE}/entity/{t}/#entity"} for t in topics]}
             if it["kind"] == "youtube":
                 node["uploadDate"] = iso(it["published"]); node["thumbnailUrl"] = it.get("thumb") or ""; node["contentUrl"] = it["url"]
             if has_text:

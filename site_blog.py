@@ -4,6 +4,7 @@ from datetime import datetime, timezone
 from site_i18n import COMM_LANGS, pfx, pfx2, T
 from site_learn import ENTS, esc, _fetch_json, LCSS, WT, wiki_render, wiki_images, WCSS
 import site_notes as SNT
+import site_members as MEM
 
 
 def fetch_posts(api):
@@ -23,6 +24,14 @@ def fetch_posts(api):
 def _aitr(p, lang):
     if not p.get("ai_tr"): return ""
     return f'<p class="mut"><em>{esc(T(lang, "Automatically translated with AI from the original post.", "Automatisch mit KI aus dem Originalbeitrag übersetzt."))}</em></p>'
+
+
+def _author_node(BASE, a, au):
+    """Autor als Person-Knoten: hat die Person eine Entitaet (Claim oder Seitenautor), ist deren @id die eine Identitaet, das Profil haengt als sameAs daran."""
+    eid = MEM.person_entity(a["handle"])
+    if eid:
+        return {"@type": "Person", "@id": f"{BASE}/entity/{eid}/#entity", "name": a["name"], "url": au, "sameAs": [au + "#person"]}
+    return {"@type": "Person", "@id": au + "#person", "name": a["name"], "url": au}
 
 
 def iso(ts):
@@ -84,13 +93,14 @@ def build(g, posts, people, api):
                             f'<p class="mut">{esc(T(lang, "By", "Von"))} <a href="{croot}u/{p["handle"]}/" rel="author">{esc(a["name"])}</a>{co_html}{esc(" · ")}<time datetime="{iso(p["published"])}">{iso(p["published"])}</time>{upd_html}</p>'
                             f'{("<p>" + esc(p["summary"]) + "</p>") if p.get("summary") else ""}{_aitr(p, lang)}{_kp}{body_html}{_fq}{SNT.CSS if (_kp or _fq) else ""}</article><p>{tl}</p>{vote}'
                             f'<p>{("" if p.get("legacy") else "<button type=" + chr(34) + "button" + chr(34) + " class=" + chr(34) + "bl-vote bl-follow" + chr(34) + " data-h=" + chr(34) + esc(p["handle"]) + chr(34) + " aria-pressed=" + chr(34) + "false" + chr(34) + "><span class=" + chr(34) + "t" + chr(34) + ">" + esc(T(lang, "Follow this blog", "Blog abonnieren")) + "</span></button> ")}<a href="{croot}u/{p["handle"]}/blog/feed.xml">RSS</a></p>'
+                            + ((g.get("author_box")(lang) if g.get("author_box") and p["handle"] == "mirko-p" and lang in ("en", "de") else ""))
                             + ("" if p.get("legacy") else (f'<section id="c-comments"></section>'
                             f'<script>{VOTEJS.replace("%API%", api).replace("%H%", p["handle"])}</script><script>{FOLLOWJS.replace("%API%", api).replace("%FOLLOW%", esc(T(lang, "Follow this blog", "Blog abonnieren"))).replace("%FOLLOWING%", esc(T(lang, "Following", "Abonniert")))}</script>'
                             + (ctags(lang, "blog%d" % p["id"]) if ctags else ""))))   # fruehere Blogbeitraege: keine Verbindung zur Community-Datenbank (kein Upvote, Abo, Kommentar)
             ld = [{"@context": "https://schema.org", "@type": "BlogPosting", "@id": u + "#post", "mainEntityOfPage": u, "headline": p["title"], "description": p.get("summary") or "",
                    "inLanguage": lang, **({"image": p["images"][:6]} if p.get("html") and p.get("images") else ({"image": [i["url"] for i in wiki_images(p["body"])]} if wiki_images(p["body"]) else {})), "datePublished": iso(p["published"]), "dateModified": iso(p.get("updated") or p["published"]),
-                   "author": [{"@type": "Person", "@id": au + "#person", "name": a["name"], "url": au}] + [{"@type": "Person", "@id": f"{BASE}/community/u/{c['handle']}/#person", "name": pb[c["handle"]]["name"], "url": f"{BASE}/community/u/{c['handle']}/"} for c in cos],
-                   "about": [{"@id": f"{BASE}/entity/{t}/#thing"} for t in topics], "citation": [{"@type": "CreativeWork", "name": r["title"], "url": r["url"]} for r in refs]}] + _fld
+                   "author": [_author_node(BASE, a, au)] + [{"@type": "Person", "@id": f"{BASE}/community/u/{c['handle']}/#person", "name": pb[c["handle"]]["name"], "url": f"{BASE}/community/u/{c['handle']}/"} for c in cos],
+                   "about": [{"@id": f"{BASE}/entity/{t}/#entity"} for t in topics], "citation": [{"@type": "CreativeWork", "name": r["title"], "url": r["url"]} for r in refs]}] + _fld
             noidx = False if p.get("html") else p.get("votes", 0) < INDEX_VOTES   # fruehere Blogbeitraege bleiben fuer Google sichtbar
             write(f"{pfx2(lang)}community/u/{p['handle']}/blog/{p['slug']}/index.html", page(lang, f'{p["title"]} – {a["name"]} | M365.FM', (p.get("summary") or "")[:155], u, b, None, ld, og_type="article", extra_head=LCSS, noindex=noidx))
             if not noidx:
