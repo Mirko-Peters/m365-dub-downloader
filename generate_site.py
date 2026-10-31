@@ -425,6 +425,7 @@ def page(lang, title, desc, canonical, body, alternates=None, jsonld=None, xdefa
 <meta property="og:url" content="{canonical}"><meta property="og:locale" content="{loc}"><meta property="og:site_name" content="M365.FM">
 <meta property="og:image" content="{ogimg}"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta property="og:image:alt" content="{esc(title)}">
 <meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="{esc(title)}"><meta name="twitter:description" content="{esc(desc)}"><meta name="twitter:image" content="{ogimg}">
+<link rel="preload" href="{BASE}/assets/fonts/barlow-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin><link rel="preload" href="{BASE}/assets/fonts/barlow-condensed-latin-600-normal.woff2" as="font" type="font/woff2" crossorigin>
 {extra_head}{ADS.head(BASE, body, canonical, noindex)}{css_link()}<style>{FXCSS}</style>{A11Y_EARLY}
 {ld}</head>
 <body>
