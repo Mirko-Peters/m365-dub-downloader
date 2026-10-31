@@ -191,8 +191,8 @@ def build(g):
     baseids = {e["id"] for e in json.loads((D / "entities.json").read_text("utf-8"))}
     gent = {gg["name"]: (gg["slug"] + ("-guest" if gg["slug"] not in {e["id"] for e in []} and gg["slug"] + "-guest" in ents else "")) for gg in guests}
     root = f"{BASE}/show/"; NAME = pod.get("name") or "M365.FM Podcast"
-    navitems = (("", "Home"), ("episodes/", "Episodes"), *((("blog/", "Blog"),) if (PD / "blog_posts.json.gz").exists() else ()), *((("guests/", "Guests"),) if guests else ()), ("hosts/", "Hosts"), ("sponsors/", "Sponsors"), ("reviews/", "Reviews"), ("work-with-me/", "Work with me"), ("about/", "About"))
-    nav = '<section class="sb-card sb-nav"><h2>M365.FM Show</h2><ul class="sb-navl">' + "".join(f'<li><a href="{root}{p}">{t}</a></li>' for p, t in navitems) + "</ul></section>"   # frueher zweite Menueleiste ueber dem Inhalt, jetzt Karte in der Sidebar
+    navitems = (("", "Home"), ("episodes/", "Episodes"), *(((f"{BASE}/community/u/mirko-p/blog/", "Blog"),) if (PD / "blog_posts.json.gz").exists() else ()), *((("guests/", "Guests"),) if guests else ()), ("hosts/", "Hosts"), ("sponsors/", "Sponsors"), ("reviews/", "Reviews"), ("work-with-me/", "Work with me"), ("about/", "About"))
+    nav = '<section class="sb-card sb-nav"><h2>M365.FM Show</h2><ul class="sb-navl">' + "".join(f'<li><a href="{p if p.startswith("https://") else root + p}">{t}</a></li>' for p, t in navitems) + "</ul></section>"   # frueher zweite Menueleiste ueber dem Inhalt, jetzt Karte in der Sidebar
     shell = lambda b, side="": f'{header("en", "")}<link rel="stylesheet" href="{BASE}/assets/sbar.css"><main class="wrap shw"><div class="shmain">{b}</div>{side}</main>{footer_en()}'
 
     SBX = SBR.Index(); SHP = json.loads((D / "platforms.json").read_text("utf-8")).get("en", {}) if (D / "platforms.json").exists() else {}
@@ -253,6 +253,17 @@ def build(g):
     for p in bposts:
         k = bp_ep(p)
         if k: bp_by_ep.setdefault(k, []).append(p)
+    pbt = g.get("posts_by_topic") or {}   # Themen -> Beitraege (Seitenbau): verwandte Artikel ueber die Entitaeten der Folge, nicht nur ueber den Folgenlink
+    def related_posts(slug):
+        seen, out = set(), []
+        for p in bp_by_ep.get(slug, []):
+            if p["slug"] not in seen: seen.add(p["slug"]); out.append({"title": p["title"], "slug": p["slug"]})
+        for eid in (ep_about.get(slug) or [])[:4]:
+            for p in pbt.get(eid, []):
+                if p.get("lang") == "en" and p.get("handle") == "mirko-p" and p["slug"] not in seen: seen.add(p["slug"]); out.append({"title": p["title"], "slug": p["slug"]})
+                if len(out) >= 8: break
+            if len(out) >= 8: break
+        return out[:8]
     def bday(p): return (p.get("iso") or "")[:10]
 
     # Folgenseiten
@@ -282,7 +293,7 @@ def build(g):
         body = (f'<article><p class="mut">{day(e["create_time"])}{" · Season " + str(e["season"]) if e.get("season") else ""}</p><h1>{esc(e["name"])}</h1>{aud}'
                 f'<div style="display:flex;gap:1rem;align-items:flex-start;margin:1em 0">{img_tag(thumb_of(e, nrec), e["name"], 160)}<div><strong>{esc(short_desc(e, nrec, 300))}</strong></div></div>{nkp}<div class="pp-notes">{(nnotes if nrec and nrec.get("markup") else san(e.get("show_notes")))}</div>{nfaq}{SNT.CSS if (nkp or nnotes or nfaq) else ""}'
                 + (f"<p>{ext}</p>" if ext else "") + (f'<p class="mut">Host: {hl}</p>' if hl else "") + (f"<h2>Guests</h2><ul>{gl}</ul>" if gl else "") + also
-                + (("<h2>Related articles</h2><ul>" + "".join(f'<li><a href="{bp_url(p)}">{esc(p["title"])}</a></li>' for p in bp_by_ep.get(e["slug"], [])[:6]) + "</ul>") if bp_by_ep.get(e["slug"]) else "") + tx + "</article>" + (g.get("author_box")("en") if g.get("author_box") else "")
+                + (("<h2>Related articles</h2><ul>" + "".join(f'<li><a href="{bp_url(p)}">{esc(p["title"])}</a></li>' for p in related_posts(e["slug"])) + "</ul>") if related_posts(e["slug"]) else "") + tx + "</article>" + (g.get("author_box")("en") if g.get("author_box") else "")
                 + '<p style="display:flex;justify-content:space-between;gap:1em;margin-top:2em">' + (f'<a href="{ep_url(prev_)}">← {esc(prev_["name"][:60])}</a>' if prev_ else "<span></span>") + (f'<a href="{ep_url(next_)}">{esc(next_["name"][:60])} →</a>' if next_ else "") + "</p>")
         ld = {"@context": "https://schema.org", "@type": "PodcastEpisode", "@id": ep_url(e) + "#episode", "name": e["name"], "url": ep_url(e), "datePublished": day(e["create_time"]),
               "description": short_desc(e, nrec, 500), "partOfSeries": {"@type": "PodcastSeries", "name": NAME, "url": root}, "inLanguage": "en", **({"image": thumb_of(e, nrec)} if thumb_of(e, nrec) else {}), "author": {"@id": f"{BASE}/entity/mirko-peters/#entity"}}

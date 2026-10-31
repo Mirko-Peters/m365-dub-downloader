@@ -1262,7 +1262,9 @@ def build():
     import site_legacy_blog as LBL
     _posts = BLG.fetch_posts(COMMUNITY_API); _have = {p["slug"] for p in _posts if p["handle"] == "mirko-p"}
     _posts += [p for p in LBL.items(BASE) if p["slug"] not in _have]; LBL.publish(write, BASE); MEM.BLOGLANGS = {p["lang"] for p in _posts}   # plus die frueheren Podpage-Blogbeitraege als Community-Beitraege von mirko-p
-    for _p in _posts: MEM.BLOGS.setdefault(_p["handle"], set()).add(_p["lang"])
+    for _p in _posts:
+        MEM.BLOGS.setdefault(_p["handle"], set()).add(_p["lang"])
+        if _p["handle"] == "mirko-p" and _p.get("html") and _p["slug"] in LBL.TOPICS: _p["topics"] = LBL.TOPICS[_p["slug"]]   # Datenbank-Fassung: Themen beim Import eingefroren, hier die aktuelle Zuordnung
     _pname = {x["handle"]: x["name"] for x in _people}
     _pbt = {}   # Entitaet -> Blogbeitraege (neueste zuerst): jede Entitaetsseite zeigt und verlinkt ihre Artikel
     for _p in sorted(_posts, key=lambda x: x.get("published") or 0, reverse=True):

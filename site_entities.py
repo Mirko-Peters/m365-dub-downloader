@@ -228,8 +228,8 @@ def _iso(ts):
 def topic_posts(posts_by_topic, eid, lang):
     """Artikel einer Entitaet: bei sehr allgemeinen Entitaeten (> 60 Treffer) nur die Beitraege, deren Hauptthema sie ist; Seitensprache zuerst, dann Englisch."""
     ps = posts_by_topic.get(eid) or []
-    if len(ps) > 60:
-        ps = [p for p in ps if (p.get("topics") or [""])[0] == eid] or ps[:60]
+    if len(ps) > 60:   # sehr allgemeine Entitaet: nur Beitraege, bei denen sie Haupt- oder Zweitthema ist
+        ps = [p for p in ps if eid in (p.get("topics") or [])[:2]] or ps[:60]
     ps = [p for p in ps if p.get("lang") in (lang, "en")]
     return sorted(ps, key=lambda p: (p.get("lang") != lang, -(p.get("published") or 0)))
 
@@ -441,6 +441,7 @@ def build(g, wiki_links, experts_by_ent, ep_find):
                     ("Wikidata", f"https://www.wikidata.org/wiki/{e['wikidata']}" if e.get("wikidata") else "")] + [(T(lang, "Profile", "Profil"), u_) for u_ in (e.get("same_as") or [])[:4]]
             _src = [(n_, u_) for n_, u_ in _src if u_ and str(u_).startswith("http")]
             srcbox = (f'<section class="en-src"><h2>{esc(T(lang, "Sources", "Quellen"))}</h2><ul>' + "".join(f'<li>{esc(n_)}: <a href="{esc(u_)}" rel="noopener">{esc(u_.replace("https://", "").rstrip("/"))}</a></li>' for n_, u_ in _src)
+                      + (f'<li>{esc(T(lang, "Feed for this topic (RSS)", "Feed zu diesem Thema (RSS)"))}: <a href="{BASE}/entity/{e["id"]}/feed.xml">entity/{e["id"]}/feed.xml</a></li>' if (eps or _arts) else "")
                       + (f'<li>{esc(T(lang, "M365.FM episodes on this topic", "M365.FM-Folgen zum Thema"))}: {len(eps)}</li>' if eps else "") + (f'<li>{esc(T(lang, "Articles on this topic", "Artikel zum Thema"))}: {len(_arts)}</li>' if _arts else "") + "</ul></section>") if (_src or eps or _arts) else ""
             _au = ENTS.get(AUTHOR_EID)
             updline = (f'<p class="mut en-upd">' + (f'{esc(T(lang, "Maintained by", "Gepflegt von"))} <a href="{root}{AUTHOR_EID}/">{esc(_au["name"])}</a> (Microsoft MVP) · ' if _au and e["id"] != AUTHOR_EID else "")
@@ -480,7 +481,20 @@ def build(g, wiki_links, experts_by_ent, ep_find):
                 _thin = not _real and _app < 2
             _alts = {"en": eurl(BASE, "en", e["id"]), "de": eurl(BASE, "de", e["id"])} if _has_de and not _thin else None
             _noidx = lang not in ("en", "de") or (lang == "de" and not _has_de) or _thin
-            write(f"{rel}/{e['id']}/index.html", page(lang, f'{e["name"]} – {TL[e["type"]][li]} | M365.FM', d[:155], u, b, _alts if lang in ("en", "de") else None, ld, xdefault=eurl(BASE, "en", e["id"]), og_type="website", extra_head=LCSS + css, noindex=_noidx))
+            _feedu = f"{BASE}/entity/{e['id']}/feed.xml"
+            if lang == "en" and (_arts or eps):   # Themen-Feed: neueste Artikel und Folgen zu dieser Entitaet (fuer Leser und Agenten)
+                from xml.sax.saxutils import escape as _x
+                from email.utils import formatdate as _fd
+                _items = [("article", p["title"], f"{BASE}/community/u/{p['handle']}/blog/{p['slug']}/", p.get("published") or 0, p.get("summary") or "") for p in _arts[:30] if p.get("lang") == "en"]
+                for x in eps[:20]:
+                    try: _ts = int(__import__("datetime").datetime.strptime(str(x.get("date", ""))[:10], "%Y-%m-%d").replace(tzinfo=__import__("datetime").timezone.utc).timestamp())
+                    except Exception: _ts = 0
+                    _items.append(("episode", x["e"]["title"], _epu(x), _ts, x.get("sum") or ""))
+                _items.sort(key=lambda t: -t[3])
+                write(f"entity/{e['id']}/feed.xml", '<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"><channel>' + f"<title>{_x(e['name'])} – M365.FM</title><link>{u}</link><description>{_x(d[:300])}</description><language>en</language>"
+                      + "".join(f"<item><title>{_x(t)}</title><link>{lnk}</link><guid>{lnk}</guid><pubDate>{_fd(ts)}</pubDate><category>{k}</category><description>{_x(sm[:400])}</description></item>" for k, t, lnk, ts, sm in _items[:40]) + "</channel></rss>")
+            _fhead = f'<link rel="alternate" type="application/rss+xml" title="{esc(e["name"])} – M365.FM" href="{_feedu}">' if (_arts or eps) else ""
+            write(f"{rel}/{e['id']}/index.html", page(lang, f'{e["name"]} – {TL[e["type"]][li]} | M365.FM', d[:155], u, b, _alts if lang in ("en", "de") else None, ld, xdefault=eurl(BASE, "en", e["id"]), og_type="website", extra_head=LCSS + css + _fhead, noindex=_noidx))
             if not _noidx: sitemap.append((u, _mod, _alts))
 
 
