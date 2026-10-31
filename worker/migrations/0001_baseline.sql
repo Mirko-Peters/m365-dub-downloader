@@ -144,9 +144,9 @@ CREATE TABLE IF NOT EXISTS channels (          -- Social-Media-Kanaele, optional
   feed TEXT NOT NULL DEFAULT '',               -- RSS/Atom-URL (https)
   fetched INTEGER NOT NULL DEFAULT 0,
   fails INTEGER NOT NULL DEFAULT 0,
-  UNIQUE(owner_type, owner_id, url),
   followers INTEGER NOT NULL DEFAULT 0,
-  followers_at INTEGER NOT NULL DEFAULT 0
+  followers_at INTEGER NOT NULL DEFAULT 0,
+  UNIQUE(owner_type, owner_id, url)
 );
 CREATE TABLE IF NOT EXISTS feed_items (        -- nur Titel, Link und Datum (kein Volltext)
   id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -559,9 +559,9 @@ CREATE TABLE IF NOT EXISTS blog_posts (          -- Blog je Mitglied; status: dr
   updated INTEGER NOT NULL,
   published INTEGER NOT NULL DEFAULT 0,
   html TEXT NOT NULL DEFAULT '',                 -- vollstaendiger HTML-Inhalt uebernommener Beitraege (leer bei Wiki-Beitraegen)
-  UNIQUE (user_id, slug),
   keypoints TEXT NOT NULL DEFAULT '[]',
-  faq TEXT NOT NULL DEFAULT '[]'
+  faq TEXT NOT NULL DEFAULT '[]',
+  UNIQUE (user_id, slug)
 );
 CREATE TABLE IF NOT EXISTS blog_import (          -- Fortschritt der Uebernahme der frueheren Podpage-Beitraege (legacyblog.js)
   k TEXT PRIMARY KEY,
@@ -662,8 +662,8 @@ CREATE TABLE IF NOT EXISTS lib_items (           -- Copilot-Bibliothek: Prompts,
   created INTEGER NOT NULL,
   updated INTEGER NOT NULL,
   published INTEGER NOT NULL DEFAULT 0,
-  UNIQUE (user_id, slug),
-  link TEXT NOT NULL DEFAULT ''
+  link TEXT NOT NULL DEFAULT '',
+  UNIQUE (user_id, slug)
 );
 CREATE TABLE IF NOT EXISTS lib_votes (
   item_id INTEGER NOT NULL,
