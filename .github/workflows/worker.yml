@@ -60,6 +60,7 @@ jobs:
           for f in src/*.js setup.mjs; do node --check "$f"; done
           node --test
           node ../tools/check_mcp_coverage.mjs
+          python3 -c "import sqlite3,glob,pathlib;db=sqlite3.connect(':memory:');[db.executescript(pathlib.Path(f).read_text('utf-8')) for f in sorted(glob.glob('migrations/*.sql'))];print('Migrationen in SQLite ok:',db.execute(\"select count(*) from sqlite_master where type='table'\").fetchone()[0],'Tabellen')"
       - name: Installieren
         if: env.skip != '1'
         working-directory: worker
