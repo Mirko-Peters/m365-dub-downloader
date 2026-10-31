@@ -1,0 +1,1078 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:03.240
+Já desejou que o Business Central realmente fizesse o trabalho chato pra você?
+
+00:00:03.720 --> 00:00:06.040
+Como conciliar pagamentos ou redigir textos de produtos,
+
+00:00:06.240 --> 00:00:09.240
+em vez de te enterrar em cliques extras e no sofrimento do Excel até tarde da noite?
+
+00:00:09.800 --> 00:00:10.780
+Essa é a promessa do Copilot.
+
+00:00:11.220 --> 00:00:15.180
+E antes que pergunte sim, ele já vem integrado ao Business Central Online sem custo extra,
+
+00:00:15.820 --> 00:00:17.900
+só não espere que rode na sua instalação on-premise.
+
+00:00:18.460 --> 00:00:19.040
+Aqui está o pull.
+
+00:00:19.440 --> 00:00:22.020
+A maioria dos administradores nunca olha além das demonstrações padrões.
+
+00:00:22.360 --> 00:00:25.360
+Hoje vamos analisar tudo e mostrar como fazer o Copilot funcionar pra sua empresa.
+
+00:00:26.000 --> 00:00:28.340
+Ao final você sairá com uma lista de verificação de sobrevivência
+
+00:00:28.340 --> 00:00:29.620
+que pode testar em um ambiente sandbox.
+
+00:00:30.380 --> 00:00:33.180
+Tudo começa com um menu oculto sobre o qual a Microsoft quase não fala.
+
+00:00:34.040 --> 00:00:35.180
+Menu secreto do Copilot.
+
+00:00:35.340 --> 00:00:38.780
+O verdadeiro poder do Copilot não está nos botões chamativos que você vê em um cartão de clima.
+
+00:00:39.180 --> 00:00:41.620
+O verdadeiro truque é o que a Microsoft deixou escondido por baixo.
+
+00:00:42.120 --> 00:00:45.140
+Você encontrará esses pontos de extensão dentro do namespace de sistema de IA?
+
+00:00:45.620 --> 00:00:48.180
+Procure pelo Codunit de capacidade do Copilot em uns relacionados.
+
+00:00:48.620 --> 00:00:50.480
+É lá que residem os ganchos reais para desenvolvedores.
+
+00:00:50.920 --> 00:00:52.600
+Esses não são artefatos adatórios na base de culpa.
+
+00:00:52.900 --> 00:00:56.600
+Eles foram criados pra que você possa definir e registrar seus próprios recursos baseados em IA.
+
+00:00:56.600 --> 00:00:59.680
+Em vez de esperar a Microsoft lançar uma nova demonstração a cada trimestre,
+
+00:01:00.000 --> 00:01:02.660
+o menu com o qual a maioria das pessoas interagem é apenas a superfície.
+
+00:01:03.040 --> 00:01:06.220
+Digitar dados de fatura, obter um resumo organizado, talvez redigir uma descrição de produto.
+
+00:01:07.520 --> 00:01:09.500
+Mas esses são cenários de demonstração para mostrar a ver se funciona.
+
+00:01:10.300 --> 00:01:15.220
+Da realidade, as entranhas do Business Central contêm objetos como capacidade do Copilot e disponibilidade do Copilot.
+
+00:01:15.220 --> 00:01:19.220
+Em termos simples, uma capacidade é o conjunto de habilidades que você está criando para o Copilot.
+
+00:01:19.800 --> 00:01:24.140
+A disponibilidade informa ao sistema quando e onde essa habilidade deve aparecer para os usuários finais.
+
+00:01:25.160 --> 00:01:27.560
+Juntos, isso não é apenas um menu de widgets de IA prontos.
+
+00:01:28.340 --> 00:01:30.680
+É uma estrutura para tornar o Copilot específico para a sua empresa.
+
+00:01:31.380 --> 00:01:31.880
+Daquilo de surpresa.
+
+00:01:32.380 --> 00:01:35.880
+A maioria dos administradores assume que o Copilot é totalmente bloqueado com uma caixa preta brilhante.
+
+00:01:36.340 --> 00:01:37.860
+Eles usam o que está ladrão de ombros e seguem em frente.
+
+00:01:38.240 --> 00:01:39.860
+Eles nunca procuram pelos controles adicionais.
+
+00:01:39.860 --> 00:01:42.360
+Mas se no nível de desenvolvimento você tem alavancas expostas.
+
+00:01:42.780 --> 00:01:46.500
+E sim, existe uma maneira de os administradores realmente verem os resultados do que os desenvolvedores registram.
+
+00:01:47.160 --> 00:01:50.180
+Vá para a página de capacidades de Copilot e agentes dentro do Business Central.
+
+00:01:50.660 --> 00:01:52.340
+Cada capacidade que você registra aparece lá.
+
+00:01:53.120 --> 00:01:55.640
+Os administradores podem desativá-las uma a uma se algo se comportar mal.
+
+00:01:56.140 --> 00:02:00.460
+Essa conexão em que desenvolvedores definem em AL e administradores gerenciam na interface
+
+00:02:00.460 --> 00:02:02.840
+é a ponte que torna isso mais do que apenas teoria.
+
+00:02:03.520 --> 00:02:07.560
+Pense nisso menos como um dispositivo Apple bloqueado e mais como um console com comandos de depuração ocultos.
+
+00:02:07.560 --> 00:02:11.880
+Tudo o que você faz é clicar no botão principal do Copilot e você está deixando potências sem uso na mesa.
+
+00:02:12.420 --> 00:02:15.140
+É como dirigir um Tesla e só avançar alguns centímetros no trânsito.
+
+00:02:16.280 --> 00:02:19.320
+O botão do Ludicrous Mode existe, mas se você não acionar, continuará parado.
+
+00:02:20.020 --> 00:02:20.680
+Ou mesmo aconteceu assim.
+
+00:02:21.080 --> 00:02:25.180
+Os objetos de namespace já estão no seu tenant, mas se não souber onde procurar, nunca os usará.
+
+00:02:25.700 --> 00:02:27.340
+Então, de quanta potência estamos falando?
+
+00:02:28.060 --> 00:02:30.860
+O módulo de IA dentro do Business Central oferece conclusões de texto,
+
+00:02:31.000 --> 00:02:34.760
+conclusões estilo chat para fluxos de trabalho e embeddings para busca semântica.
+
+00:02:34.760 --> 00:02:38.040
+Isso significa que você pode criar um recurso que, por exemplo,
+
+00:02:38.160 --> 00:02:42.000
+rascunha pedidos de compra baseados nos padrões da sua empresa, não nas suposições da Microsoft.
+
+00:02:43.040 --> 00:02:47.740
+Também significa criar assistentes que falam com a voz da sua empresa e não como um memorando estéreo de RH.
+
+00:02:48.500 --> 00:02:49.880
+Um aviso rápido antes que alguém tenha ideias.
+
+00:02:50.680 --> 00:02:54.900
+O recurso de chat prévio é com o Copilot que você talvez tenha visto no Business Central não é extensível por este módulo.
+
+00:02:55.440 --> 00:02:56.760
+Aquele chat segue seu próprio...
+
+00:02:56.760 --> 00:02:59.720
+O que você pode estender acontece por meio do modelo de capacidade escrito aqui.
+
+00:03:00.180 --> 00:03:02.460
+A Microsoft não fez um bom trabalho destacar isso em seu marketing.
+
+00:03:02.460 --> 00:03:06.680
+Sim, está na documentação, mas é enterrado em uma sessão técnica árida que poucos administradores leem.
+
+00:03:07.240 --> 00:03:09.660
+Mas assim que você sabe que esses objetos existem, o cenário...
+
+00:03:09.660 --> 00:03:14.220
+Cada peculiaridade financeira, cada campo personalizado estranho, cada fluxo de aprovação complexo,
+
+00:03:14.300 --> 00:03:16.580
+tudo pode ser resolvido com sua própria capacidade do Copilot.
+
+00:03:17.080 --> 00:03:21.920
+Em vez de esperar que Redmond lance algo do alto, você pode adaptar o assistente diretamente ao seu ambiente.
+
+00:03:22.440 --> 00:03:22.680
+Né?
+
+00:03:23.120 --> 00:03:25.220
+Claro, nada tão poderoso vem sem etiqueta de aviso.
+
+00:03:25.720 --> 00:03:26.500
+Essas são ferramentas.
+
+00:03:26.980 --> 00:03:31.100
+Registrar capacidade de forma incorreta pode criar conflitos, especialmente quando a Microsoft libera atualizações.
+
+00:03:31.100 --> 00:03:35.120
+Se fizer errado, o sandbox pode quebrar, ou pior, você pode bloquear usuários na produção.
+
+00:03:35.900 --> 00:03:38.240
+É por isso que a página de capacidades do Copilot de agentes é importante.
+
+00:03:38.960 --> 00:03:44.300
+Ela não apenas dá visibilidade aos administradores, mas oferece um botão de emergência caso seu cérebro personalizado comece a falhar.
+
+00:03:44.840 --> 00:03:45.760
+O resultado aqui é simples.
+
+00:03:46.280 --> 00:03:47.800
+Sim, existe um menu secreto no Copilot.
+
+00:03:48.260 --> 00:03:49.380
+Sim, ele já está em todos os tempos.
+
+00:03:49.760 --> 00:03:54.400
+E sim, ele transforma o Copilot em um brinquedo de demonstração em algo útil, mas saber que existe é apenas o primeiro passo.
+
+00:03:54.400 --> 00:03:59.660
+O verdadeiro truque é registrar essas capacidades com segurança para adicionar potência sem incendiar seu ambiente.
+
+00:04:00.540 --> 00:04:01.780
+E é para onde vamos agora.
+
+00:04:03.160 --> 00:04:04.700
+Registrando sem destruir seu tenant.
+
+00:04:05.480 --> 00:04:08.340
+Registrar uma capacidade do Copilot não é nenhum truque de mágica vago.
+
+00:04:09.220 --> 00:04:16.880
+Em termos simples de AL, significa criar uma extensão de ENUM para o ENUM de capacidade do Copilot e usar uma codionite de instalação ou atualização que chame capacidade do Copilot.
+
+00:04:17.760 --> 00:04:18.460
+Registrar capacidade.
+
+00:04:18.460 --> 00:04:20.920
+Esse é o aperto de mão onde você diz ao Business Center.
+
+00:04:21.000 --> 00:04:22.100
+Aqui está um novo recurso de app.
+
+00:04:22.420 --> 00:04:23.440
+Trate-o como parte do sistema.
+
+00:04:24.160 --> 00:04:28.100
+Sem essa chamada, sua extensão pode até compilar, mas o Copilot nem saberá que o recurso existe.
+
+00:04:29.040 --> 00:04:30.540
+Pense nisso com o envio de documentos para RH.
+
+00:04:31.200 --> 00:04:34.360
+Sem registro no organograma, sem mesa, sem e-mail, sem funcionário.
+
+00:04:35.320 --> 00:04:38.980
+Uma vez com a definição básica pronta, o próximo detalhe é o escopo e a nomenclatura.
+
+00:04:39.780 --> 00:04:43.640
+Cada capacidade que você registra vive no mesmo ecossistema que a Microsoft atualiza constantemente.
+
+00:04:43.960 --> 00:04:48.140
+Se você reciclar um nome genérico ou reservar um ID de descuidado, estará basicamente pedindo por um conflito.
+
+00:04:48.680 --> 00:04:51.360
+Digamos que você o chame de auxiliar de vendas e identifique com o valor de um.
+
+00:04:51.680 --> 00:04:55.220
+Então, a Microsoft lança uma atualização futura com uma capacidade integrada no mesmo espaço.
+
+00:04:56.040 --> 00:04:59.920
+De repente, o sistema não sabe qual exibir e seu código entra em conflito com o Redmond em termos de execução.
+
+00:05:00.560 --> 00:05:02.000
+A mitigação é entediante, mas essencial.
+
+00:05:02.500 --> 00:05:07.640
+Cole a nomes únicos, atribua seus próprios valores genúnicos e não coincidam com faixas comuns e versione toda a extensão de forma deliberada.
+
+00:05:08.320 --> 00:05:13.080
+Adicione números de versão para que você possa rastrear se o sandbox está na 1.2, enquanto a produção ainda está na 1.0.
+
+00:05:13.080 --> 00:05:18.900
+E se algo mudar na plataforma, suas unidades de código de atualização são a ferramenta para levar a capacidade adiante com segurança.
+
+00:05:19.760 --> 00:05:24.320
+Sem elas, você está remendo a fiação nova em um disjuntor antigo e torcendo para que nada pegue fogo.
+
+00:05:24.900 --> 00:05:26.780
+Agora, é aqui que muitos desenvolvedores se tornam negligentes.
+
+00:05:27.280 --> 00:05:30.000
+Eles lançam a extensão direta na produção porque é apenas uma capacidade.
+
+00:05:30.540 --> 00:05:32.040
+É aí que seu suporte técnico fica sobrecarregado.
+
+00:05:32.420 --> 00:05:33.120
+O caminho certo é simples.
+
+00:05:33.660 --> 00:05:34.540
+Apenas sandbox primo.
+
+00:05:34.540 --> 00:05:36.400
+Quebre, refator e teste novamente.
+
+00:05:36.600 --> 00:05:38.340
+E somente quando se comportar bem, mova para a produção.
+
+00:05:39.120 --> 00:05:40.880
+Esse lançamento controlado reduz surpresas.
+
+00:05:41.280 --> 00:05:43.540
+E isso não é apenas sobre compilar código, é sobre governança.
+
+00:05:44.300 --> 00:05:48.280
+A página de capacidades do Copilot e agentes no Business Central serve também como sua verificação de sanidade.
+
+00:05:48.840 --> 00:05:52.620
+Se sua capacidade não aparecer lá após o registro, você não a registrou corretamente.
+
+00:05:53.300 --> 00:05:54.460
+Essa página refletiu o sistema.
+
+00:05:54.840 --> 00:05:57.740
+Somente após validar a like, você deve encaminhar para a revisão do administrador.
+
+00:05:58.780 --> 00:06:04.020
+E falando em administradores, ativar ou desativar capacidades do Copilot, bem como configurar um movimento de dados,
+
+00:06:04.020 --> 00:06:08.180
+é algo que apenas admins com super permissões ou uma função de admin do Business Central podem fazer.
+
+00:06:09.120 --> 00:06:10.740
+Planeixe essa etapa de governança com antecedência.
+
+00:06:11.220 --> 00:06:11.960
+Uma dica rápida.
+
+00:06:12.240 --> 00:06:14.960
+Ao registrar, use o parâmetro opcional de texto URL de Saiba Mais.
+
+00:06:16.100 --> 00:06:19.460
+Ele aparece diretamente na página administrativa de capacidades do Copilot e agentes.
+
+00:06:20.260 --> 00:06:22.400
+Não é apenas um toque elegante, é documentação integrada.
+
+00:06:23.180 --> 00:06:26.700
+Em vez de fazer os administradores buscarem um link de Wiki ou incomodarem você no Teams,
+
+00:06:26.820 --> 00:06:30.260
+eles podem clicar direto na descrição do que a capacidade faz e como usá-la.
+
+00:06:30.260 --> 00:06:34.900
+Pense nisso como escrever instruções no próprio interruptor de luz para que a próxima pessoa não acione o errado.
+
+00:06:35.420 --> 00:06:37.660
+Que tal uma lista de verificação de boas práticas que reduza os riscos?
+
+00:06:38.100 --> 00:06:40.220
+1. Execute tudo em um ambiente sandbox antes da produção.
+
+00:06:40.780 --> 00:06:43.340
+2. Escolha valores de enumeração exclusivos e evite intervalos comum.
+
+00:06:44.060 --> 00:06:47.680
+3. Use sempre unidades de atualização e instalação para caminhos de progresso limpos.
+
+00:06:48.260 --> 00:06:51.440
+4. Anexe aquela URL de Saiba Mais para que os administradores não fiquem na dúvida pública.
+
+00:06:51.440 --> 00:06:53.820
+5. Siga esses quatro e você manterá seu ambiente estável.
+
+00:06:54.300 --> 00:06:57.060
+6. Ignore-os e você estará restaurando bancos de dados às 3 da manhã.
+
+00:06:57.640 --> 00:06:59.260
+A metáfora da vaga de estacionamento é no seu fim.
+
+00:06:59.520 --> 00:07:02.720
+7. Registrar uma funcionalidade é como reservar oficialmente uma vaga para seu carro novo.
+
+00:07:03.400 --> 00:07:05.660
+8. Preencha a documentação correta, ela é sua e todos ficam felizes.
+
+00:07:05.660 --> 00:07:08.140
+9. Pule o processo e estacione na zona proibida.
+
+00:07:08.300 --> 00:07:10.620
+E agora você está bloqueando a saída de emergência e todos estão irritados.
+
+00:07:10.620 --> 00:07:16.820
+9. O registro serve para criar um espaço seguro para seu recurso para que o Business Center e as atualizações da Microsoft possam coexistir com ele a longo prazo.
+
+00:07:17.240 --> 00:07:20.300
+10. Resumindo, trate o registro como código de produção, porque é exatamente isso que ele é.
+
+00:07:20.300 --> 00:07:25.700
+11. Teste em sandboxes, mantenha seu escopo único, rastreie suas versões e torne suas unidades de código de atualização infalível.
+
+00:07:26.080 --> 00:07:33.980
+12. Se algo estranho acontecer, a página de capacidades do Copilot e agentes somada à sua URL de Saiba Mais é como os administradores encontrarão, entenderão e, se necessário, desativarão o recurso.
+
+00:07:33.980 --> 00:07:36.900
+13. Feito corretamente, o registro prepara você para a estabilidade.
+
+00:07:36.900 --> 00:07:39.100
+14. Feito de forma desleixada, prepara você para o caos.
+
+00:07:39.100 --> 00:07:43.780
+15. Depois de ter isso definido, você notará que a funcionalidade em si é prática, mas genérica, mas genérica.
+
+00:07:43.780 --> 00:07:45.460
+16. Ela responde, mas sem personalidade.
+
+00:07:45.800 --> 00:07:48.100
+É como contratar alguém brilhante que aparece nas reuniões no mundo.
+
+00:07:48.100 --> 00:07:56.360
+17. O próximo passo é ensinar seu Copilot como agir, porque se você não fizer isso, ele soará menos como um assistente confiável e mais como um adolescente revirando os olhos para suas perguntas.
+
+00:07:56.360 --> 00:08:13.520
+18. Na própria documentação para desenvolvedores da Microsoft, o MetaPrompt é a mensagem de sistema principal que define o perfil do modelo, o formato de saída e as diretrizes de segurança.
+
+00:08:13.520 --> 00:08:15.720
+19. Em termos simples, é a descrição do cargo da IACO.
+
+00:08:15.720 --> 00:08:21.860
+20. Um prompt de usuário único é como uma solicitação de tarefa isolada, mas o MetaPrompt são instruções permanentes incorporadas a cada resposta.
+
+00:08:21.860 --> 00:08:27.220
+20. Sem ele, o Copilot não sabe se deve soar como um contador ou um redator. Ele apenas adivinha.
+
+00:08:27.540 --> 00:08:30.620
+21. Pense desta forma ou você não contrataria alguém sem lhe dar uma descrição de cargo?
+
+00:08:31.120 --> 00:08:33.540
+21. O MetaPrompt é exatamente isso para a IACO.
+
+00:08:34.280 --> 00:08:39.960
+22. Ele diz ao Copilot quando ser formal, como formatar resultados, qual tom usar e o que ele deve evitar a todo custo.
+
+00:08:39.960 --> 00:08:45.680
+23. Isso diferencia respostas que se encaixam no seu fluxo de trabalho de respostas que parecem um clipe requentado e cheio de opiniões.
+
+00:08:45.680 --> 00:08:49.800
+23. Os administradores costumam confundir MetaPrompt com Prompts. É por isso que ficam frustrados.
+
+00:08:49.800 --> 00:08:55.260
+24. Se você apenas jogar, me dê as entradas do razão para o Copilot sem contexto, ele inventará seu próprio estilo.
+
+00:08:56.020 --> 00:08:58.360
+25. Talvez parágrafos longos, talvez campos que não existem.
+
+00:08:59.140 --> 00:09:02.220
+26. Envolva essa mesma solicitação no MetaPrompt como você é um assistente financeiro.
+
+00:09:02.340 --> 00:09:05.820
+27. Sempre exibe entradas contábeis como listas usando nomes de campos do Business Central.
+
+00:09:06.540 --> 00:09:07.280
+28. Pernas o exemplo.
+
+00:09:07.800 --> 00:09:10.240
+29. De repente as respostas ficam limpas, estruturadas e organizadas.
+
+00:09:10.640 --> 00:09:13.140
+29. A diretriz de proteção é definida antes mesmo da solicitação ser executada.
+
+00:09:13.820 --> 00:09:15.480
+30. A Microsoft criou essa distinção de propósito.
+
+00:09:15.480 --> 00:09:19.740
+30. Prompts são solicitações temporárias, enquanto MetaPrompts permanecem persistentes em todo o contexto do chat.
+
+00:09:20.420 --> 00:09:26.140
+31. Os desenvolvedores o definem por meio da codeunit de mensagens de chat do IOI chamando a mensagem de sistema primária.
+
+00:09:26.140 --> 00:09:34.440
+31. Armazenar o próprio MetaPrompt no armazenamento isolado significa que sua extensão pode recuperá-lo e atualizá-lo com segurança, em vez de codificar o texto no arquivo AL.
+
+00:09:35.220 --> 00:09:40.120
+31. Se você der uma olhada na documentação, verá exemplos usando definição e obtenção de armazenamento isolado.
+
+00:09:40.120 --> 00:09:41.920
+32. Esse é o modelo correto para a produção.
+
+00:09:42.280 --> 00:09:46.020
+31. Ele mantém seu MetaPrompt disponível, mas bloqueado atrás do limite de segurança da extensão.
+
+00:09:46.640 --> 00:09:47.780
+32. Agora vamos aos detalhes técnicos.
+
+00:09:47.780 --> 00:09:55.200
+32. Ao enviar a entrada do usuário para o serviço Azure OpenAI por meio do módulo GA do Business Central, você lida com orçamentos de tokens e configurações de temperatura, goste ou não.
+
+00:09:56.240 --> 00:09:56.900
+33. Percebem importantes.
+
+00:09:57.400 --> 00:10:00.680
+33. Seu MetaPrompt somado ao Promp do usuário conta um pro limite de tokens do modelo.
+
+00:10:00.680 --> 00:10:02.940
+34. Portanto, não insira uma mensagem de sistema do tamanho no rumo.
+
+00:10:03.400 --> 00:10:04.040
+34. Mantenha a precisa.
+
+00:10:04.400 --> 00:10:05.840
+35. E a temperatura controla a aleatoriedade.
+
+00:10:06.200 --> 00:10:11.120
+35. Defina uma temperatura baixa próxima de zero para cenários financeiros onde você precisa de resultados determinísticos e precisos.
+
+00:10:11.120 --> 00:10:16.080
+36. Se você estiver criando uma funcionalidade de marketing e quiser rascunhos mais criativos, aumente a temperatura e deixe improvisar.
+
+00:10:16.080 --> 00:10:30.060
+36. Seu MetaPrompt deve incluir regras de formatação explícitas, estruturas de resposta e restrições a comentários irrelevantes.
+
+00:10:30.500 --> 00:10:33.180
+37. Dessa forma, os resultados do Copilot não apenas parecem bons para os usuários.
+
+00:10:33.380 --> 00:10:35.340
+38. Eles sobrevivem a sistemas de processamento e auditorias.
+
+00:10:35.340 --> 00:10:38.480
+39. Trate o MetaPrompt como parte de documentação ou parte de controle de risco.
+
+00:10:38.480 --> 00:10:40.820
+40. A divisão de personalidade é onde isso fica interessante.
+
+00:10:40.820 --> 00:10:45.400
+41. O MetaPrompt do Copilot de marketing pode dizer a ele para usar a linguagem persuasiva e criar slogans de produtos.
+
+00:10:45.400 --> 00:10:49.500
+41. Quando o Copilot financeiro diz, exibe entradas de diário estruturadas sem adjetivos.
+
+00:10:50.340 --> 00:10:54.360
+41. A mesma IA subjacente é resultados completamente diferentes porque você define a personalidade com antecedência.
+
+00:10:54.880 --> 00:10:58.400
+42. Essa é a diferença entre automação prática e resultados chamativos que ninguém consegue usar de fato.
+
+00:10:59.180 --> 00:11:02.180
+42. Embora esta sessão seja sobre boas maneiras, você não pode ignorar a infraestrutura básica.
+
+00:11:02.820 --> 00:11:05.820
+43. Os MetaPrompt só funcionam se a conexão com o Azure estiver configurada corretamente.
+
+00:11:05.820 --> 00:11:08.480
+43. A IA não os processa localmente no Business Central.
+
+00:11:08.480 --> 00:11:11.240
+44. Ela passa tudo pelo back-end do Azure OpenAI.
+
+00:11:11.240 --> 00:11:14.400
+44. Serra esse pipeline e não importará quão bem você escreva as regras.
+
+00:11:14.400 --> 00:11:17.100
+44. Você ainda terá falhas e talvez piores chaves com falha.
+
+00:11:17.520 --> 00:11:18.740
+45. Resumindo, Prompt são solicitações.
+
+00:11:19.120 --> 00:11:20.320
+45. MetaPrompt são ordens permanentes.
+
+00:11:20.740 --> 00:11:22.640
+45. Faça-os corretamente e armazene-os com segurança.
+
+00:11:22.860 --> 00:11:25.140
+46. Verifique o cálculo de tokens e ajuste a temperatura para a tarefa.
+
+00:11:25.280 --> 00:11:29.840
+47. É assim que você transforma o Copilot em um tagarela aleatório, um assistente específico para a função em que você pode confiar.
+
+00:11:30.220 --> 00:11:33.480
+47. Se fizer de forma descuidada, passará noites editando absurdos em relatórios,
+
+00:11:33.480 --> 00:11:37.540
+48. Mas nenhum MetaPrompt mais bem escrito salvará você se suas credenciais estiverem expostas.
+
+00:11:37.540 --> 00:11:42.440
+48. E é aí que reside o verdadeiro perigo, não no tom ou no formato, mas em como você armazena e protege as chaves
+
+00:11:42.440 --> 00:11:44.440
+48. Que permitem ao Copilot falar com o Azure OpenAI.
+
+00:11:45.600 --> 00:11:47.840
+48. Protegendo as chaves, a segurança do Azure é feita da maneira certa.
+
+00:11:48.340 --> 00:11:53.500
+49. Proteger as chaves não é glamouroso, mas é onde você mantém seu tenant seguro ou acaba tendo que preencher relatórios de incidentes.
+
+00:11:54.240 --> 00:11:57.160
+49. Quando o Copilot chama o Azure OpenAI, ele precisa de três coisas sempre.
+
+00:11:57.580 --> 00:12:01.420
+50. O endpoint do recurso, que é o URL do seu recurso Azure OpenAI.
+
+00:12:01.840 --> 00:12:03.180
+51. O nome da implantação é a chave da API.
+
+00:12:04.180 --> 00:12:07.820
+52. Juntos, esses três são um aperto de mão que prova que seu tenant tem permissão para falar com o modelo.
+
+00:12:08.400 --> 00:12:11.760
+52. Deixe qualquer um deles exposto e você não estará usando o IA estará simulando uma violação.
+
+00:12:11.760 --> 00:12:15.880
+53. Sendo direto, nunca sob nenhuma circunstância insira esses valores fixos hardcodes no AL.
+
+00:12:16.260 --> 00:12:20.380
+54. Se você incluir uma chave de API no seu código, ou colocá-la no GitHub por conveniência,
+
+00:12:20.820 --> 00:12:23.840
+basicamente convidou scanners de credenciais para tratar seu repositório como banquete.
+
+00:12:24.560 --> 00:12:29.800
+54. Desenvolvedores podem ignorar, achando que é apenas teste, mas repositórios são constantemente vasculhados em busca de segredos expostos.
+
+00:12:30.140 --> 00:12:32.600
+55. É assim que dados reajem clientes e acabam em sites de compartilhamento de texto.
+
+00:12:32.960 --> 00:12:34.560
+55. Você não consegue corrigir isso com uma atualização de texto.
+
+00:12:34.560 --> 00:12:37.120
+55. O caminho seguro já foi definido pela Microsoft.
+
+00:12:37.680 --> 00:12:41.140
+55. Para trabalho, desenvolvimento e teste, o armazenamento isolado no AL é a sua escolha.
+
+00:12:41.140 --> 00:12:43.440
+55. Imagine como um armário dentro da sua extensão.
+
+00:12:44.060 --> 00:12:46.480
+55. As chaves entram e nenhuma outra extensão pode espiá-las.
+
+00:12:47.140 --> 00:12:49.200
+55. Isso mantém as coisas contidas, leves e simples.
+
+00:12:49.200 --> 00:12:51.720
+55. É perfeito para sandboxes e builds de desenvolvimento.
+
+00:12:52.140 --> 00:12:54.680
+55. Mas não se engane, o armazenamento isolado não é de nível de produção.
+
+00:12:55.400 --> 00:13:00.700
+55. Seu escopo local o torna útil para a iteração, mas não foi projetado para ser seu cofre quando usuários e dados reais estão em jogo.
+
+00:13:01.280 --> 00:13:06.340
+55. Mas quando você vai para a produção, a única medida responsável, o app Key Vault ou o app Key Vault, é implantando amplamente.
+
+00:13:07.140 --> 00:13:10.680
+55. Pense nisso como alugar um cofre bancário em vez de esconder dinheiro na gaveta da sua mesa.
+
+00:13:11.140 --> 00:13:16.800
+55. O Key Vault mantém suas chaves de API em um container seguro com controle de acesso e políticas adequadas de log e rotação.
+
+00:13:17.480 --> 00:13:21.820
+55. Você integra sua extensão a ele, chama o que precisa em tempo de execução e nunca expõe a chave bruta no código.
+
+00:13:22.360 --> 00:13:26.800
+55. Esse é o padrão que os auditores realmente gostam, pois prova que os segredos nunca ficaram circulando em texto simples.
+
+00:13:27.300 --> 00:13:31.620
+55. É uma governança entediante, mas o TED é exatamente o que você quer quando as equipes de conformidade aparecem.
+
+00:13:32.140 --> 00:13:34.360
+56. Tá um detalhe direto da documentação que faz a diferença.
+
+00:13:35.140 --> 00:13:38.100
+56. Em AL você pode armazenar a chave de API com um secret text.
+
+00:13:38.100 --> 00:13:43.680
+56. Dessa forma, mesmo se você depurar passo a passo, a chave não aparecerá em texto simples pra ninguém tirar print.
+
+00:13:44.440 --> 00:13:46.200
+57. Secret text é exatamente o que o nome sugere.
+
+00:13:46.660 --> 00:13:48.500
+58. Ele oculta valores confidenciais durante a execução.
+
+00:13:48.980 --> 00:13:51.940
+58. Se você não aprender mais nada nesta sessão, lembre-se de que essa opção existe.
+
+00:13:51.940 --> 00:13:54.940
+58. Ela fecha um dos vetores de vazamento mais bobos.
+
+00:13:55.360 --> 00:13:57.700
+59. A exposição acidental pelo desenvolvedor no depurador.
+
+00:13:58.760 --> 00:14:02.100
+59. Agora, vamos listar o que fazer e o que não fazer, como os verdadeiros administradores converem.
+
+00:14:02.100 --> 00:14:06.280
+59. Não incorpore chave de API no código AL e nem as colhe em repositórios.
+
+00:14:06.280 --> 00:14:08.100
+60. Isso é isca pra captura de credencial.
+
+00:14:08.100 --> 00:14:13.860
+61. Use armazenamento isolado pra desenvolvimento e testes, mantendo sua equipe produtiva sem enviar segredos em texto simples.
+
+00:14:13.860 --> 00:14:16.540
+61. Não leve esse padrão de desenvolvimento pra produção.
+
+00:14:16.540 --> 00:14:18.320
+62. Não é um cofre, é apenas um arquivo.
+
+00:14:18.320 --> 00:14:20.560
+62. Conecte sua bio de produção ao Key Vault.
+
+00:14:20.560 --> 00:14:22.860
+63. É o único lugar onde essas chaves devem ficar a longo prazo.
+
+00:14:22.860 --> 00:14:28.000
+63. Outro ponto de sanidade é as permissões de usuário dentro do Business Central não bloqueiam magicamente as chaves de API.
+
+00:14:28.000 --> 00:14:33.300
+64. Erdo o controle de acesso aos dados de negócio, claro, mas as chaves servem pra autenticar todo o serviço.
+
+00:14:33.300 --> 00:14:36.660
+64. Se uma vazar, terceiros podem se passar por toda a integração.
+
+00:14:36.660 --> 00:14:40.320
+64. Portanto, pare de fingir que o escopo de permissões vai te salvar nisso. Não vai.
+
+00:14:40.320 --> 00:14:46.380
+64. E se você quiser validar sua configuração, o caminho oficial é a sequência de autorização definida na codeunit do Azure OpenAI.
+
+00:14:46.380 --> 00:14:51.460
+64. É lá que você insere a URL do recurso, a implantação e a chave de API pra provar que tudo está alinhado.
+
+00:14:51.460 --> 00:14:53.580
+64. Se fizer errado, o Compilot nem carregará.
+
+00:14:53.580 --> 00:14:57.620
+64. Se fizer pela metade, você terá erros silenciosos que os usuários encontrarão antes de você.
+
+00:14:57.620 --> 00:15:02.180
+64. Isso é simples. Siga a cadeia em ordem, teste corretamente no dev e depois passe pela pré-produção.
+
+00:15:02.180 --> 00:15:03.460
+64. Finalmente o problema.
+
+00:15:03.460 --> 00:15:07.300
+64. Três ambientes, três conjuntos de chaves, um pipeline que realmente funciona sob carga.
+
+00:15:07.300 --> 00:15:09.360
+64. Então aqui está a sua lista de verificação pra evitar problema.
+
+00:15:09.360 --> 00:15:14.300
+65. Armazenamento isolado no dev e key vault na produção envolva sua chave de API em secret text.
+
+00:15:14.300 --> 00:15:20.420
+65. Nunca incorpore valores no código e sempre execute a cadeia de autorização de ponta a ponta antes de dar o trabalho por encerrado.
+
+00:15:20.420 --> 00:15:26.040
+66. Esse padrão mantém sua integração com o Compilot ativa, segura e em conformidade, sem sustos de última hora.
+
+00:15:26.040 --> 00:15:30.860
+66. Com a parte de segurança resolvida, o próximo desafio é menos sobre onde esconder as chaves
+
+00:15:30.860 --> 00:15:34.620
+e mais sobre como fazer todas as peças se conectarem sem mensagens de erro constantes.
+
+00:15:34.620 --> 00:15:40.680
+66. Porque ter uma funcionalidade, um metaprompto e uma chave segura não ajudam muito se eles ficarem isolados e se recusarem a funcionar em conjunto.
+
+00:15:40.680 --> 00:15:42.640
+67. É aí que entra a estruturação do fluxo de trabalho.
+
+00:15:42.640 --> 00:15:45.580
+67. Do projeto à realidade, conectando o fluxo de trabalho.
+
+00:15:45.580 --> 00:15:50.600
+68. Então agora estamos falando sobre o que transforma peças soltas em um fluxo de copiloto que realmente funciona.
+
+00:15:50.600 --> 00:15:55.360
+69. Você registrou uma capacidade, definiu o escopo, garantiu as chaves e escreveu o metaprompto.
+
+00:15:55.360 --> 00:16:00.840
+69. Mas, a menos que você os alinhe na ordem certa, tudo o que terá é um botão brilhante que ou apresenta erro,
+
+00:16:00.840 --> 00:16:04.420
+ou, silenciosamente, não faz nada até que os usuários comecem a abrir chamados.
+
+00:16:04.420 --> 00:16:07.560
+69. Aqui está a sequência resumida em cinco etapas faladas.
+
+00:16:07.560 --> 00:16:15.440
+69. Passo 1. Capacidade. Passo 2. Disponibilidade. Passo 3. Autorização. Passo 4. Metaprompte. Passo 5.
+
+00:16:15.440 --> 00:16:18.580
+70. Lembre-se desses cinco e você sempre terá o diagrama de conexão em sua mente.
+
+00:16:18.580 --> 00:16:25.760
+71. A capacidade oferece, a habilidade, a disponibilidade define o público, a autorização desperta o cérebro, o metaprompto dá as normas, o piloto prova que realmente funciona.
+
+00:16:25.760 --> 00:16:28.320
+71. Esse é o ciclo completo. Passo 1. Capacidade.
+
+00:16:28.320 --> 00:16:36.740
+71. Em AL, isso significa estender o ENUM de capacidade do copiloto com uma extensão de ENUM e então registrá-lo em uma code unit de instalação ou atualização, chamando a capacidade do copiloto.
+
+00:16:37.420 --> 00:16:38.140
+71. Registrar a capacidade.
+
+00:16:38.660 --> 00:16:41.440
+71. Esse é o anúncio oficial de vaga que diz aqui está uma nova habilidade de assistente.
+
+00:16:42.000 --> 00:16:42.900
+72. Pela um espaço no sistema.
+
+00:16:43.400 --> 00:16:46.940
+72. Sem isso, o Business Central nem sequer sabe que seu recurso deveria existir.
+
+00:16:47.940 --> 00:16:49.100
+72. Passo 2. Disponibilidade.
+
+00:16:49.640 --> 00:16:52.180
+73. Uma vez que a habilidade é definida, você define onde ela aparece.
+
+00:16:53.180 --> 00:16:56.200
+73. Isso é controlado através da página de administração de recursos do copiloto e agente.
+
+00:16:56.200 --> 00:16:59.880
+73. Você decide estar marcado como visualização apenas interna e disponível para todos.
+
+00:17:00.480 --> 00:17:03.920
+74. Desenvolvedores pensam nisso com metadados, mas para administradores, é o botão de alternância para o lançamento.
+
+00:17:04.560 --> 00:17:04.900
+75. Use-o.
+
+00:17:05.320 --> 00:17:09.740
+75. Se você pular esta etapa, riscará expor recursos inacabados a todos os usuários antes que estejam estáveis.
+
+00:17:09.740 --> 00:17:11.600
+75. Passo 3. Ação.
+
+00:17:12.180 --> 00:17:16.320
+76. Agora você conecta o back-end do Azure OpenAI através da code unit do Azure OpenAI.
+
+00:17:16.700 --> 00:17:22.780
+76. Você precisa do clássico trio de recursos, ponto de extremidade, URL do Azure OpenAI, nome da implantação e a chave da API.
+
+00:17:23.780 --> 00:17:25.200
+77. Chame o Azure OpenAI.
+
+00:17:25.200 --> 00:17:27.120
+77. Defina a autorização com esses valores.
+
+00:17:28.480 --> 00:17:34.200
+78. Se a capacidade era o anúncio de emprego e a disponibilidade, o contrato, a autorização ou o crachá para colocar seu assistente no prédio.
+
+00:17:34.920 --> 00:17:36.640
+79. Sem ele, o recurso não te trava na porta de vida.
+
+00:17:37.140 --> 00:17:38.200
+79. Passo 4. Metaprompt.
+
+00:17:38.200 --> 00:17:42.200
+80. Aqui você injeta as instruções permanentes que modam o tom, a estrutura e a formatação.
+
+00:17:42.760 --> 00:17:44.160
+80. Use mensagem de chat do AI.
+
+00:17:45.160 --> 00:17:52.080
+80. Defina a mensagem de sistema principal para buscar o Metaprompt que você armazenou com segurança no armazenamento, isolado ou em produção, referenciado a partir do que volta.
+
+00:17:52.080 --> 00:17:55.920
+80. É aqui que você diz se você é um assistente de cotações ou você é um ajudante financeiro.
+
+00:17:55.920 --> 00:17:58.200
+80. Defina como a saída deve ser.
+
+00:17:58.200 --> 00:18:00.820
+80. Sem isso, o assistente simplesmente dá de ombros e inventa tudo.
+
+00:18:01.080 --> 00:18:01.980
+80. Quase 5 pilotos.
+
+00:18:02.360 --> 00:18:03.520
+80. Libere para um pequeno grupo primeiro.
+
+00:18:04.000 --> 00:18:06.760
+80. Dê a eles a funcionalidade, colete feedbacks e monitore a telemetria.
+
+00:18:07.360 --> 00:18:11.120
+80. O módulo de AI registra o uso para que você veja se ele está gerando resultados limpos ou spam.
+
+00:18:11.360 --> 00:18:13.620
+80. E antes de expandir, você precisa de um plano de reversão.
+
+00:18:13.800 --> 00:18:17.580
+80. Boa notícia. A página de capacidades do Copado de Agente serve como seu botão de emergência.
+
+00:18:17.580 --> 00:18:22.300
+80. Administradores podem desativar recursos individualmente caso algo comece a falhar.
+
+00:18:22.300 --> 00:18:28.260
+80. Essa mesma página também mostra a alternância de movimentação de dados entre regiões se sua configuração do Azure for multiregional.
+
+00:18:28.760 --> 00:18:30.120
+80. Se você ver isso, preste atenção.
+
+00:18:30.840 --> 00:18:32.080
+81. Alguém da conformidade prestará.
+
+00:18:32.360 --> 00:18:34.200
+81. Vamos consolidar essa sequência com um exemplo práctico.
+
+00:18:34.200 --> 00:18:37.060
+81. Uma equipe criou um Copilot em sugestão de pedidos de venda.
+
+00:18:37.060 --> 00:18:41.560
+81. Começaram com uma extensão enum para a capacidade do Copilot e a vincularam a uma CodeUnit instalada.
+
+00:18:41.560 --> 00:18:47.060
+81. Marcaram como preview na página de capacidades do Copilot e agentes, ficando visível apenas para usuários de teste.
+
+00:18:47.660 --> 00:18:48.980
+81. Então chamaram o Azure OpenAI.
+
+00:18:49.460 --> 00:18:53.280
+81. Definiram a autorização com o endpoint, a implantação e a chave para que o modelo respondesse.
+
+00:18:54.180 --> 00:18:58.760
+81. Em seguida, gravaram o Metaprompt no armazenamento isolado e definiram com mensagens de chat do AI.
+
+00:18:59.540 --> 00:19:00.980
+81. Definiram a mensagem principal do sistema.
+
+00:19:01.420 --> 00:19:02.520
+81. Você é um assistente de cotações.
+
+00:19:02.940 --> 00:19:04.980
+81. Sugira pacotes e formate-os como linhas de item.
+
+00:19:05.320 --> 00:19:05.940
+81. Sem conversas vezes.
+
+00:19:06.560 --> 00:19:09.480
+81. No piloto, pequenos grupos testaram até que os resultados fossem previsíveis.
+
+00:19:09.980 --> 00:19:14.460
+81. Só então marcaram a disponibilidade como GA, tornando ativo para todos os usuários de vendas.
+
+00:19:14.460 --> 00:19:18.060
+81. O resultado é um Copilot que recomendava pacotes em vez de escrever conteúdo inútil.
+
+00:19:18.060 --> 00:19:20.340
+81. A camada de governança, que não é opcional.
+
+00:19:21.000 --> 00:19:24.180
+82. Se algo der errado, administradores podem desativar a chave antes que os usuários liguem.
+
+00:19:24.180 --> 00:19:28.900
+83. Essa mentalidade disjuntora é o que mantém Copilots personalizados produtivos em vez de disruptivos.
+
+00:19:28.900 --> 00:19:31.260
+84. Aplique isso como faria com qualquer extensão.
+
+00:19:31.260 --> 00:19:33.940
+85. Lançamentos graduais, escopo limitado, testes mensuráveis.
+
+00:19:33.940 --> 00:19:35.700
+85. A IA não tem passe livre.
+
+00:19:35.700 --> 00:19:38.020
+86. Execute cada parte isoladamente ao testão.
+
+00:19:38.020 --> 00:19:39.760
+86. Não conecte toda a cadeia e espera melhor.
+
+00:19:40.060 --> 00:19:41.740
+86. Valide o registro da capacidade.
+
+00:19:41.740 --> 00:19:44.180
+86. Verifique se a disponibilidade aparece corretamente.
+
+00:19:44.180 --> 00:19:48.500
+87. Confirme a autorização e, em seguida, verifique se o MetaPrompte é aplicado nas respostas.
+
+00:19:48.500 --> 00:19:52.740
+87. Só quando cada peça funcionar é que você permite que os usuários finais a acessem.
+
+00:19:52.740 --> 00:19:54.740
+88. Essa é a ponte entre o projeto e a realidade.
+
+00:19:54.740 --> 00:19:58.500
+89. Simplificando. A capacidade de definibilidade, a disponibilidade define o público,
+
+00:19:58.500 --> 00:20:03.420
+89. Autorização abre a porta, o MetaPrompte define as regras e o piloto prova que o sistema não vai te envergonhar.
+
+00:20:03.420 --> 00:20:06.540
+89. E você estará à frente dos lançamentos oficiais de recursos.
+
+00:20:06.540 --> 00:20:09.460
+89. E isso nos traz de volta ao ponto principal.
+
+00:20:09.460 --> 00:20:12.980
+89. Esses passos permitem que você molde o Copilot ao redor do seu negócio,
+
+00:20:12.980 --> 00:20:16.060
+em vez de seguir apenas as demos pré-embaladas que a Microsoft apresenta.
+
+00:20:16.060 --> 00:20:18.300
+89. Então, aqui está o resumo.
+
+00:20:18.300 --> 00:20:19.420
+90. Três coisas para manter em mente.
+
+00:20:19.420 --> 00:20:23.580
+91. Estenda o Copilot por meio da IA do sistema, registrando capacidades.
+
+00:20:23.580 --> 00:20:28.260
+91. Proteja a conexão com o Azure. Use armazenamento isolado durante os testes,
+
+00:20:28.260 --> 00:20:29.940
+mas move essas chaves para que volte em produção.
+
+00:20:29.940 --> 00:20:33.860
+91. Pilote e governe os recursos na página de capacidades do Copilot e agentes,
+
+00:20:33.860 --> 00:20:36.100
+para que os administradores sempre mantenham o controle em mãos.
+
+00:20:36.100 --> 00:20:38.900
+91. Um lembrete rápido para o pessoal da governança.
+
+00:20:38.900 --> 00:20:43.020
+91. O Copilot herda as permissões do usuário, portanto, ele nunca leu o que o usuário não pode acessar.
+
+00:20:43.020 --> 00:20:47.460
+91. E a Microsoft não treina modelos com os dados do seu tenant, a menos que você permita explicitamente.
+
+00:20:47.460 --> 00:20:52.780
+91. Próximo passo, experimente uma capacidade em seu sandbox esta semana e veja se ela se comporta corretamente
+
+00:20:52.780 --> 00:20:55.540
+conforme o checklist, depois assine a newsletter no M315 Show.
+
+00:20:55.540 --> 00:21:01.780
+91. Para atualizações do Guia de Sobrevivência, siga a página do M310 Sobrevivência e siga a página do MFPs que já quebraram e consertaram essas ferramentas.
+
+00:21:01.780 --> 00:21:19.880
+91. Primeiro.
+
+00:21:19.880 --> 00:21:20.680
+92.
+
+00:21:20.680 --> 00:21:21.000
+93.
+
+00:21:21.000 --> 00:21:23.060
+92.
+
+00:21:23.060 --> 00:21:26.840
+93.
+
+00:21:26.840 --> 00:21:27.440
+93.
+
+00:21:27.440 --> 00:21:28.420
+94.
+
+00:21:28.420 --> 00:21:28.720
+94.
