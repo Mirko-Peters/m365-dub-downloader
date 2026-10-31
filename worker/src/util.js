@@ -90,3 +90,7 @@ export async function rateLimit(db, key, max, windowSec) {
 export const LANGS = ["de", "es", "fr", "it", "pt", "nl", "pl", "id", "ru", "uk", "ar", "he", "ja", "ko"];
 export const isLang = (l) => LANGS.includes(l);
 export const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+
+export async function audit(db, userId, action, target = "", detail = "") {   // Audit-Protokoll der Verwaltung (wer, wann, was) - Diff/Kurzfassung, keine Volltexte
+  try { await db.prepare("INSERT INTO audit(user_id,action,target,detail,created) VALUES(?,?,?,?,?)").bind(userId || 0, action, String(target).slice(0, 200), String(detail).slice(0, 2000), Math.floor(Date.now() / 1000)).run(); } catch { /* Tabelle fehlt bis zur Migration */ }
+}

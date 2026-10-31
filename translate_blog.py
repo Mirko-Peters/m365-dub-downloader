@@ -220,6 +220,7 @@ def pick(a, lang, have, ps, busy):
     for p in ps:
         if len(out) >= n: break
         if p["slug"] in busy: continue
+        if QUEUE and p["slug"] not in QUEUE.get(lang, ()): continue   # Vormerkliste: nur die fuer diese Sprache markierten Beitraege
         tpl, units, h = source_of(p); rec = have.get(p["slug"])
         if a["redo"] or not rec or rec.get("h") != h: rec = {"h": h, "n": len(units), "seg": {}, "ok": False}
         if rec.get("ok"): continue
@@ -294,8 +295,29 @@ def apply(a=None):
     return stats
 
 
+def queue_items():
+    """Vormerkliste aus der Verwaltung (/admin/ -> Uebersetzungen): {lang: {slugs}} fuer fruehere Blogbeitraege (kind lblog)."""
+    api = os.environ.get("COMMUNITY_API", "https://api-dub.m365.fm")
+    try:
+        with urllib.request.urlopen(urllib.request.Request(api + "/api/tr-queue", headers={"user-agent": "m365-dub-build"}), timeout=30) as r:
+            items = json.loads(r.read().decode("utf-8")).get("items", [])
+    except Exception as e:
+        print("Vormerkliste nicht abrufbar:", str(e)[:100]); return {}
+    out = {}
+    for it in items:
+        if it.get("kind") == "lblog" and it.get("lang") in LANGS: out.setdefault(it["lang"], set()).add(it["item_id"])
+    return out
+
+
+QUEUE = {}
+
+
 def select(a, ps):
     langs = a["langs"]; sl = set(a["slugs"])
+    if a.get("queue"):   # nur vorgemerkte Beitraege und nur deren Sprachen
+        QUEUE.clear(); QUEUE.update(queue_items()); langs = [l for l in langs if QUEUE.get(l)]
+        sl = sl | set().union(*QUEUE.values()) if QUEUE else {"-"}
+        print("Vormerkliste:", {l: len(v) for l, v in QUEUE.items()} or "leer")
     if sl: ps = [p for p in ps if p["slug"] in sl]
     if a["mode"] == "auto":
         lim = (datetime.now(timezone.utc) - timedelta(days=NEW_DAYS)).isoformat()
@@ -479,7 +501,7 @@ def args():
     mode = a[0] if a and not a[0].startswith("-") else "plan"
     langs = [l for l in (opt("--langs") or ",".join(LANGS)).split(",") if l in LANGS]
     return {"mode": mode, "langs": langs, "limit": int(opt("--limit", "0") or 0), "per_agent": int(opt("--per-agent", "0") or 0), "order": opt("--order", "newest"),
-            "slugs": [s for s in opt("--slugs").split(",") if s], "redo": "--redo" in a, "seed": opt("--seed")}
+            "slugs": [s for s in opt("--slugs").split(",") if s], "redo": "--redo" in a, "seed": opt("--seed"), "queue": "--queue" in a}
 
 
 BY_SLUG = {}

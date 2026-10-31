@@ -1,12 +1,12 @@
 // Community-API (Cloudflare Worker + D1): Login (Google/Microsoft), Kommentare, Abzeichen, Kurator, Push, E-Mail
-import { json, cors, cookie, makeSession, readSession, cleanText, cleanName, randomToken, rateLimit, isLang, esc, b64u, sign, verify } from "./util.js";
+import { json, cors, cookie, makeSession, readSession, cleanText, cleanName, randomToken, rateLimit, isLang, esc, b64u, sign, verify, audit } from "./util.js";
 import { evalBadges, stats, topUsers, badgesFor, award } from "./badges.js";
 import { runDigest, sendMail } from "./digest.js";
 import { handleEntity } from "./entities.js";
 import { importLegacyBlog } from "./legacyblog.js";
 import { handleA2a } from "./a2a.js";
 import { handleAdminPanel } from "./adminpanel.js";
-import { autoTranslateItems, autoTranslateEntities } from "./autotr.js";
+import { autoTranslateItems, autoTranslateEntities, runTrQueue } from "./autotr.js";
 import { entityMap } from "./entities.js";
 import { handleProfiles, deleteUserData, refreshProfilesExport } from "./profiles.js";
 import { handleEvents, deleteUserEvents, ensureM365Con } from "./events.js";
@@ -63,7 +63,7 @@ function shortName(full) {
   return `${p[0]} ${[...p[p.length - 1]][0]}.`;
 }
 const safeReturn = (env, u) => { try { const x = new URL(u); return x.origin === env.SITE ? x.href : env.SITE + "/"; } catch { return env.SITE + "/"; } };
-const isAdmin = (env, u) => (env.ADMIN_SUBS || "").split(",").map((s) => s.trim()).includes(`${u.provider}:${u.sub}`);
+const isAdmin = (env, u) => u.role === "admin" || (env.ADMIN_SUBS || "").split(",").map((s) => s.trim()).includes(`${u.provider}:${u.sub}`);
 
 const firstName = (full) => cleanName(full).split(" ").filter(Boolean)[0] || "";
 async function namePrefs(db, user) {
@@ -338,8 +338,12 @@ async function api(env, request, url, path, asUser) {
     return method === "POST" ? new Response("ok") : html("<h2>✓ Unsubscribed</h2><p>You will not receive further e-mails.</p>");
   }
 
+  if (path === "/api/tr-queue" && method === "GET") {   // Vormerkliste fuer die Uebersetzungs-Pipelines (translate_blog.py --queue): nur Schluessel
+    const rows = (await db.prepare("SELECT kind,item_id,lang FROM tr_queue WHERE status='open' ORDER BY created LIMIT 5000").all().catch(() => ({ results: [] }))).results || [];
+    return J({ items: rows }, 200, { "cache-control": "public, max-age=120" });
+  }
   if (path.startsWith("/api/admin/")) {
-    const keyOk = env.CRON_KEY && url.searchParams.get("key") === env.CRON_KEY;
+    const keyOk = env.CRON_KEY && (request.headers.get("x-cron-key") === env.CRON_KEY || url.searchParams.get("key") === env.CRON_KEY);   // Header bevorzugt (Query landet in Logs)
     if (path === "/api/admin/run-daily" && keyOk) return J(await runDigest(env, { dry: url.searchParams.get("dry") === "1" }));
     if (!user?.admin) return J({ error: "forbidden" }, 403);
     if (path === "/api/admin/reports" && method === "GET") {
@@ -353,12 +357,12 @@ async function api(env, request, url, path, asUser) {
       return J({ users: rows });
     }
     if ((m = /^\/api\/admin\/role\/(\d+)$/.exec(path)) && method === "POST") {
-      const b = await request.json().catch(() => ({})), role = b.role === "editor" ? "editor" : "user";
-      await db.prepare("UPDATE users SET role=? WHERE id=?").bind(role, +m[1]).run();
+      const b = await request.json().catch(() => ({})), role = b.role === "editor" ? "editor" : b.role === "admin" ? "admin" : "user";   // Rollen in der Datenbank: user, editor, admin
+      await db.prepare("UPDATE users SET role=? WHERE id=?").bind(role, +m[1]).run(); await audit(db, user.id, "role", m[1], role);
       await evalBadges(env, +m[1]);
       return J({ ok: true, role });
     }
-    if ((m = /^\/api\/admin\/ban\/(\d+)$/.exec(path)) && method === "POST") { await db.prepare("UPDATE users SET banned=1 WHERE id=?").bind(+m[1]).run(); return J({ ok: true }); }
+    if ((m = /^\/api\/admin\/ban\/(\d+)$/.exec(path)) && method === "POST") { await db.prepare("UPDATE users SET banned=1 WHERE id=?").bind(+m[1]).run(); await audit(db, user.id, "ban", m[1]); return J({ ok: true }); }
   }
   return J({ error: "not_found" }, 404);
 }
@@ -373,9 +377,41 @@ export default {
       if (path.startsWith("/api/")) return await api(env, request, url, path);
       return new Response("M365.FM community API", { status: 200, headers: { "content-type": "text/plain" } });
     } catch (e) {
-      console.log("error", path, String(e && e.stack || e).slice(0, 300));
-      return json({ error: "server" }, 500, env, request);
+      const rid = crypto.randomUUID().slice(0, 8);   // Request-ID: steht in der Antwort und im Log (Workers Logs), damit ein gemeldeter Fehler auffindbar ist
+      console.error("error", rid, request.method, path, String(e && e.stack || e).slice(0, 600));
+      return json({ error: "server", rid }, 500, env, request, { "x-request-id": rid });
     }
   },
-  async scheduled(event, env, ctx) { if (event.cron === "0 6 * * *") ctx.waitUntil(runDigest(env)); ctx.waitUntil(refreshFeeds(env).catch(() => 0)); ctx.waitUntil(pollUpdates(env).catch(() => 0)); ctx.waitUntil(refreshFollowers(env).catch(() => 0)); ctx.waitUntil(ensurePastEvents(env).then(() => linkSpeakers(env)).then(() => linkSpeakerEntities(env)).catch(() => 0)); ctx.waitUntil(ensureM365Con(env).then(() => linkSpeakers(env)).then(() => linkSpeakerEntities(env)).catch(() => 0)); ctx.waitUntil(seedRoadmap(env).catch(() => 0)); ctx.waitUntil(purgeMessages(env.DB).catch(() => 0)); ctx.waitUntil(autoTranslate(env).catch(() => 0)); ctx.waitUntil(autoTranslateItems(env).catch(() => 0)); ctx.waitUntil(autoTranslateEntities(env, entityMap).catch(() => 0)); ctx.waitUntil(pollPodcast(env).catch(() => 0)); ctx.waitUntil(pollVideos(env).catch(() => 0)); ctx.waitUntil(syncShows(env).catch(() => 0)); ctx.waitUntil(flushOutbox(env).catch(() => 0)); ctx.waitUntil(importLegacyBlog(env).catch(() => 0)); ctx.waitUntil(refreshProfilesExport(env).catch(() => 0)); ctx.waitUntil(remindInvites(env).catch(() => 0)); },
+  async scheduled(event, env, ctx) {
+    // Jede Aufgabe mit Protokoll (cron_runs: Start, Ende, ok, Fehlertext) statt verschluckter Fehler; Digest nur um 06:00 UTC
+    const T = (name, fn) => ctx.waitUntil(track(env, name, fn));
+    if (event.cron === "0 6 * * *") T("runDigest", () => runDigest(env));
+    T("refreshFeeds", () => refreshFeeds(env));
+    T("pollUpdates", () => pollUpdates(env));
+    T("refreshFollowers", () => refreshFollowers(env));
+    T("ensurePastEvents", () => ensurePastEvents(env).then(() => linkSpeakers(env)).then(() => linkSpeakerEntities(env)));
+    T("ensureM365Con", () => ensureM365Con(env).then(() => linkSpeakers(env)).then(() => linkSpeakerEntities(env)));
+    T("seedRoadmap", () => seedRoadmap(env));
+    T("purgeMessages", () => purgeMessages(env.DB));
+    T("autoTranslate", () => autoTranslate(env));
+    T("autoTranslateItems", () => autoTranslateItems(env));
+    T("autoTranslateEntities", () => autoTranslateEntities(env, entityMap));
+    T("pollPodcast", () => pollPodcast(env));
+    T("pollVideos", () => pollVideos(env));
+    T("syncShows", () => syncShows(env));
+    T("flushOutbox", () => flushOutbox(env));
+    T("importLegacyBlog", () => importLegacyBlog(env));
+    T("refreshProfilesExport", () => refreshProfilesExport(env));
+    T("remindInvites", () => remindInvites(env));
+    T("runTrQueue", () => runTrQueue(env, entityMap));
+    ctx.waitUntil(env.DB.prepare("DELETE FROM cron_runs WHERE started<?").bind(Math.floor(Date.now() / 1000) - 7 * 86400).run().catch(() => 0));
+  },
 };
+
+async function track(env, name, fn) {   // Lauf protokollieren; ein Fehler bricht die uebrigen Aufgaben nicht ab
+  const t0 = Math.floor(Date.now() / 1000); let id = 0;
+  try { id = (await env.DB.prepare("INSERT INTO cron_runs(name,started) VALUES(?,?) RETURNING id").bind(name, t0).first())?.id || 0; } catch { /* Tabelle fehlt bis zur Migration */ }
+  let ok = 1, info = "";
+  try { const r = await fn(); info = r && typeof r === "object" ? JSON.stringify(r).slice(0, 300) : ""; } catch (e) { ok = 0; info = String(e && e.message || e).slice(0, 300); console.error("cron", name, info); }
+  if (id) await env.DB.prepare("UPDATE cron_runs SET finished=?,ok=?,info=? WHERE id=?").bind(Math.floor(Date.now() / 1000), ok, info, id).run().catch(() => 0);
+}
