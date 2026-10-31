@@ -119,12 +119,7 @@ WCSS = """<style>.wk{margin:.6em 0}.wk-body{line-height:1.7;max-width:46em}.wk-b
 
 def fetch_wiki(api, lang):
     """Freigegebene Community-Texte zum Seitenbau holen (statisch, damit sie indexierbar sind). Fehler -> leer."""
-    import urllib.request
-    try:
-        with urllib.request.urlopen(urllib.request.Request(f"{api}/api/wiki/export?lang={lang}", headers={"user-agent": "m365-dub-build"}), timeout=10) as r:
-            return {x["term"]: x for x in json.loads(r.read().decode("utf-8")).get("items", [])}
-    except Exception:
-        return {}
+    return {x["term"]: x for x in (_fetch_json(f"{api}/api/wiki/export?lang={lang}") or {}).get("items", [])}
 
 
 _VIZ = re.compile(r"^\{\{viz\|(bars|stats|steps|timeline|compare)\|([^{}|]{1,80})\|([^{}]{1,1400})\}\}$")
@@ -396,13 +391,10 @@ def _names(term):
 
 
 # ---- Entitaets-Registry: Basisdaten (data/entities.json) + freigegebene Community-Aenderungen (API) ----
-def _fetch_json(url, timeout=10):
-    import urllib.request
-    try:
-        with urllib.request.urlopen(urllib.request.Request(url, headers={"user-agent": "m365-dub-build"}), timeout=timeout) as r:
-            return json.loads(r.read().decode("utf-8"))
-    except Exception:
-        return None
+def _fetch_json(url, timeout=120):
+    """Alle Abrufe laufen ueber site_fetch: einmal je Bau, Wiederholung, Zwischenspeicher in data/cache."""
+    import site_fetch as SF
+    return SF.fetch(url, timeout=max(timeout, 60))
 
 
 def load_entities(api):

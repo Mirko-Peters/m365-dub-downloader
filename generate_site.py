@@ -5,6 +5,8 @@ Nur Python-Standardbibliothek. Lauf:  python generate_site.py
 Basis-URL (z. B. eigene Domain):  SITE_BASE=https://international.m365.fm python generate_site.py
 """
 import site_learn as LRN
+import site_fetch as SF
+import time
 import site_press as PRS
 import site_entities as ENT
 from site_i18n import COMM_LANGS, pfx
@@ -772,7 +774,26 @@ PLAT_JS = """<script>(function(){try{var ua=navigator.userAgent||"",pl=navigator
 var d=document.documentElement;if(apple)d.className+=" apple-first";var pick=document.querySelector(apple?'[data-p=apple]':'[data-p=spotify]')||document.querySelector('[data-p=spotify]')||document.querySelector('[data-p=apple]')||document.querySelector('[data-p=spreaker]');if(pick)pick.className+=" main"}catch(e){}})();</script>"""
 
 
+_T0 = [time.perf_counter()]
+
+
+def phase(name):
+    """Zeit seit der letzten Phase ins Log (Grundlage fuer die Beschleunigung des Baus)."""
+    t = time.perf_counter(); print(f"[{t - _T0[0]:6.0f} s] {name}", flush=True); _T0[0] = t
+
+
+def sizes():
+    """Groesse von docs/ je oberstem Verzeichnis (GitHub Pages: 1 GB Richtwert)."""
+    tot, rows = 0, []
+    for d in sorted(OUT.iterdir()):
+        n = sum(f.stat().st_size for f in d.rglob("*") if f.is_file()) if d.is_dir() else d.stat().st_size
+        tot += n; rows.append((n, d.name))
+    print("docs/ gesamt: %.0f MB" % (tot / 1e6) + " - " + ", ".join(f"{n}: {b / 1e6:.0f} MB" for b, n in sorted(rows, reverse=True)[:12]))
+
+
 def build():
+    SF.prefetch(COMMUNITY_API, langs=list(COMM_LANGS)); SF.check(COMMUNITY_API)   # alle Exporte einmal, parallel; ohne Pflicht-Exporte kein Bau
+    phase("Exporte geholt")
     eps, pub, seo = load()
     try:
         _pp, _oo = MEM.fetch_members(COMMUNITY_API)
@@ -1202,6 +1223,7 @@ def build():
                         sitemap=sitemap, TODAY=TODAY, api=COMMUNITY_API, SCORE={l: (_QUI.get(l, {}).get("score") or _QUI["en"]["score"]) for l in list(LANGS) + ["en"]}))
 
     _ctx = dict(community_tags=community_tags, write=write, page=page, header=header, footer=footer, footer_en=footer_en, BASE=BASE, LANGS=LANGS, active=active, url_of=url_of, anchor_title=anchor_title, sitemap=sitemap, TODAY=TODAY, api=COMMUNITY_API, orig_alts=ORIG_ALTS)
+    phase("Folgenseiten (Dub-Sprachen), Startseiten")
     _people, _orgs = MEM.fetch_members(COMMUNITY_API)
 
     import site_podpage as PP
@@ -1247,7 +1269,9 @@ def build():
         for _t in _p.get("topics", []):
             _pbt.setdefault(_t, []).append(_p)
     _ctx["posts_by_topic"] = _pbt; _ctx["author_box"] = author_box
+    phase("Blog geladen, Folgen der Hauptshow zugeordnet")
     ENT.build(_ctx, lambda lang: LRN.gloss_links(lang, BASE), MEM.experts_index(_people, _orgs), _ep_find)
+    phase("Entitaetsseiten")
     MEM.build(_ctx, _people, _orgs, extra={l: EVT.blocks(BASE, _events, l) for l in COMM_LANGS})
     EVT.build(_ctx, _events, _people, _orgs)
     BLG.build(_ctx, _posts, _people, COMMUNITY_API)
@@ -1263,7 +1287,9 @@ def build():
     FEED.build(_ctx, (LRN._fetch_json(f"{COMMUNITY_API}/api/feed/export") or {}).get("items", []), COMMUNITY_API)
     import site_shows as SHW
     SHW.build(_ctx, (LRN._fetch_json(f"{COMMUNITY_API}/api/show/export") or {}).get("items", []))
+    phase("Community (Profile, Events, Blog, Bibliothek, Podcast, Video, Feed, Shows)")
     PP.build(_ctx)
+    phase("Englische Show (Podpage)")
     MCPS.build(_ctx)
     LIVE.build(_ctx)   # M365 Show: Livestream-Seite + Seite je Stream (data/live.json, sync_live.py)
     try:   # SEO-Check-Seite (noindex): Episoden + Community-Inhalte
@@ -1354,6 +1380,7 @@ def build():
         write("top.json", json.dumps({"period": "last 7 days", "from": topdata.get("from"), "to": topdata.get("week_end"), "languages": topfeed}, ensure_ascii=False, indent=1))
         print(len(topfeed), "Sprachen mit Top-Woche")
 
+    phase("Lernseiten, Updates, Top-Listen")
     # Sitemap, robots, llms.txt, IndexNow
     def sm_file(entries):
         x = ['<?xml version="1.0" encoding="UTF-8"?>', '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">']
@@ -1380,6 +1407,7 @@ def build():
         idx.append(f"<sitemap><loc>{BASE}/{f}</loc><lastmod>{lm}</lastmod></sitemap>")
     idx.append("</sitemapindex>")
     write("sitemap.xml", "\n".join(idx))
+    phase("Sitemaps")
     write("robots.txt", f"User-agent: *\nContent-Signal: search=yes, ai-input=yes, ai-train=yes\nAllow: /\n\n# KI-Suchen und Assistenten ausdrücklich erlaubt\n" + "".join(f"User-agent: {b}\nAllow: /\n\n" for b in ("GPTBot", "OAI-SearchBot", "ChatGPT-User", "ClaudeBot", "Claude-User", "Claude-SearchBot", "PerplexityBot", "Google-Extended", "Applebot-Extended", "Bingbot")) + f"Sitemap: {BASE}/sitemap.xml\n")
     # llms.txt (Überblick), llms-full.txt (alle Folgen), agent.json (Maschinen-Beschreibung), episodes.json (Datenfeed)
     summ = (f"AI-dubbed podcast episodes about Microsoft 365, Copilot, Azure, Power Platform and AI governance by Microsoft MVP Mirko Peters, "
@@ -1519,6 +1547,8 @@ Mirko Peters, {BASE}/about/
     json.dump([u for u, _, _ in sitemap], open(ROOT / "data" / "urls.json", "w"), indent=0)
     from site_i18n import write_src
     write_src(OUT, ROOT / "data" / "ui_js_en.json")
+    phase("Agenten-Dateien, 404, UI-Quellen")
+    sizes()
     print(f"{len(items)} Episodenseiten, {len(active)} Sprachen, {len(sitemap)} URLs → docs/")
 
 

@@ -10,24 +10,33 @@ permissions:
   contents: write
   pages: write
   id-token: write
-concurrency:
-  group: pages
-  cancel-in-progress: false
 jobs:
   build:
     runs-on: ubuntu-latest
+    concurrency:
+      group: site-build
+      cancel-in-progress: true   # ein neuer Push ersetzt den laufenden Bau (vorher: 29 von 60 Laeufen von Hand abgebrochen)
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with: { python-version: "3.12" }
-      - name: Cache fuer Browser und Teilen-Bilder
+      - name: Cache fuer den Browser (fester Schluessel, einmal gefuellt)
         uses: actions/cache@v4
         with:
-          path: |
-            ~/.cache/ms-playwright
-            .ogcache
-          key: build-cache-${{ github.run_id }}
-          restore-keys: build-cache-
+          path: ~/.cache/ms-playwright
+          key: playwright-chromium-v1
+      - name: Cache fuer Teilen-Bilder (rollierend)
+        uses: actions/cache@v4
+        with:
+          path: .ogcache
+          key: ogcache-${{ github.run_id }}
+          restore-keys: ogcache-
+      - name: Cache fuer die Community-Exporte (letzte erreichbare Fassung je Endpunkt, siehe site_fetch.py)
+        uses: actions/cache@v4
+        with:
+          path: data/cache
+          key: exports-${{ github.run_id }}
+          restore-keys: exports-
       - name: Spreaker-Daten holen (Top-Liste, veroeffentlichte Folgen)
         continue-on-error: true
         env:
@@ -70,29 +79,6 @@ jobs:
           if [ -n "$(git status --porcelain data/reviews_ext.json)" ]; then
             git config user.name "m365-site-bot"; git config user.email "actions@users.noreply.github.com"
             git add data/reviews_ext.json && git commit -m "Bewertungen aktualisiert"
-            git pull --rebase -q && git push -q
-          fi
-      - name: Artikel aus Transkripten schreiben (Claude API)
-        continue-on-error: true
-        env:
-          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
-          ARTICLE_LIMIT: "30"
-        run: |
-          python generate_articles.py
-          if [ -n "$(git status --porcelain data/articles)" ]; then
-            git config user.name "m365-site-bot"; git config user.email "actions@users.noreply.github.com"
-            git add data/articles && git commit -m "Artikel aus Transkripten ergänzt"
-            git pull --rebase -q && git push -q
-          fi
-      - name: Cover-Texte entwerfen (Claude API)
-        continue-on-error: true
-        env:
-          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
-        run: |
-          python generate_covers.py
-          if [ -n "$(git status --porcelain data/covers)" ]; then
-            git config user.name "m365-site-bot"; git config user.email "actions@users.noreply.github.com"
-            git add data/covers && git commit -m "Cover-Texte ergänzt"
             git pull --rebase -q && git push -q
           fi
       - name: Spotify-Folgenlinks einsammeln (ohne API) – nur täglich/manuell, bei Pushes gilt der gespeicherte Stand
@@ -182,6 +168,9 @@ jobs:
   deploy:
     needs: build
     runs-on: ubuntu-latest
+    concurrency:
+      group: pages
+      cancel-in-progress: false
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
