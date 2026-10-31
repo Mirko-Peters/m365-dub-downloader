@@ -5,6 +5,7 @@ import { runDigest, sendMail } from "./digest.js";
 import { handleEntity } from "./entities.js";
 import { importLegacyBlog } from "./legacyblog.js";
 import { handleA2a } from "./a2a.js";
+import { handleAdminPanel } from "./adminpanel.js";
 import { autoTranslateItems, autoTranslateEntities } from "./autotr.js";
 import { entityMap } from "./entities.js";
 import { handleProfiles, deleteUserData, refreshProfilesExport } from "./profiles.js";
@@ -275,6 +276,7 @@ async function api(env, request, url, path, asUser) {
   if (path.startsWith("/api/credit/")) { const q = await handleCredits(env, request, url, path, user, J); if (q) return q; }
   if (path.startsWith("/api/seo/")) { const q = await handleSeo(env, request, url, path, user, J); if (q) return q; }
   if (path.startsWith("/api/edits/")) { const v = await handleVotes(env, request, url, path, user, J); if (v) return v; }
+  if (path.startsWith("/api/admin/panel/")) return await handleAdminPanel(env, request, url, path, user, J);
   if (path.startsWith("/api/entity") || path.startsWith("/api/admin/entity")) { const e = await handleEntity(env, request, url, path, user, J); if (e) return e; }
   if (/^\/api\/(profile|profiles|endorse|cert-endorse|vote|feed|org|orgs|img|recommend)(\/|$)/.test(path) || path === "/api/admin/verify" || path === "/api/admin/cert-queue" || path === "/api/admin/feed-hide") { const p = await handleProfiles(env, request, url, path, user, J); if (p) { if (user && method !== "GET") await evalBadges(env, user.id).catch(() => 0); return p; } }
   if (path === "/api/wiki" || path.startsWith("/api/wiki/") || path.startsWith("/api/admin/wiki")) { const w = await handleWiki(env, request, url, path, user, J); if (w) return w; }

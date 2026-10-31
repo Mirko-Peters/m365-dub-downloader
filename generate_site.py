@@ -1505,6 +1505,19 @@ Mirko Peters, {BASE}/about/
     if ADS.ads_txt(BASE):
         write("ads.txt", ADS.ads_txt(BASE))
     print("AdSense:", json.dumps(ADS.status(BASE)))
+    # Verwaltung ohne Code (assets/admin.js): nur fuer Admins, nicht in Suchmaschinen
+    _adm_css = ("<style>.adm-tabs{display:flex;gap:6px;flex-wrap:wrap;margin:1em 0}.adm-tabs button{font:inherit;padding:.45em 1em;border:1px solid var(--bd);border-radius:2em;background:var(--card);color:inherit;cursor:pointer}"
+                ".adm-tabs button[aria-selected=true]{border-color:var(--ac);background:var(--ac);color:#fff}.adm-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(11em,1fr));gap:10px}"
+                ".adm-tile{border:1px solid var(--bd);border-radius:.6em;padding:.8em;background:var(--card);display:flex;flex-direction:column;gap:.1em}.adm-tile b{font-size:1.7rem;line-height:1.1}.adm-tile.on b{color:var(--ac)}.adm-tile small{color:var(--mut)}"
+                ".adm-row{display:flex;gap:8px;flex-wrap:wrap}.adm-row input{flex:1;min-width:12em}.adm-row input,.adm-row select{font:inherit;padding:.5em .7em;border:1px solid var(--bd);border-radius:.4em;background:var(--card);color:inherit}.adm-list{list-style:none;padding:0;margin:1em 0}.adm-item{font:inherit;color:inherit;background:none;border:0;border-bottom:1px solid var(--bd);width:100%;text-align:start;padding:.55em .2em;cursor:pointer}.adm-item:hover{background:var(--card)}"
+                ".adm-badge{font-size:.75rem;border:1px solid var(--bd);border-radius:1em;padding:.05em .6em;color:var(--mut)}.adm-badge.on{border-color:var(--ac);color:var(--ac)}"
+                ".adm-form{border:1px solid var(--bd);border-radius:.7em;padding:1em 1.2em;background:var(--card);margin:1em 0}.adm-field{display:flex;flex-direction:column;gap:.2em;margin:.7em 0}.adm-field input,.adm-field textarea,.adm-field select{font:inherit;padding:.45em .6em;border:1px solid var(--bd);border-radius:.4em;background:var(--bg);color:inherit}"
+                ".adm-msg{min-height:1.4em}.adm-msg.bad{color:var(--ac);font-weight:600}</style>")
+    write("admin/index.html", page("de", "Verwaltung – M365.FM", "Verwaltung der Website ohne Code", f"{BASE}/admin/",
+          f'{header("de", "")}<main class="wrap" id="main"><h1>Verwaltung</h1><p class="mut">Inhalte, Datenbank und Schalter der Website, ohne Code. Nur für Admins.</p>'
+          f'<div id="adm"><p class="mut">Lädt …</p></div>{_adm_css}'
+          f'<script>window.M365ADM={{api:"{COMMUNITY_API}",base:"{BASE}"}}</script><script defer src="{BASE}/assets/admin.js"></script></main>{footer("de")}',
+          noindex=True, og_type="website"))
     write("callback/index.html", """<!doctype html><meta charset=utf-8><meta name=robots content="noindex,nofollow"><meta name=viewport content="width=device-width,initial-scale=1"><title>Anmeldung</title>
 <body style="font-family:system-ui,sans-serif;background:#101214;color:#e9ecef;padding:40px;max-width:640px;margin:auto"><h2>Anmeldung</h2><p id=m>Kein Code in der Adresse.</p>
 <pre id=c style="white-space:pre-wrap;word-break:break-all;background:#1d2126;padding:14px;border:1px solid #444"></pre><button id=b style="display:none;padding:10px 18px">Code kopieren</button>
