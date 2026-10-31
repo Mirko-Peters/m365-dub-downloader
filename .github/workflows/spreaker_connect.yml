@@ -28,5 +28,5 @@ jobs:
         run: |
           git config user.name "m365-site-bot"; git config user.email "actions@users.noreply.github.com"
           git add data/spreaker_auth.enc && git commit -m "Spreaker verbunden (verschlüsselt)"
-          git pull --rebase -q && git push -q
+          (git pull --rebase -q -X theirs || git rebase --abort) && git push -q
           gh workflow run site.yml --ref main

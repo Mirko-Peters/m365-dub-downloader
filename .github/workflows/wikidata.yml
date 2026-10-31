@@ -27,5 +27,5 @@ jobs:
             git config user.name "m365-site-bot"; git config user.email "actions@users.noreply.github.com"
             git add data/wikidata_suggestions.json data/entities.json
             git commit -m "Wikidata-Vorschläge aktualisiert${{ inputs.apply && ' (sichere Treffer eingetragen)' || '' }}" -q
-            git pull --rebase -q && git push -q
+            (git pull --rebase -q -X theirs || git rebase --abort) && git push -q
           fi
