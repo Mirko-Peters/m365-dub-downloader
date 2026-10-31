@@ -15,31 +15,29 @@ _N = {
     "agents": {"en": "AI Agents & Copilot Studio", "de": "KI-Agenten & Copilot Studio", "es": "Agentes de IA y Copilot Studio", "fr": "Agents IA et Copilot Studio",
                "it": "Agenti AI e Copilot Studio", "pt": "Agentes de IA e Copilot Studio", "nl": "AI-agents & Copilot Studio", "pl": "Agenci AI i Copilot Studio",
                "id": "Agen AI & Copilot Studio", "ru": "ИИ-агенты и Copilot Studio", "uk": "ШІ-агенти та Copilot Studio", "ar": "وكلاء الذكاء الاصطناعي وCopilot Studio",
-               "he": "סוכני AI ו-Copilot Studio", "hi": "AI एजेंट और Copilot Studio", "ja": "AIエージェントとCopilot Studio", "ko": "AI 에이전트와 Copilot Studio",
-               "ml": "AI ഏജന്റുകളും Copilot Studio", "pa": "AI ਏਜੰਟ ਅਤੇ Copilot Studio", "ta": "AI ஏஜென்ட்கள் & Copilot Studio", "te": "AI ఏజెంట్లు & Copilot Studio"},
+               "he": "סוכני AI ו-Copilot Studio", "ja": "AIエージェントとCopilot Studio", "ko": "AI 에이전트와 Copilot Studio"
+               },
     "copilot": {"en": "Microsoft 365 Copilot"},
     "security": {"en": "Security, Identity & Governance", "de": "Sicherheit, Identität & Governance", "es": "Seguridad, identidad y gobernanza", "fr": "Sécurité, identité et gouvernance",
                  "it": "Sicurezza, identità e governance", "pt": "Segurança, identidade e governança", "nl": "Beveiliging, identiteit & governance", "pl": "Bezpieczeństwo, tożsamość i governance",
                  "id": "Keamanan, identitas & tata kelola", "ru": "Безопасность, идентичность и governance", "uk": "Безпека, ідентичність і governance", "ar": "الأمان والهوية والحوكمة",
-                 "he": "אבטחה, זהות וממשל", "hi": "सुरक्षा, पहचान और गवर्नेंस", "ja": "セキュリティ・ID・ガバナンス", "ko": "보안, ID 및 거버넌스",
-                 "ml": "സുരക്ഷ, ഐഡന്റിറ്റി, ഗവേണൻസ്", "pa": "ਸੁਰੱਖਿਆ, ਪਛਾਣ ਅਤੇ ਗਵਰਨੈਂਸ", "ta": "பாதுகாப்பு, அடையாளம் & ஆளுகை", "te": "భద్రత, గుర్తింపు & గవర్నెన్స్"},
+                 "he": "אבטחה, זהות וממשל", "ja": "セキュリティ・ID・ガバナンス", "ko": "보안, ID 및 거버넌스"
+                 },
     "platform": {"en": "Power Platform & Dynamics 365"},
     "azure": {"en": "Azure & Developer", "de": "Azure & Entwicklung", "es": "Azure y desarrollo", "fr": "Azure et développement", "it": "Azure e sviluppo", "pt": "Azure e desenvolvimento",
               "nl": "Azure & ontwikkeling", "pl": "Azure i programowanie", "id": "Azure & pengembangan", "ru": "Azure и разработка", "uk": "Azure і розробка", "ar": "Azure والتطوير",
-              "he": "Azure ופיתוח", "hi": "Azure और डेवलपमेंट", "ja": "Azureと開発", "ko": "Azure 및 개발", "ml": "Azure & ഡെവലപ്മെന്റ്", "pa": "Azure ਅਤੇ ਡਿਵੈਲਪਮੈਂਟ",
-              "ta": "Azure & மேம்பாடு", "te": "Azure & డెవలప్‌మెంట్"},
+              "he": "Azure ופיתוח", "ja": "Azureと開発", "ko": "Azure 및 개발", },
     "data": {"en": "Data & Fabric", "de": "Daten & Fabric", "es": "Datos y Fabric", "fr": "Données et Fabric", "it": "Dati e Fabric", "pt": "Dados e Fabric", "nl": "Data & Fabric",
-             "pl": "Dane i Fabric", "id": "Data & Fabric", "ru": "Данные и Fabric", "uk": "Дані та Fabric", "ar": "البيانات وFabric", "he": "נתונים ו-Fabric", "hi": "डेटा और Fabric",
-             "ja": "データとFabric", "ko": "데이터와 Fabric", "ml": "ഡാറ്റ & Fabric", "pa": "ਡਾਟਾ ਅਤੇ Fabric", "ta": "தரவு & Fabric", "te": "డేటా & Fabric"},
+             "pl": "Dane i Fabric", "id": "Data & Fabric", "ru": "Данные и Fabric", "uk": "Дані та Fabric", "ar": "البيانات وFabric", "he": "נתונים ו-Fabric", "ja": "データとFabric", "ko": "데이터와 Fabric", },
     "workplace": {"en": "Teams & Productivity", "de": "Teams & Produktivität", "es": "Teams y productividad", "fr": "Teams et productivité", "it": "Teams e produttività",
                   "pt": "Teams e produtividade", "nl": "Teams & productiviteit", "pl": "Teams i produktywność", "id": "Teams & produktivitas", "ru": "Teams и продуктивность",
-                  "uk": "Teams і продуктивність", "ar": "Teams والإنتاجية", "he": "Teams ופרודוקטיביות", "hi": "Teams और उत्पादकता", "ja": "Teamsと生産性", "ko": "Teams 및 생산성",
-                  "ml": "Teams & ഉത്പാദനക്ഷമത", "pa": "Teams ਅਤੇ ਉਤਪਾਦਕਤਾ", "ta": "Teams & உற்பத்தித்திறன்", "te": "Teams & ఉత్పాదకత"},
+                  "uk": "Teams і продуктивність", "ar": "Teams والإنتاجية", "he": "Teams ופרודוקטיביות", "ja": "Teamsと生産性", "ko": "Teams 및 생산성"
+                  }
 }
 TOPICS = {"de": "Themen", "es": "Temas", "fr": "Thèmes", "it": "Argomenti", "pt": "Tópicos", "nl": "Onderwerpen", "pl": "Tematy", "id": "Topik", "ru": "Темы", "uk": "Теми",
-          "ar": "المواضيع", "he": "נושאים", "hi": "विषय", "ja": "トピック", "ko": "주제", "ml": "വിഷയങ്ങൾ", "pa": "ਵਿਸ਼ੇ", "ta": "தலைப்புகள்", "te": "అంశాలు", "en": "Topics"}
+          "ar": "المواضيع", "he": "נושאים", "ja": "トピック", "ko": "주제", "en": "Topics"}
 TAGW = {"de": "Schlagwort", "es": "Etiqueta", "fr": "Mot-clé", "it": "Tag", "pt": "Tag", "nl": "Tag", "pl": "Tag", "id": "Tag", "ru": "Тег", "uk": "Тег", "ar": "وسم", "he": "תג",
-        "hi": "टैग", "ja": "タグ", "ko": "태그", "ml": "ടാഗ്", "pa": "ਟੈਗ", "ta": "குறிச்சொல்", "te": "ట్యాగ్", "en": "Tag"}
+        "ja": "タグ", "ko": "태그", "en": "Tag"}
 ORDER = [c for c, _ in CATS]
 
 

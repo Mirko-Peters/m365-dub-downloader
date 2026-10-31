@@ -253,7 +253,6 @@ def build(g, wiki_links, experts_by_ent, ep_find):
     MOD = mod_dates(recs, TODAY)
     write("entities.json", json.dumps({"version": 1, "generated": TODAY, "license": "CC BY 4.0, M365.FM community", "entities": recs}, ensure_ascii=False, indent=1))
     write("entities.jsonld", json.dumps({"@context": "https://schema.org", "@graph": [ent_ld(BASE, e, "en", gl_ids) for e in recs]}, ensure_ascii=False))
-    sitemap.append((f"{BASE}/entities.jsonld", TODAY, None))
 
     cfg_t = lambda lang: S[lang]
     for lang in COMM_LANGS:

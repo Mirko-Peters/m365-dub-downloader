@@ -142,8 +142,8 @@ footer a.soc{display:inline-flex;align-items:center;gap:6px;color:var(--mut)}foo
 """
 
 EN_NAMES = {"de": "German", "es": "Spanish", "fr": "French", "it": "Italian", "pt": "Portuguese", "nl": "Dutch", "pl": "Polish",
-            "id": "Indonesian", "ru": "Russian", "uk": "Ukrainian", "ar": "Arabic", "he": "Hebrew", "hi": "Hindi", "ja": "Japanese",
-            "ko": "Korean", "ml": "Malayalam", "pa": "Punjabi", "ta": "Tamil", "te": "Telugu", "en": "English"}
+            "id": "Indonesian", "ru": "Russian", "uk": "Ukrainian", "ar": "Arabic", "he": "Hebrew", "ja": "Japanese",
+            "ko": "Korean", "en": "English"}
 
 
 def section(n, label, inner, sid=""):
@@ -178,7 +178,7 @@ def cta_box(title, text, btn_label, href):
 
 
 FLAG = {"de": "de", "es": "es", "fr": "fr", "it": "it", "pt": "br", "nl": "nl", "pl": "pl", "id": "id", "ru": "ru", "uk": "ua", "ar": "sa", "he": "il",
-        "hi": "in", "ml": "in", "pa": "in", "ta": "in", "te": "in", "ja": "jp", "ko": "kr", "en": "gb"}
+        "ja": "jp", "ko": "kr", "en": "gb"}
 
 
 def flag(code, base, name=""):

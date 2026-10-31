@@ -7,6 +7,9 @@ const SEC = {
   "x-frame-options": "SAMEORIGIN",
 };
 const IMG = /\.(png|jpe?g|gif|webp|avif|svg|ico)$/i, STATIC = /^\/(assets|covers|og)\//i, FONT = /\.(woff2?|ttf|otf)$/i;
+const HASHED = /^\/assets\/site\.[0-9a-f]{8,}\.css$/i;   // Dateiname traegt den Inhalts-Hash: darf ein Jahr im Browser bleiben
+// Datenexporte des Seitenbaus: fuer Programme da, nicht fuer die Suche (Allowlist - .well-known, openapi.json, agent.json, episodes.json, llms*.txt bleiben sichtbar)
+const NOINDEX = /^\/(entities\.json|entities\.jsonld|og-manifest\.json|seo-report\.json|top\.json|show\/redirects\.json|show-notes\/|blog-import\/)|\.jsonld$/i;
 
 async function redirectMap(url) {
   const r = await fetch(url.origin + "/show/redirects.json", { cf: { cacheTtl: 3600, cacheEverything: true } });
@@ -35,7 +38,8 @@ export default {
     const res = await fetch(request, { cf });
     const h = new Headers(res.headers);
     for (const [k, v] of Object.entries(SEC)) h.set(k, v);
-    h.set("cache-control", isImg || isStatic ? "public, max-age=3600, s-maxage=86400" : "public, max-age=0, s-maxage=600, stale-while-revalidate=86400");
+    h.set("cache-control", HASHED.test(p) ? "public, max-age=31536000, immutable" : FONT.test(p) ? "public, max-age=86400, s-maxage=604800" : isImg || isStatic ? "public, max-age=3600, s-maxage=86400" : "public, max-age=0, s-maxage=600, stale-while-revalidate=86400");
+    if (NOINDEX.test(p)) h.set("x-robots-tag", "noindex");
     if (isImg) h.set("vary", "accept");
     if (p === "/") h.set("link", '</.well-known/api-catalog>; rel="api-catalog", </openapi.json>; rel="service-desc"; type="application/vnd.oai.openapi+json", </llms.txt>; rel="service-doc"; type="text/plain", </.well-known/agent.json>; rel="describedby"; type="application/json"');   // RFC 8288 / 9727: Startseite verweist auf maschinenlesbare Ressourcen
     if (p === "/.well-known/api-catalog") { h.set("content-type", 'application/linkset+json; profile="https://www.rfc-editor.org/info/rfc9727"'); h.set("access-control-allow-origin", "*"); }

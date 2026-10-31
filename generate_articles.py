@@ -10,8 +10,7 @@ MODEL = os.environ.get("ARTICLE_MODEL", "claude-sonnet-5-5")
 LIMIT = int(os.environ.get("ARTICLE_LIMIT", "90"))
 WORKERS = int(os.environ.get("ARTICLE_WORKERS", "10"))
 NAMES = {"de": "Deutsch", "es": "Spanisch", "fr": "Französisch", "it": "Italienisch", "pt": "Portugiesisch", "nl": "Niederländisch",
-         "pl": "Polnisch", "id": "Indonesisch", "ru": "Russisch", "uk": "Ukrainisch", "ar": "Arabisch", "he": "Hebräisch", "hi": "Hindi",
-         "ja": "Japanisch", "ko": "Koreanisch", "ml": "Malayalam", "pa": "Punjabi", "ta": "Tamil", "te": "Telugu"}
+         "pl": "Polnisch", "id": "Indonesisch", "ru": "Russisch", "uk": "Ukrainisch", "ar": "Arabisch", "he": "Hebräisch", "ja": "Japanisch", "ko": "Koreanisch", }
 ALLOWED = {"h2", "h3", "p", "ul", "ol", "li", "strong", "em", "blockquote"}
 
 

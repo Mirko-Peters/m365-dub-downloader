@@ -7,8 +7,7 @@ from pathlib import Path
 ROOT = Path(__file__).parent
 DOCS = ROOT / "docs"
 NAMES = {"de": "Deutsch", "es": "Español", "fr": "Français", "it": "Italiano", "pt": "Português", "nl": "Nederlands", "pl": "Polski", "id": "Bahasa Indonesia",
-         "ru": "Русский", "uk": "Українська", "ar": "العربية", "he": "עברית", "hi": "हिन्दी", "ja": "日本語", "ko": "한국어", "ml": "മലയാളം", "pa": "ਪੰਜਾਬੀ",
-         "ta": "தமிழ்", "te": "తెలుగు", "en": "International"}
+         "ru": "Русский", "uk": "Українська", "ar": "العربية", "he": "עברית", "ja": "日本語", "ko": "한국어", "en": "International"}
 RTL = {"ar", "he"}
 
 
