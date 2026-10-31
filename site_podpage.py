@@ -327,9 +327,9 @@ def build(g):
             lald = {"@context": "https://schema.org", "@type": "PodcastEpisode", "name": lt, "url": lu, "datePublished": day(e["create_time"]), "description": ls[:500],
                     "inLanguage": LG[l][1], "partOfSeries": {"@type": "PodcastSeries", "name": NAME, "url": root}, "author": {"@id": f"{BASE}/entity/mirko-peters/#entity"}}
             if r and r.get("audio"): lald["associatedMedia"] = {"@type": "AudioObject", "contentUrl": r["audio"]}
-            _thin = not ln   # nur Titel und Teaser: fuer Besucher da, fuer Suchmaschinen nicht (Googles Regel zu skaliertem Inhalt)
+            _thin = not ln   # nur Titel und Teaser: fuer Besucher da, fuer Suchmaschinen nicht (Googles Regel zu skaliertem Inhalt)   # liegt im R2-Bucket statt in GitHub Pages, wenn duenn (~13.500 Seiten)
             _lalts = None if (_thin or l in oa) else alts   # Sprache mit Dub-Fassung: diese Kopie bleibt ohne hreflang (ein Vertreter je Sprache im Cluster)
-            write(f"{l}/show/episodes/{e['slug']}/index.html", g["page"](l, f"{lt} – {NAME}", ls[:300], lu, f'{g["header"](l, "")}<main class="wrap">{lbody}</main>{g["footer"](l)}', _lalts, [lald], xdefault=ep_url(e), og_type="article", og_of=ep_url(e), noindex=_thin))
+            (g.get("write_r2") if (_thin and g.get("write_r2")) else write)(f"{l}/show/episodes/{e['slug']}/index.html", g["page"](l, f"{lt} – {NAME}", ls[:300], lu, f'{g["header"](l, "")}<main class="wrap">{lbody}</main>{g["footer"](l)}', _lalts, [lald], xdefault=ep_url(e), og_type="article", og_of=ep_url(e), noindex=_thin))
             if not _thin: sitemap.append((lu, day(e.get("update_time")) or TODAY, None))
 
     # Listen (paginiert)

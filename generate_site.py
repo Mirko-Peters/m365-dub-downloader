@@ -794,6 +794,8 @@ def sizes():
 
 
 def build():
+    import shutil as _sh
+    if (ROOT / "r2out").exists(): _sh.rmtree(ROOT / "r2out")
     SF.prefetch(COMMUNITY_API, langs=list(COMM_LANGS)); SF.check(COMMUNITY_API)   # alle Exporte einmal, parallel; ohne Pflicht-Exporte kein Bau
     phase("Exporte geholt")
     eps, pub, seo = load()
@@ -852,6 +854,11 @@ def build():
     def side_for(l, title, body_html):   # Sidebar der Sprachseiten: Themen der Seite, neueste Folgen der Sprache, Community
         return SBR.render_lang(SBX, BASE, l, strip_tags(title + " " + body_html.split("<main", 1)[-1])[:2500], by_lang.get(l, []), url_of, lambda x: anchor_title(x["e"]["title"]), pfx(l) if l in COMM_LANGS else "")
 
+    R2OUT = ROOT / "r2out"; _r2n = [0, 0]   # Seiten, die nicht in GitHub Pages liegen, sondern im R2-Bucket (tools/r2_pages_upload.py laedt sie hoch, der Site-Worker liefert sie aus)
+    def write_r2(rel, content):
+        p = R2OUT / rel; p.parent.mkdir(parents=True, exist_ok=True)
+        c = R2.rewrite(content) if rel.endswith(".html") else content
+        p.write_text(c, encoding="utf-8"); _r2n[0] += 1; _r2n[1] += len(c.encode("utf-8"))
     def write(rel, content):
         p = OUT / rel
         p.parent.mkdir(parents=True, exist_ok=True)
@@ -1225,7 +1232,7 @@ def build():
                         articles=articles, url_of=url_of, cat_name=cat_name, ORDER=ORDER, strip_tags=strip_tags, anchor_title=anchor_title, short=short, parse_desc=parse_desc,
                         sitemap=sitemap, TODAY=TODAY, api=COMMUNITY_API, SCORE={l: (_QUI.get(l, {}).get("score") or _QUI["en"]["score"]) for l in list(LANGS) + ["en"]}))
 
-    _ctx = dict(community_tags=community_tags, write=write, page=page, header=header, footer=footer, footer_en=footer_en, BASE=BASE, LANGS=LANGS, active=active, url_of=url_of, anchor_title=anchor_title, sitemap=sitemap, TODAY=TODAY, api=COMMUNITY_API, orig_alts=ORIG_ALTS)
+    _ctx = dict(community_tags=community_tags, write=write, write_r2=write_r2, page=page, header=header, footer=footer, footer_en=footer_en, BASE=BASE, LANGS=LANGS, active=active, url_of=url_of, anchor_title=anchor_title, sitemap=sitemap, TODAY=TODAY, api=COMMUNITY_API, orig_alts=ORIG_ALTS)
     phase("Folgenseiten (Dub-Sprachen), Startseiten")
     _people, _orgs = MEM.fetch_members(COMMUNITY_API)
 
@@ -1599,6 +1606,7 @@ Mirko Peters, {BASE}/about/
         print("Register nicht geschrieben:", str(_e)[:160])
     phase("Agenten-Dateien, 404, UI-Quellen")
     sizes()
+    print(f"r2out/: {_r2n[0]} Seiten, {_r2n[1] / 1e6:.0f} MB (werden in den R2-Bucket geladen, nicht in GitHub Pages)")
     print(f"{len(items)} Episodenseiten, {len(active)} Sprachen, {len(sitemap)} URLs → docs/")
 
 

@@ -136,6 +136,16 @@ jobs:
             (git pull --rebase -q -X theirs || git rebase --abort) && git push -q
           fi
       - run: python generate_site.py
+      - name: Seiten in den R2-Bucket laden (duenne Sprachfassungen; GitHub Pages bleibt klein, nichts wird geloescht)
+        continue-on-error: true
+        env:
+          R2_ACCOUNT_ID: ${{ secrets.R2_ACCOUNT_ID }}
+          R2_BUCKET: ${{ secrets.R2_BUCKET }}
+          R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+        run: |
+          pip install -q boto3
+          python tools/r2_pages_upload.py r2out
       - name: Pruefung - Profilseiten vorhanden?
         run: |
           n=$(ls -d docs/community/u/*/ 2>/dev/null | wc -l)
