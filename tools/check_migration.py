@@ -63,8 +63,10 @@ def legacy_paths():
     """(Art, alter Pfad, Datensatz) fuer alles, was es auf Podpage gab."""
     out = []
     for p in load("blog_posts"): out.append(("blog", f"/blog/{p['slug']}/", p))
+    rf = ROOT / "data" / "slug_renames.json"   # T12: umbenannte Folgen - auf Podpage hiess die Adresse wie der alte Slug
+    old_of = {v: k for k, v in ((json.loads(rf.read_text("utf-8")).get("episodes") or {}) if rf.exists() else {}).items()}
     for e in load("episodes"):
-        if e.get("published") not in (False, "False") and e.get("hidden") not in (True, "True"): out.append(("episode", f"/{e['slug']}/", e))
+        if e.get("published") not in (False, "False") and e.get("hidden") not in (True, "True"): out.append(("episode", f"/{old_of.get(e['slug'], e['slug'])}/", e))
     for g in load("guests"):
         if g.get("hidden") not in (True, "True"): out.append(("guest", f"/guests/{g['slug']}/", g))
     for pg in load("pages"):

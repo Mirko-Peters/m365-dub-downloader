@@ -35,9 +35,12 @@ export default {
     // Umzug (MIGRATED=1): dub.m365.fm und m365.fm -> www.m365.fm, alte Podpage-Adressen -> /show/ (301, damit der SEO-Traffic erhalten bleibt)
     if (env.MIGRATED === "1") {
       const p0 = url.pathname.replace(/\/+$/, "") || "/";
-      const to = await legacyTarget(p0);
+      let to = await legacyTarget(p0);
       // T8: dub.m365.fm/m365.fm und alte Adresse in einem Schritt auf das Ziel (vorher zwei 301 hintereinander)
-      if (url.hostname === "dub.m365.fm" || url.hostname === "m365.fm") return Response.redirect("https://www.m365.fm" + (to || url.pathname) + url.search, 301);
+      if (url.hostname === "dub.m365.fm" || url.hostname === "m365.fm") {
+        if (!to && /^(\/[a-z]{2})?\/show\/episodes\/[a-z0-9-]+$/.test(p0)) to = (await redirectMap())[p0] || "";   // T12: umbenannte Folge auch vom alten Host in einem Schritt
+        return Response.redirect("https://www.m365.fm" + (to || url.pathname) + url.search, 301);
+      }
       if (to) return Response.redirect(url.origin + to + url.search, 301);
     }
     { const mp = /^(\/[a-z]{2})?\/community\/u\/mirko-peters(\/.*)?$/.exec(url.pathname); if (mp) return Response.redirect(url.origin + (mp[1] || "") + "/community/u/mirko-p" + (mp[2] || "/") + url.search, 301); }   // alter Name des Blog-Profils

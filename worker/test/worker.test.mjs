@@ -171,3 +171,22 @@ test("contentblog: importContentBlog legt Pakete pending/live an, erneuert nur u
     assert.equal(st("b-post").title, "Im Editor", "Schutz bleibt dauerhaft");
   } finally { globalThis.fetch = old; }
 });
+
+test("register: applyRenames gibt der vorhandenen Folge den neuen Slug, nimmt Uebersetzungen mit und legt keine zweite Zeile an (SQLite)", async () => {
+  const { DatabaseSync } = await import("node:sqlite");
+  const raw = new DatabaseSync(":memory:");
+  const dir = new URL("../migrations/", import.meta.url);
+  for (const f of readdirSync(dir).filter((f) => f.endsWith(".sql")).sort()) raw.exec(readFileSync(new URL(f, dir), "utf-8"));
+  const db = { prepare(sql) { const st = raw.prepare(sql); let args = []; const o = { bind(...a) { args = a; return o; }, all: async () => ({ results: st.all(...args) }), first: async () => st.get(...args) ?? null, run: async () => st.run(...args) }; return o; }, async batch(s) { for (const x of s) await x.run(); } };
+  raw.exec("INSERT INTO episode(slug,spreaker_id,title,lang,h,updated) VALUES('alt','73815737','Titel','en','x',1)");
+  raw.exec("INSERT INTO episode_text(episode_id,field,text,h,updated) VALUES(1,'notes','Notizen','y',1)");
+  raw.exec("INSERT INTO translation(kind,item_id,lang,field,text,src,created) VALUES('episode','alt','de','title','Titel DE','haiku',1)");
+  raw.exec("INSERT INTO episode(slug,spreaker_id,title,lang,h,updated) VALUES('b','2','B','en','x',1),('b-neu','3','B neu','en','x',1)");
+  const { applyRenames } = await import("../src/register.js");
+  const r = await applyRenames(db, { alt: "neu", b: "b-neu", fehlt: "egal" });
+  assert.deepEqual(r, [{ from: "alt", to: "neu" }, { from: "b", to: "b-neu", conflict: true }]);
+  assert.deepEqual(raw.prepare("SELECT id,slug,h FROM episode ORDER BY id").all().map((x) => [x.id, x.slug, x.h]), [[1, "neu", ""], [2, "b", "x"], [3, "b-neu", "x"]], "id bleibt, Konflikt laesst beide Zeilen stehen");
+  assert.equal(raw.prepare("SELECT text FROM episode_text WHERE episode_id=1").get().text, "Notizen");
+  assert.equal(raw.prepare("SELECT item_id FROM translation WHERE kind='episode'").get().item_id, "neu");
+  assert.deepEqual(await applyRenames(db, { alt: "neu" }), [], "zweiter Lauf aendert nichts");
+});
