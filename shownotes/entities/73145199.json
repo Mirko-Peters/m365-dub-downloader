@@ -1,0 +1,186 @@
+{
+  "episode_id": "73145199",
+  "slug": "microsoft-graph-delta-queries-simply-explained",
+  "title": "Microsoft Graph Delta Queries - Simply Explained",
+  "lang": "en",
+  "duration_s": 938,
+  "transcript_source": "data/en_transcripts/784d5b924309.txt",
+  "time_basis": "estimated",
+  "entities": [
+    {
+      "slug": "mirko-peters",
+      "name": "Mirko Peters",
+      "type": "person",
+      "score": 55,
+      "mentions": 2,
+      "first_mention_s": 709,
+      "quote": "I'm your host, Mucopetus",
+      "url": "https://www.m365.fm/entity/mirko-peters/"
+    },
+    {
+      "slug": "change-notifications",
+      "name": "Change notifications and webhooks",
+      "type": "concept",
+      "score": 95,
+      "mentions": 38,
+      "first_mention_s": 56,
+      "quote": "Delta queries solve this exact problem",
+      "url": "https://www.m365.fm/entity/change-notifications/"
+    },
+    {
+      "slug": "graph",
+      "name": "Microsoft Graph",
+      "type": "product",
+      "score": 90,
+      "mentions": 23,
+      "first_mention_s": 78,
+      "quote": "Just clever, token math that lets you ask Microsoft Graph, what's new since I last asked?",
+      "url": "https://www.m365.fm/entity/graph/"
+    },
+    {
+      "slug": "entra-id",
+      "name": "Microsoft Entra ID",
+      "type": "product",
+      "score": 45,
+      "mentions": 4,
+      "first_mention_s": 48,
+      "quote": "syncs users from Microsoft, Entra, ID or emails from Exchange or files from SharePoint",
+      "url": "https://www.m365.fm/entity/entra-id/"
+    },
+    {
+      "slug": "microsoft-365",
+      "name": "Microsoft 365",
+      "type": "platform",
+      "score": 35,
+      "mentions": 2,
+      "first_mention_s": 101,
+      "quote": "that's exactly what a Delta query does, but for your Microsoft 365 data",
+      "url": "https://www.m365.fm/entity/microsoft-365/"
+    },
+    {
+      "slug": "sharepoint",
+      "name": "SharePoint",
+      "type": "product",
+      "score": 30,
+      "mentions": 2,
+      "first_mention_s": 51,
+      "quote": "or files from SharePoint",
+      "url": "https://www.m365.fm/entity/sharepoint/"
+    },
+    {
+      "slug": "exchange-online",
+      "name": "Exchange Online",
+      "type": "product",
+      "score": 25,
+      "mentions": 1,
+      "first_mention_s": 50,
+      "quote": "emails from Exchange",
+      "url": "https://www.m365.fm/entity/exchange-online/"
+    }
+  ],
+  "new_entities": [
+    {
+      "slug": "throttling",
+      "name": "Throttling",
+      "type": "concept"
+    }
+  ],
+  "quotes": [
+    {
+      "text": "A Delta query asks Microsoft Graph for only the changes since your last check. Not everything, just a new, updated, or deleted items.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 86,
+      "entities": [
+        "change-notifications",
+        "graph"
+      ],
+      "why": "The clearest one-line definition of a delta query in the episode."
+    },
+    {
+      "text": "You don't have to store timestamps or version numbers yourself. You don't have to figure out what changed and what didn't. Microsoft handles all that tracking.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 267,
+      "entities": [
+        "change-notifications",
+        "graph"
+      ],
+      "why": "Explains why the delta link removes custom change-tracking logic from your app."
+    },
+    {
+      "text": "The same change might appear in two consecutive Delta responses. That means your app has to be idempotent. It has to handle the same update twice without breaking.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 384,
+      "entities": [
+        "change-notifications"
+      ],
+      "why": "A concrete design rule developers often miss when consuming delta feeds."
+    },
+    {
+      "text": "When you get a push notification saying something changed, you then call Delta query to fetch exactly what changed.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 608,
+      "entities": [
+        "change-notifications",
+        "graph"
+      ],
+      "why": "Summarizes the recommended hybrid push-plus-pull pattern in one sentence."
+    },
+    {
+      "text": "Expect the 410 error, it's going to happen. Microsoft Graph will invalidate your token during maintenance or a tenant migration.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 755,
+      "entities": [
+        "graph",
+        "change-notifications"
+      ],
+      "why": "Turns a scary error into an expected part of the sync life cycle."
+    }
+  ],
+  "chapters": [
+    {
+      "start_s": 0,
+      "title": "Why full syncs waste data"
+    },
+    {
+      "start_s": 82,
+      "title": "What is a delta query?"
+    },
+    {
+      "start_s": 170,
+      "title": "How the token system works"
+    },
+    {
+      "start_s": 278,
+      "title": "Limitations you can't ignore"
+    },
+    {
+      "start_s": 445,
+      "title": "Delta query vs. change notifications"
+    },
+    {
+      "start_s": 585,
+      "title": "The hybrid approach"
+    },
+    {
+      "start_s": 702,
+      "title": "Practical rules for production"
+    },
+    {
+      "start_s": 811,
+      "title": "Example: syncing calendar events"
+    }
+  ],
+  "takeaways": [
+    "A delta query returns only the items added, updated or deleted since your last call, using a saved delta link instead of a full resync.",
+    "Plan for token expiry after seven days, HTTP 410 resets, processing delays, untracked properties and duplicate changes.",
+    "Combining change notifications as a trigger with delta queries for the details gives near real-time sync without wasteful polling."
+  ],
+  "hook": "Many apps that sync Microsoft 365 data still download everything every few minutes, wasting bandwidth and hitting rate limits. This episode explains for developers how Microsoft Graph delta queries and delta links work, which limitations to plan for, and how to combine them with change notifications for reliable, efficient sync.",
+  "youtube_video_id": null,
+  "generated_at": "2026-11-01T12:31:32+00:00"
+}
