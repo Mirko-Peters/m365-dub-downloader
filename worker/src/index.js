@@ -9,6 +9,7 @@ import { handleAdminPanel } from "./adminpanel.js";
 import { autoTranslateItems, autoTranslateEntities, runTrQueue } from "./autotr.js";
 import { syncLiveEvents } from "./liveevents.js";
 import { syncContentTopics, handleTopics } from "./topics.js";
+import { importEpisodes, importTranslations, handleRegister } from "./register.js";
 import { entityMap } from "./entities.js";
 import { handleProfiles, deleteUserData, refreshProfilesExport } from "./profiles.js";
 import { handleEvents, deleteUserEvents, ensureM365Con } from "./events.js";
@@ -341,6 +342,7 @@ async function api(env, request, url, path, asUser) {
   }
 
   if (path === "/api/topics/export" || path === "/api/admin/panel/topic") { const q = await handleTopics(env, request, url, path, user, J); if (q) return q; }
+  if (path === "/api/episodes/export" || path === "/api/translations/export") { const q = await handleRegister(env, request, url, path, user, J); if (q) return q; }
   if (path === "/api/tr-queue" && method === "GET") {   // Vormerkliste fuer die Uebersetzungs-Pipelines (translate_blog.py --queue): nur Schluessel
     const rows = (await db.prepare("SELECT kind,item_id,lang FROM tr_queue WHERE status='open' ORDER BY created LIMIT 5000").all().catch(() => ({ results: [] }))).results || [];
     return J({ items: rows }, 200, { "cache-control": "public, max-age=120" });
@@ -410,6 +412,8 @@ export default {
     T("syncLiveEvents", () => syncLiveEvents(env, entityMap));
     T("syncContentTopics", () => syncContentTopics(env));
     T("importEntitiesFromSite", () => importEntitiesFromSite(env));
+    T("importEpisodes", () => importEpisodes(env));
+    T("importTranslations", () => importTranslations(env));
     ctx.waitUntil(env.DB.prepare("DELETE FROM cron_runs WHERE started<?").bind(Math.floor(Date.now() / 1000) - 7 * 86400).run().catch(() => 0));
   },
 };

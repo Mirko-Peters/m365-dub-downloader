@@ -1592,6 +1592,11 @@ Mirko Peters, {BASE}/about/
     for _slug, _eids in _ep_about.items():
         for _i, _t in enumerate(_eids[:8]): _tj.append({"kind": "show", "id": _slug, "eid": _t, "w": round(max(0.2, 1 - _i * 0.15), 2)})
     write("topics.json", json.dumps({"generated": TODAY, "count": len(_tj), "items": _tj}, ensure_ascii=False))
+    import site_register as REG
+    try:
+        REG.build(write, BASE, TODAY, _posts)
+    except Exception as _e:
+        print("Register nicht geschrieben:", str(_e)[:160])
     phase("Agenten-Dateien, 404, UI-Quellen")
     sizes()
     print(f"{len(items)} Episodenseiten, {len(active)} Sprachen, {len(sitemap)} URLs → docs/")
