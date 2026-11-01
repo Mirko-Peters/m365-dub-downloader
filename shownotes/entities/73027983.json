@@ -1,0 +1,189 @@
+{
+  "episode_id": "73027983",
+  "slug": "azure-dns-simply-explained",
+  "title": "Azure DNS - Simply Explained",
+  "lang": "en",
+  "duration_s": 954,
+  "transcript_source": "data/en_transcripts/da0b86084731.txt",
+  "time_basis": "estimated",
+  "entities": [
+    {
+      "slug": "mirko-peters",
+      "name": "Mirko Peters",
+      "type": "person",
+      "score": 60,
+      "mentions": 1,
+      "first_mention_s": 3,
+      "quote": "I'm your host, Mirko Peters.",
+      "url": "https://www.m365.fm/entity/mirko-peters/"
+    },
+    {
+      "slug": "infrastructure-as-code",
+      "name": "Infrastructure as code",
+      "type": "concept",
+      "score": 20,
+      "mentions": 1,
+      "first_mention_s": 170,
+      "quote": "ARM templates if you're into infrastructure as code",
+      "url": "https://www.m365.fm/entity/infrastructure-as-code/"
+    },
+    {
+      "slug": "azure-dns",
+      "name": "Azure DNS",
+      "type": "product",
+      "score": 95,
+      "mentions": 17,
+      "first_mention_s": 41,
+      "quote": "you'll understand what Azure DNS really is",
+      "url": "https://www.m365.fm/entity/azure-dns/"
+    },
+    {
+      "slug": "azure",
+      "name": "Microsoft Azure",
+      "type": "platform",
+      "score": 60,
+      "mentions": 60,
+      "first_mention_s": 37,
+      "quote": "And more importantly, where does Azure fit in?",
+      "url": "https://www.m365.fm/entity/azure/"
+    },
+    {
+      "slug": "defender",
+      "name": "Microsoft Defender",
+      "type": "product",
+      "score": 25,
+      "mentions": 1,
+      "first_mention_s": 833,
+      "quote": "Part of Microsoft Defender for Cloud can block resolution of known malicious domains.",
+      "url": "https://www.m365.fm/entity/defender/"
+    },
+    {
+      "slug": "microsoft-365",
+      "name": "Microsoft 365",
+      "type": "platform",
+      "score": 20,
+      "mentions": 1,
+      "first_mention_s": 3,
+      "quote": "When you're setting up Microsoft 365, they ask you to add a TXT record to prove you own the domain.",
+      "url": "https://www.m365.fm/entity/microsoft-365/"
+    },
+    {
+      "slug": "azure-traffic-manager",
+      "name": "Azure Traffic Manager",
+      "type": "product",
+      "score": 15,
+      "mentions": 1,
+      "first_mention_s": 878,
+      "quote": "a CDN endpoint or a traffic manager profile, use an alias record",
+      "url": "https://www.m365.fm/entity/azure-traffic-manager/"
+    }
+  ],
+  "new_entities": [
+    {
+      "slug": "domain-name-system",
+      "name": "Domain Name System (DNS)",
+      "type": "concept"
+    },
+    {
+      "slug": "azure-private-dns-zone",
+      "name": "Azure Private DNS zone",
+      "type": "product"
+    },
+    {
+      "slug": "azure-dns-alias-record",
+      "name": "Azure DNS alias record",
+      "type": "concept"
+    },
+    {
+      "slug": "azure-virtual-network",
+      "name": "Azure Virtual Network",
+      "type": "product"
+    }
+  ],
+  "quotes": [
+    {
+      "text": "Computers live on numbers, we live on names, and DNS sits right in the middle, making the translation.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 23,
+      "entities": [
+        "domain-name-system"
+      ],
+      "why": "Explains the purpose of DNS in a single memorable image."
+    },
+    {
+      "text": "So Azure DNS is Microsoft's managed DNS hosting service. In plain English, that means you never have to run your own DNS servers, patch them, or plan for higher availability.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 135,
+      "entities": [
+        "azure-dns"
+      ],
+      "why": "Defines Azure DNS and its core benefit in plain language."
+    },
+    {
+      "text": "An alias record lets you point a name directly to an Azure resource instead of a static IP address.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 439,
+      "entities": [
+        "azure-dns-alias-record",
+        "azure-dns"
+      ],
+      "why": "Highlights the Azure-specific feature that removes manual DNS updates."
+    },
+    {
+      "text": "Plan the migration carefully. Create the zone in Azure, add all your records, then change the name servers. Not the other way around.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 629,
+      "entities": [
+        "azure-dns",
+        "domain-name-system"
+      ],
+      "why": "Gives a concrete, practical rule that prevents outages during DNS delegation."
+    }
+  ],
+  "chapters": [
+    {
+      "start_s": 0,
+      "title": "Intro"
+    },
+    {
+      "start_s": 54,
+      "title": "What DNS actually does"
+    },
+    {
+      "start_s": 134,
+      "title": "What is Azure DNS?"
+    },
+    {
+      "start_s": 208,
+      "title": "Public vs. private DNS zones"
+    },
+    {
+      "start_s": 342,
+      "title": "Record types you'll actually use"
+    },
+    {
+      "start_s": 510,
+      "title": "Delegation"
+    },
+    {
+      "start_s": 651,
+      "title": "Private DNS and virtual network links"
+    },
+    {
+      "start_s": 797,
+      "title": "Security, monitoring and best practices"
+    }
+  ],
+  "takeaways": [
+    "Azure DNS is a managed hosting service for DNS zones, so you no longer run, patch or scale your own DNS servers.",
+    "Public zones serve names to the internet and require delegation at your registrar, while private zones resolve only inside the virtual networks you link to them.",
+    "Use alias records for Azure resources and recreate every existing record in Azure before switching name servers to avoid outages."
+  ],
+  "hook": "Everyone uses DNS, but few people understand the chain behind a lookup or how Azure takes over the job. This episode explains Azure DNS for cloud admins and beginners: public and private zones, the record types you actually need, delegation and virtual network links. You will know how to move a domain to Azure DNS without breaking your website or email.",
+  "youtube_video_id": null,
+  "generated_at": "2026-11-01T14:25:35+00:00"
+}

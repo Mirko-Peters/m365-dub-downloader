@@ -1,0 +1,189 @@
+{
+  "episode_id": "73048799",
+  "slug": "azure-automation-simply-explained",
+  "title": "Azure Automation - Simply Explained",
+  "lang": "en",
+  "duration_s": 947,
+  "transcript_source": "data/en_transcripts/4324a14ee011.txt",
+  "time_basis": "estimated",
+  "entities": [
+    {
+      "slug": "automation",
+      "name": "Automation",
+      "type": "concept",
+      "score": 45,
+      "mentions": 30,
+      "first_mention_s": 5,
+      "quote": "Why automation? The problem of repetitive manual work",
+      "url": "https://www.m365.fm/entity/automation/"
+    },
+    {
+      "slug": "azure-automation",
+      "name": "Azure Automation",
+      "type": "product",
+      "score": 98,
+      "mentions": 15,
+      "first_mention_s": 5,
+      "quote": "As your automation, is it just a fancy name for running scripts in the cloud",
+      "url": "https://www.m365.fm/entity/azure-automation/"
+    },
+    {
+      "slug": "azure-key-vault",
+      "name": "Azure Key Vault",
+      "type": "product",
+      "score": 30,
+      "mentions": 1,
+      "first_mention_s": 690,
+      "quote": "reading a secret from Key Vault",
+      "url": "https://www.m365.fm/entity/azure-key-vault/"
+    },
+    {
+      "slug": "azure-logic-apps",
+      "name": "Azure Logic Apps",
+      "type": "product",
+      "score": 30,
+      "mentions": 1,
+      "first_mention_s": 306,
+      "quote": "Logic apps can call it, third party tools can call it",
+      "url": "https://www.m365.fm/entity/azure-logic-apps/"
+    },
+    {
+      "slug": "entra-id",
+      "name": "Microsoft Entra ID",
+      "type": "product",
+      "score": 28,
+      "mentions": 1,
+      "first_mention_s": 699,
+      "quote": "You'd create a service principle in Azure Active Directory",
+      "url": "https://www.m365.fm/entity/entra-id/"
+    },
+    {
+      "slug": "active-directory",
+      "name": "Active Directory",
+      "type": "product",
+      "score": 25,
+      "mentions": 1,
+      "first_mention_s": 401,
+      "quote": "servers that need to reach local file shares, active directory or legacy applications",
+      "url": "https://www.m365.fm/entity/active-directory/"
+    }
+  ],
+  "new_entities": [
+    {
+      "slug": "runbook",
+      "name": "Runbook (Azure Automation)",
+      "type": "concept"
+    },
+    {
+      "slug": "hybrid-runbook-worker",
+      "name": "Hybrid Runbook Worker",
+      "type": "product"
+    },
+    {
+      "slug": "azure-automation-state-configuration",
+      "name": "Azure Automation State Configuration",
+      "type": "product"
+    },
+    {
+      "slug": "managed-identity",
+      "name": "Managed identity",
+      "type": "concept"
+    }
+  ],
+  "quotes": [
+    {
+      "text": "A runbook is just a script. Usually PowerShell, sometimes Python, that's it. There's no magic here. You write the steps you want to follow and Azure Automation follows them exactly every time.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 157,
+      "entities": [
+        "runbook",
+        "azure-automation"
+      ],
+      "why": "Demystifies the core building block of Azure Automation."
+    },
+    {
+      "text": "But that's not automation. That's just running a script manually from a web page. Real automation needs a trigger, something that tells your runbook when to run without you touching anything.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 257,
+      "entities": [
+        "runbook",
+        "automation"
+      ],
+      "why": "Draws a clear line between running scripts and real automation."
+    },
+    {
+      "text": "If a machine drifts from its desired state, it can auto correct itself. The agent doesn't just report the problem. It fixes it.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 527,
+      "entities": [
+        "azure-automation-state-configuration"
+      ],
+      "why": "Explains the self-healing value of desired state configuration."
+    },
+    {
+      "text": "The worst thing you can do is hard code those secrets directly into your runbook. Why? Because now that secret lives in your script, it's in your source control.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 588,
+      "entities": [
+        "runbook"
+      ],
+      "why": "Clear security warning against hard-coded secrets."
+    },
+    {
+      "text": "Always use managed identities when you can. They're most secure because there's no password to leak, they're easier to maintain because there's nothing to rotate.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 797,
+      "entities": [
+        "managed-identity"
+      ],
+      "why": "Concise best-practice recommendation with reasons."
+    }
+  ],
+  "chapters": [
+    {
+      "start_s": 0,
+      "title": "Why automate repetitive IT work"
+    },
+    {
+      "start_s": 155,
+      "title": "Runbooks: the heart of automation"
+    },
+    {
+      "start_s": 247,
+      "title": "Schedules, alerts and webhooks"
+    },
+    {
+      "start_s": 351,
+      "title": "Hybrid Runbook Workers"
+    },
+    {
+      "start_s": 469,
+      "title": "State configuration"
+    },
+    {
+      "start_s": 579,
+      "title": "Shared resources"
+    },
+    {
+      "start_s": 684,
+      "title": "Managed identities"
+    },
+    {
+      "start_s": 812,
+      "title": "Start/stop VM scenario"
+    }
+  ],
+  "takeaways": [
+    "Azure Automation centralizes scripts as runbooks in an Automation account and runs them on schedules, from alerts or via webhooks.",
+    "Hybrid Runbook Workers extend automation to on-premises machines, and State Configuration keeps servers in their desired state.",
+    "Store secrets as shared resources and authenticate with managed identities instead of hard-coded passwords, then start by automating one repetitive task such as a nightly VM shutdown."
+  ],
+  "hook": "IT admins lose hours every week starting VMs, patching servers and running scripts by hand, and every manual step invites errors. This episode explains Azure Automation in plain English for admins and cloud beginners. You will learn how runbooks, schedules, hybrid workers, state configuration and managed identities work together, with a simple start/stop VM scenario that saves money.",
+  "youtube_video_id": null,
+  "generated_at": "2026-11-01T14:25:35+00:00"
+}
