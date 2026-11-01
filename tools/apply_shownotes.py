@@ -123,11 +123,11 @@ def _links(h):
 
 
 def same_on_spreaker(ep, raw):
-    """True, wenn Spreaker die Fassung raw gespeichert hat: HTML-Feld (falls geliefert) gleich, sonst Textinhalt gleich."""
-    h = ep.get("description_html")
-    if h:
-        return norm(h) == norm(raw) or text_key(h) == text_key(raw)
-    return text_key(ep.get("description") or "") == text_key(raw)
+    """True, wenn Spreaker die Fassung raw samt Links gespeichert hat. Massgeblich ist description_html (daraus baut Spreaker
+    den RSS-Feed): gleicher Textinhalt UND mindestens so viele Links wie die Datei. 'description' ist bei Spreaker nur Text
+    und reicht dafuer nicht (1.11.: 103 Folgen standen dort richtig, im Feed fehlten alle Links)."""
+    h = ep.get("description_html") or ""
+    return bool(h) and text_key(h) == text_key(raw) and _links(h) >= _links(raw)
 
 
 def sha(s):
@@ -396,7 +396,7 @@ def main():
         title = eps[eid]["title"]
         try:
             cur = sp.req("GET", f"/episodes/{eid}")["episode"]
-            old = cur.get("description") or ""
+            old = cur.get("description_html") or cur.get("description") or ""
             if dry:
                 diff = "\n".join(difflib.unified_diff(to_text(old), to_text(raw), "aktuell", "neu", lineterm="", n=1))
                 rows.append(f"## {html.escape(cur.get('title') or title)} ({eid}, {plays(eid)} Abrufe, {len(raw)} Zeichen)\n\n```diff\n{diff or '(kein Unterschied)'}\n```\n\n<details><summary>Neue Beschreibung (HTML)</summary>\n\n```html\n{raw}\n```\n\n</details>\n")
@@ -408,7 +408,7 @@ def main():
                 bk.parent.mkdir(parents=True, exist_ok=True)
                 bk.write_text(json.dumps({"episode_id": eid, "saved": now(), "title": cur.get("title") or "", "description": old,
                                           "description_html": cur.get("description_html") or ""}, ensure_ascii=False, indent=1) + "\n", "utf-8")
-            sp.req("POST", f"/episodes/{eid}", data={"description": raw})
+            sp.req("POST", f"/episodes/{eid}", data={"description_html": spreaker_html(raw)})   # T25: nur dieses Feld behaelt Links und Listen
             after = sp.req("GET", f"/episodes/{eid}")["episode"]
             if (after.get("title") or "") != (cur.get("title") or ""):
                 log_applied(eid, "mismatch", h, plays(eid), title, "Titel hat sich geaendert - bitte pruefen"); errors += 1; continue
