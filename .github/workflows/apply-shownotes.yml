@@ -57,7 +57,7 @@ jobs:
         if: always() && steps.has.outputs.yes == '1'
         run: |
           git config user.name "m365-site-bot"; git config user.email "actions@users.noreply.github.com"
-          git add -A shownotes/APPLIED.txt shownotes/DRYRUN.md shownotes/plays.json data/spreaker_auth.enc 2>/dev/null || true
+          for f in shownotes/APPLIED.txt shownotes/DRYRUN.md shownotes/plays.json data/spreaker_auth.enc; do [ -e "$f" ] && git add -A "$f"; done   # einzeln: ein fehlender Pfad liess vorher das ganze git add scheitern (DRYRUN.md wurde nie gespeichert)
           if git diff --cached --quiet; then echo "Nichts zu speichern"; exit 0; fi
           git commit -q -m "Shownotes -> Spreaker: Protokoll $(date -u +%Y-%m-%dT%H:%MZ)"
-          (git pull --rebase -q -X theirs || git rebase --abort) && git push -q
+          (git pull --rebase --autostash -q -X theirs || git rebase --abort) && git push -q
