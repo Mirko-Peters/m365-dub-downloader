@@ -1,0 +1,158 @@
+{
+  "episode_id": "75180895",
+  "slug": "factory-cloud-bill",
+  "title": "Your Factory Cloud Bill Is Much Higher Than You Think",
+  "lang": "en",
+  "duration_s": 7360,
+  "transcript_source": "data/en_transcripts/47e191200378.txt",
+  "time_basis": "estimated",
+  "entities": [
+    {
+      "slug": "governance",
+      "name": "Governance",
+      "type": "concept",
+      "score": 30,
+      "mentions": 2,
+      "first_mention_s": 1895,
+      "quote": "Those questions need history, governance, and a common way to describe the work.",
+      "url": "https://www.m365.fm/entity/governance/"
+    },
+    {
+      "slug": "azure",
+      "name": "Microsoft Azure",
+      "type": "platform",
+      "score": 35,
+      "mentions": 2,
+      "first_mention_s": 683,
+      "quote": "Azure Zone one lists roughly 8.7 cents per gigabyte beyond its included allowance.",
+      "url": "https://www.m365.fm/entity/azure/"
+    },
+    {
+      "slug": "power-bi",
+      "name": "Power BI",
+      "type": "product",
+      "score": 25,
+      "mentions": 1,
+      "first_mention_s": 3962,
+      "quote": "A production manager opens a Power BI dashboard from the plant network.",
+      "url": "https://www.m365.fm/entity/power-bi/"
+    }
+  ],
+  "new_entities": [
+    {
+      "slug": "cloud-egress",
+      "name": "Cloud data egress",
+      "type": "concept"
+    },
+    {
+      "slug": "edge-computing",
+      "name": "Edge computing",
+      "type": "concept"
+    },
+    {
+      "slug": "data-gravity",
+      "name": "Data gravity",
+      "type": "concept"
+    },
+    {
+      "slug": "manufacturing-execution-system",
+      "name": "Manufacturing execution system (MES)",
+      "type": "concept"
+    }
+  ],
+  "quotes": [
+    {
+      "text": "It's not because the cloud failed, it's because that data path was never treated as part of the architecture in the first place.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 37,
+      "entities": [
+        "cloud-egress"
+      ],
+      "why": "Pins rising factory cloud bills on architecture decisions rather than on the cloud itself."
+    },
+    {
+      "text": "The rule behind all four tiers is simple. Move data only when a named consumer needs it to make a named decision.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 2287,
+      "entities": [
+        "edge-computing"
+      ],
+      "why": "States the core design rule of the episode in one sentence."
+    },
+    {
+      "text": "They debate whether 7.8 or 9 cents per gigabyte is better, while the architecture still sends a stream that no named user needs in raw form. Saving a fraction of a cent on unnecessary movement is still unnecessary movement.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 952,
+      "entities": [
+        "cloud-egress",
+        "azure"
+      ],
+      "why": "Warns against comparing provider prices before questioning the data flow."
+    },
+    {
+      "text": "An architecture diagram is a billing diagram. The symbols may look different, but the bills follow the same path.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 3591,
+      "entities": [
+        "cloud-egress"
+      ],
+      "why": "A memorable reframing that links network design to operating cost."
+    },
+    {
+      "text": "Compression comes after placement, not before it. If a data stream has no reason to leave the plant, compressing it only creates a smaller unnecessary transfer.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 5957,
+      "entities": [
+        "edge-computing"
+      ],
+      "why": "Clarifies the right order of decisions when reducing data transfer."
+    }
+  ],
+  "chapters": [
+    {
+      "start_s": 0,
+      "title": "The clean IoT diagram and the hidden bill"
+    },
+    {
+      "start_s": 62,
+      "title": "Egress, boundaries and data paths"
+    },
+    {
+      "start_s": 979,
+      "title": "Counting samples, not devices"
+    },
+    {
+      "start_s": 1688,
+      "title": "Data half-life and the value hierarchy"
+    },
+    {
+      "start_s": 2649,
+      "title": "Data gravity"
+    },
+    {
+      "start_s": 2946,
+      "title": "Zones, NAT, replication and return paths"
+    },
+    {
+      "start_s": 4937,
+      "title": "Edge processing, filtering and aggregation"
+    },
+    {
+      "start_s": 6635,
+      "title": "The three-layer factory data pattern"
+    }
+  ],
+  "takeaways": [
+    "Factory cloud cost is driven by data movement across boundaries, zones, gateways and return paths, not just by storage.",
+    "Estimate volume from sample rate, payload size and retention rather than device count, and move data only when a named consumer needs it for a named decision.",
+    "Use an edge, site and cloud layer pattern: filter, aggregate and infer near the machine, and send governed operational facts to the cloud."
+  ],
+  "hook": "Sending all factory data to the cloud looks cheap until egress, cross-zone traffic, replication and dashboards show up on the invoice. This episode shows manufacturing and cloud architects how to model the real cost of data movement and build an edge-first pattern that scales. You will learn which data should stay local and which earns a trip to the cloud.",
+  "youtube_video_id": null,
+  "generated_at": "2026-11-01T08:24:48+00:00"
+}

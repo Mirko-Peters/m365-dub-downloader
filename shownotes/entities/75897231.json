@@ -1,0 +1,191 @@
+{
+  "episode_id": "75897231",
+  "slug": "fabric-sql-database",
+  "title": "Fabric SQL Database - Simply Explained",
+  "lang": "en",
+  "duration_s": 869,
+  "transcript_source": "data/en_transcripts/654e38ef1c5d.txt",
+  "time_basis": "estimated",
+  "entities": [
+    {
+      "slug": "fabric-workspace",
+      "name": "Fabric workspace",
+      "type": "concept",
+      "score": 40,
+      "mentions": 4,
+      "first_mention_s": 138,
+      "quote": "You open a fabric workspace, create the database the same way you'd create any other",
+      "url": "https://www.m365.fm/entity/fabric-workspace/"
+    },
+    {
+      "slug": "fabric",
+      "name": "Microsoft Fabric",
+      "type": "platform",
+      "score": 95,
+      "mentions": 33,
+      "first_mention_s": 4,
+      "quote": "the future of work, fabric and SQL. Sound like two different things",
+      "url": "https://www.m365.fm/entity/fabric/"
+    },
+    {
+      "slug": "azure",
+      "name": "Microsoft Azure",
+      "type": "platform",
+      "score": 70,
+      "mentions": 16,
+      "first_mention_s": 11,
+      "quote": "underneath it runs the same engine that powers Azure SQL database",
+      "url": "https://www.m365.fm/entity/azure/"
+    },
+    {
+      "slug": "power-bi",
+      "name": "Power BI",
+      "type": "product",
+      "score": 55,
+      "mentions": 4,
+      "first_mention_s": 420,
+      "quote": "There's a bonus for anyone who lives in power BI because the copy lands as delta tables.",
+      "url": "https://www.m365.fm/entity/power-bi/"
+    },
+    {
+      "slug": "microsoft",
+      "name": "Microsoft",
+      "type": "org",
+      "score": 25,
+      "mentions": 10,
+      "first_mention_s": 6,
+      "quote": "Sound like two different things, but Microsoft built them into one.",
+      "url": "https://www.m365.fm/entity/microsoft/"
+    },
+    {
+      "slug": "vs-code",
+      "name": "Visual Studio Code",
+      "type": "product",
+      "score": 15,
+      "mentions": 1,
+      "first_mention_s": 182,
+      "quote": "the Msql extension for Visual Studio Code",
+      "url": "https://www.m365.fm/entity/vs-code/"
+    }
+  ],
+  "new_entities": [
+    {
+      "slug": "sql-database-in-fabric",
+      "name": "SQL database in Microsoft Fabric",
+      "type": "product"
+    },
+    {
+      "slug": "azure-sql-database",
+      "name": "Azure SQL Database",
+      "type": "product"
+    },
+    {
+      "slug": "onelake",
+      "name": "OneLake",
+      "type": "product"
+    },
+    {
+      "slug": "fabric-mirroring",
+      "name": "Mirroring in Microsoft Fabric",
+      "type": "concept"
+    }
+  ],
+  "quotes": [
+    {
+      "text": "For years, the only bridge between them was a copy. You copied the data on a schedule, you fixed the copy when it broke, and you explain to someone why last night's numbers didn't match this morning's.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 106,
+      "entities": [
+        "fabric"
+      ],
+      "why": "Names the classic pain of copying data between app databases and reporting systems."
+    },
+    {
+      "text": "Those gaps won't matter to a lot of beginners, but they catch people who assume that same engine means same everything.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 248,
+      "entities": [
+        "sql-database-in-fabric",
+        "azure-sql-database"
+      ],
+      "why": "A crisp warning that a shared engine does not mean identical features."
+    },
+    {
+      "text": "The read only copy is what makes this safe. The report reads the copy while the app keeps writing to the original, a dashboard scanning millions of rows doesn't compete with the checkout page for the same resources.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 496,
+      "entities": [
+        "fabric-mirroring",
+        "sql-database-in-fabric"
+      ],
+      "why": "Explains clearly why mirrored analytics does not slow down the operational app."
+    },
+    {
+      "text": "If you already use fabric and you want your operational data living inside it, this is the natural home and the automatic copy is the reason.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 733,
+      "entities": [
+        "fabric",
+        "sql-database-in-fabric"
+      ],
+      "why": "Gives a simple decision rule for when to choose the Fabric SQL database."
+    },
+    {
+      "text": "The real shift here isn't a new database at all. It's that you stop shuttling data between systems and let it sit in one place where both sides can reach it.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 849,
+      "entities": [
+        "sql-database-in-fabric",
+        "onelake"
+      ],
+      "why": "Summarises the core idea of the episode in one memorable thought."
+    }
+  ],
+  "chapters": [
+    {
+      "start_s": 0,
+      "title": "Fabric and SQL in one product"
+    },
+    {
+      "start_s": 32,
+      "title": "What a Fabric SQL database is"
+    },
+    {
+      "start_s": 171,
+      "title": "Compared with Azure SQL Database"
+    },
+    {
+      "start_s": 301,
+      "title": "Automatic mirroring into OneLake"
+    },
+    {
+      "start_s": 451,
+      "title": "One database, two jobs"
+    },
+    {
+      "start_s": 549,
+      "title": "Capacity and cost"
+    },
+    {
+      "start_s": 703,
+      "title": "Use cases and limits"
+    },
+    {
+      "start_s": 824,
+      "title": "Recap"
+    }
+  ],
+  "takeaways": [
+    "SQL database in Fabric uses the same engine and T-SQL as Azure SQL Database, but lives inside Fabric as a managed, serverless item.",
+    "Every supported table is mirrored automatically into OneLake in an open Delta format, so reports can read the data without ETL pipelines.",
+    "It draws compute from your Fabric capacity, stops billing compute after fifteen idle minutes, and still lacks some Azure SQL features such as SQL Server Agent or VNet integration."
+  ],
+  "hook": "App databases and reporting systems have lived apart for years, connected only by fragile copy jobs. This beginner-friendly episode explains how SQL database in Microsoft Fabric mirrors your data into OneLake automatically, how it compares with Azure SQL Database, and what it costs. Ideal for anyone deciding where operational data should live in a Fabric world.",
+  "youtube_video_id": null,
+  "generated_at": "2026-11-01T08:24:48+00:00"
+}
