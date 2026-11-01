@@ -59,8 +59,18 @@ def load(name):
     for f in (PD / f"{name}.json", PD / f"{name}.json.gz"):
         if f.exists():
             data = json.loads((gzip.open(f, "rt", encoding="utf-8") if f.suffix == ".gz" else open(f, encoding="utf-8")).read())
+            if name == "guests": return [_fix_name(g) for g in data]
             return data + spreaker_extra(data) if name == "episodes" else data   # T28: neue Folgen aus Spreaker, die die Podpage-Sicherung nicht kennt
     return []
+
+
+_NAME_FIX_F = D / "name_fixes.json"   # Schreibweise von Gastnamen, die in der Podpage-Sicherung falsch steht (z. B. Nachname in Versalien)
+
+
+def _fix_name(g):
+    fx = (json.loads(_NAME_FIX_F.read_text("utf-8")).get("guests") or {}) if _NAME_FIX_F.exists() else {}
+    to = fx.get(g.get("slug"))
+    return {**g, "name": to} if to and to != g.get("name") else g
 
 
 _EXTRA = []   # einmal je Bau berechnet; load() gibt Kopien heraus
