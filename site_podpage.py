@@ -63,7 +63,8 @@ def load(name):
     return []
 
 
-_EXTRA = {}
+_EXTRA = []   # einmal je Bau berechnet; load() gibt Kopien heraus
+_SLUGS_F = D / "episode_slugs.json"   # Spreaker-ID -> Slug, damit eine Titelaenderung die URL nicht verschiebt (der Seitenbau speichert die Datei)
 
 
 def _slugify(t, n=80):
@@ -72,15 +73,21 @@ def _slugify(t, n=80):
 
 
 def spreaker_extra(podpage):
-    """T28: Folgen der Hauptshow, die Spreaker kennt (data/en_episodes.json, Show Notes in data/show_notes/en.json), die
-    Podpage-Sicherung (Stand 30.10.) aber nicht. Nur Folgen, die nach der juengsten Podpage-Folge erschienen sind: aeltere
-    ohne Zuordnung sind meist Titelvarianten vorhandener Folgen und wuerden sonst doppelte Seiten erzeugen. Ergebnis hat
-    dieselben Felder wie ein Podpage-Datensatz (null, wo Spreaker nichts liefert), Slug aus dem Titel, eindeutig."""
-    key = id(podpage)
-    if key in _EXTRA: return _EXTRA[key]
-    out = _EXTRA[key] = []
+    """T28: Folgen der Hauptshow, die Spreaker kennt (data/en_episodes.json), die Podpage-Sicherung (Stand 30.10.) aber nicht.
+    Aufgenommen wird eine Folge nur, wenn (1) sie nach der juengsten Podpage-Folge erschienen ist - aeltere ohne Zuordnung
+    sind meist Titelvarianten und waeren doppelt - und (2) ihre Show Notes schon in data/show_notes/en.json stehen (taeglicher
+    Abgleich); vorher gaebe es nur eine duenne Seite. Je Spreaker-ID genau ein Datensatz. Der Slug kommt beim ersten Mal aus dem
+    Titel und bleibt danach fest (data/episode_slugs.json). show_notes bleibt leer: die Seite rendert die Show Notes aus
+    data/show_notes (Markup mit {{link|...}}), Uebersetzungen bekommen kein rohes Markup."""
+    if not _EXTRA and podpage:
+        _EXTRA.append(_build_extra(podpage))
+    return [dict(e) for e in (_EXTRA[0] if _EXTRA else [])]
+
+
+def _build_extra(podpage):
+    out = []
     sn_f, en_f = D / "show_notes" / "en.json", D / "en_episodes.json"
-    if not podpage or not (sn_f.exists() and en_f.exists()): return out
+    if not (sn_f.exists() and en_f.exists()): return out
     from email.utils import parsedate_to_datetime
     def ts(x):
         try: return datetime.fromisoformat(str(x)).timestamp()
@@ -88,29 +95,39 @@ def spreaker_extra(podpage):
     newest = max(ts(e.get("published")) or ts(e.get("create_time")) for e in podpage)
     known = {spreaker_id(e) for e in podpage} - {""}
     slugs = {e["slug"] for e in podpage}
+    stored = json.loads(_SLUGS_F.read_text("utf-8")) if _SLUGS_F.exists() else {}
     tmpl = {k: None for k in podpage[0]}   # wie in der Podpage-Sicherung: fehlende Werte sind null
     sn = json.loads(sn_f.read_text("utf-8")).get("episodes") or {}
     by_id = {str(r.get("id")): r for r in (sn.values() if isinstance(sn, dict) else sn) if isinstance(r, dict) and r.get("id")}
-    for v in json.loads(en_f.read_text("utf-8")).values():
+    cands = {}
+    for v in json.loads(en_f.read_text("utf-8")).values():   # je Spreaker-ID die juengste Fassung (Titelaenderung = neuer Schluessel)
         sid = str(v.get("spreaker_id") or "")
         if not sid.isdigit() or sid in known: continue
         try:
             pub = parsedate_to_datetime(v["pub"])
         except (KeyError, TypeError, ValueError):
             continue
-        if pub.timestamp() <= newest: continue
+        if pub.timestamp() > newest: cands[sid] = (pub, v)
+    for sid, (pub, v) in sorted(cands.items(), key=lambda kv: kv[1][0]):
         r = by_id.get(sid) or {}
+        if not str(r.get("markup") or "").strip(): continue   # Show Notes noch nicht abgeglichen: Seite kommt mit dem naechsten Abgleich
         title = str(r.get("title") or v.get("title") or "").strip()
         if not title: continue
-        slug = base = _slugify(title) or f"episode-{sid}"; n = 2
-        while slug in slugs: slug = f"{base}-{n}"; n += 1
-        slugs.add(slug)
+        slug = stored.get(sid)
+        if not slug or (slug in slugs):
+            slug = base = stored.get(sid) or _slugify(title) or f"episode-{sid}"; n = 2
+            while slug in slugs: slug = f"{base}-{n}"; n += 1
+        slugs.add(slug); stored[sid] = slug
         iso = pub.isoformat()
         e = dict(tmpl)
-        e.update({"id": f"sp{sid}", "slug": slug, "name": title, "create_time": iso, "update_time": iso, "published": iso, "show_notes": r.get("markup") or "",
-                  "summary": "", "image_path": r.get("image") if str(r.get("image") or "").startswith("https://") else None, "season": str(r["season"]) if r.get("season") else None,
+        first = re.sub(r"\{\{(?:link|img)\|[^|{}]*\|([^{}]*)\}\}", r"\1", str(r["markup"]).strip().split("\n\n")[0]).replace("*", "")
+        summ = plain(first)[:400].rsplit(" ", 1)[0] if len(plain(first)) > 400 else plain(first)   # Kurzfassung fuer Teaser und Uebersetzungen (translate_show)
+        e.update({"id": f"sp{sid}", "slug": slug, "name": title, "create_time": iso, "update_time": iso, "published": iso, "show_notes": "",
+                  "summary": summ, "image_path": r.get("image") if str(r.get("image") or "").startswith("https://") else None, "season": str(r["season"]) if r.get("season") else None,
                   "number": str(r["number"]) if r.get("number") else None, "hidden": "False", "trailer": "False", "featured": "False", "spreaker_id": sid, "source": "spreaker"})
         out.append(e)
+    if stored and stored != (json.loads(_SLUGS_F.read_text("utf-8")) if _SLUGS_F.exists() else {}):
+        _SLUGS_F.write_text(json.dumps(dict(sorted(stored.items())), ensure_ascii=False, indent=1) + "\n", "utf-8")
     return out
 
 

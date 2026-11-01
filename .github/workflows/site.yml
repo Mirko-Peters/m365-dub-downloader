@@ -155,9 +155,9 @@ jobs:
       - name: Money-Keywords und Profil-Export sichern
         continue-on-error: true
         run: |
-          if [ -n "$(git status --porcelain data/money_keywords.json data/members_export.json data/entity_mod.json)" ]; then
+          if [ -n "$(git status --porcelain data/money_keywords.json data/members_export.json data/entity_mod.json data/episode_slugs.json)" ]; then
             git config user.name "m365-site-bot"; git config user.email "actions@users.noreply.github.com"
-            git add data/money_keywords.json data/members_export.json data/entity_mod.json && git commit -m "Money-Keywords, Profil-Export und Entitaets-Aenderungsdaten aktualisiert"
+            git add data/money_keywords.json data/members_export.json data/entity_mod.json $( [ -e data/episode_slugs.json ] && echo data/episode_slugs.json ) && git commit -m "Money-Keywords, Profil-Export, Entitaets-Aenderungsdaten und Folgen-Slugs aktualisiert"
             (git pull --rebase --autostash -q -X theirs || git rebase --abort) && git push -q || true
           fi
       - name: Interne Links prüfen
