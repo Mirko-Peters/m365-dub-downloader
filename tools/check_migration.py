@@ -13,7 +13,7 @@ from urllib.parse import urljoin, urlparse
 ROOT = Path(__file__).resolve().parent.parent
 PD = ROOT / "data" / "podpage"
 UA = {"User-Agent": "m365fm-migration-check/1.0 (+https://www.m365.fm/)"}
-OWN_IMG = ("img.m365.fm", "www.m365.fm", "m365.fm", "d3wo5wojvuv7l.cloudfront.net")   # Spreaker-Folgenbilder bleiben vorerst auf CloudFront (CLAUDE.md)
+OWN_IMG = ("img.m365.fm", "www.m365.fm", "m365.fm", "api-dub.m365.fm", "d3wo5wojvuv7l.cloudfront.net")   # api-dub: eigene Community-API (Bilder-Proxy)   # Spreaker-Folgenbilder bleiben vorerst auf CloudFront (CLAUDE.md)
 SKIPP = {"episodes", "blog", "reviews", "podroll", "courses", "store", "videos", "guests", "people", "sponsors", "contact", "join", "leave_review", "rate",
          "guest_intake", "newsletter", "follow", "voicemail"}
 
@@ -126,6 +126,13 @@ def main():
     if dub and "www.m365.fm" in a.base:
         with ThreadPoolExecutor(6) as ex:
             dres = list(ex.map(lambda it: follow(a.base.replace("www.m365.fm", "dub.m365.fm"), it[1]), dub))
+        try:   # wer antwortet auf dub.m365.fm? Cloudflare (Worker aktiv) oder GitHub Pages (DNS-Eintrag nicht proxied)
+            with OPEN.open(urllib.request.Request(a.base.replace("www.m365.fm", "dub.m365.fm") + dub[0][1], headers=UA), timeout=30) as r: hdr = r.headers
+        except urllib.error.HTTPError as e:
+            hdr = e.headers
+        except Exception:
+            hdr = {}
+        dub_server = f"server={(hdr or {}).get('server', '?')}, cf-ray={'ja' if (hdr or {}).get('cf-ray') else 'nein'}"
         k = kinds.setdefault("dub-host", {"gesamt": 0, "ok": 0, "zwei_oder_mehr_301": 0, "ohne_301": 0, "fehler": 0})
         for r, it in zip(dres, dub):
             k["gesamt"] += 1
@@ -133,13 +140,14 @@ def main():
             elif r["hops"] > 1: k["zwei_oder_mehr_301"] += 1
             else: k["ok"] += 1
             if r["status"] != 200 or r["hops"] > 1: fails.append({"art": "dub-host", "pfad": r["path"], "kette": r["chain"], "ziel": urlparse(r["final"]).path})
-    rep = {"generated": time.strftime("%Y-%m-%dT%H:%MZ", time.gmtime()), "base": a.base, "seconds": round(time.time() - t0), "kinds": kinds,
+    rep = {"generated": time.strftime("%Y-%m-%dT%H:%MZ", time.gmtime()), "base": a.base, "seconds": round(time.time() - t0), "kinds": kinds, "dub_server": locals().get("dub_server", ""),
            "failures": fails, "sample": det, "sample_ok": sum(1 for d in det if not d["issues"])}
     out = Path(a.out); out.parent.mkdir(parents=True, exist_ok=True)
     out.with_suffix(".json").write_text(json.dumps(rep, ensure_ascii=False, indent=1) + "\n", "utf-8")
     L = [f"# Prüfbericht Podpage-Migration ({rep['generated']})", "", f"Geprüft gegen {a.base}: {len(items)} frühere Adressen in {rep['seconds']} s.", "",
          "| Art | gesamt | genau eine 301 auf 200 | 200 ohne 301 | mehrere 301 | Fehler |", "|---|---|---|---|---|---|"]
     for k, v in kinds.items(): L.append(f"| {k} | {v['gesamt']} | {v['ok']} | {v['ohne_301']} | {v['zwei_oder_mehr_301']} | {v['fehler']} |")
+    if rep["dub_server"]: L += ["", f"Antwort auf dub.m365.fm: {rep['dub_server']}"]
     L += ["", f"Stichprobe Blog: {rep['sample_ok']} von {len(det)} Beiträgen ohne Befund.", ""]
     if any(d["issues"] for d in det):
         L += ["| alter Pfad | Ziel | Befund |", "|---|---|---|"] + [f"| {d['path']} | {d['final']} | {'; '.join(d['issues'])} |" for d in det if d["issues"]]

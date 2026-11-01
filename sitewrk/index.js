@@ -18,7 +18,7 @@ async function redirectMap() {
 // T8: nur Pfade, die alte Podpage-Adressen sein koennen, fragen die Weiterleitungstabelle ab (keine Dateien, keine Assets);
 // unter /show nur die frueheren Blog-Adressen /show/blog/... (dort liegen sonst nur Meta-Refresh-Seiten).
 const MAPPABLE = (p) => p !== "/" && !/\.[a-z0-9]{2,5}$/i.test(p) && !/^\/(assets|og|covers|fonts|\.well-known)(\/|$)/i.test(p)
-  && (!p.startsWith("/show") || p === "/show/blog" || p.startsWith("/show/blog/")) && !p.startsWith("/shows");
+  && (!/^\/shows?(\/|$)/.test(p) || p === "/show/blog" || p.startsWith("/show/blog/"));   // nur /show und /shows selbst ausnehmen, nicht Slugs wie /showback-…
 async function legacyTarget(p0) {
   if (!MAPPABLE(p0)) return "";
   const map = await redirectMap();
