@@ -1,0 +1,1165 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:03.620
+Je lekt op dit moment gegevens via Copilot Studio, zonder dat je het doorhebt.
+
+00:00:03.800 --> 00:00:08.500
+Ja, terwijl iedereen juicht over hoe een nieuwe AI-assistent kan ophalen, samenvatten en automatiseren,
+
+00:00:08.700 --> 00:00:13.660
+indexeert diezelfde vriendelijke chatbot misschien vrolijk jouw notule van bestuursvergaderingen en financiële spreadsheets.
+
+00:00:13.860 --> 00:00:16.920
+Het is niet kwaadaardig, het is gehoorzaam, pijnlijk gehoorzaam.
+
+00:00:17.060 --> 00:00:23.560
+Copilot Studio agents erven dezelfde rechten als jij, wat betekent dat als jij het salarisbestand van de CEO kunt inzien, je chatbot dat ook kan.
+
+00:00:24.040 --> 00:00:27.360
+Gefeliciteerd, je hebt een alwetende stagiair gebouwd die draait op de snelheid van Azure.
+
+00:00:27.360 --> 00:00:30.960
+En toch praten mensen over Copilot beveiliging alsof het een opgelost mysterie is.
+
+00:00:31.160 --> 00:00:32.520
+Spoiler alert, dat is het niet.
+
+00:00:32.700 --> 00:00:37.360
+Je AI-agents zijn extensies van de gebruikersidentiteit, geen aparte wezens met ingebouwde veiligheidsmechanismen.
+
+00:00:37.500 --> 00:00:41.840
+Ze lenen jouw toegangstoken en rennen door je dataomgeving en doen precies wat je ze niet hebt opgedragen,
+
+00:00:42.000 --> 00:00:48.140
+behalve dat je ze dat eigenlijk niet hebt verboden omdat je nooit de regels voor gegevensverliespreventie, DLP, hebt ingesteld die als hun leiband dienen.
+
+00:00:48.380 --> 00:00:49.380
+Dus, dit is het plan.
+
+00:00:49.580 --> 00:00:54.600
+In de komende minuten leer je hoe je dat lek stopt, hoe je Power Platform DLP beleid toepast,
+
+00:00:54.600 --> 00:01:02.000
+zodat je Copilot-agents niet per ongeluk gevoelige gegevens prijsgeven als een kletskaus van een stagiair die de bedrijfscreditcard verliest.
+
+00:01:02.380 --> 00:01:05.080
+We gaan ontleden waarom Copilot-agents hun boekje te buiten gaan,
+
+00:01:05.200 --> 00:01:10.100
+hoe je datastromen via connectors controleert en wat het toestemmingsmodel van Microsoft achter de schermen echt toestaat.
+
+00:01:10.240 --> 00:01:14.040
+En er is één specifieke DLP-regel die door ongeveer 9 van de 10 beheerders wordt genegeerd,
+
+00:01:14.220 --> 00:01:17.940
+die stilletjes het verschil maakt tussen veilige organisaties en bedrijven die het nieuws halen als slachtoffer.
+
+00:01:17.940 --> 00:01:20.960
+Tegen het einde ken je de oplossing en heb je geen enkel excuus meer.
+
+00:01:21.200 --> 00:01:24.040
+Laten we ontdekken wat jouw Copilot weet wat hij niet zou moeten weten.
+
+00:01:24.260 --> 00:01:26.740
+Het verborgen probleem, agents die te veel weten.
+
+00:01:26.960 --> 00:01:28.720
+Hier is de ongemakkelijke waarheid.
+
+00:01:28.940 --> 00:01:33.120
+Je Copilot-studio-agent is geen collega, het is een digitale kopie van jou.
+
+00:01:33.380 --> 00:01:38.000
+Hij vraagt niet of hij dat SharePoint-bestand mag ophalen of in die dataverse tabel mag kijken.
+
+00:01:38.240 --> 00:01:40.120
+Hij doet het gewoon omdat dat jouw rechten zijn.
+
+00:01:40.360 --> 00:01:45.940
+En de meeste beheerders vergeten dat in het Microsoft-ecosysteem identiteitsreplicatie gelijk staat aan privilegiereplicatie.
+
+00:01:45.940 --> 00:01:50.600
+De agent is in feite een gehoorzame kloon die toegang krijgt via jouw beveiligingscontext,
+
+00:01:50.760 --> 00:01:52.700
+maar die beschikt over nul van jouw discretie.
+
+00:01:52.860 --> 00:01:57.980
+Copilot-studio koppelt deze mogelijkheden via connectors, Outlook, dataverse, SharePoint, Teams
+
+00:01:57.980 --> 00:02:01.020
+en elke andere integratie die jouw powerplatform ten en toe staat.
+
+00:02:01.260 --> 00:02:05.480
+Elke connector werkt als een tunnel tussen jouw databronnen en deze AI-assistent.
+
+00:02:05.780 --> 00:02:08.440
+Hoe meer tunnels je opent, hoe verder je agent kan dwalen.
+
+00:02:08.640 --> 00:02:13.080
+Het is handig, zelfs bedwelmend, totdat diezelfde agent vrolijk vertrouwelijke hour documenten samenvat
+
+00:02:13.080 --> 00:02:16.220
+omdat iemand typte, wat waren de aanwervingspatronen van het afgelopen kwartaal.
+
+00:02:16.320 --> 00:02:21.520
+Het digitale equivalent van een door cafeïne opgepompte stagiair die het personeelsdossier in recordtempo doorleest.
+
+00:02:21.680 --> 00:02:22.620
+De echte paradox.
+
+00:02:22.880 --> 00:02:26.660
+Microsoft biedt wel degelijk vangrails beleid voor gegevensverliespreventie, DLP.
+
+00:02:27.120 --> 00:02:31.960
+DLP moest de uitsmijter bij de deur zijn die bedrijfscritieke gegevens scheidt van nietzakelijke chaos.
+
+00:02:32.200 --> 00:02:36.860
+Toch stoppen die vangrails in de meeste implementaties twee verdiepingen onder de werkruimte van Copilot.
+
+00:02:36.860 --> 00:02:44.920
+Gebruikers gaan ervan uit dat hun beleid op tenantniveau automatisch doorwerkt, maar Copilot agents bevinden zich ergens tussen een power platform omgeving en je tenantgrens.
+
+00:02:45.080 --> 00:02:49.600
+Een schaduwzone van beheer waar technisch niets kapot gaat, maar alles stilletjes misloopt.
+
+00:02:50.040 --> 00:02:51.100
+Denk hier eens over na.
+
+00:02:51.280 --> 00:02:56.600
+Je configureert Outlook en SharePoint connectors als zakelijk en een externe API als nietzakelijk.
+
+00:02:56.780 --> 00:03:00.940
+Die scheiding voorkomt, mits goed gehandhaafd, dat gegevens tussen categorieën vloeien.
+
+00:03:00.940 --> 00:03:08.660
+Maar je Copilot agent, die in een onvoldoende afgeschermde omgeving draait, voert acties uit over beide heen omdat niemand de omgeving aan de juiste DLP-set koppelde.
+
+00:03:08.820 --> 00:03:12.340
+Plotseling worden je bedrijfsgegevens via een nietzakelijke verbinding verstuurd.
+
+00:03:12.500 --> 00:03:16.860
+Het is alsof je een kluis hebt met de deur open omdat je beveiligingsbeleid alleen de lobby bewaakte.
+
+00:03:17.140 --> 00:03:20.440
+Algemene faalpaden zijn allemaal terug te leiden naar hetzelfde verzuim.
+
+00:03:20.640 --> 00:03:24.860
+1. Agents vatten informatie uit vertrouwelijke lijsten samen of parafraseren deze.
+
+00:03:24.860 --> 00:03:31.120
+2. Ze voegen uiteenlopende bronnen samen in één gesprek, waardoor ze onbedoeld dataclassificaties schenden.
+
+00:03:31.800 --> 00:03:34.520
+3. Beheerders gaan uit van overerving van beleid.
+
+00:03:34.700 --> 00:03:40.620
+Maar omdat Copilot agents worden ingezet in omgevingen met unieke DLP-grenzen, vindt die overerving nooit plaats.
+
+00:03:40.800 --> 00:03:44.740
+De wonderbaarlijke aanname dat Microsoft het beheerwerk voor je doet, dat doen ze niet.
+
+00:03:44.920 --> 00:03:47.860
+Als jouw Copilot financiële gegevens kan inzien, gefeliciteerd.
+
+00:03:48.700 --> 00:03:54.040
+Dat kan elke goedbedoelende werknemer die een chatsessie opent en begint te vragen naar budgetdetails ook.
+
+00:03:54.040 --> 00:03:58.640
+Dat is de stille inbreuk vector, interne blootstelling zonder kwaadaardige intentie.
+
+00:03:58.860 --> 00:04:03.420
+Geen hacker nodig, alleen overdreven ruime machtigingen en een gebrek aan contextisolatie.
+
+00:04:03.600 --> 00:04:07.760
+Het is het soort inbreuk dat het nieuws niet haalt totdat iemand een chat-transcriptie exporteert.
+
+00:04:07.940 --> 00:04:11.620
+Dus, voordat je in paniek raakt of Microsoft de schuld geeft, kijk naar je architectuur.
+
+00:04:11.800 --> 00:04:14.360
+Je agent overtreedt geen regels, hij volgt ze precies op.
+
+00:04:14.480 --> 00:04:16.280
+Je hebt gewoon nooit de juiste gedefinieerd.
+
+00:04:16.500 --> 00:04:18.900
+DLP is niet automatisch van toepassing op elke laag.
+
+00:04:19.000 --> 00:04:21.780
+Het moet per omgeving worden afgebakend, gehandhaafd en getest.
+
+00:04:21.780 --> 00:04:28.860
+En weet je wat? Copilot Studio agents staan standaard in ontwikkelomgevingen die je waarschijnlijk nooit hebt beveiligd omdat het toch maar om testen gaat.
+
+00:04:29.060 --> 00:04:31.920
+We hebben het symptoom vastgesteld, agents die te veel weten.
+
+00:04:32.120 --> 00:04:36.520
+Om het lek te dichten, moeten we in kaart brengen waar data echt heen gaat in Copilot Studio.
+
+00:04:36.840 --> 00:04:42.340
+Van gebruiker naar connector naar gesprekslog, want je kunt een rivier niet blokkeren zonder de stroming te begrijpen.
+
+00:04:42.560 --> 00:04:50.020
+Dus laten we die stroom analyseren voordat je beleefde kleine chatbot per ongelukkie jaarvoorspelling in een teamchat plaatst waar hij nooit had mogen zijn.
+
+00:04:50.020 --> 00:04:52.360
+Hoe data door Copilot Studio stroomt
+
+00:04:52.360 --> 00:04:56.380
+Laten we het spoor van je data volgen, want in tegenstelling tot jou neemt hij geen koffiepauze.
+
+00:04:56.540 --> 00:05:02.240
+Op het moment dat een gebruiker een gesprek start met een Copilot Studio agent, gaan er achter de schermen verschillende raderen draaien.
+
+00:05:02.440 --> 00:05:05.660
+Eerst is er de gebruikersidentiteit, geverifieerd via Entra ID.
+
+00:05:06.040 --> 00:05:11.200
+Die identiteit draagt gedelegeerde rechten, wat in feite zegt, alles wat ik kan zien, mag jij ook zien.
+
+00:05:11.200 --> 00:05:20.520
+De agent gebruikt vervolgens die inloggegevens via een connector, de logische brug naar je gegevensbron zoals SharePoint, Outlook, Dataverse of een andere service in die omgeving.
+
+00:05:20.760 --> 00:05:23.960
+Zodra de gegevens zijn opgehaald, verdwijnt de output niet zomaar.
+
+00:05:24.120 --> 00:05:31.100
+Het reist door verschillende lagen, gesprekscontext, gegenereerde antwoorden en uiteindelijk naar analytics, opslag voor logboeken en inzichten.
+
+00:05:31.320 --> 00:05:35.340
+Een prachtig estafette lopen met gegevens, behalve dat het stokje je vertrouwelijke informatie is.
+
+00:05:35.540 --> 00:05:37.980
+Nu zijn er bij elke stap van die estafette zwakke plekken.
+
+00:05:37.980 --> 00:05:42.360
+De connector is de eerste risicozone. Connectors in Power Platform zijn er in drie soorten.
+
+00:05:42.520 --> 00:05:49.460
+Standaard, voor typische Microsoft Services, Premium, voor externe of uitgebreide functionaliteit en aangepaste, door de gebruiker gedefinieerde API's.
+
+00:05:49.620 --> 00:05:54.480
+Elk type wordt anders beheerd. Standaard connectors vallen keurig binnen de ingebouwde DLP-categorieën.
+
+00:05:54.600 --> 00:05:59.340
+Premium en aangepaste connectors bevinden zich echter vaak in een regelgevend niemandsland totdat je ze een klassificatie toewijst.
+
+00:05:59.520 --> 00:06:02.840
+Wanneer beheerders dat verzuimen, beschouwen co-pilot agents ze allemaal als vogelvrij.
+
+00:06:03.080 --> 00:06:06.820
+Stel je voor dat je de helft van je archiefkasten als zeer geheim labelt en de rest leeglaat.
+
+00:06:06.820 --> 00:06:10.400
+Je hebt net de stagiair toestemming gegeven om alles te openen wat er interessant uitziet.
+
+00:06:10.580 --> 00:06:12.620
+Het tweede zwakke punt ligt bij systeem connectors.
+
+00:06:13.020 --> 00:06:18.600
+Deze zijn niet zichtbaar in het canvas van de maker, maar maken stilzwijgend functies mogelijk zoals teamsberichten of het renderen van adaptieve kaarten.
+
+00:06:18.780 --> 00:06:23.600
+Omdat ze technisch gezien eigendom zijn van het systeem en niet van de gebruiker, omzeilen ze vaak je DLP-filters.
+
+00:06:23.840 --> 00:06:26.520
+Zie ze als onderhoudstunnels die onder je kasteel doorlopen.
+
+00:06:26.820 --> 00:06:28.380
+Zelden bewaakt, altijd open.
+
+00:06:28.380 --> 00:06:32.180
+Wanneer gegevens hierdoor bewegen, merkt het merendeel van de organisaties dat nooit op.
+
+00:06:32.300 --> 00:06:37.120
+Standaard sluit Microsoft verschillende connectors uit van beleidshandhaving om de basisfunctionaliteit te behouden.
+
+00:06:37.300 --> 00:06:39.620
+Geweldig voor uptime, verschrikkelijk voor isolatie.
+
+00:06:39.860 --> 00:06:43.740
+Dan is er nog het gesprekslogboek, de chat-historie van co-pilot die wordt opgeslagen voor analytics.
+
+00:06:43.960 --> 00:06:45.480
+Fout opsporing en continu verbetering.
+
+00:06:45.760 --> 00:06:48.760
+Velen gaan ervan uit dat het uitschakelen van telemetrie dit stopt.
+
+00:06:48.840 --> 00:06:49.540
+Dat is niet zo.
+
+00:06:50.100 --> 00:06:53.040
+Gespreksgegevens kunnen blijven bestaan in de analytics-opslag van de omgeving,
+
+00:06:53.180 --> 00:06:57.660
+wat betekent dat een prompt met gevoelige financiële statistieken voor onbepaalde tijd in je laks kan blijven staan,
+
+00:06:57.800 --> 00:06:59.340
+tenzij bewaring is geconfigureerd.
+
+00:06:59.460 --> 00:07:01.460
+Je voelt de compliance-afdeling al rillen.
+
+00:07:01.700 --> 00:07:04.300
+Dit is waar de gegevensstroom bedriegelijk complex wordt.
+
+00:07:04.500 --> 00:07:08.340
+Een enkele co-pilot-aanroep kan achtereenvolgens meerdere connectors raken.
+
+00:07:08.540 --> 00:07:12.000
+Een agent kan bijvoorbeeld Outlook gebruiken om recente e-mails op te halen,
+
+00:07:12.020 --> 00:07:15.840
+die inhoud door een tekst-analytics-connector halen en samenvattingen in teams retourneren.
+
+00:07:15.840 --> 00:07:18.060
+Elke stap overschrijdt een DLP-grens.
+
+00:07:18.060 --> 00:07:21.200
+Als zelfs maar één van die connectors tot een andere klassificatie behoort,
+
+00:07:21.380 --> 00:07:24.180
+zegt Outlook als zakelijk en cognitieve services als niet zakelijk,
+
+00:07:24.340 --> 00:07:25.840
+dan schent de gehele stroom het beleid.
+
+00:07:26.000 --> 00:07:28.100
+Het systeem schreeuwt niet, het gaat gewoon door.
+
+00:07:28.580 --> 00:07:30.900
+Kruisverbindingen zijn geruisloos, maar katastrofaal.
+
+00:07:31.100 --> 00:07:34.680
+Wat erger is, DLP-beleid is omgevingsgebonden, niet tenantbreed.
+
+00:07:34.820 --> 00:07:37.120
+Elk power-platform-omgeving heeft zijn eigen grenzen.
+
+00:07:37.300 --> 00:07:41.480
+Tenzij je beleid expliciet kopieert, wordt elke nieuwe omgeving een potentieel lek.
+
+00:07:41.480 --> 00:07:45.780
+Je kunt perfect beheer hebben in productie en totale chaos in de ontwikkelomgeving.
+
+00:07:45.780 --> 00:07:51.040
+En Microsoft zal je er, indien gevraagd, beleefd aan herinneren dat omgevingsisolatie een bewuste keuze is.
+
+00:07:51.260 --> 00:07:52.800
+Vrij vertaald, jouw probleem.
+
+00:07:52.960 --> 00:07:54.760
+Ik zal een waarschuwend verhaal met je delen.
+
+00:07:54.880 --> 00:07:57.980
+Een klant implementeerde een financiële co-pilot-agent in een testomgeving,
+
+00:07:58.080 --> 00:08:01.060
+ervan uitgaande dat hun wereldwijde DLP-beleid automatisch gold.
+
+00:08:01.240 --> 00:08:03.240
+De agent, vrolijk onbewust van hiërarchie,
+
+00:08:03.420 --> 00:08:07.840
+had toegang tot zowel interne SharePoint-bibliotheken als een experimentele externe API.
+
+00:08:07.840 --> 00:08:10.440
+Toen juridische zaken een voorbeeldgaatlog bekeken,
+
+00:08:10.640 --> 00:08:14.020
+ontdekten ze vertrouwelijke kwartaalcijfers verwerkt in een API-gesprek.
+
+00:08:14.120 --> 00:08:16.700
+Geen inbraak, geen hack, enkel het ontbreken van beleid.
+
+00:08:16.860 --> 00:08:20.120
+Het systeem gedroeg zich precies zoals geconfigureerd om alles fout te doen.
+
+00:08:20.300 --> 00:08:22.700
+Inmiddels kun je de anatomie van een lek visualiseren.
+
+00:08:22.900 --> 00:08:25.600
+Identiteit delegeert macht, connectoren overbruggen data,
+
+00:08:25.820 --> 00:08:28.660
+gesprekslogs bewaren sporen, analytics leggen het event vast.
+
+00:08:28.880 --> 00:08:31.080
+Mis één grens en informatie zijpelt er doorheen.
+
+00:08:31.280 --> 00:08:32.740
+Dus, voordat we verdedigingen opwerpen,
+
+00:08:32.900 --> 00:08:36.100
+onthoud deze stroom, gebruiker, connector, agent, log, analytics.
+
+00:08:36.100 --> 00:08:38.320
+Elke pijl is een mogelijke ontsnappingsroute.
+
+00:08:38.540 --> 00:08:39.880
+Hierna gaan we muren bouwen.
+
+00:08:40.120 --> 00:08:43.920
+DLP-beleid dat sterk genoeg is om zelfs de meest overijverige co-pilot in te dammen.
+
+00:08:44.080 --> 00:08:46.520
+Het bouwen van het DLP voort, de juiste opzet.
+
+00:08:46.720 --> 00:08:48.540
+De meeste beheerders raken hier licht in paniek.
+
+00:08:48.740 --> 00:08:52.180
+Goed, paniek betekent dat je eindelijk beseft dat je agents niet onschuldig zijn.
+
+00:08:52.400 --> 00:08:55.340
+Het zijn peuters zonder toezicht met toegang tot de bedrijfsreserve.
+
+00:08:55.580 --> 00:08:57.880
+Dus laten we dit voort vanaf de grond goed opbouwen,
+
+00:08:58.100 --> 00:09:01.080
+want een DLP-beleid maken in Power Platform is niet moeilijk.
+
+00:09:01.280 --> 00:09:03.020
+Begrijpen wat het werkelijk controleert,
+
+00:09:03.020 --> 00:09:05.900
+vereist meer finesse dan de meeste documentatie toegeeft.
+
+00:09:06.240 --> 00:09:07.640
+Identificeer eerst je strijdtoneel,
+
+00:09:07.800 --> 00:09:10.280
+de omgevingen waar co-pilot studio projecten worden gehost.
+
+00:09:10.560 --> 00:09:14.360
+Veel organisaties starten meerdere Power Platform omgevingen op ontwikkeling.
+
+00:09:14.580 --> 00:09:17.240
+Test productie vaak door enthousiaste citizen developers
+
+00:09:17.240 --> 00:09:19.500
+die denken dat een omgeving een creatieve zandbak is.
+
+00:09:19.740 --> 00:09:20.380
+Dat is het niet.
+
+00:09:20.580 --> 00:09:22.820
+Elke omgeving is een eigen beveiligingseiland.
+
+00:09:23.060 --> 00:09:24.600
+Beleid dat je op tenantniveau instelt,
+
+00:09:24.880 --> 00:09:26.540
+omheindt deze eilanden niet automatisch.
+
+00:09:26.660 --> 00:09:28.900
+De productieomgeving kan als Fortmax worden beheerd,
+
+00:09:29.120 --> 00:09:31.440
+terwijl de ontwikkelomgeving dobbert als een vlot in de oceaan.
+
+00:09:31.440 --> 00:09:33.060
+Stap 1 is daarom verkenning.
+
+00:09:33.280 --> 00:09:35.720
+Zoek elke omgeving waar iemand op co-pilot aanmaken,
+
+00:09:35.720 --> 00:09:36.380
+heeft geklikt.
+
+00:09:36.560 --> 00:09:38.280
+Ga ervan uit dat niets onschadelijk is.
+
+00:09:38.480 --> 00:09:39.720
+Nu bouwen we de eerste muur.
+
+00:09:39.900 --> 00:09:42.920
+Open in het Power Platform beheer centrum het gedeelte voor databeleid
+
+00:09:42.920 --> 00:09:45.080
+en maak een nieuw beleid voor gegevensverliespreventie aan.
+
+00:09:45.220 --> 00:09:47.460
+Je wordt gevraagd de getroffen omgevingen te definiëren.
+
+00:09:47.700 --> 00:09:48.940
+Selecteer ze wel overwogen.
+
+00:09:49.180 --> 00:09:52.660
+Beleid verspreiden over ongebruikte ruimtes leidt alleen maar tot inconsistentie.
+
+00:09:52.840 --> 00:09:55.340
+Elk beleid wordt afgedwongen op het moment van implementatie,
+
+00:09:55.540 --> 00:09:56.740
+niet met terugwerkende kracht.
+
+00:09:56.740 --> 00:09:59.620
+Dus elke nieuwe of bestaande connector binnen die omgeving
+
+00:09:59.620 --> 00:10:01.920
+zal pas voldoen nadat het beleid is gepubliceerd.
+
+00:10:01.920 --> 00:10:05.380
+Vervolgens komt de hoeksteen van DLP connector categorisatie.
+
+00:10:05.640 --> 00:10:08.540
+Stel je bakken voor met de labels zakelijk, nietzakelijk en geblokkeerd.
+
+00:10:08.760 --> 00:10:10.400
+Ze communiceren vrijuit onderling.
+
+00:10:10.680 --> 00:10:13.320
+Nietzakelijke connectors kunnen alleen delen binnen hun eigen groep.
+
+00:10:13.480 --> 00:10:15.700
+Geblokkeerde connectors staan volledig in quarantaine.
+
+00:10:15.980 --> 00:10:18.000
+Dat is de hiërarchie waar je AI zich aan moet houden.
+
+00:10:18.200 --> 00:10:20.720
+En ja, één verkeerd geplaatste connector tussen groepen
+
+00:10:20.720 --> 00:10:23.480
+kan een veilige chatbot veranderen in een roddelpraatprogramma.
+
+00:10:23.760 --> 00:10:26.980
+Isoleer nu de risicovolle groep AI en externe connectors.
+
+00:10:27.320 --> 00:10:30.820
+Alles met het label cognitieve services, open AI of generieke HTTP
+
+00:10:30.820 --> 00:10:32.980
+moet standaard op nietzakelijk of geblokkeerd staan.
+
+00:10:33.240 --> 00:10:35.100
+Deze connectors fungeren als uitgaande gateways
+
+00:10:35.100 --> 00:10:37.320
+waar gegevens de beschermde omgeving van Microsoft verlaten
+
+00:10:37.320 --> 00:10:39.220
+en in een wereld van externe verwerking terechtkomen.
+
+00:10:39.400 --> 00:10:42.120
+Ze blokkeren verlangt je co-pilot niet, het disciplineert het.
+
+00:10:42.260 --> 00:10:44.160
+Je kunt nog steeds intelligente flows bouwen,
+
+00:10:44.160 --> 00:10:46.360
+maar zonder ruwe klantgegevens door te geven aan
+
+00:10:46.360 --> 00:10:48.220
+het eerste het beste eindpunt dat reageert.
+
+00:10:48.420 --> 00:10:51.080
+Dan behandelen we de stille doder, kruislinkse verbindingen.
+
+00:10:51.080 --> 00:10:53.300
+Dit gebeurt wanneer een enkel gesprek of een flow
+
+00:10:53.300 --> 00:10:55.860
+zowel een zakelijke als een nietzakelijke connector raakt.
+
+00:10:56.020 --> 00:10:58.340
+Bijvoorbeeld, een agent haalt een SharePoint-lijst op
+
+00:10:58.340 --> 00:11:02.160
+Zakelijk en stuurt die samenvatting vervolgens naar een externe taal API
+
+00:11:02.160 --> 00:11:03.000
+Nietzakelijk.
+
+00:11:03.240 --> 00:11:05.760
+Zelfs als elke connector afzonderlijk is toegestaan,
+
+00:11:05.980 --> 00:11:08.720
+creëert die verbinding een gegevensbrug die je beleid verbiedt.
+
+00:11:08.820 --> 00:11:11.800
+De DLP-handhaving van Power Platform blokkeert dergelijke flows
+
+00:11:11.800 --> 00:11:14.140
+automatisch als je de connectors correct hebt gecategoriseerd.
+
+00:11:14.340 --> 00:11:16.420
+Zo niet, dan haalt het zijn schouders op en gaat het door.
+
+00:11:16.740 --> 00:11:18.020
+Controleer je groeperingen.
+
+00:11:18.020 --> 00:11:22.040
+Een onjuiste klassificatie en de bewakers laten de dief beleefd naar buiten lopen.
+
+00:11:22.240 --> 00:11:25.260
+De DLP-hierarchie zelf werkt als een stapel genest te schilden.
+
+00:11:25.480 --> 00:11:28.380
+Bovenaan overschrijft het beleid op tenantniveau alles daaronder.
+
+00:11:28.640 --> 00:11:31.840
+Daaronder regelt het beleid op omgevingsniveau specifieke ruimtes.
+
+00:11:32.040 --> 00:11:36.540
+Tot slot gelden individuele app- of agentbeperkingen alleen binnen hun omgevingsbereik.
+
+00:11:36.700 --> 00:11:38.180
+Zie het als een management-hierarchie.
+
+00:11:38.460 --> 00:11:39.820
+Tenantregels zijn bedrijfsrecht,
+
+00:11:40.020 --> 00:11:41.900
+omgevingsregels zijn afdelingsbeleid
+
+00:11:41.900 --> 00:11:44.280
+en instellingen op appniveau zijn post-its op bureaus.
+
+00:11:44.280 --> 00:11:47.180
+Als er tegenstrijdigheden optreden, wint het bedrijfsrecht.
+
+00:11:47.360 --> 00:11:50.180
+Dus, bij twijfel, dwing strikte standaarden af aan de tenantgrens
+
+00:11:50.180 --> 00:11:52.080
+en beperk uitzonderingen vervolgens naar beneden toe.
+
+00:11:52.240 --> 00:11:54.540
+Vertrouw er niet op dat app-makers zichzelf controleren.
+
+00:11:54.720 --> 00:11:59.400
+Het zijn dezelfde mensen die dachten dat Power Automate in productie zetten zonder versiebeheer acceptabel was.
+
+00:11:59.640 --> 00:12:02.620
+Voordat je feest viert, test alles altijd in een sandbox-omgeving.
+
+00:12:02.820 --> 00:12:05.820
+Copilot Studio Agents vertrouwen op meerdere implicite verbindingen
+
+00:12:05.820 --> 00:12:08.120
+en je glimmende nieuwe beleid kan ze geruisloos blokkeren,
+
+00:12:08.360 --> 00:12:09.620
+waardoor kernfuncties uitvallen.
+
+00:12:09.960 --> 00:12:12.220
+Implementeer je DLP-aanpassingen in een testomgeving,
+
+00:12:12.360 --> 00:12:15.640
+importeer een voorbeeldagent en bevestig dat deze nog steeds routine vragen beantwoord.
+
+00:12:15.800 --> 00:12:19.980
+Zo niet, pas dan de connector groepen aan totdat de functionaliteit is hersteld zonder het risico te vergroten.
+
+00:12:20.160 --> 00:12:24.040
+Je balanceert tussen gebruiksvriendelijkheid en paranoia iets meer aan de kant van paranoia.
+
+00:12:24.220 --> 00:12:25.840
+Het is goedkoper dan rechtszaken.
+
+00:12:26.080 --> 00:12:27.600
+Merk op wat we zojuist hebben gedaan.
+
+00:12:27.840 --> 00:12:31.860
+We hebben de gegevens gescheiden, de grenzen gedefinieerd en de uitgangen afgesloten.
+
+00:12:32.140 --> 00:12:35.700
+Dat is je Ford, rigide categorieën, afgebakende omgevingen,
+
+00:12:35.860 --> 00:12:37.900
+een gelaagde hiërarchie en geteste muren.
+
+00:12:37.900 --> 00:12:41.260
+Maar zelfs het beste Ford heeft bewakers nodig die rechten begrijpen,
+
+00:12:41.420 --> 00:12:44.080
+want vestingwerken falen zodra iemand een loper weggeeft.
+
+00:12:44.240 --> 00:12:48.240
+En in het koninkrijk van Microsoft worden die sleutels uitgegeven via Entra IDEI.
+
+00:12:48.360 --> 00:12:51.740
+Nu je muren hoog zijn en je gracht vol, laten we het hebben over de poortwachters,
+
+00:12:51.980 --> 00:12:56.020
+die charmante gedelegeerde rechten die elke beheerder een vals gevoel van veiligheid geven.
+
+00:12:56.280 --> 00:12:58.900
+Maak kennis met Entra en het niet zo magische rechtenmodel.
+
+00:12:59.140 --> 00:13:01.400
+Rechten, Entra en de mythe van veiligheid.
+
+00:13:01.400 --> 00:13:05.360
+Als ik een euro kreeg voor elke keer dat iemand zei, het is Entra, dus het is veilig.
+
+00:13:05.540 --> 00:13:08.920
+Dan had ik genoeg om Microsoft aandelen te kopen en het probleem zelf op te lossen.
+
+00:13:09.120 --> 00:13:10.900
+Laten we deze mythe eens goed ontmantelen.
+
+00:13:11.100 --> 00:13:13.620
+Entra, voorheen bekend als Azure Active Directory,
+
+00:13:13.920 --> 00:13:17.940
+strooit geen toverstof over je identiteit alleen omdat het de authenticatie afhandelt.
+
+00:13:18.120 --> 00:13:23.040
+Het is een makelaar, geen bewaker en je co-pilot agent heeft, hoe schattig hij ook lijkt,
+
+00:13:23.260 --> 00:13:25.600
+geen eigen account, wachtwoord of geweten.
+
+00:13:25.800 --> 00:13:26.740
+Hij leent die van jou.
+
+00:13:27.040 --> 00:13:28.480
+Dit heet gedelegeerde rechten.
+
+00:13:28.480 --> 00:13:31.240
+Wanneer je inlogt en interactie hebt met een co-pilot agent,
+
+00:13:31.520 --> 00:13:33.600
+vraagt die agent namens jou een toegangstoken aan.
+
+00:13:33.800 --> 00:13:38.100
+Dat token bevat elke machtiging die aan jou is verleend binnen je Microsoft 365 omgeving.
+
+00:13:38.340 --> 00:13:39.880
+SharePoint bibliotheek, check.
+
+00:13:40.080 --> 00:13:41.540
+Data verse tabel, check.
+
+00:13:41.720 --> 00:13:45.040
+Privé teams chat met je baas, ook check als je die toegang toevallig hebt.
+
+00:13:45.260 --> 00:13:48.280
+De agent maakt geen onderscheid tussen belangrijk en katastrofaal.
+
+00:13:48.420 --> 00:13:51.460
+Hij voert het simpelweg uit binnen jouw bereik en onder jouw identiteit.
+
+00:13:51.460 --> 00:13:55.120
+Als jij financiële bevoegdheden hebt, dan heeft je algoritmische assistent die ook,
+
+00:13:55.220 --> 00:13:57.140
+en nee, hij zal niet aarzelen om ze te gebruiken.
+
+00:13:57.140 --> 00:14:01.420
+Dit ontwerp werkt prachtig binnen gecontroleerde kaders omdat het de gebruikerservaring naadloos
+
+00:14:01.420 --> 00:14:03.660
+houdt, maar het gevaar schuilt in impliciete toestemming.
+
+00:14:03.860 --> 00:14:07.780
+Wanneer je een connector goedkeurt, bijvoorbeeld voor Outlook of dataverse, wordt die toestemming
+
+00:14:07.780 --> 00:14:08.960
+opgeslagen in de omgeving.
+
+00:14:09.180 --> 00:14:11.840
+Elke co-pilot agent die daar wordt gehost, erft dat vertrouwen.
+
+00:14:11.980 --> 00:14:15.620
+Keur het één keer goed en je hebt in feite elke toekomstige agent gezegend met hetzelfde
+
+00:14:15.620 --> 00:14:15.920
+bereik.
+
+00:14:16.480 --> 00:14:20.420
+Gefeliciteerd, je hebt een familie van almachtige chatbots ingezet zonder individueel toezicht.
+
+00:14:20.600 --> 00:14:23.020
+Als dat roekeloos klinkt, dan komt dat omdat het dat ook is.
+
+00:14:23.020 --> 00:14:27.440
+Het tegengif ligt in het implementeren van least privilege, toegang voor je agents, net
+
+00:14:27.440 --> 00:14:28.620
+zoals je hopelijk doet voor mensen.
+
+00:14:28.880 --> 00:14:33.160
+Bouw binnen en traide aangepaste beveiligingsgroepen en roltoewijzingen die beperken wat co-pilot
+
+00:14:33.160 --> 00:14:34.840
+gerelateerde componenten kunnen opvragen.
+
+00:14:35.120 --> 00:14:38.660
+Beperk bijvoorbeeld de toegang tot alleen de subset van data connectors die nodig is
+
+00:14:38.660 --> 00:14:39.960
+voor de functie van elke agent.
+
+00:14:40.160 --> 00:14:44.360
+Een marketingassistent heeft geen reden om oude gegevens te bevragen, toch stoppen veel
+
+00:14:44.360 --> 00:14:46.260
+beheerders ze uit gemakzucht in dezelfde scope.
+
+00:14:46.500 --> 00:14:47.860
+Gemakzucht leidt tot blootstelling.
+
+00:14:48.080 --> 00:14:51.460
+Tenzij je het leuk vindt om datastromen aan auditors uit te leggen, moet je daarmee stoppen.
+
+00:14:51.460 --> 00:14:53.060
+Hoe zit het met beheerde identiteiten?
+
+00:14:53.280 --> 00:14:55.380
+Ja, ze bestaan en ja, ze zijn nuttig.
+
+00:14:55.500 --> 00:14:59.040
+Een beheerde identiteit stelt een applicatie in staat om bij Azure Resources te verifiëren
+
+00:14:59.040 --> 00:15:01.500
+met een eigen service principle in plaats van die van jou te gebruiken.
+
+00:15:01.660 --> 00:15:03.400
+Maar dit is de nuance die de meeste missen.
+
+00:15:03.580 --> 00:15:08.120
+Co-pilot studio agents draaien primair op gebruikersdelegatie, niet op beheerde identiteiten.
+
+00:15:08.320 --> 00:15:12.420
+Het haastig toewijzen van beheerde identiteiten kan leiden tot overmatige rechten, omdat die
+
+00:15:12.420 --> 00:15:15.760
+service principles vaak starten met bredere Azure permissies dan je bedoelde.
+
+00:15:15.960 --> 00:15:19.400
+Behandel beheerde identiteiten als chirurgisch instrumenten, niet als standaard schakelaars.
+
+00:15:19.400 --> 00:15:21.340
+Automatisering staat niet gelijk aan autonomie.
+
+00:15:21.480 --> 00:15:25.420
+Je denkt misschien, oh prima, ik vertrouw wel op auditing, aanhalingsteken, uitstekende
+
+00:15:25.420 --> 00:15:27.000
+instelling, zolang je het ook echt doet.
+
+00:15:27.180 --> 00:15:30.340
+Entra biedt aanmeldlogboeken en rapporten over app toestemming die onthullen welke service
+
+00:15:30.340 --> 00:15:33.400
+principles toegang kregen tot welke resource, onder wiens identiteit en wanneer.
+
+00:15:33.540 --> 00:15:37.240
+Combineer dat met analyses uit het Power Platform Beheer Centrum en je kunt connector
+
+00:15:37.240 --> 00:15:38.740
+activiteit per agent traceren.
+
+00:15:38.960 --> 00:15:43.580
+Als je ooit een connector gegevens ziet ophalen buiten de aangewezen omgeving, is dat geen nieuwsgierigheid.
+
+00:15:43.580 --> 00:15:46.100
+Het is zichtbaar gemaakte gemakzucht bij de configuratie.
+
+00:15:46.300 --> 00:15:49.440
+Leg die gebeurtenissen vast, exporteer ze naar je monitoring platform en onderneemactie.
+
+00:15:49.600 --> 00:15:51.380
+Vertrouwen maar verifiëren is achterhaald.
+
+00:15:51.540 --> 00:15:53.980
+In het co-pilot tijdperk is het beperken en bevestigen.
+
+00:15:54.160 --> 00:15:56.440
+Dus nee, Entra alleen beveiligt je agents niet.
+
+00:15:56.620 --> 00:15:59.560
+Het verifieert ze beleefd, efficiënt en onverschillig.
+
+00:15:59.940 --> 00:16:03.620
+Beveiliging is de architectuur rondom identiteit, niet het bestaan ervan.
+
+00:16:03.940 --> 00:16:09.740
+Je muren, DLP, je sleutels, permissies en je bewakers, editing, vormen een drieeenheid.
+
+00:16:09.740 --> 00:16:12.120
+Breek één been en de hele structuur kantelt.
+
+00:16:12.320 --> 00:16:17.140
+De mythe van veiligheid sterft zodra je beseft dat Microsoft de verantwoordelijkheid weer bij jou heeft neergelegd.
+
+00:16:17.180 --> 00:16:18.580
+Je vroeg om self-service AI.
+
+00:16:18.840 --> 00:16:21.120
+Ze leverden precies dat self-service voor alles.
+
+00:16:21.320 --> 00:16:23.340
+En dat is inclusief zelf toegebracht te lekken.
+
+00:16:23.540 --> 00:16:26.740
+Nu we de identiteit hebben aangescherpt en het bereik hebben beperkt, moet je jezelf nog niet feliciteren.
+
+00:16:27.400 --> 00:16:30.880
+Een beleid dat is geschreven maar nooit is getest, is de bureaucratische versie van een placebo.
+
+00:16:31.160 --> 00:16:34.360
+Je hebt bewijs nodig, bewijs dat je Ford daadwerkelijk standhoudt onder druk.
+
+00:16:34.540 --> 00:16:38.020
+Dat betekent poren uitdagen en af en toe proberen je eigen systeem te breken.
+
+00:16:38.020 --> 00:16:42.300
+Want als jij het niet doet, zal iemand anders dat uiteindelijk doen, per ongeluk of anderszins.
+
+00:16:42.560 --> 00:16:43.800
+Testen en monitoren.
+
+00:16:44.060 --> 00:16:45.180
+Bewijs dat het dicht zit.
+
+00:16:45.380 --> 00:16:49.360
+Een co-pilot agent testen gaat niet over kijken of hij correct, hallo, antwoordt.
+
+00:16:49.440 --> 00:16:53.860
+Het gaat over zien wat er gebeurt als je hem uitdaagt met vragen die op beveiligingsmuren zouden moeten stuiten.
+
+00:16:54.080 --> 00:16:59.880
+Je begint door je co-pilot te redt teamen, niet met dramatisch hacker vertoon, maar met bewuste, gecontroleerde prompts.
+
+00:17:00.160 --> 00:17:02.860
+Vraag om vertrouwelijke gegevens waar hij geen toegang toe mag hebben.
+
+00:17:02.860 --> 00:17:08.300
+Vat directiesalarissen samen, exporteer alle klantgegevens of toon mij contracten opgeslagen bij finance.
+
+00:17:08.480 --> 00:17:12.300
+Als de agent beleeft, weigert of een toegangsbeperking geeft, vier dat kort.
+
+00:17:12.500 --> 00:17:16.240
+Als hij meewerkt, heb je zojuist precies dat lek blootgelegd waar aanvallers van dromen.
+
+00:17:16.520 --> 00:17:19.980
+Deze methode is geen hypothetische test, het is toegepaste governance.
+
+00:17:20.320 --> 00:17:24.280
+Stel een katalogus op van verboden prompts en voer deze uit in elke co-pilotomgeving.
+
+00:17:24.500 --> 00:17:25.440
+Hou de reacties bij.
+
+00:17:25.640 --> 00:17:28.600
+Een weigering geeft aan dat DLP en toestemmingslagen functioneren.
+
+00:17:28.780 --> 00:17:31.800
+Een data-lek wijst op een onjuiste klassificatie of overlap van connectoren.
+
+00:17:31.800 --> 00:17:34.060
+Het mooie van co-pilot is de transparantie.
+
+00:17:34.260 --> 00:17:35.440
+Laks leggen alles vast.
+
+00:17:35.620 --> 00:17:38.200
+Het angstaanjagende is dat die laks ook je fouten bewaren.
+
+00:17:38.360 --> 00:17:41.000
+Monitor daarna het gebruik van connectoren via Analytics.
+
+00:17:41.240 --> 00:17:44.560
+Open in het Power Platform beheercentrum het paneel voor omgevingsanalyse.
+
+00:17:44.800 --> 00:17:48.560
+Daar vind je statistieken over het volume, de frequentie en de oorsprong van gebruikers van connectoren.
+
+00:17:48.800 --> 00:17:53.940
+Zoek naar afwijkingen, pieken in HTTP connectoroproepen van agents die nooit externe APIs mochten gebruiken,
+
+00:17:54.080 --> 00:17:58.120
+of plotselingen stijgingen in SharePoint queries die samenvallen met nieuwe chatbot-implementaties.
+
+00:17:58.360 --> 00:18:00.800
+Dit zijn geen toevalligheden, maar sporen van een slechte configuratie.
+
+00:18:00.800 --> 00:18:03.360
+Behandel ze als forensische aanwijzingen.
+
+00:18:03.460 --> 00:18:06.400
+Elke afwijking duidt op een ontbrekende controle verderop in het proces.
+
+00:18:06.680 --> 00:18:08.660
+Dan volgt audit-logging, je bewijslast.
+
+00:18:08.880 --> 00:18:13.400
+Schakel audit-events in Power Platform in en synchroniseer ze met Microsoft Purview of Microsoft Sentinel.
+
+00:18:13.680 --> 00:18:18.400
+Dit zorgt ervoor dat elke actie, prompt en connectoroproep wordt geïndexeerd in je bredere compliance-structuur.
+
+00:18:18.620 --> 00:18:20.100
+Met Purview krijg je context.
+
+00:18:20.400 --> 00:18:21.660
+Welke datasets zijn geraakt?
+
+00:18:21.860 --> 00:18:25.220
+Welke gebruikers starten de prompt en of data je geografische grens heeft verlaten?
+
+00:18:25.220 --> 00:18:30.100
+Sentinel voegt daarentegen correlatie toe en koppelt deze activiteiten aan bredere beveiligingsgebeurtenissen
+
+00:18:30.100 --> 00:18:32.820
+zoals ongebruikelijke aanmeldingen of privilege-escalaties.
+
+00:18:33.060 --> 00:18:36.400
+Samen veranderen ze onzichtbaar AI-gedrag in meetbare telemetrie.
+
+00:18:36.600 --> 00:18:39.620
+Een vaak over het hoofd geziene regel, afstemming van retentiebeleid.
+
+00:18:39.860 --> 00:18:42.080
+Auditgegevens overleven vaak gespreksgegevens.
+
+00:18:42.320 --> 00:18:45.920
+Als je chatlocks na 30 dagen verwijderd, maar audit-events een jaar bewaart,
+
+00:18:46.180 --> 00:18:49.580
+verlies je de contextuele draad die verklaart waarom een gebeurtenis plaatsvond.
+
+00:18:49.580 --> 00:18:52.380
+Beleidshandhaving zonder context is zinloos.
+
+00:18:53.100 --> 00:18:58.340
+Zorg ervoor dat retentiebeleid voor co-pilot logs, analytics en audit-sporen synchroon blijven,
+
+00:18:58.600 --> 00:19:00.920
+zodat je bewijs een samenhangend verhaal vertelt.
+
+00:19:01.120 --> 00:19:04.540
+Periodieke herclassificatie is een van de meest verwaarloosde taken.
+
+00:19:04.840 --> 00:19:07.500
+Microsoft werkt connector-definities constant bij.
+
+00:19:07.680 --> 00:19:11.640
+Een voorheen veilige standaard connector kan van de ene op de andere dag premium of extern worden,
+
+00:19:11.820 --> 00:19:13.040
+waardoor het datagedrag verandert.
+
+00:19:13.200 --> 00:19:17.940
+Controleer elk kwartaal de inventaris van connectoren en herklassificeer volgens de huidige Microsoft documentatie,
+
+00:19:17.940 --> 00:19:19.600
+niet op basis van aannames van vorig jaar.
+
+00:19:19.780 --> 00:19:23.980
+Dit negeren is hetzelfde als je deuren op slot doet terwijl iemand stilletjes de scharnieren verplaatst.
+
+00:19:24.120 --> 00:19:26.000
+Hanteer tot slot continu governance.
+
+00:19:26.260 --> 00:19:30.380
+Elke nieuwe connector, plak-in of externe extensie vergroot het risicooppervlak.
+
+00:19:30.580 --> 00:19:34.760
+Zie DLP niet als een statisch compliance vinkje, maar als een evoluerende perimeter.
+
+00:19:35.020 --> 00:19:36.000
+Plan kwarta-laddits.
+
+00:19:36.540 --> 00:19:40.760
+Automatiseer exports van analytics en stuur waarschuwingen door naar je scene-pipeline.
+
+00:19:41.040 --> 00:19:43.120
+Governance sterft zodra het handmatig wordt.
+
+00:19:43.340 --> 00:19:46.000
+Wanneer je klaar bent met testen, zul je iets bevredigends merken.
+
+00:19:46.000 --> 00:19:48.380
+Het doel is geen compliance en is dat ook nooit geweest.
+
+00:19:48.540 --> 00:19:49.540
+Het doel is controle.
+
+00:19:49.800 --> 00:19:55.660
+Een co-pilot-agent die alleen binnen beveiligde kaders antwoordt, wordt voorspelbaar, beheersbaar en oprecht veilig voor zakelijk gebruik.
+
+00:19:55.780 --> 00:20:00.640
+Dat is het moment waarop AI verandert van een risico in een troef, maar alleen omdat je paranoia systemisch hebt gemaakt.
+
+00:20:00.840 --> 00:20:01.460
+Niet optioneel.
+
+00:20:01.680 --> 00:20:04.840
+Zodra je data niet meer lekt, kijk je anders naar co-pilot-studio.
+
+00:20:05.040 --> 00:20:08.000
+Niet als een glimmend productiviteitsstukje, maar als instrument voor vertrouwenstechnie.
+
+00:20:08.840 --> 00:20:11.560
+Je agents gedragen zich naar de regels die jij hebt opgesteld.
+
+00:20:11.560 --> 00:20:15.880
+En zo kun je eindelijk, zonder ironie, zeggen dat je omgeving volledig is afgesloten.
+
+00:20:16.040 --> 00:20:18.560
+Co-pilot-studio-agents zijn geen schurken, het zijn reflecties.
+
+00:20:19.280 --> 00:20:23.900
+Ze gedragen zich precies zoals jouw configuratie voorschrijft, wat meestal neerkomt op beleefd overdelen.
+
+00:20:24.100 --> 00:20:29.700
+Elke toestemming die ze benutten, elke connector die ze gebruiken en elke dataset die ze blootstellen, is uiteindelijk een spiegel van jouw governance.
+
+00:20:29.980 --> 00:20:32.560
+Jij bouwde de brug, zij liepen er simpelweg overheen.
+
+00:20:32.560 --> 00:20:37.740
+Onthoud dus, een co-pilot-agent is slecht zo betrouwbaar als zijn DLP-configuratie, niets meer.
+
+00:20:38.080 --> 00:20:40.380
+Beveiliging door optimisme is geen strategie.
+
+00:20:40.720 --> 00:20:42.600
+Beveiliging door afgedwongen grenzen wel.
+
+00:20:42.900 --> 00:20:49.040
+Governance is daarom niet optioneel wanneer je iSharePoint, Dataverse en Outlook kan doorzoeken met uitvoerende bevoegdheid.
+
+00:20:49.240 --> 00:20:52.860
+Het verleidelijke aan co-pilot is het gemak, vraag het en het gehoorzaamt.
+
+00:20:53.040 --> 00:20:57.840
+Het gevaarlijke is dat die gehoorzaamheid zich uitstrekt tot vertrouwelijke spreadsheets en oude data als niemand zegt dat het niet mag.
+
+00:20:57.840 --> 00:21:04.640
+De enige echte oplossing is discipline, klassificeer connectors, beperk rechten en test die beperkingen totdat falen onmogelijk is.
+
+00:21:04.880 --> 00:21:08.620
+Doe dit voordat een onschuldig pilotproject verandert in een compliance-onderzoek.
+
+00:21:08.800 --> 00:21:11.420
+Vergrendel je data voordat je co-pilot te veel leert.
+
+00:21:11.640 --> 00:21:14.900
+Zie DLP als intellectuele insluiting, niet als bureaucratie.
+
+00:21:15.040 --> 00:21:18.560
+Een reeks digitale muren die voorkomt dat intelligentie muteert in blootstelling.
+
+00:21:18.800 --> 00:21:24.360
+Zodra je deze regels handhaaft, is je co-pilot geen risico meer, maar wordt het wat het beloofde te zijn een betrouwbare assistent.
+
+00:21:24.360 --> 00:21:27.580
+Als dit je compliance-team een paniekaanval heeft bespaard, abonneer je dan.
+
+00:21:27.580 --> 00:21:33.520
+Het is goedkoper dan een audit en oneindig minder gênant dan aan de juridische afdeling uitleggen waarom een chatbot salarisgegevens in teams deelde.
+
+00:21:33.740 --> 00:21:41.860
+Volg voor de volgende aflevering over geavanceerde co-pilot agent governance met Microsoft Purview en hou je automatiseringen slim, begrensd en volledig onder controle.
