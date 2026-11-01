@@ -1333,7 +1333,8 @@ def build():
     import site_blog as BLG
     import site_legacy_blog as LBL
     _posts = BLG.fetch_posts(COMMUNITY_API); _have = {(p["slug"], p.get("lang") or "en") for p in _posts if p["handle"] == "mirko-p"}
-    _posts += [p for p in LBL.items(BASE) if (p["slug"], p.get("lang") or "en") not in _have]   # T6: je Slug UND Sprache (die deutschen Fassungen blieben sonst beim D1-Import auf der Strecke); LBL.publish(write, BASE); MEM.BLOGLANGS = {p["lang"] for p in _posts}   # plus die frueheren Podpage-Blogbeitraege als Community-Beitraege von mirko-p
+    _posts += [p for p in LBL.items(BASE) if (p["slug"], p.get("lang") or "en") not in _have]   # plus die frueheren Podpage-Blogbeitraege als Community-Beitraege von mirko-p; T6: je Slug UND Sprache (die deutschen Fassungen blieben sonst beim D1-Import auf der Strecke)
+    LBL.publish(write, BASE); MEM.BLOGLANGS = {p["lang"] for p in _posts}   # stand seit T6 versehentlich im Kommentar: blog-import/ fuer den Worker und die Blog-Sprachen der Profile
     for _p in _posts:
         MEM.BLOGS.setdefault(_p["handle"], set()).add(_p["lang"])
         if _p["handle"] == "mirko-p" and _p.get("html") and _p["slug"] in LBL.TOPICS: _p["topics"] = LBL.TOPICS[_p["slug"]]   # Datenbank-Fassung: Themen beim Import eingefroren, hier die aktuelle Zuordnung
