@@ -26,4 +26,9 @@ jobs:
         if: inputs.apply == 'true'
         run: |
           git config user.name "github-actions"; git config user.email "actions@github.com"
-          git add data/r2_map.json && git commit -m "R2: Bildzuordnung" && git push || echo "nichts zu sichern"
+          git add data/r2_map.json
+          if git diff --cached --quiet; then echo "nichts zu sichern"; exit 0; fi
+          git commit -q -m "R2: Bildzuordnung"
+          # main bewegt sich oft (Bots): vor dem Push nachziehen und wiederholen; ein endgueltiger Fehlschlag faellt auf (kein || echo)
+          for i in 1 2 3 4 5; do git pull --rebase --autostash -q origin main && git push -q origin HEAD:main && exit 0; sleep $((i*5)); done
+          echo "::error::Zuordnung konnte nicht gesichert werden"; exit 1
