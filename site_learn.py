@@ -245,10 +245,18 @@ def gloss_links(lang, base):
 def wiki_block(lang, term_id, api, base, static, links=None):
     w = WT.get(lang, WT["en"])
     links = links or {}
-    cfg = json.dumps({"api": api, "term": term_id, "lang": lang, "t": w, "links": {k: v for k, v in links.items() if k != term_id}}, ensure_ascii=False).replace("</", "<\\/")
+    # Texte und die Liste aller verlinkbaren Begriffe (ca. 52 KB) liegen je Sprache in assets/wk-<sprache>.js (write_wk_js), nicht in jeder Seite.
+    cfg = json.dumps({"api": api, "term": term_id, "lang": lang}, ensure_ascii=False).replace("</", "<\\/")
     st = f'<div class="wk-static wk-body">{wiki_render(static["body"], links, w)[0]}</div>' if static else ""
     return (f'{WCSS}<section aria-labelledby="wk-h"><h2 id="wk-h">{esc(w["h"])}</h2><p class="mut">{esc(w["intro"])}</p><div id="c-wiki">{st}</div></section>'
-            f'<script>window.M365W={cfg}</script><script defer src="{base}/assets/wiki.js"></script>')
+            f'<script defer src="{base}/assets/wk-{lang}.js"></script><script>window.M365W={cfg}</script><script defer src="{base}/assets/wiki.js"></script>')
+
+
+def write_wk_js(write, lang, links):
+    """assets/wk-<sprache>.js: Oberflaechentexte des Wiki-Teils und alle verlinkbaren Begriffe (id -> [Name, URL]) einmal je Sprache."""
+    w = WT.get(lang, WT["en"])
+    write(f"assets/wk-{lang}.js", "window.M365WT=" + json.dumps(w, ensure_ascii=False, separators=(",", ":")).replace("</", "<\\/")
+          + ";window.M365WL=" + json.dumps(links, ensure_ascii=False, separators=(",", ":")).replace("</", "<\\/") + ";")
 
 
 def build_learn(ctx):
@@ -503,13 +511,4 @@ def gloss_link(html_, lang, base, max_links=8):
     return re.sub(r"<(p|li)>.*?</\1>", blk, html_, flags=re.S)
 
 
-GLOSS_JS = """<script>(function(){try{var L=[].slice.call(document.querySelectorAll("a.gl[data-gd]"));if(!L.length)return;
-var st=document.createElement("style");st.textContent=".glpop{position:absolute;z-index:60;max-width:22em;background:var(--card);color:var(--fg);border:1px solid var(--ac);border-radius:.6em;padding:.7em .9em;box-shadow:0 8px 24px rgba(0,0,0,.2);font-size:.92rem;line-height:1.45}.glpop b{display:block;margin-bottom:.2em}.glpop a{font-weight:700}a.gl{border-bottom:1px dotted var(--ac);text-decoration:none}";document.head.appendChild(st);
-var pop=document.createElement("div");pop.className="glpop";pop.id="glpop";pop.setAttribute("role","tooltip");pop.hidden=true;document.body.appendChild(pop);var cur=null,touch=matchMedia("(hover:none)").matches;
-function show(a){cur=a;pop.textContent="";var b=document.createElement("b");b.textContent=a.dataset.gt;pop.appendChild(b);var p=document.createElement("span");p.textContent=a.dataset.gd;if(a.dataset.gl)p.lang=a.dataset.gl;pop.appendChild(p);
-if(touch){var m=document.createElement("a");m.href=a.href;m.textContent=" →";m.setAttribute("aria-label",a.dataset.gt);pop.appendChild(m)}
-pop.hidden=false;a.setAttribute("aria-describedby","glpop");var r=a.getBoundingClientRect(),x=Math.max(8,Math.min(r.left+scrollX,scrollX+document.documentElement.clientWidth-pop.offsetWidth-8));pop.style.left=x+"px";pop.style.top=(r.bottom+scrollY+6)+"px"}
-function hide(){pop.hidden=true;if(cur)cur.removeAttribute("aria-describedby");cur=null}
-L.forEach(function(a){a.addEventListener("mouseenter",function(){if(!touch)show(a)});a.addEventListener("mouseleave",function(){setTimeout(function(){if(!pop.matches(":hover"))hide()},120)});a.addEventListener("focus",function(){show(a)});a.addEventListener("blur",function(){setTimeout(function(){if(!pop.contains(document.activeElement))hide()},120)});
-a.addEventListener("click",function(e){if(touch&&cur!==a){e.preventDefault();show(a)}})});
-pop.addEventListener("mouseleave",hide);document.addEventListener("keydown",function(e){if(e.key==="Escape")hide()});document.addEventListener("click",function(e){if(cur&&!pop.contains(e.target)&&e.target!==cur)hide()})}catch(e){}})();</script>"""
+GLOSS_JS = ""   # Glossar-Tooltips liegen in assets/page.js

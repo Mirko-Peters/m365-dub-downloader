@@ -6,7 +6,7 @@ import site_media as MED
 import json
 from site_i18n import COMM_LANGS, pfx, pfx2, overlay
 from pathlib import Path
-from site_learn import (ENTS, esc, ent_names, fetch_wiki, wiki_block, WCSS, LCSS, WT, GLOSS, GLOSS_JS)
+from site_learn import (ENTS, esc, ent_names, fetch_wiki, wiki_block, WCSS, LCSS, WT, GLOSS, GLOSS_JS, write_wk_js)
 
 TL = {"product": ("Product", "Produkt"), "platform": ("Platform", "Plattform"), "concept": ("Concept", "Konzept"), "org": ("Organization", "Organisation"), "person": ("Person", "Person"),
       "cert": ("Certification", "Zertifizierung"), "event": ("Event", "Veranstaltung"), "media": ("Media", "Medium"), "category": ("Category", "Kategorie")}
@@ -274,6 +274,7 @@ def build(g, wiki_links, experts_by_ent, ep_find):
     for lang in COMM_LANGS:
         s = S[lang]; li = 1 if lang == "de" else 0
         stat = fetch_wiki(api, lang)
+        write_wk_js(write, lang, wiki_links(lang))
         root = f"{BASE}{pfx(lang)}/entity/"
         rel = f"{pfx2(lang)}entity"
         # Index mit Typ-Filter
