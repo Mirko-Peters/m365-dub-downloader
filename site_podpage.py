@@ -2,12 +2,13 @@ import site_sidebar as SBR
 """Englische Show-Seite (Nachbau von www.m365.fm / Podpage) unter /show/: Folgen, Seiten, Hosts, Sponsoren, Reviews, Gaeste (als Personen-Entitaeten).
 Daten: data/podpage/*.json(.gz); Audio/Transkript aus data/en_episodes.json (fetch_en_episodes.py). Videos sind bewusst ausgeschlossen."""
 import site_notes as SNT
+import site_shownotes as SNS   # T26: Vollfassungen shownotes/site/<episode_id>.md
 import site_media as MED
 import gzip, json, re, html as _h
 from html.parser import HTMLParser
 from pathlib import Path
 from datetime import datetime
-from site_learn import esc
+from site_learn import esc, ENTS
 
 D = Path(__file__).parent / "data"
 PD = D / "podpage"
@@ -273,12 +274,19 @@ def build(g):
     NTL = {l: json.loads((I18 / f"notes_{l}.json").read_text("utf-8")) for l in LG if (I18 / f"notes_{l}.json").exists()}
     loc_url = lambda l, rel: f"{BASE}/{l}/show/{rel}"
     elinks = json.loads((D / "episode_links.json").read_text("utf-8")) if (D / "episode_links.json").exists() else {}   # Plattform-Abgleich (sync_platforms.py)
+    SNALL = SNS.load_all(); ENTS_ALL = ENTS
     for k, e in enumerate(eps):
         r, tr = tr_for(e)
         nrec = SNT.get("en", title=e["name"])   # Spreaker-Show-Notes (oder im Editor bearbeitete Fassung) statt Podpage-Sicherung
         nkp, nnotes, nfaq, nld = SNT.blocks(nrec, "en")
         if not nkp and not nfaq and e["slug"] in SECTIONS:   # fuer die Folge geschriebene Kernpunkte und FAQ (data/episode_sections), solange im Editor keine eigenen gepflegt sind
             _sc = SECTIONS[e["slug"]]; nkp, nfaq, _sld = SNT.sections(_sc.get("keypoints"), _sc.get("faq"), "en"); nld = list(nld) + _sld
+        _sid = (nrec or {}).get("id") or (r or {}).get("spreaker_id") or ""   # Spreaker-Folgen-ID: Show-Notes-Datensatz, sonst en_episodes.json
+        snx = SNALL.get(str(_sid)) if _sid else None   # T26: Vollfassung (Hook, Kapitel, Takeaways, Entitaeten mit Hover, FAQ) statt Podpage-Show-Notes
+        if snx:
+            _snh, _snld, _snfaq = SNS.render(snx, "en", ENTS_ALL, BASE)
+            nnotes, nld = _snh + f"<style>{SNS.CSS}</style>", [x for x in nld if x.get("@type") != "FAQPage"] + _snld
+            if _snfaq: nfaq = ""   # die FAQ der Vollfassung ersetzt aeltere FAQ-Bloecke (kein doppeltes FAQPage-Schema)
         prev_, next_ = (eps[k + 1] if k + 1 < len(eps) else None), (eps[k - 1] if k else None)
         aud = f'<audio controls preload="none" style="width:100%" src="{esc(r["audio"])}"></audio>' if r and r.get("audio") else ""
         elk = elinks.get(f"{nrec['id']}:en", {}) if nrec else {}
@@ -291,7 +299,7 @@ def build(g):
         gl = "".join(f'<li><a href="{root}guests/{gg["slug"]}/">{esc(gg["name"])}</a></li>' for gg in eg[e["slug"]])
         tx = f'<h2>Transcript</h2><details open><summary>Read the full transcript</summary><p style="white-space:pre-wrap;line-height:1.6">{esc(tr)}</p></details>' if len(tr) > 200 else ""
         body = (f'<article><p class="mut">{day(e["create_time"])}{" · Season " + str(e["season"]) if e.get("season") else ""}</p><h1>{esc(e["name"])}</h1>{aud}'
-                f'<div style="display:flex;gap:1rem;align-items:flex-start;margin:1em 0">{img_tag(thumb_of(e, nrec), e["name"], 160)}<div><strong>{esc(short_desc(e, nrec, 300))}</strong></div></div>{nkp}<div class="pp-notes">{(nnotes if nrec and nrec.get("markup") else san(e.get("show_notes")))}</div>{nfaq}{SNT.CSS if (nkp or nnotes or nfaq) else ""}'
+                f'<div style="display:flex;gap:1rem;align-items:flex-start;margin:1em 0">{img_tag(thumb_of(e, nrec), e["name"], 160)}<div><strong>{esc(short_desc(e, nrec, 300))}</strong></div></div>{nkp}<div class="pp-notes">{(nnotes if snx or (nrec and nrec.get("markup")) else san(e.get("show_notes")))}</div>{nfaq}{SNT.CSS if (nkp or nnotes or nfaq) else ""}'
                 + (f"<p>{ext}</p>" if ext else "") + (f'<p class="mut">Host: {hl}</p>' if hl else "") + (f"<h2>Guests</h2><ul>{gl}</ul>" if gl else "") + also
                 + (("<h2>Related articles</h2><ul>" + "".join(f'<li><a href="{bp_url(p)}">{esc(p["title"])}</a></li>' for p in related_posts(e["slug"])) + "</ul>") if related_posts(e["slug"]) else "") + tx + "</article>" + (g.get("author_box")("en") if g.get("author_box") else "")
                 + '<p style="display:flex;justify-content:space-between;gap:1em;margin-top:2em">' + (f'<a href="{ep_url(prev_)}">← {esc(prev_["name"][:60])}</a>' if prev_ else "<span></span>") + (f'<a href="{ep_url(next_)}">{esc(next_["name"][:60])} →</a>' if next_ else "") + "</p>")

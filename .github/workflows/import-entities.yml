@@ -1,0 +1,32 @@
+name: Entitäten aus Vorschlägen übernehmen (T26)
+# Vorschlaege unter imports/entities/<slug>.json mit status "approved" werden nach data/entities.json uebernommen
+# (tools/import_entities.py, nichts wird geloescht); der Commit unter data/ loest den Seitenbau aus, der Worker-Cron
+# importEntitiesFromSite nimmt neue Eintraege automatisch in die Datenbank.
+on:
+  push:
+    branches: [main]
+    paths: ["imports/entities/**"]
+  schedule:
+    - cron: "37 */3 * * *"
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: import-entities
+  cancel-in-progress: false
+jobs:
+  import:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.12" }
+      - name: Freigegebene Vorschläge übernehmen
+        run: python tools/import_entities.py
+      - name: Speichern
+        run: |
+          git config user.name "m365-site-bot"; git config user.email "actions@users.noreply.github.com"
+          git add -A data/entities.json imports/entities 2>/dev/null || true
+          if git diff --cached --quiet; then echo "Nichts zu speichern"; exit 0; fi
+          git commit -q -m "Entitäten aus freigegebenen Vorschlägen übernommen $(date -u +%Y-%m-%dT%H:%MZ)"
+          (git pull --rebase -q -X theirs || git rebase --abort) && git push -q
