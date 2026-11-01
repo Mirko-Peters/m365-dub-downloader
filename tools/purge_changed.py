@@ -43,7 +43,7 @@ if key and pages and old:
     for i in range(0, len(pages), 9000):
         body = json.dumps({"host": host, "key": key, "keyLocation": f"{base}/{key}.txt", "urlList": pages[i:i + 9000]}).encode()
         try:
-            with urllib.request.urlopen(urllib.request.Request("https://api.indexnow.org/indexnow", body, {"Content-Type": "application/json; charset=utf-8"}), timeout=60) as r: print("IndexNow:", r.status, len(pages[i:i + 9000]), "geaenderte Seiten gemeldet")
+            with urllib.request.urlopen(urllib.request.Request("https://api.indexnow.org/indexnow", body, {"Content-Type": "application/json; charset=utf-8", "User-Agent": "m365fm-site-build/1.0 (+https://www.m365.fm/)"}), timeout=60) as r: print("IndexNow:", r.status, len(pages[i:i + 9000]), "geaenderte Seiten gemeldet")
         except Exception as e: print("IndexNow-Fehler:", str(e)[:120])
 elif key and not old:
     print("IndexNow: erster Vergleich, keine Meldung (sonst alle Seiten)")

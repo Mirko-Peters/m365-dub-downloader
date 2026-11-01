@@ -480,6 +480,13 @@ def build(g):
     for x in guests: add(f"/guests/{x['slug']}", f"/show/guests/{x['slug']}/")
     for old, new in (("/episodes", "/show/episodes/"), ("/guests", "/show/guests/"), ("/hosts", "/show/hosts/"), ("/people", "/show/hosts/"), ("/sponsors", "/show/sponsors/"), ("/reviews", "/show/reviews/"), ("/podroll", "/show/listen/"), ("/videos", "/show/"), ("/blog", "/community/u/mirko-p/blog/" if bposts else "/show/")): rd.setdefault(old, new)
     for p in bposts: rd[f"/blog/{p['slug']}"] = f"/community/u/mirko-p/blog/{p['slug']}/"; rd[f"/show/blog/{p['slug']}"] = f"/community/u/mirko-p/blog/{p['slug']}/"
+    if bposts: rd["/show/blog"] = "/community/u/mirko-p/blog/"
+    # T8: weitere Podpage-Seiten ohne eigenen Inhalt (SKIPP), die in alten Beitraegen verlinkt sind
+    for old, new in (("/sponsor", "/show/sponsors/"), ("/follow", "/show/listen/"), ("/subscribe", "/show/listen/"), ("/contact", "/about/mirko-peters/"), ("/voicemail", "/about/mirko-peters/"),
+                     ("/guest_intake", "/about/mirko-peters/"), ("/join", "/community/"), ("/newsletter", "/community/"), ("/leave_review", "/show/reviews/"), ("/rate", "/show/reviews/"),
+                     ("/courses", "/glossary/"), ("/store", "/show/")):
+        rd.setdefault(old, new)
+    for e in eps: rd.setdefault(f"/videos/{e['slug']}", f"/show/episodes/{e['slug']}/")   # alte Video-Adressen mit Folgen-Slug direkt auf die Folge, der Rest auf /show/
     for old, new in gmerge.items():   # zusammengefuehrte Personen: alte Entitaets-Adressen (alle Sprachpfade) auf die eine Entitaet
         oid = old + "-guest" if old in baseids else old
         for pre in [""] + [f"/{l}" for l in LG]:

@@ -11,6 +11,25 @@ dom = (ROOT / "domain.txt").read_text().strip() if (ROOT / "domain.txt").exists(
 HOSTS = {dom} if dom else set()
 
 
+R2OUT = ROOT / "r2out"   # uebersetzte Seiten liegen im R2-Bucket (Paket 20), der Site-Worker liefert sie unter derselben Adresse aus
+_RD = DOCS / "show" / "redirects.json"
+REDIR = __import__("json").loads(_RD.read_text("utf-8")) if _RD.exists() else {}   # alte Podpage-Adressen -> Ziel (301 im Site-Worker)
+_LEP = re.compile(r"^/(de|es|fr|it|pt|nl|pl|id|ru|uk|ar|he|ja|ko)/show/episodes/([a-z0-9-]+)/?$")
+
+
+def _exists(path):
+    """Gibt es die Adresse so, wie der Site-Worker sie ausliefert? GitHub Pages, R2, Weiterleitungstabelle oder englisches Original."""
+    for base in (DOCS, R2OUT):
+        q = base / path.lstrip("/")
+        if (q / "index.html").exists() if (path.endswith("/") or q.is_dir()) else q.exists(): return True
+    p0 = path.rstrip("/") or "/"
+    to = REDIR.get(p0) or REDIR.get(p0.lower())
+    if to and to.rstrip("/") != p0: return _exists(to)
+    m = _LEP.match(path)
+    if m: return (DOCS / "show" / "episodes" / m.group(2) / "index.html").exists()
+    return False
+
+
 def target(href, cur):
     u = urlparse(href)
     if u.scheme in ("http", "https"):
@@ -37,6 +56,8 @@ for p in pages:
         if t is None:
             continue
         if not t.exists():
+            u = urlparse(m.group(1)); pth = unquote(u.path or rel) if u.scheme in ("http", "https", "") else ""
+            if pth and _exists(pth): continue   # per R2 oder 301 erreichbar
             broken.append((rel, m.group(1)))
         else:
             inbound[t] = inbound.get(t, 0) + 1
