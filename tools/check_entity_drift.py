@@ -11,8 +11,12 @@ OUT = ROOT / "reports" / "entity-drift"
 FIELDS = ("name", "type", "docs", "wikidata", "wikipedia", "web", "same_as", "aliases", "rel", "image", "job", "desc.en", "desc.de")
 
 
+sys.path.insert(0, str(ROOT))
+import site_r2 as R2   # der Seitenbau schreibt Bild-URLs auf img.m365.fm um (auch in entities-src.json) - das ist keine Abweichung
+
+
 def canon(v):
-    return json.dumps(v, ensure_ascii=False, sort_keys=True) if v not in (None, "", [], {}) else ""
+    return R2.rewrite(json.dumps(v, ensure_ascii=False, sort_keys=True)) if v not in (None, "", [], {}) else ""
 
 
 def get(e, f):
