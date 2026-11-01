@@ -1,0 +1,176 @@
+{
+  "episode_id": "75858649",
+  "slug": "mqtt-and-opc-ua-manufacturing",
+  "title": "MQTT and OPC UA in Microsoft Manufacturing: Azure IoT Operations + Fabric Architecture",
+  "lang": "en",
+  "duration_s": 6977,
+  "transcript_source": "data/en_transcripts/adfe57dad174.txt",
+  "time_basis": "estimated",
+  "entities": [
+    {
+      "slug": "azure",
+      "name": "Microsoft Azure",
+      "type": "platform",
+      "score": 75,
+      "mentions": 22,
+      "first_mention_s": 3,
+      "quote": "You already have ERP, MES, Azure, and machines generating data every second.",
+      "url": "https://www.m365.fm/entity/azure/"
+    },
+    {
+      "slug": "fabric",
+      "name": "Microsoft Fabric",
+      "type": "platform",
+      "score": 65,
+      "mentions": 14,
+      "first_mention_s": 38,
+      "quote": "Azure IoT operations and Microsoft Fabric can bridge those layers, but they don't create meaning on their own.",
+      "url": "https://www.m365.fm/entity/fabric/"
+    },
+    {
+      "slug": "azure-event-hubs",
+      "name": "Azure Event Hubs",
+      "type": "product",
+      "score": 35,
+      "mentions": 2,
+      "first_mention_s": 6489,
+      "quote": "Other streams may fit Azure EventHubs or Kafka compatible paths when other cloud consumers need durable ingestion",
+      "url": "https://www.m365.fm/entity/azure-event-hubs/"
+    },
+    {
+      "slug": "power-bi",
+      "name": "Power BI",
+      "type": "product",
+      "score": 15,
+      "mentions": 1,
+      "first_mention_s": 1259,
+      "quote": "A Power BI model can rename columns.",
+      "url": "https://www.m365.fm/entity/power-bi/"
+    },
+    {
+      "slug": "excel",
+      "name": "Microsoft Excel",
+      "type": "product",
+      "score": 10,
+      "mentions": 1,
+      "first_mention_s": 1399,
+      "quote": "One dashboard uses an Excel mapping table for state codes.",
+      "url": "https://www.m365.fm/entity/excel/"
+    }
+  ],
+  "new_entities": [
+    {
+      "slug": "mqtt",
+      "name": "MQTT",
+      "type": "concept"
+    },
+    {
+      "slug": "opc-ua",
+      "name": "OPC UA",
+      "type": "concept"
+    },
+    {
+      "slug": "azure-iot-operations",
+      "name": "Azure IoT Operations",
+      "type": "product"
+    },
+    {
+      "slug": "sparkplug-b",
+      "name": "Sparkplug B",
+      "type": "concept"
+    }
+  ],
+  "quotes": [
+    {
+      "text": "Asking whether MQTT or OPC UA is better is like asking whether TCP or JSON is better. TCP moves information between systems. JSON gives the content a shape that software can read.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 575,
+      "entities": [
+        "mqtt",
+        "opc-ua"
+      ],
+      "why": "A clear analogy that dissolves the MQTT versus OPC UA debate into transport versus meaning."
+    },
+    {
+      "text": "Put those together without care, and you can generate a very precise chart of an event sequence that never happened.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 343,
+      "entities": [],
+      "why": "Pointedly shows why mismatched timestamps and counters undermine dashboards."
+    },
+    {
+      "text": "A broker delivering a message doesn't prove a business process completed. It proves transport reached the agreed stage.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 1099,
+      "entities": [
+        "mqtt"
+      ],
+      "why": "Separates message delivery from business acknowledgement in industrial workflows."
+    },
+    {
+      "text": "A broker can distribute data widely without exposing it widely. Those are not the same thing.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 2490,
+      "entities": [
+        "mqtt"
+      ],
+      "why": "Concise argument for narrow topic permissions and per-client identities."
+    },
+    {
+      "text": "Installing an MQTT broker does not create a useful namespace and publishing every tag from every PLC does not create a useful namespace either. It creates a large amount of reachable data which is not the same as a shared operating model.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 2811,
+      "entities": [
+        "mqtt"
+      ],
+      "why": "Cuts through the hype around the unified namespace pattern."
+    }
+  ],
+  "chapters": [
+    {
+      "start_s": 0,
+      "title": "The plant with data nobody can trust"
+    },
+    {
+      "start_s": 383,
+      "title": "Transport versus meaning: MQTT and OPC UA"
+    },
+    {
+      "start_s": 1846,
+      "title": "Why OPC UA client-server hits a scaling limit"
+    },
+    {
+      "start_s": 2529,
+      "title": "Unified namespace and ISA-95"
+    },
+    {
+      "start_s": 3254,
+      "title": "Topic design, payload contracts and Sparkplug B"
+    },
+    {
+      "start_s": 4721,
+      "title": "The edge where OT and IT meet"
+    },
+    {
+      "start_s": 5102,
+      "title": "Azure IoT Operations, MQTT broker and data flows"
+    },
+    {
+      "start_s": 6560,
+      "title": "Asset context and Azure Device Registry"
+    }
+  ],
+  "takeaways": [
+    "MQTT and OPC UA solve different problems: MQTT distributes events through a broker, while OPC UA gives machine data structure, types and context at the source.",
+    "Governed topic rules, versioned payload contracts with units, source timestamps and quality status, and a stable asset identity matter more than the protocol choice.",
+    "Azure IoT Operations provides an edge layer with a local MQTT broker, OPC UA connectors and data flows, but it needs Kubernetes operations, clear ownership and deliberate offline design."
+  ],
+  "hook": "Plants with ERP, MES, Azure and connected machines still argue about whose numbers are right. This episode is for manufacturing, OT and integration architects choosing how MQTT, OPC UA, Azure IoT Operations and Microsoft Fabric fit together. It shows how to separate transport from meaning and design topics, payloads and edge boundaries that survive a second factory.",
+  "youtube_video_id": null,
+  "generated_at": "2026-11-01T08:32:12+00:00"
+}
