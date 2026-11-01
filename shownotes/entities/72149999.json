@@ -1,0 +1,228 @@
+{
+  "episode_id": "72149999",
+  "slug": null,
+  "title": "M365 Backup Isn't Enough: The Case for Isolated Vault Architecture",
+  "lang": "en",
+  "duration_s": 1094,
+  "transcript_source": "data/en_transcripts/28fd160beccc.txt",
+  "time_basis": "estimated",
+  "entities": [
+    {
+      "slug": "zero-trust",
+      "name": "Zero Trust",
+      "type": "concept",
+      "score": 65,
+      "mentions": 2,
+      "first_mention_s": 943,
+      "quote": "The zero trust identity perimeter",
+      "url": "https://www.m365.fm/entity/zero-trust/"
+    },
+    {
+      "slug": "audit-logs",
+      "name": "Audit logs",
+      "type": "concept",
+      "score": 45,
+      "mentions": 1,
+      "first_mention_s": 569,
+      "quote": "they lack a tamper-proof audit trail that exists outside the production loop",
+      "url": "https://www.m365.fm/entity/audit-logs/"
+    },
+    {
+      "slug": "mfa",
+      "name": "Multifactor authentication (MFA)",
+      "type": "concept",
+      "score": 35,
+      "mentions": 1,
+      "first_mention_s": 341,
+      "quote": "It lives outside of your MFA requirements",
+      "url": "https://www.m365.fm/entity/mfa/"
+    },
+    {
+      "slug": "microsoft-365",
+      "name": "Microsoft 365",
+      "type": "platform",
+      "score": 85,
+      "mentions": 11,
+      "first_mention_s": 0,
+      "quote": "Why your M365 business continuity plan fails without isolated backup vault architecture",
+      "url": "https://www.m365.fm/entity/microsoft-365/"
+    },
+    {
+      "slug": "entra-id",
+      "name": "Microsoft Entra ID",
+      "type": "product",
+      "score": 80,
+      "mentions": 4,
+      "first_mention_s": 267,
+      "quote": "your entire organization hangs by a single thread called Microsoft EntraID",
+      "url": "https://www.m365.fm/entity/entra-id/"
+    },
+    {
+      "slug": "graph",
+      "name": "Microsoft Graph",
+      "type": "product",
+      "score": 60,
+      "mentions": 2,
+      "first_mention_s": 149,
+      "quote": "By using the Microsoft Graph API, an automated attack can purge version histories",
+      "url": "https://www.m365.fm/entity/graph/"
+    },
+    {
+      "slug": "sharepoint",
+      "name": "SharePoint",
+      "type": "product",
+      "score": 40,
+      "mentions": 1,
+      "first_mention_s": 166,
+      "quote": "the script has already incinerated the recovery points for your most critical sharepoint sites",
+      "url": "https://www.m365.fm/entity/sharepoint/"
+    },
+    {
+      "slug": "onedrive",
+      "name": "OneDrive",
+      "type": "product",
+      "score": 35,
+      "mentions": 1,
+      "first_mention_s": 170,
+      "quote": "It moves through your one-drive folders like a wildfire",
+      "url": "https://www.m365.fm/entity/onedrive/"
+    },
+    {
+      "slug": "purview",
+      "name": "Microsoft Purview",
+      "type": "product",
+      "score": 30,
+      "mentions": 1,
+      "first_mention_s": 471,
+      "quote": "They provide the pervure tools, but they are not your d3p",
+      "url": "https://www.m365.fm/entity/purview/"
+    },
+    {
+      "slug": "azure",
+      "name": "Microsoft Azure",
+      "type": "platform",
+      "score": 30,
+      "mentions": 2,
+      "first_mention_s": 690,
+      "quote": "that two petabyte footprint carries a price tag of $300,000 per year in Azure Charges alone",
+      "url": "https://www.m365.fm/entity/azure/"
+    }
+  ],
+  "new_entities": [
+    {
+      "slug": "ransomware",
+      "name": "Ransomware",
+      "type": "concept"
+    },
+    {
+      "slug": "immutable-backup",
+      "name": "Immutable backup",
+      "type": "concept"
+    },
+    {
+      "slug": "sec-rule-17a-4",
+      "name": "SEC Rule 17a-4",
+      "type": "concept"
+    },
+    {
+      "slug": "managed-identity",
+      "name": "Managed identity",
+      "type": "concept"
+    }
+  ],
+  "quotes": [
+    {
+      "text": "If you are using a backup solution that authenticates against your production tenant, you don't have a backup. You have a mirror.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 279,
+      "entities": [
+        "entra-id",
+        "immutable-backup"
+      ],
+      "why": "Condenses the episode's core argument that a backup sharing the production identity is no real backup."
+    },
+    {
+      "text": "Most admins think version history is a vault. They think it's a separate copy of the data. It isn't. Versioning is just a file attribute.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 122,
+      "entities": [
+        "microsoft-365",
+        "ransomware"
+      ],
+      "why": "Corrects a widespread misconception about native Microsoft 365 versioning as a recovery mechanism."
+    },
+    {
+      "text": "Logical separation is impossible within a single trust boundary. If the same root identity can see the production data and the recovery data, the isolation is a lie.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 386,
+      "entities": [
+        "entra-id",
+        "immutable-backup"
+      ],
+      "why": "States the architectural principle behind isolated backup tenants in one clear rule."
+    },
+    {
+      "text": "High availability is about fluid, constant change. Immutability is about frozen, unchangeable truth. Trying to use one to achieve the other is a category error.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 599,
+      "entities": [
+        "immutable-backup",
+        "sec-rule-17a-4"
+      ],
+      "why": "Clearly separates high availability from immutable storage, a distinction auditors care about."
+    },
+    {
+      "text": "You aren't just watching for failed logins. You're watching for successful logins that don't make sense.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 1054,
+      "entities": [
+        "zero-trust",
+        "managed-identity"
+      ],
+      "why": "A practical monitoring rule for protecting backup identities from token abuse."
+    }
+  ],
+  "chapters": [
+    {
+      "start_s": 0,
+      "title": "Why native M365 redundancy fails"
+    },
+    {
+      "start_s": 79,
+      "title": "Instant corruption and the sync trap"
+    },
+    {
+      "start_s": 258,
+      "title": "The single identity trap"
+    },
+    {
+      "start_s": 435,
+      "title": "Regulatory and legal liability gap"
+    },
+    {
+      "start_s": 619,
+      "title": "TCO of native versus isolated backup"
+    },
+    {
+      "start_s": 751,
+      "title": "Architecting the isolated backup vault"
+    },
+    {
+      "start_s": 943,
+      "title": "The zero trust identity perimeter"
+    }
+  ],
+  "takeaways": [
+    "Native Microsoft 365 versioning and geo-redundancy protect against hardware failure, not against ransomware that abuses legitimate APIs and privileged roles.",
+    "A backup that authenticates against the production Entra ID tenant shares its blast radius; true isolation needs a separate recovery tenant with immutable WORM storage and multi-party approval.",
+    "Regulations such as SEC Rule 17a-4, NIS2 and DORA, plus the storage costs of native backup, make an isolated third-party vault both a compliance and an economic decision."
+  ],
+  "hook": "Many IT leaders trust Microsoft 365's native versioning and redundancy to save them from ransomware, but synchronized corruption and a shared identity perimeter can wipe out production and backups together. This episode is for architects, security and compliance leads who own business continuity. You will learn how to design an isolated, immutable backup vault with its own identity boundary, and why it can also cost less.",
+  "youtube_video_id": null,
+  "generated_at": "2026-11-01T18:26:59+00:00"
+}
