@@ -1,0 +1,188 @@
+{
+  "episode_id": "71910026",
+  "slug": "why-your-microservices-are-turning-the-cloud-toxic",
+  "title": "Why Your Microservices Are Turning the Cloud Toxic",
+  "lang": "en",
+  "duration_s": 1251,
+  "transcript_source": "data/en_transcripts/97c371d1097b.txt",
+  "time_basis": "estimated",
+  "entities": [
+    {
+      "slug": "mirko-peters",
+      "name": "Mirko Peters",
+      "type": "person",
+      "score": 50,
+      "mentions": 2,
+      "first_mention_s": 1088,
+      "quote": "follow me, Mercopedas, on LinkedIn",
+      "url": "https://www.m365.fm/entity/mirko-peters/"
+    },
+    {
+      "slug": "circuit-breaker-pattern",
+      "name": "Circuit breaker pattern",
+      "type": "concept",
+      "score": 90,
+      "mentions": 15,
+      "first_mention_s": 658,
+      "quote": "Circuit breakers stop panic before it spreads.",
+      "url": "https://www.m365.fm/entity/circuit-breaker-pattern/"
+    },
+    {
+      "slug": "bulkhead-pattern",
+      "name": "Bulkhead pattern",
+      "type": "concept",
+      "score": 88,
+      "mentions": 5,
+      "first_mention_s": 437,
+      "quote": "bulkhead isolation changes the system model.",
+      "url": "https://www.m365.fm/entity/bulkhead-pattern/"
+    },
+    {
+      "slug": "retry-pattern",
+      "name": "Retry pattern",
+      "type": "concept",
+      "score": 85,
+      "mentions": 18,
+      "first_mention_s": 26,
+      "quote": "it eventually triggers a wave of retries.",
+      "url": "https://www.m365.fm/entity/retry-pattern/"
+    },
+    {
+      "slug": "microservices",
+      "name": "Microservices",
+      "type": "concept",
+      "score": 80,
+      "mentions": 2,
+      "first_mention_s": 21,
+      "quote": "In a .NET microservice chain, delay spreads fast.",
+      "url": "https://www.m365.fm/entity/microservices/"
+    },
+    {
+      "slug": "dotnet",
+      "name": ".NET",
+      "type": "platform",
+      "score": 70,
+      "mentions": 5,
+      "first_mention_s": 21,
+      "quote": "In a .NET microservice chain, delay spreads fast.",
+      "url": "https://www.m365.fm/entity/dotnet/"
+    },
+    {
+      "slug": "idempotency",
+      "name": "Idempotency",
+      "type": "concept",
+      "score": 40,
+      "mentions": 1,
+      "first_mention_s": 378,
+      "quote": "Short-bounded retries with jitter on idempotent operations are usually fine.",
+      "url": "https://www.m365.fm/entity/idempotency/"
+    }
+  ],
+  "new_entities": [
+    {
+      "slug": "bulkhead-pattern",
+      "name": "Bulkhead pattern",
+      "type": "concept",
+      "mentions": 5,
+      "first_mention_s": 437,
+      "quote": "bulkhead isolation changes the system model.",
+      "status": "review"
+    },
+    {
+      "slug": "retry-pattern",
+      "name": "Retry pattern",
+      "type": "concept",
+      "mentions": 18,
+      "first_mention_s": 26,
+      "quote": "it eventually triggers a wave of retries.",
+      "status": "review"
+    }
+  ],
+  "quotes": [
+    {
+      "text": "A hard failure gets rejected immediately, but a slow failure gets admitted into the system and then multiplied across the entire path.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 138,
+      "entities": [
+        "microservices"
+      ],
+      "why": "Explains concisely why slowness is more dangerous than outright failure in distributed systems."
+    },
+    {
+      "text": "Every retry you send is just more traffic aimed at a service that already proved it couldn't handle the first request.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 269,
+      "entities": [
+        "retry-pattern"
+      ],
+      "why": "Reframes retries as additional load rather than a safety net."
+    },
+    {
+      "text": "It's a boundary that limits the blast radius of a failure. When one dependency struggles, the rest of the service refuses to hand over all its time and capacity to save it.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 476,
+      "entities": [
+        "bulkhead-pattern"
+      ],
+      "why": "Gives a clear, practical definition of bulkhead isolation."
+    },
+    {
+      "text": "A quick failure is annoying for a user, but a slow failure is expensive for the platform and everyone using it.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 736,
+      "entities": [
+        "circuit-breaker-pattern"
+      ],
+      "why": "States the core trade-off behind fast rejection with circuit breakers."
+    },
+    {
+      "text": "Stop treating resilience like smarter exception handling. Start treating it like designed containment inside the platform.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 1226,
+      "entities": [
+        "circuit-breaker-pattern",
+        "bulkhead-pattern"
+      ],
+      "why": "Summarises the episode's central shift in thinking about resilience."
+    }
+  ],
+  "chapters": [
+    {
+      "start_s": 0,
+      "title": "Silent latency: the real cloud toxin"
+    },
+    {
+      "start_s": 250,
+      "title": "Why retries turn instability into a self-inflicted attack"
+    },
+    {
+      "start_s": 436,
+      "title": "Bulkhead isolation changes the system model"
+    },
+    {
+      "start_s": 660,
+      "title": "Circuit breakers stop panic before it spreads"
+    },
+    {
+      "start_s": 872,
+      "title": "Build for controlled degradation, not perfect uptime"
+    },
+    {
+      "start_s": 1090,
+      "title": "Operationalizing resilience in .NET teams"
+    }
+  ],
+  "takeaways": [
+    "In distributed .NET systems, a slow dependency often does more damage than a crashed one because waiting work quietly consumes threads, sockets and queue capacity.",
+    "Retries should only be used for brief, random faults; against an overloaded dependency they multiply pressure, so bulkheads and scoped circuit breakers are needed to contain the blast radius.",
+    "Resilience is a business policy: define service quality tiers, degraded modes and per-dependency rules for timeout, retry, breaker, fallback and isolation, then test them deliberately."
+  ],
+  "hook": "Your microservices look healthy, yet capacity is silently collapsing behind one slow dependency. This episode is for .NET architects and engineering leaders who want to understand cascading latency failures. Learn how bulkheads, circuit breakers and controlled degradation keep one slow call from taking down the whole platform.",
+  "youtube_video_id": null,
+  "generated_at": "2026-11-01T17:32:23Z"
+}
