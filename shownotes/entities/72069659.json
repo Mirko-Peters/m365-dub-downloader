@@ -1,0 +1,179 @@
+{
+  "episode_id": "72069659",
+  "slug": null,
+  "title": "The End of EWS: Migrating to Microsoft Graph with Glen Scales [MVP]",
+  "lang": "en",
+  "duration_s": 2866,
+  "transcript_source": "data/en_transcripts/e0cf8b8bd795.txt",
+  "time_basis": "estimated",
+  "entities": [
+    {
+      "slug": "glen-scales",
+      "name": "Glen Scales",
+      "type": "person",
+      "score": 95,
+      "mentions": 2,
+      "first_mention_s": 18,
+      "quote": "Joining me is Microsoft MVP Glenn Scales. Glenn has been written about Exchange development since 2004",
+      "url": "https://www.m365.fm/entity/glen-scales/"
+    },
+    {
+      "slug": "change-notifications",
+      "name": "Change notifications and webhooks",
+      "type": "concept",
+      "score": 55,
+      "mentions": 8,
+      "first_mention_s": 749,
+      "quote": "The graph, they've got delta endpoints, which would quite good",
+      "url": "https://www.m365.fm/entity/change-notifications/"
+    },
+    {
+      "slug": "graph",
+      "name": "Microsoft Graph",
+      "type": "product",
+      "score": 85,
+      "mentions": 44,
+      "first_mention_s": 31,
+      "quote": "web dev through EVSN, now Microsoft Graph",
+      "url": "https://www.m365.fm/entity/graph/"
+    },
+    {
+      "slug": "exchange-online",
+      "name": "Exchange Online",
+      "type": "product",
+      "score": 70,
+      "mentions": 35,
+      "first_mention_s": 21,
+      "quote": "Glenn has been written about Exchange development since 2004",
+      "url": "https://www.m365.fm/entity/exchange-online/"
+    },
+    {
+      "slug": "outlook",
+      "name": "Microsoft Outlook",
+      "type": "product",
+      "score": 30,
+      "mentions": 5,
+      "first_mention_s": 612,
+      "quote": "you've got outlook forms that you've used",
+      "url": "https://www.m365.fm/entity/outlook/"
+    },
+    {
+      "slug": "microsoft-to-do",
+      "name": "Microsoft To Do",
+      "type": "product",
+      "score": 20,
+      "mentions": 1,
+      "first_mention_s": 59,
+      "quote": "the single value properties in graph by the new to-do API",
+      "url": "https://www.m365.fm/entity/microsoft-to-do/"
+    }
+  ],
+  "new_entities": [
+    {
+      "slug": "exchange-web-services",
+      "name": "Exchange Web Services (EWS)",
+      "type": "product"
+    },
+    {
+      "slug": "mapi",
+      "name": "MAPI",
+      "type": "concept"
+    },
+    {
+      "slug": "microsoft-graph-powershell",
+      "name": "Microsoft Graph PowerShell",
+      "type": "product"
+    },
+    {
+      "slug": "throttling",
+      "name": "Throttling",
+      "type": "concept"
+    }
+  ],
+  "quotes": [
+    {
+      "text": "As long as we've got good planning in place, generally migrations will go relatively smoothly. The size of the data in migrating is always tricky. But that's when you start hitting throttling, I guess.",
+      "speaker": "Glen Scales",
+      "speaker_slug": "glen-scales",
+      "time_s": 855,
+      "entities": [
+        "throttling",
+        "exchange-web-services"
+      ],
+      "why": "Practical migration advice from an EWS veteran on planning and data volume."
+    },
+    {
+      "text": "So it's an architectural change if you're using streaming notifications. It's doable, it's just a little bit more complex.",
+      "speaker": "Glen Scales",
+      "speaker_slug": "glen-scales",
+      "time_s": 831,
+      "entities": [
+        "change-notifications",
+        "graph"
+      ],
+      "why": "Flags the hardest architectural gap when moving from EWS notifications to Graph."
+    },
+    {
+      "text": "I think it's more it's an integration then because it's using JSON, that means it integrates with a lot of open source libraries. So for especially for front-end developers, it's great because you can use whatever library you want.",
+      "speaker": "Glen Scales",
+      "speaker_slug": "glen-scales",
+      "time_s": 930,
+      "entities": [
+        "graph"
+      ],
+      "why": "Names the key developer advantage of Graph over XML-based EWS."
+    },
+    {
+      "text": "there's still a whole bunch of, you know, business and other things that email is kind of critical for and will go on being critical for.",
+      "speaker": "Glen Scales",
+      "speaker_slug": "glen-scales",
+      "time_s": 2630,
+      "entities": [
+        "exchange-online"
+      ],
+      "why": "A clear stance against the 'email is dead' narrative."
+    }
+  ],
+  "chapters": [
+    {
+      "start_s": 0,
+      "title": "Glen's path into Exchange development"
+    },
+    {
+      "start_s": 359,
+      "title": "Why EWS is being retired"
+    },
+    {
+      "start_s": 443,
+      "title": "Finding EWS usage and migrating to Graph"
+    },
+    {
+      "start_s": 733,
+      "title": "Notifications, throttling and batching"
+    },
+    {
+      "start_s": 1585,
+      "title": "Security, permissions and impersonation"
+    },
+    {
+      "start_s": 1801,
+      "title": "Tools, SDKs and PowerShell"
+    },
+    {
+      "start_s": 2014,
+      "title": "Blogging, community and open source"
+    },
+    {
+      "start_s": 2498,
+      "title": "The future of mail development and rapid fire"
+    }
+  ],
+  "takeaways": [
+    "EWS in Exchange Online is switched off in stages, so check the EWS usage report in the admin portal now to find every application ID that still depends on it.",
+    "Email operations migrate to Microsoft Graph easily, while calendaring, tasks, streaming notifications and high-volume synchronization need redesign around webhooks, delta queries and throttling limits.",
+    "Moving to Graph is also a security upgrade: replace broad EWS impersonation with granular, least-privilege Graph permissions and use the Graph SDKs that handle retries and throttling."
+  ],
+  "hook": "Exchange Web Services is being retired in Exchange Online, and many line-of-business apps still depend on it without anyone knowing. Microsoft MVP Glen Scales explains to developers and admins how to find EWS usage, what migrates easily to Microsoft Graph and where the hard gaps are. You get a practical migration roadmap from someone who has built on every Exchange API since 2004.",
+  "youtube_video_id": null,
+  "generated_at": "2026-11-01T20:29:53+00:00"
+}
