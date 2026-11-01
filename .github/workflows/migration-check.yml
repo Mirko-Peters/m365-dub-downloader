@@ -1,0 +1,34 @@
+name: Prüfbericht Podpage-Migration (T14)
+# Prueft gegen die Live-Seite, ob jede fruehere Podpage-Adresse mit genau einer 301 auf eine erreichbare Seite fuehrt, und
+# prueft 50 Blogbeitraege inhaltlich (tools/check_migration.py). Ergebnis: reports/migration-check.md und .json.
+# Nur lesende Anfragen an www.m365.fm; der Bericht loest keinen Seitenbau aus.
+on:
+  workflow_dispatch:
+    inputs:
+      sample:
+        description: "Anzahl Blogbeiträge für die Inhaltsprüfung"
+        default: "50"
+  schedule:
+    - cron: "47 6 * * *"
+permissions:
+  contents: write
+concurrency:
+  group: migration-check
+  cancel-in-progress: false
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.12" }
+      - name: Live-Seite prüfen
+        run: python tools/check_migration.py --sample "${{ inputs.sample || '50' }}"
+      - name: Bericht speichern
+        run: |
+          git config user.name "m365-site-bot"; git config user.email "actions@users.noreply.github.com"
+          git add reports/migration-check.md reports/migration-check.json
+          if git diff --cached --quiet; then echo "Bericht unverändert"; exit 0; fi
+          git commit -q -m "Prüfbericht Podpage-Migration $(date -u +%Y-%m-%dT%H:%MZ) [skip ci]"
+          (git pull --rebase -q -X theirs || git rebase --abort) && git push -q

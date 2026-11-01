@@ -11,9 +11,22 @@ const HASHED = /^\/assets\/site\.[0-9a-f]{8,}\.css$/i;   // Dateiname traegt den
 // Datenexporte des Seitenbaus: fuer Programme da, nicht fuer die Suche (Allowlist - .well-known, openapi.json, agent.json, episodes.json, llms*.txt bleiben sichtbar)
 const NOINDEX = /^\/(entities\.json|entities\.jsonld|og-manifest\.json|seo-report\.json|top\.json|show\/redirects\.json|show-notes\/|blog-import\/)|\.jsonld$/i;
 
-async function redirectMap(url) {
-  const r = await fetch(url.origin + "/show/redirects.json", { cf: { cacheTtl: 3600, cacheEverything: true } });
+async function redirectMap() {
+  const r = await fetch("https://www.m365.fm/show/redirects.json", { cf: { cacheTtl: 3600, cacheEverything: true } });
   return r.ok ? r.json() : {};
+}
+// T8: nur Pfade, die alte Podpage-Adressen sein koennen, fragen die Weiterleitungstabelle ab (keine Dateien, keine Assets);
+// unter /show nur die frueheren Blog-Adressen /show/blog/... (dort liegen sonst nur Meta-Refresh-Seiten).
+const MAPPABLE = (p) => p !== "/" && !/\.[a-z0-9]{2,5}$/i.test(p) && !/^\/(assets|og|covers|fonts|\.well-known)(\/|$)/i.test(p)
+  && (!p.startsWith("/show") || p === "/show/blog" || p.startsWith("/show/blog/")) && !p.startsWith("/shows");
+async function legacyTarget(p0) {
+  if (!MAPPABLE(p0)) return "";
+  const map = await redirectMap();
+  if (map[p0] || map[p0.toLowerCase()]) return map[p0] || map[p0.toLowerCase()];
+  const m = /^\/m365-fm-podcast\/([a-z0-9-]+)$/.exec(p0);   // T8: Podpage-Folgenadressen unter dem Shownamen
+  if (m) return "/show/episodes/" + m[1] + "/";
+  if (/^\/categories(\/|$)/.test(p0)) return "/show/episodes/";   // T8: Podpage-Kategorien -> Folgenliste
+  return /^\/(blog|videos|p)\//.test(p0) ? "/show/" : "";
 }
 
 export default {
@@ -21,13 +34,11 @@ export default {
     const url = new URL(request.url);
     // Umzug (MIGRATED=1): dub.m365.fm und m365.fm -> www.m365.fm, alte Podpage-Adressen -> /show/ (301, damit der SEO-Traffic erhalten bleibt)
     if (env.MIGRATED === "1") {
-      if (url.hostname === "dub.m365.fm" || url.hostname === "m365.fm") return Response.redirect("https://www.m365.fm" + url.pathname + url.search, 301);
       const p0 = url.pathname.replace(/\/+$/, "") || "/";
-      if (p0 !== "/" && !p0.startsWith("/show") && !p0.startsWith("/shows")) {
-        const map = await redirectMap(url);
-        const to = map[p0] || map[p0.toLowerCase()] || (/^\/(blog|videos)\//.test(p0) ? "/show/" : "");
-        if (to) return Response.redirect(url.origin + to + url.search, 301);
-      }
+      const to = await legacyTarget(p0);
+      // T8: dub.m365.fm/m365.fm und alte Adresse in einem Schritt auf das Ziel (vorher zwei 301 hintereinander)
+      if (url.hostname === "dub.m365.fm" || url.hostname === "m365.fm") return Response.redirect("https://www.m365.fm" + (to || url.pathname) + url.search, 301);
+      if (to) return Response.redirect(url.origin + to + url.search, 301);
     }
     { const mp = /^(\/[a-z]{2})?\/community\/u\/mirko-peters(\/.*)?$/.exec(url.pathname); if (mp) return Response.redirect(url.origin + (mp[1] || "") + "/community/u/mirko-p" + (mp[2] || "/") + url.search, 301); }   // alter Name des Blog-Profils
     if (/^\/(pa|hi|ml|ta|te)(\/|$)/.test(url.pathname)) return Response.redirect(url.origin + "/", 301);   // diese Sprachen gibt es nicht mehr (Punjabi, Hindi, Malayalam, Tamil, Telugu)
