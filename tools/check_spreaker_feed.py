@@ -48,7 +48,7 @@ def main():
         mine, got = f.read_text("utf-8").strip(), feed.get(eid)
         if got is None:
             rows.append({"id": eid, "im_feed": False}); continue
-        r = {"id": eid, "im_feed": True, "text_gleich": text_key(got) == text_key(mine), "links_datei": links(mine), "links_feed": links(got),
+        r = {"id": eid, "im_feed": True, "text_gleich": text_key(mine) in text_key(got),   # Spreaker haengt im Feed eigene Zeilen an (Support-Link) "links_datei": links(mine), "links_feed": links(got),
              "html_im_feed": "<a " in html.unescape(got) or "<li" in html.unescape(got), "zeichen_feed": len(got),
              "alle_links_feed": len(re.findall(r"<a\s", html.unescape(got), flags=re.I))}
         if len(rows) < 3:   # Stichprobe zur Diagnose (oeffentlicher Feed-Inhalt)
