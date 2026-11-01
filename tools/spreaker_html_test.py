@@ -23,7 +23,8 @@ def main():
     sp = A.Spreaker()
     if not sp.login(): return 1
     L = [f"# Spreaker-HTML-Test an Folge {eid} ({A.now()})", "", f"Datei: {len(raw)} Zeichen, {want} Links", ""]
-    variants = [("description_html = Datei", {"description_html": raw}),
+    variants = [("description_html = Spreaker-Fassung (<p> -> <br>, <strong> -> <b>)", {"description_html": A.spreaker_html(raw)}),
+                ("description_html = Datei", {"description_html": raw}),
                 ("description = vereinfacht (<a>, <strong>, <br>)", {"description": simple(raw)}),
                 ("description_html = vereinfacht", {"description_html": simple(raw)})]
     ok = False
@@ -33,7 +34,7 @@ def main():
             ep = sp.req("GET", f"/episodes/{eid}")["episode"]
             dh = ep.get("description_html") or ""
             got = len(re.findall(r"<a\s", dh))
-            L += [f"## {name}", "", f"description_html: {len(dh)} Zeichen, {got} Links, <strong>: {dh.count('<strong')}, <li>: {dh.count('<li')}, <p>: {dh.count('<p')}", "",
+            L += [f"## {name}", "", f"description_html: {len(dh)} Zeichen, {got} Links, <strong>: {dh.count('<strong')}, <b>: {dh.count('<b>')}, <br>: {dh.count('<br')}, <li>: {dh.count('<li')}, <p>: {dh.count('<p')}", "",
                   "```html", dh[:900], "```", ""]
             if got >= want > 0:
                 ok = True; L += [f"**Erfolg mit: {name}**", ""]; break
