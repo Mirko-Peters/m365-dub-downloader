@@ -10,6 +10,12 @@ old = json.load(open(old_f)) if os.path.exists(old_f) else {}
 new = json.load(open(new_f))
 changed = sorted(u for u, h in new.items() if old.get(u) != h)
 gone = sorted(u for u in old if u not in new)
+# T41: optional 3. Argument - Liste der neu/geaendert nach R2 geladenen Seiten (tools/r2_pages_upload.py); der Site-Worker cacht sie unter /__r2c/<pfad>/
+r2 = []
+if len(sys.argv) > 3 and os.path.exists(sys.argv[3]):
+    try: r2 = [u for u in json.load(open(sys.argv[3])) if isinstance(u, str) and u.startswith("/")]
+    except Exception as e: print("R2-Liste nicht lesbar:", type(e).__name__)
+if r2: print(f"{len(r2)} R2-Seiten neu oder geaendert")
 print(f"{len(new)} Dateien, {len(changed)} neu oder geaendert, {len(gone)} weggefallen" + ("" if old else " (kein Vorlauf: erster Vergleich)"))
 
 
@@ -25,10 +31,10 @@ if tok:
             res = json.load(r).get("result") or []; zone = res[0]["id"] if res else ""
     if not zone:
         print("::warning::Zone-ID nicht gefunden - kein Purge")
-    elif not old or len(changed) + len(gone) > MAX_URLS:
+    elif not old or len(changed) + len(gone) + len(r2) > MAX_URLS:
         d = cf(f"/zones/{zone}/purge_cache", {"purge_everything": True}); print("Cache komplett geleert:", d.get("success"))
     else:
-        urls = [base + u for u in changed + gone]; ok = 0
+        urls = [base + u for u in changed + gone] + [base + "/__r2c" + u for u in r2]; ok = 0
         for i in range(0, len(urls), 30):
             d = cf(f"/zones/{zone}/purge_cache", {"files": urls[i:i + 30]}); ok += len(urls[i:i + 30]) if d.get("success") else 0
             if not d.get("success"): print("Purge-Fehler:", [e.get("message") for e in d.get("errors", [])][:2]); time.sleep(1)
