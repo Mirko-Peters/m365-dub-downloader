@@ -27,3 +27,10 @@ und werden noch nicht automatisch in die Seite eingebaut – wie sie auf m365.fm
 ## Arbeitsteilung
 - Agent A: Hauptshow, gerade Spreaker-ID · Agent B: Hauptshow, ungerade ID · dritter Agent: die 14 Sprach-Shows.
 - Episoden mit vorhandener vollständiger Datei (mit `quotes[]`) werden nicht erneut angefasst.
+
+## Vorgaben von Mirko (Stand 1.11.2026, 12:40)
+- Shownotes (Spreaker-HTML): **mindestens 4 Links, höchstens 10** (vorher 8–10). Entitäten ohne Stammdatensatz bleiben
+  unverlinkt; Shownotes mit 4–7 Links, die sonst in Ordnung sind, sind freigabefähig. Übrige Regeln unverändert
+  (kein Link in den ersten 200 Zeichen, höchstens 1 Link je Satz, alle Links auf https://www.m365.fm/ mit UTM).
+- Geschrieben wird nach Spreaker nur, was in `shownotes/QA.txt` mit ok oder fixed steht, sobald `shownotes/APPROVED` existiert.
+- Personen-Entitäten Martin Fowler und Roy Fielding sind freigegeben.
