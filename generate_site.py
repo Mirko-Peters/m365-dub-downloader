@@ -17,6 +17,7 @@ import site_seo as SEOR
 import site_live as LIVE
 import site_notes as SNT
 import site_shownotes as SNS   # T26
+import site_extract as SX   # T27: Folgen und Videos <-> Entitaeten aus der QA-geprueften Extraktion
 SNALL = SNS.load_all()   # Vollfassungen der Shownotes je Spreaker-Folge (shownotes/site/<episode_id>.md)
 import site_text
 import site_ads as ADS
@@ -977,6 +978,7 @@ def build():
         alts = {x: url_of(by_vid[vid][x]) for x in by_vid[vid]}
         if vid in ORIG: alts["en"] = f"{BASE}/show/episodes/{ORIG[vid]}/"   # T3: englisches Original gehoert zum Cluster der Dub-Fassungen
         canonical = url_of(it)
+        _xab = [{"@id": f"{BASE}/entity/{_s}/#entity"} for _s, _ in (SX.BY_EPISODE.get(str(it["eid"])) or {}).get("entities", []) if _s in LRN.ENTS][:8]   # T27: Entitaeten aus der QA-geprueften Extraktion
         spk = f'https://www.spreaker.com/episode/{it["eid"]}'
         yt = f"https://youtu.be/{vid}"
         tr = e.get("tr") or ""
@@ -994,7 +996,7 @@ def build():
              "url": canonical, "inLanguage": LANGS[l][1], "datePublished": it["date"],
              "associatedMedia": {"@type": "AudioObject", "contentUrl": spk, "inLanguage": LANGS[l][1]},
              "image": f"{BASE}/og/{canonical.replace(BASE, '').strip('/')}.png", "isAccessibleForFree": True, "keywords": e.get("tags", ""),
-             "about": [{"@type": "Thing", "name": t.strip()} for t in (e.get("tags") or "").split(",")[:5] if t.strip() and "m365.fm" not in t],
+             "about": _xab + [{"@type": "Thing", "name": t.strip()} for t in (e.get("tags") or "").split(",")[:5] if t.strip() and "m365.fm" not in t],
              **({"sameAs": list(_el.values())} if _el else {}),
              "partOfSeries": {"@id": f"{BASE}/{l}/#series", "@type": "PodcastSeries", "name": seo.get(l, {}).get("title", "M365.FM"), "url": f"{BASE}/{l}/"},   # T4: Serie = Knoten der Sprach-Startseite (vorher Spreaker-URL); das Transkript ist eine Datei (tr), kein Text -> kein transcript-Feld
              "author": {"@id": f"{BASE}/entity/mirko-peters/#entity"}},
@@ -1010,6 +1012,8 @@ def build():
             person_ld(), org_ld(),
         ]
         ld[0]["video"] = {"@id": canonical + "#video"}
+        for _n in ld:
+            if _xab and _n.get("@type") == "VideoObject": _n["about"] = _xab   # T27: das Video behandelt dieselben Entitaeten wie die Folge
         pc = [c for c in ORDER if c in cat_of[vid]][0]
         ld[0]["genre"] = cat_name(pc, l)
         ld[0]["keywords"] = ", ".join(tagraw[l][vid]) or e.get("tags", "")
@@ -1260,8 +1264,16 @@ def build():
                 _epc[k] = PP.find_episodes(BASE, e, LRN.ent_names(e))
             else:
                 rx = [re.compile(r"(?<![\w-])" + re.escape(n) + r"(?![\w-])", re.I) for n in LRN.ent_names(e)]
-                _epc[k] = [it for it in by_lang.get(lang, []) if any(r.search(it["e"]["title"] + " " + (it["e"].get("tags") or "")) for r in rx)][:12] if rx else []
+                _bye = {str(it["eid"]): it for it in by_lang.get(lang, [])}
+                _ext = [_bye[sid] for sid in SX.episodes_for(e["id"]) if sid in _bye]   # T27: QA-gepruefte Extraktion der Dub-Folge nennt die Entitaet
+                _hit = [it for it in by_lang.get(lang, []) if any(r.search(it["e"]["title"] + " " + (it["e"].get("tags") or "")) for r in rx)] if rx else []
+                _epc[k] = list({it["slug"]: it for it in _ext + _hit}.values())[:12]
         return _epc[k]
+    _yt_by_slug = {v: k for k, v in ORIG.items()}   # Hauptshow-Folge -> YouTube-Video (gleiches Video wie die Dub-Fassungen)
+    def _yt_of(x):
+        if x.get("lang") != "en": return x.get("vid") or ""   # Dub-Folge: ihr YouTube-Video
+        return x.get("yt") or _yt_by_slug.get(x.get("slug") or "", "")   # Hauptshow: aus der Extraktion, sonst ueber die Dub-Zuordnung
+    _ctx["yt_of"] = _yt_of
     _ctx["ep_sum"] = lambda x: x.get("sum") or short(parse_desc(x["e"]["desc"])[0], 260)
     _ep_about = {}   # Folge der Hauptshow -> Entitaeten, auf deren Seite sie steht (fuer PodcastEpisode.about)
     for _e in ENT.ENTS.values():

@@ -368,8 +368,10 @@ def build(g, wiki_links, experts_by_ent, ep_find):
             eps = ep_find(e, lang)   # Folgen in der Sprache der Seite (englisch: Hauptshow), sonst keine
             _epu = lambda x: x.get("url") or url_of(x)
             ept = s.get("eps") or S["en"]["eps"]
+            _yt = g.get("yt_of") or (lambda x: "")   # T27: YouTube-Video der Folge
+            _ytl = lambda x: (f' · <a href="https://www.youtube.com/watch?v={esc(_yt(x))}" rel="noopener">{esc(T(lang, "Video on YouTube", "Video auf YouTube"))}</a>') if _yt(x) else ""
             eb = (f'<h2>{esc(ept.format(t=e["name"]))}</h2>' + "".join(
-                f'<article class="en-ep"><h3><a href="{_epu(x)}">{esc(g["anchor_title"](x["e"]["title"]))}</a></h3><p class="mut">{esc(x.get("date", ""))}</p><p>{esc(g["ep_sum"](x))}</p></article>' for x in eps)) if eps else ""
+                f'<article class="en-ep"><h3><a href="{_epu(x)}">{esc(g["anchor_title"](x["e"]["title"]))}</a></h3><p class="mut">{esc(x.get("date", ""))}{_ytl(x)}</p><p>{esc(g["ep_sum"](x))}</p></article>' for x in eps)) if eps else ""
             tlab = TL[e["type"]][li]
             alt_h = T(lang, f"Title graphic: {e['name']} ({tlab})", f"Titelbild: {e['name']} ({tlab})")
             hero = MED.hero_svg(e, tlab, alt_h)
@@ -474,6 +476,7 @@ def build(g, wiki_links, experts_by_ent, ep_find):
                 ld.append({"@context": "https://schema.org", "@type": "ItemList", "@id": u + "#episodes", "name": ept.format(t=e["name"]), "numberOfItems": len(eps),
                            "itemListElement": [{"@type": "ListItem", "position": i + 1, "url": _epu(x), "name": x["e"]["title"]} for i, x in enumerate(eps)]})
                 _epids = [{"@id": x["url"] + "#episode"} for x in eps if x.get("url")]   # Folgenseiten der Hauptshow definieren #episode
+                _epids += [{"@id": _epu(x) + "#video"} for x in eps if not x.get("url") and x.get("vid")]   # T27: Dub-Folgenseiten definieren das YouTube-Video als #video
                 if _epids:
                     node["subjectOf"] = (node.get("subjectOf") or []) + _epids
             # hreflang en/de nur bei echtem deutschem Text (Gast-Entitaeten haben de == en: dann ist /de/ ein Duplikat und bleibt ohne Index)
