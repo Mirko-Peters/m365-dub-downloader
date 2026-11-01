@@ -1,0 +1,226 @@
+{
+  "episode_id": "75897678",
+  "slug": "azure-managed-identities-simply-explained",
+  "title": "Azure Managed Identities - Simply Explained",
+  "lang": "en",
+  "duration_s": 825,
+  "transcript_source": "data/en_transcripts/8a03da3886d4.txt",
+  "time_basis": "estimated",
+  "entities": [
+    {
+      "slug": "managed-identity",
+      "name": "Managed identity",
+      "type": "concept",
+      "score": 98,
+      "mentions": 23,
+      "first_mention_s": 20,
+      "quote": "It's called a managed identity, and it works on virtual machines.",
+      "url": "https://www.m365.fm/entity/managed-identity/"
+    },
+    {
+      "slug": "azure-key-vault",
+      "name": "Azure Key Vault",
+      "type": "product",
+      "score": 80,
+      "mentions": 7,
+      "first_mention_s": 37,
+      "quote": "how Key Vault opens without a password, and the traps that catch beginners",
+      "url": "https://www.m365.fm/entity/azure-key-vault/"
+    },
+    {
+      "slug": "azure-rbac",
+      "name": "Azure role-based access control (Azure RBAC)",
+      "type": "concept",
+      "score": 72,
+      "mentions": 9,
+      "first_mention_s": 276,
+      "quote": "you end up making eight role assignments, one for each machine on each account.",
+      "url": "https://www.m365.fm/entity/azure-rbac/"
+    },
+    {
+      "slug": "entra-id",
+      "name": "Microsoft Entra ID",
+      "type": "product",
+      "score": 65,
+      "mentions": 4,
+      "first_mention_s": 140,
+      "quote": "Inside Microsoft Entra ID the same directory that holds your user accounts.",
+      "url": "https://www.m365.fm/entity/entra-id/"
+    },
+    {
+      "slug": "azure",
+      "name": "Microsoft Azure",
+      "type": "platform",
+      "score": 60,
+      "mentions": 28,
+      "first_mention_s": 25,
+      "quote": "App service functions and a long list of other Azure services.",
+      "url": "https://www.m365.fm/entity/azure/"
+    },
+    {
+      "slug": "azure-virtual-machines",
+      "name": "Azure Virtual Machines",
+      "type": "product",
+      "score": 50,
+      "mentions": 10,
+      "first_mention_s": 22,
+      "quote": "It's called a managed identity, and it works on virtual machines.",
+      "url": "https://www.m365.fm/entity/azure-virtual-machines/"
+    },
+    {
+      "slug": "azure-functions",
+      "name": "Azure Functions",
+      "type": "product",
+      "score": 40,
+      "mentions": 4,
+      "first_mention_s": 24,
+      "quote": "App service functions and a long list of other Azure services.",
+      "url": "https://www.m365.fm/entity/azure-functions/"
+    },
+    {
+      "slug": "azure-app-service",
+      "name": "Azure App Service",
+      "type": "product",
+      "score": 40,
+      "mentions": 3,
+      "first_mention_s": 23,
+      "quote": "App service functions and a long list of other Azure services.",
+      "url": "https://www.m365.fm/entity/azure-app-service/"
+    },
+    {
+      "slug": "github",
+      "name": "GitHub",
+      "type": "org",
+      "score": 25,
+      "mentions": 2,
+      "first_mention_s": 90,
+      "quote": "close to twenty nine million new hardcoded secrets were pushed to public GitHub in a single year",
+      "url": "https://www.m365.fm/entity/github/"
+    }
+  ],
+  "new_entities": [
+    {
+      "slug": "managed-identity",
+      "name": "Managed identity",
+      "type": "concept",
+      "mentions": 23,
+      "first_mention_s": 20,
+      "quote": "It's called a managed identity, and it works on virtual machines.",
+      "status": "review"
+    },
+    {
+      "slug": "azure-rbac",
+      "name": "Azure role-based access control (Azure RBAC)",
+      "type": "concept",
+      "mentions": 9,
+      "first_mention_s": 276,
+      "quote": "you end up making eight role assignments, one for each machine on each account.",
+      "status": "review"
+    },
+    {
+      "slug": "azure-virtual-machines",
+      "name": "Azure Virtual Machines",
+      "type": "product",
+      "mentions": 10,
+      "first_mention_s": 22,
+      "quote": "It's called a managed identity, and it works on virtual machines.",
+      "status": "review"
+    }
+  ],
+  "quotes": [
+    {
+      "text": "Instead of your app holding a secret and proving it belongs, the app becomes the identity. Access gets granted to the identity, not to a shared key that anyone could copy.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 163,
+      "entities": [
+        "managed-identity"
+      ],
+      "why": "Sums up in two sentences the shift from shared secrets to resource identities."
+    },
+    {
+      "text": "So the practical rule is to start with a user assigned identity. Unless you have a specific reason to want the identity to live and die with a single resource.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 333,
+      "entities": [
+        "managed-identity"
+      ],
+      "why": "A clear, actionable default for choosing between system- and user-assigned identities."
+    },
+    {
+      "text": "Getting a token proves who your app is, but it doesn't decide what the app can do. That's the job of a role assignment, and it's the step beginners skip most often.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 452,
+      "entities": [
+        "managed-identity",
+        "azure-rbac"
+      ],
+      "why": "Separates authentication from authorization and names the most common beginner mistake."
+    },
+    {
+      "text": "If you let someone run code on a resource that has a managed identity, you've effectively handed them everything that identity can reach.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 694,
+      "entities": [
+        "managed-identity"
+      ],
+      "why": "A sharp warning about the escalation path that comes with managed identities."
+    },
+    {
+      "text": "The one idea worth sharing with you is that the real win is removing the secret, not hiding it better. So there's nothing to leak, nothing to screenshot, and nothing to forget to rotate.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 804,
+      "entities": [
+        "managed-identity",
+        "azure-key-vault"
+      ],
+      "why": "Memorable summary of why managed identities beat storing secrets in a vault or config."
+    }
+  ],
+  "chapters": [
+    {
+      "start_s": 0,
+      "title": "Why secrets in code are a problem"
+    },
+    {
+      "start_s": 127,
+      "title": "What a managed identity actually is"
+    },
+    {
+      "start_s": 218,
+      "title": "System-assigned vs. user-assigned identities"
+    },
+    {
+      "start_s": 341,
+      "title": "How your app gets a token"
+    },
+    {
+      "start_s": 449,
+      "title": "Granting access with role assignments"
+    },
+    {
+      "start_s": 531,
+      "title": "Reaching Key Vault without a password"
+    },
+    {
+      "start_s": 595,
+      "title": "Where managed identities work"
+    },
+    {
+      "start_s": 664,
+      "title": "Pitfalls and recap"
+    }
+  ],
+  "takeaways": [
+    "A managed identity lets an Azure resource sign in to other services through Microsoft Entra ID without any stored password, key or connection string.",
+    "User-assigned identities are the recommended default because they can be shared across resources and cut down the number of role assignments you have to manage.",
+    "A token only proves who the app is; it still needs a least-privilege role assignment, and role changes can take hours to apply because tokens are cached."
+  ],
+  "hook": "Hardcoded passwords, API keys and connection strings in config files are one of the most common ways cloud apps leak access. This Simply Explained episode is for Azure developers and admins who want to understand managed identities: how the token flow works, how to grant access to Key Vault and other services, and which pitfalls to avoid.",
+  "youtube_video_id": null,
+  "generated_at": "2026-11-01T06:54:03Z"
+}
