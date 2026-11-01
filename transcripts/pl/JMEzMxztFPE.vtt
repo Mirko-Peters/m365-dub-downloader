@@ -1,0 +1,994 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:04.700
+Do zobaczenia na żywo w styczniu. Oto zagadka, której twój dyrektor do spraw IT jeszcze nie rozwiązał.
+
+00:00:04.840 --> 00:00:12.400
+Czy, a i to tylko kolejne zadanie dla serwerowni, czy ziejąca ogniem bestia, która wymaga własnego środowiska, GPU, jezior danych i ścisłych zasad nadzoru?
+
+00:00:12.600 --> 00:00:17.600
+Większość zespołów działa po omacku, co sprawia, że budżety znikają szybciej niż antymateria w napędzie Warp.
+
+00:00:17.760 --> 00:00:19.640
+Oto co dzisiaj wyniesiesz z tego spotkania.
+
+00:00:19.800 --> 00:00:26.160
+Pięć kontroli, które ujawnią, czy projekt, a i naprawdę wymaga skali przedsiębiorstwa oraz zasady, które pozwolą ci to osiągnąć bez chaosu.
+
+00:00:26.160 --> 00:00:31.860
+Zanim przejdziemy do fabryk i załóg statków kosmicznych, zadajmy sobie pytanie, dlaczego, a i to nie jest po prostu kolejne obciążenie systemowe?
+
+00:00:32.020 --> 00:00:34.700
+Dlaczego, a i to nie jest po prostu kolejne zadanie dla systemów?
+
+00:00:34.820 --> 00:00:37.980
+A i działa inaczej niż uporządkowane obciążenia, do których przywykłeś.
+
+00:00:38.180 --> 00:00:43.540
+Tradycyjne aplikacje działają stabilnie, mają przewidywalne zapotrzebowanie na pamięć i logi działające jak w zegarku.
+
+00:00:43.680 --> 00:00:49.400
+A i natomiast wydaje się żywe. Rozwija się i zmienia z każdym nowym zestawem danych i architekturą, którą mu dostarczasz.
+
+00:00:49.400 --> 00:00:56.020
+Tam, gdzie zwykłe oprogramowanie zwiększa wersję, a i mutuje, uczy się, zmienia, a nawet ewoluuje w zależności od dostępnych zasobów.
+
+00:00:56.160 --> 00:01:02.460
+Zmiana podejścia jest więc oczywista. Nie traktuj AI jak pojedynczej aplikacji, lecz jak ekosystem operacyjny w ciągłym ruchu.
+
+00:01:02.640 --> 00:01:06.460
+W wielu działach IT-obciążenia mierzy się miejscem w szafach serwerowych i z użyciem energii.
+
+00:01:06.580 --> 00:01:10.620
+To bezpieczne, techniczne kryteria, ale z perspektywy AI-obraz całkowicie się zmienia.
+
+00:01:10.820 --> 00:01:16.660
+Nie tylko uruchamiasz serwery, ale zarządzasz akceleratorami takimi jak GPU czy TPU, często z ich własnymi modelami programowania.
+
+00:01:16.660 --> 00:01:20.660
+Nie obsługujesz prostych zadań, lecz całe potoki danych przenoszące strumienie surowych informacji.
+
+00:01:21.400 --> 00:01:24.860
+Nie wykonujesz statycznego kodu, lecz uruchamiasz dynamiczne grafy obliczeniowe,
+
+00:01:24.860 --> 00:01:26.820
+które mogą zmieniać kształt w trakcie pracy.
+
+00:01:27.080 --> 00:01:28.200
+Badania to potwierdzają.
+
+00:01:28.420 --> 00:01:32.820
+Obciążenia AI często wymagają wyspecjalizowanych akceleratorów i specyficznych wzorców dostępu do danych,
+
+00:01:33.000 --> 00:01:36.100
+które różnią się od tego, do czego zaprojektowano Twoje bazy danych czy procesory.
+
+00:01:36.320 --> 00:01:36.680
+Lekcja.
+
+00:01:36.840 --> 00:01:40.040
+Przygotuj się na zupełnie inną fizykę niż w typowym podręczniku IT.
+
+00:01:40.160 --> 00:01:42.080
+Pomyśl o płacach jako o punkcie odniesienia.
+
+00:01:42.260 --> 00:01:43.680
+Stałe, powtarzalne, dokładne.
+
+00:01:43.680 --> 00:01:45.560
+Wprowadzasz dane, wypłacasz pensje.
+
+00:01:45.760 --> 00:01:49.300
+Teraz zestaw to z głęboką siecią neuronową, posiadającą 100 milionów parametrów.
+
+00:01:49.460 --> 00:01:51.380
+Zamiast kroczyć równym rytmem, sieć szarpie.
+
+00:01:51.560 --> 00:01:55.360
+Postęp w jednej chwili przyspiesza, w drugiej staje, zmuszając Cię do redystrybucji mocy obliczeniowej,
+
+00:01:55.480 --> 00:01:57.840
+niczym inżynier przekierowujący energię, by podtrzymać systemy.
+
+00:01:57.960 --> 00:02:00.200
+Czasami trening kończy się powodzeniem, często nie.
+
+00:02:00.440 --> 00:02:04.740
+Dopóki się nie ustabilizuje, po prostu pompujesz kolejne cykle, mając nadzieję na sensowny wynik.
+
+00:02:04.740 --> 00:02:10.080
+Wniosek w przeciwieństwie do płac, trenowanie AI przynosi zmienność i musisz odpowiednio do tego zaplanować zasoby.
+
+00:02:10.280 --> 00:02:12.120
+Ta zmienność napędzana jest głodem.
+
+00:02:12.320 --> 00:02:15.340
+Algorytmy AI reagują na dane niczym czarne dziury na materię.
+
+00:02:15.600 --> 00:02:20.120
+Jednego dnia Twój zbiór danych mieści się na laptopie, następnego przesyłasz petabajty z wielu źródeł,
+
+00:02:20.180 --> 00:02:23.920
+a nagle moc obliczeniowa, pamięć i sieć muszą dostosować się do tego zapotrzebowania.
+
+00:02:24.180 --> 00:02:27.540
+Zwykłe aplikacje rzadko zużywają zasoby w takich skokach, co oznacza,
+
+00:02:27.540 --> 00:02:33.100
+że Twoja infrastruktura musi być zaprojektowana mniej jak szafka na akta, a bardziej jak rafineria, ciągłe potoki,
+
+00:02:33.100 --> 00:02:37.020
+wysoka przepustowość i zdolność do przyjmowania fal napływającego paliwa.
+
+00:02:37.400 --> 00:02:39.640
+I tu przedsiębiorstwa często popełniają błąd.
+
+00:02:39.740 --> 00:02:44.420
+Kierownictwo zakłada, że sztuczna inteligencja może współistnieć z pocztą e-mail i systemami ERP traktowana jako kolejna pozycja w budżecie.
+
+00:02:44.580 --> 00:02:47.700
+Wdrażają ją więc na standardowych serwerach, oczekując, że będzie do nich idealnie pasować.
+
+00:02:47.860 --> 00:02:48.900
+Co dzieje się zamiast tego?
+
+00:02:49.100 --> 00:02:52.060
+Klastry GPU pozostają bezczynne, czekając na powolne potoki danych.
+
+00:02:52.240 --> 00:02:53.340
+Terminy są przekraczane.
+
+00:02:53.340 --> 00:02:55.360
+Nakład pracy przy integracji rośnie lawinowo.
+
+00:02:55.360 --> 00:02:59.500
+Zespoły odkrywają, że połowa ich środowiska wymaga przepisania, aby uzyskać choćby podstawową przepustowość.
+
+00:02:59.680 --> 00:03:05.400
+Scenariusz przypomina instalację przekaźnika komunikacyjnego o zasięgu galaktycznym, by po fakcie odkryć, że sygnały nie są dostrojone do odpowiedniej częstotliwości.
+
+00:03:05.760 --> 00:03:06.680
+Wiarygodność cierpi.
+
+00:03:06.860 --> 00:03:08.420
+Koszty wymykają się spod kontroli.
+
+00:03:08.660 --> 00:03:10.760
+Organizacja zachodzi w głowę, co poszło nie tak.
+
+00:03:10.960 --> 00:03:11.980
+Wniosek jest prosty.
+
+00:03:12.140 --> 00:03:15.540
+Próbując dopasować AI do starych schematów, tworzysz wąskie gardła zamiast wartości.
+
+00:03:15.540 --> 00:03:17.760
+Oto jaśniejszy sposób na zrozumienie tej metafory.
+
+00:03:18.000 --> 00:03:20.080
+Biznes przypomina obsługę rutynowych lotów.
+
+00:03:20.080 --> 00:03:24.020
+Samoloty mają jasny harmonogram, stałe zużycie paliwa i ściśle określone trasy.
+
+00:03:24.220 --> 00:03:26.900
+Praca nad AI przypomina bardziej testy napędu Warp.
+
+00:03:27.100 --> 00:03:28.800
+Wydajność nie skaluje się liniowo.
+
+00:03:29.080 --> 00:03:33.740
+Wymagania skaczą bez ostrzeżenia, a do przetrwania tego obciążenia potrzebny jest egzotyczny sprzęt.
+
+00:03:33.860 --> 00:03:36.600
+Zignoruj to, a cały projekt wyleci poza pas startowy.
+
+00:03:36.840 --> 00:03:40.080
+Zaakceptuj to, a zaczniesz projektować odporne systemy od podstaw.
+
+00:03:40.280 --> 00:03:42.920
+Oto praktyczne pytanie, przed którym stoi każdy lider.
+
+00:03:42.920 --> 00:03:49.980
+Skąd wiadomo, kiedy projekt AI przekroczył próg i przestał być zwykłym oprogramowaniem, stając się obciążeniem zupełnie innej kategorii?
+
+00:03:50.220 --> 00:03:54.840
+Chcesz wyłapać ten moment wcześnie, zanim podwoisz budżety lub przeciążysz infrastrukturę.
+
+00:03:55.020 --> 00:03:59.180
+Wskazówki są widoczne, wzorce zapotrzebowania wykraczające poza serwery ogólnego przeznaczenia,
+
+00:03:59.340 --> 00:04:02.420
+poleganie na akceleratorach obsługujących cuda zamiast x86,
+
+00:04:02.820 --> 00:04:05.360
+zbiory danych tak ogromne, że stare bazy danych się dławią,
+
+00:04:05.500 --> 00:04:08.400
+algorytmy zmieniające się w trakcie działania oraz bariery integracyjne,
+
+00:04:08.520 --> 00:04:10.540
+gdzie stare systemy IT odmawiają współpracy.
+
+00:04:10.540 --> 00:04:14.500
+Każdy z tych sygnałów oznacza, że masz do czynienia z czymś innym niż standardowy biznes.
+
+00:04:14.680 --> 00:04:18.060
+Razem te znaki pokazują, że a i to coś więcej niż wymyślny kod.
+
+00:04:18.060 --> 00:04:21.500
+To żywy ekosystem cyfrowy, który rośnie, zmienia się i wymaga zasobów,
+
+00:04:21.560 --> 00:04:24.660
+jakich nie potrzebowało nic w Twoim dotychczasowym stosie technologicznym.
+
+00:04:24.900 --> 00:04:28.880
+Gdy nauczysz się rozpoznawać te cechy, będziesz lepiej przygotowany do przydzielenia paliwa,
+
+00:04:29.000 --> 00:04:31.020
+osłon i załogi przed rozpoczęciem podróży.
+
+00:04:31.200 --> 00:04:35.760
+I tu zaczynają się trudne wybory, bo nawet gdy rozpoznasz, a i jako inną klasę obciążenia,
+
+00:04:35.920 --> 00:04:37.760
+kolejny krok wcale nie jest oczywisty.
+
+00:04:37.760 --> 00:04:40.520
+Czy przepuszczasz to przez ten sam potok, co wszystko inne?
+
+00:04:40.700 --> 00:04:44.480
+Albo zatrzymaj się i zadaj kluczowe pytania, które rozstrzygną, czy skalowanie ma sens.
+
+00:04:44.480 --> 00:04:49.800
+To właśnie w tym punkcie decyzyjnym wielu menedżerów popełnia błędy, a lepsza lista kontrolna może uratować całe projekty.
+
+00:04:49.960 --> 00:04:52.640
+Pięć pytań, które odróżniają pilotaż od produkcji.
+
+00:04:52.880 --> 00:04:58.580
+Gdy patrzysz na ten efektowny projekt pilotażowy, a i zastanawiasz się, czy sprawdzi się w produkcji, istnieje proste narzędzie.
+
+00:04:58.780 --> 00:05:03.060
+Pięć podstawowych, praktycznych i konkretnych pytań, których eksperci używają, by ocenić,
+
+00:05:03.160 --> 00:05:05.580
+czy dane zadanie zasługuje na skalę korporacyjną.
+
+00:05:05.780 --> 00:05:07.620
+Potraktuj je jak swoją listę startową.
+
+00:05:07.860 --> 00:05:10.760
+Pomin je, a ryzykujesz stworzenie modelu, który wygląda dobrze w laboratorium,
+
+00:05:10.880 --> 00:05:12.860
+ale zawodzi, gdy pojawiają się prawdziwi użytkownicy.
+
+00:05:12.860 --> 00:05:16.180
+Przygotowaliśmy je dla Ciebie w notatkach do odcinka, ale przejdźmy przez nie teraz.
+
+00:05:16.320 --> 00:05:17.680
+Po pierwsze, skalowalność.
+
+00:05:17.840 --> 00:05:21.280
+Czy Twoja obecna infrastruktura faktycznie poradzi sobie z nieprzewidywalnym popytem?
+
+00:05:21.420 --> 00:05:26.020
+Projekty pilotażowe świetnie wypadają w małych grupach, ale produkcja generuje tysiące równoległych zapytań.
+
+00:05:26.180 --> 00:05:29.080
+Jeśli system nie może skalować się horyzontalnie bez przebudowy,
+
+00:05:29.240 --> 00:05:32.520
+skazujesz się na ciągłe, awaryjne poprawki zamiast na trwałą wartość.
+
+00:05:32.660 --> 00:05:33.760
+Po drugie, sprzęt.
+
+00:05:33.840 --> 00:05:37.240
+Czy potrzebujesz specjalistycznych akceleratorów, takich jak GPU lub TPU?
+
+00:05:37.240 --> 00:05:43.080
+Większość prototypów ledwo działa na procesorach CPU, ale skalowanie sieci neuronowych do poziomu korporacyjnego pochłonie mnóstwo mocy obliczeniowej.
+
+00:05:43.200 --> 00:05:49.360
+Pytanie nie brzmi tylko, czy możesz kupić sprzęt, ale czy Twój zespół i budżet poradzą sobie z jego obsługą, by maszyny pracowały zamiast stać bezczynnie.
+
+00:05:49.480 --> 00:05:51.040
+Po trzecie, intensywność danych.
+
+00:05:51.200 --> 00:05:52.980
+Czy naprawdę jesteś gotowy na tę nawałnicę?
+
+00:05:53.140 --> 00:05:56.520
+Wczesne pilotaże często działają na uporządkowanych, wyselekcjonowanych zbiorach danych.
+
+00:05:56.520 --> 00:06:02.500
+W środowiskach produkcyjnych dane napływają w wielu formatach z różnych kanałów, testując limity pamięci i sieci.
+
+00:06:03.020 --> 00:06:05.320
+Zadania AI nie poczekają na powolny strumień.
+
+00:06:05.520 --> 00:06:08.220
+Wymagają ciągłego przepływu, inaczej cały system stanie.
+
+00:06:08.460 --> 00:06:10.260
+Po czwarte, złożoność algorytmiczna.
+
+00:06:10.420 --> 00:06:13.600
+Czy Twój zespół poradzi sobie z modelami, które nie działają jak statyczne aplikacje?
+
+00:06:13.780 --> 00:06:18.160
+Algorytmy ewoluują, adaptują się i czasem psują, gdy tylko napotkają rzeczywiste dane wejściowe.
+
+00:06:18.340 --> 00:06:23.620
+Prototyp wygląda dobrze z jednym zamrożonym modelem, ale produkcja oznacza ciągłe aktualizacje i zmieniające się zachowania.
+
+00:06:23.620 --> 00:06:29.720
+Bez odpowiednich umiejętności napotkasz przysłowiową ścianę modele działające na laptopie, które padają na klastrze serwerów.
+
+00:06:29.820 --> 00:06:31.040
+Po piąte, integracja.
+
+00:06:31.220 --> 00:06:34.060
+Czy Twoje AI połączy się płynnie z systemami starszego typu?
+
+00:06:34.240 --> 00:06:40.220
+Może działać dobrze samodzielnie, ale w firmie musi wymieniać dane, przestrzegać zasad zgodności i współpracować z dotychczasowymi protokołami.
+
+00:06:40.460 --> 00:06:45.740
+Jeśli system stawia opór przy integracji, nie zyskałeś członka zespołu, lecz stworzyłeś obciążenie dla własnej serwerowni.
+
+00:06:45.880 --> 00:06:51.300
+To pełna lista, skalowalność, sprzęt, intensywność danych, złożoność algorytmiczna i integracja.
+
+00:06:51.300 --> 00:06:54.620
+Mogą brzmieć prosto, ale razem tworzą prawdziwy test jakości.
+
+00:06:54.820 --> 00:06:58.860
+Oficjalne ramy pracy kadry zarządzającej odzwierciedlają dokładnie te pięć obszarów i nie bez powodu.
+
+00:06:59.080 --> 00:07:02.120
+Oddzielają one obiecujące projekty pilotażowe od tych skazanych na porażkę.
+
+00:07:02.340 --> 00:07:05.580
+Więcej szczegółów znajdziesz w dzisiejszych notatkach, ale sedno sprawy jest jasne.
+
+00:07:05.760 --> 00:07:09.320
+Jeśli odpowiesz tak na wszystkie pięć pytań, nie masz do czynienia ze zwykłym zadaniem.
+
+00:07:09.580 --> 00:07:14.280
+Masz przed sobą coś, co wymaga specjalnego traktowania własnej architektury i własnych dyscyplin.
+
+00:07:14.280 --> 00:07:17.340
+To tutaj wiele projektów ujawnia swoją prawdziwą naturę.
+
+00:07:17.500 --> 00:07:25.800
+To, co wyglądało na świetne demo pod wpływem pytań, okazuje się ogromnym przedsięwzięciem pochłaniającym budżet, talenty i infrastrukturę na zupełnie inną skalę.
+
+00:07:25.980 --> 00:07:29.500
+Wczesne rozpoznanie tego faktu pozwala uniknąć marnowania miesięcy i milionów.
+
+00:07:29.700 --> 00:07:32.520
+Mimo to, nawet z listą kontrolną w ręku wyzwania pozostają.
+
+00:07:32.760 --> 00:07:36.140
+Projekty pilotażowe, które powinny płynnie przejść do produkcji, często zawodzą.
+
+00:07:36.400 --> 00:07:42.760
+Zatrzymują się nie dlatego, że pomysł był wadliwy, ale dlatego, że środowisko, do którego trafiają, jest surowsze, uboższe i mniej wyrozumiałe niż sugerowało demo.
+
+00:07:42.760 --> 00:07:45.540
+Właśnie o tej przestrzeni musimy porozmawiać w następnej kolejności.
+
+00:07:45.780 --> 00:07:48.180
+Strefa śmierci między projektem pilotażowym a produkcją.
+
+00:07:48.400 --> 00:07:53.580
+Wiele pilotaży, a i błyszczy w laboratorium, by stracić dech w piersiach w momencie przeniesienia do warunków korporacyjnych.
+
+00:07:53.760 --> 00:07:59.760
+Zgrabne demo działa dobrze, gdy jest zasilane jednym czystym zbiorem danych, uruchomione na wybranej instancji i doglądane przez kilku inżynierów.
+
+00:08:00.480 --> 00:08:05.440
+Ale w chwili wystawienia go na prawdziwy ruch, chaotyczne strumienie danych i rygorystyczny nadzór, wszystko się załamuje.
+
+00:08:05.620 --> 00:08:08.800
+Ta luka ma swoją nazwę, strefa śmierci między projektem pilotażowym a produkcją.
+
+00:08:08.800 --> 00:08:16.500
+Oto sedno problemu. Pilotaże odnoszą sukces, ponieważ są chronione, kontrolowane dane wejściowe, wyselekcjonowane przepływy pracy i środowiska zaprojektowane tak, by wspierać model.
+
+00:08:16.700 --> 00:08:18.440
+Produkcja wymaga czegoś surowszego.
+
+00:08:18.740 --> 00:08:25.540
+Skalowania między zespołami, integracji z systemami typu legacy, spełniania wymogów regulacyjnych i obsługi nieprzewidywalnych fal danych.
+
+00:08:25.780 --> 00:08:28.120
+Dlatego tak wiele projektów zatrzymuje się między fazami.
+
+00:08:28.340 --> 00:08:31.620
+Nawyki, które sprawiły, że pilotaż błyszczał, nie przygotowują go na wiatry prawdziwego świata.
+
+00:08:31.840 --> 00:08:33.360
+Konsekwencje szybko się nawarstwiają.
+
+00:08:33.620 --> 00:08:37.780
+Silosy danych odcinają linie zaopatrzenia, a całe działy strzegą informacji w niekompatybilnych formatach.
+
+00:08:37.920 --> 00:08:41.060
+Luki w nadzorze sprawiają, że kontrola dostępu i uprawnienia są improwizowane.
+
+00:08:41.280 --> 00:08:43.740
+W porządku podczas testów, fatalne w obliczu audytu.
+
+00:08:43.920 --> 00:08:49.760
+Braki sprzętowe spowalniają trenowanie i wnioskowanie, gdy procesory nie nadążają, a akceleratory nie są częścią infrastruktury.
+
+00:08:49.920 --> 00:08:56.720
+A nad tym wszystkim wiszą ramy prawne, niczym niewidoczne pułapki, zwłaszcza w branżach podlegających surowym regulacjom prywatności i uczciwości.
+
+00:08:56.720 --> 00:09:03.660
+Te zagrożenia nie są wyjątkowe. Są one wielokrotnie podkreślane w badaniach branżowych jako przeszkody blokujące skalowanie AI.
+
+00:09:03.920 --> 00:09:08.260
+Zignoruj je, a Twój sukces skończy jako zapomniane prototypy zbierające kurz.
+
+00:09:09.040 --> 00:09:10.400
+Jeden obraz mówi wszystko.
+
+00:09:10.660 --> 00:09:15.440
+Wdrażanie AI poza etap pilotażowy przypomina wspinaczkę powyżej wysokości, na której brakuje tlenu na Ewerescie.
+
+00:09:15.620 --> 00:09:17.560
+Poniżej tej linii postęp przychodzi łatwo.
+
+00:09:17.780 --> 00:09:21.320
+Powyżej niej każdy krok wymaga świadomej dyscypliny, tlenu i pracy zespołowej.
+
+00:09:21.520 --> 00:09:24.720
+W kontekście AI ten tlen pochodzi z infrastruktury, nadzoru i automatyzacji.
+
+00:09:25.500 --> 00:09:30.780
+Metafora sprawdza się raz, ale sens jest wyraźniejszy, gdy porzucisz obrazowanie i zmierzysz się z brutalną prawdą.
+
+00:09:30.980 --> 00:09:34.040
+Twój zespół nie przedrze się przez strefę śmierci samym entuzjazmem.
+
+00:09:34.260 --> 00:09:37.000
+Technicznie rzecz biorąc, to rozwiązanie ma swoją nazwę MLOPS.
+
+00:09:37.160 --> 00:09:41.540
+Oznacza to automatyzację pętli testowania, wdrażania i monitorowania, aby modele działały przewidywalnie przy skalowaniu.
+
+00:09:41.800 --> 00:09:44.920
+Zamiast ręcznie tworzonych notatników przesyłanych bezpośrednio na produkcję,
+
+00:09:44.920 --> 00:09:51.660
+tworzysz standardowe potoki, które testują modele, sprawdzają je, wdrażają w powtarzalnych krokach i monitorują ich odchylenia w rzeczywistym środowisku.
+
+00:09:51.660 --> 00:09:56.260
+MLOPS przekształca AI z jednorazowego eksperymentu w system produkcyjny o niezawodności,
+
+00:09:56.380 --> 00:09:59.720
+jakiej oczekujesz od oprogramowania płacowego czy przetwarzania transakcji.
+
+00:09:59.960 --> 00:10:03.260
+Bez tego każde przekazanie jest chwiejne, a każda aktualizacja to hazard.
+
+00:10:03.460 --> 00:10:05.260
+Konkretne problemy potwierdzają tę tezę.
+
+00:10:05.440 --> 00:10:08.520
+Ten idealnie dostrojony model, który błyszczał w izolowanych testach,
+
+00:10:08.520 --> 00:10:14.040
+w zderzeniu z transmisją na żywo, opóźnieniami rzędu milisekund i setkami zapytań klientów naraz, zaczyna się zacinać.
+
+00:10:14.180 --> 00:10:16.720
+Pulpit nawigacyjny, który działał płynnie dla jednego zespołu,
+
+00:10:16.820 --> 00:10:19.420
+zamienia się w powolny proces, gdy loguje się tysiąc pracowników.
+
+00:10:19.560 --> 00:10:23.340
+Inżynierowie ścigają się, by łatać luki w wydajności, ale rzeczywistości nie da się uniknąć.
+
+00:10:23.460 --> 00:10:27.000
+Poprawki po fakcie kosztują więcej niż właściwa orkiestracja od samego początku.
+
+00:10:27.320 --> 00:10:29.220
+Nadzór stanowi kolejne źródło załamania.
+
+00:10:29.420 --> 00:10:32.560
+To, co przeszło w fazie koncepcyjnej, szybkie obejście administracyjne,
+
+00:10:32.560 --> 00:10:36.900
+czy skrót w uprawnieniach staje się natychmiastowym koszmarem zgodności, gdy wkraczają audytorzy.
+
+00:10:37.080 --> 00:10:39.960
+Przepisy i wymogi audytowe nie są opcjonalnymi dodatkami.
+
+00:10:39.960 --> 00:10:42.860
+To obowiązkowe ramy, które kształtują sam proces produkcji.
+
+00:10:43.100 --> 00:10:45.620
+Przedsiębiorstwa, które czekają z tym do zakończenia fazy pilotażowej,
+
+00:10:45.720 --> 00:10:48.640
+utykają na odbudowywaniu fundamentów, które powinny istnieć od pierwszego dnia.
+
+00:10:48.820 --> 00:10:51.720
+Tymczasem niedobór wykwalifikowanych rąk do pracy potęguje napięcie.
+
+00:10:51.880 --> 00:10:55.700
+Pilotaże mogą przetrwać dzięki kilku bystrym inżynierom improwizującym sprytne obejścia.
+
+00:10:55.700 --> 00:11:00.620
+Skala przedsiębiorstwa wymaga specjalistów z zakresu inżynierii danych, operacji, a i infrastruktury.
+
+00:11:00.860 --> 00:11:05.600
+Bez skodyfikowanych przepływów pracy każdy krok jest wymyślany na nowo, a tygodnie znikają bez postępów.
+
+00:11:05.600 --> 00:11:09.760
+Kierownictwo patrzy na zegarek, finanse śledzą koszty, a cierpliwość się wyczerpuje.
+
+00:11:10.000 --> 00:11:14.500
+Obietnica, a i zaczyna przypominać wstrzymany projekt, a nie transformacyjną zdolność.
+
+00:11:14.700 --> 00:11:18.280
+Kusi myśl, że rozwiązanie leży w większej liczbie talentów lub maszyn,
+
+00:11:18.400 --> 00:11:23.220
+ale gromadzenie zasobów bez orkiestracji jest jak dodawanie wspinaczy do zespołu bez lin czy tlenu.
+
+00:11:23.220 --> 00:11:26.560
+Ciała są w ruchu, ale bez szans na skoordynowane przetrwanie.
+
+00:11:26.740 --> 00:11:31.180
+Tym, co faktycznie ratuje projekty, nie jest czysta moc, lecz orkiestracja ujednolicająca dyscyplina,
+
+00:11:31.300 --> 00:11:34.460
+która łączy przepływy danych, zapewnia zgodność i automatyzuje wdrażanie.
+
+00:11:34.460 --> 00:11:38.040
+Nie jest to efektowne, ale stanowi system podtrzymywania życia dla zespołów,
+
+00:11:38.100 --> 00:11:40.120
+a i próbujących wyjść poza fazę pokazową.
+
+00:11:40.340 --> 00:11:43.880
+To nieunikniona lekcja. Enterprise AI nie może być improwizowane.
+
+00:11:44.200 --> 00:11:47.460
+Sukces wynika z fabrycznej powtarzalności, szablonów dla potoków automatycznych,
+
+00:11:48.220 --> 00:11:51.740
+testów nadzorów budowanego w procesy i dynamicznie zarządzanych zasobów.
+
+00:11:51.940 --> 00:11:54.680
+Dzięki tym podstawom strefa śmierci przestaje być cmentarzyskiem,
+
+00:11:54.780 --> 00:11:57.300
+a staje się przejściem, które można pokonać systematycznie.
+
+00:11:57.540 --> 00:12:01.500
+Bez nich każdy krok jest kruchą improwizacją, skazaną na załamanie pod presją.
+
+00:12:01.500 --> 00:12:05.200
+Gdy już dostrzeżesz skalę wymaganej koordynacji, pojawia się kolejne pytanie.
+
+00:12:05.500 --> 00:12:07.660
+Jak właściwie zbudować tę warstwę orkiestracji?
+
+00:12:07.860 --> 00:12:09.840
+Nie jako rozproszone poprawki czy odizolowane zespoły,
+
+00:12:09.960 --> 00:12:12.440
+lecz jako centralny pokład dowodzenia, gdzie chaos jest okiełznany,
+
+00:12:12.520 --> 00:12:15.000
+role zdefiniowane, a systemy działają w pełnej synchronizacji.
+
+00:12:15.180 --> 00:12:18.840
+Oto fabryka AI, czyli dowództwo floty dla korporacyjnej sztucznej inteligencji.
+
+00:12:19.100 --> 00:12:19.840
+Wyobraź to sobie.
+
+00:12:20.000 --> 00:12:22.540
+Zamiast każdego zespołu improwizującego w pojedynkę,
+
+00:12:22.640 --> 00:12:27.900
+masz jeden mostek, na którym działy DataOps, MLOPS i GeniOps pracują jak oficerowie na swoich stanowiskach.
+
+00:12:27.900 --> 00:12:32.740
+Silniki, osłony, nawigacja, każde z własnym zadaniem, lecz koordynowane z jednego fotela dowodzenia.
+
+00:12:32.960 --> 00:12:35.140
+Na tym polega założenie, to nie kolejne doklejone narzędzie,
+
+00:12:35.280 --> 00:12:38.460
+lecz warstwa orkiestracji, która utrzymuje statek w całości pod wpływem stresu.
+
+00:12:38.640 --> 00:12:42.320
+Bez centralnej warstwy korporacyjne, a i przypomina bardziej bójkę między pokładami.
+
+00:12:42.500 --> 00:12:46.060
+Inżynierowie danych tworzą potoki w jednym koncie, operacje piszą zasady w drugim,
+
+00:12:46.120 --> 00:12:47.860
+a badacze przerzucają modele przez burtę.
+
+00:12:48.060 --> 00:12:49.680
+Brak wspólnej mapy, brak rytmu.
+
+00:12:49.880 --> 00:12:53.920
+Otrzymujesz nakładające się skrypty, nadmiarowe systemy i luki w zabezpieczeniach tak wielkie,
+
+00:12:53.920 --> 00:12:55.620
+że przeleciałby przez nie prom kosmiczny.
+
+00:12:55.780 --> 00:13:00.040
+Ten chaos to nierzadki wypadek, lecz rezultat skalowania, a i pozostawionego samym sobie.
+
+00:13:00.280 --> 00:13:02.240
+Fabryka całkowicie zmienia ten scenariusz.
+
+00:13:02.420 --> 00:13:05.460
+Pomyśl o tym nie jak o nowym gadżecie, ale jak o pulpicie dyrygenta.
+
+00:13:05.660 --> 00:13:08.880
+Sekcje to twoje jeziora danych, potoki szkoleniowe, akceleratory chmurowe,
+
+00:13:09.020 --> 00:13:11.760
+które zamiast wchodzić sobie w drogę, grają w idealnym czasie.
+
+00:13:12.000 --> 00:13:15.580
+W praktyce demo tej sesji obejmuje funkcje takie jak podejście Auto Lake,
+
+00:13:15.840 --> 00:13:19.100
+które centralizuje rozproszone zasoby danych w jedno spójne środowisko.
+
+00:13:19.100 --> 00:13:24.080
+Potoki wreszcie działają w oparciu o stałe źródło prawdy, a ład korporacyjny ma konkretne mechanizmy do egzekwowania.
+
+00:13:24.320 --> 00:13:27.500
+Głodne modele, a i nie przymierają głodem, bo strumień danych wysechu.
+
+00:13:27.700 --> 00:13:29.320
+Szablony to kolejna karta na stole.
+
+00:13:29.560 --> 00:13:33.100
+Projekty pilotażowe rutynowo nie skalują się, ponieważ każdy z nich inaczej przygotowuje infrastrukturę,
+
+00:13:33.860 --> 00:13:37.420
+skryptuje zadania na własny sposób i pozostawia połowę systemu bez dokumentacji.
+
+00:13:37.600 --> 00:13:39.200
+Szablony naprawiają ten dryf.
+
+00:13:39.280 --> 00:13:41.160
+Budujesz raz, powielasz w nieskończoność.
+
+00:13:41.340 --> 00:13:45.820
+Zyskujesz niezawodność klasy fabrycznej, gdzie naciśnięcie przycisku uruchamia potok zawsze w ten sam sposób.
+
+00:13:45.820 --> 00:13:49.280
+Zamiast miesięcy ręcznego montażu, masz powtarzalne wdrożenie w kilka dni.
+
+00:13:49.500 --> 00:13:51.180
+Następnie przychodzi kontrola dostępu.
+
+00:13:51.300 --> 00:13:54.460
+Kontrola dostępu oparta na rolach brzmi nudno, dopóki nie musisz bez niej żyć.
+
+00:13:54.600 --> 00:13:57.600
+Bez zabezpieczeń młodszy personel przypadkowo trafia do klastrów GPU.
+
+00:13:57.860 --> 00:14:01.580
+Audytorzy muszą przemykać bocznymi drzwiami i nikt nie jest w stanie powiedzieć, kto co zmienił.
+
+00:14:01.700 --> 00:14:03.360
+RBAC przywraca porządek.
+
+00:14:03.520 --> 00:14:08.260
+Inżynierowie danych widzą potoki, naukowcy mają swoje piaskownice, a audytorzy obserwują bez ingerencji.
+
+00:14:08.500 --> 00:14:11.320
+Jasne zasady, mniej ryzyka, sprawniejsza współpraca.
+
+00:14:11.320 --> 00:14:17.540
+Sieć to niewidzialna tętnica. Skalowanie bez właściwych kanałów i połączeń powoduje plątaninę, gdy obciążenia rozpraszają się między zespołami.
+
+00:14:17.740 --> 00:14:20.000
+Odpowiedzią fabryki są prywatne ścieżki sieciowe.
+
+00:14:20.180 --> 00:14:24.820
+Punkty końcowe są odizolowane, przepustowość dostosowana do dużych potrzeb, a ryzyko wycieku spada.
+
+00:14:25.000 --> 00:14:30.420
+Pomyśl o tym jak o zapewnieniu, że sieć komunikacyjna przesyła tylko Twoje sygnały, a nie obce transmisje zakłócające linie.
+
+00:14:30.620 --> 00:14:33.200
+Orkiestracja sprzętu to często najbardziej kosztowny problem.
+
+00:14:33.420 --> 00:14:37.620
+Układy GPU i TPU są potężne, ale niezarządzane pozostają bezczynne i pochłaniają środki.
+
+00:14:37.620 --> 00:14:40.700
+W modelu fabrycznym akceleratory wpinają się w szerszy harmonogram.
+
+00:14:40.960 --> 00:14:45.060
+Sterowniki są przydzielane automatycznie, zadania ustawiane w kolejce, a wydajność równoważona.
+
+00:14:45.300 --> 00:14:49.520
+Zamiast codziennie zmagać się z rdzeniem napędu, sterujesz nim za pomocą powtarzalnej sekwencji.
+
+00:14:49.780 --> 00:14:52.860
+Sprzęt zachowuje się jak część systemu, a nie jak niezależna gwiazda.
+
+00:14:53.060 --> 00:14:58.900
+Organizacje testujące ten model zgłaszają, że konfiguracje ciągnące się tygodniami w systemie zgłoszeń ulegają drastycznemu skróceniu.
+
+00:14:59.020 --> 00:15:04.500
+To nie magia, to dyscyplina skoordynowanych przepływów pracy, kontrolowanego dostępu i ujednoliconej orkiestracji.
+
+00:15:04.500 --> 00:15:08.480
+Kiedy szalupy są przywiązane do jednego statku, rejs staje się przewidywalny.
+
+00:15:08.660 --> 00:15:12.460
+Tym, co gwarantuje niezawodność, nie są tylko narzędzia, ale stojące za nimi ramy.
+
+00:15:12.660 --> 00:15:19.160
+Podejście fabryki AI opiera się na najlepszych praktykach chmurowych zbliżonych do wytycznych Microsoftu w zakresie adopcji chmury i dobrze zaprojektowanej architektury.
+
+00:15:19.360 --> 00:15:27.000
+Taka integracja zapewnia, że obciążenia są tworzone z myślą o bezpieczeństwie, skalowalności i zgodności od samego początku, a nie dodawane później pod presją.
+
+00:15:27.000 --> 00:15:32.500
+Chroni to projekty przed pułapką kruchych demonstracji, które upadają w zderzeniu z realiami przedsiębiorstwa.
+
+00:15:32.700 --> 00:15:35.060
+Metafora gwiezdnej floty pasuje tutaj idealnie.
+
+00:15:35.240 --> 00:15:37.700
+Oficerowie nie improwizują w swoich głównych obowiązkach.
+
+00:15:37.840 --> 00:15:41.880
+Tarcze podnoszą się na rozkaz, silniki startują na sygnał, komunikacja synchronizuje się w jeden kanał.
+
+00:15:41.980 --> 00:15:43.960
+Te właśnie choreografie zapewnia ten model.
+
+00:15:44.240 --> 00:15:50.100
+Bierze rozproszone wysiłki, przypisuje im właściwe pasy i wiąże je w statek działający w oparciu o porządek, a nie chaos.
+
+00:15:50.100 --> 00:15:55.220
+W samym sercu fabryka łączy operacje danych, ML i GINA i w jeden orkiestrowany system.
+
+00:15:55.480 --> 00:16:02.340
+Wynikiem jest powtarzalna skala, a nie oparte na szczęściu AI, które bezpiecznie przechodzi z fazy demonstracji laboratoryjnej do wymagań przedsiębiorstwa.
+
+00:16:02.580 --> 00:16:07.740
+Zespoły zyskują pewność, ponieważ wiedzą, że mostek istnieje, a dyscyplina przenika każdą fazę pracy.
+
+00:16:07.940 --> 00:16:09.760
+Ale mostek jedynie wyznacza kierunek.
+
+00:16:09.920 --> 00:16:12.660
+Tym, co faktycznie napędza jednostkę, są silniki poniżej.
+
+00:16:12.840 --> 00:16:17.120
+Przeciążone akceleratory, potoki zalewane danymi, modele zmieniające kurs w trakcie pracy.
+
+00:16:17.120 --> 00:16:22.620
+I to właśnie tam, w maszynowni pod pokładem, pojawiają się kolejne wyzwania wymagające Twojej uwagi.
+
+00:16:23.300 --> 00:16:26.340
+Maszynownia, złożoność sprzętu, danych i algorytmów.
+
+00:16:26.500 --> 00:16:32.940
+Każdy gwiezdny statek ma maszynownię, a w przypadku AI przedsiębiorstwa silnik ten zasilają trzy niestabilne podsystemy akceleratory sprzętowe,
+
+00:16:33.080 --> 00:16:36.900
+strumienie danych, które je karmią oraz algorytmy, które nie potrafią ustać w miejscu.
+
+00:16:37.100 --> 00:16:39.280
+Jeśli zachwiejesz równowagą, cały statek stanie.
+
+00:16:39.600 --> 00:16:42.160
+Spraw, by pracowały w rytmie, a zyskasz siłę do skalowania.
+
+00:16:42.440 --> 00:16:43.380
+Zacznij od sprzętu.
+
+00:16:43.380 --> 00:16:49.820
+Procesory CPU radzą sobie ze zwykłymi aplikacjami, ale obciążenia, a i wymagają matematyki równoległej, której sprostać mogą tylko procesory GPU lub TPU.
+
+00:16:49.980 --> 00:16:52.280
+Te akceleratory to nie urządzenia typu podłącz i używaj.
+
+00:16:52.480 --> 00:16:56.780
+Wymagają własnych bibliotek, harmonogramów i specyficznej obsługi, przypominając bardziej egzotyczne reaktory niż biurowe serwery.
+
+00:16:57.020 --> 00:16:59.920
+Niebezpieczeństwem są bezczynne szafy serwerowe, które świecą, nic nie wnosząc.
+
+00:17:00.040 --> 00:17:03.580
+Praktyczny sprawdzian, zmierz harmonogramowanie GPU i monitoruj czas bezczynności.
+
+00:17:03.840 --> 00:17:09.320
+Jeśli akceleratory milczą, gdy rośnie zapotrzebowanie, Twoje zasoby są źle dobrane na długo przed planowaniem skali.
+
+00:17:09.320 --> 00:17:14.240
+Jest też niekończący się głód danych. Każdy poważny model wymaga potoku, a nie stróżki.
+
+00:17:14.440 --> 00:17:17.980
+Aplikacje biznesowe radzą sobie z prostymi zapytaniami i nocnym przetwarzaniem w satowym.
+
+00:17:18.160 --> 00:17:22.100
+Potoki AI wymagają szybkiej, ciągłej przepustowości przy znikomych opóźnieniach.
+
+00:17:22.240 --> 00:17:29.560
+Pamięć masowa nie może już tylko przechowywać, musi przesyłać, obsługiwać współbieżność i zapewniać przepustowość, inaczej drogie akceleratory będą tylko czekać.
+
+00:17:29.720 --> 00:17:32.120
+Badania potwierdzają to w ramach koncepcji Chinchilla.
+
+00:17:32.400 --> 00:17:37.520
+Większe modele nie przynoszą zysków bezproporcjonalnie większych zbiorów danych treningowych, a brak równowagi marnuje moc obliczeniową.
+
+00:17:37.520 --> 00:17:40.080
+To oznacza, że liczy się zarówno rozmiar, jak i jakość.
+
+00:17:40.260 --> 00:17:42.120
+Śmieci na wejściu, śmieci na wyjściu.
+
+00:17:42.280 --> 00:17:43.760
+Twój sprawdzian tutaj jest prosty.
+
+00:17:43.920 --> 00:17:46.900
+Przetestuj wydajność potoku pod realistycznym, rzeczywistym obciążeniem.
+
+00:17:47.120 --> 00:17:51.020
+Jeśli przepustowość spadnie lub utworzą się kolejki, silniki będą dławić się w produkcji.
+
+00:17:51.240 --> 00:17:54.400
+Wreszcie najdziwniejsza część maszynowni – złożoność algorytmiczna.
+
+00:17:54.740 --> 00:17:58.020
+Oprogramowanie płacowe działa krok po kroku z nudną przewidywalnością.
+
+00:17:58.280 --> 00:18:00.660
+Modele AI zachowują się raczej jak chmury plazmy.
+
+00:18:00.660 --> 00:18:06.440
+Zmieniają kształt w trakcie działania, puchnąc przy nowych cyklach treningowych lub zapadając się pod wpływem określonych danych wejściowych.
+
+00:18:06.660 --> 00:18:13.100
+Grafy obliczeniowe dla nowoczesnych sieci neuronowych zmieniają strukturę dynamicznie, a ta niestabilność mocno uderza w przydział zasobów.
+
+00:18:13.300 --> 00:18:17.740
+Bez narzędzi profilujących i dynamicznych harmonogramów Twoja infrastruktura zostanie zaskoczona.
+
+00:18:17.960 --> 00:18:21.880
+Praktyczne zabezpieczenie, postaw na ścisłe wersjonowanie modeli i ciągłe profilowanie.
+
+00:18:22.180 --> 00:18:26.340
+Dzięki temu zobaczysz, kiedy graf puchnie i dostosujesz moc obliczeniową, zanim system się załamie.
+
+00:18:26.340 --> 00:18:31.440
+Rozważ przestrogi przedsiębiorstwa, które zainwestowało w GPU, ale zasilało je słabymi potokami.
+
+00:18:31.640 --> 00:18:36.200
+Akceleratory stały w rzędzie, bucząc jak posągi, podczas gdy dane spływały zbyt wolno, by miało to znaczenie.
+
+00:18:36.460 --> 00:18:39.320
+Zadania ustawiały się w kolejce, ale nic nie pokonywało wąskiego gardła.
+
+00:18:39.520 --> 00:18:42.340
+Efekt spalone pieniądze, stracony czas i nadszarpnięta wiarygodność.
+
+00:18:43.060 --> 00:18:44.780
+Ich lekcja stała się uniwersalna.
+
+00:18:45.020 --> 00:18:50.800
+Skalowanie AI wymaga równowagi między sprzętem, przepływem danych i zachowaniem algorytmów nigdy nie analizuj ich w izolacji.
+
+00:18:51.040 --> 00:18:53.720
+Nagrodą za zrobienie tego dobrze jest po prostu równowaga.
+
+00:18:53.720 --> 00:18:56.540
+Sprzęt pracuje tylko wtedy, gdy strumienie są gotowe.
+
+00:18:56.700 --> 00:18:59.200
+Potoki danych płyną bez głodzenia akceleratorów.
+
+00:18:59.360 --> 00:19:04.000
+Algorytmy zmieniają się w monitorowanych ramach, więc przydział zasobów dostosowuje się natychmiast.
+
+00:19:04.140 --> 00:19:07.600
+To orkiestracja w samej maszynowni, a nie chaos udający postęp.
+
+00:19:08.160 --> 00:19:10.120
+A kompasem są testy diagnostyczne.
+
+00:19:10.340 --> 00:19:14.940
+Monitoruj czas bezczynności akceleratorów, testuj potoki pod obciążeniem, wersjonuj i profiluj modele.
+
+00:19:15.160 --> 00:19:18.720
+Dzięki nim wiesz, kiedy równowaga jest zachowana, a kiedy naprawa jest pilna.
+
+00:19:18.920 --> 00:19:20.580
+Jednak sama równowaga to za mało.
+
+00:19:20.580 --> 00:19:23.000
+Bez zasad i nadzoru system sam się wypala.
+
+00:19:23.000 --> 00:19:25.600
+Skalowanie to nigdy tylko czysta moc obliczeniowa.
+
+00:19:25.840 --> 00:19:30.020
+Chodzi o skoordynowane systemy, w których każda część przestrzega limitów i współpracuje.
+
+00:19:30.220 --> 00:19:35.000
+To granica między działającym silnikiem statku kosmicznego, a eksperymentem zamrożonym w locie.
+
+00:19:35.160 --> 00:19:37.540
+To kieruje nas z powrotem do szerszej perspektywy.
+
+00:19:37.780 --> 00:19:41.280
+Sztucznej inteligencji nie utrzyma pojedyncza maszyna czy efektowny klaster.
+
+00:19:41.480 --> 00:19:46.760
+To połączony system, gdzie sprzęt, dane i algorytmy muszą synchronizować się pod nadzorem i orkiestracją.
+
+00:19:46.760 --> 00:19:50.400
+Bez tego nawet najsilniejszy silnik zgaśnie na platformie startowej.
+
+00:19:50.740 --> 00:19:53.680
+Wniosek w skalowanie AI nie polega na dokładaniu sprzętu.
+
+00:19:53.900 --> 00:19:56.420
+Chodzi o traktowanie całego systemu jako ekosystemu.
+
+00:19:56.620 --> 00:19:59.600
+Orkiestracja, zarządzanie i adaptacyjna infrastruktura to nie dodatki.
+
+00:19:59.760 --> 00:20:03.940
+To triada, która utrzymuje AI w zgodzie ze strategią i zapewnia odporność w ramach zgodności z przepisami.
+
+00:20:03.940 --> 00:20:06.100
+Zignoruj je, a projekty zaczną dryfować.
+
+00:20:06.300 --> 00:20:09.740
+Zaakceptuj je, a zmienisz laboratoryjne dema w niezawodne możliwości biznesowe.
+
+00:20:09.880 --> 00:20:11.620
+Kadra kierownicza już widzi te zmiany.
+
+00:20:11.820 --> 00:20:17.580
+Badania branżowe podlinkowane w notatkach wskazują, że ponad 90% planuje zwiększyć inwestycje w AI w ciągu 3 lat.
+
+00:20:17.700 --> 00:20:19.360
+Te pieniądze potrzebują struktury.
+
+00:20:19.620 --> 00:20:22.740
+Orkiestracja AI na skalę przedsiębiorstwa w stylu fabrycznym to pomost.
+
+00:20:22.940 --> 00:20:23.860
+Wybór jest prosty.
+
+00:20:24.080 --> 00:20:26.480
+Chaos za sterami albo załoga sprawująca kontrolę.
+
+00:20:26.480 --> 00:20:31.900
+Jeśli ten odcinek podniósł Twój poziom mocy, zasubskrybuj, aby przyszłe transmisje trafiały do Ciebie automatycznie.
+
+00:20:31.900 --> 00:20:36.820
+Oceń program, zostaw swój najostrzejszy komentarz i sprawdź notatki pod kątem źródeł oraz linków.
+
+00:20:37.020 --> 00:20:38.980
+Do usłyszenia na kolejnej częstotliwości.
