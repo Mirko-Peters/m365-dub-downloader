@@ -1,0 +1,35 @@
+name: Dokumentations-Links für Entitäten prüfen und eintragen (T13)
+# tools/docs_links.py prueft jeden Kandidaten live (200, erlaubter Host, kein Fehlerpfad) und traegt nur bestandene Links ein.
+on:
+  workflow_dispatch:
+    inputs:
+      apply:
+        description: "Geprüfte Links in data/entities.json eintragen (sonst nur Bericht)"
+        type: boolean
+        default: false
+permissions:
+  contents: write
+  actions: write
+concurrency:
+  group: docs-links
+  cancel-in-progress: false
+jobs:
+  links:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.12" }
+      - name: Links prüfen
+        run: python tools/docs_links.py ${{ inputs.apply && '--apply' || '' }}
+      - name: Speichern und Seitenbau starten
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          git config user.name "m365-site-bot"; git config user.email "actions@users.noreply.github.com"
+          git add data/entities.json data/docs_links_report.json
+          if git diff --cached --quiet; then echo "Nichts zu speichern"; exit 0; fi
+          git commit -q -m "Entitäten: geprüfte Dokumentations-Links (sameAs)"
+          (git pull --rebase -q -X theirs || git rebase --abort) && git push -q
+          if ! git diff --quiet HEAD~1 -- data/entities.json; then gh workflow run site.yml --ref main; fi
