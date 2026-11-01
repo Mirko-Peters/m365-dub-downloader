@@ -5,6 +5,7 @@ async function meta(db, k) { try { return (await db.prepare("SELECT v FROM meta 
 const FLAGS = { tr_off: /^[01]$/, atr_off: /^[01]$/, atr_ent_cap: /^\d{1,4}$/, tr_queue_on: /^[01]$/, entity_source: /^(json|db)$/ };
 const QKINDS = new Set(["blog", "podcast", "video", "entity", "lblog", "notes"]), QLANGS = new Set(["en", "de", "fr", "es", "it", "nl", "pt", "pl", "id", "ru", "uk", "ar", "he", "ja", "ko"]);
 import { audit } from "./util.js";
+import { SPONSOR_STATUSES } from "./sponsor.js";
 
 export async function handleAdminPanel(env, request, url, path, user, J) {
   if (!path.startsWith("/api/admin/panel/")) return null;
@@ -60,6 +61,26 @@ export async function handleAdminPanel(env, request, url, path, user, J) {
     const fails = (await db.prepare("SELECT name,COUNT(*) n FROM cron_runs WHERE ok=0 AND finished>0 AND started>? GROUP BY name").bind(now() - 86400).all().catch(() => ({ results: [] }))).results || [];
     const log = (await db.prepare("SELECT a.user_id,u.name,a.action,a.target,a.detail,a.created FROM audit a LEFT JOIN users u ON u.id=a.user_id ORDER BY a.id DESC LIMIT 50").all().catch(() => ({ results: [] }))).results || [];
     return J({ runs, fails, audit: log });
+  }
+
+  if (path === "/api/admin/panel/sponsor-requests" && request.method === "GET") {
+    const status = url.searchParams.get("status") || "";
+    if (status && status !== "all" && !SPONSOR_STATUSES.has(status)) return J({ error: "bad_request" }, 400);
+    const limit = Math.max(1, Math.min(100, parseInt(url.searchParams.get("limit") || "50", 10) || 50));
+    const offset = Math.max(0, Math.min(100000, parseInt(url.searchParams.get("offset") || "0", 10) || 0));
+    const filtered = status && status !== "all";
+    const where = filtered ? " WHERE status=?" : "";
+    const bind = filtered ? [status] : [];
+    const total = (await db.prepare(`SELECT COUNT(*) total FROM sponsor_requests${where}`).bind(...bind).first()).total;
+    const items = (await db.prepare(`SELECT id,created,company,name,email,message,package,status,lang FROM sponsor_requests${where} ORDER BY created DESC,id DESC LIMIT ? OFFSET ?`).bind(...bind, limit, offset).all()).results || [];
+    return J({ items, total, limit, offset });
+  }
+
+  if (path === "/api/admin/panel/sponsor-requests/status" && request.method === "POST") {
+    const b = await request.json().catch(() => ({})), id = Number(b.id), status = String(b.status || "");
+    if (!Number.isSafeInteger(id) || id < 1 || !SPONSOR_STATUSES.has(status)) return J({ error: "bad_request" }, 400);
+    const updated = await db.prepare("UPDATE sponsor_requests SET status=? WHERE id=?").bind(status, id).run();
+    return updated.meta.changes ? J({ ok: true }) : J({ error: "not_found" }, 404);
   }
 
   if (path === "/api/admin/panel/translations" && request.method === "GET") {   // Uebersicht: jeder Inhalt mit vorhandenen Sprachfassungen; Grundlage aus dem Seitenbau (translation-status.json) plus Datenbank
