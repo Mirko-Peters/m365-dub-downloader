@@ -47,7 +47,7 @@ def ld(base, pid, lang, ep_url):
         u, title = ep_url(q)
         n = {"@context": "https://schema.org", "@type": "Quotation", "@id": f"{base}/entity/{pid}/#quote-{q['id']}", "text": q["text"], "inLanguage": q["lang"],
              "creator": {"@id": f"{base}/entity/{pid}/#entity"}}
-        if u: n["isPartOf"] = {"@type": "PodcastEpisode", "url": u, **({"name": title} if title else {})}
+        if u: n["isPartOf"] = {"@id": u.rstrip("/") + "/#episode"}   # Folgenseiten (Hauptshow und Dub) definieren den Knoten #episode
         if q.get("about"): n["about"] = [{"@id": f"{base}/entity/{x}/#entity"} for x in q["about"]]
         out.append(n)
     return out

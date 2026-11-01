@@ -990,7 +990,7 @@ def build():
         _el = {k: u for k, u in elinks.get(f"{vid}:{l}", {}).items() if u}   # zugeordnete Plattform-Folgenlinks -> sameAs
         more = related(it, by_lang[l], tagsets[l], catsets[l])
         ld = [
-            {"@context": "https://schema.org", "@type": "PodcastEpisode", "name": e["title"], "description": strip_tags(intro),
+            {"@context": "https://schema.org", "@type": "PodcastEpisode", "@id": canonical + "#episode", "name": e["title"], "description": strip_tags(intro),
              "url": canonical, "inLanguage": LANGS[l][1], "datePublished": it["date"],
              "associatedMedia": {"@type": "AudioObject", "contentUrl": spk, "inLanguage": LANGS[l][1]},
              "image": f"{BASE}/og/{canonical.replace(BASE, '').strip('/')}.png", "isAccessibleForFree": True, "keywords": e.get("tags", ""),
