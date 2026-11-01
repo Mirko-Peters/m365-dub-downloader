@@ -107,6 +107,21 @@ def text_key(h):
     return re.sub(r"\s+", "", html.unescape(re.sub(r"<[^>]+>", "", h or "")))
 
 
+def spreaker_html(raw):
+    """Fassung fuer Spreakers Feld description_html: Spreaker behaelt <a>, <ul>/<ol>/<li> und <br>, entfernt aber <p> und
+    <strong> (Test 1.11., reports/spreaker-html-test.md). Absaetze -> Zeilenumbruch, <strong> -> <b>."""
+    h = re.sub(r"(?is)<strong>(.*?)</strong>", r"<b>\1</b>", raw.strip())
+    h = re.sub(r"(?is)<p[^>]*>", "", h)
+    h = re.sub(r"(?is)</p>\s*(?=<(ul|ol)\b)", "<br>", h)   # vor einer Liste reicht ein Umbruch
+    h = re.sub(r"(?is)</p>\s*", "<br><br>", h)
+    h = re.sub(r"(?is)(</(ul|ol)>)\s*(?=\S)", r"\1<br>", h)
+    return re.sub(r"(?is)(<br>\s*){3,}", "<br><br>", h).strip().removesuffix("<br><br>").removesuffix("<br>")
+
+
+def _links(h):
+    return len(re.findall(r"<a\s[^>]*href=", h or "", flags=re.I))
+
+
 def same_on_spreaker(ep, raw):
     """True, wenn Spreaker die Fassung raw gespeichert hat: HTML-Feld (falls geliefert) gleich, sonst Textinhalt gleich."""
     h = ep.get("description_html")
