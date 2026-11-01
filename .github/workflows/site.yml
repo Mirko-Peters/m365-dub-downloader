@@ -97,7 +97,11 @@ jobs:
               if git diff --cached --quiet; then echo "nichts zu sichern"; exit 0; fi
               git commit -q -m "Spotify-Folgenlinks aktualisiert"
               for i in 1 2 3 4 5; do
-                git pull --rebase --autostash -q -X theirs origin main && git push -q origin HEAD:main && exit 0
+                if git pull --rebase --autostash -q -X theirs origin main; then
+                  git push -q origin HEAD:main && exit 0
+                else
+                  git rebase --abort 2>/dev/null || true
+                fi
                 sleep $((i*5))
               done
               echo "::error::Spotify-Folgenlinks konnten nicht gesichert werden"; exit 1
@@ -171,7 +175,11 @@ jobs:
               if git diff --cached --quiet; then echo "nichts zu sichern"; exit 0; fi
               git commit -q -m "Money-Keywords, Profil-Export, Entitaets-Aenderungsdaten und Folgen-Slugs aktualisiert"
               for i in 1 2 3 4 5; do
-                git pull --rebase --autostash -q -X theirs origin main && git push -q origin HEAD:main && exit 0
+                if git pull --rebase --autostash -q -X theirs origin main; then
+                  git push -q origin HEAD:main && exit 0
+                else
+                  git rebase --abort 2>/dev/null || true
+                fi
                 sleep $((i*5))
               done
               echo "::error::Money-Keywords, Profil-Export, Entitaets-Aenderungsdaten und Folgen-Slugs konnten nicht gesichert werden"; exit 1
