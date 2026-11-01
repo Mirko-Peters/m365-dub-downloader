@@ -12,6 +12,7 @@ import { syncLiveEvents } from "./liveevents.js";
 import { syncContentTopics, handleTopics } from "./topics.js";
 import { importQuotesFromSite, handleQuotes } from "./quotes.js";
 import { importEpisodes, importTranslations, handleRegister } from "./register.js";
+import { importSearchIndex, handleSearch } from "./search.js";
 import { entityMap } from "./entities.js";
 import { handleProfiles, deleteUserData, refreshProfilesExport } from "./profiles.js";
 import { handleEvents, deleteUserEvents, ensureM365Con } from "./events.js";
@@ -162,6 +163,7 @@ async function api(env, request, url, path, asUser) {
   const db = env.DB;
 
   if (path === "/api/health") return J({ ok: true }, 200);
+  if (path === "/api/search") return handleSearch(env, request, url, J);
   if (path === "/api/providers") return J({ providers: Object.keys(PROVIDERS).filter((k) => PROVIDERS[k].id(env) && PROVIDERS[k].secret(env)) }, 200, { "cache-control": "public, max-age=300" });
   if (path === "/api/me/li-follow" && method === "POST") {
     if (need()) return need();
@@ -421,6 +423,7 @@ export default {
     T("importQuotesFromSite", () => importQuotesFromSite(env));
     T("importEpisodes", () => importEpisodes(env));
     T("importTranslations", () => importTranslations(env));
+    T("importSearchIndex", () => importSearchIndex(env));
     if (event.cron !== "0 6 * * *") T("syncExpertise", () => syncExpertise(env, entityMap));   // nicht doppelt um 06:00 (beide Zeitplaene feuern)
     ctx.waitUntil(env.DB.prepare("DELETE FROM cron_runs WHERE started<?").bind(Math.floor(Date.now() / 1000) - 7 * 86400).run().catch(() => 0));
   },
