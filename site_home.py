@@ -18,16 +18,23 @@ def _load(api):
 CSS = ('<style>.hub-f{font:inherit;cursor:pointer;border:1px solid var(--bd);border-radius:2em;padding:.4em 1em;margin:.2em .3em .2em 0;background:var(--card);color:inherit}'
        '.hub-f[aria-pressed=true]{border-color:var(--ac);font-weight:700}.hub-card .kicker{margin-bottom:.3em}.hub-card{border:1px solid var(--bd);border-radius:.6em;padding:.9em 1em;background:var(--card)}'
        '.hub-card a{text-decoration:none}.hub-card h3{margin:.1em 0 .3em}.hub-ctl{display:flex;flex-wrap:wrap;gap:.5em;margin:.6em 0}.hub-ctl input,.hub-ctl select{font:inherit;padding:.4em .7em;border:1px solid var(--bd);border-radius:.4em;background:var(--card);color:inherit;max-width:100%}.hub-card[hidden],.thumb[hidden]{display:none}</style>')
-JS = ('<script>(function(){var b=[].slice.call(document.querySelectorAll(".hub-f")),c=[].slice.call(document.querySelectorAll("#hub [data-k]")),N=%N%,NM=%NAMES%,'
-      'q=document.getElementById("hub-q"),sa=document.getElementById("hub-a"),st=document.getElementById("hub-t"),sel=document.getElementById("hub-sel"),S={k:"all",ts:[]};'
+# T6: nur die ersten N Karten stehen im HTML; der Rest liegt in hub-more.json und wird bei "Mehr laden" oder beim ersten Filtern nachgeladen
+JS = ('<script>(function(){var H=document.getElementById("hub"),b=[].slice.call(document.querySelectorAll(".hub-f")),N=%N%,NM=%NAMES%,'
+      'q=document.getElementById("hub-q"),sa=document.getElementById("hub-a"),st=document.getElementById("hub-t"),sel=document.getElementById("hub-sel"),mb=document.getElementById("hub-more"),S={k:"all",ts:[]},L=0;'
+      'function cs(){return [].slice.call(H.querySelectorAll("[data-k]"))}'
+      'function more(cb){if(L||!H.dataset.more){if(cb)cb();return}L=1;if(mb)mb.disabled=true;fetch(H.dataset.more).then(function(r){return r.json()}).then(function(j){var t=document.createElement("template");t.innerHTML=(j.cards||[]).join("");H.appendChild(t.content);N=1e9;if(mb)mb.hidden=true;if(cb)cb()}).catch(function(){L=0;if(mb)mb.disabled=false})}'
       'function ap(){var n=0,ql=q?q.value.trim().toLowerCase():"",a=sa?sa.value:"",f=S.k!=="all"||ql||a||S.ts.length;'
+      'if(f&&!L&&H.dataset.more){more(ap);return}'
       'b.forEach(function(x){x.setAttribute("aria-pressed",x.dataset.k===S.k?"true":"false")});'
-      'c.forEach(function(e){var t=(e.dataset.t||"").split(" "),ok=(S.k==="all"||e.dataset.k===S.k)&&(!a||e.dataset.a===a)&&(!ql||(e.dataset.q||"").indexOf(ql)>-1||(e.dataset.a||"").toLowerCase().indexOf(ql)>-1)&&S.ts.every(function(x){return t.indexOf(x)>-1});'
+      'cs().forEach(function(e){var t=(e.dataset.t||"").split(" "),ok=(S.k==="all"||e.dataset.k===S.k)&&(!a||e.dataset.a===a)&&(!ql||(e.dataset.q||"").indexOf(ql)>-1||(e.dataset.a||"").toLowerCase().indexOf(ql)>-1)&&S.ts.every(function(x){return t.indexOf(x)>-1});'
       'if(ok&&!f){ok=n<N;n++}e.hidden=!ok});'
       'if(sel){sel.textContent="";S.ts.forEach(function(x){var s=document.createElement("button");s.type="button";s.className="hub-f";s.textContent=NM[x]+" ✕";s.title="%RM%";s.onclick=function(){S.ts=S.ts.filter(function(y){return y!==x});ap()};sel.appendChild(s)})}}'
       'b.forEach(function(x){x.addEventListener("click",function(){S.k=x.dataset.k;ap()})});'
+      'if(mb)mb.addEventListener("click",function(){more(ap)});'
       'if(q)q.addEventListener("input",ap);if(sa)sa.addEventListener("change",ap);'
       'if(st)st.addEventListener("change",function(){if(st.value&&S.ts.indexOf(st.value)<0)S.ts.push(st.value);st.value="";ap()});ap()})();</script>')
+MORE = {}      # Schluessel ("root" oder Sprache) -> Karten jenseits der ersten N (schreibt generate_site als hub-more.json)
+N_FIRST = 24   # Karten im HTML (T6: Startseite unter 300 kB)
 
 
 _LAST = {}
@@ -77,6 +84,7 @@ def hub(g, lang, base, api, videos, vid_html, root=False):
     KL = {"youtube": "YouTube", "github": "GitHub", "blog": "Blog", "podcast": "Podcast", "newsletter": "Newsletter", "mastodon": "Mastodon", "bluesky": "Bluesky", "website": "Web"}
     import site_feed
     for f in C["feed"]:
+        if f.get("kind") == "github": continue   # T6: GitHub-Aktivitaet (Commits, Stars) gehoert nicht in den oeffentlichen Feed
         d = __import__("datetime").datetime.fromtimestamp(f["published"]).strftime("%Y-%m-%d")
         who = f'{base}/community/{"c" if f["type"] == "o" else "u"}/{f["handle"]}/'
         cards.append((d, "feed", f'<div class="hub-card" data-k="feed"><div class="kicker">{esc(T(lang, "From the creators", "Von den Creatorn"))} · {esc(KL.get(f["kind"], f["kind"].title()))}</div><h3><a href="{(base + ("/de" if lang == "de" else "") + "/" + site_feed.path_of(f)) if f.get("id") else esc(f["url"])}">{esc(f["title"])}</a></h3><p class="mut"><a href="{who}">{esc(f["name"])}</a> · {d}</p></div>'))
@@ -99,6 +107,13 @@ def hub(g, lang, base, api, videos, vid_html, root=False):
         cards.append((str(v["date"])[:10], "video", vid_html(v).replace('<div class="thumb">', '<div class="thumb" data-k="video">', 1)))
         tag("Mirko Peters", [], str(v["e"]["title"]))
     cards.sort(key=lambda x: x[0], reverse=True)
+    import re as _re0
+    _seen_t, _dedup = set(), []   # T6: keine identischen Titel je Art (doppelt gelistete Artikel)
+    for c_ in cards:
+        _m = _re0.search(r'data-q="([^"]*)"', c_[2]); _key = (c_[1], _m.group(1) if _m else c_[2][:200])
+        if _key in _seen_t: continue
+        _seen_t.add(_key); _dedup.append(c_)
+    cards = _dedup
     _LAST[lang] = list(cards)
     counts = {}
     for _, k, _h in cards: counts[k] = counts.get(k, 0) + 1
@@ -117,4 +132,8 @@ def hub(g, lang, base, api, videos, vid_html, root=False):
     ctl = (f'<div class="hub-ctl"><input type="search" id="hub-q" placeholder="{esc(T(lang, "Search title or creator", "Titel oder Creator suchen"))}" aria-label="{esc(T(lang, "Search", "Suche"))}">'
            f'<select id="hub-a" aria-label="{esc(T(lang, "Creator", "Creator"))}"><option value="">{esc(T(lang, "All creators", "Alle Creator"))}</option>{aopts}</select>'
            f'<select id="hub-t" aria-label="{esc(T(lang, "Topic", "Thema"))}"><option value="">{esc(T(lang, "Add topic filter", "Thema hinzufügen"))}</option>{topts}</select></div><div id="hub-sel" aria-live="polite"></div>') if (auth or tcount) else ""
-    return (CSS + f'<div role="group" aria-label="{esc(T(lang, "Filter", "Filter"))}">{chips}</div>{ctl}<div id="hub" class="thumbs">' + "".join(h for _, _k, h in cards) + "</div>" + cta + JS.replace("%N%", "18").replace("%NAMES%", __import__("json").dumps({i: ENTS[i]["name"] for i in tcount}, ensure_ascii=False)).replace("%RM%", esc(T(lang, "remove", "entfernen"))))
+    _key = "root" if root else lang
+    MORE[_key] = [h for _, _k, h in cards[N_FIRST:]]
+    _more_url = f"{base}/{'' if root else lang + '/'}hub-more.json"
+    _mb = f'<p><button type="button" class="btn" id="hub-more">{esc(T(lang, "Load more", "Mehr laden"))} ({len(cards) - N_FIRST})</button></p>' if len(cards) > N_FIRST else ""
+    return (CSS + f'<div role="group" aria-label="{esc(T(lang, "Filter", "Filter"))}">{chips}</div>{ctl}<div id="hub" class="thumbs"{(" data-more=" + chr(34) + _more_url + chr(34)) if MORE[_key] else ""}>' + "".join(h for _, _k, h in cards[:N_FIRST]) + "</div>" + _mb + cta + JS.replace("%N%", str(N_FIRST)).replace("%NAMES%", __import__("json").dumps({i: ENTS[i]["name"] for i in tcount}, ensure_ascii=False)).replace("%RM%", esc(T(lang, "remove", "entfernen"))))

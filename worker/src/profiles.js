@@ -442,7 +442,7 @@ export async function handleProfiles(env, request, url, path, user, J) {
   if (path === "/api/feed/export" && method === "GET") {   // oeffentlich fuer den Seitenbau: externe Quellen (nur Titel+Link), eigene Seiten ausgenommen
     await ensureSectionCols(db);
     const rows = (await db.prepare(`SELECT i.id,i.title,i.url,i.summary,i.thumb,i.body,i.topics,i.keypoints,i.faq,i.published,c.kind,i.owner_type,i.owner_id,(SELECT COUNT(*) FROM item_votes v WHERE v.item_id=i.id) votes FROM feed_items i JOIN channels c ON c.id=i.channel_id
-      WHERE i.hidden=0 AND i.url NOT LIKE ? AND i.published>? AND ((i.owner_type='u' AND i.owner_id IN (SELECT p.user_id FROM profiles p JOIN users u ON u.id=p.user_id AND u.banned=0 WHERE p.public=1)) OR (i.owner_type='o' AND i.owner_id IN (SELECT id FROM orgs WHERE public=1)))
+      WHERE i.hidden=0 AND c.kind<>'github' AND i.url NOT LIKE ? AND i.published>? AND ((i.owner_type='u' AND i.owner_id IN (SELECT p.user_id FROM profiles p JOIN users u ON u.id=p.user_id AND u.banned=0 WHERE p.public=1)) OR (i.owner_type='o' AND i.owner_id IN (SELECT id FROM orgs WHERE public=1)))
       ORDER BY i.published DESC LIMIT 300`).bind(env.SITE + "%", now() - 120 * 86400).all()).results || [];
     const names = new Map(), out = [];
     for (const r of rows) {

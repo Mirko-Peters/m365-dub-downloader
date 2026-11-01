@@ -1159,6 +1159,8 @@ def build():
           "Blog posts, podcasts and events from the Microsoft community plus animated explainers on Microsoft 365, Copilot, Azure and Power Platform by Microsoft MVP Mirko Peters – in 14 languages.",
           f"{BASE}/", root_body, alts_home, [person_ld(), org_ld(), event_ld(), faq_ld("en"), {"@context": "https://schema.org", "@type": "WebSite", "@id": f"{BASE}/#website", "name": "M365.FM international", "url": f"{BASE}/", "inLanguage": [LANGS[x][1] for x in active], "publisher": {"@id": f"{BASE}/#org"}, "author": {"@id": f"{BASE}/entity/mirko-peters/#entity"}}], og_type="website"))
     sitemap.append((f"{BASE}/", TODAY, None))
+    for _hk, _hc in HUB.MORE.items():   # T6: Karten jenseits der ersten 24 je Hub als JSON (Mehr laden / Filter)
+        write(("" if _hk == "root" else _hk + "/") + "hub-more.json", json.dumps({"cards": _hc}, ensure_ascii=False))
     import site_updates as _SU2; _SU2.load(COMMUNITY_API)
     from site_learn import ENTS as _E2
     for _nl in ("en", "de"):
@@ -1281,8 +1283,8 @@ def build():
     _SU.load(COMMUNITY_API)
     import site_blog as BLG
     import site_legacy_blog as LBL
-    _posts = BLG.fetch_posts(COMMUNITY_API); _have = {p["slug"] for p in _posts if p["handle"] == "mirko-p"}
-    _posts += [p for p in LBL.items(BASE) if p["slug"] not in _have]; LBL.publish(write, BASE); MEM.BLOGLANGS = {p["lang"] for p in _posts}   # plus die frueheren Podpage-Blogbeitraege als Community-Beitraege von mirko-p
+    _posts = BLG.fetch_posts(COMMUNITY_API); _have = {(p["slug"], p.get("lang") or "en") for p in _posts if p["handle"] == "mirko-p"}
+    _posts += [p for p in LBL.items(BASE) if (p["slug"], p.get("lang") or "en") not in _have]   # T6: je Slug UND Sprache (die deutschen Fassungen blieben sonst beim D1-Import auf der Strecke); LBL.publish(write, BASE); MEM.BLOGLANGS = {p["lang"] for p in _posts}   # plus die frueheren Podpage-Blogbeitraege als Community-Beitraege von mirko-p
     for _p in _posts:
         MEM.BLOGS.setdefault(_p["handle"], set()).add(_p["lang"])
         if _p["handle"] == "mirko-p" and _p.get("html") and _p["slug"] in LBL.TOPICS: _p["topics"] = LBL.TOPICS[_p["slug"]]   # Datenbank-Fassung: Themen beim Import eingefroren, hier die aktuelle Zuordnung

@@ -36,7 +36,7 @@ def build(g, items, api):
         croot = f"{BASE}{pfx(lang)}/community/"
         links_l = {i: [e["name"], f"{BASE}{pfx(lang) if lang == 'de' else ''}/entity/{i}/"] for i, e in ENTS.items()}
         for it in items:
-            if not it.get("id"):
+            if not it.get("id") or it.get("kind") == "github":   # T6: GitHub-Aktivitaet bleibt aus dem oeffentlichen Feed
                 continue
             u = link(BASE, lang, it); own = it.get("body") or ""; has_text = len(own) >= 300
             who = f'{croot}{"c" if it["type"] == "o" else "u"}/{it["handle"]}/'; plat = PLAT.get(it["kind"], "Web")
