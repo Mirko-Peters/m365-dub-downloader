@@ -236,11 +236,14 @@ def build(g):
 
     SBX = SBR.Index(); SHP = json.loads((D / "platforms.json").read_text("utf-8")).get("en", {}) if (D / "platforms.json").exists() else {}
 
-    def pub(rel, title, desc, body, ld=None, og="website", noindex=False, last=TODAY, alts=None):
+    def pub(rel, title, desc, body, ld=None, og="website", noindex=False, last=TODAY, alts=None, canon=None):
         u = f"{root}{rel}"
         side = SBR.render(SBX, BASE, root, title + " " + plain(body)[:8000], eps, SHP, nav=nav) if not noindex else SBR.render(SBX, BASE, root, "", [], {}, nav=nav)
-        write(f"show/{rel}index.html", page("en", (title if title == NAME else f"{title} – {NAME}"), desc[:300], u, shell(body, side), alts, ld, xdefault=u, og_type=og, noindex=noindex))
-        if not noindex: sitemap.append((u, last, alts))   # T3: Alternates auch in der Sitemap
+        h = page("en", (title if title == NAME else f"{title} – {NAME}"), desc[:300], u, shell(body, side), alts, ld, xdefault=u, og_type=og, noindex=noindex)
+        if canon:   # T12: Seite bleibt erreichbar, die kanonische Adresse ist eine andere (z. B. Personen-Entitaet); nicht in die Sitemap
+            h = h.replace(f'<link rel="canonical" href="{u}">', f'<link rel="canonical" href="{canon}">', 1)
+        write(f"show/{rel}index.html", h)
+        if not noindex and not canon: sitemap.append((u, last, alts))   # T3: Alternates auch in der Sitemap
 
     # Gaeste je Folge (Namensnennung in Titel/Show Notes) aus dem gemeinsamen Folgenindex (auch fuer die Entitaetsseiten)
     IDX = episode_index(BASE); eg, ge = IDX["eg"], IDX["ge"]
@@ -416,7 +419,8 @@ def build(g):
                 + (f'<h2>Episodes</h2><ul style="list-style:none;padding:0">{"".join(card(e) for e in mine)}</ul>' if mine else "") + "</article>")
         ld = {"@context": "https://schema.org", "@type": "ProfilePage", "mainEntity": {"@type": "Person", "@id": f"{BASE}/entity/{eid}/#entity" if known else f"{root}guests/{gg['slug']}/#p", "name": gg["name"], "jobTitle": gg.get("title") or "",
               "sameAs": [gg[k] for k in ("linkedin_link", "twitter_link", "youtube_link", "website") if gg.get(k)]}}
-        pub(f"guests/{gg['slug']}/", f"{gg['name']} – guest", plain(gg.get("bio")) or f"{gg['name']} on the {NAME}", body, ld, "profile")
+        _canon = f"{BASE}/entity/{eid}/" if eid == "mirko-peters" else None   # T12: eine kanonische Mirko-Peters-Adresse (Personen-Entitaet)
+        pub(f"guests/{gg['slug']}/", f"{gg['name']} – guest", plain(gg.get("bio")) or f"{gg['name']} on the {NAME}", body, ld, "profile", canon=_canon)
         gl += f'<li style="margin:.4em 0"><a href="{root}guests/{gg["slug"]}/">{esc(gg["name"])}</a> <span class="mut">{esc(gg.get("title") or "")[:90]}</span></li>'
     if guests: pub("guests/", "Guests", f"{len(guests)} guests of the {NAME}.", f'<h1>Guests</h1><ul style="list-style:none;padding:0">{gl}</ul>')
 
@@ -477,7 +481,7 @@ def build(g):
         rd[old] = new
     for e in eps: add(f"/{e['slug']}", f"/show/episodes/{e['slug']}/")
     for sl, _ in plist: add(f"/{sl}", f"/show/{sl}/")
-    for x in guests: add(f"/guests/{x['slug']}", f"/show/guests/{x['slug']}/")
+    for x in guests: add(f"/guests/{x['slug']}", "/entity/mirko-peters/" if x["slug"] == "mirko-peters" else f"/show/guests/{x['slug']}/")   # T12: Mirko direkt auf die Personen-Entitaet
     for old, new in (("/episodes", "/show/episodes/"), ("/guests", "/show/guests/"), ("/hosts", "/show/hosts/"), ("/people", "/show/hosts/"), ("/sponsors", "/show/sponsors/"), ("/reviews", "/show/reviews/"), ("/podroll", "/show/listen/"), ("/videos", "/show/"), ("/blog", "/community/u/mirko-p/blog/" if bposts else "/show/")): rd.setdefault(old, new)
     for p in bposts: rd[f"/blog/{p['slug']}"] = f"/community/u/mirko-p/blog/{p['slug']}/"; rd[f"/show/blog/{p['slug']}"] = f"/community/u/mirko-p/blog/{p['slug']}/"
     for old, new in gmerge.items():   # zusammengefuehrte Personen: alte Entitaets-Adressen (alle Sprachpfade) auf die eine Entitaet
