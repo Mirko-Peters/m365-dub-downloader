@@ -1,6 +1,7 @@
 """Uebersetzt die Show Notes der meistgehoerten englischen Folgen (Haiku, Message Batch). Ranking: Spreaker-Statistik (Plays/Downloads seit 2025),
 Ersatz: featured + neueste. Ergebnis: data/podpage_i18n/notes_<lang>.json {folgen-slug: html}. Kosten in usage.json (Schluessel notes_*)."""
 import json, os, sys, time, urllib.request
+from site_text import bad as bad_text
 from datetime import date
 from pathlib import Path
 import requests
@@ -81,6 +82,7 @@ def main():
         if res["type"] != "succeeded": bad += 1; why[res["type"]] = why.get(res["type"], 0) + 1; continue
         u = res["message"]["usage"]; tin += u["input_tokens"]; tout += u["output_tokens"]
         if res["message"].get("stop_reason") == "max_tokens": bad += 1; why["max_tokens"] = why.get("max_tokens", 0) + 1; continue
+        if bad_text(res["message"]["content"][0]["text"]): bad += 1; why["encoding"] = why.get("encoding", 0) + 1; continue   # T5
         have[l][key[r["custom_id"]]] = P.san(res["message"]["content"][0]["text"]); ok += 1
     for l in langs: (OUT / f"notes_{l}.json").write_text(json.dumps(have[l], ensure_ascii=False), encoding="utf-8")
     uf = OUT / "usage.json"; old = json.loads(uf.read_text()) if uf.exists() else {"input_tokens": 0, "output_tokens": 0, "runs": []}

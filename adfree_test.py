@@ -19,8 +19,8 @@ def main():
     res = {"episode": EP, "api_seconds": api_dur, "owner_download": probe("o.mp3", f"{API}/episodes/{EP}/download.mp3", H), "public_download": probe("p.mp3", f"{API}/episodes/{EP}/download.mp3", {})}
     for k in ("owner_download", "public_download"):
         s = res[k]["seconds"]; res[k]["ads_seconds"] = round(s - api_dur, 1) if s else None
-    print(json.dumps(res, indent=1)); open("data/adfree_test.json", "w").write(json.dumps(res, indent=1))
+    print(json.dumps(res, indent=1)); open("data/adfree_test.json", "w", encoding="utf-8").write(json.dumps(res, indent=1))
 try:
     main()
 except Exception:
-    open("data/adfree_test.json", "w").write(json.dumps({"error": traceback.format_exc()[-1500:]}, indent=1))
+    open("data/adfree_test.json", "w", encoding="utf-8").write(json.dumps({"error": traceback.format_exc()[-1500:]}, indent=1))

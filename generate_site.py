@@ -18,6 +18,7 @@ import site_live as LIVE
 import site_notes as SNT
 import site_shownotes as SNS   # T26
 SNALL = SNS.load_all()   # Vollfassungen der Shownotes je Spreaker-Folge (shownotes/site/<episode_id>.md)
+import site_text
 import site_ads as ADS
 import site_media as MED
 import site_sidebar as SBR
@@ -956,7 +957,7 @@ def build():
     ORIG = {}
     try:
         import site_podpage as _PPm
-        _et = json.load(open(ROOT / "data" / "en_titles.json", encoding="utf-8")) if (ROOT / "data" / "en_titles.json").exists() else {}
+        _et = site_text.fix_tree(json.load(open(ROOT / "data" / "en_titles.json", encoding="utf-8"))) if (ROOT / "data" / "en_titles.json").exists() else {}   # T5
         _byt = {_PPm.norm(e["name"]): e for e in _PPm.load("episodes")}
         ORIG = {v: _byt[_PPm.norm(t)]["slug"] for v, t in _et.items() if _PPm.norm(t) in _byt}
     except Exception as _ex:
@@ -1595,7 +1596,7 @@ Mirko Peters, {BASE}/about/
 <script>var q=new URLSearchParams(location.search),c=q.get("code");if(c){document.getElementById("m").textContent="Code (in das Programm bzw. den GitHub-Workflow einfügen):";document.getElementById("c").textContent=c;var b=document.getElementById("b");b.style.display="inline-block";b.onclick=function(){navigator.clipboard.writeText(c);b.textContent="Kopiert ✓"}}else if(q.get("error")){document.getElementById("m").textContent="Fehler: "+q.get("error")}</script></body>""")
     write("og-manifest.json", json.dumps(OGLIST, ensure_ascii=False))
     write("404.html", page("en", "Not found", "Page not found", f"{BASE}/404.html", '<main class="wrap"><h1>404</h1><p><a class="btn" href="%s/">M365.FM</a></p></main>' % BASE, noindex=True))
-    json.dump([u for u, _, _ in sitemap], open(ROOT / "data" / "urls.json", "w"), indent=0)
+    json.dump([u for u, _, _ in sitemap], open(ROOT / "data" / "urls.json", "w", encoding="utf-8"), indent=0)
     from site_i18n import write_src
     write_src(OUT, ROOT / "data" / "ui_js_en.json")
     import site_trstatus as TRS

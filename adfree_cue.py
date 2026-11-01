@@ -32,4 +32,4 @@ except Exception:
     try:
         if not KEEP and "cuepoints_before" in res: requests.post(f"{API}/episodes/{EP}/cuepoints", headers=H, data={"cuepoints": json.dumps(res["cuepoints_before"])}, timeout=30)
     except Exception: pass
-print(json.dumps(res, indent=1)); open("data/adfree_cue.json", "w").write(json.dumps(res, indent=1))
+print(json.dumps(res, indent=1)); open("data/adfree_cue.json", "w", encoding="utf-8").write(json.dumps(res, indent=1))

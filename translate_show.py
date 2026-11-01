@@ -2,6 +2,7 @@
 Aufruf: python translate_show.py [--langs de,es,...] [--limit N]. Ergebnis: data/podpage_i18n/<lang>.json {folgen-slug: [titel, zusammenfassung]}
 und data/podpage_i18n/usage.json (Tokens gesamt, fuer die Kostenrechnung). Bereits uebersetzte Folgen werden uebersprungen."""
 import json, os, sys, time, urllib.request, urllib.error
+from site_text import bad as bad_text
 from pathlib import Path
 import site_podpage as P
 
@@ -101,6 +102,7 @@ def main():
         u = res["message"]["usage"]; tin += u["input_tokens"]; tout += u["output_tokens"]
         if res["message"].get("stop_reason") == "max_tokens":
             bad += 1; why["max_tokens"] = why.get("max_tokens", 0) + 1; continue
+        if any(bad_text(c.get("text", "")) for c in res["message"]["content"]): bad += 1; why["encoding"] = why.get("encoding", 0) + 1; continue   # T5
         try:
             t, sm = parse_json(res["message"]["content"][0]["text"]); have[l][key] = [t.strip(), sm.strip()]; ok += 1
         except Exception:
