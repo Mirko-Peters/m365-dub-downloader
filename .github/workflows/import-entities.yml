@@ -12,6 +12,7 @@ on:
   workflow_dispatch:
 permissions:
   contents: write
+  actions: write   # Seitenbau per workflow_dispatch starten (Commits mit dem Standard-Token loesen keinen Push-Lauf aus)
 concurrency:
   group: import-entities
   cancel-in-progress: false
@@ -33,3 +34,9 @@ jobs:
           if git diff --cached --quiet; then echo "Nichts zu speichern"; exit 0; fi
           git commit -q -m "Entitäten aus freigegebenen Vorschlägen übernommen $(date -u +%Y-%m-%dT%H:%MZ)"
           (git pull --rebase -q -X theirs || git rebase --abort) && git push -q
+          echo "PUSHED=1" >> "$GITHUB_ENV"
+      - name: Seitenbau starten (neue Entitäten oder Quotes)
+        if: env.PUSHED == '1'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh workflow run site.yml --ref main

@@ -216,13 +216,44 @@ COPY_L = {"de": "Link kopieren", "es": "Copiar enlace", "fr": "Copier le lien", 
           "ja": "リンクをコピー", "ko": "링크 복사", "en": "Copy link"}
 
 
-def seo_title(t):
-    """<title> für Suchergebnisse: Kernthema vor dem Doppelpunkt, max. ~60 Zeichen, Marke hinten."""
-    t = strip_tags(t).strip()
-    main = t.split(":")[0].strip() if ":" in t and len(t.split(":")[0].strip()) >= 18 else t
-    if len(main) > 52:
-        main = main[:51].rsplit(" ", 1)[0].rstrip(",;–-") + "…"
-    return f"{main} | M365.FM"
+_BRAND_TAIL = re.compile(r"\s*[|–—-]\s*(?:M365[ .]?FM(?:\s+Podcast)?|M365 FM Podcast)\s*$", re.I)
+BRAND = "M365.FM"
+
+
+def bare_title(t):
+    """Titel ohne angehaengte Marke (' – M365 FM Podcast', ' | M365.FM' usw.), fuer og:title, twitter:title und Teilen-Bild."""
+    t = re.sub(r"\s+", " ", strip_tags(t)).strip()
+    while True:
+        u = _BRAND_TAIL.sub("", t).strip()
+        if u == t or not u: return t
+        t = u
+
+
+def seo_title(t, limit=62, hard=78):
+    """T7: eine Titel-Vorlage fuer alle Seiten. Marke genau einmal hinten (' | M365.FM'), wenn der Titel sie nicht schon enthaelt
+    und alles in ~62 Zeichen passt; sonst der volle Titel ohne Marke (bis 78 Zeichen). Laengere Titel verlieren erst einen Anhang
+    hinter dem letzten ' | ' oder ' – ' (wenn mindestens 40 Zeichen bleiben), sonst Schnitt an einer Wortgrenze mit Auslassungszeichen.
+    Nie Schnitt am ersten Doppelpunkt: 'Microsoft Certified: …' wuerde sonst auf vielen Seiten gleich lauten."""
+    b = bare_title(t)
+    has = bool(re.search(r"M365[ .]?FM", b, re.I))
+    tag = lambda x: x if has else f"{x} | {BRAND}"
+    if len(tag(b)) <= limit or (has and len(b) <= hard): return tag(b)
+    if len(b) <= hard: return b
+    for sep in (" | ", " – ", " — "):
+        if sep in b:
+            head = b.rsplit(sep, 1)[0].strip()
+            if 40 <= len(head) <= hard: return tag(head) if len(tag(head)) <= limit else head
+    return b[: hard - 2].rsplit(" ", 1)[0].rstrip(",;:–—-") + "…"
+
+
+def meta_desc(s, n=160):
+    """Beschreibung fuer meta/og/twitter: hoechstens n Zeichen, bevorzugt am Satzende, sonst an einer Wortgrenze."""
+    s = re.sub(r"\s+", " ", strip_tags(s or "")).strip()
+    if len(s) <= n: return s
+    cut = s[:n]
+    m = max(cut.rfind(". "), cut.rfind("! "), cut.rfind("? "), cut.rfind("。"))
+    if m >= 70: return cut[:m + 1].strip()
+    return cut[: n - 1].rsplit(" ", 1)[0].rstrip(",;:–—-") + "…"
 
 
 BRAND_ICONS = {
@@ -383,6 +414,7 @@ def page(lang, title, desc, canonical, body, alternates=None, jsonld=None, xdefa
             alt += f'<link rel="alternate" hreflang="{LANGS[l][1] if l in LANGS else l}" href="{u}">\n'
         alt += f'<link rel="alternate" hreflang="x-default" href="{xdefault or alternates.get("en") or BASE + "/"}">\n'   # x-default = englische Fassung des Clusters, sonst Startseite
     ld = "".join(f'<script type="application/ld+json">{json.dumps(j, ensure_ascii=False)}</script>\n' for j in complete_ld(jsonld))
+    desc = meta_desc(desc)   # T7: Beschreibung einheitlich begrenzt
     if canonical.endswith("404.html") or noindex:
         ogimg = f"{BASE}/assets/og-default.png"
     elif og_of:   # lokalisierte Show-Seiten teilen das Teilen-Bild der englischen Seite (spart Zehntausende Bilder)
@@ -390,7 +422,7 @@ def page(lang, title, desc, canonical, body, alternates=None, jsonld=None, xdefa
         body = body.replace("<footer>", share_html(lang, canonical, title) + "<footer>", 1)
     else:
         rel = canonical.replace(BASE, "").strip("/") or "index"
-        OGLIST.append({"path": f"og/{rel}.png", "title": strip_tags(title), "lang": lang, "seed": canonical, "cover": OG_COVER.get(canonical)})
+        OGLIST.append({"path": f"og/{rel}.png", "title": bare_title(title), "lang": lang, "seed": canonical, "cover": OG_COVER.get(canonical)})
         ogimg = f"{BASE}/og/{rel}.png"
         body = body.replace("<footer>", share_html(lang, canonical, title) + "<footer>", 1)
     if side:   # Sidebar neben dem Hauptinhalt (wie auf den Show-Seiten): erstes <main> in zwei Spalten
@@ -404,15 +436,15 @@ def page(lang, title, desc, canonical, body, alternates=None, jsonld=None, xdefa
 <html lang="{hl}" dir="{d}">
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>{esc(seo_title(title) if og_type == "article" else title)}</title>
+<title>{esc(seo_title(title))}</title>
 <meta name="description" content="{esc(desc)}">
 <meta name="author" content="Mirko Peters"><meta name="robots" content="{'noindex,follow' if noindex else 'index,follow,max-image-preview:large,max-snippet:-1'}">
 <link rel="canonical" href="{canonical}">
 <link rel="icon" href="{BASE}/assets/favicon.svg" type="image/svg+xml"><link rel="icon" href="{BASE}/assets/favicon-32.png" sizes="32x32" type="image/png"><link rel="shortcut icon" href="{BASE}/assets/favicon.ico"><link rel="apple-touch-icon" href="{BASE}/assets/apple-touch-icon.png"><meta name="theme-color" content="#1d2126">
-{alt}<meta property="og:type" content="{og_type}"><meta property="og:title" content="{esc(title)}"><meta property="og:description" content="{esc(desc)}">
+{alt}<meta property="og:type" content="{og_type}"><meta property="og:title" content="{esc(bare_title(title))}"><meta property="og:description" content="{esc(desc)}">
 <meta property="og:url" content="{canonical}"><meta property="og:locale" content="{loc}"><meta property="og:site_name" content="M365.FM">
-<meta property="og:image" content="{ogimg}"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta property="og:image:alt" content="{esc(title)}">
-<meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="{esc(title)}"><meta name="twitter:description" content="{esc(desc)}"><meta name="twitter:image" content="{ogimg}">
+<meta property="og:image" content="{ogimg}"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta property="og:image:alt" content="{esc(bare_title(title))}">
+<meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="{esc(bare_title(title))}"><meta name="twitter:description" content="{esc(desc)}"><meta name="twitter:image" content="{ogimg}">
 <link rel="preload" href="{BASE}/assets/fonts/barlow-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin><link rel="preload" href="{BASE}/assets/fonts/barlow-condensed-latin-600-normal.woff2" as="font" type="font/woff2" crossorigin>
 {extra_head}{ADS.head(BASE, body, canonical, noindex)}{css_link()}<style>{FXCSS}</style>{A11Y_EARLY}
 {ld}</head>

@@ -2,7 +2,7 @@ name: Website bauen und veröffentlichen
 on:
   push:
     branches: [main]
-    paths: ["episodes/**", "data/**", "domain.txt", "sync_platforms.py", "sync_live.py", "site_live.py", "tools/build_speakers.py", "platform_match.py", "show_notes.py", "sync_show_notes.py", "generate_og.py", "site_*.py", "site_taxonomy.py", "check_links.py", "check_schema.py", "assets/**", "generate_articles.py", "scrape_spotify.py", "fetch_en_episodes.py", "fetch_en_titles.py", "fetch_reviews.py", "generate_site.py", "translate_blog.py", "generate_covers.py", "sync_spreaker.py", "spreaker_auth.py", "site_cover.py", "site_design.py", "site_money.py", "site_legal.py", "shows_seo.json", ".github/workflows/site.yml"]
+    paths: ["episodes/**", "data/**", "domain.txt", "sync_platforms.py", "sync_live.py", "site_live.py", "tools/build_speakers.py", "platform_match.py", "show_notes.py", "sync_show_notes.py", "generate_og.py", "site_*.py", "site_taxonomy.py", "check_links.py", "check_schema.py", "assets/**", "generate_articles.py", "scrape_spotify.py", "fetch_en_episodes.py", "fetch_en_titles.py", "fetch_reviews.py", "generate_site.py", "translate_blog.py", "generate_covers.py", "sync_spreaker.py", "spreaker_auth.py", "site_cover.py", "site_design.py", "site_money.py", "site_legal.py", "shows_seo.json", ".github/workflows/site.yml", "check_*.py", "shownotes/site/**", "shownotes/QA.txt"]
   schedule:
     - cron: "17 5 * * *"
   workflow_dispatch:
@@ -15,7 +15,8 @@ jobs:
     runs-on: ubuntu-latest
     concurrency:
       group: site-build
-      cancel-in-progress: true   # ein neuer Push ersetzt den laufenden Bau (vorher: 29 von 60 Laeufen von Hand abgebrochen)
+      cancel-in-progress: false   # der laufende Bau wird fertig und veroeffentlicht; von mehreren wartenden Laeufen behaelt GitHub nur den neuesten.
+                                  # Vorher (true) brach jeder Push den laufenden Bau ab: am 1.11. zwischen 07:34 und 08:12 sechs Abbrueche in Folge, nichts veroeffentlicht.
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -162,13 +163,14 @@ jobs:
       - name: Interne Links prüfen
         continue-on-error: true
         run: python check_links.py
-      - name: Schema.org (JSON-LD) prüfen
-        continue-on-error: true
+      - name: Schema.org (JSON-LD) prüfen (blockierend seit T7, Integrationsbau 1.11. ohne Fehler)
         run: python check_schema.py
       - name: Sitemaps prüfen (blockierend)
         run: python check_sitemaps.py
       - name: Encoding prüfen (Mojibake blockierend)
         run: python check_encoding.py
+      - name: Titel und Beschreibungen prüfen (T7, blockierend)
+        run: python check_titles.py
       - name: Teilen-Bilder (Open Graph) erzeugen
         continue-on-error: true
         run: |
