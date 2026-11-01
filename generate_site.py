@@ -1384,32 +1384,11 @@ def build():
         print(len(topfeed), "Sprachen mit Top-Woche")
 
     phase("Lernseiten, Updates, Top-Listen")
-    # Sitemap, robots, llms.txt, IndexNow
-    def sm_file(entries):
-        x = ['<?xml version="1.0" encoding="UTF-8"?>', '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">']
-        for u, lm, alts in entries:
-            x.append(f"<url><loc>{u}</loc><lastmod>{lm}</lastmod>")
-            for k, au in (alts or {}).items():
-                x.append(f'<xhtml:link rel="alternate" hreflang="{LANGS[k][1] if k in LANGS else k}" href="{au}"/>')   # en ist nicht in LANGS
-            x.append("</url>")
-        x.append("</urlset>")
-        return "\n".join(x)
-
-    # eine Sitemap pro Sprache (Startseite + alle Folgenseiten) + eine für Kernseiten, dazu der Index
-    index = []
-    core = [e for e in sitemap if not any(e[0].startswith(f"{BASE}/{l}/") for l in LANGS)]
-    write("sitemap-core.xml", sm_file(core))
-    index.append(("sitemap-core.xml", TODAY))
-    for l in active:
-        ents = [e for e in sitemap if e[0].startswith(f"{BASE}/{l}/")]
-        lm = max(e[1] for e in ents)
-        write(f"sitemap-{l}.xml", sm_file(ents))
-        index.append((f"sitemap-{l}.xml", lm))
-    idx = ['<?xml version="1.0" encoding="UTF-8"?>', '<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">']
-    for f, lm in index:
-        idx.append(f"<sitemap><loc>{BASE}/{f}</loc><lastmod>{lm}</lastmod></sitemap>")
-    idx.append("</sitemapindex>")
-    write("sitemap.xml", "\n".join(idx))
+    # Sitemap-Index je Sprache und Typ (T1): sitemap-<sprache>-<typ>.xml mit echtem lastmod und x-default; Hubs (lastmod = Baudatum)
+    # bekommen das juengste Datum ihrer Gruppe, der Index das juengste Datum je Datei. Grenzen je Datei: 45.000 URLs.
+    import site_sitemaps as SMAP
+    files = SMAP.write_all(sitemap, write, BASE, LANGS, TODAY)
+    print(f"Sitemaps: {len(files)} Dateien, {len(sitemap)} URLs")
     _showix = PP.episode_index(BASE)
     phase("Sitemaps")
     write("robots.txt", f"User-agent: *\nContent-Signal: search=yes, ai-input=yes, ai-train=yes\nAllow: /\n\n# KI-Suchen und Assistenten ausdrücklich erlaubt\n" + "".join(f"User-agent: {b}\nAllow: /\n\n" for b in ("GPTBot", "OAI-SearchBot", "ChatGPT-User", "ClaudeBot", "Claude-User", "Claude-SearchBot", "PerplexityBot", "Google-Extended", "Applebot-Extended", "Bingbot")) + f"Sitemap: {BASE}/sitemap.xml\n")
