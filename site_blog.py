@@ -133,25 +133,34 @@ def build(g, posts, people, api):
                                                    f'{("<br>" + esc(p["summary"])) if p.get("summary") else ""}</li>' for p in items) + "</ul>"
         is_by = lambda p, h: p["handle"] == h or any(c.get("handle") == h for c in (p.get("coauthors") or []))   # Co-Autoren: der Beitrag steht auch in ihrer Blogliste
         _pub = lambda p: (p.get("tr_index") if p.get("tr_of") else (p.get("html") or p.get("votes", 0) >= INDEX_VOTES))   # zaehlt fuer den Index der Verzeichnisse: freigegebene Sprachfassungen, fruehere Beitraege, Beitraege mit Stimmen
+        PER = 100   # T6: Verzeichnisse seitenweise (vorher alle ~2.300 Beitraege in einer Liste, ca. 1 MB)
+        def paged(items, ru, rel, head_html, title, desc, noidx, ld=None):
+            npg = max(1, (len(items) + PER - 1) // PER)
+            for pno in range(npg):
+                part = items[pno * PER:(pno + 1) * PER]
+                pu = ru if pno == 0 else f"{ru}page/{pno + 1}/"
+                nav = ""
+                if npg > 1:
+                    links = " ".join(f'<a href="{ru if q == 0 else f"{ru}page/{q + 1}/"}"{" aria-current=page style=font-weight:700" if q == pno else ""}>{q + 1}</a>' for q in range(npg))
+                    nav = f'<nav class="pages" aria-label="{esc(T(lang, "Pages", "Seiten"))}" style="margin:1em 0">{esc(T(lang, "Page", "Seite"))} {links}</nav>'
+                prev_next = ((f'<link rel="prev" href="{ru if pno == 1 else f"{ru}page/{pno}/"}">' if pno else "") + (f'<link rel="next" href="{ru}page/{pno + 2}/">' if pno + 1 < npg else ""))
+                b = shell(lang, f'{CSS}{head_html}{nav}{lst(part)}{nav}')
+                write(f"{pfx2(lang)}{rel}{'' if pno == 0 else f'page/{pno + 1}/'}index.html", page(lang, title + (f" ({pno + 1})" if pno else ""), desc, pu, b, None, ld if pno == 0 else None, og_type="website", extra_head=LCSS + prev_next, noindex=noidx))
+                if not noidx:
+                    sitemap.append((pu, (iso(part[0]["published"]) if part else TODAY), None))
         for h in sorted({p["handle"] for p in mine} | {c["handle"] for p in mine for c in (p.get("coauthors") or []) if c.get("handle") in pb}):
             noidx = not any(is_by(p, h) and _pub(p) for p in mine)
             it = sorted([p for p in mine if is_by(p, h)], key=lambda x: -x["published"]); ru = f"{croot}u/{h}/blog/"
             nm = pb[h]["name"]
-            b = shell(lang, f'{CSS}<h1>{esc(title_blog)} – {esc(nm)}</h1><p><a href="{croot}u/{h}/">{esc(nm)}</a></p>{lst(it)}')
-            write(f"{pfx2(lang)}community/u/{h}/blog/index.html", page(lang, f'{title_blog} – {nm} | M365.FM', nm, ru, b, None, None, og_type="website", extra_head=LCSS, noindex=noidx))
-            if not noidx:
-                sitemap.append((ru, TODAY, None))
+            paged(it, ru, f"community/u/{h}/blog/", f'<h1>{esc(title_blog)} – {esc(nm)}</h1><p><a href="{croot}u/{h}/">{esc(nm)}</a></p>', f'{title_blog} – {nm} | M365.FM', nm, noidx)
             write(f"{pfx2(lang)}community/u/{h}/blog/feed.xml", rss(f"{title_blog} – {nm}", ru, it, croot, pb, lang))
         noidx = not any(_pub(p) for p in mine)
         it = sorted(mine, key=lambda x: -x["published"]); ru = f"{croot}blog/"
         intro = T(lang, "Blog posts from members of the Microsoft community.", "Blogbeiträge von Mitgliedern der Microsoft-Community.")
-        b = shell(lang, f'{CSS}<h1>{esc(title_blog)}</h1><p class="mut">{esc(intro)}</p>{lst(it)}')
         ld = [{"@context": "https://schema.org", "@type": "Blog", "name": "M365.FM " + title_blog, "url": ru, "inLanguage": lang,
                "blogPost": [{"@id": f"{croot}u/{p['handle']}/blog/{p['slug']}/#post"} for p in it[:50]]}]
         write(f"{pfx2(lang)}community/blog/feed.xml", rss("M365.FM " + title_blog, ru, it, croot, pb, lang))
-        write(f"{pfx2(lang)}community/blog/index.html", page(lang, f'{title_blog} – M365.FM', intro, ru, b, None, ld, og_type="website", extra_head=LCSS, noindex=noidx))
-        if not noidx:
-            sitemap.append((ru, TODAY, None))
+        paged(it, ru, "community/blog/", f'<h1>{esc(title_blog)}</h1><p class="mut">{esc(intro)}</p>', f'{title_blog} – M365.FM', intro, noidx, ld)
 
 
 def rss(title, link, items, croot, pb, lang):
