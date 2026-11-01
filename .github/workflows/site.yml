@@ -155,6 +155,8 @@ jobs:
       - name: Schema.org (JSON-LD) prüfen
         continue-on-error: true
         run: python check_schema.py
+      - name: Sitemaps prüfen (blockierend)
+        run: python check_sitemaps.py
       - name: Teilen-Bilder (Open Graph) erzeugen
         continue-on-error: true
         run: |
