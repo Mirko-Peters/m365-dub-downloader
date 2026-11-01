@@ -120,3 +120,23 @@ test("levels: syncExpertise baut Belege aus den Quelltabellen und setzt Stufen (
   await syncExpertise({ DB: db }, async () => emap);
   assert.equal(raw.prepare("SELECT COUNT(*) n FROM expertise WHERE owner_id=4").get().n + raw.prepare("SELECT COUNT(*) n FROM expertise_evidence WHERE owner_id=4").get().n + raw.prepare("SELECT COUNT(*) n FROM expertise_score WHERE owner_id=4").get().n, 0, "nichts bleibt fuer das geloeschte Konto");
 });
+
+test("quotes: importQuotesFromSite schreibt nur Zitate mit Personen-Entitaet und ueberschreibt keine Redaktions-Zitate (SQLite)", async () => {
+  const { DatabaseSync } = await import("node:sqlite");
+  const raw = new DatabaseSync(":memory:");
+  const dir = new URL("../migrations/", import.meta.url);
+  for (const f of readdirSync(dir).filter((f) => f.endsWith(".sql")).sort()) raw.exec(readFileSync(new URL(f, dir), "utf-8"));
+  const db = { prepare(sql) { const st = raw.prepare(sql); let args = []; const o = { bind(...a) { args = a; return o; }, all: async () => ({ results: st.all(...args) }), first: async () => st.get(...args) ?? null, run: async () => st.run(...args) }; return o; }, async batch(s) { for (const x of s) await x.run(); } };
+  raw.exec("INSERT INTO quote(id,person_eid,text,lang,src,created) VALUES('2-1','anna','Redaktion','en','admin',1)");
+  const file = { quotes: [{ id: "1-1", person: "mirko-peters", text: "Ein Zitat", lang: "de", episode_id: "1", time_s: 12.4, about: ["azure"] }, { id: "1-2", person: "", text: "ohne Person", lang: "en" }, { id: "2-1", person: "anna", text: "Seitenbau", lang: "en" }] };
+  const old = globalThis.fetch; globalThis.fetch = async () => ({ json: async () => file });
+  try {
+    const { importQuotesFromSite, handleQuotes } = await import("../src/quotes.js");
+    const r = await importQuotesFromSite({ DB: db, SITE: "https://x" });
+    assert.equal(r.imported, 2);
+    const rows = raw.prepare("SELECT id,person_eid,text,time_s FROM quote ORDER BY id").all();
+    assert.deepEqual(rows.map((x) => [x.id, x.person_eid, x.text, x.time_s]), [["1-1", "mirko-peters", "Ein Zitat", 12], ["2-1", "anna", "Redaktion", null]], "ohne Person verworfen, Redaktions-Zitat bleibt");
+    const res = await handleQuotes({ DB: db }, new URL("https://x/api/quotes/export?person=mirko-peters"), (d) => d);
+    assert.equal(res.quotes.length, 1); assert.deepEqual(res.quotes[0].about, ["azure"]);
+  } finally { globalThis.fetch = old; }
+});

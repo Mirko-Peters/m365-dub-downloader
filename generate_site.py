@@ -990,7 +990,7 @@ def build():
         _el = {k: u for k, u in elinks.get(f"{vid}:{l}", {}).items() if u}   # zugeordnete Plattform-Folgenlinks -> sameAs
         more = related(it, by_lang[l], tagsets[l], catsets[l])
         ld = [
-            {"@context": "https://schema.org", "@type": "PodcastEpisode", "name": e["title"], "description": strip_tags(intro),
+            {"@context": "https://schema.org", "@type": "PodcastEpisode", "@id": canonical + "#episode", "name": e["title"], "description": strip_tags(intro),
              "url": canonical, "inLanguage": LANGS[l][1], "datePublished": it["date"],
              "associatedMedia": {"@type": "AudioObject", "contentUrl": spk, "inLanguage": LANGS[l][1]},
              "image": f"{BASE}/og/{canonical.replace(BASE, '').strip('/')}.png", "isAccessibleForFree": True, "keywords": e.get("tags", ""),
@@ -1268,6 +1268,11 @@ def build():
         for _x in _ep_find(_e, "en"):
             _ep_about.setdefault(_x["slug"], []).append(_e["id"])
     _ctx["ep_about"] = _ep_about
+    _epq = {str(it["eid"]): (url_of(it), it["e"]["title"]) for it in items.values()}   # Quotes: Spreaker-Folgen-ID -> (Seite, Titel); Dub-Folgen
+    for _it in PP.episode_index(BASE)["items"]:   # Hauptshow: Spreaker-ID aus den Show Notes
+        _nr = SNT.get("en", title=_it["e"]["title"])
+        if _nr and _nr.get("id"): _epq.setdefault(str(_nr["id"]), (_it["url"], _it["e"]["title"]))
+    _ctx["ep_by_spreaker"] = _epq
     print(len(_ep_about), "Folgen der Hauptshow auf Entitaetsseiten")
     _cl = (LRN._fetch_json(f"{COMMUNITY_API}/api/entity/claims") or {}).get("claims", []) if hasattr(LRN, "_fetch_json") else []
     ENT.ORGPAGES.update({o["eid"]: o["handle"] for o in _orgs if o.get("eid")})
@@ -1415,6 +1420,8 @@ def build():
     print(f"Sitemaps: {len(files)} Dateien, {len(sitemap)} URLs")
     _showix = PP.episode_index(BASE)
     phase("Sitemaps")
+    import site_quotes as _SQ
+    write("quotes.json", json.dumps({"version": 1, "generated": TODAY, "quotes": _SQ.ALL}, ensure_ascii=False))   # Quotes an Personen-Entitaeten; der Worker uebernimmt sie in D1 (importQuotesFromSite)
     write("robots.txt", f"User-agent: *\nContent-Signal: search=yes, ai-input=yes, ai-train=yes\nAllow: /\n\n# KI-Suchen und Assistenten ausdrücklich erlaubt\n" + "".join(f"User-agent: {b}\nAllow: /\n\n" for b in ("GPTBot", "OAI-SearchBot", "ChatGPT-User", "ClaudeBot", "Claude-User", "Claude-SearchBot", "PerplexityBot", "Google-Extended", "Applebot-Extended", "Bingbot")) + f"Sitemap: {BASE}/sitemap.xml\n")
     # llms.txt (Überblick), llms-full.txt (alle Folgen), agent.json (Maschinen-Beschreibung), episodes.json (Datenfeed)
     summ = (f"AI-dubbed podcast episodes about Microsoft 365, Copilot, Azure, Power Platform and AI governance by Microsoft MVP Mirko Peters, "
