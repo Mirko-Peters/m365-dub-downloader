@@ -1,6 +1,6 @@
 # Dry-Run Shownotes -> Spreaker
 
-2026-11-01T10:26:08+00:00 · 120 Folgen offen, 0 ungueltig, 0 unbekannt, 10 im Diff (meistgehoerte zuerst). Schreiben erst mit Datei shownotes/APPROVED.
+2026-11-01T12:27:48+00:00 · 180 Folgen offen, 0 ungueltig, 0 unbekannt, 10 im Diff (meistgehoerte zuerst). Schreiben erst mit Datei shownotes/APPROVED.
 
 ## Beyond Copilot: Building Enterprise AI Agents That Actually Work with Copilot Studio with Manpreet Singh [MVP-MCT] (74640221, 341 Abrufe, 3648 Zeichen)
 
@@ -98,6 +98,72 @@
 
 </details>
 
+## From AI Hype to AI Harness Engineering – Building AI That People Can Actually Trust with Alan Buscaglia [MVP] from Gentleman Programming (73066788, 272 Abrufe, 3755 Zeichen)
+
+```diff
+--- aktuell
++++ neu
+@@ -1,17 +1,24 @@
+-Artificial Intelligence is evolving rapidly, but building AI that organizations can actually trust requires far more than choosing the latest language model. In this episode of the M365.fm podcast, Microsoft MVP and Google Developer Expert Alan Buscaglia from Gentleman Programming joins Mirko Peters to explore the emerging discipline of AI Harness Engineering. Together they explain why successful AI projects rely on structured engineering practices, robust testing, and continuous validation rather than relying solely on prompts or model capabilities.
+-WHY AI HARNESS ENGINEERING MATTERS
+-Prompt engineering may have dominated the first wave of generative AI, but the future belongs to AI Harness Engineering. Alan explains how developers can build reliable AI applications using orchestrated workflows, reusable skills, guardrails, human-in-the-loop validation, benchmarking, and automated feedback loops. Learn why modern AI systems need the same level of engineering discipline that transformed software development through DevOps and CI/CD.
+-BUILDING AI THAT PEOPLE CAN TRUST
+-What separates an impressive AI demo from an enterprise-ready AI solution? Alan shares practical techniques for creating trustworthy AI systems, including deterministic workflows, end-to-end testing, AI evaluation strategies, multi-agent orchestration, guardrails, and continuous verification. Discover how organizations can reduce hallucinations, improve consistency, control costs, and ensure AI delivers predictable business outcomes instead of unpredictable surprises.
+-THE FUTURE OF SOFTWARE ENGINEERING
+-AI is changing software development forever, but developers are becoming more valuable—not less. Mirko and Alan discuss how coding is evolving into programming, orchestration, architecture, and problem solving. They explore the future of AI coding assistants, GitHub Copilot, Claude Code, OpenAI Codex, open-source AI models, small language models, and why communication, collaboration, and engineering judgment will become the most important skills for the next generation of developers.
+-OPEN SOURCE, COMMUNITY & LEADERSHIP
+-Alan also shares the inspiring story behind Gentleman Programming, one of the largest Spanish-speaking developer communities. He discusses his journey to becoming both a Microsoft MVP and Google Developer Expert, building open-source AI projects, educating hundreds of thousands of developers, and growing a thriving global technical community. The conversation offers valuable insights into content creation, leadership, mentorship, and how sharing knowledge can create lasting impact across the developer ecosystem.
+-KEY TAKEAWAYS FOR AI PROFESSIONALS
+-Whether you're a developer, software architect, AI engineer, IT leader, or technology enthusiast, this episode delivers practical advice for building enterprise-grade AI solutions. You'll learn why AI Harness Engineering is becoming the next major discipline in AI development, how to engineer reliable AI workflows, where prompt engineering fits into the bigger picture, and why the future belongs to professionals who combine technical expertise with critical thinking, collaboration, and responsible AI engineering. If you're building with Microsoft AI, Azure AI, GitHub Copilot, OpenAI, Anthropic Claude, or modern AI agent frameworks, this episode is packed with actionable insights you can apply immediately.
++AI demos are easy, but AI systems that deliver consistent, trustworthy results take real engineering. This conversation is for developers, tech leads and teams adopting AI coding agents. Alan Buscaglia explains how harnesses, skills, tests, guardrails and a human in the loop turn unpredictable AI into dependable output.
++In this episode
++00:00 – Welcome and introducing Alan Buscaglia
++01:41 – Alan's path and building Gentleman Programming
++12:34 – Using AI in the community and staying in the loop
++16:46 – What AI harness engineering is
++22:38 – Testing, benchmarking and guardrails
++30:10 – Tips for teams: skills over prompts
++40:14 – Learning, orchestration and soft skills
++46:06 – The AI race, costs and the future of developers
++Key takeaways
++Every AI coding tool answers differently because of the harness behind it, and teams can engineer their own harnesses, loops and skills to guide agents toward consistent results.
++Reliable AI output needs end-to-end tests, benchmarks for tokens, time and cost, and guardrail gates, while over-engineered harnesses waste context and money.
++Keep a human in the loop, share team conventions with the AI as skills, and invest in soft skills and fundamentals, because AI is a tool and not your boss.
++Worth quoting
++“The flow will be, I implement something, I committed something, I create a pull request and boom, I merged it if it passes. That flow is a harness.” – Alan Buscaglia (18:26)
++“when you harness something, you give context, and when you give context, you are getting the context from the agent, okay? So you're reducing the amount of context window that the agent can use” – Alan Buscaglia (21:21)
+ Explore more on M365.FM
+-- https://www.m365.fm/from-ai-hype-to-ai-harness-engineering-building-ai-that-people-can-actually-trust-with-alan-buscag/
+-- https://www.m365.fm/adrian-espes/
+-- https://www.m365.fm/manpreet-singh/
+-- https://www.m365.fm/categories/copilot-talk/
+-- https://www.m365.fm/categories/best-of-ai-copilot/
++Episode page: the full conversation with chapters, Alan's key quotes and an FAQ
++Alan Buscaglia – the guest, creator of Gentleman Programming and an open source collection of AI coding harnesses
++Agent harness – the guided flow behind every coding agent, which Alan builds, benchmarks and tests for consistent output
++Human in the loop – Alan's rule to never let AI pull the trigger and always stay the overseer
++Related episode: From Financial Data to AI-Ready Decisions: Power BI, Microsoft Fabric, Semantic Models & AI Agents with Rishi Sapra [MVP]
++Follow and rate M365.FM in your podcast app, and join the free M365 community at m365con.net.
+```
+
+<details><summary>Neue Beschreibung (HTML)</summary>
+
+```html
+<p>AI demos are easy, but AI systems that deliver consistent, trustworthy results take real engineering. This conversation is for developers, tech leads and teams adopting AI coding agents. Alan Buscaglia explains how harnesses, skills, tests, guardrails and a human in the loop turn unpredictable AI into dependable output.</p>
+<p><strong>In this episode</strong></p>
+<ul><li>00:00 – Welcome and introducing Alan Buscaglia</li><li>01:41 – Alan's path and building Gentleman Programming</li><li>12:34 – Using AI in the community and staying in the loop</li><li>16:46 – What AI harness engineering is</li><li>22:38 – Testing, benchmarking and guardrails</li><li>30:10 – Tips for teams: skills over prompts</li><li>40:14 – Learning, orchestration and soft skills</li><li>46:06 – The AI race, costs and the future of developers</li></ul>
+<p><strong>Key takeaways</strong></p>
+<ul><li>Every AI coding tool answers differently because of the harness behind it, and teams can engineer their own harnesses, loops and <a href="https://www.m365.fm/entity/agent-skill/?utm_source=podcast&amp;utm_medium=shownotes&amp;utm_campaign=from-ai-hype-to-ai-harness-engineering-with-alan-buscaglia">skills</a> to guide agents toward consistent results.</li><li>Reliable AI output needs end-to-end tests, benchmarks for tokens, time and cost, and guardrail gates, while over-engineered harnesses waste context and money.</li><li>Keep a human in the loop, share team conventions with the AI as skills, and invest in soft skills and fundamentals, because AI is a tool and not your boss.</li></ul>
+<p><strong>Worth quoting</strong></p>
+<p>“The flow will be, I implement something, I committed something, I create a pull request and boom, I merged it if it passes. That flow is a harness.” – Alan Buscaglia (18:26)</p>
+<p>“when you harness something, you give context, and when you give context, you are getting the context from the agent, okay? So you're reducing the amount of context window that the agent can use” – Alan Buscaglia (21:21)</p>
+<p><strong>Explore more on M365.FM</strong></p>
+<ul><li><a href="https://www.m365.fm/show/episodes/from-ai-hype-to-ai-harness-engineering-building-ai-that-people-can-actually-trust-with-alan-buscag/?utm_source=podcast&amp;utm_medium=shownotes&amp;utm_campaign=from-ai-hype-to-ai-harness-engineering-with-alan-buscaglia">Episode page</a>: the full conversation with chapters, Alan's key quotes and an FAQ</li><li><a href="https://www.m365.fm/entity/alan-buscaglia/?utm_source=podcast&amp;utm_medium=shownotes&amp;utm_campaign=from-ai-hype-to-ai-harness-engineering-with-alan-buscaglia">Alan Buscaglia</a> – the guest, creator of Gentleman Programming and an open source collection of AI coding harnesses</li><li><a href="https://www.m365.fm/entity/agent-harness/?utm_source=podcast&amp;utm_medium=shownotes&amp;utm_campaign=from-ai-hype-to-ai-harness-engineering-with-alan-buscaglia">Agent harness</a> – the guided flow behind every coding agent, which Alan builds, benchmarks and tests for consistent output</li><li><a href="https://www.m365.fm/entity/human-in-the-loop/?utm_source=podcast&amp;utm_medium=shownotes&amp;utm_campaign=from-ai-hype-to-ai-harness-engineering-with-alan-buscaglia">Human in the loop</a> – Alan's rule to never let AI pull the trigger and always stay the overseer</li><li>Related episode: <a href="https://www.m365.fm/show/episodes/rishi-sapra/?utm_source=podcast&amp;utm_medium=shownotes&amp;utm_campaign=from-ai-hype-to-ai-harness-engineering-with-alan-buscaglia">From Financial Data to AI-Ready Decisions: Power BI, Microsoft Fabric, Semantic Models &amp; AI Agents with Rishi Sapra [MVP]</a></li></ul>
+<p>Follow and rate M365.FM in your podcast app, and join the free M365 community at m365con.net.</p>
+```
+
+</details>
+
 ## Microsoft 365 Copilot Without the Hype: Adoption, Governance &amp; Getting Your Tenant Ready with Paul Keijzers [MVP] (75328001, 252 Abrufe, 3607 Zeichen)
 
 ```diff
@@ -142,7 +208,7 @@
 ```html
 <p>Buying Copilot licenses is easy, but Copilot then surfaces years of SharePoint, Teams and OneDrive content that was never meant to be shared. In this episode, Microsoft MVP Paul Keijzers explains to IT leaders and Microsoft 365 admins what a Copilot-ready tenant really means. You get practical advice on oversharing, Purview labels and DLP, content lifecycle, adoption and agent governance.</p>
 <p><strong>In this episode</strong></p>
-<ul><li>00:00 – Is your tenant ready for Copilot?</li><li>02:37 – Paul's journey from car audio to SharePoint and Copilot</li><li>11:33 – What companies underestimate</li><li>15:11 – Old SharePoint content and content lifecycle</li><li>21:28 – Oversharing, Purview, labels and <a href="https://www.m365.fm/entity/dlp/?utm_source=podcast&amp;utm_medium=shownotes&amp;utm_campaign=paul-keijzers">DLP</a></li><li>30:17 – Adoption, champions and Copilot costs</li><li>40:46 – Agents and <a href="https://www.m365.fm/entity/ai-agent/?utm_source=podcast&amp;utm_medium=shownotes&amp;utm_campaign=paul-keijzers">Agent</a> 365</li><li>45:08 – Focus weeks and rapid fire round</li></ul>
+<ul><li>00:00 – Is your tenant ready for Copilot?</li><li>02:37 – Paul's journey from car audio to SharePoint and Copilot</li><li>11:33 – What companies underestimate</li><li>15:11 – Old SharePoint content and content lifecycle</li><li>21:28 – Oversharing, Purview, labels and <a href="https://www.m365.fm/entity/dlp/?utm_source=podcast&amp;utm_medium=shownotes&amp;utm_campaign=paul-keijzers">DLP</a></li><li>30:17 – Adoption, champions and Copilot costs</li><li>40:46 – <a href="https://www.m365.fm/entity/ai-agent/?utm_source=podcast&amp;utm_medium=shownotes&amp;utm_campaign=paul-keijzers">Agents</a> and Agent 365</li><li>45:08 – Focus weeks and rapid fire round</li></ul>
 <p><strong>Key takeaways</strong></p>
 <ul><li>Copilot readiness is a <a href="https://www.m365.fm/entity/microsoft-365/?utm_source=podcast&amp;utm_medium=shownotes&amp;utm_campaign=paul-keijzers">Microsoft 365</a> project: start with sharing settings, permissions, retention, sensitivity labels and DLP, including Power Automate DLP for connectors.</li><li>Old, unarchived SharePoint content and duplicate versions make Copilot look like it hallucinates, so archive or restrict content and keep metadata and folder structures simple.</li><li>Strong adoption comes from continuous, outcome-focused support in the business rather than one-time training days, while token-based tools like Copilot Cowork need cost awareness.</li></ul>
 <p><strong>Worth quoting</strong></p>
@@ -687,123 +753,6 @@
 <p>“I always encourage people to build or implement even basic metadata, policy metadata model, because it will help them later, and metadata are supported by copilot” – Marcin Siewnicki (38:26)</p>
 <p><strong>Explore more on M365.FM</strong></p>
 <ul><li><a href="https://www.m365.fm/show/episodes/marcin-siewnicki/?utm_source=podcast&amp;utm_medium=shownotes&amp;utm_campaign=marcin-siewnicki">Episode page</a>: the full conversation with chapters, quotes and an FAQ on SharePoint and Copilot</li><li><a href="https://www.m365.fm/entity/marcin-siewnicki/?utm_source=podcast&amp;utm_medium=shownotes&amp;utm_campaign=marcin-siewnicki">Marcin Siewnicki</a> – Microsoft 365 solution architect who shares 20 years of SharePoint project experience in this episode</li><li><a href="https://www.m365.fm/entity/sharepoint/?utm_source=podcast&amp;utm_medium=shownotes&amp;utm_campaign=marcin-siewnicki">SharePoint</a> – the platform at the center of the talk, from its reputation problem to Copilot readiness</li><li><a href="https://www.m365.fm/entity/copilot/?utm_source=podcast&amp;utm_medium=shownotes&amp;utm_campaign=marcin-siewnicki">Microsoft 365 Copilot</a> – turns SharePoint content into answers, so metadata and governed content directly shape its results</li><li>Related episode: <a href="https://www.m365.fm/show/episodes/paul-keijzers/?utm_source=podcast&amp;utm_medium=shownotes&amp;utm_campaign=marcin-siewnicki">Microsoft 365 Copilot Without the Hype: Adoption, Governance &amp; Getting Your Tenant Ready with Paul Keijzers [MVP]</a></li></ul>
-<p>Follow and rate M365.FM in your podcast app, and join the free M365 community at m365con.net.</p>
-```
-
-</details>
-
-## What Happens When Sales Promises an Urgent Order (75585104, 172 Abrufe, 3625 Zeichen)
-
-```diff
---- aktuell
-+++ neu
-@@ -1,72 +1,22 @@
--An urgent customer request sounds simple: sales promises a fast delivery date, marks the order as priority, and asks production to fit it in. But the new order does not enter an empty factory. It enters a schedule already filled with machine reservations, material allocations, setup plans, qualified people, inspection capacity, maintenance windows, and promises made to other customers. The real question is therefore not simply whether the urgent order can be produced, but which existing commitment absorbs the disruption when it moves forward.
--A PROMISE IS NOT A PRODUCTION PLAN
--A commercial promise tells the customer what the business intends to deliver. A feasible production date proves that there is actually a path through material, machining, assembly, inspection, packing, and shipping within the available time.
--ERP can hold requested dates, promised dates, production orders, materials, and routing information, but a priority flag does not create capacity. A CNC machine still has limited hours, inspection still needs qualified people and equipment, and shipping still has carrier cutoffs. Urgency changes priority; it does not remove physical constraints.
--FINITE CAPACITY EXPOSES THE REAL TRADE-OFF
--Infinite-capacity planning can place several orders against the same resource and leave the collision for production to solve later. Finite-capacity scheduling forces that conflict into the open.
--If the urgent order receives Tuesday morning on a CNC machine, another operation loses Tuesday morning. That displaced order may then miss assembly, inspection, or packing windows and lose far more time than the urgent order actually consumed.
--The first scheduling move therefore creates a chain reaction through the remaining route.
--MATERIAL DOESN'T OBEY PRIORITY FLAGS
--Inventory showing as available does not always mean it is usable for the urgent order. Material may already be allocated to another customer order, still be waiting for quality release, require a specific batch or supplier, or have traceability and shelf-life restrictions.
--Reallocating material can save the urgent customer while quietly creating a shortage somewhere else. The factory has not removed the constraint; it has transferred it.
--The same applies to fixtures, gauges, special packaging, test equipment, and other physical resources that multiple orders may depend on.
--MACHINE CAPACITY IS NOT USABLE CAPACITY
--A machine can have an open calendar slot and still be unavailable for the work. The required setter may not be on shift, an operator may lack the necessary certification, the fixture may be installed somewhere else, or the CNC program may not be released for the current product revision.
--Real capacity exists only when the machine, people, tools, material, process approvals, and time window come together.
--That is why an alternate machine is not automatically an alternate production route. A proven alternate route needs approved tooling, programs, quality checks, realistic cycle times, and people who can actually run the work.
--THE BOTTLENECK MOVES
--An urgent order may initially look like a machining problem. Once machining finds a solution, the pressure can move immediately to assembly, inspection, testing, packing, or even one person responsible for an approval.
--A bottleneck is not permanently attached to one machine. It is whichever constraint currently limits the flow of work toward shipment.
--This is why high equipment utilization does not automatically mean good delivery performance. A plant can have efficient machines and still ship late because the wrong work is waiting at the wrong constraint at the wrong time.
--THE SECOND-ORDER EFFECTS ARE WHERE THE DAMAGE SPREADS
--The visible effect of an urgent order is easy to see: it moves forward.
--The less visible effect is everything that moves backward.
--One displaced machining operation can delay an assembly component. That missing component can create partial work, additional handling, another inspection window, and finally a missed shipment. Another order may lose a fixture, material allocation, test bench, or skilled person even though it never shares the original machine with the urgent order.
--Factories operate through dependencies, not isolated departments.
--An urgent order changes product, process, and resource relationships throughout that network.
--DELIVERY DATES HAVE TO BE RECALCULATED
--When work moves, the old customer dates should not simply remain untouched in ERP.
--A displaced order needs a new feasible path through every remaining operation. Machining must finish before assembly can start, assembly must finish before inspection, and inspection must finish early enough for packing and the carrier cutoff.
--An order can technically finish production on its due date and still arrive late because the truck already left.
--Customer service therefore needs a realistic ship date and the assumptions behind it, not reassurance based on a date that the current production situation no longer supports.
--WHY EXCEL BECOMES THE EMERGENCY CONTROL ROOM
--In many factories, the planner pulls information from ERP, MES, production supervisors, purchasing, quality, maintenance, and supplier updates into one spreadsheet because that is the fastest way to rebuild the complete situation.
--Excel itself is not the problem. It is flexible and practical.
--The problem appears when the spreadsheet becomes the only place where the real production decision exists. Sales sees one date in ERP, planning sees another date in a workbook, and the shop floor follows a sequence changed during the previous shift.
--The deeper issue is missing shared context between the systems.
--CONTEXT CONNECTS THE FACTS
--A machine record, work order, material quantity, operator roster, and customer due date are useful facts. They become useful for urgent-order decisions when the relationships between them are explicit.
--The system needs to understand that:
--• This operation belongs to this work order
--• This work order supports this customer commitment
--• This operation can run on these approved resources
--• This material is allocated to this production order
--• This tool or fixture is required for this process
--• This person is qualified for this operation
--• This inspection must happen before shipment
--A knowledge graph or similar relationship model can help make those dependencies visible and traceable instead of leaving them inside spreadsheets and people's heads.
--WHERE https://www.m365.fm/microsoft-fabric-simply-explained/ AND POWER BI FIT
--https://www.m365.fm/categories/security-talk/ Fabric can provide a shared data foundation across ERP, MES, maintenance, quality, machine data, and planning information. It can help prepare, govern, history, and connect data used for cross-system analysis.
--Power BI can expose current load, orders at risk, material status, queue development, and delivery exposure so sales, planning, production, and customer service work from a more consistent view.
--But neither Fabric nor Power BI is automatically a finite-capacity scheduling engine.
--A scheduling or optimization layer still needs to test resource calendars, routing dependencies, setups, material availability, skills, maintenance windows, and other constraints before a production option can be considered feasible.
--SIMULATION BEFORE YOU MOVE THE WORK
--Instead of immediately pushing an urgent order to the front, simulation allows planning to test the consequences first.
--Possible scenarios might include:
--• Move the urgent order ahead of existing work
--• Add controlled overtime
--• Use an approved alternate route
--• Split the shipment
--• Offer a later delivery date
--• Decline the requested date when no safe feasible option exists
--Each option moves risk somewhere. Simulation makes those consequences visible before production starts changing machines, people, materials, and schedules.
--PREDICTION, SIMULATION, OPTIMIZATION, AND AI
--These technologies solve different problems.
--Prediction estimates what may happen. Simulation tests what happens if the plant chooses a specific response. Optimization searches across available options for the best schedule according to defined objectives and constraints.
--Generative AI can help planners understand those results, ask questions in natural language, summarize the trade-offs, and prepare communication for sales or customer service.
--AI should not invent finite-capacity schedule mathematics from a prompt. A fluent answer is not proof that the production plan is feasible.
--WHO GETS TO CALL AN ORDER URGENT?
--Urgency needs governance.
--A customer line-down situation is different from a late internal request. A contractual recovery is different from a strategic opportunity. A safety-related requirement may justify disruption that a normal expedite request does not.
--Without clear categories and decision rights, everything eventually becomes urgent and normal work becomes whatever nobody defended loudly enough.
--Production should be able to return a feasibility answer that explains what is possible, what conditions apply, and which existing commitments change if the request is accepted.
-+When sales promises an urgent delivery date, the order lands in a factory schedule that is already full, and other customers quietly absorb the delay. This episode is for manufacturing planners, operations leaders and data architects who connect ERP, MES and analytics. It shows how to turn urgent requests into visible, tested trade-offs with a shared promise process and a layered decision architecture.
-+In this episode
-+00:00 – The urgent order and the factory scenario
-+05:45 – A promise is not a production plan
-+10:10 – Machine time, displaced orders, material and labor
-+34:00 – Shifting bottlenecks, OEE and cascading delivery dates
-+52:50 – Excel, missing context and Microsoft Fabric as the data layer
-+70:30 – Simulation, prediction and optimization
-+79:05 – Who defines priority: governance and a shared promise process
-+88:10 – Decision architecture, Copilot and human judgment
-+Key takeaways
-+A priority flag in ERP does not create capacity: an urgent order always takes machine time, material, people or inspection slots from existing commitments.
-+Finite capacity scheduling and simulation make the trade-off visible before the plant moves, while OEE dashboards and Excel recovery files only describe parts of the situation.
-+Microsoft Fabric, Power BI, Power Platform and Copilot can connect ERP and MES facts and route approvals, but the feasibility decision needs scheduling logic, defined urgency categories and an accountable human owner.
-+Explore more on M365.FM
-+Episode page: the full episode with chapters, key takeaways and an FAQ on urgent order promises
-+Microsoft Fabric – the shared data layer tying ERP orders, MES events and supply data together, without solving scheduling
-+Power BI – the shared view of order exposure and capacity pressure for sales, planning and production
-+Microsoft Excel – the planner's emergency control room when ERP and MES do not talk to each other
-+Microsoft 365 Copilot – a safer interface once data, scheduling logic and approvals exist, for questions and customer update drafts
-+Related episode: Power Platform Copilot Integration - Simply Explained
-+Follow and rate M365.FM in your podcast app, and join the free M365 community at m365con.net.
-```
-
-<details><summary>Neue Beschreibung (HTML)</summary>
-
-```html
-<p>When sales promises an urgent delivery date, the order lands in a factory schedule that is already full, and other customers quietly absorb the delay. This episode is for manufacturing planners, operations leaders and data architects who connect ERP, MES and analytics. It shows how to turn urgent requests into visible, tested trade-offs with a shared promise process and a layered decision architecture.</p>
-<p><strong>In this episode</strong></p>
-<ul><li>00:00 – The urgent order and the factory scenario</li><li>05:45 – A promise is not a production plan</li><li>10:10 – Machine time, displaced orders, material and labor</li><li>34:00 – Shifting bottlenecks, OEE and cascading delivery dates</li><li>52:50 – Excel, missing context and Microsoft Fabric as the data layer</li><li>70:30 – Simulation, prediction and optimization</li><li>79:05 – Who defines priority: governance and a shared promise process</li><li>88:10 – Decision architecture, Copilot and human judgment</li></ul>
-<p><strong>Key takeaways</strong></p>
-<ul><li>A priority flag in ERP does not create capacity: an urgent order always takes machine time, material, people or inspection slots from existing commitments.</li><li>Finite capacity scheduling and simulation make the trade-off visible before the plant moves, while OEE dashboards and Excel recovery files only describe parts of the situation.</li><li>Microsoft Fabric, Power BI, <a href="https://www.m365.fm/entity/power-platform/?utm_source=podcast&amp;utm_medium=shownotes&amp;utm_campaign=what-happens-when-sales-promises-an-urgent-order">Power Platform</a> and Copilot can connect ERP and MES facts and route approvals, but the feasibility decision needs scheduling logic, defined urgency categories and an accountable human owner.</li></ul>
-<p><strong>Explore more on M365.FM</strong></p>
-<ul><li><a href="https://www.m365.fm/show/episodes/urgent-order-sales-promises/?utm_source=podcast&amp;utm_medium=shownotes&amp;utm_campaign=what-happens-when-sales-promises-an-urgent-order">Episode page</a>: the full episode with chapters, key takeaways and an FAQ on urgent order promises</li><li><a href="https://www.m365.fm/entity/fabric/?utm_source=podcast&amp;utm_medium=shownotes&amp;utm_campaign=what-happens-when-sales-promises-an-urgent-order">Microsoft Fabric</a> – the shared data layer tying ERP orders, MES events and supply data together, without solving scheduling</li><li><a href="https://www.m365.fm/entity/power-bi/?utm_source=podcast&amp;utm_medium=shownotes&amp;utm_campaign=what-happens-when-sales-promises-an-urgent-order">Power BI</a> – the shared view of order exposure and capacity pressure for sales, planning and production</li><li><a href="https://www.m365.fm/entity/excel/?utm_source=podcast&amp;utm_medium=shownotes&amp;utm_campaign=what-happens-when-sales-promises-an-urgent-order">Microsoft Excel</a> – the planner's emergency control room when ERP and MES do not talk to each other</li><li><a href="https://www.m365.fm/entity/copilot/?utm_source=podcast&amp;utm_medium=shownotes&amp;utm_campaign=what-happens-when-sales-promises-an-urgent-order">Microsoft 365 Copilot</a> – a safer interface once data, scheduling logic and approvals exist, for questions and customer update drafts</li><li>Related episode: <a href="https://www.m365.fm/show/episodes/power-platform-copilot-integration/?utm_source=podcast&amp;utm_medium=shownotes&amp;utm_campaign=what-happens-when-sales-promises-an-urgent-order">Power Platform Copilot Integration - Simply Explained</a></li></ul>
 <p>Follow and rate M365.FM in your podcast app, and join the free M365 community at m365con.net.</p>
 ```
 
