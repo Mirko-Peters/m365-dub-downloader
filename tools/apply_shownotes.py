@@ -228,6 +228,57 @@ def qa_ok(path=None):
     return {k for k, v in st.items() if v in ("ok", "fixed")}
 
 
+def _git(*args):
+    import subprocess
+    try:
+        return subprocess.run(["git", *args], cwd=ROOT, capture_output=True, text=True, timeout=300).stdout
+    except Exception:
+        return ""
+
+
+def qa_times(path=None):
+    """episode_id -> Commit-Zeit (Unix) seines letzten Eintrags in shownotes/QA.txt (git blame; letzter Eintrag zaehlt)."""
+    f = path or (SN / "QA.txt"); out, cur = {}, None
+    if not f.exists():
+        return out
+    for line in _git("blame", "--line-porcelain", "--", str(f.relative_to(ROOT))).splitlines():
+        if line.startswith("committer-time "):
+            cur = int(line.split()[1])
+        elif line.startswith("\t") and cur:
+            x = line[1:].split(";")
+            if len(x) >= 2 and x[0].strip().isdigit():
+                out[x[0].strip()] = cur
+    return out
+
+
+def file_times(folder=None):
+    """Dateiname -> Commit-Zeit (Unix) der letzten Aenderung unter shownotes/spreaker/."""
+    out, cur = {}, None
+    for line in _git("log", "--format=@%ct", "--name-only", "--", str((folder or SRC).relative_to(ROOT))).splitlines():
+        if line.startswith("@"):
+            cur = int(line[1:])
+        elif line.strip() and cur:
+            out.setdefault(Path(line.strip()).name, cur)   # git log beginnt mit dem neuesten Commit
+    return out
+
+
+def qa_current(ids):
+    """T25: Freigabe gilt fuer die gepruefte Fassung. Wurde die Datei nach dem QA-Eintrag der Folge geaendert (z. B. Links
+    nachgetragen), wartet sie auf eine neue QA-Zeile. Ohne volle git-Historie ist das nicht pruefbar -> alles wartet (sicher)."""
+    if _git("rev-parse", "--is-shallow-repository").strip() != "false":
+        return set(), {str(i): "git-Historie fehlt (checkout mit fetch-depth: 0 noetig)" for i in ids}
+    qt, ft, ok, why = qa_times(), file_times(), set(), {}
+    for i in ids:
+        q, t = qt.get(str(i)), ft.get(f"{i}.html")
+        if q is None or t is None:
+            why[str(i)] = "Zeitpunkt nicht lesbar"
+        elif t > q:
+            why[str(i)] = "nach der QA geaendert"
+        else:
+            ok.add(str(i))
+    return ok, why
+
+
 def pending(applied, ids=None, with_invalid=False):
     """[(episode_id, html, hash, errors)] aller Dateien, die noch nicht mit dieser Fassung geschrieben sind (ungueltige nur einmal je Fassung protokolliert)."""
     out = []
@@ -273,7 +324,12 @@ def main():
         ok = qa_ok()
         held = [t for t in todo if str(t[0]) not in ok]
         todo = [t for t in todo if str(t[0]) in ok]
-        print(f"QA-Freigabe je Folge: {len(todo)} freigegeben, {len(held)} warten auf die QA")
+        cur, why = qa_current([t[0] for t in todo])   # T25: nur die Fassung, die die QA geprueft hat
+        stale = [t for t in todo if str(t[0]) not in cur]
+        todo = [t for t in todo if str(t[0]) in cur]
+        print(f"QA-Freigabe je Folge: {len(todo)} freigegeben, {len(held)} warten auf die QA, {len(stale)} seit der QA geaendert (warten auf neue Pruefung)")
+        for e, *_ in stale[:30]:
+            print(f"  {e}: {why.get(str(e), '')}")
     sp = Spreaker()
     if not sp.login():
         return 1
