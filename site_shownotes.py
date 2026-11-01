@@ -71,13 +71,19 @@ def parse_file(path):
     return {"meta": meta, "body": body.strip(), "path": str(path)}
 
 
-def load_all(d=None):
-    """episode_id (str) -> Datensatz; nur Dateien mit numerischem Namen."""
+def load_all(d=None, qa=None):
+    """episode_id (str) -> Datensatz; nur Dateien mit numerischem Namen und nur fuer Folgen, die die QA in shownotes/QA.txt
+    mit ok oder fixed fuehrt (gleiches Gate wie Quotes und Entitaets-Verknuepfung). Ungepruefte Vollfassungen bleiben Arbeitsmaterial."""
     d = Path(d) if d else SN_DIR
     out = {}
     if not d.exists(): return out
+    if qa is None:
+        import site_extract as SX
+        qa = SX.qa_ok()
+    skipped = 0
     for f in sorted(d.glob("*.md")):
         if not f.stem.isdigit(): continue
+        if f.stem not in qa: skipped += 1; continue
         try:
             rec = parse_file(f)
         except Exception:
@@ -85,6 +91,7 @@ def load_all(d=None):
         eid = str(rec["meta"].get("episode_id") or f.stem)
         rec["episode_id"] = eid
         out[eid] = rec
+    if skipped: print(f"Shownotes-Vollfassungen: {len(out)} freigegeben, {skipped} warten auf die QA (shownotes/QA.txt)")
     return out
 
 
