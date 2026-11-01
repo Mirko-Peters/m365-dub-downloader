@@ -530,7 +530,7 @@ def _art_svg_old(seed, big, small="M365.FM · AI"):
         v = 40 + (hh >> 8) % 180
         bars += f'<rect x="{x}" y="{330 - v // 2}" width="14" height="{v}" rx="7" fill="hsl({h1 + 18},85%,72%)" opacity="{0.35 + (v / 400):.2f}"/>'
         x += 25
-    return (f'<svg viewBox="0 0 1200 420" xmlns="http://www.w3.org/2000/svg" role="img" aria-hidden="true" focusable="false">'
+    return (f'<svg viewBox="0 0 1200 420" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">'
             f'<defs><linearGradient id="g{h % 99999}" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="hsl({h1},55%,24%)"/><stop offset="1" stop-color="hsl({h2},60%,11%)"/></linearGradient></defs>'
             f'<rect width="1200" height="420" fill="url(#g{h % 99999})"/>{bars}'
             f'<text x="60" y="92" font-family="Barlow Condensed,Arial Narrow,sans-serif" font-size="68" font-weight="700" fill="#f6f1ea">{esc(big)}</text>'
@@ -1069,7 +1069,7 @@ def build():
         rel = "".join(f'<a class="row" href="{url_of(x)}" title="{esc(x["e"]["title"])}"><h3>{esc(anchor_title(x["e"]["title"]))}</h3></a>' for x in more)
         body = f"""{header(l, lang_switch(l, alts, [x for x in LANGS if x in alts]))}
 <main class="wrap"><article>
-<div class="crumbs"><a href="{BASE}/{l}/">{esc(ui[7])}</a> / {esc(LANGS[l][0])} / {it["date"]}</div>
+<nav class="crumbs" aria-label="breadcrumb"><a href="{BASE}/{l}/">{esc(ui[7])}</a> / {esc(LANGS[l][0])} / {it["date"]}</nav>
 <div class="kicker">M365.FM · {esc(LANGS[l][0])}</div>{('<p class="mut"><a href="' + BASE + '/show/episodes/' + ORIG[vid] + '/" hreflang="en">' + ("Original (English)" if l != "de" else "Original (Englisch)") + '</a></p>') if vid in ORIG else ""}
 <h1>{esc(h1_main)}</h1>{("<p class=sub>" + esc(h1_rest) + "</p>") if h1_rest else ""}
 {chips_html(l, it)}<p class="lede">{intro}</p>
@@ -1363,7 +1363,7 @@ def build():
                 {"@type": "ListItem", "position": 3, "name": label, "item": canonical}]}]
         hero = MED.hero_svg({"id": "cat-" + re.sub(r"\W+", "-", label.lower()), "name": label, "type": "category"}, kind, label)
         body = f"""{header(l, lang_switch(l, alts or {}, active))}
-<main class="wrap"><div class="crumbs"><a href="{BASE}/{l}/">{esc(ui[7])}</a> / {esc(LANGS[l][0])}</div>
+<main class="wrap"><nav class="crumbs" aria-label="breadcrumb"><a href="{BASE}/{l}/">{esc(ui[7])}</a> / {esc(LANGS[l][0])}</nav>
 <div class="kicker">{esc(kind)} · {esc(LANGS[l][0])}</div><h1>{esc(label)}</h1>{hero}
 <p class="mut">{len(lst)} × {esc(ui[3])}</p>
 <h2>{esc(ui[3])}</h2><div class="list">{rows_html(lst)}</div>
@@ -1411,7 +1411,7 @@ def build():
                   {"@type": "ListItem", "position": 3, "name": label, "item": u}]}]
         alts = {x: f"{BASE}/{x}/top/" for x in active if top_for(x, 1)}
         body = f"""{header(l, lang_switch(l, alts, active))}
-<main class="wrap"><div class="crumbs"><a href="{BASE}/{l}/">{esc(ui[7])}</a> / {esc(LANGS[l][0])}</div>
+<main class="wrap"><nav class="crumbs" aria-label="breadcrumb"><a href="{BASE}/{l}/">{esc(ui[7])}</a> / {esc(LANGS[l][0])}</nav>
 <div class="kicker">★ {esc(LANGS[l][0])} · {esc(wk)}</div><h1>{esc(label)}</h1>
 <h2>{esc(ui[3])}</h2><div class="list">{rows}</div>
 <p style="margin-top:1.6em"><a class="btn" href="{BASE}/{l}/">{esc(ui[3])} →</a></p></main>{footer(l)}"""

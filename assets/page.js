@@ -35,3 +35,14 @@ row.appendChild(btn(T.share,function(){var u=C.url+"#quiz";if(navigator.share){n
 var a=el("a","btn","LinkedIn");a.href="https://www.linkedin.com/sharing/share-offsite/?url="+encodeURIComponent(C.url+"#quiz");a.target="_blank";a.rel="noopener nofollow";row.appendChild(a);row.appendChild(btn(T.retry,function(){i=0;score=0;qs.forEach(function(q){q.disabled=false;[].forEach.call(q.querySelectorAll("input"),function(x){x.checked=false});[].forEach.call(q.querySelectorAll(".qo"),function(l){l.classList.remove("ok","no")})});Q.removeChild(r);show(0)}));r.appendChild(row);Q.insertBefore(r,ctl)}
 show(0)}catch(e){}})();
 (function(){try{document.querySelectorAll('.yt').forEach(function(b){b.addEventListener('click',function(){var i=document.createElement('iframe');i.src='https://www.youtube-nocookie.com/embed/'+b.dataset.id+'?autoplay=1&rel=0';i.allow='accelerometer;autoplay;encrypted-media;picture-in-picture';i.allowFullscreen=true;i.title='YouTube';b.innerHTML='';b.appendChild(i)},{once:true})});}catch(e){}})();
+;(function(){   // T10: Menues (Sprachwahl, Menuegruppen, Burger) schliessen mit Escape, Klick daneben oder wenn der Fokus sie verlaesst
+  var SEL = "details.lsw[open],details.mg[open],details.mm[open]";
+  function closeAll(except){ document.querySelectorAll(SEL).forEach(function(d){ if (d !== except && !d.contains(except)) d.removeAttribute("open"); }); }
+  document.addEventListener("keydown", function(e){
+    if (e.key !== "Escape") return;
+    var d = document.activeElement && document.activeElement.closest && document.activeElement.closest(SEL);
+    closeAll(null); if (d) { var s = d.querySelector("summary"); if (s) s.focus(); }
+  });
+  document.addEventListener("click", function(e){ closeAll(e.target.closest ? e.target.closest("details") : null); });
+  document.addEventListener("focusin", function(e){ closeAll(e.target.closest ? e.target.closest("details") : null); });
+})();
