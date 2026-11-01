@@ -1,0 +1,181 @@
+{
+  "episode_id": "71699469",
+  "slug": null,
+  "title": "Building Resilient Azure Architectures: That Survive Regional Cloud Service Provider Outage Scenarios",
+  "lang": "en",
+  "duration_s": 1251,
+  "transcript_source": "data/en_transcripts/db6d80d6a8c0.txt",
+  "time_basis": "estimated",
+  "entities": [
+    {
+      "slug": "mirko-peters",
+      "name": "Mirko Peters",
+      "type": "person",
+      "score": 50,
+      "mentions": 1,
+      "first_mention_s": 1098,
+      "quote": "follow me, Mirko Peters, unlinked in to share your failover stories",
+      "url": "https://www.m365.fm/entity/mirko-peters/"
+    },
+    {
+      "slug": "governance",
+      "name": "Governance",
+      "type": "concept",
+      "score": 70,
+      "mentions": 6,
+      "first_mention_s": 741,
+      "quote": "We need to talk about the governance that dictates who owns the disaster",
+      "url": "https://www.m365.fm/entity/governance/"
+    },
+    {
+      "slug": "automation",
+      "name": "Automation",
+      "type": "concept",
+      "score": 45,
+      "mentions": 2,
+      "first_mention_s": 883,
+      "quote": "you trust the automation to execute the shift",
+      "url": "https://www.m365.fm/entity/automation/"
+    },
+    {
+      "slug": "azure",
+      "name": "Microsoft Azure",
+      "type": "platform",
+      "score": 75,
+      "mentions": 6,
+      "first_mention_s": 38,
+      "quote": "Global entry points like Azure Front Door or Edge Rooting are the most efficient way to scale.",
+      "url": "https://www.m365.fm/entity/azure/"
+    },
+    {
+      "slug": "cosmos-db",
+      "name": "Azure Cosmos DB",
+      "type": "product",
+      "score": 40,
+      "mentions": 1,
+      "first_mention_s": 656,
+      "quote": "You use tools like Cosmos DB with multi-region rights or SQL failover groups",
+      "url": "https://www.m365.fm/entity/cosmos-db/"
+    }
+  ],
+  "new_entities": [
+    {
+      "slug": "azure-front-door",
+      "name": "Azure Front Door",
+      "type": "product"
+    },
+    {
+      "slug": "domain-name-system",
+      "name": "Domain Name System (DNS)",
+      "type": "concept"
+    },
+    {
+      "slug": "azure-resource-manager",
+      "name": "Azure Resource Manager",
+      "type": "product"
+    },
+    {
+      "slug": "control-plane",
+      "name": "Control plane",
+      "type": "concept"
+    },
+    {
+      "slug": "chaos-engineering",
+      "name": "Chaos engineering",
+      "type": "concept"
+    }
+  ],
+  "quotes": [
+    {
+      "text": "If your failover requires a manual meeting or a functioning control plane during a blackout, you do not have a plan. You have hope.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 16,
+      "entities": [
+        "control-plane"
+      ],
+      "why": "Captures the episode's central warning in two sentences."
+    },
+    {
+      "text": "The reality is simple. Multi-region deployment doesn't make you resilient. Your state strategy does. In the old model, architects treated databases like black boxes.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 594,
+      "entities": [],
+      "why": "Reframes resilience around data rather than deployment locations."
+    },
+    {
+      "text": "Resilience means having the capacity reserved before the rest of the world tries to buy it. Your recovery should be a pushbutton event that only requires a routing change.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 517,
+      "entities": [
+        "azure-resource-manager"
+      ],
+      "why": "A concrete recommendation against redeploy-on-demand recovery plans."
+    },
+    {
+      "text": "There is no phone call, there is no slack thread, the telemetry is the only authority that matters.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 818,
+      "entities": [
+        "governance",
+        "automation"
+      ],
+      "why": "Summarizes the case for automated, telemetry-driven failover decisions."
+    },
+    {
+      "text": "You have to break things on purpose to make sure they don't break on their own. This level of rigor is what separates the architects who build systems from the ones who just build hopes.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 1035,
+      "entities": [
+        "chaos-engineering"
+      ],
+      "why": "A memorable argument for regular failure testing."
+    }
+  ],
+  "chapters": [
+    {
+      "start_s": 0,
+      "title": "Multi-region is not resilience"
+    },
+    {
+      "start_s": 36,
+      "title": "Edge failure when the front door goes dark"
+    },
+    {
+      "start_s": 216,
+      "title": "The DNS death spiral"
+    },
+    {
+      "start_s": 390,
+      "title": "Control plane degradation and the redeploy fallacy"
+    },
+    {
+      "start_s": 571,
+      "title": "State strategy"
+    },
+    {
+      "start_s": 747,
+      "title": "Governance and decision rights"
+    },
+    {
+      "start_s": 920,
+      "title": "Testing like you expect it to break"
+    },
+    {
+      "start_s": 1058,
+      "title": "The level of preparation"
+    }
+  ],
+  "takeaways": [
+    "Global edge services and DNS are dependencies that need regional bypass paths, not invisible utilities.",
+    "Recovery plans that depend on redeploying through the control plane fail when everyone hits the same management APIs and capacity runs out, so pre-provision warm standbys.",
+    "Resilience comes from a deliberate state strategy, automated failover governance and regular chaos testing."
+  ],
+  "hook": "Deploying to two Azure regions does not make a system resilient if failover depends on a meeting, a healthy control plane or capacity you never reserved. This episode walks cloud architects through edge, DNS, control plane, data and governance failures in a regional outage and shows how to design systems that keep running.",
+  "youtube_video_id": null,
+  "generated_at": "2026-11-01T20:30:58+00:00"
+}
