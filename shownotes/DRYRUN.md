@@ -1,6 +1,10 @@
 # Dry-Run Shownotes -> Spreaker
 
-2026-11-01T12:27:48+00:00 · 180 Folgen offen, 0 ungueltig, 0 unbekannt, 10 im Diff (meistgehoerte zuerst). Schreiben erst mit Datei shownotes/APPROVED.
+2026-11-01T14:26:21+00:00 · 240 Folgen offen, 1 ungueltig, 0 unbekannt, 10 im Diff (meistgehoerte zuerst). Schreiben erst mit Datei shownotes/APPROVED.
+
+## Ungueltige Dateien
+
+- 74377856: 5 Links (mindestens 6)
 
 ## Beyond Copilot: Building Enterprise AI Agents That Actually Work with Copilot Studio with Manpreet Singh [MVP-MCT] (74640221, 341 Abrufe, 3648 Zeichen)
 
@@ -164,6 +168,91 @@
 
 </details>
 
+## Beyond the Prompt: Mastering Microsoft Copilot for Real Productivity with Jess Stratton [MVP] (73206825, 265 Abrufe, 3900 Zeichen)
+
+```diff
+--- aktuell
++++ neu
+@@ -1,35 +1,24 @@
+-Jess Stratton shares her unique career journey from independent Lotus Notes developer to one of the world's most recognized Microsoft 365 educators. After joining LinkedIn Learning, she created training for millions of learners while continuously adapting to Microsoft's rapidly evolving ecosystem. Today, as a Microsoft MVP, TEDx speaker, author, and founder of Nerd Girl Jess LLC, she focuses on helping organizations move beyond simply using Microsoft https://www.m365.fm/categories/copilot-talk/ toward fundamentally changing the way people work. Her story highlights how continuous learning, curiosity, and community can create extraordinary career opportunities in technology.
+-WHY COPILOT ADOPTION FAILS IN MANY ORGANIZATIONS
+-Buying Microsoft Copilot licenses is only the beginning. Jess explains that many organizations invest heavily in AI but struggle to demonstrate measurable business value because employees are taught where Copilot's buttons are instead of learning how AI actually improves their daily work. Successful adoption requires showing employees practical productivity gains, helping them solve real business problems, and demonstrating why Copilot makes their jobs easier rather than simply introducing another piece of software. Organizations that focus on outcomes instead of features consistently achieve better long-term adoption.
+-HUMAN BEHAVIOR IS THE BIGGEST OBSTACLE
+-While many organizations assume governance or technology limits Copilot adoption, Jess believes the real challenge is people. Microsoft already provides strong governance capabilities, security controls, pilot programs, and enterprise protections. The real issue is convincing employees to change established habits and trust AI as part of their daily workflow. Until users understand how Copilot benefits their individual responsibilities, even the best technical deployment will fail to achieve widespread adoption.
+-TRAINING MUST EVOLVE BEYOND FEATURES
+-Traditional software training focuses on explaining menus and features. AI requires a completely different approach. Jess explains that modern Copilot training should answer a different question: How will this improve my work? Instead of showing every feature inside Word, Excel, Teams, or Outlook, trainers should demonstrate concrete productivity improvements, realistic business scenarios, and repeatable workflows that employees can immediately apply. Helping users experience small wins early dramatically increases long-term adoption.
+-THE POWER OF CUSTOM PROMPT GALLERIES
+-One of Jess's favorite new Microsoft Copilot capabilities is the ability for organizations to build department-specific Prompt Galleries. Rather than forcing employees to invent prompts from scratch, IT teams can provide reusable prompts tailored for HR, Finance, Marketing, Legal, Customer Service, Sales, or Operations. Because every company has unique terminology, business processes, and workflows, these curated prompts significantly reduce the learning curve while helping users experience immediate business value.
+-WHY MOST PEOPLE STILL PROMPT POORLY
+-Many users expect Copilot to generate perfect results after entering a single sentence. Jess explains that this misconception leads to disappointment. The best prompts clearly define four key elements: the goal, the business context, relevant source information, and detailed expectations about the desired output. Instead of simply asking Copilot to "write a report," users should specify the audience, tone, length, formatting, business purpose, and constraints. The more clearly expectations are communicated, the better Copilot performs.
+-CHOOSING THE RIGHT MODEL MATTERS
+-Modern Microsoft Copilot offers access to multiple AI models, yet many users leave the default setting unchanged. Jess encourages people to experiment with different models using identical prompts to understand how dramatically responses can differ. Some models prioritize reasoning, others creativity, while some focus on speed or factual consistency. Becoming an effective Copilot user increasingly requires understanding not only prompt engineering but also selecting the most appropriate model for each task.
+-AI SHOULD CHANGE THE WAY YOU WORK
+-One of the biggest mistakes organizations make is using AI to automate inefficient workflows instead of redesigning work itself. Jess believes Copilot gives businesses a rare opportunity to rethink long-established processes. Rather than recreating old manual habits with AI, organizations should simplify workflows, eliminate unnecessary steps, organize prompts, create reusable agents, and build scalable solutions that remain maintainable for years instead of becoming another layer of technical debt.
+-WHY PERSONALIZATION CHANGES EVERYTHING
+-Personalization is one of the most overlooked features inside Microsoft Copilot. Jess explains how users can customize writing styles, preferred formatting, Outlook tone, meeting summaries, PowerPoint branding, Teams meeting templates, and persistent memory to create much more natural outputs. Instead of generating generic AI content, Copilot can gradually learn how individuals communicate and present information, making AI-generated work feel significantly more authentic and personal.
+-MAKE COPILOT SOUND LIKE YOU
+-One of Jess's strongest messages is that AI should amplify your voice—not replace it. Too many LinkedIn posts, presentations, and emails already sound identical because users rely on generic prompts. She demonstrates how Outlook, Copilot Memory, Brand Kits, and writing preferences can help AI understand an individual's communication style. Users can even ask Copilot to analyze previous emails and automatically generate custom writing instructions that reflect their natural tone, vocabulary, and personality.
+-BUILDING YOUR OWN PROMPT LIBRARY
+-Rather than writing prompts repeatedly, Jess recommends creating a personal prompt library. Organizations should also identify enthusiastic Copilot champions within each department—not necessarily the most technical employees, but those who enjoy sharing knowledge with colleagues. These champions can continuously refine departmental prompts, reusable workflows, and business scenarios that make AI easier for everyone else to adopt. Over time, these libraries become valuable organizational assets that dramatically accelerate productivity.
+-HER FAVORITE COPILOT WORKFLOWS
+-Jess shares several real-world workflows she uses almost every day:
+-- Converting book chapters into complete PowerPoint presentations.
+-- Automatically creating realistic business scenarios for Microsoft 365 training.
+-- Generating fictional organizations, conversations, and Teams discussions for demonstrations.
+-- Building job descriptions, hiring documentation, and standard operating procedures for her growing business.
+-- Transforming existing documentation into presentation-ready content while preserving screenshots and instructional flow.
+-These examples demonstrate how Copilot becomes a creative business partner rather than simply a chatbot.
+-WHY POWERPOINT IS HER FAVORITE COPILOT EXPERIENCE
+-Among all Microsoft 365 applications, Jess currently finds the greatest value in PowerPoint Copilot. Once users understand slide masters, structured Word headings, templates, and reference documents, Copilot can rapidly generate professional presentations that require far less manual formatting than traditional workflows. While the feature has evolved significantly since its initial release, understanding its design principles is essential for consistently producing high-quality presentations.
+-FINDING YOUR AI VOICE
+-Jess believes one of the biggest long-term challenges of AI is preserving authenticity. Older professionals already have years of writing samples that AI can learn from, but younger generations may increasingly rely on AI before developing their own communication style. Her advice is simple: continue writing, develop your own voice, and use Copilot to enhance—not replace—your personality. Authentic communication will become increasingly valuable as AI-generated content becomes more common.
+-MANAGING AI OVERLOAD
+-Keeping up with Microsoft's AI announcements has become a full-time job. Jess openly discusses the growing challenge of information overload faced by trainers, consultants, and content creators. Rather than manually tracking every announcement, she recommends using AI itself to monitor product updates, summarize changes, and surface only the most relevant information. Building AI-powered learning workflows is becoming just as important as learning the products themselves.
++Many companies buy Copilot licenses and still struggle to see real productivity gains. In this conversation, Microsoft MVP and LinkedIn Learning instructor Jess Stratton shares how business users and adoption leads can move beyond prompt engineering. Learn how personalization, better expectations, prompt galleries and departmental champions make Copilot work the way you work.
++In this episode
++00:00 – Welcome and guest introduction
++01:24 – From Lotus Notes to LinkedIn Learning
++06:13 – Why Copilot licenses fail to deliver value
++09:56 – Misconceptions and the first coaching week
++16:07 – Agents, skills and habits to unlearn
++19:23 – Making Copilot sound like you
++31:15 – Favorite prompts and best Copilot apps
++46:56 – Rapid fire round
++Key takeaways
++Copilot value depends more on human behavior and showing people how it helps their own work than on features or governance.
++Better results come from clear expectations in prompts, the right model choice and personalization settings such as custom instructions, meeting recap templates and Copilot memory.
++Successful adoption uses excited champions per department and organization-specific prompt galleries to create quick, visible wins.
++Worth quoting
++“Human behavior, I think. I don't think it's quite the governance because I think that enough admins that are setting up co-pilot are pretty clear on what needs to happen and the risks.” – Jess Stratton (07:35)
++“companies can put in your own prompts specific to your own organization. And I think that it's going to be a game changer because people have and companies have very specific workflows, very specific apps.” – Jess Stratton (09:20)
++Explore more on M365.FM
++Episode page: the full interview with chapters, quotes and FAQ on Copilot adoption
++Jess Stratton – Microsoft MVP and LinkedIn Learning instructor sharing how she coaches people to get value from Copilot
++Microsoft 365 Copilot – the assistant at the center, from personalization settings to PowerPoint tips and saved prompts
++Prompt – why clear goals, context and especially expectations matter more than long prompt engineering
++Related episode: Microsoft 365 Copilot: What Actually Makes People More Productive with Adrian Espes [MVP]
++Follow and rate M365.FM in your podcast app, and join the free M365 community at m365con.net.
+```
+
+<details><summary>Neue Beschreibung (HTML)</summary>
+
+```html
+<p>Many companies buy Copilot licenses and still struggle to see real productivity gains. In this conversation, Microsoft MVP and LinkedIn Learning instructor Jess Stratton shares how business users and adoption leads can move beyond prompt engineering. Learn how personalization, better expectations, prompt galleries and departmental champions make Copilot work the way you work.</p>
+<p><strong>In this episode</strong></p>
+<ul><li>00:00 – Welcome and guest introduction</li><li>01:24 – From Lotus Notes to LinkedIn Learning</li><li>06:13 – Why Copilot licenses fail to deliver value</li><li>09:56 – Misconceptions and the first coaching week</li><li>16:07 – Agents, <a href="https://www.m365.fm/entity/agent-skill/?utm_source=podcast&amp;utm_medium=shownotes&amp;utm_campaign=beyond-the-prompt-mastering-microsoft-copilot-for-real-productivity-with-jess-stratton-mvp">skills</a> and habits to unlearn</li><li>19:23 – Making Copilot sound like you</li><li>31:15 – Favorite prompts and best Copilot apps</li><li>46:56 – Rapid fire round</li></ul>
+<p><strong>Key takeaways</strong></p>
+<ul><li>Copilot value depends more on human behavior and showing people how it helps their own work than on features or governance.</li><li>Better results come from clear expectations in prompts, the right model choice and personalization settings such as custom instructions, meeting recap templates and Copilot memory.</li><li>Successful adoption uses excited champions per department and organization-specific prompt galleries to create quick, visible wins.</li></ul>
+<p><strong>Worth quoting</strong></p>
+<p>“Human behavior, I think. I don't think it's quite the governance because I think that enough admins that are setting up co-pilot are pretty clear on what needs to happen and the risks.” – Jess Stratton (07:35)</p>
+<p>“companies can put in your own prompts specific to your own organization. And I think that it's going to be a game changer because people have and companies have very specific workflows, very specific apps.” – Jess Stratton (09:20)</p>
+<p><strong>Explore more on M365.FM</strong></p>
+<ul><li><a href="https://www.m365.fm/show/episodes/beyond-the-prompt-mastering-microsoft-copilot-for-real-productivity-with-jess-stratton-mvp/?utm_source=podcast&amp;utm_medium=shownotes&amp;utm_campaign=beyond-the-prompt-mastering-microsoft-copilot-for-real-productivity-with-jess-stratton-mvp">Episode page</a>: the full interview with chapters, quotes and FAQ on Copilot adoption</li><li><a href="https://www.m365.fm/entity/jess-stratton/?utm_source=podcast&amp;utm_medium=shownotes&amp;utm_campaign=beyond-the-prompt-mastering-microsoft-copilot-for-real-productivity-with-jess-stratton-mvp">Jess Stratton</a> – Microsoft MVP and LinkedIn Learning instructor sharing how she coaches people to get value from Copilot</li><li><a href="https://www.m365.fm/entity/copilot/?utm_source=podcast&amp;utm_medium=shownotes&amp;utm_campaign=beyond-the-prompt-mastering-microsoft-copilot-for-real-productivity-with-jess-stratton-mvp">Microsoft 365 Copilot</a> – the assistant at the center, from personalization settings to PowerPoint tips and saved prompts</li><li><a href="https://www.m365.fm/entity/prompt/?utm_source=podcast&amp;utm_medium=shownotes&amp;utm_campaign=beyond-the-prompt-mastering-microsoft-copilot-for-real-productivity-with-jess-stratton-mvp">Prompt</a> – why clear goals, context and especially expectations matter more than long prompt engineering</li><li>Related episode: <a href="https://www.m365.fm/show/episodes/adrian-espes/?utm_source=podcast&amp;utm_medium=shownotes&amp;utm_campaign=beyond-the-prompt-mastering-microsoft-copilot-for-real-productivity-with-jess-stratton-mvp">Microsoft 365 Copilot: What Actually Makes People More Productive with Adrian Espes [MVP]</a></li></ul>
+<p>Follow and rate M365.FM in your podcast app, and join the free M365 community at m365con.net.</p>
+```
+
+</details>
+
 ## Microsoft 365 Copilot Without the Hype: Adoption, Governance &amp; Getting Your Tenant Ready with Paul Keijzers [MVP] (75328001, 252 Abrufe, 3607 Zeichen)
 
 ```diff
@@ -221,7 +310,7 @@
 
 </details>
 
-## How AI Changed Software Development Forever — Building the Agentic Future with Andre Baltieri [MVP] (74870393, 235 Abrufe, 3663 Zeichen)
+## How AI Changed Software Development Forever — Building the Agentic Future with Andre Baltieri [MVP] (74870393, 235 Abrufe, 3649 Zeichen)
 
 ```diff
 --- aktuell
@@ -275,8 +364,8 @@
 +Microsoft Agent Framework lets .NET teams expose existing functions to AI through MCP and connect multiple models with little code.
 +Security comes first: give agents least privilege, expose only small purpose-built functions and add guardrails against prompt injection.
 +Worth quoting
-+“this doesn't mean that we don't need programmers anymore. I think there's a bit of misconception out there, because AI can generate code for us.” – Andre Baltieri (05:58)
-+“another thing that I do is every time that I finish something that I say, I achieve that what I was looking for, I close the conversation and start another conversation because it starts with a clean context.” – Andre Baltieri (49:11)
++“this doesn't mean that we, we don't need programmers anymore. I think there's a bit of misconception out there, because AI can generate code for us.” – Andre Baltieri (05:58)
++“I close the conversation and start another conversation because it starts with a clean context that, that would be say, you can clear the context, but I prefer to start a new, a new context.” – Andre Baltieri (49:11)
 +Explore more on M365.FM
 +Episode page: the full conversation with chapters, quotes and an FAQ
 +Andre Baltieri – the guest, a Microsoft MVP coding with .NET since 2003 and now mostly through agents
@@ -296,8 +385,8 @@
 <p><strong>Key takeaways</strong></p>
 <ul><li>AI agents now write most of the code, but developers are still needed to understand business rules, provide good context and orchestrate the agents.</li><li>Microsoft Agent Framework lets .NET teams expose existing functions to AI through <a href="https://www.m365.fm/entity/mcp/?utm_source=podcast&amp;utm_medium=shownotes&amp;utm_campaign=andre-baltieri">MCP</a> and connect multiple models with little code.</li><li>Security comes first: give agents least privilege, expose only small purpose-built functions and add guardrails against prompt injection.</li></ul>
 <p><strong>Worth quoting</strong></p>
-<p>“this doesn't mean that we don't need programmers anymore. I think there's a bit of misconception out there, because AI can generate code for us.” – Andre Baltieri (05:58)</p>
-<p>“another thing that I do is every time that I finish something that I say, I achieve that what I was looking for, I close the conversation and start another conversation because it starts with a clean context.” – Andre Baltieri (49:11)</p>
+<p>“this doesn't mean that we, we don't need programmers anymore. I think there's a bit of misconception out there, because AI can generate code for us.” – Andre Baltieri (05:58)</p>
+<p>“I close the conversation and start another conversation because it starts with a clean context that, that would be say, you can clear the context, but I prefer to start a new, a new context.” – Andre Baltieri (49:11)</p>
 <p><strong>Explore more on M365.FM</strong></p>
 <ul><li><a href="https://www.m365.fm/show/episodes/andre-baltieri/?utm_source=podcast&amp;utm_medium=shownotes&amp;utm_campaign=andre-baltieri">Episode page</a>: the full conversation with chapters, quotes and an FAQ</li><li><a href="https://www.m365.fm/entity/andre-baltieri/?utm_source=podcast&amp;utm_medium=shownotes&amp;utm_campaign=andre-baltieri">Andre Baltieri</a> – the guest, a Microsoft MVP coding with .NET since 2003 and now mostly through agents</li><li><a href="https://www.m365.fm/entity/ai-agent/?utm_source=podcast&amp;utm_medium=shownotes&amp;utm_campaign=andre-baltieri">AI agent</a> – the shift from coding assistants to agents that plan, split tasks and write the code</li><li><a href="https://www.m365.fm/entity/rag/?utm_source=podcast&amp;utm_medium=shownotes&amp;utm_campaign=andre-baltieri">Retrieval-augmented generation (RAG)</a> – why a good RAG with well-chunked data matters more than stuffing the context window</li><li><a href="https://www.m365.fm/entity/prompt-injection/?utm_source=podcast&amp;utm_medium=shownotes&amp;utm_campaign=andre-baltieri">Prompt injection</a> – the main risk when exposing AI to users, compared here to SQL injection</li><li>Related episode: <a href="https://www.m365.fm/show/episodes/beyond-copilot-building-ai-that-works-in-the-real-world-with-azure-ai-foundry-and-agentic-ai-for-fr/?utm_source=podcast&amp;utm_medium=shownotes&amp;utm_campaign=andre-baltieri">Beyond Copilot: Building AI That Works in the Real World with Azure AI Foundry and Agentic AI for Frontline Workers with Fergus Kidd [MVP]</a></li></ul>
 <p>Follow and rate M365.FM in your podcast app, and join the free M365 community at m365con.net.</p>
@@ -384,12 +473,12 @@
 
 </details>
 
-## From Garage Band to Symphony Orchestra- How Microsoft 365 Governance Creates Harmony at Scale — with Heiko Brenn (74111862, 205 Abrufe, 3637 Zeichen)
+## From Garage Band to Symphony Orchestra- How Microsoft 365 Governance Creates Harmony at Scale — with Heiko Brenn (74111862, 205 Abrufe, 3990 Zeichen)
 
 ```diff
 --- aktuell
 +++ neu
-@@ -1,23 +1,24 @@
+@@ -1,23 +1,25 @@
 -https://www.m365.fm/categories/power-platform-talk/ can begin like a garage band. A few people collaborate, everybody knows what the others are doing, Teams are created when needed, SharePoint sites appear naturally, and external guests are invited without requiring complicated processes. But as the organization grows, more musicians join the band. Teams multiply, SharePoint sites accumulate, guests remain after projects end, naming conventions become inconsistent, ownership becomes unclear, and manual administration can no longer keep pace. In https://www.m365.fm/heiko-brenn/ of M365 FM, Mirko Peters talks with Heiko Brenn, Director of Product Marketing at BCC, about how Microsoft 365 governance can transform that growing collaboration environment from noise into something closer to a well-coordinated orchestra. With more than 30 years of IT experience spanning administration, consulting, Exchange, PowerShell, product management, and Microsoft 365 governance, Heiko combines technology and business perspectives with his passion for music to explain why governance should enable collaboration rather than restrict it.
 -GOVERNANCE IS THE BALANCE BETWEEN FREEDOM AND STRUCTURE
 -For Heiko, Microsoft 365 governance is fundamentally about finding the balance between creativity, freedom, and structure. Governance is often perceived as a collection of restrictions telling employees what they cannot do, but effective governance should operate differently. Employees should be able to perform their work and remain creative while the necessary rules and processes operate as unobtrusively as possible in the background. The objective is not bureaucracy for its own sake. Governance provides the framework within which people can work effectively without allowing the Microsoft 365 environment to become uncontrolled.
@@ -436,6 +525,7 @@
 +Governance – described as the balance between creativity, freedom and structure, run as a team sport
 +Microsoft Teams – named alongside guests as the top source of sprawl without naming and lifecycle rules
 +Related episode: Data Loss Prevention in Microsoft 365: Policies That Actually Work
++Related episode: Beyond the Microsoft Adoption Framework: The Reality of M365 Success
 +Follow and rate M365.FM in your podcast app, and join the free M365 community at m365con.net.
 ```
 
@@ -451,13 +541,13 @@
 <p>“So from my perspective, I would say governance in general is a team sport. So it's really about involving all the different, I would say even everything that you mentioned is part of the process.” – Heiko Brenn (10:33)</p>
 <p>“So I would definitely start at an early stage with some maybe more simplified rules, but have something in place already.” – Heiko Brenn (22:19)</p>
 <p><strong>Explore more on M365.FM</strong></p>
-<ul><li><a href="https://www.m365.fm/show/episodes/heiko-brenn/?utm_source=podcast&amp;utm_medium=shownotes&amp;utm_campaign=from-garage-band-to-symphony-orchestra-microsoft-365-governance-with-heiko-brenn">Episode page</a>: the full interview with chapters, quotes and a governance FAQ</li><li><a href="https://www.m365.fm/entity/heiko-brenn/?utm_source=podcast&amp;utm_medium=shownotes&amp;utm_campaign=from-garage-band-to-symphony-orchestra-microsoft-365-governance-with-heiko-brenn">Heiko Brenn</a> – BCC's Director of Product Marketing, explaining Microsoft 365 governance through bands, conductors and jam sessions</li><li><a href="https://www.m365.fm/entity/governance/?utm_source=podcast&amp;utm_medium=shownotes&amp;utm_campaign=from-garage-band-to-symphony-orchestra-microsoft-365-governance-with-heiko-brenn">Governance</a> – described as the balance between creativity, freedom and structure, run as a team sport</li><li><a href="https://www.m365.fm/entity/teams/?utm_source=podcast&amp;utm_medium=shownotes&amp;utm_campaign=from-garage-band-to-symphony-orchestra-microsoft-365-governance-with-heiko-brenn">Microsoft Teams</a> – named alongside guests as the top source of sprawl without naming and lifecycle rules</li><li>Related episode: <a href="https://www.m365.fm/show/episodes/data-loss-prevention-in-microsoft-365/?utm_source=podcast&amp;utm_medium=shownotes&amp;utm_campaign=from-garage-band-to-symphony-orchestra-microsoft-365-governance-with-heiko-brenn">Data Loss Prevention in Microsoft 365: Policies That Actually Work</a></li></ul>
+<ul><li><a href="https://www.m365.fm/show/episodes/heiko-brenn/?utm_source=podcast&amp;utm_medium=shownotes&amp;utm_campaign=from-garage-band-to-symphony-orchestra-microsoft-365-governance-with-heiko-brenn">Episode page</a>: the full interview with chapters, quotes and a governance FAQ</li><li><a href="https://www.m365.fm/entity/heiko-brenn/?utm_source=podcast&amp;utm_medium=shownotes&amp;utm_campaign=from-garage-band-to-symphony-orchestra-microsoft-365-governance-with-heiko-brenn">Heiko Brenn</a> – BCC's Director of Product Marketing, explaining Microsoft 365 governance through bands, conductors and jam sessions</li><li><a href="https://www.m365.fm/entity/governance/?utm_source=podcast&amp;utm_medium=shownotes&amp;utm_campaign=from-garage-band-to-symphony-orchestra-microsoft-365-governance-with-heiko-brenn">Governance</a> – described as the balance between creativity, freedom and structure, run as a team sport</li><li><a href="https://www.m365.fm/entity/teams/?utm_source=podcast&amp;utm_medium=shownotes&amp;utm_campaign=from-garage-band-to-symphony-orchestra-microsoft-365-governance-with-heiko-brenn">Microsoft Teams</a> – named alongside guests as the top source of sprawl without naming and lifecycle rules</li><li>Related episode: <a href="https://www.m365.fm/show/episodes/data-loss-prevention-in-microsoft-365/?utm_source=podcast&amp;utm_medium=shownotes&amp;utm_campaign=from-garage-band-to-symphony-orchestra-microsoft-365-governance-with-heiko-brenn">Data Loss Prevention in Microsoft 365: Policies That Actually Work</a></li><li>Related episode: <a href="https://www.m365.fm/show/episodes/beyond-the-microsoft-adoption-framework-the-reality-of-m365-success/?utm_source=podcast&amp;utm_medium=shownotes&amp;utm_campaign=from-garage-band-to-symphony-orchestra-microsoft-365-governance-with-heiko-brenn">Beyond the Microsoft Adoption Framework: The Reality of M365 Success</a></li></ul>
 <p>Follow and rate M365.FM in your podcast app, and join the free M365 community at m365con.net.</p>
 ```
 
 </details>
 
-## How Microsoft 365 &amp; Copilot Are Redesigning the Way We Work with Tracy van der Schyff [MVP] (74744840, 198 Abrufe, 3944 Zeichen)
+## How Microsoft 365 &amp; Copilot Are Redesigning the Way We Work with Tracy van der Schyff [MVP] (74744840, 198 Abrufe, 3950 Zeichen)
 
 ```diff
 --- aktuell
@@ -496,7 +586,7 @@
 +Change management works only as a permanent part of the company's strategy, explaining to people why practices matter rather than just telling them what to do.
 +Worth quoting
 +“I think in the era of AI, the responsible use of technology is going to become the most important thing, apart from all the skills that we should focus on.” – Tracy van der Schyff (03:44)
-+“And whether it's co-pilot or whatever it might be, as I mentioned, it doesn't fix things, it amplifies. So, if you had a healthy environment, it's going to amplify that healthy environment.” – Tracy van der Schyff (37:46)
++“And whether it's co-pilot or whatever it might be, as I mentioned, it doesn't fix things, okay, it amplifies. So, if you had a healthy environment, it's going to amplify that healthy environment.” – Tracy van der Schyff (37:46)
 +Explore more on M365.FM
 +Episode page: the full episode with chapters, quotes and FAQ on digital fluency and Copilot
 +Tracy van der Schyff – Microsoft MVP from South Africa who frames technology adoption around digital fluency and people
@@ -516,7 +606,7 @@
 <ul><li>Digital fluency goes beyond knowing which buttons to click: people need to use tools with purpose, efficiently and responsibly, and that now includes AI.</li><li>Copilot does not fix a messy Microsoft 365 environment; it amplifies what is already there, so storage habits, sharing and permissions have to be addressed first.</li><li>Change management works only as a permanent part of the company's strategy, explaining to people why practices matter rather than just telling them what to do.</li></ul>
 <p><strong>Worth quoting</strong></p>
 <p>“I think in the era of AI, the responsible use of technology is going to become the most important thing, apart from all the skills that we should focus on.” – Tracy van der Schyff (03:44)</p>
-<p>“And whether it's co-pilot or whatever it might be, as I mentioned, it doesn't fix things, it amplifies. So, if you had a healthy environment, it's going to amplify that healthy environment.” – Tracy van der Schyff (37:46)</p>
+<p>“And whether it's co-pilot or whatever it might be, as I mentioned, it doesn't fix things, okay, it amplifies. So, if you had a healthy environment, it's going to amplify that healthy environment.” – Tracy van der Schyff (37:46)</p>
 <p><strong>Explore more on M365.FM</strong></p>
 <ul><li><a href="https://www.m365.fm/show/episodes/tracy-van-der-schyff/?utm_source=podcast&amp;utm_medium=shownotes&amp;utm_campaign=how-microsoft-365-copilot-are-redesigning-the-way-we-work-with-tracy-van-der-schyff-mvp">Episode page</a>: the full episode with chapters, quotes and FAQ on digital fluency and Copilot</li><li><a href="https://www.m365.fm/entity/tracy-van-der-schyff/?utm_source=podcast&amp;utm_medium=shownotes&amp;utm_campaign=how-microsoft-365-copilot-are-redesigning-the-way-we-work-with-tracy-van-der-schyff-mvp">Tracy van der Schyff</a> – Microsoft MVP from South Africa who frames technology adoption around digital fluency and people</li><li><a href="https://www.m365.fm/entity/copilot/?utm_source=podcast&amp;utm_medium=shownotes&amp;utm_campaign=how-microsoft-365-copilot-are-redesigning-the-way-we-work-with-tracy-van-der-schyff-mvp">Microsoft 365 Copilot</a> – described as an amplifier and spotlight that exposes existing storage, sharing and permission problems</li><li><a href="https://www.m365.fm/entity/copilot-adoption/?utm_source=podcast&amp;utm_medium=shownotes&amp;utm_campaign=how-microsoft-365-copilot-are-redesigning-the-way-we-work-with-tracy-van-der-schyff-mvp">Copilot adoption</a> – treated as permanent change management that explains why, not a one-off project</li><li>Related episode: <a href="https://www.m365.fm/show/episodes/richard-harbridge/?utm_source=podcast&amp;utm_medium=shownotes&amp;utm_campaign=how-microsoft-365-copilot-are-redesigning-the-way-we-work-with-tracy-van-der-schyff-mvp">Copilot Inherits Your Mess: Modernizing Microsoft 365 for AI with Richard Harbridge [MVP]</a></li></ul>
 <p>Follow and rate M365.FM in your podcast app, and join the free M365 community at m365con.net.</p>
@@ -670,89 +760,6 @@
 <p>“If we're storing it in a place that's reversible then we potentially shouldn't be storing it there unless it's somewhere like key vault where it's got the right governance around it.” – Ian Tweedie (41:04)</p>
 <p><strong>Explore more on M365.FM</strong></p>
 <ul><li><a href="https://www.m365.fm/show/episodes/ian-tweedie/?utm_source=podcast&amp;utm_medium=shownotes&amp;utm_campaign=architecting-power-platform-for-complex-enterprise-solutions-with-ian-tweedie">Episode page</a>: the full interview with chapters, quotes and FAQ on Power Platform architecture</li><li><a href="https://www.m365.fm/entity/ian-tweedie/?utm_source=podcast&amp;utm_medium=shownotes&amp;utm_campaign=architecting-power-platform-for-complex-enterprise-solutions-with-ian-tweedie">Ian Tweedie</a> – solution architect who explains his feature-first playbook for enterprise Power Platform solutions</li><li><a href="https://www.m365.fm/entity/power-platform/?utm_source=podcast&amp;utm_medium=shownotes&amp;utm_campaign=architecting-power-platform-for-complex-enterprise-solutions-with-ian-tweedie">Power Platform</a> – treated here as a low-code, not no-code, platform that needs clean architecture once solutions turn business-critical</li><li><a href="https://www.m365.fm/entity/governance/?utm_source=podcast&amp;utm_medium=shownotes&amp;utm_campaign=architecting-power-platform-for-complex-enterprise-solutions-with-ian-tweedie">Governance</a> – framed by Ian as defining intent and letting makers show how they will meet it</li><li>Related episode: <a href="https://www.m365.fm/show/episodes/power-platform-copilot-integration/?utm_source=podcast&amp;utm_medium=shownotes&amp;utm_campaign=architecting-power-platform-for-complex-enterprise-solutions-with-ian-tweedie">Power Platform Copilot Integration - Simply Explained</a></li></ul>
-<p>Follow and rate M365.FM in your podcast app, and join the free M365 community at m365con.net.</p>
-```
-
-</details>
-
-## SharePoint Isn&#x27;t Boring Anymore: How Copilot Is Reinventing the Modern Workplace with Marcin Siewnicki [MVP] (74711575, 181 Abrufe, 3646 Zeichen)
-
-```diff
---- aktuell
-+++ neu
-@@ -1,33 +1,24 @@
--For years, SharePoint has carried a reputation for complicated document libraries, outdated intranets, confusing navigation, too many sites, and information that employees simply cannot find. But Microsoft 365 is changing, and https://www.m365.fm/categories/copilot-talk/ is making SharePoint more important than it has been in a long time.In https://www.m365.fm/marcin-siewnicki/ of the M365 FM Podcast, Mirko Peters talks with Microsoft MVP Marcin Siewnicki about how SharePoint is evolving from a traditional document and intranet platform into a central information and knowledge layer for the modern workplace. Marcin has worked with SharePoint since the SharePoint 2003 era, giving him more than two decades of perspective on how the platform has changed.
--WHY SHAREPOINT GOT A BAD REPUTATION
--Much of SharePoint’s reputation was created by the way organizations implemented it. Intranets were often designed by IT, heavily customized, difficult to use, and disconnected from what employees actually needed.Instead of continuously gathering feedback and improving the experience, many companies delivered an intranet and expected employees to adapt to it. The result was complex navigation, outdated content, overloaded pages, and systems people avoided whenever possible.
--INFORMATION ARCHITECTURE BEFORE TECHNOLOGY
--One of the biggest problems is not SharePoint itself but how information is organized inside it. Without a clear information architecture, SharePoint can quickly become a huge shared folder filled with duplicated files, outdated information, unclear ownership, and multiple versions of the same document.Marcin explains why organizations should start with a simple structure, understand their data, remove unnecessary content, and introduce basic metadata. Information architecture does not have to be complicated to make SharePoint significantly easier to use.
--BUILDING A MODERN SHAREPOINT WORKPLACE
--A modern SharePoint homepage should not become an endless collection of web parts, corporate announcements, applications, and links. It should be simple, personalized, visually clear, and focused on what employees actually need.Communication sites can provide departments and organizations with modern, mobile-friendly publishing experiences without requiring the enormous custom intranet projects that were common in the past. The focus should be on useful information, important applications, relevant documents, straightforward navigation, and strong search capabilities.
--SOLVING THE SHAREPOINT NAVIGATION PROBLEM
--Navigation remains one of SharePoint’s biggest challenges. Organizations frequently attempt to expose every department, application, resource, and internal page through a single navigation structure.Marcin explains why simpler navigation usually works better. Global navigation should focus on the most important destinations, while detailed navigation can be provided closer to individual departments, sites, and business areas. Otherwise, navigation itself becomes another information problem.
--SHAREPOINT AND TEAMS SPRAWL
--Microsoft Teams and SharePoint are deeply connected. Every new Team and many Teams channels can introduce additional SharePoint resources, which means uncontrolled Teams creation can quickly become uncontrolled SharePoint growth.Organizations therefore need simple creation processes, templates, basic metadata, lifecycle management, and user education. Employees should understand when they need a Team, when a SharePoint site is sufficient, and what happens behind the scenes when these collaboration environments are created.One useful way of looking at the relationship is to think of Microsoft Teams as the collaboration interface while SharePoint provides much of the document and information layer underneath it.
--GOVERNANCE WITHOUT KILLING INNOVATION
--Governance does not need to mean preventing employees from using new technology. The goal is to provide enough freedom for people to work effectively while maintaining control over information, permissions, external sharing, security, and lifecycle management.Marcin discusses periodically reviewing inactive SharePoint sites and Teams, identifying environments that are no longer needed, checking ownership, reviewing permissions, and archiving or removing obsolete workspaces.Governance also cannot remain exclusively an IT exercise. Business stakeholders and users need to be involved because overly complicated policies often lead employees to find their own workarounds.
--PERMISSIONS, SHARING AND SECURITY
--Permissions become increasingly difficult to understand as SharePoint environments grow. Users add colleagues, external partners, vendors, and sharing links over time, but access is rarely reviewed with the same frequency.Regular permission reviews should therefore become part of the governance model. Site and Team owners need responsibility for checking who still requires access and whether external sharing remains necessary.https://www.m365.fm/microsoft-purview-simply-explained/ sensitivity labels can add another security layer by helping organizations classify and protect information based on its sensitivity.
--AUTOMATING SHAREPOINT GOVERNANCE
--Governance does not have to be completely manual. PowerShell, Microsoft Graph, https://www.m365.fm/power-automate-simply-explained/, https://www.m365.fm/azure-logic-apps-simply-explained/, and specialized third-party platforms can automate many administrative and governance processes.Marcin sees PowerShell and Microsoft Graph as fundamental tools for administrators, while Power Automate can provide practical automation for provisioning, approvals, notifications, lifecycle processes, and many other SharePoint scenarios.
--MODERN DOCUMENT MANAGEMENT
--SharePoint is still heavily associated with documents, and documents remain an important part of the platform. The challenge is managing them properly.Metadata, naming conventions, permissions, versioning, storage management, and sensitivity labels all contribute to a healthier information environment. Versioning deserves particular attention because large documents with many retained versions can consume significant amounts of SharePoint storage.
--METADATA VS. FOLDERS
--The old SharePoint debate between folders and metadata has not completely disappeared. Marcin argues that metadata remains extremely valuable, but organizations need to keep their metadata models simple.If users need to spend too much time deciding how to classify every document, adoption will suffer. Metadata should support the way employees work rather than creating another administrative task.
--COPILOT CAN AUTOMATE METADATA
--Copilot changes this equation because AI can reduce the manual work associated with metadata. SharePoint can analyze documents, extract relevant information, and populate columns based on the content.Organizations still need to decide which metadata is useful, but employees no longer necessarily have to enter everything manually. This can make structured information much more practical at scale.
--COPILOT CHANGES SHAREPOINT
--Copilot significantly lowers the amount of SharePoint knowledge employees need before they can start accomplishing useful work.Users can increasingly create content, work with documents, extract information, generate pages, and interact with organizational knowledge using natural language instead of understanding every technical SharePoint concept.Many of the repetitive tasks traditionally associated with maintaining SharePoint environments can therefore become easier.
--FROM FINDING DOCUMENTS TO GETTING ANSWERS
--This may be the biggest change of all.Traditional SharePoint experiences required employees to find the right site, navigate to the right library, locate the correct document, open it, and search for the information they needed.Copilot changes that interaction. Instead of only finding documents, employees can increasingly ask questions and receive answers based on information stored across their Microsoft 365 environment.SharePoint therefore starts moving from document storage toward becoming an enterprise knowledge layer.
--COPILOT CAN UNDERSTAND MORE THAN OFFICE DOCUMENTS
--Organizational knowledge is not limited to Word documents, Excel files, and PowerPoint presentations.Copilot can work with different types of information, including text, HTML, Markdown, SharePoint lists, and content extracted from video transcripts.That means training videos, recorded meetings, presentations, and other media stored within the Microsoft 365 environment can become part of the knowledge available through AI.
--WHAT HAPPENED TO SHAREPOINT AGENTS?
--SharePoint Agents provide dedicated AI experiences grounded in selected SharePoint sites, document libraries, or information sources.Marcin discusses where these agents fit into the current Copilot landscape and why the concept has become less prominent as Copilot itself gains broader capabilities for interacting directly with SharePoint information.
--IS SHAREPOINT REALLY COPILOT’S KNOWLEDGE LAYER?
--There is certainly marketing around the idea, but there is also a strong technical reality behind it.Organizations already store enormous amounts of business information in SharePoint and Microsoft Teams. Copilot can use this information, which means the quality of the underlying environment directly affects the quality of the AI experience.Poor permissions, outdated documents, duplicated information, weak metadata, and uncontrolled SharePoint sprawl do not disappear because Copilot has been introduced. They potentially become even more important
-+SharePoint has long been seen as complicated and boring, but Copilot turns it into the knowledge layer of the modern workplace. In this conversation, MVP Marcin Siewnicki shares practical advice for IT pros, intranet owners and governance teams on information architecture, sprawl, metadata and permissions. You will learn what to fix before AI arrives and how Copilot, agents and Power Automate fit together.
-+In this episode
-+00:00 – Intro and Marcin's SharePoint journey
-+05:45 – Why SharePoint got a bad reputation
-+17:20 – Sprawl, Teams and SharePoint
-+27:47 – Governance policies for SharePoint and Teams
-+33:38 – Document management and metadata
-+41:09 – What Copilot changes in SharePoint
-+47:46 – SharePoint agents and Power Automate
-+54:35 – Rapid fire round
-+Key takeaways
-+SharePoint's bad reputation stems mostly from missing information architecture and IT-driven intranets rather than from the platform itself.
-+Simple governance such as site request forms with business justification, periodic usage and permission reviews, and controlled versioning keeps SharePoint and Teams manageable.
-+Copilot makes SharePoint the main knowledge source of the organization, so basic metadata and well-governed content directly improve AI answers, while Power Automate remains the choice for deterministic processes.
-+Worth quoting
-+“So usually SharePoint is a shared folder for huge bucket for everything. So there's no information architecture. And then it's hard to find information, hard to find documents.” – Marcin Siewnicki (08:17)
-+“I always encourage people to build or implement even basic metadata, policy metadata model, because it will help them later, and metadata are supported by copilot” – Marcin Siewnicki (38:26)
-+Explore more on M365.FM
-+Episode page: the full conversation with chapters, quotes and an FAQ on SharePoint and Copilot
-+Marcin Siewnicki – Microsoft 365 solution architect who shares 20 years of SharePoint project experience in this episode
-+SharePoint – the platform at the center of the talk, from its reputation problem to Copilot readiness
-+Microsoft 365 Copilot – turns SharePoint content into answers, so metadata and governed content directly shape its results
-+Related episode: Microsoft 365 Copilot Without the Hype: Adoption, Governance & Getting Your Tenant Ready with Paul Keijzers [MVP]
-+Follow and rate M365.FM in your podcast app, and join the free M365 community at m365con.net.
-```
-
-<details><summary>Neue Beschreibung (HTML)</summary>
-
-```html
-<p>SharePoint has long been seen as complicated and boring, but Copilot turns it into the knowledge layer of the modern workplace. In this conversation, MVP Marcin Siewnicki shares practical advice for IT pros, intranet owners and governance teams on information architecture, sprawl, metadata and permissions. You will learn what to fix before AI arrives and how Copilot, agents and Power Automate fit together.</p>
-<p><strong>In this episode</strong></p>
-<ul><li>00:00 – Intro and Marcin's SharePoint journey</li><li>05:45 – Why SharePoint got a bad reputation</li><li>17:20 – Sprawl, Teams and SharePoint</li><li>27:47 – Governance policies for SharePoint and Teams</li><li>33:38 – Document management and metadata</li><li>41:09 – What Copilot changes in SharePoint</li><li>47:46 – SharePoint agents and <a href="https://www.m365.fm/entity/power-automate/?utm_source=podcast&amp;utm_medium=shownotes&amp;utm_campaign=marcin-siewnicki">Power Automate</a></li><li>54:35 – Rapid fire round</li></ul>
-<p><strong>Key takeaways</strong></p>
-<ul><li>SharePoint's bad reputation stems mostly from missing information architecture and IT-driven intranets rather than from the platform itself.</li><li>Simple governance such as site request <a href="https://www.m365.fm/entity/microsoft-forms/?utm_source=podcast&amp;utm_medium=shownotes&amp;utm_campaign=marcin-siewnicki">forms</a> with business justification, periodic usage and permission reviews, and controlled versioning keeps SharePoint and Teams manageable.</li><li>Copilot makes SharePoint the main knowledge source of the organization, so basic metadata and well-governed content directly improve AI answers, while Power Automate remains the choice for deterministic processes.</li></ul>
-<p><strong>Worth quoting</strong></p>
-<p>“So usually SharePoint is a shared folder for huge bucket for everything. So there's no information architecture. And then it's hard to find information, hard to find documents.” – Marcin Siewnicki (08:17)</p>
-<p>“I always encourage people to build or implement even basic metadata, policy metadata model, because it will help them later, and metadata are supported by copilot” – Marcin Siewnicki (38:26)</p>
-<p><strong>Explore more on M365.FM</strong></p>
-<ul><li><a href="https://www.m365.fm/show/episodes/marcin-siewnicki/?utm_source=podcast&amp;utm_medium=shownotes&amp;utm_campaign=marcin-siewnicki">Episode page</a>: the full conversation with chapters, quotes and an FAQ on SharePoint and Copilot</li><li><a href="https://www.m365.fm/entity/marcin-siewnicki/?utm_source=podcast&amp;utm_medium=shownotes&amp;utm_campaign=marcin-siewnicki">Marcin Siewnicki</a> – Microsoft 365 solution architect who shares 20 years of SharePoint project experience in this episode</li><li><a href="https://www.m365.fm/entity/sharepoint/?utm_source=podcast&amp;utm_medium=shownotes&amp;utm_campaign=marcin-siewnicki">SharePoint</a> – the platform at the center of the talk, from its reputation problem to Copilot readiness</li><li><a href="https://www.m365.fm/entity/copilot/?utm_source=podcast&amp;utm_medium=shownotes&amp;utm_campaign=marcin-siewnicki">Microsoft 365 Copilot</a> – turns SharePoint content into answers, so metadata and governed content directly shape its results</li><li>Related episode: <a href="https://www.m365.fm/show/episodes/paul-keijzers/?utm_source=podcast&amp;utm_medium=shownotes&amp;utm_campaign=marcin-siewnicki">Microsoft 365 Copilot Without the Hype: Adoption, Governance &amp; Getting Your Tenant Ready with Paul Keijzers [MVP]</a></li></ul>
 <p>Follow and rate M365.FM in your podcast app, and join the free M365 community at m365con.net.</p>
 ```
 
