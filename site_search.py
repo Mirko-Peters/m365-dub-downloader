@@ -35,12 +35,18 @@ def _walk(o):
         for v in o: yield from _walk(v)
 
 
+def _base_path(u):
+    """Pfad ohne Sprachpraefix: /de/entity/x/ und /entity/x/ sind dieselbe Seite."""
+    p = urlsplit(u).path
+    return re.sub(r"^/[a-z]{2}(?=/)", "", p) or "/"
+
+
 def _type(path, typ, ld_types):
     seg = [x for x in path.split("/") if x]
     if seg and len(seg[0]) == 2: seg = seg[1:]
     if typ == "show-episodes": return "episode"
     if typ == "episodes": return "dub_episode"
-    if typ == "blog": return "blog"
+    if typ == "blog": return "page" if seg[-1:] == ["blog"] else "blog"   # Blog-Liste ist kein Beitrag
     if typ == "events": return "event"
     if typ == "entity":
         if len(seg) < 2: return "page"
@@ -54,10 +60,12 @@ def _type(path, typ, ld_types):
     return "page"
 
 
-def extract(url, html, lang_default, typ):
-    """Ein Suchdokument aus einer gebauten Seite (None, wenn die Seite nicht in die Suche gehoert)."""
+def extract(url, html, lang_default, typ, allow_noindex=False):
+    """Ein Suchdokument aus einer gebauten Seite (None, wenn die Seite nicht in die Suche gehoert).
+    allow_noindex: duenne Entitaetsseiten (noindex,follow, z. B. Sprecher ohne eigene Folge) sind fuer Google gesperrt, in der Suche aber gewollt."""
     g = lambda k: (_RX[k].search(html) or [None, ""])[1]
-    if "noindex" in g("robots").lower(): return None
+    if "noindex" in g("robots").lower() and not allow_noindex: return None
+    if 'http-equiv="refresh"' in html[:4000]: return None   # Weiterleitungsseite
     path = urlsplit(url).path
     if re.search(r"/page/\d+/?$", path): return None   # Listen-Seite 2, 3 ...
     lds, types, date, kw = [], set(), "", []
@@ -65,6 +73,8 @@ def extract(url, html, lang_default, typ):
         try: lds.append(json.loads(raw))
         except Exception: continue
     for n in (x for j in lds for x in _walk(j)):
+        nid = n.get("@id") if isinstance(n.get("@id"), str) else ""
+        if nid and _base_path(nid.split("#")[0]) != _base_path(url): continue    # fremder Knoten (Autor, Verlag, Show) zaehlt nicht; Sprachfassungen zeigen auf die englische @id
         t = n.get("@type"); types |= set(t if isinstance(t, list) else [t] if t else [])
         for k in ("datePublished", "uploadDate", "startDate", "dateCreated"):
             if not date and isinstance(n.get(k), str) and re.match(r"\d{4}-\d{2}-\d{2}", n[k]): date = n[k][:10]
@@ -94,6 +104,21 @@ def build_index(sitemap, roots, write_r2, base, langs):
         try: d = extract(u, f.read_text("utf-8", errors="replace"), lang, typ)
         except Exception: d = None
         if d: docs.append(d)
+    # Entitaetsseiten ausserhalb der Sitemap (noindex,follow): Personen wie Sprecher sollen auffindbar sein (T40: "Aron Soller")
+    # nur Sprachen, die ueberhaupt indexierbare Entitaetsseiten haben (sonst sind es unuebersetzte Kopien der englischen Seite)
+    ent_langs = {SMAP.classify(urlsplit(u).path, langs)[0] for u, _lm, _a in sitemap if "/entity/" in u and SMAP.classify(urlsplit(u).path, langs)[1] == "entity"}
+    ent_dirs = [("/entity/" if l == "en" else f"/{l}/entity/", l) for l in sorted(ent_langs)]
+    for root in roots:
+        for prefix, lang in ent_dirs:
+            d0 = root / prefix.strip("/")
+            if not d0.is_dir(): continue
+            for f in sorted(d0.glob("*/index.html")):
+                u = base + prefix + f.parent.name + "/"
+                if u in seen: continue
+                seen.add(u)
+                try: d = extract(u, f.read_text("utf-8", errors="replace"), lang, "entity", allow_noindex=True)
+                except Exception: d = None
+                if d: docs.append(d)
     docs.sort(key=lambda d: (d["lang"] != "en", d["lang"], d["type"], d["url"]))
     parts = [docs[i:i + PART] for i in range(0, len(docs), PART)]
     for n, p in enumerate(parts, 1):
