@@ -1,0 +1,201 @@
+{
+ "episode_id": "76083520",
+ "slug": "microsoft-graph-webhooks-simply-explained",
+ "title": "Вебхуки Microsoft Graph простими словами: сповіщення в реальному часі замість постійного опитування",
+ "lang": "uk",
+ "duration_s": 1142,
+ "transcript_source": "transcripts/uk/ra62dODpiag.vtt",
+ "time_basis": "vtt",
+ "entities": [
+  {
+   "slug": "mirko-peters",
+   "name": "Mirko Peters",
+   "type": "person",
+   "score": 40,
+   "mentions": 1,
+   "first_mention_s": 70,
+   "quote": "Я ваш ведучий Мілко Пітерс.",
+   "url": "https://www.m365.fm/uk/entity/mirko-peters/"
+  },
+  {
+   "slug": "change-notifications",
+   "name": "Change notifications and webhooks",
+   "type": "concept",
+   "score": 100,
+   "mentions": 50,
+   "first_mention_s": 77,
+   "quote": "Вебхук – це HTTP запит, який надсилається автоматично, коли щось стається.",
+   "url": "https://www.m365.fm/uk/entity/change-notifications/"
+  },
+  {
+   "slug": "graph",
+   "name": "Microsoft Graph",
+   "type": "product",
+   "score": 90,
+   "mentions": 63,
+   "first_mention_s": 77,
+   "quote": "Що ж таке насправді Webhook і Graph?",
+   "url": "https://www.m365.fm/uk/entity/graph/"
+  },
+  {
+   "slug": "entra-id",
+   "name": "Microsoft Entra ID",
+   "type": "product",
+   "score": 40,
+   "mentions": 2,
+   "first_mention_s": 1047,
+   "quote": "Хтось із відділу кадрів створює обліковий запис у Microsoft EntraID,",
+   "url": "https://www.m365.fm/uk/entity/entra-id/"
+  },
+  {
+   "slug": "sharepoint",
+   "name": "SharePoint",
+   "type": "product",
+   "score": 35,
+   "mentions": 4,
+   "first_mention_s": 260,
+   "quote": "У вашому клієнті створюється новий користувач, оновлюється файл у SharePoint,",
+   "url": "https://www.m365.fm/uk/entity/sharepoint/"
+  },
+  {
+   "slug": "microsoft-365",
+   "name": "Microsoft 365",
+   "type": "platform",
+   "score": 30,
+   "mentions": 2,
+   "first_mention_s": 72,
+   "quote": "Сьогоднішня тема – це те, про що чув майже кожен, хто працює з Microsoft 365, але мало хто може чітко пояснити.",
+   "url": "https://www.m365.fm/uk/entity/microsoft-365/"
+  },
+  {
+   "slug": "azure-service-bus",
+   "name": "Azure Service Bus",
+   "type": "product",
+   "score": 20,
+   "mentions": 1,
+   "first_mention_s": 824,
+   "quote": "Черга Azure – сервісна шина або навіть проста таблиця бази даних.",
+   "url": "https://www.m365.fm/uk/entity/azure-service-bus/"
+  },
+  {
+   "slug": "teams",
+   "name": "Microsoft Teams",
+   "type": "product",
+   "score": 20,
+   "mentions": 1,
+   "first_mention_s": 264,
+   "quote": "надсилається повідомлення в Teams, змінюється подія в календарі або до групи додається новий учасник.",
+   "url": "https://www.m365.fm/uk/entity/teams/"
+  }
+ ],
+ "new_entities": [
+  {
+   "slug": "throttling",
+   "name": "Throttling",
+   "type": "concept",
+   "mentions": 3,
+   "first_mention_s": 146,
+   "quote": "Microsoft має назву для надто агресивного опитування «Тротлінг»",
+   "status": "review"
+  }
+ ],
+ "quotes": [
+  {
+   "text": "Тепер порівняйте це з подійно орієнтованим підходом. Замість того, щоб викликати Microsoft Graph кожні кілька хвилин, ви чекаєте, поки Microsoft Graph викличе вас.",
+   "speaker": "Mirko Peters",
+   "speaker_slug": "mirko-peters",
+   "time_s": 195,
+   "entities": [
+    "graph",
+    "change-notifications"
+   ],
+   "why": "Push statt Pull in einem Satz"
+  },
+  {
+   "text": "Вебхук – це HTTP запит, який надсилається автоматично, коли щось стається. Ви не просите про це, сервер просто надсилає його вам.",
+   "speaker": "Mirko Peters",
+   "speaker_slug": "mirko-peters",
+   "time_s": 212,
+   "entities": [
+    "change-notifications"
+   ],
+   "why": "Einfachste Definition eines Webhooks"
+  },
+  {
+   "text": "Без перевірки клієнтського стану у вас не було б способу відрізнити справжнє сповіщення Microsoft Graph від підробки. Це проста перевірка, але це ваш перший рубіж оборони.",
+   "speaker": "Mirko Peters",
+   "speaker_slug": "mirko-peters",
+   "time_s": 747,
+   "entities": [
+    "graph",
+    "change-notifications"
+   ],
+   "why": "Sicherheit: clientState prüfen"
+  },
+  {
+   "text": "Підтверджуйте негайно та обробляйте асинхронно. Ваша кінцева точка має перевірити стан клієнта, прийняти сповіщення та повернути відповідь 200 або 202 якнайшвидше.",
+   "speaker": "Mirko Peters",
+   "speaker_slug": "mirko-peters",
+   "time_s": 812,
+   "entities": [
+    "change-notifications"
+   ],
+   "why": "Best Practice für den Endpunkt"
+  },
+  {
+   "text": "Поєднуйте вебхуки з дельта-запитами. Використовуйте вебхуки, щоб дізнатися, коли щось змінилося, а потім використовуйте дельта-запит, щоб з'ясувати, що саме змінилося.",
+   "speaker": "Mirko Peters",
+   "speaker_slug": "mirko-peters",
+   "time_s": 988,
+   "entities": [
+    "change-notifications",
+    "graph"
+   ],
+   "why": "Hybrides Muster Webhook plus Delta Query"
+  }
+ ],
+ "chapters": [
+  {
+   "start_s": 0,
+   "title": "Вступ: що насправді таке вебхуки в Microsoft Graph"
+  },
+  {
+   "start_s": 81,
+   "title": "Проблема опитування і тротлінг"
+  },
+  {
+   "start_s": 208,
+   "title": "Що таке вебхуки і як вони працюють"
+  },
+  {
+   "start_s": 434,
+   "title": "Створення підписки: чотири ключові поля і Client State"
+  },
+  {
+   "start_s": 583,
+   "title": "Процес перевірки – handshake"
+  },
+  {
+   "start_s": 698,
+   "title": "Обробка сповіщень та безпека"
+  },
+  {
+   "start_s": 853,
+   "title": "Життєвий цикл підписки і дельта-запит"
+  },
+  {
+   "start_s": 1041,
+   "title": "Приклад із реального життя та наступні кроки"
+  }
+ ],
+ "takeaways": [
+  "Опитування марнує запити, призводить до тротлінгу й однаково не дає оновлень у реальному часі; з вебхуками Microsoft Graph сам надсилає HTTP POST на вашу кінцеву точку, щойно щось змінюється.",
+  "Підписка складається з Notification URL, ресурсу, типу зміни та часу завершення; кінцева точка має пройти перевірку validation token звичайним текстом протягом 10 секунд, перевіряти Client State і відповідати протягом 3 секунд.",
+  "Підписки мають термін дії: поновлюйте їх запитом PATCH, використовуйте сповіщення про життєвий цикл і поєднуйте вебхуки з дельта-запитом – вебхуки дають швидкість, дельта-запит – надійність."
+ ],
+ "hook": "Ваш застосунок знову і знову питає Microsoft Graph: «Є нові користувачі?» – і майже завжди чує «Ні». У цьому епізоді пояснюємо, як вебхуки Microsoft Graph замінюють постійне опитування сповіщеннями в реальному часі, на що звернути увагу під час створення підписки й перевірки та чому найкраще поєднувати їх із дельта-запитом.",
+ "youtube_video_id": "ra62dODpiag",
+ "source_video_id": "ra62dODpiag",
+ "show_id": 7393254,
+ "generated_at": "2026-11-01T09:05:25Z"
+}
