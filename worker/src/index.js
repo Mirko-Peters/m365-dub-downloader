@@ -4,6 +4,7 @@ import { evalBadges, stats, topUsers, badgesFor, award } from "./badges.js";
 import { runDigest, sendMail } from "./digest.js";
 import { handleEntity, importEntitiesFromSite } from "./entities.js";
 import { importLegacyBlog } from "./legacyblog.js";
+import { importContentBlog } from "./contentblog.js";
 import { handleA2a } from "./a2a.js";
 import { handleAdminPanel } from "./adminpanel.js";
 import { autoTranslateItems, autoTranslateEntities, runTrQueue } from "./autotr.js";
@@ -410,6 +411,7 @@ export default {
     T("syncShows", () => syncShows(env));
     T("flushOutbox", () => flushOutbox(env));
     T("importLegacyBlog", () => importLegacyBlog(env));
+    T("importContentBlog", () => importContentBlog(env));   // T15: Content-Pakete aus imports/blog/
     T("refreshProfilesExport", () => refreshProfilesExport(env));
     T("remindInvites", () => remindInvites(env));
     T("runTrQueue", () => runTrQueue(env, entityMap));
