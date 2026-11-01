@@ -109,6 +109,36 @@ def iso_dur(sec):
 _IDX = {}
 
 
+_SIDS = {}
+
+
+def _EN_SID():
+    """Spreaker-IDs der Hauptshow (data/en_episodes.json), einmal je Bau: {"title": norm(Titel) -> ID, "pub": [(Unix-Zeit, ID)]}."""
+    if not _SIDS:
+        _SIDS.update(title={}, pub=[])
+        if (D / "en_episodes.json").exists():
+            from email.utils import parsedate_to_datetime
+            for k, v in json.loads((D / "en_episodes.json").read_text("utf-8")).items():
+                if not isinstance(v, dict) or not str(v.get("spreaker_id") or "").isdigit(): continue
+                _SIDS["title"][norm(v.get("title") or k)] = str(v["spreaker_id"])
+                try: _SIDS["pub"].append((int(parsedate_to_datetime(v["pub"]).timestamp()), str(v["spreaker_id"])))
+                except (TypeError, ValueError, KeyError): pass
+    return _SIDS
+
+
+def spreaker_id(e, nrec=None):
+    """Spreaker-ID einer Podpage-Folge: aus den Show Notes, sonst per Titel, sonst per Veroeffentlichungszeit (+-2 min, nur eindeutig)."""
+    if (nrec or {}).get("id"): return str(nrec["id"])
+    x = _EN_SID()
+    if norm(e.get("name")) in x["title"]: return x["title"][norm(e.get("name"))]
+    try:
+        t = int(datetime.fromisoformat(str(e.get("published"))).timestamp())
+    except (TypeError, ValueError):
+        return ""
+    c = {sid for p, sid in x["pub"] if abs(p - t) <= 120}
+    return c.pop() if len(c) == 1 else ""
+
+
 def episode_index(BASE):
     """Einmal je Bau: alle Folgen der Hauptshow (Podpage-Sicherung) als Datensaetze fuer Entitaetsseiten und Folgenseiten.
     items: slug, title, date, url, Kurzfassung, Kernpunkte/FAQ (Editor, Spreaker, sonst data/episode_sections), Gaeste; eg: Folge -> Gaeste; ge: Gast-Slug -> Folgen."""
@@ -133,8 +163,10 @@ def episode_index(BASE):
               "sum": short_desc(e, nrec, 260), "keypoints": [x for x in kp if isinstance(x, str)], "faq": faq, "guests": [gg["slug"] for gg in eg[e["slug"]]],
               "duration": iso_dur((nrec or {}).get("duration")), "number": (str(e.get("number") or "") if str(e.get("number") or "") not in ("None", "") else ""), "season": (str(e.get("season") or "") if str(e.get("season")) != "None" else "")}
         it["_t"] = e["name"].lower(); it["_k"] = " ".join(it["keypoints"] + [x["q"] + " " + x["a"] for x in faq]).lower()
-        it["sid"] = str((nrec or {}).get("id") or "")   # Spreaker-Folgen-ID (Schluessel der Extraktion shownotes/entities/<id>.json)
-        if SX.yt_of(it["sid"]): it["yt"] = SX.yt_of(it["sid"])
+        it["sid"] = spreaker_id(e, nrec)   # Spreaker-Folgen-ID (Schluessel der Extraktion shownotes/entities/<id>.json)
+        _vl = re.search(r"(?:v=|youtu\.be/)([\w-]{11})", str(e.get("video_link") or ""))
+        if _vl: it["yt"] = _vl.group(1)   # YouTube-Video der Folge (Podpage)
+        if SX.yt_of(it["sid"]) and not it.get("yt"): it["yt"] = SX.yt_of(it["sid"])
         items.append(it); by_slug[e["slug"]] = it
     by_sid = {it["sid"]: it for it in items if it["sid"]}
     _IDX[BASE] = {"eps": eps, "items": items, "eg": eg, "ge": ge, "by_slug": by_slug, "by_sid": by_sid, "guests": guests}
