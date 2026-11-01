@@ -1,0 +1,466 @@
+{
+  "episode_id": "75855632",
+  "slug": "from-sensor-to-dashboard-the-mqtt-pipeline-through-azure-iot-hub",
+  "title": "From Sensor to Dashboard: The MQTT Pipeline Through Azure IoT Hub",
+  "lang": "en",
+  "duration_s": 6830,
+  "transcript_source": "data/en_transcripts/981baddad42b.txt",
+  "time_basis": "estimated",
+  "entities": [
+    {
+      "slug": "mqtt",
+      "name": "MQTT",
+      "type": "concept",
+      "score": 95,
+      "mentions": 68,
+      "first_mention_s": 39,
+      "quote": "We'll look at MQTT as the transport, Azure IoT Hub as the managed connection layer",
+      "url": "https://www.m365.fm/entity/mqtt/"
+    },
+    {
+      "slug": "edge-gateway",
+      "name": "Industrial edge gateway",
+      "type": "concept",
+      "score": 85,
+      "mentions": 172,
+      "first_mention_s": 109,
+      "quote": "plus which controller or gateway read the tag.",
+      "url": "https://www.m365.fm/entity/edge-gateway/"
+    },
+    {
+      "slug": "programmable-logic-controller",
+      "name": "Programmable logic controller (PLC)",
+      "type": "concept",
+      "score": 80,
+      "mentions": 33,
+      "first_mention_s": 66,
+      "quote": "The conveyor motor has a temperature sensor and the PLC sees the temperature rise",
+      "url": "https://www.m365.fm/entity/programmable-logic-controller/"
+    },
+    {
+      "slug": "mqtt-quality-of-service",
+      "name": "MQTT quality of service (QoS)",
+      "type": "concept",
+      "score": 75,
+      "mentions": 11,
+      "first_mention_s": 875,
+      "quote": "MQTT supports quality of service levels that govern how sender and broker handle acknowledgement and retry.",
+      "url": "https://www.m365.fm/entity/mqtt-quality-of-service/"
+    },
+    {
+      "slug": "iot-hub-message-routing",
+      "name": "IoT Hub message routing",
+      "type": "concept",
+      "score": 75,
+      "mentions": 15,
+      "first_mention_s": 45,
+      "quote": "message rooting, and the paths into",
+      "url": "https://www.m365.fm/entity/iot-hub-message-routing/"
+    },
+    {
+      "slug": "overall-equipment-effectiveness",
+      "name": "Overall equipment effectiveness (OEE)",
+      "type": "concept",
+      "score": 60,
+      "mentions": 10,
+      "first_mention_s": 19,
+      "quote": "They show a temperature, a fault code, or an OEE number",
+      "url": "https://www.m365.fm/entity/overall-equipment-effectiveness/"
+    },
+    {
+      "slug": "manufacturing-execution-system",
+      "name": "Manufacturing execution system (MES)",
+      "type": "concept",
+      "score": 60,
+      "mentions": 22,
+      "first_mention_s": 229,
+      "quote": "combining machine signals with MIS and ERP",
+      "url": "https://www.m365.fm/entity/manufacturing-execution-system/"
+    },
+    {
+      "slug": "enterprise-resource-planning",
+      "name": "Enterprise resource planning (ERP)",
+      "type": "concept",
+      "score": 55,
+      "mentions": 14,
+      "first_mention_s": 229,
+      "quote": "combining machine signals with MIS and ERP",
+      "url": "https://www.m365.fm/entity/enterprise-resource-planning/"
+    },
+    {
+      "slug": "data-contract",
+      "name": "Data contract",
+      "type": "concept",
+      "score": 55,
+      "mentions": 6,
+      "first_mention_s": 1804,
+      "quote": "Your payload contract and gateway logs need to preserve that source chain",
+      "url": "https://www.m365.fm/entity/data-contract/"
+    },
+    {
+      "slug": "shared-access-signature",
+      "name": "Shared access signature (SAS) token",
+      "type": "concept",
+      "score": 55,
+      "mentions": 8,
+      "first_mention_s": 1881,
+      "quote": "The first is shared access signatures or SIS tokens.",
+      "url": "https://www.m365.fm/entity/shared-access-signature/"
+    },
+    {
+      "slug": "x509-certificate",
+      "name": "X.509 certificate",
+      "type": "concept",
+      "score": 50,
+      "mentions": 3,
+      "first_mention_s": 1899,
+      "quote": "The second method uses X509 certificates.",
+      "url": "https://www.m365.fm/entity/x509-certificate/"
+    },
+    {
+      "slug": "operational-technology",
+      "name": "Operational technology (OT)",
+      "type": "concept",
+      "score": 50,
+      "mentions": 6,
+      "first_mention_s": 422,
+      "quote": "industrial PC on the OT network, with strict rules on what crosses into the enterprise network.",
+      "url": "https://www.m365.fm/entity/operational-technology/"
+    },
+    {
+      "slug": "digital-twin",
+      "name": "Digital twin",
+      "type": "concept",
+      "score": 50,
+      "mentions": 4,
+      "first_mention_s": 5913,
+      "quote": "Digital twins and knowledge graphs add relationships.",
+      "url": "https://www.m365.fm/entity/digital-twin/"
+    },
+    {
+      "slug": "iot-hub-device-twin",
+      "name": "IoT Hub device twin",
+      "type": "concept",
+      "score": 45,
+      "mentions": 6,
+      "first_mention_s": 1396,
+      "quote": "messages back to the device, device twin operations, and direct method calls.",
+      "url": "https://www.m365.fm/entity/iot-hub-device-twin/"
+    },
+    {
+      "slug": "knowledge-graph",
+      "name": "Knowledge graph",
+      "type": "concept",
+      "score": 45,
+      "mentions": 4,
+      "first_mention_s": 5913,
+      "quote": "Digital twins and knowledge graphs add relationships.",
+      "url": "https://www.m365.fm/entity/knowledge-graph/"
+    },
+    {
+      "slug": "json",
+      "name": "JSON",
+      "type": "concept",
+      "score": 40,
+      "mentions": 15,
+      "first_mention_s": 962,
+      "quote": "At small scale, you can publish a JSON message, subscribe to a topic, and call it done by lunch.",
+      "url": "https://www.m365.fm/entity/json/"
+    },
+    {
+      "slug": "managed-identity",
+      "name": "Managed identity",
+      "type": "concept",
+      "score": 40,
+      "mentions": 4,
+      "first_mention_s": 1317,
+      "quote": "It adds managed identity, authenticated device connections, device facing controls",
+      "url": "https://www.m365.fm/entity/managed-identity/"
+    },
+    {
+      "slug": "azure-iot-hub",
+      "name": "Azure IoT Hub",
+      "type": "product",
+      "score": 98,
+      "mentions": 110,
+      "first_mention_s": 39,
+      "quote": "We'll look at MQTT as the transport, Azure IoT Hub as the managed connection layer",
+      "url": "https://www.m365.fm/entity/azure-iot-hub/"
+    },
+    {
+      "slug": "azure-event-hubs",
+      "name": "Azure Event Hubs",
+      "type": "product",
+      "score": 70,
+      "mentions": 8,
+      "first_mention_s": 4431,
+      "quote": "Event hubs for streaming consumers.",
+      "url": "https://www.m365.fm/entity/azure-event-hubs/"
+    },
+    {
+      "slug": "fabric",
+      "name": "Microsoft Fabric",
+      "type": "platform",
+      "score": 60,
+      "mentions": 14,
+      "first_mention_s": 5048,
+      "quote": "Microsoft fabric from event flow to analysis.",
+      "url": "https://www.m365.fm/entity/fabric/"
+    },
+    {
+      "slug": "iot-hub-device-provisioning-service",
+      "name": "Azure IoT Hub Device Provisioning Service (DPS)",
+      "type": "product",
+      "score": 55,
+      "mentions": 4,
+      "first_mention_s": 1939,
+      "quote": "That's where Azure Device, provisioning service or DPS comes in as the fleet grows.",
+      "url": "https://www.m365.fm/entity/iot-hub-device-provisioning-service/"
+    },
+    {
+      "slug": "eventstream",
+      "name": "Eventstream",
+      "type": "product",
+      "score": 55,
+      "mentions": 6,
+      "first_mention_s": 5066,
+      "quote": "telemetry directly into a fabric event stream.",
+      "url": "https://www.m365.fm/entity/eventstream/"
+    },
+    {
+      "slug": "power-bi",
+      "name": "Power BI",
+      "type": "product",
+      "score": 25,
+      "mentions": 2,
+      "first_mention_s": 5258,
+      "quote": "For organizations already using Power BI, Fabric helps keep analytical work in a governed workspace",
+      "url": "https://www.m365.fm/entity/power-bi/"
+    }
+  ],
+  "new_entities": [
+    {
+      "slug": "mqtt",
+      "name": "MQTT",
+      "type": "concept",
+      "mentions": 68,
+      "first_mention_s": 39,
+      "quote": "We'll look at MQTT as the transport, Azure IoT Hub as the managed connection layer",
+      "status": "review"
+    },
+    {
+      "slug": "azure-iot-hub",
+      "name": "Azure IoT Hub",
+      "type": "product",
+      "mentions": 110,
+      "first_mention_s": 39,
+      "quote": "We'll look at MQTT as the transport, Azure IoT Hub as the managed connection layer",
+      "status": "review"
+    },
+    {
+      "slug": "edge-gateway",
+      "name": "Industrial edge gateway",
+      "type": "concept",
+      "mentions": 172,
+      "first_mention_s": 109,
+      "quote": "plus which controller or gateway read the tag.",
+      "status": "review"
+    },
+    {
+      "slug": "programmable-logic-controller",
+      "name": "Programmable logic controller (PLC)",
+      "type": "concept",
+      "mentions": 33,
+      "first_mention_s": 66,
+      "quote": "The conveyor motor has a temperature sensor and the PLC sees the temperature rise",
+      "status": "review"
+    },
+    {
+      "slug": "overall-equipment-effectiveness",
+      "name": "Overall equipment effectiveness (OEE)",
+      "type": "concept",
+      "mentions": 10,
+      "first_mention_s": 19,
+      "quote": "They show a temperature, a fault code, or an OEE number",
+      "status": "review"
+    },
+    {
+      "slug": "manufacturing-execution-system",
+      "name": "Manufacturing execution system (MES)",
+      "type": "concept",
+      "mentions": 22,
+      "first_mention_s": 229,
+      "quote": "combining machine signals with MIS and ERP",
+      "status": "review"
+    },
+    {
+      "slug": "enterprise-resource-planning",
+      "name": "Enterprise resource planning (ERP)",
+      "type": "concept",
+      "mentions": 14,
+      "first_mention_s": 229,
+      "quote": "combining machine signals with MIS and ERP",
+      "status": "review"
+    },
+    {
+      "slug": "operational-technology",
+      "name": "Operational technology (OT)",
+      "type": "concept",
+      "mentions": 6,
+      "first_mention_s": 422,
+      "quote": "industrial PC on the OT network, with strict rules on what crosses into the enterprise network.",
+      "status": "review"
+    },
+    {
+      "slug": "json",
+      "name": "JSON",
+      "type": "concept",
+      "mentions": 15,
+      "first_mention_s": 962,
+      "quote": "At small scale, you can publish a JSON message, subscribe to a topic, and call it done by lunch.",
+      "status": "review"
+    },
+    {
+      "slug": "managed-identity",
+      "name": "Managed identity",
+      "type": "concept",
+      "mentions": 4,
+      "first_mention_s": 1317,
+      "quote": "It adds managed identity, authenticated device connections, device facing controls",
+      "status": "review"
+    },
+    {
+      "slug": "data-contract",
+      "name": "Data contract",
+      "type": "concept",
+      "mentions": 6,
+      "first_mention_s": 1804,
+      "quote": "Your payload contract and gateway logs need to preserve that source chain",
+      "status": "review"
+    },
+    {
+      "slug": "eventstream",
+      "name": "Eventstream",
+      "type": "product",
+      "mentions": 6,
+      "first_mention_s": 5066,
+      "quote": "telemetry directly into a fabric event stream.",
+      "status": "review"
+    },
+    {
+      "slug": "digital-twin",
+      "name": "Digital twin",
+      "type": "concept",
+      "mentions": 4,
+      "first_mention_s": 5913,
+      "quote": "Digital twins and knowledge graphs add relationships.",
+      "status": "review"
+    },
+    {
+      "slug": "knowledge-graph",
+      "name": "Knowledge graph",
+      "type": "concept",
+      "mentions": 4,
+      "first_mention_s": 5913,
+      "quote": "Digital twins and knowledge graphs add relationships.",
+      "status": "review"
+    },
+    {
+      "slug": "iot-hub-device-provisioning-service",
+      "name": "Azure IoT Hub Device Provisioning Service (DPS)",
+      "type": "product",
+      "mentions": 4,
+      "first_mention_s": 1939,
+      "quote": "That's where Azure Device, provisioning service or DPS comes in as the fleet grows.",
+      "status": "review"
+    },
+    {
+      "slug": "shared-access-signature",
+      "name": "Shared access signature (SAS) token",
+      "type": "concept",
+      "mentions": 8,
+      "first_mention_s": 1881,
+      "quote": "The first is shared access signatures or SIS tokens.",
+      "status": "review"
+    },
+    {
+      "slug": "x509-certificate",
+      "name": "X.509 certificate",
+      "type": "concept",
+      "mentions": 3,
+      "first_mention_s": 1899,
+      "quote": "The second method uses X509 certificates.",
+      "status": "review"
+    },
+    {
+      "slug": "mqtt-quality-of-service",
+      "name": "MQTT quality of service (QoS)",
+      "type": "concept",
+      "mentions": 11,
+      "first_mention_s": 875,
+      "quote": "MQTT supports quality of service levels that govern how sender and broker handle acknowledgement and retry.",
+      "status": "review"
+    },
+    {
+      "slug": "iot-hub-message-routing",
+      "name": "IoT Hub message routing",
+      "type": "concept",
+      "mentions": 15,
+      "first_mention_s": 4185,
+      "quote": "IoT Hub message routing lets you define rules that inspect a message and send matching ones to custom endpoints.",
+      "status": "review"
+    },
+    {
+      "slug": "iot-hub-device-twin",
+      "name": "IoT Hub device twin",
+      "type": "concept",
+      "mentions": 6,
+      "first_mention_s": 1396,
+      "quote": "messages back to the device, device twin operations, and direct method calls.",
+      "status": "review"
+    }
+  ],
+  "quotes": [],
+  "chapters": [
+    {
+      "start_s": 0,
+      "title": "A sensor signal is not yet manufacturing information"
+    },
+    {
+      "start_s": 328,
+      "title": "The edge layer between PLCs and the cloud"
+    },
+    {
+      "start_s": 657,
+      "title": "MQTT basics and why fleets change the problem"
+    },
+    {
+      "start_s": 1313,
+      "title": "Azure IoT Hub, identity, TLS and the MQTT connection"
+    },
+    {
+      "start_s": 2667,
+      "title": "Topics, payload contracts and time"
+    },
+    {
+      "start_s": 3605,
+      "title": "QoS, routing, Event Hubs, storage and Fabric"
+    },
+    {
+      "start_s": 5300,
+      "title": "OEE, ERP, MES and context models"
+    },
+    {
+      "start_s": 6192,
+      "title": "Dashboards, alerts and edge resilience"
+    }
+  ],
+  "takeaways": [
+    "A raw sensor reading only becomes manufacturing information when the pipeline preserves its source, unit, quality state and source timestamp and links it to production context.",
+    "Azure IoT Hub uses MQTT as a managed device connection with per-device identity, fixed topics, QoS 0 or 1 and routing, so it complements rather than replaces a local MQTT broker.",
+    "Route telemetry by consumer need into Event Hubs, raw storage and Microsoft Fabric, design consumers to handle duplicates and late data, and keep safety-critical control local at the edge."
+  ],
+  "hook": "Most factory dashboards start at the wrong end: they show a temperature or an OEE number, but nobody can explain where the message came from or whether it can be trusted. This episode is for OT and IT architects, data engineers and manufacturing leaders building industrial IoT on Azure. Follow one telemetry message from a PLC through an edge gateway, MQTT and Azure IoT Hub into Event Hubs, storage, Microsoft Fabric and a dashboard people can act on.",
+  "youtube_video_id": null,
+  "generated_at": "2026-11-01T07:35:57Z"
+}
