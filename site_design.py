@@ -94,6 +94,7 @@ footer{margin-top:80px}
 .top .wrap{display:flex;align-items:center;gap:22px;flex-wrap:nowrap}
 .top .brand{white-space:nowrap}
 .menu{display:flex;gap:22px;margin-inline-start:auto;align-items:center}
+.srch-l{display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;color:inherit;border-radius:6px;flex:none}.srch-l:hover{color:var(--ac)}.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 .menu a{font:500 .88rem "Barlow Condensed","Barlow Condensed FB0","Barlow Condensed FB1","Barlow Condensed FB2",sans-serif;letter-spacing:.12em;text-transform:uppercase;text-decoration:none;color:var(--fg);padding:4px 0;border-bottom:2px solid transparent}
 .menu a:hover{border-color:var(--ac);color:var(--ac)}
 .mg{position:relative}.mg summary{list-style:none;cursor:pointer;font:500 .88rem "Barlow Condensed","Barlow Condensed FB0","Barlow Condensed FB1","Barlow Condensed FB2",sans-serif;letter-spacing:.12em;text-transform:uppercase;padding:4px 0;border-bottom:2px solid transparent;user-select:none}
@@ -219,6 +220,15 @@ def lang_dropdown(cur, items, base):
     return f'<details class="lsw"><summary aria-label="{_e(nm)}">{flag(cur, base, cur_i[1] if cur_i else cur)}{_e(label)}</summary><div class="pn">{links}</div></details>'
 
 
+def _search_link(home):
+    """T37: Lupe im Kopf -> Suchseite der Sprache (home endet auf / bzw. /<lang>/)."""
+    import re as _re, site_search as _SS
+    lang = (_re.search(r"/([a-z]{2})/$", home) or [None, "en"])[1]
+    t = _SS.ui(lang)[0]
+    return (f'<a class="srch-l" href="{_e(home)}search/" aria-label="{_e(t)}" title="{_e(t)}"><svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true" focusable="false">'
+            '<circle cx="10.5" cy="10.5" r="6.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M15.5 15.5 21 21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></a>')
+
+
 def site_header(home, brand_href, menu, lang_html, bar_html=""):
     """menu: (label, href)"""
     def one(t, h, grp):
@@ -228,6 +238,6 @@ def site_header(home, brand_href, menu, lang_html, bar_html=""):
         return f'<a href="{_e(h)}">{_e(t)}</a>'
     m = "".join(one(t, h, False) for t, h in menu); mm = "".join(one(t, h, True) for t, h in menu)
     return (f'<header class="sh">{bar_html}<div class="top"><div class="wrap"><a class="brand" href="{_e(brand_href)}">M365<i>.</i>FM <span class="dub">DUB</span></a>'
-            f'<nav class="menu" aria-label="Menu">{m}</nav>{lang_html}<details class="mm"><summary aria-label="Menu">☰</summary><div class="pn">{mm}</div></details></div></div></header>')
+            f'<nav class="menu" aria-label="Menu">{m}</nav>{_search_link(home)}{lang_html}<details class="mm"><summary aria-label="Menu">☰</summary><div class="pn">{mm}</div></details></div></div></header>')
 
 

@@ -1194,7 +1194,8 @@ def build():
 <main class="wrap">{faq_html('en', 'FAQ')}{cta_box("Want the full interviews?", "The main M365.FM show brings 900+ conversations with Microsoft MVPs, product experts and architects – in English.", "Go to M365.FM", "https://www.m365.fm")}{author_box('en')}</main>{footer_en()}"""
     write("index.html", page("en", "M365.FM – Microsoft community: blog, podcast, events & explainers | Mirko Peters",
           "Blog posts, podcasts and events from the Microsoft community plus animated explainers on Microsoft 365, Copilot, Azure and Power Platform by Microsoft MVP Mirko Peters – in 14 languages.",
-          f"{BASE}/", root_body, alts_home, [person_ld(), org_ld(), event_ld(), faq_ld("en"), {"@context": "https://schema.org", "@type": "WebSite", "@id": f"{BASE}/#website", "name": "M365.FM international", "url": f"{BASE}/", "inLanguage": [LANGS[x][1] for x in active], "publisher": {"@id": f"{BASE}/#org"}, "author": {"@id": f"{BASE}/entity/mirko-peters/#entity"}}], og_type="website"))
+          f"{BASE}/", root_body, alts_home, [person_ld(), org_ld(), event_ld(), faq_ld("en"), {"@context": "https://schema.org", "@type": "WebSite", "@id": f"{BASE}/#website", "name": "M365.FM international", "url": f"{BASE}/",
+           "potentialAction": {"@type": "SearchAction", "target": {"@type": "EntryPoint", "urlTemplate": f"{BASE}/search/?q={{search_term_string}}"}, "query-input": "required name=search_term_string"}, "inLanguage": [LANGS[x][1] for x in active], "publisher": {"@id": f"{BASE}/#org"}, "author": {"@id": f"{BASE}/entity/mirko-peters/#entity"}}], og_type="website"))
     sitemap.append((f"{BASE}/", TODAY, None))
     for _hk, _hc in HUB.MORE.items():   # T6: Karten jenseits der ersten 24 je Hub als JSON (Mehr laden / Filter)
         write(("" if _hk == "root" else _hk + "/") + "hub-more.json", json.dumps({"cards": _hc}, ensure_ascii=False))
@@ -1465,6 +1466,15 @@ def build():
     import site_sitemaps as SMAP
     files = SMAP.write_all(sitemap, write, BASE, LANGS, TODAY)
     print(f"Sitemaps: {len(files)} Dateien, {len(sitemap)} URLs")
+    # T37 Seitensuche: Index aus allen indexierbaren Seiten (alle Sprachen) nach r2out/search/, Suchseite je Sprache (noindex)
+    import site_search as SRCH
+    _sdocs = SRCH.build_index(sitemap, [OUT, R2OUT], write_r2, BASE, LANGS)
+    _ln = {"en": "English", **{x: LANGS[x][0] for x in LANGS}}
+    for _l in ["en"] + list(active):
+        _su, _st = (f"{BASE}/search/" if _l == "en" else f"{BASE}/{_l}/search/"), SRCH.ui(_l)
+        write(("search" if _l == "en" else f"{_l}/search") + "/index.html", page(_l, _st[0] + " – M365.FM", _st[1], _su,
+              f'{header(_l, "")}<main class="wrap">{SRCH.page_body(_l, COMMUNITY_API, BASE, _ln)}</main>{footer(_l)}', None, [], og_type="website", noindex=True))
+    print(f"Suche: {len(_sdocs)} Dokumente im Index, {len(_sdocs) // SRCH.PART + 1} Teile")
     _showix = PP.episode_index(BASE)
     phase("Sitemaps")
     import site_quotes as _SQ
