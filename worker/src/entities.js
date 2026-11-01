@@ -62,15 +62,32 @@ const paths = (d) => { const out = []; for (const [k, v] of Object.entries(d || 
 const at = (d, p) => (p.length === 2 ? (isObj(d?.[p[0]]) ? d[p[0]][p[1]] : undefined) : d?.[p[0]]);
 const put = (d, p, v) => { if (p.length === 2) d[p[0]] = { ...(isObj(d[p[0]]) ? d[p[0]] : {}), [p[1]]: v }; else d[p[0]] = v; };
 
+// Maschine = user_id 0 UND eine Maschinen-Zusammenfassung. user_id 0 allein reicht nicht: beim Loeschen eines Kontos setzt
+// profiles.js die Revisionen des Menschen auf user_id 0 ("geloeschtes Konto"), das bleibt eine Menschen-Aenderung.
+const MACHINE = /^(Übernahme aus entities\.json|Abgleich mit entities\.json|Auto-Übersetzung)/;
+export const isMachine = (r) => !r.user_id && MACHINE.test(r.summary || "");
+
+// Felder, die validate() bei jeder Bearbeitung ausgibt (long, desc.en/de nur mit Wert): fehlen sie in einer Menschen-Fassung, hat der
+// Mensch sie geleert. Alle anderen (image, same_as, guest, desc.<weitere Sprachen> ...) zeigt das Formular nicht -> "nicht gesehen".
+const FORM_KEYS = new Set(["name", "type", "aliases", "web", "docs", "wikipedia", "wikidata", "rel", "logo", "version", "released", "license", "level", "valid_months", "exam", "outdated", "replaced_by"]);
+const FORM_SUB = new Set(["desc.en", "desc.de", "long.en", "long.de"]);
+
 export function mergeFromJson(json, revs) {
-  // revs: aeltere zuerst [{data, user_id}], letzte = live. Ergebnis: {data, fields} - fields leer = nichts zu tun
-  const live = revs[revs.length - 1]?.data || {}, data = JSON.parse(JSON.stringify(live)), fields = [], kept = [];
+  // revs: Historie (live und old) [{id, data, user_id, summary, status}], die live-Fassung als LETZTER Eintrag.
+  // Ein Feld gehoert einem Menschen, wenn eine Menschen-Fassung genau den aktuellen live-Wert enthaelt UND ihn gegenueber ihrer
+  // Vorgaengerin (hoechste kleinere id = Stand beim Einreichen) geaendert hat. Keine Annahme ueber die Reihenfolge, in der Fassungen
+  // live waren (freigegebene Vorschlaege behalten ihre aeltere id). Leere Werte (fehlt, '', [], {}) zaehlen als ein Wert; eine
+  // Menschen-Fassung ohne das Feld hat es nicht gesehen (validate() laesst es weg). Uebernommen wird nur, was keinem Menschen gehoert.
+  const liveRev = revs[revs.length - 1], live = liveRev?.data || {}, data = JSON.parse(JSON.stringify(live)), fields = [], kept = [];
+  const val = (d, p) => { const v = at(d, p); return blank(v) ? "" : canon(v); };
+  const has = (d, p) => (p.length === 2 ? FORM_SUB.has(p.join(".")) || (isObj(d?.[p[0]]) && p[1] in d[p[0]]) : FORM_KEYS.has(p[0]) || (!!d && p[0] in d));
+  const byId = [...revs].sort((x, y) => (x.id ?? 0) - (y.id ?? 0));
+  const pred = (r) => { let q = null; for (const x of byId) { if ((x.id ?? 0) < (r.id ?? 0)) q = x; else break; } return q; };
   for (const p of paths(json)) {
     const jv = at(json, p); if (blank(jv)) continue;
-    const lv = at(live, p); if (!blank(lv) && canon(lv) === canon(jv)) continue;
-    let who = null, prev;   // wer hat den live-Wert dieses Felds zuletzt gesetzt?
-    for (const r of revs) { const v = canon(at(r.data, p) ?? null); if (who === null || v !== prev) { who = r.user_id; prev = v; } }
-    if (blank(lv) || !who) { put(data, p, jv); fields.push(p.join(".")); } else kept.push(p.join("."));
+    const lv = val(live, p); if (lv === canon(jv)) continue;
+    const human = revs.some((r) => !isMachine(r) && has(r.data, p) && val(r.data, p) === lv && val(r.data, p) !== (pred(r) ? val(pred(r).data, p) : ""));
+    if (human) kept.push(p.join(".")); else { put(data, p, jv); fields.push(p.join(".")); }
   }
   return { data, fields, kept };
 }
@@ -85,9 +102,10 @@ export async function syncEntitiesFromSite(env, opts = {}) {
   if (last && list.length < last * 0.8) return { skipped: `entities-src.json unvollstaendig (${list.length} statt ${last})` };   // Schutz vor einem halben Seitenbau
   await db.prepare("INSERT INTO meta(k,v) VALUES('ent_src_n',?) ON CONFLICT(k) DO UPDATE SET v=excluded.v").bind(String(list.length)).run();
   const live = new Map(((await db.prepare("SELECT eid,data FROM entity_rev WHERE status='live'").all()).results || []).map((r) => [r.eid, r.data]));
+  const owned = new Set(((await db.prepare("SELECT DISTINCT eid FROM entity_claims WHERE status='verified'").all().catch(() => ({ results: [] }))).results || []).map((r) => r.eid));   // selbst verwaltet: nie abgleichen
   const cand = [];
   for (const e of list) {   // Vorauswahl ohne Historie: nur Eintraege, deren JSON-Felder nicht schon so in D1 stehen
-    if (!e?.id || !live.has(e.id)) continue;
+    if (!e?.id || !live.has(e.id) || owned.has(e.id)) continue;
     let d; try { d = JSON.parse(live.get(e.id)); } catch { continue; }
     const { id, ...j } = e;
     if (paths(j).some((p) => !blank(at(j, p)) && canon(at(d, p)) !== canon(at(j, p)))) cand.push(e);
@@ -99,16 +117,18 @@ export async function syncEntitiesFromSite(env, opts = {}) {
   if (cand.length > max) await db.prepare("INSERT INTO meta(k,v) VALUES('ent_sync_off',?) ON CONFLICT(k) DO UPDATE SET v=excluded.v").bind(String((off + max) % cand.length)).run();
   for (let i = 0; i < todo.length; i += 50) {
     const part = todo.slice(i, i + 50), ids = part.map((e) => e.id);
-    const rows = (await db.prepare(`SELECT eid,data,user_id FROM entity_rev WHERE status IN ('live','old') AND eid IN (${ids.map(() => "?").join(",")}) ORDER BY id`).bind(...ids).all()).results || [];
-    const by = new Map(); for (const r of rows) { try { (by.get(r.eid) || by.set(r.eid, []).get(r.eid)).push({ data: JSON.parse(r.data), user_id: r.user_id }); } catch { /* defekte Zeile */ } }
+    // live-Zeile zuletzt: ein freigegebener Vorschlag behaelt seine aeltere id, die hoechste id ist dann eine abgeloeste Fassung
+    const rows = (await db.prepare(`SELECT id,eid,data,user_id,summary,status FROM entity_rev WHERE status IN ('live','old') AND eid IN (${ids.map(() => "?").join(",")}) ORDER BY (status='live'), id`).bind(...ids).all()).results || [];
+    const by = new Map(); for (const r of rows) { try { (by.get(r.eid) || by.set(r.eid, []).get(r.eid)).push({ id: r.id, data: JSON.parse(r.data), user_id: r.user_id, summary: r.summary, status: r.status }); } catch { /* defekte Zeile */ } }
     const stmts = [];
     for (const e of part) {
-      const revs = by.get(e.id); if (!revs?.length) continue;
+      const revs = by.get(e.id); if (!revs?.length || revs[revs.length - 1].status !== "live") continue;
       const { id, ...j } = e, m = mergeFromJson(j, revs);
       kept += m.kept.length;
       if (!m.fields.length) continue;
-      stmts.push(db.prepare("UPDATE entity_rev SET status='old' WHERE eid=? AND status='live'").bind(id),
-        db.prepare("INSERT INTO entity_rev(eid,data,summary,user_id,status,created) VALUES(?,?,?,0,'live',?)").bind(id, JSON.stringify(m.data), "Abgleich mit entities.json: " + m.fields.join(", ").slice(0, 100), t));
+      // nur schreiben, wenn die gelesene live-Fassung noch live ist (sonst hat jemand dazwischen gespeichert -> naechster Lauf)
+      stmts.push(db.prepare("UPDATE entity_rev SET status='old' WHERE id=? AND status='live'").bind(revs[revs.length - 1].id),
+        db.prepare("INSERT INTO entity_rev(eid,data,summary,user_id,status,created) SELECT ?,?,?,0,'live',? WHERE NOT EXISTS (SELECT 1 FROM entity_rev WHERE eid=? AND status='live')").bind(id, JSON.stringify(m.data), "Abgleich mit entities.json: " + m.fields.join(", ").slice(0, 100), t, id));
       updated++; if (sample.length < 10) sample.push({ id, fields: m.fields });
     }
     for (let k = 0; k < stmts.length; k += 50) await db.batch(stmts.slice(k, k + 50));
