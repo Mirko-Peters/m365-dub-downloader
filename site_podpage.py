@@ -217,7 +217,7 @@ def _EN_SID():
             from email.utils import parsedate_to_datetime
             for k, v in json.loads((D / "en_episodes.json").read_text("utf-8")).items():
                 if not isinstance(v, dict) or not str(v.get("spreaker_id") or "").isdigit(): continue
-                _SIDS["title"][norm(v.get("title") or k)] = str(v["spreaker_id"])
+                _SIDS["title"].setdefault(norm(v.get("title") or k), str(v["spreaker_id"]))
                 try: _SIDS["pub"].append((int(parsedate_to_datetime(v["pub"]).timestamp()), str(v["spreaker_id"])))
                 except (TypeError, ValueError, KeyError): pass
     return _SIDS
@@ -322,6 +322,7 @@ def build(g):
     hosts, links, revs, spons, files, cats = (load(n) for n in ("hosts", "links", "reviews", "sponsors", "downloadable_files", "categories"))
     pages = load("pages"); guests = [x for x in load("guests") if x.get("hidden") not in (True, "True")]
     enx = json.loads((D / "en_episodes.json").read_text("utf-8")) if (D / "en_episodes.json").exists() else {}
+    enx_by_id = {str(v["spreaker_id"]): v for v in enx.values() if v.get("spreaker_id")}
     ents = {e["id"]: e for e in json.loads((D / "guest_entities.json").read_text("utf-8"))} if (D / "guest_entities.json").exists() else {}
     _gm = json.loads((D / "guest_merge.json").read_text("utf-8")) if (D / "guest_merge.json").exists() else {}
     gmerge, galso = (_gm.get("merge") or {}), (_gm.get("also") or {})   # doppelte Gaeste -> Ziel-Entitaet; Gastseite verweist zusaetzlich auf diese Entitaeten
@@ -348,7 +349,7 @@ def build(g):
     ep_about = g.get("ep_about") or {}   # Folge -> Entitaeten, die sie als Treffer fuehren (Gegenrichtung zu den Entitaetsseiten)
 
     def tr_for(e):
-        r = enx.get(norm(e["name"]))
+        r = enx_by_id.get(str(e["spreaker_id"])) if e.get("spreaker_id") else enx.get(norm(e["name"]))
         t = ""
         if r and r.get("transcript"):
             f = D / "en_transcripts" / f"{r['transcript']}.txt"

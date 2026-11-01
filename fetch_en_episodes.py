@@ -1,5 +1,5 @@
 """Holt aus dem Spreaker-RSS der englischen Show Audio, Dauer und Transkript je Folge.
-Schreibt data/en_episodes.json (Schluessel: normalisierter Titel) und data/en_transcripts/<guid>.txt."""
+Schreibt data/en_episodes.json (Schluessel: normalisierter Titel, bei Kollision mit Folgen-ID) und data/en_transcripts/<guid>.txt."""
 import json, re, hashlib, sys, urllib.request
 import xml.etree.ElementTree as ET
 from pathlib import Path
@@ -43,6 +43,7 @@ def main():
     f = ROOT / "data" / "en_episodes.json"
     old = json.loads(f.read_text("utf-8")) if f.exists() else {}
     res = dict(old); n = 0
+    keys = {v.get("spreaker_id") or v.get("guid"): k for k, v in res.items()}
     for it in root.iter("item"):
         title = (it.findtext("title") or "").strip()
         guid = (it.findtext("guid") or title).strip()
@@ -63,7 +64,16 @@ def main():
                     print("Transkript fehlt:", title[:50], e, file=sys.stderr)
             if p.exists() and p.stat().st_size > 50:
                 rec["transcript"] = h
-        res[norm(title)] = rec
+        identity = rec["spreaker_id"] or guid
+        key = keys.get(identity)
+        if key is None:
+            key = norm(title)
+            if key in res:
+                key = base = f"{key} {rec['spreaker_id'] or h}"; suffix = 2
+                while key in res:
+                    key = f"{base} {suffix}"; suffix += 1
+            keys[identity] = key
+        res.setdefault(key, {}).update(rec)
     f.write_text(json.dumps(res, ensure_ascii=False, indent=0), encoding="utf-8")
     print(len(res), "Folgen,", n, "neue Transkripte")
 
