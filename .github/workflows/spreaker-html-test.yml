@@ -1,0 +1,27 @@
+name: Spreaker-HTML-Test an einer Folge (T25)
+on:
+  workflow_dispatch:
+    inputs:
+      episode: { description: "Spreaker-Folgen-ID (schon betroffene Folge)", required: true, default: "72933742" }
+permissions: { contents: write }
+concurrency: { group: apply-shownotes, cancel-in-progress: false }
+jobs:
+  t:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.12" }
+      - run: pip install -q requests cryptography
+      - env:
+          SPREAKER_TOKEN: ${{ secrets.SPREAKER_TOKEN }}
+          SPREAKER_CLIENT_ID: ${{ secrets.SPREAKER_CLIENT_ID }}
+          SPREAKER_CLIENT_SECRET: ${{ secrets.SPREAKER_CLIENT_SECRET }}
+        run: python tools/spreaker_html_test.py "${{ inputs.episode }}"
+      - if: always()
+        run: |
+          git config user.name "m365-site-bot"; git config user.email "actions@users.noreply.github.com"
+          for f in reports/spreaker-html-test.md data/spreaker_auth.enc; do [ -e "$f" ] && git add -A "$f"; done
+          git diff --cached --quiet && exit 0
+          git commit -q -m "Spreaker-HTML-Test [skip ci]"
+          for i in 1 2 3 4 5; do git pull --rebase --autostash -q origin main && git push -q origin HEAD:main && exit 0; sleep $((i*5)); done; exit 1
