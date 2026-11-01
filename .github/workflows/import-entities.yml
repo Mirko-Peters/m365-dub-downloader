@@ -1,11 +1,12 @@
 name: Entitäten aus Vorschlägen übernehmen (T26)
 # Vorschlaege unter imports/entities/<slug>.json mit status "approved" werden nach data/entities.json uebernommen
 # (tools/import_entities.py, nichts wird geloescht); der Commit unter data/ loest den Seitenbau aus, der Worker-Cron
-# importEntitiesFromSite nimmt neue Eintraege automatisch in die Datenbank.
+# importEntitiesFromSite nimmt neue Eintraege automatisch in die Datenbank. Quotes kommen aus quotes[] der Extraktionsdateien
+# shownotes/entities/<episode_id>.json, sobald die QA die Folge in shownotes/QA.txt mit ok/fixed fuehrt (tools/import_quotes.py).
 on:
   push:
     branches: [main]
-    paths: ["imports/entities/**"]
+    paths: ["imports/entities/**", "shownotes/entities/**", "shownotes/QA.txt"]
   schedule:
     - cron: "37 */3 * * *"
   workflow_dispatch:
@@ -23,7 +24,7 @@ jobs:
         with: { python-version: "3.12" }
       - name: Freigegebene Vorschläge übernehmen
         run: python tools/import_entities.py
-      - name: Freigegebene Quotes an Personen-Entitäten übernehmen
+      - name: Quotes aus geprüften Extraktionen an Personen-Entitäten übernehmen
         run: python tools/import_quotes.py
       - name: Speichern
         run: |

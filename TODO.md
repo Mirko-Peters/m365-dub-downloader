@@ -41,6 +41,8 @@ Ein Inhalt existiert genau einmal (Entität, Folge, Beitrag) in seiner Originals
 - Seitengröße (Messung 1.11.): je Seite stecken im Schnitt 4–6 KB Inline-CSS (`<style>` der Lern-/Wiki-/Mitglieder-Blöcke) und 4 KB Menü; Inline-CSS ins gehashte Stylesheet verschieben spart rund 150 MB über alle Seiten.
 
 ## Quotes (Mirko, 1.11.2026): Objekte an Personen-Entitäten
-- Ein Quote gehört immer zu genau einer Person (Entität vom Typ person). `tools/import_quotes.py` übernimmt freigegebene Dateien aus `imports/entities/quotes/` nach `data/quotes.json`; ohne Personen-Entität bleibt das Zitat liegen (`blocked` mit Grund).
+- Ein Quote gehört immer zu genau einer Person (Entität vom Typ person); eigene Quote-Entitäten gibt es nicht (Korrektur 1.11., 07:25). Gesammelt werden Quotes in `quotes[]` der Extraktionsdateien `shownotes/entities/<episode_id>.json` mit `speaker_slug`.
+- `tools/import_quotes.py` übernimmt sie nach `data/quotes.json`, sobald die QA die Folge in `shownotes/QA.txt` mit `ok` oder `fixed` führt (ältere Einzeldateien unter `imports/entities/quotes/` mit `approved` werden weiter gelesen). Ohne Personen-Entität wird ein Zitat nicht übernommen und im Lauf gemeldet.
 - Personenseiten zeigen die Zitate mit Sprung zur Folge (Zeitmarke), JSON-LD `Quotation` mit `creator` = Person; der Seitenbau veröffentlicht `quotes.json`, der Worker-Cron `importQuotesFromSite` legt sie in D1 (`quote`), Export `/api/quotes/export?person=`.
-- Offen: Zitate auch auf den Folgenseiten (Abschnitt „Zitate aus dieser Folge“), Freigabe der Quotes in der Verwaltung statt per Datei, MCP-Lesetool.
+- Folgenseiten zeigen dieselben Zitate in den Shownotes („Zitate aus dieser Folge“) mit Link auf die Personen-Entität und Zeitmarke.
+- Offen: Freigabe der Quotes in der Verwaltung statt per QA-Datei, MCP-Lesetool, Zitate in den Spreaker-Shownotes (apply-shownotes) nur nach Freigabe durch Mirko.

@@ -11,6 +11,7 @@ import html as _html
 import json
 import re
 from pathlib import Path
+import site_quotes as SQ
 
 ROOT = Path(__file__).resolve().parent
 SN_DIR = ROOT / "shownotes" / "site"
@@ -235,6 +236,8 @@ def render(rec, lang, ents, base, labels=None):
     if faq:
         html += f'<section class="faq sn-faq"><h2>{esc(T("faq"))}</h2>' + "".join(f"<details><summary>{esc(x['q'])}</summary><p>{_inline(x['a'])}</p></details>" for x in faq) + "</section>"
         ld.append({"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": x["q"], "acceptedAnswer": {"@type": "Answer", "text": x["a"]}} for x in faq]})
+    _qh, _qld = SQ.episode_block(Path(rec.get("path") or "").stem, lang, base, ents)   # Quotes aus der Extraktion, an Personen-Entitaeten gebunden
+    html += _qh; ld += _qld
     return f'<section class="shownotes sn">{html}</section>', ld, faq
 
 
