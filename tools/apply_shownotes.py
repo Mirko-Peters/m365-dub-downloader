@@ -9,7 +9,7 @@ Audio und GUID bleiben unberuehrt. Vor dem Schreiben: <= 4.000 Zeichen, nur <p><
 Zugang wie sync_spreaker.py: Secret SPREAKER_TOKEN, sonst die OAuth-Verbindung (spreaker_auth.py); der Token wird nie ausgegeben.
 Aufrufe: --check (nur Dateien pruefen, ohne API), --dry-run, --limit N, --dry-limit N, --ids 1,2,3."""
 import argparse, difflib, hashlib, html, json, os, re, sys, time
-from datetime import date, datetime, timezone
+from datetime import date, datetime, timedelta, timezone
 from html.parser import HTMLParser
 from pathlib import Path
 
@@ -181,19 +181,32 @@ class Spreaker:
                 out[int(e["episode_id"])] = {"show_id": sid, "title": e.get("title", ""), "plays": int(e.get("plays_count") or e.get("downloads_count") or 0)}
         return out
 
-    def plays(self, show_ids):
-        """Abrufe je Folge seit 2015 (Statistik-API); leer, wenn die Statistik nicht erreichbar ist."""
-        out = {}
+    def plays(self, show_ids, days=730, step=90):
+        """Abrufe je Folge der letzten zwei Jahre (Statistik-API in 90-Tage-Fenstern summiert; ein Zeitraum ab 2015 lehnt
+        Spreaker mit 400 ab). Fenster, die scheitern, werden uebersprungen; leer, wenn die Statistik gar nicht lesbar ist."""
+        out, fails = {}, 0
         for sid in show_ids:
+            to = date.today()
+            while (date.today() - to).days < days:
+                frm = to - timedelta(days=step - 1)
+                try:
+                    for it in self.paged(f"/shows/{sid}/episodes/statistics/plays/totals?from={frm}&to={to}&limit=20"):
+                        eid = it.get("episode_id") or (it.get("episode") or {}).get("episode_id")
+                        nums = {k: v for k, v in it.items() if isinstance(v, (int, float)) and not isinstance(v, bool) and k not in ("episode_id", "show_id")}
+                        pl = sum(v for k, v in nums.items() if "play" in k.lower()) or sum(v for k, v in nums.items() if "download" in k.lower())
+                        if eid:
+                            out[int(eid)] = out.get(int(eid), 0) + int(pl)
+                except Exception as e:
+                    fails += 1
+                    if fails <= 3: print(f"Statistik Show {sid} {frm}..{to} nicht lesbar: {str(e)[:120]}")
+                to = frm - timedelta(days=1)
+        if not out:   # Rueckfall: Wochen-Top der Seite (sync_spreaker.py, gleicher Endpunkt mit 7 Tagen)
             try:
-                for it in self.paged(f"/shows/{sid}/episodes/statistics/plays/totals?from=2015-01-01&to={date.today()}&limit=50"):
-                    eid = it.get("episode_id") or (it.get("episode") or {}).get("episode_id")
-                    nums = {k: v for k, v in it.items() if isinstance(v, (int, float))}
-                    pl = sum(v for k, v in nums.items() if "play" in k.lower()) or sum(v for k, v in nums.items() if "download" in k.lower())
-                    if eid:
-                        out[int(eid)] = int(pl)
-            except Exception as e:
-                print(f"Statistik Show {sid} nicht lesbar: {str(e)[:120]}")
+                t = json.loads((ROOT / "data" / "top.json").read_text("utf-8"))
+                for l in (t.get("langs") or {}).values():
+                    for r in l: out[int(r["episode_id"])] = int(r.get("score") or 0)
+            except (OSError, ValueError, KeyError):
+                pass
         return out
 
 
