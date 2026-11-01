@@ -32,7 +32,7 @@ def _author_node(BASE, a, au):
     """Autor als Person-Knoten: hat die Person eine Entitaet (Claim oder Seitenautor), ist deren @id die eine Identitaet, das Profil haengt als sameAs daran."""
     eid = MEM.person_entity(a["handle"])
     if eid:
-        return {"@type": "Person", "@id": f"{BASE}/entity/{eid}/#entity", "name": a["name"], "url": au, "sameAs": [au + "#person"]}
+        return {"@type": "Person", "@id": f"{BASE}/entity/{eid}/#entity", "name": a["name"], "url": au}   # nur Identitaet; den vollen Knoten ergaenzt page() (complete_ld)
     return {"@type": "Person", "@id": au + "#person", "name": a["name"], "url": au}
 
 
@@ -115,7 +115,10 @@ def build(g, posts, people, api):
             ld = [{"@context": "https://schema.org", "@type": "BlogPosting", "@id": u + "#post", "mainEntityOfPage": u, "headline": p["title"], "description": p.get("summary") or "",
                    "inLanguage": lang, **({"image": p["images"][:6]} if p.get("html") and p.get("images") else ({"image": [i["url"] for i in wiki_images(p["body"])]} if wiki_images(p["body"]) else {})), "datePublished": iso(p["published"]), "dateModified": iso(p.get("updated") or p["published"]),
                    "author": [_author_node(BASE, a, au)] + [{"@type": "Person", "@id": f"{BASE}/community/u/{c['handle']}/#person", "name": pb[c["handle"]]["name"], "url": f"{BASE}/community/u/{c['handle']}/"} for c in cos],
-                   "about": [{"@id": f"{BASE}/entity/{t}/#entity"} for t in topics], "citation": [{"@type": "CreativeWork", "name": r["title"], "url": r["url"]} for r in refs]}] + _fld
+                   "about": [{"@id": f"{BASE}/entity/{t}/#entity"} for t in topics], "citation": [{"@type": "CreativeWork", "name": r["title"], "url": r["url"]} for r in refs],
+                   "publisher": {"@id": f"{BASE}/#org"}}] + _fld + [{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [   # T4: Verlag und Brotkrumen
+                       {"@type": "ListItem", "position": 1, "name": "M365.FM", "item": f"{BASE}/"}, {"@type": "ListItem", "position": 2, "name": a["name"], "item": au},
+                       {"@type": "ListItem", "position": 3, "name": "Blog", "item": au + "blog/"}, {"@type": "ListItem", "position": 4, "name": p["title"], "item": u}]}]
             noidx = False if p.get("html") else p.get("votes", 0) < INDEX_VOTES   # fruehere Blogbeitraege bleiben fuer Google sichtbar
             if p.get("tr_of"):
                 noidx = not p.get("tr_index")   # Sprachfassungen: nur nach Freigabe je Sprache (data/blog_tr.json "index") indexierbar - an genau einer Stelle entschieden

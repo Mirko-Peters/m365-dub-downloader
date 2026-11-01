@@ -61,6 +61,7 @@ def get(lang, ep_id=None, title=None):
 def sections(keypoints, faq, lang):
     """Kernpunkte-Kasten und FAQ-Bereich (mit FAQPage-Schema) aus den getrennten Feldern -> (kp_html, faq_html, jsonld_liste)."""
     t = L.get(lang, L["en"])
+    faq = [x for x in (faq or []) if isinstance(x, dict) and str(x.get("q") or "").strip() and str(x.get("a") or "").strip()]   # T4: keine Frage ohne Antwort (Schema-Fehler)
     kp = (f'<aside class="kp" aria-label="{esc(t[0])}"><h2>{esc(t[0])}</h2><ul>' + "".join(f"<li>{esc(x)}</li>" for x in (keypoints or [])) + "</ul></aside>") if keypoints else ""
     faq_html = (f'<section class="faq"><h2>{esc(t[2])}</h2>' + "".join(f"<details><summary>{esc(x['q'])}</summary><p>{esc(x['a'])}</p></details>" for x in faq) + "</section>") if faq else ""
     ld = [{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": x["q"], "acceptedAnswer": {"@type": "Answer", "text": x["a"]}} for x in faq]}] if faq else []
