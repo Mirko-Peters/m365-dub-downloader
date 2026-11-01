@@ -11,6 +11,7 @@ dom = (ROOT / "domain.txt").read_text().strip() if (ROOT / "domain.txt").exists(
 HOSTS = {dom} if dom else set()
 
 
+SOFT = []   # Links, die der Worker nur auf eine Uebersicht leitet
 R2OUT = ROOT / "r2out"   # uebersetzte Seiten liegen im R2-Bucket (Paket 20), der Site-Worker liefert sie unter derselben Adresse aus
 _RD = DOCS / "show" / "redirects.json"
 REDIR = __import__("json").loads(_RD.read_text("utf-8")) if _RD.exists() else {}   # alte Podpage-Adressen -> Ziel (301 im Site-Worker)
@@ -27,6 +28,10 @@ def _exists(path):
     if to and to.rstrip("/") != p0: return _exists(to)
     m = _LEP.match(path)
     if m: return (DOCS / "show" / "episodes" / m.group(2) / "index.html").exists()
+    m = re.match(r"^/m365-fm-podcast/([a-z0-9-]+)/?$", path)   # Regeln des Site-Workers (sitewrk/index.js legacyTarget)
+    if m: return (DOCS / "show" / "episodes" / m.group(1) / "index.html").exists()
+    if re.match(r"^/categories(/|$)", path): return True
+    if re.match(r"^/(blog|videos|p)/", path): SOFT.append(path); return True   # 301 auf /show/: erreichbar, aber nur die Uebersicht
     return False
 
 
@@ -71,6 +76,7 @@ orph = [str(p.parent.relative_to(DOCS)) for p in eps if inbound.get(p, 0) < 2]
 art = [str(p.parent.relative_to(DOCS)) for p in eps if "class=article" in p.read_text(encoding="utf-8")]
 no_ilink = [a for a in art if ep_links.get("/" + a + "/", 0) == 0]
 print(f"{len(pages)} Seiten geprüft | kaputte interne Links: {len(broken)} | Links in Artikeln in falscher Sprache: {len(wrong_lang)}")
+print(f"Links, die nur per 301 auf eine Übersicht führen (/blog/…, /videos/… ohne Treffer): {len(SOFT)}")
 print(f"Folgenseiten: {len(eps)} | mit <2 eingehenden Links: {len(orph)} | Artikel: {len(art)} | Artikel ohne automatische interne Links: {len(no_ilink)}")
 for b in broken[:15]:
     print("  KAPUTT", b)

@@ -487,6 +487,8 @@ def build(g):
                      ("/courses", "/glossary/"), ("/store", "/show/")):
         rd.setdefault(old, new)
     for e in eps: rd.setdefault(f"/videos/{e['slug']}", f"/show/episodes/{e['slug']}/")   # alte Video-Adressen mit Folgen-Slug direkt auf die Folge, der Rest auf /show/
+    for p in bposts:   # alte Beitraege, in Show Notes oft ohne /blog/ verlinkt: /<slug> direkt auf den Beitrag (Folgen und Seiten haben Vorrang)
+        if f"/{p['slug']}" not in rd: add(f"/{p['slug']}", f"/community/u/mirko-p/blog/{p['slug']}/")
     for old, new in gmerge.items():   # zusammengefuehrte Personen: alte Entitaets-Adressen (alle Sprachpfade) auf die eine Entitaet
         oid = old + "-guest" if old in baseids else old
         for pre in [""] + [f"/{l}" for l in LG]:

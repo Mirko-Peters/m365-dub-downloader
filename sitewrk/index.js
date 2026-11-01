@@ -22,7 +22,11 @@ const MAPPABLE = (p) => p !== "/" && !/\.[a-z0-9]{2,5}$/i.test(p) && !/^\/(asset
 async function legacyTarget(p0) {
   if (!MAPPABLE(p0)) return "";
   const map = await redirectMap();
-  return map[p0] || map[p0.toLowerCase()] || (/^\/(blog|videos|p)\//.test(p0) ? "/show/" : "");
+  if (map[p0] || map[p0.toLowerCase()]) return map[p0] || map[p0.toLowerCase()];
+  const m = /^\/m365-fm-podcast\/([a-z0-9-]+)$/.exec(p0);   // T8: Podpage-Folgenadressen unter dem Shownamen
+  if (m) return "/show/episodes/" + m[1] + "/";
+  if (/^\/categories(\/|$)/.test(p0)) return "/show/episodes/";   // T8: Podpage-Kategorien -> Folgenliste
+  return /^\/(blog|videos|p)\//.test(p0) ? "/show/" : "";
 }
 
 export default {
