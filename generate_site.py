@@ -1485,7 +1485,7 @@ def build():
          f"- Programmatic access: [OpenAPI]({BASE}/openapi.json), [MCP server card]({BASE}/.well-known/mcp/server-card.json), [A2A agent card]({BASE}/.well-known/agent-card.json), [auth.md]({BASE}/auth.md)", "",
          "## Languages"]
     for l in active:
-        L.append(f"- [{LANGS[l][0]}]({BASE}/{l}/): {len(by_lang[l])} episodes – topics: " + ", ".join(cat_name(c, l) for c in ORDER if c in catidx[l]))
+        L.append(f"- [{LANGS[l][0]}]({BASE}/{l}/): {len(by_lang[l])} episodes – list in [{l}/llms.txt]({BASE}/{l}/llms.txt) – topics: " + ", ".join(cat_name(c, l) for c in ORDER if c in catidx[l]))
     L += ["", "## Topics (English labels; localized per language)"]
     for c in ORDER:
         L.append(f"- {cat_name(c, 'en')}: " + ", ".join(f"[{l}]({cat_url(l, c)})" for l in active if c in catidx[l]))
@@ -1515,6 +1515,16 @@ def build():
             F.append(f"- [{strip_tags(x['e']['title'])}]({url_of(x)}) – {x['date']} – " + short(parse_desc(x["e"]["desc"])[0], 200))
         F.append("")
     write("llms-full.txt", "\n".join(F))
+    # T16: je Sprache eine eigene Liste (Folgen und freigegebene Blog-Uebersetzungen), damit KI-Suchen die Sprachfassungen direkt finden
+    for l in active:
+        _tr = sorted([q for q in _posts if q.get("lang") == l and q.get("tr_of") and q.get("tr_index")], key=lambda q: -(q.get("published") or 0))
+        LL = [f"# M365.FM – {LANGS[l][0]} ({l})", "", f"> {summ}", "", f"Language home: {BASE}/{l}/ · English overview: {BASE}/llms.txt", "",
+              f"## Episodes ({len(by_lang[l])})", ""]
+        LL += [f"- [{strip_tags(x['e']['title'])}]({url_of(x)}) – {x['date']} – " + short(parse_desc(x["e"]["desc"])[0], 200) for x in by_lang[l]]
+        if _tr:
+            LL += ["", f"## Blog ({len(_tr)} translated articles by Mirko Peters)", ""]
+            LL += [f"- [{q['title']}]({BASE}/{l}/community/u/{q['handle']}/blog/{q['slug']}/)" + (f" – {(q.get('summary') or '')[:200]}" if q.get("summary") else "") for q in _tr]
+        write(f"{l}/llms.txt", "\n".join(LL) + "\n")
     feed = [{"id": x["vid"], "language": l, "title": strip_tags(x["e"]["title"]), "url": url_of(x), "date": x["date"], "summary": short(parse_desc(x["e"]["desc"])[0], 300),
              "categories": [cat_name(c, "en") for c in ORDER if c in cat_of[x["vid"]]], "tags": tagraw[l][x["vid"]], "youtube": f"https://youtu.be/{x['vid']}",
              "spreaker": f"https://www.spreaker.com/episode/{x['eid']}", "alternates": {k: url_of(v) for k, v in by_vid[x["vid"]].items()}}
