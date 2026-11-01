@@ -229,21 +229,20 @@ def bare_title(t):
         t = u
 
 
-def seo_title(t, limit=62, hard=70):
+def seo_title(t, limit=62, hard=78):
     """T7: eine Titel-Vorlage fuer alle Seiten. Marke genau einmal hinten (' | M365.FM'), wenn der Titel sie nicht schon enthaelt
-    und alles in ~62 Zeichen passt; sonst der volle Titel ohne Marke (bis 70 Zeichen). Laengere Titel werden an Doppelpunkt,
-    Gedankenstrich oder senkrechtem Strich gekuerzt (laengster passender Teil), erst zuletzt an einer Wortgrenze mit Auslassungszeichen."""
+    und alles in ~62 Zeichen passt; sonst der volle Titel ohne Marke (bis 78 Zeichen). Laengere Titel verlieren erst einen Anhang
+    hinter dem letzten ' | ' oder ' – ' (wenn mindestens 40 Zeichen bleiben), sonst Schnitt an einer Wortgrenze mit Auslassungszeichen.
+    Nie Schnitt am ersten Doppelpunkt: 'Microsoft Certified: …' wuerde sonst auf vielen Seiten gleich lauten."""
     b = bare_title(t)
     has = bool(re.search(r"M365[ .]?FM", b, re.I))
     tag = lambda x: x if has else f"{x} | {BRAND}"
     if len(tag(b)) <= limit or (has and len(b) <= hard): return tag(b)
     if len(b) <= hard: return b
-    heads = {h.strip() for sep in (": ", " – ", " — ", " | ", " - ") if sep in b for h in (b.split(sep)[0], b.rsplit(sep, 1)[0])}
-    heads = sorted((h for h in heads if len(h) >= 15), key=len, reverse=True)
-    for h in heads:
-        if len(tag(h)) <= (hard if has else limit): return tag(h)
-    for h in heads:
-        if len(h) <= hard: return h
+    for sep in (" | ", " – ", " — "):
+        if sep in b:
+            head = b.rsplit(sep, 1)[0].strip()
+            if 40 <= len(head) <= hard: return tag(head) if len(tag(head)) <= limit else head
     return b[: hard - 2].rsplit(" ", 1)[0].rstrip(",;:–—-") + "…"
 
 

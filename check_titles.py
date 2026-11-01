@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Prueft <title> und meta description im erzeugten HTML (docs/ und r2out/, Ticket T7). Fehler (Exit 1): leerer Titel, Marke doppelt
-(M365.FM/M365 FM mehr als einmal), Titel ueber 75 Zeichen, Beschreibung ueber 165 Zeichen. Hinweise: gleiche Titel auf mehreren
+(M365.FM/M365 FM mehr als einmal), Titel ueber 85 Zeichen, Beschreibung ueber 165 Zeichen. Hinweise: gleiche Titel auf mehreren
 indexierbaren Seiten derselben Sprache, Titel mit Auslassungszeichen, fehlende Beschreibung."""
 import html, re, sys
 from collections import Counter, defaultdict
@@ -34,7 +34,7 @@ def main():
                 hint[k] += 1; len(ex[k]) < 5 and ex[k].append(rel)
             if not t: e("Titel fehlt")
             elif len(BRAND.findall(t)) > 1: e("Marke doppelt im Titel")
-            elif len(t) > 75: e("Titel ueber 75 Zeichen")
+            elif len(t) > 85: e("Titel ueber 85 Zeichen")
             if t.endswith("…"): w("Titel mit Auslassungszeichen")
             if dd is None or not dd.strip(): w("Beschreibung fehlt")
             elif len(dd) > 165: e("Beschreibung ueber 165 Zeichen")
