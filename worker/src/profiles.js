@@ -4,6 +4,7 @@ import { sanitize } from "./wiki.js";
 import { cleanText, rateLimit } from "./util.js";
 import { baseIds, knownIds, validate, trustedUser, entityMap } from "./entities.js";
 import { findExperts } from "./experts.js";
+import { computeLevels } from "./levels.js";
 
 export const PROGRAMS = ["mvp", "mct", "rd", "msa", "ms_employee", "partner"];
 export const RELATIONS = ["colleague", "manager", "report", "client", "trainer", "student", "cospeaker", "podcast", "community", "mentor", "other"];
@@ -102,27 +103,6 @@ export async function autoVerifyCert(url, ent, name) {
   } catch { return false; }
 }
 
-// Bestaetigte (abgeleitete) Expertise: Themen aus bestaetigten Speaker-Sessions und aus geprueften Zertifikaten - nicht selbst gewaehlt
-const TOPIC_T = ["product", "platform", "concept", "category"];
-// via: session (bestaetigte Session), cert (geprueftes Zertifikat), post (eigene veroeffentlichte Beitraege zum Thema)
-export async function derivedExpertise(db, uid, handle, map, pre) {
-  const out = new Map();
-  const nm = ((await db.prepare("SELECT lower(name) n FROM users WHERE id=?").bind(uid).first())?.n) || "";
-  const rows = pre || (await db.prepare("SELECT s.topics,s.speakers,e.owner_id oid FROM event_sessions s JOIN events e ON e.id=s.event_id WHERE s.status='live' AND s.topics<>'[]'").all()).results || [];   // pre: im Export einmal fuer alle Profile geladen
-  for (const r of rows) {
-    let sp = [], tp = []; try { sp = JSON.parse(r.speakers || "[]"); tp = JSON.parse(r.topics || "[]"); } catch { continue; }
-    // zaehlt: per Handle oder Name zugeordnet; bestaetigt, oder vom Veranstalter selbst (Organisator nimmt seine eigene Session an)
-    if (!sp.some((x) => ((handle && x.h === handle) || (!x.h && nm && String(x.n || "").toLowerCase() === nm)) && (x.s === "confirmed" || r.oid === uid))) continue;
-    for (const t of tp) { const o = out.get(t) || { via: "session", n: 0 }; o.n++; out.set(t, o); }
-  }
-  // Themen (Entitaeten) der eigenen veroeffentlichten Community-Beitraege: Blog, Bibliothek, Podcast, Video, Gaeste-Boerse
-  const posts = (await db.prepare("SELECT topics FROM blog_posts WHERE user_id=?1 AND status='live' UNION ALL SELECT b.topics FROM blog_coauthors c JOIN blog_posts b ON b.id=c.post_id WHERE c.user_id=?1 AND c.status='confirmed' AND b.status='live' UNION ALL SELECT e.topics FROM item_guests g JOIN pod_episodes e ON g.kind='podcast' AND e.id=g.item_id WHERE g.user_id=?1 AND g.status='confirmed' AND e.status='published' UNION ALL SELECT v.topics FROM item_guests g JOIN yt_videos v ON g.kind='video' AND v.id=g.item_id WHERE g.user_id=?1 AND g.status='confirmed' AND v.status='published' UNION ALL SELECT topics FROM lib_items WHERE user_id=?1 AND status='live' UNION ALL SELECT topics FROM pod_episodes WHERE user_id=?1 AND status='published' UNION ALL SELECT topics FROM yt_videos WHERE user_id=?1 AND status='published' UNION ALL SELECT topics FROM guest_listings WHERE user_id=?1 AND active=1").bind(uid).all()).results || [];
-  for (const r of posts) { let tp = []; try { tp = JSON.parse(r.topics || "[]"); } catch { continue; } for (const t of tp) if (map.has(t) && !out.has(t)) out.set(t, { via: "post", n: 1 }); else if (out.has(t) && out.get(t).via === "post") out.get(t).n++; }
-  const certs = ((await db.prepare("SELECT c.eid FROM certs c JOIN cert_check k ON k.user_id=c.user_id AND k.eid=c.eid WHERE c.user_id=? AND k.status='verified'").bind(uid).all()).results || []).map((r) => r.eid);
-  for (const c of certs) for (const [, to] of (map.get(c)?.rel || [])) if (TOPIC_T.includes(map.get(to)?.type) && !out.has(to)) out.set(to, { via: "cert", n: 1 });
-  return out;
-}
-
 // Uebersetzungen von Kurzzeile und Bio (Sprachcode -> {headline, about}); Grundtext bleibt in profiles
 const LANG = /^[a-z]{2}(-[A-Z]{2})?$/;
 export function cleanI18n(raw) {
@@ -147,7 +127,9 @@ const assignable = (mine, role) => ORG_ROLES.includes(role) && (mine === "owner"
 async function personView(db, uid, viewer) {
   const p = await db.prepare("SELECT p.*,u.name,u.bio FROM profiles p JOIN users u ON u.id=p.user_id WHERE p.user_id=? AND u.banned=0").bind(uid).first(); if (!p) return null;
   const q = async (sql, ...b) => (await db.prepare(sql).bind(...b).all()).results || [];
-  const exp = await q("SELECT e.eid e,e.level,e.verified,(SELECT COUNT(*) FROM endorsements n WHERE n.owner_id=e.owner_id AND n.eid=e.eid) endorsed, (SELECT COUNT(*) FROM endorsements n2 WHERE n2.owner_id=e.owner_id AND n2.eid=e.eid AND n2.by_id=?) me FROM expertise e WHERE e.owner_type='u' AND e.owner_id=? ORDER BY e.verified DESC,e.level DESC", +viewer || 0, uid);
+  // Stufe und Punkte setzt das System (levels.js); ev = Belege je Art (z. B. {blog: 2, session: 1})
+  const exp = await q("SELECT e.eid e,e.level,e.verified,COALESCE(s.score,0) score,COALESCE(s.endorsed_ev,0) endorsed_ev,(SELECT COUNT(*) FROM endorsements n WHERE n.owner_id=e.owner_id AND n.eid=e.eid) endorsed, (SELECT COUNT(*) FROM endorsements n2 WHERE n2.owner_id=e.owner_id AND n2.eid=e.eid AND n2.by_id=?) me FROM expertise e LEFT JOIN expertise_score s ON s.owner_id=e.owner_id AND s.eid=e.eid WHERE e.owner_type='u' AND e.owner_id=? ORDER BY e.level DESC,s.score DESC,e.verified DESC", +viewer || 0, uid);
+  const evs = {}; for (const r of await q("SELECT eid,kind,COUNT(*) n FROM expertise_evidence WHERE owner_id=? GROUP BY eid,kind", uid)) (evs[r.eid] = evs[r.eid] || {})[r.kind] = r.n;
   const programs = await q("SELECT program p,year,url,verified FROM programs WHERE owner_type='u' AND owner_id=?", uid);
   const certs = (await q("SELECT c.eid e,c.year,c.url,COALESCE(k.status,'') st,(SELECT COUNT(*) FROM cert_endorse n WHERE n.owner_id=c.user_id AND n.eid=c.eid) endorsed,(SELECT COUNT(*) FROM cert_endorse n2 WHERE n2.owner_id=c.user_id AND n2.eid=c.eid AND n2.by_id=?) me FROM certs c LEFT JOIN cert_check k ON k.user_id=c.user_id AND k.eid=c.eid WHERE c.user_id=? ORDER BY endorsed DESC, (k.status='verified') DESC, c.year DESC", +viewer || 0, uid)).map((x) => ({ e: x.e, year: x.year, url: x.url, verified: x.st === "verified", pending: x.st === "pending", rejected: x.st === "rejected", endorsed: x.endorsed, me: !!x.me }));
   const channels = await q("SELECT kind,url,feed,followers FROM channels WHERE owner_type='u' AND owner_id=?", uid);
@@ -163,7 +145,7 @@ async function personView(db, uid, viewer) {
   const contact = {}; let priv = null;
   if (pv) { for (const k of CF) if (pv["vis_" + k] === "all" && pv[k]) contact[k] = pv[k]; if (+viewer === uid) priv = Object.fromEntries([...CF.map((k) => [k, pv[k]]), ...CF.map((k) => ["vis_" + k, pv["vis_" + k]])]); }
   return { type: "u", i18n: await readI18n(db, uid), contact, ...(priv ? { private: priv } : {}), img: im?.updated || 0, company_eid: pce, id: uid, handle: p.handle, name: p.name, bio: p.bio, headline: p.headline, about: p.about, company: p.company, job: p.job, country: p.country, public: !!p.public, show_org: !!p.show_org,
-    expertise: exp.map((e) => ({ ...e, verified: !!e.verified, me: !!e.me })), programs: programs.map((x) => ({ ...x, verified: !!x.verified })), certs, channels, org, contrib, counts, badges, recs,
+    expertise: exp.map((e) => ({ ...e, verified: !!e.verified, me: !!e.me, ev: evs[e.e] || {} })), programs: programs.map((x) => ({ ...x, verified: !!x.verified })), certs, channels, org, contrib, counts, badges, recs,
     items: await itemsOf(db, "i.owner_type='u' AND i.owner_id=?", [uid], viewer, 8) };
 }
 export async function ensureFeedCols(db) {
@@ -194,8 +176,9 @@ async function orgView(db, oid, viewer) {
 }
 
 async function replaceLists(db, t, id, { exp, prog, chan, certs }) {
-  const ops = [db.prepare("DELETE FROM expertise WHERE owner_type=? AND owner_id=? AND eid NOT IN (SELECT value FROM json_each(?))").bind(t, id, JSON.stringify(exp.map((x) => x.e)))];
-  for (const x of exp) ops.push(db.prepare("INSERT INTO expertise(owner_type,owner_id,eid,level) VALUES(?,?,?,?) ON CONFLICT(owner_type,owner_id,eid) DO UPDATE SET level=excluded.level").bind(t, id, x.e, x.level));
+  const ops = [];   // exp = null: Expertise von Personen setzt das System (levels.js); Firmen tragen ihre Themen weiter selbst ein
+  if (exp) ops.push(db.prepare("DELETE FROM expertise WHERE owner_type=? AND owner_id=? AND eid NOT IN (SELECT value FROM json_each(?))").bind(t, id, JSON.stringify(exp.map((x) => x.e))));
+  for (const x of exp || []) ops.push(db.prepare("INSERT INTO expertise(owner_type,owner_id,eid,level) VALUES(?,?,?,?) ON CONFLICT(owner_type,owner_id,eid) DO UPDATE SET level=excluded.level").bind(t, id, x.e, x.level));
   ops.push(db.prepare("DELETE FROM programs WHERE owner_type=? AND owner_id=? AND program NOT IN (SELECT value FROM json_each(?))").bind(t, id, JSON.stringify(prog.map((x) => x.p))));
   for (const x of prog) ops.push(db.prepare("INSERT INTO programs(owner_type,owner_id,program,year,url) VALUES(?,?,?,?,?) ON CONFLICT(owner_type,owner_id,program) DO UPDATE SET year=excluded.year, url=excluded.url, verified=CASE WHEN programs.url=excluded.url THEN programs.verified ELSE 0 END").bind(t, id, x.p, x.year, x.url));
   ops.push(db.prepare("DELETE FROM channels WHERE owner_type=? AND owner_id=? AND url NOT IN (SELECT value FROM json_each(?))").bind(t, id, JSON.stringify(chan.map((x) => x.url))));
@@ -215,11 +198,9 @@ export async function refreshProfilesExport(env) {
     const os = (await db.prepare("SELECT id FROM orgs WHERE public=1 ORDER BY created DESC LIMIT 200").all()).results || [];
     const people = [], orgs = [], errs = [];
     const emap = await entityMap(env);
-    const sess = (await db.prepare("SELECT s.topics,s.speakers,e.owner_id oid FROM event_sessions s JOIN events e ON e.id=s.event_id WHERE s.status='live' AND s.topics<>'[]'").all()).results || [];   // einmal fuer alle Profile
     const one = async (u) => {
       const v = await personView(db, u.user_id, 0); if (!v) return null;
-      let der = new Map(); try { der = await derivedExpertise(db, u.user_id, v.handle, emap, sess); } catch { /* Profil bleibt auch ohne abgeleitete Themen im Export */ }
-      for (const [eid, d] of der) if (emap.has(eid)) { const ex = v.expertise.find((e) => e.e === eid); if (ex) ex.via = d.via; else v.expertise.push({ e: eid, level: 2, verified: false, endorsed: 0, me: false, via: d.via, confirmed: true }); }   // bestaetigte Expertise aus Sessions/Zertifikaten ergaenzen
+      v.expertise = v.expertise.filter((e) => emap.has(e.e));
       delete v.id; return v;
     };
     for (let k = 0; k < us.length; k += 6) for (const v of await Promise.all(us.slice(k, k + 6).map((u) => one(u).catch((e) => { errs.push(String((e && e.message) || e).slice(0, 200)); return null; })))) if (v) people.push(v);   // in Gruppen parallel, Reihenfolge bleibt; ein defektes Profil stoppt den Export nicht
@@ -342,8 +323,7 @@ export async function handleProfiles(env, request, url, path, user, J) {
     const taken = handle ? await db.prepare("SELECT user_id FROM profiles WHERE handle=? AND user_id<>?").bind(handle, user.id).first() : null;
     if (taken || (handle && (await db.prepare("SELECT 1 x FROM orgs WHERE handle=?").bind(handle).first()))) return J({ error: "handle_taken" }, 409);
     const ch = await checkChannels(b.channels); if (ch.err) return J({ error: ch.err }, 400);
-    const ex = await checkExpertise(env, b.expertise); if (ex.err) return J({ error: ex.err }, 400);
-    const pr = checkPrograms(b.programs, false); if (pr.err) return J({ error: pr.err }, 400);
+    const pr = checkPrograms(b.programs, false); if (pr.err) return J({ error: pr.err }, 400);   // Expertise kommt nicht mehr aus dem Formular (levels.js)
     const known = await knownIds(env), certs = [];
     for (const c of (Array.isArray(b.certs) ? b.certs : []).slice(0, 20)) {
       const u = cleanUrl(c?.url, null); if (!ID.test(c?.e || "") || !known.has(c.e) || u === null) return J({ error: "bad_cert" }, 400);
@@ -367,7 +347,7 @@ export async function handleProfiles(env, request, url, path, user, J) {
         .bind(user.id, city, zip, street, email, phone, V(vis.city), V(vis.zip), V(vis.street), V(vis.email), V(vis.phone), now()).run();
     }
     const oldC = Object.fromEntries(((await db.prepare("SELECT eid,url FROM certs WHERE user_id=?").bind(user.id).all()).results || []).map((x) => [x.eid, x.url]));
-    await replaceLists(db, "u", user.id, { exp: ex.list, prog: pr.list, chan: ch.list, certs });
+    await replaceLists(db, "u", user.id, { exp: null, prog: pr.list, chan: ch.list, certs });
     {   // Pruefstatus: entfernte Zertifikate/geaenderte Nachweise zuruecksetzen, neue Nachweise pruefen
       const keep = new Set(certs.map((c) => c.e));
       for (const e of Object.keys(oldC)) if (!keep.has(e)) await db.prepare("DELETE FROM cert_check WHERE user_id=? AND eid=?").bind(user.id, e).run();
@@ -407,10 +387,11 @@ export async function handleProfiles(env, request, url, path, user, J) {
     const b = await body(); const o = await resolve(db, "u:" + b.handle);
     if (!o || !ID.test(b.e || "") || o.id === user.id) return J({ error: "bad_request" }, 400);
     if (!(await db.prepare("SELECT 1 x FROM expertise WHERE owner_type='u' AND owner_id=? AND eid=?").bind(o.id, b.e).first())) return J({ error: "not_found" }, 404);
+    if (!(await rateLimit(db, `endorse:${user.id}`, 30, 86400))) return J({ error: "rate_limit" }, 429);   // auch Zuruecknahmen (jede loest eine Neuberechnung aus)
     if (method === "POST") {
-      if (!(await rateLimit(db, `endorse:${user.id}`, 30, 86400))) return J({ error: "rate_limit" }, 429);
       await db.prepare("INSERT OR IGNORE INTO endorsements(owner_id,eid,by_id,created) VALUES(?,?,?,?)").bind(o.id, b.e, user.id, now()).run();
     } else await db.prepare("DELETE FROM endorsements WHERE owner_id=? AND eid=? AND by_id=?").bind(o.id, b.e, user.id).run();
+    await computeLevels(db, { uid: o.id, eid: b.e }).catch(() => 0);   // Stufe sofort nachziehen (Evangelist ab 100, Master ab 1000 Bestaetigungen)
     return J({ ok: true });
   }
   if (path === "/api/cert-endorse" && (method === "POST" || method === "DELETE")) {
@@ -580,7 +561,7 @@ export async function handleProfiles(env, request, url, path, user, J) {
     const b = await body(), o = await resolve(db, b.owner); if (!o) return J({ error: "not_found" }, 404);
     const v = b.value ? 1 : 0;
     if (b.kind === "program" && PROGRAMS.includes(b.key)) await db.prepare("UPDATE programs SET verified=? WHERE owner_type=? AND owner_id=? AND program=?").bind(v, o.t, o.id, b.key).run();
-    else if (b.kind === "exp" && ID.test(b.key || "")) await db.prepare("UPDATE expertise SET verified=? WHERE owner_type=? AND owner_id=? AND eid=?").bind(v, o.t, o.id, b.key).run();
+    else if (b.kind === "exp" && ID.test(b.key || "")) { await db.prepare("UPDATE expertise SET verified=? WHERE owner_type=? AND owner_id=? AND eid=?").bind(v, o.t, o.id, b.key).run(); if (o.t === "u") await computeLevels(db, { uid: o.id, eid: b.key }).catch(() => 0); }
     else if (b.kind === "cert" && o.t === "u" && ID.test(b.key || "")) {
       if (v) await db.prepare("INSERT INTO cert_check(user_id,eid,status,via,created) VALUES(?,?,'verified','admin',?) ON CONFLICT(user_id,eid) DO UPDATE SET status='verified',via='admin',created=excluded.created").bind(o.id, b.key, now()).run();
       else await db.prepare("INSERT INTO cert_check(user_id,eid,status,via,created) VALUES(?,?,'rejected','admin',?) ON CONFLICT(user_id,eid) DO UPDATE SET status='rejected',via='admin',created=excluded.created").bind(o.id, b.key, now()).run();
@@ -613,7 +594,7 @@ export async function deleteUserData(db, id) {
     db.prepare("DELETE FROM org_members WHERE user_id=?").bind(id),
     db.prepare("DELETE FROM item_votes WHERE user_id=? OR item_id IN (SELECT id FROM feed_items WHERE owner_type='u' AND owner_id=?)").bind(id, id),
     db.prepare("DELETE FROM feed_items WHERE owner_type='u' AND owner_id=?").bind(id), db.prepare("DELETE FROM channels WHERE owner_type='u' AND owner_id=?").bind(id),
-    db.prepare("DELETE FROM expertise WHERE owner_type='u' AND owner_id=?").bind(id), db.prepare("DELETE FROM programs WHERE owner_type='u' AND owner_id=?").bind(id),
+    db.prepare("DELETE FROM expertise WHERE owner_type='u' AND owner_id=?").bind(id), db.prepare("DELETE FROM expertise_evidence WHERE owner_id=?").bind(id), db.prepare("DELETE FROM expertise_score WHERE owner_id=?").bind(id), db.prepare("DELETE FROM programs WHERE owner_type='u' AND owner_id=?").bind(id),
     db.prepare("DELETE FROM profile_private WHERE user_id=?").bind(id), db.prepare("DELETE FROM profile_i18n WHERE user_id=?").bind(id), db.prepare("DELETE FROM certs WHERE user_id=?").bind(id), db.prepare("DELETE FROM cert_check WHERE user_id=?").bind(id), db.prepare("DELETE FROM cert_endorse WHERE owner_id=? OR by_id=?").bind(id, id), db.prepare("DELETE FROM endorsements WHERE owner_id=? OR by_id=?").bind(id, id),
     db.prepare("DELETE FROM profiles WHERE user_id=?").bind(id),
     db.prepare("DELETE FROM entity_rev WHERE user_id=? AND status IN ('pending','rejected')").bind(id), db.prepare("UPDATE entity_rev SET user_id=0 WHERE user_id=?").bind(id));

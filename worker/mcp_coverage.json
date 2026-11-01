@@ -22,6 +22,9 @@
   "/api/admin/entity/pending": {
    "skip": "Admin-Funktionen: bewusst nicht per KI-Token; Admin-Listen laufen über list_*_todo, list_event_transfers"
   },
+  "/api/admin/expertise-sync": {
+   "skip": "Admin-Funktionen: bewusst nicht per KI-Token; Stufen-Neuberechnung läuft als Cron (syncExpertise) und über die Verwaltung"
+  },
   "/api/admin/feed-hide": {
    "skip": "Admin-Funktionen: bewusst nicht per KI-Token; Admin-Listen laufen über list_*_todo, list_event_transfers"
   },
@@ -34,8 +37,20 @@
   "/api/admin/panel/import-entities": {
    "skip": "Admin-Funktionen: bewusst nicht per KI-Token; Verwaltung ueber /admin/"
   },
+  "/api/admin/panel/ops": {
+   "skip": "Admin-Funktionen: bewusst nicht per KI-Token; Verwaltung unter /admin/"
+  },
   "/api/admin/panel/overview": {
    "skip": "Admin-Funktionen: bewusst nicht per KI-Token; Verwaltung ueber /admin/"
+  },
+  "/api/admin/panel/topic": {
+   "skip": "Admin-Funktionen: bewusst nicht per KI-Token; Verwaltung unter /admin/"
+  },
+  "/api/admin/panel/tr-queue": {
+   "skip": "Admin-Funktionen: bewusst nicht per KI-Token; Verwaltung unter /admin/"
+  },
+  "/api/admin/panel/translations": {
+   "skip": "Admin-Funktionen: bewusst nicht per KI-Token; Verwaltung unter /admin/"
   },
   "/api/admin/podcast": {
    "skip": "Admin-Funktionen: bewusst nicht per KI-Token; Admin-Listen laufen über list_*_todo, list_event_transfers"
@@ -256,6 +271,9 @@
    "tools": [
     "send_entity_invites"
    ]
+  },
+  "/api/episodes/export": {
+   "skip": "Datenexport des Folgen-Registers fuer Seitenbau und Agenten (episodes.json der Seite bleibt die Agenten-Schnittstelle)"
   },
   "/api/event": {
    "tools": [
@@ -688,6 +706,15 @@
     "suggest_my_speaker_entries"
    ]
   },
+  "/api/topics/export": {
+   "skip": "Datenexport fuer Seitenbau und Agenten (Inhalt <-> Entitaet mit Gewicht); Lesetools nutzen die Entitaetsseiten/articles.json"
+  },
+  "/api/tr-queue": {
+   "skip": "Schnittstelle fuer die Uebersetzungs-Pipelines (translate_blog.py --queue): nur Schluessel, kein Inhalt"
+  },
+  "/api/translations/export": {
+   "skip": "Datenexport der Uebersetzungen fuer den Seitenbau (Paket 17/18)"
+  },
   "/api/ui-i18n": {
    "skip": "Seiten-Infrastruktur (kein Nutzerfunktion)"
   },
@@ -760,30 +787,6 @@
    "tools": [
     "vote_wish"
    ]
-  },
-  "/api/admin/panel/ops": {
-   "skip": "Admin-Funktionen: bewusst nicht per KI-Token; Verwaltung unter /admin/"
-  },
-  "/api/admin/panel/translations": {
-   "skip": "Admin-Funktionen: bewusst nicht per KI-Token; Verwaltung unter /admin/"
-  },
-  "/api/admin/panel/tr-queue": {
-   "skip": "Admin-Funktionen: bewusst nicht per KI-Token; Verwaltung unter /admin/"
-  },
-  "/api/tr-queue": {
-   "skip": "Schnittstelle fuer die Uebersetzungs-Pipelines (translate_blog.py --queue): nur Schluessel, kein Inhalt"
-  },
-  "/api/topics/export": {
-   "skip": "Datenexport fuer Seitenbau und Agenten (Inhalt <-> Entitaet mit Gewicht); Lesetools nutzen die Entitaetsseiten/articles.json"
-  },
-  "/api/admin/panel/topic": {
-   "skip": "Admin-Funktionen: bewusst nicht per KI-Token; Verwaltung unter /admin/"
-  },
-  "/api/episodes/export": {
-   "skip": "Datenexport des Folgen-Registers fuer Seitenbau und Agenten (episodes.json der Seite bleibt die Agenten-Schnittstelle)"
-  },
-  "/api/translations/export": {
-   "skip": "Datenexport der Uebersetzungen fuer den Seitenbau (Paket 17/18)"
   }
  }
 }
