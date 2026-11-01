@@ -33,7 +33,7 @@ def block(pid, lang, ep_url):
     t = L.get(lang, L["en"]); out = []
     for q in qs:
         u, title = ep_url(q)
-        ts = _mmss(q.get("time_s"))
+        ts = (("≈ " if q.get("time_est") and q.get("time_s") is not None else "") + _mmss(q.get("time_s")))
         src = (f' <a href="{esc(u)}{("#t=" + str(int(q["time_s"]))) if q.get("time_s") is not None else ""}">{esc(t[1])}{(": " + esc(title)) if title else ""}{(" (" + t[2] + " " + ts + ")") if ts else ""}</a>') if u else ""
         out.append(f'<figure class="en-quote" lang="{esc(q["lang"])}"><blockquote><p>{esc(q["text"])}</p></blockquote><figcaption class="mut">{src}</figcaption></figure>')
     css = "<style>.en-quote{margin:1em 0;border-inline-start:4px solid var(--ac);padding:.2em 1em}.en-quote blockquote{margin:0;font-size:1.05em}.en-quote figcaption{font-size:.9em}</style>"
@@ -73,7 +73,7 @@ def episode_block(eid, lang, base, ents=None):
     for q in qs:
         pid = q["person"]; e = (ents or {}).get(pid) or {}
         name = e.get("name") or pid.replace("-", " ").title()
-        ts = _mmss(q.get("time_s"))
+        ts = (("≈ " if q.get("time_est") and q.get("time_s") is not None else "") + _mmss(q.get("time_s")))
         out.append(f'<figure class="en-quote" lang="{esc(q["lang"])}"><blockquote><p>{esc(q["text"])}</p></blockquote><figcaption class="mut">'
                    f'<a href="{base}{_pfx(lang)}/entity/{esc(pid)}/">{esc(name)}</a>{(" · " + ts) if ts else ""}</figcaption></figure>')
         n = {"@context": "https://schema.org", "@type": "Quotation", "@id": f"{base}/entity/{pid}/#quote-{q['id']}", "text": q["text"], "inLanguage": q["lang"],

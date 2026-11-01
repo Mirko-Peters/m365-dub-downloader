@@ -93,7 +93,8 @@ def main(dry=False):
         q = {"id": qid, "person": pid, "text": text, "lang": lang, "episode_id": eid, "episode_slug": d.get("episode_slug") or ep.get("slug") or "",
              "time_s": int(float(ts)) if isinstance(ts, (int, float)) or str(ts or "").replace(".", "", 1).isdigit() else None,
              "about": [x for x in (d.get("entities") or []) if isinstance(x, str)][:8], "why": str(d.get("why") or "")[:200],
-             "source_video_id": d.get("source_video_id") or ep.get("source_video_id") or ep.get("youtube_video_id") or "", "src": src}
+             "source_video_id": d.get("source_video_id") or ep.get("source_video_id") or ep.get("youtube_video_id") or "", "src": src,
+             "time_est": str(ep.get("time_basis") or "") == "estimated"}
         if qid not in by:
             added.append(qid); q["imported"] = time.strftime("%Y-%m-%d", time.gmtime())
         by[qid] = {**by.get(qid, {}), **q}
