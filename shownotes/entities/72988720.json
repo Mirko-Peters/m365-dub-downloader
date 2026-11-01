@@ -1,0 +1,204 @@
+{
+ "episode_id": "72988720",
+ "slug": "azure-service-bus-simply-explained",
+ "title": "Azure Service Bus - Simply Explained",
+ "lang": "en",
+ "duration_s": 887,
+ "transcript_source": "data/en_transcripts/5727dc7b8d31.txt",
+ "time_basis": "estimated",
+ "entities": [
+  {
+   "slug": "azure-service-bus",
+   "name": "Azure Service Bus",
+   "type": "product",
+   "score": 100,
+   "mentions": 31,
+   "first_mention_s": 44,
+   "quote": "And as your service bus is Microsoft's version of that middleman",
+   "url": "https://www.m365.fm/entity/azure-service-bus/"
+  },
+  {
+   "slug": "message-broker",
+   "name": "Message broker",
+   "type": "concept",
+   "score": 75,
+   "mentions": 11,
+   "first_mention_s": 42,
+   "quote": "That middleman is called a message broker.",
+   "url": "https://www.m365.fm/entity/message-broker/"
+  },
+  {
+   "slug": "dead-lettering",
+   "name": "Dead-lettering",
+   "type": "concept",
+   "score": 65,
+   "mentions": 9,
+   "first_mention_s": 297,
+   "quote": "If the message keeps failing, it eventually gets moved to the dead letter queue.",
+   "url": "https://www.m365.fm/entity/dead-lettering/"
+  },
+  {
+   "slug": "apache-kafka",
+   "name": "Apache Kafka",
+   "type": "product",
+   "score": 50,
+   "mentions": 4,
+   "first_mention_s": 558,
+   "quote": "What about Kafka? That's a different conversation entirely.",
+   "url": "https://www.m365.fm/entity/apache-kafka/"
+  },
+  {
+   "slug": "azure-event-hubs",
+   "name": "Azure Event Hubs",
+   "type": "product",
+   "score": 45,
+   "mentions": 1,
+   "first_mention_s": 510,
+   "quote": "Event hubs is built for something completely different. High throughput event streaming.",
+   "url": "https://www.m365.fm/entity/azure-event-hubs/"
+  },
+  {
+   "slug": "azure-event-grid",
+   "name": "Azure Event Grid",
+   "type": "product",
+   "score": 40,
+   "mentions": 2,
+   "first_mention_s": 527,
+   "quote": "Event grid is the lightweight option, a pub subsystem for event-driven triggers.",
+   "url": "https://www.m365.fm/entity/azure-event-grid/"
+  },
+  {
+   "slug": "azure",
+   "name": "Microsoft Azure",
+   "type": "platform",
+   "score": 30,
+   "mentions": 5,
+   "first_mention_s": 125,
+   "quote": "Azure Service Bus is Microsoft's fully managed version of this reception desk.",
+   "url": "https://www.m365.fm/entity/azure/"
+  },
+  {
+   "slug": "azure-functions",
+   "name": "Azure Functions",
+   "type": "product",
+   "score": 20,
+   "mentions": 1,
+   "first_mention_s": 530,
+   "quote": "When a blob gets uploaded to storage, event grid can fire an azure function.",
+   "url": "https://www.m365.fm/entity/azure-functions/"
+  }
+ ],
+ "new_entities": [
+  {
+   "slug": "message-broker",
+   "name": "Message broker",
+   "type": "concept",
+   "mentions": 11,
+   "first_mention_s": 42,
+   "quote": "That middleman is called a message broker.",
+   "status": "review"
+  },
+  {
+   "slug": "apache-kafka",
+   "name": "Apache Kafka",
+   "type": "product",
+   "mentions": 4,
+   "first_mention_s": 558,
+   "quote": "What about Kafka? That's a different conversation entirely.",
+   "status": "review"
+  }
+ ],
+ "quotes": [
+  {
+   "text": "When two apps are decoupled, they can fail independently. If the receiver crashes, the sender doesn't even notice. The message just sits in the broker waiting.",
+   "speaker": "Mirko Peters",
+   "speaker_slug": "mirko-peters",
+   "time_s": 67,
+   "entities": [
+    "message-broker",
+    "azure-service-bus"
+   ],
+   "why": "Explains the core benefit of decoupling through a message broker."
+  },
+  {
+   "text": "If you're regularly sending data larger than that, you probably shouldn't be putting it in a message. Store the large data somewhere else and put a reference in the message.",
+   "speaker": "Mirko Peters",
+   "speaker_slug": "mirko-peters",
+   "time_s": 237,
+   "entities": [
+    "azure-service-bus"
+   ],
+   "why": "A practical design pattern for large payloads."
+  },
+  {
+   "text": "Service bus is for commands and business workflows, while Kafka is for events streaming and analytics. Many large systems use both.",
+   "speaker": "Mirko Peters",
+   "speaker_slug": "mirko-peters",
+   "time_s": 560,
+   "entities": [
+    "azure-service-bus",
+    "apache-kafka"
+   ],
+   "why": "Clarifies when to use Service Bus versus Kafka."
+  },
+  {
+   "text": "If you're asking, did this message get processed correctly? Use service bus. If you're asking, can I replay this stream of events from last week? Use Kafka.",
+   "speaker": "Mirko Peters",
+   "speaker_slug": "mirko-peters",
+   "time_s": 572,
+   "entities": [
+    "azure-service-bus",
+    "apache-kafka"
+   ],
+   "why": "A memorable rule of thumb for choosing a messaging technology."
+  },
+  {
+   "text": "Decouple means services don't need to know about each other. They only know about the queue or topic. That means you can change one service without breaking the others",
+   "speaker": "Mirko Peters",
+   "speaker_slug": "mirko-peters",
+   "time_s": 780,
+   "entities": [
+    "azure-service-bus"
+   ],
+   "why": "Defines decoupling in plain terms and why it makes systems easier to change."
+  }
+ ],
+ "chapters": [
+  {
+   "start_s": 0,
+   "title": "Tight coupling and the need for a middleman"
+  },
+  {
+   "start_s": 47,
+   "title": "What a message broker is"
+  },
+  {
+   "start_s": 151,
+   "title": "Anatomy and lifecycle of a message"
+  },
+  {
+   "start_s": 319,
+   "title": "Dead-lettering, sessions, duplicate detection and transactions"
+  },
+  {
+   "start_s": 487,
+   "title": "Service Bus vs. Storage Queues, Event Hubs, Event Grid and Kafka"
+  },
+  {
+   "start_s": 581,
+   "title": "Real-world use cases"
+  },
+  {
+   "start_s": 770,
+   "title": "The big picture: decouple, buffer, route"
+  }
+ ],
+ "takeaways": [
+  "Azure Service Bus is Microsoft's fully managed message broker that decouples applications so senders and receivers can fail, scale and change independently.",
+  "Queues deliver to one consumer, topics with filtered subscriptions fan out to many, and features such as dead-letter queues, sessions, duplicate detection, transactions and scheduled delivery handle the hard edge cases.",
+  "Choose Storage Queues for simple background jobs, Event Hubs and Kafka for high-throughput streaming, Event Grid for lightweight reactive events and Service Bus for reliable business workflows."
+ ],
+ "hook": "Apps that call each other directly break the moment one service is slow or offline. This episode explains Azure Service Bus in plain English for developers and cloud architects: queues, topics, message lifecycle, dead-lettering, sessions and when to pick Event Hubs, Event Grid or Kafka instead. You will understand how to build systems that keep working when things go wrong.",
+ "youtube_video_id": null,
+ "generated_at": "2026-11-01T13:41:46Z"
+}
