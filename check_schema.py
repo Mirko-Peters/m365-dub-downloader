@@ -16,7 +16,7 @@ REQ = {
     "Person": ["name"], "Organization": ["name"], "CollectionPage": ["name", "url"],
     "ProfilePage": ["mainEntity"], "Event": ["name", "startDate", "location"], "WebSite": ["name", "url"],
 }
-iso = re.compile(r"^\d{4}-\d{2}-\d{2}(T[\d:.+\-Z]+)?$")
+iso = re.compile(r"^\d{4}(-\d{2}(-\d{2})?)?(T[\d:.+\-Z]+)?$")   # schema.org Date: auch Jahr oder Jahr-Monat (released von Produkten)
 errs, warns = Counter(), Counter()
 examples = {}
 ids = defaultdict(set)
