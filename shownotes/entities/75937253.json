@@ -1,0 +1,156 @@
+{
+  "episode_id": "75937253",
+  "slug": null,
+  "title": "Microsoft Fabric Direct Lake - Simply Explained",
+  "lang": "en",
+  "duration_s": 837,
+  "transcript_source": "data/en_transcripts/1cbe1a5d8552.txt",
+  "time_basis": "estimated",
+  "entities": [
+    {
+      "slug": "power-bi",
+      "name": "Power BI",
+      "type": "product",
+      "score": 80,
+      "mentions": 12,
+      "first_mention_s": 22,
+      "quote": "the way it works is different from anything power BI has done before",
+      "url": "https://www.m365.fm/entity/power-bi/"
+    },
+    {
+      "slug": "fabric",
+      "name": "Microsoft Fabric",
+      "type": "platform",
+      "score": 75,
+      "mentions": 11,
+      "first_mention_s": 7,
+      "quote": "The fastest report in Microsoft Fabric might be showing you yesterday's numbers",
+      "url": "https://www.m365.fm/entity/fabric/"
+    },
+    {
+      "slug": "azure",
+      "name": "Microsoft Azure",
+      "type": "platform",
+      "score": 20,
+      "mentions": 2,
+      "first_mention_s": 605,
+      "quote": "Now for how this sits between Azure",
+      "url": "https://www.m365.fm/entity/azure/"
+    }
+  ],
+  "new_entities": [
+    {
+      "slug": "direct-lake",
+      "name": "Direct Lake",
+      "type": "concept"
+    },
+    {
+      "slug": "onelake",
+      "name": "OneLake",
+      "type": "product"
+    },
+    {
+      "slug": "delta-table",
+      "name": "Delta table",
+      "type": "concept"
+    },
+    {
+      "slug": "fabric-capacity",
+      "name": "Fabric capacity",
+      "type": "concept"
+    }
+  ],
+  "quotes": [
+    {
+      "text": "A stale number doesn't announce itself. It looks exactly like a fresh one, and someone makes a decision on it before anyone notices.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 88,
+      "entities": [
+        "power-bi"
+      ],
+      "why": "Explains in one image why refresh latency in imported reports is a business risk, not just a technical detail."
+    },
+    {
+      "text": "Instead of dragging your data into the report, direct lake points the report at those files and reads them where they sit.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 182,
+      "entities": [
+        "direct-lake",
+        "onelake"
+      ],
+      "why": "Summarises the core idea of Direct Lake in a single plain-language sentence."
+    },
+    {
+      "text": "Framing doesn't copy your data. Instead, it reads the table's record of changes, finds the newest files, and updates the report's pointers to look at those files.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 285,
+      "entities": [
+        "direct-lake",
+        "delta-table"
+      ],
+      "why": "Clarifies what a Direct Lake refresh really does and why it takes seconds instead of hours."
+    },
+    {
+      "text": "With the SQL version, a problem usually shows up as a slow report. With the one lake version, the same problem shows up as an error.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 464,
+      "entities": [
+        "direct-lake",
+        "onelake"
+      ],
+      "why": "Gives a practical rule of thumb for telling the two Direct Lake flavours apart."
+    },
+    {
+      "text": "When your data is large, it already lives in the lake, and it changes often enough that a nightly copy no longer cuts it.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 817,
+      "entities": [
+        "direct-lake"
+      ],
+      "why": "States clearly when Direct Lake is the right choice and when it is not."
+    }
+  ],
+  "chapters": [
+    {
+      "start_s": 0,
+      "title": "Why fast and fresh rarely happen together"
+    },
+    {
+      "start_s": 135,
+      "title": "What Direct Lake actually is"
+    },
+    {
+      "start_s": 271,
+      "title": "How it works under the hood"
+    },
+    {
+      "start_s": 409,
+      "title": "The two flavors of Direct Lake"
+    },
+    {
+      "start_s": 539,
+      "title": "Where Direct Lake fits in the Microsoft stack"
+    },
+    {
+      "start_s": 642,
+      "title": "Mistakes that make Direct Lake slow"
+    },
+    {
+      "start_s": 790,
+      "title": "What to remember"
+    }
+  ],
+  "takeaways": [
+    "Direct Lake lets Power BI read Delta tables straight from OneLake, combining import-like speed with data that stays close to live.",
+    "A Direct Lake refresh is called framing: it only updates pointers to the newest files, while transcoding loads just the columns a query needs.",
+    "Direct Lake requires a paid Fabric capacity and rewards tidy Delta tables, so overwrites, tiny files and poor partitioning make it feel slow."
+  ],
+  "hook": "Power BI used to force a choice between fast but stale import reports and fresh but slow DirectQuery. This episode explains Direct Lake in Microsoft Fabric for analysts and admins who want both. You learn how framing works, which of the two flavours to pick, what licensing it needs and which mistakes make it slow.",
+  "youtube_video_id": null,
+  "generated_at": "2026-11-01T06:56:35+00:00"
+}
