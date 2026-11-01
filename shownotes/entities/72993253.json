@@ -1,0 +1,159 @@
+{
+  "episode_id": "72993253",
+  "slug": "azure-load-balancer-simply-explained",
+  "title": "Azure Load Balancer — Simply Explained",
+  "lang": "en",
+  "duration_s": 956,
+  "transcript_source": "data/en_transcripts/167a2031d78d.txt",
+  "time_basis": "estimated",
+  "entities": [
+    {
+      "slug": "mirko-peters",
+      "name": "Mirko Peters",
+      "type": "person",
+      "score": 60,
+      "mentions": 1,
+      "first_mention_s": 3,
+      "quote": "I'm your host, Mucopeters.",
+      "url": "https://www.m365.fm/entity/mirko-peters/"
+    },
+    {
+      "slug": "azure",
+      "name": "Microsoft Azure",
+      "type": "platform",
+      "score": 55,
+      "mentions": 20,
+      "first_mention_s": 12,
+      "quote": "very few people actually understand as you're a load balancer",
+      "url": "https://www.m365.fm/entity/azure/"
+    },
+    {
+      "slug": "azure-traffic-manager",
+      "name": "Azure Traffic Manager",
+      "type": "product",
+      "score": 30,
+      "mentions": 3,
+      "first_mention_s": 840,
+      "quote": "When to choose load balancer versus app gateway versus traffic manager.",
+      "url": "https://www.m365.fm/entity/azure-traffic-manager/"
+    }
+  ],
+  "new_entities": [
+    {
+      "slug": "azure-load-balancer",
+      "name": "Azure Load Balancer",
+      "type": "product"
+    },
+    {
+      "slug": "health-probe",
+      "name": "Health probe",
+      "type": "concept"
+    },
+    {
+      "slug": "network-security-group",
+      "name": "Network security group (NSG)",
+      "type": "concept"
+    },
+    {
+      "slug": "azure-application-gateway",
+      "name": "Azure Application Gateway",
+      "type": "product"
+    }
+  ],
+  "quotes": [
+    {
+      "text": "The load balancer itself doesn't do the work. It's a traffic cop, not a worker.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 166,
+      "entities": [
+        "azure-load-balancer"
+      ],
+      "why": "Sets the right mental model for what a load balancer does."
+    },
+    {
+      "text": "Without health probes, your load balancer would just blindly send traffic to every server in the pool, even the dead ones.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 297,
+      "entities": [
+        "health-probe",
+        "azure-load-balancer"
+      ],
+      "why": "Explains why health probes are essential for high availability."
+    },
+    {
+      "text": "For most applications, the default hash based distribution is actually better. It spreads traffic more evenly across your backend servers",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 493,
+      "entities": [
+        "azure-load-balancer"
+      ],
+      "why": "Practical guidance against enabling session persistence by default."
+    },
+    {
+      "text": "A load balancer with one backend server provides zero redundancy. If that server goes down, there's nowhere else to send traffic.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 814,
+      "entities": [
+        "azure-load-balancer"
+      ],
+      "why": "Corrects a common misconception in test setups."
+    },
+    {
+      "text": "Next time you set up a VM in Azure, ask yourself one question. What happens if this one VM fails? If the answer is downtime, you need a load balancer.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 930,
+      "entities": [
+        "azure-load-balancer",
+        "azure"
+      ],
+      "why": "Gives listeners a simple decision rule."
+    }
+  ],
+  "chapters": [
+    {
+      "start_s": 0,
+      "title": "Why one server is not enough"
+    },
+    {
+      "start_s": 111,
+      "title": "The smart reception desk"
+    },
+    {
+      "start_s": 189,
+      "title": "Frontend IP, backend pool and rules"
+    },
+    {
+      "start_s": 291,
+      "title": "Health probes"
+    },
+    {
+      "start_s": 390,
+      "title": "How traffic gets distributed"
+    },
+    {
+      "start_s": 516,
+      "title": "Public versus internal"
+    },
+    {
+      "start_s": 611,
+      "title": "Standard, gateway, basic and common pitfalls"
+    },
+    {
+      "start_s": 840,
+      "title": "Load balancer vs. Application Gateway vs. Traffic Manager"
+    }
+  ],
+  "takeaways": [
+    "Azure Load Balancer is a layer 4 traffic director: a frontend IP receives traffic, rules map it to a backend pool, and health probes keep failed servers out of rotation.",
+    "Traffic is spread by a five-tuple hash per flow, and session persistence should only be enabled when an application truly needs it.",
+    "Use the Standard SKU with at least two backend instances and check NSG rules, probe port and route tables first when probes report unhealthy servers."
+  ],
+  "hook": "If your app runs on a single VM, one crash or traffic spike takes it offline. This episode explains Azure Load Balancer in plain English for admins and developers new to Azure networking, from frontend IPs and health probes to distribution logic and SKUs. You will also learn the common pitfalls and when to choose Application Gateway, Front Door or Traffic Manager instead.",
+  "youtube_video_id": null,
+  "generated_at": "2026-11-01T14:32:43+00:00"
+}
