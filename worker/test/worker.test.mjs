@@ -140,3 +140,34 @@ test("quotes: importQuotesFromSite schreibt nur Zitate mit Personen-Entitaet und
     assert.equal(res.quotes.length, 1); assert.deepEqual(res.quotes[0].about, ["azure"]);
   } finally { globalThis.fetch = old; }
 });
+
+test("contentblog: importContentBlog legt Pakete pending/live an, erneuert nur unveraenderte und schuetzt Editor-Aenderungen (SQLite)", async () => {
+  const { DatabaseSync } = await import("node:sqlite");
+  const raw = new DatabaseSync(":memory:");
+  const dir = new URL("../migrations/", import.meta.url);
+  for (const f of readdirSync(dir).filter((f) => f.endsWith(".sql")).sort()) raw.exec(readFileSync(new URL(f, dir), "utf-8"));
+  const db = { prepare(sql) { const st = raw.prepare(sql); let args = []; const o = { bind(...a) { args = a; return o; }, all: async () => ({ results: st.all(...args) }), first: async () => st.get(...args) ?? null, run: async () => st.run(...args) }; return o; }, async batch(s) { for (const x of s) await x.run(); } };
+  raw.exec(`INSERT INTO users(id,provider,sub,name,role,banned,created) VALUES(1,'g','1','Mirko','user',0,1);
+    INSERT INTO profiles(user_id,public,handle,headline,about,company,job,country,show_org,updated) VALUES(1,1,'mirko-p','','','','','',1,1);
+    INSERT INTO blog_posts(user_id,slug,title,created,updated) VALUES(1,'von-hand','Von Hand',1,1)`);
+  const P = (o) => ({ slug: "a-post", lang: "de", title: "Ein Beitrag", summary: "Kurz", html: "<p>Text</p>", author: "mirko-p", topics: ["azure"], faq: [], publish: false, published: 100, hash: "h1", ...o });
+  let file = { items: [P(), P({ slug: "b-post", publish: true }), P({ slug: "von-hand" }), P({ slug: "boese", html: "<script>x</script>" }), P({ slug: "fremd", author: "niemand" })] };
+  const old = globalThis.fetch; globalThis.fetch = async () => ({ ok: true, json: async () => file });
+  let clock = 1000; const now = () => clock;
+  try {
+    const { importContentBlog } = await import("../src/contentblog.js");
+    let r = await importContentBlog({ DB: db, SITE: "https://x" }, now);
+    assert.deepEqual([r.created, r.published, r.skipped], [2, 1, 3], "zwei neu, einer live; Slug von Hand, Skript, unbekannter Autor uebersprungen");
+    const st = (s) => raw.prepare("SELECT status,title,published FROM blog_posts WHERE slug=?").get(s);
+    assert.equal(st("a-post").status, "pending"); assert.equal(st("b-post").status, "live"); assert.equal(st("b-post").published, 100);
+    assert.equal(st("von-hand").title, "Von Hand", "Beitrag von Hand bleibt");
+    clock = 2000; file = { items: [P({ title: "Neuer Titel", hash: "h2", publish: true }), P({ slug: "b-post", publish: true, title: "B neu", hash: "h3" })] };
+    raw.exec("UPDATE blog_posts SET title='Im Editor', updated=1500 WHERE slug='b-post'");
+    r = await importContentBlog({ DB: db, SITE: "https://x" }, now);
+    assert.equal(st("a-post").title, "Neuer Titel"); assert.equal(st("a-post").status, "live", "publish-Flag schaltet wartenden Beitrag live");
+    assert.equal(st("b-post").title, "Im Editor", "im Editor geaendert: Paket ueberschreibt nicht");
+    clock = 3000; file = { items: [P({ slug: "b-post", publish: true, title: "B noch neuer", hash: "h4" })] };
+    await importContentBlog({ DB: db, SITE: "https://x" }, now);
+    assert.equal(st("b-post").title, "Im Editor", "Schutz bleibt dauerhaft");
+  } finally { globalThis.fetch = old; }
+});
