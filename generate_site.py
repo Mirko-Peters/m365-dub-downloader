@@ -191,6 +191,7 @@ def load():
 
 def lang_switch(cur, alt_urls, home_langs):
     items = [(l, LANGS[l][0], alt_urls.get(l) or f"{BASE}/{l}/", LANGS[l][1]) for l in home_langs]
+    if alt_urls.get("en"): items = [("en", "English", alt_urls["en"], "en")] + items   # Wechsel auf Seitenebene zum englischen Original (sonst /show/)
     return lang_dropdown(cur, items, "")
 
 
@@ -393,7 +394,7 @@ def page(lang, title, desc, canonical, body, alternates=None, jsonld=None, xdefa
     if alternates:
         for l, u in alternates.items():
             alt += f'<link rel="alternate" hreflang="{LANGS[l][1] if l in LANGS else l}" href="{u}">\n'
-        alt += f'<link rel="alternate" hreflang="x-default" href="{xdefault or BASE + "/"}">\n'
+        alt += f'<link rel="alternate" hreflang="x-default" href="{xdefault or alternates.get("en") or BASE + "/"}">\n'   # x-default = englische Fassung des Clusters, sonst Startseite
     ld = "".join(f'<script type="application/ld+json">{json.dumps(j, ensure_ascii=False)}</script>\n' for j in (jsonld or []))
     if canonical.endswith("404.html") or noindex:
         ogimg = f"{BASE}/assets/og-default.png"
@@ -959,6 +960,7 @@ def build():
         e = it["e"]; ui = UI[l]
         intro, hdr, bullets, aud = parse_desc(e["desc"])
         alts = {x: url_of(by_vid[vid][x]) for x in by_vid[vid]}
+        if vid in ORIG: alts["en"] = f"{BASE}/show/episodes/{ORIG[vid]}/"   # T3: englisches Original gehoert zum Cluster der Dub-Fassungen
         canonical = url_of(it)
         spk = f'https://www.spreaker.com/episode/{it["eid"]}'
         yt = f"https://youtu.be/{vid}"
@@ -1064,14 +1066,14 @@ def build():
 {footer(l)}{PLAT_JS}{INFO_JS}{LRN.GLOSS_JS}{QUIZ_JS if quiz_block else ''}{community_tags(l, vid)}"""
         OG_COVER[canonical] = art_svg(vid, LANGS[l][0], lang=l)
         write(f'{l}/{it["slug"]}/index.html',
-              page(l, e["title"], short(intro), canonical, body, alts, ld + _nld, side=side_for(l, e["title"], body), extra_head=f'<meta property="article:section" content="{esc(cat_name(pc, l))}">' + "".join(f'<meta property="article:tag" content="{esc(t)}">' for t in tagraw[l][vid])))
+              page(l, e["title"], short(intro), canonical, body, alts, ld + _nld, xdefault=alts.get("en"), side=side_for(l, e["title"], body), extra_head=f'<meta property="article:section" content="{esc(cat_name(pc, l))}">' + "".join(f'<meta property="article:tag" content="{esc(t)}">' for t in tagraw[l][vid])))
         sitemap.append((canonical, it["date"], alts))
         if vid in ORIG: ORIG_ALTS.setdefault(ORIG[vid], {})[l] = (canonical, e["title"])
 
     # Sprach-Startseiten
     for l in active:
         ui = UI[l]; s = seo.get(l, {})
-        alts_home = {x: f"{BASE}/{x}/" for x in active}
+        alts_home = {"en": f"{BASE}/", **{x: f"{BASE}/{x}/" for x in active}}   # T3: englische Startseite gehoert zum Cluster
         title = s.get("title") or f"M365.FM – {LANGS[l][0]}"
         d = short(s.get("description", ""), 300)
         newest = by_lang[l]
@@ -1104,7 +1106,7 @@ def build():
         sitemap.append((f"{BASE}/{l}/", TODAY, alts_home))
 
     # Wurzel
-    alts_home = {x: f"{BASE}/{x}/" for x in active}
+    alts_home = {"en": f"{BASE}/", **{x: f"{BASE}/{x}/" for x in active}}   # T3: Startseite (Englisch) im Cluster
     grid = "".join(f'<a class="tile" href="{BASE}/{l}/" hreflang="{LANGS[l][1]}" lang="{LANGS[l][1]}"><b>{esc(LANGS[l][0])}</b><span>{len(by_lang[l])} episodes</span></a>' for l in active)
     vids_new = sorted(by_vid, key=lambda v: max(x["date"] for x in by_vid[v].values()), reverse=True)[:9]
     latest = []
