@@ -78,6 +78,8 @@ def check_html(raw):
         errs.append("nicht geschlossen: " + ", ".join(f"<{t}>" for t in p.stack))
     if not "".join(p.text).strip():
         errs.append("kein Text")
+    if re.search(r"utm_campaign=(None|null|undefined)?(&|&amp;|\"|$)", s):   # Generator ohne Folgen-Slug (QA, 1.11.)
+        errs.append("utm_campaign leer oder None (Folgen-Slug fehlt)")
     _rf = ROOT / "data" / "slug_renames.json"   # T12: kein Link auf die alte Adresse einer umbenannten Folge
     for _old in ((json.loads(_rf.read_text("utf-8")).get("episodes") or {}) if _rf.exists() else {}):
         if re.search(r'href="[^"]*/show/episodes/' + re.escape(_old) + r'/', s): errs.append(f"Link auf alten Folgen-Slug {_old} (data/slug_renames.json)")
