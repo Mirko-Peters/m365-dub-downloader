@@ -1,0 +1,170 @@
+{
+  "episode_id": "75935099",
+  "slug": "subnetting-and-cidr",
+  "title": "Subnetting and CIDR - Simply Explained",
+  "lang": "en",
+  "duration_s": 916,
+  "transcript_source": "data/en_transcripts/ffef6eab9701.txt",
+  "time_basis": "estimated",
+  "entities": [
+    {
+      "slug": "azure",
+      "name": "Microsoft Azure",
+      "type": "platform",
+      "score": 85,
+      "mentions": 14,
+      "first_mention_s": 20,
+      "quote": "the moment you create an Azure Virtual network, you type one of these ranges yourself.",
+      "url": "https://www.m365.fm/entity/azure/"
+    },
+    {
+      "slug": "microsoft-365",
+      "name": "Microsoft 365",
+      "type": "platform",
+      "score": 45,
+      "mentions": 4,
+      "first_mention_s": 0,
+      "quote": "What this means for Microsoft three hundred sixty five.",
+      "url": "https://www.m365.fm/entity/microsoft-365/"
+    },
+    {
+      "slug": "azure-expressroute",
+      "name": "Azure ExpressRoute",
+      "type": "product",
+      "score": 40,
+      "mentions": 1,
+      "first_mention_s": 865,
+      "quote": "It doesn't recommend Expressroute for Microsoft three hundred sixty five in most cases",
+      "url": "https://www.m365.fm/entity/azure-expressroute/"
+    },
+    {
+      "slug": "microsoft",
+      "name": "Microsoft",
+      "type": "org",
+      "score": 20,
+      "mentions": 10,
+      "first_mention_s": 146,
+      "quote": "which Microsoft uses in its own beginner documentation.",
+      "url": "https://www.m365.fm/entity/microsoft/"
+    }
+  ],
+  "new_entities": [
+    {
+      "slug": "subnetting",
+      "name": "Subnetting",
+      "type": "concept"
+    },
+    {
+      "slug": "cidr",
+      "name": "Classless Inter-Domain Routing (CIDR)",
+      "type": "concept"
+    },
+    {
+      "slug": "subnet-mask",
+      "name": "Subnet mask",
+      "type": "concept"
+    },
+    {
+      "slug": "azure-virtual-network",
+      "name": "Azure Virtual Network",
+      "type": "product"
+    }
+  ],
+  "quotes": [
+    {
+      "text": "Subnetting is the practice of taking a large block of addresses and carving out a smaller block for one group of devices.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 57,
+      "entities": [
+        "subnetting"
+      ],
+      "why": "A clear one-sentence definition of subnetting."
+    },
+    {
+      "text": "The whole trick fits in one sentence. A bigger number means a smaller network, and a smaller number means a bigger network.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 510,
+      "entities": [
+        "cidr",
+        "subnet-mask"
+      ],
+      "why": "Captures the key intuition behind slash notation."
+    },
+    {
+      "text": "Azure reserves five addresses in every subnet. The first is the network identifier, the second is the default gateway.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 766,
+      "entities": [
+        "azure",
+        "azure-virtual-network"
+      ],
+      "why": "Points out an Azure-specific detail that catches many beginners."
+    },
+    {
+      "text": "If the range you choose for your virtual network overlaps the range your office already uses, routing breaks traffic can end up at the wrong destination, or it can simply vanish with no error message at all.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 815,
+      "entities": [
+        "azure-virtual-network",
+        "subnetting"
+      ],
+      "why": "Names the most damaging hybrid networking mistake."
+    },
+    {
+      "text": "Most of the pain people feel in Azure networking traces back to a range that somebody picked in a hurry during a first deployment.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 717,
+      "entities": [
+        "azure"
+      ],
+      "why": "A practical warning to plan address ranges up front."
+    }
+  ],
+  "chapters": [
+    {
+      "start_s": 0,
+      "title": "Your router already subnets"
+    },
+    {
+      "start_s": 91,
+      "title": "Anatomy of an IP address"
+    },
+    {
+      "start_s": 203,
+      "title": "Masks and slash notation"
+    },
+    {
+      "start_s": 340,
+      "title": "Why split a network"
+    },
+    {
+      "start_s": 430,
+      "title": "Subnet math without fear"
+    },
+    {
+      "start_s": 533,
+      "title": "From classes to CIDR"
+    },
+    {
+      "start_s": 723,
+      "title": "Subnetting in Azure"
+    },
+    {
+      "start_s": 847,
+      "title": "What it means for Microsoft 365"
+    }
+  ],
+  "takeaways": [
+    "The slash number is simply a size: a bigger number means a smaller network, and usable addresses are the block size minus two.",
+    "Azure reserves five addresses in every subnet, so a /24 gives 251 usable addresses and the smallest supported subnet is a /29.",
+    "Plan one large non-overlapping range with headroom, because overlapping ranges between office and cloud silently break hybrid routing."
+  ],
+  "hook": "Subnetting notation scares people, yet anyone who creates an Azure virtual network has to pick address ranges. This episode decodes IP addresses, subnet masks and CIDR slash notation for beginners and shows how to avoid the overlapping-range mistake that breaks hybrid networks.",
+  "youtube_video_id": null,
+  "generated_at": "2026-11-01T06:57:34+00:00"
+}
