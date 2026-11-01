@@ -567,6 +567,13 @@ def build(g):
     for old, new in (("/episodes", "/show/episodes/"), ("/guests", "/show/guests/"), ("/hosts", "/show/hosts/"), ("/people", "/show/hosts/"), ("/sponsors", "/show/sponsors/"), ("/reviews", "/show/reviews/"), ("/podroll", "/show/listen/"), ("/videos", "/show/"), ("/blog", "/community/u/mirko-p/blog/" if bposts else "/show/")): rd.setdefault(old, new)
     for p in bposts: rd[f"/blog/{p['slug']}"] = f"/community/u/mirko-p/blog/{p['slug']}/"; rd[f"/show/blog/{p['slug']}"] = f"/community/u/mirko-p/blog/{p['slug']}/"
     if bposts: rd["/show/blog"] = "/community/u/mirko-p/blog/"
+    # T12: umbenannte Folgen (data/slug_renames.json): alte Folgenadresse in allen Sprachen per 301 auf die neue (der Site-Worker
+    # fragt die Tabelle fuer /show/episodes/... erst, wenn die Seite fehlt); die fruehere Podpage-Adresse /mirko-peters zeigt auf die Person
+    _ren = (json.loads((D / "slug_renames.json").read_text("utf-8")).get("episodes") or {}) if (D / "slug_renames.json").exists() else {}
+    for _old, _new in _ren.items():
+        for pre in [""] + [f"/{l}" for l in LG]:
+            rd[f"{pre}/show/episodes/{_old}"] = f"{pre}/show/episodes/{_new}/"
+    if "mirko-peters" in _ren: rd["/mirko-peters"] = "/entity/mirko-peters/"
     # T8: weitere Podpage-Seiten ohne eigenen Inhalt (SKIPP), die in alten Beitraegen verlinkt sind
     for old, new in (("/community-events", "/community/events/"), ("/sponsor", "/show/sponsors/"), ("/follow", "/show/listen/"), ("/subscribe", "/show/listen/"), ("/contact", "/about/mirko-peters/"), ("/voicemail", "/about/mirko-peters/"),
                      ("/guest_intake", "/about/mirko-peters/"), ("/join", "/community/"), ("/newsletter", "/community/"), ("/leave_review", "/show/reviews/"), ("/rate", "/show/reviews/"),
