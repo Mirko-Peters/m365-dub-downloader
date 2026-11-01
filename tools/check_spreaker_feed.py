@@ -49,7 +49,10 @@ def main():
         if got is None:
             rows.append({"id": eid, "im_feed": False}); continue
         r = {"id": eid, "im_feed": True, "text_gleich": text_key(got) == text_key(mine), "links_datei": links(mine), "links_feed": links(got),
-             "html_im_feed": "<a " in html.unescape(got) or "<li" in html.unescape(got), "zeichen_feed": len(got)}
+             "html_im_feed": "<a " in html.unescape(got) or "<li" in html.unescape(got), "zeichen_feed": len(got),
+             "alle_links_feed": len(re.findall(r"<a\s", html.unescape(got), flags=re.I))}
+        if len(rows) < 3:   # Stichprobe zur Diagnose (oeffentlicher Feed-Inhalt)
+            r["feed_anfang"] = html.unescape(got)[:1500]; r["feed_links"] = re.findall(r"<a\s[^>]*>", html.unescape(got), flags=re.I)[:8]
         same += r["text_gleich"]; keep += r["links_feed"] >= r["links_datei"] > 0
         rows.append(r)
     rep = {"generated": time.strftime("%Y-%m-%dT%H:%MZ", time.gmtime()), "geschrieben": len(rows), "im_feed": sum(1 for r in rows if r["im_feed"]),
