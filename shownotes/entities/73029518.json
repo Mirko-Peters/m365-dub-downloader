@@ -1,0 +1,227 @@
+{
+ "episode_id": "73029518",
+ "slug": "azure-virtual-network-simply-explained",
+ "title": "Azure Virtual Network - Simply Explained",
+ "lang": "en",
+ "duration_s": 1055,
+ "transcript_source": "data/en_transcripts/902f97a65ec0.txt",
+ "time_basis": "estimated",
+ "entities": [
+  {
+   "slug": "azure-virtual-network",
+   "name": "Azure Virtual Network",
+   "type": "product",
+   "score": 100,
+   "mentions": 70,
+   "first_mention_s": 0,
+   "quote": "What is an Azure Virtual Network?",
+   "url": "https://www.m365.fm/entity/azure-virtual-network/"
+  },
+  {
+   "slug": "subnetting",
+   "name": "Subnetting",
+   "type": "concept",
+   "score": 80,
+   "mentions": 45,
+   "first_mention_s": 271,
+   "quote": "Subnets? Dividing your network.",
+   "url": "https://www.m365.fm/entity/subnetting/"
+  },
+  {
+   "slug": "network-security-group",
+   "name": "Network security group (NSG)",
+   "type": "concept",
+   "score": 75,
+   "mentions": 16,
+   "first_mention_s": 324,
+   "quote": "You can also use network security groups to control traffic between subnets.",
+   "url": "https://www.m365.fm/entity/network-security-group/"
+  },
+  {
+   "slug": "virtual-network-peering",
+   "name": "Azure virtual network peering",
+   "type": "concept",
+   "score": 75,
+   "mentions": 22,
+   "first_mention_s": 781,
+   "quote": "That's where VNet Peering comes in. It lets you connect two VNets privately.",
+   "url": "https://www.m365.fm/entity/virtual-network-peering/"
+  },
+  {
+   "slug": "user-defined-routes",
+   "name": "User-defined routes (UDR)",
+   "type": "concept",
+   "score": 65,
+   "mentions": 4,
+   "first_mention_s": 674,
+   "quote": "That's when you need user-defined routes or UDRs.",
+   "url": "https://www.m365.fm/entity/user-defined-routes/"
+  },
+  {
+   "slug": "cidr",
+   "name": "Classless Inter-Domain Routing (CIDR)",
+   "type": "concept",
+   "score": 60,
+   "mentions": 4,
+   "first_mention_s": 136,
+   "quote": "You do that using CIDR notation.",
+   "url": "https://www.m365.fm/entity/cidr/"
+  },
+  {
+   "slug": "hub-and-spoke-network-topology",
+   "name": "Hub-and-spoke network topology",
+   "type": "concept",
+   "score": 55,
+   "mentions": 4,
+   "first_mention_s": 848,
+   "quote": "So how do you handle this at scale? You use a hub and spoke architecture.",
+   "url": "https://www.m365.fm/entity/hub-and-spoke-network-topology/"
+  },
+  {
+   "slug": "azure",
+   "name": "Microsoft Azure",
+   "type": "platform",
+   "score": 50,
+   "mentions": 26,
+   "first_mention_s": 0,
+   "quote": "What is an Azure Virtual Network?",
+   "url": "https://www.m365.fm/entity/azure/"
+  },
+  {
+   "slug": "azure-virtual-machines",
+   "name": "Azure Virtual Machines",
+   "type": "product",
+   "score": 30,
+   "mentions": 8,
+   "first_mention_s": 16,
+   "quote": "Every virtual machine, every database, every app service, every function you deploy, they all sit inside one.",
+   "url": "https://www.m365.fm/entity/azure-virtual-machines/"
+  }
+ ],
+ "new_entities": [
+  {
+   "slug": "virtual-network-peering",
+   "name": "Azure virtual network peering",
+   "type": "concept",
+   "mentions": 22,
+   "first_mention_s": 781,
+   "quote": "That's where VNet Peering comes in. It lets you connect two VNets privately.",
+   "status": "review"
+  },
+  {
+   "slug": "user-defined-routes",
+   "name": "User-defined routes (UDR)",
+   "type": "concept",
+   "mentions": 4,
+   "first_mention_s": 674,
+   "quote": "That's when you need user-defined routes or UDRs.",
+   "status": "review"
+  },
+  {
+   "slug": "hub-and-spoke-network-topology",
+   "name": "Hub-and-spoke network topology",
+   "type": "concept",
+   "mentions": 4,
+   "first_mention_s": 848,
+   "quote": "So how do you handle this at scale? You use a hub and spoke architecture.",
+   "status": "review"
+  }
+ ],
+ "quotes": [
+  {
+   "text": "Your VNet's address space cannot overlap with any other network you plan to connect to. This is a common mistake.",
+   "speaker": "Mirko Peters",
+   "speaker_slug": "mirko-peters",
+   "time_s": 190,
+   "entities": [
+    "azure-virtual-network",
+    "cidr"
+   ],
+   "why": "Names the most common and costly VNet planning mistake."
+  },
+  {
+   "text": "Public IPs are optional. You assign them explicitly because Azure never gives your resources a public IP unless you ask for it. That's by design, the default should be private and public should be a deliberate choice.",
+   "speaker": "Mirko Peters",
+   "speaker_slug": "mirko-peters",
+   "time_s": 463,
+   "entities": [
+    "azure-virtual-network"
+   ],
+   "why": "States the private-by-default principle for exposing Azure resources."
+  },
+  {
+   "text": "Each peering is a direct link between exactly two VNets. If you want A to talk to C, you need a separate peering between A and C.",
+   "speaker": "Mirko Peters",
+   "speaker_slug": "mirko-peters",
+   "time_s": 841,
+   "entities": [
+    "virtual-network-peering"
+   ],
+   "why": "Explains non-transitive peering in one concrete sentence."
+  },
+  {
+   "text": "None of these pieces work in isolation. A VNet without subnets is just empty space. Subnets without NSGs are wide open.",
+   "speaker": "Mirko Peters",
+   "speaker_slug": "mirko-peters",
+   "time_s": 948,
+   "entities": [
+    "azure-virtual-network",
+    "subnetting",
+    "network-security-group"
+   ],
+   "why": "Captures why VNet components must be designed as one system."
+  },
+  {
+   "text": "Create a VNet with a well-planned address space before you deploy anything. That single decision affects everything downstream.",
+   "speaker": "Mirko Peters",
+   "speaker_slug": "mirko-peters",
+   "time_s": 1021,
+   "entities": [
+    "azure-virtual-network"
+   ],
+   "why": "A clear first-step recommendation for any Azure deployment."
+  }
+ ],
+ "chapters": [
+  {
+   "start_s": 0,
+   "title": "What an Azure Virtual Network is"
+  },
+  {
+   "start_s": 129,
+   "title": "IP addressing and CIDR"
+  },
+  {
+   "start_s": 271,
+   "title": "Subnets: dividing your network"
+  },
+  {
+   "start_s": 422,
+   "title": "Public and private IPs"
+  },
+  {
+   "start_s": 535,
+   "title": "Network security groups"
+  },
+  {
+   "start_s": 650,
+   "title": "Route tables and user-defined routes"
+  },
+  {
+   "start_s": 761,
+   "title": "VNet peering and hub-and-spoke"
+  },
+  {
+   "start_s": 888,
+   "title": "How it all connects"
+  }
+ ],
+ "takeaways": [
+  "An Azure Virtual Network is a regional, private network boundary, and its address space should be planned large enough and free of overlaps before anything is deployed.",
+  "Subnets separate application tiers, private IPs should be the default, and network security groups plus route tables control what traffic is allowed and where it goes.",
+  "VNet peering connects networks privately over the Microsoft backbone but is not transitive, so growing environments typically use a hub-and-spoke design."
+ ],
+ "hook": "Many Azure deployments run into trouble because the virtual network underneath was treated as a checkbox. This episode is for cloud beginners, administrators and architects who deploy workloads in Azure. You learn how address spaces, subnets, IPs, NSGs, routing and peering fit together so your network is secure and ready to grow.",
+ "youtube_video_id": null,
+ "generated_at": "2026-11-01T11:41:53Z"
+}

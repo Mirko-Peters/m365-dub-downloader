@@ -1,0 +1,223 @@
+{
+ "episode_id": "73029828",
+ "slug": "azure-network-security-groups-simply-explained",
+ "title": "Azure Network Security Groups - Simply Explained",
+ "lang": "en",
+ "duration_s": 871,
+ "transcript_source": "data/en_transcripts/4d8a03a8f120.txt",
+ "time_basis": "estimated",
+ "entities": [
+  {
+   "slug": "mirko-peters",
+   "name": "Mirko Peters",
+   "type": "person",
+   "score": 45,
+   "mentions": 2,
+   "first_mention_s": 4,
+   "quote": "I'm Milko Peters your host",
+   "url": "https://www.m365.fm/entity/mirko-peters/"
+  },
+  {
+   "slug": "network-security-group",
+   "name": "Network security group (NSG)",
+   "type": "concept",
+   "score": 100,
+   "mentions": 66,
+   "first_mention_s": 17,
+   "quote": "That's your Azure VM without an NSG.",
+   "url": "https://www.m365.fm/entity/network-security-group/"
+  },
+  {
+   "slug": "application-security-groups",
+   "name": "Application security groups (ASG)",
+   "type": "concept",
+   "score": 70,
+   "mentions": 17,
+   "first_mention_s": 374,
+   "quote": "And then there are application security groups or ASGs for short.",
+   "url": "https://www.m365.fm/entity/application-security-groups/"
+  },
+  {
+   "slug": "azure-service-tags",
+   "name": "Azure service tags",
+   "type": "concept",
+   "score": 60,
+   "mentions": 6,
+   "first_mention_s": 352,
+   "quote": "Now one feature that makes NSG's really powerful is service tags.",
+   "url": "https://www.m365.fm/entity/azure-service-tags/"
+  },
+  {
+   "slug": "azure-firewall",
+   "name": "Azure Firewall",
+   "type": "product",
+   "score": 60,
+   "mentions": 8,
+   "first_mention_s": 620,
+   "quote": "But wait, isn't Azure Firewall a thing?",
+   "url": "https://www.m365.fm/entity/azure-firewall/"
+  },
+  {
+   "slug": "least-privilege",
+   "name": "Least privilege",
+   "type": "concept",
+   "score": 55,
+   "mentions": 2,
+   "first_mention_s": 529,
+   "quote": "Here's the most important principle. Least privilege.",
+   "url": "https://www.m365.fm/entity/least-privilege/"
+  },
+  {
+   "slug": "azure",
+   "name": "Microsoft Azure",
+   "type": "platform",
+   "score": 50,
+   "mentions": 27,
+   "first_mention_s": 17,
+   "quote": "That's your Azure VM without an NSG.",
+   "url": "https://www.m365.fm/entity/azure/"
+  },
+  {
+   "slug": "azure-virtual-network",
+   "name": "Azure Virtual Network",
+   "type": "product",
+   "score": 35,
+   "mentions": 9,
+   "first_mention_s": 73,
+   "quote": "Allow all traffic within the virtual network",
+   "url": "https://www.m365.fm/entity/azure-virtual-network/"
+  },
+  {
+   "slug": "azure-load-balancer",
+   "name": "Azure Load Balancer",
+   "type": "product",
+   "score": 25,
+   "mentions": 4,
+   "first_mention_s": 285,
+   "quote": "Let's the as your load balancer send health probes to your VMs",
+   "url": "https://www.m365.fm/entity/azure-load-balancer/"
+  },
+  {
+   "slug": "tls-inspection",
+   "name": "TLS inspection",
+   "type": "concept",
+   "score": 20,
+   "mentions": 1,
+   "first_mention_s": 686,
+   "quote": "It can also do TLS inspection",
+   "url": "https://www.m365.fm/entity/tls-inspection/"
+  }
+ ],
+ "new_entities": [
+  {
+   "slug": "application-security-groups",
+   "name": "Application security groups (ASG)",
+   "type": "concept",
+   "mentions": 17,
+   "first_mention_s": 374,
+   "quote": "And then there are application security groups or ASGs for short.",
+   "status": "review"
+  },
+  {
+   "slug": "azure-service-tags",
+   "name": "Azure service tags",
+   "type": "concept",
+   "mentions": 6,
+   "first_mention_s": 352,
+   "quote": "Now one feature that makes NSG's really powerful is service tags.",
+   "status": "review"
+  }
+ ],
+ "quotes": [
+  {
+   "text": "It works at layers three and four of the network model, which means it looks at IP addresses, ports and protocols without digging into the actual content of the traffic.",
+   "speaker": "Mirko Peters",
+   "speaker_slug": "mirko-peters",
+   "time_s": 139,
+   "entities": [
+    "network-security-group"
+   ],
+   "why": "Precisely defines what an NSG can and cannot inspect."
+  },
+  {
+   "text": "NSGs are stateful. What does that mean? If you allow inbound traffic on port 80, the reply traffic goes back out automatically.",
+   "speaker": "Mirko Peters",
+   "speaker_slug": "mirko-peters",
+   "time_s": 177,
+   "entities": [
+    "network-security-group"
+   ],
+   "why": "Explains statefulness, a frequent source of confusion, with a simple example."
+  },
+  {
+   "text": "Leave gaps between your priorities. Use 100, 200, 300 instead of 100 and 102. If you need to insert a new rule later, you can slide it in at 150 without re-numbering everything.",
+   "speaker": "Mirko Peters",
+   "speaker_slug": "mirko-peters",
+   "time_s": 323,
+   "entities": [
+    "network-security-group"
+   ],
+   "why": "A practical habit that keeps rule sets maintainable."
+  },
+  {
+   "text": "Only allow what's needed nothing more. Start with a deny all posture and open specific ports to specific sources. Don't open everything and try to lock it down later.",
+   "speaker": "Mirko Peters",
+   "speaker_slug": "mirko-peters",
+   "time_s": 531,
+   "entities": [
+    "least-privilege",
+    "network-security-group"
+   ],
+   "why": "Turns least privilege into a concrete NSG rule strategy."
+  },
+  {
+   "text": "That's defense in depth. The NSG handles the simple stuff and the firewall handles the complex stuff.",
+   "speaker": "Mirko Peters",
+   "speaker_slug": "mirko-peters",
+   "time_s": 726,
+   "entities": [
+    "network-security-group",
+    "azure-firewall"
+   ],
+   "why": "Summarizes how NSGs and Azure Firewall complement each other."
+  }
+ ],
+ "chapters": [
+  {
+   "start_s": 0,
+   "title": "Why an Azure VM without an NSG is an unlocked door"
+  },
+  {
+   "start_s": 115,
+   "title": "What a network security group is"
+  },
+  {
+   "start_s": 249,
+   "title": "How NSG rules work: priority and defaults"
+  },
+  {
+   "start_s": 399,
+   "title": "Common misconfigurations"
+  },
+  {
+   "start_s": 527,
+   "title": "Best practices for NSG rules"
+  },
+  {
+   "start_s": 625,
+   "title": "NSG vs Azure Firewall"
+  },
+  {
+   "start_s": 734,
+   "title": "Walkthrough: creating and applying an NSG"
+  }
+ ],
+ "takeaways": [
+  "A network security group filters traffic at layers three and four by source, destination, port and protocol, and it is stateful, free and the first line of defense in Azure.",
+  "Rules are evaluated by priority with the first match winning, so leave gaps between priorities, attach one NSG per subnet and check effective security rules when troubleshooting.",
+  "Avoid opening sensitive ports to the internet, use application security groups and service tags instead of hard-coded IPs, and add Azure Firewall when you need centralized deep inspection."
+ ],
+ "hook": "Most Azure security incidents start with an overly permissive rule, not a sophisticated exploit. This episode is for Azure beginners and administrators who deploy virtual machines and subnets. You learn how NSG rules, priorities, service tags and application security groups work and which mistakes leave your environment wide open.",
+ "youtube_video_id": null,
+ "generated_at": "2026-11-01T11:42:25Z"
+}
