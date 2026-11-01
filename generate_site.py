@@ -1466,6 +1466,13 @@ def build():
     files = SMAP.write_all(sitemap, write, BASE, LANGS, TODAY)
     print(f"Sitemaps: {len(files)} Dateien, {len(sitemap)} URLs")
     _showix = PP.episode_index(BASE)
+    # T36: Spreaker-Folge -> eigene Episodenseite (kanonisch, ohne UTM) fuer das Website-Feld bei Spreaker (tools/set_spreaker_links.py)
+    _spk = {str(x["sid"]): x["url"] for x in _showix["items"] if x.get("sid") and x.get("url")}
+    for _l, _its in by_lang.items():
+        for _it in _its:
+            if _it.get("eid"): _spk.setdefault(str(_it["eid"]), url_of(_it))
+    write("spreaker-pages.json", json.dumps({"generated": TODAY, "count": len(_spk), "pages": _spk}, ensure_ascii=False))
+    print(f"Spreaker-Seitenzuordnung: {len(_spk)} Folgen")
     phase("Sitemaps")
     import site_quotes as _SQ
     write("quotes.json", json.dumps({"version": 1, "generated": TODAY, "quotes": _SQ.ALL}, ensure_ascii=False))   # Quotes an Personen-Entitaeten; der Worker uebernimmt sie in D1 (importQuotesFromSite)

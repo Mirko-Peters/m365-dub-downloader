@@ -1,0 +1,44 @@
+name: Spreaker-Website-Feld auf die Episodenseite setzen (T36)
+# Bei jeder veroeffentlichten Folge (Hauptshow + Sprach-Shows) zeigt "Website" (episode_link, RSS <link>) auf die eigene Seite.
+# Alte Werte stehen im Protokoll data/spreaker_links.tsv. shownotes/PAUSED haelt auch diesen Lauf an.
+on:
+  schedule:
+    - cron: "47 4 * * *"   # taeglich nach dem naechtlichen Seitenbau: neue Folgen nachziehen
+  workflow_dispatch:
+    inputs:
+      ids: { description: "Nur diese Folgen-IDs (Komma)", required: false, default: "" }
+      limit: { description: "Hoechstens so viele Folgen", required: false, default: "300" }
+      dry_run: { description: "Nur Probelauf", type: boolean, default: true }
+permissions:
+  contents: write
+concurrency: { group: apply-shownotes, cancel-in-progress: false }
+jobs:
+  links:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.12" }
+      - run: pip install -q requests cryptography
+      - name: Website-Feld setzen
+        env:
+          SPREAKER_TOKEN: ${{ secrets.SPREAKER_TOKEN }}
+          SPREAKER_CLIENT_ID: ${{ secrets.SPREAKER_CLIENT_ID }}
+          SPREAKER_CLIENT_SECRET: ${{ secrets.SPREAKER_CLIENT_SECRET }}
+        run: |
+          if [ -e shownotes/PAUSED ]; then echo "shownotes/PAUSED vorhanden - Lauf uebersprungen"; exit 0; fi
+          DRY=""; if [ "${{ github.event_name }}" = "workflow_dispatch" ] && [ "${{ inputs.dry_run }}" = "true" ]; then DRY="--dry-run"; fi
+          python tools/set_spreaker_links.py --limit "${{ inputs.limit || '300' }}" --ids "${{ inputs.ids }}" $DRY
+      - name: Protokoll sichern
+        if: always()
+        run: |
+          git config user.name "m365-site-bot"; git config user.email "actions@users.noreply.github.com"
+          for f in data/spreaker_links.tsv data/spreaker_auth.enc; do [ -e "$f" ] && git add -A "$f"; done
+          if git diff --cached --quiet; then echo "nichts zu sichern"; exit 0; fi
+          git commit -q -m "Spreaker-Website-Feld: Protokoll $(date -u +%Y-%m-%dT%H:%MZ) [skip ci]"
+          for i in 1 2 3 4 5; do
+            if git pull --rebase --autostash -q origin main; then git push -q origin HEAD:main && exit 0
+            else git rebase --abort 2>/dev/null || true; fi
+            sleep $((i*5))
+          done
+          echo "::error::Protokoll konnte nicht gesichert werden"; exit 1
