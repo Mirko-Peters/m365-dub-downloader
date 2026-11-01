@@ -14,10 +14,15 @@ from PIL import Image
 ROOT = Path(__file__).resolve().parent.parent
 MAP = ROOT / "data" / "r2_map.json"
 PUBLIC = "https://img.m365.fm"
-EXT = {"image/jpeg": ".jpg", "image/png": ".png", "image/gif": ".gif", "image/webp": ".webp", "image/svg+xml": ".svg", "image/avif": ".avif"}
+EXT = {"image/jpeg": ".jpg", "image/png": ".png", "image/gif": ".gif", "image/webp": ".webp", "image/svg+xml": ".svg", "image/avif": ".avif",
+       "application/pdf": ".pdf"}   # PDFs: Podpage-Downloads (Archiv vor der Kuendigung)
 HOSTS = ("statics.mylandingpages.co", "roundups-inarticle-public.s3", "m.media-amazon.com", "img.podpage.com",
          "blogifyai.s3", "rank-ai-generated-images.s3", "images.pexels.com", "s3.us-west-1.amazonaws.com/redwood-labs",
-         "neuroncdn")
+         "neuroncdn", "media.podpage.com", "redwood-labs.s3.amazonaws.com")   # Podpage-Speicher: Gastfotos, Cover, Downloads (T32)
+URL_RX = re.compile(r'https?://[^\s"\'<>)\\]+')
+# T32 Podpage-Abloesung: alles, was auf Podpage-Speicher liegt, vor der Kuendigung kopieren (auch nur archivierte Dateien)
+PODPAGE_SOURCES = ["data/podpage/episodes.json.gz", "data/podpage/hosts.json", "data/podpage/sponsors.json", "data/podpage/podcast.json",
+                   "data/podpage/downloadable_files.json", "data/podpage/pages.json"]
 
 
 def urls():
@@ -26,8 +31,13 @@ def urls():
         found |= set(re.findall(r'https?://[^\s"\'<>)]+', b.get("html") or ""))
     for g in json.load(open(ROOT / "data/podpage/guests.json", encoding="utf-8")):
         found.add(g.get("image_path") or "")
+    for rel in PODPAGE_SOURCES + sorted(str(x.relative_to(ROOT)) for x in (ROOT / "data/podpage_i18n").glob("notes_*.json")):
+        f = ROOT / rel
+        if f.exists():
+            found |= set(URL_RX.findall(gzip.open(f, "rt", encoding="utf-8").read() if f.suffix == ".gz" else f.read_text("utf-8")))
+    found = {u.rstrip(".,;") for u in found}
     return sorted(u for u in found if u.startswith("http") and any(h in u for h in HOSTS)
-                  and (re.search(r"\.(jpe?g|png|gif|webp|svg|avif)(\?|$)", u, re.I) or "redwood-labs" in u or "neuroncdn" in u))
+                  and (re.search(r"\.(jpe?g|jfif|png|gif|webp|svg|avif|pdf)(\?|$)", u, re.I) or "redwood-labs" in u or "neuroncdn" in u))
 
 
 def main():

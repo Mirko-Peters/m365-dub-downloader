@@ -16,8 +16,7 @@ jobs:
         with: { python-version: "3.12" }
       - run: pip install requests beautifulsoup4
       - run: python fetch_podpage_blog.py "${{ inputs.limit }}" 2>&1 | tail -20 > data/podpage/blog_fetch.log; test -s data/podpage/blog_posts.json.gz
-      - name: committen
-        if: always()
+      - name: committen   # T32: nur nach erfolgreichem Abruf (vorher if: always() - hat auch eine leere Sicherung committet)
         run: |
           git config user.name "github-actions"; git config user.email "actions@github.com"
           git add data/podpage/blog_posts.json.gz data/podpage/blog_fetch.log && git commit -m "Podpage-Blog geholt" && git pull -q --rebase && git push || true
