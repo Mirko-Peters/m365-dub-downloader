@@ -56,6 +56,9 @@ class _Check(HTMLParser):
     def handle_data(self, data): self.text.append(data)
 
 
+MIN_LINKS = 6   # Linkvorgabe fuer Spreaker-Shownotes (Mirko, 1.11.)
+
+
 def check_html(raw):
     """Liste der Fehler (leer = in Ordnung)."""
     s = raw.strip()
@@ -75,6 +78,9 @@ def check_html(raw):
         errs.append("nicht geschlossen: " + ", ".join(f"<{t}>" for t in p.stack))
     if not "".join(p.text).strip():
         errs.append("kein Text")
+    n_links = len(re.findall(r"<a\s[^>]*href=", s, flags=re.I))
+    if n_links < MIN_LINKS:   # Mirko, 1.11.: mindestens 6 Links (vorher 8-10, kurz 4); weniger -> nicht schreiben, Generator ergaenzt
+        errs.append(f"{n_links} Links (mindestens {MIN_LINKS})")
     return errs + p.errors
 
 
