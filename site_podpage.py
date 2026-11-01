@@ -201,7 +201,7 @@ def build(g):
         u = f"{root}{rel}"
         side = SBR.render(SBX, BASE, root, title + " " + plain(body)[:8000], eps, SHP, nav=nav) if not noindex else SBR.render(SBX, BASE, root, "", [], {}, nav=nav)
         write(f"show/{rel}index.html", page("en", (title if title == NAME else f"{title} – {NAME}"), desc[:300], u, shell(body, side), alts, ld, xdefault=u, og_type=og, noindex=noindex))
-        if not noindex: sitemap.append((u, last, None))
+        if not noindex: sitemap.append((u, last, alts))   # T3: Alternates auch in der Sitemap
 
     # Gaeste je Folge (Namensnennung in Titel/Show Notes) aus dem gemeinsamen Folgenindex (auch fuer die Entitaetsseiten)
     IDX = episode_index(BASE); eg, ge = IDX["eg"], IDX["ge"]
@@ -311,6 +311,7 @@ def build(g):
         if len(tr) > 200: ld["transcript"] = tr[:5000]
         # Alternates nur fuer Sprachfassungen mit uebersetzten Show Notes (150 je Sprache); die uebrigen ~14.000 Fassungen (nur Titel + Teaser) bleiben noindex und ausserhalb der Sitemap
         alts = {"en": ep_url(e), **{l: loc_url(l, f"episodes/{e['slug']}/") for l in TRL if e["slug"] in TRL[l] and TRL[l][e["slug"]][0] and NTL.get(l, {}).get(e["slug"])}}
+        for _dl, (_du, _) in oa.items(): alts[_dl] = _du   # T3: die Dub-Fassung (eigene Folge in der Sprache) ist die Sprachalternative, nicht die duenne Show-Kopie
         pub(f"episodes/{e['slug']}/", e.get("meta_title") or e["name"], e.get("meta_description") or short_desc(e, nrec, 155), body, ([ld] + nld) if nld else ld, "article", last=day(e.get("update_time")) or TODAY, alts=alts if len(alts) > 1 else None)
         # lokalisierte Fassungen dieser Folge
         for l in TRL:
@@ -327,7 +328,8 @@ def build(g):
                     "inLanguage": LG[l][1], "partOfSeries": {"@type": "PodcastSeries", "name": NAME, "url": root}, "author": {"@id": f"{BASE}/entity/mirko-peters/#entity"}}
             if r and r.get("audio"): lald["associatedMedia"] = {"@type": "AudioObject", "contentUrl": r["audio"]}
             _thin = not ln   # nur Titel und Teaser: fuer Besucher da, fuer Suchmaschinen nicht (Googles Regel zu skaliertem Inhalt)
-            write(f"{l}/show/episodes/{e['slug']}/index.html", g["page"](l, f"{lt} – {NAME}", ls[:300], lu, f'{g["header"](l, "")}<main class="wrap">{lbody}</main>{g["footer"](l)}', None if _thin else alts, [lald], xdefault=ep_url(e), og_type="article", og_of=ep_url(e), noindex=_thin))
+            _lalts = None if (_thin or l in oa) else alts   # Sprache mit Dub-Fassung: diese Kopie bleibt ohne hreflang (ein Vertreter je Sprache im Cluster)
+            write(f"{l}/show/episodes/{e['slug']}/index.html", g["page"](l, f"{lt} – {NAME}", ls[:300], lu, f'{g["header"](l, "")}<main class="wrap">{lbody}</main>{g["footer"](l)}', _lalts, [lald], xdefault=ep_url(e), og_type="article", og_of=ep_url(e), noindex=_thin))
             if not _thin: sitemap.append((lu, day(e.get("update_time")) or TODAY, None))
 
     # Listen (paginiert)
@@ -349,9 +351,9 @@ def build(g):
             lrel = "episodes/" if p == 0 else f"episodes/page/{p + 1}/"
             lu = loc_url(l, lrel)
             ttl = f"{NAME} – {LG[l][0]}" + (f" ({p + 1})" if p else "")
-            lal = {"en": f"{root}episodes/" if p == 0 else f"{root}episodes/page/{p + 1}/"}
+            lal = {"en": f"{root}episodes/", l: lu} if p == 0 else None   # T3: Folgenliste der Sprache im Cluster mit der englischen Liste
             write(f"{l}/show/{lrel}index.html", g["page"](l, ttl, f"{NAME}: {len(les)} · {LG[l][0]}", lu, f'{g["header"](l, "")}<main class="wrap"><h1>{esc(ttl)}</h1><ul style="list-style:none;padding:0">{lis}</ul><p>{pg}</p></main>{g["footer"](l)}',
-                                                         None, None, xdefault=lu if p else f"{root}episodes/", og_type="website", noindex=bool(p)))
+                                                         lal, None, xdefault=lu if p else f"{root}episodes/", og_type="website", noindex=bool(p)))
             if not p: sitemap.append((lu, TODAY, None))
 
     # Gaeste
