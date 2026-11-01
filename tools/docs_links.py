@@ -2,7 +2,7 @@
 """T13: offizielle Dokumentations-Links (sameAs) fuer Entitaeten ohne jede Quelle. Kandidaten stehen in CAND; jeder wird live geprueft:
 Status 200 nach hoechstens 5 Weiterleitungen, Ziel-Host in der Allowlist, kein Such- oder Fehlerpfad. Nur dann wird das Feld (docs oder web)
 gesetzt, und nur wenn die Entitaet dort noch nichts hat. Bericht: data/docs_links_report.json. Aufruf: python tools/docs_links.py [--apply]"""
-import json, sys, time, urllib.error, urllib.request
+import json, re, sys, time, urllib.error, urllib.request
 from pathlib import Path
 from urllib.parse import urlparse
 
@@ -36,7 +36,7 @@ def check(url):
     try:
         with urllib.request.urlopen(urllib.request.Request(url, headers=UA), timeout=25) as r:
             fin = r.geturl(); u = urlparse(fin)
-            bad = "/search" in u.path or "404" in u.path or "error" in u.path.lower()
+            bad = bool(re.match(r"^(/[a-z]{2}-[a-z]{2})?/search(/|$)", u.path)) or "404" in u.path or "/error" in u.path.lower()   # Suchseite von Learn, nicht Produkte wie /azure/search/
             return (r.status == 200 and u.netloc in OK_HOSTS and not bad), fin, r.status
     except urllib.error.HTTPError as e:
         return False, url, e.code
