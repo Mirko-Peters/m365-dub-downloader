@@ -1,6 +1,6 @@
 # Dry-Run Shownotes -> Spreaker
 
-2026-11-01T14:26:21+00:00 · 240 Folgen offen, 1 ungueltig, 0 unbekannt, 10 im Diff (meistgehoerte zuerst). Schreiben erst mit Datei shownotes/APPROVED.
+2026-11-01T16:26:14+00:00 · 300 Folgen offen, 1 ungueltig, 0 unbekannt, 10 im Diff (meistgehoerte zuerst). Schreiben erst mit Datei shownotes/APPROVED.
 
 ## Ungueltige Dateien
 
