@@ -49,11 +49,14 @@ def build(g, items, api):
                             f'{("<p>" + esc(it["summary"]) + "</p>") if it.get("summary") else ""}{_kp}{body_html}{_fq}{SNT.CSS if (_kp or _fq) else ""}</article>'
                             f'<p><a class="btn main" href="{esc(it["url"])}" rel="nofollow ugc noopener" target="_blank">{esc(T(lang, "View the original on", "Original ansehen auf"))} {esc(plat)} ↗</a></p><p>{tl}</p>'
                             f'<p class="mut">{esc(T(lang, "Title, description and thumbnail come from the creator’s public feed; the original stays with its author.", "Titel, Beschreibung und Vorschaubild stammen aus dem öffentlichen Feed des Creators; das Original bleibt beim Urheber."))}</p>')
-            node = {"@type": "VideoObject" if it["kind"] == "youtube" else "Article", "@id": u + "#item", "name": it["title"], "headline": it["title"], "description": (it.get("summary") or it["title"])[:300],
+            _yid = re.search(r"(?:v=|youtu\.be/|/shorts/)([\w-]{11})", it.get("url") or "") if it["kind"] == "youtube" else None
+            _thumb = it.get("thumb") or (f"https://i.ytimg.com/vi/{_yid.group(1)}/hqdefault.jpg" if _yid else "")
+            _isvid = it["kind"] == "youtube" and bool(_thumb)   # VideoObject nur mit Vorschaubild (Pflichtfeld), sonst Article
+            node = {"@type": "VideoObject" if _isvid else "Article", "@id": u + "#item", "name": it["title"], "headline": it["title"], "description": (it.get("summary") or it["title"])[:300],
                     "datePublished": iso(it["published"]), "inLanguage": lang, "isBasedOn": it["url"], "author": {"@type": "Person" if it["type"] == "u" else "Organization", "name": it["name"], "url": who},
                     "about": [{"@id": f"{BASE}/entity/{t}/#entity"} for t in topics]}
-            if it["kind"] == "youtube":
-                node["uploadDate"] = iso(it["published"]); node["thumbnailUrl"] = it.get("thumb") or ""; node["contentUrl"] = it["url"]
+            if _isvid:
+                node["uploadDate"] = iso(it["published"]); node["thumbnailUrl"] = _thumb; node["contentUrl"] = it["url"]
             if has_text:
                 node["text"] = own[:5000]
             write(f"{pfx2(lang)}{path_of(it)}index.html", page(lang, f'{it["title"]} – {it["name"]} | M365.FM', (it.get("summary") or it["title"])[:155], u, b, None, [{"@context": "https://schema.org", **node}] + _fld, og_type="article", extra_head=LCSS, noindex=not has_text))

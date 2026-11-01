@@ -8,6 +8,7 @@ from pathlib import Path
 DOCS = Path(__file__).parent / "docs"
 HARD = re.compile("ÔÇ|â€")
 SOFT = re.compile("�|Ã[\u0080-ÿ]")
+EXTERNAL = re.compile(r"^([a-z]{2}/)?community/feed/")
 
 
 def main():
@@ -19,7 +20,9 @@ def main():
         except UnicodeDecodeError:
             hard[str(p.relative_to(DOCS))] += 1; continue
         a, b = len(HARD.findall(h)), len(SOFT.findall(h))
-        if a: hard[str(p.relative_to(DOCS))] += a
+        rel = str(p.relative_to(DOCS))
+        if a and EXTERNAL.search(rel): soft[rel] += a; a = 0   # Fremd-Feeds (Kreatoren-Feeds): Text stammt nicht von uns, Reparatur in site_fetch; nur Hinweis
+        if a: hard[rel] += a
         if b: soft[str(p.relative_to(DOCS))] += b
     print(f"{n} Seiten geprueft: {sum(hard.values())} Mojibake-Treffer in {len(hard)} Dateien, {sum(soft.values())} U+FFFD/Ã-Treffer in {len(soft)} Dateien")
     for f, c in hard.most_common(20): print("FEHLER", c, "x", f)

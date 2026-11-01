@@ -10,6 +10,7 @@
 import json, os, re, sys, time, threading, urllib.request
 from pathlib import Path
 from concurrent.futures import ThreadPoolExecutor
+import site_text as STX
 
 CACHE = Path(__file__).parent / "data" / "cache"
 API = os.environ.get("COMMUNITY_API", "https://api-dub.m365.fm")
@@ -63,6 +64,8 @@ def fetch(url, timeout=120, tries=3):
     else:
         state = "fehlt"
         print(f"WARNUNG: {url.split('://', 1)[-1]} nicht erreichbar ({err}) und keine gespeicherte Fassung", file=sys.stderr)
+    if j is not None:
+        j = STX.fix_tree(j)   # Mojibake aus Fremd-Feeds und alten Importen vor dem Seitenbau reparieren (check_encoding ist blockierend)
     with _LOCK:
         _MEM[url] = j; _STATE[url] = state
     return j
