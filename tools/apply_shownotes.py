@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """T25: Freigegebene Shownotes per Spreaker-API in die Episodenbeschreibungen schreiben.
 
-Quelle: shownotes/spreaker/<episode_id>.html (vom Shownotes-Generator). Freigabe-Gate: Datei shownotes/APPROVED (legt die QA an);
+Quelle: shownotes/spreaker/<episode_id>.html (vom Shownotes-Generator). Freigabe-Gate: Datei shownotes/APPROVED (legt die QA an) als Hauptschalter,
+geschrieben werden nur Folgen, die die QA in shownotes/QA.txt mit ok oder fixed fuehrt;
 ohne sie nur Dry-Run (Diff nach shownotes/DRYRUN.md). shownotes/PAUSED haelt alles an. Je Lauf hoechstens --limit Folgen,
 meistgehoerte zuerst (Spreaker-Statistik, Zwischenspeicher shownotes/plays.json). Protokoll je Folge in shownotes/APPLIED.txt
 (Zeit, Episode, Status, Hash der HTML-Datei, Abrufe, Titel, Hinweis). Es wird nur die Beschreibung geschrieben; Titel, Status,
@@ -211,6 +212,16 @@ class Spreaker:
 
 
 # ---------------------------------------------------------------- Ablauf
+def qa_ok(path=None):
+    """episode_ids (str) mit QA-Status ok oder fixed in shownotes/QA.txt (Format episode_id;status;Datum, letzter Eintrag zaehlt)."""
+    st, f = {}, path or (SN / "QA.txt")
+    if f.exists():
+        for line in f.read_text("utf-8").splitlines():
+            x = [y.strip() for y in line.split(";")]
+            if len(x) >= 2 and x[0].isdigit(): st[x[0]] = x[1].lower()
+    return {k for k, v in st.items() if v in ("ok", "fixed")}
+
+
 def pending(applied, ids=None, with_invalid=False):
     """[(episode_id, html, hash, errors)] aller Dateien, die noch nicht mit dieser Fassung geschrieben sind (ungueltige nur einmal je Fassung protokolliert)."""
     out = []
@@ -252,6 +263,11 @@ def main():
     dry = a.dry_run or not (SN / "APPROVED").exists()
     if dry:
         print("Dry-Run (keine Datei shownotes/APPROVED bzw. --dry-run)")
+    else:   # Schreiben nur fuer Folgen, die die QA einzeln freigegeben hat (shownotes/QA.txt: ok oder fixed); APPROVED ist der Hauptschalter
+        ok = qa_ok()
+        held = [t for t in todo if str(t[0]) not in ok]
+        todo = [t for t in todo if str(t[0]) in ok]
+        print(f"QA-Freigabe je Folge: {len(todo)} freigegeben, {len(held)} warten auf die QA")
     sp = Spreaker()
     if not sp.login():
         return 1
