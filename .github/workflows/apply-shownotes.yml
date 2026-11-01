@@ -30,6 +30,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with: { fetch-depth: 0 }   # T25: volle Historie, damit apply_shownotes Datei- und QA-Zeitpunkt vergleichen kann
       - name: Gibt es Shownotes?
         id: has
         run: |
