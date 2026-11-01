@@ -1,0 +1,183 @@
+{
+  "episode_id": "73014337",
+  "slug": "gitops-simply-explained",
+  "title": "GitOps - Simply Explained",
+  "lang": "en",
+  "duration_s": 974,
+  "transcript_source": "data/en_transcripts/58448ce57f5c.txt",
+  "time_basis": "estimated",
+  "entities": [
+    {
+      "slug": "azure",
+      "name": "Microsoft Azure",
+      "type": "platform",
+      "score": 50,
+      "mentions": 34,
+      "first_mention_s": 5,
+      "quote": "You've probably seen it mentioned in job postings, conference talks, or Azure documentation.",
+      "url": "https://www.m365.fm/entity/azure/"
+    },
+    {
+      "slug": "azure-devops",
+      "name": "Azure DevOps",
+      "type": "product",
+      "score": 45,
+      "mentions": 6,
+      "first_mention_s": 49,
+      "quote": "or you click a button in Azure DevOps, and either way the deployment happens.",
+      "url": "https://www.m365.fm/entity/azure-devops/"
+    },
+    {
+      "slug": "github-actions",
+      "name": "GitHub Actions",
+      "type": "product",
+      "score": 25,
+      "mentions": 2,
+      "first_mention_s": 246,
+      "quote": "Azure Pipelines, Jenkins, GitHub Actions. It builds the container",
+      "url": "https://www.m365.fm/entity/github-actions/"
+    },
+    {
+      "slug": "azure-key-vault",
+      "name": "Azure Key Vault",
+      "type": "product",
+      "score": 25,
+      "mentions": 1,
+      "first_mention_s": 684,
+      "quote": "Instead, use Azure Key Vault or an external secrets operator.",
+      "url": "https://www.m365.fm/entity/azure-key-vault/"
+    },
+    {
+      "slug": "terraform",
+      "name": "Terraform",
+      "type": "product",
+      "score": 15,
+      "mentions": 1,
+      "first_mention_s": 873,
+      "quote": "You can use GitOps with terraform, poloomy, even Ansible",
+      "url": "https://www.m365.fm/entity/terraform/"
+    }
+  ],
+  "new_entities": [
+    {
+      "slug": "gitops",
+      "name": "GitOps",
+      "type": "concept"
+    },
+    {
+      "slug": "kubernetes",
+      "name": "Kubernetes",
+      "type": "product"
+    },
+    {
+      "slug": "azure-kubernetes-service",
+      "name": "Azure Kubernetes Service (AKS)",
+      "type": "product"
+    },
+    {
+      "slug": "flux-cd",
+      "name": "Flux",
+      "type": "product"
+    },
+    {
+      "slug": "argo-cd",
+      "name": "Argo CD",
+      "type": "product"
+    }
+  ],
+  "quotes": [
+    {
+      "text": "Git becomes your single source of truth, not just for your code, but for everything your infrastructure needs to run. Every configuration, every deployment, manifest, every environment variable, it all lives in Git.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 131,
+      "entities": [
+        "gitops"
+      ],
+      "why": "Clear definition of the core GitOps principle."
+    },
+    {
+      "text": "Now, GitOps isn't a tool you can buy. It's an operating model, like DevOps or DevSecOps. A set of principles that guide how you manage your infrastructure.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 145,
+      "entities": [
+        "gitops"
+      ],
+      "why": "Corrects the common misconception that GitOps is a product."
+    },
+    {
+      "text": "So instead of a pipeline pushing changes into your cluster, your cluster pulls its desired state from Git. That simple inversion makes your infrastructure more secure, more auditable, and harder to break by accident.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 335,
+      "entities": [
+        "gitops",
+        "kubernetes"
+      ],
+      "why": "Explains why the pull-based model matters for security."
+    },
+    {
+      "text": "That's what makes GitOps self-healing. It doesn't just deploy changes. It actively prevents your infrastructure from drifting away from what's defined.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 447,
+      "entities": [
+        "gitops"
+      ],
+      "why": "Summarises the value of the reconciliation loop in one thought."
+    },
+    {
+      "text": "In GitOps, you revert the Git commit. That's it, one command. The operator sees the revert, pulls the previous state, and the cluster goes back to what was working before.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 749,
+      "entities": [
+        "gitops"
+      ],
+      "why": "Concrete illustration of how GitOps makes rollbacks trivial."
+    }
+  ],
+  "chapters": [
+    {
+      "start_s": 0,
+      "title": "The Old Way and Configuration Drift"
+    },
+    {
+      "start_s": 126,
+      "title": "What GitOps Actually Is"
+    },
+    {
+      "start_s": 235,
+      "title": "Pull-Based vs Push-Based Deployments"
+    },
+    {
+      "start_s": 346,
+      "title": "The Reconciliation Loop"
+    },
+    {
+      "start_s": 459,
+      "title": "Argo CD vs Flux"
+    },
+    {
+      "start_s": 592,
+      "title": "GitOps on Azure: AKS, Azure Arc and Azure DevOps"
+    },
+    {
+      "start_s": 728,
+      "title": "Key Benefits"
+    },
+    {
+      "start_s": 854,
+      "title": "Common Myths and Getting Started"
+    }
+  ],
+  "takeaways": [
+    "GitOps makes Git the single source of truth for infrastructure, so the cluster always matches what is declared and versioned in the repository.",
+    "In the pull-based model an operator such as Flux or Argo CD reconciles the cluster with Git continuously, which removes drift and keeps cluster credentials out of CI pipelines.",
+    "On Azure, Flux v2 is built into AKS and Azure Arc, so a team can start with one small cluster pointed at a Git repo and gain instant rollbacks and a full audit trail."
+  ],
+  "hook": "Manual kubectl fixes and configuration drift make Kubernetes clusters behave in ways nobody can explain. This episode explains GitOps for Azure and Kubernetes engineers: declarative state in Git, pull-based deployments, the reconciliation loop, Flux versus Argo CD and the built-in GitOps support in AKS. You learn how to get trivial rollbacks, self-healing clusters and a built-in audit trail.",
+  "youtube_video_id": null,
+  "generated_at": "2026-11-01T14:31:21+00:00"
+}
