@@ -99,6 +99,20 @@ def norm(h):
     return re.sub(r"\s+", " ", (h or "")).strip()
 
 
+def text_key(h):
+    """Textinhalt ohne Tags und Leerraum. Spreaker gibt in 'description' nur Text zurueck (Tags entfernt, Listenpunkte ohne
+    Trenner), das gesendete HTML ist laenger - verglichen wird deshalb der Inhalt, nicht die Zeichenzahl."""
+    return re.sub(r"\s+", "", html.unescape(re.sub(r"<[^>]+>", "", h or "")))
+
+
+def same_on_spreaker(ep, raw):
+    """True, wenn Spreaker die Fassung raw gespeichert hat: HTML-Feld (falls geliefert) gleich, sonst Textinhalt gleich."""
+    h = ep.get("description_html")
+    if h:
+        return norm(h) == norm(raw) or text_key(h) == text_key(raw)
+    return text_key(ep.get("description") or "") == text_key(raw)
+
+
 def sha(s):
     return hashlib.sha1(s.encode("utf-8")).hexdigest()[:12]
 
@@ -370,13 +384,18 @@ def main():
                 diff = "\n".join(difflib.unified_diff(to_text(old), to_text(raw), "aktuell", "neu", lineterm="", n=1))
                 rows.append(f"## {html.escape(cur.get('title') or title)} ({eid}, {plays(eid)} Abrufe, {len(raw)} Zeichen)\n\n```diff\n{diff or '(kein Unterschied)'}\n```\n\n<details><summary>Neue Beschreibung (HTML)</summary>\n\n```html\n{raw}\n```\n\n</details>\n")
                 continue
-            if norm(old) == norm(raw):
+            if same_on_spreaker(cur, raw):
                 log_applied(eid, "unchanged", h, plays(eid), title, "Beschreibung ist schon aktuell"); continue
+            bk = SN / "spreaker_backup" / f"{eid}.json"   # alte Fassung sichern, bevor sie ueberschrieben wird (nichts loeschen)
+            if not bk.exists():
+                bk.parent.mkdir(parents=True, exist_ok=True)
+                bk.write_text(json.dumps({"episode_id": eid, "saved": now(), "title": cur.get("title") or "", "description": old,
+                                          "description_html": cur.get("description_html") or ""}, ensure_ascii=False, indent=1) + "\n", "utf-8")
             sp.req("POST", f"/episodes/{eid}", data={"description": raw})
             after = sp.req("GET", f"/episodes/{eid}")["episode"]
             if (after.get("title") or "") != (cur.get("title") or ""):
                 log_applied(eid, "mismatch", h, plays(eid), title, "Titel hat sich geaendert - bitte pruefen"); errors += 1; continue
-            if norm(after.get("description") or "") == norm(raw):
+            if same_on_spreaker(after, raw):
                 log_applied(eid, "ok", h, plays(eid), title, f"geschrieben und geprueft ({len(raw)} Zeichen)"); written += 1
             else:
                 log_applied(eid, "mismatch", h, plays(eid), title, f"Spreaker hat {len(after.get('description') or '')} Zeichen gespeichert, erwartet {len(raw)}"); errors += 1
