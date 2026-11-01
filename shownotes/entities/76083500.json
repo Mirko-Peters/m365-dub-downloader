@@ -1,0 +1,199 @@
+{
+ "episode_id": "76083500",
+ "slug": "microsoft-graph-webhooks-simply-explained",
+ "title": "Webhooks Microsoft Graph expliqués : des notifications en temps réel au lieu du polling permanent",
+ "lang": "fr",
+ "duration_s": 1141,
+ "transcript_source": "transcripts/fr/ra62dODpiag.vtt",
+ "time_basis": "vtt",
+ "entities": [
+  {
+   "slug": "mirko-peters",
+   "name": "Mirko Peters",
+   "type": "person",
+   "score": 40,
+   "mentions": 1,
+   "first_mention_s": 70,
+   "quote": "Je suis votre Peter.",
+   "url": "https://www.m365.fm/fr/entity/mirko-peters/"
+  },
+  {
+   "slug": "change-notifications",
+   "name": "Change notifications and webhooks",
+   "type": "concept",
+   "score": 100,
+   "mentions": 49,
+   "first_mention_s": 77,
+   "quote": "Microsoft Graph utilise aussi des webhooks.",
+   "url": "https://www.m365.fm/fr/entity/change-notifications/"
+  },
+  {
+   "slug": "graph",
+   "name": "Microsoft Graph",
+   "type": "product",
+   "score": 90,
+   "mentions": 65,
+   "first_mention_s": 77,
+   "quote": "Au lieu d'appeler Microsoft Graph toutes les quelques minutes, vous attendez que Microsoft Graph vous appelle.",
+   "url": "https://www.m365.fm/fr/entity/graph/"
+  },
+  {
+   "slug": "entra-id",
+   "name": "Microsoft Entra ID",
+   "type": "product",
+   "score": 40,
+   "mentions": 2,
+   "first_mention_s": 1047,
+   "quote": "par les RH dans EntraID.",
+   "url": "https://www.m365.fm/fr/entity/entra-id/"
+  },
+  {
+   "slug": "sharepoint",
+   "name": "SharePoint",
+   "type": "product",
+   "score": 35,
+   "mentions": 5,
+   "first_mention_s": 262,
+   "quote": "Un fichier est mis à jour dans SharePoint.",
+   "url": "https://www.m365.fm/fr/entity/sharepoint/"
+  },
+  {
+   "slug": "microsoft-365",
+   "name": "Microsoft 365",
+   "type": "platform",
+   "score": 30,
+   "mentions": 2,
+   "first_mention_s": 71,
+   "quote": "Quand quelque chose change dans Microsoft 365,",
+   "url": "https://www.m365.fm/fr/entity/microsoft-365/"
+  },
+  {
+   "slug": "azure-service-bus",
+   "name": "Azure Service Bus",
+   "type": "product",
+   "score": 20,
+   "mentions": 1,
+   "first_mention_s": 824,
+   "quote": "Une file d'attente Azure, un service bus ou même une simple table de base de données.",
+   "url": "https://www.m365.fm/fr/entity/azure-service-bus/"
+  },
+  {
+   "slug": "teams",
+   "name": "Microsoft Teams",
+   "type": "product",
+   "score": 20,
+   "mentions": 1,
+   "first_mention_s": 263,
+   "quote": "Un message est envoyé dans Teams.",
+   "url": "https://www.m365.fm/fr/entity/teams/"
+  }
+ ],
+ "new_entities": [
+  {
+   "slug": "throttling",
+   "name": "Throttling",
+   "type": "concept",
+   "mentions": 4,
+   "first_mention_s": 146,
+   "quote": "Microsoft a un nom pour ce sondage trop agressif, la limitation de débit,",
+   "status": "review"
+  }
+ ],
+ "quotes": [
+  {
+   "text": "Même si vous interrogez toutes les 5 minutes, vous n'obtenez toujours pas de mise à jour en temps réel. Un changement pourrait survenir une minute après vos derniers sondages. Vous ne le saurez pas avant 4 minutes de plus.",
+   "speaker": "Mirko Peters",
+   "speaker_slug": "mirko-peters",
+   "time_s": 184,
+   "entities": [
+    "change-notifications"
+   ],
+   "why": "Warum Polling nie Echtzeit ist"
+  },
+  {
+   "text": "Un webhook est une requête HTTP envoyée automatiquement quand quelque chose se produit. Vous ne le demandez pas, le serveur vous transmet simplement.",
+   "speaker": "Mirko Peters",
+   "speaker_slug": "mirko-peters",
+   "time_s": 212,
+   "entities": [
+    "change-notifications"
+   ],
+   "why": "Webhook in einem Satz definiert"
+  },
+  {
+   "text": "Si vous le renvoyez encapsulé dans du JSON ou encodé de quelque manière que ce soit, la validation échoue. Votre abonnement ne sera pas créé.",
+   "speaker": "Mirko Peters",
+   "speaker_slug": "mirko-peters",
+   "time_s": 651,
+   "entities": [
+    "graph"
+   ],
+   "why": "Häufigster Fehler beim Validierungs-Handshake"
+  },
+  {
+   "text": "Accuser réception immédiatement et traiter de manière asynchrone. Votre point de terminaison doit valider l'état du client, accepter la notification et renvoyer une réponse 200 ou 202 aussi vite que possible.",
+   "speaker": "Mirko Peters",
+   "speaker_slug": "mirko-peters",
+   "time_s": 811,
+   "entities": [
+    "change-notifications"
+   ],
+   "why": "Best Practice für Notification-Endpunkte"
+  },
+  {
+   "text": "Mais la requête Delta est fiable, vous pouvez l'exécuter à tout moment et elle vous donne une liste complète des changements depuis votre dernière vérification. Ainsi, même si vous manquez une notification, vous pouvez vous rattraper.",
+   "speaker": "Mirko Peters",
+   "speaker_slug": "mirko-peters",
+   "time_s": 1001,
+   "entities": [
+    "change-notifications",
+    "graph"
+   ],
+   "why": "Delta Query als Sicherheitsnetz"
+  }
+ ],
+ "chapters": [
+  {
+   "start_s": 64,
+   "title": "Introduction : le problème du polling"
+  },
+  {
+   "start_s": 207,
+   "title": "Qu'est-ce qu'un webhook ?"
+  },
+  {
+   "start_s": 316,
+   "title": "Comment fonctionnent les webhooks Microsoft Graph"
+  },
+  {
+   "start_s": 434,
+   "title": "Création d'un abonnement"
+  },
+  {
+   "start_s": 583,
+   "title": "La poignée de main de validation"
+  },
+  {
+   "start_s": 699,
+   "title": "Gestion des notifications et sécurité"
+  },
+  {
+   "start_s": 853,
+   "title": "Cycle de vie, renouvellement et requête Delta"
+  },
+  {
+   "start_s": 1042,
+   "title": "Exemple concret et prochaines étapes"
+  }
+ ],
+ "takeaways": [
+  "Le polling gaspille des requêtes, déclenche le throttling de Microsoft Graph et n'offre jamais de temps réel ; avec les webhooks (notifications de changement), Graph envoie un HTTP POST à votre point de terminaison dès qu'une ressource change.",
+  "Un abonnement comprend l'URL de notification, la ressource, le type de changement et une date d'expiration ; le point de terminaison doit renvoyer le jeton de validation en texte brut, vérifier l'état client et répondre en moins de 3 secondes.",
+  "Les abonnements expirent et doivent être renouvelés (notifications de cycle de vie) ; combinez les webhooks avec la requête Delta pour récupérer exactement ce qui a changé, même après une notification perdue."
+ ],
+ "hook": "Vérifier sa boîte aux lettres toutes les dix minutes, c'est du polling ; le facteur qui sonne dès qu'une lettre arrive, c'est un webhook. Dans cet épisode, nous expliquons comment fonctionnent les webhooks Microsoft Graph – abonnement, validation, sécurité, renouvellement – et pourquoi la combinaison avec la requête Delta les rend fiables.",
+ "youtube_video_id": "ra62dODpiag",
+ "source_video_id": "ra62dODpiag",
+ "show_id": 7393223,
+ "generated_at": "2026-11-01T11:09:06Z"
+}
