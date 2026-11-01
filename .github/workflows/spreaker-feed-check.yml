@@ -1,0 +1,26 @@
+name: Spreaker-Feed gegen geschriebene Shownotes (T25)
+# Nachkontrolle nach apply-shownotes: stehen Text und Links im oeffentlichen RSS (Apple/Spotify)? Bericht reports/spreaker-feed-check.md
+on:
+  workflow_dispatch:
+  workflow_run:
+    workflows: ["Shownotes nach Spreaker schreiben (T25)"]
+    types: [completed]
+permissions:
+  contents: write
+concurrency: { group: spreaker-feed-check, cancel-in-progress: false }
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.12" }
+      - run: python tools/check_spreaker_feed.py
+      - name: Bericht speichern
+        run: |
+          git config user.name "m365-site-bot"; git config user.email "actions@users.noreply.github.com"
+          git add reports/spreaker-feed-check.md reports/spreaker-feed-check.json
+          if git diff --cached --quiet; then echo "unveraendert"; exit 0; fi
+          git commit -q -m "Spreaker-Feed-Pruefung $(date -u +%Y-%m-%dT%H:%MZ) [skip ci]"
+          for i in 1 2 3 4 5; do git pull --rebase --autostash -q origin main && git push -q origin HEAD:main && exit 0; sleep $((i*5)); done
+          exit 1
