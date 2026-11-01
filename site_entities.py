@@ -272,6 +272,8 @@ def build(g, wiki_links, experts_by_ent, ep_find):
     recs = sorted(ENTS.values(), key=lambda e: e["id"])
     MOD = mod_dates(recs, TODAY)
     write("entities.json", json.dumps({"version": 1, "generated": TODAY, "license": "CC BY 4.0, M365.FM community", "entities": recs}, ensure_ascii=False, indent=1))
+    import site_learn as _SL   # T30: Repo-Fassung ohne D1 - Grundlage fuer den Abgleich im Worker (syncEntitiesFromSite)
+    write("entities-src.json", json.dumps({"version": 1, "generated": TODAY, "entities": sorted(_SL.SRC_ENTS.values(), key=lambda e: e["id"])}, ensure_ascii=False))
     write("entities.jsonld", json.dumps({"@context": "https://schema.org", "@graph": [ent_ld(BASE, e, "en", gl_ids) for e in recs]}, ensure_ascii=False))
 
     cfg_t = lambda lang: S[lang]

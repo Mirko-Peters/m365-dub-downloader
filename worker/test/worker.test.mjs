@@ -190,3 +190,90 @@ test("register: applyRenames gibt der vorhandenen Folge den neuen Slug, nimmt Ue
   assert.equal(raw.prepare("SELECT item_id FROM translation WHERE kind='episode'").get().item_id, "neu");
   assert.deepEqual(await applyRenames(db, { alt: "neu" }), [], "zweiter Lauf aendert nichts");
 });
+
+test("entities: syncEntitiesFromSite uebernimmt JSON-Aenderungen, wenn zuletzt eine Maschine das Feld gesetzt hat, und laesst Menschen-Aenderungen stehen (SQLite)", async () => {
+  const { DatabaseSync } = await import("node:sqlite");
+  const raw = new DatabaseSync(":memory:");
+  const dir = new URL("../migrations/", import.meta.url);
+  for (const f of readdirSync(dir).filter((f) => f.endsWith(".sql")).sort()) raw.exec(readFileSync(new URL(f, dir), "utf-8"));
+  const db = { prepare(sql) { const st = raw.prepare(sql); let args = []; const o = { bind(...a) { args = a; return o; }, all: async () => ({ results: st.all(...args) }), first: async () => st.get(...args) ?? null, run: async () => st.run(...args) }; return o; }, async batch(s) { for (const x of s) await x.run(); } };
+  const ins = (eid, data, uid, status, summary) => raw.prepare("INSERT INTO entity_rev(eid,data,summary,user_id,status,created) VALUES(?,?,?,?,?,1)").run(eid, JSON.stringify(data), summary, uid, status);
+  // a: nur importiert -> Name und Doku-Link aus der JSON
+  ins("a", { type: "person", name: "Yves HABERSAAT", desc: { en: "Bio" } }, 0, "live", "Übernahme aus entities.json");
+  // b: Mensch hat den Namen geaendert, danach Auto-Uebersetzung -> Name bleibt, neuer Doku-Link kommt, fr-Uebersetzung bleibt
+  ins("b", { type: "product", name: "Alt", desc: { en: "E" } }, 0, "old", "Übernahme aus entities.json");
+  ins("b", { type: "product", name: "Von Hand", desc: { en: "E" } }, 7, "old", "Korrektur");
+  ins("b", { type: "product", name: "Von Hand", desc: { en: "E", fr: "F" } }, 0, "live", "Auto-Übersetzung (Claude Haiku)");
+  // c: unveraendert -> nichts
+  ins("c", { type: "concept", name: "C" }, 0, "live", "Übernahme aus entities.json");
+  const src = [{ id: "a", type: "person", name: "Yves Habersaat", desc: { en: "Bio" }, docs: "https://learn.microsoft.com/x" },
+    { id: "b", type: "product", name: "JSON-Name", desc: { en: "E" }, docs: "https://learn.microsoft.com/b", wikidata: "Q42" },
+    { id: "c", type: "concept", name: "C" }, { id: "neu", type: "concept", name: "Neu" }];
+  const old = globalThis.fetch; let body = { entities: src };
+  globalThis.fetch = async (u) => ({ ok: true, json: async () => (String(u).endsWith("/entities-src.json") ? body : { entities: src }) });
+  try {
+    const { syncEntitiesFromSite, importEntitiesFromSite } = await import("../src/entities.js");
+    const r = await syncEntitiesFromSite({ DB: db, SITE: "https://x" });
+    assert.equal(r.updated, 2); assert.equal(r.candidates, 2);
+    const live = (id) => JSON.parse(raw.prepare("SELECT data FROM entity_rev WHERE eid=? AND status='live'").get(id).data);
+    assert.equal(live("a").name, "Yves Habersaat"); assert.equal(live("a").docs, "https://learn.microsoft.com/x");
+    assert.equal(live("b").name, "Von Hand", "Menschen-Aenderung bleibt"); assert.equal(live("b").docs, "https://learn.microsoft.com/b"); assert.equal(live("b").wikidata, "Q42"); assert.equal(live("b").desc.fr, "F", "Uebersetzung bleibt");
+    assert.equal(raw.prepare("SELECT COUNT(*) n FROM entity_rev WHERE eid='c'").get().n, 1, "unveraendert -> keine neue Fassung");
+    assert.equal(raw.prepare("SELECT COUNT(*) n FROM entity_rev WHERE eid IN ('a','b')").get().n, 6, "alte Fassungen bleiben (status old), nichts geloescht");
+    const r2 = await syncEntitiesFromSite({ DB: db, SITE: "https://x" });
+    assert.equal(r2.updated, 0, "zweiter Lauf aendert nichts"); assert.equal(r2.candidates, 1, "b bleibt Kandidat wegen des Menschen-Namens");
+    body = { entities: src.slice(0, 2) };   // halber Seitenbau
+    const r3 = await syncEntitiesFromSite({ DB: db, SITE: "https://x" });
+    assert.match(r3.skipped || "", /unvollstaendig/);
+    body = { entities: src };
+    const r4 = await importEntitiesFromSite({ DB: db, SITE: "https://x" });
+    assert.equal(r4.imported, 1, "neue ID wird wie bisher uebernommen"); assert.equal(r4.synced.updated, 0);
+    raw.exec("INSERT INTO meta(k,v) VALUES('entity_source','db') ON CONFLICT(k) DO UPDATE SET v='db'");
+    assert.match((await syncEntitiesFromSite({ DB: db, SITE: "https://x" })).skipped, /entity_source=db/);
+  } finally { globalThis.fetch = old; }
+});
+
+test("entities: Abgleich ueberschreibt keine Menschen (freigegebener Vorschlag mit aelterer id, geloeschtes Konto, absichtlich geleertes Feld, selbst verwaltet) (SQLite)", async () => {
+  const { DatabaseSync } = await import("node:sqlite");
+  const raw = new DatabaseSync(":memory:");
+  const dir = new URL("../migrations/", import.meta.url);
+  for (const f of readdirSync(dir).filter((f) => f.endsWith(".sql")).sort()) raw.exec(readFileSync(new URL(f, dir), "utf-8"));
+  const db = { prepare(sql) { const st = raw.prepare(sql); let args = []; const o = { bind(...a) { args = a; return o; }, all: async () => ({ results: st.all(...args) }), first: async () => st.get(...args) ?? null, run: async () => st.run(...args) }; return o; }, async batch(s) { for (const x of s) await x.run(); } };
+  const ins = (eid, data, uid, status, summary) => raw.prepare("INSERT INTO entity_rev(eid,data,summary,user_id,status,created) VALUES(?,?,?,?,?,1)").run(eid, JSON.stringify(data), summary, uid, status);
+  const IMP = "Übernahme aus entities.json", TR = "Auto-Übersetzung (Claude Haiku)";
+  // p: Vorschlag (id 2) erst nach einer Maschinen-Fassung (id 3) freigegeben -> live hat die kleinere id
+  ins("p", { type: "product", name: "Teams Alt" }, 0, "old", IMP);
+  ins("p", { type: "product", name: "Microsoft Teams" }, 7, "live", "Name korrigiert");
+  ins("p", { type: "product", name: "Teams Alt", desc: { fr: "x" } }, 0, "old", TR);
+  // d: Mensch korrigiert, Konto spaeter geloescht (user_id 0, Zusammenfassung bleibt)
+  ins("d", { type: "person", name: "Yves HABERSAAT", job: "CTO" }, 0, "old", IMP);
+  ins("d", { type: "person", name: "Yves Habersaat", job: "Principal Architect" }, 0, "live", "Eigenes Profil");
+  // w: Mensch entfernt eine falsche Wikidata-ID
+  ins("w", { type: "product", name: "W", wikidata: "Q1" }, 0, "old", IMP);
+  ins("w", { type: "product", name: "W", wikidata: "" }, 9, "live", "falsche Q-ID entfernt");
+  // o: selbst verwaltet (verifizierter Claim)
+  ins("o", { type: "org", name: "Firma" }, 0, "live", IMP);
+  raw.exec("INSERT INTO entity_claims(eid,user_id,status,created) VALUES('o',5,'verified',1)");
+  const src = [{ id: "p", type: "product", name: "Teams Alt", wikidata: "Q2" }, { id: "d", type: "person", name: "Yves HABERSAAT", job: "CTO" },
+    { id: "w", type: "product", name: "W", wikidata: "Q1", docs: "https://learn.microsoft.com/w" }, { id: "o", type: "org", name: "JSON-Firma" }];
+  const old = globalThis.fetch; globalThis.fetch = async () => ({ ok: true, json: async () => ({ entities: src }) });
+  try {
+    const { syncEntitiesFromSite } = await import("../src/entities.js");
+    const r = await syncEntitiesFromSite({ DB: db, SITE: "https://x" });
+    const live = (id) => JSON.parse(raw.prepare("SELECT data FROM entity_rev WHERE eid=? AND status='live'").get(id).data);
+    assert.equal(raw.prepare("SELECT COUNT(*) n FROM entity_rev WHERE status='live' GROUP BY eid HAVING n>1").all().length, 0, "je Entitaet genau eine live-Fassung");
+    assert.equal(live("p").name, "Microsoft Teams", "freigegebener Vorschlag bleibt"); assert.equal(live("p").wikidata, "Q2");
+    assert.equal(live("d").name, "Yves Habersaat", "Aenderung eines geloeschten Kontos bleibt"); assert.equal(live("d").job, "Principal Architect");
+    assert.equal(live("w").wikidata, "", "absichtlich geleert bleibt leer"); assert.equal(live("w").docs, "https://learn.microsoft.com/w", "nie gesetztes Feld wird gefuellt");
+    assert.equal(live("o").name, "Firma", "selbst verwaltet wird nicht abgeglichen");
+    assert.equal(r.updated, 2);
+    // Wettlauf: live wechselt zwischen Lesen und Schreiben -> nichts geschrieben
+    const before = raw.prepare("SELECT COUNT(*) n FROM entity_rev").get().n;
+    const st = raw.prepare("SELECT id FROM entity_rev WHERE eid='w' AND status='live'").get().id;
+    raw.exec(`UPDATE entity_rev SET status='old' WHERE id=${st}`); ins("w", { type: "product", name: "W2" }, 9, "live", "neu");
+    raw.prepare("UPDATE entity_rev SET status='old' WHERE id=? AND status='live'").run(st);
+    raw.prepare("INSERT INTO entity_rev(eid,data,summary,user_id,status,created) SELECT ?,?,?,0,'live',1 WHERE NOT EXISTS (SELECT 1 FROM entity_rev WHERE eid=? AND status='live')").run("w", "{}", "Abgleich mit entities.json: x", "w");
+    assert.equal(raw.prepare("SELECT COUNT(*) n FROM entity_rev").get().n, before + 1, "bedingtes Schreiben greift nicht, wenn live gewechselt hat");
+    assert.equal(live("w").name, "W2");
+  } finally { globalThis.fetch = old; }
+});
