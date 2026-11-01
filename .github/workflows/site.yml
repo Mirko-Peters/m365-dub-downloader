@@ -92,7 +92,16 @@ jobs:
           python scrape_spotify.py
           if [ -n "$(git status --porcelain data/spotify_links.json)" ]; then
             git config user.name "m365-site-bot"; git config user.email "actions@users.noreply.github.com"
-            git add data/spotify_links.json && git commit -m "Spotify-Folgenlinks aktualisiert" && (git pull --rebase --autostash -q -X theirs || git rebase --abort) && git push -q || true
+            (
+              for f in data/spotify_links.json; do [ -e "$f" ] && git add -A "$f"; done
+              if git diff --cached --quiet; then echo "nichts zu sichern"; exit 0; fi
+              git commit -q -m "Spotify-Folgenlinks aktualisiert"
+              for i in 1 2 3 4 5; do
+                git pull --rebase --autostash -q -X theirs origin main && git push -q origin HEAD:main && exit 0
+                sleep $((i*5))
+              done
+              echo "::error::Spotify-Folgenlinks konnten nicht gesichert werden"; exit 1
+            )
           fi
       - name: Speaker der Events zusammenfuehren (Personen-Entitaeten, Sessions)
         run: python tools/build_speakers.py
@@ -157,8 +166,16 @@ jobs:
         run: |
           if [ -n "$(git status --porcelain data/money_keywords.json data/members_export.json data/entity_mod.json data/episode_slugs.json)" ]; then
             git config user.name "m365-site-bot"; git config user.email "actions@users.noreply.github.com"
-            git add data/money_keywords.json data/members_export.json data/entity_mod.json $( [ -e data/episode_slugs.json ] && echo data/episode_slugs.json ) && git commit -m "Money-Keywords, Profil-Export, Entitaets-Aenderungsdaten und Folgen-Slugs aktualisiert"
-            (git pull --rebase --autostash -q -X theirs || git rebase --abort) && git push -q || true
+            (
+              for f in data/money_keywords.json data/members_export.json data/entity_mod.json data/episode_slugs.json; do [ -e "$f" ] && git add -A "$f"; done
+              if git diff --cached --quiet; then echo "nichts zu sichern"; exit 0; fi
+              git commit -q -m "Money-Keywords, Profil-Export, Entitaets-Aenderungsdaten und Folgen-Slugs aktualisiert"
+              for i in 1 2 3 4 5; do
+                git pull --rebase --autostash -q -X theirs origin main && git push -q origin HEAD:main && exit 0
+                sleep $((i*5))
+              done
+              echo "::error::Money-Keywords, Profil-Export, Entitaets-Aenderungsdaten und Folgen-Slugs konnten nicht gesichert werden"; exit 1
+            )
           fi
       - name: Interne Links prüfen
         continue-on-error: true
