@@ -1,0 +1,190 @@
+{
+ "episode_id": "76083521",
+ "slug": "microsoft-graph-delta-abfragen-erklart-delta-link-token-ablauf-fehler-410-und-hybrid-mit-change-notifications",
+ "title": "Microsoft Graph Delta-Abfragen erklärt: Delta-Link, Token-Ablauf, Fehler 410 und Hybrid mit Change Notifications",
+ "lang": "de",
+ "duration_s": 941,
+ "transcript_source": "transcripts/de/t88PcmlYUN0.vtt",
+ "time_basis": "vtt",
+ "entities": [
+  {
+   "slug": "mirko-peters",
+   "name": "Mirko Peters",
+   "type": "person",
+   "score": 40,
+   "mentions": 1,
+   "first_mention_s": 771,
+   "quote": "Ich bin der Moderator Mekopetas. Heute sprechen wir über die Entwicklung mit Delta-Query in der Produktion.",
+   "url": "https://www.m365.fm/de/entity/mirko-peters/"
+  },
+  {
+   "slug": "change-notifications",
+   "name": "Change notifications and webhooks",
+   "type": "concept",
+   "score": 100,
+   "mentions": 59,
+   "first_mention_s": 117,
+   "quote": "Delta-Abfragen lösen genau dieses Problem.",
+   "url": "https://www.m365.fm/de/entity/change-notifications/"
+  },
+  {
+   "slug": "graph",
+   "name": "Microsoft Graph",
+   "type": "product",
+   "score": 90,
+   "mentions": 22,
+   "first_mention_s": 143,
+   "quote": "Eine Delta-Abfrage fragt Microsoft Graph nur nach den Änderungen seit ihrer letzten Überprüfung ab.",
+   "url": "https://www.m365.fm/de/entity/graph/"
+  },
+  {
+   "slug": "entra-id",
+   "name": "Microsoft Entra ID",
+   "type": "product",
+   "score": 45,
+   "mentions": 4,
+   "first_mention_s": 107,
+   "quote": "Wenn jemand einen Benutzer in der Microsoft Entra-ID aktualisiert, wird diese Änderung nicht sofort in Delta-Abfragen",
+   "url": "https://www.m365.fm/de/entity/entra-id/"
+  },
+  {
+   "slug": "microsoft-365",
+   "name": "Microsoft 365",
+   "type": "platform",
+   "score": 30,
+   "mentions": 1,
+   "first_mention_s": 169,
+   "quote": "Genau das macht eine Delta-Abfrage allerdings für Ihre Microsoft 365 Daten.",
+   "url": "https://www.m365.fm/de/entity/microsoft-365/"
+  },
+  {
+   "slug": "sharepoint",
+   "name": "SharePoint",
+   "type": "product",
+   "score": 25,
+   "mentions": 2,
+   "first_mention_s": 107,
+   "quote": "Diese Daten befinden sich in SharePoint, nicht im Hauptverzeichensspeicher.",
+   "url": "https://www.m365.fm/de/entity/sharepoint/"
+  },
+  {
+   "slug": "exchange-online",
+   "name": "Exchange Online",
+   "type": "product",
+   "score": 20,
+   "mentions": 1,
+   "first_mention_s": 107,
+   "quote": "Stellen Sie sich nun vor, Sie erstellen eine App, die Benutzer von Microsoft Entra-ID oder E-Mails von Exchange oder",
+   "url": "https://www.m365.fm/de/entity/exchange-online/"
+  }
+ ],
+ "new_entities": [
+  {
+   "slug": "graph-explorer",
+   "name": "Graph Explorer",
+   "type": "product",
+   "mentions": 1,
+   "first_mention_s": 849,
+   "quote": "Verwenden Sie Graph Explorer. Wählen Sie einen kurzen Zeitraum aus.",
+   "status": "review"
+  }
+ ],
+ "quotes": [
+  {
+   "text": "Delta-Abfragen lösen genau dieses Problem. Anstatt nach allem zu fragen, fragen Sie nur nach den Änderungen seit Ihrer letzten Überprüfung.",
+   "speaker": "Mirko Peters",
+   "speaker_slug": "mirko-peters",
+   "time_s": 117,
+   "entities": [
+    "change-notifications"
+   ],
+   "why": "Kernidee der Folge in einem Satz"
+  },
+  {
+   "text": "Sie müssen keine Zeitstempel oder Versionsnummern selbst speichern. Sie müssen nicht herausfinden, was sich geändert hat und was nicht. Microsoft kümmert sich um die gesamte Nachverfolgung.",
+   "speaker": "Mirko Peters",
+   "speaker_slug": "mirko-peters",
+   "time_s": 332,
+   "entities": [
+    "change-notifications",
+    "graph"
+   ],
+   "why": "Erklärt den Nutzen des Delta-Links"
+  },
+  {
+   "text": "Wenn Ihre App nicht mindestens alle sieben Tage synchronisiert wird, läuft dieses Token ab. Und wenn es abläuft, können Sie nicht einfach dort weitermachen, wo Sie aufgehört haben.",
+   "speaker": "Mirko Peters",
+   "speaker_slug": "mirko-peters",
+   "time_s": 355,
+   "entities": [
+    "change-notifications"
+   ],
+   "why": "Wichtigste Einschränkung: Token-Ablauf"
+  },
+  {
+   "text": "Stattdessen verwenden Sie diese Benachrichtigung als Trigger. Wenn Sie eine Push-Benachrichtigung erhalten, die besagt, dass sich etwas geändert hat, rufen Sie Delta Query auf, um genau die Änderung abzurufen.",
+   "speaker": "Mirko Peters",
+   "speaker_slug": "mirko-peters",
+   "time_s": 667,
+   "entities": [
+    "change-notifications",
+    "graph"
+   ],
+   "why": "Beschreibt das empfohlene Hybrid-Muster"
+  },
+  {
+   "text": "Sie erhalten die Unmittelbarkeit von Push-Benachrichtigungen mit der Gründlichkeit von Delta-Query und vermeiden die Schwächen jedes Ansatzes, wenn er einzeln verwendet wird.",
+   "speaker": "Mirko Peters",
+   "speaker_slug": "mirko-peters",
+   "time_s": 757,
+   "entities": [
+    "change-notifications"
+   ],
+   "why": "Fazit zum Vergleich Push vs. Pull"
+  }
+ ],
+ "chapters": [
+  {
+   "start_s": 0,
+   "title": "Einstieg: Warum Apps alles neu herunterladen"
+  },
+  {
+   "start_s": 149,
+   "title": "Was ist eine Delta-Abfrage?"
+  },
+  {
+   "start_s": 238,
+   "title": "So funktioniert das Token-System: Delta-Link und Next-Link"
+  },
+  {
+   "start_s": 342,
+   "title": "Sechs Einschränkungen: Token-Ablauf, Fehler 410, Verzögerung, Duplikate"
+  },
+  {
+   "start_s": 505,
+   "title": "Delta Query vs. Change Notifications: Pull gegen Push"
+  },
+  {
+   "start_s": 647,
+   "title": "Der hybride Ansatz: Türklingel plus Kamera"
+  },
+  {
+   "start_s": 764,
+   "title": "Sechs praktische Regeln für Delta Query in der Produktion"
+  },
+  {
+   "start_s": 876,
+   "title": "Beispiel: Kalenderereignisse synchronisieren"
+  }
+ ],
+ "takeaways": [
+  "Eine Delta-Abfrage in Microsoft Graph liefert nach einer ersten Vollsynchronisierung nur neue, geänderte oder gelöschte Elemente; der gespeicherte Delta-Link merkt sich, wo Ihre App aufgehört hat, und der Next-Link signalisiert weitere Seiten.",
+  "Planen Sie die Grenzen fest ein: Delta-Token für Verzeichnisobjekte laufen nach sieben Tagen ab, HTTP 410 erzwingt eine komplette Neusynchronisierung, Änderungen kommen verzögert an und Duplikate verlangen idempotente Verarbeitung.",
+  "Für Produktions-Apps empfiehlt sich der hybride Ansatz: Change Notifications dienen als Auslöser, die Delta-Abfrage holt die tatsächlichen Änderungen ab – dazu Delta-Link sicher speichern, mindestens alle sechs Tage synchronisieren und bei Fehler 429 exponentiell zurückfahren."
+ ],
+ "hook": "Wenn sich von 1000 Kalenderereignissen nur eines ändert, lädt eine klassische App trotzdem alle 1000 herunter. Diese Folge erklärt, wie Delta-Abfragen in Microsoft Graph nur die Änderungen seit der letzten Prüfung abrufen, wo Token-Ablauf, Fehler 410 und Duplikate lauern und warum die Kombination mit Change Notifications der Goldstandard für Produktions-Apps ist.",
+ "youtube_video_id": "t88PcmlYUN0",
+ "source_video_id": "t88PcmlYUN0",
+ "show_id": 7393187,
+ "generated_at": "2026-11-01T07:06:57Z"
+}
