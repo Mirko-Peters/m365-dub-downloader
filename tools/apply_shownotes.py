@@ -78,6 +78,9 @@ def check_html(raw):
         errs.append("nicht geschlossen: " + ", ".join(f"<{t}>" for t in p.stack))
     if not "".join(p.text).strip():
         errs.append("kein Text")
+    _rf = ROOT / "data" / "slug_renames.json"   # T12: kein Link auf die alte Adresse einer umbenannten Folge
+    for _old in ((json.loads(_rf.read_text("utf-8")).get("episodes") or {}) if _rf.exists() else {}):
+        if re.search(r'href="[^"]*/show/episodes/' + re.escape(_old) + r'/', s): errs.append(f"Link auf alten Folgen-Slug {_old} (data/slug_renames.json)")
     n_links = len(re.findall(r"<a\s[^>]*href=", s, flags=re.I))
     if n_links < MIN_LINKS:   # Mirko, 1.11.: mindestens 6 Links (vorher 8-10, kurz 4); weniger -> nicht schreiben, Generator ergaenzt
         errs.append(f"{n_links} Links (mindestens {MIN_LINKS})")

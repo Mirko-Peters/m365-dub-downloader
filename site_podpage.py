@@ -73,6 +73,24 @@ def _fix_name(g):
     return {**g, "name": to} if to and to != g.get("name") else g
 
 
+def _renames():
+    """T12: umbenannte Folgen-Slugs (data/slug_renames.json, alt -> neu)."""
+    f = D / "slug_renames.json"
+    return (json.loads(f.read_text("utf-8")).get("episodes") or {}) if f.exists() else {}
+
+
+RENAMES = _renames()
+
+
+def rename_links(h):
+    """T12: Links auf einen alten Folgen-Slug (frueher flach /<slug>/ auf Podpage, oder /show/episodes/<slug>/, auch mit Sprachpfad)
+    auf die neue Folgenadresse umschreiben. Im Inhalt (Blog, Show Notes) meint die flache Podpage-Adresse immer die Folge."""
+    if not RENAMES or not h: return h
+    alt = "|".join(re.escape(o) for o in sorted(RENAMES, key=len, reverse=True))
+    pat = re.compile(r'href="((?:https?://(?:www\.)?m365\.fm)?)((?:/[a-z]{2})?/show/episodes/|/)(' + alt + r')/?([?#][^"]*)?"')
+    return pat.sub(lambda m: f'href="{m.group(1)}{m.group(2) if m.group(2) != "/" else "/show/episodes/"}{RENAMES[m.group(3)]}/{m.group(4) or ""}"', h)
+
+
 _EXTRA = []   # einmal je Bau berechnet; load() gibt Kopien heraus
 _SLUGS_F = D / "episode_slugs.json"   # Spreaker-ID -> Slug, damit eine Titelaenderung die URL nicht verschiebt (der Seitenbau speichert die Datei)
 
@@ -360,7 +378,7 @@ def build(g):
         def rep(m):
             u = m.group(1); path = _re.sub(r"^https?://(www\.)?m365\.fm", "", u)
             if not path.startswith("/") or path.startswith("//"): return m.group(0)
-            seg = path.strip("/").split("#")[0]
+            seg = path.strip("/").split("#")[0]; seg = RENAMES.get(seg, seg)
             if seg in eslug: return f'href="{root}episodes/{seg}/"'
             if seg.startswith("blog/") and seg[5:] in bslug: return f'href="{root}blog/{seg[5:]}/"'
             if seg == "blog": return f'href="{root}blog/"'
@@ -368,7 +386,7 @@ def build(g):
         return _re.sub(r'href="([^"]+)"', rep, h)
     def bp_ep(p):
         for m in _re.finditer(r'href="([^"]+)"', p.get("html") or ""):
-            seg = _re.sub(r"^https?://(www\.)?m365\.fm", "", m.group(1)).strip("/")
+            seg = _re.sub(r"^https?://(www\.)?m365\.fm", "", m.group(1)).strip("/"); seg = RENAMES.get(seg, seg)
             if seg in eslug: return seg
         return None
     bp_by_ep = {}
@@ -408,6 +426,7 @@ def build(g):
             _snh, _snld, _snfaq = SNS.render(snx, "en", ENTS_ALL, BASE)
             nnotes, nld = _snh + f"<style>{SNS.CSS}</style>", [x for x in nld if x.get("@type") != "FAQPage"] + _snld
             if _snfaq: nfaq = ""   # die FAQ der Vollfassung ersetzt aeltere FAQ-Bloecke (kein doppeltes FAQPage-Schema)
+        nnotes = rename_links(nnotes)   # T12: Show Notes verlinken die Folge oft ueber die alte Podpage-Adresse
         prev_, next_ = (eps[k + 1] if k + 1 < len(eps) else None), (eps[k - 1] if k else None)
         aud = f'<audio controls preload="none" style="width:100%" src="{esc(r["audio"])}"></audio>' if r and r.get("audio") else ""
         elk = elinks.get(f"{nrec['id']}:en", {}) if nrec else {}
@@ -420,7 +439,7 @@ def build(g):
         gl = "".join(f'<li><a href="{root}guests/{gg["slug"]}/">{esc(gg["name"])}</a></li>' for gg in eg[e["slug"]])
         tx = f'<h2>Transcript</h2><details open><summary>Read the full transcript</summary><p style="white-space:pre-wrap;line-height:1.6">{esc(tr)}</p></details>' if len(tr) > 200 else ""
         body = (f'<article><p class="mut">{day(e["create_time"])}{" · Season " + str(e["season"]) if e.get("season") else ""}</p><h1>{esc(e["name"])}</h1>{aud}'
-                f'<div style="display:flex;gap:1rem;align-items:flex-start;margin:1em 0">{img_tag(thumb_of(e, nrec), e["name"], 160)}<div><strong>{esc(short_desc(e, nrec, 300))}</strong></div></div>{nkp}<div class="pp-notes">{(nnotes if snx or (nrec and nrec.get("markup")) else san(e.get("show_notes")))}</div>{nfaq}{SNT.CSS if (nkp or nnotes or nfaq) else ""}'
+                f'<div style="display:flex;gap:1rem;align-items:flex-start;margin:1em 0">{img_tag(thumb_of(e, nrec), e["name"], 160)}<div><strong>{esc(short_desc(e, nrec, 300))}</strong></div></div>{nkp}<div class="pp-notes">{(nnotes if snx or (nrec and nrec.get("markup")) else rename_links(san(e.get("show_notes"))))}</div>{nfaq}{SNT.CSS if (nkp or nnotes or nfaq) else ""}'
                 + (f"<p>{ext}</p>" if ext else "") + (f'<p class="mut">Host: {hl}</p>' if hl else "") + (f"<h2>Guests</h2><ul>{gl}</ul>" if gl else "") + also
                 + (("<h2>Related articles</h2><ul>" + "".join(f'<li><a href="{bp_url(p)}">{esc(p["title"])}</a></li>' for p in related_posts(e["slug"])) + "</ul>") if related_posts(e["slug"]) else "") + tx + "</article>" + (g.get("author_box")("en") if g.get("author_box") else "")
                 + '<p style="display:flex;justify-content:space-between;gap:1em;margin-top:2em">' + (f'<a href="{ep_url(prev_)}">← {esc(prev_["name"][:60])}</a>' if prev_ else "<span></span>") + (f'<a href="{ep_url(next_)}">{esc(next_["name"][:60])} →</a>' if next_ else "") + "</p>")
@@ -567,6 +586,15 @@ def build(g):
     for old, new in (("/episodes", "/show/episodes/"), ("/guests", "/show/guests/"), ("/hosts", "/show/hosts/"), ("/people", "/show/hosts/"), ("/sponsors", "/show/sponsors/"), ("/reviews", "/show/reviews/"), ("/podroll", "/show/listen/"), ("/videos", "/show/"), ("/blog", "/community/u/mirko-p/blog/" if bposts else "/show/")): rd.setdefault(old, new)
     for p in bposts: rd[f"/blog/{p['slug']}"] = f"/community/u/mirko-p/blog/{p['slug']}/"; rd[f"/show/blog/{p['slug']}"] = f"/community/u/mirko-p/blog/{p['slug']}/"
     if bposts: rd["/show/blog"] = "/community/u/mirko-p/blog/"
+    # T12: umbenannte Folgen (data/slug_renames.json): alte Folgenadresse in allen Sprachen per 301 auf die neue (der Site-Worker
+    # fragt die Tabelle fuer /show/episodes/... erst, wenn die Seite fehlt); die fruehere Podpage-Adresse /mirko-peters zeigt auf die Person
+    _ren = (json.loads((D / "slug_renames.json").read_text("utf-8")).get("episodes") or {}) if (D / "slug_renames.json").exists() else {}
+    for _old, _new in _ren.items():
+        for pre in [""] + [f"/{l}" for l in LG]:
+            rd[f"{pre}/show/episodes/{_old}"] = f"{pre}/show/episodes/{_new}/"
+    for _old, _new in _ren.items():   # weitere fruehere Folgenadressen mit dem alten Slug direkt auf die neue Folge (ein Schritt)
+        rd.setdefault(f"/videos/{_old}", f"/show/episodes/{_new}/"); rd[f"/m365-fm-podcast/{_old}"] = f"/show/episodes/{_new}/"
+    if "mirko-peters" in _ren: rd["/mirko-peters"] = "/entity/mirko-peters/"
     # T8: weitere Podpage-Seiten ohne eigenen Inhalt (SKIPP), die in alten Beitraegen verlinkt sind
     for old, new in (("/community-events", "/community/events/"), ("/sponsor", "/show/sponsors/"), ("/follow", "/show/listen/"), ("/subscribe", "/show/listen/"), ("/contact", "/about/mirko-peters/"), ("/voicemail", "/about/mirko-peters/"),
                      ("/guest_intake", "/about/mirko-peters/"), ("/join", "/community/"), ("/newsletter", "/community/"), ("/leave_review", "/show/reviews/"), ("/rate", "/show/reviews/"),

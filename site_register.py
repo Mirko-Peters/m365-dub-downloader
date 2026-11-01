@@ -32,7 +32,9 @@ def build(write, BASE, TODAY, posts):
     PART = 300   # Teile von je 300 Folgen (Worker-Speicher): episodes-register.json (Index) + episodes-register-N.json
     for n in range(0, len(eps), PART):
         write(f"episodes-register-{n // PART + 1}.json", json.dumps({"generated": TODAY, "part": n // PART + 1, "episodes": eps[n:n + PART]}, ensure_ascii=False))
-    write("episodes-register.json", json.dumps({"generated": TODAY, "count": len(eps), "parts": (len(eps) + PART - 1) // PART, "slugs": [e["slug"] for e in eps]}, ensure_ascii=False))
+    _rf = ROOT / "data" / "slug_renames.json"   # T12: umbenannte Folgen - der Worker benennt die vorhandene Zeile um, statt eine zweite anzulegen
+    _ren = (json.loads(_rf.read_text("utf-8")).get("episodes") or {}) if _rf.exists() else {}
+    write("episodes-register.json", json.dumps({"generated": TODAY, "count": len(eps), "parts": (len(eps) + PART - 1) // PART, "slugs": [e["slug"] for e in eps], "renames": _ren}, ensure_ascii=False))
     # Uebersetzungen der Folgen (Titel, Teaser, Show Notes)
     tr = []
     I18 = ROOT / "data" / "podpage_i18n"

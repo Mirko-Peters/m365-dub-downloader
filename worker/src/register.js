@@ -9,6 +9,7 @@ async function getJson(env, path) { try { const r = await fetch(env.SITE + path,
 export async function importEpisodes(env) {
   const db = env.DB, j = await getJson(env, "/episodes-register.json");
   if (!j || !j.parts) return { skipped: "episodes-register.json nicht erreichbar" };
+  const renamed = await applyRenames(db, j.renames);
   const have = new Map(((await db.prepare("SELECT id,slug,h FROM episode").all()).results || []).map((r) => [r.slug, r]));
   const t = now(); let done = 0, texts = 0;
   const part = ((+(await db.prepare("SELECT v FROM meta WHERE k='ep_import_part'").first().catch(() => null))?.v || 0) % j.parts) + 1;   // je Lauf ein Teil (Reihum), Aenderungen per Hash
@@ -33,7 +34,24 @@ export async function importEpisodes(env) {
     done++;
   }
   const total = (await db.prepare("SELECT COUNT(*) n FROM episode").first())?.n || 0;
-  return { part, changed: done, texts, total, source: j.count };
+  return { part, changed: done, texts, total, source: j.count, ...(renamed.length ? { renamed } : {}) };
+}
+
+// T12: umbenannte Folgen (data/slug_renames.json, alt -> neu): die vorhandene Zeile behaelt id, Texte und Gaeste und bekommt den neuen Slug;
+// Uebersetzungen (kind 'episode') wandern mit. Gibt es den neuen Slug schon, bleibt die alte Zeile unveraendert und wird gemeldet (nichts loeschen).
+export async function applyRenames(db, renames) {
+  const out = [];
+  for (const [from, to] of Object.entries(renames || {})) {
+    if (!from || !to || from === to) continue;
+    const old = await db.prepare("SELECT id FROM episode WHERE slug=?").bind(from).first();
+    if (!old) continue;
+    const clash = await db.prepare("SELECT id FROM episode WHERE slug=?").bind(to).first();
+    if (clash) { out.push({ from, to, conflict: true }); continue; }
+    await db.prepare("UPDATE episode SET slug=?,h='',updated=? WHERE id=?").bind(to, now(), old.id).run();
+    await db.prepare("UPDATE OR IGNORE translation SET item_id=? WHERE kind='episode' AND item_id=?").bind(to, from).run();
+    out.push({ from, to });
+  }
+  return out;
 }
 
 // Uebersetzungen: (1) vorhandene Tabellen ent_tr und item_tr einmalig kopieren, (2) Registerdateien des Seitenbaus (Folgen-Titel/Teaser/Notes je Sprache, Blog-Sprachfassungen) schrittweise

@@ -82,7 +82,7 @@ def items(BASE):
         def rep(m):
             path = re.sub(r"^https?://(www\.)?m365\.fm", "", m.group(1))
             if not path.startswith("/") or path.startswith("//"): return m.group(0)
-            seg = path.strip("/").split("#")[0]
+            seg = path.strip("/").split("#")[0]; seg = P.RENAMES.get(seg, seg)   # T12: alte Podpage-Adresse einer umbenannten Folge
             if seg in eslug: return f'href="{BASE}/show/episodes/{seg}/"'
             if seg.startswith("blog/") and seg[5:] in bslug: return f'href="{url_of(BASE, seg[5:])}"'
             if seg == "blog": return f'href="{BASE}/community/u/{HANDLE}/blog/"'
