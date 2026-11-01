@@ -15,7 +15,8 @@ jobs:
     runs-on: ubuntu-latest
     concurrency:
       group: site-build
-      cancel-in-progress: true   # ein neuer Push ersetzt den laufenden Bau (vorher: 29 von 60 Laeufen von Hand abgebrochen)
+      cancel-in-progress: false   # der laufende Bau wird fertig und veroeffentlicht; von mehreren wartenden Laeufen behaelt GitHub nur den neuesten.
+                                  # Vorher (true) brach jeder Push den laufenden Bau ab: am 1.11. zwischen 07:34 und 08:12 sechs Abbrueche in Folge, nichts veroeffentlicht.
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
