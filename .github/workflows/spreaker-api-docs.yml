@@ -1,0 +1,16 @@
+name: Spreaker-API Diagnose (T25)
+on: { workflow_dispatch: {} }
+permissions: { contents: write }
+jobs:
+  d:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.12" }
+      - run: python tools/spreaker_api_docs.py
+      - run: |
+          git config user.name "m365-site-bot"; git config user.email "actions@users.noreply.github.com"
+          git add reports/spreaker-api.md; git diff --cached --quiet && exit 0
+          git commit -q -m "Spreaker-API Diagnose [skip ci]"
+          for i in 1 2 3 4 5; do git pull --rebase --autostash -q origin main && git push -q origin HEAD:main && exit 0; sleep $((i*5)); done; exit 1
