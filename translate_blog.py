@@ -13,6 +13,7 @@ Profile: agents/blog-team/uebersetzer/<lang>.md (Systemprompt je Sprache). Quell
 Zwischenablage: data/blog_i18n/<lang>/<bucket>.json.gz {slug: {h, n, seg{id: text}, ok, m, ts}}; Ziel D1 (blog_posts je Sprache) folgt.
 """
 import gzip, hashlib, json, os, random, re, sys, time, urllib.request, urllib.error
+from site_text import bad as bad_text
 from datetime import datetime, timezone, timedelta
 from pathlib import Path
 
@@ -421,6 +422,7 @@ def collect():
             bl_ = usage["by_lang"].setdefault(lang, {"input_tokens": 0, "output_tokens": 0, "system_tokens": 0})
             bl_["input_tokens"] += ti; bl_["output_tokens"] += u["output_tokens"]; bl_["system_tokens"] += int(len(system_prompt(lang)) / 3.5)
             text = "".join(c.get("text", "") for c in msg["content"] if c.get("type") == "text")
+            if bad_text(text): bad += 1; why["encoding"] = why.get("encoding", 0) + 1; continue   # T5: Ersatzzeichen/Mojibake nie speichern
             got = parse(text)
             if msg.get("stop_reason") == "max_tokens" and got: got.pop(list(got)[-1]); why["max_tokens"] = why.get("max_tokens", 0) + 1
             p = BY_KEY.get(k)

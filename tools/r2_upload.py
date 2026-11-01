@@ -24,7 +24,7 @@ def urls():
     found = set()
     for b in json.load(gzip.open(ROOT / "data/podpage/blog_posts.json.gz")):
         found |= set(re.findall(r'https?://[^\s"\'<>)]+', b.get("html") or ""))
-    for g in json.load(open(ROOT / "data/podpage/guests.json")):
+    for g in json.load(open(ROOT / "data/podpage/guests.json", encoding="utf-8")):
         found.add(g.get("image_path") or "")
     return sorted(u for u in found if u.startswith("http") and any(h in u for h in HOSTS)
                   and (re.search(r"\.(jpe?g|png|gif|webp|svg|avif)(\?|$)", u, re.I) or "redwood-labs" in u or "neuroncdn" in u))
@@ -33,7 +33,7 @@ def urls():
 def main():
     apply = "--apply" in sys.argv
     todo = urls()
-    done = json.load(open(MAP)) if MAP.exists() else {}
+    done = json.load(open(MAP, encoding="utf-8")) if MAP.exists() else {}
     todo = [u for u in todo if u not in done]
     print(f"{len(todo)} Bilder offen, {len(done)} schon in R2")
     if not apply:

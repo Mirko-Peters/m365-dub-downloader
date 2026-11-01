@@ -4,6 +4,7 @@ Quelle 1 (immer): oeffentlicher YouTube-Kanal-Feed (letzte ~15 Videos mit Titel,
 Quelle 2 (wenn yt-dlp da ist und YouTube antwortet): Reiter 'Streams' mit live_status (is_live / is_upcoming / was_live) und geplanter Startzeit.
 Kanal aus config.json (youtube_channel_url). Bereits bekannte Streams bleiben erhalten (Archiv bis 300)."""
 import json, re, sys, time, urllib.request
+from site_text import fix_tree
 import xml.etree.ElementTree as ET
 from datetime import datetime, timezone
 from pathlib import Path
@@ -120,6 +121,7 @@ def main():
             s["live_status"] = "was_live"
     arch = sorted(streams.values(), key=lambda s: s.get("start") or s.get("published") or "", reverse=True)[:300]
     data = {"channel": cid, "handle": live_config().get("handle") or "@m365show", "source": "rss+yt-dlp" if yd else old.get("source", "rss"), "streams": arch}
+    data = fix_tree(data)   # T5: Mojibake aus YouTube-Titeln reparieren, bevor es in die Seite geht
     txt = json.dumps(data, ensure_ascii=False, indent=1)
     if not f.exists() or json.loads(f.read_text("utf-8")) != data:
         f.write_text(txt, encoding="utf-8"); print("live.json:", len(arch), "Streams,", sum(1 for s in arch if s.get("live_status") == "is_upcoming"), "geplant,", sum(1 for s in arch if s.get("live_status") == "is_live"), "live")

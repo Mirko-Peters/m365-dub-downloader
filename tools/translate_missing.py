@@ -31,7 +31,7 @@ def call(key, model, items):
 def main():
     ap = argparse.ArgumentParser(); ap.add_argument("--dry-run", action="store_true"); ap.add_argument("--model", default="claude-haiku-5-5"); ap.add_argument("--limit", type=int, default=0)
     a = ap.parse_args()
-    D = json.load(open(P)); todo = []   # (entity, feld, quellsprache, zielsprache, text)
+    D = json.load(open(P, encoding="utf-8")); todo = []   # (entity, feld, quellsprache, zielsprache, text)
     for e in D:
         for field in ("desc", "long"):
             v = e.get(field) or {}
@@ -54,7 +54,7 @@ def main():
             out = str(res.get(f"{e['id']}|{f}|{s}>{d}", "")).replace(f"[{s}->{d}] ", "").strip()
             if out and (f != "desc" or 20 <= len(out) <= 300):
                 e.setdefault(f, {})[d] = out
-        json.dump(D, open(P, "w"), ensure_ascii=False, indent=1)   # nach jedem Block speichern
+        json.dump(D, open(P, "w", encoding="utf-8"), ensure_ascii=False, indent=1)   # nach jedem Block speichern
         print(f"  {min(i + 12, len(todo))}/{len(todo)}")
 
 
