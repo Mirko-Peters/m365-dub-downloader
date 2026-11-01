@@ -111,7 +111,7 @@ def person_ld(BASE, p, orgs_by_handle):
     n = {"@type": "Person", "@id": pid, "name": p["name"], "url": purl(BASE, "en", "u", p["handle"]), "mainEntityOfPage": {"@id": purl(BASE, "en", "u", p["handle"]) + "#profile"}}
     if img_url("u", p):
         n["image"] = img_url("u", p)
-    if p.get("recs"):
+    if p.get("recs") and False:   # T4: Person kennt kein review (Google lehnt Rezensions-Snippets auf Personen ab); Empfehlungen bleiben sichtbarer Text
         n["review"] = [{"@type": "Review", "reviewBody": r["body"][:600], "author": {"@type": "Person", "name": r["by"]["name"], **({"url": purl(BASE, "en", "u", r["by"]["handle"])} if r["by"].get("handle") else {})}, "datePublished": datetime.fromtimestamp(r["created"], timezone.utc).strftime("%Y-%m-%d")} for r in p["recs"][:10]]
     if p.get("headline"):
         n["description"] = p["headline"]
@@ -296,6 +296,7 @@ def build(g, people, orgs, extra=None):
                           + rec_html(p, lang, li, pb) + (f'<h2>{esc(s["contrib"])}</h2>{contrib}' if contrib else "") + ((extra or {}).get(lang, {}).get("u", {}).get(p["handle"], "")) + live_js + css)
             node = person_ld(BASE, p, ob)
             ld = [{"@context": "https://schema.org", "@type": "ProfilePage", "@id": purl(BASE, "en", "u", p["handle"]) + "#profile", "url": u, "name": p["name"], "inLanguage": lang, "dateModified": TODAY, "mainEntity": node}]
+            ld.append({"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "M365.FM", "item": f"{BASE}/"}, {"@type": "ListItem", "position": 2, "name": s["members"], "item": f"{BASE}{pfx(lang)}/community/members/"}, {"@type": "ListItem", "position": 3, "name": p["name"], "item": u}]})   # T4
             write(f"{pfx2(lang)}community/u/{p['handle']}/index.html", page(lang, f'{p["name"]} – {p.get("headline") or s["members"]} | M365.FM', (p.get("headline") or p.get("about") or "")[:155], u, b, None, ld, og_type="profile", extra_head=LCSS, noindex=noidx))
             if not noidx:
                 sitemap.append((u, TODAY, None))

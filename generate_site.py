@@ -380,7 +380,7 @@ def page(lang, title, desc, canonical, body, alternates=None, jsonld=None, xdefa
         for l, u in alternates.items():
             alt += f'<link rel="alternate" hreflang="{LANGS[l][1] if l in LANGS else l}" href="{u}">\n'
         alt += f'<link rel="alternate" hreflang="x-default" href="{xdefault or alternates.get("en") or BASE + "/"}">\n'   # x-default = englische Fassung des Clusters, sonst Startseite
-    ld = "".join(f'<script type="application/ld+json">{json.dumps(j, ensure_ascii=False)}</script>\n' for j in (jsonld or []))
+    ld = "".join(f'<script type="application/ld+json">{json.dumps(j, ensure_ascii=False)}</script>\n' for j in complete_ld(jsonld))
     if canonical.endswith("404.html") or noindex:
         ogimg = f"{BASE}/assets/og-default.png"
     elif og_of:   # lokalisierte Show-Seiten teilen das Teilen-Bild der englischen Seite (spart Zehntausende Bilder)
@@ -439,6 +439,30 @@ def css_link():
         (OUT / "assets").mkdir(parents=True, exist_ok=True); (OUT / "assets" / name).write_text(css, encoding="utf-8")
         _CSSF["u"] = f"{BASE}/assets/{name}"
     return f'<link rel="stylesheet" href="{_CSSF["u"]}">'
+
+
+_IDENT = {"@id", "@type", "@context", "name", "url"}
+
+
+def _defined(node, ids):
+    """Merkt sich jede @id, die auf der Seite mit mehr als Identitaetsfeldern (name, url) definiert ist."""
+    if isinstance(node, dict):
+        if node.get("@id") and (set(node) - _IDENT): ids.add(node["@id"])
+        for v in node.values(): _defined(v, ids)
+    elif isinstance(node, list):
+        for v in node: _defined(v, ids)
+
+
+def complete_ld(jsonld):
+    """T4: Verweise auf die Organisation (/#org) und die Person Mirko Peters (#entity) werden auf jeder Seite durch die vollen Knoten
+    ergaenzt (eine Definition je @id, sonst nur Verweise), damit publisher/author nirgends ins Leere zeigen."""
+    lst = list(jsonld or [])
+    if not lst: return lst
+    txt = json.dumps(lst); have = set(); _defined(lst, have)
+    org, per = f"{BASE}/#org", f"{BASE}/entity/mirko-peters/#entity"
+    if per in txt and per not in have: lst.append(person_ld())
+    if org in txt and org not in have: lst.append(org_ld())
+    return lst
 
 
 def person_ld():
@@ -514,7 +538,9 @@ def _art_svg_old(seed, big, small="M365.FM · AI"):
 
 def org_ld():
     return {"@context": "https://schema.org", "@type": "Organization", "@id": f"{BASE}/#org", "name": "M365.FM", "url": "https://www.m365.fm",
-            "logo": f"{BASE}/assets/og-default.png", "founder": {"@id": f"{BASE}/entity/mirko-peters/#entity"},
+            "logo": {"@type": "ImageObject", "url": f"{BASE}/assets/apple-touch-icon.png", "width": 180, "height": 180}, "image": f"{BASE}/assets/og-default.png",
+            "description": "M365.FM: Microsoft community podcast (M365.FM Show), blog, events and animated explainers on Microsoft 365, Copilot, Azure and Power Platform in 15 languages.",
+            "founder": {"@id": f"{BASE}/entity/mirko-peters/#entity"},
             "sameAs": ["https://www.m365.fm", "https://m365con.net", YT_CHANNEL, LINKEDIN]}
 
 
@@ -968,9 +994,8 @@ def build():
              "associatedMedia": {"@type": "AudioObject", "contentUrl": spk, "inLanguage": LANGS[l][1]},
              "image": f"{BASE}/og/{canonical.replace(BASE, '').strip('/')}.png", "isAccessibleForFree": True, "keywords": e.get("tags", ""),
              "about": [{"@type": "Thing", "name": t.strip()} for t in (e.get("tags") or "").split(",")[:5] if t.strip() and "m365.fm" not in t],
-             **({"transcript": tr} if tr else {}),
              **({"sameAs": list(_el.values())} if _el else {}),
-             "partOfSeries": {"@type": "PodcastSeries", "name": seo.get(l, {}).get("title", "M365.FM"), "url": f"https://www.spreaker.com/show/{LANGS[l][3]}", "sameAs": same_as(l, plat.get(l, {}))},
+             "partOfSeries": {"@id": f"{BASE}/{l}/#series", "@type": "PodcastSeries", "name": seo.get(l, {}).get("title", "M365.FM"), "url": f"{BASE}/{l}/"},   # T4: Serie = Knoten der Sprach-Startseite (vorher Spreaker-URL); das Transkript ist eine Datei (tr), kein Text -> kein transcript-Feld
              "author": {"@id": f"{BASE}/entity/mirko-peters/#entity"}},
             {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [
                 {"@type": "ListItem", "position": 1, "name": "M365.FM", "item": f"{BASE}/"},
@@ -1139,7 +1164,7 @@ def build():
         _nu = f"{BASE}/{'de/' if _nl == 'de' else ''}updates/"
         _nt = "Updates – neu seit gestern" if _nl == "de" else "Updates – new since yesterday"
         _nb = f'{header(_nl, "")}<main class="wrap"><h1>{esc(_nt)}</h1><p class="mut">{esc("Was seit dem letzten Tag neu dazugekommen ist. Die Seite wird höchstens einmal täglich erweitert (abgeschlossene Tage)." if _nl == "de" else "What was added since the last day. The page grows at most once a day (completed days only).")}</p><p><a class="btn main" href="{BASE}/{"de/" if _nl == "de" else ""}community/#c-wish">{"Roadmap &amp; Wunschliste" if _nl == "de" else "Roadmap &amp; wishlist"}</a></p>{_SU2.page_block(_nl, lambda i, _l=_nl: f"{BASE}{'/' + _l if _l != 'en' else ''}/entity/{i}/", {k: v["name"] for k, v in _E2.items()})}{HUB.news(_nl, BASE)}</main>{footer(_nl)}'
-        write(f"{'de/' if _nl == 'de' else ''}updates/index.html", page(_nl, f"{_nt} – M365.FM", "Neue Beiträge, Folgen, Videos, Bibliothekseinträge und Updates pro Tag." if _nl == "de" else "New posts, episodes, videos, library items and updates per day.", _nu, _nb))
+        write(f"{'de/' if _nl == 'de' else ''}updates/index.html", page(_nl, f"{_nt} – M365.FM", "Neue Beiträge, Folgen, Videos, Bibliothekseinträge und Updates pro Tag." if _nl == "de" else "New posts, episodes, videos, library items and updates per day.", _nu, _nb, None, [{"@context": "https://schema.org", "@type": "CollectionPage", "@id": _nu + "#page", "name": _nt, "url": _nu, "inLanguage": _nl, "dateModified": TODAY, "isPartOf": {"@id": f"{BASE}/#website"}, "publisher": {"@id": f"{BASE}/#org"}}]))
         sitemap.append((_nu, TODAY, None))
 
     # Rechtliche Seiten (noindex)
@@ -1268,6 +1293,7 @@ def build():
             _pbt.setdefault(_t, []).append(_p)
     _ctx["posts_by_topic"] = _pbt; _ctx["author_box"] = author_box
     phase("Blog geladen, Folgen der Hauptshow zugeordnet")
+    ENT.PERSON_LD = person_ld   # T4: eine Definition der Person Mirko Peters (Entitaetsseite nutzt denselben Knoten)
     ENT.build(_ctx, lambda lang: LRN.gloss_links(lang, BASE), MEM.experts_index(_people, _orgs), _ep_find)
     phase("Entitaetsseiten")
     MEM.build(_ctx, _people, _orgs, extra={l: EVT.blocks(BASE, _events, l) for l in COMM_LANGS})

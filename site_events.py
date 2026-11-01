@@ -71,7 +71,7 @@ def event_ld(BASE, ev, pb, ob):
         n["about"] = t
     subs = []
     for s in ev.get("sessions", []):
-        sub = {"@type": "Event", "name": s["title"], "superEvent": {"@id": u + "#event"}}
+        sub = {"@type": "Event", "name": s["title"], "superEvent": {"@id": u + "#event"}, "location": n["location"], "eventAttendanceMode": n["eventAttendanceMode"]}   # T4: jedes Event braucht einen Ort
         if s.get("start"):
             sub["startDate"] = s["start"]
         else:

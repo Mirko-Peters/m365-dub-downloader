@@ -24,6 +24,7 @@ for _f in sorted((Path(__file__).parent / "data" / "entity_texts").glob("part-*.
     try: GENTEXT.update(json.loads(_f.read_text("utf-8")))
     except Exception: pass
 AUTHOR_EID = "mirko-peters"   # Entitaet des Seitenautors (E-E-A-T: Autor und Pruefer der Entitaetsseiten)
+PERSON_LD = None   # wird vom Seitenbau gesetzt (generate_site.person_ld): ein Person-Knoten fuer den Autor
 EVENTS = {}   # Event-Handle -> Event (fuer Verlinkung Entitaet -> Eventseite)
 CLAIMS = {}   # eid -> Profil-Handle (uebernommene Entitaeten)
 ORGPAGES = {}   # eid -> Firmen-Handle
@@ -150,6 +151,8 @@ def ent_ld(BASE, e, lang, glossary_set=None):
         if rel.get("created_by"):
             n["creator"] = [ref(x) for x in rel["created_by"]]; n["author"] = [ref(x) for x in rel["created_by"]]
     elif t == "person":
+        if i == AUTHOR_EID and PERSON_LD:   # T4: Seitenautor = derselbe Knoten wie auf allen anderen Seiten (keine vier Fassungen derselben @id)
+            base = PERSON_LD(); n.update({k: v for k, v in base.items() if k != "@context"}); n["mainEntityOfPage"] = eurl(BASE, "en", i)
         if e.get("job"):
             n["jobTitle"] = e["job"]
         if e.get("image") and str(e["image"]).startswith("https://"):

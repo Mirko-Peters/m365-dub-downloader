@@ -16,7 +16,8 @@ REQ = {
     "Person": ["name"], "Organization": ["name"], "CollectionPage": ["name", "url"],
     "ProfilePage": ["mainEntity"], "Event": ["name", "startDate", "location"], "WebSite": ["name", "url"],
 }
-iso = re.compile(r"^\d{4}(-\d{2}(-\d{2})?)?(T[\d:.+\-Z]+)?$")   # schema.org Date: auch Jahr oder Jahr-Monat (released von Produkten)
+iso = re.compile(r"^\d{4}(-\d{2}(-\d{2}(T[\d:.+\-Z]+)?)?)?$")   # ISO 8601 inkl. reduzierter Genauigkeit (Jahr, Jahr-Monat: Erscheinungsdaten von Produkten)
+IDENT = {"@id", "@type", "@context", "name", "url"}
 errs, warns = Counter(), Counter()
 examples = {}
 ids = defaultdict(set)
@@ -47,9 +48,13 @@ def walk(o, f, top):
             v = o.get(k)
             if isinstance(v, str) and not iso.match(v):
                 note("E", f"{k} kein ISO-Datum: {v[:20]}", f)
+        if t == "Person" and "review" in o:
+            note("E", "Person mit 'review' (kein Person-Feld, Google lehnt es ab)", f)
+        if t == "Event" and o.get("superEvent") and not o.get("location"):
+            note("E", "Event (subEvent) ohne location", f)
         if "@id" in o:
             ids[o["@id"]].add(f)
-            if len(o) > 1:
+            if set(o) - IDENT:   # nur Identitaet (name, url) = Verweis, keine Definition
                 defs[o["@id"]].add(json.dumps(o, sort_keys=True))
         for v in o.values():
             walk(v, f, False)
@@ -82,7 +87,7 @@ for p in glob.glob(str(DOCS / "**" / "*.html"), recursive=True)[:2000]:
 for r in sorted(refs)[:10]:
     note("W", "@id referenziert, aber nirgends definiert: " + r.replace("https://www.m365.fm", ""), "")
 for i, d in defs.items():
-    if len(d) > 1 and any(k in i for k in ("#person", "#org")):
+    if len(d) > 1 and (any(k in i for k in ("#person", "#org", "#series")) or i.endswith("/entity/mirko-peters/#entity")):   # Entitaeten duerfen je Sprache eine eigene Beschreibung tragen
         note("W", f"{i.replace('https://www.m365.fm', '')} in {len(d)} Varianten definiert", "")
 print(f"{n} Seiten mit JSON-LD geprueft")
 for k, v in errs.most_common():
