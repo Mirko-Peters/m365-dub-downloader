@@ -23,7 +23,7 @@ URLS = [
     ("R2-Bild", "https://img.m365.fm/i/5254f600109b589b2c2d.webp"),
     ("404", B + "/gibt-es-nicht-cache-check/"),
 ]
-KEEP = ("cache-control", "cf-cache-status", "age", "etag", "last-modified", "expires", "vary", "content-encoding", "content-type", "server", "x-cache", "alt-svc", "x-robots-tag")
+KEEP = ("cache-control", "cf-cache-status", "x-m365-cache", "age", "etag", "last-modified", "expires", "vary", "content-encoding", "content-type", "server", "x-cache", "alt-svc", "x-robots-tag")
 
 
 class NoRedirect(urllib.request.HTTPRedirectHandler):
@@ -95,7 +95,7 @@ def cf(path, body=None):
         return 0, {"errors": [{"message": type(e).__name__}]}
 
 
-def err(d): return [e.get("message") for e in (d.get("errors") or [])][:1]
+def err(d): return [re.sub(r"[0-9a-f]{32}", "***", str(e.get("message"))) for e in (d.get("errors") or [])][:1]   # keine Zonen-/Token-IDs ins Protokoll
 
 
 zone = os.environ.get("CF_ZONE_ID", "")
@@ -134,7 +134,7 @@ Q = """query($z:String!,$s:Date!,$u:Date!){viewer{zones(filter:{zoneTag:$z}){htt
 dimensions{date} sum{requests cachedRequests bytes cachedBytes pageViews} uniq{uniques}}}}}"""
 st, d = cf("/graphql", {"query": Q, "variables": {"z": zone, "s": since.isoformat(), "u": until.isoformat()}})
 if st != 200 or d.get("errors"):
-    print(f"Analytics nicht lesbar: HTTP {st} {[e.get('message') for e in (d.get('errors') or [])][:1]} (Token braucht 'Analytics: Read')")
+    print(f"Analytics nicht lesbar: HTTP {st} {err(d)} (Token braucht 'Analytics: Read')")
 else:
     rows = (((d.get("data") or {}).get("viewer") or {}).get("zones") or [{}])[0].get("httpRequests1dGroups") or []
     T = {"requests": 0, "cachedRequests": 0, "bytes": 0, "cachedBytes": 0, "pageViews": 0}

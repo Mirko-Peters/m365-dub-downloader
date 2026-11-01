@@ -181,7 +181,12 @@ jobs:
       - name: Seiten-Hashes (fuer gezieltes Purge und IndexNow)
         run: python tools/page_hashes.py docs page-hashes.json
       - uses: actions/upload-artifact@v4
-        with: { name: page-hashes, path: page-hashes.json, retention-days: 3 }
+        with:
+          name: page-hashes
+          retention-days: 3
+          path: |
+            page-hashes.json
+            r2-changed.json
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with: { path: docs }
@@ -215,5 +220,5 @@ jobs:
           BASE: https://www.m365.fm
         run: |
           mkdir -p .pagehashes
-          python3 tools/purge_changed.py .pagehashes/page-hashes.json .newhashes/page-hashes.json
+          python3 tools/purge_changed.py .pagehashes/page-hashes.json .newhashes/page-hashes.json .newhashes/r2-changed.json
           cp .newhashes/page-hashes.json .pagehashes/page-hashes.json
