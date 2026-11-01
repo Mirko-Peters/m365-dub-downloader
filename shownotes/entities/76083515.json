@@ -1,0 +1,200 @@
+{
+ "episode_id": "76083515",
+ "slug": "microsoft-graph-webhooks-simply-explained",
+ "title": "Webhooki Microsoft Graph w prostych słowach: powiadomienia w czasie rzeczywistym zamiast ciągłego pollingu",
+ "lang": "pl",
+ "duration_s": 1142,
+ "transcript_source": "transcripts/pl/ra62dODpiag.vtt",
+ "time_basis": "vtt",
+ "entities": [
+  {
+   "slug": "mirko-peters",
+   "name": "Mirko Peters",
+   "type": "person",
+   "score": 40,
+   "mentions": 1,
+   "first_mention_s": 69,
+   "quote": "Nazywam się Milko Peters i będę Waszym gospodarzem.",
+   "url": "https://www.m365.fm/pl/entity/mirko-peters/"
+  },
+  {
+   "slug": "change-notifications",
+   "name": "Change notifications and webhooks",
+   "type": "concept",
+   "score": 100,
+   "mentions": 58,
+   "first_mention_s": 77,
+   "quote": "WebHook to żądanie HTTP wysyłane automatycznie, gdy coś się wydarzy.",
+   "url": "https://www.m365.fm/pl/entity/change-notifications/"
+  },
+  {
+   "slug": "graph",
+   "name": "Microsoft Graph",
+   "type": "product",
+   "score": 90,
+   "mentions": 64,
+   "first_mention_s": 77,
+   "quote": "Microsoft Graph również korzysta z WebHooków, ale Microsoft nazywa je powiadomieniami o zmianach.",
+   "url": "https://www.m365.fm/pl/entity/graph/"
+  },
+  {
+   "slug": "entra-id",
+   "name": "Microsoft Entra ID",
+   "type": "product",
+   "score": 40,
+   "mentions": 2,
+   "first_mention_s": 1046,
+   "quote": "Ktoś z HR tworzy jego konto w Microsoft Entra ID",
+   "url": "https://www.m365.fm/pl/entity/entra-id/"
+  },
+  {
+   "slug": "sharepoint",
+   "name": "SharePoint",
+   "type": "product",
+   "score": 35,
+   "mentions": 5,
+   "first_mention_s": 260,
+   "quote": "Masz bibliotekę dokumentów SharePoint, do której przesyłane są rachunki.",
+   "url": "https://www.m365.fm/pl/entity/sharepoint/"
+  },
+  {
+   "slug": "microsoft-365",
+   "name": "Microsoft 365",
+   "type": "platform",
+   "score": 30,
+   "mentions": 2,
+   "first_mention_s": 72,
+   "quote": "Gdy coś zmienia się w Microsoft 365, Graph wysyła żądanie HTTP POST na podany przez Ciebie adres URL.",
+   "url": "https://www.m365.fm/pl/entity/microsoft-365/"
+  },
+  {
+   "slug": "azure-service-bus",
+   "name": "Azure Service Bus",
+   "type": "product",
+   "score": 20,
+   "mentions": 1,
+   "first_mention_s": 824,
+   "quote": "Może to być kolejka Azure, Service Bus,",
+   "url": "https://www.m365.fm/pl/entity/azure-service-bus/"
+  },
+  {
+   "slug": "teams",
+   "name": "Microsoft Teams",
+   "type": "product",
+   "score": 20,
+   "mentions": 1,
+   "first_mention_s": 260,
+   "quote": "aktualizowany plik w SharePoint, wysyłana wiadomość w Teams,",
+   "url": "https://www.m365.fm/pl/entity/teams/"
+  }
+ ],
+ "new_entities": [
+  {
+   "slug": "throttling",
+   "name": "Throttling",
+   "type": "concept",
+   "mentions": 4,
+   "first_mention_s": 146,
+   "quote": "Microsoft ma określenie na zbyt agresywne odpytywanie, throttling,",
+   "status": "review"
+  }
+ ],
+ "quotes": [
+  {
+   "text": "WebHook to żądanie HTTP wysyłane automatycznie, gdy coś się wydarzy. Nie prosisz o nie, serwer po prostu wypycha je do Ciebie.",
+   "speaker": "Mirko Peters",
+   "speaker_slug": "mirko-peters",
+   "time_s": 212,
+   "entities": [
+    "change-notifications"
+   ],
+   "why": "Einfachste Definition eines Webhooks"
+  },
+  {
+   "text": "I w tym rzecz, nawet jeśli sprawdzasz co 5 minut, nadal nie otrzymujesz aktualizacji w czasie rzeczywistym. Zmiana może nastąpić minutę po Twoim ostatnim odpytaniu. Nie dowiesz się o niej przez kolejne 4 minuty.",
+   "speaker": "Mirko Peters",
+   "speaker_slug": "mirko-peters",
+   "time_s": 183,
+   "entities": [
+    "change-notifications"
+   ],
+   "why": "Zeigt anschaulich, warum Polling nie Echtzeit liefert"
+  },
+  {
+   "text": "Token walidacji musi zostać zwrócony jako zwykły tekst. Nie JSON, nie HTML, lecz zwykły tekst. A odpowiedź musi mieć nagłówek typu zawartości ustawiony na text plain.",
+   "speaker": "Mirko Peters",
+   "speaker_slug": "mirko-peters",
+   "time_s": 643,
+   "entities": [
+    "change-notifications",
+    "graph"
+   ],
+   "why": "Häufigster Fehler beim Validierungs-Handshake"
+  },
+  {
+   "text": "Potwierdzaj natychmiast i przetwarzaj asynchronicznie. Twój punkt końcowy powinien zweryfikować stan klienta, zaakceptować powiadomienie i zwrócić odpowiedź 200 lub 202 tak szybko jak to możliwe.",
+   "speaker": "Mirko Peters",
+   "speaker_slug": "mirko-peters",
+   "time_s": 812,
+   "entities": [
+    "change-notifications"
+   ],
+   "why": "Zentrale Best Practice für Notification-Endpunkte"
+  },
+  {
+   "text": "Webhoki są szybkie, ale nie są idealne. Powiadomienia mogą zaginąć, subskrypcje mogą wygasnąć, a twój punkt końcowy może przestać działać. Ale Delta Query jest niezawodne.",
+   "speaker": "Mirko Peters",
+   "speaker_slug": "mirko-peters",
+   "time_s": 995,
+   "entities": [
+    "change-notifications",
+    "graph"
+   ],
+   "why": "Begründet die Kombination aus Webhooks und Delta Query"
+  }
+ ],
+ "chapters": [
+  {
+   "start_s": 64,
+   "title": "Wprowadzenie: czym są webhooki Microsoft Graph"
+  },
+  {
+   "start_s": 105,
+   "title": "Problem odpytywania (polling)"
+  },
+  {
+   "start_s": 208,
+   "title": "Czym są webhooki?"
+  },
+  {
+   "start_s": 316,
+   "title": "Jak działają webhooki w Microsoft Graph"
+  },
+  {
+   "start_s": 433,
+   "title": "Tworzenie subskrypcji i uścisk dłoni walidacji"
+  },
+  {
+   "start_s": 698,
+   "title": "Obsługa powiadomień i bezpieczeństwo"
+  },
+  {
+   "start_s": 854,
+   "title": "Cykl życia subskrypcji i Delta Query"
+  },
+  {
+   "start_s": 1041,
+   "title": "Przykład z życia i kolejne kroki"
+  }
+ ],
+ "takeaways": [
+  "Zamiast odpytywania, które marnuje żądania i grozi throttlingiem, webhooki Microsoft Graph (powiadomienia o zmianach) wysyłają żądanie HTTP POST do Twojego punktu końcowego, gdy tylko coś się zmieni.",
+  "Subskrypcja wymaga adresu URL powiadomień, zasobu, typu zmiany i czasu wygaśnięcia; punkt końcowy musi działać przez HTTPS, odesłać token walidacji jako zwykły tekst, sprawdzać stan klienta i odpowiadać w ciągu 3 sekund.",
+  "Subskrypcje wygasają i trzeba je odnawiać, a połączenie webhooków z Delta Query daje zarówno szybkość, jak i niezawodność, gdy powiadomienia zaginą."
+ ],
+ "hook": "Dlaczego Twoja aplikacja wciąż pyta Microsoft Graph, czy coś się zmieniło? W tym odcinku Mirko Peters wyjaśnia, jak webhooki zastępują odpytywanie, jak utworzyć subskrypcję i przejść uścisk dłoni walidacji oraz dlaczego Delta Query jest Twoją siatką bezpieczeństwa.",
+ "youtube_video_id": "ra62dODpiag",
+ "source_video_id": "ra62dODpiag",
+ "show_id": 7393242,
+ "generated_at": "2026-11-01T17:05:26Z"
+}
