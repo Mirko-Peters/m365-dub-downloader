@@ -6,7 +6,7 @@
   function api(p, o) { o = o || {}; o.credentials = "include"; o.headers = Object.assign({ "x-requested-with": "m365" }, o.headers || {}); if (o.body && typeof o.body !== "string") { o.body = JSON.stringify(o.body); o.headers["content-type"] = "application/json"; } return fetch(API + p, o).then(function (r) { return r.json().catch(function () { return {}; }).then(function (j) { return { s: r.status, j: j }; }); }); }
   var TYPES = { product: "Produkt", platform: "Plattform", concept: "Konzept", org: "Firma", person: "Person", cert: "Zertifikat", event: "Event", media: "Medium", category: "Kategorie" };
   var ERR = { bad_name: "Name zu kurz", bad_type: "Typ fehlt", too_short: "Kurzbeschreibung fehlt (mindestens 20 Zeichen in Englisch oder Deutsch)", too_long: "Kurzbeschreibung zu lang (höchstens 300 Zeichen)", bad_url: "Eine Adresse ist ungültig (nur https, Docs nur microsoft.com, azure.com oder github.com)", bad_qid: "Wikidata-ID muss wie Q12345 aussehen", bad_relation: "Eine Beziehung zeigt auf eine unbekannte Entität", unchanged: "Nichts geändert", rate_limit: "Zu viele Änderungen in kurzer Zeit, bitte später", login: "Bitte anmelden", forbidden: "Nur für Admins" };
-  var tabs = [["ov", "Übersicht"], ["fr", "Freigaben"], ["tr", "Übersetzungen"], ["ent", "Entitäten"], ["db", "Datenbank"], ["sw", "Schalter"]], panes = {}, bar = h("div", { class: "adm-tabs", role: "tablist" });
+  var tabs = [["ov", "Übersicht"], ["fr", "Freigaben"], ["sponsor", "Sponsor-Anfragen"], ["tr", "Übersetzungen"], ["ent", "Entitäten"], ["db", "Datenbank"], ["sw", "Schalter"]], panes = {}, bar = h("div", { class: "adm-tabs", role: "tablist" });
   var LANGN = { de: "Deutsch", fr: "Französisch", es: "Spanisch", it: "Italienisch", nl: "Niederländisch", pt: "Portugiesisch", pl: "Polnisch", id: "Indonesisch", ru: "Russisch", uk: "Ukrainisch", ar: "Arabisch", he: "Hebräisch", ja: "Japanisch", ko: "Koreanisch", en: "Englisch" };
   var KINDN = { lblog: "Blog (früher)", blog: "Blog (Community)", podcast: "Podcast", video: "Video", notes: "Show Notes", entity: "Entität" };
   function ago(t) { if (!t) return "–"; var d = Math.round(Date.now() / 1000 - t); return d < 90 ? d + " s" : d < 5400 ? Math.round(d / 60) + " min" : d < 172800 ? Math.round(d / 3600) + " h" : Math.round(d / 86400) + " d"; }
@@ -40,6 +40,7 @@
     }); },
     tr: function () { if (panes.tr.firstChild) return; translations(); },
     fr: function () { approvals(); },
+    sponsor: function () { sponsorRequests(); },
     db: function () { overview(function (o) { var p = panes.db, d = o.db, m = h("p", { class: "adm-msg" }); p.textContent = "";
       p.appendChild(h("h2", { text: "Umzug in die Datenbank" }));
       var miss = d.entities_file == null ? null : Math.max(0, d.entities_file - (d.entities_db || 0));
@@ -83,6 +84,56 @@
     api("/api/admin/reports").then(function (r) { var it = (r.j || {}).reports || []; if (it.length) { var ul = section("Gemeldete Kommentare (" + it.length + ")"); it.forEach(function (x) { var rm = row(ul, [h("b", { text: x.n + "× gemeldet" }), " ", h("span", { class: "mut", text: (x.lang || "") + " · " + (x.status || "") }), h("p", { class: "mut", text: (x.body || "").slice(0, 260) }), h("p", {}, [act("Ausblenden", true, function () { return api("/api/admin/hide/" + x.id, { method: "POST", body: {} }); }, function () { rm(); }), " ", act("Behalten", false, function () { return api("/api/admin/show/" + x.id, { method: "POST", body: {} }); }, function () { rm(); })])]); }); } done(); });
     api("/api/admin/podcast").then(function (r) { var it = (r.j || {}).items || []; if (it.length) { var ul = section("Podcast-Folgen (" + it.length + ")", "Freigabe läuft über die Abstimmung der Community (" + ((r.j || {}).threshold || 25) + " Punkte) und die Veröffentlichung bei Spreaker; hier nur ablehnen."); it.forEach(function (x) { var rm = row(ul, [h("b", { text: x.title }), " ", h("span", { class: "mut", text: (x.name || "") + " · " + x.status + " · " + (x.votes || 0) + " Stimmen · " + when(x.created) }), x.spreaker ? h("p", {}, [h("a", { href: x.spreaker, target: "_blank", rel: "noopener", text: "Bei Spreaker öffnen" })]) : null, h("p", {}, [act("Ablehnen", false, function () { return api("/api/admin/podcast/reject", { method: "POST", body: { id: x.id, note: note() } }); }, function () { rm(); })])]); }); } done(); });
     api("/api/admin/video").then(function (r) { var it = (r.j || {}).items || []; if (it.length) { var ul = section("Videos (" + it.length + ")", "Freigabe über die Abstimmung (" + ((r.j || {}).threshold || 25) + " Punkte) und die Veröffentlichung bei YouTube; hier nur ablehnen."); it.forEach(function (x) { var rm = row(ul, [h("b", { text: x.title }), " ", h("span", { class: "mut", text: (x.name || "") + " · " + x.status + " · " + (x.votes || 0) + " Stimmen · " + when(x.created) }), x.youtube ? h("p", {}, [h("a", { href: x.youtube, target: "_blank", rel: "noopener", text: "Im YouTube Studio öffnen" })]) : null, h("p", {}, [act("Ablehnen", false, function () { return api("/api/admin/video/reject", { method: "POST", body: { id: x.id, note: note() } }); }, function () { rm(); })])]); }); } done(); });
+  }
+
+  function sponsorRequests() {
+    var p = panes.sponsor, filter = h("select", { "aria-label": "Status filtern" }), msgEl = h("p", { class: "adm-msg" });
+    var table = h("table", { class: "adm-tbl" }), head = h("thead"), body = h("tbody"), prev = h("button", { type: "button", class: "btn", text: "Zurück" }), next = h("button", { type: "button", class: "btn", text: "Weiter" }), count = h("span", { class: "mut" });
+    var limit = 50, offset = 0, total = 0;
+    p.textContent = ""; p.append(h("h2", { text: "Sponsor-Anfragen" }), filter, h("p", {}, [prev, " ", next, " ", count]), msgEl, table);
+    [["", "Alle Status"], ["new", "Neu"], ["contacted", "Kontaktiert"], ["won", "Gewonnen"], ["lost", "Verloren"], ["spam", "Spam"]].forEach(function (x) { filter.appendChild(h("option", { value: x[0], text: x[1] })); });
+    table.append(head, body);
+    function shortPackage(x) {
+      try {
+        var q = typeof x.package === "string" ? JSON.parse(x.package) : x.package;
+        var parts = [q.goal || q.target || q.ziel, q.duration || q.term || q.laufzeit, q.components || q.blocks || q.bausteine];
+        return parts.map(function (v) { return Array.isArray(v) ? v.join(", ") : v; }).filter(Boolean).join(" · ") || JSON.stringify(q).slice(0, 100);
+      } catch (e) { return String(x.package || "").slice(0, 100); }
+    }
+    function price(x) {
+      try {
+        var q = typeof x.package === "string" ? JSON.parse(x.package) : x.package, v = [q.monthlyUsd, q.monthly_usd, q.monthlyPrice, q.priceMonthly, q.monthly, q.preisMonat].find(function (x) { return x != null && x !== ""; });
+        return v == null ? "–" : "USD " + v + "/Monat";
+      } catch (e) { return "–"; }
+    }
+    function load() {
+      msgEl.textContent = "Lädt …";
+      api("/api/admin/panel/sponsor-requests?limit=" + limit + "&offset=" + offset + (filter.value ? "&status=" + encodeURIComponent(filter.value) : "")).then(function (r) {
+        head.textContent = ""; body.textContent = "";
+        if (r.s !== 200) { msg(msgEl, "Sponsor-Anfragen nicht abrufbar", true); return; }
+        total = r.j.total || 0; msgEl.textContent = "";
+        head.appendChild(h("tr", {}, ["Datum", "Firma", "Name", "E-Mail", "Paket", "Preis", "Status"].map(function (x) { return h("th", { text: x }); })));
+        (r.j.items || []).forEach(function (x) {
+          var state = h("select", { "aria-label": "Status für " + x.company });
+          [["new", "Neu"], ["contacted", "Kontaktiert"], ["won", "Gewonnen"], ["lost", "Verloren"], ["spam", "Spam"]].forEach(function (v) { var opt = h("option", { value: v[0], text: v[1] }); if (x.status === v[0]) opt.selected = true; state.appendChild(opt); });
+          state.addEventListener("change", function () {
+            state.disabled = true;
+            api("/api/admin/panel/sponsor-requests/status", { method: "POST", body: { id: x.id, status: state.value } }).then(function (updated) {
+              state.disabled = false;
+              if (updated.s === 200) load(); else { msg(msgEl, "Status konnte nicht gespeichert werden", true); state.value = x.status; }
+            });
+          });
+          body.appendChild(h("tr", {}, [h("td", { text: x.created ? new Date(x.created * 1000).toLocaleDateString("de-DE") : "–" }), h("td", { text: x.company }), h("td", { text: x.name }), h("td", { text: x.email }), h("td", { text: shortPackage(x) }), h("td", { text: price(x) }), h("td", {}, [state])]));
+        });
+        if (!total) body.appendChild(h("tr", {}, [h("td", { colspan: "7", class: "mut", text: "Keine Sponsor-Anfragen." })]));
+        count.textContent = total ? (offset + 1) + "–" + Math.min(offset + limit, total) + " von " + total : "0 Anfragen";
+        prev.disabled = offset <= 0; next.disabled = offset + limit >= total;
+      });
+    }
+    prev.onclick = function () { offset = Math.max(0, offset - limit); load(); };
+    next.onclick = function () { offset += limit; load(); };
+    filter.addEventListener("change", function () { offset = 0; load(); });
+    load();
   }
 
   // ---------- Uebersetzungen: Uebersicht je Sprache, Filter, Vormerken ----------

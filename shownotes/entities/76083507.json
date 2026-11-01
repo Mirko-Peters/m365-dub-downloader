@@ -1,0 +1,200 @@
+{
+ "episode_id": "76083507",
+ "slug": "microsoft-graph-webhooks-simply-explained",
+ "title": "Webhook di Microsoft Graph spiegati: notifiche in tempo reale invece del polling continuo",
+ "lang": "it",
+ "duration_s": 1142,
+ "transcript_source": "transcripts/it/ra62dODpiag.vtt",
+ "time_basis": "vtt",
+ "entities": [
+  {
+   "slug": "change-notifications",
+   "name": "Change notifications and webhooks",
+   "type": "concept",
+   "score": 100,
+   "mentions": 51,
+   "first_mention_s": 77,
+   "quote": "Ma Microsoft li chiama notifiche di modifica.",
+   "url": "https://www.m365.fm/it/entity/change-notifications/"
+  },
+  {
+   "slug": "graph",
+   "name": "Microsoft Graph",
+   "type": "product",
+   "score": 90,
+   "mentions": 64,
+   "first_mention_s": 77,
+   "quote": "Invece di chiamare Microsoft Graph ogni pochi minuti aspetti che Microsoft Graph chiami te.",
+   "url": "https://www.m365.fm/it/entity/graph/"
+  },
+  {
+   "slug": "sharepoint",
+   "name": "SharePoint",
+   "type": "product",
+   "score": 35,
+   "mentions": 5,
+   "first_mention_s": 262,
+   "quote": "Un file aggiornato in SharePoint,",
+   "url": "https://www.m365.fm/it/entity/sharepoint/"
+  },
+  {
+   "slug": "microsoft-365",
+   "name": "Microsoft 365",
+   "type": "platform",
+   "score": 30,
+   "mentions": 2,
+   "first_mention_s": 71,
+   "quote": "Quando qualcosa cambia in Microsoft 365,",
+   "url": "https://www.m365.fm/it/entity/microsoft-365/"
+  },
+  {
+   "slug": "entra-id",
+   "name": "Microsoft Entra ID",
+   "type": "product",
+   "score": 30,
+   "mentions": 2,
+   "first_mention_s": 1048,
+   "quote": "crea il suo account in Microsoft Entry ID",
+   "url": "https://www.m365.fm/it/entity/entra-id/"
+  },
+  {
+   "slug": "teams",
+   "name": "Microsoft Teams",
+   "type": "product",
+   "score": 20,
+   "mentions": 1,
+   "first_mention_s": 263,
+   "quote": "un messaggio inviato in Teams,",
+   "url": "https://www.m365.fm/it/entity/teams/"
+  },
+  {
+   "slug": "onedrive",
+   "name": "OneDrive",
+   "type": "product",
+   "score": 20,
+   "mentions": 1,
+   "first_mention_s": 513,
+   "quote": "Per elementi di unità in SharePoint o OneDrive può arrivare fino a 30 giorni.",
+   "url": "https://www.m365.fm/it/entity/onedrive/"
+  },
+  {
+   "slug": "azure-service-bus",
+   "name": "Azure Service Bus",
+   "type": "product",
+   "score": 20,
+   "mentions": 1,
+   "first_mention_s": 825,
+   "quote": "un service bus persino una semplice tabella di database.",
+   "url": "https://www.m365.fm/it/entity/azure-service-bus/"
+  }
+ ],
+ "new_entities": [
+  {
+   "slug": "throttling",
+   "name": "Throttling",
+   "type": "concept",
+   "mentions": 3,
+   "first_mention_s": 148,
+   "quote": "Throttling o come alcuni sviluppatori lo chiamano. La prigione di Graph.",
+   "status": "review"
+  }
+ ],
+ "quotes": [
+  {
+   "text": "Anche se interroghi ogni cinque minuti non ottieni comunque aggiornamenti in tempo reale. Un cambiamento potrebbe verificarsi un minuto dopo l'ultima interrogazione. Non ne saprai nulla per altri quattro minuti. Stai sprecando risorse e perdendo comunque la finestra temporale.",
+   "speaker": "Mirko Peters",
+   "speaker_slug": "mirko-peters",
+   "time_s": 184,
+   "entities": [
+    "change-notifications"
+   ],
+   "why": "Warum Polling nie Echtzeit ist"
+  },
+  {
+   "text": "Questo è importante perché il tuo endpoint si trova su Internet. Chiunque conosca il tuo URL potrebbe inviarvi un post. Senza la convalida dello stato del client non avresti modo di distinguere tra una notifica reale di Microsoft Graph e una falsa.",
+   "speaker": "Mirko Peters",
+   "speaker_slug": "mirko-peters",
+   "time_s": 741,
+   "entities": [
+    "graph",
+    "change-notifications"
+   ],
+   "why": "clientState als erste Verteidigungslinie"
+  },
+  {
+   "text": "Rispondi immediatamente ed elabora in modo asincrono. Il tuo endpoint dovrebbe convalidare lo stato del client, accettare la notifica e restituire una risposta a 200 o 202 il più velocemente possibile.",
+   "speaker": "Mirko Peters",
+   "speaker_slug": "mirko-peters",
+   "time_s": 811,
+   "entities": [
+    "change-notifications"
+   ],
+   "why": "Best Practice für Notification-Endpunkte"
+  },
+  {
+   "text": "La Delta Query è affidabile. Puoi eseguirlo in qualsiasi momento e ti fornirà un elenco completo delle modifiche dall'ultimo controllo. Quindi anche se perdi una notifica puoi recuperare.",
+   "speaker": "Mirko Peters",
+   "speaker_slug": "mirko-peters",
+   "time_s": 1001,
+   "entities": [
+    "change-notifications",
+    "graph"
+   ],
+   "why": "Delta Query als Sicherheitsnetz"
+  },
+  {
+   "text": "Invece di chiedere costantemente aggiornamenti a graph, lasci che sia graph ad avvisarti quando succede qualcosa. È un cambiamento fondamentale nel modo in cui costruisci l'integrazione.",
+   "speaker": "Mirko Peters",
+   "speaker_slug": "mirko-peters",
+   "time_s": 1119,
+   "entities": [
+    "graph"
+   ],
+   "why": "Kernbotschaft: Push statt Pull"
+  }
+ ],
+ "chapters": [
+  {
+   "start_s": 64,
+   "title": "Introduzione: polling contro webhook"
+  },
+  {
+   "start_s": 208,
+   "title": "Cosa sono i webhook"
+  },
+  {
+   "start_s": 316,
+   "title": "Come funzionano i webhook in Microsoft Graph"
+  },
+  {
+   "start_s": 434,
+   "title": "Creare una sottoscrizione"
+  },
+  {
+   "start_s": 583,
+   "title": "Handshake di convalida"
+  },
+  {
+   "start_s": 699,
+   "title": "Gestione delle notifiche e sicurezza"
+  },
+  {
+   "start_s": 854,
+   "title": "Ciclo di vita, rinnovo e Delta Query"
+  },
+  {
+   "start_s": 1042,
+   "title": "Esempio reale e prossimi passi"
+  }
+ ],
+ "takeaways": [
+  "Il polling spreca richieste, rischia il throttling e non è mai in tempo reale: con i webhook (notifiche di modifica) è Microsoft Graph a chiamare la tua app.",
+  "Una sottoscrizione richiede URL di notifica, risorsa, tipo di modifica e scadenza; l'endpoint deve superare la convalida restituendo il token come testo semplice e verificare sempre il client state.",
+  "Rispondi entro 3 secondi ed elabora in modo asincrono, rinnova le sottoscrizioni prima della scadenza e usa la Delta Query come rete di sicurezza per le notifiche perse."
+ ],
+ "hook": "La tua app continua a chiedere a Microsoft Graph se c'è qualcosa di nuovo? In questo episodio scopri come i webhook di Microsoft Graph sostituiscono il polling continuo con notifiche in tempo reale, dalla sottoscrizione alla convalida fino alla Delta Query come rete di sicurezza.",
+ "youtube_video_id": "ra62dODpiag",
+ "source_video_id": "ra62dODpiag",
+ "show_id": 7393231,
+ "generated_at": "2026-11-01T21:03:47Z"
+}

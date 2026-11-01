@@ -7,6 +7,7 @@ import { importLegacyBlog } from "./legacyblog.js";
 import { importContentBlog } from "./contentblog.js";
 import { handleA2a } from "./a2a.js";
 import { handleAdminPanel } from "./adminpanel.js";
+import { handleSponsor } from "./sponsor.js";
 import { autoTranslateItems, autoTranslateEntities, runTrQueue } from "./autotr.js";
 import { syncLiveEvents } from "./liveevents.js";
 import { syncContentTopics, handleTopics } from "./topics.js";
@@ -160,6 +161,9 @@ async function api(env, request, url, path, asUser) {
   const uid = asUser === undefined ? await readSession(env, request) : null, user = asUser === undefined ? (uid ? await me(env, uid) : null) : asUser;
   const need = () => (user ? null : J({ error: "login" }, 401));
   const db = env.DB;
+
+  const sponsor = await handleSponsor(env, request, url, path, J);
+  if (sponsor) return sponsor;
 
   if (path === "/api/health") return J({ ok: true }, 200);
   if (path === "/api/providers") return J({ providers: Object.keys(PROVIDERS).filter((k) => PROVIDERS[k].id(env) && PROVIDERS[k].secret(env)) }, 200, { "cache-control": "public, max-age=300" });

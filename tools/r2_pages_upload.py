@@ -40,6 +40,10 @@ def main():
             else:
                 ok += 1; man[key] = h
     MAN.parent.mkdir(parents=True, exist_ok=True); MAN.write_text(json.dumps(man, sort_keys=True), encoding="utf-8")
+    # T41: geaenderte Seiten fuer den Purge nach dem Deploy (der Site-Worker haelt R2-Seiten 4 h im Kanten-Cache)
+    changed = sorted("/" + k[len("pages/"):-len("index.html")] for k, _d, _h in todo if k.endswith("/index.html") and man.get(k) == _h)
+    Path(os.environ.get("R2_CHANGED_OUT", "r2-changed.json")).write_text(json.dumps(changed), encoding="utf-8")
+    print(f"fuer den Purge vorgemerkt: {len(changed)} Seiten")
     print(f"hochgeladen: {ok}, Fehler: {err}, im Manifest: {len(man)}")
     return 0
 

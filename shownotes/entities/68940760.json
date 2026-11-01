@@ -1,0 +1,474 @@
+{
+  "episode_id": "68940760",
+  "slug": "active-directory-security-drift-how-identity-sprawl-and-misconfiguration-create-invisible-risk",
+  "title": "Active Directory Security Drift: How Identity Sprawl and Misconfiguration Create Invisible Risk",
+  "lang": "en",
+  "duration_s": 9880,
+  "transcript_source": "data/en_transcripts/595c4c417a44.txt",
+  "time_basis": "estimated",
+  "entities": [
+    {
+      "slug": "active-directory",
+      "name": "Active Directory",
+      "type": "product",
+      "score": 95,
+      "mentions": 25,
+      "first_mention_s": 189,
+      "quote": "for a service ticket to LDP on DC 02, the directory answers. Queries reveal group memberships, SPNs and crucially, a",
+      "url": "https://www.m365.fm/entity/active-directory/"
+    },
+    {
+      "slug": "active-directory-tiering",
+      "name": "Active Directory administrative tiering",
+      "type": "concept",
+      "score": 84,
+      "mentions": 72,
+      "first_mention_s": 51,
+      "quote": "Not evil, just physics. At 0918, a tier 2 user browsers to the app, Kerberos does its honest work. The front end",
+      "url": "https://www.m365.fm/entity/active-directory-tiering/"
+    },
+    {
+      "slug": "unconstrained-delegation",
+      "name": "Unconstrained delegation",
+      "type": "concept",
+      "score": 82,
+      "mentions": 10,
+      "first_mention_s": 0,
+      "quote": "Unconstrained delegation, TGT extraction, there is a furnace on the application tier. No one calls it that. They call",
+      "url": "https://www.m365.fm/entity/unconstrained-delegation/"
+    },
+    {
+      "slug": "krbtgt-account",
+      "name": "KRBTGT account",
+      "type": "concept",
+      "score": 80,
+      "mentions": 20,
+      "first_mention_s": 347,
+      "quote": "replication rights were used, schedule KRB TGT rotation twice, spaced by maximum ticket lifetime. We rebuild the app",
+      "url": "https://www.m365.fm/entity/krbtgt-account/"
+    },
+    {
+      "slug": "golden-ticket-attack",
+      "name": "Golden ticket attack",
+      "type": "concept",
+      "score": 78,
+      "mentions": 7,
+      "first_mention_s": 401,
+      "quote": "Disapace. The orbit holds. Stale KRB TGT. Golden ticket persistence. There is a clock at the centre of every forest.",
+      "url": "https://www.m365.fm/entity/golden-ticket-attack/"
+    },
+    {
+      "slug": "dcsync-attack",
+      "name": "DCSync attack",
+      "type": "concept",
+      "score": 78,
+      "mentions": 14,
+      "first_mention_s": 449,
+      "quote": "privileges, reads the directory, one DC sync, one quiet harvest. They collect KRB TGT's current key and its previous",
+      "url": "https://www.m365.fm/entity/dcsync-attack/"
+    },
+    {
+      "slug": "smb-signing",
+      "name": "SMB signing",
+      "type": "concept",
+      "score": 78,
+      "mentions": 27,
+      "first_mention_s": 259,
+      "quote": "a logging sync. Prince Pooler off, SMB signing and forced. LDP channel binding required. Uncontrol locks the process",
+      "url": "https://www.m365.fm/entity/smb-signing/"
+    },
+    {
+      "slug": "windows-laps",
+      "name": "Windows LAPS",
+      "type": "product",
+      "score": 76,
+      "mentions": 23,
+      "first_mention_s": 1415,
+      "quote": "collapse. The fix is not a sermon. It is lapes. Local administrator password solution turns the same name into unique",
+      "url": "https://www.m365.fm/entity/windows-laps/"
+    },
+    {
+      "slug": "ntlm",
+      "name": "NTLM",
+      "type": "concept",
+      "score": 72,
+      "mentions": 31,
+      "first_mention_s": 1653,
+      "quote": "identical door. Disabled SMB signing. NTLM really. There is an old current moving under modern names. It is called",
+      "url": "https://www.m365.fm/entity/ntlm/"
+    },
+    {
+      "slug": "ntlm-relay-attack",
+      "name": "NTLM relay attack",
+      "type": "concept",
+      "score": 72,
+      "mentions": 17,
+      "first_mention_s": 1461,
+      "quote": "the room. We pair with SMB signing so relays cannot impersonate proximity. We enable restricted admin or remote",
+      "url": "https://www.m365.fm/entity/ntlm-relay-attack/"
+    },
+    {
+      "slug": "pass-the-hash",
+      "name": "Pass-the-hash",
+      "type": "concept",
+      "score": 70,
+      "mentions": 6,
+      "first_mention_s": 926,
+      "quote": "cord, they bought time and options, passed the hash, offline cracking, forging tickets if KRBTGT stayed old.",
+      "url": "https://www.m365.fm/entity/pass-the-hash/"
+    },
+    {
+      "slug": "group-managed-service-accounts",
+      "name": "Group managed service accounts (gMSA)",
+      "type": "concept",
+      "score": 70,
+      "mentions": 23,
+      "first_mention_s": 146,
+      "quote": "historical forgotten, convenient, contains a GMSA fallback password from before the migration fully completed. Drift",
+      "url": "https://www.m365.fm/entity/group-managed-service-accounts/"
+    },
+    {
+      "slug": "pac-validation",
+      "name": "PAC validation",
+      "type": "concept",
+      "score": 68,
+      "mentions": 30,
+      "first_mention_s": 662,
+      "quote": "rotation with hardening. We enable pack validation on sensitive services that support it. Domain controllers, pk i,",
+      "url": "https://www.m365.fm/entity/pac-validation/"
+    },
+    {
+      "slug": "privileged-access-workstation",
+      "name": "Privileged access workstation (PAW)",
+      "type": "concept",
+      "score": 66,
+      "mentions": 14,
+      "first_mention_s": 593,
+      "quote": "trust. We execute with ceremony. On a tear paw with changed ticket in hand, a senior admin rotates KRBTGT using a",
+      "url": "https://www.m365.fm/entity/privileged-access-workstation/"
+    },
+    {
+      "slug": "credential-guard",
+      "name": "Windows Defender Credential Guard",
+      "type": "product",
+      "score": 66,
+      "mentions": 9,
+      "first_mention_s": 2066,
+      "quote": "it is guarded by ceremony. Run SPPL, credential guard. EDR hooks that watch every hand that reaches. But where those",
+      "url": "https://www.m365.fm/entity/credential-guard/"
+    },
+    {
+      "slug": "group-policy-preferences-passwords",
+      "name": "Group Policy Preferences passwords (cpassword)",
+      "type": "concept",
+      "score": 64,
+      "mentions": 10,
+      "first_mention_s": 2587,
+      "quote": "dot XML each line is a whisper in the c password attribute a string base 64 calm waiting the schema tags as it",
+      "url": "https://www.m365.fm/entity/group-policy-preferences-passwords/"
+    },
+    {
+      "slug": "sysmon",
+      "name": "Sysmon",
+      "type": "product",
+      "score": 62,
+      "mentions": 31,
+      "first_mention_s": 118,
+      "quote": "door 2 requests spike. Base pulse. Sysment 10. L-Sass handle open by unusual process. Ötacili. D. E.C. The telescope",
+      "url": "https://www.m365.fm/entity/sysmon/"
+    },
+    {
+      "slug": "active-directory-certificate-services",
+      "name": "Active Directory Certificate Services (AD CS)",
+      "type": "product",
+      "score": 60,
+      "mentions": 5,
+      "first_mention_s": 3453,
+      "quote": "will choose your ending for you an a dc s esc one misconfiguration there is a forge that mince identities into",
+      "url": "https://www.m365.fm/entity/active-directory-certificate-services/"
+    },
+    {
+      "slug": "sid-filtering",
+      "name": "SID filtering",
+      "type": "concept",
+      "score": 60,
+      "mentions": 9,
+      "first_mention_s": 3068,
+      "quote": "b local two way transitive sid filtering disabled for migration selective authentication not configured adfs claims",
+      "url": "https://www.m365.fm/entity/sid-filtering/"
+    },
+    {
+      "slug": "active-directory-forest",
+      "name": "Active Directory forest",
+      "type": "concept",
+      "score": 58,
+      "mentions": 42,
+      "first_mention_s": 406,
+      "quote": "There is a clock at the centre of every forest. It is not on a wall. It beats inside the KRB TGT account. When that",
+      "url": "https://www.m365.fm/entity/active-directory-forest/"
+    },
+    {
+      "slug": "group-policy",
+      "name": "Group Policy",
+      "type": "product",
+      "score": 58,
+      "mentions": 40,
+      "first_mention_s": 513,
+      "quote": "ask authoritatively. They enumerate GPOs. Link acquired policy that runs a start-up script on a management server.",
+      "url": "https://www.m365.fm/entity/group-policy/"
+    },
+    {
+      "slug": "security-information-and-event-management",
+      "name": "Security information and event management (SIEM)",
+      "type": "concept",
+      "score": 50,
+      "mentions": 26,
+      "first_mention_s": 319,
+      "quote": "of other item, tidy. In the CM chord the song HTTP SPN spike plus LSS handle plus new service ticket to CFs from the",
+      "url": "https://www.m365.fm/entity/security-information-and-event-management/"
+    },
+    {
+      "slug": "domain-name-system",
+      "name": "Domain Name System (DNS)",
+      "type": "concept",
+      "score": 45,
+      "mentions": 23,
+      "first_mention_s": 3358,
+      "quote": "white lists if trust only exists for dns forwarding replace with conditional forwarding not identity treaties sixth",
+      "url": "https://www.m365.fm/entity/domain-name-system/"
+    },
+    {
+      "slug": "just-in-time-access",
+      "name": "Just-in-time access",
+      "type": "concept",
+      "score": 40,
+      "mentions": 7,
+      "first_mention_s": 370,
+      "quote": "become real. Emergency access becomes JIT. Approved, logged, recorded. The team learns that unconstrained delegation",
+      "url": "https://www.m365.fm/entity/just-in-time-access/"
+    }
+  ],
+  "new_entities": [
+    {
+      "slug": "unconstrained-delegation",
+      "name": "Unconstrained delegation",
+      "type": "concept",
+      "mentions": 10,
+      "first_mention_s": 0,
+      "quote": "Unconstrained delegation, TGT extraction, there is a furnace on the application tier. No one calls it that. They call",
+      "status": "review"
+    },
+    {
+      "slug": "golden-ticket-attack",
+      "name": "Golden ticket attack",
+      "type": "concept",
+      "mentions": 7,
+      "first_mention_s": 401,
+      "quote": "Disapace. The orbit holds. Stale KRB TGT. Golden ticket persistence. There is a clock at the centre of every forest.",
+      "status": "review"
+    },
+    {
+      "slug": "krbtgt-account",
+      "name": "KRBTGT account",
+      "type": "concept",
+      "mentions": 20,
+      "first_mention_s": 347,
+      "quote": "replication rights were used, schedule KRB TGT rotation twice, spaced by maximum ticket lifetime. We rebuild the app",
+      "status": "review"
+    },
+    {
+      "slug": "dcsync-attack",
+      "name": "DCSync attack",
+      "type": "concept",
+      "mentions": 14,
+      "first_mention_s": 449,
+      "quote": "privileges, reads the directory, one DC sync, one quiet harvest. They collect KRB TGT's current key and its previous",
+      "status": "review"
+    },
+    {
+      "slug": "pass-the-hash",
+      "name": "Pass-the-hash",
+      "type": "concept",
+      "mentions": 6,
+      "first_mention_s": 926,
+      "quote": "cord, they bought time and options, passed the hash, offline cracking, forging tickets if KRBTGT stayed old.",
+      "status": "review"
+    },
+    {
+      "slug": "windows-laps",
+      "name": "Windows LAPS",
+      "type": "product",
+      "mentions": 23,
+      "first_mention_s": 1415,
+      "quote": "collapse. The fix is not a sermon. It is lapes. Local administrator password solution turns the same name into unique",
+      "status": "review"
+    },
+    {
+      "slug": "smb-signing",
+      "name": "SMB signing",
+      "type": "concept",
+      "mentions": 27,
+      "first_mention_s": 259,
+      "quote": "a logging sync. Prince Pooler off, SMB signing and forced. LDP channel binding required. Uncontrol locks the process",
+      "status": "review"
+    },
+    {
+      "slug": "ntlm-relay-attack",
+      "name": "NTLM relay attack",
+      "type": "concept",
+      "mentions": 17,
+      "first_mention_s": 1461,
+      "quote": "the room. We pair with SMB signing so relays cannot impersonate proximity. We enable restricted admin or remote",
+      "status": "review"
+    },
+    {
+      "slug": "credential-guard",
+      "name": "Windows Defender Credential Guard",
+      "type": "product",
+      "mentions": 9,
+      "first_mention_s": 2066,
+      "quote": "it is guarded by ceremony. Run SPPL, credential guard. EDR hooks that watch every hand that reaches. But where those",
+      "status": "review"
+    },
+    {
+      "slug": "group-managed-service-accounts",
+      "name": "Group managed service accounts (gMSA)",
+      "type": "concept",
+      "mentions": 23,
+      "first_mention_s": 146,
+      "quote": "historical forgotten, convenient, contains a GMSA fallback password from before the migration fully completed. Drift",
+      "status": "review"
+    },
+    {
+      "slug": "sysmon",
+      "name": "Sysmon",
+      "type": "product",
+      "mentions": 31,
+      "first_mention_s": 118,
+      "quote": "door 2 requests spike. Base pulse. Sysment 10. L-Sass handle open by unusual process. Ötacili. D. E.C. The telescope",
+      "status": "review"
+    },
+    {
+      "slug": "pac-validation",
+      "name": "PAC validation",
+      "type": "concept",
+      "mentions": 30,
+      "first_mention_s": 662,
+      "quote": "rotation with hardening. We enable pack validation on sensitive services that support it. Domain controllers, pk i,",
+      "status": "review"
+    },
+    {
+      "slug": "sid-filtering",
+      "name": "SID filtering",
+      "type": "concept",
+      "mentions": 9,
+      "first_mention_s": 3068,
+      "quote": "b local two way transitive sid filtering disabled for migration selective authentication not configured adfs claims",
+      "status": "review"
+    },
+    {
+      "slug": "group-policy-preferences-passwords",
+      "name": "Group Policy Preferences passwords (cpassword)",
+      "type": "concept",
+      "mentions": 10,
+      "first_mention_s": 2587,
+      "quote": "dot XML each line is a whisper in the c password attribute a string base 64 calm waiting the schema tags as it",
+      "status": "review"
+    }
+  ],
+  "quotes": [
+    {
+      "text": "We rebuild the app server from signed media rather than cleaning in place, cleansing rituals lie, rebuilds tell the truth.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 351,
+      "entities": [],
+      "why": "Clear incident response rule: rebuild compromised hosts instead of cleaning them."
+    },
+    {
+      "text": "Golden tickets are not sorcery. They are courtesy extended too long. Rotate the key. Shorten the night. Bind claims to truth.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 771,
+      "entities": [
+        "golden-ticket-attack",
+        "krbtgt-account"
+      ],
+      "why": "Reframes golden tickets as a KRBTGT rotation failure with three concrete counters."
+    },
+    {
+      "text": "Pass the hash is gravity exploiting repetition. End the repetition. Make each mass its own. The chain falls apart because it cannot find the next identical door.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 1639,
+      "entities": [
+        "pass-the-hash",
+        "windows-laps"
+      ],
+      "why": "Explains why unique local admin passwords break lateral movement."
+    },
+    {
+      "text": "Defense begins with humility. Backups do not need to impersonate gods. They need a narrow lens. We redraw rights as principle.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 936,
+      "entities": [
+        "dcsync-attack"
+      ],
+      "why": "Argues for least privilege on backup service accounts instead of replication rights."
+    },
+    {
+      "text": "abandoned trusts are not pathways they are tears in the fabric close them or they will choose your ending for you",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 3443,
+      "entities": [
+        "active-directory-forest",
+        "sid-filtering"
+      ],
+      "why": "Memorable warning about forgotten forest trusts."
+    }
+  ],
+  "chapters": [
+    {
+      "start_s": 0,
+      "title": "Unconstrained delegation and TGT extraction"
+    },
+    {
+      "start_s": 401,
+      "title": "Stale KRBTGT and golden ticket persistence"
+    },
+    {
+      "start_s": 787,
+      "title": "Overprivileged backup service and DCSync"
+    },
+    {
+      "start_s": 1216,
+      "title": "Local admin reuse and pass-the-hash"
+    },
+    {
+      "start_s": 1639,
+      "title": "SMB signing, NTLM relay and LSASS harvest"
+    },
+    {
+      "start_s": 2507,
+      "title": "GPP passwords, forest trusts and AD CS ESC1"
+    },
+    {
+      "start_s": 3939,
+      "title": "Monday actions: tiering, hardening and detection"
+    },
+    {
+      "start_s": 5180,
+      "title": "Legacy, PAC validation, segmentation and response"
+    }
+  ],
+  "takeaways": [
+    "Active Directory drifts toward insecurity through convenience: unconstrained delegation, stale KRBTGT keys, overprivileged backup accounts and shared local admin passwords each open a quiet path to domain dominance.",
+    "Close those paths with constrained or resource-based delegation, twice-rotated KRBTGT, gMSAs, Windows LAPS, SMB signing, LSA protection and Credential Guard, and remove GPP passwords, open trusts and loose certificate templates.",
+    "Enforce tiering with privileged access workstations, tune detections on Kerberos, replication and LSASS events, and run contained, evidence-first response rituals instead of improvised clean-ups."
+  ],
+  "hook": "Active Directory rarely fails loudly; it drifts, one exception and one forgotten service account at a time, until an attacker walks a quiet path to domain admin. This episode is for identity, infrastructure and security teams who run on-premises AD. It walks through the most common misconfigurations, the attack chains they enable and the hardening, tiering and detection rituals that close them.",
+  "youtube_video_id": null,
+  "generated_at": "2026-11-01T21:37:45Z"
+}

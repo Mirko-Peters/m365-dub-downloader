@@ -6,6 +6,8 @@ import { cleanText, cleanName, esc, isLang, LANGS, b64u, sign, verify } from "..
 import { sanitize } from "../src/wiki.js";
 import { parseFeed } from "../src/feeds.js";
 import { scoreOf, levelOf, levelName, CAPS, THRESH } from "../src/levels.js";
+import { handleSponsor } from "../src/sponsor.js";
+import { handleAdminPanel } from "../src/adminpanel.js";
 
 test("util: Texte bereinigen und escapen", () => {
   assert.equal(cleanText("  a<b>c  ", 3), "a<b");
@@ -231,6 +233,59 @@ test("entities: syncEntitiesFromSite uebernimmt JSON-Aenderungen, wenn zuletzt e
     raw.exec("INSERT INTO meta(k,v) VALUES('entity_source','db') ON CONFLICT(k) DO UPDATE SET v='db'");
     assert.match((await syncEntitiesFromSite({ DB: db, SITE: "https://x" })).skipped, /entity_source=db/);
   } finally { globalThis.fetch = old; }
+});
+
+test("sponsor: Anfragen, Honeypot, Rate-Limit und Admin-Panel (SQLite)", async () => {
+  const { DatabaseSync } = await import("node:sqlite");
+  const raw = new DatabaseSync(":memory:");
+  const dir = new URL("../migrations/", import.meta.url);
+  for (const f of readdirSync(dir).filter((f) => f.endsWith(".sql")).sort()) raw.exec(readFileSync(new URL(f, dir), "utf-8"));
+  const db = { prepare(sql) { const st = raw.prepare(sql); let args = []; const o = { bind(...a) { args = a; return o; }, all: async () => ({ results: st.all(...args) }), first: async () => st.get(...args) ?? null, run: async () => { const r = st.run(...args); return { meta: { changes: Number(r.changes), last_row_id: Number(r.lastInsertRowid) } }; } }; return o; }, async batch(s) { for (const x of s) await x.run(); } };
+  const env = { DB: db, SESSION_SECRET: "test-secret", SITE: "https://www.m365.fm", ADMIN_SUBS: "google:sub2" };
+  raw.exec("INSERT INTO users(id,provider,sub,name,role,banned,created) VALUES(1,'google','sub1','Admin 1','admin',0,1),(2,'google','sub2','Admin 2','user',0,1)");
+  raw.exec("INSERT INTO mail_addr(user_id,email,verified,created) VALUES(1,'admin1@example.com',1,1),(2,'admin2@example.com',1,1)");
+  const J = (data, status = 200) => new Response(JSON.stringify(data), { status, headers: { "content-type": "application/json" } });
+  const payload = (extra = {}) => ({ company: "Contoso", name: "Ada Beispiel", email: "ada@example.com", message: "Bitte melden.", package: { ziel: "Azure", themen: ["Cloud"], laufzeit: "3 Monate", bausteine: ["Podcast"], preisMonat: 500, gesamtpreis: 1500 }, lang: "de", ...extra });
+  const request = (body) => new Request("https://api.example/api/sponsor/request", { method: "POST", headers: { "cf-connecting-ip": "203.0.113.8", "content-type": "application/json" }, body: JSON.stringify(body) });
+  const post = (body) => handleSponsor(env, request(body), new URL("https://api.example/api/sponsor/request"), "/api/sponsor/request", J);
+
+  assert.equal((await post(null)).status, 400, "ungueltige JSON-Form wird kontrolliert abgewiesen");
+  assert.equal((await post(payload({ email: "nicht-eine-mail" }))).status, 400);
+  let response = await post(payload());
+  assert.equal(response.status, 200);
+  let rows = raw.prepare("SELECT id,status,ip_hash,package FROM sponsor_requests ORDER BY id").all();
+  assert.equal(rows[0].status, "new");
+  assert.match(rows[0].ip_hash, /^[a-f0-9]{64}$/);
+  assert.notEqual(rows[0].ip_hash, "203.0.113.8");
+  assert.equal(JSON.parse(rows[0].package).preisMonat, 500);
+  let outbox = raw.prepare("SELECT user_id,key,html FROM mail_outbox ORDER BY user_id").all();
+  assert.deepEqual(outbox.map((x) => x.user_id), [1, 2], "beide Admin-Konten bekommen eine Outbox-Mail");
+  assert.ok(outbox.some((x) => x.key === `sponsor:${rows[0].id}`));
+  assert.match(outbox[0].html, /Contoso/);
+  assert.match(outbox[0].html, /USD 500\/Monat/);
+  assert.match(outbox[0].html, /\/admin\//);
+
+  response = await post(payload({ website: "gefüllt" }));
+  assert.equal(response.status, 200);
+  rows = raw.prepare("SELECT id,status FROM sponsor_requests ORDER BY id").all();
+  assert.equal(rows[1].status, "spam");
+  assert.equal(raw.prepare("SELECT COUNT(*) n FROM mail_outbox").get().n, 2, "Honeypot erzeugt keine Mail");
+
+  for (let i = 0; i < 3; i++) assert.equal((await post(payload())).status, 200);
+  assert.equal((await post(payload())).status, 429, "sechste Anfrage innerhalb einer Stunde wird abgewiesen");
+  assert.equal(raw.prepare("SELECT COUNT(*) n FROM sponsor_requests").get().n, 5);
+
+  const adminReq = new Request("https://api.example/api/admin/panel/sponsor-requests?status=spam&limit=10");
+  response = await handleAdminPanel(env, adminReq, new URL(adminReq.url), "/api/admin/panel/sponsor-requests", { id: 3, admin: false }, J);
+  assert.equal(response.status, 403, "Liste ist nur fuer Admins");
+  response = await handleAdminPanel(env, adminReq, new URL(adminReq.url), "/api/admin/panel/sponsor-requests", { id: 1, admin: true }, J);
+  let result = await response.json();
+  assert.equal(result.total, 1);
+  assert.equal(result.items[0].status, "spam");
+  response = await handleAdminPanel(env, new Request("https://api.example/api/admin/panel/sponsor-requests/status", { method: "POST", body: JSON.stringify({ id: rows[0].id, status: "contacted" }) }), new URL("https://api.example/api/admin/panel/sponsor-requests/status"), "/api/admin/panel/sponsor-requests/status", { id: 1, admin: true }, J);
+  assert.equal(response.status, 200);
+  assert.equal(raw.prepare("SELECT status FROM sponsor_requests WHERE id=?").get(rows[0].id).status, "contacted");
+  raw.close();
 });
 
 test("entities: Abgleich ueberschreibt keine Menschen (freigegebener Vorschlag mit aelterer id, geloeschtes Konto, absichtlich geleertes Feld, selbst verwaltet) (SQLite)", async () => {
