@@ -143,6 +143,10 @@ function trigramQuery(query) {
   return [...grams].map((gram) => `"${gram.replaceAll('"', '""')}"`).join(" OR ");
 }
 
+function escapeLike(query) {
+  return query.replace(/[\\%_]/g, "\\$&");
+}
+
 function filtersSql(filters) {
   const clauses = [], values = [];
   if (filters.lang) { clauses.push("d.lang=?"); values.push(filters.lang); }
@@ -152,54 +156,145 @@ function filtersSql(filters) {
   return { sql: clauses.length ? ` AND ${clauses.join(" AND ")}` : "", values };
 }
 
-function searchSql(tokenizer, query, filters, pref) {
+const FACETS = ["main", "type", "lang", "entity", "year"];
+function filtersForFacet(filters, facet) {
+  return { ...filters, ...(facet === "main" ? {} : { [facet]: "" }) };
+}
+
+function candidateQuery(tokenizer, query, filters) {
   const short = Array.from(query).length < 3;
   const params = [];
-  let cte = "", matchSql, join = "";
-  if (short) {
-    matchSql = "d.title LIKE ? ESCAPE '\\' COLLATE NOCASE";
-    params.push(`${query.replace(/[\\%_]/g, "\\$&")}%`);
-  } else {
-    const expression = tokenizer === "trigram"
-      ? trigramQuery(query)
-      : query.split(/\s+/).filter(Boolean).map((term) => `"${term.replaceAll('"', '""')}"`).join(" OR ");
-    cte = "WITH matched AS (SELECT rowid,bm25(search_fts,10,5,1) score FROM search_fts WHERE search_fts MATCH ?) ";
-    params.push(expression);
-    join = "LEFT JOIN matched m ON m.rowid=d.rowid";
-    if (tokenizer === "unicode61") {
-      matchSql = "(m.rowid IS NOT NULL OR d.title LIKE ? ESCAPE '\\' COLLATE NOCASE)";
-      params.push(`%${query.replace(/[\\%_]/g, "\\$&")}%`);
-    } else matchSql = "m.rowid IS NOT NULL";
-  }
-  const filter = filtersSql(filters);
-  params.push(...filter.values);
-  let order;
+  const escaped = escapeLike(query);
+  const exactLike = `%${escaped}%`;
+  const prefixLike = `${escaped}%`;
+  const expression = tokenizer === "trigram"
+    ? trigramQuery(query)
+    : query.split(/\s+/).filter(Boolean).map((term) => `"${term.replaceAll('"', '""')}"`).join(" OR ");
+  const ctes = [];
   if (!short) {
-    order = "COALESCE(m.score,1)-CASE WHEN d.lang=? THEN 0.000001 ELSE 0 END";
-  } else {
-    order = "CASE WHEN d.lang=? THEN 0 ELSE 1 END,d.title COLLATE NOCASE";
+    ctes.push("matched AS MATERIALIZED (SELECT rowid,bm25(search_fts,10,5,1) score FROM search_fts WHERE search_fts MATCH ?)");
+    params.push(expression);
   }
-  return {
-    cte,
-    from: `FROM search_doc d ${join} WHERE d.gone=0 AND ${matchSql}${filter.sql}`,
-    params,
-    orderParams: [pref],
-    order,
-  };
+  const contexts = [];
+  for (const [index, facet] of FACETS.entries()) {
+    const contextFilters = filtersForFacet(filters, facet);
+    const key = JSON.stringify(contextFilters);
+    const existing = contexts.find((context) => context.key === key);
+    if (existing) existing.mask |= 1 << index;
+    else contexts.push({ key, filters: contextFilters, mask: 1 << index });
+  }
+  const branches = [];
+  for (const context of contexts) {
+    const filter = filtersSql(context.filters);
+    const source = short
+      ? "FROM search_doc d"
+      : tokenizer === "unicode61"
+        ? "FROM search_doc d LEFT JOIN matched m ON m.rowid=d.rowid"
+        : "FROM matched m INNER JOIN search_doc d ON d.rowid=m.rowid";
+    const matched = short
+      ? "d.title LIKE ? ESCAPE '\\' COLLATE NOCASE"
+      : tokenizer === "unicode61"
+        ? "(m.rowid IS NOT NULL OR d.title LIKE ? ESCAPE '\\' COLLATE NOCASE)"
+        : "1=1";
+    const score = short ? "0" : "COALESCE(m.score,0)";
+    branches.push(
+      `SELECT * FROM (SELECT d.rowid,${score} score,CASE WHEN d.title LIKE ? ESCAPE '\\' COLLATE NOCASE THEN 1 ELSE 0 END exact,${context.mask} scope ` +
+      `${source} WHERE d.gone=0 AND ${matched}${filter.sql} ORDER BY exact DESC,score ASC LIMIT 1000)`,
+    );
+    params.push(exactLike);
+    if (short) params.push(prefixLike);
+    else if (tokenizer === "unicode61") params.push(exactLike);
+    params.push(...filter.values);
+  }
+  ctes.push(`eligible AS (${branches.join(" UNION ALL ")})`);
+  ctes.push(
+    "ranked AS (SELECT rowid,MIN(score) score,MAX(exact) exact," +
+    FACETS.map((facet, index) => `MAX(scope & ${1 << index}) ${facet}`).join(",") +
+    " FROM eligible GROUP BY rowid ORDER BY main DESC,exact DESC,score ASC LIMIT 1000)",
+  );
+  const sql = `WITH ${ctes.join(",")} SELECT d.id,d.url,d.lang,d.type,d.title,d.summary,d.date,d.image,d.entities,r.score,r.main AS in_main,r.type AS in_type,r.lang AS in_lang,r.entity AS in_entity,r.year AS in_year FROM ranked r INNER JOIN search_doc d ON d.rowid=r.rowid`;
+  return { sql, params };
 }
 
-async function facetCounts(db, tokenizer, query, filters, pref, expression) {
-  const sql = searchSql(tokenizer, query, filters, pref);
-  const rows = (await db.prepare(`${sql.cte}SELECT ${expression} value,COUNT(*) n ${sql.from} GROUP BY value`).bind(...sql.params).all()).results || [];
-  return Object.fromEntries(rows.filter((row) => row.value).map((row) => [row.value, row.n]));
+function normalizeWord(word) {
+  return word.toLocaleLowerCase().replace(/ä/g, "ae").replace(/ö/g, "oe").replace(/ü/g, "ue").replace(/ß/g, "ss")
+    .normalize("NFD").replace(/\p{M}/gu, "");
 }
 
-async function entityFacetCounts(db, tokenizer, query, filters, pref) {
-  const sql = searchSql(tokenizer, query, filters, pref);
-  const cte = `WITH RECURSIVE ${sql.cte ? `${sql.cte.slice(5)},` : ""}filtered(id,rest) AS (SELECT d.rowid,d.entities||',' ${sql.from}),` +
-    "split(id,rest,entity) AS (SELECT id,rest,'' FROM filtered UNION ALL SELECT id,substr(rest,instr(rest,',')+1),substr(rest,1,instr(rest,',')-1) FROM split WHERE rest<>'') ";
-  const rows = (await db.prepare(`${cte}SELECT entity value,COUNT(DISTINCT id) n FROM split WHERE entity<>'' GROUP BY entity ORDER BY n DESC,value LIMIT 15`).bind(...sql.params).all()).results || [];
-  return Object.fromEntries(rows.map((row) => [row.value, row.n]));
+function trigrams(value) {
+  const chars = Array.from(`^${normalizeWord(value)}$`);
+  const out = new Set();
+  for (let i = 0; i < chars.length - 2; i++) out.add(chars.slice(i, i + 3).join(""));
+  return out;
+}
+
+function dice(a, b) {
+  if (a === b) return 1;
+  const left = trigrams(a), right = trigrams(b);
+  let common = 0;
+  for (const gram of left) if (right.has(gram)) common++;
+  return left.size + right.size ? 2 * common / (left.size + right.size) : 0;
+}
+
+function titleSimilarity(query, title) {
+  const q = normalizeWord(query), titleText = normalizeWord(title);
+  const queryWords = q.match(/[\p{L}\p{N}]+/gu) || [q];
+  const titleWords = titleText.match(/[\p{L}\p{N}]+/gu) || [titleText];
+  const best = queryWords.map((word) => Math.max(...titleWords.map((candidate) => dice(word, candidate))));
+  return best.reduce((sum, score) => sum + score, 0) / Math.max(1, best.length);
+}
+
+function resultPath(row) {
+  let path;
+  try { path = new URL(row.url).pathname; } catch { path = row.url; }
+  const prefix = `/${row.lang}`;
+  if (path === prefix || path === `${prefix}/`) path = "/";
+  else if (path.startsWith(`${prefix}/`)) path = path.slice(prefix.length);
+  return path.replace(/\/+$/, "") || "/";
+}
+
+function rankCandidates(rows, query, pref) {
+  const scores = rows.map((row) => Number(row.score) || 0);
+  const min = Math.min(...scores, 0), max = Math.max(...scores, 0);
+  for (const row of rows) {
+    const similarity = titleSimilarity(query, row.title);
+    const bm25 = max === min ? 1 : (max - Number(row.score || 0)) / (max - min);
+    row.rank = similarity * 100 + bm25 * 10 +
+      (similarity >= 0.4 && ["person", "entity"].includes(row.type) ? 16 : 0) +
+      (pref && row.lang === pref ? 12 : 0);
+  }
+  rows.sort((a, b) => b.rank - a.rank || a.title.localeCompare(b.title));
+  return rows;
+}
+
+function dedupeLanguages(rows, pref) {
+  const byPath = new Map();
+  for (const row of rows) {
+    const path = resultPath(row), previous = byPath.get(path);
+    const priority = (item) => item.lang === pref && pref ? 2 : item.lang === "en" ? 1 : 0;
+    if (!previous || priority(row) > priority(previous) ||
+        (priority(row) === priority(previous) && row.rank > previous.rank)) byPath.set(path, row);
+  }
+  return [...byPath.values()].sort((a, b) => b.rank - a.rank || a.title.localeCompare(b.title));
+}
+
+function countFacet(rows, scope, field) {
+  const counts = {};
+  for (const row of rows) {
+    if (!row[`in_${scope}`]) continue;
+    const value = field === "year" ? row.date?.slice(0, 4) : row[field];
+    if (value) counts[value] = (counts[value] || 0) + 1;
+  }
+  return counts;
+}
+
+function countEntityFacet(rows) {
+  const counts = {};
+  for (const row of rows) {
+    if (!row.in_entity) continue;
+    for (const entity of new Set((row.entities || "").split(",").filter(Boolean))) counts[entity] = (counts[entity] || 0) + 1;
+  }
+  return Object.fromEntries(Object.entries(counts).sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0])).slice(0, 15));
 }
 
 export async function handleSearch(env, request, url, J) {
@@ -219,25 +314,24 @@ export async function handleSearch(env, request, url, J) {
     year,
   };
   const pref = url.searchParams.get("pref") || "";
-  const ipHash = await sha256hex(request.headers.get("cf-connecting-ip") || "");
+  const day = new Date().toISOString().slice(0, 10);
+  const ipHash = await sha256hex(`${request.headers.get("cf-connecting-ip") || ""}|${day}|${env.RL_SALT || ""}`);
   if (!(await rateLimit(env.DB, `search:${ipHash}`, 60, 60))) return J({ error: "rate_limit" }, 429);
 
   const tokenizer = await ensureSearchFts(env.DB);
-  const selected = searchSql(tokenizer, q, filters, pref);
-  const count = await env.DB.prepare(`${selected.cte}SELECT COUNT(*) n ${selected.from}`).bind(...selected.params).first();
-  const resultsQuery = searchSql(tokenizer, q, filters, pref);
-  const rows = (await env.DB.prepare(
-    `${resultsQuery.cte}SELECT d.url,d.title,d.summary,d.type,d.lang,d.date,d.image ${resultsQuery.from} ORDER BY ${resultsQuery.order} LIMIT ? OFFSET ?`,
-  ).bind(...resultsQuery.params, ...resultsQuery.orderParams, size, (page - 1) * size).all()).results || [];
-  const [typeCounts, langCounts, entityFacet, yearCounts] = await Promise.all([
-    facetCounts(env.DB, tokenizer, q, { ...filters, type: "" }, pref, "d.type"),
-    facetCounts(env.DB, tokenizer, q, { ...filters, lang: "" }, pref, "d.lang"),
-    entityFacetCounts(env.DB, tokenizer, q, { ...filters, entity: "" }, pref),
-    facetCounts(env.DB, tokenizer, q, { ...filters, year: "" }, pref, "substr(d.date,1,4)"),
-  ]);
+  const candidates = candidateQuery(tokenizer, q, filters);
+  const rawRows = (await env.DB.prepare(candidates.sql).bind(...candidates.params).all()).results || [];
+  const ranked = rankCandidates(rawRows, q, pref);
+  const resultRows = filters.lang ? ranked.filter((row) => row.in_main) : dedupeLanguages(ranked.filter((row) => row.in_main), pref);
+  const results = resultRows.slice((page - 1) * size, page * size).map(({ url, title, summary, type, lang, date, image }) => ({ url, title, summary, type, lang, date, image }));
   return J({
-    q, total: count?.n || 0, page,
-    results: rows,
-    facets: { type: typeCounts, lang: langCounts, entity: entityFacet, year: yearCounts },
+    q, total: resultRows.length, page,
+    results,
+    facets: {
+      type: countFacet(ranked, "type", "type"),
+      lang: countFacet(ranked, "lang", "lang"),
+      entity: countEntityFacet(ranked),
+      year: countFacet(ranked, "year", "year"),
+    },
   }, 200, { "cache-control": "public, max-age=300" });
 }
