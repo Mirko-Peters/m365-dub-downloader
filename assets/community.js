@@ -240,12 +240,19 @@
     }).catch(function () { root.hidden = false; root.appendChild(h("p", { class: "cmut", role: "status", text: tt("error") })); });
   }
 
+  // T9: Widgets erst laden, wenn sie in die Naehe des sichtbaren Bereichs kommen (spart API-Aufrufe und Verbindungsaufbau beim ersten Laden)
+  function lazy(el, fn) {
+    if (!el) return;
+    if (!("IntersectionObserver" in window) || location.hash) return fn(el);
+    var o = new IntersectionObserver(function (x) { if (x.some(function (y) { return y.isIntersecting; })) { o.disconnect(); fn(el); } }, { rootMargin: "800px" });
+    o.observe(el);
+  }
   function init() {
+    lazy(document.getElementById("c-comments"), mountComments);
+    lazy(document.getElementById("c-sub"), mountSub);
+    lazy(document.getElementById("c-curator"), function (el) { mountCurator(el, false); });
     var el;
-    if ((el = document.getElementById("c-comments"))) mountComments(el);
-    if ((el = document.getElementById("c-sub"))) mountSub(el);
-    if ((el = document.getElementById("c-curator"))) mountCurator(el, false);
-    if ((el = document.getElementById("c-page"))) mountPage(el);
+    if ((el = document.getElementById("c-page"))) mountPage(el);   // Community-Seite: Inhalt ist der Hauptteil, sofort laden
   }
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init); else init();
 })();

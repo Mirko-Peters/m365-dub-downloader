@@ -445,7 +445,7 @@ def page(lang, title, desc, canonical, body, alternates=None, jsonld=None, xdefa
 <meta property="og:url" content="{canonical}"><meta property="og:locale" content="{loc}"><meta property="og:site_name" content="M365.FM">
 <meta property="og:image" content="{ogimg}"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta property="og:image:alt" content="{esc(bare_title(title))}">
 <meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="{esc(bare_title(title))}"><meta name="twitter:description" content="{esc(desc)}"><meta name="twitter:image" content="{ogimg}">
-<link rel="preload" href="{BASE}/assets/fonts/barlow-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin><link rel="preload" href="{BASE}/assets/fonts/barlow-condensed-latin-600-normal.woff2" as="font" type="font/woff2" crossorigin>
+{"" if lang in ("ar", "he", "ja", "ko", "ru", "uk") else f'<link rel="preload" href="{BASE}/assets/fonts/barlow-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin><link rel="preload" href="{BASE}/assets/fonts/barlow-condensed-latin-600-normal.woff2" as="font" type="font/woff2" crossorigin>'}
 {extra_head}{ADS.head(BASE, body, canonical, noindex)}{css_link()}<style>{FXCSS}</style>{A11Y_EARLY}
 {ld}</head>
 <body>
@@ -454,7 +454,7 @@ def page(lang, title, desc, canonical, body, alternates=None, jsonld=None, xdefa
 {a11y_tags(lang)}
 <script defer src="{BASE}/assets/page.js"></script>
 <script defer src="{BASE}/assets/attend.js"></script>
-<script defer src="{BASE}/assets/smooth.js"></script>
+<script>(function(){{if(!matchMedia("(pointer:fine)").matches||matchMedia("(prefers-reduced-motion: reduce)").matches)return;var d=0,ev=["wheel","keydown","pointerdown","touchstart"];function go(){{if(d)return;d=1;ev.forEach(function(e){{removeEventListener(e,go)}});var s=document.createElement("script");s.src="{BASE}/assets/smooth.js";document.body.appendChild(s)}}ev.forEach(function(e){{addEventListener(e,go,{{passive:true,once:true}})}})}})();</script>
 <script defer src="{BASE}/assets/fx.js"></script>
 {('<script defer src="' + BASE + '/assets/viz.js"></script>') if 'class="viz"' in body else ""}
 </body></html>
