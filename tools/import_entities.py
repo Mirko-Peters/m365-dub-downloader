@@ -4,7 +4,7 @@
 Vorschlaege schreiben die Extraktions-Agenten (status "review"); die QA setzt "rejected", Mirko bzw. die Redaktion "approved".
 Je Vorschlag: slug, name, type (person|concept|product|certification|event|organization|platform|category), lang,
 short_description (Pflicht, >= 20 Zeichen), aliases[], sameAs[] (Microsoft Learn -> docs, Wikipedia -> wikipedia, Wikidata -> wikidata,
-sonst same_as), evidence[]. Quotes (imports/entities/quotes/, type "quote") werden hier nicht importiert (eigene Entitaetsart, spaeter).
+sonst same_as), evidence[]. Quotes (imports/entities/quotes/, type "quote") sind Objekte an Personen-Entitaeten: tools/import_quotes.py.
 Idempotent: vorhandene IDs werden nicht ueberschrieben (nur fehlende Aliase, sameAs und Beschreibungen in weiteren Sprachen ergaenzt);
 die Datei bekommt status "imported" und imported_at. Nichts wird geloescht. Aufruf: python tools/import_entities.py [--dry-run]"""
 import json, re, sys, time

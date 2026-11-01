@@ -39,3 +39,8 @@ Ein Inhalt existiert genau einmal (Entität, Folge, Beitrag) in seiner Originals
 - Belege kommen aus Blog, Sessions, Podcast, Video, Bibliothek, Wiki, Entitäten, geprüften Zertifikaten, Antworten und Bestätigungen (`worker/src/levels.js`). Noch nicht als Beleg: Gastauftritte in der Hauptshow (Folgen-Register aus Paket 16/17, `episode_guest` ↔ beanspruchte Personen-Entität) – nach dem Merge von PR 69 als Beleg-Art `show` (Gewicht 4) ergänzen.
 - Firmenprofile tragen ihre Themen weiterhin selbst ein; bei Bedarf aus den Belegen der Team-Mitglieder ableiten.
 - Seitengröße (Messung 1.11.): je Seite stecken im Schnitt 4–6 KB Inline-CSS (`<style>` der Lern-/Wiki-/Mitglieder-Blöcke) und 4 KB Menü; Inline-CSS ins gehashte Stylesheet verschieben spart rund 150 MB über alle Seiten.
+
+## Quotes (Mirko, 1.11.2026): Objekte an Personen-Entitäten
+- Ein Quote gehört immer zu genau einer Person (Entität vom Typ person). `tools/import_quotes.py` übernimmt freigegebene Dateien aus `imports/entities/quotes/` nach `data/quotes.json`; ohne Personen-Entität bleibt das Zitat liegen (`blocked` mit Grund).
+- Personenseiten zeigen die Zitate mit Sprung zur Folge (Zeitmarke), JSON-LD `Quotation` mit `creator` = Person; der Seitenbau veröffentlicht `quotes.json`, der Worker-Cron `importQuotesFromSite` legt sie in D1 (`quote`), Export `/api/quotes/export?person=`.
+- Offen: Zitate auch auf den Folgenseiten (Abschnitt „Zitate aus dieser Folge“), Freigabe der Quotes in der Verwaltung statt per Datei, MCP-Lesetool.

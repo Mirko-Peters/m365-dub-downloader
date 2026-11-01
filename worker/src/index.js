@@ -9,6 +9,7 @@ import { handleAdminPanel } from "./adminpanel.js";
 import { autoTranslateItems, autoTranslateEntities, runTrQueue } from "./autotr.js";
 import { syncLiveEvents } from "./liveevents.js";
 import { syncContentTopics, handleTopics } from "./topics.js";
+import { importQuotesFromSite, handleQuotes } from "./quotes.js";
 import { importEpisodes, importTranslations, handleRegister } from "./register.js";
 import { entityMap } from "./entities.js";
 import { handleProfiles, deleteUserData, refreshProfilesExport } from "./profiles.js";
@@ -342,6 +343,7 @@ async function api(env, request, url, path, asUser) {
     return method === "POST" ? new Response("ok") : html("<h2>✓ Unsubscribed</h2><p>You will not receive further e-mails.</p>");
   }
 
+  if (path === "/api/quotes/export" && method === "GET") return handleQuotes(env, url, J);   // Quotes an Personen-Entitaeten (?person=, ?lang=)
   if (path === "/api/topics/export" || path === "/api/admin/panel/topic") { const q = await handleTopics(env, request, url, path, user, J); if (q) return q; }
   if (path === "/api/episodes/export" || path === "/api/translations/export") { const q = await handleRegister(env, request, url, path, user, J); if (q) return q; }
   if (path === "/api/tr-queue" && method === "GET") {   // Vormerkliste fuer die Uebersetzungs-Pipelines (translate_blog.py --queue): nur Schluessel
@@ -414,6 +416,7 @@ export default {
     T("syncLiveEvents", () => syncLiveEvents(env, entityMap));
     T("syncContentTopics", () => syncContentTopics(env));
     T("importEntitiesFromSite", () => importEntitiesFromSite(env));
+    T("importQuotesFromSite", () => importQuotesFromSite(env));
     T("importEpisodes", () => importEpisodes(env));
     T("importTranslations", () => importTranslations(env));
     if (event.cron !== "0 6 * * *") T("syncExpertise", () => syncExpertise(env, entityMap));   // nicht doppelt um 06:00 (beide Zeitplaene feuern)

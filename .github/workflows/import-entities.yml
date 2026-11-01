@@ -23,10 +23,12 @@ jobs:
         with: { python-version: "3.12" }
       - name: Freigegebene Vorschläge übernehmen
         run: python tools/import_entities.py
+      - name: Freigegebene Quotes an Personen-Entitäten übernehmen
+        run: python tools/import_quotes.py
       - name: Speichern
         run: |
           git config user.name "m365-site-bot"; git config user.email "actions@users.noreply.github.com"
-          git add -A data/entities.json imports/entities 2>/dev/null || true
+          git add -A data/entities.json data/quotes.json imports/entities 2>/dev/null || true
           if git diff --cached --quiet; then echo "Nichts zu speichern"; exit 0; fi
           git commit -q -m "Entitäten aus freigegebenen Vorschlägen übernommen $(date -u +%Y-%m-%dT%H:%MZ)"
           (git pull --rebase -q -X theirs || git rebase --abort) && git push -q
