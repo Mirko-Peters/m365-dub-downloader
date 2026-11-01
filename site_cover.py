@@ -84,7 +84,7 @@ def cover_svg(vid, lang, lang_label, title, cat_label, cats, tags, spec=None, ui
     kws = [k[:26] for k in kws]
     anchor, tx = ("end", 1136) if rtl else ("start", 64)
     ix = 64 if rtl else 868
-    out = [f'<svg viewBox="0 0 1200 420" xmlns="http://www.w3.org/2000/svg" role="img" aria-hidden="true" focusable="false">',
+    out = [f'<svg viewBox="0 0 1200 420" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">',
            f'<defs><pattern id="gr{uid}" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M40 0 H0 V40" fill="none" stroke="{LINE}" stroke-opacity=".05"/></pattern>'
            f'<linearGradient id="gl{uid}" x1="0" x2="1"><stop offset="0" stop-color="{AC}" stop-opacity=".16"/><stop offset="1" stop-color="{AC}" stop-opacity="0"/></linearGradient></defs>',
            f'<rect width="1200" height="420" fill="{INK}"/><rect width="1200" height="420" fill="url(#gr{uid})"/>',

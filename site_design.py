@@ -47,7 +47,7 @@ nav.langs{font-family:"Barlow Condensed","Barlow Condensed FB0","Barlow Condense
 .tile,.thumb{position:relative}
 .tile{padding:28px 18px 18px;border:1px solid var(--bd);margin:-1px 0 0 -1px}.grid{border:0}
 .tile:before,.tile:after{content:"+";position:absolute;top:-10px;font:300 19px/1 "Barlow","Barlow FB0","Barlow FB1","Barlow FB2",sans-serif;color:var(--mut)}.tile:before{left:-5px}.tile:after{right:-5px}
-.tile b{font-weight:600;font-size:1.7rem}.tile:hover{background:var(--ink);color:var(--onink)}
+.tile b{font-weight:600;font-size:1.7rem}.tile:hover,.tile:focus-visible{background:var(--ink);color:var(--onink)}.tile:hover .mut,.tile:focus-visible .mut{color:var(--onink);opacity:.85}
 .stats{border-color:var(--bd)}.stats b{color:var(--ac);font-weight:600}.points,.list{border-top:1px solid var(--bd)}.points li:before{color:var(--ac);font-weight:600}
 .author,.share,footer{border-color:var(--bd)}.author .badge{background:var(--ac);color:var(--onac)}
 .chips{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0 16px}
@@ -88,6 +88,7 @@ footer{margin-top:80px}
 .cc .btn{background:transparent;color:var(--onink);border-color:var(--onink)}.cc .btn.main{background:var(--ac);color:var(--onac);border-color:var(--ac)}
 
 /* ---- Kopfbereich: M365Con-Leiste, Menue, Sprachwahl mit Flaggen ---- */
+:focus-visible{outline:3px solid var(--ac);outline-offset:2px}summary:focus-visible{outline-offset:0}
 .skip{position:absolute;inset-inline-start:8px;top:-60px;z-index:100;background:var(--ac);color:var(--onac);padding:10px 16px;font-weight:700;text-decoration:none}.skip:focus{top:8px}.sh{display:contents}h2.kicker{font-size:.95rem;line-height:1.4;margin-top:0}.mbar{position:sticky;top:0;z-index:60;background:var(--ink);color:var(--onink);text-align:center;font:600 .82rem/1.3 "Barlow Condensed","Barlow Condensed FB0","Barlow Condensed FB1","Barlow Condensed FB2",sans-serif;letter-spacing:.1em;text-transform:uppercase}
 .mbar a{display:block;padding:9px 14px;color:inherit;text-decoration:none}.mbar a:hover{background:var(--ac);color:var(--onac)}.mbar a:hover b{color:inherit}.mbar b{color:#9fc0ea;font-weight:600}.mbar i{font-style:normal;margin-inline-start:8px;opacity:.85}
 .top .wrap{display:flex;align-items:center;gap:22px;flex-wrap:nowrap}
@@ -203,6 +204,10 @@ def flag(code, base, name=""):
 EN_URL = ""
 
 
+LANG_LBL = {"en": "Language", "de": "Sprache", "es": "Idioma", "fr": "Langue", "it": "Lingua", "pt": "Idioma", "nl": "Taal", "pl": "Język", "id": "Bahasa",
+            "ru": "Язык", "uk": "Мова", "ar": "اللغة", "he": "שפה", "ja": "言語", "ko": "언어"}
+
+
 def lang_dropdown(cur, items, base):
     """items: (code, native name, url, hreflang). Dropdown mit Flaggen."""
     if EN_URL and not any(x[0] == "en" for x in items):
@@ -210,7 +215,8 @@ def lang_dropdown(cur, items, base):
     cur_i = next((x for x in items if x[0] == cur), None)
     label = (cur_i[0] if cur_i else cur).upper()
     links = "".join(f'<a href="{_e(u)}" hreflang="{_e(h)}" lang="{_e(h)}"{" aria-current=page" if c == cur else ""}>{flag(c, base, n)}{_e(n)}</a>' for c, n, u, h in items)
-    return f'<details class="lsw"><summary>{flag(cur, base, cur_i[1] if cur_i else cur)}{_e(label)}</summary><div class="pn">{links}</div></details>'
+    nm = f'{LANG_LBL.get(cur, "Language")}: {cur_i[1] if cur_i else cur}'   # T10: zugaenglicher Name der Sprachwahl
+    return f'<details class="lsw"><summary aria-label="{_e(nm)}">{flag(cur, base, cur_i[1] if cur_i else cur)}{_e(label)}</summary><div class="pn">{links}</div></details>'
 
 
 def site_header(home, brand_href, menu, lang_html, bar_html=""):
