@@ -190,3 +190,45 @@ test("register: applyRenames gibt der vorhandenen Folge den neuen Slug, nimmt Ue
   assert.equal(raw.prepare("SELECT item_id FROM translation WHERE kind='episode'").get().item_id, "neu");
   assert.deepEqual(await applyRenames(db, { alt: "neu" }), [], "zweiter Lauf aendert nichts");
 });
+
+test("entities: syncEntitiesFromSite uebernimmt JSON-Aenderungen, wenn zuletzt eine Maschine das Feld gesetzt hat, und laesst Menschen-Aenderungen stehen (SQLite)", async () => {
+  const { DatabaseSync } = await import("node:sqlite");
+  const raw = new DatabaseSync(":memory:");
+  const dir = new URL("../migrations/", import.meta.url);
+  for (const f of readdirSync(dir).filter((f) => f.endsWith(".sql")).sort()) raw.exec(readFileSync(new URL(f, dir), "utf-8"));
+  const db = { prepare(sql) { const st = raw.prepare(sql); let args = []; const o = { bind(...a) { args = a; return o; }, all: async () => ({ results: st.all(...args) }), first: async () => st.get(...args) ?? null, run: async () => st.run(...args) }; return o; }, async batch(s) { for (const x of s) await x.run(); } };
+  const ins = (eid, data, uid, status, summary) => raw.prepare("INSERT INTO entity_rev(eid,data,summary,user_id,status,created) VALUES(?,?,?,?,?,1)").run(eid, JSON.stringify(data), summary, uid, status);
+  // a: nur importiert -> Name und Doku-Link aus der JSON
+  ins("a", { type: "person", name: "Yves HABERSAAT", desc: { en: "Bio" } }, 0, "live", "Übernahme aus entities.json");
+  // b: Mensch hat den Namen geaendert, danach Auto-Uebersetzung -> Name bleibt, neuer Doku-Link kommt, fr-Uebersetzung bleibt
+  ins("b", { type: "product", name: "Alt", desc: { en: "E" } }, 0, "old", "Übernahme aus entities.json");
+  ins("b", { type: "product", name: "Von Hand", desc: { en: "E" } }, 7, "old", "Korrektur");
+  ins("b", { type: "product", name: "Von Hand", desc: { en: "E", fr: "F" } }, 0, "live", "Auto-Übersetzung (Claude Haiku)");
+  // c: unveraendert -> nichts
+  ins("c", { type: "concept", name: "C" }, 0, "live", "Übernahme aus entities.json");
+  const src = [{ id: "a", type: "person", name: "Yves Habersaat", desc: { en: "Bio" }, docs: "https://learn.microsoft.com/x" },
+    { id: "b", type: "product", name: "JSON-Name", desc: { en: "E" }, docs: "https://learn.microsoft.com/b", wikidata: "Q42" },
+    { id: "c", type: "concept", name: "C" }, { id: "neu", type: "concept", name: "Neu" }];
+  const old = globalThis.fetch; let body = { entities: src };
+  globalThis.fetch = async (u) => ({ ok: true, json: async () => (String(u).endsWith("/entities-src.json") ? body : { entities: src }) });
+  try {
+    const { syncEntitiesFromSite, importEntitiesFromSite } = await import("../src/entities.js");
+    const r = await syncEntitiesFromSite({ DB: db, SITE: "https://x" });
+    assert.equal(r.updated, 2); assert.equal(r.candidates, 2);
+    const live = (id) => JSON.parse(raw.prepare("SELECT data FROM entity_rev WHERE eid=? AND status='live'").get(id).data);
+    assert.equal(live("a").name, "Yves Habersaat"); assert.equal(live("a").docs, "https://learn.microsoft.com/x");
+    assert.equal(live("b").name, "Von Hand", "Menschen-Aenderung bleibt"); assert.equal(live("b").docs, "https://learn.microsoft.com/b"); assert.equal(live("b").wikidata, "Q42"); assert.equal(live("b").desc.fr, "F", "Uebersetzung bleibt");
+    assert.equal(raw.prepare("SELECT COUNT(*) n FROM entity_rev WHERE eid='c'").get().n, 1, "unveraendert -> keine neue Fassung");
+    assert.equal(raw.prepare("SELECT COUNT(*) n FROM entity_rev WHERE eid IN ('a','b')").get().n, 6, "alte Fassungen bleiben (status old), nichts geloescht");
+    const r2 = await syncEntitiesFromSite({ DB: db, SITE: "https://x" });
+    assert.equal(r2.updated, 0, "zweiter Lauf aendert nichts"); assert.equal(r2.candidates, 1, "b bleibt Kandidat wegen des Menschen-Namens");
+    body = { entities: src.slice(0, 2) };   // halber Seitenbau
+    const r3 = await syncEntitiesFromSite({ DB: db, SITE: "https://x" });
+    assert.match(r3.skipped || "", /unvollstaendig/);
+    body = { entities: src };
+    const r4 = await importEntitiesFromSite({ DB: db, SITE: "https://x" });
+    assert.equal(r4.imported, 1, "neue ID wird wie bisher uebernommen"); assert.equal(r4.synced.updated, 0);
+    raw.exec("INSERT INTO meta(k,v) VALUES('entity_source','db') ON CONFLICT(k) DO UPDATE SET v='db'");
+    assert.match((await syncEntitiesFromSite({ DB: db, SITE: "https://x" })).skipped, /entity_source=db/);
+  } finally { globalThis.fetch = old; }
+});

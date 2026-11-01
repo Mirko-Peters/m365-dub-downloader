@@ -46,7 +46,74 @@ export async function importEntitiesFromSite(env) {
   const todo = list.filter((e) => e && /^[a-z0-9][a-z0-9-]{1,79}$/.test(e.id || "") && e.name && e.type && !have.has(e.id)), t = Math.floor(Date.now() / 1000);
   for (let i = 0; i < todo.length; i += 50)
     await db.batch(todo.slice(i, i + 50).map((e) => { const { id, ...data } = e; return db.prepare("INSERT INTO entity_rev(eid,data,summary,user_id,status,created) VALUES(?,?,?,0,'live',?)").bind(id, JSON.stringify(data), "Übernahme aus entities.json", t); }));
-  return { imported: todo.length, db: have.size + todo.length, file: list.length };
+  const synced = await syncEntitiesFromSite(env).catch((e) => ({ error: String(e).slice(0, 120) }));
+  return { imported: todo.length, db: have.size + todo.length, file: list.length, synced };
+}
+
+// T30: Abgleich JSON -> D1 fuer Entitaeten, die schon in der Datenbank sind. Grundlage ist /entities-src.json (Repo-Fassung ohne
+// D1-Ueberlagerung; /entities.json enthaelt schon die D1-Fassung). Je Feld (desc und long je Sprache) zaehlt, wer es zuletzt
+// geaendert hat: eine Maschine (user_id 0: Uebernahme, Abgleich, Auto-Uebersetzung) -> die JSON gewinnt; ein Mensch -> D1 bleibt.
+// Nur Felder mit Wert in der JSON werden uebernommen, nichts wird geloescht. Neue live-Fassung "Abgleich mit entities.json".
+const NESTED = new Set(["desc", "long"]);
+const isObj = (v) => v && typeof v === "object" && !Array.isArray(v);
+const canon = (v) => JSON.stringify(v, (k, x) => (isObj(x) ? Object.fromEntries(Object.keys(x).sort().map((y) => [y, x[y]])) : x));
+const blank = (v) => v === undefined || v === null || v === "" || (Array.isArray(v) && !v.length) || (isObj(v) && !Object.keys(v).length);
+const paths = (d) => { const out = []; for (const [k, v] of Object.entries(d || {})) { if (k === "id" || k === "edited") continue; if (NESTED.has(k) && isObj(v)) for (const l of Object.keys(v)) out.push([k, l]); else out.push([k]); } return out; };
+const at = (d, p) => (p.length === 2 ? (isObj(d?.[p[0]]) ? d[p[0]][p[1]] : undefined) : d?.[p[0]]);
+const put = (d, p, v) => { if (p.length === 2) d[p[0]] = { ...(isObj(d[p[0]]) ? d[p[0]] : {}), [p[1]]: v }; else d[p[0]] = v; };
+
+export function mergeFromJson(json, revs) {
+  // revs: aeltere zuerst [{data, user_id}], letzte = live. Ergebnis: {data, fields} - fields leer = nichts zu tun
+  const live = revs[revs.length - 1]?.data || {}, data = JSON.parse(JSON.stringify(live)), fields = [], kept = [];
+  for (const p of paths(json)) {
+    const jv = at(json, p); if (blank(jv)) continue;
+    const lv = at(live, p); if (!blank(lv) && canon(lv) === canon(jv)) continue;
+    let who = null, prev;   // wer hat den live-Wert dieses Felds zuletzt gesetzt?
+    for (const r of revs) { const v = canon(at(r.data, p) ?? null); if (who === null || v !== prev) { who = r.user_id; prev = v; } }
+    if (blank(lv) || !who) { put(data, p, jv); fields.push(p.join(".")); } else kept.push(p.join("."));
+  }
+  return { data, fields, kept };
+}
+
+export async function syncEntitiesFromSite(env, opts = {}) {
+  const db = env.DB;
+  if ((await source(env)) === "db") return { skipped: "entity_source=db" };
+  let list = [];
+  try { const r = await fetch(env.SITE + "/entities-src.json", { cf: { cacheTtl: 0 } }); if (r.ok) list = (await r.json()).entities || []; } catch { /* noch nicht veroeffentlicht */ }
+  if (!list.length) return { skipped: "entities-src.json nicht erreichbar" };
+  const last = +(await db.prepare("SELECT v FROM meta WHERE k='ent_src_n'").first().catch(() => null))?.v || 0;
+  if (last && list.length < last * 0.8) return { skipped: `entities-src.json unvollstaendig (${list.length} statt ${last})` };   // Schutz vor einem halben Seitenbau
+  await db.prepare("INSERT INTO meta(k,v) VALUES('ent_src_n',?) ON CONFLICT(k) DO UPDATE SET v=excluded.v").bind(String(list.length)).run();
+  const live = new Map(((await db.prepare("SELECT eid,data FROM entity_rev WHERE status='live'").all()).results || []).map((r) => [r.eid, r.data]));
+  const cand = [];
+  for (const e of list) {   // Vorauswahl ohne Historie: nur Eintraege, deren JSON-Felder nicht schon so in D1 stehen
+    if (!e?.id || !live.has(e.id)) continue;
+    let d; try { d = JSON.parse(live.get(e.id)); } catch { continue; }
+    const { id, ...j } = e;
+    if (paths(j).some((p) => !blank(at(j, p)) && canon(at(d, p)) !== canon(at(j, p)))) cand.push(e);
+  }
+  const max = opts.max || 200, t = now(); let updated = 0, kept = 0; const sample = [];
+  // reihum: Kandidaten, bei denen nur von Menschen geaenderte Felder abweichen, bleiben Kandidaten und duerfen neue nicht verdraengen
+  const off = cand.length > max ? (+(await db.prepare("SELECT v FROM meta WHERE k='ent_sync_off'").first().catch(() => null))?.v || 0) % cand.length : 0;
+  const todo = cand.length > max ? [...cand.slice(off), ...cand.slice(0, off)].slice(0, max) : cand;
+  if (cand.length > max) await db.prepare("INSERT INTO meta(k,v) VALUES('ent_sync_off',?) ON CONFLICT(k) DO UPDATE SET v=excluded.v").bind(String((off + max) % cand.length)).run();
+  for (let i = 0; i < todo.length; i += 50) {
+    const part = todo.slice(i, i + 50), ids = part.map((e) => e.id);
+    const rows = (await db.prepare(`SELECT eid,data,user_id FROM entity_rev WHERE status IN ('live','old') AND eid IN (${ids.map(() => "?").join(",")}) ORDER BY id`).bind(...ids).all()).results || [];
+    const by = new Map(); for (const r of rows) { try { (by.get(r.eid) || by.set(r.eid, []).get(r.eid)).push({ data: JSON.parse(r.data), user_id: r.user_id }); } catch { /* defekte Zeile */ } }
+    const stmts = [];
+    for (const e of part) {
+      const revs = by.get(e.id); if (!revs?.length) continue;
+      const { id, ...j } = e, m = mergeFromJson(j, revs);
+      kept += m.kept.length;
+      if (!m.fields.length) continue;
+      stmts.push(db.prepare("UPDATE entity_rev SET status='old' WHERE eid=? AND status='live'").bind(id),
+        db.prepare("INSERT INTO entity_rev(eid,data,summary,user_id,status,created) VALUES(?,?,?,0,'live',?)").bind(id, JSON.stringify(m.data), "Abgleich mit entities.json: " + m.fields.join(", ").slice(0, 100), t));
+      updated++; if (sample.length < 10) sample.push({ id, fields: m.fields });
+    }
+    for (let k = 0; k < stmts.length; k += 50) await db.batch(stmts.slice(k, k + 50));
+  }
+  return { candidates: cand.length, checked: todo.length, updated, kept_human_fields: kept, sample };
 }
 
 // Wer ein geprueftes Zertifikat hat, darf direkt Themen/Konzepte bearbeiten und abstimmen, die mit diesem Zertifikat verknuepft sind

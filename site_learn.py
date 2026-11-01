@@ -405,6 +405,9 @@ def _fetch_json(url, timeout=120):
     return SF.fetch(url, timeout=max(timeout, 60))
 
 
+SRC_ENTS = {}   # T30: Entitaeten aus data/*.json ohne D1-Ueberlagerung (der Worker gleicht sie mit D1 ab)
+
+
 def load_entities(api):
     base = {}
     f = Path(__file__).parent / "data" / "entities.json"
@@ -419,6 +422,7 @@ def load_entities(api):
     if sf.exists():
         for e in json.loads(sf.read_text("utf-8")):
             base.setdefault(e["id"], e)
+    SRC_ENTS.clear(); SRC_ENTS.update({k: dict(v) for k, v in base.items()})   # T30: reine Repo-Fassung (vor D1) fuer /entities-src.json
     over = (_fetch_json(f"{api}/api/entity/export") or {}).get("items", [])
     for it in over:
         d = it.get("data") or {}
