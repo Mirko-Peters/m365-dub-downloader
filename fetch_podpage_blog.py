@@ -50,5 +50,8 @@ def main():
             if not r.get("error"): res[r["url"]] = r
             if i % 200 == 0: print(i, flush=True)
     out = [res[u] for u in urls if u in res]; print("gespeichert:", len(out), "fehlend:", len(urls) - len(out))
+    out += [p for u, p in old.items() if u not in set(urls)]   # T32: Beitraege der Sicherung, die die Sitemap nicht (mehr) nennt, bleiben erhalten
+    if len(out) < len(old):   # nie verkleinern (www.m365.fm ist nicht mehr Podpage, die Sitemap ist ein Index)
+        print(f"ABBRUCH: {len(out)} < {len(old)} Beitraege in der Sicherung - nichts geschrieben"); sys.exit(1)
     with gzip.open(OUT, "wt", encoding="utf-8") as f: json.dump(out, f, ensure_ascii=False)
 main()

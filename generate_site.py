@@ -895,15 +895,16 @@ def build():
     def side_for(l, title, body_html):   # Sidebar der Sprachseiten: Themen der Seite, neueste Folgen der Sprache, Community
         return SBR.render_lang(SBX, BASE, l, strip_tags(title + " " + body_html.split("<main", 1)[-1])[:2500], by_lang.get(l, []), url_of, lambda x: anchor_title(x["e"]["title"]), pfx(l) if l in COMM_LANGS else "")
 
+    R2_EXT = (".html", ".json", ".jsonld", ".xml")   # T32: Bild-URLs auch in Exporten (entities*.json, Register, Sitemaps) auf img.m365.fm
     R2OUT = ROOT / "r2out"; _r2n = [0, 0]   # Seiten, die nicht in GitHub Pages liegen, sondern im R2-Bucket (tools/r2_pages_upload.py laedt sie hoch, der Site-Worker liefert sie aus)
     def write_r2(rel, content):
         p = R2OUT / rel; p.parent.mkdir(parents=True, exist_ok=True)
-        c = R2.rewrite(content) if rel.endswith(".html") else content
+        c = R2.rewrite(content) if rel.endswith(R2_EXT) else content
         p.write_text(c, encoding="utf-8"); _r2n[0] += 1; _r2n[1] += len(c.encode("utf-8"))
     def write(rel, content):
         p = OUT / rel
         p.parent.mkdir(parents=True, exist_ok=True)
-        p.write_text(R2.rewrite(content) if rel.endswith(".html") else content, encoding="utf-8")
+        p.write_text(R2.rewrite(content) if rel.endswith(R2_EXT) else content, encoding="utf-8")
 
     # Taxonomie: Kategorien (video-weit) + sprachbezogene Tags
     cat_of = {}
