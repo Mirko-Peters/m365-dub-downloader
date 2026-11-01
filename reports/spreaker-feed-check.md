@@ -1,6 +1,6 @@
-# Spreaker-Feed gegen geschriebene Shownotes (2026-11-01T17:26Z)
+# Spreaker-Feed gegen geschriebene Shownotes (2026-11-01T17:28Z)
 
-Geschrieben: 163 · im Feed: 163 · Text gleich: 161 · alle m365-Links im Feed: 150
+Geschrieben: 163 · im Feed: 163 · Text gleich: 163 · alle m365-Links im Feed: 163
 
 | Folge | im Feed | Text gleich | Links Datei | Links Feed | HTML im Feed |
 |---|---|---|---|---|---|
@@ -40,10 +40,10 @@ Geschrieben: 163 · im Feed: 163 · Text gleich: 161 · alle m365-Links im Feed:
 | 72947388 | ja | ja | 6 | 6 | ja |
 | 72964816 | ja | ja | 8 | 8 | ja |
 | 72964976 | ja | ja | 8 | 8 | ja |
-| 72987630 | ja | ja | 9 | 0 | ja |
-| 72989260 | ja | ja | 8 | 0 | ja |
-| 72990818 | ja | ja | 8 | 0 | ja |
-| 72991410 | ja | ja | 8 | 0 | ja |
+| 72987630 | ja | ja | 9 | 9 | ja |
+| 72989260 | ja | ja | 8 | 8 | ja |
+| 72990818 | ja | ja | 8 | 8 | ja |
+| 72991410 | ja | ja | 8 | 8 | ja |
 | 73013222 | ja | ja | 9 | 9 | ja |
 | 73013597 | ja | ja | 7 | 7 | ja |
 | 73013898 | ja | ja | 8 | 8 | ja |
@@ -57,9 +57,9 @@ Geschrieben: 163 · im Feed: 163 · Text gleich: 161 · alle m365-Links im Feed:
 | 73085054 | ja | ja | 8 | 8 | ja |
 | 73085280 | ja | ja | 8 | 8 | ja |
 | 73102508 | ja | ja | 8 | 8 | ja |
-| 73103039 | ja | ja | 8 | 0 | ja |
+| 73103039 | ja | ja | 8 | 8 | ja |
 | 73103133 | ja | ja | 6 | 6 | ja |
-| 73103460 | ja | ja | 8 | 0 | ja |
+| 73103460 | ja | ja | 8 | 8 | ja |
 | 73107765 | ja | ja | 8 | 8 | ja |
 | 73108187 | ja | ja | 6 | 6 | ja |
 | 73121606 | ja | ja | 7 | 7 | ja |
@@ -71,9 +71,9 @@ Geschrieben: 163 · im Feed: 163 · Text gleich: 161 · alle m365-Links im Feed:
 | 73158384 | ja | ja | 6 | 6 | ja |
 | 73161592 | ja | ja | 7 | 7 | ja |
 | 73163763 | ja | ja | 6 | 6 | ja |
-| 73164010 | ja | nein | 8 | 0 | ja |
+| 73164010 | ja | ja | 8 | 8 | ja |
 | 73164272 | ja | ja | 7 | 7 | ja |
-| 73188412 | ja | ja | 8 | 0 | ja |
+| 73188412 | ja | ja | 8 | 8 | ja |
 | 73192365 | ja | ja | 6 | 6 | ja |
 | 73192525 | ja | ja | 8 | 8 | ja |
 | 73193068 | ja | ja | 6 | 6 | ja |
@@ -95,7 +95,7 @@ Geschrieben: 163 · im Feed: 163 · Text gleich: 161 · alle m365-Links im Feed:
 | 73748225 | ja | ja | 8 | 8 | ja |
 | 73814434 | ja | ja | 6 | 6 | ja |
 | 73815737 | ja | ja | 8 | 8 | ja |
-| 73819585 | ja | ja | 8 | 0 | ja |
+| 73819585 | ja | ja | 8 | 8 | ja |
 | 73853268 | ja | ja | 6 | 6 | ja |
 | 73894283 | ja | ja | 8 | 8 | ja |
 | 73895529 | ja | ja | 6 | 6 | ja |
@@ -119,7 +119,7 @@ Geschrieben: 163 · im Feed: 163 · Text gleich: 161 · alle m365-Links im Feed:
 | 74711575 | ja | ja | 7 | 7 | ja |
 | 74728795 | ja | ja | 8 | 8 | ja |
 | 74744840 | ja | ja | 6 | 6 | ja |
-| 74753075 | ja | nein | 9 | 0 | ja |
+| 74753075 | ja | ja | 9 | 9 | ja |
 | 74770060 | ja | ja | 6 | 6 | ja |
 | 74870393 | ja | ja | 7 | 7 | ja |
 | 74941717 | ja | ja | 6 | 6 | ja |
@@ -127,12 +127,12 @@ Geschrieben: 163 · im Feed: 163 · Text gleich: 161 · alle m365-Links im Feed:
 | 75145490 | ja | ja | 7 | 7 | ja |
 | 75160879 | ja | ja | 8 | 8 | ja |
 | 75162059 | ja | ja | 8 | 8 | ja |
-| 75163467 | ja | ja | 8 | 0 | ja |
-| 75172317 | ja | ja | 8 | 0 | ja |
+| 75163467 | ja | ja | 8 | 8 | ja |
+| 75172317 | ja | ja | 8 | 8 | ja |
 | 75180895 | ja | ja | 6 | 6 | ja |
 | 75201028 | ja | ja | 7 | 7 | ja |
 | 75202052 | ja | ja | 7 | 7 | ja |
-| 75204061 | ja | ja | 8 | 0 | ja |
+| 75204061 | ja | ja | 8 | 8 | ja |
 | 75327523 | ja | ja | 6 | 6 | ja |
 | 75328001 | ja | ja | 8 | 8 | ja |
 | 75405282 | ja | ja | 8 | 8 | ja |
