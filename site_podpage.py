@@ -5,7 +5,7 @@ import site_notes as SNT
 import site_shownotes as SNS   # T26: Vollfassungen shownotes/site/<episode_id>.md
 import site_extract as SX   # T27: Folgen <-> Entitaeten aus der QA-geprueften Extraktion
 import site_media as MED
-import gzip, json, re, html as _h
+import gzip, json, re, unicodedata, html as _h
 from html.parser import HTMLParser
 from pathlib import Path
 from datetime import datetime
@@ -58,8 +58,60 @@ def plain(s):
 def load(name):
     for f in (PD / f"{name}.json", PD / f"{name}.json.gz"):
         if f.exists():
-            return json.loads((gzip.open(f, "rt", encoding="utf-8") if f.suffix == ".gz" else open(f, encoding="utf-8")).read())
+            data = json.loads((gzip.open(f, "rt", encoding="utf-8") if f.suffix == ".gz" else open(f, encoding="utf-8")).read())
+            return data + spreaker_extra(data) if name == "episodes" else data   # T28: neue Folgen aus Spreaker, die die Podpage-Sicherung nicht kennt
     return []
+
+
+_EXTRA = {}
+
+
+def _slugify(t, n=80):
+    s = re.sub(r"[^a-z0-9]+", "-", unicodedata.normalize("NFKD", t).encode("ascii", "ignore").decode().lower()).strip("-")
+    return s if len(s) <= n else s[:n].rsplit("-", 1)[0]
+
+
+def spreaker_extra(podpage):
+    """T28: Folgen der Hauptshow, die Spreaker kennt (data/en_episodes.json, Show Notes in data/show_notes/en.json), die
+    Podpage-Sicherung (Stand 30.10.) aber nicht. Nur Folgen, die nach der juengsten Podpage-Folge erschienen sind: aeltere
+    ohne Zuordnung sind meist Titelvarianten vorhandener Folgen und wuerden sonst doppelte Seiten erzeugen. Ergebnis hat
+    dieselben Felder wie ein Podpage-Datensatz (null, wo Spreaker nichts liefert), Slug aus dem Titel, eindeutig."""
+    key = id(podpage)
+    if key in _EXTRA: return _EXTRA[key]
+    out = _EXTRA[key] = []
+    sn_f, en_f = D / "show_notes" / "en.json", D / "en_episodes.json"
+    if not podpage or not (sn_f.exists() and en_f.exists()): return out
+    from email.utils import parsedate_to_datetime
+    def ts(x):
+        try: return datetime.fromisoformat(str(x)).timestamp()
+        except (TypeError, ValueError): return 0
+    newest = max(ts(e.get("published")) or ts(e.get("create_time")) for e in podpage)
+    known = {spreaker_id(e) for e in podpage} - {""}
+    slugs = {e["slug"] for e in podpage}
+    tmpl = {k: None for k in podpage[0]}   # wie in der Podpage-Sicherung: fehlende Werte sind null
+    sn = json.loads(sn_f.read_text("utf-8")).get("episodes") or {}
+    by_id = {str(r.get("id")): r for r in (sn.values() if isinstance(sn, dict) else sn) if isinstance(r, dict) and r.get("id")}
+    for v in json.loads(en_f.read_text("utf-8")).values():
+        sid = str(v.get("spreaker_id") or "")
+        if not sid.isdigit() or sid in known: continue
+        try:
+            pub = parsedate_to_datetime(v["pub"])
+        except (KeyError, TypeError, ValueError):
+            continue
+        if pub.timestamp() <= newest: continue
+        r = by_id.get(sid) or {}
+        title = str(r.get("title") or v.get("title") or "").strip()
+        if not title: continue
+        slug = base = _slugify(title) or f"episode-{sid}"; n = 2
+        while slug in slugs: slug = f"{base}-{n}"; n += 1
+        slugs.add(slug)
+        iso = pub.isoformat()
+        e = dict(tmpl)
+        e.update({"id": f"sp{sid}", "slug": slug, "name": title, "create_time": iso, "update_time": iso, "published": iso, "show_notes": r.get("markup") or "",
+                  "summary": "", "image_path": r.get("image") if str(r.get("image") or "").startswith("https://") else None, "season": str(r["season"]) if r.get("season") else None,
+                  "number": str(r["number"]) if r.get("number") else None, "hidden": "False", "trailer": "False", "featured": "False", "spreaker_id": sid, "source": "spreaker"})
+        out.append(e)
+    return out
 
 
 def norm(s):
@@ -128,6 +180,7 @@ def _EN_SID():
 
 def spreaker_id(e, nrec=None):
     """Spreaker-ID einer Podpage-Folge: aus den Show Notes, sonst per Titel, sonst per Veroeffentlichungszeit (+-2 min, nur eindeutig)."""
+    if e.get("spreaker_id"): return str(e["spreaker_id"])   # T28: Folge stammt direkt aus Spreaker
     if (nrec or {}).get("id"): return str(nrec["id"])
     x = _EN_SID()
     if norm(e.get("name")) in x["title"]: return x["title"][norm(e.get("name"))]
@@ -361,7 +414,8 @@ def build(g):
         # Alternates nur fuer Sprachfassungen mit uebersetzten Show Notes (150 je Sprache); die uebrigen ~14.000 Fassungen (nur Titel + Teaser) bleiben noindex und ausserhalb der Sitemap
         alts = {"en": ep_url(e), **{l: loc_url(l, f"episodes/{e['slug']}/") for l in TRL if e["slug"] in TRL[l] and TRL[l][e["slug"]][0]}}   # alle Sprachfassungen (uebersetzte Titel/Teaser, teils Show Notes) sind indexierbar und verknuepft
         for _dl, (_du, _) in oa.items(): alts[_dl] = _du   # T3: die Dub-Fassung (eigene Folge in der Sprache) ist die Sprachalternative, nicht die duenne Show-Kopie
-        pub(f"episodes/{e['slug']}/", e.get("meta_title") or e["name"], e.get("meta_description") or short_desc(e, nrec, 155), body, ([ld] + nld) if nld else ld, "article", last=day(e.get("update_time")) or TODAY, alts=alts if len(alts) > 1 else None)
+        pub(f"episodes/{e['slug']}/", e.get("meta_title") or e["name"], e.get("meta_description") or short_desc(e, nrec, 155), body, ([ld] + nld) if nld else ld, "article", last=day(e.get("update_time")) or TODAY, alts=alts if len(alts) > 1 else None,
+            noindex=e.get("source") == "spreaker" and not snx and not plain(e.get("show_notes")) and not (nrec or {}).get("markup"))   # T28: neue Folge ohne Show Notes erst nach dem Show-Notes-Abgleich in den Index
         # lokalisierte Fassungen dieser Folge
         for l in TRL:
             tt = TRL[l].get(e["slug"])
