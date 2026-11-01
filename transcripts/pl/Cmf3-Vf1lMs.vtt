@@ -1,0 +1,1039 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:05.020
+Twój agent SharePoint nie halucynował wycieku. Podałeś mu wąż strażacki, prosząc o łyk wody.
+
+00:00:05.260 --> 00:00:09.880
+Zbyt szeroki zakres źródeł wiedzy plus luźne dziedziczenie równa się przypadkowemu ujawnieniu z prędkością maszyny.
+
+00:00:10.080 --> 00:00:17.460
+Rozwiązanie nie jest magią. To dyscyplina zakresu, zaostrzenie uprawnień i skuteczne DLP w ramach zestawu zasad bazowych, które możesz wdrożyć już dziś.
+
+00:00:17.600 --> 00:00:24.740
+Pokażę Ci, jak agenci faktycznie widzą dane, dlaczego grounding nie izoluje uprawnień i jakie dokładnie kontrole ich ograniczają, nie zabijając użyteczności.
+
+00:00:24.740 --> 00:00:31.220
+Istnieje jedno ustawienie, które większość adminów pomija, jedna brama akceptacji, której potrzebujesz i wzorzec DLP, który faktycznie blokuje agentów.
+
+00:00:31.420 --> 00:00:33.100
+Zacznijmy od tego, jak oni widzą.
+
+00:00:33.280 --> 00:00:37.560
+Podstawa, jak agenci SharePointa faktycznie widzą Twoje dane, czyli DNA uprawnień.
+
+00:00:37.700 --> 00:00:41.420
+Prawda jest taka, że agenci nie czytają Twoich intencji, czytają Microsoft Graph.
+
+00:00:41.620 --> 00:00:46.720
+Wyobraź sobie graf jako krwiobieg. Jeśli treść jest dostępna przez Twoje listy ACL, agent widzi tlen.
+
+00:00:46.900 --> 00:00:51.620
+Jeśli zbyt szeroko określisz źródło wiedzy, właśnie zainstalowałeś obejście dla swoich starannie oznakowanych tętnic.
+
+00:00:51.620 --> 00:00:57.100
+Pozwól, że przetłumaczę. Agent ma dwa główne składniki – personę użytkownika i filtry pobierania.
+
+00:00:57.440 --> 00:01:02.560
+Persona to tożsamość i jej uprawnienia w SharePoint, OnDrive i innych połączonych powierzchniach.
+
+00:01:03.400 --> 00:01:09.340
+Pobieranie to miejsce, na które wskazałeś biblioteka, folder, sterta plików lub kilka adresów URL.
+
+00:01:09.780 --> 00:01:12.960
+Większość ludzi myli filtry pobierania z granicami bezpieczeństwa.
+
+00:01:13.140 --> 00:01:15.980
+To nie to samo. Pobieranie mówi – szukaj najpierw tutaj.
+
+00:01:16.180 --> 00:01:17.840
+Uprawnienia mówią – możesz wejść.
+
+00:01:18.060 --> 00:01:20.560
+Agent przestrzega najpierw uprawnień, potem pobierania.
+
+00:01:20.560 --> 00:01:23.460
+Jeśli masz zapamiętać tylko jedną rzecz, zapamiętaj tę kolejność.
+
+00:01:23.620 --> 00:01:27.740
+Etykiety wrażliwości i perwiu DLP nakładają się na treści jak znaki ostrzegawcze i barierki.
+
+00:01:27.940 --> 00:01:32.700
+Etykiety klasyfikują – DLP wymusza zachowanie, gdy określona treść jest przetwarzana lub dostępna.
+
+00:01:32.940 --> 00:01:35.120
+Rzecz, którą większość ludzi przeocza, jest prosta.
+
+00:01:35.380 --> 00:01:37.020
+Grounding nie nadpisuje uprawnień.
+
+00:01:37.200 --> 00:01:38.740
+Grounding filtruje relewancję.
+
+00:01:38.940 --> 00:01:40.880
+Nie ogranicza prawnej autoryzacji agenta.
+
+00:01:40.880 --> 00:01:48.660
+Więc jeśli tożsamość agenta widzi sąsiednie biblioteki, bo zostawiłeś włączone dziedziczenie LLM, może i połączy fakty z sąsiedztwa w jedną odpowiedź.
+
+00:01:48.760 --> 00:01:50.760
+To nie jest upiorne, to przewidywalne.
+
+00:01:51.140 --> 00:01:53.340
+Dziedziczenie uprawnień to cicha eskalacja.
+
+00:01:53.560 --> 00:01:59.880
+Przysięgasz, że witryna jest tylko wewnętrzna, a potem odkrywasz, że grupa SharePoint zawiera wszystkich użytkowników lub uwierzytelnionych użytkowników.
+
+00:01:59.880 --> 00:02:02.520
+Goście zostają, grupy projektowe trwają w nieskończoność.
+
+00:02:02.660 --> 00:02:04.900
+Agent szanuje listy ACL, a nie intencje.
+
+00:02:05.120 --> 00:02:08.900
+Jeśli ta tożsamość może otworzyć plik w SharePoint, agent może go przetworzyć.
+
+00:02:09.020 --> 00:02:12.120
+Chyba, że DLP lub etykiety wyraźnie blokują operację agenta.
+
+00:02:12.380 --> 00:02:16.900
+Dlatego twój pilotaż na jednej bibliotece nagle zacytował politykę HR z sąsiedniej biblioteki.
+
+00:02:17.060 --> 00:02:18.260
+Nic nie odizolowałeś.
+
+00:02:18.560 --> 00:02:21.360
+Zasugerowałeś tylko preferowaną półkę w niezamkniętym pokoju.
+
+00:02:21.560 --> 00:02:23.620
+Wprowadź model minimalnej, niezbędnej wiedzy.
+
+00:02:23.860 --> 00:02:28.580
+Zamiast podawać główny folder witryny z nadzieją, że relewancja cię uratuje, przypisz źródła wiedzy do konkretnych bibliotek.
+
+00:02:28.580 --> 00:02:30.680
+Unikaj pobierania danych na poziomie witryny.
+
+00:02:30.840 --> 00:02:36.460
+Ogranicz foldery, używaj filtrów metadanych, aby indeks wyszukiwania obejmował tylko dokumenty istotne dla misji agenta.
+
+00:02:36.660 --> 00:02:43.680
+W Copilot Studio i kreatorach agentów SharePoint możesz wyznaczyć oficjalne źródła, wyłączyć ogólną wiedzę, a i dodać odpowiedzi zastępcze.
+
+00:02:43.840 --> 00:02:46.940
+Ta nieautorytatywna odpowiedź zastępcza to twój pas bezpieczeństwa.
+
+00:02:47.160 --> 00:02:51.140
+Bez niej model wypełnia luki ogólną wiedzą, która nie przestrzega twoich zasad zgodności.
+
+00:02:51.400 --> 00:02:52.660
+Limity też mają znaczenie.
+
+00:02:52.860 --> 00:02:57.340
+Platformy nakładają praktyczne limity na liczbę plików, folderów i adresów URL w ramach źródła wiedzy.
+
+00:02:57.340 --> 00:03:00.740
+To nie tylko notatki o wydajności, to bariery dla ładu informacyjnego.
+
+00:03:00.960 --> 00:03:05.220
+Gdy osiągniesz limit, błędnym odruchem jest poszerzenie zakresu do głównej witryny tylko na chwilę.
+
+00:03:05.360 --> 00:03:06.860
+Tak właśnie zaczynają się wycieki.
+
+00:03:07.100 --> 00:03:13.660
+Właściwym ruchem jest zarządzanie wieloma wąskimi agentami, z których każdy ma ściśle określone źródła, zamiast jednego encyklopedycznego bota z nieograniczonym dostępem.
+
+00:03:13.820 --> 00:03:15.980
+Rozpraszaj wiedzę, zachowuj minimalne uprawnienia.
+
+00:03:16.180 --> 00:03:19.280
+Cofnijmy się, dam ci model myślowy, który nie zawiedzie cię pod presją.
+
+00:03:19.500 --> 00:03:22.060
+Agent to persona użytkownika plus filtr wyszukiwania.
+
+00:03:22.240 --> 00:03:24.520
+Uprawnienia bramkują najpierw, wyszukiwanie jest drugie.
+
+00:03:27.340 --> 00:03:29.560
+Jakie działania są dozwolone, gdy występuje ta wrażliwość?
+
+00:03:29.760 --> 00:03:32.120
+Grounding pomaga modelowi znaleźć właściwy akapit.
+
+00:03:32.260 --> 00:03:35.100
+Uprawnienia decydują, czy w ogóle mógł ten akapit zobaczyć.
+
+00:03:35.100 --> 00:03:38.920
+DLP nadal może zablokować przetwarzanie, nawet gdy oba powyższe dają zgodę.
+
+00:03:39.060 --> 00:03:42.720
+Ten stos bramkuj, wyszukuj, wymuszaj utrzymuje przejrzystość twojego rozumowania.
+
+00:03:42.900 --> 00:03:50.200
+Konsekwencją ignorowania tego jest wyciek danych, który wygląda jak dziwne zachowanie, a w rzeczywistości jest kolizją projektu zakresu z nadmiernym dziedziczeniem uprawnień.
+
+00:03:50.400 --> 00:03:54.660
+Sąsiednie biblioteki są dla modelu bliskie, ponieważ są bliskie w twoich uprawnieniach.
+
+00:03:54.660 --> 00:03:58.800
+I tak model chętnie połączy fakty ponad granicami, których nigdy nie uszczelniłeś.
+
+00:03:58.800 --> 00:04:01.900
+Gdy zrozumiesz tę hydraulikę, wszystko inne staje się jasne.
+
+00:04:02.040 --> 00:04:06.480
+Przestajesz winić LLM za udzielane odpowiedzi i zaczynasz kontrolować, co może on brać pod uwagę.
+
+00:04:06.800 --> 00:04:12.460
+Skoro już widzisz obieg krwi i kręgosłup, uprawnienia wykresu i filtry wyszukiwania, zatrzymajmy wyciek wody między pomieszczeniami.
+
+00:04:12.660 --> 00:04:16.540
+Określ zakres źródeł jak w umowie, zerwij dziedziczenie i etykietuj z pełną powagą.
+
+00:04:16.540 --> 00:04:20.940
+Płaszczyzna kontroli pierwsza. Określ zakres źródeł wiedzy jak prawnik czytający umowy.
+
+00:04:21.120 --> 00:04:25.860
+Teraz piszemy zakres jak język prawniczy, precyzyjny, ograniczony i całkowicie nieakceptujący niejednoznaczności.
+
+00:04:26.040 --> 00:04:33.220
+Ponieważ szerokie źródła tworzą szum, a LLM chętnie połączy bliskie prawdy w odpowiedź niczym plotkarski felietonista z długim obiektywem.
+
+00:04:33.400 --> 00:04:36.940
+Oto zasada zakresu, która odróżnia profesjonalistów od praktykantów.
+
+00:04:37.100 --> 00:04:38.840
+Tylko źródła na poziomie biblioteki.
+
+00:04:39.080 --> 00:04:40.960
+Nie witryny, nie wszystko pod tym hubem.
+
+00:04:40.960 --> 00:04:43.800
+Pojedyncza biblioteka dokumentów na zadeklarowany cel.
+
+00:04:44.000 --> 00:04:48.960
+Jeśli agent istnieje, aby odpowiadać na FAQ produktu, otrzymuje bibliotekę FAQ produktu i nic więcej.
+
+00:04:49.180 --> 00:04:53.980
+Prawda? Każdy centymetr nadmiaru staje się ukrytym ryzykiem, które model może aktywować w milisekundy.
+
+00:04:54.160 --> 00:04:56.340
+Porównaj to z podejściem przeciętnego użytkownika.
+
+00:04:56.580 --> 00:05:00.340
+Wskaż główny katalog witryny, dodaj podfoldery i licz na to, że metadany je uratują.
+
+00:05:00.560 --> 00:05:04.500
+Nie uratują. Filtry wyszukiwania tylko kierują procesem, nie stanowią zapory ogniowej.
+
+00:05:04.740 --> 00:05:08.400
+Strukturyzuj więc zakres tak, jak prawnik tworzy klauzulę, konkretnie, wykluczająco i sprawdzalnie.
+
+00:05:08.400 --> 00:05:11.060
+Praktyczne mechanizmy zakresu, z których faktycznie będziesz korzystać.
+
+00:05:11.140 --> 00:05:12.500
+Unikaj głównych katalogów witryn.
+
+00:05:12.720 --> 00:05:14.620
+Zawsze określaj konkretną ścieżkę do biblioteki.
+
+00:05:14.800 --> 00:05:16.220
+Ograniczaj głębokość folderów.
+
+00:05:16.400 --> 00:05:20.420
+Jeśli musisz używać folderów, zablokuj je na płytkim poziomie, bez rekurencyjnego zbierania wszystkiego.
+
+00:05:20.640 --> 00:05:27.900
+Wymuszaj filtry metadanych, pobieraj tylko elementy, gdzie status to zatwierdzony, wersja to opublikowana, a dział to X, brak metadanych, brak pobierania.
+
+00:05:28.160 --> 00:05:30.540
+Wykluczaj wersje robocze, archiwa i drzewa robocze.
+
+00:05:30.760 --> 00:05:33.000
+Jeśli nie możesz ich wykluczyć, przenieś je gdzie indziej.
+
+00:05:33.160 --> 00:05:35.300
+Tak, refaktoryzacja to właśnie ład korporacyjny.
+
+00:05:38.400 --> 00:05:40.860
+Wyklucz limity liczby plików, folderów i limity adresów URL.
+
+00:05:41.100 --> 00:05:44.180
+Traktuj je jak ograniczenia prędkości, dzięki którym wszystko działa sprawnie.
+
+00:05:44.380 --> 00:05:48.700
+W Copilot Studio i kreatorach agentów SharePoint przetestuj praktyczne limity przed uruchomieniem.
+
+00:05:48.960 --> 00:05:55.040
+Stwórz źródło pilotażowe z realną dystrybucją, kilkaset zatwierdzonych PDF-ów, kilka podręczników w DOS, tuzin prezentacji PPT.
+
+00:05:55.260 --> 00:05:59.680
+Jeśli pobieranie zwalnia, wygasa lub zaczyna pomijać pliki, nie rozszerzaj zakresu, podziel go.
+
+00:05:59.900 --> 00:06:02.640
+Jedna dziedzina na źródło, jedno źródło na osobowość agenta.
+
+00:06:02.640 --> 00:06:04.700
+To jest orkiestracja, a nie zachłanność.
+
+00:06:04.700 --> 00:06:09.520
+Skrót, o którym nikt nie mówi, wielu wąsko wyspecjalizowanych agentów zawsze wygrywa z jednym encyklopedycznym potworem.
+
+00:06:09.740 --> 00:06:16.800
+Stwórz agenta do spraw, polityki HR, agenta do spraw, świadczeń agenta do spraw, podróży, każdy z własną biblioteką, typów i wymuszonymi filtrami.
+
+00:06:16.920 --> 00:06:22.040
+A jeśli potrzebujesz jednego punktu wejścia, zorganizuj go za pomocą agenta routera, który przekazuje zapytania do odpowiedniego specjalisty.
+
+00:06:22.380 --> 00:06:24.680
+Profesjonaliści tak robią, bo to pozwala skalować zarządzanie.
+
+00:06:24.680 --> 00:06:30.000
+Początkujący wrzucają 200 plików z różnych dziedzin do jednego agenta i dziwią się, że odpowiedzi brzmią jak obrady komitetu.
+
+00:06:30.160 --> 00:06:32.740
+Wyłącz ogólną wiedzę, a i dla agentów regulowanych.
+
+00:06:32.920 --> 00:06:36.620
+Jeśli agent jest autorytetem w danej dziedzinie, powinien milczeć poza nią.
+
+00:06:36.800 --> 00:06:38.980
+Tu właśnie przydają się odpowiedzi alternatywne.
+
+00:06:39.340 --> 00:06:41.340
+Skonfiguruj jasną i pokorną odpowiedź.
+
+00:06:41.460 --> 00:06:43.140
+Nie jestem autorytetem w tej sprawie.
+
+00:06:43.320 --> 00:06:45.360
+Oto zatwierdzone źródła, które obsługuje.
+
+00:06:45.360 --> 00:06:52.000
+W chwili, gdy pozwolisz, by ogólna wiedza wypełniała luki, wracasz do nieweryfikowalnych ciekawostek, które ignorują etykiety i zasady DLP.
+
+00:06:52.320 --> 00:06:53.460
+Selekcja ma znaczenie.
+
+00:06:53.700 --> 00:06:55.040
+Wyznacz oficjalne źródła.
+
+00:06:55.260 --> 00:06:58.120
+Oznacza to przepływ zatwierdzania przed etapem pobierania danych.
+
+00:06:58.360 --> 00:07:02.900
+Dodawaj tylko treści, które przeszły weryfikację, sprawdzono ich aktualność oraz etykiety wrażliwości.
+
+00:07:03.160 --> 00:07:06.220
+Jeśli nie potrafisz dowieść pochodzenia dokumentu, nie powinien on trafiać do agenta.
+
+00:07:06.460 --> 00:07:08.380
+Model jest pewny siebie, ale nie zawsze ma rację.
+
+00:07:08.580 --> 00:07:10.220
+Twoja selekcja jest bezpiecznikiem.
+
+00:07:10.360 --> 00:07:12.920
+Pospolite błędy, które przestaniesz popełniać już dziś.
+
+00:07:12.920 --> 00:07:18.360
+Wrzucanie różnych dziedzin do jednego źródła polityki, dokumenty techniczne i umowy w jednym wielkim stosie.
+
+00:07:18.520 --> 00:07:22.100
+Podziel je według przeznaczenia, pozwalając agentom przeszukiwać dowolne adresy URL.
+
+00:07:22.360 --> 00:07:26.240
+Nie. Zewnętrzne adresy URL zwiększają obszar zagrożenia i ograniczają możliwość audytu.
+
+00:07:26.380 --> 00:07:30.140
+Przy pobieraniu szkiców i plików z czatów model nie odróżni wersji niegotowych od opublikowanych,
+
+00:07:30.200 --> 00:07:32.840
+chyba że wymusisz metadane i lokalizacje, które je rozdzielają.
+
+00:07:33.080 --> 00:07:34.860
+Zakładanie, że ukryte znaczy chronione.
+
+00:07:35.060 --> 00:07:36.700
+Ukryte to tylko wybór interfejsu.
+
+00:07:36.880 --> 00:07:37.880
+Uprawnienia to prawo.
+
+00:07:38.100 --> 00:07:40.540
+Dyscyplina testowania, bo tak faktycznie testujesz zakres.
+
+00:07:40.540 --> 00:07:44.300
+Sprawdzaj przypadki brzegowe, zadawaj agentowi konkretne pytania, na które powinien odpowiedzieć z marszu,
+
+00:07:44.380 --> 00:07:46.380
+a potem kurz go tematami pobocznymi, które musi odrzucić.
+
+00:07:46.500 --> 00:07:49.520
+Jeśli odpowiada poza domeną, twój zakres lub mechanizm awaryjny jest błędny.
+
+00:07:49.660 --> 00:07:52.760
+Jeśli odmawia w domenie, twoje filtry lub zatwierdzenia są zbyt restrykcyjne.
+
+00:07:52.960 --> 00:07:54.900
+Dostrajanie to odejmowanie, a nie dodawanie.
+
+00:07:55.080 --> 00:08:00.140
+Usuwaj nieistotne ścieżki, redukuj niejasności metadanych i tnij, aż odpowiedzi będą nudnie przewidywalne.
+
+00:08:00.280 --> 00:08:02.120
+Oraz metryki, które będziesz śledzić.
+
+00:08:02.120 --> 00:08:06.780
+Zdolność do udzielania odpowiedzi, procent zapytań w domenie rozwiązanych z cytatami do wybranej biblioteki.
+
+00:08:06.960 --> 00:08:10.100
+Izolacja, procent odpowiedzi cytujących wyłącznie zatwierdzone źródła.
+
+00:08:10.300 --> 00:08:15.120
+Jakość milczenia, jasność i częstotliwość stosowania odpowiedzi awaryjnej przy zapytaniach spoza domeny.
+
+00:08:15.360 --> 00:08:18.100
+Jeśli chcesz mentalną listę kontrolną przed przejściem dalej,
+
+00:08:18.240 --> 00:08:22.080
+tylko biblioteka, płytkie foldery, ścisłe metadane, tylko zatwierdzone treści,
+
+00:08:22.240 --> 00:08:26.080
+brak wiedzy ogólnej, wielu wąskich agentów, przetestowane limity, mierzone wyniki.
+
+00:08:26.080 --> 00:08:30.800
+Gdy to zablokujesz wszystko w dół uprawnienia, etykiety, DLP współpracuje z tobą,
+
+00:08:30.920 --> 00:08:33.300
+zamiast walczyć z twoim źle określonym chaosem.
+
+00:08:33.480 --> 00:08:37.840
+Teraz wzmacniamy dziedziczenie, aby cały pokój był zamknięty, a nie tylko szafka na dokumenty.
+
+00:08:38.000 --> 00:08:41.260
+Panel kontrolny drugi, przerwij dziedziczenie i etykietuj z pełnym przekonaniem.
+
+00:08:41.460 --> 00:08:44.440
+Ograniczona wiedza jest bezużyteczna, jeśli drzwi są oścież otwarte.
+
+00:08:44.640 --> 00:08:48.100
+W SharePoint dziedziczone uprawnienia to swetry z odzysku, bezpieczeństwa.
+
+00:08:48.320 --> 00:08:51.960
+Źle dopasowane, pełne dziur i tajemniczo wystarczające, dopóki nie zawieje chłód.
+
+00:08:51.960 --> 00:08:56.300
+Agenci szanują listy kontroli dostępu ACL, a nie optymizm, więc przerywamy dziedziczenie tam,
+
+00:08:56.420 --> 00:08:59.300
+gdzie to ważne, przypisujemy unikalne uprawnienia i usuwamy szerokie grupy,
+
+00:08:59.400 --> 00:09:02.300
+które po cichu zmieniają to, co wewnętrzne, w to, co dostępne dla sieci.
+
+00:09:02.540 --> 00:09:04.080
+Zacznij od niewygodnego audytu.
+
+00:09:04.260 --> 00:09:06.580
+Podziel swoje wrażliwe biblioteki na trzy koszyki.
+
+00:09:06.800 --> 00:09:08.860
+Do izolacji, do udostępnienia i nieznane.
+
+00:09:09.100 --> 00:09:10.420
+Nieznane to czerwona flaga.
+
+00:09:10.620 --> 00:09:13.820
+Jeśli nie potrafisz w jednym zdaniu wyjaśnić, kto ma dostęp, należy to przenieść do izolacji,
+
+00:09:13.940 --> 00:09:15.220
+dopóki nie zostanie udowodnione inaczej.
+
+00:09:15.220 --> 00:09:18.700
+Następnie dla każdej biblioteki do izolacji przerwij dziedziczenie uprawnień.
+
+00:09:18.820 --> 00:09:22.020
+Nie na poziomie witryny, ale biblioteki przechowującej najważniejsze zasoby.
+
+00:09:22.200 --> 00:09:24.700
+Przerywanie dziedziczenia to nie dramat, to dojrzałość.
+
+00:09:24.960 --> 00:09:27.800
+Dążysz do jawnego, minimalnego członkostwa małej grupy właścicieli,
+
+00:09:27.940 --> 00:09:31.180
+zdefiniowanej grupy członków i osób tylko do odczytu, gdzie wymaga tego biznes.
+
+00:09:31.380 --> 00:09:32.980
+Teraz oczyść leniwe mechanizmy.
+
+00:09:33.220 --> 00:09:36.160
+Szerokie grupy, takie jak wszyscy, wszyscy z wyjątkiem użytkowników zewnętrznych
+
+00:09:36.160 --> 00:09:39.500
+i uwierzytelnieni użytkownicy, chowają się w grupach SharePoint niczym matrioszki.
+
+00:09:39.500 --> 00:09:43.180
+Wyciągnij je i zastąp grupami zabezpieczeń Azure ad przypisanymi do ról,
+
+00:09:43.280 --> 00:09:44.560
+którymi faktycznie zarządzasz.
+
+00:09:44.720 --> 00:09:47.580
+Goście powinni być wyjątkiem tymczasowi i łatwi do zidentyfikowania.
+
+00:09:47.740 --> 00:09:49.680
+Nigdy nie powinni być zagnieżdżeni w grupie SharePoint
+
+00:09:49.680 --> 00:09:51.700
+utworzonej podczas startu projektu 3 lata temu.
+
+00:09:51.940 --> 00:09:53.660
+Jeśli w nazwie grupy pojawia się słowo
+
+00:09:53.660 --> 00:09:56.160
+Wszyscy, twój agent potraktuje to jak szwedzki stół.
+
+00:09:56.440 --> 00:09:59.680
+Ustandaryzuj poziomy uprawnień, aby można było nimi łatwo zarządzać.
+
+00:09:59.860 --> 00:10:04.260
+Poziom A. Poufne biblioteki, właściciele, członkowie, małe grupy, czytelnicy,
+
+00:10:04.460 --> 00:10:06.340
+bardzo wąski dostęp, brak gości.
+
+00:10:06.340 --> 00:10:12.920
+Poziom B. Biblioteki tylko dla wewnętrznych, właściciele, członkowie, zarządzań, czytelnicy,
+
+00:10:13.120 --> 00:10:15.180
+grupa działowa, brak osób z zewnątrz.
+
+00:10:15.380 --> 00:10:18.940
+Poziom C. Publiczne biblioteki wewnętrzne, właściciele, członkowie, czytelnicy,
+
+00:10:19.100 --> 00:10:20.660
+wszyscy pracownicy, wciąż bez gości.
+
+00:10:20.920 --> 00:10:23.420
+Model jest prosty, ponieważ musi być egzekwowany przez ludzi,
+
+00:10:23.540 --> 00:10:24.600
+którzy bywają rozkojarzeni.
+
+00:10:24.840 --> 00:10:28.040
+Agenci wykonają wszystko, co zaprogramujesz, więc programuj zdrowy rozsądek.
+
+00:10:28.040 --> 00:10:29.460
+Czas na etykiety wrażliwości.
+
+00:10:29.680 --> 00:10:32.180
+Etykiety to nie naklejki, to klucze do polityk bezpieczeństwa.
+
+00:10:32.180 --> 00:10:35.340
+Mapujesz poufne, ograniczone, publiczne i inne statusy na konkretne zachowania.
+
+00:10:35.500 --> 00:10:38.800
+Pułapką, w którą wpada większość administratorów, jest traktowanie etykiet jako ozdobników.
+
+00:10:39.020 --> 00:10:39.760
+Z tym już koniec.
+
+00:10:39.960 --> 00:10:44.020
+Łączysz etykiety z Perview DLP, aby etykieta oznaczała coś, co maszyny mogą egzekwować.
+
+00:10:44.220 --> 00:10:48.360
+Na przykład poufne HR uruchamia politykę DLP, która blokuje działania agenta,
+
+00:10:48.520 --> 00:10:50.720
+nawet jeśli użytkownik może wyświetlić plik.
+
+00:10:50.880 --> 00:10:53.880
+Tak, dobrze słyszysz, użytkownik może przeczytać plik w SharePoint,
+
+00:10:54.060 --> 00:10:56.420
+ale agent otrzymuje odmowę na poziomie przetwarzania.
+
+00:10:56.420 --> 00:11:01.380
+To przełom etykiety plus DLP oddzielają widoczność dla ludzi od automatyzacji maszynowej.
+
+00:11:01.540 --> 00:11:02.800
+Przejdźmy do konkretów.
+
+00:11:03.000 --> 00:11:05.980
+Masz bibliotekę polityk HR z etykietą, poufne HR.
+
+00:11:06.180 --> 00:11:09.180
+Agent HR musi odpowiadać na pytania z tej biblioteki.
+
+00:11:09.440 --> 00:11:13.580
+Dobrze, tożsamość tego agenta otrzymuje uprawnienia do odczytu tej konkretnej biblioteki.
+
+00:11:13.820 --> 00:11:16.120
+Sąsiednie biblioteki, takie jak robocze wersje HR,
+
+00:11:16.320 --> 00:11:19.880
+są izolowane unikalnymi uprawnieniami, których tożsamość agenta nie posiada.
+
+00:11:19.880 --> 00:11:24.060
+Tymczasem twoja polityka DLP mówi, jeśli etykieta to poufne HR,
+
+00:11:24.200 --> 00:11:28.880
+a dostęp to przetwarzanie przez agenta, zezwól tylko, jeśli agent jest na liście zatwierdzonych.
+
+00:11:29.580 --> 00:11:34.160
+Każdy inny agent, w tym twój entuzjastyczny ogólny agent wiedzy firmowej, zostaje zablokowany.
+
+00:11:34.400 --> 00:11:38.760
+W ten sposób zatrzymujesz wyciek danych, nawet gdy ktoś zapomni i udzieli dostępu niewłaściwemu agentowi.
+
+00:11:38.920 --> 00:11:40.960
+A co z użytkownikami, którzy widzą zbyt wiele?
+
+00:11:41.120 --> 00:11:42.680
+To cicha eskalacja uprawnień.
+
+00:11:42.840 --> 00:11:44.820
+Jeśli polegasz tylko na widoczności użytkownika,
+
+00:11:44.980 --> 00:11:47.660
+każdy agent działający w jego imieniu dziedziczy ten szeroki dostęp.
+
+00:11:47.660 --> 00:11:49.880
+Dlatego ogranicz uprawnienia tożsamości agenta.
+
+00:11:50.060 --> 00:11:52.640
+Nie buduj agentów, którzy działają w imieniu osoby, która ich uruchamia.
+
+00:11:52.840 --> 00:11:55.920
+Buduj je tak, aby działały jako tożsamość usługi z minimalnymi uprawnieniami.
+
+00:11:56.120 --> 00:11:58.960
+Połącz to z etykietami i DLP, aby nawet uprzywilejowani użytkownicy
+
+00:11:58.960 --> 00:12:01.420
+nie mogli zmusić agenta do przetwarzania danych spoza zakresu.
+
+00:12:01.580 --> 00:12:05.300
+Warstwujesz zabezpieczenia jak rozsądny dorosły, zamiast modlić się do strony ustawień.
+
+00:12:05.420 --> 00:12:07.380
+Typowe błędy, które niszczą tę warstwę.
+
+00:12:07.560 --> 00:12:09.760
+Zakładanie, że ukryte oznacza bezpieczne.
+
+00:12:09.960 --> 00:12:12.860
+Pozostawianie witryn projektowych z domyślnym dziedziczeniem uprawnień.
+
+00:12:12.860 --> 00:12:16.020
+Pozostawianie dostępu gościnnego, gdy dostawca już dawno odszedł.
+
+00:12:16.140 --> 00:12:20.500
+A co najgorsze, dodawanie szerokich grup M365 do czytelników, bo tak było łatwiej.
+
+00:12:20.720 --> 00:12:24.280
+Jest łatwiej, dopóki twój agent nie wklei cytatu z działu prawnego do odpowiedzi dla sprzedaży.
+
+00:12:24.500 --> 00:12:26.460
+Wtedy zaczyna się teatr reagowania na incydenty.
+
+00:12:26.700 --> 00:12:28.480
+Rytm wdrożenia, który możesz powtórzyć.
+
+00:12:28.580 --> 00:12:29.700
+Odizoluj bibliotekę.
+
+00:12:29.900 --> 00:12:31.900
+Zastąp szerokie grupy grupami opartymi na rolach.
+
+00:12:32.060 --> 00:12:33.780
+Przypisz tożsamość usługi do agenta.
+
+00:12:34.060 --> 00:12:36.940
+Zastosuj etykiety wrażliwości na poziomie plików i bibliotek.
+
+00:12:36.940 --> 00:12:41.100
+Powiąż zasady DLP z etykietami za pomocą jawnych warunków zezwalających agentom.
+
+00:12:41.260 --> 00:12:43.440
+Przeprowadź testy na kontrolowanym zestawie zapytań.
+
+00:12:43.600 --> 00:12:47.860
+W domenie dozwolone, obok zabronione etykiet Owain, ale nie zatwierdzone agent zablokowany z jasnym komunikatem.
+
+00:12:48.080 --> 00:12:50.700
+Jeśli jakakolwiek odpowiedź wycieknie, uprawnienia są błędne.
+
+00:12:50.900 --> 00:12:55.020
+Jeśli agent przetwarza etykietowaną zawartość bez zatwierdzenia, mapowanie DLP jest błędne.
+
+00:12:55.220 --> 00:12:57.540
+Napraw mapowanie, a nie bajkę, którą sobie opowiadasz.
+
+00:12:57.720 --> 00:12:58.700
+Jeszcze jeden niuans.
+
+00:12:58.940 --> 00:13:01.460
+Dziedziczenie w witrynie może pozostać dla spraw mniej istotnych.
+
+00:13:01.460 --> 00:13:04.480
+Nie wykonujemy operacji na otwartym sercu w przypadku menu stołówki.
+
+00:13:04.680 --> 00:13:07.700
+Zarezerwuj unikalne uprawnienia dla bibliotek, które zasilają agentów.
+
+00:13:07.820 --> 00:13:12.500
+To utrzymuje obciążenie administracyjne w ryzach, wzmacniając dokładnie te obszary, które dotknie automatyzacja.
+
+00:13:12.680 --> 00:13:13.660
+Przerwij dziedziczenie.
+
+00:13:13.900 --> 00:13:15.480
+Używaj unikalnych, minimalnych grup.
+
+00:13:15.680 --> 00:13:18.540
+Etykietuj tak, jakby etykieta kontrolowała pieniądze, bo wycieki kosztują.
+
+00:13:18.780 --> 00:13:22.620
+Następnie połącz etykiety z DLP, aby agenci przestrzegali zasad, nawet gdy ludzie zapominają.
+
+00:13:22.820 --> 00:13:25.520
+Teraz pomieszczenie jest zamknięte, a nie tylko szafka na dokumenty.
+
+00:13:25.660 --> 00:13:27.020
+Płaszczyzna kontroli numer 3.
+
+00:13:27.020 --> 00:13:30.320
+Bramki zatwierdzeń, licencjonowanie typu płać za użycie oraz zasady dotyczące danych.
+
+00:13:30.480 --> 00:13:32.860
+Ograniczyłeś źródła i wyeliminowałeś leniwe dziedziczenie.
+
+00:13:33.100 --> 00:13:38.820
+Dobrze, teraz zabezpiecz wejście, aby przypadkowi entuzjaści nie uruchamiali cieniowych agentów z niekontrolowanym dostępem.
+
+00:13:39.040 --> 00:13:42.540
+Jeśli każdy może stworzyć agenta UAD, zmienia się w crowdsourcingowy chaos.
+
+00:13:42.780 --> 00:13:44.580
+Rozwiązanie jest nudne i skuteczne.
+
+00:13:44.840 --> 00:13:50.300
+Zatwierdzenia, granice licencyjne i zasady danych, które działają jak pasy bezpieczeństwa, nie odepniesz ich w trakcie jazdy.
+
+00:13:50.540 --> 00:13:52.880
+Zacznij od przepływu zatwierdzania tworzenia agentów.
+
+00:13:52.880 --> 00:13:53.980
+Koniec z samowolą.
+
+00:13:54.200 --> 00:13:57.080
+Wnioski o nowego agenta trafiają do wyznaczonych osób zatwierdzających.
+
+00:13:57.220 --> 00:14:01.080
+Pomyśl o bezpieczeństwie, zgodności i właścicielu biznesowym, który faktycznie zna domenę.
+
+00:14:01.280 --> 00:14:06.540
+Wymuszaj konwencję nazewnictwa, deklarację celu udokumentowanego właściciela, kontakt techniczny i datę wygaśnięcia.
+
+00:14:06.800 --> 00:14:08.400
+Brak właściciela, brak zatwierdzenia.
+
+00:14:08.640 --> 00:14:10.000
+Brak celu, brak zatwierdzenia.
+
+00:14:10.220 --> 00:14:13.660
+Jeśli brzmi to pedantycznie, gratulacje, wreszcie zajmujesz się ładem korporacyjnym.
+
+00:14:13.660 --> 00:14:15.640
+Ustandaryzuj formularz zgłoszeniowy.
+
+00:14:15.860 --> 00:14:28.320
+Wymagaj grupy docelowej, obsługiwanej funkcji biznesowej, dokładnych źródeł wiedzy z URL-ami do poziomu biblioteki, oczekiwań co do etykiet, zachowania w przypadku błędów, informacji o braku autorytatywności poza zakresem oraz tożsamości usługi.
+
+00:14:28.560 --> 00:14:33.840
+Zmuś ich do wyboru spośród zatwierdzonych szablonów HR Q&A, przeglądarka polityk, baza wiedzy IT i tak dalej.
+
+00:14:34.140 --> 00:14:36.660
+Dzięki temu dziedziczysz ograniczone ustawienia domyślne zamiast improwizacji.
+
+00:14:36.660 --> 00:14:38.660
+Teraz granice licencyjne.
+
+00:14:38.820 --> 00:14:44.040
+Wybierzesz jedną z dwóch ścieżek Microsoft 365, kopilot dla użytkowników lub płatność za użycie w SharePoint.
+
+00:14:44.200 --> 00:14:44.580
+Prawda?
+
+00:14:45.000 --> 00:14:48.060
+Licencjonowanie to nie tylko pozycja w budżecie, to narzędzie kontroli.
+
+00:14:48.240 --> 00:14:53.600
+W przypadku kopilota przypisanego do użytkownika, tylko licencjonowane osoby mogą korzystać z funkcji agentów, co naturalnie ogranicza niekontrolowany rozrost.
+
+00:14:53.740 --> 00:15:00.700
+W modelu płatności zgodnie z użyciem Pay As You Go aktywujesz zużycie na poziomie dzierżawy lub środowiska oraz zcentralizowane rozliczanie, co jest elastyczne, ale przy braku ostrożności przypomina otwarty bar.
+
+00:15:00.700 --> 00:15:02.400
+Dlatego stawiasz wokół niego ogrodzenia.
+
+00:15:02.400 --> 00:15:07.040
+Oddziel środowiska pilotażowe od produkcyjnych, a płatność za użycie aktywuj tylko tam, gdzie finanse mają pełen wgląd w licznik.
+
+00:15:07.220 --> 00:15:11.780
+Skonfiguruj alerty kosztowe, aby niekontrolowany projekt pilotażowy nie zamienił się w poetycki wieczór grozy dla Twojego rachunku w chmurze.
+
+00:15:11.900 --> 00:15:14.440
+Polityka zatwierdzania musi uwzględniać wybór licencji.
+
+00:15:14.680 --> 00:15:20.500
+Jeśli to płatność za użycie, wymagaj wskazania centrum kosztów właściciela podpisującego się pod opłatami oraz szacowanego profilu użycia.
+
+00:15:20.720 --> 00:15:25.040
+Jeśli to licencje użytkownika, wymagaj listy licencjonowanych osób i planu wyrejestrowania.
+
+00:15:25.040 --> 00:15:28.940
+Nie robisz problemów, tylko zapobiegasz incydentom typu nie wiedzieliśmy, że to włączone.
+
+00:15:29.100 --> 00:15:34.660
+Następnie przechodzimy do zasad ochrony danych reguł, które powstrzymują agentów przed pobieraniem wszystkiego z niedozwolonych konektorów, jakby byli w barze z koktajlami.
+
+00:15:34.800 --> 00:15:40.340
+Używaj zasad ochrony danych na poziomie dzierżawy Power Platform, aby ograniczyć, które konektory mogą znajdować się w tej samej grupie danych co SharePoint.
+
+00:15:40.540 --> 00:15:45.700
+Regulowani agenci działają w ograniczonej grupie dostępnej tylko dla Microsoft 365 i zatwierdzonych wewnętrznych API.
+
+00:15:45.900 --> 00:15:49.020
+Żadnego przypadkowego internetu, żadnych usług konsumenckich, żadnego shadow SaaS.
+
+00:15:49.020 --> 00:15:54.280
+Jeśli wymagana jest integracja, przechodzi ona przez proces weryfikacji, otrzymuje konektor korporacyjny i trafia na listę dozwolonych.
+
+00:15:54.340 --> 00:15:57.300
+Tak, to wymaga czasu. Nazywa się to przestrzeganiem zasad.
+
+00:15:57.500 --> 00:15:59.820
+Połącz te zasady ochrony danych z usługą Perview.
+
+00:16:00.020 --> 00:16:08.560
+Użyj Perview do definiowania granic danych, lokalizacji wrażliwych treści, ścieżek wycieku, które są niedozwolone oraz monitoringu sygnalizującego próby łączenia grup.
+
+00:16:08.800 --> 00:16:10.800
+Budujesz pasy ruchu i linie ostrzegawcze.
+
+00:16:11.000 --> 00:16:13.340
+Agent może szybko poruszać się w obrębie swojego pasa.
+
+00:16:13.580 --> 00:16:17.060
+Nie może przeskoczyć przez barierkę wprost pod nadjeżdżający ruch publicznych punktów końcowych.
+
+00:16:17.060 --> 00:16:19.660
+Wdróż szablony agentów z zatwierdzonymi źródłami danych.
+
+00:16:19.820 --> 00:16:22.320
+To część, którą wszyscy pomijają, a potem żałują.
+
+00:16:22.540 --> 00:16:30.540
+Szablony mają wbudowane wyłączone korzystanie z wiedzy ogólnej, niepewne mechanizmy zastępcze, źródła na poziomie biblioteki, wymagane filtry metadanych i poprawną tożsamość usługi.
+
+00:16:30.760 --> 00:16:34.420
+Zatwierdzasz szablon polityki HR i masz pewność, że zawiera on właściwe ustawienia domyślne.
+
+00:16:34.580 --> 00:16:36.360
+Pozwól użytkownikom jedynie uzupełniać luki.
+
+00:16:36.600 --> 00:16:38.880
+Niech nie wyważają otwartych drzwi, tworząc kwadratowe koła.
+
+00:16:38.880 --> 00:16:47.720
+Typowe błędy do wyeliminowania, pozwalanie na tworzenie pilotów w niezarządzanych witrynach, włączanie płatności Pay As Hugo bez śledzenia kosztów czy alertów oraz nadawanie uprawnień twórcy każdemu, kto tylko o nie poprosi.
+
+00:16:47.860 --> 00:16:51.900
+Ponadto nigdy nie pozwalaj agentom na domyślne korzystanie z wiedzy ogólnej, gdy nie znajdą odpowiedzi.
+
+00:16:52.080 --> 00:16:56.000
+W ten sposób otrzymujesz pewnie brzmiące bzdury otulone wiarygodnie wyglądającymi cytatami.
+
+00:16:56.000 --> 00:17:09.360
+Ostateczny rytm, wniosek przez szablon, przegląd bezpieczeństwa, trio właścicieli zgodności SAS, wybór licencji z kontrolą kosztów, przypisanie do grupy danych zastrzeżonych, potwierdzenie granic perwiu, zatwierdzenie z datą wygaśnięcia i zaplanowanie odnowienia za 90 dni.
+
+00:17:09.600 --> 00:17:11.740
+Brak odnowienia, automatyczna dezaktywacja.
+
+00:17:11.960 --> 00:17:15.120
+Agenci nie są nieśmiertelni, podobnie jak ich przypadki użycia.
+
+00:17:15.320 --> 00:17:18.820
+Płaszczyzna kontroli czwarta DLP, które rzeczywiście zatrzymuje agentów.
+
+00:17:19.020 --> 00:17:20.840
+Wzorce perwiu, które działają skutecznie.
+
+00:17:20.840 --> 00:17:24.140
+Bez egzekwowania w czasie rzeczywistym, agenci to tylko szybcy kurierzy danych.
+
+00:17:24.140 --> 00:17:25.420
+Potrzebujesz hamulców.
+
+00:17:25.600 --> 00:17:30.820
+Wkraczają wzorce perwiu DLP, które nie tylko ostrzegają, ale blokują, alarmują i zostawiają ślad, który ucieszy audytora.
+
+00:17:31.040 --> 00:17:31.760
+Dlaczego to ważne?
+
+00:17:32.020 --> 00:17:34.280
+Agenci przetwarzają treść, nie tylko ją przeglądają.
+
+00:17:34.480 --> 00:17:36.540
+Przeglądanie może być dopuszczalne dla człowieka.
+
+00:17:36.860 --> 00:17:39.060
+Zautomatyzowane przetwarzanie to inna klasa ryzyka.
+
+00:17:39.340 --> 00:17:44.740
+Rozwiązaniem jest powiązanie wykrywania wrażliwości i wzorców z konkretnymi blokadami działań dla kontekstów agentów.
+
+00:17:44.740 --> 00:17:45.580
+Oto fundament.
+
+00:17:45.940 --> 00:17:49.080
+Buduj zasady kierowane na lokalizację SharePoint zasilające agentów.
+
+00:17:49.080 --> 00:17:56.920
+Dopasowuj etykiety wrażliwości i typy informacji poufnych oraz ustawiaj blokady przetwarzania, udostępniania lub pobierania przez agenta, gdy ufność osiągnie Twój próg.
+
+00:17:57.020 --> 00:17:58.180
+Tak, progi ufności.
+
+00:17:58.440 --> 00:18:00.360
+Przestań traktować je jak dekoracje.
+
+00:18:00.640 --> 00:18:05.380
+Dla szumnych wzorców, takich jak ogólne PEI, zwiększ ufność i wymagaj wielu dowodów.
+
+00:18:05.560 --> 00:18:11.800
+Dla najcenniejszych zasobów tajemnic handlowych, dokładnego dopasowania identyfikatorów pracowników stosuj wysoką wagę z natychmiastową blokadą.
+
+00:18:12.040 --> 00:18:13.720
+Wzorce, które działają skutecznie.
+
+00:18:13.960 --> 00:18:18.080
+Etykiety wrażliwości przypisane do blokady agenta, chyba że jest na liście dozwolonych.
+
+00:18:18.080 --> 00:18:24.880
+Typy informacji poufnych, identyfikatory finansowe, rządowe, terminy medyczne, dostrojone z wyższą ufnością.
+
+00:18:25.080 --> 00:18:32.320
+Dokładne dopasowanie danych EDM dla rzeczywistych identyfikatorów, numerów pracowników, ID klientów, aby uniknąć zalewu fałszywymi alarmami.
+
+00:18:32.560 --> 00:18:36.520
+Słowniki słów kluczowych dla nas w kodowych projektów zastrzeżonych, niska głośność, wysoki sygnał.
+
+00:18:36.680 --> 00:18:38.000
+Działania, które mają znaczenie.
+
+00:18:38.240 --> 00:18:40.540
+Blokada z wyłączoną możliwością obejścia dla agentów.
+
+00:18:40.540 --> 00:18:42.340
+Ludzie mogą się tłumaczyć, agenci nie.
+
+00:18:42.540 --> 00:18:45.000
+Maszyny nie mają kontekstu biznesowego, mają wyzwalacze.
+
+00:18:45.000 --> 00:18:48.160
+Kwarantanna lub ograniczenie pobierania po wyzwoleniu przez przepływy pracy agenta.
+
+00:18:48.340 --> 00:18:51.200
+Jeśli agent nie może pobrać pliku, nie może z niego halucynować.
+
+00:18:51.420 --> 00:18:56.740
+Alert do Secops z bogatym kontekstem biblioteka witryny, etykieta, wzorzec wyzwalający tożsamość wywołującego agenta.
+
+00:18:56.960 --> 00:18:59.340
+Redukcja szumu, aby ludzie nie obchodzili zabezpieczeń.
+
+00:18:59.500 --> 00:19:01.900
+Zacznij w trybie symulacji w witrynach nieprodukcyjnych.
+
+00:19:02.100 --> 00:19:05.140
+Dostrajaj progi, aż alerty odzwierciedlą rzeczywistość, a nie fantazję.
+
+00:19:05.300 --> 00:19:08.880
+Ogranicz zakres najpierw do bibliotek agentów, rozszerzaj dopiero, gdy sygnał będzie czysty.
+
+00:19:08.880 --> 00:19:12.880
+Stosuj połączone warunki etykieta plus typ informacji poufnych dwa zamki, jedne drzwi.
+
+00:19:13.040 --> 00:19:15.080
+Komunikacja do użytkownika to nie fanaberia.
+
+00:19:15.260 --> 00:19:17.800
+To różnica między zgodnością a obejściami systemu.
+
+00:19:17.980 --> 00:19:19.640
+Pisz jasne komunikaty o błędach.
+
+00:19:19.780 --> 00:19:22.920
+Ten agent nie jest upoważniony do przetwarzania poufnych treści hrabia.
+
+00:19:23.080 --> 00:19:25.900
+Poproś agenta HR lub zażądaj dostępu przez odpowiedni proces.
+
+00:19:26.180 --> 00:19:28.380
+Dajesz im właściwe drzwi, a nie mur nie do przebicia.
+
+00:19:28.620 --> 00:19:31.340
+Jeśli powiesz tylko zablokowane, wkleją dane do Teams.
+
+00:19:31.520 --> 00:19:32.280
+To twoja wina.
+
+00:19:32.480 --> 00:19:33.240
+Typowe błędy.
+
+00:19:33.240 --> 00:19:37.020
+Ograniczanie DLP do Exchange i Teams, bo polityki Sherpunta były zbyt hałaśliwe.
+
+00:19:37.220 --> 00:19:38.980
+Były hałaśliwe, bo ich nie dostroiłeś.
+
+00:19:39.140 --> 00:19:41.160
+Wykluczanie Sherpunta również ze względu na wydajność.
+
+00:19:41.360 --> 00:19:42.100
+Wydajność czego?
+
+00:19:42.340 --> 00:19:43.880
+Twojej kolejnej reakcji na incydent?
+
+00:19:44.020 --> 00:19:47.040
+Poleganie wyłącznie na ogólnych typach informacji poufnych przy ignorowaniu EDM.
+
+00:19:47.200 --> 00:19:48.740
+Posiadasz dokładne identyfikatory.
+
+00:19:48.940 --> 00:19:49.620
+Używaj ich.
+
+00:19:49.780 --> 00:19:50.920
+Test sprawdzający.
+
+00:19:51.100 --> 00:19:55.140
+Agent spoza zakresu próbuje odpowiedzieć na pytanie wymagające pliku z etykietą poufności.
+
+00:19:55.420 --> 00:20:00.120
+Wynikiem powinna być natychmiastowa blokada, komunikat instruktażowy i alert o wysokim priorytecie w twoim potoku.
+
+00:20:00.120 --> 00:20:03.500
+Jeśli zamiast tego otrzymasz pewną odpowiedź, twoje DLP jest tylko dekoracją.
+
+00:20:03.700 --> 00:20:05.440
+Niech to będą zęby, a nie tabliczka z napisem.

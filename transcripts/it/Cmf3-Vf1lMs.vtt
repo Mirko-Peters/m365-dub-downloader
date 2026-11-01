@@ -1,0 +1,2734 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:04.740
+Il tuo agente SharePoint non ha allucinato una fuga di dati, gli è dato un idrante in mano chiedendogli solo un source.
+
+00:00:05.140 --> 00:00:09.960
+Fonti di conoscenza troppo ampi unitari edità permissive equivalgono a una diffusione accidentale alla velocità della macchina.
+
+00:00:10.220 --> 00:00:14.200
+La soluzione non è magia. È disciplina nell'ambito rafforzamento dei permessi di LP efficace,
+
+00:00:14.560 --> 00:00:17.020
+racchiusi in un pacchetto di policy di base che puoi distribuire oggi.
+
+00:00:17.780 --> 00:00:24.320
+Ti mostrerò come gli agenti vedono davvero i dati, perché il grounding non isola i permessi e i controlli esatti per contenerli senza limitarne l'utilità.
+
+00:00:25.280 --> 00:00:28.880
+C'è un'impostazione che la maggior parte dei amministratori ignora, un controllo di approvazione necessario,
+
+00:00:28.880 --> 00:00:32.640
+è un modello di LP che blocca davvero gli agenti. Iniziamo da come vedo.
+
+00:00:33.580 --> 00:00:37.460
+Fondamenta, come gli agenti SharePoint vedono davvero i tuoi dati, il DNA dei permessi.
+
+00:00:38.080 --> 00:00:40.980
+La verità è che gli agenti non leggono le tue intenzioni, leggono Microsoft Graph.
+
+00:00:41.680 --> 00:00:43.040
+Pensa a Graph come un flusso sanguigno.
+
+00:00:43.480 --> 00:00:46.760
+Se il contenuto è accessibile tramite i tuoi ACL, l'agente ne vede l'ossigeno.
+
+00:00:46.840 --> 00:00:51.260
+Se estendi troppo una fonte di conoscenza, hai appena installato un bypass attorno alle tue arterie attentamente etichettate.
+
+00:00:51.780 --> 00:00:52.500
+Lascia che ti spieghi meglio.
+
+00:00:52.960 --> 00:00:56.400
+Un agente ha due ingredienti principali, una persona utente e filtri di recupero.
+
+00:00:56.400 --> 00:01:02.360
+La persona equivale all'identità e i suoi permessi su SharePoint, OneDrive e qualsiasi altra superficie connessa.
+
+00:01:03.280 --> 00:01:05.100
+Il recupero equivale a ciò a cui lo hai puntato.
+
+00:01:05.580 --> 00:01:09.320
+Una libreria, una cartella, un insieme di file o alcuni URL.
+
+00:01:10.300 --> 00:01:12.920
+Molte persone confondono i filtri di recupero con i confini di sicurezza.
+
+00:01:13.280 --> 00:01:13.640
+Non lo sono.
+
+00:01:14.060 --> 00:01:15.380
+Il recupero dice cerca prima qui.
+
+00:01:16.340 --> 00:01:17.460
+I permessi dicono puoi entrare.
+
+00:01:18.180 --> 00:01:20.600
+L'agente obbedisce prima ai permessi, poi al recupero.
+
+00:01:21.120 --> 00:01:22.740
+Se non ricordi altro ricorda quest'ordine.
+
+00:01:22.740 --> 00:01:27.240
+Ora, le etichette di sensibilità e il DLP di ProView si posizionano sul contenuto come segnaletica e guardrail.
+
+00:01:27.780 --> 00:01:32.640
+Le etichette classificano e il DLP impone il comportamento quando un determinato contenuto viene consultato o elaborato.
+
+00:01:33.400 --> 00:01:35.040
+La cosa che sfugge alla maggior parte delle persone è semplice.
+
+00:01:35.500 --> 00:01:36.580
+Il grounding non annulla i diritti.
+
+00:01:37.180 --> 00:01:38.160
+Il grounding filtra la pertinente.
+
+00:01:38.600 --> 00:01:40.040
+Non riduce l'autorità legale dell'agente.
+
+00:01:40.960 --> 00:01:45.280
+Quindi se l'identità del tuo agente può vedere più librerie adiacenti perché hai lasciato intatta l'eredità,
+
+00:01:45.280 --> 00:01:50.000
+ma l'LLM può e unirà verità vicina in una risposta non inquietante e prevedibile.
+
+00:01:51.280 --> 00:01:53.160
+L'eredità dei permessi è un'escalation silenziosa.
+
+00:01:54.080 --> 00:01:59.280
+Giuri che un sito è solo interno, poi scopri che un gruppo SharePoint include tutti o utenti autenticati...
+
+00:01:59.280 --> 00:01:59.940
+Autenticati?
+
+00:02:00.220 --> 00:02:02.160
+Gli ospiti rimangono e tutti i gruppi di progetto persistono.
+
+00:02:02.540 --> 00:02:04.120
+L'agente rispetta gli ACL e non intenzione.
+
+00:02:04.700 --> 00:02:06.360
+Se quell'identità può aprire il file di SharePoint,
+
+00:02:06.460 --> 00:02:10.360
+l'agente può elaborarlo a meno che le combinazioni di DLP o policy DLP o policy etichettatura
+
+00:02:10.360 --> 00:02:12.100
+non blocchino esplicitamente le operazioni dell'agente.
+
+00:02:12.100 --> 00:02:16.680
+Ecco perché il tuo progetto pilota su una simulibreria è citato improvvisamente una policy HR da una libreria vicina.
+
+00:02:17.160 --> 00:02:18.060
+Non hai isolato a nulla.
+
+00:02:18.640 --> 00:02:20.920
+Hai suggerito uno scaffale preferito in una stanza non chiusa a chiave.
+
+00:02:21.740 --> 00:02:23.520
+Introduci il modello della minima conoscenza necessaria.
+
+00:02:23.860 --> 00:02:26.620
+Invece di alimentare la radice di un sito sperando che la pertinenza ti salvi,
+
+00:02:26.700 --> 00:02:28.300
+lega le fonti di conoscenza a librerie specifiche.
+
+00:02:28.840 --> 00:02:30.100
+Evita l'ingestione a livello di sito.
+
+00:02:30.680 --> 00:02:31.480
+Limita le cartelle.
+
+00:02:31.600 --> 00:02:33.860
+Usa i filtri di metadati affinché l'indicizzazione del recupero
+
+00:02:33.860 --> 00:02:35.980
+includa solo i documenti rilevanti per la missione dell'agente.
+
+00:02:35.980 --> 00:02:38.700
+In Copilot Studio e nei costruttori di agenti SharePoint
+
+00:02:38.700 --> 00:02:41.880
+puoi disegnare fonti ufficiali, disabilitare la conoscenza AI generale
+
+00:02:41.880 --> 00:02:43.420
+e aggiungere risposte di fallback.
+
+00:02:44.120 --> 00:02:46.580
+Quel fallback non autoritativo ha la tua cintura di sicurezza.
+
+00:02:47.000 --> 00:02:49.660
+Senza di esso il modello riempie vuoti con conoscenze generali
+
+00:02:49.660 --> 00:02:51.200
+che non rispettano la tua postura di conformità.
+
+00:02:51.700 --> 00:02:52.400
+Anche i limiti contano.
+
+00:02:52.780 --> 00:02:55.640
+Le piattaforme impongono tetti pratici su file, cartelle e url
+
+00:02:55.640 --> 00:02:56.860
+per ogni fonte di conoscenza.
+
+00:02:57.660 --> 00:03:00.180
+Non sono solo note sulle prestazioni, sono guarderai per la governance.
+
+00:03:00.180 --> 00:03:03.500
+Quando raggiungi un limite, l'istinto sbagliato è ampliare l'ambito
+
+00:03:03.500 --> 00:03:05.060
+alla radice del sito solo per il momento.
+
+00:03:05.560 --> 00:03:06.560
+È così che iniziano le fughe di data.
+
+00:03:06.900 --> 00:03:08.880
+La mossa giusta è orchestrare più agenti mirati,
+
+00:03:08.980 --> 00:03:10.780
+ciascuno con fonti strettamente delimitate,
+
+00:03:11.080 --> 00:03:13.440
+piuttosto con botte enciclopedico con accesso limitato.
+
+00:03:13.980 --> 00:03:15.620
+Distribuisci la conoscenza e mantieni in autorità il mio.
+
+00:03:16.000 --> 00:03:17.900
+Fammi fare un passo indietro e darti un modello mentale
+
+00:03:17.900 --> 00:03:19.100
+che non ti tradirà sotto pressione.
+
+00:03:19.880 --> 00:03:22.060
+Agente equivale a persona utente più filtro di recupero.
+
+00:03:22.440 --> 00:03:24.140
+Le autorizzazioni filtrono per prima e recupero per sì.
+
+00:03:24.620 --> 00:03:25.680
+Etichete scrivono la sensibilità.
+
+00:03:26.520 --> 00:03:28.240
+Gli LP decide quali azioni sono consentite
+
+00:03:28.240 --> 00:03:29.420
+quando è presente tale sensibilità.
+
+00:03:29.720 --> 00:03:31.560
+Il grounding aiuta il modello a trovare il paragrafo giusto.
+
+00:03:31.980 --> 00:03:34.600
+Le autorizzazioni decidono se gli era consentito vedere quel paragrafo.
+
+00:03:35.540 --> 00:03:37.040
+Il DLP può comunque negare la lavorazione
+
+00:03:37.040 --> 00:03:38.440
+anche quando entrambi gli altri dicono di sì.
+
+00:03:39.400 --> 00:03:40.800
+Quella sequenza filtra, trova appica,
+
+00:03:40.880 --> 00:03:42.080
+mantiene il tuo ragionamento lucido.
+
+00:03:42.920 --> 00:03:44.760
+Le conseguenze dell'ignorare questa perdita di dati
+
+00:03:44.760 --> 00:03:46.600
+sembrano un AI che si comporta in modo strano,
+
+00:03:46.640 --> 00:03:47.980
+ma in realtà è la tua progettazione dell'ambito
+
+00:03:47.980 --> 00:03:49.520
+che collide con un'ereditarietà permissiva.
+
+00:03:50.480 --> 00:03:52.460
+Le librerie adiacenti sembrano vicine al modello
+
+00:03:52.460 --> 00:03:54.120
+perché sono vicine nelle tue autorizzazioni.
+
+00:03:55.000 --> 00:03:56.880
+E sì, il modello unirà felicemente verità
+
+00:03:56.880 --> 00:03:58.520
+attraverso confini che non hai mai blindato.
+
+00:03:59.140 --> 00:04:00.600
+Una volta interiorizzato il funzionamento
+
+00:04:00.600 --> 00:04:01.400
+tutto il resto ha senso.
+
+00:04:02.260 --> 00:04:04.040
+Smetti di incolpare l'LM per le risposte
+
+00:04:04.040 --> 00:04:06.020
+e inizi a controllare ciò che gli è permesso considerare.
+
+00:04:06.740 --> 00:04:07.880
+Ora che vedi il flusso sanguigno,
+
+00:04:07.940 --> 00:04:08.680
+la colonna vertebrale,
+
+00:04:08.780 --> 00:04:10.560
+le autorizzazioni del grafico e i filtri di recupero
+
+00:04:10.560 --> 00:04:12.120
+evitiamo che l'acqua passi da una stanza all'altra.
+
+00:04:12.920 --> 00:04:14.220
+Delimita le fonti come in un contratto,
+
+00:04:14.280 --> 00:04:16.340
+poi interrompi l'ereditarietà ed etichetta con convinzione.
+
+00:04:17.020 --> 00:04:17.740
+Piano di controllo U
+
+00:04:17.740 --> 00:04:20.040
+Delimita le fonti di conoscenza come un avvocato
+
+00:04:20.040 --> 00:04:20.660
+legge e contratto.
+
+00:04:21.240 --> 00:04:22.880
+Ora scriviamo l'ambito come un linguaggio legale,
+
+00:04:22.880 --> 00:04:25.060
+preciso, limitato e del tutto intollerante all'ambiguità.
+
+00:04:25.760 --> 00:04:27.500
+Perché fonti ampie creano interferenze
+
+00:04:27.500 --> 00:04:29.740
+e l'LM dirà felicemente verità vicina
+
+00:04:29.740 --> 00:04:31.580
+in una risposta come un cronista di gossip
+
+00:04:31.580 --> 00:04:32.500
+con un teleobiettivo.
+
+00:04:33.960 --> 00:04:34.980
+Ecco la regola sull'ambito
+
+00:04:34.980 --> 00:04:36.360
+che separa gli adulti dagli stagisti.
+
+00:04:37.060 --> 00:04:38.380
+Solo fonti a livello di librerie.
+
+00:04:39.000 --> 00:04:40.760
+Non siti, non tutto ciò che sta sotto questo hub.
+
+00:04:41.600 --> 00:04:42.740
+Una singola libreria di documenti
+
+00:04:42.740 --> 00:04:43.640
+per ogni scopo dichiarato.
+
+00:04:44.040 --> 00:04:46.160
+Se la gente esiste per rispondere alle fac di prodotto,
+
+00:04:46.620 --> 00:04:48.740
+ottiene solo la libreria delle fac di prodotto e nient'altro.
+
+00:04:49.100 --> 00:04:49.400
+La verità.
+
+00:04:49.740 --> 00:04:51.840
+Ogni centimetro extra diventa un rischio latente
+
+00:04:51.840 --> 00:04:53.840
+che il modello può attivare in pochi millisecondi.
+
+00:04:54.480 --> 00:04:55.980
+Confrontalo con l'approccio dell'utente a me.
+
+00:04:56.480 --> 00:04:57.680
+Puntare la root del sito,
+
+00:04:57.740 --> 00:04:58.560
+aggiungere sotto cartelle
+
+00:04:58.560 --> 00:05:00.100
+e sperare che i metadati salvino tutto.
+
+00:05:01.140 --> 00:05:02.880
+I filtri di recupero guidano la ricerca,
+
+00:05:03.160 --> 00:05:03.920
+non creano un firewall.
+
+00:05:04.680 --> 00:05:06.560
+Quindi strutturate l'ambito come un avvocato struttura
+
+00:05:06.560 --> 00:05:08.420
+le clausole specifico, esclusivo e verificabile.
+
+00:05:08.940 --> 00:05:10.900
+Meccaniche di definizione dell'ambito pratico che userete dopo.
+
+00:05:11.280 --> 00:05:12.180
+Evitate le root dei siti.
+
+00:05:12.680 --> 00:05:14.420
+Specificate sempre un percorso di vera concreto.
+
+00:05:14.760 --> 00:05:15.440
+Limitate le cartelle.
+
+00:05:15.940 --> 00:05:16.940
+Se dovete usare le cartelle,
+
+00:05:17.320 --> 00:05:18.540
+bloccatela a un livello superficiale
+
+00:05:18.540 --> 00:05:19.660
+senza inclusioni ricorsive.
+
+00:05:19.660 --> 00:05:21.640
+Imponete filtri sui metadati,
+
+00:05:21.720 --> 00:05:23.160
+acquisite solo elementi con stato approvato,
+
+00:05:23.260 --> 00:05:24.700
+versione pubblicata, dipartimento X,
+
+00:05:24.820 --> 00:05:25.560
+niente metadati,
+
+00:05:25.960 --> 00:05:26.840
+niente acquisizione,
+
+00:05:27.140 --> 00:05:27.840
+niente acquisizione.
+
+00:05:28.660 --> 00:05:30.680
+Escludete bots, archivi e sottostrutture di lavoro.
+
+00:05:31.160 --> 00:05:32.080
+Se non potete escluderli,
+
+00:05:32.140 --> 00:05:32.800
+spostate d'altrove.
+
+00:05:33.380 --> 00:05:34.120
+Sì, rifattorizzare,
+
+00:05:34.180 --> 00:05:34.960
+questo si chiama governance.
+
+00:05:35.420 --> 00:05:36.080
+Verifica dei limiti
+
+00:05:36.080 --> 00:05:37.700
+le piattaforme non sono buffer infiniti.
+
+00:05:38.060 --> 00:05:38.900
+Avete conteggi di file,
+
+00:05:39.020 --> 00:05:39.620
+limiti di cartelle,
+
+00:05:39.720 --> 00:05:40.360
+quote di URL.
+
+00:05:41.180 --> 00:05:42.280
+Trattateli come limiti di velocità
+
+00:05:42.280 --> 00:05:43.200
+che tengono le ruote salde.
+
+00:05:44.180 --> 00:05:44.900
+In Copilot Studio
+
+00:05:44.900 --> 00:05:46.260
+e nei builder di agenti SharePoint
+
+00:05:46.260 --> 00:05:47.740
+testate i tetti massimi pratici
+
+00:05:47.740 --> 00:05:48.460
+prima di andare live.
+
+00:05:48.460 --> 00:05:50.000
+Create una fonte pilota
+
+00:05:50.000 --> 00:05:50.980
+con la distribuzione reale.
+
+00:05:51.140 --> 00:05:52.060
+Alcune centinaia di PDF
+
+00:05:52.060 --> 00:05:53.300
+approvati, qualche pre-book docs,
+
+00:05:53.380 --> 00:05:54.260
+una dozzina di PPT.
+
+00:05:54.660 --> 00:05:56.060
+Se l'acquisizione rallenta,
+
+00:05:56.120 --> 00:05:56.740
+va in timeout
+
+00:05:56.740 --> 00:05:57.820
+o inizia a saltare file,
+
+00:05:57.940 --> 00:05:58.660
+non ampliate l'ambito,
+
+00:05:58.760 --> 00:05:59.960
+suddividetelo, suddividete.
+
+00:06:00.340 --> 00:06:01.060
+Un dominio per fonte,
+
+00:06:01.120 --> 00:06:02.400
+una fonte per persona dell'agente.
+
+00:06:02.960 --> 00:06:04.340
+Questa orchestrazione non ingordigia.
+
+00:06:04.860 --> 00:06:06.380
+La scorciatoia che nessuno insegna.
+
+00:06:06.480 --> 00:06:07.480
+Molti agenti ristretti
+
+00:06:07.480 --> 00:06:09.300
+battono sempre un mostro enciclopedico.
+
+00:06:10.500 --> 00:06:12.160
+Costruite un agente per le policy HR,
+
+00:06:12.320 --> 00:06:12.980
+uno per i benefit,
+
+00:06:13.120 --> 00:06:13.720
+uno per i viaggi,
+
+00:06:14.100 --> 00:06:15.200
+ognuno con la propria libreria
+
+00:06:15.200 --> 00:06:16.120
+e filtri applicati.
+
+00:06:16.120 --> 00:06:18.380
+Poi, se serve un punto di accesso unico,
+
+00:06:18.520 --> 00:06:19.320
+orchestrate all'ingresso
+
+00:06:19.320 --> 00:06:20.120
+con un agente router
+
+00:06:20.120 --> 00:06:20.820
+che gira le query
+
+00:06:20.820 --> 00:06:21.840
+allo specialista giusto.
+
+00:06:22.620 --> 00:06:23.280
+Professionisti lo fanno
+
+00:06:23.280 --> 00:06:24.200
+perché permette di scala da go.
+
+00:06:24.380 --> 00:06:25.320
+I principianti stipano
+
+00:06:25.320 --> 00:06:26.500
+200 file di dominimisti
+
+00:06:26.500 --> 00:06:27.220
+in un solo agente
+
+00:06:27.220 --> 00:06:27.800
+e si stupiscono
+
+00:06:27.800 --> 00:06:28.740
+se le risposte sembrano
+
+00:06:28.740 --> 00:06:29.640
+ordinarie di condominio.
+
+00:06:30.060 --> 00:06:30.940
+Disabilitate la conoscenza
+
+00:06:30.940 --> 00:06:31.520
+ea generale
+
+00:06:31.520 --> 00:06:32.640
+per gli agenti regolamentati.
+
+00:06:32.960 --> 00:06:33.980
+Se l'agente è autorevole
+
+00:06:33.980 --> 00:06:34.580
+per un dominio,
+
+00:06:34.680 --> 00:06:35.340
+dovrebbe tacere
+
+00:06:35.340 --> 00:06:36.700
+al di fuori di esso.
+
+00:06:37.260 --> 00:06:37.800
+È qui che contano
+
+00:06:37.800 --> 00:06:38.520
+le risposte di fallback.
+
+00:06:39.260 --> 00:06:40.120
+Configurate una risposta
+
+00:06:40.120 --> 00:06:40.760
+chiara e umile.
+
+00:06:41.640 --> 00:06:42.260
+Non sono autorizzato
+
+00:06:42.260 --> 00:06:42.780
+rispondere su.
+
+00:06:43.280 --> 00:06:44.160
+Ecco le fonti approvate
+
+00:06:44.160 --> 00:06:44.740
+che coprono.
+
+00:06:45.560 --> 00:06:46.200
+Nell'istante in cui
+
+00:06:46.200 --> 00:06:47.520
+lasciate che la conoscenza generale
+
+00:06:47.520 --> 00:06:48.460
+riempie le lacune
+
+00:06:48.460 --> 00:06:49.300
+tornate a banalità
+
+00:06:49.300 --> 00:06:50.080
+non verificabili
+
+00:06:50.080 --> 00:06:50.880
+che ignorano etichette
+
+00:06:50.880 --> 00:06:51.680
+e intenti di ADP.
+
+00:06:52.220 --> 00:06:53.120
+La cura dei contenuti conta.
+
+00:06:53.720 --> 00:06:54.920
+Disegnate fonti ufficiali.
+
+00:06:55.540 --> 00:06:55.980
+Ciò significa
+
+00:06:55.980 --> 00:06:56.920
+un flusso di approvazione
+
+00:06:56.920 --> 00:06:57.900
+a monte dell'acquisizione.
+
+00:06:58.560 --> 00:06:59.480
+Aggiungete solo contenuti
+
+00:06:59.480 --> 00:07:00.020
+che hanno superato
+
+00:07:00.020 --> 00:07:01.020
+revisione, precisione,
+
+00:07:01.060 --> 00:07:02.020
+attualità e classificazione
+
+00:07:02.020 --> 00:07:02.780
+della sensibilità.
+
+00:07:03.400 --> 00:07:04.100
+Se non potete provare
+
+00:07:04.100 --> 00:07:05.100
+la provenienza di un documento
+
+00:07:05.100 --> 00:07:05.900
+non deve finire in bocca
+
+00:07:05.900 --> 00:07:06.320
+a un agente.
+
+00:07:06.760 --> 00:07:07.660
+Il modello è sicuro di sé,
+
+00:07:07.720 --> 00:07:08.140
+non corretto.
+
+00:07:08.140 --> 00:07:09.460
+La vostra cura è il freno.
+
+00:07:10.000 --> 00:07:10.500
+Errori comuni
+
+00:07:10.500 --> 00:07:11.480
+che smetterete di commettere
+
+00:07:11.480 --> 00:07:11.880
+da oggi.
+
+00:07:13.120 --> 00:07:14.100
+Accumulare domini misti
+
+00:07:14.100 --> 00:07:14.780
+in un'unica fonte,
+
+00:07:14.900 --> 00:07:15.200
+policy,
+
+00:07:15.540 --> 00:07:16.300
+documenti tecnici
+
+00:07:16.300 --> 00:07:17.380
+e contratti con fornitori
+
+00:07:17.380 --> 00:07:18.080
+in un unico mucchio.
+
+00:07:18.960 --> 00:07:19.760
+Divideteli per scopo
+
+00:07:19.760 --> 00:07:20.500
+lasciando che gli agenti
+
+00:07:20.500 --> 00:07:21.920
+analizzino URL web arbitrari.
+
+00:07:22.400 --> 00:07:23.240
+No, gli URL esterni
+
+00:07:23.240 --> 00:07:24.220
+espandono la raggio d'azione
+
+00:07:24.220 --> 00:07:25.520
+e limitano l'auditabilità.
+
+00:07:26.380 --> 00:07:27.080
+Ingerendo bozze
+
+00:07:27.080 --> 00:07:27.700
+e fai di chat
+
+00:07:27.700 --> 00:07:28.880
+il modello non distingue
+
+00:07:28.880 --> 00:07:29.700
+i contenuti completi
+
+00:07:29.700 --> 00:07:30.420
+da quelli pubblicati
+
+00:07:30.420 --> 00:07:31.100
+a meno di imporre
+
+00:07:31.100 --> 00:07:32.480
+metadati e posizioni separate.
+
+00:07:33.440 --> 00:07:34.140
+Suppure che nascosto
+
+00:07:34.140 --> 00:07:34.920
+significhi protetto.
+
+00:07:34.920 --> 00:07:35.860
+Nascosto è una scelta
+
+00:07:35.860 --> 00:07:36.300
+di interfaccio.
+
+00:07:36.460 --> 00:07:37.520
+Per me si sono la legge.
+
+00:07:38.020 --> 00:07:38.700
+Disciplinare i test
+
+00:07:38.700 --> 00:07:39.500
+perché si bisogna testare
+
+00:07:39.500 --> 00:07:40.260
+l'ambito di applicazione.
+
+00:07:40.580 --> 00:07:41.440
+Interrogate i casi limite
+
+00:07:41.440 --> 00:07:42.040
+e ponete alla gente
+
+00:07:42.040 --> 00:07:42.680
+domande autorevoli
+
+00:07:42.680 --> 00:07:43.420
+a cui dovrebbe rispondere
+
+00:07:43.420 --> 00:07:44.160
+senza esitazione
+
+00:07:44.160 --> 00:07:44.840
+e poi provocatelo
+
+00:07:44.840 --> 00:07:45.820
+con argomenti decenti
+
+00:07:45.820 --> 00:07:46.380
+che deve rifiutare.
+
+00:07:46.760 --> 00:07:47.700
+Se risponde fuori dominio
+
+00:07:47.700 --> 00:07:49.100
+i perimetri fallback sono errati.
+
+00:07:49.640 --> 00:07:50.520
+Se rifiuta nel dominio
+
+00:07:50.520 --> 00:07:51.680
+i vostri filtri o approvazioni
+
+00:07:51.680 --> 00:07:52.620
+sono troppo restrittivi.
+
+00:07:52.860 --> 00:07:53.940
+La calibrazione è sottrazione
+
+00:07:53.940 --> 00:07:54.360
+e non aggiunto.
+
+00:07:54.700 --> 00:07:55.920
+Rimuovete i percorsi rilevanti
+
+00:07:55.920 --> 00:07:56.700
+riducete l'ambiguità
+
+00:07:56.700 --> 00:07:57.220
+dei metadati
+
+00:07:57.220 --> 00:07:58.120
+e continuate a segmentare
+
+00:07:58.120 --> 00:07:58.840
+finché le risposte
+
+00:07:58.840 --> 00:07:59.300
+non diventano
+
+00:07:59.300 --> 00:08:00.200
+noiosamente prevedibili.
+
+00:08:00.460 --> 00:08:01.480
+E le metriche da monitorare.
+
+00:08:02.460 --> 00:08:03.320
+Capacità di risposta
+
+00:08:03.320 --> 00:08:04.080
+percentuale di query
+
+00:08:04.080 --> 00:08:04.900
+nel dominio risolte
+
+00:08:04.900 --> 00:08:05.420
+con citazioni
+
+00:08:05.420 --> 00:08:06.420
+della libreria prevista.
+
+00:08:07.060 --> 00:08:07.560
+Contenimento
+
+00:08:07.560 --> 00:08:08.500
+percentuale di risposte
+
+00:08:08.500 --> 00:08:09.560
+che citano solo fonti approvate.
+
+00:08:10.280 --> 00:08:11.160
+Qualità del silenzio
+
+00:08:11.160 --> 00:08:12.040
+chiarezza e frequenza
+
+00:08:12.040 --> 00:08:12.560
+del fallback
+
+00:08:12.560 --> 00:08:13.260
+quando interrogato
+
+00:08:13.260 --> 00:08:14.000
+fuori il dominio.
+
+00:08:15.220 --> 00:08:16.360
+Per un promemoria mentale
+
+00:08:16.360 --> 00:08:17.300
+prima di procedere
+
+00:08:17.300 --> 00:08:18.080
+solo librerie
+
+00:08:18.080 --> 00:08:19.420
+cartelle poco profonde
+
+00:08:19.420 --> 00:08:20.720
+metadati rigorosi
+
+00:08:20.720 --> 00:08:21.920
+solo contenuti approvati
+
+00:08:21.920 --> 00:08:23.140
+niente conoscenza generale
+
+00:08:23.140 --> 00:08:24.600
+molteplici agenti specifici
+
+00:08:24.600 --> 00:08:25.300
+limiti testati
+
+00:08:25.300 --> 00:08:26.100
+risultati misurati.
+
+00:08:26.100 --> 00:08:27.480
+Una volta bloccato questo
+
+00:08:27.480 --> 00:08:28.140
+tutto ciò che segue
+
+00:08:28.140 --> 00:08:28.760
+permessi
+
+00:08:28.760 --> 00:08:29.380
+etichette
+
+00:08:29.380 --> 00:08:30.620
+DLP lavora a vostro favore
+
+00:08:30.620 --> 00:08:31.400
+invece di contrastare
+
+00:08:31.400 --> 00:08:31.760
+il caos
+
+00:08:31.760 --> 00:08:32.300
+di un perimetro
+
+00:08:32.300 --> 00:08:32.940
+troppo ampio.
+
+00:08:33.840 --> 00:08:34.480
+Ora rafforziamo
+
+00:08:34.480 --> 00:08:35.240
+l'ereditarietà
+
+00:08:35.240 --> 00:08:36.200
+affinché la stanza stessa
+
+00:08:36.200 --> 00:08:36.900
+sia chiusa a chiave
+
+00:08:36.900 --> 00:08:37.620
+non solo lo schedario.
+
+00:08:38.340 --> 00:08:39.180
+Piano di controllo 2
+
+00:08:39.180 --> 00:08:39.680
+interrompete
+
+00:08:39.680 --> 00:08:40.220
+l'ereditarietà
+
+00:08:40.220 --> 00:08:41.240
+ed etichettate con convinzione.
+
+00:08:41.580 --> 00:08:42.360
+La conoscenza limitata
+
+00:08:42.360 --> 00:08:42.700
+è inutile
+
+00:08:42.700 --> 00:08:43.800
+se le porte sono spalancate.
+
+00:08:44.300 --> 00:08:44.780
+In SharePoint
+
+00:08:44.780 --> 00:08:45.700
+i permessi ereditati
+
+00:08:45.700 --> 00:08:46.260
+sono il maglione
+
+00:08:46.260 --> 00:08:46.900
+di seconda mano
+
+00:08:46.900 --> 00:08:47.640
+della sicurezza
+
+00:08:47.640 --> 00:08:49.040
+maladerenti
+
+00:08:49.040 --> 00:08:49.620
+pieni di buchi
+
+00:08:49.620 --> 00:08:50.660
+e misteriosamente adeguati
+
+00:08:50.660 --> 00:08:51.880
+finché non arriva il vento freddo.
+
+00:08:52.520 --> 00:08:53.300
+Gli agenti rispettano
+
+00:08:53.300 --> 00:08:53.760
+le ACL
+
+00:08:53.760 --> 00:08:54.360
+non l'ottimismo.
+
+00:08:54.860 --> 00:08:55.480
+Quindi interrompiamo
+
+00:08:55.480 --> 00:08:56.120
+l'ereditarietà
+
+00:08:56.120 --> 00:08:56.640
+dove conta
+
+00:08:56.640 --> 00:08:57.560
+assegniamo permessi
+
+00:08:57.560 --> 00:08:58.320
+univoci
+
+00:08:58.320 --> 00:08:58.800
+ed eliminiamo
+
+00:08:58.800 --> 00:08:59.500
+i gruppi generici
+
+00:08:59.500 --> 00:09:00.660
+che trasformano silenziosamente
+
+00:09:00.660 --> 00:09:01.000
+l'interno
+
+00:09:01.000 --> 00:09:02.080
+in qualcosa di esposto all'esterno.
+
+00:09:02.560 --> 00:09:03.740
+Iniziate con un audit scomodo
+
+00:09:03.740 --> 00:09:05.140
+dividete le vostre librerie
+
+00:09:05.140 --> 00:09:06.180
+sensibili in tre categorie
+
+00:09:06.180 --> 00:09:07.340
+da isolare
+
+00:09:07.340 --> 00:09:08.840
+condivisibili e sconosciute
+
+00:09:08.840 --> 00:09:09.560
+sconosciute
+
+00:09:09.560 --> 00:09:10.300
+è un segnale di allarme.
+
+00:09:10.680 --> 00:09:11.400
+Se non riuscite a spiegare
+
+00:09:11.400 --> 00:09:11.940
+chi ha accesso
+
+00:09:11.940 --> 00:09:12.620
+in una sola frase
+
+00:09:12.620 --> 00:09:13.620
+deve finire in da isolare
+
+00:09:13.620 --> 00:09:14.820
+finché non viene provato il contrario.
+
+00:09:14.820 --> 00:09:16.160
+Quindi per ogni libreria
+
+00:09:16.160 --> 00:09:16.680
+da isolare
+
+00:09:16.680 --> 00:09:17.200
+interrompete
+
+00:09:17.200 --> 00:09:18.440
+l'ereditarietà di permessi
+
+00:09:18.440 --> 00:09:19.600
+non a livello di sito
+
+00:09:19.600 --> 00:09:20.480
+ma a livello della libreria
+
+00:09:20.480 --> 00:09:21.440
+che custodisce Gelidero.
+
+00:09:21.900 --> 00:09:22.840
+Interrompere l'ereditarietà
+
+00:09:22.840 --> 00:09:23.520
+non è un dramma
+
+00:09:23.520 --> 00:09:24.320
+è maturità.
+
+00:09:25.360 --> 00:09:26.100
+Puntate a una membership
+
+00:09:26.100 --> 00:09:26.920
+minima esplicita
+
+00:09:26.920 --> 00:09:28.240
+un piccolo gruppo di proprietari
+
+00:09:28.240 --> 00:09:29.080
+un gruppo definito
+
+00:09:29.080 --> 00:09:29.740
+di membri e lettori
+
+00:09:29.740 --> 00:09:30.500
+solo dove il business
+
+00:09:30.500 --> 00:09:31.480
+lo richiede.
+
+00:09:31.620 --> 00:09:32.740
+Ripulite dai meccanismi pigri.
+
+00:09:33.100 --> 00:09:34.000
+Gruppi ampi come tutti
+
+00:09:34.000 --> 00:09:35.160
+tutti i tramitenti esterni
+
+00:09:35.160 --> 00:09:36.120
+e utenti autenticati
+
+00:09:36.120 --> 00:09:36.700
+si nascondono
+
+00:09:36.700 --> 00:09:37.580
+nei gruppi SharePoint
+
+00:09:37.580 --> 00:09:38.720
+come Matrioske.
+
+00:09:39.560 --> 00:09:40.120
+Tirateli fuori
+
+00:09:40.120 --> 00:09:40.700
+e sostituiteli
+
+00:09:40.700 --> 00:09:41.540
+con gruppi di sicurezza
+
+00:09:41.540 --> 00:09:42.440
+azzurati mappati
+
+00:09:42.440 --> 00:09:43.960
+su ruoli che gestite realmente.
+
+00:09:45.280 --> 00:09:46.280
+Gli ospiti dovrebbero essere
+
+00:09:46.280 --> 00:09:47.200
+eccezioni temporane
+
+00:09:47.200 --> 00:09:47.880
+identificabili
+
+00:09:47.880 --> 00:09:48.420
+mai inseriti
+
+00:09:48.420 --> 00:09:49.240
+in un gruppo SharePoint
+
+00:09:49.240 --> 00:09:50.080
+creato durante il lancio
+
+00:09:50.080 --> 00:09:51.100
+di un progetto tre anni fa.
+
+00:09:52.040 --> 00:09:52.740
+Se la parola a tutti
+
+00:09:52.740 --> 00:09:54.140
+appare nel nome del gruppo
+
+00:09:54.140 --> 00:09:54.720
+il tuo agente
+
+00:09:54.720 --> 00:09:55.680
+lo tratterà come un buffet.
+
+00:09:56.520 --> 00:09:57.180
+Standardizza i livelli
+
+00:09:57.180 --> 00:09:57.700
+di autorizzazione
+
+00:09:57.700 --> 00:09:58.200
+in modo da poter
+
+00:09:58.200 --> 00:09:58.900
+gestire logicamente.
+
+00:09:59.620 --> 00:10:00.140
+Livello A
+
+00:10:00.140 --> 00:10:01.360
+Librerie riservate
+
+00:10:01.360 --> 00:10:02.100
+proprietari
+
+00:10:02.100 --> 00:10:02.660
+membri
+
+00:10:02.660 --> 00:10:03.860
+piccoli gruppi di lettori
+
+00:10:03.860 --> 00:10:04.400
+nano
+
+00:10:04.400 --> 00:10:05.560
+o ristretti
+
+00:10:05.560 --> 00:10:06.220
+niente ospiti.
+
+00:10:08.120 --> 00:10:08.640
+Livello B
+
+00:10:08.640 --> 00:10:10.220
+Librerie solo per uso interno
+
+00:10:10.220 --> 00:10:11.200
+proprietari
+
+00:10:11.200 --> 00:10:11.740
+membri
+
+00:10:11.740 --> 00:10:12.900
+gruppi di lettori gestiti
+
+00:10:12.900 --> 00:10:13.800
+gruppo di dipartimento
+
+00:10:13.800 --> 00:10:14.740
+niente esterni.
+
+00:10:16.220 --> 00:10:16.680
+Livello C
+
+00:10:16.680 --> 00:10:17.660
+Librerie interne pubbliche
+
+00:10:17.660 --> 00:10:18.140
+proprietari
+
+00:10:18.140 --> 00:10:18.420
+membri
+
+00:10:18.420 --> 00:10:18.780
+lettori
+
+00:10:18.780 --> 00:10:19.500
+tutti i dipendenti
+
+00:10:19.500 --> 00:10:20.400
+ancora niente ospiti.
+
+00:10:21.100 --> 00:10:21.820
+Il modello è semplice
+
+00:10:21.820 --> 00:10:22.720
+perché deve essere applicato
+
+00:10:22.720 --> 00:10:23.280
+da esseri umani
+
+00:10:23.280 --> 00:10:24.440
+che si distraggono facilmente.
+
+00:10:25.100 --> 00:10:25.860
+Gli agenti eseguiranno
+
+00:10:25.860 --> 00:10:26.600
+ciò che codifichi
+
+00:10:26.600 --> 00:10:27.880
+quindi codifica il buon senso.
+
+00:10:28.280 --> 00:10:29.480
+Ecco le etichette di riservatezza.
+
+00:10:29.860 --> 00:10:30.860
+Le etichette non sono adesivi
+
+00:10:30.860 --> 00:10:31.600
+sono chiavi di policy.
+
+00:10:32.280 --> 00:10:33.000
+Mappi comportamenti
+
+00:10:33.000 --> 00:10:34.060
+a categorie come riservato
+
+00:10:34.060 --> 00:10:34.500
+limitato
+
+00:10:34.500 --> 00:10:34.860
+pubblico
+
+00:10:34.860 --> 00:10:35.220
+e così via.
+
+00:10:35.560 --> 00:10:36.300
+La trappola in cui cadono
+
+00:10:36.300 --> 00:10:37.040
+molti amministratori
+
+00:10:37.040 --> 00:10:37.800
+e lasciare che le etichette
+
+00:10:37.800 --> 00:10:38.700
+siano puramente decorabili.
+
+00:10:38.860 --> 00:10:39.460
+Abbiamo chiuso però.
+
+00:10:39.780 --> 00:10:40.480
+Allinea le etichette
+
+00:10:40.480 --> 00:10:41.180
+con preview DLP
+
+00:10:41.180 --> 00:10:41.800
+così le etichette
+
+00:10:41.800 --> 00:10:42.420
+diventa qualcosa
+
+00:10:42.420 --> 00:10:42.840
+che le macchine
+
+00:10:42.840 --> 00:10:43.900
+possono imporre.
+
+00:10:44.000 --> 00:10:44.460
+Ad esempio
+
+00:10:44.460 --> 00:10:45.460
+HR riservato
+
+00:10:45.460 --> 00:10:46.980
+attiva una policy DLP
+
+00:10:46.980 --> 00:10:47.940
+che blocca le azioni
+
+00:10:47.940 --> 00:10:48.940
+di elaborazione dell'agente
+
+00:10:48.940 --> 00:10:49.660
+anche se un utente
+
+00:10:49.660 --> 00:10:50.420
+può vedere il file.
+
+00:10:51.260 --> 00:10:52.060
+Sì hai sentito bene
+
+00:10:52.060 --> 00:10:53.020
+l'utente può leggere
+
+00:10:53.020 --> 00:10:53.520
+un sharepoint
+
+00:10:53.520 --> 00:10:54.300
+ma l'agente riceve
+
+00:10:54.300 --> 00:10:54.720
+un rifiuto
+
+00:10:54.720 --> 00:10:55.740
+a livello di elaborazione.
+
+00:10:56.520 --> 00:10:57.200
+Questa è la svolta
+
+00:10:57.200 --> 00:10:58.100
+etichette DLP
+
+00:10:58.100 --> 00:10:59.460
+separano la visibilità umana
+
+00:10:59.460 --> 00:11:00.060
+dall'automazione
+
+00:11:00.060 --> 00:11:00.660
+delle macchine.
+
+00:11:01.740 --> 00:11:02.600
+Vediamolo concretamente.
+
+00:11:02.980 --> 00:11:03.820
+Hai una libreria di policy
+
+00:11:03.820 --> 00:11:04.600
+HR etichettata
+
+00:11:04.600 --> 00:11:05.540
+come HR riservato.
+
+00:11:06.200 --> 00:11:06.880
+Un agente HR
+
+00:11:06.880 --> 00:11:07.460
+deve rispondere
+
+00:11:07.460 --> 00:11:07.880
+a domande
+
+00:11:07.880 --> 00:11:08.960
+basate su quella libreria.
+
+00:11:09.600 --> 00:11:09.780
+Bene
+
+00:11:09.780 --> 00:11:10.860
+all'identità di quell'agente
+
+00:11:10.860 --> 00:11:11.420
+viene concesso
+
+00:11:11.420 --> 00:11:12.100
+l'accesso in lettura
+
+00:11:12.100 --> 00:11:13.220
+a quella specifica libreria.
+
+00:11:14.000 --> 00:11:14.880
+Le librerie adiacenti
+
+00:11:14.880 --> 00:11:16.000
+come le bozze di lavoro HR
+
+00:11:16.000 --> 00:11:16.560
+sono isolate
+
+00:11:16.560 --> 00:11:17.480
+con permessi unici
+
+00:11:17.480 --> 00:11:18.040
+che l'identità
+
+00:11:18.040 --> 00:11:19.140
+dell'agente non possiede.
+
+00:11:20.340 --> 00:11:20.940
+Nel frattempo
+
+00:11:20.940 --> 00:11:21.800
+la tua policy DLP
+
+00:11:21.800 --> 00:11:22.760
+dice se l'etichetta
+
+00:11:22.760 --> 00:11:23.620
+HR riservato
+
+00:11:23.620 --> 00:11:24.680
+e il tentativo di accesso
+
+00:11:24.680 --> 00:11:25.700
+all'elaborazione dell'agente
+
+00:11:25.700 --> 00:11:27.060
+consenti solo se l'agente
+
+00:11:27.060 --> 00:11:28.140
+è tra gli agenti HR
+
+00:11:28.140 --> 00:11:28.920
+approvati.
+
+00:11:29.920 --> 00:11:30.580
+Ogni altro agente
+
+00:11:30.580 --> 00:11:31.480
+incluso il tuo entusiasta
+
+00:11:31.480 --> 00:11:32.980
+generalista di conoscenza aziendale
+
+00:11:32.980 --> 00:11:33.780
+viene bloccato
+
+00:11:33.780 --> 00:11:35.980
+così che fermi le interferenze
+
+00:11:35.980 --> 00:11:36.700
+anche quando qualcuno
+
+00:11:36.700 --> 00:11:37.240
+si dimentica
+
+00:11:37.240 --> 00:11:37.940
+concedere accesso
+
+00:11:37.940 --> 00:11:38.740
+all'agente sbagliato
+
+00:11:38.740 --> 00:11:39.740
+e per gli utenti
+
+00:11:39.740 --> 00:11:40.580
+che vedono troppo.
+
+00:11:41.080 --> 00:11:42.080
+Quella è l'escalation silenziosa.
+
+00:11:42.520 --> 00:11:43.160
+Se ti affidi solo
+
+00:11:43.160 --> 00:11:44.300
+alla visibilità dell'utente
+
+00:11:44.300 --> 00:11:45.360
+qualsiasi agente
+
+00:11:45.360 --> 00:11:46.360
+che agisce per conto suo
+
+00:11:46.360 --> 00:11:46.920
+erediterà
+
+00:11:46.920 --> 00:11:47.860
+questa eccessiva apertura.
+
+00:11:48.240 --> 00:11:48.720
+Quindi mantieni
+
+00:11:48.720 --> 00:11:49.860
+l'identità dell'agente limitato.
+
+00:11:50.180 --> 00:11:50.920
+Non creare agenti
+
+00:11:50.920 --> 00:11:51.780
+che operano come chiunque
+
+00:11:51.780 --> 00:11:52.220
+li richiami.
+
+00:11:52.680 --> 00:11:53.300
+Costruiscili in modo
+
+00:11:53.300 --> 00:11:53.920
+che operino come
+
+00:11:53.920 --> 00:11:54.780
+un'identità di servizio
+
+00:11:54.780 --> 00:11:55.340
+con privilegimi.
+
+00:11:56.120 --> 00:11:57.280
+Abbinare le etichette DLP
+
+00:11:57.280 --> 00:11:58.160
+così nemmeno gli utenti
+
+00:11:58.160 --> 00:11:58.660
+privilegiati
+
+00:11:58.660 --> 00:11:59.500
+possono indurre un agente
+
+00:11:59.500 --> 00:12:00.860
+a elaborare dati non autorizzati.
+
+00:12:01.760 --> 00:12:02.700
+Stai stratificando le difese
+
+00:12:02.700 --> 00:12:03.820
+come una persona responsabile
+
+00:12:03.820 --> 00:12:04.680
+senza pregare la pagina
+
+00:12:04.680 --> 00:12:05.120
+in postazione.
+
+00:12:05.640 --> 00:12:06.080
+Errori comuni
+
+00:12:06.080 --> 00:12:06.900
+che rovinano questo livello.
+
+00:12:07.600 --> 00:12:08.200
+Dare per scontato
+
+00:12:08.200 --> 00:12:08.660
+che nascosto
+
+00:12:08.660 --> 00:12:09.400
+significhi sicuro.
+
+00:12:10.300 --> 00:12:11.140
+Lasciare i siti di progetto
+
+00:12:11.140 --> 00:12:12.300
+con l'ereditarietà predefinita.
+
+00:12:13.120 --> 00:12:14.100
+Lasciare attivo l'accesso guest
+
+00:12:14.100 --> 00:12:14.820
+dopo che il fornitore
+
+00:12:14.820 --> 00:12:15.320
+se n'è andato.
+
+00:12:16.180 --> 00:12:16.840
+E peggio ancora
+
+00:12:16.840 --> 00:12:17.820
+inserire ampi gruppi
+
+00:12:17.820 --> 00:12:19.320
+M365 tra i lettori
+
+00:12:19.320 --> 00:12:20.260
+perché era più facile.
+
+00:12:21.080 --> 00:12:21.500
+È più facile
+
+00:12:21.500 --> 00:12:22.180
+finché il tuo agente
+
+00:12:22.180 --> 00:12:23.420
+non inserisce una citazione legale
+
+00:12:23.420 --> 00:12:24.240
+non esposta di vendita.
+
+00:12:24.820 --> 00:12:25.600
+Allora diventa una farsa
+
+00:12:25.600 --> 00:12:26.160
+agli incidenti.
+
+00:12:26.580 --> 00:12:27.500
+Un ritmo di implementazione
+
+00:12:27.500 --> 00:12:28.100
+che puoi ripetere.
+
+00:12:28.740 --> 00:12:29.400
+Isola libreria.
+
+00:12:29.820 --> 00:12:30.760
+Sostituisci gruppi ampi
+
+00:12:30.760 --> 00:12:31.600
+con gruppi basati sui ru.
+
+00:12:31.760 --> 00:12:32.460
+Assegna un'identità
+
+00:12:32.460 --> 00:12:33.460
+di servizio all'agente.
+
+00:12:34.020 --> 00:12:35.160
+Applica etichette di sensibilità
+
+00:12:35.160 --> 00:12:35.760
+a livello di file
+
+00:12:35.760 --> 00:12:36.280
+e di libreria.
+
+00:12:37.060 --> 00:12:38.180
+E associa le policy DLP
+
+00:12:38.180 --> 00:12:38.720
+alle etichette
+
+00:12:38.720 --> 00:12:39.880
+con condizioni di autorizzazione
+
+00:12:39.880 --> 00:12:40.800
+esplicite per l'agente.
+
+00:12:41.840 --> 00:12:42.260
+Esegui test
+
+00:12:42.260 --> 00:12:43.080
+con un setting query control.
+
+00:12:43.640 --> 00:12:44.420
+Dominio consentito
+
+00:12:44.420 --> 00:12:45.240
+adiacente negato
+
+00:12:45.240 --> 00:12:46.000
+agente etichettato
+
+00:12:46.000 --> 00:12:46.580
+ma non approvato
+
+00:12:46.580 --> 00:12:47.780
+bloccato con messaggio chiaro.
+
+00:12:48.100 --> 00:12:48.960
+Se una risposta trapela
+
+00:12:48.960 --> 00:12:50.080
+le autorizzazioni sono errate.
+
+00:12:50.780 --> 00:12:51.560
+Se l'agente elabora
+
+00:12:51.560 --> 00:12:52.500
+contenuti etichettati
+
+00:12:52.500 --> 00:12:53.480
+senza essere approvato
+
+00:12:53.480 --> 00:12:54.520
+la tua mappatura DLP
+
+00:12:54.520 --> 00:12:55.060
+è errata.
+
+00:12:55.660 --> 00:12:56.420
+Corregge la mappatura
+
+00:12:56.420 --> 00:12:57.520
+non la storia che ti racconti.
+
+00:12:57.860 --> 00:12:58.480
+Un'altra sfumatura.
+
+00:12:58.740 --> 00:12:59.680
+L'ereditarietà nel sito
+
+00:12:59.680 --> 00:13:00.920
+può rimanere per le cose banali.
+
+00:13:01.660 --> 00:13:02.340
+Non stiamo operando
+
+00:13:02.340 --> 00:13:02.920
+a cuore aperto
+
+00:13:02.920 --> 00:13:03.820
+sul menu della mensa.
+
+00:13:04.940 --> 00:13:06.120
+Riserva autorizzazioni univoche
+
+00:13:06.120 --> 00:13:06.600
+per le librerie
+
+00:13:06.600 --> 00:13:07.380
+che alimentano gli agenti.
+
+00:13:07.840 --> 00:13:08.300
+Ciò mantiene
+
+00:13:08.300 --> 00:13:09.540
+il carico di lavoro amministrativo
+
+00:13:09.540 --> 00:13:09.980
+gestibile
+
+00:13:09.980 --> 00:13:10.980
+proteggendo le superfici
+
+00:13:10.980 --> 00:13:12.020
+che l'automazione colpirà.
+
+00:13:12.920 --> 00:13:13.820
+Interrompi l'ereditarietà.
+
+00:13:14.140 --> 00:13:15.100
+Usa gruppi univoci e minimi.
+
+00:13:15.100 --> 00:13:16.000
+Come se l'etichetta
+
+00:13:16.000 --> 00:13:16.740
+controllasse denaro
+
+00:13:16.740 --> 00:13:17.540
+perché le fughe di notizie
+
+00:13:17.540 --> 00:13:18.120
+costano denaro.
+
+00:13:18.680 --> 00:13:19.420
+Poi collega l'etichetta
+
+00:13:19.420 --> 00:13:19.860
+alla DLP
+
+00:13:19.860 --> 00:13:20.560
+così gli agenti
+
+00:13:20.560 --> 00:13:21.240
+seguono le regole
+
+00:13:21.240 --> 00:13:21.920
+anche quando gli umani
+
+00:13:21.920 --> 00:13:22.600
+se ne dimenticano.
+
+00:13:23.060 --> 00:13:24.160
+Ora la stanza è chiusa a chiave
+
+00:13:24.160 --> 00:13:25.000
+non solo lo schedario.
+
+00:13:26.100 --> 00:13:26.920
+Piano di controllo 3
+
+00:13:26.920 --> 00:13:28.020
+Filtri di approvazione
+
+00:13:28.020 --> 00:13:29.140
+limiti di licenza consumo
+
+00:13:29.140 --> 00:13:29.940
+e policy sui dati.
+
+00:13:30.340 --> 00:13:30.980
+Hai definito l'ambito
+
+00:13:30.980 --> 00:13:31.420
+delle fonti
+
+00:13:31.420 --> 00:13:32.260
+e eliminato l'editarietà.
+
+00:13:32.680 --> 00:13:32.920
+Bene.
+
+00:13:33.960 --> 00:13:35.360
+Ora sbarra la porta principale
+
+00:13:35.360 --> 00:13:36.160
+così gli appassionati
+
+00:13:36.160 --> 00:13:37.200
+non creano agenti ombra
+
+00:13:37.200 --> 00:13:38.040
+con accessi impropri.
+
+00:13:39.240 --> 00:13:40.520
+Se chiunque può creare un agente
+
+00:13:40.520 --> 00:13:41.460
+la governance diventa
+
+00:13:41.460 --> 00:13:42.120
+un caos con le T.
+
+00:13:42.800 --> 00:13:43.600
+La soluzione è noiosa
+
+00:13:43.600 --> 00:13:44.120
+ed efficace.
+
+00:13:45.240 --> 00:13:45.640
+Approvazioni
+
+00:13:45.640 --> 00:13:46.480
+limiti di licenza
+
+00:13:46.480 --> 00:13:47.260
+e policy sui dati
+
+00:13:47.260 --> 00:13:48.580
+che fungono da cinture di sicurezza
+
+00:13:48.580 --> 00:13:49.260
+che non puoi slacciare
+
+00:13:49.260 --> 00:13:49.920
+durante la guida.
+
+00:13:50.580 --> 00:13:51.300
+Inizia con un flusso
+
+00:13:51.300 --> 00:13:51.780
+di approvazione
+
+00:13:51.780 --> 00:13:52.840
+per la creazione dell'agente.
+
+00:13:53.220 --> 00:13:53.880
+Niente liberi tutti.
+
+00:13:54.240 --> 00:13:55.240
+Le nuove richieste di agenti
+
+00:13:55.240 --> 00:13:56.560
+vanno ad approvatori designati.
+
+00:13:57.040 --> 00:13:57.740
+Pensa la sicurezza
+
+00:13:57.740 --> 00:13:58.300
+la conformità
+
+00:13:58.300 --> 00:13:59.140
+e un proprietario aziendale
+
+00:13:59.140 --> 00:14:00.300
+che capisce davvero il dominio.
+
+00:14:01.180 --> 00:14:01.920
+Imponi convenzioni
+
+00:14:01.920 --> 00:14:02.760
+di denominazione
+
+00:14:02.760 --> 00:14:04.100
+una dichiarazione di scopo
+
+00:14:04.100 --> 00:14:05.280
+un proprietario documentato
+
+00:14:05.280 --> 00:14:06.200
+un contatto di supporto
+
+00:14:06.200 --> 00:14:07.040
+e una data di scadenza.
+
+00:14:07.360 --> 00:14:08.060
+Nessuna approvazione.
+
+00:14:08.060 --> 00:14:08.980
+Nessuno scopo
+
+00:14:08.980 --> 00:14:09.580
+nessuna approvazione.
+
+00:14:10.000 --> 00:14:10.640
+Se suona pedante
+
+00:14:10.640 --> 00:14:11.440
+con gratulazioni
+
+00:14:11.440 --> 00:14:13.120
+stai finalmente facendo governance.
+
+00:14:13.860 --> 00:14:15.060
+Standardizza il modulo di richiesta.
+
+00:14:16.440 --> 00:14:17.660
+Richiedi pubblico di riferimento
+
+00:14:17.660 --> 00:14:18.920
+capacità aziendale servita
+
+00:14:18.920 --> 00:14:20.060
+fonti di conoscenze esatte
+
+00:14:20.060 --> 00:14:20.520
+con URL
+
+00:14:20.520 --> 00:14:21.640
+fino a livello di libreria
+
+00:14:21.640 --> 00:14:22.900
+aspettative di etichettatura
+
+00:14:22.900 --> 00:14:24.080
+comportamento di fallback
+
+00:14:24.080 --> 00:14:25.640
+non autorevolezza fuori ambito
+
+00:14:25.640 --> 00:14:27.360
+e l'identità di servizio da utilizzare.
+
+00:14:28.960 --> 00:14:29.860
+Obbligali a scegliere
+
+00:14:29.860 --> 00:14:31.100
+tra modelli preapprovati
+
+00:14:31.100 --> 00:14:31.760
+FQHR
+
+00:14:31.760 --> 00:14:32.500
+browser di policy
+
+00:14:32.500 --> 00:14:33.480
+KBIT e così via.
+
+00:14:34.380 --> 00:14:35.800
+Così redditi impostazioni predefinite
+
+00:14:35.800 --> 00:14:37.080
+vincolate invece dell'improvvisazione.
+
+00:14:37.080 --> 00:14:38.320
+Ora i limiti di licenza
+
+00:14:38.320 --> 00:14:40.020
+sceglierai uno dei due percorsi
+
+00:14:40.020 --> 00:14:42.000
+Microsoft 365 Copilot
+
+00:14:42.000 --> 00:14:42.800
+basato sull'utente
+
+00:14:42.800 --> 00:14:43.680
+o SharePoint a consumo
+
+00:14:43.680 --> 00:14:44.620
+la verità
+
+00:14:44.620 --> 00:14:46.360
+la licenza non è una voce di bilan
+
+00:14:46.360 --> 00:14:48.100
+è una superficie di controllo
+
+00:14:48.100 --> 00:14:49.480
+con Copilot basato su utente
+
+00:14:49.480 --> 00:14:50.580
+solo gli utenti con licenza
+
+00:14:50.580 --> 00:14:51.840
+possono usare le funzioni di agente
+
+00:14:51.840 --> 00:14:52.680
+il che limita naturalmente
+
+00:14:52.680 --> 00:14:53.320
+la proliferazione
+
+00:14:53.320 --> 00:14:54.860
+con la modalità Pay as you go
+
+00:14:54.860 --> 00:14:55.680
+si abilita il consumo
+
+00:14:55.680 --> 00:14:56.920
+a livello di tenant o ambiente
+
+00:14:56.920 --> 00:14:58.360
+e la fatturazione è centralizzata
+
+00:14:58.360 --> 00:14:59.940
+flessibile ma se non si presta attenzione
+
+00:14:59.940 --> 00:15:00.500
+è un open bar
+
+00:15:00.500 --> 00:15:02.280
+quindi si mettono dei recinti
+
+00:15:02.280 --> 00:15:04.180
+ambienti separati per pilota e produzione
+
+00:15:04.180 --> 00:15:05.200
+con Pay as you go attivo
+
+00:15:05.200 --> 00:15:06.780
+solo dove la finanza può monitorare il contatore
+
+00:15:06.780 --> 00:15:08.300
+avvisi di costo configurati
+
+00:15:08.300 --> 00:15:09.920
+affinché un progetto pilota fuori controllo
+
+00:15:09.920 --> 00:15:11.360
+non diventi un incubo per la tua fattura cloud
+
+00:15:11.360 --> 00:15:12.700
+la policy di approvazione
+
+00:15:12.700 --> 00:15:14.060
+deve includere la scelta della licenza
+
+00:15:14.060 --> 00:15:15.760
+se è Pay as you go
+
+00:15:15.760 --> 00:15:17.200
+richiedi un centro di costo
+
+00:15:17.200 --> 00:15:18.420
+un responsabile che firmi le spese
+
+00:15:18.420 --> 00:15:19.780
+e un profilo di utilizzo stimato
+
+00:15:19.780 --> 00:15:21.760
+se è basato su utente
+
+00:15:21.760 --> 00:15:22.800
+richiedi un elenco di utenti
+
+00:15:22.800 --> 00:15:24.580
+con licenza e un piano per la disattivazione
+
+00:15:24.580 --> 00:15:26.300
+non stai facendo il difficile
+
+00:15:26.300 --> 00:15:27.380
+stai evitando l'incidente
+
+00:15:27.380 --> 00:15:28.820
+del non sapevamo fosse attivo
+
+00:15:28.820 --> 00:15:30.560
+poi vengono le policy sui dati
+
+00:15:30.560 --> 00:15:31.980
+le regole che impediscono agli agenti
+
+00:15:31.980 --> 00:15:33.320
+di attingere da connettori proibiti
+
+00:15:33.320 --> 00:15:34.200
+come se fossero un bar
+
+00:15:34.200 --> 00:15:36.300
+usa le policy sui dati a livello di tenant
+
+00:15:36.300 --> 00:15:37.060
+di Power Platform
+
+00:15:37.060 --> 00:15:38.280
+per limitare quali connettori
+
+00:15:38.280 --> 00:15:40.000
+sono ammessi nello stesso gruppo di SharePoint
+
+00:15:40.000 --> 00:15:41.560
+gli agenti regolamentati
+
+00:15:41.560 --> 00:15:42.640
+vivono in un gruppo ristretto
+
+00:15:42.640 --> 00:15:44.460
+solo con Microsoft 365
+
+00:15:44.460 --> 00:15:45.680
+e API interne approvate
+
+00:15:45.680 --> 00:15:47.180
+niente web casuale
+
+00:15:47.180 --> 00:15:48.100
+niente servizi consumer
+
+00:15:48.100 --> 00:15:48.560
+niente shadow
+
+00:15:48.560 --> 00:15:50.000
+se serve un'integrazione
+
+00:15:50.000 --> 00:15:51.120
+passa attraverso una revisione
+
+00:15:51.120 --> 00:15:52.260
+ottiene un connettore aziendale
+
+00:15:52.260 --> 00:15:53.880
+e finisce nella lista dei consentiti
+
+00:15:53.880 --> 00:15:55.160
+se richiede tempo
+
+00:15:55.160 --> 00:15:56.960
+si chiama non violare la policy
+
+00:15:56.960 --> 00:15:58.940
+abbina quelle policy sui dati con Perview
+
+00:15:58.940 --> 00:16:01.780
+usa Perview per definire i confini dei dati
+
+00:16:01.780 --> 00:16:03.980
+le posizioni dei contenuti sensibili etichettati
+
+00:16:03.980 --> 00:16:05.500
+i percorsi di sfiltrazione vietati
+
+00:16:05.500 --> 00:16:06.900
+e il monitoraggio che segnala
+
+00:16:06.900 --> 00:16:08.460
+i tentativi di collegare i gruppi
+
+00:16:08.460 --> 00:16:10.740
+stai costruendo corsie e bande sonore
+
+00:16:10.740 --> 00:16:13.020
+l'agente può correre veloce all'interno della corsia
+
+00:16:13.020 --> 00:16:14.820
+non può saltare i guardrei
+
+00:16:14.820 --> 00:16:16.620
+nel traffico dei terminali pubblici
+
+00:16:16.620 --> 00:16:18.440
+implementa modelli di agenti
+
+00:16:18.440 --> 00:16:19.200
+con fonti pre-provate
+
+00:16:19.200 --> 00:16:20.900
+questa è la parte che tutti saltano
+
+00:16:20.900 --> 00:16:21.760
+e di cui poi si pentono
+
+00:16:21.760 --> 00:16:23.400
+i modelli includono
+
+00:16:23.400 --> 00:16:24.880
+la conscienza generale disabilitata
+
+00:16:24.880 --> 00:16:26.000
+il fallback non autorevole
+
+00:16:26.000 --> 00:16:27.140
+fonti a livello di libreria
+
+00:16:27.140 --> 00:16:28.500
+filtri di metadati richiesti
+
+00:16:28.500 --> 00:16:30.340
+e la corretta identità di servizio
+
+00:16:30.340 --> 00:16:32.460
+approva un modello di policy HR
+
+00:16:32.460 --> 00:16:34.420
+sai che arriva con le impostazioni predefinite corrette
+
+00:16:34.420 --> 00:16:35.980
+ma obbligaci a compilare solo i spazi
+
+00:16:35.980 --> 00:16:38.480
+così non reinventano la ruota con spigoli vivi
+
+00:16:38.480 --> 00:16:39.820
+errori comuni da affermare
+
+00:16:39.820 --> 00:16:42.700
+lasciare che i piloti nascano in siti non gestiti solo per test
+
+00:16:42.700 --> 00:16:45.100
+attivare pay g senza taggare costi o avvisi
+
+00:16:45.100 --> 00:16:47.520
+e concedere ruoli di maker a chiunque respiri
+
+00:16:47.520 --> 00:16:49.160
+non permettere mai agli agenti
+
+00:16:49.160 --> 00:16:50.160
+di usare la conoscenza generale
+
+00:16:50.160 --> 00:16:51.460
+come predefinita se non trovano nulla
+
+00:16:51.460 --> 00:16:54.300
+è così che si ottengono sciocchezze convincenti a volte
+
+00:16:54.300 --> 00:16:55.260
+incitazioni plausibili
+
+00:16:55.260 --> 00:16:57.040
+ritmo finale
+
+00:16:57.040 --> 00:16:58.420
+richiesta tramite modello
+
+00:16:58.420 --> 00:16:59.680
+revisione della sicurezza
+
+00:16:59.680 --> 00:17:01.560
+trio dei responsabili della conformità SAS
+
+00:17:01.560 --> 00:17:03.700
+scelta della licenza con controllo dei costi
+
+00:17:03.700 --> 00:17:05.000
+vincolo al gruppo dati riservati
+
+00:17:05.000 --> 00:17:06.140
+conferma dei perimetri per via
+
+00:17:06.140 --> 00:17:07.760
+approvazione con scadenza e pianificazione
+
+00:17:07.760 --> 00:17:09.220
+del rinnovo a 90 giorni
+
+00:17:09.220 --> 00:17:10.380
+nessun rinnovo
+
+00:17:10.380 --> 00:17:11.440
+disabilitazione automatica
+
+00:17:11.440 --> 00:17:13.080
+gli agenti non sono immortali
+
+00:17:13.080 --> 00:17:14.580
+e nemmeno i loro casi d'uso
+
+00:17:14.580 --> 00:17:17.040
+piano di controllo 4
+
+00:17:17.040 --> 00:17:18.820
+DLP che blocca davvero gli agenti
+
+00:17:18.820 --> 00:17:20.440
+modelli per via che colpiscono
+
+00:17:20.440 --> 00:17:22.240
+senza un'applicazione in tempo reale
+
+00:17:22.240 --> 00:17:24.140
+gli agenti sono solo corrieri di dati ad alta velocità
+
+00:17:24.140 --> 00:17:25.380
+servono i freni
+
+00:17:25.380 --> 00:17:26.800
+ecco i modelli di DLP di Purview
+
+00:17:26.800 --> 00:17:27.820
+che non si limitano a munire
+
+00:17:27.820 --> 00:17:29.280
+bloccano, avvisano e lasciano una traccia
+
+00:17:29.280 --> 00:17:30.360
+che il tuo revisore apprezzerà
+
+00:17:30.360 --> 00:17:31.960
+perché è importante
+
+00:17:31.960 --> 00:17:33.220
+gli agenti elaborano i contenuti
+
+00:17:33.220 --> 00:17:34.200
+non si limitano a visualizzare
+
+00:17:34.200 --> 00:17:36.220
+la visualizzazione può essere permessa a un essere umano
+
+00:17:36.220 --> 00:17:37.520
+l'elaborazione automatizzata
+
+00:17:37.520 --> 00:17:39.160
+è una classe di rischio diversa
+
+00:17:39.160 --> 00:17:41.300
+la soluzione è vincolare il rilevamento di sensibilità
+
+00:17:41.300 --> 00:17:42.320
+ai modelli a blocchi d'azione
+
+00:17:42.320 --> 00:17:44.020
+espliciti per i contesti degli agenti
+
+00:17:44.020 --> 00:17:45.720
+ecco la struttura fondamentale
+
+00:17:45.720 --> 00:17:48.080
+crea policy che puntino alle posizioni SharePoint
+
+00:17:48.080 --> 00:17:49.120
+che alimentano gli agenti
+
+00:17:49.120 --> 00:17:50.760
+corrispondano alle etichette di sensibilità
+
+00:17:50.760 --> 00:17:51.980
+ai tipi di informazioni sensibili
+
+00:17:51.980 --> 00:17:53.580
+impostazioni per bloccare l'elaborazione
+
+00:17:53.580 --> 00:17:55.140
+la condivisione e il download da parte della gente
+
+00:17:55.140 --> 00:17:56.780
+condivisione e il download da parte della gente
+
+00:17:56.780 --> 00:17:58.200
+sì, soglie di confidenza
+
+00:17:58.200 --> 00:17:59.240
+invece di decorazioni
+
+00:17:59.240 --> 00:18:01.580
+per modelli rumorosi
+
+00:18:01.580 --> 00:18:02.520
+come le P generiche
+
+00:18:02.520 --> 00:18:03.660
+aumenta la confidenza
+
+00:18:03.660 --> 00:18:05.160
+e richiede molteplici riscontri
+
+00:18:05.160 --> 00:18:06.820
+per i beni preziosi
+
+00:18:06.820 --> 00:18:07.680
+segreti industriali
+
+00:18:07.680 --> 00:18:09.540
+corrispondenze esatte di EDI dipendenti
+
+00:18:09.540 --> 00:18:11.480
+usa alta gravità con blocco immediato
+
+00:18:11.480 --> 00:18:12.800
+modelli che colpiscono
+
+00:18:12.800 --> 00:18:15.520
+etichette di sensibilità mappate
+
+00:18:15.520 --> 00:18:16.220
+al blocco della gente
+
+00:18:16.220 --> 00:18:17.480
+a meno che non siano in lista consentita
+
+00:18:17.480 --> 00:18:20.220
+tipi di informazioni sensibili
+
+00:18:20.220 --> 00:18:20.940
+i di finanziari
+
+00:18:20.940 --> 00:18:22.120
+identificatori governativi
+
+00:18:22.120 --> 00:18:22.840
+termini sanitari
+
+00:18:22.840 --> 00:18:23.480
+ottimizzati
+
+00:18:23.480 --> 00:18:24.740
+con maggiore confidenza
+
+00:18:24.740 --> 00:18:26.860
+corrispondenza esatta dei dati
+
+00:18:26.860 --> 00:18:27.540
+EDM
+
+00:18:27.540 --> 00:18:28.820
+per i tuoi identificatori reali
+
+00:18:28.820 --> 00:18:29.620
+numeri di dipendenti
+
+00:18:29.620 --> 00:18:30.220
+di clienti
+
+00:18:30.220 --> 00:18:31.080
+così falsi e positivi
+
+00:18:31.080 --> 00:18:32.040
+non ti sommergeranno
+
+00:18:32.040 --> 00:18:34.000
+dizionario di parole chiave
+
+00:18:34.000 --> 00:18:34.680
+per nomi in codice
+
+00:18:34.680 --> 00:18:35.520
+dei progetti proprietari
+
+00:18:35.520 --> 00:18:36.000
+basso volume
+
+00:18:36.000 --> 00:18:36.660
+segnale elevato
+
+00:18:36.660 --> 00:18:38.200
+azioni che contano
+
+00:18:38.200 --> 00:18:39.540
+blocco con o verrai disabilitato
+
+00:18:39.540 --> 00:18:40.480
+per gli agenti
+
+00:18:40.480 --> 00:18:41.700
+gli umani possono giustificarsi
+
+00:18:41.700 --> 00:18:42.100
+gli agenti
+
+00:18:42.100 --> 00:18:43.940
+le macchine non hanno contesto aziendale
+
+00:18:43.940 --> 00:18:44.440
+hanno trigger
+
+00:18:44.440 --> 00:18:45.760
+metti in quarantena
+
+00:18:45.760 --> 00:18:46.440
+non limita il download
+
+00:18:46.440 --> 00:18:47.580
+quando attivato dei flussi di lavoro
+
+00:18:47.580 --> 00:18:49.540
+se l'agente non può recuperare il file
+
+00:18:49.540 --> 00:18:50.140
+non può allucinare
+
+00:18:50.140 --> 00:18:51.320
+basandosi su di esso
+
+00:18:51.320 --> 00:18:52.100
+avviso il secops
+
+00:18:52.100 --> 00:18:52.940
+con contesto ricco
+
+00:18:52.940 --> 00:18:54.340
+etichetta della libreria del sito
+
+00:18:54.340 --> 00:18:55.180
+modello di attivazione
+
+00:18:55.180 --> 00:18:56.340
+identità dell'agente chiamante
+
+00:18:56.340 --> 00:18:57.780
+riduzione del rumore
+
+00:18:57.780 --> 00:18:58.560
+per evitare che le persone
+
+00:18:58.560 --> 00:18:59.500
+aggirino i controlli
+
+00:18:59.500 --> 00:19:00.840
+inizia in modalità simulazione
+
+00:19:00.840 --> 00:19:01.740
+in siti non di produzione
+
+00:19:01.740 --> 00:19:02.840
+ottimizza le soglie
+
+00:19:02.840 --> 00:19:03.400
+finché gli avvisi
+
+00:19:03.400 --> 00:19:04.180
+non riflettono la realtà
+
+00:19:04.180 --> 00:19:04.780
+non la fantasia
+
+00:19:04.780 --> 00:19:06.000
+limita rigorosamente
+
+00:19:06.000 --> 00:19:06.940
+le librerie degli agenti
+
+00:19:06.940 --> 00:19:07.280
+all'inizio
+
+00:19:07.280 --> 00:19:07.980
+espandi solo dopo
+
+00:19:07.980 --> 00:19:08.740
+che il segnale è pulito
+
+00:19:08.740 --> 00:19:10.040
+usa condizioni combinate
+
+00:19:10.040 --> 00:19:11.640
+etichetta più tipo di informazione sensibile
+
+00:19:11.640 --> 00:19:12.140
+due serrature
+
+00:19:12.140 --> 00:19:12.700
+una porta
+
+00:19:12.700 --> 00:19:14.120
+la messaggistica per l'utente
+
+00:19:14.120 --> 00:19:14.940
+non dettaglio trascurante
+
+00:19:14.940 --> 00:19:16.380
+è la differenza tra conformità
+
+00:19:16.380 --> 00:19:17.240
+e canali secondari
+
+00:19:17.240 --> 00:19:19.080
+scrivi testi di errori chiari
+
+00:19:19.080 --> 00:19:21.120
+questo agente non è autorizzato
+
+00:19:21.120 --> 00:19:22.840
+a elaborare contenuti HR riservati
+
+00:19:22.840 --> 00:19:24.320
+chiedi all'agente HR
+
+00:19:24.320 --> 00:19:25.680
+richiedi l'accesso tramite la prevista
+
+00:19:25.680 --> 00:19:27.300
+stai offrendo loro la porta giusta
+
+00:19:27.300 --> 00:19:28.120
+non un muro di mattone
+
+00:19:28.120 --> 00:19:29.400
+se dici solo bloccato
+
+00:19:29.400 --> 00:19:30.780
+incolleranno i dati su Teams
+
+00:19:30.780 --> 00:19:32.080
+è colpa tua
+
+00:19:32.080 --> 00:19:33.040
+errori comuni
+
+00:19:33.680 --> 00:19:34.980
+limita la DLP exchange a Teams
+
+00:19:34.980 --> 00:19:36.040
+perché le policy di SharePoint
+
+00:19:36.040 --> 00:19:36.820
+erano rumorose
+
+00:19:36.820 --> 00:19:38.760
+erano rumorose perché non le ottimizzate
+
+00:19:38.760 --> 00:19:40.940
+escludere SharePoint anche per le prestazioni
+
+00:19:40.940 --> 00:19:42.000
+prestazioni di cosa?
+
+00:19:42.320 --> 00:19:43.520
+del tuo prossimo incidente da gestire?
+
+00:19:44.060 --> 00:19:45.880
+infine affidarsi solo a tipi dpi generici
+
+00:19:45.880 --> 00:19:46.660
+ignorando le DM
+
+00:19:46.660 --> 00:19:48.280
+possiedi identificatori esatti
+
+00:19:48.280 --> 00:19:49.120
+usa lì
+
+00:19:49.120 --> 00:19:50.480
+la prova del 9
+
+00:19:50.480 --> 00:19:52.120
+un agente non autorizzato
+
+00:19:52.120 --> 00:19:53.280
+tenta di rispondere a una domanda
+
+00:19:53.280 --> 00:19:54.960
+che richiede un file con etichetta riservata
+
+00:19:54.960 --> 00:19:56.420
+il risultato dovrebbe essere
+
+00:19:56.420 --> 00:19:57.120
+un blocco immediato
+
+00:19:57.120 --> 00:19:58.020
+un messaggio istruttivo
+
+00:19:58.020 --> 00:19:59.060
+e un avviso di alta gravità
+
+00:19:59.060 --> 00:19:59.760
+nella tua pipeline
+
+00:19:59.760 --> 00:20:02.140
+se invece ricevi una risposta sicura
+
+00:20:02.140 --> 00:20:03.620
+la tua DLP è solo decorativa
+
+00:20:03.620 --> 00:20:04.500
+dalle dei denti
+
+00:20:04.500 --> 00:20:05.180
+non fare solo segnale

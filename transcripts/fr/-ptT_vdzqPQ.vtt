@@ -1,0 +1,2836 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:04.920
+Python est le langage de l'IA. Faux. Dans l'écosystème Microsoft, c'est l'IA qui fait le lien, pas vous.
+
+00:00:05.580 --> 00:00:08.120
+Vous continuez à forcer l'usage de Python dans Power Automate et Power BI,
+
+00:00:08.220 --> 00:00:10.160
+puis vous étonnez que vos flux soient instables comme une chaise à trois pieds.
+
+00:00:10.780 --> 00:00:11.340
+Voici la solution.
+
+00:00:11.800 --> 00:00:16.380
+Je vais vous montrer pourquoi l'orchestration par agent et copilote transforme les scripts de type TypeScript en liant privilégié,
+
+00:00:16.720 --> 00:00:22.480
+relaie Python à l'analytique isolée, et fusionne construction, débogage et déploiement en une boucle conversationnelle unique.
+
+00:00:23.180 --> 00:00:25.720
+Restez pour découvrir l'étape secrète qui tue l'inflation des bugs,
+
+00:00:25.720 --> 00:00:31.120
+l'erreur qui draine silencieusement les budgets, et le modèle hybride pour garder Python sans la douleur.
+
+00:00:32.800 --> 00:00:35.000
+Le problème, les frictions de Python au sein de Power Platform.
+
+00:00:35.780 --> 00:00:37.500
+Commençons par l'évidence qui, curieusement, ne l'est pas.
+
+00:00:37.880 --> 00:00:39.860
+Power Automate n'exécute pas de Python arbitraire.
+
+00:00:40.420 --> 00:00:44.120
+Les Office Scripts basés sur TypeScript sont l'interface de script natif pour Microsoft 365.
+
+00:00:44.640 --> 00:00:46.460
+Excel en ligne les héberge. C'est la voie à suivre.
+
+00:00:46.740 --> 00:00:50.240
+En assistant sur Python, vous ajoutez des Azure Functions, des LogiCapt ou des connecteurs personnalisés.
+
+00:00:50.540 --> 00:00:55.040
+Voilà avec du calcul externe, des pipelines de déploiement, de l'authentification, et mon préféré, des erreurs d'exécution mystérieuses.
+
+00:00:55.040 --> 00:00:58.000
+Pourquoi cela nuit, simple économie combinée à la probabilité ?
+
+00:00:58.000 --> 00:01:00.680
+Une configuration externe signifie plus de services à configurer,
+
+00:01:01.120 --> 00:01:05.040
+plus d'identifiants à renouveler, et plus de coûts qui s'accumulent même, pendant votre sommeil.
+
+00:01:05.580 --> 00:01:07.220
+Le typage dynamique ajoute une part de roulette russe.
+
+00:01:07.520 --> 00:01:11.300
+Le code semble compilé car il n'y a pas de compilation, puis échoue en plein vol car un champ n'était pas celui prévu.
+
+00:01:11.840 --> 00:01:13.340
+Revu. Dans un flux, ce n'est pas amusant.
+
+00:01:13.760 --> 00:01:18.040
+C'est une approbation bloquée, un SLA manqué, et un énième ticket intitulé « Acquire Jean-E » en minuscule.
+
+00:01:18.920 --> 00:01:20.680
+Scénario spécifique, flux de données Power BI.
+
+00:01:21.260 --> 00:01:22.160
+Vous transformez des données.
+
+00:01:22.160 --> 00:01:27.080
+Copilot peut désormais générer du Power Query M ou du Python pour vous, dans un flux de données Gen 2.
+
+00:01:27.760 --> 00:01:32.420
+Super, jusqu'à ce que vous mélangez cela avec un service Python séparé pour des tâches de liaison que Power Automate aurait pu gérer nativement.
+
+00:01:32.800 --> 00:01:34.340
+Votre lignage traverse désormais plusieurs produits.
+
+00:01:34.680 --> 00:01:38.060
+Pour l'observabilité, essayez de tracer une erreur d'un flux vers une fonction, puis un flux de données,
+
+00:01:38.300 --> 00:01:39.640
+avant que vos parties prenantes ne demandent.
+
+00:01:39.780 --> 00:01:42.160
+C'est fini, c'est fini, pour la septième fois.
+
+00:01:42.900 --> 00:01:43.880
+Flux Power Automate.
+
+00:01:44.200 --> 00:01:46.160
+L'intérêt réside dans les connecteurs natifs et les Office Scripts.
+
+00:01:46.160 --> 00:01:50.060
+Certains insèrent encore du Python derrière un connecteur personnalisé pour renommer des colonnes dans Excel.
+
+00:01:50.680 --> 00:01:52.520
+C'est comme appeler une dépanneuse pour sortir de son garage.
+
+00:01:53.460 --> 00:01:54.800
+Chaque saut augmente la fragilité.
+
+00:01:55.640 --> 00:01:56.840
+Les schémas de connecteurs dérivent.
+
+00:01:57.220 --> 00:01:58.540
+Les dépendances des fonctions vieillissent.
+
+00:01:58.980 --> 00:02:04.540
+Les permissions s'étendent sur les rôles entra, les groupes de ressources et des comptes de stockage mystère dont personne ne revendique la création.
+
+00:02:04.540 --> 00:02:06.860
+Notebooks fabrique.
+
+00:02:06.980 --> 00:02:10.820
+Oui, Python a sa place ici pour la science des données, le ML et les calculs lourds, mais quand vous utilisez...
+
+00:02:10.820 --> 00:02:13.740
+Des notebooks comme liens d'orchestration, vous soudez la logique métier à un noyau de calcul.
+
+00:02:14.760 --> 00:02:17.660
+La planification, la validation et les entrées slash sorties deviennent du sur mesure.
+
+00:02:18.300 --> 00:02:20.680
+Une mise à jour d'environnement plus tard, Panda se passe à une version mineure,
+
+00:02:20.780 --> 00:02:23.180
+et votre simple script de liaison devient une strata archéologique.
+
+00:02:24.120 --> 00:02:25.360
+Les débutants pensent qu'ils simplifient les choses.
+
+00:02:25.620 --> 00:02:29.140
+En réalité, ils créent un point de défaillance procédurale unique, avec du YAML en prime.
+
+00:02:29.680 --> 00:02:32.240
+Ce que la plupart des gens ignorent, c'est qu'Office Scripts n'est pas un jouet TypeScript.
+
+00:02:32.240 --> 00:02:37.420
+C'est la solution officielle pour automatiser Excel et les tâches Microsoft 365 sans alourdir l'infrastructure.
+
+00:02:37.960 --> 00:02:42.680
+Comparez cela au TypeScript Node complet que vous pourriez utiliser dans Azure Functions pour des API robustes quand vous en avez vraiment besoin.
+
+00:02:43.100 --> 00:02:45.080
+Python au sein de Power Platform est indirect par conception.
+
+00:02:45.620 --> 00:02:45.960
+Vous pouvez le faire.
+
+00:02:46.420 --> 00:02:47.320
+Vous ne devriez pas le faire pour de la santé.
+
+00:02:47.600 --> 00:02:49.640
+Parlons du calcul des coûts, sans fioritures.
+
+00:02:50.240 --> 00:02:52.320
+Les flux simples sont économiques car ils restent dans la plateforme.
+
+00:02:52.900 --> 00:02:55.860
+Les connecteurs, déclencheurs et Office Scripts utilisent vos licences existantes.
+
+00:02:56.540 --> 00:03:00.160
+Si vous ajoutez Python via Functions, vous payez en deux devises, argent et attention.
+
+00:03:00.160 --> 00:03:02.780
+De l'argent pour l'exécution, le stockage et le réseau.
+
+00:03:02.960 --> 00:03:06.840
+De l'attention pour le versionning, la sécurisation des images, les secrets, les tentatives, les démarrages à froid.
+
+00:03:07.080 --> 00:03:09.500
+Et le traditionnel, pourquoi ça échouait à 2h14 du matin ? Une sague.
+
+00:03:09.940 --> 00:03:10.900
+A petite échelle, ça va ?
+
+00:03:10.900 --> 00:03:13.560
+A l'échelle d'une organisation, c'est une ligne budgétaire teintée de regrets.
+
+00:03:14.300 --> 00:03:16.000
+Les modes de défaillance courant se répètent sans cesse.
+
+00:03:16.740 --> 00:03:19.860
+Des connecteurs fragiles où votre spécification swagger a un champ de retard sur la réalité.
+
+00:03:20.540 --> 00:03:21.080
+Dérives des versions.
+
+00:03:21.420 --> 00:03:23.840
+Mise à jour de bibliothèques non figées parce que quelqu'un adore la dernière version.
+
+00:03:23.840 --> 00:03:28.220
+Prolifération des permissions principaux de service avec des droits temporaires que qui deviennent permanents.
+
+00:03:29.640 --> 00:03:34.700
+Débogage inter-service, relecture des exécutions dans les journaux Power Automate, Azure Functions et Dataflow comme un podcast True Crime.
+
+00:03:35.360 --> 00:03:41.220
+La liberté du typage dynamique est amusante jusqu'à 15h0 lors de la clôture trimestrielle quand votre flux réussit avec des données erronées.
+
+00:03:41.700 --> 00:03:44.280
+Les frontières fortement typées interceptent les erreurs avant la mise en production.
+
+00:03:44.900 --> 00:03:48.600
+Dans Power Platform, les scripts de type TypeScript et les connecteurs schématisés vous offrent ces garde-fous.
+
+00:03:48.600 --> 00:03:52.200
+Python peut aussi avoir des types certes, mais la plupart d'entre vous ne les imposent pas dans les flux.
+
+00:03:52.440 --> 00:03:54.320
+Ne contestez pas, vos fichiers journaux l'ont déjà fait pour vous.
+
+00:03:54.680 --> 00:03:56.000
+Et voici la transition que vous attendiez.
+
+00:03:56.580 --> 00:04:00.540
+Si la friction s'accumule à chaque fois que vous bricolez du code, qu'est-ce qui remplace ce bricolage ?
+
+00:04:00.540 --> 00:04:04.720
+Place à l'IA qui écrit et exécute ce code pour vous dans les limites optimisées par la plateforme.
+
+00:04:05.460 --> 00:04:09.540
+Copilot peut traduire le langage naturel en Office Scripts pour les tâches Microsoft 365.
+
+00:04:11.180 --> 00:04:15.880
+Dans Power BI, Copilot utilise les métadonnées du modèle sémantique pour générer du M ou du Python avec précision
+
+00:04:15.880 --> 00:04:17.820
+et créer des structures de rapport en quelques secondes.
+
+00:04:17.820 --> 00:04:23.760
+Des agents, comme l'agent de typage, coordonnent les outils avec mémoire et garde-fous réduisant le ping-pong entre spécifications, code, déploiement et débogage.
+
+00:04:24.380 --> 00:04:28.980
+Vous restreignez la surface d'exposition, vous obtenez des interfaces typées là où c'est nécessaire, et vous gardez Python là où il excelle.
+
+00:04:29.500 --> 00:04:31.220
+De l'analytique maîtrisée, pas du ruban adhésif.
+
+00:04:31.660 --> 00:04:33.580
+Oui, vous pouvez vous y accrocher, mais Python peut tout faire.
+
+00:04:34.480 --> 00:04:35.220
+Ruban adhésif aussi.
+
+00:04:35.580 --> 00:04:37.380
+Cela n'en fait pas la fixation adaptée aux avions.
+
+00:04:37.900 --> 00:04:38.740
+Regardez l'orchestration native.
+
+00:04:39.220 --> 00:04:40.140
+Laissez l'IA écrire la colle.
+
+00:04:40.740 --> 00:04:42.760
+Mettez Python dans des notebooks ou des services conçus pour cela.
+
+00:04:43.240 --> 00:04:45.540
+Vous dépenserez moins, casserez moins, et c'est ce qui fait mal.
+
+00:04:45.540 --> 00:04:48.440
+Vous livrerez plus ?
+
+00:04:48.440 --> 00:04:50.260
+Pourquoi les approches actuelles échouent ?
+
+00:04:50.260 --> 00:04:51.760
+Code manuel et playbook statique.
+
+00:04:52.440 --> 00:04:54.320
+La boucle de codage manuel paraît héroïque au tableau.
+
+00:04:54.440 --> 00:04:56.640
+Exigence, code, déploiement, test, correctif, redéploiement.
+
+00:04:57.280 --> 00:04:58.940
+En réalité, c'est un jeu de taux pour ralenti.
+
+00:04:59.540 --> 00:05:00.940
+Les règles métiers changent en cours de sprint.
+
+00:05:01.560 --> 00:05:03.240
+Votre schéma final change avant le déjeuner.
+
+00:05:03.980 --> 00:05:05.720
+La seule constante est un nouveau redéploiement.
+
+00:05:06.500 --> 00:05:08.680
+Dans la Power Platform, cette boucle est encore plus pénible,
+
+00:05:08.680 --> 00:05:12.520
+car chaque saut de Power Automate vers Azure Functions puis Power BI
+
+00:05:12.520 --> 00:05:14.980
+amplifie les frictions et multiplie vos modes de défaillance.
+
+00:05:15.540 --> 00:05:17.180
+Les playbooks statiques sont l'autre piège.
+
+00:05:17.780 --> 00:05:19.920
+Vous avez écrit un guide infaillible pour la logique de fin de trimestre.
+
+00:05:20.980 --> 00:05:22.980
+Puis les ventes inventent une nouvelle remise, la finance.
+
+00:05:23.180 --> 00:05:25.040
+Ajustent la comptabilisation des revenus et le juridique.
+
+00:05:25.320 --> 00:05:26.800
+Ajoutent une approbation en quatre étapes hier.
+
+00:05:28.260 --> 00:05:30.160
+Votre colpiton dans les functions ne plie pas, elle craque.
+
+00:05:31.100 --> 00:05:33.700
+Vous mettez à jour le code, les dépendances, reconstruisez les conteneurs
+
+00:05:33.700 --> 00:05:36.460
+et redécouvrez que les démarrages à froid adorent survenir pendant les démos de direction.
+
+00:05:37.080 --> 00:05:38.160
+Fascinant, n'est-ce pas ?
+
+00:05:38.160 --> 00:05:41.360
+La vérité que la plupart évite, la liberté du typage dynamique semble rapide quand on est seul.
+
+00:05:41.360 --> 00:05:43.580
+A l'échelle des flux, c'est la roulette russe des bugs.
+
+00:05:44.480 --> 00:05:47.540
+Un champ optionnel passe de chaîne à nombre et votre fonction navigue joyeusement
+
+00:05:47.540 --> 00:05:51.380
+jusqu'à ce qu'une branche attende du texte et génère une exception à l'exécution à l'exécution.
+
+00:05:52.660 --> 00:05:54.180
+Ce n'est pas un test unitaire qui échoue bruyamment,
+
+00:05:54.320 --> 00:05:56.240
+c'est la production qui classe silencieusement mal les transactions.
+
+00:05:57.520 --> 00:05:59.160
+Et oui, votre piste d'audit est pratiquement un roman.
+
+00:05:59.720 --> 00:06:01.080
+L'observabilité est une chasse au trésor.
+
+00:06:01.080 --> 00:06:04.840
+Les erreurs NES dans Power Automate sont transformées dans un connecteur personnalisé,
+
+00:06:04.940 --> 00:06:07.600
+déclenchent une fonction Python, rebondissent vers Dataflow Gen 2
+
+00:06:07.600 --> 00:06:10.260
+et finissent par apparaître comme une tuile cassée dans Power BI.
+
+00:06:11.280 --> 00:06:14.220
+Maintenant, vous lisez 5 journaux qui ne s'accordent pas sur le même format de redatage.
+
+00:06:14.700 --> 00:06:15.640
+Vous appelez cela une investigation.
+
+00:06:16.320 --> 00:06:18.100
+Les utilisateurs appellent cela, nous n'avons toujours pas les chiés.
+
+00:06:18.560 --> 00:06:19.100
+Micro-histoire.
+
+00:06:19.520 --> 00:06:21.460
+Une équipe a gagné des heures sur ses rapports mensuels
+
+00:06:21.460 --> 00:06:24.020
+en consolidant les transformations dans une seule fonction Python.
+
+00:06:24.620 --> 00:06:26.780
+Ça a fonctionné jusqu'à ce que les conflits de dépendance ressurgissent.
+
+00:06:26.780 --> 00:06:29.920
+Une mise à jour mineure de Pandas a changé le comportement par défaut,
+
+00:06:30.000 --> 00:06:32.120
+leur fonction a converti silencieusement les valeurs nulles
+
+00:06:32.120 --> 00:06:34.780
+et deux semaines plus tard, leur rapport d'écart était juste assez faux pour être dangereux.
+
+00:06:35.380 --> 00:06:35.900
+Donc corrigez le problème.
+
+00:06:36.320 --> 00:06:38.380
+Puis c'est revenu, car le verrouillage des versions était dans le backlog.
+
+00:06:38.840 --> 00:06:40.920
+La récurrence des bugs n'est pas un mystère, c'est un flux de processus.
+
+00:06:41.260 --> 00:06:42.100
+Et la gouvernance ?
+
+00:06:42.100 --> 00:06:43.440
+Les connecteurs personnalisés vieillissent mal.
+
+00:06:44.180 --> 00:06:46.420
+Les spécifications OpenAPI se décalent de la réalité.
+
+00:06:46.620 --> 00:06:49.680
+Les jetons expirent, les principaux de service accumulent des droits excessifs temporairement
+
+00:06:49.680 --> 00:06:53.860
+et votre pipeline autrefois élégant est devenu une machine de rue Goldberg avec des failles Socks.
+
+00:06:54.760 --> 00:06:56.240
+La boucle manuelle ne coûte pas seulement du temps,
+
+00:06:56.240 --> 00:06:57.560
+elle accumule de la dette opérationnelle.
+
+00:06:58.360 --> 00:07:01.180
+Chaque correctif rapide est une future panne avec une invitation dans le calendrier.
+
+00:07:01.580 --> 00:07:04.040
+Le centre ne peut tenir, car le centre est une colle fragile.
+
+00:07:04.500 --> 00:07:06.140
+Le code manuel fonctionne quand le domaine est stable.
+
+00:07:06.760 --> 00:07:08.480
+La logique métier de Power Platform n'est pas stable.
+
+00:07:09.220 --> 00:07:10.340
+Par conséquent, soyez attentifs.
+
+00:07:11.120 --> 00:07:14.120
+Votre orchestration doit être adaptative, typée aux extrémités et générée,
+
+00:07:14.360 --> 00:07:16.760
+près des primitifs de la plateforme, pas cousue, main de loin.
+
+00:07:17.480 --> 00:07:18.700
+Arrêtez de traiter les ongles comme une application.
+
+00:07:19.200 --> 00:07:20.440
+Laissez un agent orchestré contraindre.
+
+00:07:21.140 --> 00:07:22.380
+La meilleure méthode ?
+
+00:07:22.380 --> 00:07:24.400
+Un agent typé et copilote comme orchestrateur.
+
+00:07:24.400 --> 00:07:26.760
+Adoptez le modèle qui ne lutte pas contre la plateforme.
+
+00:07:27.160 --> 00:07:28.500
+Les agents en génèrent, appellent des outils,
+
+00:07:28.600 --> 00:07:31.100
+observent les résultats et révisent au lieu de produire du code sans contrôle,
+
+00:07:31.220 --> 00:07:33.780
+ils appellent des outils avec des garde-fous, moins et fous.
+
+00:07:34.620 --> 00:07:35.960
+Donnez à l'agent une boîte à outils limitée.
+
+00:07:37.400 --> 00:07:39.600
+Scripts Office pour les actions Microsoft 365,
+
+00:07:39.860 --> 00:07:40.520
+Dataflow Gen 2,
+
+00:07:40.640 --> 00:07:41.980
+de Power BI pour les transformations,
+
+00:07:42.220 --> 00:07:43.440
+connecteurs pour le transfert de données
+
+00:07:43.440 --> 00:07:45.120
+et interfaces strictement typées entre eux.
+
+00:07:46.400 --> 00:07:47.500
+L'agent conserve le contexte,
+
+00:07:47.500 --> 00:07:50.180
+résonne sur les étapes et n'écrit du code que là où c'est nécessaire.
+
+00:07:50.620 --> 00:07:52.140
+Commencez avec les scripts Office et copilote.
+
+00:07:52.140 --> 00:07:53.580
+Vous décrivez le résultat.
+
+00:07:54.280 --> 00:07:55.740
+Lorsqu'une nouvelle ligne arrive dans ce tableau,
+
+00:07:55.900 --> 00:07:57.120
+normalisez les dates, remplissez les vides
+
+00:07:57.120 --> 00:07:58.860
+et envoyez un résumé aux approbateurs par email.
+
+00:07:59.620 --> 00:08:02.700
+Copilote traduit cela en script Office de type TypeScript et en étape de flux.
+
+00:08:03.260 --> 00:08:04.700
+Il n'y a pas d'environnement d'exécution externe,
+
+00:08:04.780 --> 00:08:05.640
+pas de conteneur à sécuriser,
+
+00:08:05.720 --> 00:08:06.740
+pas de stockage de secrets à gérer.
+
+00:08:07.160 --> 00:08:08.480
+Le code réside là où se trouvent les données.
+
+00:08:09.000 --> 00:08:10.520
+Excel en ligne, SharePoint, OneDrive
+
+00:08:10.520 --> 00:08:12.300
+et votre flux assemble des connecteurs natifs.
+
+00:08:13.180 --> 00:08:14.780
+Moins de pièces mobiles, moins de risques de défaillance.
+
+00:08:14.960 --> 00:08:16.220
+Ce que la plupart des gens oublient,
+
+00:08:16.320 --> 00:08:18.000
+c'est que des extrémités typées existent même ici.
+
+00:08:18.920 --> 00:08:19.540
+Les modèles d'objets,
+
+00:08:19.540 --> 00:08:22.060
+les signatures de méthode et les schémas de connecteurs
+
+00:08:22.060 --> 00:08:23.700
+imposent d'une forme avant l'exécution.
+
+00:08:24.680 --> 00:08:26.100
+Passé à DataFlow Genter avec Copilote,
+
+00:08:26.280 --> 00:08:28.120
+les invites deviennent du Power Query M ou du Python,
+
+00:08:28.280 --> 00:08:29.380
+mais avec du contexte,
+
+00:08:29.480 --> 00:08:30.920
+Copilote est conscient du modèle sémantique.
+
+00:08:31.780 --> 00:08:33.720
+Il connaît vos tables, colonnes, mesures et synonymes,
+
+00:08:33.820 --> 00:08:36.080
+donc la génération est ancrée dans votre réalité
+
+00:08:36.080 --> 00:08:37.580
+par un schéma halluciné.
+
+00:08:38.380 --> 00:08:40.000
+Besoin d'une ébauche de rapport rapide ?
+
+00:08:40.000 --> 00:08:42.120
+Copilote peut générer une page avec des visuels en quelques secondes.
+
+00:08:42.680 --> 00:08:43.220
+Pas par magie,
+
+00:08:43.400 --> 00:08:45.580
+mais parce qu'il exploite les métadonnées que vous avez déjà organisées.
+
+00:08:46.580 --> 00:08:47.420
+Vous validez les changements,
+
+00:08:47.420 --> 00:08:48.660
+verrouillez le modèle et c'est important,
+
+00:08:48.800 --> 00:08:50.360
+gardez l'orchestration hors de Python.
+
+00:08:51.180 --> 00:08:53.480
+Utilisez Python dans le flux de données pour les noyaux analytiques,
+
+00:08:53.700 --> 00:08:55.620
+pas pour renommer des colonnes ou envoyer des approbations.
+
+00:08:56.700 --> 00:08:58.260
+Introduisez maintenant TypeAgent.pb
+
+00:08:58.260 --> 00:09:00.360
+ou un framework d'agence similaire pour le raisonnement multi-étape.
+
+00:09:00.940 --> 00:09:02.820
+L'agent ne remplace pas votre gouvernance, il l'applique.
+
+00:09:03.820 --> 00:09:05.120
+Il se souvient des échecs passés,
+
+00:09:05.220 --> 00:09:07.300
+choisit le bon outil et récupère les informations intelligemment.
+
+00:09:07.960 --> 00:09:10.220
+La précision de l'appel d'outil et la rétention du contexte sont essentielles.
+
+00:09:10.800 --> 00:09:12.340
+Quand l'agent peut choisir systématiquement
+
+00:09:12.340 --> 00:09:13.860
+entre mettre à jour une feuille ou envoyer un email,
+
+00:09:13.860 --> 00:09:15.760
+vous arrêtez de propager des erreurs de câblage humain.
+
+00:09:16.780 --> 00:09:19.200
+Le temps de résolution diminue car l'agent gère la préparation,
+
+00:09:19.400 --> 00:09:21.080
+génère le script, teste sur un échantillon,
+
+00:09:21.540 --> 00:09:23.860
+valide les sorties et promeut les changements seulement ensuite.
+
+00:09:25.460 --> 00:09:27.120
+La raison pour laquelle cela fonctionne est une architecture saine.
+
+00:09:27.520 --> 00:09:28.380
+Réduisez la surface de code.
+
+00:09:29.500 --> 00:09:31.460
+Établissez des limites à typage statique au point de jonction,
+
+00:09:31.760 --> 00:09:33.780
+schéma d'API ouvert, modèle d'objet Office Script,
+
+00:09:33.980 --> 00:09:35.160
+modèle sémantique dans Power BI.
+
+00:09:36.660 --> 00:09:39.100
+A l'intérieur de ces limites, laissez l'IA générer le code selon les spécifications.
+
+00:09:39.640 --> 00:09:41.760
+La raison pour laquelle cela réduit les défauts n'est pas surnaturel,
+
+00:09:41.760 --> 00:09:42.640
+c'est la prévalidation.
+
+00:09:43.220 --> 00:09:45.480
+Vous détectez les erreurs de forme avant qu'elles ne deviennent des pannes.
+
+00:09:46.780 --> 00:09:49.500
+Et comme l'agent a une mémoire, vous éliminez la récurrence, ce bug qui revient,
+
+00:09:49.820 --> 00:09:52.260
+car votre correctif n'a modifié que le fichier, pas le modèle.
+
+00:09:53.960 --> 00:09:56.020
+Changement pragmatique, Python reste là où il domine,
+
+00:09:56.900 --> 00:09:58.400
+au sein des notebooks fabriques ou des flux de données
+
+00:09:58.400 --> 00:10:00.360
+pour la modélisation analytique avancée et l'EML.
+
+00:10:01.000 --> 00:10:03.420
+Vous laissez Copilot aider à l'analyse exploratoire des données,
+
+00:10:03.600 --> 00:10:05.560
+aux modèles de vectorisation et aux codes de visualisation.
+
+00:10:06.340 --> 00:10:07.960
+Autour de cela, l'agent gère le périmètre,
+
+00:10:08.600 --> 00:10:10.960
+la planification, la validation, les entrées-sorties et la politique.
+
+00:10:11.760 --> 00:10:14.200
+Les agents déclenchent des notebooks, valident les sorties
+
+00:10:14.200 --> 00:10:16.800
+et acheminent les résultats sans inventer d'orchestration sur mesure en Python.
+
+00:10:18.020 --> 00:10:19.380
+Vous ne soudez pas la logique métier à noyau,
+
+00:10:19.460 --> 00:10:21.120
+vous séparez les préoccupations en professionnels.
+
+00:10:22.240 --> 00:10:24.080
+Les scripts Office et Copilot offrent des victoires rapides.
+
+00:10:24.520 --> 00:10:25.860
+L'agent assure la répétabilité.
+
+00:10:26.500 --> 00:10:27.780
+Voici le raccourci que personne n'enseigne.
+
+00:10:28.300 --> 00:10:29.540
+Codez les prompts comme des actifs.
+
+00:10:30.240 --> 00:10:33.020
+Traitez-les comme des modèles, avec des variables et des critères d'acceptation.
+
+00:10:34.440 --> 00:10:36.000
+Si vous ne devez retenir qu'une chose,
+
+00:10:36.240 --> 00:10:38.420
+capturez le prompt réussi et la forme attendue des résultats.
+
+00:10:38.420 --> 00:10:42.620
+L'agent peut le réutiliser, l'adapter et vérifier le résultat par rapport à vos contrats.
+
+00:10:43.140 --> 00:10:45.660
+C'est ainsi que vous fusionnez développement, débogage et déploiement
+
+00:10:45.660 --> 00:10:47.640
+dans une boucle conversationnelle toujours gouvernée.
+
+00:10:48.000 --> 00:10:49.540
+Le changement majeur, dont personne ne parle,
+
+00:10:49.780 --> 00:10:51.100
+les contrats typés pour les outils d'agent.
+
+00:10:51.580 --> 00:10:53.060
+Vous définissez les schémas d'entrée et de sortie.
+
+00:10:53.840 --> 00:10:56.180
+L'agent peut valider avant même d'exécuter une seule étape en production.
+
+00:10:56.640 --> 00:10:58.440
+Comparer cela au fait de lancer simplement Python et de prier
+
+00:10:58.440 --> 00:11:00.080
+pour que Wojson n'ait pas ajouté une propriété imprévue.
+
+00:11:00.500 --> 00:11:01.340
+Et oui, Python peut être typé.
+
+00:11:01.340 --> 00:11:04.140
+L'essentiel est la discipline aux frontières, pas la loyauté envers un langage.
+
+00:11:04.660 --> 00:11:07.320
+Dans la Power Platform, les frontières sont les domaines de Microsoft Office,
+
+00:11:07.500 --> 00:11:09.220
+Power BI, Dataverse, Power BI.
+
+00:11:09.700 --> 00:11:11.220
+Alors utilisez les primitifs qu'ils optimisent.
+
+00:11:11.640 --> 00:11:13.200
+Une fois que vous avez maîtrisé cela, tout le reste s'imbrique.
+
+00:11:13.560 --> 00:11:15.200
+Le versionnage a une surface d'exposition réduite.
+
+00:11:15.540 --> 00:11:17.340
+Prompté script, pas de monolithe.
+
+00:11:17.680 --> 00:11:18.820
+L'observabilité est centralisée.
+
+00:11:19.300 --> 00:11:20.840
+Historique d'exécution Power Automate,
+
+00:11:20.920 --> 00:11:22.180
+lignage des flux de données et traces d'agents,
+
+00:11:22.280 --> 00:11:23.980
+plutôt que 5 tableaux de bord de log déconnectés.
+
+00:11:24.680 --> 00:11:26.700
+Les coûts diminuent car vous supprimez les fonctions Azure
+
+00:11:26.700 --> 00:11:28.160
+qui ne faisaient que du travail de bas niveau.
+
+00:11:28.160 --> 00:11:31.540
+Et les taux de défauts chutent car votre orchestrateur est standardisé,
+
+00:11:31.760 --> 00:11:32.440
+pas artisanal.
+
+00:11:33.380 --> 00:11:34.500
+Vous vous dites peut-être M.
+
+00:11:35.640 --> 00:11:36.320
+C'est inexact.
+
+00:11:37.080 --> 00:11:38.300
+Vous élevez le contrôle d'un niveau.
+
+00:11:39.040 --> 00:11:41.620
+Vous décidez des contrats, des outils, des garde-fous et des jalons de revue.
+
+00:11:42.340 --> 00:11:44.660
+L'agent effectue l'assemblage plus rapidement que votre boucle humaine
+
+00:11:44.660 --> 00:11:45.580
+et avec moins d'erreurs.
+
+00:11:46.660 --> 00:11:48.520
+Vous réservez Python à l'analytique à haute valeur ajoutée
+
+00:11:48.520 --> 00:11:49.820
+où les bibliothèques justifient leur utilité.
+
+00:11:50.200 --> 00:11:51.580
+Ce n'est pas une reddition, c'est de la stratégie.
+
+00:11:52.180 --> 00:11:53.760
+Laissez-moi vous montrer concrètement ce que cela donne.
+
+00:11:54.620 --> 00:11:55.260
+Une demande arrive.
+
+00:11:55.260 --> 00:11:58.320
+Nous avons besoin d'un rapport hebdomadaire qui nettoie des fichiers CSV,
+
+00:11:58.520 --> 00:12:00.540
+les enrichis via Dataverse, les pousse vers un modèle sémantique
+
+00:12:00.540 --> 00:12:01.780
+et prévient les approbateurs par email.
+
+00:12:02.780 --> 00:12:04.460
+L'ancienne méthode, créer une fonction Python,
+
+00:12:04.660 --> 00:12:06.700
+brancher un connecteur personnalisé, se battre avec OOS,
+
+00:12:06.820 --> 00:12:07.720
+corriger les types trois fois.
+
+00:12:08.340 --> 00:12:09.060
+La nouvelle méthode.
+
+00:12:09.460 --> 00:12:12.680
+L'agent appelle DataFlowGenteux via Copilot pour générer les transformations,
+
+00:12:13.040 --> 00:12:14.140
+valide les colonnes avec le modèle,
+
+00:12:14.320 --> 00:12:16.160
+utilise OfficeScripts pour préparer le dépôt Excel,
+
+00:12:16.520 --> 00:12:18.040
+déclenche un flux pour les notifications
+
+00:12:18.040 --> 00:12:19.620
+et enregistre la lignée.
+
+00:12:19.620 --> 00:12:22.040
+Pas de bricolage sur mesure, pas de redéploiement en plein.
+
+00:12:22.480 --> 00:12:24.580
+Cela fonctionne parce que vous avez arrêté d'utiliser Python
+
+00:12:24.580 --> 00:12:27.060
+comme un ruban adhésif sur une plateforme conçue avec ses propres fixations.
+
+00:12:27.400 --> 00:12:29.340
+Vous laissez l'IA écrire le code de liaison au niveau des jonctions,
+
+00:12:29.460 --> 00:12:30.260
+pas pour combler les fossés.
+
+00:12:31.040 --> 00:12:32.980
+Quand l'activité change alerte, spoiler, elle changera vous.
+
+00:12:33.620 --> 00:12:35.560
+Mettez à jour un prompt, pas une image de conteneur.
+
+00:12:36.120 --> 00:12:38.220
+C'est ainsi que vous continuez à livrer pendant que les autres sont en enfer
+
+00:12:38.220 --> 00:12:39.060
+avec leur dépendance,
+
+00:12:39.260 --> 00:12:41.740
+à expliquer à la finance pourquoi la dernière version était une mauvaise idée.
+
+00:12:42.800 --> 00:12:44.460
+Première application, flux de données Power BI,
+
+00:12:44.580 --> 00:12:46.020
+généré en Python, non écrit à la main.
+
+00:12:46.020 --> 00:12:47.820
+C'est là que tout devient clair.
+
+00:12:48.140 --> 00:12:50.440
+Dans Power BI, vous n'êtes pas payé pour écrire du code M artisanal
+
+00:12:50.440 --> 00:12:51.180
+ou du Python sur mesure.
+
+00:12:51.820 --> 00:12:54.000
+Vous êtes payé pour fournir des données propres et des rapports fonctionnels.
+
+00:12:54.320 --> 00:12:57.860
+Copilot dans Dataflow Gen 2 vous permet d'exprimer la transformation en langage clair,
+
+00:12:57.980 --> 00:13:02.940
+puis il génère du Power Query M ou oui, du Python ancré à votre modèle sémantique réel.
+
+00:13:03.600 --> 00:13:06.040
+Pas des tables imaginaires, mais vos propres tables, colonnes et mesures.
+
+00:13:06.680 --> 00:13:09.020
+Cette connaissance sémantique élimine toute une catégorie de problèmes
+
+00:13:09.020 --> 00:13:11.180
+liés aux colonnes introuvables avant même qu'ils ne surviennent.
+
+00:13:12.020 --> 00:13:13.220
+Pourquoi est-ce important ?
+
+00:13:13.220 --> 00:13:15.100
+Génération plus contexte et gale moins d'erreurs idiotes.
+
+00:13:15.100 --> 00:13:17.240
+Ce que la plupart des gens oublient, c'est la boucle de révision.
+
+00:13:18.100 --> 00:13:19.060
+Ne faites pas confiance à la boîte noire.
+
+00:13:19.540 --> 00:13:21.580
+Utilisez-la pour rédiger rapidement, puis examiner les différences
+
+00:13:21.580 --> 00:13:22.740
+et verrouiller le modèle une fois qu'il est correct.
+
+00:13:23.320 --> 00:13:25.320
+Ensuite, utilisez Copilot pour itérer par prompt
+
+00:13:25.320 --> 00:13:27.320
+plutôt que par d'interminables modifications manuelles.
+
+00:13:27.760 --> 00:13:29.820
+Vous traitez le code comme un modèle, avec des variables,
+
+00:13:30.140 --> 00:13:31.760
+plutôt que comme un journal intime de votre clavier.
+
+00:13:32.740 --> 00:13:34.360
+A quoi ressemble le flux de travail ?
+
+00:13:34.360 --> 00:13:36.780
+Vous demandez à partir des transactions de vente, filtrez sur les 12 derniers mois,
+
+00:13:37.000 --> 00:13:39.260
+normalisez les formats de date, faites une jointure gauche avec le fichier client
+
+00:13:39.260 --> 00:13:40.160
+et calculez la marge brute.
+
+00:13:41.380 --> 00:13:42.760
+Copilot propose du M ou du Python.
+
+00:13:42.760 --> 00:13:45.280
+Vous prévisualisez le résultat sur l'échantillon,
+
+00:13:45.680 --> 00:13:48.520
+validez les noms de colonnes par rapport au modèle sémantique et fixez l'étape.
+
+00:13:49.420 --> 00:13:50.900
+Besoin de Python pour un noyau d'analyse,
+
+00:13:51.020 --> 00:13:53.720
+comme la détection d'anomalies ou la décomposition saisonnière ?
+
+00:13:53.720 --> 00:13:54.020
+Très bien.
+
+00:13:54.740 --> 00:13:56.500
+Laissez Copilot générer cela dans le flux de données,
+
+00:13:56.620 --> 00:13:58.020
+mais laissez l'orchestration en dehors.
+
+00:13:58.880 --> 00:14:00.600
+Python calcule, la plateforme orchestre.
+
+00:14:00.900 --> 00:14:02.440
+Victoire rapide, la structure du rapport.
+
+00:14:03.040 --> 00:14:04.700
+Copilot peut générer une première version de page,
+
+00:14:04.820 --> 00:14:06.180
+avec des visuels en quelques secondes.
+
+00:14:06.660 --> 00:14:08.080
+Ce n'est pas de la magie, c'est de la métadonnée.
+
+00:14:08.680 --> 00:14:09.800
+Vous avez déjà nommé vos mesures,
+
+00:14:10.020 --> 00:14:11.780
+ajoutez des synonymes et organisez les relations.
+
+00:14:11.780 --> 00:14:14.580
+Copilot s'appuie sur cela pour placer les graphiques intelligemment.
+
+00:14:15.460 --> 00:14:16.800
+Vous gagnez du temps sur les tâches ingrates
+
+00:14:16.800 --> 00:14:18.040
+et vous vous concentrez sur l'essentiel,
+
+00:14:18.400 --> 00:14:20.020
+la logique métier et la présentation.
+
+00:14:21.440 --> 00:14:22.940
+Les erreurs courantes qui multiplient les défauts.
+
+00:14:23.580 --> 00:14:26.280
+D'abord, laissez le Python généré par Copilot s'éparpiller.
+
+00:14:27.100 --> 00:14:28.300
+S'il commence à renommer des colonnes,
+
+00:14:28.360 --> 00:14:29.620
+appeler des points de terminaison externes
+
+00:14:29.620 --> 00:14:30.660
+ou intégrer une logique de workflow,
+
+00:14:30.760 --> 00:14:31.780
+vous tomberiez dans du code fragile.
+
+00:14:33.240 --> 00:14:34.700
+Deuxièmement, ignorez les revues de code sous prétexte
+
+00:14:34.700 --> 00:14:35.380
+que c'est l'IA qui l'a écrit.
+
+00:14:35.880 --> 00:14:37.260
+Non, standardisez les prompts de revue,
+
+00:14:37.340 --> 00:14:38.680
+gardez une liste de contrôle,
+
+00:14:38.820 --> 00:14:39.640
+forme de colonne validée,
+
+00:14:39.640 --> 00:14:40.840
+gestion explicite des nuls,
+
+00:14:41.100 --> 00:14:42.020
+jointure déterministe.
+
+00:14:42.940 --> 00:14:44.620
+Troisièmement, mélangez orchestration et analyse.
+
+00:14:45.420 --> 00:14:46.700
+Si vous insérez une logique d'approbation
+
+00:14:46.700 --> 00:14:47.780
+dans une transformation Python,
+
+00:14:47.880 --> 00:14:49.100
+vous garantissez qu'un changement de schéma
+
+00:14:49.100 --> 00:14:50.860
+cassera votre workflow, workflow.
+
+00:14:51.620 --> 00:14:52.560
+La règle hybride est simple.
+
+00:14:53.240 --> 00:14:54.480
+Python pour les noyaux analytiques,
+
+00:14:54.940 --> 00:14:56.660
+M ou les étapes natives de la plateforme pour la plomberie.
+
+00:14:57.540 --> 00:14:58.840
+Utilisez Dataverse ou OneLake
+
+00:14:58.840 --> 00:15:00.000
+pour les entrées et sorties
+
+00:15:00.000 --> 00:15:01.200
+que le reste de la plateforme comprend.
+
+00:15:01.200 --> 00:15:03.840
+Quand vous devez ajuster la transformation,
+
+00:15:04.160 --> 00:15:05.680
+modifiez le prompt et validez le diff
+
+00:15:05.680 --> 00:15:08.060
+plutôt que d'explorer une fonction de 400 lignes.
+
+00:15:08.760 --> 00:15:10.720
+Les changements métiers deviennent des modifications d'intention,
+
+00:15:10.860 --> 00:15:11.680
+pas une chirurgie du code.
+
+00:15:12.100 --> 00:15:13.360
+Et oui, l'observabilité s'améliore.
+
+00:15:14.000 --> 00:15:15.520
+Le lignage des flux de données montre ce qui est alimenté.
+
+00:15:16.260 --> 00:15:17.720
+Les états proposés par Copilot
+
+00:15:17.720 --> 00:15:18.620
+forment une chaîne lisible
+
+00:15:18.620 --> 00:15:20.020
+plutôt qu'un amas de scripts fait main.
+
+00:15:20.660 --> 00:15:21.360
+Quand quelque chose échoue,
+
+00:15:21.420 --> 00:15:22.340
+vous déponnez à un seul endroit.
+
+00:15:23.220 --> 00:15:24.480
+Comparez cela à votre ancien modèle.
+
+00:15:24.680 --> 00:15:26.520
+Power Automate déclenche un connecteur personnalisé,
+
+00:15:26.660 --> 00:15:28.080
+appelle une API Python qui mute les colonnes,
+
+00:15:28.200 --> 00:15:30.040
+puis écrit dans un lag que vous avez oublié d'étiqueter.
+
+00:15:30.040 --> 00:15:31.080
+Délicieux.
+
+00:15:31.400 --> 00:15:32.960
+Le résultat et la rapidité avec moins de surprises.
+
+00:15:33.360 --> 00:15:34.740
+Vous générez, examinez, conseignez.
+
+00:15:35.120 --> 00:15:37.200
+Vous réservez Python au calcul lourd où il est vraiment utile.
+
+00:15:38.120 --> 00:15:39.740
+Quand le directeur financier invente une nouvelle mesure,
+
+00:15:39.820 --> 00:15:41.260
+un mardi après-midi, vous mettez à jour un prompt
+
+00:15:41.260 --> 00:15:43.560
+et revalidez sans redéployer une image de conteneur.
+
+00:15:44.120 --> 00:15:45.040
+Essayez de prétendre que ce n'est pas mieux.
+
+00:15:45.420 --> 00:15:46.300
+Flux de données stabilisées.
+
+00:15:47.260 --> 00:15:48.440
+Maintenant, éliminez ce code fragile
+
+00:15:48.440 --> 00:15:49.760
+qui encombre inutilement Power Automate.
+
+00:15:50.860 --> 00:15:52.420
+Deuxième application, Power Automate.
+
+00:15:52.960 --> 00:15:55.360
+Remplacez le code Python par des scripts office et des agents.
+
+00:15:55.980 --> 00:15:56.820
+Dans Power Automate,
+
+00:15:56.820 --> 00:15:58.420
+la bonne approche est volontairement ennuyeuse.
+
+00:15:58.420 --> 00:16:00.100
+Connecteur natif et script office.
+
+00:16:01.020 --> 00:16:01.960
+Vous décrivez vos étapes.
+
+00:16:02.120 --> 00:16:03.320
+Copilot rédige le flux en script
+
+00:16:03.320 --> 00:16:05.780
+et vous gardez tout au sein de Microsoft 365.
+
+00:16:06.540 --> 00:16:07.360
+Pas d'Azure Functions,
+
+00:16:07.700 --> 00:16:09.320
+pas d'échafaudage de connecteurs personnalisés,
+
+00:16:09.480 --> 00:16:11.180
+pas de correctif nocturne de chiffrement SSL
+
+00:16:11.180 --> 00:16:12.100
+sur un conteneur oublié,
+
+00:16:12.320 --> 00:16:13.040
+sur un conteneur oublié.
+
+00:16:13.440 --> 00:16:14.080
+Révélation choc.
+
+00:16:14.200 --> 00:16:15.200
+Quand on réduit les pièces mobiles,
+
+00:16:15.360 --> 00:16:16.080
+on réduit les pannes.
+
+00:16:16.800 --> 00:16:18.420
+Pourquoi les script office ?
+
+00:16:18.420 --> 00:16:19.380
+Parce qu'ils sont en TypeScript
+
+00:16:19.380 --> 00:16:20.480
+avec un modèle d'objet défini
+
+00:16:20.480 --> 00:16:21.500
+qui vous donne des limites typées,
+
+00:16:21.640 --> 00:16:22.480
+des signatures de méthode
+
+00:16:22.480 --> 00:16:23.920
+et des structures prévisibles
+
+00:16:23.920 --> 00:16:25.900
+avant que l'exécution ne vous mette dans l'embarras.
+
+00:16:27.020 --> 00:16:27.620
+Copilot tourne.
+
+00:16:28.380 --> 00:16:29.760
+Pour chaque nouvelle ligne dans ce tableau,
+
+00:16:30.240 --> 00:16:31.320
+normalisez les chaînes de date,
+
+00:16:31.800 --> 00:16:32.480
+calculez un statut
+
+00:16:32.480 --> 00:16:35.240
+et envoyez un résumé par email au propriétaire
+
+00:16:35.240 --> 00:16:37.260
+tout simplement via un flux et un script.
+
+00:16:38.040 --> 00:16:39.300
+Vos données restent à proximité d'Excel,
+
+00:16:39.400 --> 00:16:40.060
+SharePoint ou OneDrive.
+
+00:16:40.520 --> 00:16:41.660
+Votre gouvernement s'est simplifié
+
+00:16:41.660 --> 00:16:42.960
+et votre taux de défaut chute
+
+00:16:42.960 --> 00:16:44.520
+car vous avez éliminé ce détour à doc
+
+00:16:44.520 --> 00:16:46.480
+par Python qui aimait tomber en panne les mardis.
+
+00:16:46.940 --> 00:16:47.620
+Comment structurer le tout
+
+00:16:47.620 --> 00:16:48.860
+pour que cela passe à l'échelle ?
+
+00:16:48.860 --> 00:16:50.040
+Adoptez un modèle piloté par un agent.
+
+00:16:50.580 --> 00:16:52.140
+L'agent de type agent ou équivalent
+
+00:16:52.140 --> 00:16:52.960
+sélectionne des outils
+
+00:16:52.960 --> 00:16:54.300
+dans une boîte à outils limitée.
+
+00:16:55.260 --> 00:16:56.100
+Invoquez un office script
+
+00:16:56.100 --> 00:16:56.960
+appelé un connecteur graph
+
+00:16:56.960 --> 00:16:57.800
+écrivait dans Dataverse
+
+00:16:57.800 --> 00:16:58.840
+envoyer une approbation.
+
+00:16:59.400 --> 00:17:00.640
+Les entrées et sorties sont schématisées.
+
+00:17:01.120 --> 00:17:02.100
+L'agent valide les prérequis,
+
+00:17:02.340 --> 00:17:03.560
+exécute un test sur l'échantillon
+
+00:17:03.560 --> 00:17:04.880
+et ne promeut le changement qu'ensuite.
+
+00:17:06.040 --> 00:17:07.540
+La précision de l'appel d'outils est cruciale.
+
+00:17:07.820 --> 00:17:08.940
+Nommez donc vos outils sans ambiguïté.
+
+00:17:09.500 --> 00:17:10.180
+Mettre à jour le tableau
+
+00:17:10.180 --> 00:17:11.560
+et qu'est faire quelque chose ?
+
+00:17:11.560 --> 00:17:11.780
+UQ.
+
+00:17:12.400 --> 00:17:13.560
+Quand l'agent choisit systématiquement
+
+00:17:13.560 --> 00:17:14.120
+le bon outil,
+
+00:17:14.620 --> 00:17:15.240
+vous arrêtez de relier
+
+00:17:15.240 --> 00:17:16.460
+la mauvaise action au bon déclencheur.
+
+00:17:16.880 --> 00:17:17.500
+Des victoires rapides
+
+00:17:17.500 --> 00:17:18.120
+qui permettent de supprimer
+
+00:17:18.120 --> 00:17:18.620
+le code colombi.
+
+00:17:19.400 --> 00:17:20.180
+Opération Excel,
+
+00:17:20.440 --> 00:17:21.220
+nettoyage de colonnes,
+
+00:17:21.440 --> 00:17:21.960
+dédoublonnage,
+
+00:17:26.960 --> 00:17:28.700
+aucune authentification personnalisée.
+
+00:17:29.360 --> 00:17:30.600
+Mise à jour Dataverse et SharePoint.
+
+00:17:31.280 --> 00:17:32.460
+Connecteur conscient des métadonnées,
+
+00:17:32.560 --> 00:17:33.540
+pas d'appel HTTP brut.
+
+00:17:34.400 --> 00:17:35.040
+Les coûts diminuent
+
+00:17:35.040 --> 00:17:35.740
+car vous ne payez pas
+
+00:17:35.740 --> 00:17:36.680
+pour un calcul permanent
+
+00:17:36.680 --> 00:17:37.820
+afin de renommer des colonnes.
+
+00:17:38.600 --> 00:17:39.680
+Le temps de résolution diminue
+
+00:17:39.680 --> 00:17:40.620
+car votre agent peut générer,
+
+00:17:40.760 --> 00:17:41.540
+tester et itérer
+
+00:17:41.540 --> 00:17:42.400
+sans qu'un humain configure
+
+00:17:42.400 --> 00:17:43.240
+un conteneur de dev.
+
+00:17:44.180 --> 00:17:45.180
+Et votre équipe de sécurité
+
+00:17:45.180 --> 00:17:46.200
+arrête de vous surveiller de près
+
+00:17:46.200 --> 00:17:46.920
+car vous avez supprimé
+
+00:17:46.920 --> 00:17:47.980
+cette endpoint API inconnu
+
+00:17:47.980 --> 00:17:48.800
+étiquetée temporaire.
+
+00:17:49.140 --> 00:17:50.300
+Or, erreur à éviter
+
+00:17:50.300 --> 00:17:50.940
+car vous allez évidemment
+
+00:17:50.940 --> 00:17:51.500
+tenter de les commettre.
+
+00:17:52.000 --> 00:17:52.340
+Premièrement,
+
+00:17:52.440 --> 00:17:54.160
+forcer Python via un connecteur personnalisé
+
+00:17:54.160 --> 00:17:55.460
+pour des tâches triviales.
+
+00:17:55.560 --> 00:17:56.280
+Si le travail consiste
+
+00:17:56.280 --> 00:17:56.980
+à remodeler un tableau,
+
+00:17:57.100 --> 00:17:57.860
+utilisez les Office Script.
+
+00:17:58.520 --> 00:17:58.840
+Deuxièmement,
+
+00:17:58.980 --> 00:17:59.660
+ignorez la gouvernance.
+
+00:18:00.660 --> 00:18:01.280
+Les scripts ont besoin
+
+00:18:01.280 --> 00:18:01.820
+des versionings,
+
+00:18:01.880 --> 00:18:02.420
+de points de contrôle
+
+00:18:02.420 --> 00:18:03.200
+et de normes de nommage.
+
+00:18:03.860 --> 00:18:04.560
+Traitez-les comme du code
+
+00:18:04.560 --> 00:18:05.020
+car ils en sont.
+
+00:18:06.280 --> 00:18:06.600
+Troisièmement,
+
+00:18:06.740 --> 00:18:07.720
+enterrez la logique métier
+
+00:18:07.720 --> 00:18:09.160
+dans 5 flux sans contrat de type.
+
+00:18:10.000 --> 00:18:10.920
+Définissez vos schémas d'entrée
+
+00:18:10.920 --> 00:18:11.900
+et de sortie dès le départ.
+
+00:18:12.740 --> 00:18:13.620
+L'agent pourra les appliquer,
+
+00:18:13.700 --> 00:18:14.540
+la plateforme les validera
+
+00:18:14.540 --> 00:18:15.760
+et la production vous remerciera
+
+00:18:15.760 --> 00:18:16.800
+et la production vous remercie.
+
+00:18:17.020 --> 00:18:17.820
+Vous voulez toujours utiliser Python.
+
+00:18:18.240 --> 00:18:19.200
+Mettez-le là où il a sa place.
+
+00:18:19.580 --> 00:18:19.940
+L'analyse.
+
+00:18:20.580 --> 00:18:21.820
+Si un flux nécessite des prédictions
+
+00:18:21.820 --> 00:18:22.780
+ou des transformations avancées,
+
+00:18:22.780 --> 00:18:23.760
+vous pouvez appeler un service approprié.
+
+00:18:24.680 --> 00:18:25.800
+Tâche de notebook fabrique
+
+00:18:25.800 --> 00:18:26.660
+Endpoint ML.
+
+00:18:27.140 --> 00:18:28.200
+Derrière une API propre,
+
+00:18:28.300 --> 00:18:29.200
+pas une application flasque
+
+00:18:29.200 --> 00:18:30.560
+improvisée laissée sur un plan gratuit.
+
+00:18:31.420 --> 00:18:32.040
+Le flux orchestre,
+
+00:18:32.100 --> 00:18:32.840
+le Python calcule,
+
+00:18:32.960 --> 00:18:33.700
+ils interagissent
+
+00:18:33.700 --> 00:18:34.700
+via un contrat.
+
+00:18:35.380 --> 00:18:35.900
+Pas au feeling.
+
+00:18:36.520 --> 00:18:37.120
+Avantages subtils
+
+00:18:37.120 --> 00:18:37.700
+des Office Script
+
+00:18:37.700 --> 00:18:38.340
+couplés aux agents
+
+00:18:38.340 --> 00:18:39.180
+et la maintenabilité.
+
+00:18:39.960 --> 00:18:40.800
+Les prompts deviennent des actifs,
+
+00:18:40.880 --> 00:18:41.480
+les scripts deviennent
+
+00:18:41.480 --> 00:18:42.400
+des outils réutilisables.
+
+00:18:43.220 --> 00:18:43.740
+Les flux deviennent
+
+00:18:43.740 --> 00:18:44.920
+des couches d'orchestration légères,
+
+00:18:45.020 --> 00:18:45.740
+pas des musées de logique.
+
+00:18:46.120 --> 00:18:46.800
+Quand les besoins changent,
+
+00:18:46.840 --> 00:18:47.820
+vous mettez à jour un prompt T,
+
+00:18:48.040 --> 00:18:48.500
+si nécessaire,
+
+00:18:48.560 --> 00:18:49.420
+un script avec une revue
+
+00:18:49.420 --> 00:18:50.020
+plutôt que de revoir
+
+00:18:50.020 --> 00:18:51.640
+toute une pile de connecteurs personnalisés.
+
+00:18:52.780 --> 00:18:53.880
+L'agent mémorise
+
+00:18:53.880 --> 00:18:54.820
+la correction précédente,
+
+00:18:54.980 --> 00:18:55.700
+réutilise le modèle
+
+00:18:55.700 --> 00:18:56.860
+et empêche toute récurrence.
+
+00:18:57.320 --> 00:18:58.340
+C'est ainsi que vous passez de gain.
+
+00:18:58.400 --> 00:18:59.280
+Nous avons passé l'après-midi
+
+00:18:59.280 --> 00:19:00.300
+à déboguer des types Egeuil.
+
+00:19:00.440 --> 00:19:01.720
+Nous avons livré avant le déjeuner.
+
+00:19:02.360 --> 00:19:03.040
+La vérité sur Python
+
+00:19:03.040 --> 00:19:03.780
+dans Power Automate
+
+00:19:03.780 --> 00:19:04.260
+comme Qualcomm
+
+00:19:04.260 --> 00:19:05.520
+est qu'il s'agit d'une complexité de façade.
+
+00:19:06.180 --> 00:19:07.100
+Vous prouvez que vous en êtes capable,
+
+00:19:07.320 --> 00:19:07.880
+alors que la plateforme
+
+00:19:07.880 --> 00:19:08.440
+vous offre discrètement
+
+00:19:08.440 --> 00:19:09.580
+une voie plus simple et plus sûre.
+
+00:19:10.380 --> 00:19:10.780
+Utilisez-la.
+
+00:19:11.200 --> 00:19:11.840
+Troisième application,
+
+00:19:12.240 --> 00:19:12.860
+les notebooks fabriques
+
+00:19:12.860 --> 00:19:13.460
+contiennent du Python,
+
+00:19:13.580 --> 00:19:14.480
+automatisez le périmètre.
+
+00:19:15.220 --> 00:19:15.680
+Dans Fabrique,
+
+00:19:15.800 --> 00:19:16.800
+Python occupe enfin sa place
+
+00:19:16.800 --> 00:19:17.520
+la plus efficace,
+
+00:19:17.640 --> 00:19:18.140
+le cœur de calcul.
+
+00:19:19.200 --> 00:19:19.800
+Ni la sonnette,
+
+00:19:19.880 --> 00:19:20.320
+ni les conduits.
+
+00:19:20.460 --> 00:19:21.720
+Gardez la logique métier en périphérie
+
+00:19:21.720 --> 00:19:22.400
+et laissez le notebook
+
+00:19:22.400 --> 00:19:23.080
+gérer l'analytique,
+
+00:19:23.160 --> 00:19:23.620
+la modélisation
+
+00:19:23.620 --> 00:19:24.760
+et les transformations lourdes.
+
+00:19:26.060 --> 00:19:26.580
+Le périmètre,
+
+00:19:26.680 --> 00:19:27.200
+la planification,
+
+00:19:27.420 --> 00:19:27.760
+la validation
+
+00:19:27.760 --> 00:19:28.960
+et la politique de slash S
+
+00:19:28.960 --> 00:19:29.620
+relèvent des agents
+
+00:19:29.620 --> 00:19:30.340
+et des outils de type
+
+00:19:30.340 --> 00:19:31.260
+TypeScript, TypeScript.
+
+00:19:31.780 --> 00:19:32.980
+Pourquoi est-ce important ?
+
+00:19:32.980 --> 00:19:33.520
+Lorsque vous soudez
+
+00:19:33.520 --> 00:19:34.400
+l'orchestration à un notebook,
+
+00:19:34.540 --> 00:19:35.720
+chaque modification d'environnement
+
+00:19:35.720 --> 00:19:36.960
+devient un incident de production.
+
+00:19:37.540 --> 00:19:38.380
+Séparer les préoccupations.
+
+00:19:38.760 --> 00:19:39.600
+L'agent appelle le notebook
+
+00:19:39.600 --> 00:19:40.780
+via une API de tâche propre,
+
+00:19:40.960 --> 00:19:41.900
+transmet des entrées typées
+
+00:19:41.900 --> 00:19:43.480
+et attend des sorties typées
+
+00:19:43.480 --> 00:19:44.720
+si le format dévie,
+
+00:19:44.780 --> 00:19:46.000
+l'échec est immédiat en périphérie
+
+00:19:46.000 --> 00:19:46.760
+et non au milieu
+
+00:19:46.760 --> 00:19:47.800
+d'une exécution de 20 minutes.
+
+00:19:48.600 --> 00:19:50.220
+A quoi cela ressemble-t-il en pratique ?
+
+00:19:50.220 --> 00:19:51.360
+Copilote aide dans le notebook
+
+00:19:51.360 --> 00:19:51.860
+pour les DA,
+
+00:19:52.000 --> 00:19:52.660
+la vectorisation
+
+00:19:52.660 --> 00:19:53.980
+et les squelettes de visualisation.
+
+00:19:54.400 --> 00:19:54.920
+Vous examinez
+
+00:19:54.920 --> 00:19:55.460
+et verrouillez toujours
+
+00:19:55.460 --> 00:19:56.160
+les versions des bibliothèques.
+
+00:19:56.480 --> 00:19:57.880
+Reste des adultes, n'est-ce pas ?
+
+00:19:57.880 --> 00:19:58.780
+L'agent gère les pipelines,
+
+00:19:59.280 --> 00:20:00.360
+se déclenche à l'arrivée des données,
+
+00:20:00.580 --> 00:20:01.180
+vérifie le schéma,
+
+00:20:01.480 --> 00:20:02.260
+lance l'étage du notebook
+
+00:20:02.260 --> 00:20:03.180
+et valide les sorties
+
+00:20:03.180 --> 00:20:03.880
+par rapport au contrat
+
+00:20:03.880 --> 00:20:05.160
+avant publication dans One Lake
+
+00:20:05.160 --> 00:20:06.300
+ou un modèle sémantique
+
+00:20:06.300 --> 00:20:07.160
+ou un modèle sémantique.
+
+00:20:07.160 --> 00:20:08.000
+Gérer les notebooks
+
+00:20:08.000 --> 00:20:08.420
+comme du code
+
+00:20:08.420 --> 00:20:09.140
+avec un contrôle de version.
+
+00:20:09.440 --> 00:20:09.940
+Stocker les prompts
+
+00:20:09.940 --> 00:20:11.160
+ayant généré les fonctions d'assistance.
+
+00:20:11.800 --> 00:20:12.840
+Tester unitairement les sorties,
+
+00:20:12.940 --> 00:20:13.260
+les métriques,
+
+00:20:13.340 --> 00:20:13.760
+les distributions
+
+00:20:13.760 --> 00:20:14.400
+et le nombre de lignes
+
+00:20:14.400 --> 00:20:15.200
+plutôt que la plomberie ligne
+
+00:20:15.200 --> 00:20:15.920
+par ligne par ligne.
+
+00:20:16.380 --> 00:20:16.840
+Victoire rapide.
+
+00:20:17.420 --> 00:20:18.200
+Demandez à copilote
+
+00:20:18.200 --> 00:20:18.920
+de générer une étape
+
+00:20:18.920 --> 00:20:20.040
+de décomposition saisonnière,
+
+00:20:20.500 --> 00:20:21.300
+gardez-la dans le notebook
+
+00:20:21.300 --> 00:20:22.060
+et laissez l'agent
+
+00:20:22.060 --> 00:20:22.900
+orchestrer les tentatives
+
+00:20:22.900 --> 00:20:23.460
+et les alertes.
+
+00:20:24.340 --> 00:20:24.960
+La logique métier
+
+00:20:24.960 --> 00:20:26.300
+réside dans des contrats déclaratifs.
+
+00:20:26.800 --> 00:20:27.840
+Python reste computationnel.
+
+00:20:28.700 --> 00:20:29.380
+Erreur à éviter.
+
+00:20:29.900 --> 00:20:30.680
+Masquer les approbations
+
+00:20:30.680 --> 00:20:31.680
+ou les renommages dans le notebook,
+
+00:20:32.040 --> 00:20:32.540
+coupler les flux
+
+00:20:32.540 --> 00:20:33.660
+à des points de terminaison ad hoc
+
+00:20:33.660 --> 00:20:34.840
+ou stocker la seule définition
+
+00:20:34.840 --> 00:20:35.240
+d'un KPI
+
+00:20:35.240 --> 00:20:36.320
+dans un commentaire de cellule.
+
+00:20:36.980 --> 00:20:37.820
+Ne faites pas de l'archéologie.
+
+00:20:38.360 --> 00:20:39.060
+Faites de l'architecture.
+
+00:20:40.140 --> 00:20:40.360
+Maintenant,
+
+00:20:40.440 --> 00:20:40.920
+quantifiez cela
+
+00:20:40.920 --> 00:20:41.380
+pour que la finance
+
+00:20:41.380 --> 00:20:41.900
+arrête de soupir.
+
+00:20:42.560 --> 00:20:42.920
+Résultat.
+
+00:20:43.180 --> 00:20:43.600
+Gain de temps.
+
+00:20:43.900 --> 00:20:44.540
+Réduction des coûts.
+
+00:20:44.660 --> 00:20:45.600
+Priorité ou défauts étendards.
+
+00:20:46.540 --> 00:20:47.500
+Régénération assistée par IA
+
+00:20:47.500 --> 00:20:48.440
+réduit la boucle de construction,
+
+00:20:48.580 --> 00:20:49.280
+débogage et déploiement.
+
+00:20:49.900 --> 00:20:50.480
+Copilote rédige
+
+00:20:50.480 --> 00:20:51.520
+les transformations et les scripts.
+
+00:20:51.940 --> 00:20:52.780
+L'agent effectue des tests
+
+00:20:52.780 --> 00:20:53.440
+sur des échantillons
+
+00:20:53.440 --> 00:20:53.920
+avant la promotion.
+
+00:20:54.540 --> 00:20:55.640
+Vous réduisez le travail inutile
+
+00:20:55.640 --> 00:20:56.440
+et les changements de contexte
+
+00:20:56.440 --> 00:20:57.640
+car l'orchestration reste native
+
+00:21:02.540 --> 00:21:03.500
+les flux dans la plateforme,
+
+00:21:03.580 --> 00:21:04.360
+les notebooks dans Fabrique
+
+00:21:04.360 --> 00:21:06.520
+et la colle dans Office Scripts.
+
+00:21:06.980 --> 00:21:07.860
+Vous payez moins en calcul
+
+00:21:07.860 --> 00:21:08.900
+et beaucoup moins en attention.
+
+00:21:09.640 --> 00:21:10.500
+Pas de patch de conteneurs,
+
+00:21:10.580 --> 00:21:11.000
+moins de secrets,
+
+00:21:11.120 --> 00:21:12.020
+moins de panne le week-end.
+
+00:21:12.920 --> 00:21:13.480
+Défauts enfin.
+
+00:21:14.080 --> 00:21:14.680
+Les limites typées
+
+00:21:14.680 --> 00:21:15.400
+sur les connecteurs,
+
+00:21:15.740 --> 00:21:16.840
+les modèles d'objets Office Scripts
+
+00:21:16.840 --> 00:21:17.720
+et les métadonnées sémantiques
+
+00:21:17.720 --> 00:21:19.020
+détectent tôt les erreurs de format.
+
+00:21:19.640 --> 00:21:20.100
+Les garde-fous,
+
+00:21:20.160 --> 00:21:21.080
+la précision des appels d'outils
+
+00:21:21.080 --> 00:21:22.100
+et la rétention du contexte
+
+00:21:22.100 --> 00:21:22.660
+mettent fin au cycle
+
+00:21:22.660 --> 00:21:23.360
+cassé les cas,
+
+00:21:23.440 --> 00:21:24.220
+réparé le vendredi,
+
+00:21:24.280 --> 00:21:24.760
+cassé lundi,
+
+00:21:24.760 --> 00:21:26.180
+la récurrence diminue
+
+00:21:26.180 --> 00:21:27.080
+car vous mettez à jour des modèles,
+
+00:21:27.180 --> 00:21:27.820
+pas seulement des fichiers.
+
+00:21:28.820 --> 00:21:30.000
+Benchmark pratique à suivre.
+
+00:21:30.600 --> 00:21:31.760
+Temps de résolution par incident,
+
+00:21:32.000 --> 00:21:32.520
+taux de réussite,
+
+00:21:32.580 --> 00:21:33.200
+des appels d'outils
+
+00:21:33.200 --> 00:21:34.300
+et délais de déploiement.
+
+00:21:35.060 --> 00:21:35.960
+Checklist d'implémentation,
+
+00:21:36.380 --> 00:21:37.420
+choisissez votre orchestrateur,
+
+00:21:37.760 --> 00:21:38.480
+définissez les contrats,
+
+00:21:38.640 --> 00:21:39.460
+créez des modèles de prompte,
+
+00:21:39.540 --> 00:21:40.420
+ajoutez des portes de contrôle
+
+00:21:40.420 --> 00:21:41.180
+et surveillez les résultats
+
+00:21:41.180 --> 00:21:41.820
+de manière centralisée.
+
+00:21:42.780 --> 00:21:43.420
+Python n'est pas mort,
+
+00:21:43.520 --> 00:21:44.520
+il est relégué à sa spécialité.
+
+00:21:44.900 --> 00:21:45.160
+Très bien,
+
+00:21:45.220 --> 00:21:45.820
+c'est comme ça qu'on livre.
+
+00:21:46.500 --> 00:21:47.580
+Contre-argument et réfutation,
+
+00:21:47.980 --> 00:21:49.300
+mais Python domine la science des données.
+
+00:21:50.060 --> 00:21:51.220
+Oui, Python domine la science des données.
+
+00:21:51.920 --> 00:21:52.240
+Bibliothèque,
+
+00:21:52.340 --> 00:21:52.680
+communauté,
+
+00:21:52.820 --> 00:21:53.080
+notebook,
+
+00:21:53.180 --> 00:21:53.460
+tout y est.
+
+00:21:53.700 --> 00:21:54.160
+Dans Fabrique,
+
+00:21:54.160 --> 00:21:55.000
+c'est précisément pour cela
+
+00:21:55.000 --> 00:21:55.420
+que vous le gardez
+
+00:21:55.420 --> 00:21:55.900
+dans les notebooks
+
+00:21:55.900 --> 00:21:57.020
+et les kernels analytiques.
+
+00:21:57.400 --> 00:21:57.880
+C'est le moteur,
+
+00:21:58.180 --> 00:21:58.580
+la vérité.
+
+00:21:58.880 --> 00:21:59.620
+Les moteurs ne contrôlent pas
+
+00:21:59.620 --> 00:22:00.240
+les feux de signalisation.
+
+00:22:00.680 --> 00:22:01.220
+L'orchestration,
+
+00:22:01.320 --> 00:22:01.820
+ce sont les routes,
+
+00:22:01.920 --> 00:22:02.620
+les signaux et les règles.
+
+00:22:03.440 --> 00:22:03.840
+C'est le domaine
+
+00:22:03.840 --> 00:22:04.580
+de la Power Platform.
+
+00:22:05.620 --> 00:22:05.940
+Connecteur,
+
+00:22:06.180 --> 00:22:06.840
+Office Scripts,
+
+00:22:07.040 --> 00:22:07.780
+Dataflow Gen 2
+
+00:22:07.780 --> 00:22:08.780
+et Copilot.
+
+00:22:09.860 --> 00:22:10.500
+Voici ce que la plupart
+
+00:22:10.500 --> 00:22:10.980
+des gens confont.
+
+00:22:11.580 --> 00:22:12.580
+La domination dans l'analytique
+
+00:22:12.580 --> 00:22:13.440
+n'équivaut pas à une aptitude
+
+00:22:13.440 --> 00:22:13.900
+à faire le lien
+
+00:22:13.900 --> 00:22:14.960
+dans l'écosystème Microsoft.
+
+00:22:15.660 --> 00:22:16.480
+Dans Power Automate,
+
+00:22:16.960 --> 00:22:18.500
+Python est un calcul externe indirect
+
+00:22:18.500 --> 00:22:19.580
+via Azure Functions
+
+00:22:19.580 --> 00:22:20.820
+ou des connecteurs personnalisés.
+
+00:22:20.820 --> 00:22:22.540
+Cela joue des coups
+
+00:22:22.540 --> 00:22:22.900
+des secrets,
+
+00:22:23.000 --> 00:22:23.600
+des démarrages à froid
+
+00:22:23.600 --> 00:22:24.420
+et des dérives de version.
+
+00:22:24.860 --> 00:22:25.320
+Pendant ce temps,
+
+00:22:25.400 --> 00:22:26.020
+les Office Scripts
+
+00:22:26.020 --> 00:22:26.820
+s'exécutent là où vivent
+
+00:22:26.820 --> 00:22:28.200
+vos données Microsoft 365
+
+00:22:28.200 --> 00:22:29.580
+et Copilot les rédige
+
+00:22:29.580 --> 00:22:30.420
+en langage clair.
+
+00:22:30.980 --> 00:22:31.720
+Vous choisissez la friction
+
+00:22:31.720 --> 00:22:32.680
+plutôt que la vitesse native,
+
+00:22:32.840 --> 00:22:33.340
+mais nous avons besoin
+
+00:22:33.340 --> 00:22:34.140
+d'une logique personnalisée.
+
+00:22:35.180 --> 00:22:35.740
+Placez-la derrière
+
+00:22:35.740 --> 00:22:36.360
+des limites typées.
+
+00:22:36.680 --> 00:22:37.200
+Utilisez un job
+
+00:22:37.200 --> 00:22:37.940
+de Notebook Fabrique
+
+00:22:37.940 --> 00:22:38.660
+ou un Endpoint ML
+
+00:22:38.660 --> 00:22:39.240
+pour les prédictions
+
+00:22:39.240 --> 00:22:40.120
+et les transformations lourdes.
+
+00:22:40.720 --> 00:22:41.680
+Exposez une API propre.
+
+00:22:41.920 --> 00:22:42.620
+Laissez le flux orchestré
+
+00:22:42.620 --> 00:22:43.140
+avec des contrats,
+
+00:22:43.280 --> 00:22:43.680
+pas au feeling.
+
+00:22:44.640 --> 00:22:45.400
+Vous obtenez la puissance
+
+00:22:45.400 --> 00:22:46.100
+de Python sans devoir
+
+00:22:46.100 --> 00:22:46.720
+connecter manuellement
+
+00:22:46.720 --> 00:22:47.320
+chaque approbation,
+
+00:22:50.820 --> 00:22:51.460
+et la victoire de Microsoft
+
+00:22:51.460 --> 00:22:52.780
+renforce cette séparation.
+
+00:22:53.920 --> 00:22:54.460
+Les Office Scripts
+
+00:22:54.460 --> 00:22:55.180
+sont l'interface de script
+
+00:22:55.180 --> 00:22:56.820
+privilégiée pour M365.
+
+00:22:57.480 --> 00:22:58.180
+Copilot est conscient
+
+00:22:58.180 --> 00:22:58.960
+des modèles sémantiques
+
+00:22:58.960 --> 00:22:59.560
+dans Power BI
+
+00:22:59.560 --> 00:23:00.620
+et Data Flow Gen 2,
+
+00:23:00.800 --> 00:23:01.880
+générant du M ou du Python
+
+00:23:01.880 --> 00:23:02.960
+ancré à vos métadonnées.
+
+00:23:03.920 --> 00:23:04.600
+Les agents améliorent
+
+00:23:04.600 --> 00:23:05.700
+la précision des appels d'outils
+
+00:23:05.700 --> 00:23:06.920
+et la rétention du contexte,
+
+00:23:07.140 --> 00:23:07.900
+rendant la colle fiable
+
+00:23:07.900 --> 00:23:08.420
+et auditable.
+
+00:23:09.140 --> 00:23:09.640
+Rien de tout cela
+
+00:23:09.640 --> 00:23:10.320
+n'exige d'intégrer
+
+00:23:10.320 --> 00:23:11.280
+l'orchestration dans Python.
+
+00:23:11.960 --> 00:23:12.920
+L'hybride n'est pas un compromis,
+
+00:23:13.040 --> 00:23:13.520
+c'est la conception.
+
+00:23:14.220 --> 00:23:15.260
+Les scripts façon TypeScript
+
+00:23:15.260 --> 00:23:16.400
+et les agents gèrent le périmètre,
+
+00:23:16.500 --> 00:23:17.640
+Python gère le calcul.
+
+00:23:17.640 --> 00:23:18.780
+Sans rencontre au niveau
+
+00:23:18.780 --> 00:23:19.960
+d'APTP ou de fil d'attente.
+
+00:23:20.500 --> 00:23:21.600
+Vous réduisez le temps de résolution,
+
+00:23:21.720 --> 00:23:22.620
+baissez les coûts d'exécution
+
+00:23:22.620 --> 00:23:23.900
+et diminuez la récurrence des défauts
+
+00:23:23.900 --> 00:23:24.880
+car les jonctions sont explicites.
+
+00:23:25.660 --> 00:23:26.740
+Utilisez Python là où il excelle.
+
+00:23:27.140 --> 00:23:27.720
+Arrêtez de le forcer
+
+00:23:27.720 --> 00:23:28.620
+à servir de ruban adhésif.
+
+00:23:29.320 --> 00:23:30.240
+Playbook d'implémentation
+
+00:23:30.240 --> 00:23:31.000
+vaut 30 prochains jours.
+
+00:23:31.600 --> 00:23:32.440
+Semaine 1, audite.
+
+00:23:32.860 --> 00:23:33.760
+Étiquetez chaque flux de travail
+
+00:23:33.760 --> 00:23:34.200
+et flux de données
+
+00:23:34.200 --> 00:23:35.000
+comme colquen colquen.
+
+00:23:35.780 --> 00:23:36.640
+Mettez en évidence Python
+
+00:23:36.640 --> 00:23:37.100
+dans les fonctions
+
+00:23:37.100 --> 00:23:38.060
+qui touchent aux approbations,
+
+00:23:38.200 --> 00:23:38.640
+aux renommages
+
+00:23:38.640 --> 00:23:39.300
+ou aux antipatterns
+
+00:23:39.300 --> 00:23:40.200
+de slossess de fichiers.
+
+00:23:40.740 --> 00:23:41.400
+Documentez les entrées,
+
+00:23:41.480 --> 00:23:41.760
+les sorties
+
+00:23:41.760 --> 00:23:42.240
+et les points critiques
+
+00:23:42.240 --> 00:23:42.680
+de défaillance.
+
+00:23:43.400 --> 00:23:44.380
+Récupérez les métriques réelles,
+
+00:23:44.440 --> 00:23:45.040
+le temps de résolution
+
+00:23:45.040 --> 00:23:45.480
+des incidents,
+
+00:23:45.620 --> 00:23:46.280
+le délai de déploiement
+
+00:23:46.280 --> 00:23:46.900
+et le taux de réussite
+
+00:23:46.900 --> 00:23:47.480
+des appels d'outils
+
+00:23:47.480 --> 00:23:48.120
+si vous avez des agents.
+
+00:23:48.440 --> 00:23:48.920
+Si vous ne faites pas,
+
+00:23:48.980 --> 00:23:49.180
+tant pis.
+
+00:23:49.580 --> 00:23:50.680
+Établissez la base de référence maintenant.
+
+00:23:51.420 --> 00:23:51.820
+Semaine 2,
+
+00:23:52.180 --> 00:23:52.680
+migrez les scripts
+
+00:23:52.680 --> 00:23:53.300
+de liaison trivue.
+
+00:23:53.860 --> 00:23:54.960
+Remplacez les endpoints Python
+
+00:23:54.960 --> 00:23:56.040
+utilisés pour les tâches Excel
+
+00:23:56.040 --> 00:23:56.500
+ou SharePoint
+
+00:23:56.500 --> 00:23:57.280
+par des offices script
+
+00:23:57.280 --> 00:23:58.240
+et des connecteurs natifs.
+
+00:23:59.160 --> 00:23:59.740
+Utilisez Copilot
+
+00:23:59.740 --> 00:24:00.480
+pour rédiger des scripts
+
+00:24:00.480 --> 00:24:01.140
+à partir d'instructions
+
+00:24:01.140 --> 00:24:01.720
+en langage naturel.
+
+00:24:02.080 --> 00:24:02.640
+Ajoutez ensuite
+
+00:24:02.640 --> 00:24:03.720
+une liste de contrôle légère
+
+00:24:03.720 --> 00:24:04.840
+en forme de colonne,
+
+00:24:04.840 --> 00:24:05.740
+la gestion des valeurs nulles
+
+00:24:05.740 --> 00:24:06.300
+et d'empotence.
+
+00:24:07.000 --> 00:24:08.020
+Standardisez les modèles de prompt
+
+00:24:08.020 --> 00:24:09.240
+et nommez les scripts correctement,
+
+00:24:09.380 --> 00:24:09.700
+verbe nom,
+
+00:24:09.780 --> 00:24:10.200
+avec portée,
+
+00:24:10.280 --> 00:24:10.620
+pas script,
+
+00:24:10.680 --> 00:24:11.200
+underscore final,
+
+00:24:11.280 --> 00:24:11.480
+underscore,
+
+00:24:11.620 --> 00:24:11.920
+underscore 2.
+
+00:24:12.640 --> 00:24:13.480
+Personnez-les dans votre dépôt.
+
+00:24:13.740 --> 00:24:14.600
+Oui, les scripts sont du code.
+
+00:24:15.060 --> 00:24:15.480
+Semaine 3,
+
+00:24:15.660 --> 00:24:16.660
+refactorisez les flux de données.
+
+00:24:17.040 --> 00:24:18.280
+Passez des transformations manuelles
+
+00:24:18.280 --> 00:24:19.180
+à la génération assistée
+
+00:24:19.180 --> 00:24:19.660
+par Copilot
+
+00:24:19.660 --> 00:24:20.500
+dans Dataflow Gen 2.
+
+00:24:21.340 --> 00:24:22.060
+Gardez l'orchestration
+
+00:24:22.060 --> 00:24:22.540
+en deux pitons,
+
+00:24:22.920 --> 00:24:23.540
+réservez-le uniquement
+
+00:24:23.540 --> 00:24:24.420
+aux noyaux analytiques.
+
+00:24:25.340 --> 00:24:25.980
+Validez par rapport
+
+00:24:25.980 --> 00:24:27.000
+à votre modèle sémantique,
+
+00:24:27.080 --> 00:24:27.500
+monde, colonne,
+
+00:24:27.560 --> 00:24:28.280
+type de données, mesure.
+
+00:24:28.880 --> 00:24:29.960
+Capturez le diff accepté
+
+00:24:29.960 --> 00:24:30.640
+et ajoutez-le
+
+00:24:34.840 --> 00:24:35.860
+Semaine 4,
+
+00:24:36.320 --> 00:24:37.040
+introduisez un agent
+
+00:24:37.040 --> 00:24:38.660
+pour l'orchestration complexe.
+
+00:24:38.820 --> 00:24:39.780
+Restreignez la boîte à outils,
+
+00:24:39.980 --> 00:24:40.500
+feuille de calcul,
+
+00:24:40.840 --> 00:24:41.580
+mise à jour de table,
+
+00:24:41.760 --> 00:24:42.760
+upsert dataverse,
+
+00:24:43.060 --> 00:24:43.780
+exécution de flux,
+
+00:24:44.040 --> 00:24:44.900
+envoi d'email.
+
+00:24:45.960 --> 00:24:46.920
+Définissez des contrats de type
+
+00:24:46.920 --> 00:24:47.500
+pour chaque outil,
+
+00:24:47.640 --> 00:24:48.300
+incluant des exemples
+
+00:24:48.300 --> 00:24:48.840
+de charges utiles
+
+00:24:48.840 --> 00:24:49.780
+et des critères d'acceptation.
+
+00:24:50.400 --> 00:24:51.080
+Activez la validation
+
+00:24:51.080 --> 00:24:52.400
+pré-exécution sur des échantillons,
+
+00:24:52.560 --> 00:24:53.140
+suivez la précision
+
+00:24:53.140 --> 00:24:53.780
+des appels d'outils
+
+00:24:53.780 --> 00:24:54.600
+et le temps de résolution.
+
+00:24:55.360 --> 00:24:56.100
+Lorsque l'agent échoue,
+
+00:24:56.240 --> 00:24:57.100
+corrigez le modèle et mettez-le.
+
+00:24:57.420 --> 00:24:58.240
+Mettez à jour les promptes,
+
+00:24:58.340 --> 00:24:59.100
+schémas ou noms d'outils
+
+00:24:59.100 --> 00:25:00.160
+pour éviter la récurrence.
+
+00:25:00.960 --> 00:25:01.700
+Gouvernance de bout en bout.
+
+00:25:02.080 --> 00:25:02.860
+Imposez des interfaces
+
+00:25:02.860 --> 00:25:03.640
+typées à chaque jonction.
+
+00:25:04.480 --> 00:25:05.080
+Stockez les prompts
+
+00:25:05.080 --> 00:25:05.600
+avec le code.
+
+00:25:06.020 --> 00:25:06.960
+Ajoutez des étapes de validation
+
+00:25:06.960 --> 00:25:07.500
+pour les scripts
+
+00:25:07.500 --> 00:25:08.020
+et changements de flux.
+
+00:25:08.640 --> 00:25:09.520
+Centralisez la télémétrie,
+
+00:25:10.020 --> 00:25:11.160
+l'historique Power Automate,
+
+00:25:11.300 --> 00:25:11.840
+la lignée des flux
+
+00:25:11.840 --> 00:25:12.580
+et les traces de l'agent
+
+00:25:12.580 --> 00:25:13.580
+dans un tableau de bord.
+
+00:25:14.360 --> 00:25:15.020
+Les plans de retour arrière
+
+00:25:15.020 --> 00:25:15.760
+ne sont pas négociables.
+
+00:25:16.460 --> 00:25:17.640
+Version de script précédente,
+
+00:25:17.860 --> 00:25:18.920
+dernier flux de données fonctionnel
+
+00:25:18.920 --> 00:25:19.500
+et instantané
+
+00:25:19.500 --> 00:25:20.240
+de travaux de notebook.
+
+00:25:21.440 --> 00:25:22.060
+Critères de sortie
+
+00:25:22.060 --> 00:25:22.660
+au 30e jour.
+
+00:25:24.040 --> 00:25:25.400
+Moins de connecteurs personnalisés,
+
+00:25:25.560 --> 00:25:25.820
+baisse,
+
+00:25:26.040 --> 00:25:26.920
+mesurable des coûts,
+
+00:25:27.000 --> 00:25:27.700
+changements plus rapides,
+
+00:25:27.820 --> 00:25:28.460
+avec moins de risques
+
+00:25:28.460 --> 00:25:29.540
+et interfaces documentées
+
+00:25:29.540 --> 00:25:30.920
+pour qu'un nouveau collaborateur
+
+00:25:30.920 --> 00:25:32.320
+soit opérationnel en un jour.
+
+00:25:33.420 --> 00:25:34.320
+Python reste confiné
+
+00:25:34.320 --> 00:25:34.740
+au notebook
+
+00:25:34.740 --> 00:25:35.760
+et aux noyaux analytiques.
+
+00:25:36.420 --> 00:25:37.920
+La liaison ?
+
+00:25:37.920 --> 00:25:38.440
+Elle est générée,
+
+00:25:38.560 --> 00:25:39.520
+typée et ennuyeuse.
+
+00:25:40.000 --> 00:25:40.520
+C'est tout l'intérêt.
+
+00:25:41.240 --> 00:25:41.800
+A retenir.
+
+00:25:42.240 --> 00:25:43.420
+Dans l'écosystème Microsoft,
+
+00:25:43.540 --> 00:25:43.920
+les agents
+
+00:25:43.920 --> 00:25:45.120
+et les scripts TypeScript
+
+00:25:45.120 --> 00:25:46.180
+orchestrent proprement,
+
+00:25:46.500 --> 00:25:47.200
+tandis que Python
+
+00:25:47.200 --> 00:25:48.360
+reste dans l'analytique
+
+00:25:48.360 --> 00:25:49.600
+là où il excelle.
+
+00:25:50.880 --> 00:25:52.220
+Si cela vous a fait gagner du temps,
+
+00:25:52.420 --> 00:25:52.920
+rendez-la parait.
+
+00:25:53.260 --> 00:25:53.700
+Abonnez-vous.
+
+00:25:54.220 --> 00:25:54.760
+Regardez la suite
+
+00:25:54.760 --> 00:25:55.300
+sur la création
+
+00:25:55.300 --> 00:25:55.980
+de votre premier manuel
+
+00:25:55.980 --> 00:25:56.740
+d'agent d'application
+
+00:25:56.740 --> 00:25:57.720
+avec contrats d'outils typés
+
+00:25:57.720 --> 00:25:58.680
+et étapes de validation.
+
+00:25:58.680 --> 00:25:59.980
+Vous livrerez plus vite
+
+00:25:59.980 --> 00:26:00.820
+avec moins de panne
+
+00:26:00.820 --> 00:26:01.800
+et la finance arrêtera
+
+00:26:01.800 --> 00:26:02.460
+enfin de soupirer
+
+00:26:02.460 --> 00:26:03.080
+devant vos factures.
+
+00:26:03.680 --> 00:26:04.040
+Procédez.
+
+00:26:04.040 --> 00:26:05.040
+Merci.
+
+00:26:05.040 --> 00:26:06.040
+Merci.
+
+00:26:06.040 --> 00:26:07.040
+Merci.
