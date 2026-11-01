@@ -366,6 +366,7 @@ test("search: Import, Trigramm-Suche, Filter, Facetten und gone-Markierung (SQLi
     generated = "2026-11-02";
     parts = [[{ ...docs[0], title: "Aaron Siller Updated" }, docs[1]], []];
     assert.equal((await importSearchIndex(env)).changed, 1);
+    assert.equal(raw.prepare("SELECT title FROM search_doc WHERE id=?").get(docs[0].id).title, "Aaron Siller Updated");
     const final = await importSearchIndex(env);
     assert.equal(final.gone, 1);
     assert.equal(raw.prepare("SELECT gone FROM search_doc WHERE id=?").get(docs[2].id).gone, 1);
