@@ -23,7 +23,8 @@ def load(api=None):
     BY.clear(); ALL.clear()
     if not _F.exists():
         return
-    for u in json.loads(_F.read_text("utf-8")).get("items", []):
+    import site_text as STX
+    for u in STX.fix_tree(json.loads(_F.read_text("utf-8")).get("items", [])):   # Microsoft-Feeds liefern teils Mojibake (check_encoding)
         ALL.append(u)
         for e in u.get("eids", []):
             BY.setdefault(e, []).append(u)

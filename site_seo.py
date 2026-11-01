@@ -24,7 +24,8 @@ def author_info(p):
 def run(extras):
     try:
         out = subprocess.run(["node", os.path.join(os.path.dirname(os.path.abspath(__file__)), "tools", "seo_report.mjs")], input=json.dumps(extras), capture_output=True, text=True, timeout=120, check=True).stdout
-        return json.loads(out)
+        import site_text as STX
+        return STX.fix_tree(json.loads(out))   # Titel aus Updates und Feeds im Bericht: Mojibake reparieren
     except Exception as e:
         print("SEO report failed:", e)
         return None

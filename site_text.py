@@ -19,6 +19,14 @@ def demojibake(s):
                 return t
         except (UnicodeEncodeError, UnicodeDecodeError):
             pass
+    def _chunk(m, enc):   # gemischte Texte (richtiges Unicode neben Mojibake): jede Sequenz einzeln zurueckwandeln
+        try:
+            t = m.group(0).encode(enc).decode("utf-8")
+            return t if "\ufffd" not in t else m.group(0)
+        except (UnicodeEncodeError, UnicodeDecodeError):
+            return m.group(0)
+    s = re.sub("ÔÇ.", lambda m: _chunk(m, "cp850"), s)
+    s = re.sub("â€.", lambda m: _chunk(m, "cp1252"), s)
     for k in sorted(_MAP, key=len, reverse=True):
         s = s.replace(k, _MAP[k])
     return s
