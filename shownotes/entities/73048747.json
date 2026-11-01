@@ -1,0 +1,171 @@
+{
+  "episode_id": "73048747",
+  "slug": "azure-managed-disks-simply-explained",
+  "title": "Azure Managed Disks - Simply Explained",
+  "lang": "en",
+  "duration_s": 959,
+  "transcript_source": "data/en_transcripts/d3e2fa4328ff.txt",
+  "time_basis": "estimated",
+  "entities": [
+    {
+      "slug": "azure-disk-storage",
+      "name": "Azure Disk Storage",
+      "type": "product",
+      "score": 95,
+      "mentions": 23,
+      "first_mention_s": 12,
+      "quote": "Before managed disks existed, the old way was a real hassle.",
+      "url": "https://www.m365.fm/entity/azure-disk-storage/"
+    },
+    {
+      "slug": "azure",
+      "name": "Microsoft Azure",
+      "type": "platform",
+      "score": 55,
+      "mentions": 37,
+      "first_mention_s": 0,
+      "quote": "Most people think a virtual machine in Azure just needs a disk.",
+      "url": "https://www.m365.fm/entity/azure/"
+    },
+    {
+      "slug": "azure-key-vault",
+      "name": "Azure Key Vault",
+      "type": "product",
+      "score": 35,
+      "mentions": 1,
+      "first_mention_s": 659,
+      "quote": "you can use customer managed keys with Azure Key Vault. Create a disk encryption set",
+      "url": "https://www.m365.fm/entity/azure-key-vault/"
+    },
+    {
+      "slug": "azure-private-link",
+      "name": "Azure Private Link",
+      "type": "product",
+      "score": 30,
+      "mentions": 2,
+      "first_mention_s": 711,
+      "quote": "Private endpoints let you access managed disks from within your virtual network",
+      "url": "https://www.m365.fm/entity/azure-private-link/"
+    }
+  ],
+  "new_entities": [
+    {
+      "slug": "iops",
+      "name": "IOPS",
+      "type": "concept"
+    },
+    {
+      "slug": "azure-storage-redundancy",
+      "name": "Azure Storage redundancy",
+      "type": "concept"
+    },
+    {
+      "slug": "azure-backup",
+      "name": "Azure Backup",
+      "type": "product"
+    },
+    {
+      "slug": "azure-storage-account",
+      "name": "Azure storage account",
+      "type": "concept"
+    }
+  ],
+  "quotes": [
+    {
+      "text": "Managed disks abstract all of that away. You don't create a storage account, a container, or a page blob. You just create a disk, pick a size, and a type, and Azure handles the rest.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 90,
+      "entities": [
+        "azure-disk-storage",
+        "azure-storage-account"
+      ],
+      "why": "Captures in one line what managed disks change compared with the old unmanaged model."
+    },
+    {
+      "text": "With older disk types, if you needed more performance, you had to buy a bigger disk. Even if you didn't need the extra space. Premium SSD V2 fixes that, and it's generally less expensive than the original premium SSD for the same performance.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 217,
+      "entities": [
+        "azure-disk-storage",
+        "iops"
+      ],
+      "why": "Explains the key advantage of decoupling performance from capacity."
+    },
+    {
+      "text": "The VM itself has IOPS and throughput limits too. You can attach 10 ultra disks to a small VM but the VM can only push so much data. The disks will be waiting. So always check your VM size limits before adding disks.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 431,
+      "entities": [
+        "iops",
+        "azure-disk-storage"
+      ],
+      "why": "A practical warning that is often overlooked when sizing disk performance."
+    },
+    {
+      "text": "So choosing between LRS and ZRS comes down to cost versus availability. ZRS costs more, but it keeps you running even if an entire zone goes down. For most workloads, LRS is fine. For mission critical systems, ZRS is worth the extra cost.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 509,
+      "entities": [
+        "azure-storage-redundancy"
+      ],
+      "why": "A clear decision rule for picking a redundancy option."
+    },
+    {
+      "text": "Use snapshots for quick rollbacks before deployment or patch. Use Azure backup for long term protection and compliance.",
+      "speaker": "Mirko Peters",
+      "speaker_slug": "mirko-peters",
+      "time_s": 800,
+      "entities": [
+        "azure-backup",
+        "azure-disk-storage"
+      ],
+      "why": "A concise rule for when to use snapshots versus Azure Backup."
+    }
+  ],
+  "chapters": [
+    {
+      "start_s": 0,
+      "title": "Why the disk choice matters"
+    },
+    {
+      "start_s": 46,
+      "title": "What a managed disk is"
+    },
+    {
+      "start_s": 155,
+      "title": "The five disk types"
+    },
+    {
+      "start_s": 353,
+      "title": "IOPS, throughput and latency"
+    },
+    {
+      "start_s": 449,
+      "title": "LRS vs ZRS redundancy"
+    },
+    {
+      "start_s": 546,
+      "title": "OS, data and temporary disks"
+    },
+    {
+      "start_s": 635,
+      "title": "Security and encryption"
+    },
+    {
+      "start_s": 727,
+      "title": "Backups, snapshots and cost"
+    }
+  ],
+  "takeaways": [
+    "Managed disks remove the need to create and balance storage accounts yourself, because Azure handles placement, replication and limits behind the scenes.",
+    "Premium SSD v2 and Ultra Disk let you set IOPS and throughput independently of capacity, while Premium SSD and Standard disks scale performance with disk size.",
+    "Azure bills for provisioned disk size, so right-sizing, deleting unattached disks and choosing LRS for non-critical data are the biggest cost levers."
+  ],
+  "hook": "Picking the wrong Azure managed disk can cost you performance, money or both. This episode walks Azure beginners and VM admins through the five disk types, IOPS and throughput, LRS versus ZRS, encryption, backups and cost tips so they can choose the right disk for each workload.",
+  "youtube_video_id": null,
+  "generated_at": "2026-11-01T14:25:17+00:00"
+}
