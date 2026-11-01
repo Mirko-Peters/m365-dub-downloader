@@ -64,8 +64,18 @@ jobs:
           rm -f cookies.txt
           git config user.name "dub-bot"
           git config user.email "dub-bot@users.noreply.github.com"
-          git add state.json config.json 2>/dev/null || true
-          git diff --cached --quiet || git commit -m "Dub-Status aktualisiert" && git push || true
+          for f in state.json config.json; do [ -e "$f" ] && git add -A "$f"; done
+          if git diff --cached --quiet; then echo "nichts zu sichern"; exit 0; fi
+          git commit -q -m "Dub-Status aktualisiert"
+          for i in 1 2 3 4 5; do
+            if git pull --rebase --autostash -q origin main; then
+              git push -q origin HEAD:main && exit 0
+            else
+              git rebase --abort 2>/dev/null || true
+            fi
+            sleep $((i*5))
+          done
+          echo "::error::Dub-Status konnte nicht gesichert werden"; exit 1
 
       - name: Log hochladen
         if: always()
