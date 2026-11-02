@@ -1,6 +1,6 @@
-# Spreaker-Feed gegen geschriebene Shownotes (2026-11-01T22:27Z)
+# Spreaker-Feed gegen geschriebene Shownotes (2026-11-02T00:45Z)
 
-Geschrieben: 283 · im Feed: 283 · Text gleich: 279 · alle m365-Links im Feed: 279
+Geschrieben: 283 · im Feed: 283 · Text gleich: 283 · alle m365-Links im Feed: 283
 
 | Folge | im Feed | Text gleich | Links Datei | Links Feed | HTML im Feed |
 |---|---|---|---|---|---|
@@ -89,7 +89,7 @@ Geschrieben: 283 · im Feed: 283 · Text gleich: 279 · alle m365-Links im Feed:
 | 72771493 | ja | ja | 6 | 6 | ja |
 | 72786209 | ja | ja | 6 | 6 | ja |
 | 72786704 | ja | ja | 6 | 6 | ja |
-| 72788044 | ja | nein | 7 | 5 | ja |
+| 72788044 | ja | ja | 7 | 7 | ja |
 | 72790496 | ja | ja | 6 | 6 | ja |
 | 72790744 | ja | ja | 6 | 6 | ja |
 | 72828100 | ja | ja | 6 | 6 | ja |
@@ -101,7 +101,7 @@ Geschrieben: 283 · im Feed: 283 · Text gleich: 279 · alle m365-Links im Feed:
 | 72936726 | ja | ja | 8 | 8 | ja |
 | 72936838 | ja | ja | 6 | 6 | ja |
 | 72936926 | ja | ja | 6 | 6 | ja |
-| 72937055 | ja | nein | 6 | 4 | ja |
+| 72937055 | ja | ja | 6 | 6 | ja |
 | 72937191 | ja | ja | 7 | 7 | ja |
 | 72946419 | ja | ja | 6 | 6 | ja |
 | 72946788 | ja | ja | 6 | 6 | ja |
@@ -118,7 +118,7 @@ Geschrieben: 283 · im Feed: 283 · Text gleich: 279 · alle m365-Links im Feed:
 | 72989260 | ja | ja | 8 | 8 | ja |
 | 72990818 | ja | ja | 8 | 8 | ja |
 | 72991410 | ja | ja | 8 | 8 | ja |
-| 73012311 | ja | nein | 8 | 5 | ja |
+| 73012311 | ja | ja | 8 | 8 | ja |
 | 73013222 | ja | ja | 9 | 9 | ja |
 | 73013597 | ja | ja | 7 | 7 | ja |
 | 73013898 | ja | ja | 8 | 8 | ja |
